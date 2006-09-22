@@ -8,8 +8,8 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.4">
-<!entity p-status "beta">
+<!entity p-version "3.0.5">
+<!entity p-status "BETA">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.16 2006/09/10 15:30:46 hal9 Exp $
+ $Id: faq.sgml,v 2.17 2006/09/17 14:56:32 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.16 2006/09/10 15:30:46 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.17 2006/09/17 14:56:32 hal9 Exp $</pubdate>
 
 <!--
 
@@ -700,6 +700,10 @@ Privoxy is running and being used.</title>
   throughout the 3.x series. Although each release contains updated, 
   <quote>improved</quote> versions and it is recommended to use the newer
   configuration files.
+ <![%p-newstuff;[ 
+   If upgrading from version prior to 3.0.4 the syntax for <literal>fast-redirects</literal>
+   has changed. See the <ulink url="../user-manual/whatsnew.html">What's New section</ulink> 
+   of the <citetitle>User Manual</citetitle> for details.]]>
  </para>
  <para>
    But all configuration files have substantially
@@ -842,7 +846,7 @@ the differences?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="configfiles"> <title>What's the difference between the
-<quote>Cautious</quote>, <quote>Medium</quote> and <quote>Adventuresome</quote> defaults?</title>
+<quote>Cautious</quote>, <quote>Medium</quote> and <quote>Advanced</quote> defaults?</title>
  <para>
   Configuring <application>Privoxy</application> is not entirely trivial. To
   help you get started, we provide you with three different default action
@@ -863,10 +867,10 @@ the differences?</title>
 </para>
 
 <para>
- It should be noted that the <quote>Adventuresome</quote> profile (formerly known 
- as the <quote>Advanced</quote> profile) is not only more
- aggressive, but also includes fun and, extreme usage of most of
- <application>Privoxy's</application> features. Use at your own risk!
+ It should be noted that the <quote>Advanced</quote> profile (formerly known 
+ as the <quote>Adventuresome</quote> profile) is more
+ aggressive, and will make use of some of 
+ <application>Privoxy's</application> advanced features. Use at your own risk!
 </para>
 
 </sect2>
@@ -1562,7 +1566,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  Since <application>Privoxy</application> 3.0.4, its configuration (section 5.2)
  is already prepared for <application>Tor</application>, if you are using a
  default <application>Tor</application> configuration and run it on the same
- system as Privoxy, you just have to uncomment the line:
+ system as &my-app;, you just have to uncomment the line:
 </para>
 <para>
  <screen>
@@ -1925,7 +1929,7 @@ and related issues?</title>
  is clearly labeled <quote>Text replacements for subversive browsing
  fun!</quote> or you are using an older Privoxy version and have implicitly
  activated it by choosing the  <quote>Adventuresome</quote> profile in the
- web-based editor.
+ web-based editor. Please upgrade!
 </para>
 </sect2>
 
@@ -2023,9 +2027,11 @@ What can I do?</title>
 </para>
 <para>
  Troubleshooting actions is discussed in more detail in the <ulink
- url="../user-manual/appendix.html#ACTIONSANAT">User Manual appendix</ulink>.
+ url="../user-manual/appendix.html#ACTIONSANAT">User Manual appendix,
+ Troubleshooting: the Anatomy of an Action</ulink>.
  There is also an <ulink
- url="../user-manual/actions-file.html#ACT-EXAMPLES">actions tutorial</ulink>.
+ url="../user-manual/actions-file.html#ACT-EXAMPLES">actions tutorial</ulink>
+ with general configuration information and examples.
 </para>
 
 </sect2>
@@ -2100,12 +2106,13 @@ every time I start IE. What gives?</title>
  </para>
  <para>
   To complicate matters, some systems may have a generic <quote>proxy</quote>
-  setting, which will silently various protocols, including
+  setting, which will silently enable various protocols, including
   <emphasis>both</emphasis> HTTP and FTP proxying! So it is possible to
   accidentally enable FTP proxying in these cases. And of course, if this
   happens, <application>Privoxy</application> will indeed cause problems since
   it does not know FTP. <![%p-newstuff;[Newer version will give a sane error
-  message if a FTP connection is attempted.]]>
+  message if a FTP connection is attempted.]]> Just disable the FTP setting 
+  and all will be well again.
  </para>
  <para>
   Will <application>Privoxy</application> ever proxy FTP traffic? Unlikely.
@@ -2458,6 +2465,12 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.17  2006/09/17 14:56:32  hal9
+This includes yet several more new FAQs, some improved wording, enhanced
+mark-up, various hyper links to wikipedia to explain key terminology to the
+uninitiated, etc. This is ready for release IMO pending final tagging of cvs
+and Privoxy version stamping.
+
 Revision 2.16  2006/09/10 15:30:46  hal9
 Spell check.
 

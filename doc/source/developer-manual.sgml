@@ -8,8 +8,8 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.4">
-<!entity p-status "beta">
+<!entity p-version "3.0.5">
+<!entity p-status "BETA">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -23,9 +23,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $
+ $Id: developer-manual.sgml,v 2.9 2006/09/14 02:30:07 hal9 Exp $
 
- Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
 
  ========================================================================
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.9 2006/09/14 02:30:07 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1832,14 +1832,14 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.9 2006/09/14 02:30:07 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1862,7 +1862,8 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:0
  *                this file.  If not, you can view it at
  *                http://www.gnu.org/copyleft/gpl.html
  *                or write to the Free Software Foundation, Inc., 
- *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+ *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 ,
+ *                USA
  *
  * Revisions   :
  *    $L<!-- Break CVS Substitution -->og$
@@ -1892,14 +1893,14 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.8 2006/08/22 23:35:01 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.9 2006/09/14 02:30:07 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1921,8 +1922,9 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  *                The GNU General Public License should be included with
  *                this file.  If not, you can view it at
  *                http://www.gnu.org/copyleft/gpl.html
- *                or write to the Free Software Foundation, Inc., 59
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *                or write to the Free Software Foundation, Inc., 
+ *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 ,
+ *                USA
  *
  * Revisions   :
  *    $L<!-- Break CVS Substitution -->og$
@@ -3023,6 +3025,10 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.9  2006/09/14 02:30:07  hal9
+  Fix ijbswa cvs links. Update notes on release process, and which config files
+  should be overwritten and which not.
+
   Revision 2.8  2006/08/22 23:35:01  hal9
   Fix email address, cvs URI, address branching changes and various other
   small updates.

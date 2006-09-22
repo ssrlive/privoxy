@@ -5,9 +5,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.7 2006/09/01 15:10:45 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 2.8 2006/09/06 03:04:46 hal9 Exp $
 
- Copyright (C) 2001-2006 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
 
  ========================================================================
@@ -42,8 +42,8 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity authors SYSTEM "p-authors.sgml">
-<!entity p-version "3.0.4">
-<!entity p-status "beta">
+<!entity p-version "3.0.5">
+<!entity p-status "BETA">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
@@ -229,11 +229,14 @@
  and Unix-like systems, these are located in
  <filename>/etc/privoxy/</filename> by default. 
 </para>
-<para>
- See the <ulink
- url="http://www.privoxy.org/user-manual/"><citetitle>User Manual</citetitle></ulink> for a detailed
- explanation of installation, general usage, all configuration options, new
- features and notes on upgrading.
+<para> 
+ <command>Privoxy</command> uses the concept of <command>actions</command> 
+ in order to manipulate the data stream between the browser and remote sites.
+ There are various actions available with specific functions for such things 
+ as blocking web sites, managing cookies, etc. These actions can be invoked
+ individually or combined, and used against individual URLs, or groups of URLs 
+ that can be defined using wildcards and regular expressions. The result is
+ that the user has greatly enhanced control and freedom.
 </para>
 <para>
  The actions list (ad blocks, etc) can also be configured with your
@@ -241,6 +244,12 @@
  <command>Privoxy's</command> configuration parameters  can also  be viewed at
  the same page. In addition, <command>Privoxy</command> can be toggled on/off.
  This is an internal page, and does not require Internet access.
+</para>
+<para>
+ See the <ulink
+ url="http://www.privoxy.org/user-manual/"><citetitle>User Manual</citetitle></ulink> for a detailed
+ explanation of installation, general usage, all configuration options, new
+ features and notes on upgrading.
 </para>
 </refsect1>
 
@@ -256,10 +265,10 @@
  # Define a few useful custom aliases for later use
  {{alias}}
 
- # Useful aliases
+ # Useful aliases that combine more than one action
  +crunch-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
  -crunch-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
- +imageblock      = +block +handle-as-image
+ +block-as-image = +block +handle-as-image
 
  # Fragile sites should have the minimum changes
  fragile     = -block -deanimate-gifs -fast-redirects -filter \
@@ -281,12 +290,12 @@
 +deanimate-gifs{last} \
 -downgrade-http-version \
 -fast-redirects \
-+filter{js-annoyances} \
+-filter{js-annoyances} \
 -filter{js-events} \
-+filter{html-annoyances} \
+-filter{html-annoyances} \
 -filter{content-cookies} \
 +filter{refresh-tags} \
-+filter{unsolicited-popups} \
+-filter{unsolicited-popups} \
 -filter{all-popups} \
 +filter{img-reorder} \
 +filter{banners-by-size} \
@@ -331,22 +340,23 @@
  
  # Block, and treat these URL patterns as if they were 'images'.
  # We would expect these to be ads.
- {+imageblock}
+ { +block-as-image }
   .ad.doubleclick.net
   .a[0-9].yimg.com/(?:(?!/i/).)*$
   ad.*.doubleclick.net
 
- # Block any URLs that match these patterns
- {+block}
+ # Block all URLs that match these patterns
+ { +block }
   ad*.
   .*ads.
   banner?.
   /.*count(er)?\.(pl|cgi|exe|dll|asp|php[34]?)
   .hitbox.com 
+  media./.*(ads|banner)
 
  # Make exceptions for these harmless ones that would be 
  # caught by our +block patterns just above.
- {-block}
+ { -block }
   adsl.
   advice.
   .*downloads.
@@ -367,15 +377,20 @@
  
  # Set personal exceptions to the policies in default.action #######
 
- # Sites where we want persistant cookies, so allow *all* cookies
- {-crunch-cookies -session-cookies-only}
+ # Sites where we want persistent cookies, so allow *all* cookies
+ { -crunch-cookies -session-cookies-only }
   .redhat.com
   .sun.com
   .msdn.microsoft.com
  
- # This site breaks easily.
- {-block -fast-redirects}
+ # These sites breaks easily. Use our "fragile" alias here.
+ { fragile }
   .forbes.com
+  mybank.example.com
+
+ # Replace example.com's style sheet with one of my choosing
+ { +redirect{http://localhost/css-replacements/example.com.css} }
+  example.com/stylesheet.css
 
 </literallayout>
 

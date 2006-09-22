@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.6 2006/08/27 22:01:55 hal9 Exp $
+ $Id: contacting.sgml,v 2.7 2006/09/10 14:53:54 hal9 Exp $
 
- Copyright (C) 2001 - 2006 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001 - 2006 Privoxy Developers http://privoxy.org
  See LICENSE.
 
  ======================================================================
@@ -201,7 +201,7 @@ Please be sure to provide the following information:
 </para>
 <para>
   The <ulink url="http://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
-  of the user manual</ulink> also has helpful information 
+  of the Privoxy User Manual</ulink> also has helpful information 
   on understanding <literal>actions</literal>, and <literal>action</literal> debugging. 
 </para>
 </sect3>

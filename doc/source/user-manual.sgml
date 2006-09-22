@@ -11,8 +11,8 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.4">
-<!entity p-status "beta">
+<!entity p-version "3.0.5">
+<!entity p-status "BETA">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -33,9 +33,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.20 2006/09/10 14:53:54 hal9 Exp $
+ $Id: user-manual.sgml,v 2.21 2006/09/20 03:21:36 david__schmidt Exp $
 
- Copyright (C) 2001- 2006 Privoxy Developers <developers@privoxy.org>
+ Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
  See LICENSE.
 
  ========================================================================
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.20 2006/09/10 14:53:54 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.21 2006/09/20 03:21:36 david__schmidt Exp $</pubdate>
 
 <!--
 
@@ -87,7 +87,7 @@ Hal.
 ]]>
 
  <para>
-  The <citetitle>User Manual</citetitle> gives users information on how to
+  The <citetitle>Privoxy User Manual</citetitle> gives users information on how to
   install, configure and use <ulink
   url="http://www.privoxy.org/">Privoxy</ulink>.
  </para>
@@ -97,7 +97,7 @@ Hal.
 <!-- end privoxy.sgml -->
 
  <para>
-  You can find the latest version of the <citetitle>User Manual</citetitle> at  <ulink
+  You can find the latest version of the <citetitle>Privoxy User Manual</citetitle> at  <ulink
   url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
   Please see the <link linkend="contact">Contact section</link> on how to
   contact the developers.
@@ -136,7 +136,8 @@ Hal.
 <sect2 id="features"><title>Features</title>
 <para>
  In addition to the core 
- features of ad blocking and cookie management,
+ features of ad blocking and 
+ <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookie</ulink> management,
  <application>Privoxy</application> provides many supplemental
  features<![%p-not-stable;[, some of them currently under development]]>, 
  that give the end-user more control, more privacy and more freedom:
@@ -224,7 +225,7 @@ How to install the binary packages depends on your operating system:
  in the same directory as you installed <application>Privoxy</application> in. 
 </para>
 <para>
- Version 3.0.4 introduces full <application>Windows</application> service
+ Version 3.0.4 introduced full <application>Windows</application> service
  functionality. On Windows only, the <application>Privoxy</application>
  program has two new command line arguments to install and uninstall
  <application>Privoxy</application> as a <emphasis>service</emphasis>.
@@ -431,7 +432,7 @@ How to install the binary packages depends on your operating system:
    <para>
     Multiple <link linkend="filter-file">filter files</link> can now be specified in <filename>config</filename>. This allows for 
     locally defined filters that can be maintained separately from the filters as
-    supplied by the developers.
+    supplied by the developers, i.e. <filename>default.filter</filename>.
    </para>
   </listitem>
  
@@ -558,7 +559,8 @@ How to install the binary packages depends on your operating system:
 
   <listitem>
    <para>
-    Actions files problems and suggestions are now being directed to: <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>.
+    Actions files problems and suggestions are now being directed to: 
+    <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>.
     Please use this to report such configuration related problems as missed
     ads, sites that don't function properly due to one action or another, 
     innocent images being blocked, etc.
@@ -567,12 +569,23 @@ How to install the binary packages depends on your operating system:
   
   <listitem>
    <para>
-    In addition, there are various bug fixes and significant enhancements, including 
-    error pages should no longer be cached if the problem is fixed, much better DNS
-    error handling, and various logging improvements.
+    In addition, there are numerous bug fixes and significant enhancements,
+    including error pages should no longer be cached if the problem is fixed,
+    much better DNS error handling, and various logging improvements.
    </para>
   </listitem>
 
+  <listitem>
+   <para>
+    The default actions setting is now <literal>Cautious</literal>. Previous
+    releases had a default setting of <literal>Medium</literal>. Experienced
+    users may want to adjust this, as it is fairly conservative by &my-app;
+    standards and past practices. See <ulink
+    url="http://config.privoxy.org/edit-actions-list?f=default">
+    http://config.privoxy.org/edit-actions-list?f=default</ulink>. New users
+    should try the default settings for a while before turning up the volume.
+   </para>
+  </listitem>
 
  </itemizedlist>
 </para>
@@ -598,7 +611,7 @@ How to install the binary packages depends on your operating system:
  </listitem>
  <listitem>
   <para>  
-   On the other hand, some installers may not overwrite any existing configuration 
+   On the other hand, other installers may not overwrite any existing configuration 
    files, thinking you will want to do that. You may want to manually check 
    your saved files against the newer versions to see if the improvements have
    merit, or whether there are new options that you may want to consider.
@@ -610,12 +623,23 @@ How to install the binary packages depends on your operating system:
     <para>
      See the full documentation on 
      <literal><link linkend="fast-redirects">fast-redirects</link></literal>
-     which has changed syntax, and may require adjustments to local configs.
+     which has changed syntax, and will require adjustments to local configs, 
+     such as <filename>user.action</filename>. You must reference the new 
+     syntax: 
    </para>
+   <para>
+ <screen>
+  { +fast-redirects{check-decoded-url} }
+   .example.com
+   mybank.com
+   .google.</screen>
+</para>
+
   </listitem>
  <listitem>
     <para>
-     The <filename>jarfile</filename>, cookie logger, is off by default now.
+     The <filename>jarfile</filename>, 
+     <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookie</ulink> logger, is off by default now.
     </para>
   </listitem>
 
@@ -625,6 +649,8 @@ How to install the binary packages depends on your operating system:
    and you may want to review which actions are <quote>on</quote> by 
    default. This is primarily a matter of emphasis, but some features 
    you may have been used to, may now be <quote>off</quote> by default.
+   There are also a number of new actions you may want to consider, most of
+   which are not incorporated into the default settings as yet (see above).
   </para>
  </listitem>
  
@@ -676,7 +702,8 @@ How to install the binary packages depends on your operating system:
  <listitem>
   <para>
    Set your browser to use <application>Privoxy</application> as HTTP and
-   HTTPS (SSL) proxy by setting the proxy configuration for address of
+   HTTPS (SSL)  <ulink url="http://en.wikipedia.org/wiki/Proxy_server">proxy</ulink>
+   by setting the proxy configuration for address of
    <literal>127.0.0.1</literal> and port <literal>8118</literal>.
    <emphasis>DO NOT</emphasis> activate proxying for <literal>FTP</literal> or 
    any protocols besides HTTP and HTTPS (SSL)! It won't work!
@@ -686,8 +713,9 @@ How to install the binary packages depends on your operating system:
  <listitem>
   <para>
     Flush your browser's disk and memory caches, to remove any cached ad images.
-    If using <application>Privoxy</application> to manage cookies, you should 
-    remove any currently stored cookies too.
+    If using <application>Privoxy</application> to manage 
+    <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>,
+    you should remove any currently stored cookies too.
   </para>
  </listitem> 
 
@@ -701,24 +729,24 @@ How to install the binary packages depends on your operating system:
   <para>
    See the <link linkend="configuration">Configuration section</link> for more
    configuration options, and how to customize your installation.
- <![%draft;[  You might also want to look at the <link
+   You might also want to look at the <link
    linkend="quickstart-ad-blocking">next section</link> for a quick
    introduction to how <application>Privoxy</application> blocks ads and
-   banners.]]>
+   banners.
 </para>
  </listitem> 
 
  <listitem>
   <para>
-    If you experience ads that slipped through, innocent images that are
+    If you experience ads that slip through, innocent images that are
     blocked, or otherwise feel the need to fine-tune
-    <application>Privoxy's</application> behaviour, take a look at the <link
+    <application>Privoxy's</application> behavior, take a look at the <link
     linkend="actions-file">actions files</link>. As a quick start, you might
     find the <link linkend="act-examples">richly commented examples</link>
     helpful. You can also view and edit the actions files through the <ulink
     url="http://config.privoxy.org">web-based user interface</ulink>. The
-    Appendix <quote><link linkend="actionsanat">Anatomy of an
-    Action</link></quote> has hints how to debug actions that
+    Appendix <quote><link linkend="actionsanat">Troubleshooting: Anatomy of an
+    Action</link></quote> has hints how to understand and debug actions that
     <quote>misbehave</quote>.
   </para>
  </listitem> 
@@ -1002,7 +1030,8 @@ How to install the binary packages depends on your operating system:
 <para>
  Before launching <application>Privoxy</application> for the first time, you
  will want to configure your browser(s) to use
- <application>Privoxy</application> as a HTTP and HTTPS (SSL) proxy. The default is
+ <application>Privoxy</application> as a HTTP and HTTPS (SSL) 
+ <ulink url="http://en.wikipedia.org/wiki/Proxy_server">proxy</ulink>. The default is
  127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
  used port 8000). This is the one configuration step <emphasis>that must be done
 </emphasis>!
@@ -1062,7 +1091,7 @@ How to install the binary packages depends on your operating system:
 <para>
  Then, check <quote>Use Proxy</quote> and fill in the appropriate info
  (Address: 127.0.0.1, Port: 8118). Include HTTPS (SSL), if you want HTTPS
- proxy support too (sometimes labeled <quote>Secure</quote>. Make sure any
+ proxy support too (sometimes labeled <quote>Secure</quote>). Make sure any
  checkboxes like <quote>Use the same proxy server for all protocols</quote> is
  <emphasis>UNCHECKED</emphasis>. You want only HTTP and HTTPS (SSL)!
 </para>
@@ -1086,8 +1115,9 @@ How to install the binary packages depends on your operating system:
 <para>
  After doing this, flush your browser's disk and memory caches to force a
  re-reading of all pages and to get rid of any ads that may be cached. Remove 
- any cookies, if you want <application>Privoxy</application> to manage that. You 
- are now ready to start enjoying the benefits of using
+ any <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>,
+ if you want <application>Privoxy</application> to manage that. You are now
+ ready to start enjoying the benefits of using
  <application>Privoxy</application>!
 </para>
 
@@ -1436,8 +1466,8 @@ must find a better place for this paragraph
 </para>
 
 <para>
- On <application>MS Windows</application> only there are two addition 
- options to allow <application>Privoxy</application> to install and 
+ On <application>MS Windows</application> only there are two additional 
+ command-line options to allow <application>Privoxy</application> to install and 
  run as a <emphasis>service</emphasis>. See the 
 <link linkend="installation-pack-win">Window Installation section</link> 
 for details.
@@ -1612,7 +1642,10 @@ for details.
 <para>
  The syntax of all configuration files has remained the same throughout the
  3.x series. There have been enhancements, but no changes that would preclude
- the use of any configuration file from one version to the next.
+ the use of any configuration file from one version to the next. (There is 
+ one exception: <link linkend="FAST-REDIRECTS">+fast-redirects</link> which 
+ has enhanced syntax and will require updating any local configs from earlier 
+ versions.)
 </para>
 
 <para>
@@ -1622,7 +1655,7 @@ for details.
  in a line. If the <literal>#</literal> is preceded by a backslash, it looses
  its special function. Placing a <literal>#</literal> in front of an otherwise
  valid configuration line to prevent it from being interpreted is called "commenting
- out" that line.
+ out" that line. Blank lines are ignored.
 </para>
 
 <para>
@@ -1680,7 +1713,8 @@ for details.
  There are a number of such actions, with a wide range of functionality.
  Each action does something a little different.
  These actions give us a veritable arsenal of tools with which to exert 
- our control, preferences and independence.
+ our control, preferences and independence. Actions can be combined so that 
+ their effects are aggregated when applied against a given set of URLs.
 </para> 
 <para>
  There 
@@ -1696,13 +1730,13 @@ for details.
      that sets the initial values for all actions. It is intended to 
      provide a base level of functionality for
      <application>Privoxy's</application> array of features. So it is 
-     a set of broad rules that should work reasonably well for users everywhere.
+     a set of broad rules that should work reasonably well as-is for most users.
      This is the file that the developers are keeping updated, and <link
      linkend="installation-keepupdated">making available to users</link>.
-     It is also the file that keeps track of the user's preferences 
-     as set in <filename>standard.action</filename>, e.g. either 
-     <literal>cautious</literal>, <literal>medium</literal>, or 
-     <literal>adventuresome</literal>.
+     The user's preferences as set in <filename>standard.action</filename>,
+     e.g. either <literal>Cautious</literal> (the default),
+     <literal>Medium</literal>, or <literal>Advanced</literal> (see
+     below).
     </para>
    </listitem> 
    <listitem>
@@ -1722,12 +1756,15 @@ for details.
      in <filename>default.action</filename>. 
      </para>
      <para>
-     <guibutton>Edit</guibutton>  <guibutton>Set to Cautious</guibutton> <guibutton>Set to Medium</guibutton>  <guibutton>Set to Adventuresome</guibutton>
+     <guibutton>Edit</guibutton>  <guibutton>Set to Cautious</guibutton> <guibutton>Set to Medium</guibutton>  <guibutton>Set to Advanced</guibutton>
      </para>
      <para>
      These have increasing levels of aggressiveness <emphasis>and have no
      influence on your browsing unless you select them explicitly in the
-     editor</emphasis>. 
+     editor</emphasis>. A default installation should be pre-set to 
+     <literal>Cautious</literal> (versions prior to 3.0.5 were set to
+     <literal>Medium</literal>). New users should try this for a while before
+     adjusting the settings to more aggressive levels.
      </para>
      <para>
       The <guibutton>Edit</guibutton> button allows you to turn each 
@@ -1736,7 +1773,7 @@ for details.
       a minimal set of &my-app;'s features, and subsequently there will be
       less of a chance for accidental problems. The <guibutton>Medium</guibutton>
       button sets the list to a medium level of ad blocking and a low level set of
-      privacy features. The <guibutton>Adventuresome</guibutton> button 
+      privacy features. The <guibutton>Advanced</guibutton> button 
       sets the list to a high level of ad blocking and medium level of
       privacy. See the chart below. The latter three buttons over-ride 
       any changes via with the <guibutton>Edit</guibutton> button. More 
@@ -1762,7 +1799,7 @@ for details.
       <entry>Feature</entry>
       <entry>Cautious</entry>
       <entry>Medium</entry>
-      <entry>Adventuresome</entry>
+      <entry>Advanced</entry>
     </row>
     </thead>
     <!--  <tfoot> -->
@@ -1777,8 +1814,8 @@ for details.
 
     <row>
       <entry>Ad-blocking Aggressiveness</entry>
-      <entry>low</entry>
       <entry>medium</entry>
+      <entry>high</entry>
       <entry>high</entry>
     </row>
 
@@ -1797,16 +1834,16 @@ for details.
     </row>
     <row>
       <entry>Pop-up killing</entry>
-      <entry>no</entry>
-      <entry>unsolicited</entry>
+      <entry>blocks only</entry>
+      <entry>blocks only</entry>
       <entry>all</entry>
     </row>
     
     <row>
       <entry>Privacy Features</entry>
-      <entry>none</entry>
       <entry>low</entry>
       <entry>medium</entry>
+      <entry>medium/high</entry>
     </row>
 
     <row>
@@ -1883,7 +1920,14 @@ for details.
  <filename>user.action</filename>). The content of these can all be viewed and
  edited from <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
-</para>
+ The over-riding principle when applying actions, is that the last action that
+ matches a given URL, wins. The broadest, most general rules go first
+ (defined in <filename>default.action</filename>),
+ followed by any exceptions (typically also in
+ <filename>default.action</filename>), which are then followed lastly by any
+ local preferences (typically in <emphasis>user</emphasis><filename>.action</filename>). 
+ Generally, <filename>user.action</filename> has the last word.
+ </para>
 
 <para>
  An actions file typically has multiple sections. If you want to use
@@ -1916,7 +1960,8 @@ for details.
  Note that some <link linkend="actions">actions</link>, like cookie suppression
  or script disabling, may render some sites unusable that rely on these
  techniques to work properly. Finding the right mix of actions is not always easy and
- certainly a matter of personal taste. In general, it can be said that the more
+ certainly a matter of personal taste. And, things can always change, requiring 
+ refinements in the configuration. In general, it can be said that the more
  <quote>aggressive</quote> your default settings (in the top section of the
  actions file) are, the more exceptions for <quote>trusted</quote> sites you
  will have to make later. If, for example, you want to crunch all cookies per
@@ -1942,16 +1987,16 @@ for details.
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
  The editor allows both fine-grained control over every single feature on a
  per-URL basis, and easy choosing from wholesale sets of defaults like
- <quote>Cautious</quote>, <quote>Medium</quote> or <quote>Adventuresome</quote>.
- Warning: the <quote>Adventuresome</quote> setting is not only more aggressive, 
- but includes settings that are fun and subversive, and which some may find of 
- dubious merit!
+ <quote>Cautious</quote>, <quote>Medium</quote> or <quote>Advanced</quote>.
+ Warning: the <quote>Advanced</quote> setting is more aggressive, and 
+ will be more likely to cause problems for some sites. Experienced users only!
 </para>
 
 <para>
  If you prefer plain text editing to GUIs, you can of course also directly edit the
- the actions files. Look at <filename>default.action</filename> which is richly
- commented.
+ the actions files with your favorite text editor. Look at
+ <filename>default.action</filename> which is richly commented with many 
+ good examples.
 </para>
 </sect2>
 
@@ -1978,8 +2023,19 @@ for details.
  +<link linkend="handle-as-image">handle-as-image</link> }</literal>,
  then later another one with just <literal>{
  +<link linkend="block">block</link> }</literal>, resulting
- in <emphasis>both</emphasis> actions to apply.
+ in <emphasis>both</emphasis> actions to apply. And there may well be 
+ cases where you will want to combine actions together. Such a section then 
+ might look like:
 </para>
+
+ <para>
+ <screen>
+  { +<literal>handle-as-image</literal>  +<literal>block</literal> }
+  # Block these as if they were images. Send no block page.
+   banners.example.com
+   media.example.com/.*banners
+   .example.com/images/ads/</screen>
+ </para>
 
 <para>
  You can trace this process for any given URL by visiting <ulink
@@ -1987,8 +2043,8 @@ for details.
 </para>
 
 <para>
- More detail on this is provided in the Appendix, <link linkend="ACTIONSANAT">
- Anatomy of an Action</link>.
+ Examples and more detail on this is provided in the Appendix, <link linkend="ACTIONSANAT">
+ Troubleshooting: Anatomy of an Action</link> section.
 </para>
 </sect2>
 
@@ -1997,9 +2053,9 @@ for details.
 <title>Patterns</title>
 <para> 
  As mentioned, <application>Privoxy</application> uses <quote>patterns</quote>
- to determine what actions might apply to which sites and pages your browser 
- attempts to access. These <quote>patterns</quote> use wild card type 
- <emphasis>pattern</emphasis> matching to achieve a high degree of 
+ to determine what <emphasis>actions</emphasis> might apply to which sites and
+ pages your browser attempts to access. These <quote>patterns</quote> use wild
+ card type <emphasis>pattern</emphasis> matching to achieve a high degree of
  flexibility. This allows one expression to be expanded and potentially match
  against many similar patterns.
 </para>
@@ -2013,6 +2069,13 @@ for details.
  <literal>http://</literal>) should <emphasis>not</emphasis> be included in
  the pattern. This is assumed already!
 </para>
+<para>
+ The pattern matching syntax is different for the domain and path parts of
+ the URL. The domain part uses a simple globbing type matching technique, 
+ while the path part uses a more flexible 
+ <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+  Expressions (PCRE)</quote></ulink> based syntax.
+</para>
 
 <variablelist>
  <varlistentry>
@@ -2020,7 +2083,9 @@ for details.
   <listitem>
    <para>
     is a domain-only pattern and will match any request to <literal>www.example.com</literal>,
-    regardless of which document on that server is requested.
+    regardless of which document on that server is requested. So ALL pages in
+    this domain would be covered by the scope of this action. Note that a 
+    simple <literal>example.com</literal> is different and would NOT match.
    </para>
   </listitem>
  </varlistentry>
@@ -2047,7 +2112,7 @@ for details.
   <listitem>
    <para>
     matches the document <literal>/index.html</literal>, regardless of the domain,
-    i.e. on <emphasis>any</emphasis> web server.
+    i.e. on <emphasis>any</emphasis> web server anywhere.
    </para>
   </listitem>
  </varlistentry>
@@ -2056,7 +2121,8 @@ for details.
   <listitem>
    <para>
     matches nothing, since it would be  interpreted as a domain name and
-    there is no top-level domain called <literal>.html</literal>.
+    there is no top-level domain called <literal>.html</literal>. So its 
+    a mistake.
    </para>
   </listitem>
  </varlistentry>
@@ -2095,8 +2161,14 @@ for details.
   <term><literal>.example.</literal></term>
   <listitem>
    <para>
-    matches any domain that <emphasis>CONTAINS</emphasis> <literal>.example.</literal>
-    (Correctly speaking: It matches any FQDN that contains <literal>example</literal> as a domain.)
+    matches any domain that <emphasis>CONTAINS</emphasis> <literal>.example.</literal>.
+    And, by the way, also included would be any files or documents that exist
+    within that domain since no path limitations are specified. (Correctly
+    speaking: It matches any FQDN that contains <literal>example</literal> as
+    a domain.) This might be <literal>www.example.com</literal>,
+    <literal>news.example.de</literal>, or
+    <literal>www.example.net/cgi/testing.pl</literal> for instance. All these
+    cases are matched. 
    </para>
   </listitem>
  </varlistentry>
@@ -2104,10 +2176,15 @@ for details.
 
 <para>
  Additionally, there are wild-cards that you can use in the domain names
- themselves. They work pretty similar to shell wild-cards: <quote>*</quote>
- stands for zero or more arbitrary characters, <quote>?</quote> stands for
- any single character, you can define character classes in square
- brackets and all of that can be freely mixed:
+ themselves. These work similarly to shell globbing type wild-cards:
+ <quote>*</quote> represents zero or more arbitrary characters (this is
+ equivalent to the 
+ <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+ Expression</quote></ulink> based syntax of <quote>.*</quote>),
+ <quote>?</quote>  represents any single character (this is equivalent to the
+ regular expression syntax of a simple <quote>.</quote>), and you can define
+ <quote>character classes</quote> in square brackets which is similar to 
+ the same regular expression technique. All of this can be freely mixed:
 </para>
 
 <variablelist>
@@ -2150,6 +2227,10 @@ for details.
  </varlistentry>
 </variablelist>
 
+<para>
+ While flexibile, this is not the sophistication of full regular expression based syntax.
+</para>
+
 </sect3>
 
 <!--  ~  End section  ~  -->
@@ -2159,9 +2240,11 @@ for details.
 <sect3><title>The Path Pattern</title>
 
 <para>
- <application>Privoxy</application> uses Perl compatible regular expressions
+ <application>Privoxy</application> uses Perl compatible (PCRE)
+  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+  Expression</quote></ulink> based syntax 
  (through the <ulink url="http://www.pcre.org/">PCRE</ulink> library) for
- matching the path.
+ matching the path portion (after the slash), and is thus more flexible.
 </para>
 
 <para>
@@ -2186,6 +2269,72 @@ for details.
  only documents whose path starts with <literal>PaTtErN</literal> in
  <emphasis>exactly</emphasis> this capitalization.
 </para>
+
+<variablelist>
+ <varlistentry>
+  <term><literal>.example.com/.*</literal></term>
+  <listitem>
+   <para>
+     Is equivalent to just <quote>.example.com</quote>, since any documents 
+     within that domain are matched with or without the <quote>.*</quote>
+     regular expression. This is redundant
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>.example.com/.*/index.html</literal></term>
+  <listitem>
+   <para>
+    Will match any page in the domain of <quote>example.com</quote> that is
+    named <quote>index.html</quote>, and that is part of some path. For
+    example, it matches <quote>www.example.com/testing/index.html</quote> but
+    NOT <quote>www.example.com/index.html</quote> because the regular
+    expression called for at least two <quote>/'s</quote>, thus the path 
+    requirement. It also would match 
+    <quote>www.example.com/testing/index_html</quote>, because of the 
+    special meta-character <quote>.</quote>.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>.example.com/(.*/)?index\.html</literal></term>
+  <listitem>
+   <para>
+    This regular expression is conditional so it will match any page 
+    named <quote>index.html</quote> regardless of path which in this case can 
+    have one or more <quote>/'s</quote>. And this one must contain exactly 
+    <quote>.html</quote> (but does not have to end with that!).
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>.example.com/(.*/)(ads|banners?|junk)</literal></term>
+  <listitem>
+   <para>
+    This regular expression will match any path of <quote>example.com</quote>
+    that contains any of the words <quote>ads</quote>, <quote>banner</quote>, 
+    <quote>banners</quote> (because of the <quote>?</quote>) or <quote>junk</quote>.
+    The path does not have to end in these words, just contain them.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>.example.com/(.*/)(ads|banners?|junk)/.*\.(jpe?g|gif|png)$</literal></term>
+  <listitem>
+   <para>
+    This is very much the same as above, except now it must end in either 
+    <quote>.jpg</quote>, <quote>.jpeg</quote>, <quote>.gif</quote> or <quote>.png</quote>. So this 
+    one is limited to common image formats.
+   </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+<para>
+ There are many, many good examples to be found in <filename>default.action</filename>, 
+ and more tutorials below in <link linkend="regex">Appendix on regular expressions</link>.
+</para>
+
 </sect3>
 
 </sect2>
@@ -2219,7 +2368,7 @@ for details.
 </para>
 
 <para> 
- There are three classes of actions:
+ Actions fall into three categories:
 </para>
 
 <para>
@@ -2296,12 +2445,13 @@ for details.
 <para>
  Later defined actions always over-ride earlier ones.  So exceptions 
  to any rules you make, should come in the latter part of the file (or 
- in a file that is processed later when using multiple actions files). For
- multi-valued actions, the actions are applied in the order they are specified.
- Actions files are processed in the order they are defined in
- <filename>config</filename> (the default installation has three actions
- files). It also quite possible for any given URL pattern to match more than
- one pattern and thus more than one set of actions!
+ in a file that is processed later when using multiple actions files such 
+ as <filename>user.action</filename>). For multi-valued actions, the actions
+ are applied in the order they are specified. Actions files are processed in
+ the order they are defined in <filename>config</filename> (the default
+ installation has three actions files). It also quite possible for any given
+ URL pattern to match more than one pattern and thus more than one set of
+ actions! Last match wins.
 </para>
 
 <!-- start actions listing -->
@@ -2398,10 +2548,16 @@ for details.
   <term>Effect:</term>
   <listitem>
    <para>
-    Requests for URLs to which this action applies are blocked, i.e. the requests are not
-    forwarded to the remote server, but answered locally with a substitute page or image,
-    as determined by the <literal><link linkend="handle-as-image">handle-as-image</link></literal>
-    and <literal><link linkend="set-image-blocker">set-image-blocker</link></literal> actions.
+    Requests for URLs to which this action applies are blocked, i.e. the
+    requests are trapped by &my-app; and the requested URL is never retrieved,
+    but is answered locally with a substitute page or image, as determined by
+    the <literal><link
+    linkend="handle-as-image">handle-as-image</link></literal>,
+    <literal><link
+    linkend="set-image-blocker">set-image-blocker</link></literal>, and 
+    <literal><link
+    linkend="handle-as-empty-document">handle-as-empty-document</link></literal> actions.
+    
    </para>
   </listitem>
  </varlistentry>
@@ -2446,7 +2602,8 @@ for details.
    <para>
     It is important to understand this process, in order 
     to understand how <application>Privoxy</application> deals with 
-    ads and other unwanted content.
+    ads and other unwanted content. Blocking is a core feature, and one 
+    upon which various other features depend.
    </para>
    <para>
     The <literal><link linkend="filter">filter</link></literal>
@@ -2462,12 +2619,18 @@ for details.
   <term>Example usage (section):</term>
   <listitem>
     <para>
-     <screen>{+block}      # Block and replace with "blocked" page
-.nasty-stuff.example.com
+     <screen>{+block}      
+# Block and replace with "blocked" page
+ .nasty-stuff.example.com
 
-{+block +handle-as-image} # Block and replace with image
-.ad.doubleclick.net
-.ads.r.us</screen>
+{+block +handle-as-image} 
+# Block and replace with image
+ .ad.doubleclick.net
+ .ads.r.us/banners/
+
+{+block +handle-as-empty-document} 
+# Block and then ignore
+ adserver.exampleclick.net/.*\.js$</screen>
     </para>
   </listitem>
  </varlistentry>
@@ -2577,6 +2740,7 @@ new action
      <screen># Check if www.example.net/ really uses valid XHTML
 {+content-type-overwrite {application/xml}}
 www.example.net/
+
 # but leave the content type unmodified if the URL looks like a style sheet
 {-content-type-overwrite}
 www.example.net/*.\.css$
@@ -3221,10 +3385,12 @@ problem-host.example.com</screen>
   <term>Example usage:</term>
   <listitem>
     <para>
-     <screen>+fast-redirects{simple-check}</screen>
-    </para>
-    <para>
-     <screen>+fast-redirects{check-decoded-url}</screen>
+     <screen>
+ { +fast-redirects{simple-check} }
+   .example.com 
+
+ { +fast-redirects{check-decoded-url} }
+   another.example.com/testing</screen>
     </para>
   </listitem>
  </varlistentry>
@@ -3254,8 +3420,9 @@ problem-host.example.com</screen>
     based substitutions. (Note: as of version 3.0.3 plain text documents 
     are exempted from filtering, because web servers often use the
     <literal>text/plain</literal> MIME type for all files whose type they
-    don't know.) By default, filtering works only on the document content 
-    itself, not the headers.
+    don't know.) By default, filtering works only on the raw document content 
+    itself (that which can be seen with <literal>View Source</literal>), 
+    not the headers.
    </para>
   </listitem>
  </varlistentry>
@@ -3282,7 +3449,7 @@ problem-host.example.com</screen>
    </para>
    <para>
      When used in its negative form,
-     and without parameters, filtering is completely disabled.
+     and without parameters, <emphasis>all</emphasis> filtering is completely disabled.
   </para>
   </listitem>
  </varlistentry>
@@ -3303,8 +3470,13 @@ problem-host.example.com</screen>
     noticeable on slower connections.
    </para>
    <para>
-    This is very powerful feature, and <quote>rolling your own</quote>
-    filters requires a knowledge of regular expressions and HTML.
+   <quote>Rolling your own</quote>
+    filters requires a knowledge of 
+     <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+     Expressions</quote></ulink> and 
+      <ulink url="http://en.wikipedia.org/wiki/Html"><quote>HTML</quote></ulink>.
+    This is very powerful feature, and potentially very intrusive. Use 
+    with caution.    
    </para>
    <para>
     The amount of data that can be filtered is limited to the 
@@ -3314,15 +3486,15 @@ problem-host.example.com</screen>
     data, and all pending data, is passed through unfiltered. 
    </para>
    <para>
-    Inadequate MIME types, such as zipped files, are not filtered at all.
+    Inappropriate MIME types, such as zipped files, are not filtered at all.
     (Again, only text-based types except plain text). Encrypted SSL data
     (from HTTPS servers) cannot be filtered either, since this would violate
     the integrity of the secure transaction. In some situations it might
     be necessary to protect certain text, like source code, from filtering
-    by defining appropriate <literal>-filter</literal> sections.
+    by defining appropriate <literal>-filter</literal> exceptions.
    </para>
    <para>
-    At this time, <application>Privoxy</application> cannot (yet!) uncompress compressed
+    At this time, <application>Privoxy</application> cannot uncompress compressed
     documents. If you want filtering to work on all documents, even those that
     would normally be sent compressed, use the
     <literal><link linkend="prevent-compression">prevent-compression</link></literal>
@@ -4937,9 +5109,9 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    This action is useful to replace whole documents with your own
-    ones. For that to work, they have to be available on another server, 
-    and both should resolve.
+    This action is useful to replace whole documents with ones of your 
+    choosing. This can be used to enforce safe surfing, or just as a simple 
+    convenience.
    </para>
    <para>
     You can do the same by combining the actions
@@ -4957,12 +5129,16 @@ new action
  </varlistentry>
 
  <varlistentry>
-  <term>Example usage:</term>
+  <term>Example usages:</term>
   <listitem>
    <para>
     <screen># Replace example.com's style sheet with another one
-{+redirect{http://localhost/css-replacements/example.com.css}}
-example.com/stylesheet.css</screen>
+{ +redirect{http://localhost/css-replacements/example.com.css} }
+ example.com/stylesheet.css
+
+# Create a short, easy to remember nickname for a favorite site
+{ +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
+ a</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5469,7 +5645,7 @@ new action
  #
  +crunch-all-cookies = +<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> +<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
  -crunch-all-cookies = -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
- block-as-image      = +block +handle-as-image
+ +block-as-image      = +block +handle-as-image
  mercy-for-cookies   = -crunch-all-cookies -<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link>
 
  # These aliases define combinations of actions
@@ -5581,7 +5757,7 @@ that also explains why and how aliases are used:
  #
  +crunch-all-cookies = +<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> +<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
  -crunch-all-cookies = -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
- block-as-image      = +block +handle-as-image
+ +block-as-image      = +block +handle-as-image
  mercy-for-cookies   = -crunch-all-cookies -<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link>
 
  # These aliases define combinations of actions
@@ -5805,7 +5981,7 @@ edit.*.yahoo.com
  generate the banners, so it won't be visible from the URL that the
  request is for an image. Hence we block them <emphasis>and</emphasis>
  mark them as images in one go, with the help of our
- <literal>block-as-image</literal> alias defined above. (We could of
+ <literal>+block-as-image</literal> alias defined above. (We could of
  course just as well use <literal>+<link linkend="block">block</link>
  +<link linkend="handle-as-image">handle-as-image</link></literal> here.)
  Remember that the type of the replacement image is chosen by the
@@ -5819,7 +5995,7 @@ edit.*.yahoo.com
  <screen>
 # Known ad generators:
 #
-{ block-as-image }
+{ +block-as-image }
 ar.atwola.com 
 .ad.doubleclick.net
 .ad.*.doubleclick.net
@@ -6027,12 +6203,10 @@ handle-as-text = -<link linkend="FILTER">filter</link> +-<link linkend="content-
 <para>
  <screen>
 { allow-all-cookies }
-sourceforge.net
-sunsolve.sun.com
-.slashdot.org
-.yahoo.com
-.msdn.microsoft.com
-.redhat.com</screen>
+ sourceforge.net
+ .yahoo.com
+ .msdn.microsoft.com
+ .redhat.com</screen>
 </para>
 
 <para>
@@ -6042,7 +6216,7 @@ sunsolve.sun.com
 <para>
  <screen>
 { -<link linkend="FILTER">filter</link> }
-.your-home-banking-site.com</screen>
+ .your-home-banking-site.com</screen>
 </para>
 
 <para>
@@ -6077,8 +6251,8 @@ stupid-server.example.com/</screen>
 <para>
  <screen>
 { +<link linkend="BLOCK">block</link> }
-www.example.com/nasty-ads/sponsor.gif
-another.popular.site.net/more/junk/here/</screen>
+ www.example.com/nasty-ads/sponsor.gif
+ another.popular.site.net/more/junk/here/</screen>
 </para>
 
 <para>
@@ -6096,9 +6270,10 @@ another.popular.site.net/more/junk/here/</screen>
 <para>
  <screen>
 { +block-as-image }
-.doubleclick.net
-/Realmedia/ads/
-ar.atwola.com/</screen>
+ .doubleclick.net
+ .fastclick.net
+ /Realmedia/ads/
+ ar.atwola.com/</screen>
 </para>
 
 <para>
@@ -6109,13 +6284,16 @@ ar.atwola.com/</screen>
  -- <emphasis>whoa!</emphasis> -- it worked. The <literal>fragile</literal>
  aliases disables those actions that are most likely to break a site. Also,
  good for testing purposes to see if it is <application>Privoxy</application>
- that is causing the problem or not.
+ that is causing the problem or not. We later find other regular sites 
+ that misbehave, and add those to our personalized list of troublemakers:
 </para>
 
 <para>
 <screen>
 { fragile }
-.forbes.com</screen>
+ .forbes.com
+ mail.example.com
+ .mybank.com</screen>
 </para>
 
 <para>
@@ -6128,7 +6306,7 @@ ar.atwola.com/</screen>
 <para>
 <screen>
 { +<link linkend="filter-fun">filter{fun}</link> }
-/ # For ALL sites!</screen>
+ / # For ALL sites!</screen>
 </para>
 
 <para>
@@ -6149,9 +6327,9 @@ ar.atwola.com/</screen>
 <para>
 <screen>
 { allow-ads }
-.sourceforge.net
-.slashdot.org
-.osdn.net</screen>   
+ .sourceforge.net
+ .slashdot.org
+ .osdn.net</screen>   
 </para>
 
 <para>
@@ -6171,7 +6349,7 @@ ar.atwola.com/</screen>
 <para>
 <screen>
 { handle-as-text }
-/.*\.sh$</screen>   
+ /.*\.sh$</screen>   
 </para>
 
 <para>
@@ -6234,7 +6412,7 @@ ar.atwola.com/</screen>
  Substitutions are made at the source level, so if you want to <quote>roll
  your own</quote> filters, you should first be familiar with HTML syntax, 
  and, of course, regular expressions. By default, filters are only applied 
- to the document content, but can be extended to the headers with 
+ to the raw document content, but can be extended to the HTTP headers with 
  the supplemental actions: 
  <link linkend="filter-client-headers">filter-client-headers</link>  and 
  <link linkend="filter-server-headers">filter-server-headers</link>.
@@ -6282,7 +6460,9 @@ ar.atwola.com/</screen>
 </para>
 
 <para>
- If you are new to regular expressions, you might want to take a look at
+ If you are new to 
+  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+  Expressions</quote></ulink>, you might want to take a look at
  the <link linkend="regex">Appendix on regular expressions</link>, and
  see the <ulink url="http://perldoc.perl.org/perlre.html">Perl
  manual</ulink> for
@@ -6879,7 +7059,7 @@ pre-defined filters for your convenience:
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="templates">
-<title>Templates</title>
+<title>Privoxy's Template Files</title>
 <para>
  All <application>Privoxy</application> built-in pages, i.e. error pages such as the 
  <ulink url="http://show-the-404-error.page"><quote>404 - No Such Domain</quote>
@@ -7577,7 +7757,7 @@ Requests</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="actionsanat">
-<title>Anatomy of an Action</title>
+<title>Troubleshooting: Anatomy of an Action</title>
 
 <para>
  The way <application>Privoxy</application> applies 
@@ -7598,6 +7778,13 @@ Requests</title>
  step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
  and easy way to do this (be sure to flush caches afterward!). Looking at the 
  logs is a good idea too.
+</para>
+<para>
+ Another easy troubleshooting step to try is if you have done any
+ customization of your installation, revert back to the installed
+ defaults and see if that helps. There are times the developers get complaints
+ about one thing or another, and the problem is more related to a customized
+ configuration issue.
 </para>
 
 <para>
@@ -7716,41 +7903,42 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 <para>
  The first listing
- is any matches for the <filename>standard.action</filename> file. No hits at
- all here on <quote>standard</quote>. Then next is <quote>default</quote>, or
- our <filename>default.action</filename> file. The large, multi-line listing,
- is how the actions are set to match for all URLs, i.e. our default settings.
- If you look at your <quote>actions</quote> file, this would be the section
- just below the <quote>aliases</quote> section near the top. This will apply to
- all URLs as signified by the single forward slash at the end of the listing
- -- <quote>/</quote>.
+  is for our <filename>default.action</filename> file. The large, multi-line
+  listing, is how the actions are set to match for all URLs, i.e. our default
+  settings. If you look at your <quote>actions</quote> file, this would be the
+  section just below the <quote>aliases</quote> section near the top. This
+  will apply to all URLs as signified by the single forward slash at the end
+  of the listing -- <quote> / </quote>.
 </para>
 
 <para>
- But we can define additional actions that would be exceptions to these general
- rules, and then list specific URLs (or patterns) that these exceptions would
- apply to. Last match wins. Just below this then are two explicit matches for
- <quote>.google.com</quote>. The first is negating our previous cookie setting, 
- which was for <link
+ But we have defined additional actions that would be exceptions to these general
+ rules, and then we list specific URLs (or patterns) that these exceptions
+ would apply to. Last match wins. Just below this then are two explicit
+ matches for <quote>.google.com</quote>. The first is negating our previous
+ cookie setting, which was for <link
  linkend="SESSION-COOKIES-ONLY"><quote>+session-cookies-only</quote></link>
  (i.e. not persistent). So we will allow persistent cookies for google, at
  least that is how it is in this example. The second turns
- <emphasis>off</emphasis> any 
- <link
+ <emphasis>off</emphasis> any <link
  linkend="FAST-REDIRECTS"><quote>+fast-redirects</quote></link>
  action, allowing this to take place unmolested. Note that there is a leading
  dot here -- <quote>.google.com</quote>. This will match any hosts and
  sub-domains, in the google.com domain also, such as
- <quote>www.google.com</quote>. So, apparently, we have these two actions
- defined somewhere in the lower part of our <filename>default.action</filename>
- file, and <quote>google.com</quote> is referenced somewhere in these latter
- sections.
+ <quote>www.google.com</quote> or <quote>mail.google.com</quote>. But it would not 
+ match <quote>www.google.de</quote>! So, apparently, we have these two actions
+ defined as exceptions to the general rules at the top somewhere in the lower
+ part of our <filename>default.action</filename> file, and
+ <quote>google.com</quote> is referenced somewhere in these latter sections.
 </para>
 
 <para>
  Then, for our <filename>user.action</filename> file, we again have no hits.
  So there is nothing google-specific that we might have added to our own, local
- configuration.
+ configuration. If there was, those actions would over-rule any actions from 
+ previously processed files, such as <filename>default.action</filename>.
+ <filename>user.action</filename> typically has the last word. This is the
+ best place to put hard and fast exceptions,
 </para>
 
 <para>
@@ -7824,22 +8012,23 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  <screen>
 
- { +block +handle-as-image }
-  .ad.doubleclick.net
-
- { +block +handle-as-image }
+ { +block }
   ad*.
 
+ { +block }
+  .ad.
+
  { +block +handle-as-image }
-  .doubleclick.net
+  .[a-vx-z]*.doubleclick.net
 </screen>
 </para>
 
 <para>
- We'll just show the interesting part here, the explicit matches. It is 
- matched three different times. Each as an <quote>+block +handle-as-image</quote>,
+ We'll just show the interesting part here - the explicit matches. It is 
+ matched three different times. Two <quote>+block</quote> sections, 
+ and a <quote>+block +handle-as-image</quote>,
  which is the expanded form of one of our aliases that had been defined as: 
- <quote>+imageblock</quote>. (<link
+ <quote>+block-as-image</quote>. (<link
  linkend="ALIASES"><quote>Aliases</quote></link> are defined in
  the first section of the actions file and typically used to combine more 
  than one action.)
@@ -7854,10 +8043,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  is done here -- as both a <link
  linkend="BLOCK"><quote>+block</quote></link>
  <emphasis>and</emphasis> an 
- <link
- linkend="HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></link>.
- The custom alias <quote>+imageblock</quote> just simplifies the process and make 
- it more readable.
+ <link linkend="HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></link>.
+ The custom alias <quote><literal>+block-as-image</literal></quote> just
+ simplifies the process and make it more readable.
 </para>
 
 <para>
@@ -7922,10 +8110,15 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  Ooops, the <quote>/adsl/</quote> is matching <quote>/ads</quote> in our 
  configuration! But we did not want this at all! Now we see why we get the
- blank page. We could now add a new action below this that explicitly 
- <emphasis>un</emphasis> blocks (<quote>{-block}</quote>) paths with
- <quote>adsl</quote> in them (remember, last match in the configuration wins).
- There are various ways to handle such exceptions. Example:
+ blank page. It is actually triggering two different actions here, and 
+ the effects are aggregated so that the URL is blocked, and &my-app; is told 
+ to treat the block as if it were an image. But this is, of course, all wrong.
+  We could now add a new action below this (or better in our own
+  <filename>user.action</filename> file) that explicitly
+  <emphasis>un</emphasis> blocks (
+  <link linkend="BLOCK"><quote>{-block}</quote></link>) paths with
+  <quote>adsl</quote> in them (remember, last match in the configuration
+  wins). There are various ways to handle such exceptions. Example:
 </para>
 
 <para>
@@ -7937,8 +8130,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- Now the page displays ;-) Be sure to flush your browser's caches when 
- making such changes. Or, try using <literal>Shift+Reload</literal>.
+ Now the page displays ;-) 
+ Remember to flush your browser's caches when making these kinds of changes to
+ your configuration to insure that you get a freshly delivered page! Or, try
+ using <literal>Shift+Reload</literal>.
 </para>
 
 <para>
@@ -7955,19 +8150,21 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- That actually was very telling and pointed us quickly to where the problem
+ That actually was very helpful and pointed us quickly to where the problem
  was. If you don't get this kind of match, then it means one of the default 
- rules in the first section is causing the problem. This would require some 
- guesswork, and maybe a little trial and error to isolate the offending rule.
- One likely cause would be one of the <quote>{+filter}</quote> actions. These 
- tend to be harder to troubleshoot. Try adding the URL for the site to one of
- aliases that turn off <quote>+filter</quote>:
+ rules in the first section of <filename>default.action</filename> is causing
+ the problem. This would require some guesswork, and maybe a little trial and
+ error to isolate the offending rule. One likely cause would be one of the
+ <link linkend="FILTER"><quote>+filter</quote></link> actions.
+ These tend to be harder to troubleshoot.
+ Try adding the URL for the site to one of aliases that turn off
+ <link linkend="FILTER"><quote>+filter</quote></link>:
 </para>
 
 <para>
  <screen>
 
- {shop}
+ { shop }
  .quietpc.com
  .worldpay.com   # for quietpc.com
  .jungle.com
@@ -7977,8 +8174,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 
 <para>
- <quote>{shop}</quote> is an <quote>alias</quote> that expands to 
- <quote>{ -filter -session-cookies-only }</quote>.
+ <quote><literal>{ shop }</literal></quote> is an <quote>alias</quote> that expands to 
+ <quote><literal>{ -filter -session-cookies-only }</literal></quote>.
  Or you could do your own exception to negate filtering:
 
 </para>
@@ -7986,29 +8183,55 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  <screen>
 
- {-filter}
+ { -filter }
+ # Disable ALL filter actions for sites in this section
  .forbes.com
+ developer.ibm.com
+ localhost
 </screen>
 </para>
 
 <para>
- This would turn off all filtering for that site. This would probably be most
- appropriately put in <filename>user.action</filename>, for local site
- exceptions.
+ This would turn off all filtering for these sites. This is best
+ put in <filename>user.action</filename>, for local site
+ exceptions. Note that when a simple domain pattern is used by itself (without
+ the subsequent path portion), all sub-pages within that domain are included 
+ automatcially in the scope of the action.
 </para>
 
 <para>
  Images that are inexplicably being blocked, may well be hitting the 
- <quote>+filter{banners-by-size}</quote> rule, which assumes 
- that images of certain sizes are ad banners (works well most of the time 
- since these tend to be standardized).
+<link linkend="FILTER-BANNERS-BY-SIZE"><quote>+filter{banners-by-size}</quote></link>
+ rule, which assumes 
+ that images of certain sizes are ad banners (works well 
+ <emphasis>most of the time</emphasis>  since these tend to be standardized).
 </para>
 
 <para>
- <quote>{fragile}</quote> is an alias that disables most actions. This can be 
- used as a last resort for problem sites. Remember to flush caches! If this 
- still does not work, you will have to go through the remaining actions one by
- one to find which one(s) is causing the problem.
+ <quote><literal>{ fragile }</literal></quote> is an alias that disables most
+ actions that are the most likely to cause trouble. This can be used as a
+ last resort for problem sites. 
+</para> 
+<para>
+ <screen>
+
+ { fragile }
+ # Handle with care: easy to break
+ mail.google.
+ mybank.example.com</screen>
+</para>
+ 
+
+<para>
+ <emphasis>Remember to flush caches!</emphasis> Note that the 
+ <literal>mail.google</literal> reference lacks the TLD portion (e.g. 
+ <quote>.com</quote>. This will effectively match any TLD with 
+ <literal>google</literal> in it, such as <literal>mail.google.de</literal>, 
+ just as an example.
+</para>
+<para> 
+ If this still does not work, you will have to go through the remaining
+ actions one by one to find which one(s) is causing the problem.
 </para>
 
 </sect2>
@@ -8037,6 +8260,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.21  2006/09/20 03:21:36  david__schmidt
+ Just the tiniest tweak.  Wafer thin!
+
  Revision 2.20  2006/09/10 14:53:54  hal9
  Results of spell check. User manual has some updates to standard.actions file
  info.
