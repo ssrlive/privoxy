@@ -1,10 +1,10 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/INSTALL,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/source/install.sgml,v $
  *
  * Purpose     :  INSTALL file to help with installing from source.
  *
- * Copyright   :  Written by and Copyright (C) 2001,2002 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -26,30 +26,27 @@
  *                The GNU General Public License should be included with
  *                this file.  If not, you can view it at
  *                http://www.gnu.org/copyleft/gpl.html
- *                or write to the Free Software Foundation, Inc., 59
- *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *                or write to the Free Software Foundation, Inc., 
+ *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, 
+ *                USA
  *
  *********************************************************************/
    
 
 -------------------------------------------------------------------------------
 
-This file describes installing Privoxy from source. If you are installing a
-pre-built binary installation, you should probably read the appropriate section
-in User Manual.
-
 To build Privoxy from source, autoconf, GNU make (gmake), and, of course, a C
 compiler like gcc are required.
 
-When building from a source tarball (either release version or nightly CVS
-tarball), first unpack the source:
+When building from a source tarball, first unpack the source:
 
- tar xzvf privoxy-3.1.1-beta-src* [.tgz or .tar.gz]                            
- cd privoxy-3.1.1-beta                                                         
+ tar xzvf privoxy-3.0.5-beta-src* [.tgz or .tar.gz]                            
+ cd privoxy-3.0.5-beta                                                         
 
-For retrieving the current CVS sources, you'll need CVS installed. Note that
-sources from CVS are development quality, and may not be stable, or well
-tested. To download CVS source:
+For retrieving the current CVS sources, you'll need a CVS client installed.
+Note that sources from CVS are typicially development quality, and may not be
+stable, or well tested. To download CVS source, check the Sourceforge
+documentation, which might give commands like:
 
   cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login          
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co current 
@@ -137,17 +134,19 @@ user to determine how and where to start Privoxy. The init script should be
 checked for correct paths and values, if anything other than a default install
 is done.
 
-If install finds previous versions of any configuration files, these will not
-be overwritten, and the new ones will be installed with a "new" extension. You
-will then need to manually update the installed configuration files as needed.
-All template files will be overwritten. If you have customized, local
+If install finds previous versions of any local configuration files, these will
+not be overwritten, and the new ones will be installed with a "new" extension.
+default.action, default.filter, and standard.action will be overwritten. You
+will then need to manually update the other installed configuration files as
+needed. All template files will be overwritten. If you have customized, local
 templates, you should save these first. If a previous version of Privoxy is
 already running, you will have to restart it manually.
 
-For more detailed instructions on how to build Redhat and SuSE RPMs, Windows
+For more detailed instructions on how to build Redhat RPMs, Windows
 self-extracting installers, building on platforms with special requirements
 etc, please consult the developer manual.
 
 The simplest command line to start Privoxy is $path/privoxy --user=privoxy
 $path/etc/privoxy/config. See privoxy --usage, or the man page, for other
 options, and configuration.
+
