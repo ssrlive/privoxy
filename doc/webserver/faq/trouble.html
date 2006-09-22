@@ -97,20 +97,16 @@ CLASS="APPLICATION"
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is using.</P
+> is using, or, if using a forwarding 
+ rule, you have a configuration problem or a problem with a host in the 
+ forwarding chain.
+ </P
 ><P
-> Early <SPAN
+> You should verify that <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> 2.x versions (and also
- <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
->) used port 8000 by 
- default. This has been changed to port 8118 now, due to a conflict 
- with NAS (Network Audio Service), which uses port 8000. If you haven't, 
- you need to change your browser to the new port number, or alternately 
- change the <A
+> is indeed running and that the correct port is set,
+ and matches what your browser is set to. See <A
 HREF="../user-manual/config.html#LISTEN-ADDRESS"
 TARGET="_top"
 ><TT
@@ -125,14 +121,16 @@ CLASS="APPLICATION"
 HREF="../user-manual/config.html"
 TARGET="_top"
 >main configuration file</A
->.</P
+>. If using 
+ any forwarding rules, disable those to make sure the problem is not with 
+ a forwarder.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN980"
+NAME="AEN979"
 ></A
 >5.2. I just added a new rule, but the steenkin ad is 
 still getting through. How?</H3
@@ -806,7 +804,7 @@ CLASS="QUOTE"
 > which is reporting whatever problem occurred
  downstream, and not the root cause of the error.</P
 ><P
-> In any case, v. 3.0.4 includes various improvements to help
+> In any case, v. 3.0.5 includes various improvements to help
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN

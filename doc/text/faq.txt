@@ -2,7 +2,7 @@ Privoxy Frequently Asked Questions
 
 Copyright © 2001-2006 by Privoxy Developers
 
-$Id: faq.sgml,v 2.17 2006/09/17 14:56:32 hal9 Exp $
+$Id: faq.sgml,v 2.18 2006/09/22 01:27:55 hal9 Exp $
 
 This FAQ gives quick answers to frequently asked questions about Privoxy. It is
 not a substitute for the Privoxy User Manual.
@@ -429,8 +429,9 @@ Privoxy really is free in every respect!
 1.13. Can Privoxy remove spyware? Adware? Viruses?
 
 No. Privoxy cannot remove anything. It is not a removal tool. It is a
-preventative. Privoxy can help prevent contact from sites that use such
-tactics, and thus could conceivably prevent contamination from such sites.
+preventative. Privoxy can help prevent contact from sites that use such tactics
+with approriate configuration rules, and thus could conceivably prevent
+contamination from such sites.
 
 -------------------------------------------------------------------------------
 
@@ -787,7 +788,7 @@ potentially a very powerful feature, but requires some expertise in both
 regular expressions and HTML/HTTP. You should place any modifications to the
 default filters, or any new ones you create in a separate file, such as
 user.filter, so they won't be overwritten during upgrades. The ability to
-define multiple filter files in config is a new feature as of v. 3.0.4.
+define multiple filter files in config is a new feature as of v. 3.0.5.
 
 There is no GUI editor option for this part of the configuration, but you can
 disable/enable the various pre-defined filters of the included default.filter
@@ -876,7 +877,7 @@ will try to load the actual banner images and the usual image blocking will
 
 3.15. Can Privoxy run as a service on Win2K/NT/XP?
 
-Yes. Version 3.0.4 introduces full Windows service functionality. See the User
+Yes. Version 3.0.5 introduces full Windows service functionality. See the User
 Manual for details on how to install and configure Privoxy as a service.
 
 Earlier 3.x versions could run as a system service using srvany.exe. See the
@@ -1212,7 +1213,7 @@ by socks4 or socks4a. Most likely you are interested in Tor to increase your
 anonymity level, therefore you should use socks4a, to make sure Privoxy's DNS
 requests are done through Tor and thus invisible to your local network.
 
-Since Privoxy 3.0.4, its configuration (section 5.2) is already prepared for
+Since Privoxy 3.0.5, its configuration (section 5.2) is already prepared for
 Tor, if you are using a default Tor configuration and run it on the same system
 as Privoxy, you just have to uncomment the line:
 
@@ -1516,13 +1517,13 @@ choosing the "Adventuresome" profile in the web-based editor. Please upgrade!
 5.1. I am getting "connection refused" with every web page?
 
 Either Privoxy is not running, or your browser is configured for a different
-port than what Privoxy is using.
+port than what Privoxy is using, or, if using a forwarding rule, you have a
+configuration problem or a problem with a host in the forwarding chain.
 
-Early Privoxy 2.x versions (and also Junkbuster) used port 8000 by default.
-This has been changed to port 8118 now, due to a conflict with NAS (Network
-Audio Service), which uses port 8000. If you haven't, you need to change your
-browser to the new port number, or alternately change the listen-address option
-in Privoxy's main configuration file.
+You should verify that Privoxy is indeed running and that the correct port is
+set, and matches what your browser is set to. See listen-address option in
+Privoxy's main configuration file. If using any forwarding rules, disable those
+to make sure the problem is not with a forwarder.
 
 -------------------------------------------------------------------------------
 
@@ -1800,7 +1801,7 @@ case of a "socks4a" proxy, the socks server handles all the DNS. Privoxy would
 just be the "messenger" which is reporting whatever problem occurred
 downstream, and not the root cause of the error.
 
-In any case, v. 3.0.4 includes various improvements to help Privoxy better
+In any case, v. 3.0.5 includes various improvements to help Privoxy better
 handle these cases.
 
 -------------------------------------------------------------------------------

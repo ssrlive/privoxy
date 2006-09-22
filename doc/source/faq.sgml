@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.17 2006/09/17 14:56:32 hal9 Exp $
+ $Id: faq.sgml,v 2.18 2006/09/22 01:27:55 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.17 2006/09/17 14:56:32 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.18 2006/09/22 01:27:55 hal9 Exp $</pubdate>
 
 <!--
 
@@ -414,8 +414,8 @@ warranty? Registration?</title>
 <para>
  No. &my-app; cannot remove anything. It is not a removal tool. It is a
  preventative. &my-app; can help prevent contact from sites 
- that use such tactics, and thus could conceivably prevent contamination from
- such sites.
+ that use such tactics with approriate configuration rules, and thus could
+ conceivably prevent contamination from such sites.
 </para>
 </sect2>
 
@@ -932,7 +932,7 @@ with a browser? Does that not raise security issues?</title>
  in a separate file, such as <filename>user.filter</filename>, so they won't 
  be overwritten during upgrades. 
  The ability to define multiple filter files 
- in <filename>config</filename> is a new feature as of v. 3.0.4.]]>
+ in <filename>config</filename> is a new feature as of v. 3.0.5.]]>
 </para>
 
 <para>
@@ -1073,7 +1073,7 @@ instead of the checkerboard image. Why and how do I get rid of this?</title>
 on Win2K/NT/XP?</title>
 <para>
 <![%p-newstuff;[
- Yes. Version 3.0.4 introduces full <application>Windows</application> service
+ Yes. Version 3.0.5 introduces full <application>Windows</application> service
  functionality. See <ulink url="../user-manual/installation.html#installation-pack-win">
  the User Manual</ulink> for details on how to install and configure 
  <application>Privoxy</application> as a service.
@@ -1563,7 +1563,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 
 <![%p-newstuff;[
 <para>
- Since <application>Privoxy</application> 3.0.4, its configuration (section 5.2)
+ Since <application>Privoxy</application> 3.0.5, its configuration (section 5.2)
  is already prepared for <application>Tor</application>, if you are using a
  default <application>Tor</application> configuration and run it on the same
  system as &my-app;, you just have to uncomment the line:
@@ -1947,19 +1947,20 @@ with every web page?</title>
 <para>
  Either <application>Privoxy</application> is not running, or your 
  browser is configured for a different port than what
- <application>Privoxy</application> is using.
+ <application>Privoxy</application> is using, or, if using a forwarding 
+ rule, you have a configuration problem or a problem with a host in the 
+ forwarding chain.
+ 
 </para>
 
 <para>
- Early <application>Privoxy</application> 2.x versions (and also
- <application>Junkbuster</application>) used port 8000 by 
- default. This has been changed to port 8118 now, due to a conflict 
- with NAS (Network Audio Service), which uses port 8000. If you haven't, 
- you need to change your browser to the new port number, or alternately 
- change the <ulink
+ You should verify that &my-app; is indeed running and that the correct port is set,
+ and matches what your browser is set to. See <ulink
  url="../user-manual/config.html#LISTEN-ADDRESS"><literal>listen-address</literal>
  option</ulink> in <application>Privoxy's</application> <ulink
- url="../user-manual/config.html">main configuration file</ulink>.
+ url="../user-manual/config.html">main configuration file</ulink>. If using 
+ any forwarding rules, disable those to make sure the problem is not with 
+ a forwarder.
 </para>
 
 </sect2>
@@ -2351,7 +2352,7 @@ Why?</title>
 </para>
 <![%p-newstuff;[
 <para>
- In any case, v. 3.0.4 includes various improvements to help
+ In any case, v. 3.0.5 includes various improvements to help
  <application>Privoxy</application> better handle these cases.
 </para>]]>
 </sect2>
@@ -2465,6 +2466,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.18  2006/09/22 01:27:55  hal9
+Final commit of probably various minor changes here and there. Unless
+something changes this should be ready for pending release.
+
 Revision 2.17  2006/09/17 14:56:32  hal9
 This includes yet several more new FAQs, some improved wording, enhanced
 mark-up, various hyper links to wikipedia to explain key terminology to the
