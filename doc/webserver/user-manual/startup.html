@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.4 User Manual"
+TITLE="Privoxy 3.0.5 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Quickstart to Using Privoxy"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.4 User Manual</TH
+>Privoxy 3.0.5 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -77,10 +77,7 @@ CLASS="SECT1"
 ><A
 NAME="STARTUP"
 ></A
->5. Starting <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></H1
+>5. Starting Privoxy</H1
 ><P
 > Before launching <SPAN
 CLASS="APPLICATION"
@@ -90,9 +87,20 @@ CLASS="APPLICATION"
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> as a HTTP and HTTPS proxy. The default is
+> as a HTTP and HTTPS (SSL) 
+ <A
+HREF="http://en.wikipedia.org/wiki/Proxy_server"
+TARGET="_top"
+>proxy</A
+>. The default is
  127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
- used port 8000). This is the one configuration step that must be done!</P
+ used port 8000). This is the one configuration step <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>that must be done</I
+></SPAN
+>!</P
 ><P
 > Please note that <SPAN
 CLASS="APPLICATION"
@@ -103,17 +111,18 @@ CLASS="APPLICATION"
 >  <DIV
 CLASS="FIGURE"
 ><A
-NAME="AEN604"
+NAME="AEN617"
 ></A
 ><P
 ><B
->Figure 2. Proxy Configuration (Mozilla)</B
+>Figure 2. Proxy Configuration Showing
+  Mozilla/Netscape HTTP and HTTPS (SSL) Settings</B
 ></P
 ><DIV
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="../images/proxy_setup.jpg"></P
+SRC="proxy_setup.jpg"></P
 ></DIV
 ></DIV
 >
@@ -129,27 +138,19 @@ CLASS="LITERALLAYOUT"
 >&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Tools</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Options</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >General</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Connection Settings</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Manual Proxy Configuration</SPAN
-></P
+><br>&#13;</P
 ><P
 > 
  With <SPAN
@@ -165,50 +166,36 @@ CLASS="LITERALLAYOUT"
 >&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Edit</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Preferences</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Advanced</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Proxies</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >HTTP Proxy</SPAN
-></P
+><br>&#13;</P
 ><P
 > For <SPAN
 CLASS="APPLICATION"
->Internet Explorer</SPAN
+>Internet Explorer v.5-6</SPAN
 >: </P
 ><P
 CLASS="LITERALLAYOUT"
 >&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Tools</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
->Internet Properties</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>Internet Options</SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >Connections</SPAN
-><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SPAN
+>&nbsp;-&#62;&nbsp;<SPAN
 CLASS="GUIBUTTON"
 >LAN Settings</SPAN
 ></P
@@ -218,11 +205,54 @@ CLASS="QUOTE"
 >"Use Proxy"</SPAN
 > and fill in the appropriate info
  (Address: 127.0.0.1, Port: 8118). Include HTTPS (SSL), if you want HTTPS
- proxy support too. </P
+ proxy support too (sometimes labeled <SPAN
+CLASS="QUOTE"
+>"Secure"</SPAN
+>). Make sure any
+ checkboxes like <SPAN
+CLASS="QUOTE"
+>"Use the same proxy server for all protocols"</SPAN
+> is
+ <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>UNCHECKED</I
+></SPAN
+>. You want only HTTP and HTTPS (SSL)!</P
+><P
+>  <DIV
+CLASS="FIGURE"
+><A
+NAME="AEN654"
+></A
+><P
+><B
+>Figure 3. Proxy Configuration Showing
+  Internet Explorer HTTP and HTTPS (Secure) Settings</B
+></P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="proxy2.jpg"></P
+></DIV
+></DIV
+>
+ </P
 ><P
 > After doing this, flush your browser's disk and memory caches to force a
- re-reading of all pages and to get rid of any ads that may be cached. You 
- are now ready to start enjoying the benefits of using
+ re-reading of all pages and to get rid of any ads that may be cached. Remove 
+ any <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookies</A
+>,
+ if you want <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to manage that. You are now
+ ready to start enjoying the benefits of using
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -252,14 +282,17 @@ CLASS="SECT2"
 ><A
 NAME="START-REDHAT"
 ></A
->5.1. Red Hat and Conectiva</H2
+>5.1. Red Hat, Fedora and Conectiva</H2
 ><P
-> We use a script. Note that Red Hat does not start Privoxy upon booting per
- default. It will use the file <TT
+> A default Red Hat installation may not start <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> upon boot. It will use
+ the file <TT
 CLASS="FILENAME"
 >/etc/privoxy/config</TT
-> as
- its main configuration file.</P
+> as its main configuration
+ file.</P
 ><P
 > <TABLE
 BORDER="0"
@@ -274,6 +307,22 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ></P
+><P
+> Or ...</P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+> # service privoxy start</PRE
+></TD
+></TR
+></TABLE
+></P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -284,7 +333,10 @@ NAME="START-DEBIAN"
 ></A
 >5.2. Debian</H2
 ><P
-> We use a script. Note that Debian starts Privoxy upon booting per
+> We use a script. Note that Debian typically starts <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> upon booting per
  default.  It will use the file
  <TT
 CLASS="FILENAME"
@@ -345,7 +397,10 @@ NAME="START-WINDOWS"
 ></A
 >5.4. Windows</H2
 ><P
->Click on the Privoxy Icon to start <SPAN
+>Click on the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> Icon to start <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >. If no configuration file is
@@ -357,15 +412,24 @@ CLASS="APPLICATION"
 CLASS="FILENAME"
 >config.txt</TT
 >. Note that Windows will
- automatically start Privoxy when the system starts if you chose that option
+ automatically start <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> when the system starts if you chose that option
  when installing.</P
 ><P
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > can run with full Windows service functionality.
- On Windows only, the Privoxy program has two new command line arguments
- to install and uninstall Privoxy as a service. See the 
+ On Windows only, the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> program has two new command line arguments
+ to install and uninstall <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> as a service. See the 
  <A
 HREF="installation.html#INSTALLATION-PACK-WIN"
 >Windows Installation
@@ -433,7 +497,10 @@ NAME="START-MACOSX"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > is configured to
- start automatically when the system restarts.  To start Privoxy by hand,
+ start automatically when the system restarts.  To start <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> manually,
  double-click on the <TT
 CLASS="LITERAL"
 >StartPrivoxy.command</TT
@@ -694,9 +761,15 @@ CLASS="EMPHASIS"
 >--user</I
 ></SPAN
 > option, 
-   chroot to that user's home directory, i.e. make the kernel pretend to the Privoxy
+   chroot to that user's home directory, i.e. make the kernel pretend to the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
    process that the directory tree starts there. If set up carefully, this can limit 
-   the impact of possible vulnerabilities in Privoxy to the files contained in that hierarchy.
+   the impact of possible vulnerabilities in <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to the files contained in that hierarchy.
    Unix only.
   </P
 ></LI
@@ -743,8 +816,8 @@ CLASS="APPLICATION"
 > On <SPAN
 CLASS="APPLICATION"
 >MS Windows</SPAN
-> only there are two addition 
- options to allow <SPAN
+> only there are two additional 
+ command-line options to allow <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > to install and 
@@ -806,10 +879,7 @@ ACCESSKEY="N"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Quickstart to Using <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></TD
+>Quickstart to Using Privoxy</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -819,10 +889,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
-><SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> Configuration</TD
+>Privoxy Configuration</TD
 ></TR
 ></TABLE
 ></DIV

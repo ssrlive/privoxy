@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.4 User Manual"
+TITLE="Privoxy 3.0.5 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="What's New in this Release"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.4 User Manual</TH
+>Privoxy 3.0.5 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -77,10 +77,7 @@ CLASS="SECT1"
 ><A
 NAME="QUICKSTART"
 ></A
->4. Quickstart to Using <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></H1
+>4. Quickstart to Using Privoxy</H1
 ><P
 > <P
 ></P
@@ -135,7 +132,12 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > as HTTP and
-   HTTPS (SSL) proxy by setting the proxy configuration for address of
+   HTTPS (SSL)  <A
+HREF="http://en.wikipedia.org/wiki/Proxy_server"
+TARGET="_top"
+>proxy</A
+>
+   by setting the proxy configuration for address of
    <TT
 CLASS="LITERAL"
 >127.0.0.1</TT
@@ -162,8 +164,13 @@ CLASS="LITERAL"
     If using <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> to manage cookies, you should 
-    remove any currently stored cookies too.
+> to manage 
+    <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookies</A
+>,
+    you should remove any currently stored cookies too.
   </P
 ></LI
 ><LI
@@ -179,16 +186,24 @@ HREF="configuration.html"
 >Configuration section</A
 > for more
    configuration options, and how to customize your installation.
- </P
+   You might also want to look at the <A
+HREF="quickstart.html#QUICKSTART-AD-BLOCKING"
+>next section</A
+> for a quick
+   introduction to how <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> blocks ads and
+   banners.</P
 ></LI
 ><LI
 ><P
->    If you experience ads that slipped through, innocent images that are
+>    If you experience ads that slip through, innocent images that are
     blocked, or otherwise feel the need to fine-tune
     <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
-> behaviour, take a look at the <A
+> behavior, take a look at the <A
 HREF="actions-file.html"
 >actions files</A
 >. As a quick start, you might
@@ -205,10 +220,10 @@ TARGET="_top"
 CLASS="QUOTE"
 >"<A
 HREF="appendix.html#ACTIONSANAT"
->Anatomy of an
+>Troubleshooting: Anatomy of an
     Action</A
 >"</SPAN
-> has hints how to debug actions that
+> has hints how to understand and debug actions that
     <SPAN
 CLASS="QUOTE"
 >"misbehave"</SPAN
@@ -217,7 +232,10 @@ CLASS="QUOTE"
 ></LI
 ><LI
 ><P
->   For easy access to Privoxy's most important controls, drag the provided
+>   For easy access to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>'s most important controls, drag the provided
    <A
 HREF="appendix.html#BOOKMARKLETS"
 >Bookmarklets</A
@@ -630,7 +648,7 @@ CLASS="GUIBUTTON"
 >  <DIV
 CLASS="FIGURE"
 ><A
-NAME="AEN553"
+NAME="AEN565"
 ></A
 ><P
 ><B
@@ -640,7 +658,7 @@ NAME="AEN553"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="../images/files-in-use.jpg"></P
+SRC="files-in-use.jpg"></P
 ></DIV
 ></DIV
 >
@@ -825,10 +843,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Starting <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></TD
+>Starting Privoxy</TD
 ></TR
 ></TABLE
 ></DIV

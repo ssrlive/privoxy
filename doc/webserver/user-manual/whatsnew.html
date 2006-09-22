@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.4 User Manual"
+TITLE="Privoxy 3.0.5 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Installation"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.4 User Manual</TH
+>Privoxy 3.0.5 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -82,7 +82,7 @@ NAME="WHATSNEW"
 > There are many improvements and new features in <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> 3.0.4
+> 3.0.5
  :</P
 ><P
 > <P
@@ -90,15 +90,18 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
->    Mulitiple <A
+>    Multiple <A
 HREF="filter-file.html"
 >filter files</A
-> can now be specifed in <TT
+> can now be specified in <TT
 CLASS="FILENAME"
 >config</TT
 >. This allows for 
     locally defined filters that can be maintained separately from the filters as
-    supplied by the developers.
+    supplied by the developers, i.e. <TT
+CLASS="FILENAME"
+>default.filter</TT
+>.
    </P
 ></LI
 ><LI
@@ -349,7 +352,8 @@ HREF="config.html#USER-MANUAL"
 ></LI
 ><LI
 ><P
->    Actions files problems and suggestions are now being directed to: <A
+>    Actions files problems and suggestions are now being directed to: 
+    <A
 HREF="http://sourceforge.net/tracker/?group_id=11118&atid=460288"
 TARGET="_top"
 >http://sourceforge.net/tracker/?group_id=11118&#38;atid=460288</A
@@ -361,9 +365,31 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
->    In addition, there are various bug fixes and significant enhancements, including 
-    error pages should no longer be cached if the problem is fixed, better DNS
-    error handling, and various logging improvements.
+>    In addition, there are numerous bug fixes and significant enhancements,
+    including error pages should no longer be cached if the problem is fixed,
+    much better DNS error handling, and various logging improvements.
+   </P
+></LI
+><LI
+><P
+>    The default actions setting is now <TT
+CLASS="LITERAL"
+>Cautious</TT
+>. Previous
+    releases had a default setting of <TT
+CLASS="LITERAL"
+>Medium</TT
+>. Experienced
+    users may want to adjust this, as it is fairly conservative by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    standards and past practices. See <A
+HREF="http://config.privoxy.org/edit-actions-list?f=default"
+TARGET="_top"
+>    http://config.privoxy.org/edit-actions-list?f=default</A
+>. New users
+    should try the default settings for a while before turning up the volume.
    </P
 ></LI
 ></UL
@@ -396,7 +422,7 @@ CLASS="APPLICATION"
 ><LI
 ><P
 >  
-   On the other hand, some installers may not overwrite any existing configuration 
+   On the other hand, other installers may not overwrite any existing configuration 
    files, thinking you will want to do that. You may want to manually check 
    your saved files against the newer versions to see if the improvements have
    merit, or whether there are new options that you may want to consider.
@@ -414,15 +440,42 @@ HREF="actions-file.html#FAST-REDIRECTS"
 >fast-redirects</A
 ></TT
 >
-     which has changed syntax, and may require adjustments to local configs.
+     which has changed syntax, and will require adjustments to local configs, 
+     such as <TT
+CLASS="FILENAME"
+>user.action</TT
+>. You must reference the new 
+     syntax: 
    </P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  { +fast-redirects{check-decoded-url} }
+   .example.com
+   mybank.com
+   .google.</PRE
+></TD
+></TR
+></TABLE
+></P
 ></LI
 ><LI
 ><P
 >     The <TT
 CLASS="FILENAME"
 >jarfile</TT
->, cookie logger, is off by default now.
+>, 
+     <A
+HREF="http://en.wikipedia.org/wiki/Browser_cookie"
+TARGET="_top"
+>cookie</A
+> logger, is off by default now.
     </P
 ></LI
 ><LI
@@ -441,6 +494,8 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"off"</SPAN
 > by default.
+   There are also a number of new actions you may want to consider, most of
+   which are not incorporated into the default settings as yet (see above).
   </P
 ></LI
 ><LI
@@ -511,10 +566,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Quickstart to Using <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-></TD
+>Quickstart to Using Privoxy</TD
 ></TR
 ></TABLE
 ></DIV

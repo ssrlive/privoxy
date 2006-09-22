@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.4 User Manual"
+TITLE="Privoxy 3.0.5 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Privoxy Configuration"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.4 User Manual</TH
+>Privoxy 3.0.5 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -228,8 +228,7 @@ CLASS="APPLICATION"
 >, and is used for help links from some
     of the internal CGI pages. The manual itself is normally packaged with the
     binary distributions, so you probably want to set this to a locally
-    installed copy. For multi-user setups, you could provide a copy on a local
-    webserver for all your users and use the corresponding URL here.
+    installed copy. 
    </P
 ><P
 >    Examples:
@@ -618,22 +617,6 @@ CLASS="LITERAL"
 >/</TT
 >"</SPAN
 >, please
-   </P
-><P
->    When development goes modular and multi-user, the blocker, filter, and
-    per-user config will be stored in subdirectories of <SPAN
-CLASS="QUOTE"
->"confdir"</SPAN
->.
-    For now, the configuration directory structure is flat, except for 
-    <TT
-CLASS="FILENAME"
->confdir/templates</TT
->, where the HTML templates for CGI 
-    output reside (e.g. <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
-> 404 error page). 
    </P
 ></DD
 ></DL
@@ -1161,7 +1144,7 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    The trust file to use
+>    The name of the trust file to use
    </P
 ></DD
 ><DT
@@ -1195,7 +1178,7 @@ CLASS="EMPHASIS"
 >Effect if unset:</DT
 ><DD
 ><P
->    The entire trust mechanism is turned off.
+>    The entire trust mechanism is disabled.
    </P
 ></DD
 ><DT
@@ -1228,7 +1211,11 @@ CLASS="LITERAL"
     <TT
 CLASS="LITERAL"
 >~www.example.com</TT
->. 
+> allows access to
+    <TT
+CLASS="LITERAL"
+>~www.example.com/features/news.html</TT
+>, etc. 
    </P
 ><P
 >    Or, you can designate sites as <SPAN
@@ -1243,16 +1230,18 @@ CLASS="LITERAL"
 >+</TT
 > character. The effect is that
     access to untrusted sites will be granted -- but only if a link from this
-    trusted referrer was used. The link target will then be added to the
-    <SPAN
+    trusted referrer was used to get there. The link target will then be added
+    to the <SPAN
 CLASS="QUOTE"
 >"trustfile"</SPAN
-> so that future, direct accesses will be granted.
-    Sites added via this mechanism do not become trusted referrers themselves
-    (i.e. they are added with a <TT
+> so that future, direct accesses will be
+    granted. Sites added via this mechanism do not become trusted referrers
+    themselves (i.e. they are added with a <TT
 CLASS="LITERAL"
 >~</TT
 > designation).
+    There is a limit of 512 such entries, after which new entries will not be
+    made.
    </P
 ><P
 >    If you use the <TT
@@ -2379,12 +2368,7 @@ NAME="FORWARDING"
  multiple proxies.
  It can be used to better protect privacy and confidentiality when
  accessing specific domains by routing requests to those domains
- through an anonymous public proxy (see e.g. <A
-HREF="http://www.multiproxy.org/anon_list.htm"
-TARGET="_top"
->http://www.multiproxy.org/anon_list.htm</A
->)
- Or to use a caching proxy to speed up browsing. Or chaining to a parent
+ through an anonymous public proxy. Or to use a caching proxy to speed up browsing. Or chaining to a parent
  proxy may be necessary because the machine that <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -3414,10 +3398,7 @@ ACCESSKEY="N"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
-><SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> Configuration</TD
+>Privoxy Configuration</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"

@@ -464,8 +464,8 @@ WIDTH="100%"
 CLASS="PROGRAMLISTING"
 >  mkdir dist # delete or choose different name if it already exists
   cd dist
-  cvs -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@cvs.ijbswa.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current</PRE
+  cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login
+  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current</PRE
 ></TD
 ></TR
 ></TABLE
@@ -483,6 +483,36 @@ CLASS="EMPHASIS"
      all release packages, and with them, all future bug reports, are based
      on exactly the same code.
     </P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>      Every significant release of Privoxy has included at least one 
+      package that either had incorrect versions of files, missing files, 
+      or incidental leftovers from a previous build process that gave 
+      unknown numbers of users headaches to try to figure out what was 
+      wrong. PLEASE, make sure you are using pristene sources, and are
+      following the prescribed process!
+     </P
+></TD
+></TR
+></TABLE
+></DIV
 ><P
 >     Please find additional instructions for the source tarball and the
      individual platform dependent binary packages below. And details 
@@ -697,15 +727,40 @@ CLASS="FILENAME"
 >        <TT
 CLASS="FILENAME"
 >user.action</TT
-> is designed for local preferences. 
-        Make sure this does not get overwritten!
+> and <TT
+CLASS="FILENAME"
+>user.filter</TT
+>
+        are designed for local preferences. Make sure these do not get overwritten!
+        <TT
+CLASS="FILENAME"
+>config</TT
+> should not be overwritten either. This 
+        has especially important configuration data in it.
+        <TT
+CLASS="FILENAME"
+>trust</TT
+> should be left in tact as well.
        </P
 ></LI
 ><LI
 ><P
->        Other configuration files should be installed as the new defaults, 
-        but all previously installed configuration files should be preserved
-        as backups. This is just good manners :-)
+>        Other configuration files (<TT
+CLASS="FILENAME"
+>default.action</TT
+>,
+        <TT
+CLASS="FILENAME"
+>default.filter</TT
+> and
+        <TT
+CLASS="FILENAME"
+>standard.action</TT
+>) should be installed as the new
+        defaults, but all previously installed configuration files should be
+        preserved as backups. This is just good manners :-) These files are
+        likely to change between releases and contain important new features
+        and bug fixes.
        </P
 ></LI
 ><LI
@@ -1297,7 +1352,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  debchange -v 3.0.4-BETA-1 "New upstream version"</PRE
+>  debchange -v 3.0.5-BETA-1 "New upstream version"</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1325,7 +1380,7 @@ CLASS="PROGRAMLISTING"
 >        This will create
         <TT
 CLASS="FILENAME"
->../privoxy_3.0.4-BETA-1_i386.deb</TT
+>../privoxy_3.0.5-BETA-1_i386.deb</TT
 >
         which can be uploaded.  To upload the package to Sourceforge, simply
 	issue
@@ -1769,7 +1824,7 @@ CLASS="LITERAL"
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->3.0.4
+>3.0.5
      (beta)</I
 ></SPAN
 >.
@@ -1834,7 +1889,8 @@ TARGET="_top"
       location</A
 >, the release notes and the Changelog. Also, post an
       updated News item on the project page Sourceforge, and update the Home 
-      page and docs linked from the Home page (see below).
+      page and docs linked from the Home page (see below). Other news sites
+      and release oriented sites, such as Freshmeat, should also be notified.
      </P
 ></DIV
 ></DIV

@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.4 User Manual"
+TITLE="Privoxy 3.0.5 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="The Main Configuration File"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.4 User Manual</TH
+>Privoxy 3.0.5 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -95,7 +95,8 @@ CLASS="APPLICATION"
  There are a number of such actions, with a wide range of functionality.
  Each action does something a little different.
  These actions give us a veritable arsenal of tools with which to exert 
- our control, preferences and independence.</P
+ our control, preferences and independence. Actions can be combined so that 
+ their effects are aggregated when applied against a given set of URLs.</P
 ><P
 > There 
  are three action files included with <SPAN
@@ -120,11 +121,27 @@ CLASS="FILENAME"
 CLASS="APPLICATION"
 >Privoxy's</SPAN
 > array of features. So it is 
-     a set of broad rules that should work reasonably well for users everywhere.
+     a set of broad rules that should work reasonably well as-is for most users.
      This is the file that the developers are keeping updated, and <A
 HREF="installation.html#INSTALLATION-KEEPUPDATED"
 >making available to users</A
 >.
+     The user's preferences as set in <TT
+CLASS="FILENAME"
+>standard.action</TT
+>,
+     e.g. either <TT
+CLASS="LITERAL"
+>Cautious</TT
+> (the default),
+     <TT
+CLASS="LITERAL"
+>Medium</TT
+>, or <TT
+CLASS="LITERAL"
+>Advanced</TT
+> (see
+     below).
     </P
 ></LI
 ><LI
@@ -143,21 +160,90 @@ CLASS="FILENAME"
 >     <TT
 CLASS="FILENAME"
 >standard.action</TT
-> - is used by the web based editor, 
+> - is used by the web based editor
+     at <A
+HREF="http://config.privoxy.org/edit-actions-list?f=default"
+TARGET="_top"
+>     http://config.privoxy.org/edit-actions-list?f=default</A
+>, 
      to set various pre-defined sets of rules for the default actions section
      in <TT
 CLASS="FILENAME"
 >default.action</TT
->. These have increasing levels of
-     aggressiveness <SPAN
+>. 
+     </P
+><P
+>     <SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+>  <SPAN
+CLASS="GUIBUTTON"
+>Set to Cautious</SPAN
+> <SPAN
+CLASS="GUIBUTTON"
+>Set to Medium</SPAN
+>  <SPAN
+CLASS="GUIBUTTON"
+>Set to Advanced</SPAN
+>
+     </P
+><P
+>     These have increasing levels of aggressiveness <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->and have no influence on your browsing unless
-     you select them explicitly in the editor</I
+>and have no
+     influence on your browsing unless you select them explicitly in the
+     editor</I
 ></SPAN
->. It is not recommend
-     to edit this file.
+>. A default installation should be pre-set to 
+     <TT
+CLASS="LITERAL"
+>Cautious</TT
+> (versions prior to 3.0.5 were set to
+     <TT
+CLASS="LITERAL"
+>Medium</TT
+>). New users should try this for a while before
+     adjusting the settings to more aggressive levels.
+     </P
+><P
+>      The <SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+> button allows you to turn each 
+      action on/off individually for fine-tuning. The <SPAN
+CLASS="GUIBUTTON"
+>Cautious</SPAN
+>
+      button changes the actions list to low/safe settings which will activate 
+      a minimal set of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>'s features, and subsequently there will be
+      less of a chance for accidental problems. The <SPAN
+CLASS="GUIBUTTON"
+>Medium</SPAN
+>
+      button sets the list to a medium level of ad blocking and a low level set of
+      privacy features. The <SPAN
+CLASS="GUIBUTTON"
+>Advanced</SPAN
+> button 
+      sets the list to a high level of ad blocking and medium level of
+      privacy. See the chart below. The latter three buttons over-ride 
+      any changes via with the <SPAN
+CLASS="GUIBUTTON"
+>Edit</SPAN
+> button. More 
+      fine-tuning can be done in the lower sections of this internal page.
+     </P
+><P
+>     It is not recommend to edit the <TT
+CLASS="FILENAME"
+>standard.action</TT
+> file
+     itself.
     </P
 ><P
 >     The default profiles, and their associated actions, as pre-defined in
@@ -170,7 +256,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN1912"
+NAME="AEN1967"
 ></A
 ><P
 ><B
@@ -200,7 +286,7 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->Adventuresome</TH
+>Advanced</TH
 ></TR
 ></THEAD
 ><TBODY
@@ -209,22 +295,22 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->Ad-blocking by URL</TD
+>Ad-blocking Aggressiveness</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>medium</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>high</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>high</TD
 ></TR
 ><TR
 ><TD
@@ -236,7 +322,117 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
+>no</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
 >yes</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>yes</TD
+></TR
+><TR
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Ad-filtering by link</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>no</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>no</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>yes</TD
+></TR
+><TR
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Pop-up killing</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>blocks only</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>blocks only</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>all</TD
+></TR
+><TR
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Privacy Features</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>low</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>medium</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>medium/high</TD
+></TR
+><TR
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Cookie handling</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>none</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>session-only</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>kill</TD
+></TR
+><TR
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Referer forging</TD
+><TD
+WIDTH="25%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>no</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -275,72 +471,6 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->Referer forging</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->no</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->yes</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->yes</TD
-></TR
-><TR
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->Cookie handling</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->none</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->session-only</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->kill</TD
-></TR
-><TR
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->Pop-up killing</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->unsolicited</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->unsolicited</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->all</TD
-></TR
-><TR
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
 >Fast redirects</TD
 ><TD
 WIDTH="25%"
@@ -368,7 +498,7 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>no</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -390,7 +520,7 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>no</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -412,34 +542,12 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->yes</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->yes</TD
-></TR
-><TR
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->Fun text replacements</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
 >no</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->no</TD
+>yes</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -452,50 +560,6 @@ WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
 >Image tag reordering</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->no</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->no</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->yes</TD
-></TR
-><TR
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->Ad-filtering by link</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->no</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->no</TD
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->yes</TD
-></TR
-><TR
-><TD
-WIDTH="25%"
-ALIGN="LEFT"
-VALIGN="TOP"
->Demoronizer</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -536,7 +600,33 @@ CLASS="FILENAME"
 HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
 >http://config.privoxy.org/show-status</A
->.</P
+>.
+ The over-riding principle when applying actions, is that the last action that
+ matches a given URL, wins. The broadest, most general rules go first
+ (defined in <TT
+CLASS="FILENAME"
+>default.action</TT
+>),
+ followed by any exceptions (typically also in
+ <TT
+CLASS="FILENAME"
+>default.action</TT
+>), which are then followed lastly by any
+ local preferences (typically in <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>user</I
+></SPAN
+><TT
+CLASS="FILENAME"
+>.action</TT
+>). 
+ Generally, <TT
+CLASS="FILENAME"
+>user.action</TT
+> has the last word.
+ </P
 ><P
 > An actions file typically has multiple sections. If you want to use
  <SPAN
@@ -593,7 +683,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2011"
+NAME="AEN2066"
 ></A
 >8.1. Finding the Right Mix</H2
 ><P
@@ -603,7 +693,8 @@ HREF="actions-file.html#ACTIONS"
 >, like cookie suppression
  or script disabling, may render some sites unusable that rely on these
  techniques to work properly. Finding the right mix of actions is not always easy and
- certainly a matter of personal taste. In general, it can be said that the more
+ certainly a matter of personal taste. And, things can always change, requiring 
+ refinements in the configuration. In general, it can be said that the more
  <SPAN
 CLASS="QUOTE"
 >"aggressive"</SPAN
@@ -614,7 +705,7 @@ CLASS="QUOTE"
 > sites you
  will have to make later. If, for example, you want to crunch all cookies per
  default, you'll have to make exceptions from that rule for sites that you
- regularly use and that require cookies for actually useful puposes, like maybe
+ regularly use and that require cookies for actually useful purposes, like maybe
  your bank, favorite shop, or newspaper. </P
 ><P
 > We have tried to provide you with reasonable rules to start from in the
@@ -627,7 +718,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2018"
+NAME="AEN2073"
 ></A
 >8.2. How to Edit</H2
 ><P
@@ -647,21 +738,21 @@ CLASS="QUOTE"
 >"Medium"</SPAN
 > or <SPAN
 CLASS="QUOTE"
->"Adventuresome"</SPAN
+>"Advanced"</SPAN
 >.
  Warning: the <SPAN
 CLASS="QUOTE"
->"Adventuresome"</SPAN
-> setting is not only more aggressive, 
- but includes settings that are fun and subversive, and which some may find of 
- dubious merit!</P
+>"Advanced"</SPAN
+> setting is more aggressive, and 
+ will be more likely to cause problems for some sites. Experienced users only!</P
 ><P
 > If you prefer plain text editing to GUIs, you can of course also directly edit the
- the actions files. Look at <TT
+ the actions files with your favorite text editor. Look at
+ <TT
 CLASS="FILENAME"
 >default.action</TT
-> which is richly
- commented.</P
+> which is richly commented with many 
+ good examples.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -716,7 +807,34 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >both</I
 ></SPAN
-> actions to apply.</P
+> actions to apply. And there may well be 
+ cases where you will want to combine actions together. Such a section then 
+ might look like:</P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  { +<TT
+CLASS="LITERAL"
+>handle-as-image</TT
+>  +<TT
+CLASS="LITERAL"
+>block</TT
+> }
+  # Block these as if they were images. Send no block page.
+   banners.example.com
+   media.example.com/.*banners
+   .example.com/images/ads/</PRE
+></TD
+></TR
+></TABLE
+>
+ </P
 ><P
 > You can trace this process for any given URL by visiting <A
 HREF="http://config.privoxy.org/show-url-info"
@@ -724,10 +842,10 @@ TARGET="_top"
 >http://config.privoxy.org/show-url-info</A
 >.</P
 ><P
-> More detail on this is provided in the Appendix, <A
+> Examples and more detail on this is provided in the Appendix, <A
 HREF="appendix.html#ACTIONSANAT"
-> Anatomy of an Action</A
->.</P
+> Troubleshooting: Anatomy of an Action</A
+> section.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -746,18 +864,24 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"patterns"</SPAN
 >
- to determine what actions might apply to which sites and pages your browser 
- attempts to access. These <SPAN
+ to determine what <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>actions</I
+></SPAN
+> might apply to which sites and
+ pages your browser attempts to access. These <SPAN
 CLASS="QUOTE"
 >"patterns"</SPAN
-> use wild card type 
- <SPAN
+> use wild
+ card type <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
 >pattern</I
 ></SPAN
-> matching to achieve a high degree of 
+> matching to achieve a high degree of
  flexibility. This allows one expression to be expanded and potentially match
  against many similar patterns.</P
 ><P
@@ -793,6 +917,19 @@ CLASS="EMPHASIS"
 > be included in
  the pattern. This is assumed already!</P
 ><P
+> The pattern matching syntax is different for the domain and path parts of
+ the URL. The domain part uses a simple globbing type matching technique, 
+ while the path part uses a more flexible 
+ <A
+HREF="http://en.wikipedia.org/wiki/Regular_expressions"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Regular
+  Expressions (PCRE)"</SPAN
+></A
+> based syntax.</P
+><P
 ></P
 ><DIV
 CLASS="VARIABLELIST"
@@ -808,7 +945,12 @@ CLASS="LITERAL"
 CLASS="LITERAL"
 >www.example.com</TT
 >,
-    regardless of which document on that server is requested.
+    regardless of which document on that server is requested. So ALL pages in
+    this domain would be covered by the scope of this action. Note that a 
+    simple <TT
+CLASS="LITERAL"
+>example.com</TT
+> is different and would NOT match.
    </P
 ></DD
 ><DT
@@ -859,7 +1001,7 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >any</I
 ></SPAN
-> web server.
+> web server anywhere.
    </P
 ></DD
 ><DT
@@ -873,7 +1015,8 @@ CLASS="LITERAL"
     there is no top-level domain called <TT
 CLASS="LITERAL"
 >.html</TT
->.
+>. So its 
+    a mistake.
    </P
 ></DD
 ></DL
@@ -883,7 +1026,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2092"
+NAME="AEN2156"
 ></A
 >8.4.1. The Domain Pattern</H3
 ><P
@@ -951,27 +1094,63 @@ CLASS="EMPHASIS"
 > <TT
 CLASS="LITERAL"
 >.example.</TT
->
-    (Correctly speaking: It matches any FQDN that contains <TT
+>.
+    And, by the way, also included would be any files or documents that exist
+    within that domain since no path limitations are specified. (Correctly
+    speaking: It matches any FQDN that contains <TT
 CLASS="LITERAL"
 >example</TT
-> as a domain.)
+> as
+    a domain.) This might be <TT
+CLASS="LITERAL"
+>www.example.com</TT
+>,
+    <TT
+CLASS="LITERAL"
+>news.example.de</TT
+>, or
+    <TT
+CLASS="LITERAL"
+>www.example.net/cgi/testing.pl</TT
+> for instance. All these
+    cases are matched. 
    </P
 ></DD
 ></DL
 ></DIV
 ><P
 > Additionally, there are wild-cards that you can use in the domain names
- themselves. They work pretty similar to shell wild-cards: <SPAN
+ themselves. These work similarly to shell globbing type wild-cards:
+ <SPAN
 CLASS="QUOTE"
 >"*"</SPAN
->
- stands for zero or more arbitrary characters, <SPAN
+> represents zero or more arbitrary characters (this is
+ equivalent to the 
+ <A
+HREF="http://en.wikipedia.org/wiki/Regular_expressions"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Regular
+ Expression"</SPAN
+></A
+> based syntax of <SPAN
+CLASS="QUOTE"
+>".*"</SPAN
+>),
+ <SPAN
 CLASS="QUOTE"
 >"?"</SPAN
-> stands for
- any single character, you can define character classes in square
- brackets and all of that can be freely mixed:</P
+>  represents any single character (this is equivalent to the
+ regular expression syntax of a simple <SPAN
+CLASS="QUOTE"
+>"."</SPAN
+>), and you can define
+ <SPAN
+CLASS="QUOTE"
+>"character classes"</SPAN
+> in square brackets which is similar to 
+ the same regular expression technique. All of this can be freely mixed:</P
 ><P
 ></P
 ><DIV
@@ -1063,26 +1242,37 @@ CLASS="LITERAL"
 ></DD
 ></DL
 ></DIV
+><P
+> While flexibile, this is not the sophistication of full regular expression based syntax.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2154"
+NAME="AEN2227"
 ></A
 >8.4.2. The Path Pattern</H3
 ><P
 > <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> uses Perl compatible regular expressions
+> uses Perl compatible (PCRE)
+  <A
+HREF="http://en.wikipedia.org/wiki/Regular_expressions"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Regular
+  Expression"</SPAN
+></A
+> based syntax 
  (through the <A
 HREF="http://www.pcre.org/"
 TARGET="_top"
 >PCRE</A
 > library) for
- matching the path.</P
+ matching the path portion (after the slash), and is thus more flexible.</P
 ><P
 > There is an <A
 HREF="appendix.html#REGEX"
@@ -1140,6 +1330,155 @@ CLASS="EMPHASIS"
 >exactly</I
 ></SPAN
 > this capitalization.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><TT
+CLASS="LITERAL"
+>.example.com/.*</TT
+></DT
+><DD
+><P
+>     Is equivalent to just <SPAN
+CLASS="QUOTE"
+>".example.com"</SPAN
+>, since any documents 
+     within that domain are matched with or without the <SPAN
+CLASS="QUOTE"
+>".*"</SPAN
+>
+     regular expression. This is redundant
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>.example.com/.*/index.html</TT
+></DT
+><DD
+><P
+>    Will match any page in the domain of <SPAN
+CLASS="QUOTE"
+>"example.com"</SPAN
+> that is
+    named <SPAN
+CLASS="QUOTE"
+>"index.html"</SPAN
+>, and that is part of some path. For
+    example, it matches <SPAN
+CLASS="QUOTE"
+>"www.example.com/testing/index.html"</SPAN
+> but
+    NOT <SPAN
+CLASS="QUOTE"
+>"www.example.com/index.html"</SPAN
+> because the regular
+    expression called for at least two <SPAN
+CLASS="QUOTE"
+>"/'s"</SPAN
+>, thus the path 
+    requirement. It also would match 
+    <SPAN
+CLASS="QUOTE"
+>"www.example.com/testing/index_html"</SPAN
+>, because of the 
+    special meta-character <SPAN
+CLASS="QUOTE"
+>"."</SPAN
+>.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>.example.com/(.*/)?index\.html</TT
+></DT
+><DD
+><P
+>    This regular expression is conditional so it will match any page 
+    named <SPAN
+CLASS="QUOTE"
+>"index.html"</SPAN
+> regardless of path which in this case can 
+    have one or more <SPAN
+CLASS="QUOTE"
+>"/'s"</SPAN
+>. And this one must contain exactly 
+    <SPAN
+CLASS="QUOTE"
+>".html"</SPAN
+> (but does not have to end with that!).
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>.example.com/(.*/)(ads|banners?|junk)</TT
+></DT
+><DD
+><P
+>    This regular expression will match any path of <SPAN
+CLASS="QUOTE"
+>"example.com"</SPAN
+>
+    that contains any of the words <SPAN
+CLASS="QUOTE"
+>"ads"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"banner"</SPAN
+>, 
+    <SPAN
+CLASS="QUOTE"
+>"banners"</SPAN
+> (because of the <SPAN
+CLASS="QUOTE"
+>"?"</SPAN
+>) or <SPAN
+CLASS="QUOTE"
+>"junk"</SPAN
+>.
+    The path does not have to end in these words, just contain them.
+   </P
+></DD
+><DT
+><TT
+CLASS="LITERAL"
+>.example.com/(.*/)(ads|banners?|junk)/.*\.(jpe?g|gif|png)$</TT
+></DT
+><DD
+><P
+>    This is very much the same as above, except now it must end in either 
+    <SPAN
+CLASS="QUOTE"
+>".jpg"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>".jpeg"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>".gif"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>".png"</SPAN
+>. So this 
+    one is limited to common image formats.
+   </P
+></DD
+></DL
+></DIV
+><P
+> There are many, many good examples to be found in <TT
+CLASS="FILENAME"
+>default.action</TT
+>, 
+ and more tutorials below in <A
+HREF="appendix.html#REGEX"
+>Appendix on regular expressions</A
+>.</P
 ></DIV
 ></DIV
 ><DIV
@@ -1199,7 +1538,7 @@ CLASS="LITERAL"
  of the actions file. </P
 ><P
 > 
- There are three classes of actions:</P
+ Actions fall into three categories:</P
 ><P
 > <P
 ></P
@@ -1419,15 +1758,19 @@ CLASS="APPLICATION"
 ><P
 > Later defined actions always over-ride earlier ones.  So exceptions 
  to any rules you make, should come in the latter part of the file (or 
- in a file that is processed later when using multiple actions files). For
- multi-valued actions, the actions are applied in the order they are specified.
- Actions files are processed in the order they are defined in
- <TT
+ in a file that is processed later when using multiple actions files such 
+ as <TT
+CLASS="FILENAME"
+>user.action</TT
+>). For multi-valued actions, the actions
+ are applied in the order they are specified. Actions files are processed in
+ the order they are defined in <TT
 CLASS="FILENAME"
 >config</TT
-> (the default installation has three actions
- files). It also quite possible for any given URL pattern to match more than
- one pattern and thus more than one set of actions!</P
+> (the default
+ installation has three actions files). It also quite possible for any given
+ URL pattern to match more than one pattern and thus more than one set of
+ actions! Last match wins.</P
 ><P
 > The list of valid <SPAN
 CLASS="APPLICATION"
@@ -1532,28 +1875,40 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->Block ads or other obnoxious content</P
+>Block ads or other unwanted content</P
 ></DD
 ><DT
 >Effect:</DT
 ><DD
 ><P
->    Requests for URLs to which this action applies are blocked, i.e. the requests are not
-    forwarded to the remote server, but answered locally with a substitute page or image,
-    as determined by the <TT
+>    Requests for URLs to which this action applies are blocked, i.e. the
+    requests are trapped by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and the requested URL is never retrieved,
+    but is answered locally with a substitute page or image, as determined by
+    the <TT
 CLASS="LITERAL"
 ><A
 HREF="actions-file.html#HANDLE-AS-IMAGE"
 >handle-as-image</A
 ></TT
->
-    and <TT
+>,
+    <TT
 CLASS="LITERAL"
 ><A
 HREF="actions-file.html#SET-IMAGE-BLOCKER"
 >set-image-blocker</A
 ></TT
+>, and 
+    <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HANDLE-AS-EMPTY-DOCUMENT"
+>handle-as-empty-document</A
+></TT
 > actions.
+    
    </P
 ></DD
 ><DT
@@ -1637,7 +1992,8 @@ HREF="actions-file.html#SET-IMAGE-BLOCKER"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > deals with 
-    ads and other unwanted content.
+    ads and other unwanted content. Blocking is a core feature, and one 
+    upon which various other features depend.
    </P
 ><P
 >    The <TT
@@ -1668,12 +2024,18 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->{+block}      # Block and replace with "blocked" page
-.nasty-stuff.example.com
+>{+block}      
+# Block and replace with "blocked" page
+ .nasty-stuff.example.com
 
-{+block +handle-as-image} # Block and replace with image
-.ad.doubleclick.net
-.ads.r.us</PRE
+{+block +handle-as-image} 
+# Block and replace with image
+ .ad.doubleclick.net
+ .ads.r.us/banners/
+
+{+block +handle-as-empty-document} 
+# Block and then ignore
+ adserver.exampleclick.net/.*\.js$</PRE
 ></TD
 ></TR
 ></TABLE
@@ -1756,7 +2118,10 @@ CLASS="QUOTE"
     <SPAN
 CLASS="QUOTE"
 >"Content-Type: text/html"</SPAN
->, you can use Privoxy
+>, you can use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
     to overwrite it with <SPAN
 CLASS="QUOTE"
 >"application/xml"</SPAN
@@ -1829,6 +2194,7 @@ CLASS="SCREEN"
 ># Check if www.example.net/ really uses valid XHTML
 {+content-type-overwrite {application/xml}}
 www.example.net/
+
 # but leave the content type unmodified if the URL looks like a style sheet
 {-content-type-overwrite}
 www.example.net/*.\.css$
@@ -2081,7 +2447,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 ># Let the browser revalidate cached documents without being tracked across sessions
-{+hide-if-modified-since {-1} \
+{+hide-if-modified-since {-60} \
 +overwrite-last-modified {randomize} \
 +crunch-if-none-match}
 /   </PRE
@@ -2800,22 +3166,11 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->+fast-redirects{simple-check}</PRE
-></TD
-></TR
-></TABLE
->
-    </P
-><P
->     <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->+fast-redirects{check-decoded-url}</PRE
+> { +fast-redirects{simple-check} }
+   .example.com 
+
+ { +fast-redirects{check-decoded-url} }
+   another.example.com/testing</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2856,8 +3211,12 @@ CLASS="VARIABLELIST"
 CLASS="LITERAL"
 >text/plain</TT
 > MIME type for all files whose type they
-    don't know.) By default, filtering works only on the document content 
-    itself, not the headers.
+    don't know.) By default, filtering works only on the raw document content 
+    itself (that which can be seen with <TT
+CLASS="LITERAL"
+>View Source</TT
+>), 
+    not the headers.
    </P
 ></DD
 ><DT
@@ -2898,7 +3257,13 @@ CLASS="FILENAME"
    </P
 ><P
 >     When used in its negative form,
-     and without parameters, filtering is completely disabled.
+     and without parameters, <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>all</I
+></SPAN
+> filtering is completely disabled.
   </P
 ></DD
 ><DT
@@ -2917,11 +3282,30 @@ CLASS="FILENAME"
     noticeable on slower connections.
    </P
 ><P
->    This is very powerful feature, and <SPAN
+>   <SPAN
 CLASS="QUOTE"
->"rolling your own"</SPAN
+>"Rolling your own"</SPAN
 >
-    filters requires a knowledge of regular expressions and HTML.
+    filters requires a knowledge of 
+     <A
+HREF="http://en.wikipedia.org/wiki/Regular_expressions"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Regular
+     Expressions"</SPAN
+></A
+> and 
+      <A
+HREF="http://en.wikipedia.org/wiki/Html"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"HTML"</SPAN
+></A
+>.
+    This is very powerful feature, and potentially very intrusive. Use 
+    with caution.    
    </P
 ><P
 >    The amount of data that can be filtered is limited to the 
@@ -2940,7 +3324,7 @@ HREF="config.html"
     data, and all pending data, is passed through unfiltered. 
    </P
 ><P
->    Inadequate MIME types, such as zipped files, are not filtered at all.
+>    Inappropriate MIME types, such as zipped files, are not filtered at all.
     (Again, only text-based types except plain text). Encrypted SSL data
     (from HTTPS servers) cannot be filtered either, since this would violate
     the integrity of the secure transaction. In some situations it might
@@ -2948,13 +3332,13 @@ HREF="config.html"
     by defining appropriate <TT
 CLASS="LITERAL"
 >-filter</TT
-> sections.
+> exceptions.
    </P
 ><P
 >    At this time, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> cannot (yet!) uncompress compressed
+> cannot uncompress compressed
     documents. If you want filtering to work on all documents, even those that
     would normally be sent compressed, use the
     <TT
@@ -3273,7 +3657,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->+filter{frameset-borders}    # Give frames a border and make them resizable</PRE
+>+filter{frameset-borders}    # Give frames a border and make them resizeable</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3330,7 +3714,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->+filter{quicktime-kioskmode} # Make Quicktime movies saveable</PRE
+>+filter{quicktime-kioskmode} # Make Quicktime movies savable</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3916,13 +4300,13 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->Mark URLs as belonging to images (so they'll be replaced by imagee <SPAN
+>Mark URLs as belonging to images (so they'll be replaced by images <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->if they get blocked</I
+>if they do get blocked</I
 ></SPAN
->)</P
+>, rather than HTML pages)</P
 ></DD
 ><DT
 >Effect:</DT
@@ -4330,8 +4714,8 @@ CLASS="QUOTE"
 CLASS="LITERAL"
 >hide-if-modified-since</TT
 > can
-    also add or substract a random amount of time to/from the headers value.
-    You specify a range of hours were the random factor should be chosen from and
+    also add or subtract a random amount of time to/from the header's value.
+    You specify a range of minutes where the random factor should be chosen from and
     <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -4381,7 +4765,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 ># Let the browser revalidate without being tracked across sessions
-{+hide-if-modified-since {-1}\
+{+hide-if-modified-since {-60}\
 +overwrite-last-modified {randomize}\
 +crunch-if-none-match}
 /</PRE
@@ -5207,7 +5591,10 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > relays HTTPS traffic without seeing
-   the decoded content. Websites can leverage this limitation to circumvent Privoxy's
+   the decoded content. Websites can leverage this limitation to circumvent <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>'s
    filters. By specifying an invalid port range you can disable HTTPS entirely.
    If you plan to disable SSL by default, consider enabling 
    <TT
@@ -5236,7 +5623,7 @@ CLASS="SCREEN"
 +limit-connect{80,443}                # Ports 80 and 443 are OK.
 +limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK.
 +limit-connect{-}                     # All ports are OK
-+limit-connect{,}                     # No HTTPS traffic is allowed</PRE
++limit-connect{,}                     # No HTTPS/SSL traffic is allowed</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5528,7 +5915,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 ># Let the browser revalidate without being tracked across sessions
-{+hide-if-modified-since {-1}\
+{+hide-if-modified-since {-60}\
 +overwrite-last-modified {randomize}\
 +crunch-if-none-match}
 /</PRE
@@ -5586,9 +5973,9 @@ CLASS="VARIABLELIST"
 >Notes:</DT
 ><DD
 ><P
->    This action is useful to replace whole documents with your own
-    ones. For that to work, they have to be available on another server, 
-    and both should resolve.
+>    This action is useful to replace whole documents with ones of your 
+    choosing. This can be used to enforce safe surfing, or just as a simple 
+    convenience.
    </P
 ><P
 >    You can do the same by combining the actions
@@ -5628,7 +6015,7 @@ HREF="actions-file.html#BLOCK"
    </P
 ></DD
 ><DT
->Example usage:</DT
+>Example usages:</DT
 ><DD
 ><P
 >    <TABLE
@@ -5640,8 +6027,12 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 ># Replace example.com's style sheet with another one
-{+redirect{http://localhost/css-replacements/example.com.css}}
-example.com/stylesheet.css</PRE
+{ +redirect{http://localhost/css-replacements/example.com.css} }
+ example.com/stylesheet.css
+
+# Create a short, easy to remember nickname for a favorite site
+{ +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
+ a</PRE
 ></TD
 ></TR
 ></TABLE
@@ -6334,7 +6725,7 @@ CLASS="APPLICATION"
 > to do the
     request through a SSL tunnel, everything will work. Most likely you haven't
     and the server will respond with an error message because it is expecting
-    HTTPS.
+    HTTPS (SSL).
    </P
 ></DD
 ><DT
@@ -6364,7 +6755,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3749"
+NAME="AEN3885"
 ></A
 >8.5.36. Summary</H3
 ><P
@@ -6528,7 +6919,7 @@ HREF="actions-file.html#CRUNCH-INCOMING-COOKIES"
 HREF="actions-file.html#CRUNCH-OUTGOING-COOKIES"
 >crunch-outgoing-cookies</A
 >
- block-as-image      = +block +handle-as-image
+ +block-as-image      = +block +handle-as-image
  mercy-for-cookies   = -crunch-all-cookies -<A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
 >session-cookies-only</A
@@ -6668,7 +7059,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3814"
+NAME="AEN3950"
 ></A
 >8.7.1. default.action</H3
 ><P
@@ -6751,7 +7142,7 @@ HREF="actions-file.html#CRUNCH-INCOMING-COOKIES"
 HREF="actions-file.html#CRUNCH-OUTGOING-COOKIES"
 >crunch-outgoing-cookies</A
 >
- block-as-image      = +block +handle-as-image
+ +block-as-image      = +block +handle-as-image
  mercy-for-cookies   = -crunch-all-cookies -<A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
 >session-cookies-only</A
@@ -7253,7 +7644,7 @@ CLASS="EMPHASIS"
  mark them as images in one go, with the help of our
  <TT
 CLASS="LITERAL"
->block-as-image</TT
+>+block-as-image</TT
 > alias defined above. (We could of
  course just as well use <TT
 CLASS="LITERAL"
@@ -7294,7 +7685,7 @@ WIDTH="100%"
 CLASS="SCREEN"
 ># Known ad generators:
 #
-{ block-as-image }
+{ +block-as-image }
 ar.atwola.com 
 .ad.doubleclick.net
 .ad.*.doubleclick.net
@@ -7571,7 +7962,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3995"
+NAME="AEN4131"
 ></A
 >8.7.2. user.action</H3
 ><P
@@ -7708,12 +8099,10 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >{ allow-all-cookies }
-sourceforge.net
-sunsolve.sun.com
-.slashdot.org
-.yahoo.com
-.msdn.microsoft.com
-.redhat.com</PRE
+ sourceforge.net
+ .yahoo.com
+ .msdn.microsoft.com
+ .redhat.com</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7733,7 +8122,7 @@ CLASS="SCREEN"
 HREF="actions-file.html#FILTER"
 >filter</A
 > }
-.your-home-banking-site.com</PRE
+ .your-home-banking-site.com</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7800,8 +8189,8 @@ CLASS="SCREEN"
 HREF="actions-file.html#BLOCK"
 >block</A
 > }
-www.example.com/nasty-ads/sponsor.gif
-another.popular.site.net/more/junk/here/</PRE
+ www.example.com/nasty-ads/sponsor.gif
+ another.popular.site.net/more/junk/here/</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7835,9 +8224,10 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >{ +block-as-image }
-.doubleclick.net
-/Realmedia/ads/
-ar.atwola.com/</PRE
+ .doubleclick.net
+ .fastclick.net
+ /Realmedia/ads/
+ ar.atwola.com/</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7868,7 +8258,8 @@ CLASS="LITERAL"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
- that is causing the problem or not.</P
+ that is causing the problem or not. We later find other regular sites 
+ that misbehave, and add those to our personalized list of troublemakers:</P
 ><P
 ><TABLE
 BORDER="0"
@@ -7879,7 +8270,9 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >{ fragile }
-.forbes.com</PRE
+ .forbes.com
+ mail.example.com
+ .mybank.com</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7908,7 +8301,7 @@ CLASS="SCREEN"
 HREF="actions-file.html#FILTER-FUN"
 >filter{fun}</A
 > }
-/ # For ALL sites!</PRE
+ / # For ALL sites!</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7943,9 +8336,9 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >{ allow-ads }
-.sourceforge.net
-.slashdot.org
-.osdn.net</PRE
+ .sourceforge.net
+ .slashdot.org
+ .osdn.net</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7993,7 +8386,7 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >{ handle-as-text }
-/.*\.sh$</PRE
+ /.*\.sh$</PRE
 ></TD
 ></TR
 ></TABLE

@@ -7,13 +7,13 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.4 User Manual"
+TITLE="Privoxy 3.0.5 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Actions Files"
 HREF="actions-file.html"><LINK
 REL="NEXT"
-TITLE="Templates"
+TITLE="Privoxy's Template Files"
 HREF="templates.html"><LINK
 REL="STYLESHEET"
 TYPE="text/css"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.4 User Manual</TH
+>Privoxy 3.0.5 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -94,7 +94,7 @@ CLASS="QUOTE"
  can then be invoked as an <SPAN
 CLASS="QUOTE"
 >"action"</SPAN
->. Mulitple filter files can be
+>. Multiple filter files can be
  defined through the <TT
 CLASS="LITERAL"
 > <A
@@ -142,7 +142,7 @@ CLASS="QUOTE"
  your own"</SPAN
 > filters, you should first be familiar with HTML syntax, 
  and, of course, regular expressions. By default, filters are only applied 
- to the document content, but can be extended to the headers with 
+ to the raw document content, but can be extended to the HTTP headers with 
  the supplemental actions: 
  <A
 HREF="actions-file.html#FILTER-CLIENT-HEADERS"
@@ -274,7 +274,16 @@ CLASS="LITERAL"
 > is supported,
  which turns the default to ungreedy matching.</P
 ><P
-> If you are new to regular expressions, you might want to take a look at
+> If you are new to 
+  <A
+HREF="http://en.wikipedia.org/wiki/Regular_expressions"
+TARGET="_top"
+><SPAN
+CLASS="QUOTE"
+>"Regular
+  Expressions"</SPAN
+></A
+>, you might want to take a look at
  the <A
 HREF="appendix.html#REGEX"
 >Appendix on regular expressions</A
@@ -305,7 +314,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN4133"
+NAME="AEN4271"
 ></A
 >9.1. Filter File Tutorial</H2
 ><P
@@ -668,7 +677,7 @@ CLASS="EMPHASIS"
 CLASS="LITERAL"
 >\1</TT
 > is
- a backreference to the first parenthesis just like <TT
+ a back-reference to the first parenthesis just like <TT
 CLASS="LITERAL"
 >$1</TT
 > above,
@@ -679,7 +688,7 @@ CLASS="EMPHASIS"
 >pattern</I
 ></SPAN
 >, a backslash indicates
- a backreference, whereas in the <SPAN
+ a back-reference, whereas in the <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
@@ -891,7 +900,7 @@ CLASS="QUOTE"
 ><LI
 ><P
 >      removes code that causes new windows to be opened with undesired properties, such as being
-      full-screen, non-resizable, without location, status or menu bar etc.
+      full-screen, non-resizeable, without location, status or menu bar etc.
      </P
 ></LI
 ></UL
@@ -945,7 +954,7 @@ CLASS="LITERAL"
 >MARQUEE</TT
 > tags 
     are neutralized (yeah baby!), and browser windows will be created as
-    resizable (as of course they should be!), and will have location,
+    resizeable (as of course they should be!), and will have location,
     scroll and menu bars -- even if specified otherwise.
    </P
 ></DD
@@ -959,7 +968,7 @@ CLASS="EMPHASIS"
 ></DT
 ><DD
 ><P
->    Most cookies are set in the HTTP dialogue, where they can be intercepted
+>    Most cookies are set in the HTTP dialog, where they can be intercepted
     by the
     <TT
 CLASS="LITERAL"
@@ -1020,7 +1029,7 @@ CLASS="QUOTE"
 ><P
 >    Technical note: The filter works by redefining the window.open JavaScript
     function to a dummy function during the loading and rendering phase of each
-    HTML page access, and restoring the function afterwards.
+    HTML page access, and restoring the function afterward.
    </P
 ></DD
 ><DT
@@ -1198,7 +1207,7 @@ CLASS="EMPHASIS"
 >    This filter translates the MS-only characters into Latin-1 equivalents. 
     It is not necessary when using MS products, and will cause corruption of  
     all documents that use 8-bit character sets other than Latin-1. It's mostly
-    worthwhile for Europeans on non-MS platforms, if wierd garbage characters
+    worthwhile for Europeans on non-MS platforms, if weird garbage characters
     sometimes appear on some pages, or user agents that don't correct for this on 
     the fly.
  
@@ -1364,7 +1373,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Templates</TD
+>Privoxy's Template Files</TD
 ></TR
 ></TABLE
 ></DIV
