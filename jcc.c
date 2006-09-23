@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.102 2006/09/06 13:03:04 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.103 2006/09/21 12:54:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.102 2006/09/06 13:03:04 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.103  2006/09/21 12:54:43  fabiankeil
+ *    Fix +redirect{}. Didn't work with -fast-redirects.
+ *
  *    Revision 1.102  2006/09/06 13:03:04  fabiankeil
  *    Respond with 400 and a short text message
  *    if the client tries to use Privoxy as FTP proxy.
@@ -1291,7 +1294,7 @@ static void chat(struct client_state *csp)
    while ( (csp->sfd = forwarded_connect(fwd, http, csp))
          && (errno == EINVAL) && (forwarded_connect_retries++ < max_forwarded_connect_retries))
    {
-		log_error(LOG_LEVEL_ERROR, "failed request #%u to connect to %s. Trying again.",
+      log_error(LOG_LEVEL_ERROR, "failed request #%u to connect to %s. Trying again.",
                 forwarded_connect_retries, http->hostport);
    }
 

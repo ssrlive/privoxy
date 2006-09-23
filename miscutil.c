@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.41 2006/08/18 16:03:17 david__schmidt Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.42 2006/09/09 14:01:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,11 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.41 2006/08/18 16:03:17 david__s
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.42  2006/09/09 14:01:45  fabiankeil
+ *    Integrated Oliver Yeoh's domain pattern fix
+ *    to make sure *x matches xx. Closes Patch 1217393
+ *    and Bug 1170767.
+ *
  *    Revision 1.41  2006/08/18 16:03:17  david__schmidt
  *    Tweak for OS/2 build happiness.
  *
@@ -1130,7 +1135,7 @@ time_t timegm(struct tm *tm)
       {
          strcpy(old_zone,"TZ=");
          strcat(old_zone,zone);
-         putenv(old_zone);	
+         putenv(old_zone);
       }
    }
    else
