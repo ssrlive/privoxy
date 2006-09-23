@@ -36,7 +36,16 @@ case "$1" in
 	fi
         chown -R privoxy.adm /var/log/privoxy
         chmod 750 /var/log/privoxy
-	chown privoxy /etc/privoxy/*.action /etc/privoxy/trust
+	chown privoxy /etc/privoxy/user.action /etc/privoxy/trust
+	[ -f /etc/privoxy/global.action ] \
+	    && chown privoxy /etc/privoxy/global.action
+
+	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.4"
+	then
+	    # Upgrading from a 3.0.3* version
+	    chown root /etc/privoxy/standard.action \
+		       /etc/privoxy/default.action
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

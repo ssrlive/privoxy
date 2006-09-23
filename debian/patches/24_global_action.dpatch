@@ -1,0 +1,167 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 24_global_action.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Move the global default for all pages (/) from default.action
+## DP: to global.action to make updates with local configurations easier.
+
+@DPATCH@
+diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
+--- privoxy~/GNUmakefile.in
++++ privoxy/GNUmakefile.in
+@@ -166,7 +166,7 @@
+ #############################################################################
+ # We include these files in our distributions
+ #############################################################################
+-CONFIGS = config trust default.action standard.action user.action default.filter user.filter
++CONFIGS = config trust global.action default.action standard.action user.action default.filter user.filter
+ # take care that no CVS .cvsignore or other crappy files
+ # are included here
+ # and escape every '#' in the find. doh.
+diff -urNad privoxy~/config privoxy/config
+--- privoxy~/config
++++ privoxy/config
+@@ -335,6 +335,7 @@
+ #      without at least one actions file.
+ #
+ actionsfile standard  # Internal purpose, recommended
++actionsfile global    # Global default setting for all sites
+ actionsfile default   # Main actions file
+ actionsfile user      # User customizations
+ 
+diff -urNad privoxy~/default.action.master privoxy/default.action.master
+--- privoxy~/default.action.master
++++ privoxy/default.action.master
+@@ -505,67 +505,6 @@
+ #
+ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
+ 
+-#############################################################################
+-# Defaults
+-#############################################################################
+-{ \
+--add-header \
+--block \
+--content-type-overwrite \
+--crunch-client-header \
+--crunch-if-none-match \
+--crunch-outgoing-cookies \
+--crunch-incoming-cookies \
+--crunch-server-header \
+--deanimate-gifs \
+--downgrade-http-version \
+--fast-redirects \
+--filter{js-annoyances} \
+--filter{js-events} \
+--filter{html-annoyances} \
+--filter{content-cookies} \
+--filter{refresh-tags} \
+--filter{unsolicited-popups} \
+--filter{all-popups} \
+--filter{img-reorder} \
+--filter{banners-by-size} \
+--filter{banners-by-link} \
+--filter{webbugs} \
+--filter{tiny-textforms} \
+--filter{jumping-windows} \
+--filter{frameset-borders} \
+--filter{demoronizer} \
+--filter{shockwave-flash} \
+--filter{quicktime-kioskmode} \
+--filter{fun} \
+--filter{crude-parental} \
+--filter{ie-exploits} \
+--filter{site-specifics} \
+--filter-client-headers \
+--filter-server-headers \
+--force-text-mode \
+--handle-as-empty-document \
+--handle-as-image \
+--hide-accept-language \
+--hide-content-disposition \
+--hide-if-modified-since \
+-+hide-forwarded-for-headers \
+-+hide-from-header{block} \
+--hide-referrer \
+--hide-user-agent \
+--inspect-jpegs \
+--kill-popups \
+--limit-connect \
+--prevent-compression \
+--overwrite-last-modified \
+--redirect \
+--send-vanilla-wafer \
+--send-wafer \
+--session-cookies-only \
+-+set-image-blocker{pattern} \
+--treat-forbidden-connects-like-blocks \
+-}
+-/ # Match all URLs
+ 
+ #############################################################################
+ # These extensions belong to images:
+diff -urNad privoxy~/global.action privoxy/global.action
+--- privoxy~/global.action
++++ privoxy/global.action
+@@ -0,0 +1,61 @@
++#############################################################################
++# Defaults
++#############################################################################
++{ \
++-add-header \
++-block \
++-content-type-overwrite \
++-crunch-client-header \
++-crunch-if-none-match \
++-crunch-outgoing-cookies \
++-crunch-incoming-cookies \
++-crunch-server-header \
++-deanimate-gifs \
++-downgrade-http-version \
++-fast-redirects \
++-filter{js-annoyances} \
++-filter{js-events} \
++-filter{html-annoyances} \
++-filter{content-cookies} \
++-filter{refresh-tags} \
++-filter{unsolicited-popups} \
++-filter{all-popups} \
++-filter{img-reorder} \
++-filter{banners-by-size} \
++-filter{banners-by-link} \
++-filter{webbugs} \
++-filter{tiny-textforms} \
++-filter{jumping-windows} \
++-filter{frameset-borders} \
++-filter{demoronizer} \
++-filter{shockwave-flash} \
++-filter{quicktime-kioskmode} \
++-filter{fun} \
++-filter{crude-parental} \
++-filter{ie-exploits} \
++-filter{site-specifics} \
++-filter-client-headers \
++-filter-server-headers \
++-force-text-mode \
++-handle-as-empty-document \
++-handle-as-image \
++-hide-accept-language \
++-hide-content-disposition \
++-hide-if-modified-since \
+++hide-forwarded-for-headers \
+++hide-from-header{block} \
++-hide-referrer \
++-hide-user-agent \
++-inspect-jpegs \
++-kill-popups \
++-limit-connect \
++-prevent-compression \
++-overwrite-last-modified \
++-redirect \
++-send-vanilla-wafer \
++-send-wafer \
++-session-cookies-only \
+++set-image-blocker{pattern} \
++-treat-forbidden-connects-like-blocks \
++}
++/ # Match all URLs

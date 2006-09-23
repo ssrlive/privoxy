@@ -7,16 +7,35 @@ privoxy for Debian
   want to use these features, you can enable them in
   /etc/privoxy/config and do a "/etc/init.d/privoxy restart".
 
-- A patch was applied to access the local copy of the user manual
-  (/usr/share/doc/privoxy/user-manual/*) was applied.  With the option
-   user-manual /usr/share/doc/privoxy/user-manual
-  in /etc/privoxy/config this is activated and the manual can be
-  accessed as http://config.privoxy.org/user-manual
+- Experimental IPv6 support was added to the package.
 
-- A patch was applied to use multiple filter files.  So you can leave
-  /etc/privoxy/default.filter untouched and use a local file like
-  /etc/privoxy/user.filter for your local changes (you have to enable
-  this file using a second filterfile directive in /etc/privoxy/config).
+- The global default for all URLs (/) is no longer set in
+  default.action but in a new file global.action, so your local
+  changes should go to global.action and user.action only, while
+  default.action is maintained by package upgrades automatically.
+
+- Since 3.0.5 the upstream package uses the Cautious default settings
+  instead of Medium (like 3.0.3 did).  To avoid problems on upgrades
+  of old packages, the Debian package still uses the Medium settings.
+  You can find the different profiles in /etc/privoxy/standard.action.
+  To change the default, go to http://p.p/edit-actions-list?f=global
+  (this can also be reached from http://p.p/show-status via the
+  global.action edit link) and modify the default to your needs.  You
+  can either set one of the standard profiles (Cautious, Medium, or
+  Advanced) or change every single setting using the "Edit" button.
+  It is necessary to set "enable-edit-actions 1" (see above) in
+  /etc/privoxy/config to use the web interface.  Alternatively you can
+  modify /etc/privoxy/global.action by hand.  The other templates are
+  available in /etc/privoxy/standard.action.
+
+- /etc/privoxy/default.action is now owned by root, so you can not
+  modify it via http://p.p/edit-actions-list?f=default any longer
+  (assumed that you set "enable-edit-action 1" above).  You should
+  realize your local adaptions in /etc/privoxy/global.action and
+  /etc/privoxy/user.action, so default.action can be easily upgraded
+  by new package versions.  If you do not like this change, feel free
+  to change the owner of default.action to "privoxy" and the file is
+  editable again.
 
 Roland Rosenfeld <roland@debian.org>
-$Id: README.Debian,v 1.1.2.3 2006/07/02 11:06:24 roro Exp $
+$Id: README.Debian,v 1.3 2006/07/18 14:48:48 david__schmidt Exp $

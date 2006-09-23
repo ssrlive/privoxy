@@ -1,6 +1,6 @@
-privoxy (3.0.4.cvs20060917-1) UNRELEASED; urgency=low
+privoxy (3.0.5~cvs20060923-1) UNRELEASED; urgency=low
 
-  * New upstream CVS snapshot as of 2006-09-17.
+  * New upstream CVS snapshot as of 2006-09-23.
   * hide-referrer{foo} now allows everything as a forged referrer not 
     only http/https URLs and ignoring invalid URLs (Closes: #258193).  
   * Fixes the name of the filter from "popups" to "all-popups" in
@@ -11,7 +11,7 @@ privoxy (3.0.4.cvs20060917-1) UNRELEASED; urgency=low
   * Adapted all patches to this version.
   * The following patches are incorporated upstream now, so they are no
     longer needed: 01_local_usermanual.dpatch, 04_nomultiproxy.dpatch,
-    08_log_pthread.dpatch, 09_no_identity.dpatch,
+    07_typos.dpatch, 08_log_pthread.dpatch, 09_no_identity.dpatch,
     12_multiple-filters.dpatch, 13_memory.dpatch, 18_dns_retry.dpatch.
   * 20_makefile_fixup.dpatch: Fix a syntax error in the GNUmakefile.in.
   * 05_default_action.dpatch: main parts are incorporated upstream now.
@@ -19,8 +19,24 @@ privoxy (3.0.4.cvs20060917-1) UNRELEASED; urgency=low
     cause they use %01 and %02 as delimiters for multipage results
     (Closes: #243245).
   * 03_ipv6.dpatch: Add IPv6 support (Closes: #179461).
+  * 23_fix_faq_id.dpatch: Fix value of id attribute in <sect2> tag (no
+    underscore allowed) of faq.sgml.
+  * 24_global_action.dpatch: Move the global default for all pages (/)
+    from default.action to global.action to make updates with local
+    configurations easier.
+  * 25_standard_medium.dpatch: Change the global default from
+    standard.Cautious to standard.Medium, which is similar to the old
+    3.0.3 behavior and doesn't change too much (only
+    filter{js-annoyances}, filter{html-annoyances} and
+    filter{unsolicited-popups} are switched off now additionally).
+  * 26_edit_only_writable.dpatch: Hide the edit button on
+    http://p.p/show-status if action file can not be written by the
+    privoxy user.
+  * default.action and standard.action are no longer owned by privoxy but
+    by root to show that these files are maintained upstream while users
+    should maintain their local changes in global.action and user.action.
 
- -- Roland Rosenfeld <roland@debian.org>  Sun, 17 Sep 2006 10:00:08 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 23 Sep 2006 14:22:21 +0200
 
 privoxy (3.0.3-2-2) unstable; urgency=low
 

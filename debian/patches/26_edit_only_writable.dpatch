@@ -1,0 +1,37 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 26_edit_only_writable.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Hide the edit button on http://p.p/show-status if action file can 
+## DP: not be written by the privoxy user.
+
+@DPATCH@
+diff -urNad privoxy~/cgisimple.c privoxy/cgisimple.c
+--- privoxy~/cgisimple.c
++++ privoxy/cgisimple.c
+@@ -244,6 +244,10 @@
+ #include <string.h>
+ #include <assert.h>
+ 
++#if !defined(_WIN32) && !defined(__OS2__)
++#include <unistd.h>
++#endif
++
+ #ifdef _WIN32
+ #define snprintf _snprintf
+ #endif /* def _WIN32 */
+@@ -1030,8 +1034,14 @@
+ #ifdef FEATURE_CGI_EDIT_ACTIONS
+          if (NULL == strstr(csp->actions_list[i]->filename, "standard.action") && NULL != csp->config->actions_file_short[i])
+          {
++#if !defined(_WIN32) && !defined(__OS2__)
++            if (access(csp->config->actions_file[i], W_OK) == 0) {
++#endif
+             snprintf(buf, 100, "&nbsp;&nbsp;<a href=\"/edit-actions-list?f=%s\">Edit</a>", csp->config->actions_file_short[i]);
+             if (!err) err = string_append(&s, buf);
++#if !defined(_WIN32) && !defined(__OS2__)
++            }
++#endif
+          }
+ #endif
+ 
