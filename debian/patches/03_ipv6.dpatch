@@ -1950,7 +1950,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  
     return 1;
  
-@@ -784,108 +913,42 @@
+@@ -784,108 +913,48 @@
   *
   * Function    :  resolve_hostname_to_ip
   *
@@ -1972,7 +1972,15 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 -{
 -   struct sockaddr_in inaddr;
 -   struct hostent *hostp;
--   unsigned int dns_retries = 0;
++addr_list *resolve_hostname_to_ip(const char *host, const char *port, int pf)
++ {
++   /* TODO 
++    * Do all supported platforms have "getaddrinfo"?
++    */
++    
++   struct addrinfo hints, *res0;
++   int result;
+    unsigned int dns_retries = 0;
 -#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS) || defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
 -   struct hostent result;
 -#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
@@ -1982,7 +1990,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 -   struct hostent_data hdata;
 -#endif /* def HAVE_GETHOSTBYNAME_R_(6|5)_ARGS */
 -#endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
--
+ 
 -   if ((host == NULL) || (*host == '\0'))
 -   {
 -      return(INADDR_ANY);
@@ -2056,24 +2064,19 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 -         (char *) hostp->h_addr,
 -         sizeof(inaddr.sin_addr)
 -      );
--   }
--   return(inaddr.sin_addr.s_addr);
--
--}
--
-+addr_list *resolve_hostname_to_ip(const char *host, const char *port, int pf)
-+ {
-+   /* TODO 
-+    * Do all supported platforms have "getaddrinfo"?
-+    */
-+    
-+   struct addrinfo hints, *res0;
-+   int result;
 +   memset(&hints, 0, sizeof(hints));
 +   hints.ai_family = pf;
 +   hints.ai_socktype = SOCK_STREAM;
 +  
-+   result = getaddrinfo(host, port, &hints, &res0);
++   while ((result = getaddrinfo(host, port, &hints, &res0)) 
++          && (result == EAI_AGAIN) && (dns_retries++ < 10)) {
++      log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
++                dns_retries, host);
+    }
+-   return(inaddr.sin_addr.s_addr);
+-
+-}
+-
 +   if ( result != 0 )
 +     {
 +      log_error(LOG_LEVEL_ERROR, "could not resolve hostname %s because %s", host,gai_strerror(result));
@@ -3005,7 +3008,7 @@ diff -urNad privoxy~/parsers.c privoxy/parsers.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -1932,6 +1935,167 @@
+@@ -1935,6 +1938,167 @@
     return JB_ERR_OK;
  }
  
