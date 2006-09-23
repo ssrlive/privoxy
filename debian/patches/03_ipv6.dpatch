@@ -319,7 +319,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
  
 -   snprintf(buf, 20, "%d", csp->config->hport);
 -   if (!err) err = map(exports, "my-port", 1, buf, 1);
-+	if (!err) err = map(exports, "my-port", 1, csp->my_port_str, 1);
++   if (!err) err = map(exports, "my-port", 1, csp->my_port_str, 1);
  
     if(!strcmp(CODE_STATUS, "stable"))
     {
@@ -353,7 +353,7 @@ diff -urNad privoxy~/filters.c privoxy/filters.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -468,6 +471,9 @@
+@@ -471,6 +474,9 @@
  #include <ctype.h>
  #include <string.h>
  #include <assert.h>
@@ -363,7 +363,7 @@ diff -urNad privoxy~/filters.c privoxy/filters.c
  
  #ifndef _WIN32
  #ifndef __OS2__
-@@ -502,17 +508,119 @@
+@@ -505,17 +511,119 @@
  
  const char filters_h_rcs[] = FILTERS_H_VERSION;
  
@@ -492,7 +492,7 @@ diff -urNad privoxy~/filters.c privoxy/filters.c
  /*********************************************************************
   *
   * Function    :  block_acl
-@@ -542,7 +650,7 @@
+@@ -545,7 +653,7 @@
     /* search the list */
     while (acl != NULL)
     {
@@ -501,7 +501,7 @@ diff -urNad privoxy~/filters.c privoxy/filters.c
        {
           if (dst == NULL)
           {
-@@ -552,8 +660,8 @@
+@@ -555,8 +663,8 @@
                 return(0);
              }
           }
@@ -512,7 +512,7 @@ diff -urNad privoxy~/filters.c privoxy/filters.c
           {
              if (acl->action == ACL_PERMIT)
              {
-@@ -572,81 +680,249 @@
+@@ -575,81 +683,249 @@
  
  }
  
@@ -1802,12 +1802,12 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 +                      "There may be another Privoxy or some other "
 +                      "proxy running on port %s",
 +                      log_host, port, numeric_hostname, numeric_port, numeric_port);
-+				break;
++            break;
 +         case -2 :
 +            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s (%s:%s): "
 +                      "Out of memory",
 +                      log_host, port, numeric_hostname, numeric_port);
-+				break;
++            break;
 +         default :
 +            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s: because %E",
 +                      log_host, numeric_port);
@@ -2135,7 +2135,7 @@ diff -urNad privoxy~/jbsockets.h privoxy/jbsockets.h
 diff -urNad privoxy~/jcc.c privoxy/jcc.c
 --- privoxy~/jcc.c
 +++ privoxy/jcc.c
-@@ -747,6 +747,7 @@
+@@ -750,6 +750,7 @@
  #include "cgi.h"
  #include "loadcfg.h"
  #include "urlmatch.h"
@@ -2143,7 +2143,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
  
  const char jcc_h_rcs[] = JCC_H_VERSION;
  const char project_h_rcs[] = PROJECT_H_VERSION;
-@@ -2306,61 +2307,78 @@
+@@ -2309,61 +2310,78 @@
   * Returns     :  Port that was opened.
   *
   *********************************************************************/
@@ -2224,7 +2224,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
 +               "proxy running on port %s",
 +               (NULL != bs->haddr) ? bs->haddr : "INADDR_ANY",
 +                      bs->hport, bs->hport);
-+				break;
++            break;
  
           case -2 :
 -            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: " 
@@ -2232,7 +2232,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
                 "The hostname is not resolvable",
 -               (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
 +               (NULL != bs->haddr) ? bs->haddr : "INADDR_ANY", bs->hport);
-+				break;
++            break;
  
           default :
 -            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: because %E",
@@ -2258,7 +2258,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
  }
  
  
-@@ -2389,12 +2407,18 @@
+@@ -2392,12 +2410,18 @@
  static void listen_loop(void)
  {
     struct client_state *csp = NULL;
@@ -2279,7 +2279,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
  
  #ifdef FEATURE_GRACEFUL_TERMINATION
     while (!g_terminate)
-@@ -2468,14 +2492,55 @@
+@@ -2471,14 +2495,55 @@
            * that this will hurt people's feelings.
            */
  
@@ -2338,7 +2338,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
        {
           log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
  
-@@ -2493,6 +2558,8 @@
+@@ -2496,6 +2561,8 @@
           log_error(LOG_LEVEL_CONNECT, "OK");
        }
  
@@ -2514,10 +2514,10 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
 -                     vec[0]);
 +               case 1:
 +                  config->acl = add_to_acl_list(config->acl, ACL_DENY, vec[0], NULL, &config->proxy_args);
-+						break;
++                  break;
 +               case 2:
 +                  config->acl = add_to_acl_list(config->acl, ACL_DENY, vec[0], vec[1], &config->proxy_args);
-+						break;
++                  break;
 +               default:
 +                  log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
 +                            "deny-access directive in configuration file.");
@@ -2816,10 +2816,10 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
 -                     vec[0]);
 +               case 1:
 +                  config->acl = add_to_acl_list(config->acl, ACL_PERMIT, vec[0], NULL, &config->proxy_args);
-+						break;
++                  break;
 +               case 2:
 +                  config->acl = add_to_acl_list(config->acl, ACL_PERMIT, vec[0], vec[1], &config->proxy_args);
-+						break;
++                  break;
 +               default:
 +                  log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
 +                            "permit-access directive in configuration file.");
@@ -3008,7 +3008,7 @@ diff -urNad privoxy~/parsers.c privoxy/parsers.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -1935,6 +1938,167 @@
+@@ -1938,6 +1941,167 @@
     return JB_ERR_OK;
  }
  
@@ -3404,7 +3404,7 @@ diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
           return JB_ERR_MEMORY;
        }
  
-+		http->host_port_malloc = buf;
++      http->host_port_malloc = buf;
 +
        /* check if url contains username and/or password */
 -      host = strchr(buf, '@');
@@ -3439,9 +3439,8 @@ diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
        else
        {
           /* No port specified. */
--         http->port = (http->ssl ? 443 : 80);
 +         http->port_str = (http->ssl ? "143" : "80");
-+			http->port = (http->ssl ? 443 : 80);
+          http->port = (http->ssl ? 443 : 80);
        }
  
 -      http->host = strdup(host);
@@ -3462,7 +3461,7 @@ diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
  
     assert(url);
     assert(buf);
-@@ -685,22 +679,25 @@
+@@ -685,21 +679,24 @@
     {
        return JB_ERR_MEMORY;
     }
@@ -3483,6 +3482,11 @@ diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
 +         }
 +         url->pathlen = strlen(url->path);
 +         *p = '\0';
++      }
++      else
++      {
++         url->path    = NULL;
++         url->pathlen = 0;
        }
 -      url->pathlen = strlen(url->path);
 -      *p = '\0';
@@ -3491,17 +3495,10 @@ diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
 -   {
 -      url->path    = NULL;
 -      url->pathlen = 0;
--   }
-+      else
-+      {
-+         url->path    = NULL;
-+         url->pathlen = 0;
-+      }
-+	}
+    }
     if (url->path)
     {
-       int errcode;
-@@ -739,15 +736,12 @@
+@@ -739,14 +736,11 @@
           return JB_ERR_PARSE;
        }
     }
@@ -3514,14 +3511,12 @@ diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
     {
 -      *p++ = '\0';
 -      url->port = atoi(p);
--   }
 +     char *p;
 +     parse_ip(buf,&buf,&p);
 +     url->port = atoi(p);
-+	}
+    }
  
     if (buf[0] != '\0')
-    {
 @@ -779,12 +773,13 @@
           return JB_ERR_MEMORY;
        }
