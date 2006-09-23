@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.25 2006/09/17 14:58:00 hal9 Exp $
+#  $Id: default.action.master,v 1.26 2006/09/20 02:16:43 hal9 Exp $
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -1461,6 +1461,10 @@ support.microsoft.com/
 www.alexa.com
 #MASTER# PROBLEM-URL: http://www.translate.ru/url/tran_url.asp?lang=es&url=http%3A%2F%2Fos2progg.by.ru%2Findex.shtml&direction=rs&template=General&cp1=NO&cp2=NO&autotranslate=on&transliterate=on&psubmit2.x=68&psubmit2.y=12
 www.translate.ru/url/
+#MASTER# PROBLEM-URL: http://schneegans.de/sv/?url=http%3A%2F%2Fwww.freebsd.org%2F&schema=%28Detect+automatically%29&encoding=%28Detect+automatically%29&htmlcomp=%28Detect+automatically%29
+schneegans.de/
+#MASTER# PROBLEM-URL: http://config.privoxy.org/edit-actions-submit?f=user ... &redirect_mode=http%3A%2F%2Fwww.privoxy.org%2F
+config.privoxy.org/
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
