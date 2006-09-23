@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.70 2006/09/08 12:06:34 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.71 2006/09/21 19:55:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -40,6 +40,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.70 2006/09/08 12:06:34 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.71  2006/09/21 19:55:17  fabiankeil
+ *    Fix +hide-if-modified-since{-n}.
+ *
  *    Revision 1.70  2006/09/08 12:06:34  fabiankeil
  *    Have hide-if-modified-since interpret the random
  *    range value as minutes instead of hours. Allows
@@ -1023,7 +1026,6 @@ jb_err filter_header(struct client_state *csp, char **header)
 
    int i, found_filters = 0;
 
-   log_error(LOG_LEVEL_RE_FILTER, "Entered filter_headers");
    /*
     * Need to check the set of re_filterfiles...
     */
@@ -1114,9 +1116,8 @@ jb_err filter_header(struct client_state *csp, char **header)
 	   log_error(LOG_LEVEL_HEADER, "Removing empty header %s", *header);
       freez(*header);
    }
-   log_error(LOG_LEVEL_RE_FILTER, "Leaving filter headers");
-   return(JB_ERR_OK);
 
+   return(JB_ERR_OK);
 }
 
 
