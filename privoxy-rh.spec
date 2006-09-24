@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.48 2006/09/20 23:51:26 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.49 2006/09/22 01:02:08 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -147,6 +147,7 @@ cat config | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
     sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' | \
+    sed 's@#user-manual http://www.privoxy.org/user-manual/@user-manual %{_docdir}/%{name}-%{version}/user-manual/@g' | \
     sed -e 's/[[:cntrl:]]*$//' > \
     %{buildroot}%{privoxyconf}/config
 perl -pe 's/{-no-cookies}/{-no-cookies}\n\.redhat.com/' default.action >\
@@ -252,7 +253,7 @@ fi
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
-%doc doc/webserver/p_doc.css doc/webserver/p_web.css doc/webserver/privoxy-index.html
+%doc doc/webserver/p_doc.css doc/webserver/privoxy-index.html
 %doc doc/webserver/images
 %doc doc/webserver/man-page
 
@@ -322,6 +323,9 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sat Sep 23 2006 Jochen Schlick <j.schlick_at_decagon_de> 3.0.5-1
+- let user-manual point to local documentation
+
 * Thu Sep 21 2006 Hal Burgiss <hal@foobox.net>
 - Fix user.filter install section and clean up CVS cruft in tarball.
 
@@ -752,6 +756,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.49  2006/09/22 01:02:08  hal9
+# Fix user.filter installation and CVS files cruft per support request.
+#
 # Revision 1.48  2006/09/20 23:51:26  hal9
 # Bump versions to 3.0.5
 #
