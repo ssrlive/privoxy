@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.18 2006/09/22 01:27:55 hal9 Exp $
+ $Id: faq.sgml,v 2.19 2006/09/22 10:54:32 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.18 2006/09/22 01:27:55 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.19 2006/09/22 10:54:32 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1602,7 +1602,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  Save the modified configuration file and open
  <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status/</ulink>
  in your browser, confirm that <application>Privoxy</application> has reloaded its configuration
- and that there are no other forward lines, unless you know that you need them. I everything looks good,
+ and that there are no other forward lines, unless you know that you need them. If everything looks good,
  refer to
  <ulink url="http://wiki.noreply.org/noreply/TheOnionRouter/TorFAQ#head-0e1cc2ac330ede8c6ad1ac0d0db0ac163b0e6143">Tor
  Faq 4.2</ulink> to learn how to verify that you are really using <application>Tor</application>.
@@ -2466,6 +2466,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.19  2006/09/22 10:54:32  hal9
+Change references to 3.0.4 to 3.0.5 and minor adjustments.
+
 Revision 2.18  2006/09/22 01:27:55  hal9
 Final commit of probably various minor changes here and there. Unless
 something changes this should be ready for pending release.
