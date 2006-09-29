@@ -7,7 +7,10 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.27 2006/09/23 13:00:34 fabiankeil Exp $
+#  $Id: default.action.master,v 1.28 2006/09/23 17:59:19 david__schmidt Exp $
+#
+#  Requires    :  This version requires Privoxy v3.0.4 or later due to 
+#                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -617,11 +620,12 @@ countr*.
 #############################################################################
 {+block}
 #MASTER# DONT-VERIFY (generic)
-/(.*/)?ad(/|s|v|_?image|cycle|rotate|mentor|click|frame|_?server|script|stream)
+/(.*/)?ad(/|s|v|_?image|cycle|rotate|mentor|click|frame|_?serv|script|stream|fetch)
 /.*ads/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
-/.*(count|track|compteur|adframe|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
+/.*(count|track|compteur|adframe|adserve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
+/(.*/)?clicktrack
 
 #############################################################################
 # Generic unblockers by path:
@@ -759,6 +763,39 @@ xlonhcld.xlontech.net/
 #MASTER# REMARKS: Video advertizer, owned by doubleclick.net.
 #MASTER# BLOCK-REFERRER: http://www.ign.com/ 09/17/06
 .klipmart.com
+#MASTER# BLOCK-REFERRER: http://gamespot.com 09/26/06
+adlog.com.com
+#MASTER# BLOCK-REFERRER: http://verizon.net 09/29/06
+sales.liveperson.net
+#MASTER# BLOCK-REFERRER: http://mplayernetwork.com/ 09/29/06
+.ign.com
+#MASTER# BLOCK-REFERRER: http://homedepot.com 09/29/06
+data.coremetrics.com/cm
+#MASTER# BLOCK-REFERRER: http://wired.com 09/29/06
+.realmedia.com/data/
+#MASTER# REMARKS: webbugs, ads and user tracking js in many places.
+#MASTER# BLOCK-REFERRER: http://washingtonpost.com & http://tomshardware.com 09/29/06
+.revsci.net
+#MASTER# BLOCK-REFERRER: http://www.time.com/time/business/article/0,8599,1073341,00.html 09/29/06
+.clickability.com
+/.*clickability(.com)?/
+#MASTER# BLOCK-REFERRER: http://washingtonpost.com 09/29/06
+stats.*.ihost.com
+#MASTER# BLOCK-REFERRER: http://msnbc.com and many others 09/29/06
+.2o7.net
+#MASTER# BLOCK-REFERRER: http://microsoft.com 09/29/06
+.webtrends.com
+#MASTER# BLOCK-REFERRER: http://tomshardware.com 09/29/06
+.tacoda.
+#MASTER# BLOCK-REFERRER: http://www.mplayernetwork.com/ 09/29/06
+.ign.com
+
+#----------------------------------------------------------------------------
+# Misc Junk
+#----------------------------------------------------------------------------
+{+block +handle-as-empty-document}
+#MASTER# REMARKS: signature for user tracking nytimes, cnn.com,latimes.com and many others.
+/b/ss/.+
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
@@ -807,7 +844,8 @@ y.ibsys.com/event.ng/
 #----------------------------------------------------------------------------
 #MASTER# BLOCK-REFERRER: http://www.cnn.com/
 #MASTER# BLOCK-REFERRER: http://www.aol.com/
-ar.atwola.com 
+#MASTER# COMMENT: There are at least ar.atwola and pr.atwola.
+?r.atwola.com 
 #MASTER# BLOCK-REFERRER: http://www.altavista.com/
 #MASTER# BLOCK-REFERRER: http://www.tecchannel.de/
 #MASTER# BLOCK-REFERRER: http://www.whowhere.lycos.com/
@@ -942,6 +980,8 @@ kt*.kliptracker.com/
 gfx.dvlabs.com/klipmart/
 #MASTER# REMARKS: Actions file tracker 1547656 09/02/06
 img.mediaplex.com
+#MASTER# BLOCK-REFERRER: http://www.tomshardware.com/ 09/28/06
+altfarm.mediaplex.com
 #MASTER# REMARKS: Actions file tracker 1152563 09/02/06
 ads.monster.com
 #MASTER# REMARKS: Support request 1312362 09/08/06
@@ -975,10 +1015,14 @@ matrix.mediavantage.de
 .euros4click./.+
 #MASTER# BLOCK-REFERRER: http://www.planet3dnow.de/cgi-bin/newspub/viewnews.cgi?id=1129904195
 ads-*.quarterserver.de/adserver
+#MASTER# BLOCK-REFERRER: http://forums2.gardenweb.com/forums/orchids/ 09/25/06
+.overture./.+
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
 #----------------------------------------------------------------------------
+#MASTER# REMARKS: Generic, re: tracking.foxnews.com/HG?
+tracking.
 #MASTER# BLOCK-REFERRER: http://os2.ru/
 .*.*.spylog.com/
 #MASTER# BLOCK-REFERRER: http://www.dhtmlplanet.com/
@@ -991,7 +1035,7 @@ stat.onestat.com
 #MASTER# BLOCK-REFERRER: http://www.global.net.uk/
 .[a-vx-z]*.tradedoubler.com
 #MASTER# BLOCK-REFERRER: http://www.sharepoint.boo.pl/
-stat.webmedia.pl/
+stat.webmedia.
 #MASTER# BLOCK-REFERRER: http://www.asp-php.net/index.php
 log*.xiti.com/
 log*.hit-parade.com/
@@ -1322,6 +1366,11 @@ cels.org/.*track
 .freebsd.org
 #MASTER# REMARKS: SF tracker 09/15/06
 adiumx.com
+#MASTER# UNBLOCK-REFERRER: http://google.com
+#MASTER# REMARKS: This allows many Google "Sponsored Links" to function. 
+#MASTER# REMARKS: Presumably if someone clicks these they want to go there.
+.googleadservices./pagead/adclick
+
 
 #############################################################################
 # Site-specific special rules:
@@ -1335,11 +1384,19 @@ adiumx.com
 .office.microsoft.com
 .windowsupdate.microsoft.com
 .apple.com
-.yahoo.com
 #MASTER# REMARKS: Actions Tracker 1293057 09/02/06
 .update.microsoft.com
 #MASTER# REMARKS: Various reports 09/16/06
 mail.google.
+
+#----------------------------------------------------------------------------
+# Semi-fragile, allow for blocks.
+#----------------------------------------------------------------------------
+
+{ -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups }
+#MASTER# REMARKS: Problem URL: adserver.yahoo.com
+.yahoo.com
+
 
 #----------------------------------------------------------------------------
 # Shopping and banking sites - allow cookies and pop-ups
@@ -1701,7 +1758,8 @@ www.mandrakelinux.com/en/ftp.php3
 validator.w3.org/check\?uri=referer
 #MASTER# REMARKS: Fixes Debian Bug #250407
 .petitiononline.com/mod_perl/signed.cgi
-
+#MASTER# REMARKS: Tracker bug report 1107806 09/26/06
+.telia.se
 
 #----------------------------------------------------------------------------
 # These animated gifs are either useful or nice:
@@ -1814,7 +1872,11 @@ www.dn.se
 {-filter{img-reorder}}
 #MASTER# PROBLEM-URL: http://images.google.com
 #MASTER# REMARKS: Google images don't show up with img-reorder on
-images.google.
+#MASTER# REMARKS: Also images on finance.google.com 09/25/06
+.google.
+#MASTER# PROBLEM-URL: http://wired.com
+/.*wired(\.com)?/
+.wired.com/
 
 {-filter{js-annoyances}}
 #MASTER# PROBLEM-URL: http://www.munichre.com/
