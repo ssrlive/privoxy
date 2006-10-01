@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.11.2.23 2004/02/17 13:34:01 oes Exp $
+#  $Id: default.filter,v 1.19 2006/07/18 14:48:45 david__schmidt Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -496,12 +496,88 @@ s|(<img [^>]*)onload|$1never|sig
 s|(<INPUT name="\d{2,4}" type="RADIO" value="0") CHECKED |$1|g
 s|<INPUT name="\d{2,4}" type="RADIO" value="3" |$0 checked|g
 
+#################################################################################
+#
+# google: CSS-based block for Google text ads. Also removes
+#         a width limitation and the toolbar advertisement.
+#
+#################################################################################
+FILTER: google CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.
+s@</head>@<style type="text/css">\n\
+ /* Style sheet inserted by Privoxy's google filter. */\n\
+ \#fbc, \#fbl, \#ra, .rhh {visibility: hidden !important;}\n\
+ \#tpa1,\#tpa2,\#tpa3,\#tpa4,\#tpa5,\#tpa5, \#spl, .ch, \#ads, \#toolbar, \#google_ads_frame{display: none !important;}\n\
+ .main_body, .j {width: 100%}\n</style>\n$0@
+s@<div style=\"padding-top:11px;min-width:500px\">@<div id="main_body">@
+s@(<table cellspacing=0 cellpadding=0 width=25% align=right bgcolor=\#ffffff border=0\
+|</font></td></tr></tbody></table><table align=\"right\" bgcolor=\"\#ffffff\"\
+|<table cellspacing=0 cellpadding=0 align=right bgcolor=\#ffffff border=0)@$0 id="ads"@
+s@(<br clear=all><table)( border=0 cellpadding=9><tr><td)@$1 id="toolbar"$2@
+
+#################################################################################
+#
+# yahoo: CSS-based block for Yahoo text ads. Also removes a width limitation.
+#
+#################################################################################
+FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitation.
+s@</head>@<style type="text/css">\n\
+ /* Style sheet inserted by Privoxy's yahoo filter. */\n\
+ \#symadbn, \#ymadbn, \#yschsec, \#yschanswr, .yschftad,\
+ .yschspn{display: none !important;}\n\
+ \#yschpri {width: 100% }\n</style>\n$0@
+
+#################################################################################
+#
+# msn: CSS-based block for MSN text ads. Also removes tracking URLs
+#      and a width limitation.
+#
+#################################################################################
+FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.
+s@</head>@<style type="text/css">\n\
+ /* Style sheet inserted by Privoxy's msn filter. */\n\
+ \#msn_ads, \#ads_rightC {display: none !important;}\n\
+ \#results, .flank, .SearchSection .not\
+ {width: 100% !important; min-width: 100% !important;\
+ max-width: 100% !important;}\n</style>\n$0@
+s@(<div id=)\"ads_[^\"]*\"@$0msn_ads@Uig
+s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
+s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
+
+#################################################################################
+#
+# blogspot: Cleans up some Blogspot blogs. Read the fine print before using this.
+#
+#           This filter also intentionally removes some navigation stuff and
+#           sets the page width to 100%. As a result, some rounded "corners" would
+#           appear to early or not at all and as fixing this would require a browser
+#           that understands background-size (CSS3), they are removed instead.
+#
+#################################################################################
+FILTER: blogspot Cleans up some Blogspot blogs. Read the fine print before using this.
+s@</head>@<style type="text/css">\n\
+ /* Style sheet inserted by Privoxy's blogspot filter. */\n\
+ \#powered-by {display: none !important;}\n\
+ \#wrap4, \#wrapper {margin-top: 0px }\n\
+ \#blogheader, \#header {margin-top: 0.5em !important}\n\
+ \#content {width: 98% }\n\
+ \#main {width: 70% }\n\
+ \#sidebar {width: 29% }\n\
+ .blogComments {width: 100%; overflow: scroll;}\n</style>\n$0@
+s@<body.*(<div id="(content|wrap4|wrapper))@<body><!-- Privoxy's\
+ blogspot filter ditched some garbage here -->$1@Us
+s@(<div style=\"[^\"]*width:)30em@$1 100%@
+s@background:url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;@/*$0*/@Ug
+s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;)@$1 ;/*$2*/@Ug
 
 
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.19  2006/07/18 14:48:45  david__schmidt
+#     Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+#     with what was really the latest development (the v_3_0_branch branch)
+#
 #     Revision 1.11.2.23  2004/02/17 13:34:01  oes
 #     - Beefed up the protection of the unsolicited-popups
 #       filter against matching in JavaScript string constants.
