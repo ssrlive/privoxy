@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.19 2006/07/18 14:48:45 david__schmidt Exp $
+#  $Id: default.filter,v 1.20 2006/10/01 21:00:22 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -523,7 +523,7 @@ FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitatio
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, \#yschsec, \#yschanswr, .yschftad,\
- .yschspn{display: none !important;}\n\
+ .yschspn, .yschspns {display: none !important;}\n\
  \#yschpri {width: 100% }\n</style>\n$0@
 
 #################################################################################
@@ -569,11 +569,29 @@ s@(<div style=\"[^\"]*width:)30em@$1 100%@
 s@background:url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;@/*$0*/@Ug
 s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;)@$1 ;/*$2*/@Ug
 
+#################################################################################
+#
+# html-to-xml: Header filter to change the Content-Type from html to xml.
+#
+#################################################################################
+FILTER: html-to-xml Header filter to change the Content-Type from html to xml.
+s@^(Content-Type:) text/html(;.*)?$@$1 application/xhtml+xml$2@
+
+#################################################################################
+#
+# xml-to-html: Header filter to change the Content-Type from xml to html.
+#
+#################################################################################
+FILTER: xml-to-html Header filter to change the Content-Type from xml to html.
+s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.20  2006/10/01 21:00:22  fabiankeil
+#     New site-specific filters: google, yahoo, msn and blogspot.
+#
 #     Revision 1.19  2006/07/18 14:48:45  david__schmidt
 #     Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 #     with what was really the latest development (the v_3_0_branch branch)
