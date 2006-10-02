@@ -1,7 +1,11 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Since 3.0.3 ***
+*** Since 3.0.5 ***
+- Four new filters from Fabian.
+
+*** Version 3.0.5 ***
+
 - Windows version can be installed/started as a service.
 - Windows icon stays blue when Privoxy is idle, green when busy.
 - Integrated Fabian Keil's extensive patch.  See:
