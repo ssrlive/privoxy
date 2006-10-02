@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.30 2006/10/02 03:34:19 hal9 Exp $
+#  $Id: default.action.master,v 1.31 2006/10/02 03:41:30 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -496,7 +496,7 @@ for-privoxy-version=3.0.5
 # These aliases define combinations of actions
 # that are useful for certain types of sites:
 #
-fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer allow-popups
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
 shop        = -crunch-all-cookies allow-popups
 
 # Your favourite blend of filters:
