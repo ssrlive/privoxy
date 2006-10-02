@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.28 2006/09/23 17:59:19 david__schmidt Exp $
+#  $Id: default.action.master,v 1.29 2006/09/29 13:03:02 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -488,15 +488,15 @@ for-privoxy-version=3.0.5
 #
 +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
- allow-all-cookies  = -crunch-all-cookies -session-cookies-only
- allow-popups       = -filter{all-popups} -kill-popups
+ allow-all-cookies  = -crunch-all-cookies -session-cookies-only 
+ allow-popups       = -filter{all-popups} -kill-popups -filter{unsolicited-popups}
 +block-as-image     = +block +handle-as-image
 -block-as-image     = -block
 
 # These aliases define combinations of actions
 # that are useful for certain types of sites:
 #
-fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups allow-popups
 shop        = -crunch-all-cookies allow-popups
 
 # Your favourite blend of filters:
