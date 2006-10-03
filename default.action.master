@@ -7,15 +7,15 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.32 2006/10/02 13:49:49 hal9 Exp $
+#  $Id: default.action.master,v 1.33 2006/10/03 11:12:16 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html.
-#                 Local exceptions and additions are better placed in 
-#                 user.action. This file is subject to periodic updating.
+#                 This file is subject to periodic updating. Local exceptions
+#                 and enhancements are better placed in user.action. 
 #
 #  Copyright   :  Written by and Copyright (C) 2001 - 2006 the
 #                 Privoxy team. http://www.privoxy.org/
@@ -510,7 +510,7 @@ for-privoxy-version=3.0.6
 # These aliases define combinations of actions
 # that are useful for certain types of sites:
 #
-fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups -prevent-compression
 shop        = -crunch-all-cookies allow-popups
 
 # Your favourite blend of filters:
@@ -1413,7 +1413,7 @@ mail.google.
 # Semi-fragile, allow for blocks.
 #----------------------------------------------------------------------------
 
-{ -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups }
+{ -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups -prevent-compression }
 #MASTER# REMARKS: Problem URL: adserver.yahoo.com
 .yahoo.com
 
@@ -1546,7 +1546,7 @@ config.privoxy.org/
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
 #----------------------------------------------------------------------------
-{-filter}
+{-filter -prevent-compression}
 #MASTER# PROBLEM-URL: http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/
 cvs.
 /.*(cvs(view|web)|viewcvs)
