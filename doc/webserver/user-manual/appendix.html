@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.5 User Manual"
+TITLE="Privoxy 3.0.6 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="See Also"
@@ -36,7 +36,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.5 User Manual</TH
+>Privoxy 3.0.6 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -745,7 +745,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN4920"
+NAME="AEN4992"
 ></A
 >14.2. Privoxy's Internal Pages</H2
 ><P
@@ -791,7 +791,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN4934"
+NAME="AEN5006"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -824,7 +824,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN4942"
+NAME="AEN5014"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -844,7 +844,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN4947"
+NAME="AEN5019"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -864,7 +864,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN4952"
+NAME="AEN5024"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -884,7 +884,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN4957"
+NAME="AEN5029"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -908,7 +908,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN4963"
+NAME="AEN5035"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -925,7 +925,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN4967"
+NAME="AEN5039"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -939,7 +939,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN4970"
+NAME="AEN5042"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -1443,15 +1443,21 @@ CLASS="GUIBUTTON"
  -filter {fun}
  -filter {crude-parental}
  -filter {site-specifics}
- +filter {js-annoyances}
- +filter {html-annoyances}
+ -filter {js-annoyances}
+ -filter {html-annoyances}
  +filter {refresh-tags}
- +filter {unsolicited-popups}
+ -filter {unsolicited-popups}
  +filter {img-reorder}
  +filter {banners-by-size}
  +filter {webbugs}
  +filter {jumping-windows}
  +filter {ie-exploits}
+ -filter {google}
+ -filter {yahoo}
+ -filter {msn}
+ -filter {blogspot}
+ -filter {xml-to-html}
+ -filter {html-to-xml}
  -filter-client-headers
  -filter-server-headers
  -force-text-mode
@@ -1657,16 +1663,34 @@ CLASS="SCREEN"
  -crunch-server-header
  +deanimate-gifs {last}
  -downgrade-http-version
- -fast-redirects
- +filter {js-annoyances}
- +filter {html-annoyances}
+ +fast-redirects {check-decoded-url}
+ -filter {js-events}
+ -filter {content-cookies}
+ -filter {all-popups}
+ -filter {banners-by-link}
+ -filter {tiny-textforms}
+ -filter {frameset-borders}
+ -filter {demoronizer}
+ -filter {shockwave-flash}
+ -filter {quicktime-kioskmode}
+ -filter {fun}
+ -filter {crude-parental}
+ -filter {site-specifics}
+ -filter {js-annoyances}
+ -filter {html-annoyances}
  +filter {refresh-tags}
- +filter {unsolicited-popups}
+ -filter {unsolicited-popups}
  +filter {img-reorder}
  +filter {banners-by-size}
  +filter {webbugs}
  +filter {jumping-windows}
  +filter {ie-exploits}
+ -filter {google}
+ -filter {yahoo}
+ -filter {msn}
+ -filter {blogspot}
+ -filter {xml-to-html}
+ -filter {html-to-xml}
  -filter-client-headers
  -filter-server-headers
  -force-text-mode
@@ -1830,15 +1854,34 @@ CLASS="GUIBUTTON"
   -crunch-server-header
   +deanimate-gifs 
   -downgrade-http-version 
-  +fast-redirects{check-decoded-url}
-  +filter{html-annoyances} 
-  +filter{js-annoyances} 
-  +filter{kill-popups} 
-  +filter{webbugs} 
-  +filter{nimda} 
-  +filter{banners-by-size} 
-  +filter{hal} 
-  +filter{fun} 
+  +fast-redirects {check-decoded-url}
+  -filter {js-events}
+  -filter {content-cookies}
+  -filter {all-popups}
+  -filter {banners-by-link}
+  -filter {tiny-textforms}
+  -filter {frameset-borders}
+  -filter {demoronizer}
+  -filter {shockwave-flash}
+  -filter {quicktime-kioskmode}
+  -filter {fun}
+  -filter {crude-parental}
+  -filter {site-specifics}
+  -filter {js-annoyances}
+  -filter {html-annoyances}
+  +filter {refresh-tags}
+  -filter {unsolicited-popups}
+  +filter {img-reorder}
+  +filter {banners-by-size}
+  +filter {webbugs}
+  +filter {jumping-windows}
+  +filter {ie-exploits}
+  -filter {google}
+  -filter {yahoo}
+  -filter {msn}
+  -filter {blogspot}
+  -filter {xml-to-html}
+  -filter {html-to-xml}
   -filter-client-headers
   -filter-server-headers
   -force-text-mode
@@ -1851,7 +1894,7 @@ CLASS="GUIBUTTON"
   +hide-referer{forge} 
   -hide-user-agent 
   -inspect-jpegs
-  +kill-popups 
+  -kill-popups 
   -overwrite-last-modified
   +prevent-compression 
   -redirect

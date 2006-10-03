@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.5 User Manual"
+TITLE="Privoxy 3.0.6 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="The Main Configuration File"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.5 User Manual</TH
+>Privoxy 3.0.6 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -205,7 +205,9 @@ CLASS="LITERAL"
 CLASS="LITERAL"
 >Medium</TT
 >). New users should try this for a while before
-     adjusting the settings to more aggressive levels.
+     adjusting the settings to more aggressive levels. The more aggressive 
+     the settings, then the more likelihood there is of problems such as sites 
+     not working as they should.
      </P
 ><P
 >      The <SPAN
@@ -256,7 +258,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN1967"
+NAME="AEN1970"
 ></A
 ><P
 ><B
@@ -376,7 +378,7 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->all</TD
+>blocks only</TD
 ></TR
 ><TR
 ><TD
@@ -503,7 +505,7 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>no</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -525,7 +527,7 @@ VALIGN="TOP"
 WIDTH="25%"
 ALIGN="LEFT"
 VALIGN="TOP"
->yes</TD
+>no</TD
 ><TD
 WIDTH="25%"
 ALIGN="LEFT"
@@ -683,7 +685,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2066"
+NAME="AEN2069"
 ></A
 >8.1. Finding the Right Mix</H2
 ><P
@@ -718,7 +720,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2073"
+NAME="AEN2076"
 ></A
 >8.2. How to Edit</H2
 ><P
@@ -1026,7 +1028,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2156"
+NAME="AEN2159"
 ></A
 >8.4.1. The Domain Pattern</H3
 ><P
@@ -1250,7 +1252,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2227"
+NAME="AEN2230"
 ></A
 >8.4.2. The Path Pattern</H3
 ><P
@@ -1769,8 +1771,12 @@ CLASS="FILENAME"
 >config</TT
 > (the default
  installation has three actions files). It also quite possible for any given
- URL pattern to match more than one pattern and thus more than one set of
- actions! Last match wins.</P
+ URL to match more than one <SPAN
+CLASS="QUOTE"
+>"pattern"</SPAN
+> (because of wildcards and
+ regular expressions), and thus to trigger more than one set of actions! Last
+ match wins.</P
 ><P
 > The list of valid <SPAN
 CLASS="APPLICATION"
@@ -3197,24 +3203,26 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->Get rid of HTML and JavaScript annoyances, banner advertisements (by size), do fun text replacements, etc.</P
+>Get rid of HTML and JavaScript annoyances, banner advertisements (by size), 
+         do fun text replacements, add personalized effects, etc.</P
 ></DD
 ><DT
 >Effect:</DT
 ><DD
 ><P
->    All files of text-based type, most notably HTML and JavaScript, to which this
-    action applies, are filtered on-the-fly through the specified regular expression
-    based substitutions. (Note: as of version 3.0.3 plain text documents 
-    are exempted from filtering, because web servers often use the
-    <TT
+>    All files of text-based type, most notably HTML and
+    JavaScript, to which this action applies, can be filtered on-the-fly
+    through the specified regular expression based substitutions. (Note: as of
+    version 3.0.3 plain text documents are exempted from filtering, because
+    web servers often use the <TT
 CLASS="LITERAL"
 >text/plain</TT
-> MIME type for all files whose type they
-    don't know.) By default, filtering works only on the raw document content 
-    itself (that which can be seen with <TT
+> MIME type for all
+    files whose type they don't know.) By default, filtering works only on the
+    raw document content itself (that which can be seen with <TT
 CLASS="LITERAL"
->View Source</TT
+>View
+    Source</TT
 >), 
     not the headers.
    </P
@@ -3304,8 +3312,12 @@ CLASS="QUOTE"
 >"HTML"</SPAN
 ></A
 >.
-    This is very powerful feature, and potentially very intrusive. Use 
-    with caution.    
+    This is very powerful feature, and potentially very intrusive. 
+    Filters should be used with caution, and where an equivalent
+    <SPAN
+CLASS="QUOTE"
+>"action"</SPAN
+> is not available.
    </P
 ><P
 >    The amount of data that can be filtered is limited to the 
@@ -3340,7 +3352,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > cannot uncompress compressed
     documents. If you want filtering to work on all documents, even those that
-    would normally be sent compressed, use the
+    would normally be sent compressed, you must use the
     <TT
 CLASS="LITERAL"
 ><A
@@ -3505,7 +3517,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->+filter{unsolicited-popups}  # Disable only unsolicited pop-up windows</PRE
+>+filter{unsolicited-popups}  # Disable only unsolicited pop-up windows. Useful if your browser lacks this ability.</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3524,7 +3536,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->+filter{all-popups}          # Kill all popups in JavaScript and HTML</PRE
+>+filter{all-popups}          # Kill all popups in JavaScript and HTML. Useful if your browser lacks this ability.</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3772,6 +3784,139 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >+filter{ie-exploits}         # Disable some known Internet Explorer bug exploits</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-SITE-SPECIFICS"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{site-specifics}      # Custom filters for specific site related problems</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-GOOGLE"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{google}              # Removes text ads and other Google specific improvements</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-YAHOO"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{yahoo}               # Removes text ads and other Yahoo specific improvements</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-MSN"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{msn}                 # Removes text ads and other MSN specific improvements</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-BLOGSPOT"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{blogspot}            # Cleans up Blogspot blogs</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-HTML-TO-XML"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{html-to-xml}         # Header filter to change the Content-Type from html to xml</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    <A
+NAME="FILTER-XML-TO-HTML"
+></A
+>
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+filter{xml-to-html}         # Header filter to change the Content-Type from xml to html</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5465,7 +5610,7 @@ CLASS="REPLACEABLE"
 >}</A
 >
     </TT
-> does a fairly good job of catching only the unwanted ones.
+> does a better job of catching only the unwanted ones.
    </P
 ><P
 >    If the only kind of pop-ups that you want to kill are exit consoles (those
@@ -5490,6 +5635,10 @@ CLASS="REPLACEABLE"
 >}</TT
 >
     instead. 
+   </P
+><P
+>    This action is most appropriate for browsers that don't have any controls 
+    for unwanted pop-ups. Not recommended for general usage.
    </P
 ></DD
 ><DT
@@ -6755,7 +6904,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3885"
+NAME="AEN3912"
 ></A
 >8.5.36. Summary</H3
 ><P
@@ -7059,7 +7208,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3950"
+NAME="AEN3977"
 ></A
 >8.7.1. default.action</H3
 ><P
@@ -7285,11 +7434,11 @@ HREF="actions-file.html#DEANIMATE-GIFS"
 HREF="actions-file.html#DOWNGRADE-HTTP-VERSION"
 >downgrade-http-version</A
 > \
- +<A
+ -<A
 HREF="actions-file.html#FAST-REDIRECTS"
 >fast-redirects{check-decoded-url}</A
 > \
- +<A
+ -<A
 HREF="actions-file.html#FILTER-JS-ANNOYANCES"
 >filter{js-annoyances}</A
 > \
@@ -7309,7 +7458,7 @@ HREF="actions-file.html#FILTER-CONTENT-COOKIES"
 HREF="actions-file.html#FILTER-REFRESH-TAGS"
 >filter{refresh-tags}</A
 > \
- +<A
+ -<A
 HREF="actions-file.html#FILTER-UNSOLICITED-POPUPS"
 >filter{unsolicited-popups}</A
 > \
@@ -7317,11 +7466,11 @@ HREF="actions-file.html#FILTER-UNSOLICITED-POPUPS"
 HREF="actions-file.html#FILTER-ALL-POPUPS"
 >filter{all-popups}</A
 > \
- +<A
+ -<A
 HREF="actions-file.html#FILTER-IMG-REORDER"
 >filter{img-reorder}</A
 > \
- +<A
+ -<A
 HREF="actions-file.html#FILTER-BANNERS-BY-SIZE"
 >filter{banners-by-size}</A
 > \
@@ -7337,7 +7486,7 @@ HREF="actions-file.html#FILTER-WEBBUGS"
 HREF="actions-file.html#FILTER-TINY-TEXTFORMS"
 >filter{tiny-textforms}</A
 > \
- +<A
+ -<A
 HREF="actions-file.html#FILTER-JUMPING-WINDOWS"
 >filter{jumping-windows}</A
 > \
@@ -7376,6 +7525,30 @@ HREF="actions-file.html#FILTER-CLIENT-HEADERS"
  -<A
 HREF="actions-file.html#FILTER-SERVER-HEADERS"
 >filter-server-headers</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-GOOGLE"
+>filter-google</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-YAHOO"
+>filter-yahoo</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-MSN"
+>filter-msn</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-BLOGSPOT"
+>filter-blogspot</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-XML-TO-HTML"
+>filter-xml-to-html</A
+> \
+ -<A
+HREF="actions-file.html#FILTER-HTML-TO-XML"
+>filter-html-to-xml</A
 > \
  -<A
 HREF="actions-file.html#FORCE-TEXT-MODE"
@@ -7513,7 +7686,8 @@ CLASS="SCREEN"
 #
 { fragile }
 .office.microsoft.com           # surprise, surprise!
-.windowsupdate.microsoft.com</PRE
+.windowsupdate.microsoft.com
+mail.google.com</PRE
 ></TD
 ></TR
 ></TABLE
@@ -7692,7 +7866,6 @@ ar.atwola.com
 .a.yimg.com/(?:(?!/i/).)*$
 .a[0-9].yimg.com/(?:(?!/i/).)*$
 bs*.gsanet.com
-bs*.einets.com
 .qkimg.net</PRE
 ></TD
 ></TR
@@ -7703,7 +7876,7 @@ bs*.einets.com
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
- is to block banners. A huge bunch of them can be <SPAN
+ is to block banners. Many of these can be <SPAN
 CLASS="QUOTE"
 >"blocked"</SPAN
 >
@@ -7727,7 +7900,7 @@ HREF="actions-file.html#BLOCK"
 ></TT
 > action to them.</P
 ><P
-> First comes a bunch of generic patterns, which do most of the work, by
+> First comes many generic patterns, which do most of the work, by
  matching typical domain and path name components of banners. Then comes
  a list of individual patterns for specific sites, which is omitted here
  to keep the example short:</P
@@ -7765,7 +7938,7 @@ count*.
 ></TABLE
 ></P
 ><P
-> You wouldn't believe how many advertisers actually call their banner
+> It's quite remarkable how many advertisers actually call their banner
  servers ads.<TT
 CLASS="REPLACEABLE"
 ><I
@@ -7892,6 +8065,7 @@ HREF="actions-file.html#BLOCK"
 > }
 adv[io]*.  # (for advogato.org and advice.*)
 adsl.      # (has nothing to do with ads)
+adobe.     # (has nothing to do with ads either)
 ad[ud]*.   # (adult.* and add.*)
 .edu       # (universities don't host banners (yet!))
 .*loads.   # (downloads, uploads etc)
@@ -7944,7 +8118,10 @@ CLASS="SCREEN"
 HREF="actions-file.html#FILTER"
 >filter</A
 > }
-/.*cvs
+/(.*/)?cvs
+bugzilla.
+developer.
+wiki.
 .sourceforge.net</PRE
 ></TD
 ></TR
@@ -7962,7 +8139,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4131"
+NAME="AEN4164"
 ></A
 >8.7.2. user.action</H3
 ><P
@@ -8271,7 +8448,7 @@ WIDTH="100%"
 CLASS="SCREEN"
 >{ fragile }
  .forbes.com
- mail.example.com
+ webmail.example.com
  .mybank.com</PRE
 ></TD
 ></TR

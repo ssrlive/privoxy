@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.22 2006/09/22 01:27:55 hal9 Exp $
+ $Id: user-manual.sgml,v 2.23 2006/10/02 22:43:53 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.22 2006/09/22 01:27:55 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.23 2006/10/02 22:43:53 hal9 Exp $</pubdate>
 
 <!--
 
@@ -422,8 +422,7 @@ How to install the binary packages depends on your operating system:
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- There are many improvements and new features in <application>Privoxy</application> &p-version;
- :
+ There are many improvements and new features since the last <application>Privoxy</application> stable release:
 </para>
 
 <para>
@@ -556,6 +555,12 @@ How to install the binary packages depends on your operating system:
     option, for placing documentation and help files on the local system.
    </para>
   </listitem>
+  
+  <listitem>
+   <para>
+    There are six new <link linkend="FILTER">filters</link>.
+   </para>
+  </listitem>
 
   <listitem>
    <para>
@@ -649,8 +654,9 @@ How to install the binary packages depends on your operating system:
    and you may want to review which actions are <quote>on</quote> by 
    default. This is primarily a matter of emphasis, but some features 
    you may have been used to, may now be <quote>off</quote> by default.
-   There are also a number of new actions you may want to consider, most of
-   which are not incorporated into the default settings as yet (see above).
+   There are also a number of new actions and filters you may want to
+   consider, most of which are not incorporated into the default settings as
+   yet (see above).
   </para>
  </listitem>
  
@@ -8429,6 +8435,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.23  2006/10/02 22:43:53  hal9
+ Contains new filter definitions from Fabian, and few other miscellaneous
+ touch-ups.
+
  Revision 2.22  2006/09/22 01:27:55  hal9
  Final commit of probably various minor changes here and there. Unless
  something changes this should be ready for pending release.

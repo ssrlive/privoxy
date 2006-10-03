@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.5 User Manual"
+TITLE="Privoxy 3.0.6 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Introduction"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.5 User Manual</TH
+>Privoxy 3.0.6 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -126,7 +126,7 @@ NAME="INSTALLATION-PACK-RPM"
 ><P
 > RPMs can be installed with <TT
 CLASS="LITERAL"
->rpm -Uvh privoxy-3.0.5-1.rpm</TT
+>rpm -Uvh privoxy-3.0.6-1.rpm</TT
 >,
  and will use <TT
 CLASS="FILENAME"
@@ -157,7 +157,7 @@ CLASS="COMMAND"
 > If you have problems with failed dependencies, try rebuilding the SRC RPM: 
  <TT
 CLASS="LITERAL"
->rpm --rebuild privoxy-3.0.5-1.src.rpm</TT
+>rpm --rebuild privoxy-3.0.6-1.src.rpm</TT
 >. This 
  will use your locally installed libraries and RPM version. </P
 ><P
@@ -478,7 +478,7 @@ CLASS="FILENAME"
 >, the 
  documentation is in <TT
 CLASS="FILENAME"
->/usr/share/doc/privoxy-3.0.5</TT
+>/usr/share/doc/privoxy-3.0.6</TT
 >
  and the Log directory is in <TT
 CLASS="FILENAME"
@@ -546,15 +546,15 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-> tar xzvf privoxy-3.0.5-beta-src* [.tgz or .tar.gz]
- cd privoxy-3.0.5-beta</PRE
+> tar xzvf privoxy-3.0.6-beta-src* [.tgz or .tar.gz]
+ cd privoxy-3.0.6-beta</PRE
 ></TD
 ></TR
 ></TABLE
 ></P
 ><P
-> For retrieving the current CVS sources, you'll need CVS installed.
- Note that sources from CVS are development quality, and may not be
+> For retrieving the current CVS sources, you'll need a CVS client installed.
+ Note that sources from CVS are typicially development quality, and may not be
  stable, or well tested. To download CVS source, check the Sourceforge
  documentation, which might give commands like:</P
 ><P
@@ -873,21 +873,22 @@ CLASS="APPLICATION"
  script should be checked for correct paths and values, if anything other than
  a default install is done.</P
 ><P
-> If install finds previous versions of any configuration files, these will not
- be overwritten, and the new ones will be installed with a <SPAN
+> If install finds previous versions of any local configuration files, these
+ will not be overwritten, and the new ones will be installed with a
+ <SPAN
 CLASS="QUOTE"
 >"new"</SPAN
->
- extension. You will then need to manually update the installed configuration
- files as needed. All template files will be overwritten. If you have
- customized, local templates, you should save these first. If a previous
- version of <SPAN
+> extension. default.action, default.filter, and 
+ standard.action will be overwritten. You will then need to manually update
+ the other installed configuration files as needed. All template files will be
+ overwritten. If you have customized, local templates, you should save these
+ first. If a previous version of <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is already running, you will
- have to restart it manually.</P
+> is
+ already running, you will have to restart it manually.</P
 ><P
-> For more detailed instructions on how to build Redhat and SuSE RPMs,
+> For more detailed instructions on how to build Redhat RPMs,
  Windows self-extracting installers, building on platforms with
  special requirements etc, please consult the <A
 HREF="../developer-manual/newrelease.html"
