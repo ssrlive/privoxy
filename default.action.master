@@ -7,13 +7,15 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.31 2006/10/02 03:41:30 hal9 Exp $
+#  $Id: default.action.master,v 1.32 2006/10/02 13:49:49 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
-#                 http://www.privoxy.org/user-manual/actions-file.html
+#                 http://www.privoxy.org/user-manual/actions-file.html.
+#                 Local exceptions and additions are better placed in 
+#                 user.action. This file is subject to periodic updating.
 #
 #  Copyright   :  Written by and Copyright (C) 2001 - 2006 the
 #                 Privoxy team. http://www.privoxy.org/
@@ -249,8 +251,14 @@
 #    contacting the intermediate sites. NOTE: Syntax change as of v.3.0.4.
 #
 # +filter{name}
-#    Filter the website through one or more regular expression filters.
-#    Repeat for multiple filters.
+#    All files of text-based type, most notably HTML and JavaScript, to which
+#    this action applies, can be filtered on-the-fly through the specified
+#    regular expression based substitutions. (Note: plain text documents are
+#    exempted from filtering, because web servers often use the text/plain
+#    MIME type for all files whose type they don't know.) By default,
+#    filtering works only on the raw document content itself (that which can
+#    be seen with View Source), not the headers. Repeat for multiple filters.
+#    Use with caution: filters can be very intrusive.
 #   
 #    Filters predefined in the supplied default.action include:
 #
@@ -274,7 +282,13 @@
 #     fun:                 Text replacements  for subversive browsing fun!
 #     crude-parental:      Kill all web pages that contain the words "sex" or "warez"
 #     ie-exploits:         Disable some known Internet Explorer bug exploits
-#     site-specifics       Cure for site-specific problems. Don't apply generally!
+#     site-specifics:      Cure for site-specific problems. Don't apply generally!
+#     google:              Removes text ads and other Google specific improvements
+#     yahoo:               Removes text ads and other Yahoo specific improvements
+#     msn:                 Removes text ads and other MSN specific improvements
+#     blogspot:            Cleans up Blogspot blogs
+#     html-to-xml:         Header filter to change the Content-Type from html to xml
+#     xml-to-html:         Header filter to change the Content-Type from xml to html
 #
 # +filter-client-headers
 #    By default, filters only apply to the document content itself. This will
@@ -459,7 +473,7 @@
 #############################################################################
 {{settings}}
 #############################################################################
-for-privoxy-version=3.0.5
+for-privoxy-version=3.0.6
 
 #############################################################################
 # Aliases
@@ -544,6 +558,12 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -filter{crude-parental} \
 -filter{ie-exploits} \
 -filter{site-specifics} \
+-filter{google} \
+-filter{yahoo} \
+-filter{msn} \
+-filter{blogspot} \
+-filter{xml-to-html} \
+-filter{html-to-xml} \
 -filter-client-headers \
 -filter-server-headers \
 -force-text-mode \
