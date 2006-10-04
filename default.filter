@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.20 2006/10/01 21:00:22 fabiankeil Exp $
+#  $Id: default.filter,v 1.21 2006/10/02 16:21:14 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -442,7 +442,7 @@ s%f\("javascript:location.replace\('mk:@MSITStore:C:'\)"\);%alert\("This page lo
 
 # Address bar spoofing (http://www.secunia.com/advisories/10395/):
 #
-s/(<a[^>]*href[^>]*)(\x01|\x02|\x03|%0[012])/$1MALICIOUS-LINK/ig
+s/(<a[^>]*href[^>]*)(?:\x01|\x02|\x03|%0[012])@/$1MALICIOUS-LINK@/ig
 
 # Nimda:
 #
@@ -562,7 +562,8 @@ s@</head>@<style type="text/css">\n\
  \#content {width: 98% }\n\
  \#main {width: 70% }\n\
  \#sidebar {width: 29% }\n\
- .blogComments {width: 100%; overflow: scroll;}\n</style>\n$0@
+ .post-body {overflow: auto;}\n\
+ .blogComments {width: 100%; overflow: auto;}\n</style>\n$0@
 s@<body.*(<div id="(content|wrap4|wrapper))@<body><!-- Privoxy's\
  blogspot filter ditched some garbage here -->$1@Us
 s@(<div style=\"[^\"]*width:)30em@$1 100%@
@@ -589,6 +590,10 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.21  2006/10/02 16:21:14  fabiankeil
+#     Adjusted yahoo filter to hide .yschspns as well.
+#     Added header filters: html-to-xml and xml-to-html.
+#
 #     Revision 1.20  2006/10/01 21:00:22  fabiankeil
 #     New site-specific filters: google, yahoo, msn and blogspot.
 #
