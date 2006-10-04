@@ -32,6 +32,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.38  2006/09/08 12:06:35  fabiankeil
+#    Have hide-if-modified-since interpret the random
+#    range value as minutes instead of hours. Allows
+#    more fine-grained configuration.
+#
 #    Revision 1.37  2006/09/05 18:20:14  fabiankeil
 #    Sorted alphabetically, fixed spelling mistakes
 #    and shortened some descriptions.
@@ -1256,7 +1261,7 @@ if (document.getElementById) {
     show_user_agent_opts    (document.getElementById("hide_user_agent_y").checked);
     show_set_image_blocker_opts (document.getElementById("set_image_blocker_y").checked);
     show_limit_connect_opts (document.getElementById("limit_connect_y").checked);
-    show_send_wafer_opts    (document.getElementById("wafer_y").checked);
+    show_send_wafer_opts    (document.getElementById("send_wafer_y").checked);
 } else if (document.all) {
     // alert("IE4");
     document.myform.hide_from_header_param.disabled = !(document.myform.hide_from_header_mode_set.checked);
@@ -1270,7 +1275,7 @@ if (document.getElementById) {
     show_user_agent_opts    (document.myform.hide_user_agent_y.checked);
     show_set_image_blocker_opts (document.myform.set_image_blocker_y.checked);
     show_limit_connect_opts (document.myform.limit_connect_y.checked);
-    show_send_wafer_opts    (document.myform.wafer_y.checked);
+    show_send_wafer_opts    (document.myform.send_wafer_y.checked);
 } else if (document.layers) {
     // alert("Netscape 4");
 }
