@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.21 2006/10/02 16:21:14 fabiankeil Exp $
+#  $Id: default.filter,v 1.22 2006/10/04 19:17:14 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -198,7 +198,7 @@ s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ notarget/ig        # HTML
 # img-reorder: Reorder attributes in <img> tags to make the banners-by-* filters more effective
 #
 #################################################################################
-FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* filters more effective
+FILTER: img-reorder Reorder attributes in &lt;img> tags to make the banners-by-* filters more effective
 
 # In the first step src is moved to the start, then width is moved to the second
 # place to guarantee an order of src, width, height.
@@ -535,11 +535,11 @@ s@</head>@<style type="text/css">\n\
 FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
- \#msn_ads, \#ads_rightC {display: none !important;}\n\
+ .msn_ads {display: none !important;}\n\
  \#results, .flank, .SearchSection .not\
  {width: 100% !important; min-width: 100% !important;\
  max-width: 100% !important;}\n</style>\n$0@
-s@(<div id=)\"ads_[^\"]*\"@$0msn_ads@Uig
+s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
 s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
 
@@ -590,6 +590,13 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.22  2006/10/04 19:17:14  fabiankeil
+#     Incorportated Frédéric Crozat's ie-exploits
+#     modification to make it less trigger-happy.
+#
+#     Modified blogspot filter to make .post-body
+#     scrollable if necessary.
+#
 #     Revision 1.21  2006/10/02 16:21:14  fabiankeil
 #     Adjusted yahoo filter to hide .yschspns as well.
 #     Added header filters: html-to-xml and xml-to-html.
