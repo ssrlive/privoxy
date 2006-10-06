@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.24 2006/10/06 11:25:31 fabiankeil Exp $
+#  $Id: default.filter,v 1.25 2006/10/06 15:26:09 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -205,7 +205,7 @@ FILTER: img-reorder Reorder attributes in &lt;img> tags to make the banners-by-*
 # This makes banners-by-size more effective and allows both banners-by-size
 # and banners-by-link to preserve the original image URL in the title attribute.
 
-s|<img\s+?([^>]*) src\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2$1|siUg
+s|<img\s+?([^>]*) src\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2 $1|siUg
 s|<img\s+?([^>]*) src\s*=\s*([^'">\\\s]+)|<img src=$2 $1|sig
 
 s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s*width\s*=\s*(["']?)(\d+?)\4|<img $1 width=$4$5$4$3|siUg
@@ -572,6 +572,18 @@ s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*
 
 #################################################################################
 #
+# x-httpd-php-to-html: Header filter to change the Content-Type from
+#                      x-httpd-php to html. "Content-Type: x-httpd-php"
+#                      is set by clueless PHP users and causes many
+#                      browsers do open a download menu instead of
+#                      rendering the page.
+#
+#################################################################################
+FILTER: x-httpd-php-to-html Header filter to change the Content-Type from x-httpd-php to html.
+s@^(Content-Type:) application/x-httpd-php@$1 text/html@
+
+#################################################################################
+#
 # html-to-xml: Header filter to change the Content-Type from html to xml.
 #
 #################################################################################
@@ -590,6 +602,16 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.25  2006/10/06 15:26:09  fabiankeil
+#     Bumped copyright year.
+#
+#     Reverted parts of the last img-reorder change
+#     which were intended to remove superfluous whitespace
+#     but had the side effect to mess up some tags.
+#
+#     Modified banners-by-size and banners-by-link to
+#     use border value "0" instead of "\0". Fixes BR 1100065.
+#
 #     Revision 1.24  2006/10/06 11:25:31  fabiankeil
 #     Taught img-reorder not to break img tags
 #     with empty src attributes. Fixes BR 1089474.
