@@ -7,7 +7,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.34 2006/10/03 23:42:03 hal9 Exp $
+#  $Id: default.action.master,v 1.35 2006/10/04 15:13:34 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -25,6 +25,8 @@
 #        for updates and/or subscribe to the announce mailing list
 #        (http://lists.sourceforge.net/lists/listinfo/ijbswa-announce) if you
 #        wish to receive an email notice whenever updates are released.
+#MASTER# COMMENT: The current development version is located: 
+#MASTER# COMMENT: http://ijbswa.cvs.sourceforge.net/*checkout*/ijbswa/current/default.action.master
 #
 # We value your feedback. However, to provide you with the best support,
 # please note:
@@ -473,7 +475,8 @@
 #############################################################################
 {{settings}}
 #############################################################################
-for-privoxy-version=3.0.6
+#MASTER# COMMENT: The minimum Privoxy version:
+for-privoxy-version=3.0.5
 
 #############################################################################
 # Aliases
@@ -611,9 +614,12 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 ad*.
 .*ads.
 .ad.
+#MASTER# PROBLEM URL: http://alternativos.iw-advertising.com/
+.*advert*.
 *banner*.
 count*.
 *counter.
+
 
 #############################################################################
 # Generic unblockers by host:
@@ -640,8 +646,8 @@ countr*.
 #############################################################################
 {+block}
 #MASTER# DONT-VERIFY (generic)
-/(.*/)?ad(/|s|v|_?image|cycle|rotate|mentor|click|frame|_?serv|script|stream|fetch)
-/.*ads/
+/(.*/)?ad(/|s|v|_?(image|serv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log)
+/.*ads(new)?/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
 /.*(count|track|compteur|adframe|adserve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
@@ -678,104 +684,51 @@ support./(.*/)?track
 .hitbox.com 
 #MASTER# BLOCK-REFERRER: http://www.the-gadgeteer.com/palmos.html
 www.the-gadgeteer.com/cgi-bin/getimage.cgi/
-#MASTER# BLOCK-REFERRER: http://www.stern.de/
-www.stern.de/bilder/poweredby
 #MASTER# BLOCK-REFERRER: http://www.gmx.net/de/cgi/logoutpage?CN=sJywqKCElHw%3D%3D
 images.gmx.net/images/bs/
-#MASTER# BLOCK-REFERRER: http://www.gmx.de/
-www.gmx.de/promo
 images.gmx.net/images/.*/promo/
 #MASTER# BLOCK-REFERRER: http://www.max.de/
 .akamaitech.net/.*/img/e-commerce
 www.max.de/_teaser/partner/
-#MASTER# BLOCK-REFERRER: http://search.atomz.com/search/?sp-k=&sp-p=any&sp-a=sp1001395b&sp-q=linux
-search.atomz.com/search/i/tagw1c.gif
 www.intelligentx.com/newsletters/.*\.gif
-#MASTER# BLOCK-REFERRER: http://realguide.real.com/games/
-i.real.com/g/pics/games/gamepass_120x600_2.gif
-#MASTER# BLOCK-REFERRER: http://www1.chathouse.com/roomplan.html
-www*.chathouse.com/chatimages/whopersonal.gif
 #MASTER# BLOCK-REFERRER: http://www.planetspiele.de/
 .planetspiele.de/gfx/partner
 #MASTER# BLOCK-REFERRER: http://www.hot.ee/toptools/
 top.ultraseek.net/top_sit.*\.gif
 #MASTER# BLOCK-REFERRER: http://kickme.to/FOSI
 fosi.ural.net/.*\.jpg
-#MASTER# BLOCK-REFERRER: http://www.tucows.com/
-.tucows.com/images/dodi.gif
-.tucows.com/images/elibrary_searchTop.gif
 #MASTER# BLOCK-REFERRER: http://www.ix.de/
 #MASTER# BLOCK-REFERRER: http://www.heise.de/
 /icons/emedia_b.gif
 #MASTER# BLOCK-REFERRER: http://dest.travelocity.com/DestGuides/geo_frontdoor/0,,TRAVELOCITY,00.html?HPTRACK=icon_dest
 dest.travelocity.com/website/destinations/images/partner_frommers.gif
 dest.travelocity.com/website/destinations/images/travelex_logo.gif
-#MASTER# BLOCK-REFERRER: http://www.dpreview.com/reviews/canons40/
-tribalfusion.speedera.net
-.tribalfusion.com/media/
-#MASTER# BLOCK-REFERRER: http://www.stuff.co.nz
-#MASTER# REMARKS: http://www.speedera.com/primary/newsroom/apr292002-arch.htm
-engage.speedera.net/
-#MASTER# BLOCK-REFERRER: http://www.portalofevil.com/
-b*.portalofevil.com/shlv
-#MASTER# BLOCK-REFERRER: http://us.imdb.com/Quotes?0110912
-i.imdb.com/Vpics/
 #MASTER# BLOCK-REFERRER: http://us.imdb.com/Title?0110912
 #MASTER# BLOCK-REFERRER: http://www.imdb.com/help/boards/markup
 #MASTER# REMARKS: 2nd is for emoticons exception
 i.imdb.com/Photos/CMSIcons/(?!buttons|emoticons)
 rcm.amazon.com
-#MASTER# BLOCK-REFERRER: http://us.imdb.com/Trivia?0110116
-i.imdb.com/Icons/apix/
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/
 .nytimes.com/adx/
-#MASTER# BLOCK-REFERRER: http://www.salon.com/
-www.salon.com/Creatives
-images.salon.com/plus/gear/src/
 #MASTER# BLOCK-REFERRER: http://www.sourceforge.net/
 images.sourceforge.net/images/DB2powered.gif
 #MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/media.cfm?action=shot&id=250&seq=2
 /.*paypal-smad\.gif
 www.planetgamecube.com/images/PGC_Q_Edit.gif
-#MASTER# BLOCK-REFERRER: http://www.samachar.com/
-.samachar.com/banimages/
-#MASTER# BLOCK-REFERRER: http://www.weatherbug.com/aws/index.asp
-.weatherbug.com/popups/
-#MASTER# BLOCK-REFERRER: http://portale.web.de/Film/
-.web.de/.*/EIGENWERBUNG/
-#MASTER# BLOCK-REFERRER: http://www.aintitcool.com/
-www.aintitcool.com/.*\.swf
-#MASTER# BLOCK-REFERRER: http://www.hispasexo.net/fotos/index.php?currDir=./Negras&pageType=image&image=bla001.jpg
-www.hispasexo.net/.*/sxb
-#MASTER# BLOCK-REFERRER: http://www.nytimes.com/2002/09/05/technology/05CODE.html
-graphics.nytimes.com/nytstore/images/ctx
-#MASTER# BLOCK-REFERRER: http://www.macfixit.com/
-spinbox.techtracker.com
 #MASTER# BLOCK-REFERRER: http://www.javaworld.com/javaworld/jw-11-2003/jw-1114-toolbox.html?
 spinbox.macworld.com/
 #MASTER# BLOCK-REFERRER: http://www.sharereactor.com/
 #MASTER# BLOCK-REFERRER: http://www.popupad.net/
 www.popupad.net/ats/
-#MASTER# BLOCK-REFERRER: http://www.gamespot.com/
-www.gamespot.com/promos/
 #MASTER# BLOCK-REFERRER: http://www.famousbabes.com/gabrielleR/grpics1.htm
 #MASTER# BLOCK-REFERRER: http://www.hit-now.com/
-hit-now.com
+.hit-now.com
 #MASTER# BLOCK-REFERRER: http://www.pgpi.org/
 [a-v]*.valueclick.com
 #MASTER# BLOCK-REFERRER: http://astalavista.box.sk/
 www.crazypopups.com
 #MASTER# DONT-VERIFY: Opera's list of banners to load (XML)
 /scripts/cms/xcms.asp
-#MASTER# BLOCK-REFERRER: http://www.searchking.com/servlet/SearchKing?at=search&keyword=google+owns+you&but1.x=0&but1.y=0
-www.searchking.com/skbanners/
-www.searchking.com:443
-#MASTER# BLOCK-REFERRER: http://www.dshield.org/dshieldmovie.php
-www.dshield.org/.*anner.gif
-#MASTER# REMARKS: #MASTER# BLOCK-REFERRER: http://www.msnbc.com/news/880835.asp?cp1=1
-#MASTER# REMARKS: di.image.eshop.msn.com
-#MASTER# BLOCK-REFERRER: http://www.nytimes.com/2003/12/18/politics/campaigns/18BRAU.html?hp
-xlonhcld.xlontech.net/
 #MASTER# REMARKS: Actionsfile tracker 1559740 09/16/06 See http://www.vibrantmedia.com/whatisIntelliTXT.asp
 #MASTER# BLOCK-REFERRER: http://www.hartware.de/news_40795.html
 /.*intellitxt/
@@ -809,6 +762,12 @@ stats.*.ihost.com
 .tacoda.
 #MASTER# BLOCK-REFERRER: http://www.mplayernetwork.com/ 09/29/06
 .ign.com
+#MASTER# BLOCK-REFERRER: http://www.torrentazos.com 10/04/06
+ad.theadhost.com
+#MASTER# BLOCK-REFERRER: http://www.stuff.co.nz 10/06/06
+.adbureau.net
+#MASTER# BLOCK-REFERRER: http://drudgereport.com 10/06/06
+.adgardener.com
 
 #----------------------------------------------------------------------------
 # Misc Junk
@@ -816,23 +775,22 @@ stats.*.ihost.com
 {+block +handle-as-empty-document}
 #MASTER# REMARKS: signature for user tracking nytimes, cnn.com,latimes.com and many others.
 /b/ss/.+
+#MASTER# BLOCK-REFERRER: http://www.thesun.co.uk/article/0,,11071-10784,00.html
+#MASTER# REMARKS: widespread hitbox signature 10/06/06
+/HG\?hc=
+#MASTER# BLOCK-REFERRER: http://macaddict.com 10/06/06
+.visistat.com
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
 #----------------------------------------------------------------------------
 #MASTER# BLOCK-REFERRER: http://www.britannica.com/
-www.britannica.com/marketing/
-#MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/
-mediamgr.ugo.com
-#MASTER# BLOCK-REFERRER: http://www.ebookers.fr
-#MASTER# REMARKS: Unanimis Advertising
-awrz.net/
+/popunder
 #MASTER# BLOCK-REFERRER: http://www.chip.de/artikel/c_artikelunterseite_10423683.html
 pagead*.googlesyndication./.*\.js
 a.tfag.de/js.ng/
 #MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html
-y.nbc4.com/js.ng
-y.ibsys.com/event.ng/
+images.ibsys.com/
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -840,10 +798,6 @@ y.ibsys.com/event.ng/
 {+block-as-image}
 #MASTER# BLOCK-REFERRER: http://experts-exchange.com/os2gen/
 /.*ad_?image\.(php|cgi)
-#MASTER# COMMENT: SF tracker 09/15/06
-/.*client_?ad\.(php|cgi)
-#MASTER# COMMENT: SF tracker 09/15/06
-/.*AIM_UAC.adp
 #MASTER# BLOCK-REFERRER: http://flashhentai.com/Tgp/28-09-2002/index4.html
 #MASTER# BLOCK-REFERRER: http://www.thughosting.com/www/ixix/a912/912s2.html
 #MASTER# BLOCK-REFERRER: http://www.fantasiegirl.com/cumshots/3/spunkpatrolgirl302.htm
@@ -855,6 +809,10 @@ y.ibsys.com/event.ng/
 /bandeaux/
 #MASTER# BLOCK-REFERRER: http://www.usatoday.com/
 /sponsors/.*\.gif
+#MASTER# COMMENT: SF tracker 09/15/06
+/.*client_?ad\.(php|cgi)
+#MASTER# COMMENT: SF tracker 09/15/06
+/.*AIM_UAC.adp
 
 #############################################################################
 # Site-specific block-as-image patterns:
@@ -870,8 +828,6 @@ y.ibsys.com/event.ng/
 #MASTER# BLOCK-REFERRER: http://www.tecchannel.de/
 #MASTER# BLOCK-REFERRER: http://www.whowhere.lycos.com/
 .[a-vx-z]*.doubleclick.net
-#MASTER# BLOCK-REFERRER: http://www.theinquirer.net/
-netcomm.spinbox.net
 #MASTER# BLOCK-REFERRER: http://www.joecartoon.com/
 .*servedby.advertising.com
 #MASTER# BLOCK-REFERRER: http://www.yahoo.com/
@@ -880,101 +836,52 @@ netcomm.spinbox.net
 .yimg.com/(.*/)?a/
 .yimg.com/.*/(flash|java)/promotions
 .yimg.com/a/.*/flash/
-#MASTER# BLOCK-REFERRER: http://freeshells.linuxhelpnetwork.net/
-.yimg.com/.*/justdeals
-#MASTER# BLOCK-REFERRER: http://www.kostenlos.de/
-werbung.guj.de
 #MASTER# DONT-VERIFY
 bs*.gsanet.com
 bs*.einets.com
 #MASTER# DONT-VERIFY 
 .qkimg.net
-#MASTER# BLOCK-REFERRER: http://www.sevac.com/
-.sexcounter.
 #MASTER# DONT-VERIFY
 #MASTER# REMARKS: Bannerfarms used by grokster and others:
 james.adbutler.de
 gkas.de/affilinet
-#MASTER# BLOCK-REFERRER: http://www.macaddict.com/
-130.94.70.82
-#MASTER# BLOCK-REFERRER: http://asitreff.6x.to/
-cashformel.com/web-sponsor
-www.cash4banner.com/web-sponsor
-213.221.106.162
-#MASTER# BLOCK-REFERRER: http://www.falk-online.de/index.jsp
-#MASTER# REMARKS: ad*.adsolution.de
-62.26.220.2
-62.27.38.2
-62.27.57.2
-#MASTER# BLOCK-REFERRER: unknown
-#MASTER# REMARKS: both exist and are banner farms
-www.bannermania.nom.pl
-magic.koti.com.pl/cgi-magic/banner_img.cgi
-#MASTER# BLOCK-REFERRER: http://educ8search.tripod.com/hacksoft.html
-#MASTER# REMARKS: Counter
-.netscape.com/c\.cgi\?
-#MASTER# BLOCK-REFERRER: http://mycroft.mozdev.org/
-#MASTER# REMARKS: Counter
-m[0-9].nedstatbasic.net
 #MASTER# BLOCK-REFERRER: http://salon.com/
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
 #MASTER# REMARKS: Banner farms; just exclude their corp. info
 [a-vx-z]*.atdmt.com/
-#MASTER# BLOCK-REFERRER: http://f1.racing-live.com/en/
-.akamai.net/.*f1-live\.com/.*pub
 #MASTER# BLOCK-REFERRER: http://www.melodysoft.com/cgi-bin/foro.cgi
 tracker.tradedoubler.com
 #MASTER# BLOCK-REFERRER: http://dlh.net/german.html
 imp*.tradedoubler.com
-#MASTER# BLOCK-REFERRER: http://www.physlink.com/Education/AskExperts/ae353.cfm
-/.*affiliate.*120x90
-#MASTER# BLOCK-REFERRER:  http://www.amayita.com/imagenes/index.php?currDir=./Hall_of_Fame&pageType=image&image=img_0265.jpg
-#MASTER# BLOCK-REFERRER: http://www.macgamer.com/
-.qksrv.net
-#MASTER# BLOCK-REFERRER: http://www.drudgereport.com/
-#MASTER# BLOCK-REFERRER: http://www.rpmseek.com/index.html
-#MASTER# BLOCK-REFERRER: http://www.funnyjunk.com/pages/cooties.htm
-.instacontent.net/fastclick/
 #MASTER# BLOCK-REFERRER: http://www.exactaudiocopy.de/ 09/11/06
-#MASTER# BLOCK-REFERRER:  http://stanford.facebook.com/home.php 
+#MASTER# BLOCK-REFERRER: http://stanford.facebook.com/home.php 
 .fastclick.net
 #MASTER# BLOCK-REFERRER: http://www.math.com/school/subject2/lessons/S2U3L6DP.html 09/11/06
 .casalemedia.com
 #MASTER# BLOCK-REFERRER: http://www.macnn.com/
 kermit.macnn.com/
-#MASTER# BLOCK-REFERRER: http://www.sdtimes.com/news/
-www.sdtimes.com/phpads
-#MASTER# BLOCK-REFERRER: http://www.pagesjaunes.fr/pj.cgi?
-www.pagesjaunes.fr/EDITO/FR/images/barre_partenaires.gif
-#MASTER# BLOCK-REFERRER: http://www.allocine.fr/
-.allocine.fr/.*/logo_partenaire/
-#MASTER# BLOCK-REFERRER: http://www.virtual-hideout.net/guides/psu_relay_timer_mod/index.shtml
-www.virtual-hideout.net/sponsors/
-#MASTER# BLOCK-REFERRER: http://www.the-underdogs.org/featured.php
-?.websponsors.com/
 #MASTER# BLOCK-REFERRER: http://www.globalseeker.com/freesamples/
 quinst.com/images
+#MASTER# BLOCK-REFERRER: http://www.britannica.com/
 #MASTER# BLOCK-REFERRER: http://www.newsmax.com/archives/articles/2003/11/20/185048.shtml
-ad*.fameleads.com
+/popunder
 #MASTER# BLOCK-REFERRER: http://www.imdb.com/
 ia.imdb.com/.*\.swf
 #MASTER# BLOCK-REFERRER: http://www.paroles.net/texte/10818
-.[a-vx-z]*.comclick.com/
+.reactivpub.
 #MASTER# BLOCK-REFERRER: http://freemail.web.de/
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/2003/11/19/politics/19DEAN.html?ex=1069822800&en=dc82dfff0502faeb&ei=5062&partner=GOOGLE
 .as*.falkag.
 #MASTER# BLOCK-REFERRER: http://www.macnn.com/news/18944
 a.tribalfusion.com/
 #MASTER# BLOCK-REFERRER: http://reviews.infosyncworld.com/palmos/featured/index.html?start=1&offset=10
-.instacontent.net/adcouncil/
 .adserver.com/
 #MASTER# BLOCK-REFERRER: http://computers.cnet.com/hardware/0-1027-404-20857400.html?tag=rev
 #MASTER# REMARKS: Pointdexter
 .ru4.com/
-#MASTER# BLOCK-REFERRER: http://arstechnica.com/
-content.ad-flow.com/
 #MASTER# BLOCK-REFERRER: http://www.boursorama.com/infos/actualites/detail_actu_marches.phtml?news=1510287
 www.smartadserver.com/
+#MASTER#      **  STOPCHECK HERE  **      #######################################################
 #MASTER# BLOCK-REFERRER: http://www.dn.se/hund
 www.flashbanner.no/
 #MASTER# BLOCK-REFERRER: http://abcnews.go.com/sections/us/GoodMorningAmerica/scottpeterson030509.html
@@ -995,9 +902,6 @@ www.allosponsor.com/images/ban
 #MASTER# BLOCK-REFERRER: http://www.sf.net/
 #MASTER# REMARKS: broadening scope from previous: ads.osdn.com/?ad 09/02/06 per tracker 
 ads.osdn.com
-#MASTER# BLOCK-REFERRER: http://www.nytimes.com/
-kt*.kliptracker.com/
-gfx.dvlabs.com/klipmart/
 #MASTER# REMARKS: Actions file tracker 1547656 09/02/06
 img.mediaplex.com
 #MASTER# BLOCK-REFERRER: http://www.tomshardware.com/ 09/28/06
@@ -1076,7 +980,16 @@ stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
 #MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
 #MASTER# REMARKS: There is a ssl.google-analytics as well.
 .google-analytics.
-
+#MASTER# BLOCK-REFERRER: http://www.aintitcool.com/
+content.ipro.com
+#MASTER# BLOCK-REFERRER: http://www.weatherbug.com/default.asp 10/05/06
+.247realmedia.com
+#MASTER# BLOCK-REFERRER: http://www.samachar.com/ 10/05/06
+.sify.com
+#MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html 10/06/06
+.searchignite.com
+#MASTER# BLOCK-REFERRER: http://www.sdtimes.com/ 10/07/06
+.statcounter.com
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1390,7 +1303,9 @@ adiumx.com
 #MASTER# REMARKS: This allows many Google "Sponsored Links" to function. 
 #MASTER# REMARKS: Presumably if someone clicks these they want to go there.
 .googleadservices./pagead/adclick
-
+#MASTER# UNBLOCK-REFERRER: http://www.garaget.org
+#MASTER# REMARKS: These are "ads" from individuals selling cars per tracker. 10/06/06 
+.garaget.org/annonser/
 
 #############################################################################
 # Site-specific special rules:
