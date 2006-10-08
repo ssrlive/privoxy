@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.25 2006/10/06 15:26:09 fabiankeil Exp $
+#  $Id: default.filter,v 1.26 2006/10/06 18:06:16 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -282,7 +282,8 @@ s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:adclick|atwola\.com/(?:link|redir)|double
 #################################################################################
 FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking)
 
-s/<img\s+[^>]*(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*?>//siUg
+s@<img[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*?>@<!--\
+ Filtered by Privoxy's webbugs filter: $0 -->@siUg
 
 
 #################################################################################
@@ -602,6 +603,11 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.26  2006/10/06 18:06:16  fabiankeil
+#     Added header filter x-httpd-php-to-html
+#     and reverted another img-reorder whitespace
+#     problem.
+#
 #     Revision 1.25  2006/10/06 15:26:09  fabiankeil
 #     Bumped copyright year.
 #
