@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.39 2006/09/08 09:49:23 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.40 2006/09/09 13:05:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.39 2006/09/08 09:49:23 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.40  2006/09/09 13:05:33  fabiankeil
+ *    Modified cgi_send_user_manual to serve binary
+ *    content without destroying it first. Should also be
+ *    faster now. Added ".jpg" check for Content-Type guessing.
+ *
  *    Revision 1.39  2006/09/08 09:49:23  fabiankeil
  *    Deliver documents in the user-manual directory
  *    with "Content-Type text/css" if their filename
@@ -706,6 +711,12 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    assert(csp);
    assert(rsp);
    assert(parameters);
+
+   if (!parameters->first)
+   {
+      /* requested http://p.p/user-manual (without trailing slash) */
+      return cgi_redirect(rsp, CGI_PREFIX "user-manual/");
+   }
 
    get_string_param(parameters, "file", &filename);
    /* Check paramter for hack attempts */
