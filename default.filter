@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.27 2006/10/08 17:00:51 fabiankeil Exp $
+#  $Id: default.filter,v 1.28 2006/10/11 13:31:13 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -208,7 +208,7 @@ FILTER: img-reorder Reorder attributes in &lt;img> tags to make the banners-by-*
 s|<img\s+?([^>]*) src\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2 $1|siUg
 s|<img\s+?([^>]*) src\s*=\s*([^'">\\\s]+)|<img src=$2 $1|sig
 
-s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s*width\s*=\s*(["']?)(\d+?)\4|<img $1 width=$4$5$4$3|siUg
+s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s+width\s*=\s*(["']?)(\d+?)\4|<img $1 width=$4$5$4$3|siUg
 
 
 #################################################################################
@@ -603,6 +603,13 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.28  2006/10/11 13:31:13  fabiankeil
+#     Added Anduin Withers' js-annoyances fix
+#     for not messing up escaped quotes. Fixes BR 999765.
+#
+#     Improved blogspot filter to make it less likely that
+#     the blogspot banner at the top of the page is missed.
+#
 #     Revision 1.27  2006/10/08 17:00:51  fabiankeil
 #     Modified webbugs filter to create a comment around the offending
 #     image instead of removing it entirely.
