@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.26 2006/10/06 18:06:16 fabiankeil Exp $
+#  $Id: default.filter,v 1.27 2006/10/08 17:00:51 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -82,7 +82,7 @@ s|(?:\w+\.)+referrer|"Not Your Business!"|gisU
 
 # The status bar is for displaying link targets, not pointless blahblah
 # 
-s/(\W\s*)((this|window)\.(default)?status)\s*=\s*((['"]).*?\6)/$1if(typeof(this.href) != 'undefined') $2 = $5 + ' URL: ' + this.href;else return false/ig
+s/(\W\s*)((this|window)\.(default)?status)\s*=\s*((['"]).*?(?<!\\)\6)/$1if(typeof(this.href) != 'undefined') $2 = $5 + ' URL: ' + this.href;else return false/ig
 
 # Kill OnUnload popups. Yummy.
 # Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
@@ -565,8 +565,8 @@ s@</head>@<style type="text/css">\n\
  \#sidebar {width: 29% }\n\
  .post-body {overflow: auto;}\n\
  .blogComments {width: 100%; overflow: auto;}\n</style>\n$0@
-s@<body.*(<div id="(content|wrap4|wrapper))@<body><!-- Privoxy's\
- blogspot filter ditched some garbage here -->$1@Us
+s@<body.*(?:<div id="space-for-ie"></div>|(<div id="(?:content|wrap4|wrapper)))@<body>\
+ <!-- Privoxy's blogspot filter ditched some garbage here -->$1@Us
 s@(<div style=\"[^\"]*width:)30em@$1 100%@
 s@background:url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;@/*$0*/@Ug
 s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;)@$1 ;/*$2*/@Ug
@@ -603,6 +603,17 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.27  2006/10/08 17:00:51  fabiankeil
+#     Modified webbugs filter to create a comment around the offending
+#     image instead of removing it entirely.
+#
+#     Adjusted regex to only match if there's at least one whitespace
+#     before the width and height attributes. Makes it more likely that
+#     they are indeed attributes, and not part of the value of another attribute.
+#     Solves BR 1035587.
+#
+#     Thanks to Martin Thomas for diagnosing the cause of the problem.
+#
 #     Revision 1.26  2006/10/06 18:06:16  fabiankeil
 #     Added header filter x-httpd-php-to-html
 #     and reverted another img-reorder whitespace
