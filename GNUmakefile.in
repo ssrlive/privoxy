@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.147 2006/09/13 01:25:16 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.148 2006/09/26 10:57:58 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1187,7 +1187,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	fi ;\
 	$(ECHO) Installing configuration files to $(CONF_DEST);\
 	for i in $(CONFIGS); do \
-		if [ "$$i" == "default.action" ] || [ "$$i" == "default.filter" ] || [ "$$i" == "standard.action" ]; then \
+		if [ "$$i" = "default.action" ] || [ "$$i" = "default.filter" ] || [ "$$i" = "standard.action" ]; then \
 			$(RM) $(CONF_DEST)/$$i ;\
 			$(ECHO) Installing fresh $$i;\
 			$(INSTALL) $$INSTALL_CONF $$i $(CONF_DEST) || exit 1;\
@@ -1355,6 +1355,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.148  2006/09/26 10:57:58  hal9
+# Including Karsten's patch to fix make create-snapshot.
+#
 # Revision 1.147  2006/09/13 01:25:16  hal9
 # Make sure install forces in new default.action, default.filter, and
 # standard.filter. These are privoxy files, not user files.
