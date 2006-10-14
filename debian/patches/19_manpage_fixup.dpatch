@@ -13,7 +13,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
  	nsgmls ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
  	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.8 ;\
-+	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g" privoxy.8; \
++	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" privoxy.8; \
 +	perl -pi.bak -e 's/([ {])-([a-z])/$$1\\-$$2/g' privoxy.8; \
 +	perl -pi.bak -e 's/ --([a-z])/ \\-\\-$$1/g' privoxy.8; \
 +	perl -pi.bak -e 's/\\fB--/\\fB\\-\\-/g' privoxy.8; \
@@ -24,7 +24,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  # Twice because my version of man2html is pulling in commas and periods in URLs.
  	$(PERL) -pi.bak -e 's/(<A.*),(">)/$$1$$2/g' tmp.html
  	$(PERL) -pi.bak -e 's,\.">,">,g' tmp.html
-+	$(PERL) -pi.bak -e "s/\['a\]/\&aacute;/g" tmp.html
++	$(PERL) -pi.bak -e "s/\['a\]/\&aacute;/g;s/\['e\]/\&eacute;/g" tmp.html
  # Get rid of spurious  from conversion. (How to do this with perl?)
  	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && $(RM) tmp.*
  else

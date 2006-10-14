@@ -8,7 +8,7 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -1891,3 +1891,8 @@
+@@ -1895,3 +1895,8 @@
  { +filter{js-events} }
  #MASTER# PROBLEM-URL: http://www.pharmcast.com/WarningLetters/Yr2002/December2002/J&J1202.htm
  www.pharmcast.com/

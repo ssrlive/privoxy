@@ -6,14 +6,21 @@
 
 dpatch_patch ()
 {
-    tar cf debian/patched/doc.bak.tar \
-	doc/source doc/text doc/webserver doc/pdf \
-	INSTALL README AUTHORS privoxy.1
+    tar cf debian/patched/doc.bak.tar README
+    for i in doc/source doc/text doc/webserver doc/pdf \
+             INSTALL AUTHORS privoxy.1
+    do
+       if [ -e $i ]
+       then
+	   tar rf debian/patched/doc.bak.tar $i
+       fi
+    done
 }
 
 dpatch_unpatch ()
 {
-	tar xf debian/patched/doc.bak.tar
+    rm -rf doc/pdf
+    tar xf debian/patched/doc.bak.tar
 }
 
 DPATCH_LIB_NO_DEFAULT=1

@@ -1,6 +1,15 @@
-privoxy (3.0.5~cvs20060923-1) UNRELEASED; urgency=low
+privoxy (3.0.5-beta-2) unstable; urgency=low
 
-  * New upstream CVS snapshot as of 2006-09-23.
+  * 27_remove_nsl.dpatch: Remove unnecessary linking against libnsl.
+  * 28_usermanual_slash.dpatch: Redirect http://p.p/user-manual (without
+    trailing slash) to http://p.p/user-manual/ (with trailing slash),
+    otherwise the links will be broken (Closes: #244931).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat,  7 Oct 2006 13:12:13 +0200
+
+privoxy (3.0.5-beta-1) unstable; urgency=low
+
+  * New upstream version 3.0.5-beta.
   * hide-referrer{foo} now allows everything as a forged referrer not 
     only http/https URLs and ignoring invalid URLs (Closes: #258193).  
   * Fixes the name of the filter from "popups" to "all-popups" in
@@ -28,15 +37,17 @@ privoxy (3.0.5~cvs20060923-1) UNRELEASED; urgency=low
     standard.Cautious to standard.Medium, which is similar to the old
     3.0.3 behavior and doesn't change too much (only
     filter{js-annoyances}, filter{html-annoyances} and
-    filter{unsolicited-popups} are switched off now additionally).
+    filter{unsolicited-popups} are switched off now additionally because
+    they often cause trouble by using very much CPU time).
   * 26_edit_only_writable.dpatch: Hide the edit button on
     http://p.p/show-status if action file can not be written by the
     privoxy user.
   * default.action and standard.action are no longer owned by privoxy but
     by root to show that these files are maintained upstream while users
     should maintain their local changes in global.action and user.action.
+  * Add LSB compliance to init.d script (INIT INFO and status).
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 23 Sep 2006 14:22:21 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 23 Sep 2006 23:37:03 +0200
 
 privoxy (3.0.3-2-2) unstable; urgency=low
 
