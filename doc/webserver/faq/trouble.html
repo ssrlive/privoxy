@@ -81,56 +81,66 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN967"
+NAME="AEN1031"
 ></A
->5.1. I am getting <SPAN
+>5.1. I cannot connect to any websites. Or, I am getting
+<SPAN
 CLASS="QUOTE"
 >"connection refused"</SPAN
->
-with every web page?</H3
+> message with every web page. Why?</H3
 ><P
-> Either <SPAN
+> Either ... </P
+><P
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is not running, or your 
- browser is configured for a different port than what
+> is not running. Solution: verify 
+ that <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is installed correctly, has not died, and is running.</P
+></LI
+><LI
+><P
+>Or your browser is configured for a different port than what
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is using, or, if using a forwarding 
- rule, you have a configuration problem or a problem with a host in the 
- forwarding chain.
- </P
-><P
-> You should verify that <SPAN
+> is using. Solution: verify that <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is indeed running and that the correct port is set,
- and matches what your browser is set to. See <A
-HREF="../user-manual/config.html#LISTEN-ADDRESS"
-TARGET="_top"
-><TT
+>
+ and your browser are set to the same port (<TT
 CLASS="LITERAL"
 >listen-address</TT
->
- option</A
-> in <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
-> <A
-HREF="../user-manual/config.html"
-TARGET="_top"
->main configuration file</A
->. If using 
- any forwarding rules, disable those to make sure the problem is not with 
- a forwarder.</P
+>).</P
+></LI
+><LI
+><P
+>Or if using a forwarding rule, you have a configuration problem or a
+ problem with a host in the forwarding chain. Solution: temporarily alter your
+ configuration and take the forwarders out of the equation.</P
+></LI
+><LI
+><P
+>  Or you have a firewall that is interfering and blocking you. Solution: 
+  try disabling or removing the firewall as a test.
+ </P
+></LI
+></UL
+></P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN979"
+NAME="AEN1050"
 ></A
 >5.2. I just added a new rule, but the steenkin ad is 
 still getting through. How?</H3
@@ -331,7 +341,7 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"proxy"</SPAN
 >
-  setting, which will silently enable various protocols, including
+  setting, which will enable various protocols, including
   <SPAN
 CLASS="emphasis"
 ><I
@@ -575,7 +585,8 @@ CLASS="FILENAME"
 >HOSTS</TT
 >
  file. If this file has been changed from the original, try reverting it to
- see if that helps.</P
+ see if that helps. Make sure what ever name(s) are used for the local system,
+ that they resolve both ways.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -603,14 +614,14 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > running, and
- you are actually trying to start a second <SPAN
+ your system is actually trying to start a second
+ <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> 
- on the same port, which will not work. (You can have multiple instances but
- they must be assigned different ports.) How and why this might happen varies
- from platform to platform, but you need to check your installation and
- start-up procedures.</P
+> on the same port, which will not work.
+ (You can have multiple instances but they must be assigned different ports.)
+ How and why this might happen varies from platform to platform, but you need
+ to check your installation and start-up procedures.</P
 ></DIV
 ><DIV
 CLASS="SECT2"

@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.20 2006/09/26 10:12:37 fabiankeil Exp $
+ $Id: faq.sgml,v 2.21 2006/10/03 14:40:51 fabiankeil Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.20 2006/09/26 10:12:37 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.21 2006/10/03 14:40:51 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -172,8 +172,11 @@ me?</title>
   Protocol)</ulink>, and 
   <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
   Expressions</quote></ulink>
-  will be a big plus and will help you get the most out 
-  of &my-app;.
+  will be a big plus and will help you get the most out of &my-app;. 
+  A new installation just includes a very basic configuration. The user 
+  should take this as a starting point only, and enhance it as he or she 
+  sees fit. In fact, the user is encouraged, and expected to, fine-tune the 
+  configuration.
  </para>
  <para>
   Much of <application>Privoxy's</application> configuration can be done 
@@ -675,6 +678,92 @@ Privoxy is running and being used.</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="configuration"><title>Configuration</title>
+<sect2 renderas="sect3">
+<title id="actionsfile">What exactly is an <quote>actions</quote> file?</title>
+
+<para>
+ &my-app; utilizes the concept of <quote>
+ <ulink url="../user-manual/actions-file.html#ACTIONS">actions</ulink></quote> 
+ that are used to manipulate and control web page data.
+ <ulink url="../user-manual/actions-file.html">Actions files</ulink>
+ are where these <ulink url="../user-manual/actions-file.html#ACTIONS">actions</ulink>
+ that <application>Privoxy</application> could take while processing a certain
+ request, are configured. Typically, you would define a set of default actions
+ that apply globally to all URLs, then add exceptions to these defaults where needed.
+ There is a wide array of actions available that give the user a high degree
+ of control and flexibility on how to process each and every web page.
+</para>
+ 
+<para>
+ Actions can be defined on a <ulink
+ url="../user-manual/actions-file.html#AF-PATTERNS">URL pattern</ulink> basis, i.e.
+ for single URLs, whole web sites, groups or parts thereof etc. Actions can also be
+ grouped together and then applied to requests matching one or more patterns.
+ There are many possible actions that might apply to any given site. As an example,
+ if you are blocking <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>
+ as one of your default actions, but need to accept cookies from a given site,
+ you would need to define an exception for this site in one of your actions
+ files, preferably in <filename>user.action</filename>.
+</para>
+
+</sect2>
+
+<sect2 renderas="sect3" id="actionss">
+<title>The <quote>actions</quote> concept confuses me. Please list 
+some of these <quote>actions</quote>.</title>
+<para>
+ For a comprehensive discussion of the actions concept, please refer
+ to the <ulink url="../user-manual/actions-file.html">actions file
+ chapter</ulink> in the <ulink url="../user-manual/index.html">User
+ Manual</ulink>. It includes a <ulink
+ url="../user-manual/actions-file.html#ACTIONS">list of all actions</ulink>
+ and an <ulink url="../user-manual/actions-file.html#ACT-EXAMPLES">actions
+ file tutorial</ulink> to get you started.
+</para>
+</sect2>
+
+
+<sect2 renderas="sect3">
+<title id="actconfig">How are actions files configured? What is the easiest
+way to do this?</title> 
+
+<para>
+ Actions files are just text files in a special syntax and can be edited
+ with a text editor. But probably the easiest way is to access
+ <application>Privoxy</application>'s user interface with your web browser
+ at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
+ (Shortcut: <ulink url="http://p.p/">http://p.p/</ulink>) and then select
+ <quote><ulink url="http://config.privoxy.org/show-status">View &
+ change the current configuration</ulink></quote> from the menu.
+</para>
+</sect2>
+
+
+<sect2 renderas="sect3">
+<title>There are several different <quote>actions</quote> files. What are
+the differences?</title>
+<para>
+ Three actions files 
+ are being included by the developers, to be used for 
+ different purposes: These are 
+ <filename>default.action</filename>, the <quote>main</quote> actions file
+ which is actively maintained by the <application>Privoxy</application>
+ developers and typically sets the default policies, <filename>user.action</filename>, where users are encouraged
+ to make their private customizations, and <filename>standard.action</filename>, 
+ which is for internal <application>Privoxy</application> use only.
+ Please see <ulink url="../user-manual/actions-file.html">the actions chapter</ulink>
+ in the <ulink url="../user-manual/index.html">User Manual</ulink> for a more
+ detailed explanation.
+</para>
+
+<para>
+ Earlier versions included three different versions of the 
+ <filename>default.action</filename> file. The new scheme allows for 
+ greater flexibility of local configuration, and for browser based 
+ selection of pre-defined <quote>aggressiveness</quote> levels.
+</para>
+
+</sect2>
 
 <sect2 renderas="sect3" id="getupdates"><title>Where can I get updated Actions Files?</title>
  <para>
@@ -715,90 +804,6 @@ Privoxy is running and being used.</title>
   Refer to the <ulink url="../user-manual/whatsnew.html">What's New</ulink> 
  page for information on configuration changes that may occur from one release to another.
  </para>]]>
-</sect2>
-
-<sect2 renderas="sect3">
-<title id="actionsfile">What exactly is an <quote>actions</quote> file?</title>
-
-<para>
- <ulink url="../user-manual/actions-file.html">Actions files</ulink>
- are where various <ulink url="../user-manual/actions-file.html#ACTIONS">actions</ulink>
- that <application>Privoxy</application> could take while processing a certain
- request, are configured. Typically, you would define a set of default actions
- that apply to all URLs, then add exceptions to these defaults where needed.
- There is a wide array of actions available that give the user a high degree
- of control and flexibility on how to process each and every web page.
-</para>
- 
-<para>
- Actions can be defined on a <ulink
- url="../user-manual/actions-file.html#AF-PATTERNS">URL pattern</ulink> basis, i.e.
- for single URLs, whole web sites, groups or parts thereof etc. Actions can also be
- grouped together and then applied to requests matching one or more patterns.
- There are many possible actions that might apply to any given site. As an example,
- if you are blocking <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>
- as one of your default actions, but need to accept cookies from a given site,
- you would need to define an exception for this site in one of your actions
- files, preferably in <filename>user.action</filename>.
-</para>
-
-</sect2>
-
-<sect2 renderas="sect3" id="actionss">
-<title>The <quote>actions</quote> concept confuses me. Please list 
-some of these <quote>actions</quote>.</title>
-<para>
- For a comprehensive discussion of the actions concept, please refer
- to the <ulink url="../user-manual/actions-file.html">actions file
- chapter</ulink> in the <ulink url="../user-manual/index.html">user
- manual</ulink>. It includes a <ulink
- url="../user-manual/actions-file.html#ACTIONS">list of all actions</ulink>
- and an <ulink url="../user-manual/actions-file.html#ACT-EXAMPLES">actions
- file tutorial</ulink> to get you started.
-</para>
-</sect2>
-
-
-<sect2 renderas="sect3">
-<title id="actconfig">How are actions files configured? What is the easiest
-way to do this?</title> 
-
-<para>
- Actions files are just text files in a special syntax and can be edited
- with a text editor. But probably the easiest way is to access
- <application>Privoxy</application>'s user interface with your web browser
- at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
- (Shortcut: <ulink url="http://p.p/">http://p.p/</ulink>) and then select
- <quote><ulink url="http://config.privoxy.org/show-status">View &
- change the current configuration</ulink></quote> from the menu.
-</para>
-</sect2>
-
-
-<sect2 renderas="sect3">
-<title>There are several different <quote>actions</quote> files. What are
-the differences?</title>
-<para>
- As of <application>Privoxy</application> v2.9.15, three actions files 
- are being included, to be used for 
- different purposes: These are 
- <filename>default.action</filename>, the <quote>main</quote> actions file
- which is actively maintained by the <application>Privoxy</application>
- developers, <filename>user.action</filename>, where users are encouraged
- to make their private customizations, and <filename>standard.action</filename>, 
- which is for internal <application>Privoxy</application> use only.
- Please see <ulink url="../user-manual/actions-file.html">the actions chapter</ulink>
- in the <ulink url="../user-manual/index.html">User Manual</ulink> for a more
- detailed explanation.
-</para>
-
-<para>
- Earlier versions included three different versions of the 
- <filename>default.action</filename> file. The new scheme allows for 
- greater flexibility of local configuration, and for browser based 
- selection of pre-defined <quote>aggressiveness</quote> levels.
-</para>
-
 </sect2>
 
 <sect2 renderas="sect3" id="yahoo"><title>How can I make my Yahoo/Hotmail/Gmail account work?</title>
@@ -861,7 +866,9 @@ the differences?</title>
  Where the defaults are likely to break some sites, exceptions for
  known popular <quote>problem</quote> sites are included, but in
  general, the more aggressive your default settings are, the more exceptions
- you will have to make later. See the <ulink
+ you will have to make later. New users are best to start off in 
+ <quote>Cautious</quote> setting. This is safest and will have the fewest 
+ problems. See the <ulink
  url="../user-manual/index.html"><citetitle>User Manual</citetitle></ulink>
  for a more detailed discussion.
 </para>
@@ -1021,7 +1028,7 @@ with a browser? Does that not raise security issues?</title>
  If you want to see nothing, then change the <ulink
  url="../user-manual/actions-file.html#SET-IMAGE-BLOCKER"><literal>set-image-blocker</literal>
  action</ulink> to <quote>blank</quote>. This can be done by editing the 
- <filename>default.action</filename> file, or trough the <ulink
+ <filename>user.action</filename> file, or through the <ulink
  url="http://config.privoxy.org/show-status">web-based actions file editor</ulink>.
 </para>
 
@@ -1031,12 +1038,13 @@ with a browser? Does that not raise security issues?</title>
 <title id="whyseeum">Why would anybody want to see a checkerboard pattern?</title>
 <para>
  Remember that <link linkend="whatsanad">telling which image is an ad and which
- isn't</link>, is mostly guesswork. While we hope that the standard configuration
- is rather smart, it can and will make errors. The checkerboard image is visually
+ isn't</link>, is an educated guess. While we hope that the standard configuration
+ is rather smart, it will make occasional mistakes. The checkerboard image is visually
  decent, but it shows you that and where images were blocked, which can be very
  helpful in case some navigation aid or otherwise innocent image was
- erroneously blocked. Some people might also enjoy seeing how many banners
- they <emphasis>don't</emphasis> have to see..
+ erroneously blocked. It is recommended for new users so they can 
+ <quote>see</quote> what is happening. Some people might also enjoy seeing how
+ many banners they <emphasis>don't</emphasis> have to see.
 </para>
 
 </sect2>
@@ -1075,7 +1083,7 @@ on Win2K/NT/XP?</title>
 <![%p-newstuff;[
  Yes. Version 3.0.5 introduces full <application>Windows</application> service
  functionality. See <ulink url="../user-manual/installation.html#installation-pack-win">
- the User Manual</ulink> for details on how to install and configure 
+ the <citetitle>User Manual</citetitle></ulink> for details on how to install and configure 
  <application>Privoxy</application> as a service.
 </para> 
 <para>
@@ -1277,7 +1285,8 @@ and thus avoid individual browser configuration?</title>
   toys.example.com
   games.example.com</screen>
 <para>
- This allows access to only those three sites.
+ This allows access to only those three sites by first blocking all URLs, and 
+ then subsequently allowing three specific exceptions.
 </para>
 <para>
  A more interesting approach is <application>Privoxy's</application> 
@@ -1291,7 +1300,96 @@ and thus avoid individual browser configuration?</title>
  are various other configuration options that should be disabled (described
  elsewhere here and in <ulink url="../user-manual/">the User Manual</ulink>)
  so that users can't modify their own configuration and easily circumvent the
- whitelist.
+ whitelist.  
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="no-adblock">
+<title>How can I turn off ad-blocking?</title>
+<para>
+ Ad blocking is hard-coded into the default configuration files. It has been 
+ assumed that everyone using &my-app; is interested in this feature. If you want 
+ to do without this, there are several approaches you can take: You can 
+ manually undo the many block rules in <filename>default.action</filename>. Or
+ even easier, just create your own <filename>default.action</filename> file 
+ from scratch without the many ad blocking rules, and corresponding exceptions.
+ Or lastly, if you are not concerned about the additional blocks that are
+ done for privacy reasons, you can very easily over-ride
+ <emphasis>all</emphasis> blocking with the following very simple rule in
+ <filename>user.action</filename>: 
+ </para>
+ <para>
+ <screen>
+ # Unblock everybody, everywhere
+ { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
+ / # UN-Block *all* URLs
+ </screen>
+</para>
+<para> 
+ Or even a more comprehensive reversing of various ad related actions:
+</para>
+<para>
+ <screen>
+ # Unblock everybody, everywhere, and turn off appropriate filtering, etc
+ { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> \
+  <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-SIZE">-filter{banners-by-size}</ulink> \
+  <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-SIZE">-filter{banners-by-link}</ulink> \
+  <literal>allow-popups</literal> \
+ }
+ / # UN-Block *all* URLs and allow ads
+ </screen>
+</para>
+<para>
+ This last <quote>action</quote> in this compound statement,
+ <literal>allow-popups</literal>, is an <ulink
+ url="../user-manual/actions-file.html#ALIASES">alias</ulink> that disables
+ various pop-up blocking features.
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="templates">
+<title>How can I have custom template pages, like the 
+<emphasis>BLOCKED</emphasis> page?</title>
+<para>
+ All the template pages are installed in a sub-directory appropriately named: 
+ <filename>templates</filename>. These are specialized text files utilized 
+ by &my-app; and can easily be modified using any text editor. Knowing something
+ about HTML will of course be helpful. You cannot rename any of these files, 
+ or create completely new templates, that is not possible. But you can change
+ the page content to whatever you like. Be forewarned that these files are
+ subject to being overwritten during upgrades, so be sure to save any
+ customizations.
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="blockall">
+<title>How can I remove the <quote>Go There Anyway</quote> link from 
+the <emphasis>BLOCKED</emphasis> page?</title>
+<para>
+ Editing the template page (see above) may dissuade some users, but this 
+ method is easily circumvented. Where you want this level of control, you should 
+ build &my-app; from source, and enable various features that are   
+ available as compile-time options. You should use
+ <command>configure</command> as follows:
+</para>
+<para>
+ <screen>
+ ./configure --disable-toggle --disable-editor --disable-force
+ </screen>
+</para>
+<para>
+ This will create an executable with hard-coded security features so that
+ &my-app; does not allow easy bypassing of blocks or changing the current
+ configuration. Some of these features can also by toggled on/off via options
+ in <application>Privoxy's</application> main 
+ <ulink
+ url="../user-manual/config.html#ACCESS-CONTROL">config</ulink> file. But 
+ compiled-in compliance is a much better method of ensuring that a block is
+ really a block. 
+</para>
+<para>
+ Default builds of &my-app; are typically built with these features
+ disabled.
 </para>
 </sect2>
 
@@ -1310,7 +1408,7 @@ has to add extra time to browsing.</title>
 <para>
  How much of an impact depends on many things, including the CPU of the host
  system, how aggressive the configuration is, which specific actions are being triggered, 
- the size of the page, etc.
+ the size of the page, the bandwidth of the connection, etc.
 </para>
 <para>
  Overall, it should not slow you down any in real terms, and may actually help 
@@ -1328,10 +1426,17 @@ has to add extra time to browsing.</title>
  <literal><ulink
  url="../user-manual/actions-file.html#DEANIMATE-GIFS">deanimate-gifs</ulink></literal>
  actions will certainly cause a perceived slowdown, since the entire document
- needs to be buffered before displaying. And on very large documents, there may be
- some impact. How much depends on the page size, the actual definition of the
- filter(s), etc. See below. Most other actions have little to no impact on
- speed.
+ needs to be buffered before displaying. And on very large documents, filtering may have 
+ some measurable impact. How much depends on the page size, the actual
+ definition of the filter(s), etc. See below. Most other actions have little
+ to no impact on speed.
+</para>
+<para> 
+ Also, when filtering is enabled, typically there is a disabling of 
+ compression, (see <ulink
+ url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>).
+ This can have an impact on speed as well. Again, the page size, etc. will 
+ determine how much of an impact.
 </para>
 
 </sect2>
@@ -1354,7 +1459,8 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  more noticeable on slower dialup connections. Extremely large documents
  may have some impact on the time to load the page where there is filtering
  being done. But overall, the difference should be very minimal. If there is a
- big impact, then probably some other problem is contributing.
+ big impact, then probably some other situation is contributing (like
+ anti-virus software).
  </para>
 <para>
  Filtering is automatically disabled for inappropriate MIME types. But note 
@@ -1422,6 +1528,24 @@ various ways to interact with the developers.
 
 </sect2>
 
+<sect2 renderas="sect3" id="newads2"><title>If I do submit missed ads, will 
+they be included in future updates?</title>
+<para>
+ Whether such submissions are eventually included in the
+ <filename>default.action</filename> configuration file depends on how 
+ significant the issue is. We of course want to address any potential 
+ problem with major, high-profile sites such as <citetitle>Google</citetitle>, 
+ <citetitle>Yahoo</citetitle>, etc. Any site with global or regional reach, 
+ has a good chance of being a candidate. But at the other end of the spectrum
+ are any number of smaller, low-profile sites such as for local clubs or
+ schools. Since their reach and impact are much less, they are best handled by
+ inclusion in the user's <filename>user.action</filename>, and thus would be
+ unlikely to be included. 
+</para>
+
+</sect2>
+
+
 <sect2 renderas="sect3" id="noonecares"><title>Why doesn't anyone answer my support 
 request?</title>
 <para>
@@ -1437,10 +1561,10 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 
 <sect2 renderas="sect3" id="ip"><title>How can I hide my IP address?</title>
 <para>
- If you run both the browser and the proxy locally, you cannot hide your IP
+ If you run both the browser and &my-app; locally, you cannot hide your IP
  address with <application>Privoxy</application> or ultimately any other
- software. The server needs to know your IP address so that it knows where to
- send the responses back. 
+ software alone. The server needs to know your IP address so that it knows
+ where to send the responses back. 
 </para>
 <para>
  There are many publicly usable "anonymous" proxies out there, which
@@ -1487,7 +1611,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  <application>Privoxy</application> can remove various information about you,
  and allows <emphasis>you</emphasis> more freedom  to decide which sites 
  you can trust, and what details you want to reveal. But it neither 
- hides your ip address, nor can it guarantee that the rest of the system
+ hides your IP address, nor can it guarantee that the rest of the system
  behaves correctly. There are several possibilities how a web sites can find
  out who you are, even if you are using a strict <application>Privoxy</application>
  configuration and chained it with <application>Tor</application>.
@@ -1531,7 +1655,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 <para>
  Before you configure <application>Privoxy</application> to use <application>Tor</application>
  (<ulink url="http://tor.eff.org/">http://tor.eff.org/</ulink>),
- please follow the User Manual chapters
+ please follow the <citetitle>User Manual</citetitle> chapters
  <ulink url="../user-manual/installation.html">2. Installation</ulink> and
  <ulink url="../user-manual/startup.html">5. Startup</ulink> to make sure
  <application>Privoxy</application> itself is setup correctly.
@@ -1623,20 +1747,23 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 content is being altered?</title>
 
 <para>
- Definitely. More and more sites use HTTP header content to decide what to
- display and how to display it. There is many ways that this can be handled, 
+ Definitely. It is common for sites to use browser type, browser version, 
+ HTTP header content, and various other techniques in order to dynamically
+ decide what to display and how to display it. What you see, and what I see,
+ might be very different. There are many, many ways that this can be handled,
  so having hard and fast rules, is tricky.
 </para>
 
 <para>
- <quote>User-Agent</quote> in particular is often used in this way to identify
+ <quote>User-Agent</quote> is often used in this way to identify
  the browser, and adjust content accordingly. Changing this now (at least not
  further than removing the OS information) is not recommended, since so many
- sites do look for it. You may get undesirable results by changing this.
+ sites do look for it. You may get undesirable results by changing just this 
+ one aspect.
 </para>
 
 <para>
- For instance, different browsers use different encodings of Russian and Czech
+ Also, different browsers use different encodings of Russian and Czech
  characters, certain web servers convert pages on-the-fly according to the
  User Agent header. Giving a <quote>User Agent</quote> with the wrong
  operating system or browser manufacturer causes some sites in these languages
@@ -1646,7 +1773,12 @@ content is being altered?</title>
  weather maps of Intellicast have been blocked by their server when no
  <quote>Referer</quote> or cookie is provided, is another example. (But you
  can forge both headers without giving information away). There are
- many other ways things can go wrong when trying to fool a web server.
+ many other ways things that can go wrong when trying to fool a web server. The
+ results of which could inadvertently cause pages to load incorrectly,
+ partially, or even not at all. And there may be no obvious clues as to just
+ what went wrong, or why. Nowhere will there be a message that says 
+ <quote><emphasis>Turn off <literal>fast-redirects</literal> or else!</emphasis> 
+ </quote>
 </para>
 
 <para>
@@ -1945,25 +2077,30 @@ and related issues?</title>
 <title>Troubleshooting</title>
 
 <sect2 renderas="sect3">
-<title id="refused">I am getting <quote>connection refused</quote>
-with every web page?</title>
+<title id="refused">I cannot connect to any websites. Or, I am getting
+<quote>connection refused</quote> message with every web page. Why?</title>
 <para>
- Either <application>Privoxy</application> is not running, or your 
- browser is configured for a different port than what
- <application>Privoxy</application> is using, or, if using a forwarding 
- rule, you have a configuration problem or a problem with a host in the 
- forwarding chain.
- 
+ Either ... 
 </para>
-
 <para>
- You should verify that &my-app; is indeed running and that the correct port is set,
- and matches what your browser is set to. See <ulink
- url="../user-manual/config.html#LISTEN-ADDRESS"><literal>listen-address</literal>
- option</ulink> in <application>Privoxy's</application> <ulink
- url="../user-manual/config.html">main configuration file</ulink>. If using 
- any forwarding rules, disable those to make sure the problem is not with 
- a forwarder.
+<itemizedlist>
+<listitem><para>
+<application>Privoxy</application> is not running. Solution: verify 
+ that &my-app; is installed correctly, has not died, and is running.
+</para></listitem>
+ <listitem><para>Or your browser is configured for a different port than what
+ <application>Privoxy</application> is using. Solution: verify that &my-app;
+ and your browser are set to the same port (<literal>listen-address</literal>).
+</para></listitem>
+ <listitem><para>Or if using a forwarding rule, you have a configuration problem or a
+ problem with a host in the forwarding chain. Solution: temporarily alter your
+ configuration and take the forwarders out of the equation.
+</para></listitem>
+ <listitem><para>
+  Or you have a firewall that is interfering and blocking you. Solution: 
+  try disabling or removing the firewall as a test.
+ </para></listitem>
+</itemizedlist>
 </para>
 
 </sect2>
@@ -2110,7 +2247,7 @@ every time I start IE. What gives?</title>
  </para>
  <para>
   To complicate matters, some systems may have a generic <quote>proxy</quote>
-  setting, which will silently enable various protocols, including
+  setting, which will enable various protocols, including
   <emphasis>both</emphasis> HTTP and FTP proxying! So it is possible to
   accidentally enable FTP proxying in these cases. And of course, if this
   happens, <application>Privoxy</application> will indeed cause problems since
@@ -2234,7 +2371,8 @@ Why?</title>
 <para>
  This can be caused by a problem with the local <filename>HOSTS</filename>
  file. If this file has been changed from the original, try reverting it to
- see if that helps.
+ see if that helps. Make sure what ever name(s) are used for the local system,
+ that they resolve both ways.
 </para>
 </sect2>
 
@@ -2246,11 +2384,11 @@ Why?</title>
  Port 8118 is <application>Privoxy's</application> default TCP 
  <quote>listening</quote> port. Typically this message would mean that there
  is already one instance of <application>Privoxy</application> running, and
- you are actually trying to start a second <application>Privoxy</application> 
- on the same port, which will not work. (You can have multiple instances but
- they must be assigned different ports.) How and why this might happen varies
- from platform to platform, but you need to check your installation and
- start-up procedures.
+ your system is actually trying to start a second
+ <application>Privoxy</application> on the same port, which will not work.
+ (You can have multiple instances but they must be assigned different ports.)
+ How and why this might happen varies from platform to platform, but you need
+ to check your installation and start-up procedures.
 </para>
 </sect2>
 
@@ -2469,6 +2607,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.21  2006/10/03 14:40:51  fabiankeil
+Added links from the Tor faq to the
+configuration chapter in the User Manual.
+
 Revision 2.20  2006/09/26 10:12:37  fabiankeil
 Spelling fix.
 
