@@ -14,3 +14,5 @@
 24_global_action.dpatch
 25_standard_medium.dpatch
 26_edit_only_writable.dpatch
+27_remove_nsl.dpatch
+28_usermanual_slash.dpatch

@@ -1,0 +1,24 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 28_usermanual_slash.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Redirect http://p.p/user-manual (without trailing slash) to 
+## DP: http://p.p/user-manual/ (with trailing slash), otherwise the links
+## DP: will be broken (#244931).
+
+@DPATCH@
+diff -urNad privoxy~/cgisimple.c privoxy/cgisimple.c
+--- privoxy~/cgisimple.c
++++ privoxy/cgisimple.c
+@@ -716,6 +716,11 @@
+    assert(rsp);
+    assert(parameters);
+ 
++   if (!parameters->first) {
++      /* requested http://p.p/user-manual (without trailing slash) */
++      return cgi_redirect(rsp, CGI_PREFIX "user-manual/");
++   }
++
+    get_string_param(parameters, "file", &filename);
+    /* Check paramter for hack attempts */
+    if (filename && strchr(filename, '/'))

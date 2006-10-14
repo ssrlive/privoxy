@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 27_remove_nsl.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Remove unnecessary linking against libnsl.
+
+@DPATCH@
+diff -urNad privoxy~/configure.in privoxy/configure.in
+--- privoxy~/configure.in
++++ privoxy/configure.in
+@@ -869,7 +869,7 @@
+ dnl =================================================================
+ 
+ dnl Next line needed to find the gethost*_r functions on Solaris
+-AC_CHECK_LIB(nsl, gethostbyname)
++dnl AC_CHECK_LIB(nsl, gethostbyname)
+ 
+ AC_CHECK_FUNC(gethostbyaddr_r, [
+   AC_MSG_CHECKING([signature of gethostbyaddr_r])
