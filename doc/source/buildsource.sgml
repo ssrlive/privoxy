@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: buildsource.sgml,v 2.8 2006/09/22 01:27:55 hal9 Exp $
+ $Id: buildsource.sgml,v 2.9 2006/09/22 10:38:05 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -131,6 +131,18 @@
   in the freshly downloaded or unpacked source directory.
 </para>
 
+<para>
+ To build an executable with security enhanced features so that 
+ users cannot easily bypass the proxy (e.g. <quote>go there anyway</quote>, or
+ change their own configurations, <command>configure</command> like this:
+</para>
+<para>
+ <screen>
+ ./configure  --disable-toggle  --disable-editor  --disable-force</screen>
+</para> 
+<para>
+Then build as above.
+</para>
 <para>
  <emphasis>WARNING:</emphasis> If installing as root, the install will fail
  unless a non-root user or group is specified, or a <literal>privoxy</literal>
