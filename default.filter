@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.28 2006/10/11 13:31:13 fabiankeil Exp $
+#  $Id: default.filter,v 1.29 2006/10/11 14:03:17 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -507,12 +507,15 @@ FILTER: google CSS-based block for Google text ads. Also removes a width limitat
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's google filter. */\n\
  \#fbc, \#fbl, \#ra, .rhh {visibility: hidden !important;}\n\
- \#tpa1,\#tpa2,\#tpa3,\#tpa4,\#tpa5,\#tpa5, \#spl, .ch, \#ads, \#toolbar, \#google_ads_frame{display: none !important;}\n\
+ \#tpa1,\#tpa2,\#tpa3,\#tpa4,\#tpa5,\#tpa5, \#spl, .ch, \#ads,\
+ \#toolbar, \#google_ads_frame{display: none !important;}\n\
  .main_body, .j {width: 100%}\n</style>\n$0@
 s@<div style=\"padding-top:11px;min-width:500px\">@<div id="main_body">@
 s@(<table cellspacing=0 cellpadding=0 width=25% align=right bgcolor=\#ffffff border=0\
 |</font></td></tr></tbody></table><table align=\"right\" bgcolor=\"\#ffffff\"\
-|<table cellspacing=0 cellpadding=0 align=right bgcolor=\#ffffff border=0)@$0 id="ads"@
+|<table cellspacing=0 cellpadding=0 align=right bgcolor=\#ffffff border=0\
+|<table style=\"clear:both\" align=right width=25% cellspacing=\"0\" cellpadding=\"0\"\
+ border=\"0\" bgcolor=\"\#ffffff\")@$0 id="ads"@
 s@(<br clear=all><table)( border=0 cellpadding=9><tr><td)@$1 id="toolbar"$2@
 
 #################################################################################
@@ -603,6 +606,11 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.29  2006/10/11 14:03:17  fabiankeil
+#     Changed img-reorder regex to only move width
+#     attributes if they are following at least one
+#     whitespace. Fixes BR 1328455.
+#
 #     Revision 1.28  2006/10/11 13:31:13  fabiankeil
 #     Added Anduin Withers' js-annoyances fix
 #     for not messing up escaped quotes. Fixes BR 999765.
