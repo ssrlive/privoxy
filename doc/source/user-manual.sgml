@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.23 2006/10/02 22:43:53 hal9 Exp $
+ $Id: user-manual.sgml,v 2.24 2006/10/03 11:13:54 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.23 2006/10/02 22:43:53 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.24 2006/10/03 11:13:54 hal9 Exp $</pubdate>
 
 <!--
 
@@ -590,6 +590,24 @@ How to install the binary packages depends on your operating system:
     http://config.privoxy.org/edit-actions-list?f=default</ulink>. New users
     should try the default settings for a while before turning up the volume.
    </para>
+   <para>
+    The default setting has filtering turned <emphasis>off</emphasis>, which
+    subsequently means that compression is <emphasis>on</emphasis>. Remember
+    that filtering does not work on compressed pages, so if you use, or want to
+    use, filtering, you will need to force compression off. Example:
+   </para>
+   <para>
+ <screen>
+  { +<link linkend="filter">filter</link>{google}  +<link linkend="prevent-compression">prevent-compression</link> }
+   .google.</screen>
+   </para>
+   <para>
+    Or if you use a number of filters, or filter many sites, you may just want
+    to turn off compression for all sites in
+    <filename>default.action</filename> (or
+    <filename>user.action</filename>). 
+   </para>
+
   </listitem>
 
  </itemizedlist>
@@ -1778,14 +1796,15 @@ for details.
       The <guibutton>Edit</guibutton> button allows you to turn each 
       action on/off individually for fine-tuning. The <guibutton>Cautious</guibutton>
       button changes the actions list to low/safe settings which will activate 
-      a minimal set of &my-app;'s features, and subsequently there will be
-      less of a chance for accidental problems. The <guibutton>Medium</guibutton>
-      button sets the list to a medium level of ad blocking and a low level set of
-      privacy features. The <guibutton>Advanced</guibutton> button 
-      sets the list to a high level of ad blocking and medium level of
-      privacy. See the chart below. The latter three buttons over-ride 
-      any changes via with the <guibutton>Edit</guibutton> button. More 
-      fine-tuning can be done in the lower sections of this internal page.
+      ad blocking and a minimal set of &my-app;'s features, and subsequently
+      there will be less of a chance for accidental problems. The
+      <guibutton>Medium</guibutton> button sets the list to a medium level of
+      other features and a low level set of privacy features. The
+      <guibutton>Advanced</guibutton> button sets the list to a high level of
+      ad blocking and medium level of privacy. See the chart below. The latter
+      three buttons over-ride any changes via with the
+      <guibutton>Edit</guibutton> button. More fine-tuning can be done in the
+      lower sections of this internal page.
      </para>
      <para>
      It is not recommend to edit the <filename>standard.action</filename> file
@@ -8435,6 +8454,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.24  2006/10/03 11:13:54  hal9
+ More references to the new filters. Include html this time around.
+
  Revision 2.23  2006/10/02 22:43:53  hal9
  Contains new filter definitions from Fabian, and few other miscellaneous
  touch-ups.
