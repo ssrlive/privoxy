@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.52 2006/09/06 10:43:32 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.53 2006/09/06 18:45:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,15 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.52 2006/09/06 10:43:32 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.53  2006/09/06 18:45:03  fabiankeil
+ *    Incorporate modified version of Roland Rosenfeld's patch to
+ *    optionally access the user-manual via Privoxy. Closes patch 679075.
+ *
+ *    Formatting changed to Privoxy style, added call to
+ *    cgi_error_no_template if the requested file doesn't
+ *    exist and modified check whether or not Privoxy itself
+ *    should serve the manual. Should work cross-platform now.
+ *
  *    Revision 1.52  2006/09/06 10:43:32  fabiankeil
  *    Added config option enable-remote-http-toggle
  *    to specify if Privoxy should recognize special
@@ -1553,7 +1562,7 @@ struct configuration_spec * load_config(void)
 
    g_default_actions_file  = config->actions_file[1]; /* FIXME Hope this is default.action */
    g_user_actions_file = config->actions_file[2]; /* FIXME Hope this is user.action */
-   g_re_filterfile    = config->re_filterfile;
+   g_re_filterfile    = config->re_filterfile[0]; /* FIXME Hope this is default.filter */
 
 #ifdef FEATURE_TRUST
    g_trustfile        = config->trustfile;
