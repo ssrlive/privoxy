@@ -10,8 +10,8 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.5">
 <!entity p-status "BETA">
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.21 2006/10/03 14:40:51 fabiankeil Exp $
+ $Id: faq.sgml,v 2.22 2006/10/14 20:33:10 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.21 2006/10/03 14:40:51 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.22 2006/10/14 20:33:10 hal9 Exp $</pubdate>
 
 <!--
 
@@ -806,6 +806,19 @@ the differences?</title>
  </para>]]>
 </sect2>
 
+<sect2 renderas="sect3" id="difficult">
+<title>Why is the configuration so complicated?</title>
+ <para>
+  <quote>Complicated</quote> is in the eye of the beholder. Those that are 
+  familiar with some of the underlying concepts, such as regular expression
+  syntax, take to it like a fish takes to water. Also, software that tries
+  hard to be <quote>user friendly</quote>, often lacks sophistication and
+  flexibility. There is always that trade-off there between power vs.
+  easy-of-use. Furthermore, anyone is welcome to contribute ideas and
+  implementations to enhance &my-app;. 
+ </para>
+</sect2>
+
 <sect2 renderas="sect3" id="yahoo"><title>How can I make my Yahoo/Hotmail/Gmail account work?</title>
  <para>
   The default configuration shouldn't impact the usability of any of these services.
@@ -1126,9 +1139,9 @@ and thus avoid individual browser configuration?</title>
 </quote> proxy?</title>
 <para>
  No, <application>Privoxy</application> currently does not have this ability, 
- though it may be added in a future release. Transparent proxies require 
+ though it may be added in a future release. Transparent proxies require
  special handling of the request headers beyond what
- <application>Privoxy</application> is now capable of.
+ <application>Privoxy</application> is now capable of. 
 </para>
 
 <para>
@@ -1137,7 +1150,7 @@ and thus avoid individual browser configuration?</title>
  See the <ulink
  url="../user-manual/config.html#FORWARDING">forwarding chapter</ulink>
  in the <ulink url="../user-manual/index.html">User Manual</ulink>. As
- a transparent proxy to be used for chaining we recommend Transproxy
+ a transparent proxy to be used for chaining we suggest Transproxy
  (<ulink url="http://transproxy.sourceforge.net/">http://transproxy.sourceforge.net/</ulink>).
 </para>
 
@@ -1253,7 +1266,9 @@ and thus avoid individual browser configuration?</title>
  Each instance of <application>Privoxy</application> has its own
  configuration, including such attributes as the TCP port that it listens on.
  What you can do is run multiple instances of <application>Privoxy</application>, each with 
- a unique <literal>listen-address</literal> and configuration path, and then
+ a unique 
+ <ulink url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink>
+ configuration setting, and configuration path, and then
  each of these can have their own configurations. Think of it as per-port
  configuration.
 </para>
@@ -1267,7 +1282,7 @@ and thus avoid individual browser configuration?</title>
 <title>Can I set-up Privoxy as a whitelist of
 <quote>good</quote> sites?</title>
 <para>
- Sure. There are a couple of things you can do for simple whitelisting.
+ Sure. There are a couple of things you can do for simple white-listing.
  Here's one real easy one:
 </para>
  <screen>
@@ -1307,16 +1322,24 @@ and thus avoid individual browser configuration?</title>
 <sect2 renderas="sect3" id="no-adblock">
 <title>How can I turn off ad-blocking?</title>
 <para>
- Ad blocking is hard-coded into the default configuration files. It has been 
- assumed that everyone using &my-app; is interested in this feature. If you want 
- to do without this, there are several approaches you can take: You can 
- manually undo the many block rules in <filename>default.action</filename>. Or
- even easier, just create your own <filename>default.action</filename> file 
- from scratch without the many ad blocking rules, and corresponding exceptions.
- Or lastly, if you are not concerned about the additional blocks that are
- done for privacy reasons, you can very easily over-ride
- <emphasis>all</emphasis> blocking with the following very simple rule in
- <filename>user.action</filename>: 
+ Ad blocking is achieved through a complex application of various &my-app; 
+ <ulink url="../user-manual/actions-file.html">actions</ulink>. These 
+ actions are deployed against simple images, banners, flash animations, 
+ text pages, JavaScript, pop-ups and pop-unders, etc., so its not as simple as
+ just turning one or two actions off. The various actions that make up
+ &my-app; ad blocking are hard-coded into the default configuration files. It
+ has been assumed that everyone using &my-app; is interested in this
+ particular feature. 
+ </para>
+ <para>
+ If you want to do without this, there are several approaches you can take:
+ You can manually undo the many block rules in
+ <filename>default.action</filename>. Or even easier, just create your own
+ <filename>default.action</filename> file from scratch without the many ad
+ blocking rules, and corresponding exceptions. Or lastly, if you are not
+ concerned about the additional blocks that are done for privacy reasons, you
+ can very easily over-ride <emphasis>all</emphasis> blocking with the
+ following very simple rule in your <filename>user.action</filename>: 
  </para>
  <para>
  <screen>
@@ -1333,7 +1356,7 @@ and thus avoid individual browser configuration?</title>
  # Unblock everybody, everywhere, and turn off appropriate filtering, etc
  { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> \
   <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-SIZE">-filter{banners-by-size}</ulink> \
-  <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-SIZE">-filter{banners-by-link}</ulink> \
+  <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-LINK">-filter{banners-by-link}</ulink> \
   <literal>allow-popups</literal> \
  }
  / # UN-Block *all* URLs and allow ads
@@ -1351,14 +1374,14 @@ and thus avoid individual browser configuration?</title>
 <title>How can I have custom template pages, like the 
 <emphasis>BLOCKED</emphasis> page?</title>
 <para>
- All the template pages are installed in a sub-directory appropriately named: 
- <filename>templates</filename>. These are specialized text files utilized 
- by &my-app; and can easily be modified using any text editor. Knowing something
- about HTML will of course be helpful. You cannot rename any of these files, 
- or create completely new templates, that is not possible. But you can change
- the page content to whatever you like. Be forewarned that these files are
- subject to being overwritten during upgrades, so be sure to save any
- customizations.
+ &my-app; <quote>templates</quote> are specialized text files utilized by
+ &my-app; for various purposes and can easily be modified using any text
+ editor. All the template pages are installed in a sub-directory appropriately
+ named: <filename>templates</filename>.  Knowing something about HTML syntax
+ will of course be helpful. You cannot rename any of these files, or create
+ completely new templates, that is not possible. But you can change the page
+ content to whatever you like. Be forewarned that these files are subject to
+ being overwritten during upgrades, so be sure to save any customizations.
 </para>
 </sect2>
 
@@ -1366,22 +1389,23 @@ and thus avoid individual browser configuration?</title>
 <title>How can I remove the <quote>Go There Anyway</quote> link from 
 the <emphasis>BLOCKED</emphasis> page?</title>
 <para>
- Editing the template page (see above) may dissuade some users, but this 
- method is easily circumvented. Where you want this level of control, you should 
- build &my-app; from source, and enable various features that are   
- available as compile-time options. You should use
- <command>configure</command> as follows:
+ Editing the BLOCKED template page (see above) may dissuade some users, but
+ this method is easily circumvented. Where you need this level of control, you
+ should build &my-app; from source, and enable various features that are
+ available as compile-time options. You should 
+ <command>configure</command> the sources as follows:
 </para>
 <para>
  <screen>
- ./configure --disable-toggle --disable-editor --disable-force
+ ./configure  --disable-toggle  --disable-editor  --disable-force
  </screen>
 </para>
 <para>
  This will create an executable with hard-coded security features so that
- &my-app; does not allow easy bypassing of blocks or changing the current
- configuration. Some of these features can also by toggled on/off via options
- in <application>Privoxy's</application> main 
+ &my-app; does not allow easy bypassing of blocked sites, or changing the
+ current configuration via any connected user's web browser. Some of these
+ features can also be toggled on/off via options in
+ <application>Privoxy's</application> main 
  <ulink
  url="../user-manual/config.html#ACCESS-CONTROL">config</ulink> file. But 
  compiled-in compliance is a much better method of ensuring that a block is
@@ -1823,22 +1847,28 @@ speed up web browsing?</title>
 <title id="wasted">I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</title>
 <para>
- It would be technically possible eliminate the banners in a way that frees
- their screen estate in many cases, by doing all banner blocking with filters,
- i.e. eliminating the whole image references from the HTML pages instead
- of letting them stay in, and blocking the resulting requests for the
- banners themselves.
+ It is technically possible to eliminate banners and ads in a way that frees
+ their allocated page space. This could easily be done by blocking with 
+ <application>Privoxy's</application> filters,
+ and eliminating the <emphasis>entire</emphasis> image references from the
+ HTML page source. 
 </para>
 <para>
- But this would consume considerable CPU resources, would likely destroy
- the layout of many web pages which rely on the banners consuming a certain
- amount of screen space, and would fail in other cases, where the screen space
- is reserved e.g. by tables anyway. Also, making the banners disappear without
- a visual trace complicates troubleshooting.
+ But, this would consume considerably more CPU resources (IOW, slow things
+ down), would likely destroy the layout of some web pages which rely on the
+ banners utilizing a certain amount of page space, and might fail in other
+ cases, where the screen space is reserved (e.g. by HTML tables for instance).
+ Also, making ads and banners disappear without any trace complicates
+ troubleshooting, and would sooner or later be problematic.
 </para>
 <para>
- So we won't support this in the default configuration, but you can of course
- define appropriate filters yourself.
+ The better alternative is to instead let them stay, and block the resulting
+ requests for the banners themselves as is now the case. This leaves either
+ empty space, or the familiar checkerboard pattern.
+</para>
+<para>
+ So the developers won't support this in the default configuration, but you
+ can of course define appropriate filters yourself to achieve this.
 </para>
 </sect2>
 
@@ -1911,6 +1941,7 @@ secure is it? Do I need to take any special precautions?</title>
 </para>
 </sect2>
 
+
 <sect2 renderas="sect3" id="reallyoff">
 <title>When <quote>disabled</quote> is Privoxy totally 
 out of the picture?</title>
@@ -1919,9 +1950,20 @@ out of the picture?</title>
  <application>Privoxy</application> is still acting as a proxy, but just not 
  doing any of the things that <application>Privoxy</application> would
  normally be expected to do. It is still a <quote>middle-man</quote> in 
- the interaction between your browser and web sites.
+ the interaction between your browser and web sites. See below to bypass 
+ the proxy.
 </para>
 </sect2>
+
+<sect2 renderas="sect3" id="turnoff2">
+<title>How can I tell Privoxy to totally ignore certain sites?</title>
+<para>
+ Bypassing a proxy, or proxying based on arbitrary criteria, is purely a browser
+ configuration issue, not a &my-app; issue. Modern browsers typically do have
+ settings for not proxying certain sites. Check your browser's help files.
+</para>
+</sect2>
+
 
 <sect2 renderas="sect3" id="crunch">
 <title>My logs show Privoxy <quote>crunches</quote> 
@@ -2080,13 +2122,14 @@ and related issues?</title>
 <title id="refused">I cannot connect to any websites. Or, I am getting
 <quote>connection refused</quote> message with every web page. Why?</title>
 <para>
- Either ... 
+ There are several possibilities:
 </para>
 <para>
 <itemizedlist>
 <listitem><para>
 <application>Privoxy</application> is not running. Solution: verify 
- that &my-app; is installed correctly, has not died, and is running.
+ that &my-app; is installed correctly, has not crashed, and is indeed running.
+ Look at <application>Privoxy's</application> logs to see what they say.
 </para></listitem>
  <listitem><para>Or your browser is configured for a different port than what
  <application>Privoxy</application> is using. Solution: verify that &my-app;
@@ -2098,11 +2141,23 @@ and related issues?</title>
 </para></listitem>
  <listitem><para>
   Or you have a firewall that is interfering and blocking you. Solution: 
-  try disabling or removing the firewall as a test.
+  try disabling or removing the firewall as a simple test.
  </para></listitem>
 </itemizedlist>
 </para>
 
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 renderas="sect3" id="error503">
+<title>Why am I getting a 503 Error (WSAECONNREFUSED) on every page?</title>
+ <para>
+  More than likely this is a problem with your TCP/IP networking. ZoneAlarm has
+  been reported to cause this symptom -- even if not running! The solution is
+  to either fight the ZA configuration, or uninstall ZoneAlarm, and then find
+  something better behaved in its place. Other personal firewall type products
+  may cause similar type problems if not configured correctly.
+ </para>
 </sect2>
 
 <sect2 renderas="sect3">
@@ -2121,7 +2176,12 @@ still getting through. How?</title>
  applied. Try pasting the full URL of the offending ad into <ulink
  url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>
  and see if it really matches your new rule. Blocking ads is like blocking
- spam: a lot of tinkering is required to stay ahead of the game.
+ spam: a lot of tinkering is required to stay ahead of the game. And 
+ remember you need to block the URL of the ad in question, which may be 
+ entirely different from the site URL itself. Most ads are hosted on different
+ servers than the main site itself. If you right-click on the ad, you should
+ be able to get all the relevant information you need. Alternately, you can 
+ find the correct URL by looking at <application>Privoxy's</application> logs.
 </para>
 
 </sect2>
@@ -2340,18 +2400,6 @@ every time I start IE. What gives?</title>
  </para>
 </sect2>
 
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2 renderas="sect3" id="error503">
-<title>Why am I getting a 503 Error (WSAECONNREFUSED) on every page?</title>
- <para>
-  More than likely this is a problem with your TCP/IP networking. ZoneAlarm has
-  been reported to cause this symptom -- even if not running. The solution is
-  to either fight the ZA configuration, or uninstall ZoneAlarm, and then find
-  something better behaved in its place. Other personal firewall type products
-  may cause similar type problems if not configured correctly.
- </para>
-</sect2>
-
 <sect2 renderas="sect3" id="nohostname">
 <title>My logs show many <quote>Unable to get my own hostname</quote> lines.
 Why?</title>
@@ -2493,7 +2541,7 @@ Why?</title>
 </para>
 <![%p-newstuff;[
 <para>
- In any case, v. 3.0.5 includes various improvements to help
+ In any case, newer versions include various improvements to help
  <application>Privoxy</application> better handle these cases.
 </para>]]>
 </sect2>
@@ -2525,6 +2573,19 @@ browsing has slowed to a crawl. What gives? </title>
  components such as anti-virus software, spyware protectors, personal
  firewalls or similar components. Try disabling (or uninstalling) these one
  at a time and see if that helps.
+</para>
+</sect2>
+
+<sect2 renderas="sect3" id="preventcomp">
+<title>Why do my filters work on some sites but not on others? </title>
+<para>
+ It's probably due to compression. It is a common practice for web servers to
+ send their content <quote>compressed</quote> in order to speed things up, and
+ then let the browser <quote>uncompress</quote> them. &my-app; does not (yet)
+ support compression. But we can force the web server to bend to our will ;-) 
+ So for filtering, make sure you have <ulink
+ url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>
+ turned ON!  
 </para>
 </sect2>
 
@@ -2607,6 +2668,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.22  2006/10/14 20:33:10  hal9
+Three new FAQ's re: templates and blocking, and various minor touch-ups/improvements.
+
 Revision 2.21  2006/10/03 14:40:51  fabiankeil
 Added links from the Tor faq to the
 configuration chapter in the User Manual.
