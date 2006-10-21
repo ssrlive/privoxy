@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.36 2006/10/07 18:55:17 hal9 Exp $
+#  $Id: default.action.master,v 1.37 2006/10/20 01:34:23 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -680,10 +680,10 @@ support./(.*/)?track
 .fh-*.de
 
 #############################################################################
-# Catch-all for false-positives that are just TOO obvious to let go;
+# Catch-all for false-positives that are just TOO obvious to let go
 #############################################################################
 {+block}
-#MASTER# PROBLEM URL: http://www.adserver.allerinternett.com
+#MASTER# PROBLEM URL: http://ads.facebook.com/ads/spreadshirt/banner120x600.jpg
 #MASTER# REMARKS: Going for adsrv, adserve, adserver*.
 .ads[erv][rv]*.
 .ads.
@@ -707,8 +707,6 @@ i.imdb.com/Photos/CMSIcons/(?!buttons|emoticons)
 rcm.amazon.com
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/ 10/18/06
 .nytimes.com/adx/
-#MASTER# BLOCK-REFERRER: http://www.sourceforge.net/
-images.sourceforge.net/images/DB2powered.gif
 #MASTER# BLOCK-REFERRER: http://www.sharereactor.com/ 10/19/06
 #MASTER# BLOCK-REFERRER: http://www.popupad.net/
 #www.popupad.net/ats/
@@ -735,7 +733,9 @@ images.sourceforge.net/images/DB2powered.gif
 #MASTER# BLOCK-REFERRER: http://www.ign.com/ 09/17/06
 .klipmart.com
 #MASTER# BLOCK-REFERRER: http://gamespot.com 09/26/06
-adlog.com.com
+#MASTER# REMARKS: adlog.com.com and ads.com.com
+ad*.com.com
+dw.com.com
 #MASTER# BLOCK-REFERRER: http://verizon.net 09/29/06
 sales.liveperson.net
 #MASTER# BLOCK-REFERRER: www.avclub.com/ 10/14/06
@@ -790,7 +790,7 @@ ad.theadhost.com
 #MASTER# REMARKS: Below Moved here from -handle-as-image 10/16/06 ##########
 #MASTER# BLOCK-REFERRER: http://forums2.gardenweb.com/forums/orchids/ 09/25/06
 #MASTER# REMARKS: Mostly JS and plain text stuff
-.overture./.+
+.overture.
 #MASTER# PROBLEM-URL: http://www.linuxtoday.com/
 #MASTER# REMARKS: /adi has HTML snipplets for use in IFRAMEs 10/15/06
 .doubleclick.net/adi
@@ -830,8 +830,6 @@ a.tfag.de/js.ng/
 /.*client_?ad\.(php|cgi)
 #MASTER# COMMENT: SF tracker 09/15/06
 /.*AIM_UAC.adp
-#MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html 10/17/06
-images.ibsys.com/
 
 #############################################################################
 # Site-specific block-as-image patterns:
@@ -861,10 +859,6 @@ bs*.gsanet.com
 bs*.einets.com
 #MASTER# DONT-VERIFY 
 .qkimg.net
-#MASTER# DONT-VERIFY
-#MASTER# REMARKS: Bannerfarms used by grokster and others:
-james.adbutler.de
-gkas.de/affilinet
 #MASTER# BLOCK-REFERRER: http://salon.com/ 10/19/06
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
 #MASTER# REMARKS: Banner farms; just exclude their corp. info
@@ -909,14 +903,15 @@ jmcms.cydoor.com/
 #MASTER# REMARKS: Actions file tracker 1547656 09/02/06
 img.mediaplex.com
 #MASTER# BLOCK-REFERRER: http://www.tomshardware.com/ 09/28/06
-altfarm.mediaplex.com
+#MASTER# REMARKS: There is adfarm and altfarm.mediaplex
+a*farm.mediaplex.com
 #MASTER# REMARKS: Support request 1312362 09/08/06
-adserver.itsfogo.com
+#MASTER# DUPLICATED: adserver.itsfogo.com
 #MASTER# BLOCK-REFERRER: http://www.multiproxy.org/anon_proxy.htm 09/10/06
 view.atdmt.com
 #MASTER# REMARKS: Actionsfile feedback 09/11/06 http://matrix.mediavantage.de/mx.one?                                              p=210&pa=1060&pb=1906&pd=10944&aid=399&x=120&y=240&ts=2005.06.27.21.38.08
 #MASTER# BLOCK-REFERRER: http://www.heise.de/newsticker/meldung/61067
-matrix.mediavantage.de
+matrix.mediavantage.
 #MASTER# REMARKS Ad generator, SF user tracker 09/11/06
 .cibleclick.com
 #MASTER# REMARKS: Ad generator 09/11/06  http://c1.netshelter.net/campaigns/ITTTech/itttech09_728x90.gif
@@ -943,6 +938,8 @@ matrix.mediavantage.de
 ads-*.quarterserver.
 #MASTER# BLOCK-REFERRER: http://adrian.adrian.org/ 10/07/06
 searchportal.information.com/
+#MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html 10/17/06
+images.ibsys.com/
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -970,7 +967,7 @@ www.xml.eshop.msn.com/tracksponsorimpression.asp
 #MASTER# BLOCK-REFERRER: http://www.washingtonpost.com/
 #stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
 #MASTER# BLOCK-REFERRER: http://www.ibm.com 10/09/06
-#MASTER# REMARKS: Similar host and paths appear in multiple locations.
+#MASTER# REMARKS: Similar hostname and paths appear in multiple locations.
 stats./c?rc/.*/uc.gif
 #MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/ 10/07/06
 .imrworldwide.com
@@ -997,9 +994,10 @@ content.ipro.com
 #MASTER# BLOCK-REFERRER: http://www.chez.aliceadsl.fr/ 10/07/06
 .cybermonitor.com
 #MASTER# BLOCK-REFERRER: http://www.msnbc.com 10/07/06
-#MASTER# REMARKS: And MANY others.
-/(.*/)?c\.gif\?
+#MASTER# REMARKS: And MANY others. Webbug stuff.
+/(.*/)?c(lear)?\.gif\?.
 #MASTER# BLOCK-REFERRER: http://www.investorguide.com 10/08/06
+#MASTER# BLOCK-REFERRER: http://foodnetwork.com, http://gardenweb.com 10/20/06
 #MASTER# REMARK: webbug type gif used in MANY places.
 #MASTER# REMARK: Too many false positives
 #/(.*/)?(clear|(trans_?1x|blank)?1).gif
@@ -1010,6 +1008,11 @@ content.ipro.com
 log.go.com/log
 #MASTER# BLOCK-REFERRER: http://www.care2.com 10/18/06
 stats.indextools.com
+#MASTER# BLOCK-REFERRER: http://priceline.com 10/20/06
+#MASTER# REMARKS: User tracking, webbug stuff
+/.*/dcs.gif\?&?dcs
+#MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
+/__utm.gif\?
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1021,7 +1024,7 @@ fastcounter.bcentral.com/
 #MASTER# BLOCK-REFERRER: http://osnews.com/ 10/19/06
 bilbo.counted.com/
 #MASTER# BLOCK-REFERRER: http://enciclopedia.us.es/
-#MASTER# REMAKRKS: Not found 10/19/06
+#MASTER# REMAKRKS: Not found, but leaving 10/19/06
 #[a-z][0-9].nedstatbasic.net/
 
 #----------------------------------------------------------------------------
@@ -1031,7 +1034,7 @@ bilbo.counted.com/
 #MASTER# BLOCK-REFERRER: http://dest.travelocity.com/DestGuides/geo_frontdoor/0,,TRAVELOCITY,00.html?HPTRACK=icon_dest 10/07/06
 .travelocity./Sponsor_gifs/
 #MASTER# DONT-VERIFY
-#MASTER# REMARKS: Referenced from HTML-Emails
+#MASTER# REMARKS: Referenced from HTML-Emails (not checked 10/08/06)
 .weather.com/creatives/
 .weather.com/web/services/email/
 #MASTER# BLOCK-REFERRER: http://gamespot.com/gamespot/filters/0,10850,6013548,00.html 10/08/06
@@ -1058,9 +1061,7 @@ smartad.*.*.*
 .bc.yahoo.com/b\?P=
 #MASTER# BLOCK-REFERRER: http://www.dinside.no/ 10/08/06
 .dinside.no/annonsorer/
-#MASTER# BLOCK-REFERRER: http://millionaire.itv.com/millionaire/game/freegame/nq-anytime/anytimeset.html
-millionaire.itv.com/.*/assets/
-#MASTER# BLOCK-REFERRER: http://www.heise.de/
+#MASTER# BLOCK-REFERRER: http://www.heise.de/ 10/08/06
 #MASTER# BLOCK-REFERRER: http://www.spiegel.de/
 /RealMedia/ads/
 
@@ -1080,7 +1081,7 @@ ad*.vhb.de
 .globalintersec.com/adv
 #MASTER# UNBLOCK-REFERRER: http://www.wunderground.com/geo/BannerPromo/US/NY/New_York.html 10/08/06
 banners.wunderground.com/
-#MASTER# UNBLOCK-REFERRER: http://www.openoffice.org/
+#MASTER# UNBLOCK-REFERRER: http://www.openoffice.org/ 10/09/06
 .openoffice.org/banners/
 #MASTER# UNBLOCK-REFERRER: http://www.amazon.com/exec/obidos/tg/browse/-/130/ref=gw_br_dvd/102-9730978-3540926 10/09/06
 #MASTER# REMARKS: Part of site decoration
@@ -1126,7 +1127,7 @@ dv411.com/.*advc50
 www.arm.com/.*ads
 #MASTER# UNBLOCK-REFERRER: http://www.anybrowser.org/campaign/ 10/09/06
 www.anybrowser.org/
-#MASTER# UNBLOCK-REFERRER: http://www.tads.org/
+#MASTER# UNBLOCK-REFERRER: http://www.tads.org/ 10/09/06
 www.tads.org/
 #MASTER# UNBLOCK-REFERRER: http://www.mbe.com/redir/packtrack.asp 10/10/06
 .mbe.com/redir/packtrack.asp
@@ -1217,10 +1218,14 @@ edge.macworld.com
 {fragile}
 .office.microsoft.com
 .windowsupdate.microsoft.com
-.apple.com
+#MASTER# PROBLEM URL: http://metrics.apple.com 10/11/06
+# too broad: .apple.com
+www.apple.com
+store.apple.com
+images.apple.com
 #MASTER# REMARKS: Actions Tracker 1293057 09/02/06
 .update.microsoft.com
-#MASTER# REMARKS: Various reports 09/16/06
+#MASTER# REMARKS: Various reports 09/16/06. This site also requires pop-ups.
 mail.google.
 
 #----------------------------------------------------------------------------
@@ -1424,7 +1429,7 @@ quoka.de
 # (Section obsolete as of Privoxy 3.0.3, which has workaround)
 #----------------------------------------------------------------------------
 #{-prevent-compression}
-#MASTER# REMARKS: Surely this is rectified by now 09/16/06 ???
+# Surely this is rectified by now 09/16/06 ???
 #MASTER# PROBLEM-URL: http://www.powie.de/
 #www.powie.de
 #MASTER# PROBLEM-URL: http://www.phpcenter.de/
@@ -1506,6 +1511,7 @@ javabog.dk/ijk/
 # These don't work without the referrer information:
 #----------------------------------------------------------------------------
 {-hide-referrer}
+#MASTER# REMARKS: This section NOT checked 10/18/06 HB
 #MASTER# REMARKS: These are movie clips, linked from http://us.imdb.com
 .totaleclips.com
 #MASTER# PROBLEM-URL: http://www.mandrakelinux.com/en/ftp.php3
