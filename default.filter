@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.29 2006/10/11 14:03:17 fabiankeil Exp $
+#  $Id: default.filter,v 1.30 2006/10/18 12:36:50 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -304,8 +304,7 @@ s/(<textarea[^>]*?)wrap=(['"]?)hard\2/$1/ig
 #################################################################################
 FILTER: jumping-windows Prevent windows from resizing and moving themselves
 
-s/(?:window|this|self)\.(?:move|resize)(?:to|by)\(/''.concat(/ig
-
+s/(?<=[\W])(?:window|this|self)\.(?:move|resize)(?:to|by)\(/''.concat(/ig
 
 #################################################################################
 #
@@ -499,6 +498,15 @@ s|<INPUT name="\d{2,4}" type="RADIO" value="3" |$0 checked|g
 
 #################################################################################
 #
+# no-ping: Removes non-standard ping attributes in <a> and <area> tags.
+#          
+#################################################################################
+FILTER: no-ping Removes non-standard ping attributes in &lt;a> and &lt;area> tags.
+s@(<a(?:rea)?[^>]*?)ping=(['"]?)([^"'>]+)\2([>\s]?)@\
+<strong title="Privoxy removed ping target '$3'">PING!</strong>\n$1$4@ig
+
+#################################################################################
+#
 # google: CSS-based block for Google text ads. Also removes
 #         a width limitation and the toolbar advertisement.
 #
@@ -602,10 +610,42 @@ s@^(Content-Type:) text/html(;.*)?$@$1 application/xhtml+xml$2@
 FILTER: xml-to-html Header filter to change the Content-Type from xml to html.
 s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 
+#################################################################################
+#
+# hide-tor-exit-notation: Header filter to remove the Tor exit node notation
+#                         in Host and Referer headers.
+#
+#   Note: If Privoxy and Tor are chained and Privoxy is configured to
+#         use socks4a, one can use http://www.example.org.foobar.exit/
+#         to access the host www.example.org through Tor exit node foobar.
+#
+#         As the HTTP client isn't aware of this notation, it treats the
+#         whole string "www.example.org.foobar.exit" as host and uses it
+#         for the "Host" and "Referer" headers. From the server's point of
+#         view the resulting headers are invalid and can cause problems.
+#
+#         An invalid "Referer" header can trigger "hot-linking" protections,
+#         an invalid "Host" header will make it impossible for the server to
+#         find the right vhost (several domains hosted on the same IP address).
+#
+#         This filter removes the "foo.exit" part in those headers
+#         to prevent the mentioned problems. Note that it only modifies
+#         the HTTP headers, it doesn't make it impossible for the server
+#         to detect your Tor exit node based on the IP address the request is
+#         coming from.
+#
+#################################################################################
+FILTER: hide-tor-exit-notation Header filter to remove the Tor exit node notation in Host and Referer headers.
+s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
+
+
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.30  2006/10/18 12:36:50  fabiankeil
+#     google filter now cleans Google groups as well.
+#
 #     Revision 1.29  2006/10/11 14:03:17  fabiankeil
 #     Changed img-reorder regex to only move width
 #     attributes if they are following at least one
