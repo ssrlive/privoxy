@@ -8,7 +8,6 @@ Current Privoxy Team:
  
  Hal Burgiss
  Ian Cummings
- Félix Rauch
  Roland Rosenfeld
 
 Former Privoxy Team Members:
@@ -35,8 +34,9 @@ Former Privoxy Team Members:
  Sarantis Paskalis
  Stefan Waldherr
 
-Thanks to the many people who have tested Privoxy, reported bugs, made
-suggestions or contributed in some way. These include (in alphabetical order):
+Thanks to the many people who have tested Privoxy, reported bugs,
+provided patches, made suggestions or contributed in some other way.
+These include (in alphabetical order):
 
  Ken Arromdee
  Devin Bayer
@@ -59,6 +59,7 @@ suggestions or contributed in some way. These include (in alphabetical order):
  David Mediavilla 
  Raphael Moll
  Roberto Ragusa
+ Félix Rauch
  Maynard Riley
  Spinor S
  Bart Schelstraete
