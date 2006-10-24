@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.37 2006/10/20 01:34:23 hal9 Exp $
+#  $Id: default.action.master,v 1.38 2006/10/21 22:21:45 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -267,33 +267,35 @@
 #   
 #    Filters predefined in the supplied default.action include:
 #
-#     js-annoyances:       Get rid of particularly annoying JavaScript abuse
-#     js-events:           Kill all JS event bindings (Radically destructive! Use only on real suckers)
-#     html-annoyances:     Get rid of particularly annoying HTML abuse
-#     content-cookies:     Kill cookies that come in the HTML or JS content
-#     refresh-tags:        Kill automatic refresh tags (for dial-on-demand setups)
-#     unsolicited-popups:  Disable only unsolicited pop-up windows
-#     all-popups:          Kill all popups in JavaScript and HTML
-#     img-reorder:         Reorder attributes in <img> tags to make the banners-by-* filters more effective
-#     banners-by-size:     Kill banners by size (very efficient!)
-#     banners-by-link:     Kill banners by their links to known clicktrackers 
-#     webbugs:             Squish WebBugs (1x1 invisible GIFs used for user tracking)
-#     tiny-textforms:      Extend those tiny textareas up to 40x80 and kill the hard wrap
-#     jumping-windows:     Prevent windows from resizing and moving themselves
-#     frameset-borders:    Give frames a border
-#     demoronizer:         Fix MS's non-standard use of standard charsets
-#     shockwave-flash:     Kill embedded Shockwave Flash objects
-#     quicktime-kioskmode: Make Quicktime movies saveable
-#     fun:                 Text replacements  for subversive browsing fun!
-#     crude-parental:      Kill all web pages that contain the words "sex" or "warez"
-#     ie-exploits:         Disable some known Internet Explorer bug exploits
-#     site-specifics:      Cure for site-specific problems. Don't apply generally!
-#     google:              Removes text ads and other Google specific improvements
-#     yahoo:               Removes text ads and other Yahoo specific improvements
-#     msn:                 Removes text ads and other MSN specific improvements
-#     blogspot:            Cleans up Blogspot blogs
-#     html-to-xml:         Header filter to change the Content-Type from html to xml
-#     xml-to-html:         Header filter to change the Content-Type from xml to html
+#     js-annoyances:         Get rid of particularly annoying JavaScript abuse
+#     js-events:             Kill all JS event bindings (Radically destructive! Use only on real suckers)
+#     html-annoyances:       Get rid of particularly annoying HTML abuse
+#     content-cookies:       Kill cookies that come in the HTML or JS content
+#     refresh-tags:          Kill automatic refresh tags (for dial-on-demand setups)
+#     unsolicited-popups:    Disable only unsolicited pop-up windows
+#     all-popups:            Kill all popups in JavaScript and HTML
+#     img-reorder:           Reorder attributes in <img> tags to make the banners-by-* filters more effective
+#     banners-by-size:       Kill banners by size (very efficient!)
+#     banners-by-link:       Kill banners by their links to known clicktrackers 
+#     webbugs:               Squish WebBugs (1x1 invisible GIFs used for user tracking)
+#     tiny-textforms:        Extend those tiny textareas up to 40x80 and kill the hard wrap
+#     jumping-windows:       Prevent windows from resizing and moving themselves
+#     frameset-borders:      Give frames a border
+#     demoronizer:           Fix MS's non-standard use of standard charsets
+#     shockwave-flash:       Kill embedded Shockwave Flash objects
+#     quicktime-kioskmode:   Make Quicktime movies saveable
+#     fun:                   Text replacements  for subversive browsing fun!
+#     crude-parental:        Kill all web pages that contain the words "sex" or "warez"
+#     ie-exploits:           Disable some known Internet Explorer bug exploits
+#     site-specifics:        Cure for site-specific problems. Don't apply generally!
+#     google:                Removes text ads and other Google specific improvements
+#     yahoo:                 Removes text ads and other Yahoo specific improvements
+#     msn:                   Removes text ads and other MSN specific improvements
+#     blogspot:              Cleans up Blogspot blogs
+#     html-to-xml:           Header filter to change the Content-Type from html to xml
+#     xml-to-html:           Header filter to change the Content-Type from xml to html
+#     no-ping:               Removes non-standard ping attributes from anchor and area tags
+#     hide-tor-exit-notation: Header filter to remove the Tor exit node notation in Host and Referer headers
 #
 # +filter-client-headers
 #    By default, filters only apply to the document content itself. This will
@@ -570,6 +572,8 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -filter{blogspot} \
 -filter{xml-to-html} \
 -filter{html-to-xml} \
+-filter{no-ping} \
+-filter{hide-tor-exit-notation} \
 -filter-client-headers \
 -filter-server-headers \
 -force-text-mode \
@@ -801,13 +805,16 @@ view.atdmt.com/(.*/)?iview/
 #MASTER# REMARKS: Above Moved here from -handle-as-image 10/16/06 ##########
 #MASTER# REMARKS: Generic, re: tracking.foxnews.com/HG? 10/01/06
 tracking.
+#MASTER# BLOCK-REFERRER: http://netcraft.com and many others 10/22/06
+/(.*/)?adjs\.php\?
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
 #----------------------------------------------------------------------------
 #MASTER# BLOCK-REFERRER: http://www.chip.de/artikel/c_artikelunterseite_10423683.html
 pagead*.googlesyndication./.*\.js
-a.tfag.de/js.ng/
+#MASTER# REMARKS: broadening scope from a.tfag.de/js.ng/ 10/23/06
+/js\.ng/
 #MASTER# BLOCK-REFERRER: http://www.britannica.com/
 /popunder
 
@@ -1168,7 +1175,7 @@ adbusters.org/
 #MASTER# UNBLOCK-REFERRER: http://upgrade.bitdefender.com/update71/avx/Plugins/adsntfs.xmd.gzip 09/04/06
 /update/.*adsnt.*
 #MASTER# UNBLOCK-REFERRER: http://msdn.microsoft.com/ 09/11/06
-msdn.microsoft.com/.*masthead
+.microsoft.com/.*masthead
 #MASTER# UNBLOCK-REFERRER: http://indymedia.org adfree site 09/11/06
 .indymedia.org
 #MASTER# UNBLOCK-REFERRER: http://www.seanbaby.com/stupid/comicads05.shtml 09/11/06
@@ -1589,16 +1596,6 @@ validator.w3.org/check\?uri=referer
 #MASTER# PROBLEM-URL:  http://www.webreference.com/js/column8/property.html 10/15/06
 #MASTER# REMARKS: Explains how content cookies work
 .webreference.com/js/column8/property.html
-
-{-handle-as-image}
-#MASTER# REMARKS: Moved this section to handle-as-empty-document 10/16/06
-#MASTER# PROBLEM-URL: http://www.linuxtoday.com/
-#MASTER# REMARKS: /adi has HTML snipplets for use in IFRAMEs 10/15/06
-#.doubleclick.net/adi
-#.doubleclick.net/.*/adj/
-#MASTER# PROBLEM-URL: http://maps.yahoo.com/
-#MASTER# REMARKS: /AVE/iview has HTML snipplets for use in IFRAMEs 10/15/06
-#view.atdmt.com/(.*/)?iview/
 
 {-filter{fun}}
 #MASTER# PROBLEM-URL: http://www.privoxy.org/user-manual/filter-file.html
