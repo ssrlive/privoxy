@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.24 2006/10/03 11:13:54 hal9 Exp $
+ $Id: user-manual.sgml,v 2.25 2006/10/18 10:50:33 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.24 2006/10/03 11:13:54 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.25 2006/10/18 10:50:33 hal9 Exp $</pubdate>
 
 <!--
 
@@ -3665,6 +3665,14 @@ problem-host.example.com</screen>
     <anchor id="filter-xml-to-html">
     <screen>+filter{xml-to-html}         # Header filter to change the Content-Type from xml to html</screen>
    </para>
+   <para>
+    <anchor id="filter-no-ping">
+    <screen>+filter{no-ping}             # Removes non-standard ping attributes from anchor and area tags</screen>
+   </para>
+   <para>
+    <anchor id="filter-hide-tor-exit-notation">
+    <screen>+filter{hide-tor-exit-notation} # Header filter to remove the Tor exit node notation in Host and Referer headers</screen>
+   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -5010,16 +5018,25 @@ new action
   <term>Example usage (sections):</term>
   <listitem>
    <para>
-    <screen># Set default:
+    <screen>
+# Selectively turn off compression, and enable a filter
 #
-{+prevent-compression}
-/ # Match all sites
+{ +filter{tiny-textforms} +prevent-compression }
+# Match only these sites
+ .google.
+ sourceforge.net
+ sf.net
 
-# Make exceptions for ill sites:
+# Or instead, we could set a universal default:
 #
-{-prevent-compression}
-www.debianhelp.org
-www.pclinuxonline.com</screen>
+{ +prevent-compression }
+ / # Match all sites
+
+# Then maybe make exceptions for ill-behaved sites:
+#
+{ -prevent-compression }
+ .debianhelp.org
+ www.pclinuxonline.com</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5687,7 +5704,6 @@ new action
  them before writing. So the effects of your aliases are of course preserved,
  but the aliases themselves are lost when you edit sections that use aliases
  with it.
- This is likely to change in future versions of <application>Privoxy</application>.
 </para>
 
 <para>
@@ -5709,12 +5725,13 @@ new action
  +crunch-all-cookies = +<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> +<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
  -crunch-all-cookies = -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
  +block-as-image      = +block +handle-as-image
- mercy-for-cookies   = -crunch-all-cookies -<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link>
+ allow-all-cookies   = -crunch-all-cookies -<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link>
 
  # These aliases define combinations of actions
  # that are useful for certain types of sites:
  #
- fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link> -<link linkend="KILL-POPUPS">kill-popups</link>
+ fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link> -<link linkend="KILL-POPUPS">kill-popups</link> -<link linkend="PREVENT-COMPRESSION">prevent-compression</link>
+
  shop        = -crunch-all-cookies -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link> -<link linkend="KILL-POPUPS">kill-popups</link>
 
  # Short names for other aliases, for really lazy people ;-)
@@ -5737,7 +5754,8 @@ new action
  {fragile}
  .office.microsoft.com
  .windowsupdate.microsoft.com
- .nytimes.com
+ # Gmail is really mail.google.com, not gmail.com
+ mail.google.com
 
  # Shopping sites:
  # Allow cookies (for setting and retrieving your customer data)
@@ -5745,18 +5763,18 @@ new action
  {shop}
  .quietpc.com
  .worldpay.com   # for quietpc.com
- .scan.co.uk
+ mybank.example.com
 
  # These shops require pop-ups:
  #
- {shop -kill-popups -filter{all-popups}}
+ {-kill-popups -filter{all-popups} -filter{unsolicted-popups}}
   .dabs.com
   .overclockers.co.uk</screen>
 </para>
 
 <para>
- Aliases like <quote>shop</quote> and <quote>fragile</quote> are often used for 
- <quote>problem</quote> sites that require some actions to be disabled 
+ Aliases like <quote>shop</quote> and <quote>fragile</quote> are typically used for 
+ <quote>problem</quote> sites that require more than one action to be disabled 
  in order to function properly.
 </para>
 </sect2>
@@ -5902,6 +5920,8 @@ that also explains why and how aliases are used:
  -<link linkend="FILTER-BLOGSPOT">filter-blogspot</link> \
  -<link linkend="FILTER-XML-TO-HTML">filter-xml-to-html</link> \
  -<link linkend="FILTER-HTML-TO-XML">filter-html-to-xml</link> \
+ -<link linkend="FILTER-NO-PING">filter-no-ping</link> \
+ -<link linkend="FILTER-HIDE-TOR-EXIT-NOTATION">filter-hide-tor-exit-notation</link> \
  -<link linkend="FORCE-TEXT-MODE">force-text-mode</link> \
  -<link linkend="HANDLE-AS-EMPTY-DOCUMENT">handle-as-empty-document</link> \
  -<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> \
@@ -7178,11 +7198,32 @@ pre-defined filters for your convenience:
    </para>
   </listitem>
  </varlistentry>
+ 
   <varlistentry>
   <term><emphasis>html-to-xml</emphasis></term>
   <listitem>
    <para>
     Header filter to change the Content-Type from html to xml.
+   </para>
+  </listitem>
+ </varlistentry>
+
+  <varlistentry>
+  <term><emphasis>no-ping</emphasis></term>
+  <listitem>
+   <para>
+    Removes the non-standard <literal>ping</literal> attribute from
+    anchor and area HTML tags.
+   </para>
+  </listitem>
+ </varlistentry>
+
+  <varlistentry>
+  <term><emphasis>hide-tor-exit-notation</emphasis></term>
+  <listitem>
+   <para>
+    Header filter to remove the <command>Tor</command> exit node notation
+    found in Host and Referer headers.
    </para>
   </listitem>
  </varlistentry>
@@ -8012,6 +8053,8 @@ Requests</title>
  -filter {blogspot}
  -filter {xml-to-html}
  -filter {html-to-xml}
+ -filter {no-ping}
+ -filter{hide-tor-exit-notation}
  -filter-client-headers
  -filter-server-headers
  -force-text-mode
@@ -8148,6 +8191,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -filter {blogspot}
  -filter {xml-to-html}
  -filter {html-to-xml}
+ -filter {no-ping}
+ -filter{hide-tor-exit-notation}
  -filter-client-headers
  -filter-server-headers
  -force-text-mode
@@ -8273,6 +8318,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   -filter {blogspot}
   -filter {xml-to-html}
   -filter {html-to-xml}
+  -filter {no-ping}
+  -filter{hide-tor-exit-notation}
   -filter-client-headers
   -filter-server-headers
   -force-text-mode
@@ -8454,6 +8501,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.25  2006/10/18 10:50:33  hal9
+ Add note that since filters are off in Cautious, compression is ON. Turn off
+ compression to make filters work on all sites.
+
  Revision 2.24  2006/10/03 11:13:54  hal9
  More references to the new filters. Include html this time around.
 
