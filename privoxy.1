@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "03 October 2006" "Privoxy 3.0.6 UNRELEASED" ""
+.TH "PRIVOXY" "1" "24 October 2006" "Privoxy 3.0.6 UNRELEASED" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
@@ -181,6 +181,8 @@ configuration might look like:
 -filter{blogspot} \\
 -filter{xml-to-html} \\
 -filter{html-to-xml} \\
+-filter{no-ping} \\
+-filter{hide-tor-exit-notation} \\
 -filter-client-headers \\
 -filter-server-headers \\
 -force-text-mode \\
@@ -352,7 +354,6 @@ the \fBPrivoxy\fR developer manual.
  
  Hal Burgiss
  Ian Cummings
- Félix Rauch
  Roland Rosenfeld
 .fi
 .SH "COPYRIGHT AND LICENSE"

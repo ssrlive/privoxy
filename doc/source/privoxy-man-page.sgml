@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.9 2006/09/22 01:27:55 hal9 Exp $
+ $Id: privoxy-man-page.sgml,v 2.10 2006/10/03 11:12:18 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -317,6 +317,8 @@
 -filter{blogspot} \
 -filter{xml-to-html} \
 -filter{html-to-xml} \
+-filter{no-ping} \
+-filter{hide-tor-exit-notation} \
 -filter-client-headers \
 -filter-server-headers \
 -force-text-mode \
