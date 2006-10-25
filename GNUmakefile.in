@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.148 2006/09/26 10:57:58 hal9 Exp $
+# $Id: GNUmakefile.in,v 1.149 2006/10/11 01:40:28 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1132,8 +1132,8 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(CAT) config >config~ ;\
 		$(MV) config.base config ;\
 	fi
-	$(SED) 's+confdir .+confdir $(CONF_DEST)+' config | \
-	$(SED) 's+logdir .+logdir $(LOG_DEST)+' >config.tmp
+	$(SED) 's+^confdir \.+confdir $(CONF_DEST)+' config | \
+	$(SED) 's+^logdir \.+logdir $(LOG_DEST)+' >config.tmp
 	-@if [ $(check_doc) = 0 ]; then \
       $(SED) 's+^#\?user-manual .*+user-manual $(DOC_DEST)/user-manual/+' config.tmp >config.updated ;\
 	else \
@@ -1355,6 +1355,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.149  2006/10/11 01:40:28  hal9
+# Apply patch from  Neil McCalden to fix syntax issue.
+#
 # Revision 1.148  2006/09/26 10:57:58  hal9
 # Including Karsten's patch to fix make create-snapshot.
 #
