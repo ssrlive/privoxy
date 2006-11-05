@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.38 2006/10/21 22:21:45 hal9 Exp $
+#  $Id: default.action.master,v 1.39 2006/10/24 10:53:55 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -628,6 +628,9 @@ count*.
 *counter.
 #MASTER# PROBLEM URL: http://www.newegg.com
 promotions.
+#MASTER# PROBLEM URL: http://metrics.performancing.com/ 11/04/06
+#MASTER# BLOCK-REFERRER: http://tech.cybernetnews.com/
+metrics.
 
 #############################################################################
 # Generic unblockers by host:
@@ -638,6 +641,7 @@ adsl.
 ad[udmw]*.
 adbl*.
 adam*.
+adapt*.
 adob*.
 adrenaline.
 adtp*.
@@ -672,7 +676,7 @@ countr*.
 support./(.*/)?track
 
 #############################################################################
-# Exceptions for academia
+# Exceptions for academia and non-profits
 #############################################################################
 .edu
 .ac.*/
@@ -682,6 +686,9 @@ support./(.*/)?track
 #MASTER# REMARKS: 09/18/06 Tracker request
 .hs-*.de 
 .fh-*.de
+#MASTER# REMARKS: Try to avoid harmless names in non-commercial organizations. Added 10/24/06
+#MASTER# PROBLEM URL: http://www.gnu.org/graphics/gnu-head-banner.png
+.org/.*(image|banner)
 
 #############################################################################
 # Catch-all for false-positives that are just TOO obvious to let go
@@ -691,7 +698,7 @@ support./(.*/)?track
 #MASTER# REMARKS: Going for adsrv, adserve, adserver*.
 .ads[erv][rv]*.
 .ads.
-/(.*/)?ad(se?rv|click|stream|image)
+/(.*/)?ad(se?rv|click|stream|image|log|farm|script)
 
 #############################################################################
 # Site-specific block patterns;
@@ -726,7 +733,7 @@ rcm.amazon.com
 #MASTER# REMARKS: Yea, all these at one site! 10/19/06
 .cpays.com
 .oxado.com
-.adultfriendfinder.com
+.adult*finder.com
 #MASTER# DONT-VERIFY: Opera's list of banners to load (XML)
 /scripts/cms/xcms.asp
 #MASTER# REMARKS: Actionsfile tracker 1559740 09/16/06 See http://www.vibrantmedia.com/whatisIntelliTXT.asp
@@ -745,7 +752,8 @@ sales.liveperson.net
 #MASTER# BLOCK-REFERRER: www.avclub.com/ 10/14/06
 .iad.liveperson.net
 #MASTER# BLOCK-REFERRER: http://homedepot.com 09/29/06
-data.coremetrics.com/cm
+#MASTER# BLOCK-REFERRER: http://weather.com 11/03/06
+.coremetrics.com/
 #MASTER# BLOCK-REFERRER: http://wired.com 09/29/06
 .realmedia.com/data/
 #MASTER# REMARKS: webbugs, ads and user tracking js in many places.
@@ -776,11 +784,17 @@ ad.theadhost.com
 #MASTER# BLOCK-REFERRER: http://www.geocities.com/the_sockman1/index.html 10/15/06
 #MASTER# REMARKS: ..and any other page on geocities. Source of the obnoxious Geocities drop-in menu.
 .geocities.com/js_source
+#MASTER# BLOCK-REFERRER: http://www.google.com 09/28/06
+.dartsearch.net
+#MASTER# BLOCK-REFERRER: http://wunderground.com 11/02/06
+.zedo.com
+#MASTER# BLOCK-REFERRER: http://realtor.org 11/03/06
+.trk.sodoit.com/
 
 #----------------------------------------------------------------------------
-# Misc Junk.
+# Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
 #----------------------------------------------------------------------------
-{+block +handle-as-empty-document}
+{+block +handle-as-empty-document -handle-as-image}
 #MASTER# REMARKS: signature for user tracking nytimes, cnn.com,latimes.com and many others. 10/06/06
 /b/ss/.+
 #MASTER# BLOCK-REFERRER: http://www.thesun.co.uk/article/0,,11071-10784,00.html
@@ -790,7 +804,9 @@ ad.theadhost.com
 .visistat.com
 #MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
 #MASTER# REMARKS: There is a ssl.google-analytics as well.
-.google-analytics.
+.google-analytics./
+#MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
+/(.*/)?__utm.gif\?
 #MASTER# REMARKS: Below Moved here from -handle-as-image 10/16/06 ##########
 #MASTER# BLOCK-REFERRER: http://forums2.gardenweb.com/forums/orchids/ 09/25/06
 #MASTER# REMARKS: Mostly JS and plain text stuff
@@ -807,6 +823,32 @@ view.atdmt.com/(.*/)?iview/
 tracking.
 #MASTER# BLOCK-REFERRER: http://netcraft.com and many others 10/22/06
 /(.*/)?adjs\.php\?
+#MASTER# BLOCK-REFERRER: http://washingpost.com and others 10/25/06
+/.*\.gif\?D=DM
+#MASTER# BLOCK-REFERRER: http://www.washingtonpost.com/
+#stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
+#MASTER# BLOCK-REFERRER: http://www.ibm.com 10/09/06
+#MASTER# REMARKS: Similar hostname and paths appear in multiple locations.
+stats./c?rc/.*/uc.gif
+#MASTER# BLOCK-REFERRER: http://priceline.com 10/20/06
+#MASTER# REMARKS: User tracking, webbug stuff
+/(.*/)?dcs.gif\?&?dcs
+#MASTER# BLOCK-REFERRER: http://www.msnbc.com 10/07/06
+#MASTER# REMARKS: And MANY others. Webbug stuff.
+/(.*/)?c(lear)?\.gif\?.
+#MASTER# BLOCK-REFERRER: http://www.investorguide.com 10/08/06
+#MASTER# BLOCK-REFERRER: http://foodnetwork.com, http://gardenweb.com 10/20/06
+#MASTER# REMARK: webbug type gif used in MANY places.
+#MASTER# REMARK: Too many false positives
+#/(.*/)?(clear|(trans_?1x|blank)?1).gif
+#MASTER# REMARK: Let's try this way.
+/(.*/)?(clear|blank|(trans_?|1x)?1).gif\?.
+#MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/epdf/ 10/08/06
+.bc.yahoo.com/b\?P=
+#MASTER# BLOCK-REFERRER: http://www.motherboard.cz 10/30/06
+x*.alexa.com
+#MASTER# BLOCK-REFERRER: http://actorstheatre.org 11/02/06
+stats./.*\.gif\?
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
@@ -815,7 +857,7 @@ tracking.
 pagead*.googlesyndication./.*\.js
 #MASTER# REMARKS: broadening scope from a.tfag.de/js.ng/ 10/23/06
 /js\.ng/
-#MASTER# BLOCK-REFERRER: http://www.britannica.com/
+#MASTER# BLOCK-REFERRER: http://www.britannica.com/ 10/23/06
 /popunder
 
 #############################################################################
@@ -971,11 +1013,6 @@ log*.xiti.com/
 log*.hit-parade.com/
 #MASTER# BLOCK-REFERRER: http://www.msnbc.com/news/884810.asp?0si=-&cp1=1
 www.xml.eshop.msn.com/tracksponsorimpression.asp
-#MASTER# BLOCK-REFERRER: http://www.washingtonpost.com/
-#stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
-#MASTER# BLOCK-REFERRER: http://www.ibm.com 10/09/06
-#MASTER# REMARKS: Similar hostname and paths appear in multiple locations.
-stats./c?rc/.*/uc.gif
 #MASTER# BLOCK-REFERRER: http://www.planetgamecube.com/ 10/07/06
 .imrworldwide.com
 #MASTER# REMARKS: Actionsfile feedback 1555719 09/10/06, and Debian Bug report 
@@ -1000,26 +1037,11 @@ content.ipro.com
 .research-int.se/data
 #MASTER# BLOCK-REFERRER: http://www.chez.aliceadsl.fr/ 10/07/06
 .cybermonitor.com
-#MASTER# BLOCK-REFERRER: http://www.msnbc.com 10/07/06
-#MASTER# REMARKS: And MANY others. Webbug stuff.
-/(.*/)?c(lear)?\.gif\?.
-#MASTER# BLOCK-REFERRER: http://www.investorguide.com 10/08/06
-#MASTER# BLOCK-REFERRER: http://foodnetwork.com, http://gardenweb.com 10/20/06
-#MASTER# REMARK: webbug type gif used in MANY places.
-#MASTER# REMARK: Too many false positives
-#/(.*/)?(clear|(trans_?1x|blank)?1).gif
-#MASTER# REMARK: Let's try this way.
-/(.*/)?(clear|blank|(trans_?|1x)?1).gif\?.+
 #MASTER# BLOCK-REFERRER: http://disney.go.com
 #MASTER# BLOCK-REFERRER: http://abcnews.com  10/15/06
 log.go.com/log
 #MASTER# BLOCK-REFERRER: http://www.care2.com 10/18/06
 stats.indextools.com
-#MASTER# BLOCK-REFERRER: http://priceline.com 10/20/06
-#MASTER# REMARKS: User tracking, webbug stuff
-/.*/dcs.gif\?&?dcs
-#MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
-/__utm.gif\?
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1064,8 +1086,6 @@ leadback.advertising.
 astalavista.box.sk/adult.*\.jpg
 #MASTER# BLOCK-REFERRER: http://www.bol.com.br/
 smartad.*.*.*
-#MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/epdf/ 10/08/06
-.bc.yahoo.com/b\?P=
 #MASTER# BLOCK-REFERRER: http://www.dinside.no/ 10/08/06
 .dinside.no/annonsorer/
 #MASTER# BLOCK-REFERRER: http://www.heise.de/ 10/08/06
@@ -1195,6 +1215,8 @@ cels.org/.*track
 #MASTER# REMARKS: Ad-free art site 09/12/06
 .rubberslug.com
 .freebsd.org
+.fsf.org
+,gnu.org
 #MASTER# REMARKS: SF tracker 09/15/06
 adiumx.com
 #MASTER# UNBLOCK-REFERRER: http://google.com 10/01/06
@@ -1213,6 +1235,11 @@ edge.macworld.com
 #MASTER# UNBLOCK-REFERRER: http://dawn.com
 #MASTER# REMARKS: SF Actionsfile tracker 10/19/06. These images are not ads.
 .dawn.com/.*/(9690dina|aurora_award)\.
+#MASTER# UNBLOCK-REFERRER: http://google.com/reader/ 
+#MASTER# REMARKS: Initial page does not load, per Support request 10/27/06
+.google.com/reader/
+#MASTER# REMARKS: Actionsfile Tracker 1587079 10/30/06
+.parcel2go.com/track
 
 #############################################################################
 # Site-specific special rules:
@@ -1388,7 +1415,7 @@ webmail.
 /.*wiki/
 #MASTER# REMARKS: protect some google projects from accidental JS/HTML tampering, etc
 maps.google.
-.google.com/calendar
+.google.com/(calendar|reader)
 #MASTER# REMARKS: A lot of code and docs on these sites:
 code.
 developer.
@@ -1423,6 +1450,9 @@ javascriptkit.com
 .openbsd.org
 .dragonflybsd.org
 .freedesktop.org
+.gnu.org
+.fedoraproject.org
+.userscripts.org
 #MASTER# REMARKS: Bug trackers like Flyspray and Mailinglist interfaces like Mailman:
 /(.*/)?flyspray/
 /(.*/)?mail(man|archive|inglists?)/
@@ -1665,4 +1695,5 @@ blogs.msdn.com
 #  +session-cookies-only \
 #}
 #www.versiontracker.com/
+
 #MASTER# set vi:nowrap
