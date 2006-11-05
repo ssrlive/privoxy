@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.39 2006/10/24 10:53:55 hal9 Exp $
+#  $Id: default.action.master,v 1.40 2006/11/05 16:46:06 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -662,7 +662,7 @@ countr*.
 /.*ads(new)?/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
-/.*(count|track|compteur|adframe|adse?rve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
+/.*(count|track|compteur|(?<!relo)adframe|adse?rve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
 /(.*/)?clicktrack
 
 #############################################################################
@@ -1216,7 +1216,7 @@ cels.org/.*track
 .rubberslug.com
 .freebsd.org
 .fsf.org
-,gnu.org
+.gnu.org
 #MASTER# REMARKS: SF tracker 09/15/06
 adiumx.com
 #MASTER# UNBLOCK-REFERRER: http://google.com 10/01/06
@@ -1560,6 +1560,8 @@ validator.w3.org/check\?uri=referer
 .petitiononline.com/mod_perl/signed.cgi
 #MASTER# REMARKS: Tracker bug report 1107806 09/26/06
 .telia.se
+#MASTER# REMARKS: XML validator that actually works.
+schneegans.de/sv/\?url=referer
 
 #----------------------------------------------------------------------------
 # These animated gifs are either useful or nice:
@@ -1695,5 +1697,14 @@ blogs.msdn.com
 #  +session-cookies-only \
 #}
 #www.versiontracker.com/
+
+#MASTER# REMARKS: If Privoxy is disabled, requests for config.privoxy.org/
+#MASTER# REMARKS: reach privoxy.org and are redirected to privoxy.org/config.
+#MASTER# REMARKS: The instructions tell the user to reload the page with
+#MASTER# REMARKS: Privoxy enabled to reach the configuration webinterface,
+#MASTER# REMARKS: to make this work we have to intercept the request and revert
+#MASTER# REMARKS: the redirection.
+{+redirect{http://config.privoxy.org/}}
+.privoxy.org/config
 
 #MASTER# set vi:nowrap
