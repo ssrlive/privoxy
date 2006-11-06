@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.104 2006/09/23 13:26:38 roro Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.105 2006/11/06 14:26:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,13 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.104 2006/09/23 13:26:38 roro Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.105  2006/11/06 14:26:02  fabiankeil
+ *    Don't exit after receiving the second SIGHUP on Solaris.
+ *
+ *    Fixes BR 1052235, but the same problem may exist on other
+ *    systems. Once 3.0.6 is out we should use sigset()
+ *    where available and see if it breaks anything.
+ *
  *    Revision 1.104  2006/09/23 13:26:38  roro
  *    Replace TABs by spaces in source code.
  *
@@ -674,10 +681,6 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.104 2006/09/23 13:26:38 roro Exp $";
 #include <signal.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#ifdef FEATURE_PTHREAD
-#include <pthread.h>
-#endif /* def FEATURE_PTHREAD */
 
 #ifdef _WIN32
 # ifndef FEATURE_PTHREAD
