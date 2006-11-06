@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.103 2006/09/21 12:54:43 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.104 2006/09/23 13:26:38 roro Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.103 2006/09/21 12:54:43 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.104  2006/09/23 13:26:38  roro
+ *    Replace TABs by spaces in source code.
+ *
  *    Revision 1.103  2006/09/21 12:54:43  fabiankeil
  *    Fix +redirect{}. Didn't work with -fast-redirects.
  *
@@ -2102,7 +2105,11 @@ int main(int argc, const char *argv[])
 
    for (idx = 0; catched_signals[idx] != 0; idx++)
    {
+#ifdef sun /* FIXME: Is it safe to check for HAVE_SIGSET instead? */ 
+      if (sigset(catched_signals[idx], sig_handler) == SIG_ERR)
+#else
       if (signal(catched_signals[idx], sig_handler) == SIG_ERR)
+#endif /* ifdef sun */
       {
          log_error(LOG_LEVEL_FATAL, "Can't set signal-handler for signal %d: %E", catched_signals[idx]);
       }
