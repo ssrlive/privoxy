@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.40 2006/11/05 16:46:06 hal9 Exp $
+#  $Id: default.action.master,v 1.41 2006/11/05 17:22:23 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.4 or later due to 
 #                 syntax changes.
@@ -770,8 +770,6 @@ stats.*.ihost.com
 .webtrends.com
 #MASTER# BLOCK-REFERRER: http://tomshardware.com 09/29/06
 .tacoda.
-#MASTER# BLOCK-REFERRER: http://www.mplayernetwork.com/ 09/29/06
-.ign.com
 #MASTER# BLOCK-REFERRER: http://www.torrentazos.com 10/04/06
 ad.theadhost.com
 #MASTER# BLOCK-REFERRER: http://www.stuff.co.nz 10/06/06
@@ -989,6 +987,9 @@ ads-*.quarterserver.
 searchportal.information.com/
 #MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html 10/17/06
 images.ibsys.com/
+#MASTER# BLOCK-REFERRER: http://www.rentalhouses.com/search_results.php?searchnew=1&citys_city=&citys_county=&citys_state=&ssubmit=Search&Szip=40205&keyword=&listingid=&strs_state=&strs_city=&strs_street= 11/05/06
+.lduhtrp.net/image
+
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
