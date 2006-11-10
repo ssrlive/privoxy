@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.30 2006/10/18 12:36:50 fabiankeil Exp $
+#  $Id: default.filter,v 1.31 2006/10/21 13:12:28 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -390,7 +390,7 @@ FILTER: fun Text replacements for subversive browsing fun!
 
 # SCNR
 #
-s/microsoft(?!.com)/MicroSuck/ig
+s/microsoft(?!.[^\s])/MicroSuck/ig
 
 # Buzzword Bingo (example for extended regex syntax)
 #
@@ -502,8 +502,8 @@ s|<INPUT name="\d{2,4}" type="RADIO" value="3" |$0 checked|g
 #          
 #################################################################################
 FILTER: no-ping Removes non-standard ping attributes in &lt;a> and &lt;area> tags.
-s@(<a(?:rea)?[^>]*?)ping=(['"]?)([^"'>]+)\2([>\s]?)@\
-<strong title="Privoxy removed ping target '$3'">PING!</strong>\n$1$4@ig
+s@(<a(?:rea)?[^>]*?)\sping=(['"]?)([^"'>]+)\2([>\s]?)@\
+<strong style="color:white; background-color:red;" title="Privoxy removed ping target '$3'">PING!</strong>\n$1$4@ig
 
 #################################################################################
 #
@@ -532,11 +532,13 @@ s@(<br clear=all><table)( border=0 cellpadding=9><tr><td)@$1 id="toolbar"$2@
 #
 #################################################################################
 FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitation.
-s@</head>@<style type="text/css">\n\
+s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
- \#symadbn, \#ymadbn, \#yschsec, \#yschanswr, .yschftad,\
- .yschspn, .yschspns {display: none !important;}\n\
- \#yschpri {width: 100% }\n</style>\n$0@
+ \#symadbn, \#ymadbn, .yschbox, \#yschsec, .yschhd, \#yschanswr, .yschftad,\
+ .yschspn, .yschspns, \#ygrp-sponsored-links {display: none !important;}\n\
+ \#yschpri, \#yschweb {width: 100% !important; max-width: 100% !important;}\n\
+ \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
+</style>\n$0@
 
 #################################################################################
 #
@@ -548,9 +550,19 @@ FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a w
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
  .msn_ads {display: none !important;}\n\
- \#results, .flank, .SearchSection .not\
- {width: 100% !important; min-width: 100% !important;\
- max-width: 100% !important;}\n</style>\n$0@
+ \#results, .flank, .results_area_flank, .results_area_stroke, .SearchSection .not\
+ {width: 99% /*!important*/; min-width: 99% !important;\
+ max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
+ /* Make continue links harder to miss */\n\
+ \#pagination_bottom a {padding: .3em .5em .3em .5em; border: 1px solid \#e6e6e6;}\n\
+ \#pagination_bottom li, \#pagination_bottom li .selected, li .nextPage \
+ {margin: 0 !important; cursor: auto; border: none; padding:.1em;}\n\
+ \#pagination_bottom li .prevPage {padding-right: 1.5em !important;}\n\
+ \#pagination_bottom li .selected {border: none;}\n\
+ .selected a {background-color: \#d2eaf6; border: 1px solid \#b7d8ee;}\n\
+ /* Remove "suggestions". They are next to worthless but partly overlap with the search results */\n\
+ .suggestion, \#nys_right {clear: both; display:none;}\n\
+ </style>\n$0@
 s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
 s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
@@ -643,6 +655,12 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.31  2006/10/21 13:12:28  fabiankeil
+#     Added no-ping and hide-tor-exit-notation.
+#
+#     Adjusted jumping-windows to break less.
+#     Fixes BR 1146134.
+#
 #     Revision 1.30  2006/10/18 12:36:50  fabiankeil
 #     google filter now cleans Google groups as well.
 #
