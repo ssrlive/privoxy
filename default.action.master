@@ -847,6 +847,12 @@ stats./c?rc/.*/uc.gif
 x*.alexa.com
 #MASTER# BLOCK-REFERRER: http://actorstheatre.org 11/02/06
 stats./.*\.gif\?
+#MASTER# BLOCK-REFERRER: http://mplayernetwork.com 11/07/06
+#MASTER# BLOCK-REFERRER: http://eetimes.com 09/26/06
+/event.ng/
+#MASTER# BLOCK-REFERRER: http://www.homedepot.com/ 11/08/06
+#MASTER# BLOCK-REFERRER: http://www.williams-sonoma.com/ 11/08/06
+/cm\?[tc]
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
