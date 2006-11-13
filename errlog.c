@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.44 2006/08/18 16:03:16 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.45 2006/08/21 11:15:54 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.44 2006/08/18 16:03:16 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.45  2006/08/21 11:15:54  david__schmidt
+ *    MS Visual C++ build updates
+ *
  *    Revision 1.44  2006/08/18 16:03:16  david__schmidt
  *    Tweak for OS/2 build happiness.
  *
@@ -261,9 +264,6 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.44 2006/08/18 16:03:16 david__schmi
 
 #include <errno.h>
 #include <assert.h>
-#ifdef FEATURE_PTHREAD
-#include <pthread.h>
-#endif /* def FEATURE_PTHREAD */
 
 #ifdef _WIN32
 #ifndef STRICT
@@ -526,7 +526,7 @@ void log_error(int loglevel, char *fmt, ...)
        time (&now);
 #ifdef HAVE_LOCALTIME_R
        tm_now = *localtime_r(&now, &tm_now);
-#elif OSX_DARWIN
+#elif FEATURE_PTHREAD
        pthread_mutex_lock(&localtime_mutex);
        tm_now = *localtime (&now); 
        pthread_mutex_unlock(&localtime_mutex);
@@ -791,7 +791,7 @@ void log_error(int loglevel, char *fmt, ...)
                time (&now); 
 #ifdef HAVE_GMTIME_R
                gmt = *gmtime_r(&now, &gmt);
-#elif OSX_DARWIN
+#elif FEATURE_PTHREAD
                pthread_mutex_lock(&gmtime_mutex);
                gmt = *gmtime(&now);
                pthread_mutex_unlock(&gmtime_mutex);
@@ -800,7 +800,7 @@ void log_error(int loglevel, char *fmt, ...)
 #endif
 #ifdef HAVE_LOCALTIME_R
                tm_now = localtime_r(&now, &dummy);
-#elif OSX_DARWIN
+#elif FEATURE_PTHREAD
                pthread_mutex_lock(&localtime_mutex);
                tm_now = localtime (&now); 
                pthread_mutex_unlock(&localtime_mutex);

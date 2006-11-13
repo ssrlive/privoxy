@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.16 2006/09/02 15:36:42 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.17 2006/11/06 19:58:23 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.17  2006/11/06 19:58:23  fabiankeil
+ *    Move pthread.h inclusion from jcc.c to jcc.h.
+ *    Fixes build on x86-freebsd1 (FreeBSD 5.4-RELEASE).
+ *
  *    Revision 1.16  2006/09/02 15:36:42  fabiankeil
  *    Follow the OpenBSD port's lead and protect the resolve
  *    functions on OpenBSD as well.
@@ -151,14 +155,22 @@ extern int g_terminate;
 #include <pthread.h>
 extern pthread_mutex_t log_mutex;
 extern pthread_mutex_t log_init_mutex;
-#if defined(OSX_DARWIN) || defined(__OpenBSD__)
-#ifdef OSX_DARWIN
+
+#ifndef HAVE_GMTIME_R
 extern pthread_mutex_t gmtime_mutex;
+#endif /* ndef HAVE_GMTIME_R */
+
+#ifndef HAVE_LOCALTIME_R
 extern pthread_mutex_t localtime_mutex;
-#endif /* def OSX_DARWIN */
+#endif /* ndef HAVE_GMTIME_R */
+
+#ifndef HAVE_GETHOSTBYADDR_R
 extern pthread_mutex_t gethostbyaddr_mutex;
+#endif /* ndef HAVE_GETHOSTBYADDR_R */
+
+#ifndef HAVE_GETHOSTBYNAME_R
 extern pthread_mutex_t gethostbyname_mutex;
-#endif /* defined(OSX_DARWIN) || defined(__OpenBSD__) */
+#endif /* ndef HAVE_GETHOSTBYNAME_R */
 #endif /* FEATURE_PTHREAD */
 
 /* Functions */

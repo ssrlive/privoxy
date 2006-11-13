@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.92 2006/08/17 17:09:49 fabiankeil Exp $
+dnl $Id: configure.in,v 1.93 2006/09/22 01:26:20 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.93  2006/09/22 01:26:20  hal9
+dnl Set version to 3.0.5 BETA for hopefully release this weekend.
+dnl
 dnl Revision 1.92  2006/08/17 17:09:49  fabiankeil
 dnl Added check for timegm().
 dnl
@@ -444,7 +447,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.92 $)
+AC_REVISION($Revision: 1.93 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1109,7 +1112,7 @@ AC_FUNC_SETPGRP
 AC_TYPE_SIGNAL
 dnl uncommenting does not work for swa. suse linux
 dnl AC_FUNC_STAT
-AC_CHECK_FUNCS([atexit getcwd gethostbyaddr gethostbyname inet_ntoa localtime_r memchr memmove memset random regcomp select setlocale socket strchr strdup strerror strftime strptime strstr strtoul timegm])
+AC_CHECK_FUNCS([atexit getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r inet_ntoa localtime_r memchr memmove memset random regcomp select setlocale socket strchr strdup strerror strftime strptime strstr strtoul timegm])
 
 
 dnl =================================================================
