@@ -81,7 +81,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN688"
+NAME="AEN712"
 ></A
 >4.1. How much does Privoxy slow my browsing down? This 
 has to add extra time to browsing.</H3
@@ -267,7 +267,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 >, http://example.com/show-proxy-args and http://i.j.b/,
  are no longer supported. If you still use such an old version, you should really consider
- upgrading to 3.0.5.</P
+ upgrading to 3.0.6.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -397,7 +397,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN760"
+NAME="AEN784"
 ></A
 >4.8. Can Privoxy guarantee I am anonymous?</H3
 ><P
@@ -477,7 +477,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN778"
+NAME="AEN802"
 ></A
 >4.9. A test site says I am not using a Proxy.</H3
 ><P
@@ -710,7 +710,7 @@ CLASS="APPLICATION"
 >Tor</SPAN
 >.</P
 ><P
-> Afterwards, please take the time to at least skim through the rest
+> Afterward, please take the time to at least skim through the rest
  of <SPAN
 CLASS="APPLICATION"
 >Tor's</SPAN
@@ -726,7 +726,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN835"
+NAME="AEN859"
 ></A
 >4.11. Might some things break because header information or
 content is being altered?</H3
@@ -796,7 +796,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN849"
+NAME="AEN873"
 ></A
 >4.12. Can Privoxy act as a <SPAN
 CLASS="QUOTE"
@@ -835,7 +835,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN858"
+NAME="AEN882"
 ></A
 >4.13. What about as a firewall? Can Privoxy protect me?</H3
 ><P
@@ -858,32 +858,46 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN863"
+NAME="AEN887"
 ></A
 >4.14. I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</H3
 ><P
-> It would be technically possible eliminate the banners in a way that frees
- their screen estate in many cases, by doing all banner blocking with filters,
- i.e. eliminating the whole image references from the HTML pages instead
- of letting them stay in, and blocking the resulting requests for the
- banners themselves.</P
+> It is technically possible to eliminate banners and ads in a way that frees
+ their allocated page space. This could easily be done by blocking with 
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> filters,
+ and eliminating the <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>entire</I
+></SPAN
+> image references from the
+ HTML page source. </P
 ><P
-> But this would consume considerable CPU resources, would likely destroy
- the layout of many web pages which rely on the banners consuming a certain
- amount of screen space, and would fail in other cases, where the screen space
- is reserved e.g. by tables anyway. Also, making the banners disappear without
- a visual trace complicates troubleshooting.</P
+> But, this would consume considerably more CPU resources (IOW, slow things
+ down), would likely destroy the layout of some web pages which rely on the
+ banners utilizing a certain amount of page space, and might fail in other
+ cases, where the screen space is reserved (e.g. by HTML tables for instance).
+ Also, making ads and banners disappear without any trace complicates
+ troubleshooting, and would sooner or later be problematic.</P
 ><P
-> So we won't support this in the default configuration, but you can of course
- define appropriate filters yourself.</P
+> The better alternative is to instead let them stay, and block the resulting
+ requests for the banners themselves as is now the case. This leaves either
+ empty space, or the familiar checkerboard pattern.</P
+><P
+> So the developers won't support this in the default configuration, but you
+ can of course define appropriate filters yourself to achieve this.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN868"
+NAME="AEN895"
 ></A
 >4.15. How can Privoxy filter Secure (HTTPS) URLs?</H3
 ><P
@@ -942,7 +956,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN882"
+NAME="AEN909"
 ></A
 >4.16. Privoxy runs as a <SPAN
 CLASS="QUOTE"
@@ -1050,7 +1064,24 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"middle-man"</SPAN
 > in 
- the interaction between your browser and web sites.</P
+ the interaction between your browser and web sites. See below to bypass 
+ the proxy.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="TURNOFF2"
+></A
+>4.19. How can I tell Privoxy to totally ignore certain sites?</H3
+><P
+> Bypassing a proxy, or proxying based on arbitrary criteria, is purely a browser
+ configuration issue, not a <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> issue. Modern browsers typically do have
+ settings for not proxying certain sites. Check your browser's help files.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -1059,7 +1090,7 @@ CLASS="SECT2"
 ><A
 NAME="CRUNCH"
 ></A
->4.19. My logs show Privoxy <SPAN
+>4.20. My logs show Privoxy <SPAN
 CLASS="QUOTE"
 >"crunches"</SPAN
 > 
@@ -1109,7 +1140,7 @@ CLASS="SECT2"
 ><A
 NAME="DOWNLOADS"
 ></A
->4.20. Can Privoxy effect files that I download
+>4.21. Can Privoxy effect files that I download
 from a webserver? FTP server?</H3
 ><P
 > From the webserver's perspective, there is no difference between
@@ -1248,7 +1279,7 @@ CLASS="SECT2"
 ><A
 NAME="DOWNLOADS2"
 ></A
->4.21. I just downloaded a Perl script, and Privoxy
+>4.22. I just downloaded a Perl script, and Privoxy
 altered it! Yikes, what is wrong!</H3
 ><P
 > Please read above.</P
@@ -1260,7 +1291,7 @@ CLASS="SECT2"
 ><A
 NAME="HOSTSFILE"
 ></A
->4.22. Should I continue to use a <SPAN
+>4.23. Should I continue to use a <SPAN
 CLASS="QUOTE"
 >"HOSTS"</SPAN
 > file for ad-blocking?</H3
@@ -1331,7 +1362,7 @@ CLASS="SECT2"
 ><A
 NAME="SEEALSO"
 ></A
->4.23. Where can I find more information about Privoxy
+>4.24. Where can I find more information about Privoxy
 and related issues?</H3
 ><P
 > Other references and sites of interest to <SPAN
@@ -1605,7 +1636,7 @@ CLASS="SECT2"
 ><A
 NAME="MICROSUCK"
 ></A
->4.24. I've noticed that Privoxy changes <SPAN
+>4.25. I've noticed that Privoxy changes <SPAN
 CLASS="QUOTE"
 >"Microsoft"</SPAN
 > to 

@@ -79,10 +79,10 @@ NAME="WHATSNEW"
 ></A
 >3. What's New in this Release</H1
 ><P
-> There are many improvements and new features since the last <SPAN
+> There are many improvements and new features since <SPAN
 CLASS="APPLICATION"
->Privoxy</SPAN
-> stable release:</P
+>Privoxy 3.0.3</SPAN
+>, the last stable release:</P
 ><P
 > <P
 ></P
@@ -374,29 +374,8 @@ TARGET="_top"
 ><P
 >    In addition, there are numerous bug fixes and significant enhancements,
     including error pages should no longer be cached if the problem is fixed,
-    much better DNS error handling, and various logging improvements.
-   </P
-></LI
-><LI
-><P
->    The default actions setting is now <TT
-CLASS="LITERAL"
->Cautious</TT
->. Previous
-    releases had a default setting of <TT
-CLASS="LITERAL"
->Medium</TT
->. Experienced
-    users may want to adjust this, as it is fairly conservative by <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
-    standards and past practices. See <A
-HREF="http://config.privoxy.org/edit-actions-list?f=default"
-TARGET="_top"
->    http://config.privoxy.org/edit-actions-list?f=default</A
->. New users
-    should try the default settings for a while before turning up the volume.
+    much better DNS error handling, various logging improvements, and 
+    configuration updates for better ad blocking and junk elimination.
    </P
 ></LI
 ></UL
@@ -502,8 +481,97 @@ CLASS="QUOTE"
 >"off"</SPAN
 > by default.
    There are also a number of new actions and filters you may want to
-   consider, most of which are not incorporated into the default settings as
-   yet (see above).
+   consider, most of which are not fully incorporated into the default
+   settings as yet (see above).
+  </P
+></LI
+><LI
+><P
+>    The default actions setting is now <TT
+CLASS="LITERAL"
+>Cautious</TT
+>. Previous
+    releases had a default setting of <TT
+CLASS="LITERAL"
+>Medium</TT
+>. Experienced
+    users may want to adjust this, as it is fairly conservative by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    standards and past practices. See <A
+HREF="http://config.privoxy.org/edit-actions-list?f=default"
+TARGET="_top"
+>    http://config.privoxy.org/edit-actions-list?f=default</A
+>. New users
+    should try the default settings for a while before turning up the volume.
+   </P
+></LI
+><LI
+><P
+>    The default setting has filtering turned <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>off</I
+></SPAN
+>, which
+    subsequently means that compression is <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>on</I
+></SPAN
+>. Remember
+    that filtering does not work on compressed pages, so if you use, or want to
+    use, filtering, you will need to force compression off. Example:
+   </P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  { +<A
+HREF="actions-file.html#FILTER"
+>filter</A
+>{google}  +<A
+HREF="actions-file.html#PREVENT-COMPRESSION"
+>prevent-compression</A
+> }
+   .google.</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>    Or if you use a number of filters, or filter many sites, you may just want
+    to turn off compression for all sites in
+    <TT
+CLASS="FILENAME"
+>default.action</TT
+> (or
+    <TT
+CLASS="FILENAME"
+>user.action</TT
+>). 
+   </P
+></LI
+><LI
+><P
+>   Also, <A
+HREF="actions-file.html#SESSION-COOKIES-ONLY"
+>session-cookies-only</A
+> is 
+   off by default now. If you've liked this feature in the past, you may want 
+   to turn it back on in <TT
+CLASS="FILENAME"
+>user.action</TT
+> now.
   </P
 ></LI
 ><LI
