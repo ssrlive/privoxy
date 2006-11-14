@@ -1,7 +1,8 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Since 3.0.5 ***
+*** Version 3.0.6 ***
+
 - New content filters: no-ping, google, msn, yahoo and blogspot.
 - New header filters:  x-httpd-php-to-html, html-to-xml, xml-to-html
                        and hide-tor-exit-notation.
