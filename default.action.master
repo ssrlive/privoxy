@@ -9,9 +9,9 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.41 2006/11/05 17:22:23 fabiankeil Exp $
+#  $Id: default.action.master,v 1.43 2006/11/12 15:14:02 hal9 Exp $
 #
-#  Requires    :  This version requires Privoxy v3.0.4 or later due to 
+#  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
@@ -481,7 +481,7 @@
 {{settings}}
 #############################################################################
 #MASTER# COMMENT: The minimum Privoxy version:
-for-privoxy-version=3.0.5
+for-privoxy-version=3.0.6
 
 #############################################################################
 # Aliases
