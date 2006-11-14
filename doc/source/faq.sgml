@@ -8,8 +8,8 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.5">
-<!entity p-status "BETA">
+<!entity p-version "3.0.6">
+<!entity p-status "stable">
 <!entity % p-not-stable "IGNORE">
 <!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.22 2006/10/14 20:33:10 hal9 Exp $
+ $Id: faq.sgml,v 2.23 2006/10/21 22:19:52 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.22 2006/10/14 20:33:10 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.23 2006/10/21 22:19:52 hal9 Exp $</pubdate>
 
 <!--
 
@@ -212,8 +212,17 @@ Privoxy work? </title>
   it is in a perfect position to filter outbound personal information that your
   browser is leaking, as well as inbound junk. It uses a variety of techniques to do
   this, all of which are under your complete control via the various configuration
-  files and options.
+  files and options. Being a proxy also makes it easier to share
+  configurations among multiple browsers and/or users.
  </para>
+</sect2>
+
+<sect2 renderas="sect3" id="otherstuff">
+<title>Does Privoxy do anything more than ad blocking?</title>
+ <para> 
+  Yes, ad blocking is but one possible use. There are many, many ways &my-app; 
+  can be used to sanitize and customize web browsing. 
+</para>
 </sect2>
 
 <sect2 renderas="sect3" id="newjb"><title>What is this new version of 
@@ -230,14 +239,14 @@ Privoxy work? </title>
 <title id="whyprivoxy">Why <quote>Privoxy</quote>? Why change the name from
 Junkbuster at all?</title>
 <para>
- <ulink url="http://junkbusters.com/">Junkbusters Corporation</ulink>
+ Though outdated, <ulink url="http://junkbusters.com/">Junkbusters Corporation</ulink>
  continues to offer their original version of the <application>Internet
  Junkbuster</application>, so publishing our
  <application> Junkbuster</application>-derived software under the same name
  led to confusion.
 </para>
 <para>
- There are also potential legal complications from the continued use of the 
+ There are also potential legal complications from our use of the 
  <application>Junkbuster</application> name, which is a registered trademark of 
  <ulink url="http://junkbusters.com/">Junkbusters Corporation</ulink>.
  There are, however, no objections from Junkbusters Corporation to the 
@@ -257,7 +266,6 @@ Junkbuster at all?</title>
  <quote><emphasis>private</emphasis> edition</quote> of the web.
 </para>
 </sect2>
-
 
 <sect2 renderas="sect3" id="differs"><title>How does Privoxy differ
 from the old Junkbuster?</title> 
@@ -339,32 +347,42 @@ This does not sound very scientific.</title>
 
 </sect2>
 
-
 <sect2 renderas="sect3">
 <title id="configornot">Will I have to configure Privoxy
  before I can use it?</title>
 <para>
  No, not really. The default installation should give you a good starting
- point, and block <emphasis>most</emphasis> unwanted content.
+ point, and block <emphasis>most</emphasis> ads and unwanted content. Many of
+ the more advanced features are off by default, and would require you to 
+ activate them. 
 </para>
 <para>
- But you will certainly run into situations where there are false positives,
+ You do have to set up your browser to use
+ <application>Privoxy</application> (see the <link
+ linkend="firststep">Installation section below</link>). 
+</para>
+<para>
+ And you will certainly run into situations where there are false positives,
  or ads not being blocked that you may not want to see. In these cases, you
  would certainly benefit by customizing <application>Privoxy's</application>
  configuration to more closely match your individual situation. And we would
  encourage you to do this. This is where the real power of
  <application>Privoxy</application> lies!
 </para>
-<para>
- You will have to tell your browser about <application>Privoxy</application> 
- (see the Installation section below).
-</para>
 
 </sect2>
 
+<sect2 renderas="sect3" id="lan">
+<title>Can Privoxy run as a server on a network?</title>
+ <para> 
+  Yes, &my-app; runs as a server already, and can easily be configured to
+  <quote>serve</quote> more than one client. See <link linkend="lanconfig">
+  How can I set up Privoxy to act as a proxy for my LAN</link> below.
+</para>
+</sect2>
+
 <sect2 renderas="sect3" id="browsers2"><title>My browser does the same things as
-Privoxy. Why should I use
-Privoxy at all?</title>
+Privoxy. Why should I use Privoxy at all?</title>
  <para>
   Modern browsers do indeed have <emphasis>some</emphasis> of the same
   functionality as <application>Privoxy</application>. Maybe this is
@@ -373,9 +391,10 @@ Privoxy at all?</title>
  </para>
  <para>
   In addition, a proxy is good choice if you use multiple browsers, or 
-  have a LAN with multiple computers. This way all the configuration 
-  is in one place, and you don't have to maintain a similar configuration 
-  for possibly many browsers.
+  have a LAN with multiple computers since &my-app; can run as a server  
+  application. This way all the configuration is in one place, and you don't
+  have to maintain a similar configuration for possibly many browsers or
+  users.
  </para>
 </sect2>
 
@@ -416,9 +435,9 @@ warranty? Registration?</title>
 <title>Can Privoxy remove spyware? Adware? Viruses?</title>
 <para>
  No. &my-app; cannot remove anything. It is not a removal tool. It is a
- preventative. &my-app; can help prevent contact from sites 
- that use such tactics with approriate configuration rules, and thus could
- conceivably prevent contamination from such sites.
+ preventative. &my-app; can help prevent contact from sites that use such
+ tactics with appropriate configuration rules, and thus could conceivably
+ prevent contamination from such sites.
 </para>
 </sect2>
 
@@ -456,11 +475,6 @@ warranty? Registration?</title>
    mailing list</ulink>. Then, please read the <ulink
    url="../developer-manual/index.html">Developer's Manual</ulink>, at least
    the pertinent sections.
-</para>
-<para>
- Once we have added you to the team, you'll have access to the <ulink
- url="http://sourceforge.net/cvs/?group_id=11118">CVS repository</ulink>, and
- together we'll find a suitable task for you.
 </para>
 </sect3>
 
@@ -554,15 +568,16 @@ Include supported.sgml here:
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="firststep">I just installed Privoxy. Is there anything 
+<sect2 renderas="sect3" id="firststep">
+<title>I just installed Privoxy. Is there anything 
 special I have to do now?</title>
 
 <para>
  All browsers must be told to use <application>Privoxy</application> 
  as a proxy by specifying the correct proxy address and port number 
- in the appropriate configuration area for the browser. See below.
- You should also flush your browser's memory and disk cache to get rid of any
+ in the appropriate configuration area for the browser. See 
+ <ulink url="../user-manual/startup.html">the User Manual for more
+ details</ulink>. You should also flush your browser's memory and disk cache to get rid of any
  cached junk items, and remove any stored 
  <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>.
 
@@ -594,9 +609,10 @@ special I have to do now?</title>
   <application>Privoxy</application> can also be used to proxy for 
   a Local Area Network. In this case, your would enter either the IP 
   address of the LAN host where <application>Privoxy</application> 
-  is running, or the equivalent hostname. Port assignment would be 
-  same as above. Note that <application>Privoxy</application> doesn't
-  listen on any LAN interfaces by default.
+  is running, or the equivalent hostname, e.g. <literal>192.168.1.1</literal>.
+  Port assignment would be same as above. Note that
+  <application>Privoxy</application> doesn't listen on any LAN interfaces by
+  default.
  </para>
  <para>
   <application>Privoxy</application> does not currently handle
@@ -822,7 +838,7 @@ the differences?</title>
 <sect2 renderas="sect3" id="yahoo"><title>How can I make my Yahoo/Hotmail/Gmail account work?</title>
  <para>
   The default configuration shouldn't impact the usability of any of these services.
-  It will, however, make all <ulink 
+  It may, however, make all <ulink 
  url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink> 
   temporary, so that your browser will forget your
   login credentials in between browser sessions. If you would like not to have to log
@@ -848,6 +864,7 @@ the differences?</title>
   <screen># Gmail is a _fragile_ site:
 #
 { <literal>fragile</literal> }
+ # Gmail is ...
  mail.google.com</screen>
  </para>
  <para>
@@ -964,8 +981,8 @@ with a browser? Does that not raise security issues?</title>
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="lanconfig">How can I set up Privoxy to act as a proxy for my 
+<sect2 renderas="sect3" id="lanconfig">
+<title>How can I set up Privoxy to act as a proxy for my 
  LAN?</title>
 <para>
  By default, <application>Privoxy</application> only responds to requests 
@@ -1053,7 +1070,7 @@ with a browser? Does that not raise security issues?</title>
  Remember that <link linkend="whatsanad">telling which image is an ad and which
  isn't</link>, is an educated guess. While we hope that the standard configuration
  is rather smart, it will make occasional mistakes. The checkerboard image is visually
- decent, but it shows you that and where images were blocked, which can be very
+ decent, and it shows you where images have been blocked, which can be very
  helpful in case some navigation aid or otherwise innocent image was
  erroneously blocked. It is recommended for new users so they can 
  <quote>see</quote> what is happening. Some people might also enjoy seeing how
@@ -1345,8 +1362,7 @@ and thus avoid individual browser configuration?</title>
  <screen>
  # Unblock everybody, everywhere
  { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
- / # UN-Block *all* URLs
- </screen>
+ / # UN-Block *all* URLs</screen>
 </para>
 <para> 
  Or even a more comprehensive reversing of various ad related actions:
@@ -1359,8 +1375,7 @@ and thus avoid individual browser configuration?</title>
   <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-LINK">-filter{banners-by-link}</ulink> \
   <literal>allow-popups</literal> \
  }
- / # UN-Block *all* URLs and allow ads
- </screen>
+ / # UN-Block *all* URLs and allow ads</screen>
 </para>
 <para>
  This last <quote>action</quote> in this compound statement,
@@ -1397,8 +1412,7 @@ the <emphasis>BLOCKED</emphasis> page?</title>
 </para>
 <para>
  <screen>
- ./configure  --disable-toggle  --disable-editor  --disable-force
- </screen>
+ ./configure  --disable-toggle  --disable-editor  --disable-force</screen>
 </para>
 <para>
  This will create an executable with hard-coded security features so that
@@ -1759,7 +1773,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  Faq 4.2</ulink> to learn how to verify that you are really using <application>Tor</application>.
 </para>
 <para>
- Afterwards, please take the time to at least skim through the rest
+ Afterward, please take the time to at least skim through the rest
  of <application>Tor's</application> documentation. Make sure you understand
  what <application>Tor</application> does, why it is no replacement for
  application level security, and why you shouldn't use it for unencrypted logins.
@@ -2167,8 +2181,7 @@ still getting through. How?</title>
  If the ad had been displayed before you added its URL, it will probably be
  held in the browser's cache for some time, so it will be displayed without
  the need for any request to the server, and <application>Privoxy</application>
- will not be in the picture. The best thing to do is try flushing the browser's
- caches. And then try again.
+ will not be involved. Flush the browser's caches, and then try again.
 </para>
 
 <para>
@@ -2182,6 +2195,63 @@ still getting through. How?</title>
  servers than the main site itself. If you right-click on the ad, you should
  be able to get all the relevant information you need. Alternately, you can 
  find the correct URL by looking at <application>Privoxy's</application> logs.
+</para>
+<para>
+ Below is a slightly modified real-life log snippet that originates with one 
+ requested URL: <literal>www.example.com</literal> (name of site was changed
+ for this example, the number of requests is real). You can see in this the
+ complexity of what goes into making up this one <quote>page</quote>. There
+ are eight different domains involved here, with thirty two separate URLs
+ requested in all, making up all manner of images, Shockwave Flash,
+ JavaScript, CSS stylesheets, scripts, and other related content. Some of this
+ content is obviously <quote>good</quote> or <quote>bad</quote>, but not all.
+ Many of the more questionable looking requests, are going to outside domains
+ that seem to be identifying themselves with suspicious looking names, making
+ our job a little easier. &my-app; has <quote>crunched</quote> (meaning caught 
+ and BLOCKED) quite a few items in this example, but perhaps missed a few as well. 
+</para>
+<para>
+<screen>
+<![CDATA[
+Request: www.example.com/
+Request: www.example.com/favicon.ico
+Request: img.example.com/main.css
+Request: img.example.com/sr.js
+Request: example.betamarker.com/example.html
+Request: www.lik-sang.com/Banners/bestsellers/skyscraper.php?likref=BSellers
+Request: img.example.com/pb.png
+Request: www.google-analytics.com/urchin.js crunch!
+Request: www.advertising-department.com/ats/switch.ps.php?26856 crunch!
+Request: img.example.com/p.gif
+Request: www.popuptraffic.com/assign.php?l=example&mode=behind crunch!
+Request: www.popuptraffic.com/scripts/popup.php?hid=5c3cf&tmpl=PBa.tmpl crunch!
+Request: www.popuptraffic.com/assign.php?l=example crunch!
+Request: www.lik-sang.com/Banners/best_sellers/best_sellers.css
+Request: www.adtrak.net/adx.js crunch!
+Request: img.example.com/hbg.gif
+Request: img.example.com/example.jpg
+Request: img.example.com/mt.png
+Request: img.example.com/mm.png
+Request: img.example.com/mb.png
+Request: www.popuptraffic.com/scripts/popup.php?hid=a71b91fa5&tmpl=Ua.tmp crunch!
+Request: www.example.com/tracker.js
+Request: www.lik-sang.com/Banners/best_sellers/lsi_head.gif
+Request: www.adtrak.net/adjs.php?n=020548130&what=zone:61 crunch!
+Request: www.adtrak.net/adjs.php?n=463594413&what=zone:58&source=Ua crunch!
+Request: www.lik-sang.com/Banners/best_sellers/bottomani.swf
+Request: mmm.elitemediagroup.net/install.php?allowpop=no&popupmincook=0&allowsp2=1 crunch!
+Request: www.example.com/tracker.js?screen=1400x1050&win=962x693
+Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=61 crunch!
+Request: 66.70.21.80/scripts/click.php?hid=5c3cf599a9efd0320d26&si
+Request: 66.70.21.80/img/pixel.gif
+Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=58&source=Ua&block=86400 crunch!
+Request: 66.70.21.80/scripts/click.php?hid=a71b9f6504b0c5681fa5&si=Ua
+]]>
+</screen>
+</para>
+<para>
+ Despite 12 out of 32 requests being blocked, the page looked, and seemed to
+ behave perfectly <quote>normal</quote> (minus some ads, of course).
 </para>
 
 </sect2>
@@ -2200,14 +2270,20 @@ What can I do?</title>
 </para>
 
 <para>
- If still a problem, go to <ulink
+ If the problem went away, we know we have a configuration related problem.
+ Now go to <ulink
  url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>
- and paste the full URL of the page in question into the prompt. See which actions
- are being applied to the URL, and which matches in which actions files are
- responsible for that. Now, armed with this information, go to <ulink
+ and paste the full URL of the page in question into the prompt. See which
+ actions are being applied to the URL, and which matches in which actions
+ files are responsible for that. It might be helpful also to look at your logs
+ for this site too, to see what else might be happening. Many sites are
+ complex and require a number of related pages to help present their content.
+ Look at what else might be used by the page in question, and what of that
+ might be <emphasis>required</emphasis>.
+ Now, armed with this information, go to
+ <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
- and select the appropriate actions files for editing.
-</para>
+ and select the appropriate actions files for editing. </para>
 <para>
  You can now either look for a section which disables the actions that
  you suspect to cause the problem and add a pattern for your site there,
@@ -2233,6 +2309,10 @@ What can I do?</title>
  There is also an <ulink
  url="../user-manual/actions-file.html#ACT-EXAMPLES">actions tutorial</ulink>
  with general configuration information and examples.
+</para>
+<para>
+ As a last resort, you can always see if your browser has a setting that will 
+ bypass the proxy setting for selective sites. Modern browsers can do this.
 </para>
 
 </sect2>
@@ -2419,7 +2499,7 @@ Why?</title>
 <para>
  This can be caused by a problem with the local <filename>HOSTS</filename>
  file. If this file has been changed from the original, try reverting it to
- see if that helps. Make sure what ever name(s) are used for the local system,
+ see if that helps. Make sure whatever name(s) are used for the local system,
  that they resolve both ways.
 </para>
 </sect2>
@@ -2668,6 +2748,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.23  2006/10/21 22:19:52  hal9
+Two new FAQs, a rewrite or two, and some touch ups.
+
 Revision 2.22  2006/10/14 20:33:10  hal9
 Three new FAQ's re: templates and blocking, and various minor touch-ups/improvements.
 

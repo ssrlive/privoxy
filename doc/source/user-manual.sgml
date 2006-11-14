@@ -12,10 +12,10 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.6">
-<!entity p-status "UNRELEASED">
+<!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.25 2006/10/18 10:50:33 hal9 Exp $
+ $Id: user-manual.sgml,v 2.26 2006/10/24 11:16:44 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.25 2006/10/18 10:50:33 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.26 2006/10/24 11:16:44 hal9 Exp $</pubdate>
 
 <!--
 
@@ -178,7 +178,7 @@ How to install the binary packages depends on your operating system:
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-rpm"><title>Red Hat, SuSE and Conectiva RPMs</title>
+<sect3 id="installation-pack-rpm"><title>Red Hat and Fedora RPMs</title>
 
 <para>
  RPMs can be installed with <literal>rpm -Uvh privoxy-&p-version;-1.rpm</literal>,
@@ -363,7 +363,8 @@ How to install the binary packages depends on your operating system:
 
 <para>
  The most convenient way to obtain the <application>Privoxy</application> sources
- is to download the source tarball from our <ulink url="http://sf.net/projects/ijbswa/">project
+ is to download the source tarball from our 
+ <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118&amp;package_id=10571">project download
  page</ulink>.
 </para>
 
@@ -422,7 +423,7 @@ How to install the binary packages depends on your operating system:
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- There are many improvements and new features since the last <application>Privoxy</application> stable release:
+ There are many improvements and new features since <application>Privoxy 3.0.3</application>, the last stable release:
 </para>
 
 <para>
@@ -576,39 +577,11 @@ How to install the binary packages depends on your operating system:
    <para>
     In addition, there are numerous bug fixes and significant enhancements,
     including error pages should no longer be cached if the problem is fixed,
-    much better DNS error handling, and various logging improvements.
+    much better DNS error handling, various logging improvements, and 
+    configuration updates for better ad blocking and junk elimination.
    </para>
   </listitem>
 
-  <listitem>
-   <para>
-    The default actions setting is now <literal>Cautious</literal>. Previous
-    releases had a default setting of <literal>Medium</literal>. Experienced
-    users may want to adjust this, as it is fairly conservative by &my-app;
-    standards and past practices. See <ulink
-    url="http://config.privoxy.org/edit-actions-list?f=default">
-    http://config.privoxy.org/edit-actions-list?f=default</ulink>. New users
-    should try the default settings for a while before turning up the volume.
-   </para>
-   <para>
-    The default setting has filtering turned <emphasis>off</emphasis>, which
-    subsequently means that compression is <emphasis>on</emphasis>. Remember
-    that filtering does not work on compressed pages, so if you use, or want to
-    use, filtering, you will need to force compression off. Example:
-   </para>
-   <para>
- <screen>
-  { +<link linkend="filter">filter</link>{google}  +<link linkend="prevent-compression">prevent-compression</link> }
-   .google.</screen>
-   </para>
-   <para>
-    Or if you use a number of filters, or filter many sites, you may just want
-    to turn off compression for all sites in
-    <filename>default.action</filename> (or
-    <filename>user.action</filename>). 
-   </para>
-
-  </listitem>
 
  </itemizedlist>
 </para>
@@ -673,11 +646,53 @@ How to install the binary packages depends on your operating system:
    default. This is primarily a matter of emphasis, but some features 
    you may have been used to, may now be <quote>off</quote> by default.
    There are also a number of new actions and filters you may want to
-   consider, most of which are not incorporated into the default settings as
-   yet (see above).
+   consider, most of which are not fully incorporated into the default
+   settings as yet (see above).
   </para>
  </listitem>
- 
+
+  <listitem>
+   <para>
+    The default actions setting is now <literal>Cautious</literal>. Previous
+    releases had a default setting of <literal>Medium</literal>. Experienced
+    users may want to adjust this, as it is fairly conservative by &my-app;
+    standards and past practices. See <ulink
+    url="http://config.privoxy.org/edit-actions-list?f=default">
+    http://config.privoxy.org/edit-actions-list?f=default</ulink>. New users
+    should try the default settings for a while before turning up the volume.
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+    The default setting has filtering turned <emphasis>off</emphasis>, which
+    subsequently means that compression is <emphasis>on</emphasis>. Remember
+    that filtering does not work on compressed pages, so if you use, or want to
+    use, filtering, you will need to force compression off. Example:
+   </para>
+   <para>
+ <screen>
+  { +<link linkend="filter">filter</link>{google}  +<link linkend="prevent-compression">prevent-compression</link> }
+   .google.</screen>
+   </para>
+   <para>
+    Or if you use a number of filters, or filter many sites, you may just want
+    to turn off compression for all sites in
+    <filename>default.action</filename> (or
+    <filename>user.action</filename>). 
+   </para>
+
+  </listitem>
+
+  <listitem>
+  <para>
+   Also, <link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> is 
+   off by default now. If you've liked this feature in the past, you may want 
+   to turn it back on in <filename>user.action</filename> now.
+  </para>
+  </listitem>
+
+
   <listitem>
   <para>
 <!-- I think it is best to keep this somewhat vague, in case  -->
@@ -686,6 +701,7 @@ How to install the binary packages depends on your operating system:
    <application>Privoxy</application> after installation.
   </para>
  </listitem> 
+
 
  </itemizedlist>
 </para>
@@ -822,7 +838,8 @@ How to install the binary packages depends on your operating system:
 <para>
  First a bit of a warning ... blocking ads is much like blocking SPAM: the
  more aggressive you are about it, the more likely you are to block 
- things that were not intended. So there is a trade off here. If you want
+ things that were not intended. And the more likely that some things 
+ may not work as intended. So there is a trade off here. If you want
  extreme ad free browsing, be prepared to deal with more
  <quote>problem</quote> sites, and to spend more time adjusting the
  configuration to solve these unintended consequences. In short, there is 
@@ -835,7 +852,7 @@ How to install the binary packages depends on your operating system:
  Secondly, a brief explanation of <application>Privoxy's </application>
  <quote>actions</quote>. <quote>Actions</quote> in this context, are 
  the directives we use to tell <application>Privoxy</application> to perform
- some task relating to HTTP transactions (i.e. web browsing). We tell
+ some task relating to WWW transactions (i.e. web browsing). We tell
  <application>Privoxy</application> to take some <quote>action</quote>. Each
  action has a unique name and function. While there are many potential
  <application>actions</application> in <application>Privoxy's</application>
@@ -860,13 +877,17 @@ How to install the binary packages depends on your operating system:
  original page's HTML content. An ad image for instance, is just an URL
  embedded in the page somewhere. The image itself may be on the same server,
  or a server somewhere else on the Internet. Complex web pages will have many
- such embedded URLs.
+ such embedded URLs. &my-app; can deal with each URL individually, so, for
+ instance, the main page text is not touched, but images from such-and-such
+ server are blocked.
 </para>
 
 <para>
- The actions we need to know about for ad blocking are:  <literal><link
+ The most important actions for basic ad blocking are:  <literal><link
  linkend="block">block</link></literal>, <literal><link
- linkend="handle-as-image">handle-as-image</link></literal>, and
+ linkend="handle-as-image">handle-as-image</link></literal>, 
+ <literal><link
+ linkend="handle-as-empty-document">handle-as-empty-document</link></literal>,and
  <literal><link linkend="set-image-blocker">set-image-blocker</link></literal>:
 </para>
 
@@ -875,12 +896,14 @@ How to install the binary packages depends on your operating system:
   
  <listitem>
   <para>
-   <literal><link linkend="block">block</link></literal> - this action stops
-   any contact between your browser and any URL patterns that match this
-   action's configuration. It can be used for blocking ads, but also anything
-   that is determined to be unwanted. By itself, it simply stops any
-   communication with the remote server and sends <application>Privoxy</application>'s
-   own built-in BLOCKED page instead to let you now what has happened.
+   <literal><link linkend="block">block</link></literal> - this is perhaps 
+   the single most used action, and is particularly important for ad blocking.
+   This action stops any contact between your browser and any URL patterns
+   that match this action's configuration. It can be used for blocking ads,
+   but also anything that is determined to be unwanted. By itself, it simply
+   stops any communication with the remote server and sends
+   <application>Privoxy</application>'s own built-in BLOCKED page instead to
+   let you now what has happened (with some exceptions, see below).
   </para>
  </listitem> 
 
@@ -897,6 +920,15 @@ How to install the binary packages depends on your operating system:
    a <quote>broken image</quote> icon). There are some limitations to this
    though. For instance, you can't just brute-force an image substitution for
    an entire HTML page in most situations.
+  </para>
+ </listitem> 
+
+ <listitem>
+  <para>
+   <literal><link linkend="handle-as-empty-document">handle-as-empty-document</link></literal> - 
+   sends an empty document instead of <application>Privoxy's</application> 
+   normal BLOCKED HTML page. This is useful for file types that are neither 
+   HTML nor images, such as blocking JavaScript files.
   </para>
  </listitem> 
 
@@ -1040,6 +1072,13 @@ How to install the binary packages depends on your operating system:
  to now go to the <link linkend="act-examples">Actions Files Tutorial</link>.
  The ideas explained therein also apply to the web-based editor.
 </para>
+<para>
+ There are also various 
+ <link linkend="filter">filters</link> that can be used for ad blocking 
+ (filters are a special subset of actions). These 
+ fall into the <quote>advanced</quote> usage category, and are explained in
+ depth in later sections. 
+</para>
 
 </sect2>
 
@@ -1082,11 +1121,20 @@ How to install the binary packages depends on your operating system:
  
 
 <para> 
- With <application>Firefox</application>, this can be set under:
+ With <application>Firefox</application>, this is typically set under:
 </para>
  
 <literallayout>
  <guibutton>Tools</guibutton> -> <guibutton>Options</guibutton> -> <guibutton>General</guibutton> -> <guibutton>Connection Settings</guibutton> -> <guibutton>Manual Proxy Configuration</guibutton>
+
+</literallayout>
+
+<para> 
+ Or optionally on some platforms:
+</para>
+ 
+<literallayout>
+ <guibutton>Edit</guibutton> -> <guibutton>Preferences</guibutton> -> <guibutton>General</guibutton> -> <guibutton>Connection Settings</guibutton> -> <guibutton>Manual Proxy Configuration</guibutton>
 
 </literallayout>
 
@@ -1154,7 +1202,7 @@ How to install the binary packages depends on your operating system:
 </para>
 
 <sect2 id="start-redhat">
-<title>Red Hat, Fedora and Conectiva</title>
+<title>Red Hat and Fedora</title>
 <para>
  A default Red Hat installation may not start &my-app; upon boot. It will use
  the file <filename>/etc/privoxy/config</filename> as its main configuration
@@ -1190,6 +1238,9 @@ How to install the binary packages depends on your operating system:
 </para>
 </sect2>
 
+<!--
+ omitting 10/31/06 HB
+
 <sect2 id="start-suse">
 <title>SuSE</title>
 <para>
@@ -1203,7 +1254,7 @@ your PC.
 </screen>
 </para>
 </sect2>
-
+-->
 <sect2 id="start-windows">
 <title>Windows</title>
 <para>
@@ -1631,7 +1682,7 @@ for details.
     <filename>default.action</filename> (which you will most probably want
     to define sooner or later) are probably best applied in
     <filename>user.action</filename>, where you can preserve them across
-    upgrades. <filename>standard.action</filename> is for
+    upgrades. <filename>standard.action</filename> is only for
     <application>Privoxy's</application> internal use.
    </para>
    <para>    
@@ -1773,7 +1824,7 @@ for details.
   </listitem> 
    <listitem>
     <para>
-     <filename>standard.action</filename> - is used by the web based editor
+     <filename>standard.action</filename> - is used only by the web based editor
      at <ulink url="http://config.privoxy.org/edit-actions-list?f=default">
      http://config.privoxy.org/edit-actions-list?f=default</ulink>, 
      to set various pre-defined sets of rules for the default actions section
@@ -2255,7 +2306,7 @@ for details.
 </variablelist>
 
 <para>
- While flexibile, this is not the sophistication of full regular expression based syntax.
+ While flexible, this is not the sophistication of full regular expression based syntax.
 </para>
 
 </sect3>
@@ -2766,7 +2817,7 @@ new action
   <listitem>
     <para>
      <screen># Check if www.example.net/ really uses valid XHTML
-{+content-type-overwrite {application/xml}}
+{ +content-type-overwrite{application/xml} }
 www.example.net/
 
 # but leave the content type unmodified if the URL looks like a style sheet
@@ -2856,7 +2907,7 @@ new action
   <listitem>
     <para>
      <screen># Block the non-existent "Privacy-Violation:" client header 
-{+crunch-client-header {Privacy-Violation:}}
+{ +crunch-client-header{Privacy-Violation:} }
 /
     </screen>
    </para>
@@ -2938,9 +2989,9 @@ new action
   <listitem>
     <para>
      <screen># Let the browser revalidate cached documents without being tracked across sessions
-{+hide-if-modified-since {-60} \
-+overwrite-last-modified {randomize} \
-+crunch-if-none-match}
+{ +hide-if-modified-since{-60} \
+ +overwrite-last-modified{randomize} \
+ +crunch-if-none-match}
 /   </screen>
    </para>
   </listitem>
@@ -3092,7 +3143,7 @@ new action
   <listitem>
     <para>
      <screen># Crunch server headers that try to prevent caching
-{+crunch-server-header {no-cache}}
+{ +crunch-server-header{no-cache} }
 /   </screen>
    </para>
   </listitem>
@@ -3963,7 +4014,7 @@ new action
    <para>
     This action alone doesn't do anything noticeable. It just marks URLs.
     If the <literal><link linkend="block">block</link></literal> action <emphasis>also applies</emphasis>,
-    the presence or absence of this mark decides whether an HTML <quote>blocked</quote>
+    the presence or absence of this mark decides whether an HTML <quote>BLOCKED</quote>
     page, or an empty document will be sent to the client as a substitute for the blocked content.
     The <emphasis>empty</emphasis> document isn't literally empty, but actually contains a single space.
    </para>
@@ -3994,6 +4045,8 @@ new action
     Some browsers complain about syntax errors if JavaScript documents
     are blocked with <application>Privoxy's</application>
     default HTML page; this option can be used to silence them.
+    And of course this action can also be used to eliminate the &my-app;
+    BLOCKED message in frames.
    </para>
    <para>
     The content type for the empty document can be specified with
@@ -4270,10 +4323,10 @@ new action
   <listitem>
     <para>
      <screen># Disarm the download link in Sourceforge's patch tracker
-{-filter\
-+content-type-overwrite {text/plain}\
-+hide-content-disposition {block} }
-.sourceforge.net/tracker/download.php</screen>
+{ -filter \
+ +content-type-overwrite{text/plain}\
+ +hide-content-disposition{block} }
+ .sourceforge.net/tracker/download.php</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -4358,9 +4411,9 @@ new action
   <listitem>
     <para>
      <screen># Let the browser revalidate without being tracked across sessions
-{+hide-if-modified-since {-60}\
-+overwrite-last-modified {randomize}\
-+crunch-if-none-match}
+{ +hide-if-modified-since{-60} \
+ +overwrite-last-modified{randomize} \
+ +crunch-if-none-match}
 /</screen>
    </para>
   </listitem>
@@ -5131,9 +5184,9 @@ new action
   <listitem>
     <para>
      <screen># Let the browser revalidate without being tracked across sessions
-{+hide-if-modified-since {-60}\
-+overwrite-last-modified {randomize}\
-+crunch-if-none-match}
+{ +hide-if-modified-since{-60} \
+ +overwrite-last-modified{randomize} \
+ +crunch-if-none-match}
 /</screen>
    </para>
   </listitem>
@@ -5767,7 +5820,7 @@ new action
 
  # These shops require pop-ups:
  #
- {-kill-popups -filter{all-popups} -filter{unsolicted-popups}}
+ {-kill-popups -filter{all-popups} -filter{unsolicited-popups}}
   .dabs.com
   .overclockers.co.uk</screen>
 </para>
@@ -7828,8 +7881,9 @@ Requests</title>
 <sect2 id="chain">
 <title>Chain of Events</title>
 <para>
- Let's take a quick look at the basic sequence of events when a web page is 
- requested by your browser and <application>Privoxy</application> is on duty:
+ Let's take a quick look at how some of <application>Privoxy's</application> 
+ core features are triggered, and the ensuing sequence of events when a web
+ page is requested by your browser:
 </para>
 
 <para>
@@ -7855,10 +7909,13 @@ Requests</title>
    linkend="BLOCK"><quote>+block</quote></link> patterns. If
    so, the URL is then blocked, and the remote web server will not be contacted.
    <link linkend="HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></link> 
-   is then checked and if it does not match, an 
-   HTML <quote>BLOCKED</quote> page is sent back. Otherwise, if it does match,
-   an image is returned. The type of image depends on the setting of <link
-   linkend="SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></link>
+   and 
+   <link linkend="HANDLE-AS-EMPTY-DOCUMENT"><quote>+handle-as-empty-document</quote></link>
+   are then checked, and if there is no match, an 
+   HTML <quote>BLOCKED</quote> page is sent back to the browser. Otherwise, if
+   it does match, an image is returned for the former, and an empty text
+   document for the latter. The type of image would depend on the setting of
+   <link linkend="SET-IMAGE-BLOCKER"><quote>+set-image-blocker</quote></link>
    (blank, checkerboard pattern, or an HTTP redirect to an image elsewhere).
   </para>
  </listitem> 
@@ -7886,8 +7943,8 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   Now the web server starts sending its response back (i.e. typically a web page and related 
-   data).
+   Now the web server starts sending its response back (i.e. typically a web
+   page).
   </para>
  </listitem> 
  <listitem>
@@ -7910,7 +7967,7 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   If a <link linkend="FILTER"><quote>+filter</quote></link>
+   If any <link linkend="FILTER"><quote>+filter</quote></link> action
    or <link
    linkend="DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></link>
    action applies (and the document type fits the action), the rest of the page is
@@ -7923,7 +7980,7 @@ Requests</title>
    <application>Privoxy</application> back to your browser. 
   </para>
   <para>
-   If neither <link linkend="FILTER"><quote>+filter</quote></link>
+   If neither a <link linkend="FILTER"><quote>+filter</quote></link> action
    or <link
    linkend="DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></link>
    matches, then <application>Privoxy</application> passes the raw data through 
@@ -7935,13 +7992,21 @@ Requests</title>
    As the browser receives the now (possibly filtered) page content, it 
    reads and then requests any URLs that may be embedded within the page
    source, e.g. ad images, stylesheets, JavaScript, other HTML documents (e.g.
-   frames), sounds, etc. For each of these objects, the browser issues a new
-   request. And each such request is in turn processed as above. Note that a
-   complex web page may have many such embedded URLs.
+   frames), sounds, etc. For each of these objects, the browser issues a
+   separate request (this is easily viewable in <application>Privoxy's</application>
+   logs). And each such request is in turn processed just as above. Note that a
+   complex web page will have many, many such embedded URLs. If these 
+   secondary requests are to a different server, then quite possibly a very 
+   differing set of actions is triggered.
   </para>
  </listitem> 
  
  </itemizedlist>
+</para>
+<para>
+ NOTE: This is somewhat of a simplistic overview of what happens with each URL
+ request. For the sake of brevity and simplicity, we have focused on 
+ <application>Privoxy's</application> core features only.
 </para>
 
 </sect2>
@@ -8437,7 +8502,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  put in <filename>user.action</filename>, for local site
  exceptions. Note that when a simple domain pattern is used by itself (without
  the subsequent path portion), all sub-pages within that domain are included 
- automatcially in the scope of the action.
+ automatically in the scope of the action.
 </para>
 
 <para>
@@ -8501,6 +8566,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.26  2006/10/24 11:16:44  hal9
+ Add new filters.
+
  Revision 2.25  2006/10/18 10:50:33  hal9
  Add note that since filters are off in Cautious, compression is ON. Turn off
  compression to make filters work on all sites.
