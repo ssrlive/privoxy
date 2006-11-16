@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.31 2006/10/21 13:12:28 fabiankeil Exp $
+#  $Id: default.filter,v 1.32 2006/11/10 18:04:04 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -282,8 +282,7 @@ s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:adclick|atwola\.com/(?:link|redir)|double
 #################################################################################
 FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking)
 
-s@<img[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*?>@<!--\
- Filtered by Privoxy's webbugs filter: $0 -->@siUg
+s@<img[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*?>@@siUg
 
 
 #################################################################################
@@ -655,6 +654,19 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.32  2006/11/10 18:04:04  fabiankeil
+#     Have no-ping print the ping warning in red.
+#
+#     Modified yahoo to keep in sync with recent
+#     CSS changes and to suppress a useless horizontal
+#     scrollbar.
+#
+#     msn now makes sure that the continue-link boxes
+#     act as links (the original CSS just changes the cursor).
+#
+#     Changed fun filter regex to leave microsoft links alone.
+#     Fixes BR 1019996.
+#
 #     Revision 1.31  2006/10/21 13:12:28  fabiankeil
 #     Added no-ping and hide-tor-exit-notation.
 #
