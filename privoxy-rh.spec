@@ -1,6 +1,6 @@
-# $Id: privoxy-rh.spec,v 1.49 2006/09/22 01:02:08 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.50 2006/09/24 01:19:03 hal9 Exp $
 #
-# Written by and Copyright (C) 2001 the SourceForge
+# Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -37,7 +37,7 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated acordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 3.0.5
+Version: 3.0.6
 Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
@@ -69,7 +69,7 @@ Privoxy is based on the Internet Junkbuster.
 # We check to see if versions match
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=5
+VERSION_POINT=6
 
 # find CVS files and remove it.
 find -name CVS | xargs rm -rf
@@ -756,6 +756,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.50  2006/09/24 01:19:03  hal9
+# Add changes for user-manual directive by nfopd submitted via SF.
+#
 # Revision 1.49  2006/09/22 01:02:08  hal9
 # Fix user.filter installation and CVS files cruft per support request.
 #
