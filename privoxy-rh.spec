@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.50 2006/09/24 01:19:03 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.51 2006/11/18 14:37:12 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -323,6 +323,9 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sat Oct 18 2006 Hal Burgiss <hal@foobox.net>
+- Bump version to 3.0.6
+
 * Sat Sep 23 2006 Jochen Schlick <j.schlick_at_decagon_de> 3.0.5-1
 - let user-manual point to local documentation
 
@@ -756,6 +759,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.51  2006/11/18 14:37:12  fabiankeil
+# Bump version to 3.0.6.
+#
 # Revision 1.50  2006/09/24 01:19:03  hal9
 # Add changes for user-manual directive by nfopd submitted via SF.
 #
