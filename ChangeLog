@@ -1,6 +1,9 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Since 3.0.6 ***
+
+
 *** Version 3.0.6 ***
 
 - New content filters: no-ping, google, msn, yahoo and blogspot.
