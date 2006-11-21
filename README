@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/doc/source/readme.sgml,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/README,v $
  *
  * Purpose     :  README file to give a short intro.
  *
@@ -32,8 +32,12 @@
  *
  *********************************************************************/
 
-This README is included with Privoxy 3.0.6. See http://www.privoxy.org/ for
-more information. The current code maturity level is "stable".
+This README is included with Privoxy > 3.0.6 -> 3.0.7. 
+See http://www.privoxy.org/ for more information. The current code maturity
+level is "unknown". Development work is in progress. There may be new 
+features, bugs, partially working aspects, etc, all of which may not be 
+documented. Use 3.0.6 for production systems and where stability is necessary.
+Please report any problems.
 
 -------------------------------------------------------------------------------
 
