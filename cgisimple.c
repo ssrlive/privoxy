@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.40 2006/09/09 13:05:33 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.41 2006/10/09 19:18:28 roro Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.40 2006/09/09 13:05:33 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.41  2006/10/09 19:18:28  roro
+ *    Redirect http://p.p/user-manual (without trailing slash) to
+ *    http://p.p/user-manual/ (with trailing slash), otherwise links will be broken.
+ *
  *    Revision 1.40  2006/09/09 13:05:33  fabiankeil
  *    Modified cgi_send_user_manual to serve binary
  *    content without destroying it first. Should also be
@@ -736,7 +740,15 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    }
 
    /* Open user-manual file */
+#ifdef WIN32
+   /*
+    * XXX: Do we support other operating systems that
+    * require special treatment to fopen in binary mode?
+    */
+   if (NULL == (fp = fopen(full_path, "rb")))
+#else
    if (NULL == (fp = fopen(full_path, "r")))
+#endif /* def WIN32 */
    {
       log_error(LOG_LEVEL_ERROR, "Cannot open user-manual file %s: %E", full_path);
       err = cgi_error_no_template(csp, rsp, full_path);
@@ -760,15 +772,15 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    if (!fread(rsp->body, length, 1, fp))
    {
       /*
-       * Why should this happen? If it does, we just log
-       * it and serve what we got, most likely padded with garbage.
+       * This happens if we didn't fopen in binary mode.
+       * If it does, we just log it and serve what we got,
+       * most likely padded with garbage.
        */
       log_error(LOG_LEVEL_ERROR, "Couldn't completely read user-manual file %s.", full_path);
    }
    fclose(fp);
    free(full_path);
 
-   /* Privoxy only gets it right for non-binary content. */
    rsp->content_length = (int)length;
 
    /* Guess correct Content-Type based on the filename's ending */
