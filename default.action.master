@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.44 2006/11/14 01:54:35 hal9 Exp $
+#  $Id: default.action.master,v 1.45 2006/11/18 10:36:17 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -865,6 +865,8 @@ pagead*.googlesyndication./.*\.js
 /js\.ng/
 #MASTER# BLOCK-REFERRER: http://www.britannica.com/ 10/23/06
 /popunder
+#MASTER# BLOCK-REFERRER: http://www.pcmag.com/ 11/22/06 per SF Tracker
+/js/slider\.js
 
 #############################################################################
 # Generic block-as-image patterns:
