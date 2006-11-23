@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.45 2006/11/18 10:36:17 hal9 Exp $
+#  $Id: default.action.master,v 1.46 2006/11/22 15:06:08 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -790,6 +790,8 @@ ad.theadhost.com
 .zedo.com
 #MASTER# BLOCK-REFERRER: http://realtor.org 11/03/06
 .trk.sodoit.com/
+#MASTER# BLOCK-REFERRER: http://www.freenews.fr 11/23/06 Actionsfile feedback item #1597034
+.espace.netavenir.com
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
