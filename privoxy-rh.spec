@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.51 2006/11/18 14:37:12 fabiankeil Exp $
+# $Id: privoxy-rh.spec,v 1.52 2006/11/18 17:36:53 hal9 Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -41,7 +41,7 @@ Version: 3.0.6
 Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
-Source0: http://www.waldherr.org/%{name}/%{name}-%{version}.tar.gz
+Source0: http://dl.sf.net/ijbswa/%{name}-%{version}-stable-src.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Group: System Environment/Daemons
 URL: http://www.privoxy.org/
@@ -62,7 +62,8 @@ for both stand-alone systems and multi-user networks.
 Privoxy is based on the Internet Junkbuster.
 
 %prep
-%setup -q -c
+#%setup -q -c
+%setup -q -n "%{name}-%{version}-stable"
 
 %build
 
@@ -759,6 +760,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.52  2006/11/18 17:36:53  hal9
+# Ooops, bumping version to 3.0.6
+#
 # Revision 1.51  2006/11/18 14:37:12  fabiankeil
 # Bump version to 3.0.6.
 #
