@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.65 2006/09/21 12:54:43 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.66 2006/09/23 13:26:38 roro Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -10,9 +10,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.65 2006/09/21 12:54:43 fabiankeil
  *                   `filter_popups', `forward_url', 'redirect_url',
  *                   `ij_untrusted_url', `intercept_url', `pcrs_filter_respose',
  *                   `ijb_send_banner', `trust_url', `gif_deanimate_response',
- *                   `jpeg_inspect_response'
+ *                   `jpeg_inspect_response', `execute_single_pcrs_command',
+ *                   `rewrite_url', `get_last_url'
  *
- * Copyright   :  Written by and Copyright (C) 2001, 2004 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001, 2004-2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -39,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.65 2006/09/21 12:54:43 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.66  2006/09/23 13:26:38  roro
+ *    Replace TABs by spaces in source code.
+ *
  *    Revision 1.65  2006/09/21 12:54:43  fabiankeil
  *    Fix +redirect{}. Didn't work with -fast-redirects.
  *
@@ -1120,107 +1124,283 @@ struct http_response *trust_url(struct client_state *csp)
 }
 #endif /* def FEATURE_TRUST */
 
+/*********************************************************************
+ *
+ * Function    :  execute_single_pcrs_command
+ *
+ * Description :  Apply single pcrs command to the subject.
+ *                The subject itself is left untouched, memory for the result
+ *                is malloc()ed and it is the caller's responsibility to free
+ *                the result when it's no longer needed.
+ *
+ * Parameters  :
+ *          1  :  subject = the subject (== original) string
+ *          2  :  pcrs_command = the pcrs command as string (s@foo@bar@) 
+ *          3  :  hits = int* for returning  the number of modifications 
+ *
+ * Returns     :  NULL in case of errors, otherwise the
+ *                result of the pcrs command.  
+ *
+ *********************************************************************/
+char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits)
+{
+   int error;
+   size_t size;
+   char *result = NULL;
+   pcrs_job *job;
+
+   assert(subject);
+   assert(pcrs_command);
+
+   *hits = 0;
+   size = strlen(subject);
+
+   if (NULL == (job = pcrs_compile_command(pcrs_command, &error)))
+   {
+      log_error(LOG_LEVEL_ERROR, "Failed to compile pcrs command \"%s\". Error: %d.",
+         pcrs_command, error);
+   }
+   else if ((*hits = pcrs_execute(job, subject, size, &result, &size)) < 0)
+   {
+      log_error(LOG_LEVEL_ERROR, "Failed to execute pcrs command: %s", pcrs_strerror(*hits));
+      *hits = 0;
+      freez(result);
+   }
+
+   if (job)
+   {
+      job = pcrs_free_job(job);
+   }
+
+   return result;
+
+}
+
+/*********************************************************************
+ *
+ * Function    :  rewrite_url
+ *
+ * Description :  Rewrites a URL with a single pcrs command
+ *                and returns the result if it differs from the
+ *                original and isn't obviously invalid.
+ *
+ * Parameters  :
+ *          1  :  old_url = URL to rewrite.
+ *          2  :  pcrs_command = pcrs command formatted as string (s@foo@bar@)
+ *
+ *
+ * Returns     :  NULL if the pcrs_command didn't change the url, or 
+ *                the result of the modification.
+ *
+ *********************************************************************/
+char *rewrite_url(char *old_url, const char *pcrs_command)
+{
+   char *new_url = NULL;
+   int hits;
+
+   assert(old_url);
+   assert(pcrs_command);
+
+   new_url = execute_single_pcrs_command(old_url, pcrs_command, &hits);
+
+   if (hits == 0)
+   {
+      log_error(LOG_LEVEL_REDIRECTS,
+         "pcrs command \"%s\" didn't change \"%s\".",
+         pcrs_command, old_url, new_url);
+      freez(new_url);
+   }
+   else if (strncmpic(new_url, "http://", 7) && strncmpic(new_url, "https://", 8))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "pcrs command \"%s\" changed \"%s\" to \"%s\" (%u hi%s), "
+         "but the result doesn't look like a valid URL and will be ignored.",
+         pcrs_command, old_url, new_url, hits, (hits == 1) ? "t" : "ts");
+      freez(new_url);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_REDIRECTS,
+         "pcrs command \"%s\" changed \"%s\" to \"%s\" (%u hi%s).",
+         pcrs_command, old_url, new_url, hits, (hits == 1) ? "t" : "ts");
+   }
+
+   return new_url;
+
+}
+
 
 #ifdef FEATURE_FAST_REDIRECTS
 /*********************************************************************
  *
+ * Function    :  get_last_url
+ *
+ * Description :  Search for the last URL inside a string.
+ *                If the string already is a URL, it will
+ *                be the first URL found.
+ *
+ * Parameters  :
+ *          1  :  subject = the string to check
+ *          2  :  redirect_mode = +fast-redirect{} mode 
+ *
+ * Returns     :  NULL if no URL was found, or
+ *                the last URL found.
+ *
+ *********************************************************************/
+char *get_last_url(char *subject, const char *redirect_mode)
+{
+   char *new_url;
+   char *tmp;
+
+   assert(subject);
+   assert(redirect_mode);
+
+   subject = strdup(subject);
+
+   if (0 == strcmpic(redirect_mode, "check-decoded-url"))
+   {  
+      log_error(LOG_LEVEL_REDIRECTS, "Decoding \"%s\" if necessary.", subject);
+      new_url = url_decode(subject);
+      freez(subject);
+      subject = new_url;
+   }
+
+   log_error(LOG_LEVEL_REDIRECTS, "Checking \"%s\" for redirects", subject);
+
+   /*
+    * Find the last URL encoded in the request
+    */
+   tmp = subject;
+   while ((tmp = strstr(tmp, "http://")) != NULL)
+   {
+      new_url = tmp++;
+   }
+
+   if (new_url != subject)
+   {
+      new_url = strdup(new_url);
+      freez(subject);
+      return new_url;
+   }
+
+   freez(subject);
+   return NULL;
+
+}
+#endif /* def FEATURE_FAST_REDIRECTS */
+
+
+/*********************************************************************
+ *
  * Function    :  redirect_url
  *
- * Description :  Checks for redirection URLs and returns a HTTP redirect
- *                to the destination URL, if necessary
+ * Description :  Checks if Privoxy should answer the request with
+ *                a HTTP redirect and generates the redirect if
+ *                necessary.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  NULL if URL was clean, HTTP redirect otherwise.
+ * Returns     :  NULL if the request can pass, HTTP redirect otherwise.
  *
  *********************************************************************/
 struct http_response *redirect_url(struct client_state *csp)
 {
-   char *p, *q;
    struct http_response *rsp;
-   char *redirect_mode = NULL;
-   int x, y;
+#ifdef FEATURE_FAST_REDIRECTS
+   /*
+    * XXX: Do we still need FEATURE_FAST_REDIRECTS
+    * as compile-time option? The user can easily disable
+    * it in his action file.
+    */
+   char * redirect_mode;
+#endif /* def FEATURE_FAST_REDIRECTS */
+   char *old_url = NULL;
+   char *new_url = NULL;
+   char *redirection_string;
 
    if ((csp->action->flags & ACTION_REDIRECT))
    {
-      q = csp->action->string[ACTION_STRING_REDIRECT];
-   }
-   else if ((csp->action->flags & ACTION_FAST_REDIRECTS))
-   {
-      redirect_mode = csp->action->string[ACTION_STRING_FAST_REDIRECTS];
-      if (0 == strcmpic(redirect_mode, "check-decoded-url"))
-      {  
-         p = q = csp->http->path; 
-         log_error(LOG_LEVEL_REDIRECTS, "Decoding path: %s if necessary.", p);
-         while (*p)
-         {
-            if (*p == '%') /* Escape sequence? */
-            {
-               /* Yes, translate from hexadecimal to decimal */
-               p++;
-               /* First byte */
-               x=((int)*p++)-48;
-               if (x>9) x-=7;
-               x<<=4;
-               /* Second byte */
-               y=((int)*p++)-48;
-               if (y>9)y-=7;
-               /* Merge */
-               *q++=(char)(x|y);
-            }
-            else
-            {
-               /* No, forward character. */
-               *q++=*p++;
-            }
-         }
-         *q='\0';
-      }
-      p = q = csp->http->path;
-      log_error(LOG_LEVEL_REDIRECTS, "Checking path for redirects: %s", p);
+      redirection_string = csp->action->string[ACTION_STRING_REDIRECT];
 
       /*
-       * find the last URL encoded in the request
+       * If the redirection string begins with 's',
+       * assume it's a pcrs command, otherwise treat it as
+       * properly formatted URL and use it for the redirection
+       * directly.
+       *
+       * According to RFC 2616 section 14.30 the URL
+       * has to be absolute and if the user tries:
+       * +redirect{shit/this/will/be/parsed/as/pcrs_command.html}
+       * she would get undefined results anyway.
+       *
        */
-      while ((p = strstr(p, "http://")) != NULL)
+
+      if (*redirection_string == 's')
       {
-         q = p++;
+         old_url = csp->http->url;
+         new_url = rewrite_url(old_url, redirection_string);
+      }
+      else
+      {
+         log_error(LOG_LEVEL_REDIRECTS,
+            "No pcrs command recognized, assuming that \"%s\" is already properly formatted.",
+            redirection_string);
+         new_url = strdup(redirection_string);
       }
    }
-   else
-   {
-      /* All redirection actions are disabled */
-      return NULL;
-   }
-   /*
-    * if there was any, generate and return a HTTP redirect
-    */
-   if (q != csp->http->path)
-   {
-      log_error(LOG_LEVEL_REDIRECTS, "redirecting to: %s", q);
 
-      if (NULL == (rsp = alloc_http_response()))
+#ifdef FEATURE_FAST_REDIRECTS
+   if ((csp->action->flags & ACTION_FAST_REDIRECTS))
+   {
+      redirect_mode = csp->action->string[ACTION_STRING_FAST_REDIRECTS];
+
+      /*
+       * If it exists, use the previously rewritten URL as input
+       * otherwise just use the old path.
+       */
+      old_url = new_url ? new_url : strdup(csp->http->path);
+      new_url = get_last_url(old_url, redirect_mode);
+      freez(old_url);
+   }
+#endif /* def FEATURE_FAST_REDIRECTS */
+
+   /* Did any redirect action trigger? */   
+   if (new_url)
+   {
+      if (0 == strcmpic(new_url, csp->http->url))
       {
-         return cgi_error_memory();
+         log_error(LOG_LEVEL_ERROR,
+            "New URL \"%s\" and old URL \"%s\" are the same. Redirection loop prevented.",
+            csp->http->url, new_url);
+            freez(new_url);
       }
-
-      if ( enlist_unique_header(rsp->headers, "Location", q)
-        || (NULL == (rsp->status = strdup("302 Local Redirect from Privoxy"))) )
+      else
       {
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
+         log_error(LOG_LEVEL_REDIRECTS, "New URL is: %s", new_url);
 
-      return finish_http_response(rsp);
+         if (NULL == (rsp = alloc_http_response()))
+         {
+            freez(new_url);
+            return cgi_error_memory();
+         }
+
+         if ( enlist_unique_header(rsp->headers, "Location", new_url)
+           || (NULL == (rsp->status = strdup("302 Local Redirect from Privoxy"))) )
+         {
+            freez(new_url);
+            free_http_response(rsp);
+            return cgi_error_memory();
+         }
+         freez(new_url);
+         return finish_http_response(rsp);
+      }
    }
-   else
-   {
-      return NULL;
-   }
+
+   /* Only reached if no redirect is required */
+   return NULL;
 
 }
-#endif /* def FEATURE_FAST_REDIRECTS */
 
 
 #ifdef FEATURE_IMAGE_BLOCKING
