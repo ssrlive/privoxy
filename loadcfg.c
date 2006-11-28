@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.53 2006/09/06 18:45:03 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.54 2006/10/21 16:04:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.53 2006/09/06 18:45:03 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.54  2006/10/21 16:04:22  fabiankeil
+ *    Modified kludge for win32 to make ming32 menu
+ *    "Options/Edit Filters" (sort of) work again.
+ *    Same limitations as for the action files apply.
+ *    Fixes BR 1567373.
+ *
  *    Revision 1.53  2006/09/06 18:45:03  fabiankeil
  *    Incorporate modified version of Roland Rosenfeld's patch to
  *    optionally access the user-manual via Privoxy. Closes patch 679075.
@@ -546,6 +552,8 @@ void unload_configfile (void * data)
    {
       freez(config->actions_file_short[i]);
       freez(config->actions_file[i]);
+      freez(config->re_filterfile_short[i]);
+      freez(config->re_filterfile[i]);
    }
 
    freez(config->admin_address);
