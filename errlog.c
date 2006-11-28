@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.45 2006/08/21 11:15:54 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.46 2006/11/13 19:05:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,16 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.45 2006/08/21 11:15:54 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.46  2006/11/13 19:05:51  fabiankeil
+ *    Make pthread mutex locking more generic. Instead of
+ *    checking for OSX and OpenBSD, check for FEATURE_PTHREAD
+ *    and use mutex locking unless there is an _r function
+ *    available. Better safe than sorry.
+ *
+ *    Fixes "./configure --disable-pthread" and should result
+ *    in less threading-related problems on pthread-using platforms,
+ *    but it still doesn't fix BR#1122404.
+ *
  *    Revision 1.45  2006/08/21 11:15:54  david__schmidt
  *    MS Visual C++ build updates
  *
@@ -370,7 +380,10 @@ static void fatal_error(const char * error_message)
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
 #if defined(unix)
-   unlink(pidfile);
+   if(pidfile)
+   {
+      unlink(pidfile);
+   }
 #endif /* unix */
 
    exit(1);
