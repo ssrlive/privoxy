@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.46 2006/11/22 15:06:08 hal9 Exp $
+#  $Id: default.action.master,v 1.47 2006/11/23 13:27:39 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -659,7 +659,7 @@ countr*.
 {+block}
 #MASTER# DONT-VERIFY (generic)
 /(.*/)?ad(\?|/|s|v|_?(image|se?rv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log|space)
-/.*ads(new)?/
+/phpads(new)?/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
 /.*(count|track|compteur|(?<!relo)adframe|adse?rve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
@@ -1331,7 +1331,8 @@ i.cnn.net/cnn/.*/clickability/button
 .rosettaproject.org
 #MASTER# PROBLEM-URL: http://www.quantum.com requires popups for downloads, etc. 09/11/06
 .quantum.com
-
+#MASTER# PROBLEM-URL: http://www.liberation.fr 11/23/06 Actions tracker
+.liberation.fr
 
 #----------------------------------------------------------------------------
 # Sometimes (i.e. often!) fast-redirects catches things by mistake
