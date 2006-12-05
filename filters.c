@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.66 2006/09/23 13:26:38 roro Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.67 2006/11/28 15:19:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.66 2006/09/23 13:26:38 roro Exp $
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.67  2006/11/28 15:19:43  fabiankeil
+ *    Implemented +redirect{s@foo@bar@} to generate
+ *    a redirect based on a rewritten version of the
+ *    original URL.
+ *
  *    Revision 1.66  2006/09/23 13:26:38  roro
  *    Replace TABs by spaces in source code.
  *
@@ -1276,8 +1281,16 @@ char *get_last_url(char *subject, const char *redirect_mode)
       new_url = tmp++;
    }
 
-   if (new_url != subject)
+   if (new_url != subject || (0 == strncmpic(subject, "http://", 7)))
    {
+      /*
+       * Return new URL if we found a redirect 
+       * or if the subject already was a URL.
+       *
+       * The second case makes sure that we can
+       * chain get_last_url after another redirection check
+       * (like rewrite_url) without losing earlier redirects.
+       */
       new_url = strdup(new_url);
       freez(subject);
       return new_url;
