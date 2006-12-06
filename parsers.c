@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.74 2006/10/02 16:59:12 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.75 2006/11/13 19:05:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -10,10 +10,15 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.74 2006/10/02 16:59:12 fabiankeil
  *                   `client_uagent', `client_x_forwarded',
  *                   `client_x_forwarded_adder', `client_xtra_adder',
  *                   `content_type', `crumble', `destroy_list', `enlist',
- *                   `flush_socket', ``get_header', `sed',
- *                   and `server_set_cookie'.
+ *                   `flush_socket', ``get_header', `sed', `filter_server_header'
+ *                   `filter_client_header', `filter_header', `crunch_server_header',
+ *                   `server_content_encoding', `server_content_disposition',
+ *                   `server_last_modified', `client_accept_language',
+ *                   `crunch_client_header', `client_if_modified_since',
+ *                   `client_if_none_match', `get_destination_from_headers',
+ *                   `parse_header_time' and `server_set_cookie'.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -40,6 +45,16 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.74 2006/10/02 16:59:12 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.75  2006/11/13 19:05:51  fabiankeil
+ *    Make pthread mutex locking more generic. Instead of
+ *    checking for OSX and OpenBSD, check for FEATURE_PTHREAD
+ *    and use mutex locking unless there is an _r function
+ *    available. Better safe than sorry.
+ *
+ *    Fixes "./configure --disable-pthread" and should result
+ *    in less threading-related problems on pthread-using platforms,
+ *    but it still doesn't fix BR#1122404.
+ *
  *    Revision 1.74  2006/10/02 16:59:12  fabiankeil
  *    The special header "X-Filter: No" now disables
  *    header filtering as well.
@@ -2939,6 +2954,78 @@ struct tm *parse_header_time(char *header, time_t *tm) {
       timeptr=&gmt;
    }
    return(timeptr);
+
+}
+
+/*********************************************************************
+ *
+ * Function    :  get_destination_from_headers
+ *
+ * Description :  Parse the "Host:" header to get the request's destination.
+ *                Only needed if the client's request was forcefully
+ *                redirected into Privoxy.
+ *
+ *                Code mainly copied from client_host() which is currently
+ *                run too late for this purpose.
+ *
+ * Parameters  :
+ *          1  :  headers = List of headers (one of them hopefully being
+ *                the "Host:" header)
+ *          2  :  http = storage for the result (host, port and hostport). 
+ *
+ * Returns     :  JB_ERR_MEMORY in case of memory problems,
+ *                JB_ERR_PARSE if the host header couldn't be found,
+ *                JB_ERR_OK otherwise.
+ *
+ *********************************************************************/
+jb_err get_destination_from_headers(const struct list *headers, struct http_request *http)
+{
+   char *q;
+   char *p;
+   char *host;
+
+   host = get_header_value(headers, "Host:");
+
+   if (NULL == host)
+   {
+      log_error(LOG_LEVEL_ERROR, "No \"Host:\" header found.");
+      return JB_ERR_PARSE;
+   }
+
+   if (NULL == (p = strdup((host))))
+   {
+      log_error(LOG_LEVEL_ERROR, "Out of memory while parsing \"Host:\" header");
+      return JB_ERR_MEMORY;
+   }
+   chomp(p);
+   if (NULL == (q = strdup(p)))
+   {
+      freez(p);
+      log_error(LOG_LEVEL_ERROR, "Out of memory while parsing \"Host:\" header");
+      return JB_ERR_MEMORY;
+   }
+
+   freez(http->hostport);
+   http->hostport = p;
+   freez(http->host);
+   http->host = q;
+   q = strchr(http->host, ':');
+   if (q != NULL)
+   {
+      /* Terminate hostname and evaluate port string */
+      *q++ = '\0';
+      http->port = atoi(q);
+   }
+   else
+   {
+      http->port = http->ssl ? 443 : 80;
+   }
+
+   log_error(LOG_LEVEL_HEADER, "Destination extracted from \"Host:\" header: %s = %s:%d",
+      http->hostport, http->host, http->port);
+
+   return JB_ERR_OK;
+
 }
 
 
