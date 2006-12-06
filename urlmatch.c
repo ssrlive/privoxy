@@ -1,12 +1,12 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.10.2.7 2003/05/17 15:57:24 oes Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.12 2006/07/18 14:48:47 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/urlmatch.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
  *
  * Purpose     :  Declares functions to match URLs against URL
  *                patterns.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2003, 2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.10.2.7 2003/05/17 15:57:24 oes 
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.12  2006/07/18 14:48:47  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.10.2.7  2003/05/17 15:57:24  oes
  *     - parse_http_url now checks memory allocation failure for
  *       duplication of "*" URL and rejects "*something" URLs
@@ -167,6 +171,69 @@ void free_http_request(struct http_request *http)
    http->dcount = 0;
 }
 
+/*********************************************************************
+ *
+ * Function    :  init_domain_components
+ *
+ * Description :  Splits the domain name so we can compare it
+ *                against wildcards. It used to be part of
+ *                parse_http_url, but was separated because the
+ *                same code is required in chat in case of
+ *                intercepted requests.
+ *
+ * Parameters  :
+ *          1  :  http = pointer to the http structure to hold elements.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out of memory
+ *                JB_ERR_PARSE on malformed command/URL
+ *                             or >100 domains deep.
+ *
+ *********************************************************************/
+jb_err init_domain_components(struct http_request *http)
+{
+   char *vec[BUFFER_SIZE];
+   size_t size;
+   char *p;
+
+   http->dbuffer = strdup(http->host);
+   if (NULL == http->dbuffer)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   /* map to lower case */
+   for (p = http->dbuffer; *p ; p++)
+   {
+      *p = tolower((int)(unsigned char)*p);
+   }
+
+   /* split the domain name into components */
+   http->dcount = ssplit(http->dbuffer, ".", vec, SZ(vec), 1, 1);
+
+   if (http->dcount <= 0)
+   {
+      /*
+       * Error: More than SZ(vec) components in domain
+       *    or: no components in domain
+       */
+      log_error(LOG_LEVEL_ERROR, "More than SZ(vec) components in domain or none at all.");
+      return JB_ERR_PARSE;
+   }
+
+   /* save a copy of the pointers in dvec */
+   size = http->dcount * sizeof(*http->dvec);
+
+   http->dvec = (char **)malloc(size);
+   if (NULL == http->dvec)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   memcpy(http->dvec, vec, size);
+
+   return JB_ERR_OK;
+}
 
 /*********************************************************************
  *
@@ -193,6 +260,8 @@ jb_err parse_http_url(const char * url,
                       struct http_request *http,
                       struct client_state *csp)
 {
+   int host_available = 1; /* A proxy can dream. */
+
    /*
     * Zero out the results structure
     */
@@ -253,6 +322,17 @@ jb_err parse_http_url(const char * url,
          url_noproto += 8;
          http->ssl = 1;
       }
+      else if (*url_noproto == '/')
+      {
+        /*
+         * Short request line without protocol and host.
+         * Most likely because the client's request
+         * was intercepted and redirected into Privoxy.
+         */
+         http->ssl = 0;
+         http->host = NULL;
+         host_available = 0;
+      }
       else
       {
          http->ssl = 0;
@@ -292,6 +372,11 @@ jb_err parse_http_url(const char * url,
       }
    }
 
+   if (!host_available)
+   {
+      /* Without host, there is nothing left to do here */
+      return JB_ERR_OK;
+   }
 
    /*
     * Split hostport into user/password (ignored), host, port.
@@ -348,49 +433,7 @@ jb_err parse_http_url(const char * url,
    /*
     * Split domain name so we can compare it against wildcards
     */
-
-   {
-      char *vec[BUFFER_SIZE];
-      size_t size;
-      char *p;
-
-      http->dbuffer = strdup(http->host);
-      if (NULL == http->dbuffer)
-      {
-         return JB_ERR_MEMORY;
-      }
-
-      /* map to lower case */
-      for (p = http->dbuffer; *p ; p++)
-      {
-         *p = tolower((int)(unsigned char)*p);
-      }
-
-      /* split the domain name into components */
-      http->dcount = ssplit(http->dbuffer, ".", vec, SZ(vec), 1, 1);
-
-      if (http->dcount <= 0)
-      {
-         /*
-          * Error: More than SZ(vec) components in domain
-          *    or: no components in domain
-          */
-         return JB_ERR_PARSE;
-      }
-
-      /* save a copy of the pointers in dvec */
-      size = http->dcount * sizeof(*http->dvec);
-
-      http->dvec = (char **)malloc(size);
-      if (NULL == http->dvec)
-      {
-         return JB_ERR_MEMORY;
-      }
-
-      memcpy(http->dvec, vec, size);
-   }
-
-   return JB_ERR_OK;
+   return init_domain_components(http);
 
 }
 
@@ -434,6 +477,7 @@ jb_err parse_http_request(const char *req,
    n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
    if (n != 3)
    {
+      log_error(LOG_LEVEL_ERROR, "Trouble ssplitting: %s", buf);
       free(buf);
       return JB_ERR_PARSE;
    }
@@ -487,6 +531,7 @@ jb_err parse_http_request(const char *req,
    else
    {
       /* Unknown HTTP method */
+      log_error(LOG_LEVEL_ERROR, "Unknown HTTP method detected: %s", v[0]);
       free(buf);
       return JB_ERR_PARSE;
    }
