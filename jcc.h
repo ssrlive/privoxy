@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.17 2006/11/06 19:58:23 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.18 2006/11/13 19:05:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Main file.  Contains main() method, main loop, and 
  *                the main connection-handling function.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -35,6 +35,16 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.18  2006/11/13 19:05:51  fabiankeil
+ *    Make pthread mutex locking more generic. Instead of
+ *    checking for OSX and OpenBSD, check for FEATURE_PTHREAD
+ *    and use mutex locking unless there is an _r function
+ *    available. Better safe than sorry.
+ *
+ *    Fixes "./configure --disable-pthread" and should result
+ *    in less threading-related problems on pthread-using platforms,
+ *    but it still doesn't fix BR#1122404.
+ *
  *    Revision 1.17  2006/11/06 19:58:23  fabiankeil
  *    Move pthread.h inclusion from jcc.c to jcc.h.
  *    Fixes build on x86-freebsd1 (FreeBSD 5.4-RELEASE).
@@ -184,6 +194,14 @@ int main(int argc, const char *argv[]);
 /* Revision control strings from this header and associated .c file */
 extern const char jcc_rcs[];
 extern const char jcc_h_rcs[];
+
+/* HTTP snippets */
+extern const char CSUCCEED[];
+extern const char CHEADER[];
+extern const char CFORBIDDEN[];
+extern const char FTP_RESPONSE[];
+extern const char GOPHER_RESPONSE[];
+extern const char MISSING_DESTINATION_RESPONSE[];
 
 #ifdef __cplusplus
 } /* extern "C" */
