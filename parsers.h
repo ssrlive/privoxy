@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.30 2006/08/14 08:25:19 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.31 2006/08/17 17:15:10 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,22 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.31  2006/08/17 17:15:10  fabiankeil
+ *    - Back to timegm() using GnuPG's replacement if necessary.
+ *      Using mktime() and localtime() could add a on hour offset if
+ *      the randomize factor was big enough to lead to a summer/wintertime
+ *      switch.
+ *
+ *    - Removed now-useless Privoxy 3.0.3 compatibility glue.
+ *
+ *    - Moved randomization code into pick_from_range().
+ *
+ *    - Changed parse_header_time definition.
+ *      time_t isn't guaranteed to be signed and
+ *      if it isn't, -1 isn't available as error code.
+ *      Changed some variable types in client_if_modified_since()
+ *      because of the same reason.
+ *
  *    Revision 1.30  2006/08/14 08:25:19  fabiankeil
  *    Split filter-headers{} into filter-client-headers{}
  *    and filter-server-headers{}.
@@ -212,7 +228,8 @@ extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf);
-struct tm *parse_header_time(char *header, time_t *tm);
+extern struct tm *parse_header_time(char *header, time_t *tm);
+extern jb_err get_destination_from_headers(const struct list *headers, struct http_request *http);
 
 extern jb_err crumble                (struct client_state *csp, char **header);
 extern jb_err client_referrer        (struct client_state *csp, char **header);
