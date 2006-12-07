@@ -3,6 +3,8 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.6 ***
 
+- Privoxy is now able to run as intercepting proxy in combination
+  with any packet filter that does the port redirection.
 
 *** Version 3.0.6 ***
 
