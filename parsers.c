@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.75 2006/11/13 19:05:51 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.76 2006/12/06 19:52:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.75 2006/11/13 19:05:51 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.76  2006/12/06 19:52:25  fabiankeil
+ *    Added get_destination_from_headers().
+ *
  *    Revision 1.75  2006/11/13 19:05:51  fabiankeil
  *    Make pthread mutex locking more generic. Instead of
  *    checking for OSX and OpenBSD, check for FEATURE_PTHREAD
@@ -3021,8 +3024,18 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
       http->port = http->ssl ? 443 : 80;
    }
 
-   log_error(LOG_LEVEL_HEADER, "Destination extracted from \"Host:\" header: %s = %s:%d",
-      http->hostport, http->host, http->port);
+   /* Rebuild request URL */
+   freez(http->url);
+   http->url = strdup(http->ssl ? "https://" : "http://");
+   string_append(&http->url, http->hostport);
+   string_append(&http->url, http->path);
+   if (http->url == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   log_error(LOG_LEVEL_HEADER, "Destination extracted from \"Host:\" header. New request URL: %s",
+      http->url);
 
    return JB_ERR_OK;
 
