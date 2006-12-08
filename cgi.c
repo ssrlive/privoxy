@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.78 2006/09/21 19:22:07 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.79 2006/11/13 19:05:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,16 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.78 2006/09/21 19:22:07 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.79  2006/11/13 19:05:50  fabiankeil
+ *    Make pthread mutex locking more generic. Instead of
+ *    checking for OSX and OpenBSD, check for FEATURE_PTHREAD
+ *    and use mutex locking unless there is an _r function
+ *    available. Better safe than sorry.
+ *
+ *    Fixes "./configure --disable-pthread" and should result
+ *    in less threading-related problems on pthread-using platforms,
+ *    but it still doesn't fix BR#1122404.
+ *
  *    Revision 1.78  2006/09/21 19:22:07  fabiankeil
  *    Use CGI_PREFIX to check the referrer.
  *    The check for "http://config.privoxy.org/" fails
@@ -1228,7 +1238,9 @@ struct http_response *error_response(struct client_state *csp,
 {
    jb_err err;
    struct http_response *rsp;
-   struct map * exports = default_exports(csp, NULL);
+   struct map *exports = default_exports(csp, NULL);
+   char *path = NULL;
+
    if (exports == NULL)
    {
       return cgi_error_memory();
@@ -1240,9 +1252,19 @@ struct http_response *error_response(struct client_state *csp,
       return cgi_error_memory();
    }
 
-   err = map(exports, "host", 1, html_encode(csp->http->host), 0);
+   if (csp->flags & CSP_FLAG_FORCED)
+   {
+      path = strdup(FORCE_PREFIX);
+   }
+   else
+   {
+      path = strdup("");
+   }
+   err = string_append(&path, csp->http->path);
+
+   if (!err) err = map(exports, "host", 1, html_encode(csp->http->host), 0);
    if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
-   if (!err) err = map(exports, "path", 1, html_encode(csp->http->path), 0);
+   if (!err) err = map(exports, "path", 1, html_encode_and_free_original(path), 0);
    if (!err) err = map(exports, "error", 1, html_encode_and_free_original(safe_strerror(sys_err)), 0);
    if (!err) err = map(exports, "protocol", 1, csp->http->ssl ? "https://" : "http://", 1); 
    if (!err)

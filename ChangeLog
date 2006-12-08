@@ -15,6 +15,8 @@ ChangeLog for Privoxy
   pages are no longer padded with garbage data.
 - Fixed small memory leak in case of config file reloads.
 - Only unlink the pidfile if it's actually used.
+- Retries after connection problems with forced requests
+  aren't blocked again.
 	
 *** Version 3.0.6 ***
 
