@@ -3,9 +3,19 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.6 ***
 
-- Privoxy is now able to run as intercepting proxy in combination
-  with any packet filter that does the port redirection.
-
+- Privoxy can be combined with any packet filter to build
+  an intercepting proxy for HTTP/1.1 requests (and for HTTP/1.0
+  requests with Host header set).
+- fast-redirects{} catch redirects to https URLs as well.
+- redirect{s@foo@bar@} can be used to redirect to a rewritten
+  version of the original URL.
+- Trap unsupported gopher proxy requests.
+- Fixed a bug in the User Manual delivery on Windows
+  (mingw32 only). Images now show up correctly and HTML
+  pages are no longer padded with garbage data.
+- Fixed small memory leak in case of config file reloads.
+- Only unlink the pidfile if it's actually used.
+	
 *** Version 3.0.6 ***
 
 - New content filters: no-ping, google, msn, yahoo and blogspot.
