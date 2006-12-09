@@ -9,10 +9,10 @@ diff -urNad privoxy~/config privoxy/config
 --- privoxy~/config
 +++ privoxy/config
 @@ -1,4 +1,4 @@
--#        Sample Configuration File for Privoxy v3.0.5
+-#        Sample Configuration File for Privoxy v3.0.6
 +#        Sample Configuration File for Privoxy
  #
- #  $Id: config,v 1.55 2006/09/23 17:59:19 david__schmidt Exp $
+ #  $Id: config,v 1.56 2006/11/14 01:54:36 hal9 Exp $
  #
 @@ -123,7 +123,7 @@
  #          If set, this option should be the first option in the config

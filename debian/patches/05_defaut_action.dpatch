@@ -8,12 +8,15 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -1895,3 +1895,8 @@
- { +filter{js-events} }
- #MASTER# PROBLEM-URL: http://www.pharmcast.com/WarningLetters/Yr2002/December2002/J&J1202.htm
- www.pharmcast.com/
-+
-+# Allow %01 and %02 in URLs as they are used in Amazon's multi-page results
-+# see http://bugs.debian.org/243245:
+@@ -1695,6 +1695,11 @@
+ {+filter{tiny-textforms} +prevent-compression}
+ .sourceforge.net/tracker
+ 
 +{-filter{ie-exploits}}
++#MASTER# REMARKS: Allow %01 and %02 in URLs as they are used in Amazon's 
++#MASTER# REMARKS: multi-page results see http://bugs.debian.org/243245
 +.amazon.de
++
+ {+downgrade-http-version}
+ #MASTER# COMMENTS: This section not checked 10/17/06 HB
+ #MASTER# REMARKS: This is work-around for CUPS http configuration.

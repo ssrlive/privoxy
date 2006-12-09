@@ -9,7 +9,7 @@
 diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
 --- privoxy~/GNUmakefile.in
 +++ privoxy/GNUmakefile.in
-@@ -710,6 +710,10 @@
+@@ -704,6 +704,10 @@
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
  	nsgmls ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
  	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.8 ;\
@@ -20,7 +20,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  	$(DB) ../privoxy-man-page.sgml && $(MV) -f privoxy.8 ../../../privoxy.8
  
  # For those with man2html ala RH7s.
-@@ -722,6 +726,7 @@
+@@ -716,6 +720,7 @@
  # Twice because my version of man2html is pulling in commas and periods in URLs.
  	$(PERL) -pi.bak -e 's/(<A.*),(">)/$$1$$2/g' tmp.html
  	$(PERL) -pi.bak -e 's,\.">,">,g' tmp.html

@@ -45,9 +45,9 @@ diff -urNad privoxy~/global.action privoxy/global.action
 --filter{ie-exploits} \
 ++filter{ie-exploits} \
  -filter{site-specifics} \
- -filter-client-headers \
- -filter-server-headers \
-@@ -44,17 +44,17 @@
+ -filter{google} \
+ -filter{yahoo} \
+@@ -52,17 +52,17 @@
  -hide-if-modified-since \
  +hide-forwarded-for-headers \
  +hide-from-header{block} \

@@ -32,7 +32,7 @@ diff -urNad privoxy~/config privoxy/config
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -505,67 +505,6 @@
+@@ -530,75 +530,6 @@
  #
  allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
  
@@ -72,6 +72,14 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --filter{crude-parental} \
 --filter{ie-exploits} \
 --filter{site-specifics} \
+--filter{google} \
+--filter{yahoo} \
+--filter{msn} \
+--filter{blogspot} \
+--filter{xml-to-html} \
+--filter{html-to-xml} \
+--filter{no-ping} \
+--filter{hide-tor-exit-notation} \
 --filter-client-headers \
 --filter-server-headers \
 --force-text-mode \
@@ -103,7 +111,7 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
 diff -urNad privoxy~/global.action privoxy/global.action
 --- privoxy~/global.action
 +++ privoxy/global.action
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,69 @@
 +#############################################################################
 +# Defaults
 +#############################################################################
@@ -140,6 +148,14 @@ diff -urNad privoxy~/global.action privoxy/global.action
 +-filter{crude-parental} \
 +-filter{ie-exploits} \
 +-filter{site-specifics} \
++-filter{google} \
++-filter{yahoo} \
++-filter{msn} \
++-filter{blogspot} \
++-filter{xml-to-html} \
++-filter{html-to-xml} \
++-filter{no-ping} \
++-filter{hide-tor-exit-notation} \
 +-filter-client-headers \
 +-filter-server-headers \
 +-force-text-mode \

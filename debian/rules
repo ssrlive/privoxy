@@ -14,6 +14,9 @@ DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 DEBDIR=`pwd`/debian/privoxy
 
+# Include dpatch stuff.
+include /usr/share/dpatch/dpatch.make
+
 OPTIMIZE=
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
         OPTIMIZE=-O0
@@ -134,16 +137,6 @@ binary-arch: build-stamp install
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
-
-patch: patch-stamp
-patch-stamp:
-	dpatch apply-all
-	touch patch-stamp
-	#dpatch call-all -a=pkg-info >patch-stamp
-
-unpatch:
-	dpatch deapply-all
-	rm -rf patch-stamp debian/patched
 
 binary: binary-indep binary-arch
 

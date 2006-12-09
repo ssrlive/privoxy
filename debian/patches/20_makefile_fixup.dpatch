@@ -8,7 +8,7 @@
 diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
 --- privoxy~/GNUmakefile.in
 +++ privoxy/GNUmakefile.in
-@@ -678,9 +678,9 @@
+@@ -672,9 +672,9 @@
  	$(RM) -r doc/source/user-manual/
  	mkdir -p doc/text doc/source/user-manual
  	cd doc/source/user-manual && $(DB) -iuser-man ../user-manual.sgml && cd .. && cp user-manual/*.html ../webserver/user-manual/

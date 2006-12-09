@@ -1,3 +1,29 @@
+privoxy (3.0.6-1) unstable; urgency=low
+
+  * New upstream release 3.0.6.
+    - remove 28_usermanual_slash.dpatch, which is already included
+      upstream now.
+  * README.Debian: mention that privoxy has to be used as HTTP proxy to
+    access http://p.p/ URLs (Closes: #398162).
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 20 Nov 2006 19:29:27 +0100
+
+privoxy (3.0.5-beta-3) unstable; urgency=medium
+
+  * Disable the IPv6 patch, because this is seems to have too many bugs
+    for a release right now.  
+    - This reopens #179461.
+    - This solves the problem, that "listen-address :8118" listens on
+      localhost only (Closes: #391600).
+    - This solves the problem, that regex pattern at front of hostname
+      is ignored (Closes: #393605). 
+  * Use /usr/share/dpatch/dpatch.make in debian/rules instead of adding
+    the content by hand.
+  * Extended version of 26_edit_only_writable.dpatch by Fabian Keil.  Now
+    shows a message, that the file is write protected.  See SF#1564026.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 22 Oct 2006 11:53:02 +0200
+
 privoxy (3.0.5-beta-2) unstable; urgency=low
 
   * 27_remove_nsl.dpatch: Remove unnecessary linking against libnsl.

@@ -17,7 +17,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  		doc/pdf/*.pdf
  
  #############################################################################
-@@ -521,7 +521,7 @@
+@@ -515,7 +515,7 @@
  	$(RM) /etc/init.d/privoxy
  	$(RM) /usr/sbin/privoxy
  	$(RM) /usr/sbin/rcprivoxy
@@ -26,7 +26,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  
  #############################################################################
  # generic distribution
-@@ -697,7 +697,7 @@
+@@ -691,7 +691,7 @@
  	$(RM) doc/man/* doc/webserver/man-page/*.html
  ifneq ($(MAN2HTML),false)
  	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
@@ -35,7 +35,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  	$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html
  else
  	$(MAKE) groff2html
-@@ -709,14 +709,14 @@
+@@ -703,14 +703,14 @@
  man: dok-release
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
  	nsgmls ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
@@ -53,7 +53,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
  	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
  # Twice because my version of man2html is pulling in commas and periods in URLs.
-@@ -731,7 +731,7 @@
+@@ -725,7 +725,7 @@
  
  # Otherwise we get plain groff conversion.
  groff2html:
@@ -62,7 +62,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  
  
  # readme page and INSTALL file
-@@ -1129,8 +1129,8 @@
+@@ -1123,8 +1123,8 @@
  		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC/user-manual;\
  	fi
  	@# Not all platforms support gzipped man pages.
@@ -73,7 +73,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  
  	@# Change the config file default directories according to the configured ones
  	@$(ECHO) Rewriting config for this installation
-@@ -1290,7 +1290,7 @@
+@@ -1284,7 +1284,7 @@
  
  	@# man page and docs
  	@$(ECHO) Removing $(PROGRAM) docs
