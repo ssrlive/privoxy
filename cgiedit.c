@@ -1,7 +1,7 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.41.2.12 2006/01/30 15:16:25 david__schmidt Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.43 2006/07/18 14:48:45 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/cgiedit.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
  *
  * Purpose     :  CGI-based actionsfile editor.
  *
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.41.2.12 2006/01/30 15:16:25 david
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.43  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.41.2.12  2006/01/30 15:16:25  david__schmidt
  *    Remove a little residual debugging info
  *
@@ -329,8 +333,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.41.2.12 2006/01/30 15:16:25 david
 #include "miscutil.h"
 #include "errlog.h"
 #include "loaders.h"
-#include "loadcfg.h"
+#ifdef FEATURE_TOGGLE
 /* loadcfg.h is for global_toggle_state only */
+#include "loadcfg.h"
+#endif /* def FEATURE_TOGGLE */
 #include "urlmatch.h"
 
 const char cgiedit_h_rcs[] = CGIEDIT_H_VERSION;
@@ -4228,7 +4234,7 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
    return cgi_redirect(rsp, target);
 }
 
-
+#ifdef FEATURE_TOGGLE
 /*********************************************************************
  *
  * Function    :  cgi_toggle
@@ -4296,7 +4302,7 @@ jb_err cgi_toggle(struct client_state *csp,
 
    return template_fill_for_cgi(csp, template_name, exports, rsp);
 }
-
+#endif /* def FEATURE_TOGGLE */
 
 /*********************************************************************
  *
