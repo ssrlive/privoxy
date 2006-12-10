@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.26 2006/10/24 11:16:44 hal9 Exp $
+ $Id: user-manual.sgml,v 2.27 2006/11/14 01:57:47 hal9 Exp $
 
  Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.26 2006/10/24 11:16:44 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.27 2006/11/14 01:57:47 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2822,8 +2822,8 @@ www.example.net/
 
 # but leave the content type unmodified if the URL looks like a style sheet
 {-content-type-overwrite}
-www.example.net/*.\.css$
-www.example.net/*.style
+www.example.net/.*\.css$
+www.example.net/.*style
 </screen>
    </para>
   </listitem>
@@ -4326,7 +4326,7 @@ new action
 { -filter \
  +content-type-overwrite{text/plain}\
  +hide-content-disposition{block} }
- .sourceforge.net/tracker/download.php</screen>
+ .sourceforge.net/tracker/download\.php</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5267,7 +5267,7 @@ new action
    <para>
     <screen># Replace example.com's style sheet with another one
 { +redirect{http://localhost/css-replacements/example.com.css} }
- example.com/stylesheet.css
+ example.com/stylesheet\.css
 
 # Create a short, easy to remember nickname for a favorite site
 { +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
@@ -6397,7 +6397,7 @@ stupid-server.example.com/</screen>
 <para>
  <screen>
 { +<link linkend="BLOCK">block</link> }
- www.example.com/nasty-ads/sponsor.gif
+ www.example.com/nasty-ads/sponsor\.gif
  another.popular.site.net/more/junk/here/</screen>
 </para>
 
@@ -8566,6 +8566,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.27  2006/11/14 01:57:47  hal9
+ Dump all docs prior to 3.0.6 release. Various minor changes to faq and user
+ manual.
+
  Revision 2.26  2006/10/24 11:16:44  hal9
  Add new filters.
 
