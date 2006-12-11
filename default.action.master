@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.47 2006/11/23 13:27:39 hal9 Exp $
+#  $Id: default.action.master,v 1.48 2006/12/03 21:23:33 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -1253,6 +1253,8 @@ edge.macworld.com
 .google.com/reader/
 #MASTER# REMARKS: Actionsfile Tracker 1587079 10/30/06
 .parcel2go.com/track
+#MASTER# REMARKS: Actionsfile Tracker #1612950 12/11/06
+.amazon.com/gp/gift-central/.*recip/
 
 #############################################################################
 # Site-specific special rules:
