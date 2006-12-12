@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.32 2006/11/10 18:04:04 fabiankeil Exp $
+#  $Id: default.filter,v 1.33 2006/11/16 17:10:43 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -83,6 +83,7 @@ s|(?:\w+\.)+referrer|"Not Your Business!"|gisU
 # The status bar is for displaying link targets, not pointless blahblah
 # 
 s/(\W\s*)((this|window)\.(default)?status)\s*=\s*((['"]).*?(?<!\\)\6)/$1if(typeof(this.href) != 'undefined') $2 = $5 + ' URL: ' + this.href;else return false/ig
+s/(?:(?:this|window)\.(?:default)?status)\s*=\s*\w*\s*;//ig
 
 # Kill OnUnload popups. Yummy.
 # Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
@@ -515,7 +516,7 @@ s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's google filter. */\n\
  \#fbc, \#fbl, \#ra, .rhh {visibility: hidden !important;}\n\
  \#tpa1,\#tpa2,\#tpa3,\#tpa4,\#tpa5,\#tpa5, \#spl, .ch, \#ads,\
- \#toolbar, \#google_ads_frame{display: none !important;}\n\
+ \#toolbar, \#google_ads_frame, \#mbEnd {display: none !important;}\n\
  .main_body, .j {width: 100%}\n</style>\n$0@
 s@<div style=\"padding-top:11px;min-width:500px\">@<div id="main_body">@
 s@(<table cellspacing=0 cellpadding=0 width=25% align=right bgcolor=\#ffffff border=0\
@@ -654,6 +655,12 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.33  2006/11/16 17:10:43  fabiankeil
+#     Removed webbugs debugging comment again.
+#     The apostrophe could break JavaScript and
+#     the comment itself could mess up existing
+#     comments.
+#
 #     Revision 1.32  2006/11/10 18:04:04  fabiankeil
 #     Have no-ping print the ping warning in red.
 #
