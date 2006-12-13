@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.150 2006/10/25 11:55:45 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.151 2006/11/30 01:08:55 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -246,7 +246,7 @@ OTHER_CFLAGS =
 CFLAGS = @CFLAGS@ @CPPFLAGS@ $(OTHER_CFLAGS) $(SPECIAL_CFLAGS) -Wall \
          @STATIC_PCRE_ONLY@ -Ipcre 
 
-LDFLAGS = $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
+LDFLAGS = @LDFLAGS@ $(DEBUG_CFLAGS) $(SPECIAL_CFLAGS)
 
 
 #############################################################################
@@ -1355,6 +1355,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.151  2006/11/30 01:08:55  hal9
+# Fix problem with variable declarations in the Slackware section. Thanks to higuita.
+#
 # Revision 1.150  2006/10/25 11:55:45  fabiankeil
 # Fix sed regexes for rewriting "confdir ." and "logdir .".
 # Thanks to Darel Henman for reporting this.
