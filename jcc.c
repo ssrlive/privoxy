@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.108 2006/11/28 15:38:51 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.109 2006/12/06 19:41:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,16 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.108 2006/11/28 15:38:51 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.109  2006/12/06 19:41:40  fabiankeil
+ *    Privoxy is now able to run as intercepting
+ *    proxy in combination with any packet filter
+ *    that does the port redirection. The destination
+ *    is extracted from the "Host:" header which
+ *    should be available for nearly all requests.
+ *
+ *    Moved HTTP snipplets into jcc.c.
+ *    Added error message for gopher proxy requests.
+ *
  *    Revision 1.108  2006/11/28 15:38:51  fabiankeil
  *    Only unlink the pidfile if it's actually used.
  *
@@ -112,7 +122,8 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.108 2006/11/28 15:38:51 fabiankeil Exp $"
  *    Windows service integration
  *
  *    Revision 1.95  2006/08/03 02:46:41  david__schmidt
- *    Incorporate Fabian Keil's patch work:http://www.fabiankeil.de/sourcecode/privoxy/
+ *    Incorporate Fabian Keil's patch work:
+http://www.fabiankeil.de/sourcecode/privoxy/
  *
  *    Revision 1.94  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
@@ -849,31 +860,31 @@ static const char VANILLA_WAFER[] =
    "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 /* HTTP snipplets. */
-static const char CSUCCEED[] =
+const char CSUCCEED[] =
    "HTTP/1.0 200 Connection established\n"
    "Proxy-Agent: Privoxy/" VERSION "\r\n\r\n";
 
-static const char CHEADER[] =
+const char CHEADER[] =
    "HTTP/1.0 400 Invalid header received from browser\r\n"
    "Connection: close\r\n\r\n"
    "Invalid header received from browser.";
 
-static const char CFORBIDDEN[] =
+const char CFORBIDDEN[] =
    "HTTP/1.0 403 Connection not allowable\r\n"
    "X-Hint: If you read this message interactively, then you know why this happens ,-)\r\n"
    "Connection: close\r\n\r\n";
 
-static const char FTP_RESPONSE[] =
+const char FTP_RESPONSE[] =
    "HTTP/1.0 400 Invalid request received from browser\r\n"
    "Connection: close\r\n\r\n"
    "Invalid request. Privoxy doesn't support FTP.\r\n";
 
-static const char GOPHER_RESPONSE[] =
+const char GOPHER_RESPONSE[] =
    "HTTP/1.0 400 Invalid request received from browser\r\n"
    "Connection: close\r\n\r\n"
    "Invalid request. Privoxy doesn't support gopher.\r\n";
 
-static const char MISSING_DESTINATION_RESPONSE[] =
+const char MISSING_DESTINATION_RESPONSE[] =
    "HTTP/1.0 400 Bad request received from browser\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Privoxy was unable to extract the destination.\r\n";
