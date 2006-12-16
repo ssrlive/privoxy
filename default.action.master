@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.48 2006/12/03 21:23:33 hal9 Exp $
+#  $Id: default.action.master,v 1.49 2006/12/11 11:18:25 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -857,6 +857,12 @@ stats./.*\.gif\?
 #MASTER# BLOCK-REFERRER: http://www.homedepot.com/ 11/08/06
 #MASTER# BLOCK-REFERRER: http://www.williams-sonoma.com/ 11/08/06
 /cm\?[tc]
+#MASTER# BLOCK-REFERRER: http://www.snapfiles.com/feedback/ 12/13/06 SF tracker
+.snapfiles.net/rotation/.*\.asp
+#MASTER# BLOCK-REFERRER: not provided. SF tracker #1616034 12/16/06
+#MASTER# COMMENT: JS pop-ups
+spa.snap.com/
+
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
@@ -867,8 +873,10 @@ pagead*.googlesyndication./.*\.js
 /js\.ng/
 #MASTER# BLOCK-REFERRER: http://www.britannica.com/ 10/23/06
 /popunder
-#MASTER# BLOCK-REFERRER: http://www.pcmag.com/ 11/22/06 per SF Tracker
+#MASTER# BLOCK-REFERRER: http://www.pcmag.com/ 11/22/06 per SF Tracker # 1601148
 /js/slider\.js
+#MASTER# BLOCK-REFERRER: http://www.earthcore.com/ feedback item #1605385 12/14/06
+/t\.php\?cat=.*&kw=.*&sc=
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1055,6 +1063,10 @@ content.ipro.com
 log.go.com/log
 #MASTER# BLOCK-REFERRER: http://www.care2.com 10/18/06
 stats.indextools.com
+#MASTER# BLOCK-REFERRER: http://www.techcrunch.com/ 12/16/06 #1616497 3 urls.
+tra*.measuremap.com
+.eurekster.com/sidebar
+tra*.mybloglog.com
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
