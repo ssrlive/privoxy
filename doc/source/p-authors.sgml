@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.18 2006/10/22 14:29:34 hal9 Exp $
+ $Id: p-authors.sgml,v 2.19 2006/11/14 01:57:47 hal9 Exp $
 
  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -36,6 +36,7 @@ Current Privoxy Team:
  
  Hal Burgiss
  Ian Cummings
+ Justin McMurtry
  Roland Rosenfeld
 <![%p-authors-formal;[
 </literallayout>
@@ -96,6 +97,7 @@ Current Privoxy Team:
  Jindrich Makovicka 
  David Mediavilla 
  Raphael Moll
+ Adam Piggott
  Oliver Stoeneberg
  Martin Thomas
  Roberto Ragusa
