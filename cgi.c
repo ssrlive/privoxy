@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.80 2006/12/08 14:45:32 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.81 2006/12/09 13:49:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.80 2006/12/08 14:45:32 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.81  2006/12/09 13:49:16  fabiankeil
+ *    Fix configure option --disable-toggle.
+ *    Thanks to Peter Thoenen for reporting this.
+ *
  *    Revision 1.80  2006/12/08 14:45:32  fabiankeil
  *    Don't lose the FORCE_PREFIX in case of
  *    connection problems. Fixes #612235.
@@ -2295,7 +2299,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "my-hostname",   1, html_encode(csp->my_hostname ? csp->my_hostname : "unknown"), 0);
    if (!err) err = map(exports, "homepage",      1, html_encode(HOME_PAGE_URL), 0);
    if (!err) err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
-   if (!err) err = map(exports, "menu",          1, make_menu(caller), 0);
+   if (!err) err = map(exports, "menu",          1, make_menu(caller, csp->config->feature_flags), 0);
    if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
    if (!strncmpic(csp->config->usermanual, "file://", 7) ||
        !strncmpic(csp->config->usermanual, "http", 4))
@@ -2481,14 +2485,18 @@ jb_err map_conditional(struct map *exports, const char *name, int choose_first)
  *
  * Description :  Returns an HTML-formatted menu of the available 
  *                unhidden CGIs, excluding the one given in <self>
+ *                and the toggle CGI if toggling is disabled.
  *
- * Parameters  :  self = name of CGI to leave out, can be NULL for
+ * Parameters  :
+ *          1  :  self = name of CGI to leave out, can be NULL for
  *                complete listing.
+ *          2  :  feature_flags = feature bitmap from csp->config
+ *                
  *
  * Returns     :  menu string, or NULL on out-of-memory error.
  *
  *********************************************************************/
-char *make_menu(const char *self)
+char *make_menu(const char *self, const unsigned feature_flags)
 {
    const struct cgi_dispatcher *d;
    char *result = strdup("");
@@ -2501,6 +2509,17 @@ char *make_menu(const char *self)
    /* List available unhidden CGI's and export as "other-cgis" */
    for (d = cgi_dispatchers; d->name; d++)
    {
+
+#ifdef FEATURE_TOGGLE
+      if (!(feature_flags & RUNTIME_FEATURE_CGI_TOGGLE) && !strcmp(d->name, "toggle"))
+      {
+         /*
+          * Suppress the toggle link if remote toggling is disabled.
+          */
+         continue;
+      }
+#endif /* def FEATURE_TOGGLE */
+
       if (d->description && strcmp(d->name, self))
       {
          string_append(&result, "<li><a href=\"" CGI_PREFIX);
