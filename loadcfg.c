@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.54 2006/10/21 16:04:22 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.55 2006/11/28 15:31:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.54 2006/10/21 16:04:22 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.55  2006/11/28 15:31:52  fabiankeil
+ *    Fix memory leak in case of config file reloads.
+ *
  *    Revision 1.54  2006/10/21 16:04:22  fabiankeil
  *    Modified kludge for win32 to make ming32 menu
  *    "Options/Edit Filters" (sort of) work again.
@@ -1657,7 +1660,7 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
     * Add config option name embedded in
     * link to it's section in the user-manual
     */
-   buf = strdup("\n<br><a href=\"");
+   buf = strdup("\n<a href=\"");
    if (!strncmpic(config->usermanual, "file://", 7) ||
        !strncmpic(config->usermanual, "http", 4))
    {
@@ -1705,6 +1708,7 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
       }
    }
 
+   string_append(&buf, "<br>");
    string_join(&config->proxy_args, buf);
 }
 
