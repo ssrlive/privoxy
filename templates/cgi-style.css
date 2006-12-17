@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/edit-actions-list,v $
+# File        :  $Source: /cvsroot/ijbswa/current/templates/cgi-style.css,v $
 #
 # Purpose     :  Style sheet for the web-based config interface.
 #
@@ -29,7 +29,10 @@
 #                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # Revisions   :
-#    $Log: edit-actions-list,v $
+#    $Log: cgi-style.css,v $
+#    Revision 1.8  2002/05/12 15:53:41  jongfoster
+#    Adding standard comment header with license and CVS log.
+#
 #
 ##############################################################################
 
@@ -37,7 +40,7 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $Id: cgi-style.css,v 1.7 2002/05/12 15:45:33 jongfoster Exp $
+ * $Id: cgi-style.css,v 1.8 2002/05/12 15:53:41 jongfoster Exp $
  */
 
 /*
@@ -135,3 +138,14 @@ a.cmd:active, td.indentbuttons a:active, td.buttons a:active {
  * Special red emphasis:
  */
 em.warning { color: #ff0000 }
+
+/*
+ * In show-status we use tables directly behind headlines
+ * and for some reason or another the headlines are set to
+ * "margin:0" and leave the tables no air to breath.
+ *
+ * A proper fix would be to replace or remove the "margin:0",
+ * but as this affects every cgi page we do it another time
+ * and use this workaround until then.
+ */
+.box table { margin-top: 1em; }
