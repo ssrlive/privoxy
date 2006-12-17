@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.41 2006/10/09 19:18:28 roro Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.42 2006/11/21 15:43:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,13 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.41 2006/10/09 19:18:28 roro E
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.42  2006/11/21 15:43:12  fabiankeil
+ *    Add special treatment for WIN32 to make sure
+ *    cgi_send_user_manual opens the files in binary mode.
+ *    Fixes BR 1600411 and unbreaks image delivery.
+ *
+ *    Remove outdated comment.
+ *
  *    Revision 1.41  2006/10/09 19:18:28  roro
  *    Redirect http://p.p/user-manual (without trailing slash) to
  *    http://p.p/user-manual/ (with trailing slash), otherwise links will be broken.
@@ -1042,7 +1049,7 @@ jb_err cgi_show_status(struct client_state *csp,
       {
          if (!err) err = string_append(&s, "<tr><td>");
          if (!err) err = string_join(&s, html_encode(csp->actions_list[i]->filename));
-         snprintf(buf, 100, "</td><td class=\"buttons\"><a href=\"/show-status?file=actions&index=%d\">View</a>", i);
+         snprintf(buf, 100, "</td><td class=\"buttons\"><a href=\"/show-status?file=actions&amp;index=%d\">View</a>", i);
          if (!err) err = string_append(&s, buf);
 
 #ifdef FEATURE_CGI_EDIT_ACTIONS
@@ -1076,18 +1083,18 @@ jb_err cgi_show_status(struct client_state *csp,
       {
          if (!err) err = string_append(&s, "<tr><td>");
          if (!err) err = string_join(&s, html_encode(csp->rlist[i]->filename));
-         snprintf(buf, 100, "</td><td class=\"buttons\"><a href=\"/show-status?file=filter&index=%d\">View</a>", i);
+         snprintf(buf, 100, "</td><td class=\"buttons\"><a href=\"/show-status?file=filter&amp;index=%d\">View</a>", i);
          if (!err) err = string_append(&s, buf);
          if (!err) err = string_append(&s, "</td></tr>\n");
       }
    }
    if (*s != '\0')   
    {
-      if (!err) err = map(exports, "re-filter-filename", 1, s, 0);
+      if (!err) err = map(exports, "re-filter-filenames", 1, s, 0);
    }
    else
    {
-      if (!err) err = map(exports, "re-filter-filename", 1, "<tr><td>None specified</td></tr>", 1);
+      if (!err) err = map(exports, "re-filter-filenames", 1, "<tr><td>None specified</td></tr>", 1);
       if (!err) err = map_block_killer(exports, "have-filterfile");
    }
 
@@ -1318,7 +1325,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
                /* FIXME: Hardcoded HTML! */
                string_append(&matches, "<tr><th>In file: ");
                string_join  (&matches, html_encode(csp->config->actions_file_short[i]));
-               snprintf(buf, 150, ".action <a class=\"cmd\" href=\"/show-status?file=actions&index=%d\">", i);
+               snprintf(buf, 150, ".action <a class=\"cmd\" href=\"/show-status?file=actions&amp;index=%d\">", i);
                string_append(&matches, buf);
                string_append(&matches, "View</a>");
 #ifdef FEATURE_CGI_EDIT_ACTIONS
@@ -1490,6 +1497,12 @@ static jb_err show_defines(struct map *exports)
    if (!err) err = map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
    if (!err) err = map(exports, "FORCE_PREFIX", 1, "(none - disabled)", 1);
 #endif /* ndef FEATURE_FORCE_LOAD */
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
+   if (!err) err = map_conditional(exports, "FEATURE_GRACEFUL_TERMINATION", 1);
+#else /* ifndef FEATURE_GRACEFUL_TERMINATION */
+   if (!err) err = map_conditional(exports, "FEATURE_GRACEFUL_TERMINATION", 0);
+#endif /* ndef FEATURE_GRACEFUL_TERMINATION */
 
 #ifdef FEATURE_IMAGE_BLOCKING
    if (!err) err = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
