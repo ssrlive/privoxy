@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.96 2006/11/18 14:42:51 fabiankeil Exp $
+dnl $Id: configure.in,v 1.97 2006/11/21 18:32:46 hal9 Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.97  2006/11/21 18:32:46  hal9
+dnl Setting version to 3.0.7 UNRELEASED for lack of a better setting.
+dnl
 dnl Revision 1.96  2006/11/18 14:42:51  fabiankeil
 dnl Mark as stable.
 dnl
@@ -464,7 +467,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.96 $)
+AC_REVISION($Revision: 1.97 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -721,7 +724,7 @@ dnl Note: PTHREAD_LIB is always set, even if pthread is disabled.
 dnl This is because we don't know yet whether pthread is enabled.
 
 AC_ARG_ENABLE(mingw32,
-[  --enable-mingw32        Use mingw32 for a Windows GUI],
+[  --enable-mingw32                Use mingw32 for a Windows GUI],
 [if test $enableval = yes; then
   target_type=mingw
 fi])
@@ -847,7 +850,7 @@ dnl =================================================================
 AC_CHECK_HEADER(pthread.h, [have_pthread=yes], [have_pthread=no])
 
 AC_ARG_ENABLE(pthread,
-[  --disable-pthread       Don't use POSIX threads (pthreads)],
+[  --disable-pthread               Don't use POSIX threads (pthreads)],
 [if test $enableval = no; then
   # Disable pthreads
   have_pthread=no
@@ -1171,100 +1174,103 @@ dnl Features
 dnl =================================================================
 
 AC_ARG_ENABLE(toggle,
-[  --disable-toggle         Don't support temporary disable],
+[  --disable-toggle                Don't support temporary disable],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_TOGGLE)
 fi],AC_DEFINE(FEATURE_TOGGLE))
 
 AC_ARG_ENABLE(force,
-[  --disable-force          Don't allow single-page disable],
+[  --disable-force                 Don't allow single-page disable],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_FORCE_LOAD)
 fi],AC_DEFINE(FEATURE_FORCE_LOAD))
 
 AC_ARG_ENABLE(fast-redirects,
-[  --disable-fast-redirects Don't support fast redirects],
+[  --disable-fast-redirects        Don't support fast redirects],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_FAST_REDIRECTS)
 fi], AC_DEFINE(FEATURE_FAST_REDIRECTS))
 
 AC_ARG_ENABLE(killpopup,
-[  --disable-killpopup      Never block popups],
+[  --disable-killpopup             Never block popups],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_KILL_POPUPS)
 fi],AC_DEFINE(FEATURE_KILL_POPUPS))
 
 AC_ARG_ENABLE(stats,
-[  --disable-stats          Don't keep statistics],
+[  --disable-stats                 Don't keep statistics],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_STATISTICS)
 fi],AC_DEFINE(FEATURE_STATISTICS))
 
 AC_ARG_ENABLE(ie-images,
-[  --enable-ie-images       Enable a quick but not always reliable auto-detect whether requests from
-                           MS Internet Explorer are for an image or not.],
+[  --enable-ie-images              Enable a quick but not always reliable auto-detect whether requests from
+                                  MS Internet Explorer are for an image or not.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_IMAGE_DETECT_MSIE)
 fi],)
 
 AC_ARG_ENABLE(image-blocking,
-[  --disable-image-blocking Don't try to figure out whether a request is 
-                           for an image or HTML - assume HTML.],
+[  --disable-image-blocking        Don't try to figure out whether a request is 
+                                  for an image or HTML - assume HTML.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_IMAGE_BLOCKING)
 fi],
 AC_DEFINE(FEATURE_IMAGE_BLOCKING))
 
 AC_ARG_ENABLE(acl-files,
-[  --disable-acl-files      Prevents the use of ACL files to control access to
-                           the proxy by IP address.],
+[  --disable-acl-files             Prevents the use of ACL files to control access to
+                                  Privoxy by IP address.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_ACL)
 fi],
 AC_DEFINE(FEATURE_ACL))
 
 AC_ARG_ENABLE(trust-files,
-[  --disable-trust-files    Prevents the use of trust files.],
+[  --disable-trust-files           Prevents the use of trust files.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_TRUST)
 fi],
 AC_DEFINE(FEATURE_TRUST))
 
 AC_ARG_ENABLE(jar-files,
-[  --disable-jar-files      Prevents the use of jar files to capture cookies.],
+[  --disable-jar-files             Prevents the use of jar files to capture cookies.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_COOKIE_JAR)
 fi],
 AC_DEFINE(FEATURE_COOKIE_JAR))
 
 AC_ARG_ENABLE(editor,
-[  --disable-editor         Prevents the use of the web-based actions file
-                           editor and web-based temporary disable setting.],
+[  --disable-editor                Prevents the use of the web-based actions file
+                                  editor and web-based temporary disable setting.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_CGI_EDIT_ACTIONS)
 fi],
 AC_DEFINE(FEATURE_CGI_EDIT_ACTIONS))
 
 AC_ARG_ENABLE(no-gifs,
-[  --enable-no-gifs         Use politically correct PNG format instead of GIF
-                           for built-in images. May not work with all browsers.],
+[  --enable-no-gifs                Use politically correct PNG format instead of GIF
+                                  for built-in images. May not work with all browsers.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_NO_GIFS)
 fi])
 
+AC_ARG_ENABLE(graceful-termination,
+[  --enable-graceful-termination   Allow to shutdown Privoxy through the webinterface.],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_GRACEFUL_TERMINATION)
+fi])
 
 dnl pcre/pcrs is needed for CGI anyway, so
 dnl the choice is only between static and
 dnl dynamic:
 
 AC_ARG_ENABLE(dynamic-pcre,
-[  --disable-dynamic-pcre        Use the built-in, static pcre, even if
-                                libpcre is available],
+[  --disable-dynamic-pcre          Use the built-in, static pcre, even if libpcre is available],
 [ if test $enableval = "no"; then have_pcre=no; fi ])
 
 AC_ARG_ENABLE(dynamic-pcrs,
-[  --disable-dynamic-pcrs        Use the built-in, static pcrs, even if
-                                libpcrs is available],
+[  --disable-dynamic-pcrs          Use the built-in, static pcrs, even if libpcrs is available],
 [ if test $enableval = "no"; then have_pcrs=no; fi ])
 
 

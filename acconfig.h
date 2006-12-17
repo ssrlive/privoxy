@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.32  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.27.2.4  2003/12/17 16:34:40  oes
  *    Cosmetics
  *
@@ -339,6 +343,11 @@
  * Use PNG instead of GIF for built-in images
  */
 #undef FEATURE_NO_GIFS
+
+/*
+ * Allow to shutdown Privoxy through the webinterface.
+ */
+#undef FEATURE_GRACEFUL_TERMINATION
 
 /*
  * Use POSIX threads instead of native threads.
