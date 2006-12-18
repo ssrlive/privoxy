@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.49 2006/12/11 11:18:25 hal9 Exp $
+#  $Id: default.action.master,v 1.50 2006/12/16 13:25:55 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -748,7 +748,7 @@ rcm.amazon.com
 #MASTER# BLOCK-REFERRER: http://gamespot.com 09/26/06
 #MASTER# REMARKS: adlog.com.com and ads.com.com
 ad*.com.com
-dw.com.com
+#MASTER# REMARKS: used in redirects: dw.com.com 12/18/06
 #MASTER# BLOCK-REFERRER: http://verizon.net 09/29/06
 sales.liveperson.net
 #MASTER# BLOCK-REFERRER: www.avclub.com/ 10/14/06
@@ -862,7 +862,8 @@ stats./.*\.gif\?
 #MASTER# BLOCK-REFERRER: not provided. SF tracker #1616034 12/16/06
 #MASTER# COMMENT: JS pop-ups
 spa.snap.com/
-
+#MASTER# BLOCK-REFERRER: http://www.gamefaqs.com/computer/doswin/game/914819.html 12/18/06
+dw.com.com/clear/
 
 #----------------------------------------------------------------------------
 # JavaScripts for ad and popup generation
@@ -1704,6 +1705,8 @@ blogs.msdn.com
 #MASTER# PROBLEM-URL: http://uk.rd.yahoo.com/M=200059723.200849546.202365062.200414073/D=ukhmpg/S=15426100:TEAR/A=200396897/R=1119/id=img1_nocap_dial/*http://ad.uk.doubleclick.net/clk;5982435;8261020;g?http://www.lunnpoly.com
 #MASTER# REMARKS: Basically all of Yahoo's outbound links
 .*rd.yahoo.com/
+#MASTER# PROBLEM-URL: http://www.gamefaqs.com/computer/doswin/game/914819.html 12/18/06
+dw.com.com/
 
 {+block}
 #MASTER# COMMENTS: This section not checked 10/17/06 HB. Still out there?
