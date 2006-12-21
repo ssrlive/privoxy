@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.39  2006/10/04 17:37:54  fabiankeil
+#    JavaScript fix for bug report #1570678.
+#
 #    Revision 1.38  2006/09/08 12:06:35  fabiankeil
 #    Have hide-if-modified-since interpret the random
 #    range value as minutes instead of hours. Allows
@@ -402,9 +405,11 @@ function show_send_wafer_opts(tf)
 
 <body>
 
+<!-- @if-one-form-only-start -->
 <form method="GET" action="edit-actions-submit" id="myform" name="myform">
+<!-- if-one-form-only-end@ -->
 
-  <table cellpadding="20" cellspacing="10" border="0" width="100%">
+  <table summary="" cellpadding="20" cellspacing="10" border="0" width="100%">
     <tr>
       <td class="title">
 
@@ -424,6 +429,7 @@ function show_send_wafer_opts(tf)
     </tr>
 <!-- if-unstable-end@ -->
 
+<!-- @if-one-form-only-start -->
     <tr>
       <td class="box">
         <h2>Edit Actions
@@ -439,10 +445,16 @@ function show_send_wafer_opts(tf)
         <p><input type="submit" value="Submit" name="Submit"></p>
       </td>
     </tr>
+<!-- if-one-form-only-end@ -->
 
 <tr><td class="wrapbox">
 
-  <table border="0" cellspacing="2" width="100%" class="wide">
+<!-- @if-multiple-forms-start -->
+<form method="GET" action="edit-actions-submit" id="myform" name="myform">
+  <h2>Edit Actions (Section 1)</h2>
+<!-- if-multiple-forms-end@ -->
+
+  <table summary="Action section 1" border="0" cellspacing="2" width="100%" class="wide">
     <tr class="hdr" align="left">
       <th class="enh" align="center">Enable</th>
       <th class="dish" align="center">Disable</th>
@@ -659,6 +671,28 @@ function show_send_wafer_opts(tf)
         id="fast_redirects_check_decoded_url" @fast-redirects-param-check-decoded-url@><label
         for="fast_redirects_check_decoded_url">Decode URL before checking.</label></td>
     </tr>
+<!-- @if-multiple-forms-start -->
+   </table>
+   <p>
+    <input type="hidden" name="f" value="@f@">
+    <input type="hidden" name="v" value="@v@">
+    <input type="hidden" name="s" value="@s@">
+    <input type="submit" value="Submit changes in Section 1" name="Submit">
+  </p>
+  </form>
+ </td></tr>
+ <tr><td class="wrapbox">
+  <form method="GET" action="edit-actions-submit" id="myform-2" name="myform">
+  <h2>Edit Actions (Section 2)</h2>
+  <table summary="Action section 2" border="0" cellspacing="2" width="100%" class="wide">
+    <tr class="hdr" align="left">
+      <th class="enh" align="center">Enable</th>
+      <th class="dish" align="center">Disable</th>
+      <th class="noch" align="center">No Change</th>
+      <th>Action</th>
+      <th>Description</th>
+    </tr>
+<!-- if-multiple-forms-end@ -->
     <tr class="bg1" align="left" valign="top">
       <td class="en1">&nbsp;</td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
@@ -672,6 +706,28 @@ function show_send_wafer_opts(tf)
         disable the filters individually below.</td>
     </tr>
 @filter-params@
+<!-- @if-multiple-forms-start -->
+   </table>
+   <p>
+    <input type="hidden" name="f" value="@f@">
+    <input type="hidden" name="v" value="@v@">
+    <input type="hidden" name="s" value="@s@">
+    <input type="submit" value="Submit changes in Section 2" name="Submit">
+   </p>
+  </form>
+ </td></tr>
+ <tr><td class="wrapbox">
+  <form method="GET" action="edit-actions-submit" id="myform-3" name="myform">
+  <h2>Edit Actions (Section 3)</h2>
+  <table summary="Action section 3" border="0" cellspacing="2" width="100%" class="wide">
+    <tr class="hdr" align="left">
+      <th class="enh" align="center">Enable</th>
+      <th class="dish" align="center">Disable</th>
+      <th class="noch" align="center">No Change</th>
+      <th>Action</th>
+      <th>Description</th>
+    </tr>
+<!-- if-multiple-forms-end@ -->
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="filter_client_headers" value="Y" @filter-client-headers-y@
@@ -895,7 +951,28 @@ function show_send_wafer_opts(tf)
 	to keep track of your visits.
      </td>
     </tr>
-
+<!-- @if-multiple-forms-start -->
+   </table>
+   <p>
+    <input type="hidden" name="f" value="@f@">
+    <input type="hidden" name="v" value="@v@">
+    <input type="hidden" name="s" value="@s@">
+    <input type="submit" value="Submit changes in Section 3" name="Submit">
+   </p>
+  </form>
+ </td></tr>
+ <tr><td class="wrapbox">
+  <form method="GET" action="edit-actions-submit" id="myform-4" name="myform">
+  <h2>Edit Actions (Section 4)</h2>
+  <table summary="Action section 4" border="0" cellspacing="2" width="100%" class="wide">
+    <tr class="hdr" align="left">
+      <th class="enh" align="center">Enable</th>
+      <th class="dish" align="center">Disable</th>
+      <th class="noch" align="center">No Change</th>
+      <th>Action</th>
+      <th>Description</th>
+    </tr>
+<!-- if-multiple-forms-end@ -->
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="hide_referrer" id="hide_referrer_y" value="Y" @hide-referrer-y@
@@ -1087,7 +1164,7 @@ function show_send_wafer_opts(tf)
       <td class="dis1">&nbsp;</td>
       <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td>Address to redirect to:<br>
+      <td>Static address or a single pcrs command to redirect to a rewritten version of the original URL:<br>
         <input type="text" name="redirect_mode" size="40"
         value="@redirect-param@"></td>
     </tr>
@@ -1202,14 +1279,23 @@ function show_send_wafer_opts(tf)
     </tr>
   </table>
 
+<!-- @if-multiple-forms-start -->
+  <p>
+   <input type="hidden" name="f" value="@f@">
+   <input type="hidden" name="v" value="@v@">
+   <input type="hidden" name="s" value="@s@">
+   <input type="submit" value="Submit changes in Section 4" name="Submit">
+  </p>
+ </form>
+<!-- if-multiple-forms-end@ -->
 </td></tr>
-
+<!-- @if-one-form-only-start -->
     <tr>
       <td class="green" align="center">
         <p><input type="submit" value="Submit" name="Submit"></p>
       </td>
     </tr>
-
+<!-- if-one-form-only-end@ -->
     <tr>
       <td class="box">
         <h2>More Privoxy:</h2>
@@ -1235,15 +1321,10 @@ function show_send_wafer_opts(tf)
     </tr>
 <!-- if-have-help-info-end@ -->
 
-    <tr>
-      <td>
-        <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>
-      </td>
-    </tr>
-
   </table>
+<!-- @if-one-form-only-start -->
 </form>
-
+<!-- if-one-form-only-end@ -->
 
 <script type="text/javascript">
 <!--
