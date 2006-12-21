@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.82 2006/09/20 15:50:31 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.83 2006/12/06 19:26:29 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.83  2006/12/06 19:26:29  fabiankeil
+ *    Moved HTTP snipplets into jcc.c. They aren't
+ *    used anywhere else.
+ *
  *    Revision 1.82  2006/09/20 15:50:31  fabiankeil
  *    Doubled size of HOSTENT_BUFFER_SIZE to mask
  *    problems with gethostbyname_r and some
@@ -1423,6 +1427,9 @@ struct access_control_list
 /** configuration_spec::feature_flags: HTTP-header-based toggle. */
 #define RUNTIME_FEATURE_HTTP_TOGGLE       4
 
+/** configuration_spec::feature_flags: Split large forms to limit the number of GET arguments. */
+#define RUNTIME_FEATURE_SPLIT_LARGE_FORMS       8
+
 /**
  * Data loaded from the configuration file.
  *
@@ -1443,6 +1450,7 @@ struct configuration_spec
     * - RUNTIME_FEATURE_CGI_EDIT_ACTIONS
     * - RUNTIME_FEATURE_CGI_TOGGLE
     * - RUNTIME_FEATURE_HTTP_TOGGLE
+    * - RUNTIME_FEATURE_SPLIT_LARGE_FORMS
     */
    unsigned feature_flags;
 

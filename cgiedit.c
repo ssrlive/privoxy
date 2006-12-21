@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.43 2006/07/18 14:48:45 david__schmidt Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.44 2006/12/09 13:49:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.43 2006/07/18 14:48:45 david__sch
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.44  2006/12/09 13:49:16  fabiankeil
+ *    Fix configure option --disable-toggle.
+ *    Thanks to Peter Thoenen for reporting this.
+ *
  *    Revision 1.43  2006/07/18 14:48:45  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -3028,6 +3032,35 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
    if (!err) err = map(exports, "s", 1, url_encode(lookup(parameters, "s")), 0);
 
    if (!err) err = actions_to_radio(exports, cur_line->data.action);
+
+   /*
+    * XXX: Some browsers (at least IE6 and IE7) have an artifical URL
+    * length limitation and ignore clicks on the Submit buttons if
+    * the resulting GET URL would be longer than their limit.
+    *
+    * In Privoxy 3.0.5 beta the standard edit-actions-for-url template
+    * reached this limit and action editing stopped working in these
+    * browsers (BR #1570678).
+    *
+    * The config option split-large-forms works around this browser
+    * bug (HTTP has no URL lenght limitation) by deviding the action
+    * list form into multiple smaller ones. It means the URLs are shorter
+    * and work in broken browsers as well, but the user can no longer change
+    * all actions with one submit.
+    *
+    * A better solution would be to switch to POST requests,
+    * but this will do for now.
+    */
+   if(!err && (csp->config->feature_flags & RUNTIME_FEATURE_SPLIT_LARGE_FORMS))
+   {
+      /* Generate multiple smaller form by killing the big one. */
+      err = map_block_killer(exports, "one-form-only");
+   }
+   else
+   {
+      /* Default: Generate one large form by killing the smaller ones. */
+      err = map_block_killer(exports, "multiple-forms");
+   }
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {

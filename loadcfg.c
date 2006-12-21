@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.55 2006/11/28 15:31:52 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.56 2006/12/17 17:04:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.55 2006/11/28 15:31:52 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.56  2006/12/17 17:04:51  fabiankeil
+ *    Move the <br> in the generated HTML for the config
+ *    options from the beginning of the string to its end.
+ *    Keeps the white space in balance.
+ *
  *    Revision 1.55  2006/11/28 15:31:52  fabiankeil
  *    Fix memory leak in case of config file reloads.
  *
@@ -476,6 +481,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_permit_access             3587953268ul /* "permit-access" */
 #define hash_proxy_info_url            3903079059ul /* "proxy-info-url" */
 #define hash_single_threaded           4250084780ul /* "single-threaded" */
+#define hash_split_large_cgi_forms      671658948ul /* "split-large-cgi-forms" */
 #define hash_suppress_blocklists       1948693308ul /* "suppress-blocklists" */
 #define hash_toggle                        447966ul /* "toggle" */
 #define hash_trust_info_url             430331967ul /* "trust-info-url" */
@@ -676,6 +682,7 @@ struct configuration_spec * load_config(void)
    config->proxy_args                = strdup("");
    config->forwarded_connect_retries = 0;
    config->feature_flags            &= ~RUNTIME_FEATURE_CGI_TOGGLE;
+   config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
 
    if ((configfp = fopen(configfile, "r")) == NULL)
    {
@@ -1301,6 +1308,20 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_single_threaded :
             config->multi_threaded = 0;
+            continue;
+
+/* *************************************************************************
+ * split-large-cgi-forms
+ * *************************************************************************/
+         case hash_split_large_cgi_forms :
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
+            }
             continue;
 
 /* *************************************************************************
