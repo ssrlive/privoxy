@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.42 2006/11/21 15:43:12 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.43 2006/12/17 17:57:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,12 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.42 2006/11/21 15:43:12 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.43  2006/12/17 17:57:56  fabiankeil
+ *    - Added FEATURE_GRACEFUL_TERMINATION to the
+ *      "conditional #defines" section
+ *    - Escaped ampersands in generated HTML.
+ *    - Renamed re-filter-filename to re-filter-filenames
+ *
  *    Revision 1.42  2006/11/21 15:43:12  fabiankeil
  *    Add special treatment for WIN32 to make sure
  *    cgi_send_user_manual opens the files in binary mode.
@@ -863,7 +869,7 @@ jb_err cgi_show_version(struct client_state *csp,
  *
  * Function    :  cgi_show_status
  *
- * Description :  CGI function that returns a a web page describing the
+ * Description :  CGI function that returns a web page describing the
  *                current status of Privoxy.
  *
  * Parameters  :
@@ -900,8 +906,6 @@ jb_err cgi_show_status(struct client_state *csp,
    int local_urls_read;
    int local_urls_rejected;
 #endif /* ndef FEATURE_STATISTICS */
-   struct file_list * fl;
-   struct url_actions * b;
    jb_err err = JB_ERR_OK;
 
    struct map *exports;
@@ -1045,7 +1049,7 @@ jb_err cgi_show_status(struct client_state *csp,
    s = strdup("");
    for (i = 0; i < MAX_AF_FILES; i++)
    {
-      if (((fl = csp->actions_list[i]) != NULL) && ((b = fl->f) != NULL))
+      if (csp->actions_list[i] != NULL)
       {
          if (!err) err = string_append(&s, "<tr><td>");
          if (!err) err = string_join(&s, html_encode(csp->actions_list[i]->filename));
@@ -1079,11 +1083,12 @@ jb_err cgi_show_status(struct client_state *csp,
    s = strdup("");
    for (i = 0; i < MAX_AF_FILES; i++)
    {
-      if (((fl = csp->rlist[i]) != NULL) && ((b = fl->f) != NULL))
+      if (csp->rlist[i] != NULL)
       {
          if (!err) err = string_append(&s, "<tr><td>");
          if (!err) err = string_join(&s, html_encode(csp->rlist[i]->filename));
-         snprintf(buf, 100, "</td><td class=\"buttons\"><a href=\"/show-status?file=filter&amp;index=%d\">View</a>", i);
+         snprintf(buf, 100,
+            "</td><td class=\"buttons\"><a href=\"/show-status?file=filter&amp;index=%d\">View</a>", i);
          if (!err) err = string_append(&s, buf);
          if (!err) err = string_append(&s, "</td></tr>\n");
       }
