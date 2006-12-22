@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.70 2006/12/09 13:33:15 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.71 2006/12/22 14:24:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.70 2006/12/09 13:33:15 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.71  2006/12/22 14:24:52  fabiankeil
+ *    Skip empty filter files in pcrs_filter_response,
+ *    but don't ignore the ones that come afterwards.
+ *    Fixes parts of BR 1619208.
+ *
  *    Revision 1.70  2006/12/09 13:33:15  fabiankeil
  *    Added some sanity checks for get_last_url().
  *    Fixed possible segfault caused by my last commit.
@@ -1565,7 +1570,7 @@ int is_untrusted_url(struct client_state *csp)
       {
          /* if the URL's referrer is from a trusted referrer, then
           * add the target spec to the trustfile as an unblocked
-          * domain and return NULL (which means it's OK).
+          * domain and return 0 (which means it's OK).
           */
 
          FILE *fp;
@@ -1596,9 +1601,19 @@ int is_untrusted_url(struct client_state *csp)
                string_join(&new_entry, path);
             }
 
+            /*
+             * Give a reason for generating this entry.
+             */
+            string_append(&new_entry, " # Trusted referrer was: ");
+            string_append(&new_entry, referer);
+
             if (new_entry != NULL)
             {
-               fprintf(fp, "%s\n", new_entry);
+               if (-1 == fprintf(fp, "%s\n", new_entry))
+               {
+                  log_error(LOG_LEVEL_ERROR, "Failed to append \'%s\' to trustfile \'%s\': %E",
+                     new_entry, csp->config->trustfile);
+               }
                free(new_entry);
             }
             else
@@ -1608,6 +1623,11 @@ int is_untrusted_url(struct client_state *csp)
             }
 
             fclose(fp);
+         }
+         else
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to append new entry for \'%s\' to trustfile \'%s\': %E",
+               csp->http->hostport, csp->config->trustfile);
          }
          return 0;
       }
