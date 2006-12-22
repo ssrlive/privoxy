@@ -3,6 +3,16 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.6 ***
 
+- New trust entries are saved with a comment that contains the
+  trusted referring URL (Suggested by Daniel Griscom).
+- Filter descriptions are HTML encoded automatically. 	
+- The config option split-large-forms can be used to work
+  around a browser bug that caused IE6 and IE7 to ignore
+  the Submit button on the edit-actions-for-url CGI page.
+- Requests for Privoxy's CGI pages can be blocked, redirected
+  or (un)trusted like ordinary requests.
+- Empty filter files no longer interrupt the filtering process
+  prematurely and are correctly listed on the show-status CGI page. 
 - Privoxy can be combined with any packet filter to build
   an intercepting proxy for HTTP/1.1 requests (and for HTTP/1.0
   requests with Host header set).
