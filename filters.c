@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.71 2006/12/22 14:24:52 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.72 2006/12/22 18:52:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.71 2006/12/22 14:24:52 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.72  2006/12/22 18:52:53  fabiankeil
+ *    Modified is_untrusted_url to complain in case of
+ *    write errors and to give a reason when adding new
+ *    entries to the trustfile. Closes FR 1097611.
+ *
  *    Revision 1.71  2006/12/22 14:24:52  fabiankeil
  *    Skip empty filter files in pcrs_filter_response,
  *    but don't ignore the ones that come afterwards.
@@ -1742,7 +1747,9 @@ char *pcrs_filter_response(struct client_state *csp)
       {
          if (strcmp(b->name, filtername->str) == 0)
          {
-            int current_hits = 0;
+            int current_hits = 0; /* Number of hits caused by this filter */
+            int job_number   = 0; /* Which job we're currently executing  */
+            int job_hits     = 0; /* How many hits the current job caused */
 
             if ( NULL == b->joblist )
             {
@@ -1754,13 +1761,50 @@ char *pcrs_filter_response(struct client_state *csp)
             /* Apply all jobs from the joblist */
             for (job = b->joblist; NULL != job; job = job->next)
             {
-               current_hits += pcrs_execute(job, old, size, &new, &size);
-               if (old != csp->iob->cur) free(old);
-               old=new;
+               job_number++;
+               job_hits = pcrs_execute(job, old, size, &new, &size);
+
+               if (job_hits >= 0)
+               {
+                  /*
+                   * That went well. Continue filtering
+                   * and use the result of this job as
+                   * input for the next one.
+                   */
+                  current_hits += job_hits;
+                  if (old != csp->iob->cur)
+                  {
+                     free(old);
+                  }
+                  old = new;
+               }
+               else
+               {
+                  /*
+                   * The job caused an unexpected error. Inform the user
+                   * and skip the rest of jobs in this filter. We could
+                   * continue with the next job, but usually the jobs
+                   * depend on each other or are similar enough to
+                   * fail with the same reason.
+                   *
+                   * XXX: In theory pcrs_strerror() would
+                   * return a proper error message here.
+                   *
+                   * At the moment, however, our pcrs expects the
+                   * error codes of pcre 3.4 and newer pcre version
+                   * return different error codes. As a result
+                   * pcrs_strerror()'s error message might be bogus,
+                   * therefore we print the numerical value as well.
+                   */
+                  log_error(LOG_LEVEL_ERROR, "Skipped filter \'%s\' after job number %u: %s (%d)",
+                     b->name, job_number, pcrs_strerror (job_hits), job_hits);
+                  break;
+               }
             }
 
-            log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s%s (size %d) with filter %s produced %d hits (new size %d).",
-                      csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
+            log_error(LOG_LEVEL_RE_FILTER,
+               "re_filtering %s%s (size %d) with filter %s produced %d hits (new size %d).",
+               csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
 
             hits += current_hits;
          }
