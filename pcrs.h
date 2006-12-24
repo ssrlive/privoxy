@@ -3,7 +3,7 @@
 
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/pcrs.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/pcrs.h,v $
  *
  * Purpose     :  Header file for pcrs.c
  *
@@ -11,6 +11,10 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.13  2006/07/18 14:48:47  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.11  2002/03/08 14:18:23  oes
  *    Fixing -Wconversion warnings
  *
@@ -62,7 +66,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.11 2002/03/08 14:18:23 oes Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.13 2006/07/18 14:48:47 david__schmidt Exp $"
 
 
 #ifndef _PCRE_H
@@ -85,12 +89,20 @@ extern "C" {
 #define PCRS_MAX_MATCH_INIT  40     /* Initial amount of matches that can be stored in global searches */
 #define PCRS_MAX_MATCH_GROW  1.6    /* Factor by which storage for matches is extended if exhausted */
 
-/* Error codes */
-#define PCRS_ERR_NOMEM     -10      /* Failed to acquire memory. */
-#define PCRS_ERR_CMDSYNTAX -11      /* Syntax of s///-command */
-#define PCRS_ERR_STUDY     -12      /* pcre error while studying the pattern */
-#define PCRS_ERR_BADJOB    -13      /* NULL job pointer, pattern or substitute */
-#define PCRS_WARN_BADREF   -14      /* Backreference out of range */
+/*
+ * PCRS error codes
+ *
+ * They are supposed to be handled together with PCRE error
+ * codes and have to start with an offset to prevent overlaps.
+ *
+ * PCRE 6.7 uses error codes from -1 to -21, PCRS error codes
+ * below -100 should be safe for a while.
+ */
+#define PCRS_ERR_NOMEM     -100      /* Failed to acquire memory. */
+#define PCRS_ERR_CMDSYNTAX -101      /* Syntax of s///-command */
+#define PCRS_ERR_STUDY     -102      /* pcre error while studying the pattern */
+#define PCRS_ERR_BADJOB    -103      /* NULL job pointer, pattern or substitute */
+#define PCRS_WARN_BADREF   -104      /* Backreference out of range */
 
 /* Flags */
 #define PCRS_GLOBAL          1      /* Job should be applied globally, as with perl's g option */
