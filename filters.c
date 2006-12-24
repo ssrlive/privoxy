@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.72 2006/12/22 18:52:53 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.73 2006/12/23 16:01:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.72 2006/12/22 18:52:53 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.73  2006/12/23 16:01:02  fabiankeil
+ *    Don't crash if pcre returns an error code
+ *    that pcrs didn't expect. Fixes BR 1621173.
+ *
  *    Revision 1.72  2006/12/22 18:52:53  fabiankeil
  *    Modified is_untrusted_url to complain in case of
  *    write errors and to give a reason when adding new
@@ -1781,23 +1785,23 @@ char *pcrs_filter_response(struct client_state *csp)
                else
                {
                   /*
-                   * The job caused an unexpected error. Inform the user
-                   * and skip the rest of jobs in this filter. We could
+                   * This job caused an unexpected error. Inform the user
+                   * and skip the rest of the jobs in this filter. We could
                    * continue with the next job, but usually the jobs
                    * depend on each other or are similar enough to
-                   * fail with the same reason.
+                   * fail for the same reason.
                    *
-                   * XXX: In theory pcrs_strerror() would
-                   * return a proper error message here.
+                   * At the moment our pcrs expects the error codes of pcre 3.4,
+                   * but newer pcre versions can return additional error codes.
+                   * As a result pcrs_strerror()'s error message might be
+                   * "Unknown error ...", therefore we print the numerical value
+                   * as well.
                    *
-                   * At the moment, however, our pcrs expects the
-                   * error codes of pcre 3.4 and newer pcre version
-                   * return different error codes. As a result
-                   * pcrs_strerror()'s error message might be bogus,
-                   * therefore we print the numerical value as well.
+                   * XXX: Is this important enough for LOG_LEVEL_ERROR or
+                   * should we use LOG_LEVEL_RE_FILTER instead?
                    */
                   log_error(LOG_LEVEL_ERROR, "Skipped filter \'%s\' after job number %u: %s (%d)",
-                     b->name, job_number, pcrs_strerror (job_hits), job_hits);
+                     b->name, job_number, pcrs_strerror(job_hits), job_hits);
                   break;
                }
             }
