@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.43 2006/09/23 13:26:38 roro Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.44 2006/11/07 12:46:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -36,6 +36,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.43 2006/09/23 13:26:38 roro Exp
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.44  2006/11/07 12:46:43  fabiankeil
+ *    Silence compiler warning on NetBSD 3.1.
+ *
  *    Revision 1.43  2006/09/23 13:26:38  roro
  *    Replace TABs by spaces in source code.
  *
@@ -1081,25 +1084,37 @@ char * make_path(const char * dir, const char * file)
 long int pick_from_range(long int range)
 {
    long int number;
-#ifndef HAVE_RANDOM
-   unsigned int weak_seed;
-
-   weak_seed = (unsigned int)((unsigned int)time(NULL) | (unsigned int)range);
-   srand(weak_seed);
-   /*
-    * Some rand implementations aren't that random and return mostly
-    * lower numbers. Low entropy doesn't matter for the header times, 
-    * but higher "random" factors are prefered.
-    */
-   number = (rand() * 12345) % (long int)(range + 1);
-   /* Overflows don't matter either, positive numbers do. */
-   if(number<0)
-   {
-      number*= -1;
-   }
-#else
+#ifdef HAVE_RANDOM
    number = random() % range + 1; 
-#endif /* (ifndef HAVE_RANDOM) */
+#elif defined(FEATURE_PTHREAD)
+   pthread_mutex_lock(&rand_mutex);
+   number = rand() % (long int)(range + 1);
+   pthread_mutex_unlock(&rand_mutex);
+#else
+#ifdef _WIN32
+   /*
+    * On Windows and mingw32 srand() has to be called in every
+    * rand()-using thread, but can cause crashes if it's not
+    * mutex protected.
+    *
+    * Currently we don't have mutexes for mingw32, and for
+    * our purpose this cludge is probably preferable to crashes.
+    */
+   log_error(LOG_LEVEL_INFO, "No thread-safe PRNG available? Using weak \'randomization\' factor.");
+   number = (range + GetCurrentThreadId() % range) / 2;
+#else
+   /*
+    * XXX: Which platforms reach this and are there
+    * better options than just using rand() and hoping
+    * that it's safe?
+    */
+   log_error(LOG_LEVEL_INFO, "No thread-safe PRNG available? Header time randomization might cause "
+      "crashes, predictable results or even combine these fine options.");
+   number = rand() % (long int)(range + 1);
+#endif /* def _WIN32 */ 
+
+#endif /* (def HAVE_RANDOM) */
+
    return (number);
 }
 

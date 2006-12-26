@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.18 2006/11/13 19:05:51 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.19 2006/12/06 19:41:39 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,16 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.19  2006/12/06 19:41:39  fabiankeil
+ *    Privoxy is now able to run as intercepting
+ *    proxy in combination with any packet filter
+ *    that does the port redirection. The destination
+ *    is extracted from the "Host:" header which
+ *    should be available for nearly all requests.
+ *
+ *    Moved HTTP snipplets into jcc.c.
+ *    Added error message for gopher proxy requests.
+ *
  *    Revision 1.18  2006/11/13 19:05:51  fabiankeil
  *    Make pthread mutex locking more generic. Instead of
  *    checking for OSX and OpenBSD, check for FEATURE_PTHREAD
@@ -181,6 +191,11 @@ extern pthread_mutex_t gethostbyaddr_mutex;
 #ifndef HAVE_GETHOSTBYNAME_R
 extern pthread_mutex_t gethostbyname_mutex;
 #endif /* ndef HAVE_GETHOSTBYNAME_R */
+
+#ifndef HAVE_RANDOM
+extern pthread_mutex_t rand_mutex;
+#endif /* ndef HAVE_RANDOM */
+
 #endif /* FEATURE_PTHREAD */
 
 /* Functions */
