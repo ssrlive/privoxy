@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.111 2006/12/23 16:15:06 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.112 2006/12/26 17:31:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.111 2006/12/23 16:15:06 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.112  2006/12/26 17:31:41  fabiankeil
+ *    Mutex protect rand() if POSIX threading
+ *    is used, warn the user if that's not possible
+ *    and stop using it on _WIN32 where it could
+ *    cause crashes.
+ *
  *    Revision 1.111  2006/12/23 16:15:06  fabiankeil
  *    Don't prevent core dumps by catching SIGABRT.
  *    It's rude and makes debugging unreasonable painful.
@@ -2078,7 +2084,7 @@ int main(int argc, const char *argv[])
 #endif
 {
    int argc_pos = 0;
-   int random_seed;
+   unsigned int random_seed;
 #ifdef unix
    struct passwd *pw = NULL;
    struct group *grp = NULL;
