@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.76 2006/12/06 19:52:25 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.77 2006/12/07 18:44:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.76 2006/12/06 19:52:25 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.77  2006/12/07 18:44:26  fabiankeil
+ *    Rebuild request URL in get_destination_from_headers()
+ *    to make sure redirect{pcrs command} works as expected
+ *    for intercepted requests.
+ *
  *    Revision 1.76  2006/12/06 19:52:25  fabiankeil
  *    Added get_destination_from_headers().
  *
@@ -2936,7 +2941,7 @@ int strclean(const char *string, const char *substring)
  *          2  :  tm = storage for the resulting time in seconds 
  *
  * Returns     :  Time struct containing the header time, or
- *                NULL in case of a parsing problem.
+ *                NULL in case of a parsing problems.
  *
  *********************************************************************/
 struct tm *parse_header_time(char *header, time_t *tm) {
@@ -2944,6 +2949,25 @@ struct tm *parse_header_time(char *header, time_t *tm) {
    char * timestring;
    struct tm gmt;
    struct tm * timeptr;
+
+   /*
+    * Initializing gmt to prevent time zone offsets.
+    *
+    * While this is only necessary on some platforms
+    * (mingw32 for example), I don't know how to
+    * detect these automatically and doing it everywhere
+    * shouldn't hurt.
+    */
+   time(tm); 
+#ifdef HAVE_LOCALTIME_R
+   gmt = *localtime_r(tm, &gmt);
+#elif FEATURE_PTHREAD
+   pthread_mutex_lock(&localtime_mutex);
+   gmt = *localtime(tm); 
+   pthread_mutex_unlock(&localtime_mutex);
+#else
+   gmt = *localtime(tm); 
+#endif
 
    /* Skipping header name */
    timestring = strstr(header, ": ");
@@ -2954,7 +2978,7 @@ struct tm *parse_header_time(char *header, time_t *tm) {
    else
    {
       *tm = timegm(&gmt);
-      timeptr=&gmt;
+      timeptr = &gmt;
    }
    return(timeptr);
 
