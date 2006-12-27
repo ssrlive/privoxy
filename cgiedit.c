@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.44 2006/12/09 13:49:16 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.45 2006/12/21 12:57:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.44 2006/12/09 13:49:16 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.45  2006/12/21 12:57:48  fabiankeil
+ *    Add config option "split-large-forms"
+ *    to work around the browser bug reported
+ *    in BR #1570678.
+ *
  *    Revision 1.44  2006/12/09 13:49:16  fabiankeil
  *    Fix configure option --disable-toggle.
  *    Thanks to Peter Thoenen for reporting this.
@@ -3085,7 +3090,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
    {
       /* We have some entries in the filter list */
       char * result;
-      int index = 0;
+      int filter_identifier = 0;
       char * filter_template;
 
       err = template_load(csp, &filter_template, "edit-actions-for-url-filter", 0);
@@ -3143,7 +3148,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                }
 
                /* Generate a unique serial number */
-               snprintf(number, sizeof(number), "%x", index++);
+               snprintf(number, sizeof(number), "%x", filter_identifier++);
                number[sizeof(number) - 1] = '\0';
 
                line_exports = new_map();
@@ -3232,7 +3237,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    unsigned line_number;
    char target[1024];
    jb_err err;
-   int index;
+   int filter_identifier;
    const char * action_set_name;
    char ch;
    struct file_list * fl;
@@ -3276,9 +3281,9 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    get_string_param(parameters, "p", &action_set_name);
    if (action_set_name != NULL)
    {
-      for (index = 0; index < MAX_AF_FILES; index++)
+      for (filter_identifier = 0; filter_identifier < MAX_AF_FILES; filter_identifier++)
       {
-         if (((fl = csp->actions_list[index]) != NULL) && ((b = fl->f) != NULL))
+         if (((fl = csp->actions_list[filter_identifier]) != NULL) && ((b = fl->f) != NULL))
          {
             for (b = b->next; NULL != b; b = b->next)
             {
@@ -3319,7 +3324,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] = 0;
    }
 
-   for (index = 0; !err; index++)
+   for (filter_identifier = 0; !err; filter_identifier++)
    {
       char key_value[30];
       char key_name[30];
@@ -3327,9 +3332,9 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       char value;
 
       /* Generate the keys */
-      snprintf(key_value, sizeof(key_value), "filter_r%x", index);
+      snprintf(key_value, sizeof(key_value), "filter_r%x", filter_identifier);
       key_value[sizeof(key_value) - 1] = '\0';
-      snprintf(key_name, sizeof(key_name), "filter_n%x", index);
+      snprintf(key_name, sizeof(key_name), "filter_n%x", filter_identifier);
       key_name[sizeof(key_name) - 1] = '\0';
 
       err = get_string_param(parameters, key_name, &name);
