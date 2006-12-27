@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.112 2006/12/26 17:31:41 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.113 2006/12/26 17:38:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.112 2006/12/26 17:31:41 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.113  2006/12/26 17:38:50  fabiankeil
+ *    Silence compiler warning I introduced with my last commit.
+ *
  *    Revision 1.112  2006/12/26 17:31:41  fabiankeil
  *    Mutex protect rand() if POSIX threading
  *    is used, warn the user if that's not possible
@@ -2719,7 +2722,7 @@ static void listen_loop(void)
             pthread_attr_init(&attrs);
             pthread_attr_setdetachstate(&attrs, PTHREAD_CREATE_DETACHED);
             errno = pthread_create(&the_thread, &attrs,
-               (void*)serve, csp);
+               (void * (*)(void *))serve, csp);
             child_id = errno ? -1 : 0;
             pthread_attr_destroy(&attrs);
          }
