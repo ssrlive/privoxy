@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.50 2006/12/16 13:25:55 hal9 Exp $
+#  $Id: default.action.master,v 1.51 2006/12/18 11:35:04 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -664,6 +664,9 @@ countr*.
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
 /.*(count|track|compteur|(?<!relo)adframe|adse?rve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
 /(.*/)?clicktrack
+#MASTER# REMARKS: Added 12/28/06 per Adam Piggott
+/(.*/)?(full)?pop[-_]?(up|over|under|open(er)?)?s?(/|\.)
+/(.*/)?((flash)?pop|live(cnt|count(er)?)).*\.(js|php|cgi)
 
 #############################################################################
 # Generic unblockers by path:
@@ -792,6 +795,8 @@ ad.theadhost.com
 .trk.sodoit.com/
 #MASTER# BLOCK-REFERRER: http://www.freenews.fr 11/23/06 Actionsfile feedback item #1597034
 .espace.netavenir.com
+#MASTER# BLOCK-REFERRER: http://www.powerdvd.com/ 12/28/06
+.hitfarm.com
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1117,6 +1122,8 @@ smartad.*.*.*
 #MASTER# BLOCK-REFERRER: http://www.heise.de/ 10/08/06
 #MASTER# BLOCK-REFERRER: http://www.spiegel.de/
 /RealMedia/ads/
+#MASTER# BLOCK-REFERRER: http://www.powerdvd.com 12/28/06 per SF tracker
+/top\.php\?d=.*\.[a-z]{2,5}
 
 #############################################################################
 # Site-specific unblockers:
