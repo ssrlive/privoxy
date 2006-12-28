@@ -1,7 +1,7 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.32.2.6 2006/01/29 23:10:56 david__schmidt Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.35 2006/07/18 14:48:45 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/actions.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
  *
  * Purpose     :  Declares functions to work with actions files
  *                Functions declared include: FIXME
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.32.2.6 2006/01/29 23:10:56 david_
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.35  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.32.2.6  2006/01/29 23:10:56  david__schmidt
  *    Multiple filter file support
  *
@@ -1086,7 +1090,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
          if (buf[1] == '{')
          {
             /* It's {{settings}} or {{alias}} */
-            int len = strlen(buf);
+            size_t len = strlen(buf);
             char * start = buf + 2;
             char * end = buf + len - 1;
             if ((len < 5) || (*end-- != '}') || (*end-- != '}'))
