@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.82 2006/12/17 17:53:39 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.83 2006/12/17 19:35:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.82 2006/12/17 17:53:39 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.83  2006/12/17 19:35:19  fabiankeil
+ *    Escape ampersand in Privoxy menu.
+ *
  *    Revision 1.82  2006/12/17 17:53:39  fabiankeil
  *    Suppress the toggle link if remote toggling is disabled.
  *
@@ -1072,7 +1075,7 @@ char get_char_param(const struct map *parameters,
    ch = *(lookup(parameters, param_name));
    if ((ch >= 'a') && (ch <= 'z'))
    {
-      ch = ch - 'a' + 'A';
+      ch = (char)(ch - 'a' + 'A');
    }
 
    return ch;
@@ -1204,7 +1207,7 @@ jb_err get_number_param(struct client_state *csp,
          return JB_ERR_CGI_PARAMS;
       }
 
-      ch -= '0';
+      ch = (char)(ch - '0');
 
       /* Note:
        *
@@ -1218,7 +1221,7 @@ jb_err get_number_param(struct client_state *csp,
          return JB_ERR_CGI_PARAMS;
       }
 
-      value = value * 10 + ch;
+      value = value * 10 + (unsigned)ch;
    }
 
    /* Success */
@@ -1558,7 +1561,7 @@ jb_err cgi_error_unknown(struct client_state *csp,
    rsp->head_length = 0;
    rsp->is_static = 0;
 
-   sprintf(errnumbuf, "%d", error_to_report);
+   snprintf(errnumbuf, sizeof(errnumbuf), "%d", error_to_report);
 
    rsp->body = malloc(strlen(body_prefix) + strlen(errnumbuf) + strlen(body_suffix) + 1);
    if (rsp->body == NULL)
@@ -1801,7 +1804,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
    /* 
     * Fill in the HTTP Status
     */
-   sprintf(buf, "HTTP/1.0 %s", rsp->status ? rsp->status : "200 OK");
+   snprintf(buf, sizeof(buf), "HTTP/1.0 %s", rsp->status ? rsp->status : "200 OK");
    err = enlist_first(rsp->headers, buf);
 
    /* 
@@ -1813,7 +1816,7 @@ struct http_response *finish_http_response(struct http_response *rsp)
    }
    if (!err)
    {
-      sprintf(buf, "Content-Length: %d", (int)rsp->content_length);
+      snprintf(buf, sizeof(buf), "Content-Length: %d", (int)rsp->content_length);
       err = enlist(rsp->headers, buf);
    }
 
