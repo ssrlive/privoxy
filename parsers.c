@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.77 2006/12/07 18:44:26 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.78 2006/12/26 17:19:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.77 2006/12/07 18:44:26 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.78  2006/12/26 17:19:20  fabiankeil
+ *    Bringing back the "useless" localtime() call
+ *    I removed in revision 1.67. On some platforms
+ *    it's necessary to prevent time zone offsets.
+ *
  *    Revision 1.77  2006/12/07 18:44:26  fabiankeil
  *    Rebuild request URL in get_destination_from_headers()
  *    to make sure redirect{pcrs command} works as expected
@@ -711,7 +716,7 @@ int flush_socket(jb_socket fd, struct client_state *csp)
  *                or buffer limit reached.
  *
  *********************************************************************/
-jb_err add_to_iob(struct client_state *csp, char *buf, int n)
+jb_err add_to_iob(struct client_state *csp, char *buf, size_t n)
 {
    struct iob *iob = csp->iob;
    size_t used, offset, need, want;
@@ -719,8 +724,8 @@ jb_err add_to_iob(struct client_state *csp, char *buf, int n)
 
    if (n <= 0) return JB_ERR_OK;
 
-   used   = iob->eod - iob->buf;
-   offset = iob->cur - iob->buf;
+   used   = (size_t)(iob->eod - iob->buf);
+   offset = (size_t)(iob->cur - iob->buf);
    need   = used + n + 1;
 
    /*
@@ -1616,7 +1621,7 @@ jb_err server_last_modified(struct client_state *csp, char **header)
       }
       else
       {
-         rtime = difftime(now, last_modified);
+         rtime = (long int)difftime(now, last_modified);
          if (rtime)
          {
             rtime = pick_from_range(rtime);
@@ -2910,8 +2915,11 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
  *********************************************************************/
 int strclean(const char *string, const char *substring)
 {
-   int hits = 0, len = strlen(substring);
+   int hits = 0;
+   size_t len;
    char *pos, *p;
+
+   len = strlen(substring);
 
    while((pos = strstr(string, substring)) != NULL)
    {
