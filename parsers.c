@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.78 2006/12/26 17:19:20 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.79 2006/12/29 18:04:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.78 2006/12/26 17:19:20 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.79  2006/12/29 18:04:40  fabiankeil
+ *    Fixed gcc43 conversion warnings.
+ *
  *    Revision 1.78  2006/12/26 17:19:20  fabiankeil
  *    Bringing back the "useless" localtime() call
  *    I removed in revision 1.67. On some platforms
@@ -716,7 +719,7 @@ int flush_socket(jb_socket fd, struct client_state *csp)
  *                or buffer limit reached.
  *
  *********************************************************************/
-jb_err add_to_iob(struct client_state *csp, char *buf, size_t n)
+jb_err add_to_iob(struct client_state *csp, char *buf, int n)
 {
    struct iob *iob = csp->iob;
    size_t used, offset, need, want;
@@ -726,7 +729,7 @@ jb_err add_to_iob(struct client_state *csp, char *buf, size_t n)
 
    used   = (size_t)(iob->eod - iob->buf);
    offset = (size_t)(iob->cur - iob->buf);
-   need   = used + n + 1;
+   need   = used + (size_t)n + 1;
 
    /*
     * If the buffer can't hold the new data, extend it first.
