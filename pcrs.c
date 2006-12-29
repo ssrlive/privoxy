@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.21 2006/07/18 14:48:47 david__schmidt Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.22 2006/12/24 17:34:20 fabiankeil Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,12 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.21 2006/07/18 14:48:47 david__schmidt E
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.22  2006/12/24 17:34:20  fabiankeil
+ *    Add pcrs_strerror() message for PCRE_ERROR_MATCHLIMIT
+ *    and give a hint why an error code might be unknown.
+ *
+ *    Catch NULL subjects early in pcrs_execute().
+ *
  *    Revision 1.21  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -345,7 +351,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
    if (trivialflag)
    {
       text = strncpy(text, replacement, length + 1);
-      k = length;
+      k = (int)length;
    }
 
    /*
@@ -406,7 +412,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
          if (replacement[i] == '$' && !quoted && i < (int)(length - 1))
          {
             char *symbol, symbols[] = "'`+&";
-            r->block_length[l] = k - r->block_offset[l];
+            r->block_length[l] = (size_t)(k - r->block_offset[l]);
 
             /* Numerical backreferences */
             if (isdigit((int)replacement[i + 1]))
@@ -471,7 +477,7 @@ plainchar:
     */
    r->text = text;
    r->backrefs = l;
-   r->block_length[l] = k - r->block_offset[l];
+   r->block_length[l] = (size_t)(k - r->block_offset[l]);
 
    return r;
 
@@ -843,12 +849,12 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
       return(PCRS_ERR_BADJOB);
    }
 
-   if (NULL == (matches = (pcrs_match *)malloc(max_matches * sizeof(pcrs_match))))
+   if (NULL == (matches = (pcrs_match *)malloc((size_t)max_matches * sizeof(pcrs_match))))
    {
       *result = NULL;
       return(PCRS_ERR_NOMEM);
    }
-   memset(matches, '\0', max_matches * sizeof(pcrs_match));
+   memset(matches, '\0', (size_t)max_matches * sizeof(pcrs_match));
 
 
    /*
@@ -867,29 +873,29 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
          matches[i].submatch_offset[k] = offsets[2 * k];
 
          /* Note: Non-found optional submatches have length -1-(-1)==0 */
-         matches[i].submatch_length[k] = offsets[2 * k + 1] - offsets[2 * k]; 
+         matches[i].submatch_length[k] = (size_t)(offsets[2 * k + 1] - offsets[2 * k]); 
 
          /* reserve mem for each submatch as often as it is ref'd */
-         newsize += matches[i].submatch_length[k] * job->substitute->backref_count[k];
+         newsize += matches[i].submatch_length[k] * (size_t)job->substitute->backref_count[k];
       }
       /* plus replacement text size minus match text size */
       newsize += strlen(job->substitute->text) - matches[i].submatch_length[0]; 
 
       /* chunk before match */
       matches[i].submatch_offset[PCRS_MAX_SUBMATCHES] = 0;
-      matches[i].submatch_length[PCRS_MAX_SUBMATCHES] = offsets[0];
-      newsize += offsets[0] * job->substitute->backref_count[PCRS_MAX_SUBMATCHES];
+      matches[i].submatch_length[PCRS_MAX_SUBMATCHES] = (size_t)offsets[0];
+      newsize += (size_t)offsets[0] * (size_t)job->substitute->backref_count[PCRS_MAX_SUBMATCHES];
 
       /* chunk after match */
       matches[i].submatch_offset[PCRS_MAX_SUBMATCHES + 1] = offsets[1];
-      matches[i].submatch_length[PCRS_MAX_SUBMATCHES + 1] = subject_length - offsets[1] - 1;
-      newsize += (subject_length - offsets[1]) * job->substitute->backref_count[PCRS_MAX_SUBMATCHES + 1];
+      matches[i].submatch_length[PCRS_MAX_SUBMATCHES + 1] = subject_length - (size_t)offsets[1] - 1;
+      newsize += (subject_length - (size_t)offsets[1]) * (size_t)job->substitute->backref_count[PCRS_MAX_SUBMATCHES + 1];
 
       /* Storage for matches exhausted? -> Extend! */
       if (++i >= max_matches)
       {
          max_matches = (int)(max_matches * PCRS_MAX_MATCH_GROW);
-         if (NULL == (dummy = (pcrs_match *)realloc(matches, max_matches * sizeof(pcrs_match))))
+         if (NULL == (dummy = (pcrs_match *)realloc(matches, (size_t)max_matches * sizeof(pcrs_match))))
          {
             free(matches);
             *result = NULL;
@@ -944,7 +950,7 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
    for (i = 0; i < matches_found; i++)
    {
       /* copy the chunk preceding the match */
-      memcpy(result_offset, subject + offset, (size_t)matches[i].submatch_offset[0] - offset); 
+      memcpy(result_offset, subject + offset, (size_t)(matches[i].submatch_offset[0] - offset)); 
       result_offset += matches[i].submatch_offset[0] - offset;
 
       /* For every segment of the substitute.. */
@@ -972,11 +978,11 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
             result_offset += matches[i].submatch_length[job->substitute->backref[k]];
          }
       }
-      offset =  matches[i].submatch_offset[0] + matches[i].submatch_length[0];
+      offset =  matches[i].submatch_offset[0] + (int)matches[i].submatch_length[0];
    }
 
    /* Copy the rest. */
-   memcpy(result_offset, subject + offset, subject_length - offset);
+   memcpy(result_offset, subject + offset, subject_length - (size_t)offset);
 
    *result_length = newsize;
    free(matches);
