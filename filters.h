@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.22 2006/07/18 14:48:46 david__schmidt Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.23 2006/11/28 15:19:43 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,11 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.23  2006/11/28 15:19:43  fabiankeil
+ *    Implemented +redirect{s@foo@bar@} to generate
+ *    a redirect based on a rewritten version of the
+ *    original URL.
+ *
  *    Revision 1.22  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -276,7 +281,7 @@ extern const struct forward_spec *forward_url(struct http_request *http, struct 
 extern char *pcrs_filter_response(struct client_state *csp);
 extern char *gif_deanimate_response(struct client_state *csp);
 extern char *jpeg_inspect_response(struct client_state *csp);
-extern int remove_chunked_transfer_coding(char *buffer, const size_t size);
+extern size_t remove_chunked_transfer_coding(char *buffer, const size_t size);
 extern char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits);
 extern char *rewrite_url(char *old_url, const char *pcrs_command);
 extern char *get_last_url(char *subject, const char *redirect_mode);
