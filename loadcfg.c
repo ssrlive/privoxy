@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.57 2006/12/21 12:57:48 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.58 2006/12/31 14:24:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.57 2006/12/21 12:57:48 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.58  2006/12/31 14:24:29  fabiankeil
+ *    Fix gcc43 compiler warnings.
+ *
  *    Revision 1.57  2006/12/21 12:57:48  fabiankeil
  *    Add config option "split-large-forms"
  *    to work around the browser bug reported
@@ -465,43 +468,44 @@ static struct file_list *current_configfile = NULL;
  * console and GUI specific options last).
  */
 
-#define hash_actions_file              1196306641ul /* "actionsfile" */
-#define hash_admin_address             4112573064ul /* "admin-address" */
-#define hash_buffer_limit              1881726070ul /* "buffer-limit */
-#define hash_confdir                      1978389ul /* "confdir" */
-#define hash_debug                          78263ul /* "debug" */
-#define hash_deny_access               1227333715ul /* "deny-access" */
-#define hash_enable_edit_actions       2517097536ul /* "enable-edit-actions" */
-#define hash_enable_remote_toggle      2979744683ul /* "enable-remote-toggle" */
-#define hash_enable_remote_http_toggle 110543988ul  /* "enable-remote-http-toggle" */
-#define hash_filterfile                 250887266ul /* "filterfile" */
-#define hash_forward                      2029845ul /* "forward" */
-#define hash_forward_socks4            3963965521ul /* "forward-socks4" */
-#define hash_forward_socks4a           2639958518ul /* "forward-socks4a" */
-#define hash_forwarded_connect_retries  101465292ul /* "forwarded-connect-retries" */
-#define hash_jarfile                      2046641ul /* "jarfile" */
-#define hash_listen_address            1255650842ul /* "listen-address" */
-#define hash_logdir                        422889ul /* "logdir" */
-#define hash_logfile                      2114766ul /* "logfile" */
-#define hash_permit_access             3587953268ul /* "permit-access" */
-#define hash_proxy_info_url            3903079059ul /* "proxy-info-url" */
-#define hash_single_threaded           4250084780ul /* "single-threaded" */
-#define hash_split_large_cgi_forms      671658948ul /* "split-large-cgi-forms" */
-#define hash_suppress_blocklists       1948693308ul /* "suppress-blocklists" */
-#define hash_toggle                        447966ul /* "toggle" */
-#define hash_trust_info_url             430331967ul /* "trust-info-url" */
-#define hash_trustfile                   56494766ul /* "trustfile" */
-#define hash_usermanual                1416668518ul /* "user-manual" */
-#define hash_activity_animation        1817904738ul /* "activity-animation" */
-#define hash_close_button_minimizes    3651284693ul /* "close-button-minimizes" */
-#define hash_hide_console              2048809870ul /* "hide-console" */
-#define hash_log_buffer_size           2918070425ul /* "log-buffer-size" */
-#define hash_log_font_name             2866730124ul /* "log-font-name" */
-#define hash_log_font_size             2866731014ul /* "log-font-size" */
-#define hash_log_highlight_messages    4032101240ul /* "log-highlight-messages" */
-#define hash_log_max_lines             2868344173ul /* "log-max-lines" */
-#define hash_log_messages              2291744899ul /* "log-messages" */
-#define hash_show_on_task_bar           215410365ul /* "show-on-task-bar" */
+#define hash_actions_file                1196306641ul /* "actionsfile" */
+#define hash_accept_intercepted_requests 1513024973ul /* "accept-intercepted-requests" */
+#define hash_admin_address               4112573064ul /* "admin-address" */
+#define hash_buffer_limit                1881726070ul /* "buffer-limit */
+#define hash_confdir                        1978389ul /* "confdir" */
+#define hash_debug                            78263ul /* "debug" */
+#define hash_deny_access                 1227333715ul /* "deny-access" */
+#define hash_enable_edit_actions         2517097536ul /* "enable-edit-actions" */
+#define hash_enable_remote_toggle        2979744683ul /* "enable-remote-toggle" */
+#define hash_enable_remote_http_toggle    110543988ul /* "enable-remote-http-toggle" */
+#define hash_filterfile                   250887266ul /* "filterfile" */
+#define hash_forward                        2029845ul /* "forward" */
+#define hash_forward_socks4              3963965521ul /* "forward-socks4" */
+#define hash_forward_socks4a             2639958518ul /* "forward-socks4a" */
+#define hash_forwarded_connect_retries    101465292ul /* "forwarded-connect-retries" */
+#define hash_jarfile                        2046641ul /* "jarfile" */
+#define hash_listen_address              1255650842ul /* "listen-address" */
+#define hash_logdir                          422889ul /* "logdir" */
+#define hash_logfile                        2114766ul /* "logfile" */
+#define hash_permit_access               3587953268ul /* "permit-access" */
+#define hash_proxy_info_url              3903079059ul /* "proxy-info-url" */
+#define hash_single_threaded             4250084780ul /* "single-threaded" */
+#define hash_split_large_cgi_forms        671658948ul /* "split-large-cgi-forms" */
+#define hash_suppress_blocklists         1948693308ul /* "suppress-blocklists" */
+#define hash_toggle                          447966ul /* "toggle" */
+#define hash_trust_info_url               430331967ul /* "trust-info-url" */
+#define hash_trustfile                     56494766ul /* "trustfile" */
+#define hash_usermanual                  1416668518ul /* "user-manual" */
+#define hash_activity_animation          1817904738ul /* "activity-animation" */
+#define hash_close_button_minimizes      3651284693ul /* "close-button-minimizes" */
+#define hash_hide_console                2048809870ul /* "hide-console" */
+#define hash_log_buffer_size             2918070425ul /* "log-buffer-size" */
+#define hash_log_font_name               2866730124ul /* "log-font-name" */
+#define hash_log_font_size               2866731014ul /* "log-font-size" */
+#define hash_log_highlight_messages      4032101240ul /* "log-highlight-messages" */
+#define hash_log_max_lines               2868344173ul /* "log-max-lines" */
+#define hash_log_messages                2291744899ul /* "log-messages" */
+#define hash_show_on_task_bar             215410365ul /* "show-on-task-bar" */
 
 
 static void savearg(char *command, char *argument, struct configuration_spec * config);
@@ -688,6 +692,7 @@ struct configuration_spec * load_config(void)
    config->forwarded_connect_retries = 0;
    config->feature_flags            &= ~RUNTIME_FEATURE_CGI_TOGGLE;
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
+   config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
 
    if ((configfp = fopen(configfile, "r")) == NULL)
    {
@@ -776,6 +781,19 @@ struct configuration_spec * load_config(void)
             strcat(p, ".action");
             config->actions_file[i] = make_path(config->confdir, p);
             free(p);
+            continue;
+/* *************************************************************************
+ * accept-intercepted-requests
+ * *************************************************************************/
+         case hash_accept_intercepted_requests:
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
+            }
             continue;
 
 /* *************************************************************************

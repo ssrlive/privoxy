@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.115 2006/12/29 17:38:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.116 2006/12/29 19:08:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.115 2006/12/29 17:38:57 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.116  2006/12/29 19:08:22  fabiankeil
+ *    Reverted parts of my last commit
+ *    to keep error handling working.
+ *
  *    Revision 1.115  2006/12/29 17:38:57  fabiankeil
  *    Fixed gcc43 conversion warnings.
  *
@@ -1183,9 +1187,23 @@ static void chat(struct client_state *csp)
    {
       /*
        * Intercepted or invalid request without domain 
-       * inside the request line. Try to get it another way.
+       * inside the request line. Try to get it another way,
+       * unless accept-intercepted-requests is disabled.
        */
-      if (JB_ERR_OK == get_destination_from_headers(headers, http))
+      if (!(csp->config->feature_flags & RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS))
+      {
+         log_error(LOG_LEVEL_ERROR, "%s's request: \'%s\' is invalid."
+            " Privoxy isn't configured to accept intercepted requests.",
+            csp->ip_addr_str, http->cmd);
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, http->cmd);
+
+         strcpy(buf, CHEADER);
+         write_socket(csp->cfd, buf, strlen(buf));
+         free_http_request(http);
+         destroy_list(headers);
+         return;
+      }
+      else if (JB_ERR_OK == get_destination_from_headers(headers, http))
       {
          /* Split the domain we just got for pattern matching */
          init_domain_components(http);

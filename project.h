@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.84 2006/12/21 12:57:48 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.85 2006/12/31 15:03:31 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.85  2006/12/31 15:03:31  fabiankeil
+ *    Fix gcc43 compiler warnings and a comment.
+ *
  *    Revision 1.84  2006/12/21 12:57:48  fabiankeil
  *    Add config option "split-large-forms"
  *    to work around the browser bug reported
@@ -1423,16 +1426,20 @@ struct access_control_list
 
 
 /** configuration_spec::feature_flags: CGI actions editor. */
-#define RUNTIME_FEATURE_CGI_EDIT_ACTIONS  1
+#define RUNTIME_FEATURE_CGI_EDIT_ACTIONS             1
 
 /** configuration_spec::feature_flags: Web-based toggle. */
-#define RUNTIME_FEATURE_CGI_TOGGLE        2
+#define RUNTIME_FEATURE_CGI_TOGGLE                   2
 
 /** configuration_spec::feature_flags: HTTP-header-based toggle. */
-#define RUNTIME_FEATURE_HTTP_TOGGLE       4
+#define RUNTIME_FEATURE_HTTP_TOGGLE                  4
 
 /** configuration_spec::feature_flags: Split large forms to limit the number of GET arguments. */
-#define RUNTIME_FEATURE_SPLIT_LARGE_FORMS       8
+#define RUNTIME_FEATURE_SPLIT_LARGE_FORMS            8
+
+/** configuration_spec::feature_flags: Check the host header for requests with host-less request lines. */
+#define RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS 16
+
 
 /**
  * Data loaded from the configuration file.
