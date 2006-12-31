@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.83 2006/12/06 19:26:29 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.84 2006/12/21 12:57:48 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.84  2006/12/21 12:57:48  fabiankeil
+ *    Add config option "split-large-forms"
+ *    to work around the browser bug reported
+ *    in BR #1570678.
+ *
  *    Revision 1.83  2006/12/06 19:26:29  fabiankeil
  *    Moved HTTP snipplets into jcc.c. They aren't
  *    used anywhere else.
@@ -823,7 +828,7 @@ struct url_spec
    int   port;         /**< The port number, or 0 to match all ports.         */
 
    char *path;         /**< The source for the regex.                         */
-   int   pathlen;      /**< ==strlen(path).  Needed for prefix matching.  FIXME: Now obsolete?     */
+   size_t pathlen;     /**< ==strlen(path).  Needed for prefix matching.  FIXME: Now obsolete?     */
    regex_t *preg;      /**< Regex for matching path part                      */
 };
 
@@ -878,13 +883,13 @@ struct iob
 #define IOB_RESET(CSP) if(CSP->iob->buf) free(CSP->iob->buf); memset(CSP->iob, '\0', sizeof(CSP->iob));
 
 /* Bits for csp->content_type */
-#define CT_TEXT   1 /**< csp->content_type bitmask:
+#define CT_TEXT   1U /**< csp->content_type bitmask:
                          Suitable for pcrs filtering. */
-#define CT_GIF    2 /**< csp->content_type bitmask:
+#define CT_GIF    2U /**< csp->content_type bitmask:
                          Suitable for GIF filtering.  */
-#define CT_TABOO  4 /**< csp->content_type bitmask:
+#define CT_TABOO  4U /**< csp->content_type bitmask:
                          DO NOT filter, irrespective of other flags. */
-#define CT_JPEG   8 /**< csp->content_type bitmask:
+#define CT_JPEG   8U /**< csp->content_type bitmask:
                          Suitable for JPEG filtering.  */
 
 /**
@@ -1156,7 +1161,7 @@ struct client_state
    jb_socket sfd;
 
    /** Multi-purpose flag container, see CSP_FLAG_* above */
-   unsigned short int flags;
+   unsigned int flags;
 
    /** Client PC's IP address, as reported by the accept() function.
        As a string. */
@@ -1186,7 +1191,7 @@ struct client_state
    struct list cookie_list[1];
 
    /** MIME-Type key, see CT_* above */
-   unsigned short int content_type;
+   unsigned int content_type;
 
    /** The "X-Forwarded-For:" header sent by the client */
    char   *x_forwarded;
@@ -1319,8 +1324,7 @@ struct block_spec
 };
 
 /**
- * Arbitrary limit for the number of trusted referrers
- * Privoxy can print in its blocking message.
+ * Arbitrary limit for the number of trusted referrers.
  */
 #define MAX_TRUSTED_REFERRERS 512
 
