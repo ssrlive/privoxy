@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.79 2006/12/29 18:04:40 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.80 2006/12/29 19:08:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.79 2006/12/29 18:04:40 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.80  2006/12/29 19:08:22  fabiankeil
+ *    Reverted parts of my last commit
+ *    to keep error handling working.
+ *
  *    Revision 1.79  2006/12/29 18:04:40  fabiankeil
  *    Fixed gcc43 conversion warnings.
  *
@@ -1087,14 +1091,25 @@ jb_err filter_header(struct client_state *csp, char **header)
    if (0 == found_filters)
    {
       log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
-         return(JB_ERR_OK);
+      return(JB_ERR_OK);
    }
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {
       fl = csp->rlist[i];
       if ((NULL == fl) || (NULL == fl->f))
-         break;
+      {
+         /*
+          * Either there are no filter files
+          * left, or this filter file just
+          * contains no valid filters.
+          *
+          * Continue to be sure we don't miss
+          * valid filter files that are chained
+          * after empty or invalid ones.
+          */
+         continue;
+      }
       /*
        * For all applying +filter actions, look if a filter by that
        * name exists and if yes, execute its pcrs_joblist on the
