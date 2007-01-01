@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.80 2006/12/29 19:08:22 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.81 2006/12/31 22:21:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.80 2006/12/29 19:08:22 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.81  2006/12/31 22:21:33  fabiankeil
+ *    Skip empty filter files in filter_header()
+ *    but don't ignore the ones that come afterwards.
+ *    Fixes BR 1619208, this time for real.
+ *
  *    Revision 1.80  2006/12/29 19:08:22  fabiankeil
  *    Reverted parts of my last commit
  *    to keep error handling working.
@@ -568,6 +573,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.80 2006/12/29 19:08:22 fabiankeil
 #include <string.h>
 #include <time.h>
 
+#ifdef FEATURE_ZLIB
+#include <zlib.h>
+#endif
+
 #if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
 #endif
@@ -650,6 +659,9 @@ const struct parsers server_patterns[] = {
 const struct parsers server_patterns_light[] = {
    { "Content-Length:",          15, server_content_length },
    { "Transfer-Encoding:",       18, server_transfer_coding },
+#ifdef FEATURE_ZLIB
+   { "Content-Encoding:",        17, server_content_encoding },
+#endif /* def FEATURE_ZLIB */
    { NULL, 0, NULL }
 };
 
@@ -781,6 +793,296 @@ jb_err add_to_iob(struct client_state *csp, char *buf, int n)
    return JB_ERR_OK;
 
 }
+
+
+#ifdef FEATURE_ZLIB
+/*********************************************************************
+ *
+ * Function    :  decompress_iob
+ *
+ * Description :  Decompress buffered page, expanding the
+ *                buffer as necessary.  csp->iob->cur
+ *                should point to the the beginning of the
+ *                compressed data block.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK on success,
+ *                JB_ERR_MEMORY if out-of-memory limit reached, and
+ *                JB_ERR_COMPRESS if error decompressing buffer.
+ *
+ *********************************************************************/
+jb_err decompress_iob(struct client_state *csp)
+{
+   char  *buf;       /* new, uncompressed buffer */
+   size_t bufsize;   /* allocated size of the new buffer */
+   size_t skip_size; /* Number of bytes at the beginning of the iob
+                        that we should NOT decompress. */
+   int status;       /* return status of the inflate() call */
+   z_stream zstr;    /* used by calls to zlib */
+
+   bufsize = csp->iob->size;
+   skip_size = (size_t)(csp->iob->cur - csp->iob->buf);
+
+   if (bufsize < 10)
+   {
+      /*
+       * This is to protect the parsing of gzipped data,
+       * but it should(?) be valid for deflated data also.
+       */
+      log_error (LOG_LEVEL_ERROR, "Buffer too small decompressing iob");
+      return JB_ERR_COMPRESS;
+   }
+
+   if (csp->content_type & CT_GZIP)
+   {
+      /*
+       * Our task is slightly complicated by the facts that data
+       * compressed by gzip does not include a zlib header, and
+       * that there is no easily accessible interface in zlib to
+       * handle a gzip header. We strip off the gzip header by
+       * hand, and later inform zlib not to expect a header.
+       */
+
+      /*
+       * Strip off the gzip header. Please see RFC 1952 for more
+       * explanation of the appropriate fields.
+       */
+      if ((*csp->iob->cur++ != (char)0x1f)
+       || (*csp->iob->cur++ != (char)0x8b)
+       || (*csp->iob->cur++ != Z_DEFLATED))
+      {
+         log_error (LOG_LEVEL_ERROR, "Invalid gzip header when decompressing");
+         return JB_ERR_COMPRESS;
+      }
+      else
+      {
+         int flags = *csp->iob->cur++;
+         /*
+          * XXX: These magic numbers should be replaced
+          * with macros to give a better idea what they do.
+          */
+         if (flags & 0xe0)
+         {
+            /* The gzip header has reserved bits set; bail out. */
+            log_error (LOG_LEVEL_ERROR, "Invalid gzip header when decompressing");
+            return JB_ERR_COMPRESS;
+         }
+         csp->iob->cur += 6;
+
+         /* Skip extra fields if necessary. */
+         if (flags & 0x04)
+         {
+            /*
+             * Skip a given number of bytes, specified
+             * as a 16-bit little-endian value.
+             */
+            csp->iob->cur += *csp->iob->cur++ + (*csp->iob->cur++ << 8);
+         }
+
+         /* Skip the filename if necessary. */
+         if (flags & 0x08)
+         {
+            /* A null-terminated string follows. */
+            while (*csp->iob->cur++);
+         }
+
+         /* Skip the comment if necessary. */
+         if (flags & 0x10)
+         {
+            while (*csp->iob->cur++);
+         }
+
+         /* Skip the CRC if necessary. */
+         if (flags & 0x02)
+         {
+            csp->iob->cur += 2;
+         }
+      }
+   }
+   else if (csp->content_type & CT_DEFLATE)
+   {
+      log_error (LOG_LEVEL_INFO, "Decompressing deflated iob: %d", *csp->iob->cur);
+      /*
+       * In theory (that is, according to RFC 1950), deflate-compressed
+       * data should begin with a two-byte zlib header and have an
+       * adler32 checksum at the end. It seems that in practice only
+       * the raw compressed data is sent. Note that this means that
+       * we are not RFC 1950-compliant here, but the advantage is that
+       * this actually works. :)
+       *
+       * We add a dummy null byte to tell zlib where the data ends,
+       * and later inform it not to expect a header.
+       *
+       * Fortunately, add_to_iob() has thoughtfully null-terminated
+       * the buffer; we can just increment the end pointer to include
+       * the dummy byte.  
+       */
+      csp->iob->eod++;
+   }
+   else
+   {
+      log_error (LOG_LEVEL_ERROR,
+         "Unable to determine compression format for decompression");
+      return JB_ERR_COMPRESS;
+   }
+
+   /* Set up the fields required by zlib. */
+   zstr.next_in  = (Bytef *)csp->iob->cur;
+   zstr.avail_in = (unsigned long)(csp->iob->eod - csp->iob->cur);
+   zstr.zalloc   = Z_NULL;
+   zstr.zfree    = Z_NULL;
+   zstr.opaque   = Z_NULL;
+
+   /*
+    * Passing -MAX_WBITS to inflateInit2 tells the library
+    * that there is no zlib header.
+    */
+   if (inflateInit2 (&zstr, -MAX_WBITS) != Z_OK)
+   {
+      log_error (LOG_LEVEL_ERROR, "Error initializing decompression");
+      return JB_ERR_COMPRESS;
+   }
+
+   /*
+    * Next, we allocate new storage for the inflated data.
+    * We don't modify the existing iob yet, so in case there
+    * is error in decompression we can recover gracefully.
+    */
+   buf = zalloc (bufsize);
+   if (NULL == buf)
+   {
+      log_error (LOG_LEVEL_ERROR, "Out of memory decompressing iob");
+      return JB_ERR_MEMORY;
+   }
+
+   assert(bufsize >= skip_size);
+   memcpy(buf, csp->iob->buf, skip_size);
+   zstr.avail_out = bufsize - skip_size;
+   zstr.next_out  = (Bytef *)buf + skip_size;
+
+   /* Try to decompress the whole stream in one shot. */
+   while (Z_BUF_ERROR == (status = inflate(&zstr, Z_FINISH)))
+   {
+      /* We need to allocate more memory for the output buffer. */
+
+      char *tmpbuf;                /* used for realloc'ing the buffer */
+      size_t oldbufsize = bufsize; /* keep track of the old bufsize */
+
+      /*
+       * If zlib wants more data then there's a problem, because
+       * the complete compressed file should have been buffered.
+       */
+      if (0 == zstr.avail_in)
+      {
+         log_error(LOG_LEVEL_ERROR, "Unexpected end of compressed iob");
+         return JB_ERR_COMPRESS;
+      }
+
+      /*
+       * If we tried the limit and still didn't have enough
+       * memory, just give up.
+       */
+      if (bufsize == csp->config->buffer_limit)
+      {
+         log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
+         return JB_ERR_MEMORY;
+      }
+
+      /* Try doubling the buffer size each time. */
+      bufsize *= 2;
+
+      /* Don't exceed the buffer limit. */
+      if (bufsize > csp->config->buffer_limit)
+      {
+         bufsize = csp->config->buffer_limit;
+      }
+    
+      /* Try to allocate the new buffer. */
+      tmpbuf = realloc(buf, bufsize);
+      if (NULL == tmpbuf)
+      {
+         log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob");
+         freez(buf);
+         return JB_ERR_MEMORY;
+      }
+      else
+      {
+         char *oldnext_out = (char *)zstr.next_out;
+
+         /*
+          * Update the fields for inflate() to use the new
+          * buffer, which may be in a location different from
+          * the old one.
+          */
+         zstr.avail_out += bufsize - oldbufsize;
+         zstr.next_out   = (Bytef *)tmpbuf + bufsize - zstr.avail_out;
+
+         /*
+          * Compare with an uglier method of calculating these values
+          * that doesn't require the extra oldbufsize variable.
+          */
+         assert(zstr.avail_out == tmpbuf + bufsize - (char *)zstr.next_out);
+         assert((char *)zstr.next_out == tmpbuf + ((char *)oldnext_out - buf));
+         assert(zstr.avail_out > 0);
+
+         buf = tmpbuf;
+      }
+   }
+
+   inflateEnd(&zstr);
+   if (status != Z_STREAM_END)
+   {
+      /* We failed to decompress the stream. */
+      log_error(LOG_LEVEL_ERROR,
+         "Error in decompressing to the buffer (iob): %s", zstr.msg);
+      return JB_ERR_COMPRESS;
+   }
+
+   /*
+    * Finally, we can actually update the iob, since the
+    * decompression was successful. First, free the old
+    * buffer.
+    */
+   freez(csp->iob->buf);
+
+   /* Now, update the iob to use the new buffer. */
+   csp->iob->buf  = buf;
+   csp->iob->cur  = csp->iob->buf + skip_size;
+   csp->iob->eod  = (char *)zstr.next_out;
+   csp->iob->size = bufsize;
+  
+   /*
+    * Make sure the new uncompressed iob obeys some minimal
+    * consistency conditions.
+    */
+   if ((csp->iob->buf <  csp->iob->cur)
+    && (csp->iob->cur <= csp->iob->eod)
+    && (csp->iob->eod <= csp->iob->buf + csp->iob->size))
+   {
+      char t = csp->iob->cur[100];
+      csp->iob->cur[100] = '\0';
+      /*
+       * XXX: The debug level should be lowered
+       * before the next stable release.
+       */
+      log_error(LOG_LEVEL_INFO, "Sucessfully decompressed: %s", csp->iob->cur);
+      csp->iob->cur[100] = t;
+      return JB_ERR_OK;
+   }
+   else
+   {
+      /* It seems that zlib did something weird. */
+      log_error(LOG_LEVEL_ERROR,
+         "Unexpected error decompressing the buffer (iob): %d==%d, %d>%d, %d<%d",
+         csp->iob->cur, csp->iob->buf + skip_size, csp->iob->eod, csp->iob->buf,
+         csp->iob->eod, csp->iob->buf + csp->iob->size);
+      return JB_ERR_COMPRESS;
+   }
+
+}
+#endif /* defined(FEATURE_ZLIB) */
 
 
 /*********************************************************************
@@ -957,7 +1259,7 @@ char *sed(const struct parsers pats[],
        */
       if (strncmpic(csp->http->cmd, "HEAD", 4))
       {
-         /*XXX: Code duplication*/
+         /*XXX: Code duplication */
          for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
          {
             for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
@@ -1266,34 +1568,44 @@ jb_err server_content_type(struct client_state *csp, char **header)
    
    newval = csp->action->string[ACTION_STRING_CONTENT_TYPE]; 
 
-   if (csp->content_type != CT_TABOO)
+   assert(!csp->content_type || (csp->content_type == CT_TABOO));
+
+   if (!(csp->content_type & CT_TABOO))
    {
       if ((strstr(*header, " text/") && !strstr(*header, "plain"))
-       || strstr(*header, "xml")
-       || strstr(*header, "application/x-javascript"))
-         csp->content_type = CT_TEXT;
+        || strstr(*header, "xml")
+        || strstr(*header, "application/x-javascript"))
+      {
+         csp->content_type |= CT_TEXT;
+      }
       else if (strstr(*header, " image/gif"))
-         csp->content_type = CT_GIF;
+      {
+         csp->content_type |= CT_GIF;
+      }
       else if (strstr(*header, " image/jpeg"))
-         csp->content_type = CT_JPEG;
+      {
+         csp->content_type |= CT_JPEG;
+      }
       else
+      {
          csp->content_type = 0;
+      }
    }
    /*
     * Are we enabling text mode by force?
     */
    if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
    {
-     /*
-      * Do we really have to?
-      */
-      if (csp->content_type == CT_TEXT)
+      /*
+       * Do we really have to?
+       */
+      if (csp->content_type & CT_TEXT)
       {
          log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
       }
       else
       {
-         csp->content_type = CT_TEXT;
+         csp->content_type |= CT_TEXT;
          log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
       }
    }
@@ -1302,28 +1614,29 @@ jb_err server_content_type(struct client_state *csp, char **header)
     */ 
    if (csp->action->flags & ACTION_CONTENT_TYPE_OVERWRITE)
    { 
-     /*
-      * Make sure the user doesn't accidently
-      * change the content type of binary documents. 
-      */ 
-     if (csp->content_type == CT_TEXT)
-     { 
-        freez(*header);
-        *header = strdup("Content-Type: ");
-        string_append(header, newval);
-        
-        if (header == NULL)
-        { 
-           log_error(LOG_LEVEL_HEADER, "Insufficient memory. Conten-Type crunched without replacement!");
-           return JB_ERR_MEMORY;
-        }
-        log_error(LOG_LEVEL_HEADER, "Modified: %s!", *header);
-     }
-     else
-     {
-        log_error(LOG_LEVEL_HEADER, "%s not replaced. It doesn't look like text. "
-                 "Enable force-text-mode if you know what you're doing.", *header);   
-     }
+      /*
+       * Make sure the user doesn't accidently
+       * change the content type of binary documents. 
+       */ 
+      if (csp->content_type & CT_TEXT)
+      { 
+         freez(*header);
+         *header = strdup("Content-Type: ");
+         string_append(header, newval);
+
+         if (header == NULL)
+         { 
+            log_error(LOG_LEVEL_HEADER,
+               "Insufficient memory. Content-Type crunched without replacement!");
+            return JB_ERR_MEMORY;
+         }
+         log_error(LOG_LEVEL_HEADER, "Modified: %s!", *header);
+      }
+      else
+      {
+         log_error(LOG_LEVEL_HEADER, "%s not replaced. It doesn't look like text. "
+            "Enable force-text-mode if you know what you're doing.", *header);   
+      }
    }  
    return JB_ERR_OK;
 }
@@ -1356,6 +1669,13 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
     */
    if (strstr(*header, "gzip") || strstr(*header, "compress") || strstr(*header, "deflate"))
    {
+#ifdef FEATURE_ZLIB
+      /*
+       * XXX: Added to test if we could use CT_GZIP and CT_DEFLATE here.
+       */
+      log_error(LOG_LEVEL_INFO, "Marking content type for %s as CT_TABOO because of %s.",
+         csp->http->cmd, *header);
+#endif /* def FEATURE_ZLIB */
       csp->content_type = CT_TABOO;
    }
 
@@ -1368,7 +1688,10 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
 
       /*
        * If the body was modified, it has been de-chunked first
-       * and the header must be removed. 
+       * and the header must be removed.
+       *
+       * FIXME: If there is more than one transfer encoding,
+       * only the "chunked" part should be removed here.
        */
       if (csp->flags & CSP_FLAG_MODIFIED)
       {
@@ -1385,7 +1708,16 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
  *
  * Function    :  server_content_encoding
  *
- * Description :  Prohibit filtering (CT_TABOO) if content encoding compresses
+ * Description :  This function is run twice for each request,
+ *                unless FEATURE_ZLIB and filtering are disabled.
+ *
+ *                The first run is used to check if the content
+ *                is compressed, if FEATURE_ZLIB is disabled
+ *                filtering is then disabled as well, if FEATURE_ZLIB
+ *                is enabled the content is marked for decompression.
+ *                
+ *                The second run is used to remove the Content-Encoding
+ *                header if the decompression was successful.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1400,13 +1732,48 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_content_encoding(struct client_state *csp, char **header)
 {
-   /*
-    * Turn off pcrs and gif filtering if body compressed
-    */
+#ifdef FEATURE_ZLIB
+   /* XXX: Why would we modify the content if it was taboo? */
+   if ((csp->flags & CSP_FLAG_MODIFIED) && !(csp->content_type & CT_TABOO))
+   {
+      /*
+       * We successfully decompressed the content,
+       * and have to clean the header now, so the
+       * client no longer expects compressed data..
+       *
+       * XXX: There is a difference between cleaning
+       * and removing it completely.
+       */
+      log_error(LOG_LEVEL_HEADER, "Crunching: %s", *header);
+      freez(*header);
+   }
+   else if (strstr(*header, "gzip"))
+   {
+      /* Mark for gzip decompression */
+      csp->content_type |= CT_GZIP;
+   }
+   else if (strstr(*header, "deflate"))
+   {
+      /* Mark for zlib decompression */
+      csp->content_type |= CT_DEFLATE;
+   }
+   else if (strstr(*header, "compress"))
+   {
+      /*
+       * We can't decompress this; therefore we can't filter
+       * it either.
+       */
+      csp->content_type |= CT_TABOO;
+   }
+#else /* !defined(FEATURE_ZLIB) */
    if (strstr(*header, "gzip") || strstr(*header, "compress") || strstr(*header, "deflate"))
    {
-      csp->content_type = CT_TABOO;
+      /*
+       * Body is compressed, turn off pcrs and gif filtering.
+       */
+      csp->content_type |= CT_TABOO;
    }
+#endif /* !defined(FEATURE_ZLIB) */
 
    return JB_ERR_OK;
 

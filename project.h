@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.85 2006/12/31 15:03:31 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.86 2006/12/31 17:56:37 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.86  2006/12/31 17:56:37  fabiankeil
+ *    Added config option accept-intercepted-requests
+ *    and disabled it by default.
+ *
  *    Revision 1.85  2006/12/31 15:03:31  fabiankeil
  *    Fix gcc43 compiler warnings and a comment.
  *
@@ -633,7 +637,7 @@ typedef int jb_err;
 #define JB_ERR_PARSE      4 /**< Error parsing file                       */
 #define JB_ERR_MODIFIED   5 /**< File has been modified outside of the  
                                  CGI actions editor.                      */
-
+#define JB_ERR_COMPRESS   6 /**< Error on decompression                   */
 
 /**
  * This macro is used to free a pointer that may be NULL.
@@ -885,15 +889,18 @@ struct iob
  */
 #define IOB_RESET(CSP) if(CSP->iob->buf) free(CSP->iob->buf); memset(CSP->iob, '\0', sizeof(CSP->iob));
 
-/* Bits for csp->content_type */
-#define CT_TEXT   1U /**< csp->content_type bitmask:
-                         Suitable for pcrs filtering. */
-#define CT_GIF    2U /**< csp->content_type bitmask:
-                         Suitable for GIF filtering.  */
-#define CT_TABOO  4U /**< csp->content_type bitmask:
-                         DO NOT filter, irrespective of other flags. */
-#define CT_JPEG   8U /**< csp->content_type bitmask:
-                         Suitable for JPEG filtering.  */
+/* Bits for csp->content_type bitmask: */
+#define CT_TEXT    0x0001U /**< Suitable for pcrs filtering. */
+#define CT_GIF     0x0002U /**< Suitable for GIF filtering.  */
+#define CT_TABOO   0x0004U /**< DO NOT filter, irrespective of other flags. */
+#define CT_JPEG    0x0008U /**< Suitable for JPEG filtering.  */
+
+/* Although these are not, strictly speaking, content types
+ * (they are content encodings), it is simple to handle them
+ * as such.
+ */
+#define CT_GZIP    0x0010U /**< gzip-compressed data. */
+#define CT_DEFLATE 0x0020U /**< zlib-compressed data. */
 
 /**
  * The mask which includes all actions.

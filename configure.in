@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.97 2006/11/21 18:32:46 hal9 Exp $
+dnl $Id: configure.in,v 1.98 2006/12/17 19:15:26 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.98  2006/12/17 19:15:26  fabiankeil
+dnl Added ./configure switch for FEATURE_GRACEFUL_TERMINATION.
+dnl
 dnl Revision 1.97  2006/11/21 18:32:46  hal9
 dnl Setting version to 3.0.7 UNRELEASED for lack of a better setting.
 dnl
@@ -467,7 +470,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.97 $)
+AC_REVISION($Revision: 1.98 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1272,6 +1275,22 @@ AC_ARG_ENABLE(dynamic-pcre,
 AC_ARG_ENABLE(dynamic-pcrs,
 [  --disable-dynamic-pcrs          Use the built-in, static pcrs, even if libpcrs is available],
 [ if test $enableval = "no"; then have_pcrs=no; fi ])
+
+
+# This check is incomplete. mingw32's zlib is found but the build fails.
+AC_ARG_ENABLE(zlib,
+[  --enable-zlib                   Use an external zlib library to allow decompressing
+                                  data on the fly.],
+[enableval2=$enableval],
+[enableval2=no])
+if test $enableval2 = yes; then
+  AC_CHECK_LIB(z, zlibVersion, , [
+    AC_MSG_ERROR([Unable to find a copy of zlib. The zlib library
+is necessary to enable compresion support. ])
+  ]) 
+  AC_DEFINE(FEATURE_ZLIB,1,
+    [ Define to 1 to use compression through the zlib library. ])
+fi
 
 
 # If we have libpcre and either we also have pcreposix or

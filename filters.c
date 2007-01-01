@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.74 2006/12/24 17:37:38 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.75 2006/12/29 18:30:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.74 2006/12/24 17:37:38 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.75  2006/12/29 18:30:46  fabiankeil
+ *    Fixed gcc43 conversion warnings,
+ *    changed sprintf calls to snprintf.
+ *
  *    Revision 1.74  2006/12/24 17:37:38  fabiankeil
  *    Adjust comment in pcrs_filter_response()
  *    to recent pcrs changes. Hohoho.
@@ -934,7 +938,6 @@ struct http_response *block_url(struct client_state *csp)
             return cgi_error_memory();
          }
       }
-
    }
    else
 #endif /* def FEATURE_IMAGE_BLOCKING */
@@ -1660,6 +1663,11 @@ int is_untrusted_url(struct client_state *csp)
  *                csp->content_length to the modified size and raise the
  *                CSP_FLAG_MODIFIED flag.
  *
+ *                XXX: Currently pcrs_filter_response is also responsible
+ *                for dechunking and decompressing. Both should be
+ *                done in separate functions so other content modifiers
+ *                profit as well, even if pcrs filtering is disabled.
+ *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
@@ -1709,7 +1717,7 @@ char *pcrs_filter_response(struct client_state *csp)
    if (0 == found_filters)
    {
       log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
-         return(NULL);
+      return(NULL);
    }
 
    /*
@@ -1726,6 +1734,41 @@ char *pcrs_filter_response(struct client_state *csp)
       csp->iob->eod = csp->iob->cur + size;
       csp->flags |= CSP_FLAG_MODIFIED;
    }
+
+#ifdef FEATURE_ZLIB
+   /*
+    * If the body has a compressed transfer-encoding,
+    * uncompress it first, adjusting size and iob->eod.
+    * Note that decompression occurs after de-chunking.
+    */
+   if (csp->content_type & CT_GZIP || csp->content_type & CT_DEFLATE)
+   {
+      /* Notice that we at least tried to decompress. */
+      if (JB_ERR_OK != decompress_iob(csp))
+      {
+         /*
+          * We failed to decompress the data; there's no point
+          * in continuing since we can't filter. This is
+          * slightly tricky because we need to remember not to
+          * modify the Content-Encoding header later; using
+          * CT_TABOO flag is a kludge for this purpose.
+          */
+          csp->content_type |= CT_TABOO;
+          return(NULL);
+      }
+      log_error(LOG_LEVEL_RE_FILTER, "Decompressing successful");
+
+      /*
+       * Decompression gives us a completely new iob,
+       * so we need to update.
+       */
+      size = (size_t)(csp->iob->eod - csp->iob->cur);
+      old  = csp->iob->cur;
+
+      csp->flags |= CSP_FLAG_MODIFIED;
+      csp->content_type &= ~CT_TABOO;
+   }
+#endif
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {

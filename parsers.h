@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.33 2006/12/29 18:04:40 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.34 2006/12/29 19:08:22 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.34  2006/12/29 19:08:22  fabiankeil
+ *    Reverted parts of my last commit
+ *    to keep error handling working.
+ *
  *    Revision 1.33  2006/12/29 18:04:40  fabiankeil
  *    Fixed gcc43 conversion warnings.
  *
@@ -230,6 +234,7 @@ extern const add_header_func_ptr add_server_headers[];
 
 extern int flush_socket(jb_socket fd, struct client_state *csp);
 extern jb_err add_to_iob(struct client_state *csp, char *buf, int n);
+extern jb_err decompress_iob(struct client_state *csp);
 extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
