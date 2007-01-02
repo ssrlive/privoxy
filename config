@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.6
 #
-#  $Id: config,v 1.55 2006/09/23 17:59:19 david__schmidt Exp $
+#  $Id: config,v 1.56 2006/11/14 01:54:36 hal9 Exp $
 #
 #  Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
 #
@@ -544,19 +544,19 @@ logfile logfile
 #  Notes:
 #
 #      The available debug levels are:
-#  
-#          debug         1 # show each GET/POST/CONNECT request 
-#          debug         2 # show each connection status 
-#          debug         4 # show I/O status 
-#          debug         8 # show header parsing 
-#          debug        16 # log all data into the logfile 
-#          debug        32 # debug force feature 
+#
+#          debug         1 # show each GET/POST/CONNECT request
+#          debug         2 # show each connection status
+#          debug         4 # show I/O status
+#          debug         8 # show header parsing
+#          debug        16 # log all data into the logfile
+#          debug        32 # debug force feature
 #          debug        64 # debug regular expression filter
-#          debug       128 # debug fast redirects 
-#          debug       256 # debug GIF de-animation 
+#          debug       128 # debug fast redirects
+#          debug       256 # debug GIF de-animation
 #          debug       512 # Common Log Format
-#          debug      1024 # debug kill pop-ups 
-#          debug      2048 # CGI user interface 
+#          debug      1024 # debug kill pop-ups
+#          debug      2048 # CGI user interface
 #          debug      4096 # Startup banner and warnings.
 #          debug      8192 # Non-fatal errors
 #
@@ -884,7 +884,7 @@ enable-edit-actions 1
 #      to anywhere, with the exception that 192.168.45.73 may not
 #      access www.dirty-stuff.example.com:
 #
-#        permit-access  192.168.45.64/26 
+#        permit-access  192.168.45.64/26
 #        deny-access    192.168.45.73     www.dirty-stuff.example.com
 #
 
@@ -932,8 +932,8 @@ buffer-limit 4096
 #  of multiple proxies. It can be used to better protect privacy
 #  and confidentiality when accessing specific domains by routing
 #  requests to those domains through an anonymous public proxy.
-#  Or to use a caching proxy to speed up browsing. Or chaining to 
-#  a parent proxy may be necessary because the machine that Privoxy 
+#  Or to use a caching proxy to speed up browsing. Or chaining to
+#  a parent proxy may be necessary because the machine that Privoxy
 #  runs on has no direct Internet access.
 #
 #  Also specified here are SOCKS proxies. Privoxy supports the SOCKS
@@ -980,7 +980,7 @@ buffer-limit 4096
 #      Everything goes to an example anonymizing proxy, except SSL on
 #      port 443 (which it doesn't handle):
 #
-#        forward   /      anon-proxy.example.org:8080 
+#        forward   /      anon-proxy.example.org:8080
 #        forward   :443   .
 #
 #      Everything goes to our example ISP's caching proxy, except for
@@ -1039,17 +1039,17 @@ buffer-limit 4096
 #      ISP's proxy by way of example.com's corporate SOCKS 4A gateway
 #      to the Internet.
 #
-#        forward-socks4a   /              socks-gw.example.com:1080   www-cache.example-isp.net:8080 
+#        forward-socks4a   /              socks-gw.example.com:1080   www-cache.example-isp.net:8080
 #        forward           .example.com   .
-#  
+#
 #      A rule that uses a SOCKS 4 gateway for all destinations but no
 #      HTTP parent looks like this:
-#  
+#
 #        forward-socks4   /               socks-gw.example.com:1080  .
 #
 #      To chain Privoxy and Tor, both running on the same system,
 #      you should use the rule:
-#  
+#
 #        forward-socks4a             /     127.0.0.1:9050 .
 #
 #      The public Tor network can't be used to reach your local network,
