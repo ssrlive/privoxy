@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.22 2006/12/24 17:34:20 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.23 2006/12/29 17:53:05 fabiankeil Exp $";
 
 /*********************************************************************
  *
@@ -33,6 +33,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.22 2006/12/24 17:34:20 fabiankeil Exp $
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.23  2006/12/29 17:53:05  fabiankeil
+ *    Fixed gcc43 conversion warnings.
+ *
  *    Revision 1.22  2006/12/24 17:34:20  fabiankeil
  *    Add pcrs_strerror() message for PCRE_ERROR_MATCHLIMIT
  *    and give a hint why an error code might be unknown.
@@ -477,6 +480,7 @@ plainchar:
     */
    r->text = text;
    r->backrefs = l;
+   r->length = (size_t)k;
    r->block_length[l] = (size_t)(k - r->block_offset[l]);
 
    return r;
@@ -879,7 +883,7 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
          newsize += matches[i].submatch_length[k] * (size_t)job->substitute->backref_count[k];
       }
       /* plus replacement text size minus match text size */
-      newsize += strlen(job->substitute->text) - matches[i].submatch_length[0]; 
+      newsize += job->substitute->length - matches[i].submatch_length[0]; 
 
       /* chunk before match */
       matches[i].submatch_offset[PCRS_MAX_SUBMATCHES] = 0;

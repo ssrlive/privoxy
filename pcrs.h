@@ -11,6 +11,10 @@
  *
  * Revisions   :
  *    $Log: pcrs.h,v $
+ *    Revision 1.14  2006/12/24 17:27:37  fabiankeil
+ *    Increase pcrs error code offset to prevent overlaps
+ *    with pcre versions newer than our own.
+ *
  *    Revision 1.13  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -66,7 +70,7 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.13 2006/07/18 14:48:47 david__schmidt Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.14 2006/12/24 17:27:37 fabiankeil Exp $"
 
 
 #ifndef _PCRE_H
@@ -118,6 +122,7 @@ extern "C" {
 
 typedef struct {
   char  *text;                                   /* The plaintext part of the substitute, with all backreferences stripped */
+  size_t length;                                 /* The substitute may not be a valid C string so we can't rely on strlen(). */
   int    backrefs;                               /* The number of backreferences */
   int    block_offset[PCRS_MAX_SUBMATCHES];      /* Array with the offsets of all plaintext blocks in text */
   size_t block_length[PCRS_MAX_SUBMATCHES];      /* Array with the lengths of all plaintext blocks in text */
