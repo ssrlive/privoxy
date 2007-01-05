@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.83 2006/12/17 19:35:19 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.84 2006/12/28 17:54:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -11,8 +11,8 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.83 2006/12/17 19:35:19 fabiankeil Exp $";
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team. http://www.privoxy.org/
+ * Copyright   :  Written by and Copyright (C) 2001-2004, 2006
+ *                the SourceForge Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.83 2006/12/17 19:35:19 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.84  2006/12/28 17:54:22  fabiankeil
+ *    Fixed gcc43 conversion warnings and replaced sprintf
+ *    calls with snprintf to give OpenBSD's gcc one less reason
+ *    to complain.
+ *
  *    Revision 1.83  2006/12/17 19:35:19  fabiankeil
  *    Escape ampersand in Privoxy menu.
  *
@@ -2130,7 +2135,7 @@ jb_err template_load(struct client_state *csp, char **template_ptr,
  *                                    Caller must free().
  *          2  :  exports = map with fill in symbol -> name pairs
  *
- * Returns     :  JB_ERR_OK on success
+ * Returns     :  JB_ERR_OK on success (and for uncritical errors)
  *                JB_ERR_MEMORY on out-of-memory error
  *
  *********************************************************************/
@@ -2201,15 +2206,35 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
       }
       else
       {
-         pcrs_execute(job, file_buffer, size, &tmp_out_buffer, &size);
-         free(file_buffer);
+         error = pcrs_execute(job, file_buffer, size, &tmp_out_buffer, &size);
+
          pcrs_free_job(job);
          if (NULL == tmp_out_buffer)
          {
             *template_ptr = NULL;
             return JB_ERR_MEMORY;
          }
-         file_buffer = tmp_out_buffer;
+
+         if (error < 0)
+         {
+            /* 
+             * Substitution failed, keep the original buffer,
+             * log the problem and ignore it.
+             * 
+             * The user might see some unresolved @CGI_VARIABLES@,
+             * but returning a special CGI error page seems unreasonable
+             * and could mask more important error messages.
+             */
+            free(tmp_out_buffer);
+            log_error(LOG_LEVEL_ERROR, "Failed to execute s/%s/%s/%s. %s",
+               buf, m->value, flags, pcrs_strerror(error));
+         }
+         else
+         {
+            /* Substitution succeeded, use modified buffer. */
+            free(file_buffer);
+            file_buffer = tmp_out_buffer;
+         }
       }
    }
 
