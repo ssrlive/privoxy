@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.5 2006/07/18 14:48:47 david__schmidt Exp $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.6 2006/12/06 19:12:43 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: urlmatch.h,v $
+ *    Revision 1.6  2006/12/06 19:12:43  fabiankeil
+ *    Added prototype for init_domain_components().
+ *
  *    Revision 1.5  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -76,10 +79,10 @@ extern void free_http_request(struct http_request *http);
 extern jb_err init_domain_components(struct http_request *http);
 extern jb_err parse_http_request(const char *req,
                                  struct http_request *http,
-                                 struct client_state *csp);
+                                 const struct client_state *csp);
 extern jb_err parse_http_url(const char * url,
                              struct http_request *http,
-                             struct client_state *csp);
+                             const struct client_state *csp);
 
 extern int url_match(const struct url_spec *pattern,
                      const struct http_request *url);
