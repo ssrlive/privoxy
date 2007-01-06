@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.12 2006/07/18 14:48:47 david__schmidt Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.13 2006/12/06 19:50:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,13 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.12 2006/07/18 14:48:47 david__s
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.13  2006/12/06 19:50:54  fabiankeil
+ *    parse_http_url() now handles intercepted
+ *    HTTP request lines as well. Moved parts
+ *    of parse_http_url()'s code into
+ *    init_domain_components() so that it can
+ *    be reused in chat().
+ *
  *    Revision 1.12  2006/07/18 14:48:47  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -205,7 +212,7 @@ jb_err init_domain_components(struct http_request *http)
    /* map to lower case */
    for (p = http->dbuffer; *p ; p++)
    {
-      *p = tolower((int)(unsigned char)*p);
+      *p = (char)tolower((int)(unsigned char)*p);
    }
 
    /* split the domain name into components */
@@ -222,7 +229,7 @@ jb_err init_domain_components(struct http_request *http)
    }
 
    /* save a copy of the pointers in dvec */
-   size = http->dcount * sizeof(*http->dvec);
+   size = (size_t)http->dcount * sizeof(*http->dvec);
 
    http->dvec = (char **)malloc(size);
    if (NULL == http->dvec)
@@ -258,7 +265,7 @@ jb_err init_domain_components(struct http_request *http)
  *********************************************************************/
 jb_err parse_http_url(const char * url,
                       struct http_request *http,
-                      struct client_state *csp)
+                      const struct client_state *csp)
 {
    int host_available = 1; /* A proxy can dream. */
 
@@ -458,7 +465,7 @@ jb_err parse_http_url(const char * url,
  *********************************************************************/
 jb_err parse_http_request(const char *req,
                           struct http_request *http,
-                          struct client_state *csp)
+                          const struct client_state *csp)
 {
    char *buf;
    char *v[10];
@@ -754,7 +761,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          return JB_ERR_MEMORY;
       }
 
-      sprintf(rebuf, "^(%s)", url->path);
+      snprintf(rebuf, sizeof(rebuf), "^(%s)", url->path);
 
       errcode = regcomp(url->preg, rebuf,
             (REG_EXTENDED|REG_NOSUB|REG_ICASE));
@@ -825,7 +832,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
        */
       for (p = url->dbuffer; *p ; p++)
       {
-         *p = tolower((int)(unsigned char)*p);
+         *p = (char)tolower((int)(unsigned char)*p);
       }
 
       /* 
@@ -849,7 +856,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          /* 
           * Save a copy of the pointers in dvec
           */
-         size = url->dcount * sizeof(*url->dvec);
+         size = (size_t)url->dcount * sizeof(*url->dvec);
 
          url->dvec = (char **)malloc(size);
          if (NULL == url->dvec)
