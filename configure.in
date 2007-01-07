@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.98 2006/12/17 19:15:26 fabiankeil Exp $
+dnl $Id: configure.in,v 1.99 2007/01/01 19:36:37 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.99  2007/01/01 19:36:37  fabiankeil
+dnl Integrate a modified version of Wil Mahan's
+dnl zlib patch (PR #895531).
+dnl
 dnl Revision 1.98  2006/12/17 19:15:26  fabiankeil
 dnl Added ./configure switch for FEATURE_GRACEFUL_TERMINATION.
 dnl
@@ -470,7 +474,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.98 $)
+AC_REVISION($Revision: 1.99 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -681,7 +685,9 @@ dnl additional gcc flags
 dnl =================================================================
 dnl 
 if test "$GCC"; then
-  CFLAGS="-pipe $CFLAGS"
+  if test "$host" != "powerpc-unknown-amigaos"; then
+    CFLAGS="-pipe $CFLAGS"
+  fi
 fi
 
 
