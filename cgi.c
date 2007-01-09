@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.84 2006/12/28 17:54:22 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.85 2007/01/05 14:19:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.84 2006/12/28 17:54:22 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.85  2007/01/05 14:19:02  fabiankeil
+ *    Handle pcrs_execute() errors in template_fill() properly.
+ *
  *    Revision 1.84  2006/12/28 17:54:22  fabiankeil
  *    Fixed gcc43 conversion warnings and replaced sprintf
  *    calls with snprintf to give OpenBSD's gcc one less reason
@@ -1501,7 +1504,7 @@ jb_err cgi_error_no_template(struct client_state *csp,
    strcat(rsp->body, body_suffix);
 
    rsp->status = strdup(status);
-   if (rsp->body == NULL)
+   if (rsp->status == NULL)
    {
       return JB_ERR_MEMORY;
    }
@@ -1578,7 +1581,7 @@ jb_err cgi_error_unknown(struct client_state *csp,
    strcat(rsp->body, body_suffix);
 
    rsp->status = strdup(status);
-   if (rsp->body == NULL)
+   if (rsp->status == NULL)
    {
       return JB_ERR_MEMORY;
    }
