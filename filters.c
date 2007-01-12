@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.75 2006/12/29 18:30:46 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.76 2007/01/01 19:36:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.75 2006/12/29 18:30:46 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.76  2007/01/01 19:36:37  fabiankeil
+ *    Integrate a modified version of Wil Mahan's
+ *    zlib patch (PR #895531).
+ *
  *    Revision 1.75  2006/12/29 18:30:46  fabiankeil
  *    Fixed gcc43 conversion warnings,
  *    changed sprintf calls to snprintf.
@@ -1425,7 +1429,7 @@ struct http_response *redirect_url(struct client_state *csp)
        * If it exists, use the previously rewritten URL as input
        * otherwise just use the old path.
        */
-      old_url = new_url ? new_url : strdup(csp->http->path);
+      old_url = (new_url != NULL) ? new_url : strdup(csp->http->path);
       new_url = get_last_url(old_url, redirect_mode);
       freez(old_url);
    }
@@ -1487,7 +1491,7 @@ struct http_response *redirect_url(struct client_state *csp)
  *                otherwise
  *
  *********************************************************************/
-int is_imageurl(struct client_state *csp)
+int is_imageurl(const struct client_state *csp)
 {
 #ifdef FEATURE_IMAGE_DETECT_MSIE
    char *tmp;
@@ -1534,7 +1538,7 @@ int is_imageurl(struct client_state *csp)
  * Returns     :  0 => trusted, 1 => untrusted
  *
  *********************************************************************/
-int is_untrusted_url(struct client_state *csp)
+int is_untrusted_url(const struct client_state *csp)
 {
    struct file_list *fl;
    struct block_spec *b;
