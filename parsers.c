@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.81 2006/12/31 22:21:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.82 2007/01/01 19:36:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.81 2006/12/31 22:21:33 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.82  2007/01/01 19:36:37  fabiankeil
+ *    Integrate a modified version of Wil Mahan's
+ *    zlib patch (PR #895531).
+ *
  *    Revision 1.81  2006/12/31 22:21:33  fabiankeil
  *    Skip empty filter files in filter_header()
  *    but don't ignore the ones that come afterwards.
@@ -903,6 +907,10 @@ jb_err decompress_iob(struct client_state *csp)
    }
    else if (csp->content_type & CT_DEFLATE)
    {
+      /*
+       * XXX: The debug level should be lowered
+       * before the next stable release.
+       */
       log_error (LOG_LEVEL_INFO, "Decompressing deflated iob: %d", *csp->iob->cur);
       /*
        * In theory (that is, according to RFC 1950), deflate-compressed
@@ -930,7 +938,7 @@ jb_err decompress_iob(struct client_state *csp)
 
    /* Set up the fields required by zlib. */
    zstr.next_in  = (Bytef *)csp->iob->cur;
-   zstr.avail_in = (unsigned long)(csp->iob->eod - csp->iob->cur);
+   zstr.avail_in = (unsigned int)(csp->iob->eod - csp->iob->cur);
    zstr.zalloc   = Z_NULL;
    zstr.zfree    = Z_NULL;
    zstr.opaque   = Z_NULL;
@@ -1031,7 +1039,22 @@ jb_err decompress_iob(struct client_state *csp)
       }
    }
 
-   inflateEnd(&zstr);
+   if (Z_STREAM_ERROR == inflateEnd(&zstr))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Inconsistent stream state after decompression: %s", zstr.msg);
+      /*
+       * XXX: Intentionally no return.
+       *
+       * According to zlib.h, Z_STREAM_ERROR is returned
+       * "if the stream state was inconsistent".
+       *
+       * I assume in this case inflate()'s status
+       * would also be something different than Z_STREAM_END
+       * so this check should be redundant, but lets see.
+       */
+   }
+
    if (status != Z_STREAM_END)
    {
       /* We failed to decompress the stream. */
@@ -1800,6 +1823,7 @@ jb_err server_content_encoding(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_content_length(struct client_state *csp, char **header)
 {
+   const size_t max_header_length = 80;
    if (csp->content_length != 0) /* Content length could have been modified */
    {
       /*
@@ -1807,15 +1831,16 @@ jb_err server_content_length(struct client_state *csp, char **header)
        * is different than the original value?
        */
       freez(*header);
-      *header = (char *) zalloc(100);
+      *header = (char *) zalloc(max_header_length);
       if (*header == NULL)
       {
          return JB_ERR_MEMORY;
       }
 
-      sprintf(*header, "Content-Length: %d", (int) csp->content_length);
-
-      log_error(LOG_LEVEL_HEADER, "Adjust Content-Length to %d", (int) csp->content_length);
+      snprintf(*header, max_header_length, "Content-Length: %d",
+         (int)csp->content_length);
+      log_error(LOG_LEVEL_HEADER, "Adjusted Content-Length to %d",
+         (int)csp->content_length);
    }
 
    return JB_ERR_OK;
@@ -2308,11 +2333,13 @@ jb_err client_accept_language(struct client_state *csp, char **header)
 
       if (*header == NULL)
       {
-         log_error(LOG_LEVEL_ERROR, " Insufficent memory. Accept-Language header crunched without replacement.");  
+         log_error(LOG_LEVEL_ERROR,
+            "Insufficent memory. Accept-Language header crunched without replacement.");  
       }
       else
       {
-         log_error(LOG_LEVEL_HEADER, "Accept-Language header crunched and replaced with: %s", *header);
+         log_error(LOG_LEVEL_HEADER,
+            "Accept-Language header crunched and replaced with: %s", *header);
       }
    }
    return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
@@ -2583,19 +2610,22 @@ jb_err client_max_forwards(struct client_state *csp, char **header)
 {
    unsigned int max_forwards;
 
-   if ((0 == strcmpic(csp->http->gpc, "trace"))
-      || (0 == strcmpic(csp->http->gpc, "options")))
+   if ((0 == strcmpic(csp->http->gpc, "trace")) ||
+       (0 == strcmpic(csp->http->gpc, "options")))
    {
       if (1 == sscanf(*header, "Max-Forwards: %u", &max_forwards))
       {
-         if (max_forwards-- >= 1)
+         if (max_forwards-- > 0)
          {
-            sprintf(*header, "Max-Forwards: %u", max_forwards);
-            log_error(LOG_LEVEL_HEADER, "Max forwards of %s request now %d", csp->http->gpc, max_forwards);
+            snprintf(*header, strlen(*header)+1, "Max-Forwards: %u", max_forwards);
+            log_error(LOG_LEVEL_HEADER, "Max-Forwards header for %s request replaced with: %s",
+               csp->http->gpc, *header);
          }
          else
          {
-            log_error(LOG_LEVEL_ERROR, "Non-intercepted %s request with Max-Forwards zero!", csp->http->gpc);
+            /* FIXME: Follow spec and intercept the request. */
+            log_error(LOG_LEVEL_ERROR,
+               "Non-intercepted %s request with Max-Forwards zero!", csp->http->gpc);
          }
       }
    }
@@ -2855,7 +2885,8 @@ jb_err client_x_filter(struct client_state *csp, char **header)
       {
          if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
          {
-            log_error(LOG_LEVEL_HEADER, "force-text-mode overruled the client's request to fetch without filtering!");
+            log_error(LOG_LEVEL_HEADER,
+               "force-text-mode overruled the client's request to fetch without filtering!");
          }
          else
          {  
