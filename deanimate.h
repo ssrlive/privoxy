@@ -1,9 +1,9 @@
 #ifndef DEANIMATE_H_INCLUDED
 #define DEANIMATE_H_INCLUDED
-#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.8.2.1 2004/10/03 12:53:32 david__schmidt Exp $"
+#define DEANIMATE_H_VERSION "$Id: deanimate.h,v 1.10 2006/07/18 14:48:45 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/deanimate.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/deanimate.h,v $
  *
  * Purpose     :  Declares functions to manipulate binary images on the
  *                fly.  High-level functions include:
@@ -44,6 +44,10 @@
  *
  * Revisions   :
  *    $Log: deanimate.h,v $
+ *    Revision 1.10  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.8.2.1  2004/10/03 12:53:32  david__schmidt
  *    Add the ability to check jpeg images for invalid
  *    lengths of comment blocks.  Defensive strategy
@@ -88,9 +92,9 @@ extern "C" {
  */
 struct binbuffer
 {
-   char *buffer; 
-   size_t offset;   
-   size_t size;    
+   char *buffer;
+   size_t offset;
+   size_t size;
 };
 
 /*
