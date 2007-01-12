@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.99 2007/01/01 19:36:37 fabiankeil Exp $
+dnl $Id: configure.in,v 1.100 2007/01/07 07:38:10 joergs Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2004 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.100  2007/01/07 07:38:10  joergs
+dnl Disabled -pipe for AmigaOS4.
+dnl
 dnl Revision 1.99  2007/01/01 19:36:37  fabiankeil
 dnl Integrate a modified version of Wil Mahan's
 dnl zlib patch (PR #895531).
@@ -474,7 +477,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.99 $)
+AC_REVISION($Revision: 1.100 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1170,7 +1173,16 @@ AC_CHECK_LIB(pcreposix, regcomp, [
    ])
 ], [have_pcreposix=no], -lpcre) 
 
-AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcrs=no])], [have_pcrs=no], -lpcre)
+dnl ================================================================
+dnl libpcrs is temporarily disabled.
+dnl
+dnl Privoxy's own pcrs version fixes some problems that
+dnl are present in libpcrs 0.3, the last pcrs release we
+dnl know of, and as libpcrs seems to be currently unmaintained
+dnl we can't send these fixes upstream.
+dnl ================================================================
+dnl
+dnl AC_CHECK_LIB(pcrs, pcrs_compile, [AC_CHECK_HEADER(pcrs.h, [have_pcrs=yes], [have_pcrs=no])], [have_pcrs=no], -lpcre)
 
 dnl =================================================================
 dnl Always defined
@@ -1278,12 +1290,19 @@ AC_ARG_ENABLE(dynamic-pcre,
 [  --disable-dynamic-pcre          Use the built-in, static pcre, even if libpcre is available],
 [ if test $enableval = "no"; then have_pcre=no; fi ])
 
-AC_ARG_ENABLE(dynamic-pcrs,
-[  --disable-dynamic-pcrs          Use the built-in, static pcrs, even if libpcrs is available],
-[ if test $enableval = "no"; then have_pcrs=no; fi ])
+dnl =================================================
+dnl libpcrs is temporarily disabled,
+dnl see comment above for the reason.
+dnl =================================================
+dnl AC_ARG_ENABLE(dynamic-pcrs,
+dnl [  --disable-dynamic-pcrs          Use the built-in, static pcrs, even if libpcrs is available],
+dnl [ if test $enableval = "no"; then have_pcrs=no; fi ])
 
 
-# This check is incomplete. mingw32's zlib is found but the build fails.
+dnl ====================================================
+dnl This check is incomplete. For mingw32 zlib is found
+dnl by configure, but not necessarily by the compiler.
+dnl ====================================================
 AC_ARG_ENABLE(zlib,
 [  --enable-zlib                   Use an external zlib library to allow decompressing
                                   data on the fly.],
@@ -1315,19 +1334,23 @@ else
   STATIC_PCRE_ONLY=
 fi
 
-# If we have libpcrs and pcre is linked dynamically
-# then also link pcrs dynamically, else build and link
-# pcrs statically
-#
-if test $have_pcrs = "yes" -a $pcre_dyn = "yes"; then
-  echo "using libpcrs"
-  STATIC_PCRS_ONLY=#
-  LIBS="$LIBS -lpcrs"
-else
+dnl =================================================
+dnl libpcrs is temporarily disabled,
+dnl see comment above for the reason.
+dnl =================================================
+dnl # If we have libpcrs and pcre is linked dynamically
+dnl # then also link pcrs dynamically, else build and link
+dnl # pcrs statically
+dnl
+dnl if test $have_pcrs = "yes" -a $pcre_dyn = "yes"; then
+dnl  echo "using libpcrs"
+dnl  STATIC_PCRS_ONLY=#
+dnl  LIBS="$LIBS -lpcrs"
+dnl else
   echo "using built-in static pcrs"
   AC_DEFINE(STATIC_PCRS)
   STATIC_PCRS_ONLY=
-fi
+dnl fi
 
 AC_SUBST(STATIC_PCRE_ONLY)
 AC_SUBST(STATIC_PCRS_ONLY)
