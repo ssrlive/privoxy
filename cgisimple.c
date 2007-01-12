@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.45 2006/12/28 18:16:41 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.46 2007/01/02 12:49:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.45 2006/12/28 18:16:41 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.46  2007/01/02 12:49:46  fabiankeil
+ *    Add FEATURE_ZLIB to the list of conditional
+ *    defines at the show-status page.
+ *
  *    Revision 1.45  2006/12/28 18:16:41  fabiankeil
  *    Fixed gcc43 compiler warnings, zero out cgi_send_user_manual's
  *    body memory before using it, replaced sprintf calls with snprintf.
@@ -788,14 +792,13 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    fseek(fp, 0, SEEK_SET);
 
    /* Allocate memory and load the file directly into the body */
-   rsp->body = (char *)malloc(length+1);
+   rsp->body = (char *)zalloc(length+1);
    if (!rsp->body)
    {
       fclose(fp);
       free(full_path);
       return JB_ERR_MEMORY;
    }
-   memset(rsp->body, '\0', length+1);
    if (!fread(rsp->body, length, 1, fp))
    {
       /*
