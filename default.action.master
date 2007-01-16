@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.51 2006/12/18 11:35:04 hal9 Exp $
+#  $Id: default.action.master,v 1.52 2006/12/28 11:23:43 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.5 or later due to 
 #                 syntax changes.
@@ -674,7 +674,7 @@ countr*.
 {-block}
 #MASTER# DONT-VERIFY (generic)
 /.*ad(sl|v(i[cs]|o|an|ertencia|ent|.*search)) # advice/advisories/advan*/advertencia (spanish)
-/.*(lo|thre|he|d|gr|l|ro|re|squ)ads
+/.*(lo|thre|he|d|gr|l|ro|re|squ|class(ified)?)ads
 /.*account
 support./(.*/)?track
 
@@ -1073,6 +1073,9 @@ stats.indextools.com
 tra*.measuremap.com
 .eurekster.com/sidebar
 tra*.mybloglog.com
+#MASTER# BLOCK-REFERRER:  http://www.polymervision.com/ 
+#MASTER# REMARKS: Actionsfile feedback item #1629370 01/16/07
+.guesttrace.
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
