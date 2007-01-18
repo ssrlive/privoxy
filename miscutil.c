@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.44 2006/11/07 12:46:43 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.45 2006/12/26 17:31:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -9,8 +9,8 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.44 2006/11/07 12:46:43 fabianke
  *                These are each too small to deserve their own file
  *                but don't really fit in any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
- *                Privoxy team. http://www.privoxy.org/
+ * Copyright   :  Written by and Copyright (C) 2001-2003, 2006
+ *                the SourceForge Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -36,6 +36,12 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.44 2006/11/07 12:46:43 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.45  2006/12/26 17:31:41  fabiankeil
+ *    Mutex protect rand() if POSIX threading
+ *    is used, warn the user if that's not possible
+ *    and stop using it on _WIN32 where it could
+ *    cause crashes.
+ *
  *    Revision 1.44  2006/11/07 12:46:43  fabiankeil
  *    Silence compiler warning on NetBSD 3.1.
  *
@@ -263,9 +269,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.44 2006/11/07 12:46:43 fabianke
 #include <ctype.h>
 #include <assert.h>
 
-#ifndef HAVE_TIMEGM
+#if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 #include <time.h>
-#endif /* #ifndef HAVE_TIMEGM */
+#endif /* !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV) */
 
 #include "project.h"
 #include "miscutil.h"
@@ -358,7 +364,7 @@ unsigned int hash_string( const char* s )
 
    for ( ; *s; ++s )
    {
-      h = 5 * h + *s;
+      h = 5 * h + (unsigned int)*s;
    }
 
    return (h);
@@ -1119,7 +1125,7 @@ long int pick_from_range(long int range)
 }
 
 
-#ifndef HAVE_TIMEGM
+#if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 /*********************************************************************
  *
  * Function    :  timegm
@@ -1167,7 +1173,7 @@ time_t timegm(struct tm *tm)
    tzset();
    return answer;
 }
-#endif /* (ifndef HAVE_TIMEGM) */
+#endif /* !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV) */
 
 
 /*
