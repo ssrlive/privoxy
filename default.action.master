@@ -9,9 +9,9 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.52 2006/12/28 11:23:43 hal9 Exp $
+#  $Id: default.action.master,v 1.53 2007/01/16 10:54:36 hal9 Exp $
 #
-#  Requires    :  This version requires Privoxy v3.0.5 or later due to 
+#  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
@@ -19,7 +19,7 @@
 #                 This file is subject to periodic updating. Local exceptions
 #                 and enhancements are better placed in user.action. 
 #
-#  Copyright   :  Written by and Copyright (C) 2001 - 2006 the
+#  Copyright   :  Written by and Copyright (C) 2001 - 2007 the
 #                 Privoxy team. http://www.privoxy.org/
 #
 #  Note: Updated versions of this file will be made available from time
@@ -481,7 +481,7 @@
 {{settings}}
 #############################################################################
 #MASTER# COMMENT: The minimum Privoxy version:
-for-privoxy-version=3.0.6
+for-privoxy-version=3.0.7
 
 #############################################################################
 # Aliases
@@ -1305,6 +1305,9 @@ mail.google.
 #----------------------------------------------------------------------------
 { -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups -prevent-compression }
 #MASTER# REMARKS: Problem URL: adserver.yahoo.com 10/01/06
+#MASTER# REMARKS: This is much too broad for my taste. It forces me to add
+#MASTER# REMARKS: a special yahoo section in my user.action file, just to
+#MASTER# REMARKS: confirm my defaults in default.action. fk 2007-01-19
 .yahoo.com
 
 #----------------------------------------------------------------------------
@@ -1373,8 +1376,11 @@ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 .speedfind.de
 #MASTER# PROBLEM-URL: http://www.nytimes.com/
 .nytimes.com
-#MASTER# PROBLEM-URL: http://groups.yahoo.com/
-.yahoo.com/.*done=
+#MASTER# PROBLEM-URL: http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
+#MASTER# REMARKS: Yahoo logout URL after first redirect. fk 2007-01-19
+#MASTER# REMARKS: Logout fails if we fast-redirect to the URL after "done=".
+#MASTER# REMARKS: Reported in support request #1635354.
+.yahoo.com/.*done=http
 #MASTER# PROBLEM-URL: http://validator.w3.org/check
 .w3.org
 #MASTER# PROBLEM-URL: http://www.ask.com/
@@ -1711,11 +1717,17 @@ blogs.msdn.com
 blogs.msdn.com
 
 {+fast-redirects{check-decoded-url} -block}
-#MASTER# COMMENTS: This section not checked 10/17/06 HB
+#MASTER# COMMENTS: Is this still in use? 2007-01-19 fk
+#MASTER# REMARKS: Remark used to be "Basically all of Yahoo's outbound links" which is no longer true.
 #MASTER# PROBLEM-URL: http://uk.rd.yahoo.com/M=200059723.200849546.202365062.200414073/D=ukhmpg/S=15426100:TEAR/A=200396897/R=1119/id=img1_nocap_dial/*http://ad.uk.doubleclick.net/clk;5982435;8261020;g?http://www.lunnpoly.com
-#MASTER# REMARKS: Basically all of Yahoo's outbound links
 .*rd.yahoo.com/
-#MASTER# PROBLEM-URL: http://www.gamefaqs.com/computer/doswin/game/914819.html 12/18/06
+#MASTER# REMARKS: Yahoo search results. Added 2007-01-19 fk
+#MASTER# REDIRECT-REFERRER: http://search.yahoo.com/search?p=privoxy
+#MASTER# PROBLEM-URL: http://rds.yahoo.com/_ylt=A0geuryczbBF._YAEmxXNyoA;_ylu=X3oDMTB2b2gzdDdtBGNvbG8DZQRsA1dTMQRwb3MDMQRzZWMDc3IEdnRpZAM-/SIG=11b3qg40n/EXP=1169301276/**http%3a//www.privoxy.org/
+rds.yahoo.com/
+#MASTER# COMMENTS: Verified 2007-01-19 fk
+#MASTER# REDIRECT-REFERRER: http://www.gamefaqs.com/computer/doswin/game/914819.html
+#MASTER# PROBLEM-URL: http://dw.com.com/redir?asid=0&astid=8&siteid=19&edid=107&destCat=33862&destURL=http%3A%2F%2Fdb.gamefaqs.com%2Fcomputer%2Fdoswin%2Ffile%2Fvampire_tmb_b.txt
 dw.com.com/
 
 {+block}
@@ -1747,5 +1759,12 @@ dw.com.com/
 #MASTER# REMARKS: the redirection.
 {+redirect{http://config.privoxy.org/}}
 .privoxy.org/config
+
+#MASTER# REMARKS: Yahoo logout URLs need special treatment,
+#MASTER# REMARKS: the URL after "done=" is no fast-redirect. 2007-01-19 fk
+#MASTER# REMARKS: Reported in support request #1635354.
+#MASTER# PROBLEM-URL: http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
+{-fast-redirects +redirect{s@^.*\*(http://login\.yahoo\.com/.*)$@$1@i}}
+.yahoo./.*http://login.yahoo.com/config/login.*http://
 
 #MASTER# set vi:nowrap
