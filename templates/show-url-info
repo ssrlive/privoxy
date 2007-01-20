@@ -93,7 +93,7 @@
 
 <body>
 
-  <table cellpadding="20" cellspacing="10" border="0" width="100%">
+  <table summary="" cellpadding="20" cellspacing="10" border="0" width="100%">
     <tr>
       <td class="title">
 
@@ -137,6 +137,19 @@
     </tr>
 <!-- if-url-given-end@ -->
 
+<!-- @if-privoxy-is-toggled-off-start -->
+
+    <tr>
+      <td class="warning">
+        <h2>Warning:</h2>
+        <p>
+          <strong>Privoxy is currently toggled off. Matching actions will not apply
+          unless you <a href="@default-cgi@toggle?set=enable">toggle Privoxy on</a> first.</strong>
+        </p>
+      </td>
+    </tr>
+<!-- if-privoxy-is-toggled-off-end@ -->
+
     <tr>
       <td class="box">
         <h2>Look up the actions for a 
@@ -175,13 +188,7 @@
       </td>
     </tr>
 <!-- if-have-help-info-end@ -->
-    
 
-     <tr>
-      <td>
-        <p class="small">Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></p>
-      </td>
-    </tr>   
   </table>
 
 </body>

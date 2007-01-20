@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.46 2007/01/02 12:49:46 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.47 2007/01/12 15:07:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -9,7 +9,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.46 2007/01/02 12:49:46 fabian
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.46 2007/01/02 12:49:46 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.47  2007/01/12 15:07:10  fabiankeil
+ *    Use zalloc in cgi_send_user_manual.
+ *
  *    Revision 1.46  2007/01/02 12:49:46  fabiankeil
  *    Add FEATURE_ZLIB to the list of conditional
  *    defines at the show-status page.
@@ -1244,6 +1247,19 @@ jb_err cgi_show_url_info(struct client_state *csp,
       url_param = url_param_prefixed;
    }
 
+   /*
+    * Hide "toggle off" warning if Privoxy is toggled on.
+    */
+   if (
+#ifdef FEATURE_TOGGLE
+       (global_toggle_state == 1) &&
+#endif /* def FEATURE_TOGGLE */
+       map_block_killer(exports, "privoxy-is-toggled-off")
+      )
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
 
    if (url_param[0] == '\0')
    {
