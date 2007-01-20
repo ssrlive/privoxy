@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.54 2007/01/19 16:13:00 fabiankeil Exp $
+#  $Id: default.action.master,v 1.55 2007/01/20 13:24:29 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -910,6 +910,11 @@ pagead*.googlesyndication./.*\.js
 /.*client_?ad\.(php|cgi)
 #MASTER# COMMENT: SF tracker 09/15/06
 /.*AIM_UAC.adp
+#MASTER# BLOCK-REFERRER: http://www.wunderground.com/ 2007-01-20
+#MASTER# COMMENT: banner at top of page http://server2.as5000.com/AS5000/adserver/click?ID=ADST-00015&C=0&T=1169332403
+/(.*/)?adserver/image
+#MASTER# COMMENT: Also from wunderground.com: http://icons-aa.wunderground.com/ads/images/TripAdvisor-Blinky.gif 2007-01-20
+/(.*/)?ads/images/
 
 #############################################################################
 # Site-specific block-as-image patterns:
@@ -1746,6 +1751,9 @@ www.skweezer.net/bloglines
 #MASTER# PROBLEM-URL: http://www.anti-leech.com/theft_example.html
 #MASTER# REMARKS: Lame attempt at banning ad-blockers. Used by other websites as well.
 /antitheft\.php
+
+{ +prevent-compression }
+.compusa.com/
 
 {+filter{tiny-textforms} +prevent-compression}
 .sourceforge.net/tracker
