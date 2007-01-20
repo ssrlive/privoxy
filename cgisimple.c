@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.47 2007/01/12 15:07:10 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.48 2007/01/20 15:31:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.47 2007/01/12 15:07:10 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.48  2007/01/20 15:31:31  fabiankeil
+ *    Display warning if show-url-info CGI page
+ *    is used while Privoxy is toggled off.
+ *
  *    Revision 1.47  2007/01/12 15:07:10  fabiankeil
  *    Use zalloc in cgi_send_user_manual.
  *
@@ -280,6 +284,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.47 2007/01/12 15:07:10 fabian
 #include <ctype.h>
 #include <string.h>
 #include <assert.h>
+
+#ifdef HAVE_ACCESS
+#include <unistd.h>
+#endif /* def HAVE_ACCESS */
 
 #ifdef _WIN32
 #define snprintf _snprintf
@@ -1078,8 +1086,20 @@ jb_err cgi_show_status(struct client_state *csp,
 #ifdef FEATURE_CGI_EDIT_ACTIONS
          if (NULL == strstr(csp->actions_list[i]->filename, "standard.action") && NULL != csp->config->actions_file_short[i])
          {
-            snprintf(buf, 100, "&nbsp;&nbsp;<a href=\"/edit-actions-list?f=%s\">Edit</a>", csp->config->actions_file_short[i]);
-            if (!err) err = string_append(&s, buf);
+#ifdef HAVE_ACCESS
+            if (access(csp->config->actions_file[i], W_OK) == 0)
+            {
+#endif /* def HAVE_ACCESS */
+               snprintf(buf, 100, "&nbsp;&nbsp;<a href=\"/edit-actions-list?f=%s\">Edit</a>",
+                  csp->config->actions_file_short[i]);
+               if (!err) err = string_append(&s, buf);
+#ifdef HAVE_ACCESS
+            }
+            else
+            {
+               if (!err) err = string_append(&s, "&nbsp;&nbsp;<strong>No write access.</strong>");
+            }
+#endif /* def HAVE_ACCESS */
          }
 #endif
 
