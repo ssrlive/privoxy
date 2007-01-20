@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.53 2007/01/16 10:54:36 hal9 Exp $
+#  $Id: default.action.master,v 1.54 2007/01/19 16:13:00 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -336,7 +336,7 @@
 #   specified e-mail address.
 #
 # +hide-if-modified-since{block}
-# +hide-if-modified-since{-1}
+# +hide-if-modified-since{-60}
 #   Deletes the "If-Modified-Since:" HTTP client header or modifies its 
 #   value, preventing another way to track users.
 #
@@ -702,6 +702,9 @@ support./(.*/)?track
 .ads[erv][rv]*.
 .ads.
 /(.*/)?ad(se?rv|click|stream|image|log|farm|script)
+#MASTER# PROBLEM URL: http://www.torrentportal.com/topad.html
+#MASTER# REMARKS: Action tracker 1637648 and a bit of imagination. Added 2007-01-20.
+/.*(top|bottom|left|right)_?ad
 
 #############################################################################
 # Site-specific block patterns;
@@ -797,6 +800,10 @@ ad.theadhost.com
 .espace.netavenir.com
 #MASTER# BLOCK-REFERRER: http://www.powerdvd.com/ 12/28/06
 .hitfarm.com
+#MASTER# BLOCK-REFERRER: http://www.uk-businessdirectory.co.uk/
+#MASTER# REMARKS: Action tracker 1616457. Added 2007-01-20.
+.topnemo.com/engine
+.top100categories.com/engine
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1422,13 +1429,13 @@ config.privoxy.org/
 # No filtering for sourcecode or other automatically parsed content
 #----------------------------------------------------------------------------
 {-filter -prevent-compression}
-#MASTER# PROBLEM-URL: http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/ijbswa/current/
-cvs.
+#MASTER# PROBLEM-URL: http://ijbswa.cvs.sourceforge.net/ijbswa/current/
+.cvs.
 /.*(cvs(view|web)|viewcvs)
 #MASTER# REMARKS: The same for Subversion
 #MASTER# PROBLEM-URL: http://svn.sourceforge.net/
-svn.
-websvn.
+.svn.
+.websvn.
 /(.*/)?svn/
 #MASTER# PROBLEM-URL: http://liveupdate.symantec.com/ennlu.x86
 #MASTER# REMARKS: Jeez, could you please stay with one of them?
@@ -1729,6 +1736,10 @@ rds.yahoo.com/
 #MASTER# REDIRECT-REFERRER: http://www.gamefaqs.com/computer/doswin/game/914819.html
 #MASTER# PROBLEM-URL: http://dw.com.com/redir?asid=0&astid=8&siteid=19&edid=107&destCat=33862&destURL=http%3A%2F%2Fdb.gamefaqs.com%2Fcomputer%2Fdoswin%2Ffile%2Fvampire_tmb_b.txt
 dw.com.com/
+#MASTER# REMARKS: Action tracker 1593393. Added 2007-01-20.
+#MASTER# PROBLEM-URL: http://wzus.bloglines.com/r?t=a&d=us&s=bl&c=blen&ti=1&ai=51060&l=dir&o=0&sv=z6f537f5b&ip=971AC44B&u=http%3A%2F%2Fwww.skweezer.net%2Fbloglines%2Fskweeze.aspx%3F%26i%3Dd%26l%3Den%26r%3Dhttp%253A%252F%252Fwww.bloglines.com%252Fmyblogs_display%253Fsub%253D29302699%2526site%253D5382440%26url%3Dhttp%253A%252F%252Fpermalink.gmane.org%252Fgmane.linux.debian.devel.changes.unstable%252F97340
+.bloglines.com/r\?
+www.skweezer.net/bloglines
 
 {+block}
 #MASTER# COMMENTS: This section not checked 10/17/06 HB. Still out there?
