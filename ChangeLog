@@ -6,16 +6,16 @@ ChangeLog for Privoxy
 - New trust entries are saved with a comment that contains the
   trusted referring URL (Suggested by Daniel Griscom).
 - Filter descriptions are HTML encoded automatically. 	
-- The config option split-large-forms can be used to work
+- New config option "split-large-forms" to work
   around a browser bug that caused IE6 and IE7 to ignore
   the Submit button on the edit-actions-for-url CGI page.
 - Requests for Privoxy's CGI pages can be blocked, redirected
   or (un)trusted like ordinary requests.
 - Empty filter files no longer interrupt the filtering process
   prematurely and are correctly listed on the show-status CGI page. 
-- Privoxy can be combined with any packet filter to build
-  an intercepting proxy for HTTP/1.1 requests (and for HTTP/1.0
-  requests with Host header set).
+- New config option "accept-intercepted-requests" to combine
+  Privoxy with any packet filter to build an intercepting proxy
+  for HTTP/1.1 requests (and for HTTP/1.0 requests with Host header set).
 - fast-redirects{} catch redirects to https URLs as well.
 - redirect{s@foo@bar@} can be used to redirect to a rewritten
   version of the original URL.
@@ -27,7 +27,31 @@ ChangeLog for Privoxy
 - Only unlink the pidfile if it's actually used.
 - Retries after connection problems with forced requests
   aren't blocked again.
-	
+- On Unix SIGABRT causes a coredump as expected and is no
+  longer treated as normal shutdown signal.
+- The "access denied" CGI page is more descriptive and
+  allows to circumvent the referrer check.
+- Updated PCRS to handle unexpected PCRE errors properly.
+  Fixed crashes that could occur if Privoxy was build
+  with external PCRE versions newer than Privoxy's internal
+  one. (Reported by Chung-chieh Shan)
+- Fixed crashes with null bytes in PCRS replacement strings
+  (Patch provided by Felix Gröbert).
+- Fixed crashes with header time randomization on mingw32.
+- Added zlib support to filter content with gzip and deflate
+  encoding. (Patch provided by Wil Mahan)
+- The CGI style sheet is no longer delivered if the referring
+  page isn't a Privoxy CGI page. This prevents a JavaScript-based
+  Privoxy detection "attack".
+- Added support for AmigaOS 4, fixed build for AmigaOS 3.x.	
+- The show-url-info CGI page displays a warning if Privoxy
+  is currently toggled off.
+- The show-status CGI page suppresses the edit button
+  for action files if Privoxy has no write access.	
+- Minor code clean-ups, filter and action file updates.
+  (Some of them reported by Davide Alberani, Markus Elfring
+  and Adam Piggott)
+
 *** Version 3.0.6 ***
 
 - New content filters: no-ping, google, msn, yahoo and blogspot.
@@ -359,12 +383,12 @@ being a mix of "U.S. English", "U.K. English" and "Irish English".
 
 
 ----------------------------------------------------------------------
-Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
                Privoxy team. http://www.privoxy.org/
 
                Based on the Internet Junkbuster originally written
                by and Copyright (C) 1997 Anonymous Coders and 
-               Junkbusters Corporation.  http://www.junkbusters.com
+               Junkbusters Corporation.  http://www.junkbusters.com/
 
                This program is free software; you can redistribute it 
                and/or modify it under the terms of the GNU General
@@ -384,4 +408,11 @@ Copyright   :  Written by and Copyright (C) 2001 the SourceForge
                or write to the Free Software Foundation, Inc., 59
                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+               Note that parts of Privoxy are under licenses that are
+               GPL-compatible but less restrictive - for details see
+               Privoxy's source code. The Privoxy team doesn't hold the
+               copyright for these parts and doesn't relicense them either.
+               You are free to extract them again to distribute them under
+               their own license.
+	
 set vi:tw=68
