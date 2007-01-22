@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.55 2007/01/20 13:24:29 fabiankeil Exp $
+#  $Id: default.action.master,v 1.56 2007/01/20 23:00:51 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -890,6 +890,8 @@ pagead*.googlesyndication./.*\.js
 /js/slider\.js
 #MASTER# BLOCK-REFERRER: http://www.earthcore.com/ feedback item #1605385 12/14/06
 /t\.php\?cat=.*&kw=.*&sc=
+#MASTER# BLOCK-REFERRER: http://floodle.net 2007-01-21 SF tracker
+scripts.chitika.net/.*\.js
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1027,7 +1029,8 @@ searchportal.information.com/
 images.ibsys.com/
 #MASTER# BLOCK-REFERRER: http://www.rentalhouses.com/search_results.php?searchnew=1&citys_city=&citys_county=&citys_state=&ssubmit=Search&Szip=40205&keyword=&listingid=&strs_state=&strs_city=&strs_street= 11/05/06
 .lduhtrp.net/image
-
+#MASTER# BLOCK-REFERRER: http://floodle.net 2007-01-21 SF tracker
+scripts.chitika.net/.*\.(gif|png|jpg)
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1093,7 +1096,8 @@ tra*.mybloglog.com
 # Specific counters (see above for generic patterns)
 #----------------------------------------------------------------------------
 #MASTER# BLOCK-REFERRER: http://www.distrowatch.com/table.php?distribution=linex 10/19/06
-s*.sitemeter.com/meter
+#MASTER# BLOCK-REFERRER: http://floodle.net 2007-01-21 tracker  #1641102
+s*.sitemeter.com/(meter|js/counter.js)
 #MASTER# BLOCK-REFERRER: http://personales.mundivia.es/lbouza/ 10/19/06
 fastcounter.bcentral.com/
 #MASTER# BLOCK-REFERRER: http://osnews.com/ 10/19/06
