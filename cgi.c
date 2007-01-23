@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.86 2007/01/09 11:54:26 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.87 2007/01/22 15:34:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,16 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.86 2007/01/09 11:54:26 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.87  2007/01/22 15:34:13  fabiankeil
+ *    - "Protect" against a rather lame JavaScript-based
+ *      Privoxy detection "attack" and check the referrer
+ *      before delivering the CGI style sheet.
+ *    - Move referrer check for unsafe CGI pages into
+ *      referrer_is_safe() and log the result.
+ *    - Map @url@ in cgi-error-disabled page.
+ *      It's required for the "go there anyway" link.
+ *    - Mark *csp as immutable for grep_cgi_referrer().
+ *
  *    Revision 1.86  2007/01/09 11:54:26  fabiankeil
  *    Fix strdup() error handling in cgi_error_unknown()
  *    and cgi_error_no_template(). Reported by Markus Elfring.
@@ -1422,7 +1432,7 @@ jb_err cgi_error_disabled(struct client_state *csp,
    {
       return JB_ERR_MEMORY;
    }
-   if (map(exports, "url", 1, csp->http->url, 1))
+   if (map(exports, "url", 1, html_encode(csp->http->url), 0))
    {
       /* Not important enough to do anything */
       log_error(LOG_LEVEL_ERROR, "Failed to fill in url.");
@@ -2393,11 +2403,13 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!strncmpic(csp->config->usermanual, "file://", 7) ||
        !strncmpic(csp->config->usermanual, "http", 4))
    {
-      if (!err) err = map(exports, "user-manual", 1, csp->config->usermanual ,1);
+      /* Manual is located somewhere else, just link to it. */
+      if (!err) err = map(exports, "user-manual", 1, html_encode(csp->config->usermanual), 0);
    }
    else
    {
-      if (!err) err = map(exports, "user-manual", 1, "http://"CGI_SITE_2_HOST"/user-manual/" ,1);
+      /* Manual is delivered by Privoxy. */
+      if (!err) err = map(exports, "user-manual", 1, html_encode(CGI_PREFIX"user-manual/"), 0);
    }
    if (!err) err = map(exports, "actions-help-prefix", 1, ACTIONS_HELP_PREFIX ,1);
 #ifdef FEATURE_TOGGLE
@@ -2611,11 +2623,23 @@ char *make_menu(const char *self, const unsigned feature_flags)
 
       if (d->description && strcmp(d->name, self))
       {
-         string_append(&result, "<li><a href=\"" CGI_PREFIX);
+         char *html_encoded_prefix;
+
+         string_append(&result, "<li><a href=\"");
+         html_encoded_prefix = html_encode(CGI_PREFIX);
+         if (html_encoded_prefix == NULL)
+         {
+            return NULL;  
+         }
+         else
+         {
+            string_append(&result, html_encoded_prefix);
+            free(html_encoded_prefix);
+         }
          string_append(&result, d->name);
          string_append(&result, "\">");
          string_append(&result, d->description);
-         string_append(&result, "</a></li>");
+         string_append(&result, "</a></li>\n");
       }
    }
 
