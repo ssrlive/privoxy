@@ -84,6 +84,7 @@
   <meta http-equiv="Content-Script-Type" content="text/javascript">
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="robots" content="noindex,nofollow">
+  <link rel="shortcut icon" href="@default-cgi@error-favicon.ico">
   <style type="text/css">
 #include cgi-style.css
   </style>

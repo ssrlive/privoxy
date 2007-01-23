@@ -32,6 +32,14 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.40  2006/12/21 13:01:03  fabiankeil
+#    Prepare for "split-large-forms".
+#
+#    Mention that redirect{} now also understands
+#    a single pcrs job as argument.
+#
+#    Add some table summaries and remove useless validator link.
+#
 #    Revision 1.39  2006/10/04 17:37:54  fabiankeil
 #    JavaScript fix for bug report #1570678.
 #
@@ -238,6 +246,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
+  <link rel="shortcut icon" href="@default-cgi@favicon.ico" type="image/x-icon">
 
   <title>Privoxy@@my-hostname@: Edit actions</title>
 

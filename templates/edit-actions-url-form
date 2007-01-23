@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-url-form,v $
+#    Revision 1.16  2006/07/18 14:49:14  david__schmidt
+#    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+#    with what was really the latest development (the v_3_0_branch branch)
+#
 #    Revision 1.14.2.2  2002/08/23 02:22:53  hal9
 #    Fix a perl brain fart with <li> in comments.
 #
@@ -115,6 +119,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
+  <link rel="shortcut icon" href="@default-cgi@error-favicon.ico">
 
   <title>Privoxy@@my-hostname@: Edit URL Pattern</title>
 
@@ -198,12 +203,6 @@ function validate(text)
       </td>
     </tr>
 <!-- if-have-help-info-end@ -->
-
-    <tr>
-      <td>
-        <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>
-      </td>
-    </tr>
 
   </table>
 </body>

@@ -5,7 +5,7 @@
 # Purpose     :  Template used to edit the actions file.
 # 
 #
-# Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
+# Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
 #                Privoxy team. http://www.privoxy.org/
 #
 #                Original Author: Copyright (C) 2001 Jonathan Foster
@@ -31,6 +31,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.31  2006/09/10 14:39:24  hal9
+#    Fix typo + minor change.
+#
 #    Revision 1.30  2006/09/09 01:12:15  hal9
 #    Soften actions files update interval.
 #
@@ -188,6 +191,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
+  <link rel="shortcut icon" href="@default-cgi@favicon.ico" type="image/x-icon">
 
   <title>Privoxy: Edit actions file @f@.action</title>
 
@@ -385,12 +389,6 @@ function a_p(link,section)
       </td>
     </tr>
 <!-- if-have-help-info-end@ -->
-
-    <tr>
-      <td>
-        <small><small>Valid <a href="http://validator.w3.org/">HTML 4.01 Strict</a></small></small>
-      </td>
-    </tr>
 
   </table>
 </body>
