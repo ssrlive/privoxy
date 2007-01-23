@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.48 2007/01/20 15:31:31 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.49 2007/01/20 16:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.48 2007/01/20 15:31:31 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.49  2007/01/20 16:29:38  fabiankeil
+ *    Suppress edit buttons for action files if Privoxy has
+ *    no write access. Suggested by Roland in PR 1564026.
+ *
  *    Revision 1.48  2007/01/20 15:31:31  fabiankeil
  *    Display warning if show-url-info CGI page
  *    is used while Privoxy is toggled off.
@@ -313,6 +317,41 @@ const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 static char *show_rcs(void);
 static jb_err show_defines(struct map *exports);
 
+/*
+ * 16x16 ico blobs for favicon delivery functions.
+ */
+const char default_favicon_data[] =
+   "\000\000\001\000\001\000\020\020\002\000\000\000\000\000\260"
+   "\000\000\000\026\000\000\000\050\000\000\000\020\000\000\000"
+   "\040\000\000\000\001\000\001\000\000\000\000\000\100\000\000"
+   "\000\000\000\000\000\000\000\000\000\002\000\000\000\000\000"
+   "\000\000\377\377\377\000\377\000\052\000\017\360\000\000\077"
+   "\374\000\000\161\376\000\000\161\376\000\000\361\377\000\000"
+   "\361\377\000\000\360\017\000\000\360\007\000\000\361\307\000"
+   "\000\361\307\000\000\361\307\000\000\360\007\000\000\160\036"
+   "\000\000\177\376\000\000\077\374\000\000\017\360\000\000\360"
+   "\017\000\000\300\003\000\000\200\001\000\000\200\001\000\000"
+   "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+   "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+   "\000\000\200\001\000\000\200\001\000\000\300\003\000\000\360"
+   "\017\000\000";
+const char error_favicon_data[] =
+   "\000\000\001\000\001\000\020\020\002\000\000\000\000\000\260"
+   "\000\000\000\026\000\000\000\050\000\000\000\020\000\000\000"
+   "\040\000\000\000\001\000\001\000\000\000\000\000\100\000\000"
+   "\000\000\000\000\000\000\000\000\000\002\000\000\000\000\000"
+   "\000\000\377\377\377\000\000\000\377\000\017\360\000\000\077"
+   "\374\000\000\161\376\000\000\161\376\000\000\361\377\000\000"
+   "\361\377\000\000\360\017\000\000\360\007\000\000\361\307\000"
+   "\000\361\307\000\000\361\307\000\000\360\007\000\000\160\036"
+   "\000\000\177\376\000\000\077\374\000\000\017\360\000\000\360"
+   "\017\000\000\300\003\000\000\200\001\000\000\200\001\000\000"
+   "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+   "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+   "\000\000\200\001\000\000\200\001\000\000\300\003\000\000\360"
+   "\017\000\000";
+const size_t default_favicon_length  = sizeof(default_favicon_data) - 1;
+const size_t error_favicon_length  = sizeof(error_favicon_data) - 1;
 
 /*********************************************************************
  *
@@ -664,6 +703,88 @@ jb_err cgi_transparent_image(struct client_state *csp,
    }
 
    if (enlist(rsp->headers, "Content-Type: " BUILTIN_IMAGE_MIMETYPE))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->is_static = 1;
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_send_default_favicon
+ *
+ * Description :  CGI function that sends the standard favicon.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_send_default_favicon(struct client_state *csp,
+                                struct http_response *rsp,
+                                const struct map *parameters)
+{
+   rsp->body = bindup(default_favicon_data, default_favicon_length);
+   rsp->content_length = default_favicon_length;
+
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   if (enlist(rsp->headers, "Content-Type: image/x-icon"))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   rsp->is_static = 1;
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_send_error_favicon
+ *
+ * Description :  CGI function that sends the favicon for error pages.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_send_error_favicon(struct client_state *csp,
+                              struct http_response *rsp,
+                              const struct map *parameters)
+{
+   rsp->body = bindup(error_favicon_data, error_favicon_length);
+   rsp->content_length = error_favicon_length;
+
+   if (rsp->body == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   if (enlist(rsp->headers, "Content-Type: image/x-icon"))
    {
       return JB_ERR_MEMORY;
    }

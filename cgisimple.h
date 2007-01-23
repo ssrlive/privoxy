@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.13 2006/07/18 14:48:45 david__schmidt Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.14 2006/09/06 18:45:03 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -11,7 +11,7 @@
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -38,6 +38,15 @@
  *
  * Revisions   :
  *    $Log: cgisimple.h,v $
+ *    Revision 1.14  2006/09/06 18:45:03  fabiankeil
+ *    Incorporate modified version of Roland Rosenfeld's patch to
+ *    optionally access the user-manual via Privoxy. Closes patch 679075.
+ *
+ *    Formatting changed to Privoxy style, added call to
+ *    cgi_error_no_template if the requested file doesn't
+ *    exist and modified check whether or not Privoxy itself
+ *    should serve the manual. Should work cross-platform now.
+ *
  *    Revision 1.13  2006/07/18 14:48:45  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -129,6 +138,12 @@ extern jb_err cgi_show_request (struct client_state *csp,
 extern jb_err cgi_transparent_image (struct client_state *csp,
                                      struct http_response *rsp,
                                      const struct map *parameters);
+extern jb_err cgi_send_error_favicon (struct client_state *csp,
+                                      struct http_response *rsp,
+                                      const struct map *parameters);
+extern jb_err cgi_send_default_favicon (struct client_state *csp,
+                                        struct http_response *rsp,
+                                        const struct map *parameters);
 extern jb_err cgi_send_stylesheet(struct client_state *csp,
                                   struct http_response *rsp,
                                   const struct map *parameters);
