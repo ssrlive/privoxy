@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.82 2007/01/01 19:36:37 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.83 2007/01/12 15:03:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -18,7 +18,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.82 2007/01/01 19:36:37 fabiankeil
  *                   `client_if_none_match', `get_destination_from_headers',
  *                   `parse_header_time' and `server_set_cookie'.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -45,6 +45,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.82 2007/01/01 19:36:37 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.83  2007/01/12 15:03:02  fabiankeil
+ *    Correct a cast, check inflateEnd() exit code
+ *    to see if we have to, replace sprintf calls
+ *    with snprintf.
+ *
  *    Revision 1.82  2007/01/01 19:36:37  fabiankeil
  *    Integrate a modified version of Wil Mahan's
  *    zlib patch (PR #895531).
@@ -1252,6 +1257,7 @@ char *sed(const struct parsers pats[],
 
    if (first_run) /* Parse and print */
    {
+      log_error(LOG_LEVEL_HEADER, "scanning headers for: %s", csp->http->url);
       for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
       {
          for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
@@ -1563,12 +1569,14 @@ jb_err crunch_server_header(struct client_state *csp, char **header)
 
    return JB_ERR_OK;
 }
+
+
 /*********************************************************************
  *
  * Function    :  server_content_type
  *
  * Description :  Set the content-type for filterable types (text/.*,
- *                javascript and image/gif) unless filtering has been
+ *                .*xml.*, javascript and image/gif) unless filtering has been
  *                forbidden (CT_TABOO) while parsing earlier headers.
  *                NOTE: Since text/plain is commonly used by web servers
  *                      for files whose correct type is unknown, we don't
@@ -1587,11 +1595,22 @@ jb_err crunch_server_header(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_content_type(struct client_state *csp, char **header)
 {
-   const char *newval;
-   
-   newval = csp->action->string[ACTION_STRING_CONTENT_TYPE]; 
+   /* Remove header if it isn't the first Content-Type header */
+   if(csp->content_type && (csp->content_type != CT_TABOO))
+   {
+     /*
+      * Another, slightly slower, way to see if
+      * we already parsed another Content-Type header.
+      */
+      assert(NULL != get_header_value(csp->headers, "Content-Type:"));
 
-   assert(!csp->content_type || (csp->content_type == CT_TABOO));
+      log_error(LOG_LEVEL_ERROR,
+         "Multiple Content-Type headers. Removing and ignoring: \'%s\'",
+         *header);
+      freez(*header);
+
+      return JB_ERR_OK;
+   }
 
    if (!(csp->content_type & CT_TABOO))
    {
@@ -1645,12 +1664,11 @@ jb_err server_content_type(struct client_state *csp, char **header)
       { 
          freez(*header);
          *header = strdup("Content-Type: ");
-         string_append(header, newval);
+         string_append(header, csp->action->string[ACTION_STRING_CONTENT_TYPE]);
 
          if (header == NULL)
          { 
-            log_error(LOG_LEVEL_HEADER,
-               "Insufficient memory. Content-Type crunched without replacement!");
+            log_error(LOG_LEVEL_HEADER, "Insufficient memory to replace Content-Type!");
             return JB_ERR_MEMORY;
          }
          log_error(LOG_LEVEL_HEADER, "Modified: %s!", *header);
