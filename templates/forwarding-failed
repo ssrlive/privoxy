@@ -6,7 +6,7 @@
 # USING HTML TEMPLATES:
 # ---------------------
 #
-# Template files are written win plain HTML, with a few
+# Template files are written in plain HTML, with a few
 # additions:
 # 
 # - Lines that start with a '#' character like this one
@@ -47,7 +47,7 @@
 #    The URL of the SourceForge ijbswa project, who maintains this
 #    software.
 #
-#  host-ip
+#  gateway
 #    The IP or hostname of the forwarding server
 #  hostport:
 #    The host and port part of the request that lead to this problem
@@ -55,8 +55,9 @@
 #    The path part of the request that lead to this problem
 #  error-message:
 #    The failure reason.
-#  socks-type:
-#    The type of the socks request: SOCKS4 or SOCKS4a
+#  forwarding-type:
+#    The type of the forwarding request: "socks4-", "socks4a-"
+#    or (in the future) "" for direct connections to the forwarder.
 #
 #
 # CONDITIONAL SYMBOLS FOR THIS TEMPLATE AND THEIR DEPANDANT SYMBOLS:
@@ -120,13 +121,17 @@
     <tr>
       <td class="warning" colspan=2>
         <h2>Forwarding failure</h2>
-          <p>Privoxy was unable to @forwarding-type@forward your request
-             <a href="@protocol@@hostport@@path@"><b>@protocol@@hostport@@path@</b></a>
+          <p>Privoxy was unable to <b>@forwarding-type@forward</b> your request
+             <a  title="Repeat the request"
+              href="@protocol@@hostport@@path@"><b>@protocol@@hostport@@path@</b></a>
              through <b>@gateway@</b>:
             <br><strong>@error-message@</strong></p>
           </p>
-          <p>If you think it's a temporary failure, you might just
-            <a href="@protocol@@hostport@@path@">try again</a>.
+          <p>Just <a title="Repeat the request" href="@protocol@@hostport@@path@">try again</a> to
+             see if this is a temporary problem, or check your <a title="Privoxy's show-status page"
+              href="@default-cgi@show-status">forwarding settings</a>
+             and make sure that all forwarding servers are working correctly and
+             listening where they are supposed to be listening.
          </p>
       </td>
     </tr>
