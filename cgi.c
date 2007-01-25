@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.88 2007/01/23 13:14:32 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.89 2007/01/23 15:51:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.88 2007/01/23 13:14:32 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.89  2007/01/23 15:51:16  fabiankeil
+ *    Add favicon delivery functions.
+ *
  *    Revision 1.88  2007/01/23 13:14:32  fabiankeil
  *    - Map variables that aren't guaranteed to be
  *      pure ASCII html_encoded.
@@ -562,6 +565,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.88 2007/01/23 13:14:32 fabiankeil Exp $";
 #include "encode.h"
 #include "ssplit.h"
 #include "errlog.h"
+#include "filters.h"
 #include "miscutil.h"
 #include "cgisimple.h"
 #ifdef FEATURE_CGI_EDIT_ACTIONS
@@ -1383,6 +1387,46 @@ struct http_response *error_response(struct client_state *csp,
    {
       rsp->status = strdup("404 No such domain");
       if (rsp->status == NULL)
+      {
+         free_map(exports);
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
+   }
+   else if (!strcmp(templatename, "forwarding-failed"))
+   {
+      const struct forward_spec * fwd = forward_url(csp->http, csp);
+      if (fwd == NULL)
+      {
+         log_error(LOG_LEVEL_FATAL, "gateway spec is NULL. This shouldn't happen!");
+         /* Never get here - LOG_LEVEL_FATAL causes program exit */
+      }
+
+      /*
+       * XXX: While the template is called forwarding-failed,
+       * it currently only handles socks forwarding failures.
+       */
+      assert(fwd->type != SOCKS_NONE);
+
+      /*
+       * Map failure reason, forwarding type and forwarder.
+       */
+      if (NULL == csp->error_message)
+      {
+         /*
+          * Either we forgot to record the failure reason,
+          * or the memory allocation failed.
+          */
+         log_error(LOG_LEVEL_ERROR, "Socks failure reason missing.");
+         csp->error_message = strdup("Failure reason missing. Check the log file for details.");
+      }
+      if (!err) err = map(exports, "gateway", 1, fwd->gateway_host, 1);
+      if (!err) map(exports, "forwarding-type", 1, (fwd->type == SOCKS_4) ?
+                   "socks4-" : "socks4a-", 1);
+      if (!err) err = map(exports, "error-message", 1, html_encode(csp->error_message), 0);
+
+      if (!err) rsp->status = strdup("503 Forwarding failure");
+      if ((rsp->status == NULL) || (NULL == csp->error_message) || err)
       {
          free_map(exports);
          free_http_response(rsp);
