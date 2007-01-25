@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.86 2006/12/31 17:56:37 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.87 2007/01/01 19:36:37 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -10,7 +10,7 @@
  *                project.  Does not define any variables or functions
  *                (though it does declare some macros).
  *
- * Copyright   :  Written by and Copyright (C) 2001 - 2004 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001 - 2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.87  2007/01/01 19:36:37  fabiankeil
+ *    Integrate a modified version of Wil Mahan's
+ *    zlib patch (PR #895531).
+ *
  *    Revision 1.86  2006/12/31 17:56:37  fabiankeil
  *    Added config option accept-intercepted-requests
  *    and disabled it by default.
@@ -1221,6 +1225,12 @@ struct client_state
    struct file_list *tlist;
 
 #endif /* def FEATURE_TRUST */
+
+   /**
+    * Failure reason to embedded in the CGI error page,
+    * or NULL. Currently only used for socks errors.
+    */
+   char *error_message;
 
    /** Next thread in linked list. Only read or modify from the main thread! */
    struct client_state *next;
