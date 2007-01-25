@@ -1,13 +1,13 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.16 2002/05/12 21:36:29 jongfoster Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.18 2006/07/18 14:48:46 david__schmidt Exp $";
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/gateway.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
  *
  * Purpose     :  Contains functions to connect to a server, possibly
  *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
  *                proxy).
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.16 2002/05/12 21:36:29 jongfoster
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.18  2006/07/18 14:48:46  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.16  2002/05/12 21:36:29  jongfoster
  *    Correcting function comments
  *
@@ -249,6 +253,10 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
  *                descriptor for a socket which can be treated as a
  *                normal (non-SOCKS) socket.
  *
+ *                Logged error messages are saved to csp->error_message
+ *                and later reused by error_response() for the CGI
+ *                message. strdup allocation failures are handled there.
+ *
  * Parameters  :
  *          1  :  fwd = Specifies the SOCKS proxy to use.
  *          2  :  target_host = The final server to connect to.
@@ -272,22 +280,25 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    size_t csiz;
    jb_socket sfd;
    int err = 0;
-   char *errstr;
+   char *errstr = NULL;
 
    if ((fwd->gateway_host == NULL) || (*fwd->gateway_host == '\0'))
    {
-      log_error(LOG_LEVEL_CONNECT, "socks4_connect: NULL gateway host specified");
+      /* XXX: Shouldn't the config file parser prevent this? */
+      errstr = "NULL gateway host specified.";
       err = 1;
    }
 
    if (fwd->gateway_port <= 0)
    {
-      log_error(LOG_LEVEL_CONNECT, "socks4_connect: invalid gateway port specified");
+      errstr = "invalid gateway port specified.";
       err = 1;
    }
 
    if (err)
    {
+      log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
+      csp->error_message = strdup(errstr); 
       errno = EINVAL;
       return(JB_INVALID_SOCKET);
    }
@@ -304,8 +315,9 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
          web_server_addr = htonl(resolve_hostname_to_ip(target_host));
          if (web_server_addr == INADDR_NONE)
          {
-            log_error(LOG_LEVEL_CONNECT, "socks4_connect: could not resolve target host %s", target_host);
-            return(JB_INVALID_SOCKET);
+            errstr = "could not resolve target host";
+            log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s %s", errstr, target_host);
+            err = 1;
          }
          break;
       case SOCKS_4A:
@@ -314,46 +326,69 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
          if (n > sizeof(cbuf))
          {
             errno = EINVAL;
-            return(JB_INVALID_SOCKET);
+            errstr = "buffer cbuf too small.";
+            log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
+            err = 1;
          }
-         strcpy(cbuf + csiz, target_host);
-         csiz = n;
+         else
+         {
+            strcpy(cbuf + csiz, target_host);
+            csiz = n;
+         }
          break;
       default:
          /* Should never get here */
-         log_error(LOG_LEVEL_FATAL, "SOCKS4 impossible internal error - bad SOCKS type.");
-         errno = EINVAL;
-         return(JB_INVALID_SOCKET);
+         log_error(LOG_LEVEL_FATAL,
+            "socks4_connect: SOCKS4 impossible internal error - bad SOCKS type.");
+         /* Not reached */
+   }
+
+   if (err)
+   {
+      csp->error_message = strdup(errstr);
+      return(JB_INVALID_SOCKET);
    }
 
    c->vn          = 4;
    c->cd          = 1;
-   c->dstport[0]  = (target_port       >> 8  ) & 0xff;
-   c->dstport[1]  = (target_port             ) & 0xff;
-   c->dstip[0]    = (web_server_addr   >> 24 ) & 0xff;
-   c->dstip[1]    = (web_server_addr   >> 16 ) & 0xff;
-   c->dstip[2]    = (web_server_addr   >>  8 ) & 0xff;
-   c->dstip[3]    = (web_server_addr         ) & 0xff;
+   /* XXX: these casts surpress gcc43 warnings, but are they correct?  */
+   c->dstport[0]  = (unsigned char)((target_port       >> 8  ) & 0xff);
+   c->dstport[1]  = (unsigned char)((target_port             ) & 0xff);
+   c->dstip[0]    = (unsigned char)((web_server_addr   >> 24 ) & 0xff);
+   c->dstip[1]    = (unsigned char)((web_server_addr   >> 16 ) & 0xff);
+   c->dstip[2]    = (unsigned char)((web_server_addr   >>  8 ) & 0xff);
+   c->dstip[3]    = (unsigned char)((web_server_addr         ) & 0xff);
 
    /* pass the request to the socks server */
    sfd = connect_to(fwd->gateway_host, fwd->gateway_port, csp);
 
    if (sfd == JB_INVALID_SOCKET)
    {
-      return(JB_INVALID_SOCKET);
+      /*
+       * XXX: connect_to could fill in the exact reason.
+       * Most likely resolving the IP of the forwarder failed.
+       */
+      errstr = "connect_to failed: see logfile for details";
+      err = 1;
+   }
+   else if (write_socket(sfd, (char *)c, csiz))
+   {
+      errstr = "SOCKS4 negotiation write failed.";
+      log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
+      err = 1;
+      close_socket(sfd);
+   }
+   else if (read_socket(sfd, sbuf, sizeof(sbuf)) != sizeof(*s))
+   {
+      errstr = "SOCKS4 negotiation read failed.";
+      log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
+      err = 1;
+      close_socket(sfd);
    }
 
-   if (write_socket(sfd, (char *)c, csiz))
+   if (err)
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS4 negotiation write failed...");
-      close_socket(sfd);
-      return(JB_INVALID_SOCKET);
-   }
-
-   if (read_socket(sfd, sbuf, sizeof(sbuf)) != sizeof(*s))
-   {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS4 negotiation read failed...");
-      close_socket(sfd);
+      csp->error_message = strdup(errstr);      
       return(JB_INVALID_SOCKET);
    }
 
@@ -363,30 +398,31 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
          return(sfd);
          break;
       case SOCKS_REQUEST_REJECT:
-         errstr = "SOCKS request rejected or failed";
+         errstr = "SOCKS request rejected or failed.";
          errno = EINVAL;
          break;
       case SOCKS_REQUEST_IDENT_FAILED:
          errstr = "SOCKS request rejected because "
-            "SOCKS server cannot connect to identd on the client";
+            "SOCKS server cannot connect to identd on the client.";
          errno = EACCES;
          break;
       case SOCKS_REQUEST_IDENT_CONFLICT:
          errstr = "SOCKS request rejected because "
             "the client program and identd report "
-            "different user-ids";
+            "different user-ids.";
          errno = EACCES;
          break;
       default:
-         errstr = cbuf;
          errno = ENOENT;
-         sprintf(errstr,
-                 "SOCKS request rejected for reason code %d\n", s->cd);
+         snprintf(cbuf, sizeof(cbuf),
+                 "SOCKS request rejected for reason code %d.", s->cd);
+         errstr = cbuf;
    }
 
-   log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s ...", errstr);
-
+   log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
+   csp->error_message = strdup(errstr);
    close_socket(sfd);
+
    return(JB_INVALID_SOCKET);
 
 }
