@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.118 2007/01/07 07:43:43 joergs Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.119 2007/01/25 14:02:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,14 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.118 2007/01/07 07:43:43 joergs Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.119  2007/01/25 14:02:30  fabiankeil
+ *    - Add Proxy-Agent header to HTTP snippets that are
+ *      supposed to reach HTTP clients only.
+ *    - Made a few CONNECT log messages more descriptive.
+ *    - Catch completely empty server responses (as seen
+ *      with Tor's fake ".noconnect" top level domain).
+ *    - Use shiny new "forwarding-failed" template for socks errors.
+ *
  *    Revision 1.118  2007/01/07 07:43:43  joergs
  *    AmigaOS4 support added.
  *
@@ -906,7 +914,7 @@ const char CSUCCEED[] =
 const char CHEADER[] =
    "HTTP/1.0 400 Invalid header received from browser\r\n"
    "Connection: close\r\n\r\n"
-   "Invalid header received from browser.";
+   "Invalid header received from browser.\r\n";
 
 const char CFORBIDDEN[] =
    "HTTP/1.0 403 Connection not allowable\r\n"
@@ -990,6 +998,233 @@ static void sig_handler(int the_signal)
 
 /*********************************************************************
  *
+ * Function    :  client_protocol_is_unsupported
+ *
+ * Description :  Checks if the client used a known unsupported
+ *                protocol and deals with it by sending an error
+ *                response.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  req = the first request line send by the client
+ *
+ * Returns     :  TRUE if an error response has been generated, or
+ *                FALSE if the request doesn't look invalid.
+ *
+ *********************************************************************/
+int client_protocol_is_unsupported(const struct client_state *csp, char *req)
+{
+   char buf[BUFFER_SIZE];
+
+   /*
+    * If it's a FTP or gopher request, we don't support it.
+    *
+    * These checks are better than nothing, but they might
+    * not work in all configurations and some clients might
+    * have problems digesting the answer.
+    *
+    * They should, however, never cause more problems than
+    * Privoxy's old behaviour (returning the misleading HTML
+    * error message:
+    *
+    * "Could not resolve http://(ftp|gopher)://example.org").
+    */
+   if (!strncmpic(req, "GET ftp://", 10) || !strncmpic(req, "GET gopher://", 13))
+   {
+      if (!strncmpic(req, "GET ftp://", 10))
+      {
+         strcpy(buf, FTP_RESPONSE);
+         log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as FTP proxy: %s",
+            csp->ip_addr_str, req);
+      }
+      else
+      {
+         strcpy(buf, GOPHER_RESPONSE);
+         log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as gopher proxy: %s",
+            csp->ip_addr_str, req);
+      }
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, req);
+      freez(req);
+      write_socket(csp->cfd, buf, strlen(buf));
+
+      return TRUE;
+   }
+
+   return FALSE;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_request_destination_elsewhere
+ *
+ * Description :  If the client's request was redirected into
+ *                Privoxy without the client's knowledge,
+ *                the request line lacks the destination host.
+ *
+ *                This function tries to get it elsewhere,
+ *                provided accept-intercepted-requests is enabled.
+ *
+ *                "Elsewhere" currently only means "Host: header",
+ *                but in the future we may ask the redirecting
+ *                packet filter to look the destination up.
+ *
+ *                If the destination stays unknown, an error
+ *                response is send to the client and headers
+ *                are freed so that chat() can return directly.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  headers = a header list
+ *
+ * Returns     :  JB_ERR_OK if the destination is now known, or
+ *                JB_ERR_PARSE if it isn't.
+ *
+ *********************************************************************/
+jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers)
+{
+   char buf[BUFFER_SIZE];
+   char *req;
+
+   if (!(csp->config->feature_flags & RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS))
+   {
+      log_error(LOG_LEVEL_ERROR, "%s's request: \'%s\' is invalid."
+         " Privoxy isn't configured to accept intercepted requests.",
+         csp->ip_addr_str, csp->http->cmd);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
+         csp->ip_addr_str, csp->http->cmd);
+
+      strcpy(buf, CHEADER);
+      write_socket(csp->cfd, buf, strlen(buf));
+      destroy_list(headers);
+
+      return JB_ERR_PARSE;
+   }
+   else if (JB_ERR_OK == get_destination_from_headers(headers, csp->http))
+   {
+      /* Split the domain we just got for pattern matching */
+      init_domain_components(csp->http);
+
+      return JB_ERR_OK;
+   }
+   else
+   {
+      /* We can't work without destination. Go spread the news.*/
+
+      req = list_to_text(headers);
+      chomp(req);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
+         csp->ip_addr_str, csp->http->cmd);
+      log_error(LOG_LEVEL_ERROR,
+         "Privoxy was unable to get the destination for %s's request:\n%s\n%s",
+         csp->ip_addr_str, csp->http->cmd, req);
+      freez(req);
+
+      strcpy(buf, MISSING_DESTINATION_RESPONSE);
+      write_socket(csp->cfd, buf, strlen(buf));
+      destroy_list(headers);
+
+      return JB_ERR_PARSE;
+   }
+   /*
+    * TODO: If available, use PF's ioctl DIOCNATLOOK as last resort
+    * to get the destination IP address, use it as host directly
+    * or do a reverse DNS lookup first.
+    */
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_server_headers
+ *
+ * Description :  Parses server headers in iob and fills them
+ *                into csp->headers so that they can later be
+ *                handled by sed().
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK if everything went fine, or
+ *                JB_ERR_PARSE if the headers were incomplete.
+ *
+ *********************************************************************/
+jb_err get_server_headers(struct client_state *csp)
+{
+   int continue_hack_in_da_house = 0;
+   char * header;
+
+   while (((header = get_header(csp)) != NULL) || continue_hack_in_da_house)
+   {
+      if (header == NULL)
+      {
+         /*
+          * continue hack in da house. Ignore the ending of
+          * this head and continue enlisting header lines.
+          * The reason is described below.
+          */
+         enlist(csp->headers, "");
+         continue_hack_in_da_house = 0;
+         continue;
+      }
+      else if (0 == strncmpic(header, "HTTP/1.1 100", 12))
+      {
+         /*
+          * It's a bodyless continue response, don't
+          * stop header parsing after reaching it's end.
+          *
+          * As a result Privoxy will concatenate the
+          * next response's head and parse and deliver
+          * the headers as if they belonged to one request.
+          *
+          * The client will separate them because of the
+          * empty line between them.
+          *
+          * XXX: What we're doing here is clearly against
+          * the intended purpose of the continue header,
+          * and under some conditions (HTTP/1.0 client request)
+          * it's a standard violation.
+          *
+          * Anyway, "sort of against the spec" is preferable
+          * to "always getting confused by Continue responses"
+          * (Privoxy's behaviour before this hack was added)
+          */
+         log_error(LOG_LEVEL_HEADER, "Continue hack in da house.");
+         continue_hack_in_da_house = 1;
+      }
+      else if (*header == '\0') 
+      {
+         /*
+          * If the header is empty, but the Continue hack
+          * isn't active, we can assume that we reached the
+          * end of the buffer before we hit the end of the
+          * head.
+          *
+          * Inform the caller an let it decide how to handle it.
+          */
+         return JB_ERR_PARSE;
+      }
+
+      /* Enlist header */
+      if (JB_ERR_MEMORY == enlist(csp->headers, header))
+      {
+         /*
+          * XXX: Should we quit the request and return a
+          * out of memory error page instead?
+          */
+         log_error(LOG_LEVEL_ERROR,
+            "Out of memory while enlisting server headers. %s lost.",
+            header);
+      }
+      freez(header);
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  chat
  *
  * Description :  Once a connection to the client has been accepted,
@@ -997,6 +1232,9 @@ static void sig_handler(int the_signal)
  *                main business of the communication.  When this
  *                function returns, the caller must close the client
  *                socket handle.
+ *
+ *                FIXME: chat is nearly thousand lines long.
+ *                Ridiculous.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1098,35 +1336,14 @@ static void chat(struct client_state *csp)
          continue;   /* more to come! */
       }
 
-      /*
-       * If it's a FTP or gopher request, we don't support it.
-       *
-       * These checks are better than nothing, but they might
-       * not work in all configurations and some clients might
-       * have problems digesting the answer.
-       *
-       * They should, however, never cause more problems than
-       * Privoxy's old behaviour (returning the misleading HTML error message:
-       * "Could not resolve http://(ftp|gopher)://example.org").
-       */
-      if (!strncmpic(req, "GET ftp://", 10) || !strncmpic(req, "GET gopher://", 13))
+      /* Does the request line look invalid? */
+      if (client_protocol_is_unsupported(csp, req))
       {
-         if (!strncmpic(req, "GET ftp://", 10))
-         {
-            strcpy(buf, FTP_RESPONSE);
-            log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as FTP proxy: %s",
-               csp->ip_addr_str, req);
-         }
-         else
-         {
-            strcpy(buf, GOPHER_RESPONSE);
-            log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as gopher proxy: %s",
-               csp->ip_addr_str, req);
-         }
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, req);
-         freez(req);
-         write_socket(csp->cfd, buf, strlen(buf));
-         free_http_request(http);
+         /* 
+          * Yes. The request has already been
+          * answered with a error response, the buffers
+          * were freed and we're done with chatting.
+          */
          return;
       }
 
@@ -1203,51 +1420,22 @@ static void chat(struct client_state *csp)
    if (http->host == NULL)
    {
       /*
-       * Intercepted or invalid request without domain 
-       * inside the request line. Try to get it another way,
-       * unless accept-intercepted-requests is disabled.
+       * If we still don't know the request destination,
+       * the request is invalid or the client uses
+       * Privoxy without it's knowledge.
        */
-      if (!(csp->config->feature_flags & RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS))
+      if (JB_ERR_OK != get_request_destination_elsewhere(csp, headers))
       {
-         log_error(LOG_LEVEL_ERROR, "%s's request: \'%s\' is invalid."
-            " Privoxy isn't configured to accept intercepted requests.",
-            csp->ip_addr_str, http->cmd);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, http->cmd);
-
-         strcpy(buf, CHEADER);
-         write_socket(csp->cfd, buf, strlen(buf));
-         free_http_request(http);
-         destroy_list(headers);
-         return;
+         /*
+          * Our attempts to get the request destination
+          * elsewhere failed or Privoxy is configured
+          * to only accept proxy requests.
+          *
+          * An error response has already been send
+          * and we're done here.
+          */
+          return;
       }
-      else if (JB_ERR_OK == get_destination_from_headers(headers, http))
-      {
-         /* Split the domain we just got for pattern matching */
-         init_domain_components(http);
-      }
-      else
-      {
-         /* We can't work without destination. Go spread the news.*/
-
-         req = list_to_text(headers);
-         chomp(req);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, http->cmd);
-         log_error(LOG_LEVEL_ERROR,
-           "Privoxy was unable to get the destination for %s's request:\n%s\n%s",
-            csp->ip_addr_str, http->cmd, req);
-         freez(req);
-
-         strcpy(buf, MISSING_DESTINATION_RESPONSE);
-         write_socket(csp->cfd, buf, strlen(buf));
-         free_http_request(http);
-         destroy_list(headers);
-         return;
-      }
-      /*
-       * TODO: If available, use PF's ioctl DIOCNATLOOK as last resort
-       * to get the destination IP address, use it as host directly
-       * or do a reverse DNS lookup first.
-       */
    }
 
    /* decide how to route the HTTP request */
@@ -1879,26 +2067,8 @@ static void chat(struct client_state *csp)
                return;
             }
 
-            /* get header lines from the iob */
-
-            while ((p = get_header(csp)) != NULL)
-            {
-               if (*p == '\0')
-               {
-                  /* see following note */
-                  break;
-               }
-               enlist(csp->headers, p);
-               freez(p);
-            }
-
-            /* NOTE: there are no "empty" headers so
-             * if the pointer `p' is not NULL we must
-             * assume that we reached the end of the
-             * buffer before we hit the end of the header.
-             */
-
-            if (p)
+            /* Convert iob into something sed() can digest */
+            if (JB_ERR_PARSE == get_server_headers(csp))
             {
                if (ms_iis5_hack)
                {
