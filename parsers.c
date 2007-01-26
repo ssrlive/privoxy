@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.83 2007/01/12 15:03:02 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.84 2007/01/24 12:56:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,14 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.83 2007/01/12 15:03:02 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.84  2007/01/24 12:56:52  fabiankeil
+ *    - Repeat the request URL before logging any headers.
+ *      Makes reading the log easier in case of simultaneous requests.
+ *    - If there are more than one Content-Type headers in one request,
+ *      use the first one and remove the others.
+ *    - Remove "newval" variable in server_content_type().
+ *      It's only used once.
+ *
  *    Revision 1.83  2007/01/12 15:03:02  fabiankeil
  *    Correct a cast, check inflateEnd() exit code
  *    to see if we have to, replace sprintf calls
@@ -1499,7 +1507,12 @@ jb_err filter_header(struct client_state *csp, char **header)
       }
    }
 
-   if ( 0 == size )
+   /*
+    * Additionally checking for hits is important because if
+    * the continue hack is triggered, server headers can
+    * arrive empty to separate multiple heads from each other.
+    */
+   if ((0 == size) && hits)
    {
       log_error(LOG_LEVEL_HEADER, "Removing empty header %s", *header);
       freez(*header);
