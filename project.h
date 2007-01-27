@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.87 2007/01/01 19:36:37 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.88 2007/01/25 13:36:59 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.88  2007/01/25 13:36:59  fabiankeil
+ *    Add csp->error_message for failure reasons
+ *    that should be embedded into the CGI pages.
+ *
  *    Revision 1.87  2007/01/01 19:36:37  fabiankeil
  *    Integrate a modified version of Wil Mahan's
  *    zlib patch (PR #895531).
@@ -1487,6 +1491,9 @@ struct configuration_spec
 
    /** The config file directory. */
    const char *confdir;
+
+   /** The directory for customized CGI templates. */
+   const char *templdir;
 
    /** The log file directory. */
    const char *logdir;
