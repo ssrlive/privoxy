@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.119 2007/01/25 14:02:30 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.120 2007/01/26 14:18:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.119 2007/01/25 14:02:30 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.120  2007/01/26 14:18:42  fabiankeil
+ *    - Start to reduce chat()'s line count and move
+ *      parts of it into separate functions.
+ *    - Add "HTTP/1.1 100 Continue" hack for BR 756734.
+ *
  *    Revision 1.119  2007/01/25 14:02:30  fabiankeil
  *    - Add Proxy-Agent header to HTTP snippets that are
  *      supposed to reach HTTP clients only.
@@ -2291,6 +2296,73 @@ void usage(const char *myname)
 
 /*********************************************************************
  *
+ * Function    :  initialize_mutexes
+ *
+ * Description :  Prepares mutexes if mutex support is available.
+ *
+ * Parameters  :  None
+ *
+ * Returns     :  Void, exits in case of errors.
+ *
+ *********************************************************************/
+void initialize_mutexes()
+{
+   int err = 0;
+
+#ifdef FEATURE_PTHREAD
+   /*
+    * Prepare global mutex semaphores
+    */
+   err = pthread_mutex_init(&log_mutex, 0);
+
+   if (!err) err = pthread_mutex_init(&log_init_mutex, 0);
+
+   /*
+    * XXX: The assumptions below are a bit naive
+    * and can cause locks that aren't necessary.
+    *
+    * For example older FreeBSD versions (< 6.x?)
+    * have no gethostbyname_r, but gethostbyname is
+    * thead safe.
+    */
+#ifndef HAVE_GMTIME_R
+   if (!err) err = pthread_mutex_init(&gmtime_mutex, 0);
+#endif /* ndef HAVE_GMTIME_R */
+
+#ifndef HAVE_LOCALTIME_R
+   if (!err) err = pthread_mutex_init(&localtime_mutex, 0);
+#endif /* ndef HAVE_GMTIME_R */
+
+#ifndef HAVE_GETHOSTBYADDR_R
+   if (!err) err = pthread_mutex_init(&gethostbyaddr_mutex, 0);
+#endif /* ndef HAVE_GETHOSTBYADDR_R */
+
+#ifndef HAVE_GETHOSTBYNAME_R
+   if (!err) err = pthread_mutex_init(&gethostbyname_mutex, 0);
+#endif /* ndef HAVE_GETHOSTBYNAME_R */
+
+#ifndef HAVE_RANDOM
+   if (!err) err = pthread_mutex_init(&rand_mutex, 0);
+#endif /* ndef HAVE_RANDOM */
+#endif /* FEATURE_PTHREAD */
+
+   /*
+    * TODO: mutex support for mingw32 would be swell.
+    */
+
+   if (err)
+   {
+      printf("Fatal error. Mutex initialization failed: %s.\n",
+         strerror(err));
+      exit(1);
+   }
+
+   return;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  main
  *
  * Description :  Load the config file and start the listen loop.
@@ -2464,34 +2536,8 @@ int main(int argc, const char *argv[])
    InitWin32();
 #endif
 
-#ifdef FEATURE_PTHREAD
-   /*
-    * Prepare global mutex semaphores
-    */
-   pthread_mutex_init(&log_mutex,0);
-   pthread_mutex_init(&log_init_mutex,0);
-
-#ifndef HAVE_GMTIME_R
-   pthread_mutex_init(&gmtime_mutex,0);
-#endif /* ndef HAVE_GMTIME_R */
-
-#ifndef HAVE_LOCALTIME_R
-   pthread_mutex_init(&localtime_mutex,0);
-#endif /* ndef HAVE_GMTIME_R */
-
-#ifndef HAVE_GETHOSTBYADDR_R
-   pthread_mutex_init(&gethostbyaddr_mutex,0);
-#endif /* ndef HAVE_GETHOSTBYADDR_R */
-
-#ifndef HAVE_GETHOSTBYNAME_R
-   pthread_mutex_init(&gethostbyname_mutex,0);
-#endif /* ndef HAVE_GETHOSTBYNAME_R */
-
-#ifndef HAVE_RANDOM
-   pthread_mutex_init(&rand_mutex,0);
-#endif /* ndef HAVE_RANDOM */
-
-#endif /* FEATURE_PTHREAD */
+   /* Prepare mutexes if supported and necessary. */
+   initialize_mutexes();
 
    random_seed = (unsigned int)time(NULL);
 #ifdef HAVE_RANDOM
