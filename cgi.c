@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.90 2007/01/25 13:47:26 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.91 2007/01/27 13:09:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.90 2007/01/25 13:47:26 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.91  2007/01/27 13:09:16  fabiankeil
+ *    Add new config option "templdir" to
+ *    change the templates directory.
+ *
  *    Revision 1.90  2007/01/25 13:47:26  fabiankeil
  *    Added "forwarding-failed" template support for error_response().
  *
@@ -1066,7 +1070,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
          if (!err)
          {
             /* It worked */
-            return finish_http_response(rsp);
+            return finish_http_response(csp, rsp);
          }
          else
          {
@@ -1454,7 +1458,7 @@ struct http_response *error_response(struct client_state *csp,
       return cgi_error_memory();
    }
 
-   return finish_http_response(rsp);
+   return finish_http_response(csp, rsp);
 }
 
 
@@ -1522,7 +1526,10 @@ void cgi_init_error_messages(void)
       "\r\n";
    cgi_error_memory_response->body =
       "<html>\r\n"
-      "<head><title>500 Internal Privoxy Error</title></head>\r\n"
+      "<head>\r\n"
+      " <title>500 Internal Privoxy Error</title>\r\n"
+      " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">"
+      "</head>\r\n"
       "<body>\r\n"
       "<h1>500 Internal Privoxy Error</h1>\r\n"
       "<p>Privoxy <b>ran out of memory</b> while processing your request.</p>\r\n"
@@ -1586,7 +1593,10 @@ jb_err cgi_error_no_template(struct client_state *csp,
       "500 Internal Privoxy Error";
    static const char body_prefix[] =
       "<html>\r\n"
-      "<head><title>500 Internal Privoxy Error</title></head>\r\n"
+      "<head>\r\n"
+      " <title>500 Internal Privoxy Error</title>\r\n"
+      " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">"
+      "</head>\r\n"
       "<body>\r\n"
       "<h1>500 Internal Privoxy Error</h1>\r\n"
       "<p>Privoxy encountered an error while processing your request:</p>\r\n"
@@ -1669,7 +1679,10 @@ jb_err cgi_error_unknown(struct client_state *csp,
       "500 Internal Privoxy Error";
    static const char body_prefix[] =
       "<html>\r\n"
-      "<head><title>500 Internal Privoxy Error</title></head>\r\n"
+      "<head>\r\n"
+      " <title>500 Internal Privoxy Error</title>\r\n"
+      " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">"
+      "</head>\r\n"
       "<body>\r\n"
       "<h1>500 Internal Privoxy Error</h1>\r\n"
       "<p>Privoxy encountered an error while processing your request:</p>\r\n"
@@ -1912,6 +1925,8 @@ void get_http_time(int time_offset, char *buf)
  *
  * Description :  Fill in the missing headers in an http response,
  *                and flatten the headers to an http head.
+ *                For HEAD requests the body is freed once
+ *                the Content-Length header is set.
  *
  * Parameters  :
  *          1  :  rsp = pointer to http_response to be processed
@@ -1920,7 +1935,7 @@ void get_http_time(int time_offset, char *buf)
  *                On error, free()s rsp and returns cgi_error_memory()
  *
  *********************************************************************/
-struct http_response *finish_http_response(struct http_response *rsp)
+struct http_response *finish_http_response(const struct client_state *csp, struct http_response *rsp)
 {
    char buf[BUFFER_SIZE];
    jb_err err;
@@ -1952,7 +1967,25 @@ struct http_response *finish_http_response(struct http_response *rsp)
       err = enlist(rsp->headers, buf);
    }
 
-   if (strncmpic(rsp->status, "302", 3))
+   if (0 == strcmpic(csp->http->gpc, "head"))
+   {
+      /*
+       * The client only asked for the head. Dispose
+       * the body and log an offensive message.
+       *
+       * While it may seem to be a bit inefficient to
+       * prepare the body if it isn't needed, it's the
+       * only way to get the Content-Length right for
+       * dynamic pages. We could have disposed the body
+       * earlier, but not without duplicating the
+       * Content-Length setting code above.
+       */
+      log_error(LOG_LEVEL_CGI, "Preparing to give head to %s.", csp->ip_addr_str);
+      freez(rsp->body);
+      rsp->content_length = 0;
+   }
+
+   if ((rsp->status != NULL) && strncmpic(rsp->status, "302", 3))
    {
      /*
       * If it's not a redirect without any content,

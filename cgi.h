@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.31 2006/07/18 14:48:45 david__schmidt Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.32 2006/12/17 17:53:39 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -11,7 +11,7 @@
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.32  2006/12/17 17:53:39  fabiankeil
+ *    Suppress the toggle link if remote toggling is disabled.
+ *
  *    Revision 1.31  2006/07/18 14:48:45  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -200,7 +203,8 @@ extern struct http_response * error_response(struct client_state *csp,
 extern struct http_response * alloc_http_response(void);
 extern void free_http_response(struct http_response *rsp);
 
-extern struct http_response *finish_http_response(struct http_response *rsp);
+extern struct http_response *finish_http_response(const struct client_state *csp,
+                                                  struct http_response *rsp);
 
 extern struct map * default_exports(const struct client_state *csp, const char *caller);
 
