@@ -48,6 +48,20 @@ ChangeLog for Privoxy
   is currently toggled off.
 - The show-status CGI page suppresses the edit button
   for action files if Privoxy has no write access.	
+- If Privoxy creates new Trustfile entries, a comment
+  with the trusted referrer is added. (Suggested by Daniel Griscom)
+- Socks errors are no longer handled by the CGI page for
+  DNS resolution failures.
+- CGI pages use favicons to signal whether they are error
+  or control pages. This is useful if you rely heavily on
+  browser tabs.
+- Most CGI error pages react properly to HEAD requests.
+- Requests with RFC 3253 HTTP methods (used by Subversion)
+  are accepted. (Patch provided by Petr Kadlec)
+- New config option "templdir" to change the location
+  of the CGI templates to make sure customized templates
+  aren't "updated".
+- Better handling of "HTTP/1.1 100 Continue" responses.
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring
   and Adam Piggott)

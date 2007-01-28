@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.13 2006/12/06 19:50:54 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.14 2007/01/06 14:23:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -6,7 +6,7 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.13 2006/12/06 19:50:54 fabianke
  * Purpose     :  Declares functions to match URLs against URL
  *                patterns.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2003, 2006 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2003, 2006-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -33,6 +33,11 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.13 2006/12/06 19:50:54 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.14  2007/01/06 14:23:56  fabiankeil
+ *    Fix gcc43 warnings. Mark *csp as immutable
+ *    for parse_http_url() and url_match().
+ *    Replace a sprintf call with snprintf.
+ *
  *    Revision 1.13  2006/12/06 19:50:54  fabiankeil
  *    parse_http_url() now handles intercepted
  *    HTTP request lines as well. Moved parts
@@ -530,6 +535,22 @@ jb_err parse_http_request(const char *req,
          || (0 == strcmpic(v[0], "unsubscribe"))
          || (0 == strcmpic(v[0], "notify"))
          || (0 == strcmpic(v[0], "poll"))
+
+         /*
+          * Or yet another WebDAV extension, this time for
+          * Web Distributed Authoring and Versioning (RFC3253)
+          */
+         || (0 == strcmpic(v[0], "version-control"))
+         || (0 == strcmpic(v[0], "report"))
+         || (0 == strcmpic(v[0], "checkout"))
+         || (0 == strcmpic(v[0], "checkin"))
+         || (0 == strcmpic(v[0], "uncheckout"))
+         || (0 == strcmpic(v[0], "mkworkspace"))
+         || (0 == strcmpic(v[0], "update"))
+         || (0 == strcmpic(v[0], "label"))
+         || (0 == strcmpic(v[0], "merge"))
+         || (0 == strcmpic(v[0], "baseline-control"))
+         || (0 == strcmpic(v[0], "mkactivity"))
          )
    {
       /* Normal */
