@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.84 2007/01/24 12:56:52 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.85 2007/01/26 15:33:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.84 2007/01/24 12:56:52 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.85  2007/01/26 15:33:46  fabiankeil
+ *    Stop filter_header() from unintentionally removing
+ *    empty header lines that were enlisted by the continue
+ *    hack.
+ *
  *    Revision 1.84  2007/01/24 12:56:52  fabiankeil
  *    - Repeat the request URL before logging any headers.
  *      Makes reading the log easier in case of simultaneous requests.
@@ -2646,18 +2651,28 @@ jb_err client_max_forwards(struct client_state *csp, char **header)
    {
       if (1 == sscanf(*header, "Max-Forwards: %u", &max_forwards))
       {
-         if (max_forwards-- > 0)
+         if (max_forwards > 0)
          {
-            snprintf(*header, strlen(*header)+1, "Max-Forwards: %u", max_forwards);
+            snprintf(*header, strlen(*header)+1, "Max-Forwards: %u", --max_forwards);
             log_error(LOG_LEVEL_HEADER, "Max-Forwards header for %s request replaced with: %s",
                csp->http->gpc, *header);
          }
          else
          {
-            /* FIXME: Follow spec and intercept the request. */
+            /*
+             * direct_response() which was called earlier
+             * in chat() should prevent that we ever get
+             * here.
+             */
             log_error(LOG_LEVEL_ERROR,
                "Non-intercepted %s request with Max-Forwards zero!", csp->http->gpc);
+            assert(max_forwards != 0);
          }
+      }
+      else
+      {
+         log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
+         freez(*header);
       }
    }
 
@@ -3222,8 +3237,13 @@ jb_err server_http(struct client_state *csp, char **header)
  * Function    :  server_set_cookie
  *
  * Description :  Handle the server "cookie" header properly.
- *                Log cookie to the jar file.  Then "crunch" it,
- *                or accept it.  Called from `sed'.
+ *                Log cookie to the jar file.  Then "crunch",
+ *                accept or rewrite it to a session cookie.
+ *                Called from `sed'.
+ *
+ *                TODO: Allow the user to specify a new expiration
+ *                time to cause the cookie to expire even before the
+ *                browser is closed.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3238,6 +3258,12 @@ jb_err server_http(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err server_set_cookie(struct client_state *csp, char **header)
 {
+   time_t now;
+   time_t cookie_time; 
+   struct tm tm_now; 
+   struct tm tm_cookie;
+   time(&now);
+
 #ifdef FEATURE_COOKIE_JAR
    if (csp->config->jar)
    {
@@ -3248,9 +3274,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
        * the %z field in strftime()
        */
       char tempbuf[ BUFFER_SIZE ];
-      time_t now; 
-      struct tm tm_now; 
-      time (&now); 
+ 
 #ifdef HAVE_LOCALTIME_R
       tm_now = *localtime_r(&now, &tm_now);
 #elif FEATURE_PTHREAD
@@ -3311,22 +3335,122 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
             next_tag = cur_tag + strlen(cur_tag);
          }
 
-         /* Is this the "Expires" tag? */
+         /*
+          * Check the expiration date to see
+          * if the cookie is still valid, if yes,
+          * rewrite it to a session cookie.
+          */
          if (strncmpic(cur_tag, "expires=", 8) == 0)
          {
-            /* Delete the tag by copying the rest of the string over it.
-             * (Note that we cannot just use "strcpy(cur_tag, next_tag)",
-             * since the behaviour of strcpy is undefined for overlapping
-             * strings.)
+            char *match;
+            /*
+             * Try the valid time formats we know about.
+             *
+             * XXX: Maybe the log messages should be removed
+             * for the next stable release. They just exist to
+             * see which time format gets the most hits and
+             * should be checked for first.
              */
-            memmove(cur_tag, next_tag, strlen(next_tag) + 1);
+            if (NULL != (match = strptime(cur_tag, "expires=%a, %e-%b-%y %H:%M:%S ", &tm_cookie)))
+            {
+               log_error(LOG_LEVEL_HEADER,
+                  "cookie \'%s\' send by %s appears to be using time format 1.",
+                  csp->http->url, *header);
+            }
+            else if (NULL != (match = strptime(cur_tag, "expires=%A, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
+            {
+               log_error(LOG_LEVEL_HEADER,
+                  "cookie \'%s\' send by %s appears to be using time format 2.",
+                  csp->http->url, *header);
 
-            /* That changed the header, need to issue a log message */
-            changed = 1;
+            }
+            else if (NULL != (match = strptime(cur_tag, "expires=%a, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
+            {
+               log_error(LOG_LEVEL_HEADER,
+                  "cookie \'%s\' send by %s appears to be using time format 3.",
+                  csp->http->url, *header);
+            }
 
-            /* Note that the next tag has now been moved to *cur_tag,
-             * so we do not need to update the cur_tag pointer.
-             */
+            /* Did any of them match? */
+            if (NULL == match)
+            {
+               /*
+                * Nope, treat it as if it was still valid.
+                *
+                * XXX: Should we remove the whole cookie instead?
+                */
+               log_error(LOG_LEVEL_ERROR,
+                  "Can't parse %s. Unsupported time format?", cur_tag);
+               memmove(cur_tag, next_tag, strlen(next_tag) + 1);
+               changed = 1;
+            }
+            else
+            {
+               /*
+                * Yes. Check if the cookie is still valid.
+                *
+                * If the cookie is already expired it's probably
+                * a delete cookie and even if it isn't, the browser
+                * will discard it anyway.
+                */
+
+               /*
+                * XXX: timegm() isn't available on some AmigaOS
+                * versions and our replacement doesn't work.
+                *
+                * Our options are to either:
+                *
+                * - disable session-cookies-only completely if timegm
+                *   is missing,
+                *
+                * - to simply remove all expired tags, like it has
+                *   been done until Privoxy 3.0.6 and to live with
+                *    the consequence that it can cause login/logout
+                *   problems on servers that don't validate their
+                *   input properly, or
+                *
+                * - to replace it with mktime in which
+                *   case there is a slight chance of valid cookies
+                *   passing as already expired.
+                *
+                *   This is the way it's currently done and it's not
+                *   as bad as it sounds. If the missing GMT offset is
+                *   enough to change the result of the expiration check
+                *   the cookie will be only valid for a few hours
+                *   anyway, which in many cases will be shorter
+                *   than a browser session.
+                */
+               cookie_time = timegm(&tm_cookie);
+               if (cookie_time - now < 0)
+               {
+                  log_error(LOG_LEVEL_HEADER,
+                     "Cookie \'%s\' is already expired and can pass unmodified.", *header);
+                  /* Just in case some clown sets more then one expiration date */
+                  cur_tag = next_tag;
+               }
+               else
+               {
+                  log_error(LOG_LEVEL_HEADER,
+                     "Cookie \'%s\' is still valid and has to be rewritten.", *header);
+
+                  /*
+                   * Delete the tag by copying the rest of the string over it.
+                   * (Note that we cannot just use "strcpy(cur_tag, next_tag)",
+                   * since the behaviour of strcpy is undefined for overlapping
+                   * strings.)
+                   */
+                  memmove(cur_tag, next_tag, strlen(next_tag) + 1);
+
+                  /* That changed the header, need to issue a log message */
+                  changed = 1;
+
+                  /*
+                   * Note that the next tag has now been moved to *cur_tag,
+                   * so we do not need to update the cur_tag pointer.
+                   */
+               }
+            }
+
          }
          else
          {
@@ -3337,7 +3461,9 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
 
       if (changed)
       {
-         log_error(LOG_LEVEL_HEADER, "Changed cookie to a temporary one.");
+         assert(NULL != *header);
+         log_error(LOG_LEVEL_HEADER, "Cookie rewritten to a temporary one: %s",
+            *header);
       }
    }
 
