@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.57 2007/01/22 03:07:46 hal9 Exp $
+#  $Id: default.action.master,v 1.58 2007/01/27 11:51:36 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -804,6 +804,10 @@ ad.theadhost.com
 #MASTER# REMARKS: Action tracker 1616457. Added 2007-01-20.
 .topnemo.com/engine
 .top100categories.com/engine
+#MASTER# REMARKS: Actionsfile feedback item #1647852 2007-01-30
+#MASTER# REMARKS: Domain squatting onload pop-ups
+#MASTER# BLOCK-REFERRER: http://www.memtest.com/
+/(t|search)\.php\?uid=ws[a-z0-9]+\.[a-z0-9]+
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1033,6 +1037,8 @@ images.ibsys.com/
 .lduhtrp.net/image
 #MASTER# BLOCK-REFERRER: http://floodle.net 2007-01-21 SF tracker
 scripts.chitika.net/.*\.(gif|png|jpg)
+#MASTER# REMARKS: Actionsfile feedback item #1648478 2007-01-30
+.projectwonderful.com/gen.php
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
