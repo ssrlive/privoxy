@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.77 2007/01/12 15:36:44 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.78 2007/01/28 13:41:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.77 2007/01/12 15:36:44 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.78  2007/01/28 13:41:18  fabiankeil
+ *    - Add HEAD support to finish_http_response.
+ *    - Add error favicon to internal HTML error messages.
+ *
  *    Revision 1.77  2007/01/12 15:36:44  fabiankeil
  *    Mark *csp as immutable for is_untrusted_url()
  *    and is_imageurl(). Closes FR 1237736.
@@ -2241,29 +2245,40 @@ struct http_response *direct_response(struct client_state *csp)
    {
       for (p = csp->headers->first; (p != NULL) ; p = p->next)
       {
-         if (!strncmp("Max-Forwards:", p->str, 13)
-             && (*(p->str+13) != '\0') && (atoi(p->str+13) == 0))
+         if (!strncmpic("Max-Forwards:", p->str, 13))
          {
-            /* FIXME: We could handle at least TRACE here,
-               but that would require a verbatim copy of
-               the request which we don't have anymore */
+            unsigned int max_forwards;
 
-            log_error(LOG_LEVEL_HEADER, "Found Max-Forwards:0 in OPTIONS or TRACE request -- Returning 501");
-
-            /* Get mem for response or fail*/
-            if (NULL == (rsp = alloc_http_response()))
+            /*
+             * If it's a Max-Forwards value of zero,
+             * we have to intercept the request.
+             */
+            if (1 == sscanf(p->str+12, ": %u", &max_forwards) && max_forwards == 0)
             {
-               return cgi_error_memory();
-            }
+               /*
+                * FIXME: We could handle at least TRACE here,
+                * but that would require a verbatim copy of
+                * the request which we don't have anymore
+                */
+                log_error(LOG_LEVEL_HEADER,
+                  "Detected header \'%s\' in OPTIONS or TRACE request. Returning 501.",
+                  p->str);
+
+               /* Get mem for response or fail*/
+               if (NULL == (rsp = alloc_http_response()))
+               {
+                  return cgi_error_memory();
+               }
             
-            if (NULL == (rsp->status = strdup("501 Not Implemented")))
-            {
-               free_http_response(rsp);
-               return cgi_error_memory();
-            }
+               if (NULL == (rsp->status = strdup("501 Not Implemented")))
+               {
+                  free_http_response(rsp);
+                  return cgi_error_memory();
+               }
 
-            rsp->is_static = 1;
-            return(finish_http_response(csp, rsp));
+               rsp->is_static = 1;
+               return(finish_http_response(csp, rsp));
+            }
          }
       }
    }

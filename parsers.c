@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.85 2007/01/26 15:33:46 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.86 2007/01/30 13:05:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,15 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.85 2007/01/26 15:33:46 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.86  2007/01/30 13:05:26  fabiankeil
+ *    - Let server_set_cookie() check the expiration date
+ *      of cookies and don't touch the ones that are already
+ *      expired. Fixes problems with low quality web applications
+ *      as described in BR 932612.
+ *
+ *    - Adjust comment in client_max_forwards to reality;
+ *      remove invalid Max-Forwards headers.
+ *
  *    Revision 1.85  2007/01/26 15:33:46  fabiankeil
  *    Stop filter_header() from unintentionally removing
  *    empty header lines that were enlisted by the continue
@@ -2644,25 +2653,31 @@ jb_err client_x_forwarded(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_max_forwards(struct client_state *csp, char **header)
 {
-   unsigned int max_forwards;
+   int max_forwards;
 
    if ((0 == strcmpic(csp->http->gpc, "trace")) ||
        (0 == strcmpic(csp->http->gpc, "options")))
    {
-      if (1 == sscanf(*header, "Max-Forwards: %u", &max_forwards))
+      assert(*(*header+12) == ':');
+      if (1 == sscanf(*header+12, ": %u", &max_forwards))
       {
          if (max_forwards > 0)
          {
             snprintf(*header, strlen(*header)+1, "Max-Forwards: %u", --max_forwards);
-            log_error(LOG_LEVEL_HEADER, "Max-Forwards header for %s request replaced with: %s",
-               csp->http->gpc, *header);
+            log_error(LOG_LEVEL_HEADER, "Max-Forwards value for %s request reduced to %u.",
+               csp->http->gpc, max_forwards);
+         }
+         else if (max_forwards < 0)
+         {
+            log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
+            freez(*header);
          }
          else
          {
             /*
-             * direct_response() which was called earlier
-             * in chat() should prevent that we ever get
-             * here.
+             * Not supposed to be reached. direct_response() which
+             * was already called earlier in chat() should have
+             * intercepted the request.
              */
             log_error(LOG_LEVEL_ERROR,
                "Non-intercepted %s request with Max-Forwards zero!", csp->http->gpc);
