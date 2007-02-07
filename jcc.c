@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.120 2007/01/26 14:18:42 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.121 2007/01/27 10:52:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.120 2007/01/26 14:18:42 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.121  2007/01/27 10:52:56  fabiankeil
+ *    Move mutex initialization into separate
+ *    function and exit in case of errors.
+ *
  *    Revision 1.120  2007/01/26 14:18:42  fabiankeil
  *    - Start to reduce chat()'s line count and move
  *      parts of it into separate functions.
@@ -760,6 +764,7 @@ http://www.fabiankeil.de/sourcecode/privoxy/
 #include <signal.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <assert.h>
 
 #ifdef _WIN32
 # ifndef FEATURE_PTHREAD
@@ -1096,6 +1101,7 @@ jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *
       log_error(LOG_LEVEL_ERROR, "%s's request: \'%s\' is invalid."
          " Privoxy isn't configured to accept intercepted requests.",
          csp->ip_addr_str, csp->http->cmd);
+      /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
          csp->ip_addr_str, csp->http->cmd);
 
@@ -1118,6 +1124,7 @@ jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *
 
       req = list_to_text(headers);
       chomp(req);
+      /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
          csp->ip_addr_str, csp->http->cmd);
       log_error(LOG_LEVEL_ERROR,
@@ -1225,6 +1232,144 @@ jb_err get_server_headers(struct client_state *csp)
    }
 
    return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  crunch_reason
+ *
+ * Description :  Translates the crunch reason code into a string.
+ *
+ * Parameters  :
+ *          1  :  rsp = a http_response
+ *
+ * Returns     :  A string with the crunch reason or an error description.
+ *
+ *********************************************************************/
+const char *crunch_reason(const struct http_response *rsp)
+{
+   char * reason = NULL;
+
+   assert(rsp != NULL);
+   if (rsp == NULL)
+   {
+      return "Internal error while searching for crunch reason";
+   }
+
+   switch (rsp->reason)
+   {
+      case RSP_REASON_UNSUPPORTED:
+         reason = "Unsupported HTTP feature";
+         break;
+      case RSP_REASON_BLOCKED:
+         reason = "Blocked";
+         break;
+      case RSP_REASON_UNTRUSTED:
+         reason = "Untrusted";
+         break;
+      case RSP_REASON_REDIRECTED:
+         reason = "Redirected";
+         break;
+      case RSP_REASON_CGI_CALL:
+         reason = "CGI Call";
+         break;
+      case RSP_REASON_NO_SUCH_DOMAIN:
+         reason = "DNS failure";
+         break;
+      case RSP_REASON_FORWARDING_FAILED:
+         reason = "Forwarding failed";
+         break;
+      case RSP_REASON_CONNECT_FAILED:
+         reason = "Connection failure";
+         break;
+      case RSP_REASON_OUT_OF_MEMORY:
+         reason = "Out of memory (may mask other reasons)";
+         break;
+      default:
+         reason = "No reason recorded";
+         break;
+   }
+
+   return reason;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  send_crunch_response
+ *
+ * Description :  Delivers already prepared response for
+ *                intercepted requests, logs the interception
+ *                and frees the response.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  rsp = Fully prepared response. Will be freed on exit.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+void send_crunch_response(struct client_state *csp, struct http_response *rsp)
+{
+      const struct http_request *http = csp->http;
+      char status_code[4];
+
+      assert(rsp != NULL);
+      assert(rsp->head != NULL);
+
+      if (rsp == NULL)
+      {
+         /*
+          * Not supposed to happen. If it does
+          * anyway, treat it as an unknown error.
+          */
+         cgi_error_unknown(csp, rsp, RSP_REASON_INTERNAL_ERROR);
+         /* return code doesn't matter */
+      }
+
+      if (rsp == NULL)
+      {
+         /* If rsp is still NULL, we have serious internal problems. */
+         log_error(LOG_LEVEL_FATAL,
+            "NULL response in send_crunch_response and cgi_error_unknown failed as well.");
+      }
+
+      /*
+       * Extract the status code from the actual head
+       * that was send to the client. It is the only
+       * way to get it right for all requests, including
+       * the fixed ones for out-of-memory problems.
+       *
+       * A head starts like this: 'HTTP/1.1 200...'
+       *                           0123456789|11
+       *                                     10
+       */
+      status_code[0] = rsp->head[9];
+      status_code[1] = rsp->head[10];
+      status_code[2] = rsp->head[11];
+      status_code[3] = '\0';
+
+      /* Write the answer to the client */
+      if (write_socket(csp->cfd, rsp->head, rsp->head_length)
+       || write_socket(csp->cfd, rsp->body, rsp->content_length))
+      {
+         /* There is nothing we can do about it. */
+         log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", csp->http->host);
+      }
+
+      /* Log that the request was crunched and why. */
+      log_error(LOG_LEVEL_GPC, "%s%s crunch! (%s)",
+         http->hostport, http->path, crunch_reason(rsp));
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %d",
+         csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
+
+      /* Clean up and return */
+      if (cgi_error_memory() != rsp)
+      {
+         free_http_response(rsp);
+      } 
+      return;
 }
 
 
@@ -1384,8 +1529,9 @@ static void chat(struct client_state *csp)
    {
       strcpy(buf, CHEADER);
       write_socket(csp->cfd, buf, strlen(buf));
-
+      /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 400 0", csp->ip_addr_str);
+      log_error(LOG_LEVEL_ERROR, "Invalid header received from %s.", csp->ip_addr_str);
 
       free_http_request(http);
       return;
@@ -1516,7 +1662,10 @@ static void chat(struct client_state *csp)
       {
          if (csp->action->flags & ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS)
          {
-            /* The response will violate the specs, but makes unblocking easier. */
+            /*
+             * The response may confuse some clients,
+             * but makes unblocking easier.
+             */
             log_error(LOG_LEVEL_ERROR, "Marking suspicious CONNECT request from %s for blocking.",
                csp->ip_addr_str);
             csp->action->flags |= ACTION_BLOCK;
@@ -1651,24 +1800,16 @@ static void chat(struct client_state *csp)
 
 		 )
    {
-      /* Write the answer to the client */
-      if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-       || write_socket(csp->cfd, rsp->body, rsp->content_length))
-      {
-         log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-      }
-
+      /*
+       * Deliver, log and free the interception
+       * response. Afterwards we're done here.
+       */
+      send_crunch_response(csp, rsp);
 #ifdef FEATURE_STATISTICS
       /* Count as a rejected request */
       csp->flags |= CSP_FLAG_REJECTED;
 #endif /* def FEATURE_STATISTICS */
 
-      /* Log (FIXME: All intercept reasons appear as "crunch" with Status 200) */
-      log_error(LOG_LEVEL_GPC, "%s%s crunch!", http->hostport, http->path);
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 3", csp->ip_addr_str, http->ocmd);
-
-      /* Clean up and return */
-      free_http_response(rsp);
       return;
    }
 
@@ -1708,40 +1849,25 @@ static void chat(struct client_state *csp)
       {
          /* Socks error. */
          rsp = error_response(csp, "forwarding-failed", errno);
-
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-            csp->ip_addr_str, http->ocmd);
       }
       else if (errno == EINVAL)
       {
          rsp = error_response(csp, "no-such-domain", errno);
-
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 404 0",
-                   csp->ip_addr_str, http->ocmd);
       }
       else
       {
          rsp = error_response(csp, "connect-failed", errno);
-
          log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
                 http->hostport);
-
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-                   csp->ip_addr_str, http->ocmd);
       }
 
 
       /* Write the answer to the client */
-      if(rsp)
+      if(rsp != NULL)
       {
-         if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-          || write_socket(csp->cfd, rsp->body, rsp->content_length))
-         {
-            log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-         }
+         send_crunch_response(csp, rsp);
       }
 
-      free_http_response(rsp);
       freez(hdr);
       return;
    }
@@ -1758,21 +1884,13 @@ static void chat(struct client_state *csp)
          log_error(LOG_LEVEL_CONNECT, "write header to: %s failed: %E",
                     http->hostport);
 
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-                   csp->ip_addr_str, http->ocmd);
-
          rsp = error_response(csp, "connect-failed", errno);
 
          if(rsp)
          {
-            if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-             || write_socket(csp->cfd, rsp->body, rsp->content_length))
-            {
-               log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-            }
+            send_crunch_response(csp, rsp);
          }
 
-         free_http_response(rsp);
          freez(hdr);
          return;
       }
@@ -1784,7 +1902,7 @@ static void chat(struct client_state *csp)
        * so just send the "connect succeeded" message to the
        * client, flush the rest, and get out of the way.
        */
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 2\n",
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 0",
                 csp->ip_addr_str, http->ocmd);
 
       if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1))
@@ -1867,21 +1985,13 @@ static void chat(struct client_state *csp)
          {
             log_error(LOG_LEVEL_ERROR, "read from: %s failed: %E", http->host);
 
-            log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 503 0",
-                      csp->ip_addr_str, http->ocmd);
-
             rsp = error_response(csp, "connect-failed", errno);
 
             if(rsp)
             {
-               if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-                || write_socket(csp->cfd, rsp->body, rsp->content_length))
-               {
-                  log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-               }
+               send_crunch_response(csp, rsp);
             }
 
-            free_http_response(rsp);
             return;
          }
 
@@ -2008,12 +2118,8 @@ static void chat(struct client_state *csp)
                       */
                      log_error(LOG_LEVEL_ERROR, "Out of memory while trying to flush.");
                      rsp = cgi_error_memory();
+                     send_crunch_response(csp, rsp);
 
-                     if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-                         || write_socket(csp->cfd, rsp->body, rsp->content_length))
-                     {
-                        log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-                     }
                      return;
                   }
 
@@ -2029,7 +2135,7 @@ static void chat(struct client_state *csp)
                      return;
                   }
 
-                  byte_count += hdrlen + (size_t)(flushed + len);
+                  byte_count += hdrlen + (size_t)flushed + (size_t)len;
                   freez(hdr);
                   content_filter = NULL;
                   server_body = 1;
@@ -2063,12 +2169,8 @@ static void chat(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
                rsp = cgi_error_memory();
-               
-               if (write_socket(csp->cfd, rsp->head, rsp->head_length)
-                   || write_socket(csp->cfd, rsp->body, rsp->content_length))
-               {
-                  log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-               }
+               send_crunch_response(csp, rsp);               
+
                return;
             }
 
@@ -2209,8 +2311,18 @@ static void chat(struct client_state *csp)
       return; /* huh? we should never get here */
    }
 
+   if (csp->content_length == 0)
+   {
+      /*
+       * If Privoxy didn't recalculate the
+       * Content-Lenght, byte_count is still
+       * correct.
+       */
+      csp->content_length = byte_count;
+   }
+
    log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %d",
-             csp->ip_addr_str, http->ocmd, byte_count);
+      csp->ip_addr_str, http->ocmd, csp->content_length);
 }
 
 
