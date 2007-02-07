@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.152 2006/12/13 14:53:51 etresoft Exp $
+# $Id: GNUmakefile.in,v 1.153 2007/01/07 07:36:36 joergs Exp $
 #
 # Written by and Copyright (C) 2001 - 2004 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -482,7 +482,7 @@ suse-dist: rpm-stuff
 # 	fi
 
 	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
-	$(RPM) --clean -ta  $(TAR_ARCH)
+	$(RPMBUILD) --clean -ta  $(TAR_ARCH)
 	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
 
 # anonymously ncftps the rpms to sourceforge
@@ -1359,6 +1359,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.153  2007/01/07 07:36:36  joergs
+# Added AmigaOS4 support.
+#
 # Revision 1.152  2006/12/13 14:53:51  etresoft
 # Include any existing LDFLAGS environment when linking so that a MacOS X Universal Binary can be created.
 #
