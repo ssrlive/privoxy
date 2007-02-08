@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.92 2007/01/28 13:41:17 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.93 2007/02/07 10:45:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,14 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.92 2007/01/28 13:41:17 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.93  2007/02/07 10:45:22  fabiankeil
+ *    - Save the reason for generating http_responses.
+ *    - Fix --disable-toggle (again).
+ *    - Use TBL birthday hack for 403 responses as well.
+ *    - Uglify the @menu@ again to fix JavaScript
+ *      errors on the "blocked" template.
+ *    - Escape an ampersand in cgi_error_unknown().
+ *
  *    Revision 1.92  2007/01/28 13:41:17  fabiankeil
  *    - Add HEAD support to finish_http_response.
  *    - Add error favicon to internal HTML error messages.
@@ -742,12 +750,12 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
  */
 const char image_pattern_data[] =
    "\211\120\116\107\015\012\032\012\000\000\000\015\111\110\104"
-   "\122\000\000\000\004\000\000\000\004\010\002\000\000\000\046"
-   "\223\011\051\000\000\000\006\142\113\107\104\000\310\000\310"
-   "\000\310\052\045\225\037\000\000\000\032\111\104\101\124\170"
-   "\332\143\070\161\342\304\377\377\377\041\044\003\234\165\342"
-   "\304\011\006\234\062\000\125\200\052\251\125\174\360\223\000"
-   "\000\000\000\111\105\116\104\256\102\140\202";
+   "\122\000\000\000\004\000\000\000\004\010\006\000\000\000\251"
+   "\361\236\176\000\000\000\006\142\113\107\104\000\000\000\000"
+   "\000\000\371\103\273\177\000\000\000\033\111\104\101\124\010"
+   "\327\143\140\140\140\060\377\377\377\077\003\234\106\341\060"
+   "\060\230\063\020\124\001\000\161\021\031\241\034\364\030\143"
+   "\000\000\000\000\111\105\116\104\256\102\140\202";
 
 /*
  * 1x1 transparant PNG.
