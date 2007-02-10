@@ -62,6 +62,11 @@ ChangeLog for Privoxy
   of the CGI templates to make sure customized templates
   aren't "updated".
 - Better handling of "HTTP/1.1 100 Continue" responses.
+- "Crunch!" log messages (used when Privoxy answers requests
+  by itself) now also contain the reason.
+- The show-url-info CGI page shows the forwarding settings.
+- The background of the PNG pattern is transparent.
+- Fixed XML syntax errors caused by banners-by-size and banners-by-url.
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring
   and Adam Piggott)
