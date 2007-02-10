@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.93 2007/02/07 10:45:22 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.94 2007/02/08 19:44:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.93 2007/02/07 10:45:22 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.94  2007/02/08 19:44:49  fabiankeil
+ *    Use a transparent background for the PNG replacement pattern.
+ *
  *    Revision 1.93  2007/02/07 10:45:22  fabiankeil
  *    - Save the reason for generating http_responses.
  *    - Fix --disable-toggle (again).
@@ -1440,8 +1443,8 @@ struct http_response *error_response(struct client_state *csp,
          csp->error_message = strdup("Failure reason missing. Check the log file for details.");
       }
       if (!err) err = map(exports, "gateway", 1, fwd->gateway_host, 1);
-      if (!err) map(exports, "forwarding-type", 1, (fwd->type == SOCKS_4) ?
-                   "socks4-" : "socks4a-", 1);
+      if (!err) err = map(exports, "forwarding-type", 1, (fwd->type == SOCKS_4) ?
+                         "socks4-" : "socks4a-", 1);
       if (!err) err = map(exports, "error-message", 1, html_encode(csp->error_message), 0);
 
       if (!err) rsp->status = strdup("503 Forwarding failure");
