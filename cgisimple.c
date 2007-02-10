@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.49 2007/01/20 16:29:38 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.50 2007/01/23 15:51:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.49 2007/01/20 16:29:38 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.50  2007/01/23 15:51:17  fabiankeil
+ *    Add favicon delivery functions.
+ *
  *    Revision 1.49  2007/01/20 16:29:38  fabiankeil
  *    Suppress edit buttons for action files if Privoxy has
  *    no write access. Suggested by Roland in PR 1564026.
@@ -1487,7 +1490,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
          }
       }
 
-      matches = strdup("<table class=\"transparent\">");
+      matches = strdup("<table summary=\"\" class=\"transparent\">");
 
       for (i = 0; i < MAX_AF_FILES; i++)
       {
@@ -1524,7 +1527,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
             {
                string_append(&matches, "<tr><td>{");
                string_join  (&matches, actions_to_html(csp, b->action));
-               string_append(&matches, " }</b><br>\n<code>");
+               string_append(&matches, " }<br>\n<code>");
                string_join  (&matches, html_encode(b->url->spec));
                string_append(&matches, "</code></td></tr>\n");
 
@@ -1547,9 +1550,62 @@ jb_err cgi_show_url_info(struct client_state *csp,
       }
       string_append(&matches, "</table>\n");
 
+      /*
+       * Fill in forwarding settings.
+       *
+       * The possibilities are:
+       *  - no forwarding
+       *  - http forwarding only
+       *  - socks4(a) forwarding only
+       *  - socks4(a) and http forwarding.
+       *
+       * XXX: Parts of this code could be reused for the
+       * "forwarding-failed" template which currently doesn't
+       * display the proxy port and an eventuell second forwarder.
+       */
+      {
+         const struct forward_spec * fwd = forward_url(url_to_query, csp);
+
+         if ((fwd->gateway_host == NULL) && (fwd->forward_host == NULL))
+         {
+            if (!err) err = map_block_killer(exports, "socks-forwarder");
+            if (!err) err = map_block_killer(exports, "http-forwarder");
+         }
+         else
+         {
+            char port[10]; /* We save proxy ports as int but need a string here */
+
+            if (!err) err = map_block_killer(exports, "no-forwarder");
+
+            if (fwd->gateway_host != NULL)
+            {
+               if (!err) err = map(exports, "socks-type", 1, (fwd->type == SOCKS_4) ?
+                                  "socks4" : "socks4a", 1);
+               if (!err) err = map(exports, "gateway-host", 1, fwd->gateway_host, 1);
+               snprintf(port, sizeof(port), "%d", fwd->gateway_port);
+               if (!err) err = map(exports, "gateway-port", 1, port, 1);
+            }
+            else
+            {
+               if (!err) err = map_block_killer(exports, "socks-forwarder");
+            }
+
+            if (fwd->forward_host != NULL)
+            {
+               if (!err) err = map(exports, "forward-host", 1, fwd->forward_host, 1);
+               snprintf(port, sizeof(port), "%d", fwd->forward_port);
+               if (!err) err = map(exports, "forward-port", 1, port, 1);
+            }
+            else
+            {
+               if (!err) err = map_block_killer(exports, "http-forwarder");
+            }
+         }
+      }
+
       free_http_request(url_to_query);
 
-      if (matches == NULL)
+      if (err || matches == NULL)
       {
          free_current_action(action);
          free_map(exports);
