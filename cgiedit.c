@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.46 2006/12/27 18:44:52 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.47 2006/12/28 18:04:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -15,7 +15,7 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.46 2006/12/27 18:44:52 fabiankeil
  *
  *                Stick to the short names in this file for consistency.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.46 2006/12/27 18:44:52 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.47  2006/12/28 18:04:25  fabiankeil
+ *    Fixed gcc43 conversion warnings.
+ *
  *    Revision 1.46  2006/12/27 18:44:52  fabiankeil
  *    Stop shadowing string.h's index().
  *
@@ -1013,29 +1016,44 @@ jb_err edit_write_file(struct editable_file * file)
                assert(numhash > 0);
 
                /* Allocate new memory for string */
-               len = strlen(cur_line->unprocessed);
-               if (NULL == (str = malloc(len + 1 + (size_t)numhash)))
+               len = strlen(cur_line->unprocessed) + (size_t)numhash;
+               if (NULL == (str = malloc(len + 1)))
                {
                   /* Uh oh, just trashed file! */
                   fclose(fp);
                   return JB_ERR_MEMORY;
                }
 
-               /* Loop through string from end */
-               src  = cur_line->unprocessed + len;
-               dest = str + len + numhash;
-               for ( ; len >= 0; len--)
+               /* Copy string but quote hashes */
+               src  = cur_line->unprocessed;
+               dest = str;
+               while (*src)
                {
-                  if ((*dest-- = *src--) == '#')
+                  if (*src == '#')
                   {
-                     *dest-- = '\\';
+                     *dest++ = '\\';
                      numhash--;
                      assert(numhash >= 0);
                   }
+                  *dest++ = *src++;
                }
+               *dest = '\0';
+
                assert(numhash == 0);
-               assert(src  + 1 == cur_line->unprocessed);
-               assert(dest + 1 == str);
+               assert(strlen(str) == len);
+               assert(str == dest - len);
+               assert(src - len <= cur_line->unprocessed);
+
+               if ((strlen(str) != len) || (numhash != 0))
+               {
+                  /*
+                   * Escaping didn't work as expected, go spread the news.
+                   * Only reached in non-debugging builds.
+                   */
+                  log_error(LOG_LEVEL_ERROR,
+                     "Looks like hash escaping failed. %s might be corrupted now.",
+                     file->filename);
+               }
 
                if (fputs(str, fp) < 0)
                {

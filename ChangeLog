@@ -67,6 +67,8 @@ ChangeLog for Privoxy
 - The show-url-info CGI page shows the forwarding settings.
 - The background of the PNG pattern is transparent.
 - Fixed XML syntax errors caused by banners-by-size and banners-by-url.
+- Fixed crashes and possible action file corruptions
+  when lines containing hashes are written through the CGI editor.
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring
   and Adam Piggott)
