@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.14 2007/01/06 14:23:56 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.15 2007/01/28 16:11:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.14 2007/01/06 14:23:56 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.15  2007/01/28 16:11:23  fabiankeil
+ *    Accept WebDAV methods for subversion
+ *    in parse_http_request(). Closes FR 1581425.
+ *
  *    Revision 1.14  2007/01/06 14:23:56  fabiankeil
  *    Fix gcc43 warnings. Mark *csp as immutable
  *    for parse_http_url() and url_match().
@@ -489,7 +493,6 @@ jb_err parse_http_request(const char *req,
    n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
    if (n != 3)
    {
-      log_error(LOG_LEVEL_ERROR, "Trouble ssplitting: %s", buf);
       free(buf);
       return JB_ERR_PARSE;
    }
