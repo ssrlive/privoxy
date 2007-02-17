@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.35 2006/12/21 12:28:12 fabiankeil Exp $
+#  $Id: default.filter,v 1.36 2007/02/05 16:47:31 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -424,17 +424,42 @@ s/(M|m)edien(?![^<]*>)/$1&auml;dchen/Ug
 
 #################################################################################
 #
-# crude-parental: Crude parental filtering?  (Use along with a suitable blocklist).
-#                 Shows how to deny access to whole page based on a keyword.
+# crude-parental: Crude parental filtering. Use with a suitable blocklist.
+#                 Pages are "blocked" based on keyword matching.
 #
 #################################################################################
-FILTER: crude-parental Crude parental filtering (demo only)
+FILTER: crude-parental Crude parental filtering 
 
 # (Note: Middlesex, Sussex and Essex are counties in the UK, not rude words)
 # (Note #2: Is 'sex' a rude word?!)
 
-s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
-s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
+# Remove by description
+s/^.*\
+(suck |lick |tounge |rub |fuck |fingering |finger |chicks? )?\
+(her |your |my |hard |with |big |wet |tight |pink |hot |moist |young |teen )+\
+(dicks?|penis|cocks?|balls?|tits?|pussy|cunt|clit|ass|mouth).*$\
+/This page has been blocked by Privoxy's crude-parental content filter\
+/is 
+
+#Remove by link text
+s/^.*\
+(download|broadband|view|watch|free|get|extreem)? \
+(sex|xxx|porn|cumshot|fuck(ing|s)?|anal|ass|asian|adult|Amateur|org(y|ies)|close ups?|hand ?      job|nail(ed)?)+ \
+(movies?|pics?|videos?|dvds?|dvd's|links?).*$\
+/This page has been blocked by Privoxy's crude-parental content filter\
+/is 
+
+#Remove by age disclaimer
+s/^.*\
+(models?|chicks?|girls?|women|persons) \
+(who|are|were)+ (over|at least) (16|18|21) years (old|of age).*$\
+/This page has been blocked by Privoxy's crude-parental content filter\
+/is 
+
+#Remove by regulations
+s/^.*(Section 2257|18 U.?S.?C.? 2257).*$\
+/This page has been blocked by Privoxy's crude-parental content filter\
+/is 
 
 
 #################################################################################
@@ -666,6 +691,11 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.36  2007/02/05 16:47:31  fabiankeil
+#     - Let banners-by-link look for "advert".
+#     - Fix XML systax problems with banners-by-link
+#       and banners-by-size (AF#1651570).
+#
 #     Revision 1.35  2006/12/21 12:28:12  fabiankeil
 #     Escaping special characters in filter descriptions is no
 #     longer necessary, it's done by Privoxy now.
