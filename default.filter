@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.36 2007/02/05 16:47:31 fabiankeil Exp $
+#  $Id: default.filter,v 1.37 2007/02/17 13:29:44 hal9 Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -433,6 +433,10 @@ FILTER: crude-parental Crude parental filtering
 # (Note: Middlesex, Sussex and Essex are counties in the UK, not rude words)
 # (Note #2: Is 'sex' a rude word?!)
 
+s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
+
+s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
+
 # Remove by description
 s/^.*\
 (suck |lick |tounge |rub |fuck |fingering |finger |chicks? )?\
@@ -691,6 +695,9 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.37  2007/02/17 13:29:44  hal9
+#     Updates to the crude parental filter per Feature Requests item #1648657.
+#
 #     Revision 1.36  2007/02/05 16:47:31  fabiankeil
 #     - Let banners-by-link look for "advert".
 #     - Fix XML systax problems with banners-by-link
