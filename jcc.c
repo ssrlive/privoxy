@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.121 2007/01/27 10:52:56 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.122 2007/02/07 11:12:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,17 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.121 2007/01/27 10:52:56 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.122  2007/02/07 11:12:02  fabiankeil
+ *    - Move delivery and logging of crunched responses
+ *      from chat() into send_crunch_response().
+ *    - Display the reason for generating http_responses.
+ *    - Log the content length for LOG_LEVEL_CLF correctly
+ *      (still incorrect for some fixed responses).
+ *    - Reword an incorrect comment about
+ *      treat-forbidden-connects-like-blocks violating
+ *      the specs.
+ *    - Add some log messages.
+ *
  *    Revision 1.121  2007/01/27 10:52:56  fabiankeil
  *    Move mutex initialization into separate
  *    function and exit in case of errors.
@@ -957,6 +968,13 @@ const char NO_SERVER_DATA_RESPONSE[] =
    "Empty server or forwarder response.\r\n"
    "The connection was closed without sending any data.\r\n";
 
+/* XXX: should be a template */
+const char NULL_BYTE_RESPONSE[] =
+   "HTTP/1.0 400 Bad request received from browser\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Connection: close\r\n\r\n"
+   "Bad request. Null byte(s) before end of request.\r\n";
+
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 /*********************************************************************
  *
@@ -1454,6 +1472,8 @@ static void chat(struct client_state *csp)
 
    http = csp->http;
 
+   memset(buf, 0, sizeof(buf));
+
    /*
     * Read the client's request.  Note that since we're not using select() we
     * could get blocked here if a client connected, then didn't say anything!
@@ -1461,10 +1481,46 @@ static void chat(struct client_state *csp)
 
    for (;;)
    {
-      len = read_socket(csp->cfd, buf, sizeof(buf));
+      size_t c_len; /* Request lenght when treated as C string */
+
+      len = read_socket(csp->cfd, buf, sizeof(buf)-1);
 
       if (len <= 0) break;      /* error! */
-      
+
+      /* Naughty NULL bytes inside the request? */
+      c_len = strlen(buf);
+      if (c_len < len)
+      {
+         /*
+          * Yes. Log the request, return an
+          * error response and hang up.
+          */
+         size_t tmp_len = c_len;
+
+         do
+         {
+           /*
+            * Replace NULL byte(s) with line break(s)
+            * so the request can be logged as string.
+            */
+            buf[tmp_len]='\n';
+            tmp_len = strlen(buf);
+         } while (tmp_len < len);
+
+         log_error(LOG_LEVEL_ERROR,
+            "%s\'s request contains NULL byte(s) (length=%d, strlen=%d).\n"
+            "Complete request with NULL byte(s) turned into line break(s):\n%s",
+            csp->ip_addr_str, len, c_len, buf);
+
+         strcpy(buf, NULL_BYTE_RESPONSE);
+         write_socket(csp->cfd, buf, strlen(buf));
+
+         /* XXX: Log correct size */
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
+
+         return;
+      }
+
       /*
        * If there is no memory left for buffering the
        * request, there is nothing we can do but hang up
