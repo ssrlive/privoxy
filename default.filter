@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.37 2007/02/17 13:29:44 hal9 Exp $
+#  $Id: default.filter,v 1.38 2007/02/19 11:22:48 hal9 Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -81,8 +81,10 @@ FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse
 s|(?:\w+\.)+referrer|"Not Your Business!"|gisU
 
 # The status bar is for displaying link targets, not pointless blahblah
-# 
-s/(\W\s*)((this|window)\.(default)?status)\s*=\s*((['"]).*?(?<!\\)\6)/$1if(typeof(this.href) != 'undefined') $2 = $5 + ' URL: ' + this.href;else return false/ig
+#
+s@([\W]\s*)((?:this|window)\.(?:default)?status)\s*=\s*((['"]).*?\4)@$1$2 =\
+ (typeof(this.href) != 'undefined')?($3 + ' URL: ' + this.href):($2)@ig
+
 s/(?:(?:this|window)\.(?:default)?status)\s*=\s*\w*\s*;//ig
 
 # Kill OnUnload popups. Yummy.
@@ -179,7 +181,7 @@ s/<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;\s
 FILTER: unsolicited-popups Disable only unsolicited pop-up windows
 
 s+([^'"]\s*<head.*>)(?=\s*[^'"])+$1<script>function PrivoxyWindowOpen(){return(null);}</script>+isU
-s+([^\w\s.]\s*)((window|this|parent)\.)?open\s*\(+$1PrivoxyWindowOpen(+ig
+s@([^\w\s.]\s*)((?:map)?(window|this|parent)\.?)?open\s*\(@$1PrivoxyWindowOpen(@ig
 s+([^'"]\s*</html>)(?!\s*(\\n|'|"))+$1<script>function PrivoxyWindowOpen(a, b, c){return(window.open(a, b, c));}</script>+iU     
 
 
@@ -190,7 +192,7 @@ s+([^'"]\s*</html>)(?!\s*(\\n|'|"))+$1<script>function PrivoxyWindowOpen(a, b, c
 #################################################################################
 FILTER: all-popups Kill all popups in JavaScript and HTML
 
-s/((\W\s*)(window|this|parent)\.)open\s*\\?\(/$1concat(/ig  # JavaScript
+s@((\W\s*)(?:map)?(window|this|parent)\.?)open\s*\\?\(@$1concat(@ig  # JavaScript
 s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ notarget/ig        # HTML
 
 
@@ -695,6 +697,9 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.38  2007/02/19 11:22:48  hal9
+#     Adding back the orginal filter content to offset problems found by Fabian.
+#
 #     Revision 1.37  2007/02/17 13:29:44  hal9
 #     Updates to the crude parental filter per Feature Requests item #1648657.
 #
