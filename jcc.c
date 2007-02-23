@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.122 2007/02/07 11:12:02 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.123 2007/02/21 18:42:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.122 2007/02/07 11:12:02 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.123  2007/02/21 18:42:10  fabiankeil
+ *    Answer requests that contain NULL bytes with
+ *    a custom response instead of waiting for more
+ *    data until the client eventually hangs up.
+ *
  *    Revision 1.122  2007/02/07 11:12:02  fabiankeil
  *    - Move delivery and logging of crunched responses
  *      from chat() into send_crunch_response().
@@ -1504,13 +1509,13 @@ static void chat(struct client_state *csp)
             * so the request can be logged as string.
             */
             buf[tmp_len]='\n';
-            tmp_len = strlen(buf);
+            tmp_len += strlen(buf+tmp_len);
          } while (tmp_len < len);
 
-         log_error(LOG_LEVEL_ERROR,
-            "%s\'s request contains NULL byte(s) (length=%d, strlen=%d).\n"
-            "Complete request with NULL byte(s) turned into line break(s):\n%s",
-            csp->ip_addr_str, len, c_len, buf);
+         log_error(LOG_LEVEL_ERROR, "%s\'s request contains NULL byte(s) "
+            "(length=%d, strlen=%d).", csp->ip_addr_str, len, c_len);
+         log_error(LOG_LEVEL_HEADER, 
+            "Denied request with NULL byte(s) turned into line break(s):\n%s", buf);
 
          strcpy(buf, NULL_BYTE_RESPONSE);
          write_socket(csp->cfd, buf, strlen(buf));
@@ -1586,7 +1591,7 @@ static void chat(struct client_state *csp)
       strcpy(buf, CHEADER);
       write_socket(csp->cfd, buf, strlen(buf));
       /* XXX: Use correct size */
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 400 0", csp->ip_addr_str);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
       log_error(LOG_LEVEL_ERROR, "Invalid header received from %s.", csp->ip_addr_str);
 
       free_http_request(http);
