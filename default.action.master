@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.59 2007/01/31 11:43:44 hal9 Exp $
+#  $Id: default.action.master,v 1.60 2007/02/05 12:08:52 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1039,6 +1039,9 @@ images.ibsys.com/
 scripts.chitika.net/.*\.(gif|png|jpg)
 #MASTER# REMARKS: Actionsfile feedback item #1648478 2007-01-30
 .projectwonderful.com/gen.php
+#MASTER# BLOCK-REFERRER: http://www.multimap.com/ (sporadic)
+#MASTER# REMARKS: Actionsfile feedback item #1665682 2007-02-21
+.akamai.net/.*\.adtech\.de/.*\.(gif|png)
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
