@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.89 2007/02/07 16:52:11 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.90 2007/02/08 19:12:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.89 2007/02/07 16:52:11 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.90  2007/02/08 19:12:35  fabiankeil
+ *    Don't run server_content_length() the first time
+ *    sed() parses server headers; only adjust the
+ *    Content-Length header if the page was modified.
+ *
  *    Revision 1.89  2007/02/07 16:52:11  fabiankeil
  *    Fix log messages regarding the cookie time format
  *    (cookie and request URL were mixed up).
@@ -3410,34 +3415,52 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
           * if the cookie is still valid, if yes,
           * rewrite it to a session cookie.
           */
-         if (strncmpic(cur_tag, "expires=", 8) == 0)
+         if ((strncmpic(cur_tag, "expires=", 8) == 0) && *(cur_tag + 8))
          {
             char *match;
+            const char *expiration_date = cur_tag + 8; /* Skip "[Ee]xpires=" */
+
             /*
              * Try the valid time formats we know about.
+             *
+             * XXX: This should be factored out into a separate function.
              *
              * XXX: Maybe the log messages should be removed
              * for the next stable release. They just exist to
              * see which time format gets the most hits and
              * should be checked for first.
              */
-            if (NULL != (match = strptime(cur_tag, "expires=%a, %e-%b-%y %H:%M:%S ", &tm_cookie)))
+            if (NULL != (match = strptime(expiration_date, "%a, %e-%b-%y %H:%M:%S ", &tm_cookie)))
             {
+               /* 22-Feb-2008 12:01:18 GMT */
                log_error(LOG_LEVEL_HEADER,
                   "cookie \'%s\' send by %s appears to be using time format 1.",
                   *header, csp->http->url);
             }
-            else if (NULL != (match = strptime(cur_tag, "expires=%A, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
+            else if (NULL != (match = strptime(expiration_date, "%A, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
             {
+               /* Tue, 02-Jun-2037 20:00:00 GMT */
                log_error(LOG_LEVEL_HEADER,
                   "cookie \'%s\' send by %s appears to be using time format 2.",
                   *header, csp->http->url);
-
             }
-            else if (NULL != (match = strptime(cur_tag, "expires=%a, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
+            else if (NULL != (match = strptime(expiration_date, "%a, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
             {
+               /* Tuesday, 02-Jun-2037 20:00:00 GMT */
+               /*
+                * On FreeBSD this is never reached because it's handled
+                * by "format 2" as well. I am, however, not sure if all
+                * strptime() implementations behave that way.
+                */
                log_error(LOG_LEVEL_HEADER,
                   "cookie \'%s\' send by %s appears to be using time format 3.",
+                   *header, csp->http->url);
+            }
+            else if (NULL != (match = strptime(expiration_date, "%a, %e %b %Y %H:%M:%S ", &tm_cookie)))
+            {
+               /* Fri, 22 Feb 2008 19:20:05 GMT */
+               log_error(LOG_LEVEL_HEADER,
+                  "cookie \'%s\' send by %s appears to be using time format 4.",
                    *header, csp->http->url);
             }
 
@@ -3450,7 +3473,7 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
                 * XXX: Should we remove the whole cookie instead?
                 */
                log_error(LOG_LEVEL_ERROR,
-                  "Can't parse %s. Unsupported time format?", cur_tag);
+                  "Can't parse \'%s\', send by %s. Unsupported time format?", cur_tag, csp->http->url);
                memmove(cur_tag, next_tag, strlen(next_tag) + 1);
                changed = 1;
             }
