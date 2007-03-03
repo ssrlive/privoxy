@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.60 2007/02/05 12:08:52 hal9 Exp $
+#  $Id: default.action.master,v 1.61 2007/02/23 12:17:19 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1314,7 +1314,9 @@ edge.macworld.com
 #MASTER# UNBLOCK-REFERRER: http://yahoo.com 2007-01-27
 #MASTER# REMARKS: Actionsfile Tracker #1645501, this is a UI page element.
 .yimg.com/.*/themes/ad/
-
+#MASTER# UNBLOCK-REFERRER: http://mozilla.hongo.wide.ad.jp/pub/mozilla.org//thunderbird/releases/
+#MASTER# REMARKS: Actionsfile feedback item #1672918 2007-03-03
+.ad.*/pub/mozilla.org/
 
 #############################################################################
 # Site-specific special rules:
