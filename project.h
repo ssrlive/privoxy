@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.89 2007/01/27 13:09:16 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.90 2007/02/07 10:36:16 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.90  2007/02/07 10:36:16  fabiankeil
+ *    Add new http_response member to save
+ *    the reason why the response was generated.
+ *
  *    Revision 1.89  2007/01/27 13:09:16  fabiankeil
  *    Add new config option "templdir" to
  *    change the templates directory.
@@ -1157,6 +1161,30 @@ struct url_actions
  * Flag for csp->flags: Set if we are toggled on (FEATURE_TOGGLE).
  */
 #define CSP_FLAG_TOGGLED_ON 0x20
+
+/**
+ * Flag for csp->flags: Set if adding the 'Connection: close' header
+ * for the client isn't necessary.
+ */
+#define CSP_FLAG_CLIENT_CONNECTION_CLOSE_SET   0x00000040UL
+
+/**
+ * Flag for csp->flags: Set if adding the 'Connection: close' header
+ * for the server isn't necessary.
+ */
+#define CSP_FLAG_SERVER_CONNECTION_CLOSE_SET   0x00000080UL
+
+/**
+ * Flag for csp->flags: Signals header parsers whether they
+ * are parsing server or client headers.
+ */
+#define CSP_FLAG_CLIENT_HEADER_PARSING_DONE    0x00000100UL
+
+/**
+ * Flag for csp->flags: Set if adding the Host: header
+ * isn't necessary.
+ */
+#define CSP_FLAG_HOST_HEADER_IS_SET            0x00000200UL
 
 
 /*
