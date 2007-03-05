@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.79 2007/01/31 16:21:38 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.80 2007/02/07 10:55:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.79 2007/01/31 16:21:38 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.80  2007/02/07 10:55:20  fabiankeil
+ *    - Save the reason for generating http_responses.
+ *    - Block (+block) with status code 403 instead of 404.
+ *    - Use a different kludge to remember a failed decompression.
+ *
  *    Revision 1.79  2007/01/31 16:21:38  fabiankeil
  *    Search for Max-Forwards headers case-insensitive,
  *    don't generate the "501 unsupported" message for invalid
@@ -1001,7 +1006,7 @@ struct http_response *block_url(struct client_state *csp)
 
 #ifdef FEATURE_FORCE_LOAD
       err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
-      if (csp->http->ssl != 0)
+      if (csp->http->ssl != 0 || 0 == strcmpic(csp->http->gpc, "connect"))
 #endif /* ndef FEATURE_FORCE_LOAD */
       {
          err = map_block_killer(exports, "force-support");
@@ -1153,7 +1158,14 @@ struct http_response *trust_url(struct client_state *csp)
     * Export the force prefix or the force conditional block killer
     */
 #ifdef FEATURE_FORCE_LOAD
-   err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
+   if (0 == strcmpic(csp->http->gpc, "connect"))
+   {
+       err = map_block_killer(exports, "force-support");
+   }
+   else
+   {
+      err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
+   }
 #else /* ifndef FEATURE_FORCE_LOAD */
    err = map_block_killer(exports, "force-support");
 #endif /* ndef FEATURE_FORCE_LOAD */
@@ -1783,7 +1795,7 @@ char *pcrs_filter_response(struct client_state *csp)
           csp->content_type &= ~CT_DEFLATE;
           return(NULL);
       }
-      log_error(LOG_LEVEL_RE_FILTER, "Decompressing successful");
+      log_error(LOG_LEVEL_RE_FILTER, "Decompression successful");
 
       /*
        * Decompression gives us a completely new iob,
@@ -1881,7 +1893,7 @@ char *pcrs_filter_response(struct client_state *csp)
             }
 
             log_error(LOG_LEVEL_RE_FILTER,
-               "re_filtering %s%s (size %d) with filter %s produced %d hits (new size %d).",
+               "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
                csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
 
             hits += current_hits;
