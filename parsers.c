@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.90 2007/02/08 19:12:35 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.91 2007/02/24 12:27:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -45,6 +45,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.90 2007/02/08 19:12:35 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.91  2007/02/24 12:27:32  fabiankeil
+ *    Improve cookie expiration date detection.
+ *
  *    Revision 1.90  2007/02/08 19:12:35  fabiankeil
  *    Don't run server_content_length() the first time
  *    sed() parses server headers; only adjust the
@@ -681,7 +684,7 @@ const struct parsers client_patterns[] = {
    { "Host:",                     5,   client_host },
    { "if-modified-since:",       18,   client_if_modified_since },
    { "Keep-Alive:",              11,   crumble },
-   { "connection:",              11,   crumble },
+   { "connection:",              11,   connection },
    { "proxy-connection:",        17,   crumble },
    { "max-forwards:",            13,   client_max_forwards },
    { "Accept-Language:",         16,   client_accept_language },
@@ -695,7 +698,7 @@ const struct parsers client_patterns[] = {
 const struct parsers server_patterns[] = {
    { "HTTP",                      4, server_http },
    { "set-cookie:",              11, server_set_cookie },
-   { "connection:",              11, crumble },
+   { "connection:",              11, connection },
    { "Content-Type:",            13, server_content_type },
    { "Content-MD5:",             12, server_content_md5 },
    { "Content-Encoding:",        17, server_content_encoding },
@@ -1545,7 +1548,7 @@ jb_err filter_header(struct client_state *csp, char **header)
                   continue;
                }
 
-               log_error(LOG_LEVEL_RE_FILTER, "re_filtering %s (size %d) with filter %s...",
+               log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %d) with \'%s\' ...",
                          *header, size, b->name);
 
                /* Apply all jobs from the joblist */
@@ -1576,7 +1579,7 @@ jb_err filter_header(struct client_state *csp, char **header)
                      }
                   }
                }
-               log_error(LOG_LEVEL_RE_FILTER, " ...produced %d hits (new size %d).", current_hits, size);
+               log_error(LOG_LEVEL_RE_FILTER, "... produced %d hits (new size %d).", current_hits, size);
                hits += current_hits;
             }
          }
@@ -1595,6 +1598,56 @@ jb_err filter_header(struct client_state *csp, char **header)
    }
 
    return(JB_ERR_OK);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  connection
+ *
+ * Description :  Makes sure that the value of the Connection: header
+ *                is "close" and signals connection_close_adder 
+ *                to do nothing.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err connection(struct client_state *csp, char **header)
+{
+   char *old_header = *header;
+
+   /* Do we have a 'Connection: close' header? */
+   if (strcmpic(*header, "Connection: close"))
+   {
+      /* No, create one */
+      *header = strdup("Connection: close");
+      if (header == NULL)
+      { 
+         return JB_ERR_MEMORY;
+      }
+      log_error(LOG_LEVEL_HEADER, "Replaced: \'%s\' with \'%s\'", old_header, *header);
+      freez(old_header);
+   }
+
+   /* Signal connection_close_adder() to return early. */
+   if (csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
+   {
+      csp->flags |= CSP_FLAG_SERVER_CONNECTION_CLOSE_SET;
+   }
+   else
+   {
+      csp->flags |= CSP_FLAG_CLIENT_CONNECTION_CLOSE_SET;
+   }
+
+   return JB_ERR_OK;
 }
 
 
@@ -1642,13 +1695,13 @@ jb_err crumble(struct client_state *csp, char **header)
 jb_err crunch_server_header(struct client_state *csp, char **header)
 {
    const char *crunch_pattern;
-   /*Is there a header to crunch*/
 
+   /* Do we feel like crunching? */
    if ((csp->action->flags & ACTION_CRUNCH_SERVER_HEADER))
    {
       crunch_pattern = csp->action->string[ACTION_STRING_SERVER_HEADER];
 
-      /*Is the current header the lucky one?*/
+      /* Is the current header the lucky one? */
       if (strstr(*header, crunch_pattern))
       {
          log_error(LOG_LEVEL_HEADER, "Crunching server header: %s (contains: %s)", *header, crunch_pattern);  
@@ -2183,6 +2236,7 @@ jb_err server_last_modified(struct client_state *csp, char **header)
    return JB_ERR_OK;
 }
 
+
 /*********************************************************************
  *
  * Function    :  client_accept_encoding
@@ -2470,13 +2524,13 @@ jb_err client_accept_language(struct client_state *csp, char **header)
 jb_err crunch_client_header(struct client_state *csp, char **header)
 {
    const char *crunch_pattern;
-   /*Is there a header to crunch*/
-   
+
+   /* Do we feel like crunching? */
    if ((csp->action->flags & ACTION_CRUNCH_CLIENT_HEADER))
    {
       crunch_pattern = csp->action->string[ACTION_STRING_CLIENT_HEADER];
 
-      /*Is the current header the lucky one?*/
+      /* Is the current header the lucky one? */
       if (strstr(*header, crunch_pattern))
       {
          log_error(LOG_LEVEL_HEADER, "Crunching client header: %s (contains: %s)", *header, crunch_pattern);  
@@ -2612,9 +2666,10 @@ jb_err client_from(struct client_state *csp, char **header)
  *
  * Function    :  client_send_cookie
  *
- * Description :  Handle the "cookie" header properly.  Called from `sed'.
- *                If cookie is accepted, add it to the cookie_list,
- *                else we crunch it.  Mmmmmmmmmmm ... cookie ......
+ * Description :  Crunches the "cookie" header if necessary.
+ *                Called from `sed'.
+ *
+ *                XXX: Stupid name, doesn't send squat.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2629,25 +2684,13 @@ jb_err client_from(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_send_cookie(struct client_state *csp, char **header)
 {
-   jb_err result = JB_ERR_OK;
-
-   if ((csp->action->flags & ACTION_NO_COOKIE_READ) == 0)
+   if (csp->action->flags & ACTION_NO_COOKIE_READ)
    {
-      /* strlen("cookie: ") == 8 */
-      result = enlist(csp->cookie_list, *header + 8);
-   }
-   else
-   {
-      log_error(LOG_LEVEL_HEADER, "Crunched outgoing cookie -- yum!");
+      log_error(LOG_LEVEL_HEADER, "Crunched outgoing cookie: %s", *header);
+      freez(*header);
    }
 
-   /*
-    * Always remove the cookie here.  The cookie header
-    * will be sent at the end of the header.
-    */
-   freez(*header);
-
-   return result;
+   return JB_ERR_OK;
 }
 
 
@@ -2827,6 +2870,9 @@ jb_err client_host(struct client_state *csp, char **header)
       log_error(LOG_LEVEL_HEADER, "New host and port from Host field: %s = %s:%d",
                 csp->http->hostport, csp->http->host, csp->http->port);
    }
+
+   /* Signal client_host_adder() to return right away */
+   csp->flags |= CSP_FLAG_HOST_HEADER_IS_SET;
 
    return JB_ERR_OK;
 }
@@ -3044,8 +3090,16 @@ jb_err client_host_adder(struct client_state *csp)
    char *p;
    jb_err err;
 
+   if (csp->flags & CSP_FLAG_HOST_HEADER_IS_SET)
+   {
+      /* Header already set by the client, nothing to do. */
+      return JB_ERR_OK;
+   }
+
    if ( !csp->http->hostport || !*(csp->http->hostport))
    {
+      /* XXX: When does this happen and why is it OK? */
+      log_error(LOG_LEVEL_INFO, "Weirdness in client_host_adder detected and ignored.");
       return JB_ERR_OK;
    }
 
@@ -3061,6 +3115,7 @@ jb_err client_host_adder(struct client_state *csp)
       p = csp->http->hostport;
    }
 
+   /* XXX: Just add it, we already made sure that it will be unique */
    log_error(LOG_LEVEL_HEADER, "addh-unique: Host: %s", p);
    err = enlist_unique_header(csp->headers, "Host", p);
    return err;
@@ -3073,6 +3128,8 @@ jb_err client_host_adder(struct client_state *csp)
  * Function    :  client_cookie_adder
  *
  * Description :  Used in the add_client_headers list.  Called from `sed'.
+ *
+ *                XXX: Remove csp->cookie_list which is no longer used.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3154,6 +3211,8 @@ jb_err client_cookie_adder(struct client_state *csp)
  *********************************************************************/
 jb_err client_accept_encoding_adder(struct client_state *csp)
 {
+   assert(0); /* Not in use */
+
    if (   ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
        && (!strcmpic(csp->http->ver, "HTTP/1.1")) )
    {
@@ -3249,9 +3308,10 @@ jb_err client_x_forwarded_adder(struct client_state *csp)
  *
  * Function    :  connection_close_adder
  *
- * Description :  Adds a "Connection: close" header to csp->headers
- *                as a temporary fix for the needed but missing HTTP/1.1
- *                support. Called from `sed'.
+ * Description :  "Temporary" fix for the needed but missing HTTP/1.1
+ *                support. Adds a "Connection: close" header to csp->headers
+ *                unless the header was already present. Called from `sed'.
+ *
  *                FIXME: This whole function shouldn't be neccessary!
  *
  * Parameters  :
@@ -3263,7 +3323,27 @@ jb_err client_x_forwarded_adder(struct client_state *csp)
  *********************************************************************/
 jb_err connection_close_adder(struct client_state *csp)
 {
+   const unsigned int flags = csp->flags;
+
+   /*
+    * Return right away if
+    *
+    * - we're parsing server headers and the server header
+    *   "Connection: close" is already set, or if
+    *
+    * - we're parsing client headers and the client header 
+    *   "Connection: close" is already set.
+    */
+   if ((flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE
+     && flags & CSP_FLAG_SERVER_CONNECTION_CLOSE_SET)
+   ||(!(flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
+     && flags & CSP_FLAG_CLIENT_CONNECTION_CLOSE_SET))
+   {
+      return JB_ERR_OK;
+   }
+
    log_error(LOG_LEVEL_HEADER, "Adding: Connection: close");
+
    return enlist(csp->headers, "Connection: close");
 }
 
@@ -3291,6 +3371,9 @@ jb_err connection_close_adder(struct client_state *csp)
  *********************************************************************/
 jb_err server_http(struct client_state *csp, char **header)
 {
+   /* Signal that were now parsing server headers. */
+   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
+
    sscanf(*header, "HTTP/%*d.%*d %d", &(csp->http->status));
    if (csp->http->status == 206)
    {
@@ -3354,10 +3437,10 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
       tm_now = *localtime_r(&now, &tm_now);
 #elif FEATURE_PTHREAD
       pthread_mutex_lock(&localtime_mutex);
-      tm_now = *localtime (&now); 
+      tm_now = *localtime (&now);
       pthread_mutex_unlock(&localtime_mutex);
 #else
-      tm_now = *localtime (&now); 
+      tm_now = *localtime (&now);
 #endif
       strftime(tempbuf, BUFFER_SIZE-6, "%b %d %H:%M:%S ", &tm_now); 
 
@@ -3419,11 +3502,11 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
          {
             char *match;
             const char *expiration_date = cur_tag + 8; /* Skip "[Ee]xpires=" */
-
+            memset(&tm_cookie, 0, sizeof(tm_cookie));
             /*
              * Try the valid time formats we know about.
              *
-             * XXX: This should be factored out into a separate function.
+             * XXX: This should be moved to parse_header_time().
              *
              * XXX: Maybe the log messages should be removed
              * for the next stable release. They just exist to
@@ -3461,6 +3544,13 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
                /* Fri, 22 Feb 2008 19:20:05 GMT */
                log_error(LOG_LEVEL_HEADER,
                   "cookie \'%s\' send by %s appears to be using time format 4.",
+                   *header, csp->http->url);
+            }
+            else if (NULL != (match = strptime(expiration_date, "%A %b %e %H:%M:%S %Y", &tm_cookie)))
+            {
+               /* Thu Mar 08 23:00:00 2007 GMT */
+               log_error(LOG_LEVEL_HEADER,
+                  "cookie \'%s\' send by %s appears to be using time format 5.",
                    *header, csp->http->url);
             }
 
@@ -3523,11 +3613,10 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
                }
                else
                {
-                  log_error(LOG_LEVEL_HEADER,
-                     "Cookie \'%s\' is still valid and has to be rewritten.", *header);
-
                   /*
-                   * Delete the tag by copying the rest of the string over it.
+                   * Still valid, delete expiration date by copying
+                   * the rest of the string over it.
+                   *
                    * (Note that we cannot just use "strcpy(cur_tag, next_tag)",
                    * since the behaviour of strcpy is undefined for overlapping
                    * strings.)
