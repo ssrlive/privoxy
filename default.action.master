@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.62 2007/03/03 19:42:02 hal9 Exp $
+#  $Id: default.action.master,v 1.63 2007/03/06 00:25:01 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1059,8 +1059,9 @@ statse.webtrendslive.com
 spinbox.versiontracker.com/.*\.(gif|jpg)
 #MASTER# BLOCK-REFERRER: http://mycroft.mozdev.org/ 10/07/06
 stat.onestat.com
-#MASTER# BLOCK-REFERRER: http://www.global.net.uk/ 10/07/06
-.[a-vx-z]*.tradedoubler.com
+#MASTER# BLOCK-REFERRER: http://www.meparecebien.com/noticias/discograficas/sinnamon-records/sinnamon-records-libera-a-sus-artistas-nacionales-para-el-mercado-digital-401/
+#MASTER# REMARKS: Actionsfile feedback item #1644583 2007-03-05
+imp*.tradedoubler.com
 #MASTER# BLOCK-REFERRER: http://www.sharepoint.boo.pl/
 #MASTER# REMARKS: Not found, but left 10/07/06
 stat.webmedia.
