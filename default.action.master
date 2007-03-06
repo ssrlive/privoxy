@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.61 2007/02/23 12:17:19 hal9 Exp $
+#  $Id: default.action.master,v 1.62 2007/03/03 19:42:02 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -896,6 +896,9 @@ pagead*.googlesyndication./.*\.js
 /t\.php\?cat=.*&kw=.*&sc=
 #MASTER# BLOCK-REFERRER: http://floodle.net 2007-01-21 SF tracker
 scripts.chitika.net/.*\.js
+#MASTER# REMARKS: Actionsfile tracker #1674363 2007-03-05, text ads
+#MASTER# BLOCK-REFERRER: http://www.securityfocus.com/archive/1/461489/30/0/threaded
+jlinks.industrybrains.com/
 
 #############################################################################
 # Generic block-as-image patterns:
