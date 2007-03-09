@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.123 2007/02/21 18:42:10 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.124 2007/02/23 14:59:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.123 2007/02/21 18:42:10 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.124  2007/02/23 14:59:54  fabiankeil
+ *    Speed up NULL byte escaping and only log the complete
+ *    NULL byte requests with header debugging enabled.
+ *
  *    Revision 1.123  2007/02/21 18:42:10  fabiankeil
  *    Answer requests that contain NULL bytes with
  *    a custom response instead of waiting for more
@@ -1398,6 +1402,65 @@ void send_crunch_response(struct client_state *csp, struct http_response *rsp)
 
 /*********************************************************************
  *
+ * Function    :  request_contains_null_bytes
+ *
+ * Description :  Checks for NULL bytes in the request and sends
+ *                an error message to the client if any were found.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  buf = Data from the client's request to check.
+ *          3  :  len = The data length.
+ *
+ * Returns     :  TRUE if the request contained one or more NULL bytes, or
+ *                FALSE otherwise.
+ *
+ *********************************************************************/
+int request_contains_null_bytes(const struct client_state *csp, char *buf, int len)
+{
+   size_t c_len; /* Request lenght when treated as C string */
+
+   c_len = strlen(buf);
+
+   if (c_len < len)
+   {
+      /*
+       * Null byte(s) found. Log the request,
+       * return an error response and hang up.
+       */
+      size_t tmp_len = c_len;
+
+      do
+      {
+        /*
+         * Replace NULL byte(s) with '°' characters
+         * so the request can be logged as string.
+         * XXX: Is there a better replacement character?
+         */
+         buf[tmp_len]='°';
+         tmp_len += strlen(buf+tmp_len);
+      } while (tmp_len < len);
+
+      log_error(LOG_LEVEL_ERROR, "%s\'s request contains at least one NULL byte "
+         "(length=%d, strlen=%d).", csp->ip_addr_str, len, c_len);
+      log_error(LOG_LEVEL_HEADER, 
+         "Offending request data with NULL bytes turned into \'°\' characters: %s", buf);
+
+      strcpy(buf, NULL_BYTE_RESPONSE);
+      write_socket(csp->cfd, buf, strlen(buf));
+
+      /* XXX: Log correct size */
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
+
+      return TRUE;
+   }
+
+   return FALSE;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  chat
  *
  * Description :  Once a connection to the client has been accepted,
@@ -1486,43 +1549,13 @@ static void chat(struct client_state *csp)
 
    for (;;)
    {
-      size_t c_len; /* Request lenght when treated as C string */
-
       len = read_socket(csp->cfd, buf, sizeof(buf)-1);
 
       if (len <= 0) break;      /* error! */
 
-      /* Naughty NULL bytes inside the request? */
-      c_len = strlen(buf);
-      if (c_len < len)
+      if (request_contains_null_bytes(csp, buf, len))
       {
-         /*
-          * Yes. Log the request, return an
-          * error response and hang up.
-          */
-         size_t tmp_len = c_len;
-
-         do
-         {
-           /*
-            * Replace NULL byte(s) with line break(s)
-            * so the request can be logged as string.
-            */
-            buf[tmp_len]='\n';
-            tmp_len += strlen(buf+tmp_len);
-         } while (tmp_len < len);
-
-         log_error(LOG_LEVEL_ERROR, "%s\'s request contains NULL byte(s) "
-            "(length=%d, strlen=%d).", csp->ip_addr_str, len, c_len);
-         log_error(LOG_LEVEL_HEADER, 
-            "Denied request with NULL byte(s) turned into line break(s):\n%s", buf);
-
-         strcpy(buf, NULL_BYTE_RESPONSE);
-         write_socket(csp->cfd, buf, strlen(buf));
-
-         /* XXX: Log correct size */
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
-
+         /* NULL bytes found and dealt with, just hang up. */
          return;
       }
 
@@ -2045,6 +2078,18 @@ static void chat(struct client_state *csp)
          if (len < 0)
          {
             log_error(LOG_LEVEL_ERROR, "read from: %s failed: %E", http->host);
+
+            if (http->ssl && (fwd->forward_host == NULL))
+            {
+               /*
+                * Just hang up. We already confirmed the client's CONNECT
+                * request with status code 200 and unencrypted content is
+                * no longer welcome.
+                */
+               log_error(LOG_LEVEL_ERROR,
+                  "CONNECT already confirmed. Unable to tell the client about the problem.");
+               return;
+            }
 
             rsp = error_response(csp, "connect-failed", errno);
 
