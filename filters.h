@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.24 2006/12/29 18:30:46 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.25 2007/01/12 15:36:44 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.25  2007/01/12 15:36:44  fabiankeil
+ *    Mark *csp as immutable for is_untrusted_url()
+ *    and is_imageurl(). Closes FR 1237736.
+ *
  *    Revision 1.24  2006/12/29 18:30:46  fabiankeil
  *    Fixed gcc43 conversion warnings,
  *    changed sprintf calls to snprintf.
@@ -243,7 +247,7 @@ struct url_spec;
  */
 #ifdef FEATURE_ACL
 extern int block_acl(struct access_control_addr *dst, struct client_state *csp);
-extern int acl_addr(char *aspec, struct access_control_addr *aca);
+extern int acl_addr(const char *aspec, struct access_control_addr *aca);
 #endif /* def FEATURE_ACL */
 extern int match_portlist(const char *portlist, int port);
 

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.80 2007/02/07 10:55:20 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.81 2007/03/05 14:40:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.80 2007/02/07 10:55:20 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.81  2007/03/05 14:40:53  fabiankeil
+ *    - Cosmetical changes for LOG_LEVEL_RE_FILTER messages.
+ *    - Hide the "Go there anyway" link for blocked CONNECT
+ *      requests where going there anyway doesn't work anyway.
+ *
  *    Revision 1.80  2007/02/07 10:55:20  fabiankeil
  *    - Save the reason for generating http_responses.
  *    - Block (+block) with status code 403 instead of 404.
@@ -650,20 +655,33 @@ int block_acl(struct access_control_addr *dst, struct client_state *csp)
  * Returns     :  0 => Ok, everything else is an error.
  *
  *********************************************************************/
-int acl_addr(char *aspec, struct access_control_addr *aca)
+int acl_addr(const char *aspec, struct access_control_addr *aca)
 {
-   int i, masklength, port;
+   int i, masklength;
+   long port;
    char *p;
+   char *acl_spec = NULL;
 
    masklength = 32;
    port       =  0;
 
-   if ((p = strchr(aspec, '/')) != NULL)
+   /*
+    * Use a temporary acl spec copy so we can log
+    * the unmodified original in case of parse errors.
+    */
+   acl_spec = strdup(aspec);
+   if (acl_spec == NULL)
+   {
+      /* XXX: This will be logged as parse error. */
+      return(-1);
+   }
+
+   if ((p = strchr(acl_spec, '/')) != NULL)
    {
       *p++ = '\0';
-
       if (ijb_isdigit(*p) == 0)
       {
+         free(acl_spec);
          return(-1);
       }
       masklength = atoi(p);
@@ -671,26 +689,32 @@ int acl_addr(char *aspec, struct access_control_addr *aca)
 
    if ((masklength < 0) || (masklength > 32))
    {
+      free(acl_spec);
       return(-1);
    }
 
-   if ((p = strchr(aspec, ':')) != NULL)
+   if ((p = strchr(acl_spec, ':')) != NULL)
    {
-      *p++ = '\0';
+      char *endptr;
 
-      if (ijb_isdigit(*p) == 0)
+      *p++ = '\0';
+      port = strtol(p, &endptr, 10);
+
+      if (port <= 0 || port > 65535 || *endptr != '\0')
       {
+         free(acl_spec);
          return(-1);
       }
-      port = atoi(p);
    }
 
-   aca->port = port;
+   aca->port = (unsigned long)port;
 
-   aca->addr = ntohl(resolve_hostname_to_ip(aspec));
+   aca->addr = ntohl(resolve_hostname_to_ip(acl_spec));
+   free(acl_spec);
 
    if (aca->addr == INADDR_NONE)
    {
+      /* XXX: This will be logged as parse error. */
       return(-1);
    }
 
@@ -1795,7 +1819,9 @@ char *pcrs_filter_response(struct client_state *csp)
           csp->content_type &= ~CT_DEFLATE;
           return(NULL);
       }
-      log_error(LOG_LEVEL_RE_FILTER, "Decompression successful");
+      log_error(LOG_LEVEL_RE_FILTER,
+         "Decompression successful. Old size: %d, new size: %d.",
+         size, csp->iob->eod - csp->iob->cur);
 
       /*
        * Decompression gives us a completely new iob,
