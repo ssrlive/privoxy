@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.63 2007/03/06 00:25:01 hal9 Exp $
+#  $Id: default.action.master,v 1.64 2007/03/06 19:04:40 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -390,7 +390,7 @@
 #   The CONNECT methods exists in HTTP to allow access to secure websites
 #   (https:// URLs) through proxies. It works very simply: The proxy
 #   connects to the server on the specified port, and then short-circuits
-#   its connections to the cliant and to the remote proxy.
+#   its connections to the client and to the remote proxy.
 #   This can be a big security hole, since CONNECT-enabled proxies can
 #   be abused as TCP relays very easily.
 #   By default, i.e. in the absence of a +limit-connect action, Privoxy
@@ -808,6 +808,9 @@ ad.theadhost.com
 #MASTER# REMARKS: Domain squatting onload pop-ups
 #MASTER# BLOCK-REFERRER: http://www.memtest.com/
 /(t|search)\.php\?uid=ws[a-z0-9]+\.[a-z0-9]+
+MASTER# BLOCK-REFERRER: via Yahoo groups
+MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
+.adinterax.com/(?!(.*)\.(js|gif|jpg))
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -899,6 +902,12 @@ scripts.chitika.net/.*\.js
 #MASTER# REMARKS: Actionsfile tracker #1674363 2007-03-05, text ads
 #MASTER# BLOCK-REFERRER: http://www.securityfocus.com/archive/1/461489/30/0/threaded
 jlinks.industrybrains.com/
+MASTER# BLOCK-REFERRER: via Yahoo groups
+MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
+.adinterax.com/.*\.js
+#MASTER# BLOCK-REFERRER: http://dictionary.reference.com/search?q=privacy&db=*
+MASTER# REMARKS: Actionsfile tracker 1650798 2007-02-02
+.googleadservices.com/gampad/.*\.js
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1045,6 +1054,9 @@ scripts.chitika.net/.*\.(gif|png|jpg)
 #MASTER# BLOCK-REFERRER: http://www.multimap.com/ (sporadic)
 #MASTER# REMARKS: Actionsfile feedback item #1665682 2007-02-21
 .akamai.net/.*\.adtech\.de/.*\.(gif|png)
+MASTER# BLOCK-REFERRER: via Yahoo groups
+MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
+.adinterax.com/.*\.(gif|jpg)
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
