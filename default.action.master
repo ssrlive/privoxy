@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.64 2007/03/06 19:04:40 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.65 2007/03/14 11:02:33 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -968,6 +968,7 @@ bs*.einets.com
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
 #MASTER# REMARKS: Banner farms; just exclude their corp. info
 [a-vx-z]*.atdmt.com/
+view.atdmt.com/
 #MASTER# BLOCK-REFERRER: http://www.exactaudiocopy.de/ 09/11/06
 #MASTER# BLOCK-REFERRER: http://stanford.facebook.com/home.php 
 .fastclick.net
@@ -1124,6 +1125,11 @@ insightxe./data/
 #MASTER# BLOCK-REFERRER:  http://www.unitedairlines.com
 #MASTER# REMARKS: Actionsfile feedback item #1650797 2007-02-05
 .insightfirst.com
+#MASTER# BLOCK-REFERRER: http://rss.slashdot.org/Slashdot/slashdot
+#MASTER# PROBLEM URL: rss.slashdot.org/~a/Slashdot/slashdot?i=ofbWqX
+rss.slashdot.org/~a/Slashdot/slashdot\?
+#MASTER# PROBLEM URL: rss.slashdot.org/~r/Slashdot/slashdot/~4/102113044
+rss.slashdot.org/~r/Slashdot/slashdot/~4/
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1176,6 +1182,15 @@ smartad.*.*.*
 /RealMedia/ads/
 #MASTER# BLOCK-REFERRER: http://www.powerdvd.com 12/28/06 per SF tracker
 /top\.php\?d=.*\.[a-z]{2,5}
+
+#############################################################################
+# Generic -overwrite-last-modified patterns for URLs that look
+# as if they belong to files that are often fetched through download
+# managers. Randomizing the Last-Modfied date causes problems with
+# interrupted downloads.
+#############################################################################
+{-overwrite-last-modified}
+/.*\.(tar|gz|b?zip2?|t[gb]z|iso|dmg|avi|m(p4|4v)|mpe?g)$
 
 #############################################################################
 # Site-specific unblockers:
@@ -1472,6 +1487,8 @@ www.translate.ru/url/
 schneegans.de/
 #MASTER# PROBLEM-URL: http://config.privoxy.org/edit-actions-submit?f=user ... &redirect_mode=http%3A%2F%2Fwww.privoxy.org%2F
 config.privoxy.org/
+#MASTER# PROBLEM-URL: http://users.wsj.com/lmda/do/checkLogin?mg=evo-wsj&url=http%3A%2F%2Fonline.wsj.com%2Farticle%2FSB117313867582027623.html
+.wsj.com/lmda/do/checkLogin
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
