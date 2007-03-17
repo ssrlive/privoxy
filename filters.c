@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.81 2007/03/05 14:40:53 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.82 2007/03/13 11:28:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.81 2007/03/05 14:40:53 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.82  2007/03/13 11:28:43  fabiankeil
+ *    - Fix port handling in acl_addr() and use a temporary acl spec
+ *      copy so error messages don't contain a truncated version.
+ *    - Log size of iob before and after decompression.
+ *
  *    Revision 1.81  2007/03/05 14:40:53  fabiankeil
  *    - Cosmetical changes for LOG_LEVEL_RE_FILTER messages.
  *    - Hide the "Go there anyway" link for blocked CONNECT
@@ -1030,7 +1035,15 @@ struct http_response *block_url(struct client_state *csp)
 
 #ifdef FEATURE_FORCE_LOAD
       err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
-      if (csp->http->ssl != 0 || 0 == strcmpic(csp->http->gpc, "connect"))
+      /*
+       * Export the force conditional block killer if
+       *
+       * - Privoxy was compiled without FEATURE_FORCE_LOAD, or
+       * - Privoxy is configured to enforce blocks, or
+       * - it's a CONNECT request and enforcing wouldn't work anyway.
+       */
+      if ((csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS)
+       || (0 == strcmpic(csp->http->gpc, "connect")))
 #endif /* ndef FEATURE_FORCE_LOAD */
       {
          err = map_block_killer(exports, "force-support");
@@ -1179,12 +1192,17 @@ struct http_response *trust_url(struct client_state *csp)
    }
 
    /*
-    * Export the force prefix or the force conditional block killer
+    * Export the force conditional block killer if
+    *
+    * - Privoxy was compiled without FEATURE_FORCE_LOAD, or
+    * - Privoxy is configured to enforce blocks, or
+    * - it's a CONNECT request and enforcing wouldn't work anyway.
     */
 #ifdef FEATURE_FORCE_LOAD
-   if (0 == strcmpic(csp->http->gpc, "connect"))
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS)
+    || (0 == strcmpic(csp->http->gpc, "connect")))
    {
-       err = map_block_killer(exports, "force-support");
+      err = map_block_killer(exports, "force-support");
    }
    else
    {

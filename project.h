@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.90 2007/02/07 10:36:16 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.91 2007/03/05 13:28:03 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.91  2007/03/05 13:28:03  fabiankeil
+ *    Add some CSP_FLAGs for the header parsers.
+ *
  *    Revision 1.90  2007/02/07 10:36:16  fabiankeil
  *    Add new http_response member to save
  *    the reason why the response was generated.
@@ -1508,6 +1511,9 @@ struct access_control_list
 
 /** configuration_spec::feature_flags: Check the host header for requests with host-less request lines. */
 #define RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS 16
+
+/** configuration_spec::feature_flags: Don't allow to circumvent blocks with the force prefix. */
+#define RUNTIME_FEATURE_ENFORCE_BLOCKS              32
 
 
 /**

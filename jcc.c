@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.124 2007/02/23 14:59:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.125 2007/03/09 14:12:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.124 2007/02/23 14:59:54 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.125  2007/03/09 14:12:00  fabiankeil
+ *    - Move null byte check into separate function.
+ *    - Don't confuse the client with error pages
+ *      if a CONNECT request was already confirmed.
+ *
  *    Revision 1.124  2007/02/23 14:59:54  fabiankeil
  *    Speed up NULL byte escaping and only log the complete
  *    NULL byte requests with header debugging enabled.
@@ -1592,15 +1597,23 @@ static void chat(struct client_state *csp)
       }
 
 #ifdef FEATURE_FORCE_LOAD
-      /* If this request contains the FORCE_PREFIX,
-       * better get rid of it now and set the force flag --oes
+      /*
+       * If this request contains the FORCE_PREFIX and blocks
+       * aren't enforced, get rid of it and set the force flag.
        */
-
       if (strstr(req, FORCE_PREFIX))
       {
-         strclean(req, FORCE_PREFIX);
-         log_error(LOG_LEVEL_FORCE, "Enforcing request \"%s\".\n", req);
-         csp->flags |= CSP_FLAG_FORCED;
+         if (csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS)
+         {
+            log_error(LOG_LEVEL_FORCE,
+               "Ignored force prefix in request: \"%s\".", req);
+         }
+         else
+         {
+            strclean(req, FORCE_PREFIX);
+            log_error(LOG_LEVEL_FORCE, "Enforcing request: \"%s\".", req);
+            csp->flags |= CSP_FLAG_FORCED;
+         }
       }
 
 #endif /* def FEATURE_FORCE_LOAD */
