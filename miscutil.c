@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.45 2006/12/26 17:31:41 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.46 2007/01/18 15:03:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -9,12 +9,20 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.45 2006/12/26 17:31:41 fabianke
  *                These are each too small to deserve their own file
  *                but don't really fit in any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2003, 2006
+ * Copyright   :  Written by and Copyright (C) 2001-2007
  *                the SourceForge Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
  *                Junkbusters Corporation.  http://www.junkbusters.com
+ *
+ *                The timegm replacement function was taken from GnuPG,
+ *                Copyright (C) 2004 Free Software Foundation, Inc.
+ *
+ *                The snprintf replacement function is written by
+ *                Mark Martinec who also holds the copyright. It can be
+ *                used under the terms of the GPL or the terms of the
+ *                "Frontier Artistic License".
  *
  *                This program is free software; you can redistribute it 
  *                and/or modify it under the terms of the GNU General
@@ -36,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.45 2006/12/26 17:31:41 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.46  2007/01/18 15:03:20  fabiankeil
+ *    Don't include replacement timegm() if
+ *    putenv() or tzset() isn't available.
+ *
  *    Revision 1.45  2006/12/26 17:31:41  fabiankeil
  *    Mutex protect rand() if POSIX threading
  *    is used, warn the user if that's not possible
@@ -432,7 +444,7 @@ char *safe_strerror(int err)
 
    if (s == NULL)
    {
-      sprintf(buf, "(errno = %d)", err);
+      snprintf(buf, sizeof(buf), "(errno = %d)", err);
       s = buf;
    }
 
