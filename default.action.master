@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.65 2007/03/14 11:02:33 hal9 Exp $
+#  $Id: default.action.master,v 1.66 2007/03/16 16:04:18 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1348,6 +1348,11 @@ edge.macworld.com
 #MASTER# UNBLOCK-REFERRER: http://mozilla.hongo.wide.ad.jp/pub/mozilla.org//thunderbird/releases/
 #MASTER# REMARKS: Actionsfile feedback item #1672918 2007-03-03
 .ad.*/pub/mozilla.org/
+#MASTER# UNBLOCK-REFERRER: http://lads.myspace.com/mini/mini.swf?b=NDgwNzU1ODE=&o=NjQwNzIzMA==&d=MTE3NDI4ODcwNg==&i=MA==&a=VHJ1ZQ==
+#MASTER# UNBLOCK-REFERRER: http://profile.myspace.com/index.cfm?fuseaction=user.viewprofile&friendid=5282733
+#MASTER# UNBLOCK-REFERRER: http://lads.myspace.com/videos/vplayer.swf
+#MASTER# REMARKS: MySpace videos caught by .*ads. The above profile.myspace.com link grabs the vplayer.swf file (which does not work when directly fetched)
+lads.myspace.com
 
 #############################################################################
 # Site-specific special rules:
