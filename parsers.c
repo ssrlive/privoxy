@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.91 2007/02/24 12:27:32 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.92 2007/03/05 13:25:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -10,13 +10,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.91 2007/02/24 12:27:32 fabiankeil
  *                   `client_uagent', `client_x_forwarded',
  *                   `client_x_forwarded_adder', `client_xtra_adder',
  *                   `content_type', `crumble', `destroy_list', `enlist',
- *                   `flush_socket', ``get_header', `sed', `filter_server_header'
- *                   `filter_client_header', `filter_header', `crunch_server_header',
+ *                   `flush_socket', ``get_header', `sed', `filter_header'
  *                   `server_content_encoding', `server_content_disposition',
  *                   `server_last_modified', `client_accept_language',
  *                   `crunch_client_header', `client_if_modified_since',
  *                   `client_if_none_match', `get_destination_from_headers',
- *                   `parse_header_time' and `server_set_cookie'.
+ *                   `parse_header_time', `decompress_iob' and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
@@ -45,6 +44,14 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.91 2007/02/24 12:27:32 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.92  2007/03/05 13:25:32  fabiankeil
+ *    - Cosmetical changes for LOG_LEVEL_RE_FILTER messages.
+ *    - Handle "Cookie:" and "Connection:" headers a bit smarter
+ *      (don't crunch them just to recreate them later on).
+ *    - Add another non-standard time format for the cookie
+ *      expiration date detection.
+ *    - Fix a valgrind warning.
+ *
  *    Revision 1.91  2007/02/24 12:27:32  fabiankeil
  *    Improve cookie expiration date detection.
  *
@@ -691,7 +698,7 @@ const struct parsers client_patterns[] = {
    { "if-none-match:",           14,   client_if_none_match },
    { "X-Filter:",                 9,   client_x_filter },
    { "*",                         0,   crunch_client_header },
-   { "*",                         0,   filter_client_header },
+   { "*",                         0,   filter_header },
    { NULL,                        0,   NULL }
 };
 
@@ -707,7 +714,7 @@ const struct parsers server_patterns[] = {
    { "content-disposition:",     20, server_content_disposition },
    { "Last-Modified:",           14, server_last_modified },
    { "*",                         0, crunch_server_header },
-   { "*",                         0, filter_server_header },
+   { "*",                         0, filter_header },
    { NULL, 0, NULL }
 };
 
@@ -878,6 +885,9 @@ jb_err decompress_iob(struct client_state *csp)
                         that we should NOT decompress. */
    int status;       /* return status of the inflate() call */
    z_stream zstr;    /* used by calls to zlib */
+
+   assert(csp->iob->cur - csp->iob->buf > 0);
+   assert(csp->iob->eod - csp->iob->cur > 0);
 
    bufsize = csp->iob->size;
    skip_size = (size_t)(csp->iob->cur - csp->iob->buf);
@@ -1406,62 +1416,10 @@ char *sed(const struct parsers pats[],
 
 /*********************************************************************
  *
- * Function    :  filter_server_header
- *
- * Description :  Checks if server header filtering is enabled.
- *                If it is, filter_header is called to do the work. 
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  header = On input, pointer to header to modify.
- *                On output, pointer to the modified header, or NULL
- *                to remove the header.  This function frees the
- *                original string if necessary.
- *
- * Returns     :  JB_ERR_OK on success and always succeeds
- *
- *********************************************************************/
-jb_err filter_server_header(struct client_state *csp, char **header)
-{
-   if (csp->action->flags & ACTION_FILTER_SERVER_HEADERS)
-   {
-      filter_header(csp, header);
-   }
-   return(JB_ERR_OK);
-}
-
-/*********************************************************************
- *
- * Function    :  filter_client_header
- *
- * Description :  Checks if client header filtering is enabled.
- *                If it is, filter_header is called to do the work. 
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  header = On input, pointer to header to modify.
- *                On output, pointer to the modified header, or NULL
- *                to remove the header.  This function frees the
- *                original string if necessary.
- *
- * Returns     :  JB_ERR_OK on success and always succeeds
- *
- *********************************************************************/
-jb_err filter_client_header(struct client_state *csp, char **header)
-{
-   if (csp->action->flags & ACTION_FILTER_CLIENT_HEADERS)
-   {
-      filter_header(csp, header);
-   }
-   return(JB_ERR_OK);
-}
-
-/*********************************************************************
- *
  * Function    :  filter_header
  *
  * Description :  Executes all text substitutions from all applying
- *                +filter actions on the header.
+ *                +(server|client)-header-filter actions on the header.
  *                Most of the code was copied from pcrs_filter_response,
  *                including the rather short variable names
  *
@@ -1489,6 +1447,19 @@ jb_err filter_header(struct client_state *csp, char **header)
    struct list_entry *filtername;
 
    int i, found_filters = 0;
+   int wanted_filter_type;
+   int multi_action_index;
+
+   if (csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
+   {
+      wanted_filter_type = FT_SERVER_HEADER_FILTER;
+      multi_action_index = ACTION_MULTI_SERVER_HEADER_FILTER;
+   }
+   else
+   {
+      wanted_filter_type = FT_CLIENT_HEADER_FILTER;
+      multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
+   }
 
    /*
     * Need to check the set of re_filterfiles...
@@ -1535,7 +1506,13 @@ jb_err filter_header(struct client_state *csp, char **header)
        */
       for (b = fl->f; b; b = b->next)
       {
-         for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
+         if (b->type != wanted_filter_type)
+         {
+            /* Skip other filter types */
+            continue;
+         }
+
+         for (filtername = csp->action->multi[multi_action_index]->first;
               filtername ; filtername = filtername->next)
          {
             if (strcmp(b->name, filtername->str) == 0)
