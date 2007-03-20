@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.58 2006/12/31 14:25:20 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.59 2007/01/25 13:38:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.58 2006/12/31 14:25:20 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.59  2007/01/25 13:38:20  fabiankeil
+ *    Freez csp->error_message in sweep().
+ *
  *    Revision 1.58  2006/12/31 14:25:20  fabiankeil
  *    Fix gcc43 compiler warnings.
  *
@@ -1420,19 +1423,41 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
     */
    while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
    {
+      int new_filter = 0;
+
+      if (strncmp(buf, "FILTER:", 7) == 0)
+      {
+         new_filter = FT_CONTENT_FILTER;
+      }
+      else if (strncmp(buf, "SERVER-HEADER-FILTER:", 21) == 0)
+      {
+         new_filter = FT_SERVER_HEADER_FILTER;
+      }
+      else if (strncmp(buf, "CLIENT-HEADER-FILTER:", 21) == 0)
+      {
+         new_filter = FT_CLIENT_HEADER_FILTER;
+      }
+
       /*
        * If this is the head of a new filter block, make it a
        * re_filterfile spec of its own and chain it to the list:
        */
-      if (strncmp(buf, "FILTER:", 7) == 0)
+      if (new_filter != 0)
       {
          new_bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
          if (new_bl == NULL)
          {
             goto load_re_filterfile_error;
          }
-
-         new_bl->name = chomp(buf + 7);
+         if (new_filter == FT_CONTENT_FILTER)
+         {
+            new_bl->name = chomp(buf + 7);
+         }
+         else
+         {
+            new_bl->name = chomp(buf + 21);
+         }
+         new_bl->type = new_filter;
 
          /*
           * If a filter description is available,

@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.47 2006/12/28 18:04:25 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.48 2007/02/13 14:35:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.47 2006/12/28 18:04:25 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.48  2007/02/13 14:35:25  fabiankeil
+ *    Replace hash escaping code to prevent
+ *    crashes, memory and file corruption.
+ *
  *    Revision 1.47  2006/12/28 18:04:25  fabiankeil
  *    Fixed gcc43 conversion warnings.
  *
@@ -3106,10 +3110,20 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
    }
 
    if (0 == have_filters)
+   {
       err = map(exports, "filter-params", 1, "", 1);
+   }
    else
    {
-      /* We have some entries in the filter list */
+      /*
+       * List available filters and their settings.
+       *
+       * XXX: Different types of filters should use different
+       * @substitution strings@. They are currently listed
+       * in the order they appear in the filter files and
+       * are all inserted as @filter-params@ which can lead
+       * to an "interesting" mix. 
+       */
       char * result;
       int filter_identifier = 0;
       char * filter_template;
@@ -3142,8 +3156,37 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                char * this_line;
                struct map *line_exports;
                char number[20];
+               int multi_action_index = 0;
+               char *filter_type;
+               char *abbr_filter_type;
 
-               filter_name = cur_line->data.action->multi_add[ACTION_MULTI_FILTER]->first;
+               switch (filter_group->type)
+               {
+                  case FT_CONTENT_FILTER:
+                     /* XXX: Should we call it content-filter instead? */
+                     filter_type = "filter"; 
+                     abbr_filter_type = "F";
+                     multi_action_index = ACTION_MULTI_FILTER;
+                     break;
+                  case FT_SERVER_HEADER_FILTER:
+                     filter_type = "server-header-filter"; 
+                     abbr_filter_type = "S"; 
+                     multi_action_index = ACTION_MULTI_SERVER_HEADER_FILTER;
+                     break;
+                  case FT_CLIENT_HEADER_FILTER:
+                     filter_type = "client-header-filter"; 
+                     abbr_filter_type = "C"; 
+                     multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
+                     break;
+                  default:
+                     log_error(LOG_LEVEL_FATAL,
+                        "cgi_edit_actions_for_url: Unknown filter type: %u for filter %s.",
+                        filter_group->type, filter_group->name);
+                     /* Not reached. */
+               }
+               assert(multi_action_index);
+
+               filter_name = cur_line->data.action->multi_add[multi_action_index]->first;
                while ((filter_name != NULL)
                    && (0 != strcmp(filter_group->name, filter_name->str)))
                {
@@ -3156,7 +3199,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                }
                else
                {
-                  filter_name = cur_line->data.action->multi_remove[ACTION_MULTI_FILTER]->first;
+                  filter_name = cur_line->data.action->multi_remove[multi_action_index]->first;
                   while ((filter_name != NULL)
                       && (0 != strcmp(filter_group->name, filter_name->str)))
                   {
@@ -3184,6 +3227,8 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                   if (!err) err = map(line_exports, "name",  1, filter_group->name, 1);
                   if (!err) err = map(line_exports, "description",  1, filter_group->description, 1);
                   if (!err) err = map_radio(line_exports, "this-filter", "ynx", current_mode);
+                  if (!err) err = map(line_exports, "filter-type", 1, filter_type, 1);
+                  if (!err) err = map(line_exports, "abbr-filter-type", 1, abbr_filter_type, 1);
 
                   this_line = NULL;
                   if (!err)
@@ -3349,14 +3394,25 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    {
       char key_value[30];
       char key_name[30];
+      char key_type[30];
       const char *name;
-      char value;
+      char value; /*
+                   * Filter state. Valid states are: 'Y' (active),
+                   * 'N' (inactive) and 'X' (no change).
+                   * XXX: bad name.
+                   */
+      char type;  /*
+                   * Abbreviated filter type. Valid types are: 'F' (content filter),
+                   * 'S' (server-header filter) and 'C' (client-header filter).
+                   */
+      int multi_action_index = 0;
 
       /* Generate the keys */
       snprintf(key_value, sizeof(key_value), "filter_r%x", filter_identifier);
-      key_value[sizeof(key_value) - 1] = '\0';
+      key_value[sizeof(key_value) - 1] = '\0'; /* XXX: Why? */
       snprintf(key_name, sizeof(key_name), "filter_n%x", filter_identifier);
-      key_name[sizeof(key_name) - 1] = '\0';
+      key_name[sizeof(key_name) - 1] = '\0'; /* XXX: Why? */
+      snprintf(key_type, sizeof(key_type), "filter_t%x", filter_identifier);
 
       err = get_string_param(parameters, key_name, &name);
       if (err) break;
@@ -3367,26 +3423,45 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
          break;
       }
 
+      type = get_char_param(parameters, key_type);
+      switch (type)
+      {
+         case 'F':
+            multi_action_index = ACTION_MULTI_FILTER;
+            break;
+         case 'S':
+            multi_action_index = ACTION_MULTI_SERVER_HEADER_FILTER;
+            break;
+         case 'C':
+            multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
+            break;
+         default:
+            log_error(LOG_LEVEL_ERROR,
+               "Unknown filter type: %c for filter %s. Filter ignored.", type, name);
+            continue;
+      }
+      assert(multi_action_index);
+
       value = get_char_param(parameters, key_value);
       if (value == 'Y')
       {
-         list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
-         if (!err) err = enlist(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
-         list_remove_item(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+         list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
+         if (!err) err = enlist(cur_line->data.action->multi_add[multi_action_index], name);
+         list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
       }
       else if (value == 'N')
       {
-         list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
-         if (!cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER])
+         list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
+         if (!cur_line->data.action->multi_remove_all[multi_action_index])
          {
-            list_remove_item(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
-            if (!err) err = enlist(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+            list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
+            if (!err) err = enlist(cur_line->data.action->multi_remove[multi_action_index], name);
          }
       }
       else if (value == 'X')
       {
-         list_remove_item(cur_line->data.action->multi_add[ACTION_MULTI_FILTER], name);
-         list_remove_item(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER], name);
+         list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
+         list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
       }
    }
 

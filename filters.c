@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.82 2007/03/13 11:28:43 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.83 2007/03/17 15:20:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.82 2007/03/13 11:28:43 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.83  2007/03/17 15:20:05  fabiankeil
+ *    New config option: enforce-blocks.
+ *
  *    Revision 1.82  2007/03/13 11:28:43  fabiankeil
  *    - Fix port handling in acl_addr() and use a temporary acl spec
  *      copy so error messages don't contain a truncated version.
@@ -1876,6 +1879,12 @@ char *pcrs_filter_response(struct client_state *csp)
     */
    for (b = fl->f; b; b = b->next)
    {
+      if (b->type != FT_CONTENT_FILTER)
+      {
+         /* Skip header filters */
+         continue;
+      }
+
       for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
            filtername ; filtername = filtername->next)
       {

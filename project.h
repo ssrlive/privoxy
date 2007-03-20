@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.91 2007/03/05 13:28:03 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.92 2007/03/17 15:20:05 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.92  2007/03/17 15:20:05  fabiankeil
+ *    New config option: enforce-blocks.
+ *
  *    Revision 1.91  2007/03/05 13:28:03  fabiankeil
  *    Add some CSP_FLAGs for the header parsers.
  *
@@ -1047,18 +1050,22 @@ struct iob
 #define ACTION_STRING_COUNT                15
 
 
-/*To make the ugly hack in sed easier to understand*/
+/* To make the ugly hack in sed easier to understand */
 #define CHECK_EVERY_HEADER_REMAINING 0
 
 
 /** Index into current_action_spec::multi[] for headers to add. */
-#define ACTION_MULTI_ADD_HEADER     0
+#define ACTION_MULTI_ADD_HEADER              0
 /** Index into current_action_spec::multi[] for headers to add. */
-#define ACTION_MULTI_WAFER          1
-/** Index into current_action_spec::multi[] for filters to apply. */
-#define ACTION_MULTI_FILTER         2
+#define ACTION_MULTI_WAFER                   1
+/** Index into current_action_spec::multi[] for content filters to apply. */
+#define ACTION_MULTI_FILTER                  2
+/** Index into current_action_spec::multi[] for server-header filters to apply. */
+#define ACTION_MULTI_SERVER_HEADER_FILTER    3
+/** Index into current_action_spec::multi[] for client-header filters to apply. */
+#define ACTION_MULTI_CLIENT_HEADER_FILTER    4
 /** Number of multi-string actions. */
-#define ACTION_MULTI_COUNT          3
+#define ACTION_MULTI_COUNT                   5
 
 
 /**
@@ -1444,6 +1451,10 @@ struct forward_spec
  */
 #define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
 
+/* Supported filter types */
+#define FT_CONTENT_FILTER       1
+#define FT_CLIENT_HEADER_FILTER 2
+#define FT_SERVER_HEADER_FILTER 3
 
 /**
  * This struct represents one filter (one block) from
@@ -1457,6 +1468,7 @@ struct re_filterfile_spec
    char *description;               /**< Description from FILTER: statement in re_filterfile. */
    struct list patterns[1];         /**< The patterns from the re_filterfile. */
    pcrs_job *joblist;               /**< The resulting compiled pcrs_jobs. */
+   int type;                        /**< Filter type (content, client-header, server-header). */
    struct re_filterfile_spec *next; /**< The pointer for chaining. */
 };
 
