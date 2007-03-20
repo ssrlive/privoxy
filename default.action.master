@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.66 2007/03/16 16:04:18 fabiankeil Exp $
+#  $Id: default.action.master,v 1.67 2007/03/19 14:28:38 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -202,6 +202,14 @@
 #    Block this URL. Privoxy will ignore this URL completely, and not request
 #    it.
 #
+# +client-header-filter{name}
+#    All client headers to which this action applies are filtered on-the-fly
+#    through the specified regular expression based substitutions.
+#
+#    Client-header filters predefined in the supplied default.filter include:
+#
+#     hide-tor-exit-notation: Removes the Tor exit node notation in Host and Referer headers
+#
 # +content-type-overwrite
 #    Replaces the "Content-Type:" HTTP server header, so that unwanted
 #    download menus will not pop up, or changes the browser's rendering mode.
@@ -265,7 +273,7 @@
 #    be seen with View Source), not the headers. Repeat for multiple filters.
 #    Use with caution: filters can be very intrusive.
 #   
-#    Filters predefined in the supplied default.action include:
+#    Filters predefined in the supplied default.filter include:
 #
 #     js-annoyances:         Get rid of particularly annoying JavaScript abuse
 #     js-events:             Kill all JS event bindings (Radically destructive! Use only on real suckers)
@@ -292,18 +300,7 @@
 #     yahoo:                 Removes text ads and other Yahoo specific improvements
 #     msn:                   Removes text ads and other MSN specific improvements
 #     blogspot:              Cleans up Blogspot blogs
-#     html-to-xml:           Header filter to change the Content-Type from html to xml
-#     xml-to-html:           Header filter to change the Content-Type from xml to html
 #     no-ping:               Removes non-standard ping attributes from anchor and area tags
-#     hide-tor-exit-notation: Header filter to remove the Tor exit node notation in Host and Referer headers
-#
-# +filter-client-headers
-#    By default, filters only apply to the document content itself. This will
-#    extend those filters to include the client's headers as well.
-#
-# +filter-server-headers
-#    By default, filters only apply to the document content itself. This will
-#    extend those filters to include the server's headers as well.
 #
 # +force-text-mode
 #    Declares a document as plain text, even if the "Content-Type:" isn't detected 
@@ -371,21 +368,6 @@
 # +inspect-jpegs
 #    Scan jpeg headers for malformed comment blocks and correct them.
 #
-# +set-image-blocker{blank}
-# +set-image-blocker{pattern}
-# +set-image-blocker{<URL>} with <url> being any valid image URL
-#    Decides what to do with URLs that end up tagged with {+block +handle-as-image}.
-#    There are 4 options:
-#      * "-set-image-blocker" will send a HTML "blocked" page, usually
-#         resulting in a "broken image" icon.
-#      * "+set-image-blocker{blank}" will send a 1x1 transparent image
-#      * "+set-image-blocker{pattern}" will send a 4x4 grey/white pattern
-#        which is less intrusive than the logo but easier to recognize
-#        than the transparent one.
-#      * "+set-image-blocker{<URL>}" will send a HTTP temporary redirect
-#        to the specified image URL.
-#
-#
 # +limit-connect{portlist}
 #   The CONNECT methods exists in HTTP to allow access to secure websites
 #   (https:// URLs) through proxies. It works very simply: The proxy
@@ -428,12 +410,35 @@
 #    and +gif-deanimate will not work on compressed data. Will slow down
 #    connections to those websites, though.
 #
-# +prevent-keeping-cookies
+# +server-header-filter{name}
+#    All server headers to which this action applies are filtered on-the-fly
+#    through the specified regular expression based substitutions.
+#
+#    Server-header filters predefined in the supplied default.filter include:
+#
+#     html-to-xml:           Changes the Content-Type header from html to xml
+#     xml-to-html:           Changes the Content-Type header from xml to html
+#
 # +session-cookies-only
 #    If the website sets cookies, make sure they are erased when you exit
 #    and restart your web browser.  This makes profiling cookies useless,
 #    but won't break sites which require cookies so that you can log in
 #    or for transactions.
+#
+# +set-image-blocker{blank}
+# +set-image-blocker{pattern}
+# +set-image-blocker{<URL>} with <url> being any valid image URL
+#    Decides what to do with URLs that end up tagged with {+block +handle-as-image}.
+#    There are 4 options:
+#      * "-set-image-blocker" will send a HTML "blocked" page, usually
+#         resulting in a "broken image" icon.
+#      * "+set-image-blocker{blank}" will send a 1x1 transparent image
+#      * "+set-image-blocker{pattern}" will send a 4x4 grey/white pattern
+#        which is less intrusive than the logo but easier to recognize
+#        than the transparent one.
+#      * "+set-image-blocker{<URL>}" will send a HTTP temporary redirect
+#        to the specified image URL.
+#
 #
 # +crunch-outgoing-cookies
 #    Prevent the website from reading cookies
@@ -447,6 +452,7 @@
 #    equivalent.
 #
 # +redirect{<URL>}
+# +redirect{<pcrs command>}
 #    Convinces the browser that the requested document has been moved to
 #    another location and the browser should get it from the specified
 #    URL.
@@ -536,6 +542,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 { \
 -add-header \
 -block \
+-client-header-filter{hide-tor-exit-notation} \
 -content-type-overwrite \
 -crunch-client-header \
 -crunch-if-none-match \
@@ -570,12 +577,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -filter{yahoo} \
 -filter{msn} \
 -filter{blogspot} \
--filter{xml-to-html} \
--filter{html-to-xml} \
 -filter{no-ping} \
--filter{hide-tor-exit-notation} \
--filter-client-headers \
--filter-server-headers \
 -force-text-mode \
 -handle-as-empty-document \
 -handle-as-image \
@@ -594,6 +596,8 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
+-server-header-filter{xml-to-html} \
+-server-header-filter{html-to-xml} \
 -session-cookies-only \
 +set-image-blocker{pattern} \
 -treat-forbidden-connects-like-blocks \

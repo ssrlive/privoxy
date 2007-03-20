@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.41  2007/01/23 16:03:16  fabiankeil
+#    - Add favicon links.
+#    - Remove useless W3C validator links.
+#
 #    Revision 1.40  2006/12/21 13:01:03  fabiankeil
 #    Prepare for "split-large-forms".
 #
@@ -737,33 +741,6 @@ function show_send_wafer_opts(tf)
       <th>Description</th>
     </tr>
 <!-- if-multiple-forms-end@ -->
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="filter_client_headers" value="Y" @filter-client-headers-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="filter_client_headers" value="N" @filter-client-headers-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="filter_client_headers" value="X" @filter-client-headers-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@FILTER-CLIENT-HEADERS">filter-client-headers</a></td>
-      <td>Apply filters to the client headers as well. Only enable this if you know what you're doing.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="filter_server_headers" value="Y" @filter-server-headers-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="filter_server_headers" value="N" @filter-server-headers-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="filter_server_headers" value="X" @filter-server-headers-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@FILTER-SERVER-HEADERS">filter-server-headers</a></td>
-      <td>Apply filters to the server headers as well. Only enable this if you know what you're doing.</td>
-    </tr>
-
    <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="force_text_mode" value="Y" @force-text-mode-y@

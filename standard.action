@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.17 2006/10/24 10:53:55 hal9 Exp $
+#  $Id: standard.action,v 1.18 2007/01/22 16:06:28 fabiankeil Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -30,6 +30,7 @@
 { \
 -add-header \
 -block \
+-client-header-filter{hide-tor-exit-notation} \
 -content-type-overwrite \
 -crunch-client-header \
 -crunch-if-none-match \
@@ -64,12 +65,7 @@
 -filter{yahoo} \
 -filter{msn} \
 -filter{blogspot} \
--filter{xml-to-html} \
--filter{html-to-xml} \
 -filter{no-ping} \
--filter{hide-tor-exit-notation} \
--filter-client-headers \
--filter-server-headers \
 -force-text-mode \
 -handle-as-empty-document \
 -handle-as-image \
@@ -88,6 +84,8 @@
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
+-server-header-filter{xml-to-html} \
+-server-header-filter{html-to-xml} \
 -session-cookies-only \
 +set-image-blocker{pattern} \
 -treat-forbidden-connects-like-blocks \
@@ -101,6 +99,7 @@ standard.Cautious
 { \
 -add-header \
 -block \
+-client-header-filter{hide-tor-exit-notation} \
 -content-type-overwrite \
 -crunch-client-header \
 -crunch-if-none-match \
@@ -135,12 +134,7 @@ standard.Cautious
 -filter{yahoo} \
 -filter{msn} \
 -filter{blogspot} \
--filter{xml-to-html} \
--filter{html-to-xml} \
 -filter{no-ping} \
--filter{hide-tor-exit-notation} \
--filter-client-headers \
--filter-server-headers \
 -force-text-mode \
 -handle-as-empty-document \
 -handle-as-image \
@@ -159,6 +153,8 @@ standard.Cautious
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
+-server-header-filter{xml-to-html} \
+-server-header-filter{html-to-xml} \
 +session-cookies-only \
 +set-image-blocker{pattern} \
 -treat-forbidden-connects-like-blocks \
@@ -179,6 +175,7 @@ standard.Medium
 { \
 -add-header \
 -block \
+-client-header-filter{hide-tor-exit-notation} \
 -content-type-overwrite \
 -crunch-client-header \
 +crunch-if-none-match \
@@ -213,12 +210,7 @@ standard.Medium
 -filter{yahoo} \
 -filter{msn} \
 -filter{blogspot} \
--filter{xml-to-html} \
--filter{html-to-xml} \
 -filter{no-ping} \
--filter{hide-tor-exit-notation} \
--filter-client-headers \
--filter-server-headers \
 -force-text-mode \
 -handle-as-empty-document \
 -handle-as-image \
@@ -237,6 +229,8 @@ standard.Medium
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
+-server-header-filter{xml-to-html} \
+-server-header-filter{html-to-xml} \
 -session-cookies-only \
 +set-image-blocker{pattern} \
 +treat-forbidden-connects-like-blocks \

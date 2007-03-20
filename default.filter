@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.38 2007/02/19 11:22:48 hal9 Exp $
+#  $Id: default.filter,v 1.39 2007/02/21 14:10:23 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -638,36 +638,35 @@ s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*
 
 #################################################################################
 #
-# x-httpd-php-to-html: Header filter to change the Content-Type from
+# x-httpd-php-to-html: Changes the Content-Type header from
 #                      x-httpd-php to html. "Content-Type: x-httpd-php"
 #                      is set by clueless PHP users and causes many
 #                      browsers do open a download menu instead of
 #                      rendering the page.
 #
 #################################################################################
-FILTER: x-httpd-php-to-html Header filter to change the Content-Type from x-httpd-php to html.
+SERVER-HEADER-FILTER: x-httpd-php-to-html Changes the Content-Type header from x-httpd-php to html.
 s@^(Content-Type:) application/x-httpd-php@$1 text/html@
 
 #################################################################################
 #
-# html-to-xml: Header filter to change the Content-Type from html to xml.
+# html-to-xml: Changes the Content-Type header from html to xml.
 #
 #################################################################################
-FILTER: html-to-xml Header filter to change the Content-Type from html to xml.
+SERVER-HEADER-FILTER: html-to-xml Changes the Content-Type header from html to xml.
 s@^(Content-Type:) text/html(;.*)?$@$1 application/xhtml+xml$2@
 
 #################################################################################
 #
-# xml-to-html: Header filter to change the Content-Type from xml to html.
+# xml-to-html: Changes the Content-Type header from xml to html.
 #
 #################################################################################
-FILTER: xml-to-html Header filter to change the Content-Type from xml to html.
+SERVER-HEADER-FILTER: xml-to-html Changes the Content-Type header from xml to html.
 s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 
 #################################################################################
 #
-# hide-tor-exit-notation: Header filter to remove the Tor exit node notation
-#                         in Host and Referer headers.
+# hide-tor-exit-notation: Remove the Tor exit node notation in Host and Referer headers.
 #
 #   Note: If Privoxy and Tor are chained and Privoxy is configured to
 #         use socks4a, one can use http://www.example.org.foobar.exit/
@@ -689,7 +688,7 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #         coming from.
 #
 #################################################################################
-FILTER: hide-tor-exit-notation Header filter to remove the Tor exit node notation in Host and Referer headers.
+CLIENT-HEADER-FILTER: hide-tor-exit-notation Removes the Tor exit node notation in Host and Referer headers.
 s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 
 
@@ -697,6 +696,12 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.39  2007/02/21 14:10:23  fabiankeil
+#     - Fix a js-annoyances pcrs command that broke
+#       evaluated code. (BR #1124071, thanks to Bor Gergely)
+#     - Have unsolicited-popups and all-popups catch the
+#       wheather.com popup reported in in AF #1640173.
+#
 #     Revision 1.38  2007/02/19 11:22:48  hal9
 #     Adding back the orginal filter content to offset problems found by Fabian.
 #
