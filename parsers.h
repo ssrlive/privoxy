@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.35 2007/01/01 19:36:37 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.36 2007/03/05 13:25:32 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,14 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.36  2007/03/05 13:25:32  fabiankeil
+ *    - Cosmetical changes for LOG_LEVEL_RE_FILTER messages.
+ *    - Handle "Cookie:" and "Connection:" headers a bit smarter
+ *      (don't crunch them just to recreate them later on).
+ *    - Add another non-standard time format for the cookie
+ *      expiration date detection.
+ *    - Fix a valgrind warning.
+ *
  *    Revision 1.35  2007/01/01 19:36:37  fabiankeil
  *    Integrate a modified version of Wil Mahan's
  *    zlib patch (PR #895531).
@@ -265,8 +273,6 @@ extern jb_err client_if_modified_since(struct client_state *csp, char **header);
 extern jb_err client_accept_language  (struct client_state *csp, char **header);
 extern jb_err client_if_none_match    (struct client_state *csp, char **header);
 extern jb_err crunch_client_header    (struct client_state *csp, char **header);
-extern jb_err filter_client_header    (struct client_state *csp, char **header);
-extern jb_err filter_server_header    (struct client_state *csp, char **header);
 extern jb_err client_x_filter         (struct client_state *csp, char **header);
 
 
