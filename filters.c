@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.83 2007/03/17 15:20:05 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.84 2007/03/20 15:16:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.83 2007/03/17 15:20:05 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.84  2007/03/20 15:16:34  fabiankeil
+ *    Use dedicated header filter actions instead of abusing "filter".
+ *    Replace "filter-client-headers" and "filter-client-headers"
+ *    with "server-header-filter" and "client-header-filter".
+ *
  *    Revision 1.83  2007/03/17 15:20:05  fabiankeil
  *    New config option: enforce-blocks.
  *
@@ -1840,9 +1845,6 @@ char *pcrs_filter_response(struct client_state *csp)
           csp->content_type &= ~CT_DEFLATE;
           return(NULL);
       }
-      log_error(LOG_LEVEL_RE_FILTER,
-         "Decompression successful. Old size: %d, new size: %d.",
-         size, csp->iob->eod - csp->iob->cur);
 
       /*
        * Decompression gives us a completely new iob,
