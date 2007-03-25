@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.126 2007/03/17 15:20:05 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.127 2007/03/20 13:53:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.126 2007/03/17 15:20:05 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.127  2007/03/20 13:53:17  fabiankeil
+ *    Log the source address for ACL-related connection drops.
+ *
  *    Revision 1.126  2007/03/17 15:20:05  fabiankeil
  *    New config option: enforce-blocks.
  *
@@ -2012,9 +2015,6 @@ static void chat(struct client_state *csp)
        * so just send the "connect succeeded" message to the
        * client, flush the rest, and get out of the way.
        */
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 0",
-                csp->ip_addr_str, http->ocmd);
-
       if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1))
       {
          freez(hdr);
