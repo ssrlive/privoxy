@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.93 2007/03/20 15:21:44 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.94 2007/03/21 12:23:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,13 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.93 2007/03/20 15:21:44 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.94  2007/03/21 12:23:53  fabiankeil
+ *    - Add better protection against malicious gzip headers.
+ *    - Stop logging the first hundred bytes of decompressed content.
+ *      It looks like it's working and there is always debug 16.
+ *    - Log the content size after decompression in decompress_iob()
+ *      instead of pcrs_filter_response().
+ *
  *    Revision 1.93  2007/03/20 15:21:44  fabiankeil
  *    - Use dedicated header filter actions instead of abusing "filter".
  *      Replace "filter-client-headers" and "filter-client-headers"
@@ -642,6 +649,13 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.93 2007/03/20 15:21:44 fabiankeil
 #include <ctype.h>
 #include <assert.h>
 #include <string.h>
+
+#ifdef __GLIBC__
+/*
+ * Convince GNU's libc to provide a strptime prototype.
+ */
+#define __USE_XOPEN
+#endif /*__GLIBC__ */
 #include <time.h>
 
 #ifdef FEATURE_ZLIB
@@ -2177,6 +2191,8 @@ jb_err server_last_modified(struct client_state *csp, char **header)
    }
    else if (0 == strcmpic(newval, "randomize"))
    {
+      const char *header_time = *header + sizeof("Last-Modified:");
+
       log_error(LOG_LEVEL_HEADER, "Randomizing: %s", *header);
       now = time(NULL);
 #ifdef HAVE_GMTIME_R
@@ -2188,9 +2204,9 @@ jb_err server_last_modified(struct client_state *csp, char **header)
 #else
       timeptr = gmtime(&now);
 #endif
-      if ((timeptr = parse_header_time(*header, &last_modified)) == NULL)
+      if (JB_ERR_OK != parse_header_time(header_time, &last_modified))
       {
-         log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
+         log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s in %s (crunching!)", header_time, *header);
          freez(*header);
       }
       else
@@ -2937,9 +2953,11 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
       }
       else /* add random value */
       {
-         if ((timeptr = parse_header_time(*header, &tm)) == NULL)
+         const char *header_time = *header + sizeof("If-Modified-Since:");
+
+         if (JB_ERR_OK != parse_header_time(header_time, &tm))
          {
-            log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s (crunching!)", *header);
+            log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s in %s (crunching!)", header_time, *header);
             freez(*header);
          }
          else
@@ -3425,7 +3443,6 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
    time_t now;
    time_t cookie_time; 
    struct tm tm_now; 
-   struct tm tm_cookie;
    time(&now);
 
 #ifdef FEATURE_COOKIE_JAR
@@ -3457,8 +3474,8 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
 
    if ((csp->action->flags & ACTION_NO_COOKIE_SET) != 0)
    {
-      log_error(LOG_LEVEL_HEADER, "Crunched incoming cookie -- yum!");
-      return crumble(csp, header);
+      log_error(LOG_LEVEL_HEADER, "Crunching incoming cookie: %s", *header);
+      freez(*header);
    }
    else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)
    {
@@ -3506,62 +3523,10 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
           */
          if ((strncmpic(cur_tag, "expires=", 8) == 0) && *(cur_tag + 8))
          {
-            char *match;
-            const char *expiration_date = cur_tag + 8; /* Skip "[Ee]xpires=" */
-            memset(&tm_cookie, 0, sizeof(tm_cookie));
-            /*
-             * Try the valid time formats we know about.
-             *
-             * XXX: This should be moved to parse_header_time().
-             *
-             * XXX: Maybe the log messages should be removed
-             * for the next stable release. They just exist to
-             * see which time format gets the most hits and
-             * should be checked for first.
-             */
-            if (NULL != (match = strptime(expiration_date, "%a, %e-%b-%y %H:%M:%S ", &tm_cookie)))
-            {
-               /* 22-Feb-2008 12:01:18 GMT */
-               log_error(LOG_LEVEL_HEADER,
-                  "cookie \'%s\' send by %s appears to be using time format 1.",
-                  *header, csp->http->url);
-            }
-            else if (NULL != (match = strptime(expiration_date, "%A, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
-            {
-               /* Tue, 02-Jun-2037 20:00:00 GMT */
-               log_error(LOG_LEVEL_HEADER,
-                  "cookie \'%s\' send by %s appears to be using time format 2.",
-                  *header, csp->http->url);
-            }
-            else if (NULL != (match = strptime(expiration_date, "%a, %e-%b-%Y %H:%M:%S ", &tm_cookie)))
-            {
-               /* Tuesday, 02-Jun-2037 20:00:00 GMT */
-               /*
-                * On FreeBSD this is never reached because it's handled
-                * by "format 2" as well. I am, however, not sure if all
-                * strptime() implementations behave that way.
-                */
-               log_error(LOG_LEVEL_HEADER,
-                  "cookie \'%s\' send by %s appears to be using time format 3.",
-                   *header, csp->http->url);
-            }
-            else if (NULL != (match = strptime(expiration_date, "%a, %e %b %Y %H:%M:%S ", &tm_cookie)))
-            {
-               /* Fri, 22 Feb 2008 19:20:05 GMT */
-               log_error(LOG_LEVEL_HEADER,
-                  "cookie \'%s\' send by %s appears to be using time format 4.",
-                   *header, csp->http->url);
-            }
-            else if (NULL != (match = strptime(expiration_date, "%A %b %e %H:%M:%S %Y", &tm_cookie)))
-            {
-               /* Thu Mar 08 23:00:00 2007 GMT */
-               log_error(LOG_LEVEL_HEADER,
-                  "cookie \'%s\' send by %s appears to be using time format 5.",
-                   *header, csp->http->url);
-            }
+            char *expiration_date = cur_tag + 8; /* Skip "[Ee]xpires=" */
 
-            /* Did any of them match? */
-            if (NULL == match)
+            /* Did we detect the date properly? */
+            if (JB_ERR_OK != parse_header_time(expiration_date, &cookie_time))
             {
                /*
                 * Nope, treat it as if it was still valid.
@@ -3609,7 +3574,6 @@ jb_err server_set_cookie(struct client_state *csp, char **header)
                 *   anyway, which in many cases will be shorter
                 *   than a browser session.
                 */
-               cookie_time = timegm(&tm_cookie);
                if (cookie_time - now < 0)
                {
                   log_error(LOG_LEVEL_HEADER,
@@ -3702,54 +3666,48 @@ int strclean(const char *string, const char *substring)
  *
  * Function    :  parse_header_time
  *
- * Description :  Transforms time inside a HTTP header into
- *                the usual time format.
+ * Description :  Parses time formats used in HTTP header strings
+ *                to get the numerical respresentation.
  *
  * Parameters  :
- *          1  :  header = header to parse
- *          2  :  tm = storage for the resulting time in seconds 
+ *          1  :  header_time = HTTP header time as string. 
+ *          2  :  result = storage for header_time in seconds
  *
- * Returns     :  Time struct containing the header time, or
- *                NULL in case of a parsing problems.
+ * Returns     :  JB_ERR_OK if the time format was recognized, or
+ *                JB_ERR_PARSE otherwise.
  *
  *********************************************************************/
-struct tm *parse_header_time(char *header, time_t *tm) {
-
-   char * timestring;
+jb_err parse_header_time(const char *header_time, time_t *result)
+{
    struct tm gmt;
-   struct tm * timeptr;
 
    /*
-    * Initializing gmt to prevent time zone offsets.
+    * Zero out gmt to prevent time zone offsets.
     *
     * While this is only necessary on some platforms
     * (mingw32 for example), I don't know how to
     * detect these automatically and doing it everywhere
     * shouldn't hurt.
     */
-   time(tm); 
-#ifdef HAVE_LOCALTIME_R
-   gmt = *localtime_r(tm, &gmt);
-#elif FEATURE_PTHREAD
-   pthread_mutex_lock(&localtime_mutex);
-   gmt = *localtime(tm); 
-   pthread_mutex_unlock(&localtime_mutex);
-#else
-   gmt = *localtime(tm); 
-#endif
+   memset(&gmt, 0, sizeof(gmt));
 
-   /* Skipping header name */
-   timestring = strstr(header, ": ");
-   if (strptime(timestring, ": %a, %d %b %Y %H:%M:%S", &gmt) == NULL)
+                            /* Tue, 02 Jun 2037 20:00:00 */
+   if ((NULL == strptime(header_time, "%a, %d %b %Y %H:%M:%S", &gmt))
+                            /* Tue, 02-Jun-2037 20:00:00 */
+    && (NULL == strptime(header_time, "%a, %d-%b-%Y %H:%M:%S", &gmt))
+                            /* Tue, 02-Jun-37 20:00:00 */
+    && (NULL == strptime(header_time, "%a, %d-%b-%y %H:%M:%S", &gmt))
+                        /* Tuesday, 02-Jun-2037 20:00:00 */
+    && (NULL == strptime(header_time, "%A, %d-%b-%Y %H:%M:%S", &gmt))
+                        /* Tuesday Jun 02 20:00:00 2037 */
+    && (NULL == strptime(header_time, "%A %b %d %H:%M:%S %Y", &gmt)))
    {
-      timeptr = NULL;
+      return JB_ERR_PARSE;
    }
-   else
-   {
-      *tm = timegm(&gmt);
-      timeptr = &gmt;
-   }
-   return(timeptr);
+
+   *result = timegm(&gmt);
+
+   return JB_ERR_OK;
 
 }
 
