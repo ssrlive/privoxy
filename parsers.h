@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.36 2007/03/05 13:25:32 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.37 2007/03/20 15:22:17 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,11 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.37  2007/03/20 15:22:17  fabiankeil
+ *    - Remove filter_client_header() and filter_client_header(),
+ *      filter_header() now checks the shiny new
+ *      CSP_FLAG_CLIENT_HEADER_PARSING_DONE flag instead.
+ *
  *    Revision 1.36  2007/03/05 13:25:32  fabiankeil
  *    - Cosmetical changes for LOG_LEVEL_RE_FILTER messages.
  *    - Handle "Cookie:" and "Connection:" headers a bit smarter
@@ -251,7 +256,7 @@ extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern char *sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf);
-extern struct tm *parse_header_time(char *header, time_t *tm);
+extern jb_err parse_header_time(const char *header_time, time_t *result);
 extern jb_err get_destination_from_headers(const struct list *headers, struct http_request *http);
 
 /* XXX: Why do we export these anyway? */
