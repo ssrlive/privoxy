@@ -17,6 +17,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url-filter,v $
+#    Revision 1.7  2007/03/20 15:40:00  fabiankeil
+#    Adjust to new world order with dedicated header-filter actions.
+#
 #
 ##############################################################################
 
@@ -27,7 +30,7 @@
   <td class="action">
     <input type="hidden" name="filter_t@index@" value="@abbr-filter-type@">
     <input type="hidden" name="filter_n@index@" value="@name@">
-    <a href="@user-manual@@actions-help-prefix@FILTER">@filter-type@</a> @name@
+    <a href="@user-manual@@actions-help-prefix@@anchor@">@filter-type@</a> @name@
   </td>
   <td>@description@</td>
 </tr>

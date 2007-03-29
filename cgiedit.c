@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.48 2007/02/13 14:35:25 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.49 2007/03/20 15:16:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.48 2007/02/13 14:35:25 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.49  2007/03/20 15:16:34  fabiankeil
+ *    Use dedicated header filter actions instead of abusing "filter".
+ *    Replace "filter-client-headers" and "filter-client-headers"
+ *    with "server-header-filter" and "client-header-filter".
+ *
  *    Revision 1.48  2007/02/13 14:35:25  fabiankeil
  *    Replace hash escaping code to prevent
  *    crashes, memory and file corruption.
@@ -3117,16 +3122,12 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
    {
       /*
        * List available filters and their settings.
-       *
-       * XXX: Different types of filters should use different
-       * @substitution strings@. They are currently listed
-       * in the order they appear in the filter files and
-       * are all inserted as @filter-params@ which can lead
-       * to an "interesting" mix. 
        */
-      char * result;
+      char *content_filter_params;
+      char *server_header_filter_params;
+      char *client_header_filter_params;
+      char *filter_template;
       int filter_identifier = 0;
-      char * filter_template;
 
       err = template_load(csp, &filter_template, "edit-actions-for-url-filter", 0);
       if (err)
@@ -3142,7 +3143,9 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 
       err = template_fill(&filter_template, exports);
 
-      result = strdup("");
+      content_filter_params = strdup("");
+      server_header_filter_params = strdup("");
+      client_header_filter_params = strdup("");
 
       for (i = 0; i < MAX_AF_FILES; i++)
       {
@@ -3152,13 +3155,15 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
             for (;(!err) && (filter_group != NULL); filter_group = filter_group->next)
             {
                char current_mode = 'x';
-               struct list_entry *filter_name;
-               char * this_line;
-               struct map *line_exports;
                char number[20];
                int multi_action_index = 0;
+               struct list_entry *filter_name;
+               struct map *line_exports;
+               char *this_line;
                char *filter_type;
                char *abbr_filter_type;
+               char *anchor;
+               char **current_params;
 
                switch (filter_group->type)
                {
@@ -3167,16 +3172,22 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                      filter_type = "filter"; 
                      abbr_filter_type = "F";
                      multi_action_index = ACTION_MULTI_FILTER;
+                     anchor = "FILTER";
+                     current_params = &content_filter_params;
                      break;
                   case FT_SERVER_HEADER_FILTER:
                      filter_type = "server-header-filter"; 
                      abbr_filter_type = "S"; 
                      multi_action_index = ACTION_MULTI_SERVER_HEADER_FILTER;
+                     current_params = &server_header_filter_params;
+                     anchor = "SERVER-HEADER-FILTER"; /* XXX: no documentation available yet */
                      break;
                   case FT_CLIENT_HEADER_FILTER:
                      filter_type = "client-header-filter"; 
                      abbr_filter_type = "C"; 
                      multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
+                     current_params = &client_header_filter_params;
+                     anchor = "CLIENT-HEADER-FILTER"; /* XXX: no documentation available yet */
                      break;
                   default:
                      log_error(LOG_LEVEL_FATAL,
@@ -3219,7 +3230,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                if (line_exports == NULL)
                {
                   err = JB_ERR_MEMORY;
-                  freez(result);
+                  freez(*current_params); /* XXX: really necessary? */
                }
                else
                {
@@ -3229,6 +3240,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                   if (!err) err = map_radio(line_exports, "this-filter", "ynx", current_mode);
                   if (!err) err = map(line_exports, "filter-type", 1, filter_type, 1);
                   if (!err) err = map(line_exports, "abbr-filter-type", 1, abbr_filter_type, 1);
+                  if (!err) err = map(line_exports, "anchor", 1, anchor, 1);
 
                   this_line = NULL;
                   if (!err)
@@ -3237,7 +3249,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                      if (this_line == NULL) err = JB_ERR_MEMORY;
                   }
                   if (!err) err = template_fill(&this_line, line_exports);
-                  string_join(&result, this_line);
+                  string_join(current_params, this_line);
 
                   free_map(line_exports);
                }
@@ -3246,13 +3258,14 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       }
       freez(filter_template);
 
-      if (!err)
+      if (!err) err = map(exports, "content-filter-params", 1, content_filter_params, 0);
+      if (!err) err = map(exports, "server-header-filter-params", 1, server_header_filter_params, 0);
+      if (!err) err = map(exports, "client-header-filter-params", 1, client_header_filter_params, 0);
+      if (err)
       {
-         err = map(exports, "filter-params", 1, result, 0);
-      }
-      else
-      {
-         freez(result);
+         freez(content_filter_params);
+         freez(server_header_filter_params);
+         freez(client_header_filter_params);
       }
    }
 
