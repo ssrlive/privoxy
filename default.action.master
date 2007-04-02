@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.68 2007/03/20 15:40:00 fabiankeil Exp $
+#  $Id: default.action.master,v 1.69 2007/03/26 17:37:39 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -681,6 +681,9 @@ countr*.
 /.*(lo|thre|he|d|gr|l|ro|re|squ|class(ified)?)ads
 /.*account
 support./(.*/)?track
+#MASTER# REMARKS: 20070402 Adam Piggott first-party tracking
+#MASTER# PROBLEM URL: http://www.shockwave.com/servlet/DownloadEcommTracker?sku=fizzball-pc&promoCode=SiteShockwaveLandingPage
+.shockwave.com/servlet/DownloadEcommTracker
 
 #############################################################################
 # Exceptions for academia and non-profits
