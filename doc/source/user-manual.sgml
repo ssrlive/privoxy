@@ -11,7 +11,7 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.6">
+<!entity p-version "3.0.7">
 <!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "IGNORE">
@@ -33,9 +33,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.27 2006/11/14 01:57:47 hal9 Exp $
+ $Id: user-manual.sgml,v 2.28 2006/12/10 23:42:48 hal9 Exp $
 
- Copyright (C) 2001- 2006 Privoxy Developers http://www.privoxy.org
+ Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -54,12 +54,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001 - 2006 by 
+ <link linkend="copyright">Copyright</link> &my-copy; 2001 - 2007 by 
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.27 2006/11/14 01:57:47 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.28 2006/12/10 23:42:48 hal9 Exp $</pubdate>
 
 <!--
 
@@ -423,19 +423,21 @@ How to install the binary packages depends on your operating system:
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- There are many improvements and new features since <application>Privoxy 3.0.3</application>, the last stable release:
+ There are many improvements and new features since <application>Privoxy 3.0.6</application>, the last stable release:
 </para>
 
 <para>
  <itemizedlist>
   <listitem>
    <para>
-    Multiple <link linkend="filter-file">filter files</link> can now be specified in <filename>config</filename>. This allows for 
-    locally defined filters that can be maintained separately from the filters as
-    supplied by the developers, i.e. <filename>default.filter</filename>.
+    Header filtering can be done with dedicated header filters now. As a result
+    the actions <q>filter-client-headers</q> and <q>filter-server-headers</q>
+    that were introduced with <application>Privoxy 3.0.5</application> to apply
+    the content filters to the headers as, well have been removed again.
    </para>
   </listitem>
- 
+
+<!-- pre-3.0.6 changes: 
  <listitem>
   <para>  
    There are a number of new <link linkend="actions-file">actions</link>:
@@ -581,7 +583,7 @@ How to install the binary packages depends on your operating system:
     configuration updates for better ad blocking and junk elimination.
    </para>
   </listitem>
-
+-->
 
  </itemizedlist>
 </para>
@@ -2720,6 +2722,84 @@ for details.
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="client-header-filter">
+<title>client-header-filter</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Rewrite or remove single client headers.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    All client headers to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of a client-header filter, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Client-header filters are applied to each header on its own, not to
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is z.
+   </para>
+   <para>
+    Client-header filters are executed after the other header actions have finished
+    and use their output as input.
+   </para>
+   <para>
+    Please refer to the <link linkend="filter-file">filter file chapter</link>
+    to learn which client-header filters are available by default, and how to
+    create your own.
+   </para>
+
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>
+{+client-header-filter{hide-tor-exit-notation}}
+.exit/
+    </screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="content-type-overwrite">
 <!-- 
 new action 
@@ -2798,10 +2878,9 @@ new action
     This limitation exists for a reason, think twice before circumventing it.
    </para>
    <para>
-    Most of the time it's easier to enable
-    <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
-    and replace this action with a custom regular expression. It allows you
-    to activate it for every document of a certain site and it will still
+    Most of the time it's easier to replace this action with a custom
+    <literal><link linkend="server-header-filter">server-header filter</link></literal>.
+    It allows you to activate it for every document of a certain site and it will still
     only replace the content types you aimed at.
    </para>
    <para>
@@ -2890,9 +2969,8 @@ new action
    <para>
     <literal>crunch-client-header</literal> is only meant for quick tests.
     If you have to block several different headers, or only want to modify
-    parts of them, you should enable
-    <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
-    and create your own filter.
+    parts of them, you should use a
+    <literal><link linkend="client-header-filter">client-header filter</link></literal>.
    </para>
     <warning>
      <para>
@@ -3126,9 +3204,8 @@ new action
    <para>
     <literal>crunch-server-header</literal> is only meant for quick tests.
     If you have to block several different headers, or only want to modify
-    parts of them, you should enable
-    <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
-    and create your own filter.
+    parts of them, you should use a custom
+    <literal><link linkend="server-header-filter">server-header filter</link></literal>.
    </para>
     <warning>
      <para>
@@ -3444,9 +3521,9 @@ problem-host.example.com</screen>
     followed by another parameter. <literal>fast-redirects</literal> doesn't know that
     and will cause a redirect to <quote>http://www.example.net/&amp;foo=bar</quote>.
     Depending on the target server configuration, the parameter will be silently ignored
-    or lead to a <quote>page not found</quote> error. It is possible to fix these redirected
-    requests with <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
-    but it requires a little effort.
+    or lead to a <quote>page not found</quote> error. You can prevent this problem by
+    first using the <literal><link linkend="redirect">redirect</link></literal> action
+    to remove the last part of the URL, but it requires a little effort.
    </para>
    <para>
     To detect a redirection URL, <literal>fast-redirects</literal> only
@@ -3495,15 +3572,11 @@ problem-host.example.com</screen>
   <term>Effect:</term>
   <listitem>
    <para>
-    All files of text-based type, most notably HTML and
-    JavaScript, to which this action applies, can be filtered on-the-fly
-    through the specified regular expression based substitutions. (Note: as of
-    version 3.0.3 plain text documents are exempted from filtering, because
-    web servers often use the <literal>text/plain</literal> MIME type for all
-    files whose type they don't know.) By default, filtering works only on the
-    raw document content itself (that which can be seen with <literal>View
-    Source</literal>), 
-    not the headers.
+    All instances of text-based type, most notably HTML and JavaScript, to which
+    this action applies, can be filtered on-the-fly through the specified regular
+    expression based substitutions. (Note: as of version 3.0.3 plain text documents
+    are exempted from filtering, because web servers often use the
+   <literal>text/plain</literal> MIME type for all files whose type they don't know.)
    </para>
   </listitem>
  </varlistentry>
@@ -3520,7 +3593,7 @@ problem-host.example.com</screen>
   <term>Parameter:</term>
   <listitem>
    <para>
-    The name of a filter, as defined in the <link linkend="filter-file">filter file</link>.
+    The name of a content filter, as defined in the <link linkend="filter-file">filter file</link>.
     Filters can be defined in one or more  files as defined by the 
     <literal><link linkend="filterfile">filterfile</link></literal>
     option in the <link linkend="config">config file</link>. 
@@ -3576,14 +3649,19 @@ problem-host.example.com</screen>
     by defining appropriate <literal>-filter</literal> exceptions.
    </para>
    <para>
-    At this time, <application>Privoxy</application> cannot uncompress compressed
-    documents. If you want filtering to work on all documents, even those that
-    would normally be sent compressed, you must use the
-    <literal><link linkend="prevent-compression">prevent-compression</link></literal>
+    Compressed content can't be filtered either, unless &my-app;
+    is compiled with zlib support (requires at least &my-app; 3.0.7),
+    in which case &my-app; will decompress the content before filtering
+    it.
+   </para>
+   <para>
+    If you use a &my-app; version without zlib support, but want filtering to work on
+    as much documents as possible, even those that would normally be sent compressed,
+    you must use the <literal><link linkend="prevent-compression">prevent-compression</link></literal>
     action in conjunction with <literal>filter</literal>.
    </para>
    <para>
-    Filtering can achieve some of the same effects as the 
+    Content filtering can achieve some of the same effects as the 
     <literal><link linkend="block">block</link></literal>
     action, i.e. it can be used to block ads and banners. But the mechanism 
     works quite differently. One effective use, is to block ad banners 
@@ -3709,213 +3787,11 @@ problem-host.example.com</screen>
     <screen>+filter{blogspot}            # Cleans up Blogspot blogs</screen>
    </para>
    <para>
-    <anchor id="filter-html-to-xml">
-    <screen>+filter{html-to-xml}         # Header filter to change the Content-Type from html to xml</screen>
-   </para>
-   <para>
-    <anchor id="filter-xml-to-html">
-    <screen>+filter{xml-to-html}         # Header filter to change the Content-Type from xml to html</screen>
-   </para>
-   <para>
     <anchor id="filter-no-ping">
     <screen>+filter{no-ping}             # Removes non-standard ping attributes from anchor and area tags</screen>
    </para>
-   <para>
-    <anchor id="filter-hide-tor-exit-notation">
-    <screen>+filter{hide-tor-exit-notation} # Header filter to remove the Tor exit node notation in Host and Referer headers</screen>
-   </para>
   </listitem>
  </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="filter-client-headers">
-<title>filter-client-headers</title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-   To apply filtering to the client's (browser's) headers
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    By default, <application>Privoxy's</application> filters only apply 
-    to the document content itself. This will extend those filters to 
-    include the client's headers as well.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- boolean, parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
-<varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    Regular expressions can be used to filter headers as well. Check your
-    filters closely before activating this action, as it can easily lead to broken
-    requests.
-   </para>
-   <para> 
-    These filters are applied to each header on its own, not to them
-    all at once. This makes it easier to diagnose problems, but on the downside
-    you can't write filters that only change header x if header y's value is
-    z.
-   </para>
-   <para>
-    The filters are used after the other header actions have finished and can
-    use their output as input.
-   </para>
-  
-   <para>
-    Whenever possible one should specify <literal>^</literal>,
-    <literal>$</literal>, the whole header name and the colon, to make sure
-    the filter doesn't cause havoc to other headers or the
-    page itself. For example if you want to transform
-    <application>Galeon</application> User-Agents to 
-    <application>Firefox</application> User-Agents you
-    shouldn't use:
-</para>
-<para>
-<screen>
-s@Galeon/\d\.\d\.\d @@
-</screen>
-</para><para>
-    but:
-</para><para>
-<screen>
-s@^(User-Agent:.*) Galeon/\d\.\d\.\d (Firefox/\d\.\d\.\d\.\d)$@$1 $2@
-</screen>
-</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage (section):</term>
-  <listitem>
-    <para>
-     <screen>
-{+filter-client-headers +filter{test_filter}}
-problem-host.example.com
-    </screen>
-    </para>
-  </listitem>
- </varlistentry>
-
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="filter-server-headers">
-<title>filter-server-headers</title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-   To apply filtering to the server's headers
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    By default, <application>Privoxy's</application> filters only apply 
-    to the document content itself. This will extend those filters to 
-    include the server's headers as well.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- boolean, parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
-<varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    Similar to <literal>filter-client-headers</literal>, but works on 
-    the server instead. To filter both server and client, use both.
-   </para>
-   <para>
-    As with <literal>filter-client-headers</literal>, check your
-    filters before activating this action, as it can easily lead to broken
-    requests.
-   </para>
-   <para> 
-    These filters are applied to each header on its own, not to them
-    all at once. This makes it easier to diagnose problems, but on the downside
-    you can't write filters that only change header x if header y's value is
-    z.
-   </para>
-   <para>
-    The filters are used after the other header actions have finished and can
-    use their output as input.
-   </para>
-   <para>
-    Remember too, whenever possible one should specify <literal>^</literal>,
-    <literal>$</literal>, the whole header name and the colon, to make sure
-    the filter doesn't cause havoc to other headers or the
-    page itself. See above for example.
-   </para>
-
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage (section):</term>
-  <listitem>
-    <para>
-     <screen>
-{+filter-server-headers +filter{test_filter}}
-problem-host.example.com
-    </screen>
-    </para>
-  </listitem>
- </varlistentry>
-
 </variablelist>
 </sect3>
 
@@ -5046,23 +4922,33 @@ new action
   <listitem>
    <para>
     More and more websites send their content compressed by default, which
-    is generally a good idea and saves bandwidth. But for the <literal><link
+    is generally a good idea and saves bandwidth. But the <literal><link
     linkend="filter">filter</link></literal>, <literal><link linkend="deanimate-gifs">deanimate-gifs</link></literal>
-    and <literal><link linkend="kill-popups">kill-popups</link></literal> actions to work,
-    <application>Privoxy</application> needs access to the  uncompressed data.
-    Unfortunately, <application>Privoxy</application> can't yet(!)  uncompress, filter, and
-    re-compress the content on the fly. So if you want to ensure that all websites, including
-    those that normally compress, can be filtered, you need to use this action.
+    and <literal><link linkend="kill-popups">kill-popups</link></literal> actions need
+    access to the uncompressed data.
    </para>
    <para>
-    This will slow down transfers from those websites, though. If you use any of the above-mentioned
-    actions, you will typically want to use <literal>prevent-compression</literal> in conjunction
-    with them.
+    When compiled with zlib support (available since &my-app; 3.0.7), content that should be
+    filtered is decompressed on-the-fly and you don't have to worry about this action.
+    If you are using an older &my-app; version, or one that hasn't been compiled with zlib
+    support, this action can be used to convince the server to send the content uncompressed.
+   </para>
+   <para>
+    Most text-based instances compress very well, the size is seldom decreased by less than 50%,
+    for markup-heavy instances like news feeds saving more than 90% of the original size isn't
+    unusual. 
+   </para>
+   <para>
+    Not using compression will therefore slow down the transfer, and you should only
+    enable this action if you really need it. As of &my-app; 3.0.7 it's disabled in all
+    predefined action settings.
    </para>
    <para>
     Note that some (rare) ill-configured sites don't handle requests for uncompressed
-    documents correctly (they send an empty document body). If you use <literal>prevent-compression</literal>
-    per default, you'll have to add exceptions for those sites. See the example for how to do that.
+    documents correctly. Broken PHP applications tend to send an empty document body,
+    some IIS versions only send the beginning of the content. If you enable
+    <literal>prevent-compression</literal> per default, you might want to add
+    exceptions for those sites. See the example for how to do that.
    </para>
   </listitem>
  </varlistentry>
@@ -5085,11 +4971,10 @@ new action
 { +prevent-compression }
  / # Match all sites
 
-# Then maybe make exceptions for ill-behaved sites:
+# Then maybe make exceptions for broken sites:
 #
 { -prevent-compression }
- .debianhelp.org
- www.pclinuxonline.com</screen>
+.compusa.com/</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5233,7 +5118,7 @@ new action
   <term>Parameter:</term>
   <listitem>
    <para>
-    Any URL.
+    An absolute URL or a single pcrs command.
    </para>
   </listitem>
  </varlistentry>
@@ -5242,21 +5127,22 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    This action is useful to replace whole documents with ones of your 
-    choosing. This can be used to enforce safe surfing, or just as a simple 
-    convenience.
-   </para>
-   <para>
-    You can do the same by combining the actions
-    <literal><link linkend="block">block</link></literal>,
-    <literal><link linkend="handle-as-image">handle-as-image</link></literal> and
-    <literal><link linkend="set-image-blocker">set-image-blocker{URL}</link></literal>.
-    It doesn't sound right for non-image documents, and that's why this action
-    was created.
+    Requests to which this action applies are answered with a
+    HTTP redirect to URLs of your choosing. The new URL is
+    either provided as parameter, or derived by applying a
+    single pcrs command to the original URL.
    </para>
    <para>
     This action will be ignored if you use it together with
     <literal><link linkend="block">block</link></literal>.
+    It can be combined with
+    <literal><link linkend="fast-redirects">fast-redirects{check-decoded-url}</link></literal>
+    to redirect to a decoded version of a rewritten URL.
+   </para>
+   <para>
+    Use this action carefully, make sure not to create redirection loops
+    and be aware that using your own redirects might make it
+    possible to fingerprint your requests.
    </para>
   </listitem>
  </varlistentry>
@@ -5270,8 +5156,15 @@ new action
  example.com/stylesheet\.css
 
 # Create a short, easy to remember nickname for a favorite site
+# (relies on the browser accept and forward invalid URLs to &my-app;)
 { +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
- a</screen>
+ a
+
+# Always use the expanded view for Undeadly.org articles
+# (Note the $ at the end of the URL pattern to make sure
+# the request for the rewritten URL isn't redirected as well)
+{+redirect{s@$@&amp;mode=expanded@}}
+undeadly.org/cgi\?action=article&amp;sid=\d*$</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -5408,6 +5301,86 @@ my-internal-testing-server.void</screen>
    </para>
   </listitem>
  </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="server-header-filter">
+<title>server-header-filter</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Rewrite or remove single server headers.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    All server headers to which this action applies are filtered on-the-fly
+    through the specified regular expression based substitutions.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of a server-header filter, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Server-header filters are applied to each header on its own, not to
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is z.
+   </para>
+   <para>
+    Server-header filters are executed after the other header actions have finished
+    and use their output as input.
+   </para>
+   <para>
+    Please refer to the <link linkend="filter-file">filter file chapter</link>
+    to learn which server-header filters are available by default, and how to
+    create your own.
+   </para>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>
+{+server-header-filter{html-to-xml}}
+example.org/xml-instance-that-is-delivered-as-html
+
+{+server-header-filter{xml-to-html}}
+example.org/instance-that-is-delivered-as-xml-but-is-not
+    </screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
 </variablelist>
 </sect3>
 
@@ -5935,6 +5908,7 @@ that also explains why and how aliases are used:
 ##########################################################################
  { \
  -<link linkend="ADD-HEADER">add-header</link> \
+ -<link linkend="CLIENT-HEADER-FILTER">client-header-filter{hide-tor-exit-notation}</link> \
  -<link linkend="BLOCK">block</link> \
  -<link linkend="CONTENT-TYPE-OVERWRITE">content-type-overwrite</link> \
  -<link linkend="CRUNCH-CLIENT-HEADER">crunch-client-header</link> \
@@ -5965,16 +5939,11 @@ that also explains why and how aliases are used:
  -<link linkend="FILTER-FUN">filter{fun}</link> \
  -<link linkend="FILTER-CRUDE-PARENTAL">filter{crude-parental}</link> \
  +<link linkend="FILTER-IE-EXPLOITS">filter{ie-exploits}</link> \     
- -<link linkend="FILTER-CLIENT-HEADERS">filter-client-headers</link> \
- -<link linkend="FILTER-SERVER-HEADERS">filter-server-headers</link> \
- -<link linkend="FILTER-GOOGLE">filter-google</link> \
- -<link linkend="FILTER-YAHOO">filter-yahoo</link> \
- -<link linkend="FILTER-MSN">filter-msn</link> \
- -<link linkend="FILTER-BLOGSPOT">filter-blogspot</link> \
- -<link linkend="FILTER-XML-TO-HTML">filter-xml-to-html</link> \
- -<link linkend="FILTER-HTML-TO-XML">filter-html-to-xml</link> \
- -<link linkend="FILTER-NO-PING">filter-no-ping</link> \
- -<link linkend="FILTER-HIDE-TOR-EXIT-NOTATION">filter-hide-tor-exit-notation</link> \
+ -<link linkend="FILTER-GOOGLE">filter{google}</link> \
+ -<link linkend="FILTER-YAHOO">filter{yahoo}</link> \
+ -<link linkend="FILTER-MSN">filter{msn}</link> \
+ -<link linkend="FILTER-BLOGSPOT">filter{blogspot}</link> \
+ -<link linkend="FILTER-NO-PING">filter{no-ping}</link> \
  -<link linkend="FORCE-TEXT-MODE">force-text-mode</link> \
  -<link linkend="HANDLE-AS-EMPTY-DOCUMENT">handle-as-empty-document</link> \
  -<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> \
@@ -5993,6 +5962,8 @@ that also explains why and how aliases are used:
  -<link linkend="REDIRECT">redirect</link> \
  -<link linkend="SEND-VANILLA-WAFER">send-vanilla-wafer</link> \
  -<link linkend="SEND-WAFER">send-wafer</link> \
+ -<link linkend="SERVER-HEADER-FILTER">server-header-filter{xml-to-html}</link> \
+ -<link linkend="SERVER-HEADER-FILTER">server-header-filter{html-to-xml}</link> \
  +<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> \
  +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
  -<link linkend="TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS">treat-forbidden-connects-like-blocks</link> \
@@ -6529,11 +6500,23 @@ stupid-server.example.com/</screen>
 <title>Filter Files</title>
 
 <para>
- On-the-fly text substitutions that can be invoked through the
- <literal><link linkend="filter">filter</link></literal> action need
+ On-the-fly text substitutions need
  to be defined in a <quote>filter file</quote>. Once defined, they 
- can then be invoked as an <quote>action</quote>. Multiple filter files can be
- defined through the <literal> <link
+ can then be invoked as an <quote>action</quote>.
+</para>
+
+<para>
+ &my-app; supports three different filter actions:
+ <literal><link linkend="filter">filter</link></literal> to
+ rewrite the content that is send to the client,
+ <literal><link linkend="client-header-filter">client-header-filter</link></literal>
+ to rewrite headers that are send by the client, and
+ <literal><link linkend="server-header-filter">server-header-filter</link></literal>
+ to rewrite headers that are send by the server, and
+</para>
+
+<para>
+ Multiple filter files can be defined through the <literal> <link
  linkend="filterfile">filterfile</link></literal> config directive. The filters
  as supplied by the developers will be found in
  <filename>default.filter</filename>. It is recommended that any locally
@@ -6543,33 +6526,30 @@ stupid-server.example.com/</screen>
 </para>
 
 <para>
- Typical reasons for doing these kinds of substitutions are to eliminate
- common annoyances in HTML and JavaScript, such as pop-up windows,
+ Command tasks for content filters are to eliminate common annoyances in
+ HTML and JavaScript, such as pop-up windows,
  exit consoles, crippled windows without navigation tools, the
  infamous &lt;BLINK&gt; tag etc, to suppress images with certain
  width and height attributes (standard banner sizes or web-bugs),
- or just to have fun. The possibilities are endless.
+ or just to have fun.
 </para>
 
 <para>
- Filtering works on any text-based document type, including 
+ Content filtering works on any text-based document type, including 
  HTML, JavaScript, CSS etc. (all <literal>text/*</literal>
  MIME types, <emphasis>except</emphasis> <literal>text/plain</literal>).
  Substitutions are made at the source level, so if you want to <quote>roll
  your own</quote> filters, you should first be familiar with HTML syntax, 
- and, of course, regular expressions. By default, filters are only applied 
- to the raw document content, but can be extended to the HTTP headers with 
- the supplemental actions: 
- <link linkend="filter-client-headers">filter-client-headers</link>  and 
- <link linkend="filter-server-headers">filter-server-headers</link>.
+ and, of course, regular expressions.
 </para>
 
 <para>
  Just like the <link linkend="actions-file">actions files</link>, the
  filter file is organized in sections, which are called <emphasis>filters</emphasis>
- here. Each filter consists of a heading line, that starts with the
- <emphasis>keyword</emphasis> <literal>FILTER:</literal>, followed by
- the filter's <emphasis>name</emphasis>, and a short (one line) 
+ here. Each filter consists of a heading line, that starts with one of the
+ <emphasis>keywords</emphasis> <literal>FILTER:</literal>,
+ <literal>CLIENT-HEADER-FILTER:</literal> or <literal>SERVER-HEADER-FILTER:</literal>
+ followed by the filter's <emphasis>name</emphasis>, and a short (one line) 
  <emphasis>description</emphasis> of what it does. Below that line
  come the <emphasis>jobs</emphasis>, i.e. lines that define the actual
  text substitutions. By convention, the name of a filter
@@ -6586,7 +6566,7 @@ stupid-server.example.com/</screen>
 </para>
  
 <para>
- A filter header line for a filter called <quote>foo</quote> could look
+ A content filter header line for a filter called <quote>foo</quote> could look
  like this:
 </para>
 
@@ -6624,7 +6604,7 @@ stupid-server.example.com/</screen>
 
 <sect2><title>Filter File Tutorial</title>
 <para>
- Now, let's complete our <quote>foo</quote> filter. We have already defined
+ Now, let's complete our <quote>foo</quote> content filter. We have already defined
  the heading, but the jobs are still missing. Since all it does is to replace
  <quote>foo</quote> with <quote>bar</quote>, there is only one (trivial) job
  needed:
@@ -7247,7 +7227,7 @@ pre-defined filters for your convenience:
   <term><emphasis>xml-to-html</emphasis></term>
   <listitem>
    <para>
-    Header filter to change the Content-Type from xml to html.
+    Server-header filter to change the Content-Type from xml to html.
    </para>
   </listitem>
  </varlistentry>
@@ -7256,7 +7236,7 @@ pre-defined filters for your convenience:
   <term><emphasis>html-to-xml</emphasis></term>
   <listitem>
    <para>
-    Header filter to change the Content-Type from html to xml.
+    Server-header filter to change the Content-Type from html to xml.
    </para>
   </listitem>
  </varlistentry>
@@ -7275,8 +7255,32 @@ pre-defined filters for your convenience:
   <term><emphasis>hide-tor-exit-notation</emphasis></term>
   <listitem>
    <para>
-    Header filter to remove the <command>Tor</command> exit node notation
+    Client-header filter to remove the <command>Tor</command> exit node notation
     found in Host and Referer headers.
+   </para>
+   <para>
+    If &my-app; and <command>Tor</command> are chained and &my-app;
+    is configured to use socks4a, one can use <quote>http://www.example.org.foobar.exit/</quote>
+    to access the host <quote>www.example.org</quote> through the
+    <command>Tor</command> exit node <quote>foobar</quote>.
+   </para>
+   <para>
+    As the HTTP client isn't aware of this notation, it treats the
+    whole string <quote>www.example.org.foobar.exit</quote> as host and uses it
+    for the <quote>Host</quote> and <quote>Referer</quote> headers. From the
+    server's point of view the resulting headers are invalid and can cause problems.
+   </para>
+   <para>
+    An invalid <quote>Referer</quote> header can trigger <quote>hot-linking</quote>
+    protections, an invalid <quote>Host</quote> header will make it impossible for
+    the server to find the right vhost (several domains hosted on the same IP address).
+   </para>
+   <para>
+    This client-header filter removes the <quote>foo.exit</quote> part in those headers
+    to prevent the mentioned problems. Note that it only modifies
+    the HTTP headers, it doesn't make it impossible for the server
+    to detect your <command>Tor</command> exit node based on the IP address
+    the request is coming from.
    </para>
   </listitem>
  </varlistentry>
@@ -8082,6 +8086,7 @@ Requests</title>
 
  {-add-header
  -block
+ -client-header-filter{hide-tor-exit-notation}
  -content-type-overwrite
  -crunch-client-header
  -crunch-if-none-match
@@ -8116,12 +8121,7 @@ Requests</title>
  -filter {yahoo}
  -filter {msn}
  -filter {blogspot}
- -filter {xml-to-html}
- -filter {html-to-xml}
  -filter {no-ping}
- -filter{hide-tor-exit-notation}
- -filter-client-headers
- -filter-server-headers
  -force-text-mode
  -handle-as-empty-document
  -handle-as-image
@@ -8140,6 +8140,8 @@ Requests</title>
  -redirect
  -send-vanilla-wafer
  -send-wafer
+ -server-header-filter{xml-to-html}
+ -server-header-filter{html-to-xml} 
  +session-cookies-only
  +set-image-blocker {pattern}
  -treat-forbidden-connects-like-blocks }
@@ -8220,6 +8222,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  
  -add-header
  -block
+ -client-header-filter{hide-tor-exit-notation}
  -content-type-overwrite
  -crunch-client-header
  -crunch-if-none-match
@@ -8254,12 +8257,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -filter {yahoo}
  -filter {msn}
  -filter {blogspot}
- -filter {xml-to-html}
- -filter {html-to-xml}
  -filter {no-ping}
- -filter{hide-tor-exit-notation}
- -filter-client-headers
- -filter-server-headers
  -force-text-mode
  -handle-as-empty-document
  -handle-as-image
@@ -8278,6 +8276,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -redirect
  -send-vanilla-wafer
  -send-wafer
+ -server-header-filter{xml-to-html}
+ -server-header-filter{html-to-xml} 
  -session-cookies-only
  +set-image-blocker {pattern}
  -treat-forbidden-connects-like-blocks </screen>
@@ -8347,6 +8347,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
  {-add-header 
   -block
+  -client-header-filter{hide-tor-exit-notation}
   -content-type-overwrite
   -crunch-client-header
   -crunch-if-none-match
@@ -8381,12 +8382,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   -filter {yahoo}
   -filter {msn}
   -filter {blogspot}
-  -filter {xml-to-html}
-  -filter {html-to-xml}
   -filter {no-ping}
-  -filter{hide-tor-exit-notation}
-  -filter-client-headers
-  -filter-server-headers
   -force-text-mode
   -handle-as-empty-document
   -handle-as-image 
@@ -8402,7 +8398,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   +prevent-compression 
   -redirect
   -send-vanilla-wafer 
-  -send-wafer 
+  -send-wafer
+  -server-header-filter{xml-to-html}
+  -server-header-filter{html-to-xml} 
   +session-cookies-only 
   +set-image-blocker{blank} 
   -treat-forbidden-connects-like-blocks }
@@ -8566,6 +8564,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.28  2006/12/10 23:42:48  hal9
+ Fix various typos reported by Adam P. Thanks.
+
  Revision 2.27  2006/11/14 01:57:47  hal9
  Dump all docs prior to 3.0.6 release. Various minor changes to faq and user
  manual.
