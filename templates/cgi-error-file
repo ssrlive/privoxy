@@ -103,7 +103,7 @@
     <tr>
       <td class="warning">
         <h2>Actions file not found</h2>
-        <p>The actions file you are trying to edit (<code>@f@.action</code>)
+        <p>The actions file you are trying to edit (index <code>@f@</code>)
            does not exist, or cannot be read.</p>
       </td>
     </tr>

@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.32  2007/01/23 16:03:16  fabiankeil
+#    - Add favicon links.
+#    - Remove useless W3C validator links.
+#
 #    Revision 1.31  2006/09/10 14:39:24  hal9
 #    Fix typo + minor change.
 #
@@ -330,7 +334,7 @@ function a_p(link,section)
     <tr>
       <td class="box">
         <div class="buttons">
-          <h2>Editing Actions File @f@.action</h2>
+          <h2>Editing Actions File @actions-file@</h2>
           <!-- @if-all-urls-present-then@@else-not-all-urls-present@ -->
           <p><a class="cmd" href="edit-actions-section-add?f=@f@&amp;v=@v@&amp;s=0">Insert new section at top</a></p>
           <!-- @endif-all-urls-present@ -->

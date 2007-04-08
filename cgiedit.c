@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.49 2007/03/20 15:16:34 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.50 2007/03/29 11:40:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.49 2007/03/20 15:16:34 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.50  2007/03/29 11:40:34  fabiankeil
+ *    Divide @filter-params@ into @client-header-filter-params@
+ *    @content-filter-params@ and @server-header-filter-params@.
+ *
  *    Revision 1.49  2007/03/20 15:16:34  fabiankeil
  *    Use dedicated header filter actions instead of abusing "filter".
  *    Replace "filter-client-headers" and "filter-client-headers"
@@ -470,8 +474,7 @@ struct editable_file
 {
    struct file_line * lines;  /**< The contents of the file.  A linked list of lines. */
    const char * filename;     /**< Full pathname - e.g. "/etc/privoxy/wibble.action". */
-   const char * identifier;   /**< Filename stub - e.g. "wibble".  Use for CGI param. */
-                              /**< Pre-encoded with url_encode() for ease of use. */
+   int identifier;            /**< The file name's position in csp->config->actions_file[]. */
    const char * version_str;  /**< Last modification time, as a string.  For CGI param. */
                               /**< Can be used in URL without using url_param(). */
    unsigned version;          /**< Last modification time - prevents chaos with
@@ -494,7 +497,6 @@ struct editable_file
 jb_err edit_read_file(struct client_state *csp,
                       const struct map *parameters,
                       int require_version,
-                      const char *suffix,
                       struct editable_file **pfile);
 jb_err edit_write_file(struct editable_file * file);
 void   edit_free_file(struct editable_file * file);
@@ -530,13 +532,6 @@ static int match_actions_file_header_line(const char * line, const char * name);
 static jb_err split_line_on_equals(const char * line, char ** pname, char ** pvalue);
 
 /* Internal parameter parsing functions */
-static jb_err get_file_name_param(struct client_state *csp,
-                                  const struct map *parameters,
-                                  const char *param_name,
-                                  const char *suffix,
-                                  char **pfilename,
-                                  const char **pparam);
-
 static jb_err get_url_spec_param(struct client_state *csp,
                                  const struct map *parameters,
                                  const char *name,
@@ -574,6 +569,10 @@ static char *section_target(const unsigned sectionid);
  *                allocated string of the form #l<n>, for use in link
  *                targets.
  *
+ *                XXX: The hash should be moved into the templates
+ *                to make this function more generic and render
+ *                stringify() obsolete.
+ *
  * Parameters  :
  *          1  :  sectionid = start line number of section
  *
@@ -588,6 +587,27 @@ static char *section_target(const unsigned sectionid)
    snprintf(buf, 30, "#l%d", sectionid);
    return(strdup(buf));
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  stringify
+ *
+ * Description :  Convert a number into a dynamically allocated string.
+ *
+ * Parameters  :
+ *          1  :  number = The number to convert.
+ *
+ * Returns     :  String with link target, or NULL if out of memory
+ *
+ *********************************************************************/
+static char *stringify(const int number)
+{
+   char buf[6];
+
+   snprintf(buf, sizeof(buf), "%i", number);
+   return strdup(buf);
 }
 
 
@@ -688,6 +708,7 @@ static jb_err map_copy_parameter_url(struct map *out,
 }
 #endif /* 0 - unused function */
 
+
 /*********************************************************************
  *
  * Function    :  cgi_edit_actions_url_form
@@ -701,7 +722,7 @@ static jb_err map_copy_parameter_url(struct map *out,
  *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters
- *           f : (filename) Identifies the file to edit
+ *           i : (action index) Identifies the file to edit
  *           v : (version) File's last-modified time
  *           p : (pattern) Line number of pattern to edit
  *
@@ -772,7 +793,7 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   err = map(exports, "f", 1, file->identifier, 1);
+   err = map(exports, "f", 1, stringify(file->identifier), 0);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
    if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
@@ -861,7 +882,7 @@ jb_err cgi_edit_actions_add_url_form(struct client_state *csp,
  *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
- *           f : (filename) Identifies the file to edit
+ *           f : (number)  The action file identifier.
  *           v : (version) File's last-modified time
  *           p : (pattern) Line number of pattern to edit
  *
@@ -932,11 +953,12 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   err = map(exports, "f", 1, file->identifier, 1);
+   err = map(exports, "f", 1, stringify(file->identifier), 0);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
    if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
    if (!err) err = map(exports, "jumptarget", 1, section_target(section_start_line_number), 0);
+   if (!err) err = map(exports, "actions-file", 1, html_encode(file->filename), 0);
 
    edit_free_file(file);
 
@@ -1145,8 +1167,6 @@ void edit_free_file(struct editable_file * file)
    }
 
    edit_free_file_lines(file->lines);
-   freez(file->filename);
-   freez(file->identifier);
    freez(file->version_str);
    file->version = 0;
    file->parse_error_text = NULL; /* Statically allocated */
@@ -1741,13 +1761,11 @@ jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile, int *newline)
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  parameters = map of cgi parameters.
  *          3  :  require_version = true to check "ver" parameter.
- *          4  :  suffix = File extension, e.g. ".action".
- *          5  :  pfile = Destination for the file.  Will be set
+ *          4  :  pfile = Destination for the file.  Will be set
  *                        to NULL on error.
  *
  * CGI Parameters :
- *    filename :  The name of the file to read, without the
- *                path or ".action" extension.
+ *           f :  The action file identifier.
  *         ver :  (Only if require_version is nonzero)
  *                Timestamp of the actions file.  If wrong, this
  *                function fails with JB_ERR_MODIFIED.
@@ -1766,19 +1784,18 @@ jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile, int *newline)
 jb_err edit_read_file(struct client_state *csp,
                       const struct map *parameters,
                       int require_version,
-                      const char *suffix,
                       struct editable_file **pfile)
 {
    struct file_line * lines;
    FILE * fp;
    jb_err err;
-   char * filename;
-   const char * identifier;
+   const char * filename = NULL;
    struct editable_file * file;
    unsigned version = 0;
    struct stat statbuf[1];
    char version_buf[22];
    int newline = NEWLINE_UNKNOWN;
+   int i;
 
    assert(csp);
    assert(parameters);
@@ -1786,17 +1803,24 @@ jb_err edit_read_file(struct client_state *csp,
 
    *pfile = NULL;
 
-   err = get_file_name_param(csp, parameters, "f", suffix,
-                             &filename, &identifier);
-   if (err)
+   if ((JB_ERR_OK == get_number_param(csp, parameters, "f", &i))
+      && (i < MAX_AF_FILES) && (NULL != csp->config->actions_file[i]))
    {
-      return err;
+      /*
+       * i is guaranteed to be non-negative because
+       * get_number_param returned JB_ERR_OK.
+       *
+       * XXX: This comment wouldn't be necessary if
+       * get_number_param's fourth parameter would simply
+       * be changed to unsigned. I don't see the point of
+       * overloading its meaning to signal problems.
+       */
+      filename = csp->config->actions_file[i];
    }
 
-   if (stat(filename, statbuf) < 0)
+   if (filename == NULL || stat(filename, statbuf) < 0)
    {
       /* Error, probably file not found. */
-      free(filename);
       return JB_ERR_FILE;
    }
    version = (unsigned) statbuf->st_mtime;
@@ -1807,7 +1831,6 @@ jb_err edit_read_file(struct client_state *csp,
       err = get_number_param(csp, parameters, "v", &specified_version);
       if (err)
       {
-         free(filename);
          return err;
       }
 
@@ -1819,7 +1842,6 @@ jb_err edit_read_file(struct client_state *csp,
 
    if (NULL == (fp = fopen(filename,"rb")))
    {
-      free(filename);
       return JB_ERR_FILE;
    }
 
@@ -1829,14 +1851,12 @@ jb_err edit_read_file(struct client_state *csp,
 
    if (err)
    {
-      free(filename);
       return err;
    }
 
    file = (struct editable_file *) zalloc(sizeof(*file));
    if (err)
    {
-      free(filename);
       edit_free_file_lines(lines);
       return err;
    }
@@ -1845,13 +1865,7 @@ jb_err edit_read_file(struct client_state *csp,
    file->newline = newline;
    file->filename = filename;
    file->version = version;
-   file->identifier = url_encode(identifier);
-
-   if (file->identifier == NULL)
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
+   file->identifier = i;
 
    /* Correct file->version_str */
    freez(file->version_str);
@@ -1891,8 +1905,7 @@ jb_err edit_read_file(struct client_state *csp,
  *                        to NULL on error.
  *
  * CGI Parameters :
- *    filename :  The name of the actions file to read, without the
- *                path or ".action" extension.
+ *           f :  The actions file identifier.
  *         ver :  (Only if require_version is nonzero)
  *                Timestamp of the actions file.  If wrong, this
  *                function fails with JB_ERR_MODIFIED.
@@ -1922,7 +1935,7 @@ jb_err edit_read_actions_file(struct client_state *csp,
 
    *pfile = NULL;
 
-   err = edit_read_file(csp, parameters, require_version, ".action", &file);
+   err = edit_read_file(csp, parameters, require_version, &file);
    if (err)
    {
       /* Try to handle if possible */
@@ -1969,6 +1982,10 @@ jb_err edit_read_actions_file(struct client_state *csp,
 }
 
 
+#if 0
+/*
+ * Currently not needed, but may become useful again in the future.
+ */
 /*********************************************************************
  *
  * Function    :  get_file_name_param
@@ -2083,6 +2100,7 @@ static jb_err get_file_name_param(struct client_state *csp,
 
    return JB_ERR_OK;
 }
+#endif /*0*/
 
 
 /*********************************************************************
@@ -2361,7 +2379,7 @@ jb_err cgi_error_parse(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   err = map(exports, "f", 1, file->identifier, 1);
+   err = map(exports, "f", 1, stringify(file->identifier), 0);
    if (!err) err = map(exports, "parse-error", 1, html_encode(file->parse_error_text), 0);
 
    cur_line = file->parse_error;
@@ -2427,7 +2445,7 @@ jb_err cgi_error_file(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_error_file
+ * Function    :  cgi_error_file_read_only
  *
  * Description :  CGI function that is called when a file cannot be
  *                opened for writing by the CGI editor.
@@ -2695,13 +2713,14 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
    /* Set up global exports */
 
-   if (!err) err = map(exports, "f", 1, file->identifier, 1);
+   if (!err) err = map(exports, "actions-file", 1, html_encode(file->filename), 0);
+   if (!err) err = map(exports, "f", 1, stringify(file->identifier), 0);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
 
    /* Discourage private additions to default.action */
 
    if (!err) err = map_conditional(exports, "default-action",
-                                   (strcmp("default", lookup(parameters, "f")) == 0));
+                                   (strstr("default.action", file->filename) != NULL));
    if (err)
    {
       edit_free_file(file);
@@ -3062,7 +3081,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   err = map(exports, "f", 1, file->identifier, 1);
+   err = map(exports, "f", 1, stringify(file->identifier), 0);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "s", 1, url_encode(lookup(parameters, "s")), 0);
 
@@ -3526,13 +3545,13 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       if (err == JB_ERR_FILE)
       {
          /* Read-only file. */
-         err = cgi_error_file_read_only(csp, rsp, file->identifier);
+         err = cgi_error_file_read_only(csp, rsp, file->filename);
       }
       edit_free_file(file);
       return err;
    }
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
             (long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
@@ -3647,13 +3666,13 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
       if (err == JB_ERR_FILE)
       {
          /* Read-only file. */
-         err = cgi_error_file_read_only(csp, rsp, file->identifier);
+         err = cgi_error_file_read_only(csp, rsp, file->filename);
       }
       edit_free_file(file);
       return err;
    }
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
             (long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
@@ -3776,13 +3795,13 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
       if (err == JB_ERR_FILE)
       {
          /* Read-only file. */
-         err = cgi_error_file_read_only(csp, rsp, file->identifier);
+         err = cgi_error_file_read_only(csp, rsp, file->filename);
       }
       edit_free_file(file);
       return err;
    }
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
             (long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
@@ -3887,13 +3906,13 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
       if (err == JB_ERR_FILE)
       {
          /* Read-only file. */
-         err = cgi_error_file_read_only(csp, rsp, file->identifier);
+         err = cgi_error_file_read_only(csp, rsp, file->filename);
       }
       edit_free_file(file);
       return err;
    }
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
             (long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
@@ -4009,13 +4028,13 @@ jb_err cgi_edit_actions_section_remove(struct client_state *csp,
       if (err == JB_ERR_FILE)
       {
          /* Read-only file. */
-         err = cgi_error_file_read_only(csp, rsp, file->identifier);
+         err = cgi_error_file_read_only(csp, rsp, file->filename);
       }
       edit_free_file(file);
       return err;
    }
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i",
             (long) time(NULL), file->identifier);
 
    edit_free_file(file);
@@ -4178,13 +4197,13 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
       if (err == JB_ERR_FILE)
       {
          /* Read-only file. */
-         err = cgi_error_file_read_only(csp, rsp, file->identifier);
+         err = cgi_error_file_read_only(csp, rsp, file->filename);
       }
       edit_free_file(file);
       return err;
    }
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i",
             (long) time(NULL), file->identifier);
 
    edit_free_file(file);
@@ -4366,14 +4385,14 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
          if (err == JB_ERR_FILE)
          {
             /* Read-only file. */
-            err = cgi_error_file_read_only(csp, rsp, file->identifier);
+            err = cgi_error_file_read_only(csp, rsp, file->filename);
          }
          edit_free_file(file);
          return err;
       }
    } /* END if (section1 != section2) */
 
-   snprintf(target, 1024, CGI_PREFIX "edit-actions-list?foo=%lu&f=%s",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i",
             (long) time(NULL), file->identifier);
 
    edit_free_file(file);
