@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.24 2006/08/17 17:15:10 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.25 2007/01/18 15:03:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -10,7 +10,7 @@
  *                each too small to deserve their own file but don't 
  *                really fit in any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.25  2007/01/18 15:03:20  fabiankeil
+ *    Don't include replacement timegm() if
+ *    putenv() or tzset() isn't available.
+ *
  *    Revision 1.24  2006/08/17 17:15:10  fabiankeil
  *    - Back to timegm() using GnuPG's replacement if necessary.
  *      Using mktime() and localtime() could add a on hour offset if
@@ -205,6 +209,12 @@ extern int snprintf(char *, size_t, const char *, /*args*/ ...);
 #if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 time_t timegm(struct tm *tm);
 #endif /* !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV) */
+
+#if !defined(HAVE_STRLCPY)
+/* Here's looking at you, Ulrich. */
+#define strlcpy(dst, src, size) (size_t)snprintf((dst), (size), "%s", (src))
+#define HAVE_STRLCPY 1
+#endif /* ndef HAVE_STRLCPY*/
 
 /* Revision control strings from this header and associated .c file */
 extern const char miscutil_rcs[];
