@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.47 2006/11/28 15:25:15 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.48 2007/03/31 13:33:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.47 2006/11/28 15:25:15 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.48  2007/03/31 13:33:28  fabiankeil
+ *    Add alternative log_error() with timestamps
+ *    that contain milliseconds and without using
+ *    strcpy(), strcat() or sprintf().
+ *
  *    Revision 1.47  2006/11/28 15:25:15  fabiankeil
  *    Only unlink the pidfile if it's actually used.
  *
@@ -273,7 +278,8 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.47 2006/11/28 15:25:15 fabiankeil E
 
 #if defined(HAVE_STRLCPY) && defined(HAVE_GETTIMEOFDAY)
 #define USE_NEW_LOG_ERROR
-#include <time.h>
+/* For gettimeofday() */
+#include <sys/time.h>
 #endif /* defined(HAVE_STRLCPY) && defined(HAVE_GETTIMEOFDAY) */
 
 #if !defined(_WIN32) && !defined(__OS2__)
