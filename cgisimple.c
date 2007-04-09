@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.52 2007/02/13 15:10:26 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.53 2007/04/08 13:21:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.52 2007/02/13 15:10:26 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.53  2007/04/08 13:21:04  fabiankeil
+ *    Reference action files in CGI URLs by id instead
+ *    of using the first part of the file name.
+ *    Fixes BR 1694250 and BR 1590556.
+ *
  *    Revision 1.52  2007/02/13 15:10:26  fabiankeil
  *    Apparently fopen()ing in "binary" mode doesn't require
  *    #ifdefs, it's already done without them in cgiedit.c.
@@ -303,10 +308,6 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.52 2007/02/13 15:10:26 fabian
 #ifdef HAVE_ACCESS
 #include <unistd.h>
 #endif /* def HAVE_ACCESS */
-
-#ifdef _WIN32
-#define snprintf _snprintf
-#endif /* def _WIN32 */
 
 #include "project.h"
 #include "cgi.h"

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.61 2007/03/16 16:47:35 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.62 2007/03/17 15:20:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.61 2007/03/16 16:47:35 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.62  2007/03/17 15:20:05  fabiankeil
+ *    New config option: enforce-blocks.
+ *
  *    Revision 1.61  2007/03/16 16:47:35  fabiankeil
  *    - Mention other reasons why acl directive loading might have failed.
  *    - Don't log the acl source if the acl destination is to blame.
@@ -409,9 +412,6 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.61 2007/03/16 16:47:35 fabiankeil
 # ifndef _WIN_CONSOLE
 #  include "w32log.h"
 # endif /* ndef _WIN_CONSOLE */
-
-/* VC++ has "_snprintf", not "snprintf" */
-#define snprintf _snprintf
 
 #else /* ifndef _WIN32 */
 
