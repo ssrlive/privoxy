@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.46 2007/01/18 15:03:20 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.47 2007/03/17 11:52:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,11 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.46 2007/01/18 15:03:20 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.47  2007/03/17 11:52:15  fabiankeil
+ *    - Use snprintf instead of sprintf.
+ *    - Mention copyright for the replacement
+ *      functions in the copyright header.
+ *
  *    Revision 1.46  2007/01/18 15:03:20  fabiankeil
  *    Don't include replacement timegm() if
  *    putenv() or tzset() isn't available.
@@ -1188,11 +1193,10 @@ time_t timegm(struct tm *tm)
 #endif /* !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV) */
 
 
+#ifndef HAVE_SNPRINTF
 /*
  * What follows is a portable snprintf routine, written by Mark Martinec.
  * See: http://www.ijs.si/software/snprintf/
- * Anyone who needs it can add a define for themselves... so far, only 
- * OS/2 (native) lacks snprintf.
 
                                   snprintf.c
                    - a portable implementation of snprintf,
@@ -1213,8 +1217,6 @@ Author
    Copyright © 1999, Mark Martinec
 
  */
-
-#ifdef __OS2__
 
 #define PORTABLE_SNPRINTF_VERSION_MAJOR 2
 #define PORTABLE_SNPRINTF_VERSION_MINOR 2
@@ -1955,7 +1957,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
   return (int) str_l;
 }
 #endif
-#endif /* __OS2__ */
+#endif /* ndef HAVE_SNPRINTF */
 /*
   Local Variables:
   tab-width: 3
