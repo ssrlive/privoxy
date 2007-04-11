@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.48 2007/03/31 13:33:28 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.49 2007/04/08 16:44:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.48 2007/03/31 13:33:28 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.49  2007/04/08 16:44:15  fabiankeil
+ *    We need <sys/time.h> for gettimeofday(), not <time.h>.
+ *
  *    Revision 1.48  2007/03/31 13:33:28  fabiankeil
  *    Add alternative log_error() with timestamps
  *    that contain milliseconds and without using
@@ -803,8 +806,8 @@ void log_error(int loglevel, const char *fmt, ...)
    outbuf = outbuf_save;
 
    /*
-    * Memsetting the whole buffer to zero
-    * here make things easier later on.
+    * Memsetting the whole buffer to zero (in theory)
+    * makes things easier later on.
     */
    memset(outbuf, 0, log_buffer_size);
 
@@ -833,10 +836,15 @@ void log_error(int loglevel, const char *fmt, ...)
       if (ch != '%')
       {
          outbuf[length++] = ch;
-         assert(outbuf[length] == '\0');
+         /*
+          * XXX: Only necessary on platforms which don't use pthread
+          * mutexes (mingw32 for example), where multiple threads can
+          * write to the buffer at the same time.
+          */
+         outbuf[length] = '\0';
          continue;
       }
-      assert(outbuf[length] == '\0');
+      outbuf[length] = '\0';
       ch = *src++;
       switch (ch) {
          case '%':
