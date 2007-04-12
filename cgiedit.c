@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.50 2007/03/29 11:40:34 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.51 2007/04/08 13:21:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.50 2007/03/29 11:40:34 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.51  2007/04/08 13:21:05  fabiankeil
+ *    Reference action files in CGI URLs by id instead
+ *    of using the first part of the file name.
+ *    Fixes BR 1694250 and BR 1590556.
+ *
  *    Revision 1.50  2007/03/29 11:40:34  fabiankeil
  *    Divide @filter-params@ into @client-header-filter-params@
  *    @content-filter-params@ and @server-header-filter-params@.
@@ -347,10 +352,6 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.50 2007/03/29 11:40:34 fabiankeil
 #include <assert.h>
 #include <sys/stat.h>
 
-#ifdef _WIN32
-#define snprintf _snprintf
-#endif /* def _WIN32 */
-
 #include "project.h"
 #include "cgi.h"
 #include "cgiedit.h"
@@ -474,7 +475,7 @@ struct editable_file
 {
    struct file_line * lines;  /**< The contents of the file.  A linked list of lines. */
    const char * filename;     /**< Full pathname - e.g. "/etc/privoxy/wibble.action". */
-   int identifier;            /**< The file name's position in csp->config->actions_file[]. */
+   unsigned identifier;       /**< The file name's position in csp->config->actions_file[]. */
    const char * version_str;  /**< Last modification time, as a string.  For CGI param. */
                               /**< Can be used in URL without using url_param(). */
    unsigned version;          /**< Last modification time - prevents chaos with
@@ -490,6 +491,24 @@ struct editable_file
    const char * parse_error_text;  /**< On parse error, this is the problem.
                                         (Statically allocated) */
 };
+
+/**
+ * Used by cgi_edit_actions_for_url() to replace filter related macros.
+ */
+struct cgi_filter_info
+{
+   const int multi_action_index; /**< The multi action index as defined in project.h */
+   char *prepared_templates;     /**< Temporary space for the filled-in templates for
+                                      this filter. Once all templated are aggregated
+                                      they replace the @$filtername-params@ macro. */
+   const char *type;             /**< Name of the filter type,
+                                      for example "server-header-filter". */
+   const char *abbr_type;        /**< Abbreviation of the filter type,
+                                      usually the first character capitalized */
+   const char *anchor;           /**< Anchor for the User Manual link,
+                                      for example "SERVER-HEADER-FILTER"  */
+};
+
 
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
 
@@ -602,7 +621,7 @@ static char *section_target(const unsigned sectionid)
  * Returns     :  String with link target, or NULL if out of memory
  *
  *********************************************************************/
-static char *stringify(const int number)
+static char *stringify(const unsigned number)
 {
    char buf[6];
 
@@ -1795,7 +1814,7 @@ jb_err edit_read_file(struct client_state *csp,
    struct stat statbuf[1];
    char version_buf[22];
    int newline = NEWLINE_UNKNOWN;
-   int i;
+   unsigned i;
 
    assert(csp);
    assert(parameters);
@@ -1806,15 +1825,6 @@ jb_err edit_read_file(struct client_state *csp,
    if ((JB_ERR_OK == get_number_param(csp, parameters, "f", &i))
       && (i < MAX_AF_FILES) && (NULL != csp->config->actions_file[i]))
    {
-      /*
-       * i is guaranteed to be non-negative because
-       * get_number_param returned JB_ERR_OK.
-       *
-       * XXX: This comment wouldn't be necessary if
-       * get_number_param's fourth parameter would simply
-       * be changed to unsigned. I don't see the point of
-       * overloading its meaning to signal problems.
-       */
       filename = csp->config->actions_file[i];
    }
 
@@ -3142,11 +3152,25 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       /*
        * List available filters and their settings.
        */
-      char *content_filter_params;
-      char *server_header_filter_params;
-      char *client_header_filter_params;
       char *filter_template;
       int filter_identifier = 0;
+      /* XXX: Should we put these into an array? */
+      static struct cgi_filter_info content_filter = {
+        ACTION_MULTI_FILTER, NULL,
+         "filter", "F", "FILTER"
+      };
+      static struct cgi_filter_info server_header_filter = {
+         ACTION_MULTI_SERVER_HEADER_FILTER, NULL,
+         "server-header-filter", "S", "SERVER-HEADER-FILTER"
+      };
+      static struct cgi_filter_info client_header_filter = {
+         ACTION_MULTI_CLIENT_HEADER_FILTER, NULL,
+         "client-header-filter", "C", "CLIENT-HEADER-FILTER"
+      };
+
+      content_filter.prepared_templates = strdup("");
+      server_header_filter.prepared_templates = strdup("");
+      client_header_filter.prepared_templates = strdup("");
 
       err = template_load(csp, &filter_template, "edit-actions-for-url-filter", 0);
       if (err)
@@ -3162,10 +3186,6 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 
       err = template_fill(&filter_template, exports);
 
-      content_filter_params = strdup("");
-      server_header_filter_params = strdup("");
-      client_header_filter_params = strdup("");
-
       for (i = 0; i < MAX_AF_FILES; i++)
       {
          if ((csp->rlist[i] != NULL) && (csp->rlist[i]->f != NULL))
@@ -3173,40 +3193,23 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
             filter_group = csp->rlist[i]->f;
             for (;(!err) && (filter_group != NULL); filter_group = filter_group->next)
             {
+               int multi_action_index;
                char current_mode = 'x';
                char number[20];
-               int multi_action_index = 0;
                struct list_entry *filter_name;
                struct map *line_exports;
-               char *this_line;
-               char *filter_type;
-               char *abbr_filter_type;
-               char *anchor;
-               char **current_params;
+               struct cgi_filter_info *current_filter = NULL;
 
                switch (filter_group->type)
                {
                   case FT_CONTENT_FILTER:
-                     /* XXX: Should we call it content-filter instead? */
-                     filter_type = "filter"; 
-                     abbr_filter_type = "F";
-                     multi_action_index = ACTION_MULTI_FILTER;
-                     anchor = "FILTER";
-                     current_params = &content_filter_params;
+                     current_filter = &content_filter;
                      break;
                   case FT_SERVER_HEADER_FILTER:
-                     filter_type = "server-header-filter"; 
-                     abbr_filter_type = "S"; 
-                     multi_action_index = ACTION_MULTI_SERVER_HEADER_FILTER;
-                     current_params = &server_header_filter_params;
-                     anchor = "SERVER-HEADER-FILTER"; /* XXX: no documentation available yet */
+                     current_filter = &server_header_filter;
                      break;
                   case FT_CLIENT_HEADER_FILTER:
-                     filter_type = "client-header-filter"; 
-                     abbr_filter_type = "C"; 
-                     multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
-                     current_params = &client_header_filter_params;
-                     anchor = "CLIENT-HEADER-FILTER"; /* XXX: no documentation available yet */
+                     current_filter = &client_header_filter;
                      break;
                   default:
                      log_error(LOG_LEVEL_FATAL,
@@ -3214,7 +3217,8 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                         filter_group->type, filter_group->name);
                      /* Not reached. */
                }
-               assert(multi_action_index);
+               assert(current_filter != NULL);
+               multi_action_index = current_filter->multi_action_index;
 
                filter_name = cur_line->data.action->multi_add[multi_action_index]->first;
                while ((filter_name != NULL)
@@ -3249,26 +3253,27 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                if (line_exports == NULL)
                {
                   err = JB_ERR_MEMORY;
-                  freez(*current_params); /* XXX: really necessary? */
+                  freez(current_filter->prepared_templates); /* XXX: really necessary? */
                }
                else
                {
+                  char *filter_line;
+
                   if (!err) err = map(line_exports, "index", 1, number, 1);
                   if (!err) err = map(line_exports, "name",  1, filter_group->name, 1);
                   if (!err) err = map(line_exports, "description",  1, filter_group->description, 1);
                   if (!err) err = map_radio(line_exports, "this-filter", "ynx", current_mode);
-                  if (!err) err = map(line_exports, "filter-type", 1, filter_type, 1);
-                  if (!err) err = map(line_exports, "abbr-filter-type", 1, abbr_filter_type, 1);
-                  if (!err) err = map(line_exports, "anchor", 1, anchor, 1);
+                  if (!err) err = map(line_exports, "filter-type", 1, current_filter->type, 1);
+                  if (!err) err = map(line_exports, "abbr-filter-type", 1, current_filter->abbr_type, 1);
+                  if (!err) err = map(line_exports, "anchor", 1, current_filter->anchor, 1);
 
-                  this_line = NULL;
                   if (!err)
                   {
-                     this_line = strdup(filter_template);
-                     if (this_line == NULL) err = JB_ERR_MEMORY;
+                     filter_line = strdup(filter_template);
+                     if (filter_line == NULL) err = JB_ERR_MEMORY;
                   }
-                  if (!err) err = template_fill(&this_line, line_exports);
-                  string_join(current_params, this_line);
+                  if (!err) err = template_fill(&filter_line, line_exports);
+                  string_join(&current_filter->prepared_templates, filter_line);
 
                   free_map(line_exports);
                }
@@ -3277,14 +3282,14 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       }
       freez(filter_template);
 
-      if (!err) err = map(exports, "content-filter-params", 1, content_filter_params, 0);
-      if (!err) err = map(exports, "server-header-filter-params", 1, server_header_filter_params, 0);
-      if (!err) err = map(exports, "client-header-filter-params", 1, client_header_filter_params, 0);
+      if (!err) err = map(exports, "content-filter-params", 1, content_filter.prepared_templates, 0);
+      if (!err) err = map(exports, "server-header-filter-params", 1, server_header_filter.prepared_templates, 0);
+      if (!err) err = map(exports, "client-header-filter-params", 1, client_header_filter.prepared_templates, 0);
       if (err)
       {
-         freez(content_filter_params);
-         freez(server_header_filter_params);
-         freez(client_header_filter_params);
+         freez(content_filter.prepared_templates);
+         freez(server_header_filter.prepared_templates);
+         freez(client_header_filter.prepared_templates);
       }
    }
 
