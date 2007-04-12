@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.70 2007/04/02 08:49:49 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.71 2007/04/11 09:23:06 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1011,7 +1011,8 @@ jmcms.cydoor.com/
 #MASTER# BLOCK-REFERRER: http://discussion.brighthand.com/forumdisplay.php?s=fee44a5b2a6fc2e9e79d6472bc8fbe94&forumid=197 10/19/06
 *[0-9].tribalfusion.com/
 #MASTER# REMARKS: Actions file tracker 1547656 09/02/06
-img.mediaplex.com
+#MASTER# REMARKS: Update pattern: Actionsfile feedback item #1698822, was opened at 2007-04-11 to catch https://secure.img-cdn.mediaplex.com/0....
+img*.mediaplex.com
 #MASTER# BLOCK-REFERRER: http://www.tomshardware.com/ 09/28/06
 #MASTER# REMARKS: There is adfarm and altfarm.mediaplex
 a*farm.mediaplex.com
