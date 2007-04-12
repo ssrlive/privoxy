@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.18 2007/01/22 16:06:28 fabiankeil Exp $
+#  $Id: standard.action,v 1.19 2007/03/20 15:40:00 fabiankeil Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -79,8 +79,8 @@
 -inspect-jpegs \
 -kill-popups \
 -limit-connect \
--prevent-compression \
 -overwrite-last-modified \
+-prevent-compression \
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
@@ -148,8 +148,8 @@ standard.Cautious
 -inspect-jpegs \
 -kill-popups \
 -limit-connect \
--prevent-compression \
 -overwrite-last-modified \
+-prevent-compression \
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
@@ -224,8 +224,8 @@ standard.Medium
 -inspect-jpegs \
 -kill-popups \
 +limit-connect{,} \
--prevent-compression \
 +overwrite-last-modified{randomize} \
+-prevent-compression \
 -redirect \
 -send-vanilla-wafer \
 -send-wafer \
