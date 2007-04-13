@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.71 2007/04/11 09:23:06 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.72 2007/04/12 02:57:46 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1364,6 +1364,9 @@ lads.myspace.com
 #MASTER# UNBLOCK-REFERRER: http://www.fish4.co.uk/iad/lettings/advert?adId=12389712&src=nestoria
 #MASTER# REMARKS 20070411 Adam Piggott fish4.co.uk is a popular UK advertising site for cars, properties and jobs and uses ad/advert all over the place, understandably.
 .fish4.co.uk/.*ad
+#MASTER# REMARKS Actionsfile feedback item #1700037 2007-04-13 HB
+#MASTER# UNBLOCK-REFERRER: http://www.mp3.com.au/popup/popup.asp?id=110433
+.mp3.com.au/.*popup
 
 #############################################################################
 # Site-specific special rules:
