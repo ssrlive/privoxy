@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.36 2006/12/28 17:15:42 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.37 2007/03/11 15:56:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.36 2006/12/28 17:15:42 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.37  2007/03/11 15:56:12  fabiankeil
+ *    Add kludge to log unknown aliases and actions before exiting.
+ *
  *    Revision 1.36  2006/12/28 17:15:42  fabiankeil
  *    Fix gcc43 conversion warning.
  *
@@ -870,6 +873,67 @@ jb_err merge_current_action (struct current_action_spec *dest,
 
 /*********************************************************************
  *
+ * Function    :  update_action_bits
+ *
+ * Description :  Updates the action bits based on matching tags.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  0 if no tag matched, or
+ *                1 otherwise
+ *
+ *********************************************************************/
+int update_action_bits(struct client_state *csp)
+{
+   struct file_list *fl;
+   struct url_actions *b;
+   struct list_entry *tag;
+   int updated = 0;
+   int i;
+
+   /* Take each tag, */
+   for (tag = csp->tags->first; tag != NULL; tag = tag->next)
+   {
+      /* run through all action files, */
+      for (i = 0; i < MAX_AF_FILES; i++)
+      {
+         if (((fl = csp->actions_list[i]) == NULL) || ((b = fl->f) == NULL))
+         {
+            /* Skip empty files */
+            continue;
+         }
+         /* and through all the action patterns, */
+         for (b = b->next; NULL != b; b = b->next)
+         {
+            /* skip the URL patterns, */
+            if (NULL == b->url->tag_regex)
+            {
+               continue;
+            }
+
+            /* and check if one of the tag patterns matches this tag, */
+            if (0 == regexec(b->url->tag_regex, tag->str, 0, NULL, 0))
+            {
+               /* if it does, update the action bit map, */
+               if (merge_current_action(csp->action, b->action))
+               {
+                  log_error(LOG_LEVEL_ERROR,
+                     "Out of memorey while changing action bits");
+               }
+               /* and signal the change. */
+               updated = 1;
+            }
+         }
+      }
+   }
+
+   return updated;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  free_current_action
  *
  * Description :  Free memory used by a current_action_spec.
@@ -1479,7 +1543,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
  * Function    :  actions_to_text
  *
  * Description :  Converts a actionsfile entry from the internal
- *                structurt into a text line.  The output is split
+ *                structure into a text line.  The output is split
  *                into one line for each action with line continuation. 
  *
  * Parameters  :

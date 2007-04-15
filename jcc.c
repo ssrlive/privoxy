@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.127 2007/03/20 13:53:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.128 2007/03/25 16:55:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.127 2007/03/20 13:53:17 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.128  2007/03/25 16:55:54  fabiankeil
+ *    Don't CLF-log CONNECT requests twice.
+ *
  *    Revision 1.127  2007/03/20 13:53:17  fabiankeil
  *    Log the source address for ACL-related connection drops.
  *
@@ -1867,6 +1870,13 @@ static void chat(struct client_state *csp)
       enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
    }
 
+   hdr = sed(client_patterns, add_client_headers, csp);
+   if (hdr == NULL)
+   {
+      /* FIXME Should handle error properly */
+      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
+   }
+   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
 #ifdef FEATURE_KILL_POPUPS
    block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
@@ -1923,14 +1933,10 @@ static void chat(struct client_state *csp)
       csp->flags |= CSP_FLAG_REJECTED;
 #endif /* def FEATURE_STATISTICS */
 
-      return;
-   }
+      freez(hdr);
+      list_remove_all(csp->headers);
 
-   hdr = sed(client_patterns, add_client_headers, csp);
-   if (hdr == NULL)
-   {
-      /* FIXME Should handle error properly */
-      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
+      return;
    }
 
    list_remove_all(csp->headers);

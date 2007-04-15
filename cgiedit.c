@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.51 2007/04/08 13:21:05 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.52 2007/04/12 10:41:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.51 2007/04/08 13:21:05 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.52  2007/04/12 10:41:23  fabiankeil
+ *    - Don't mistake VC++'s _snprintf() for a snprintf() replacement.
+ *    - Move some cgi_edit_actions_for_url() variables into structs.
+ *    - Remove bogus comment.
+ *
  *    Revision 1.51  2007/04/08 13:21:05  fabiankeil
  *    Reference action files in CGI URLs by id instead
  *    of using the first part of the file name.
@@ -493,22 +498,52 @@ struct editable_file
 };
 
 /**
- * Used by cgi_edit_actions_for_url() to replace filter related macros.
+ * Information about the filter types.
+ * Used for macro replacement in cgi_edit_actions_for_url.
  */
-struct cgi_filter_info
+struct filter_type_info
 {
    const int multi_action_index; /**< The multi action index as defined in project.h */
-   char *prepared_templates;     /**< Temporary space for the filled-in templates for
-                                      this filter. Once all templated are aggregated
-                                      they replace the @$filtername-params@ macro. */
+   const char *macro_name;       /**< Name of the macro that has to be replaced
+                                      with the prepared templates.
+                                      For example "content-filter-params" */
    const char *type;             /**< Name of the filter type,
                                       for example "server-header-filter". */
-   const char *abbr_type;        /**< Abbreviation of the filter type,
-                                      usually the first character capitalized */
+   const char *abbr_type;        /**< Abbreviation of the filter type, usually the
+                                      first or second character capitalized */
    const char *anchor;           /**< Anchor for the User Manual link,
                                       for example "SERVER-HEADER-FILTER"  */
 };
 
+/* Accessed by index, keep the order in the way the FT_ macros are defined. */
+const static struct filter_type_info filter_type_info[] =
+{
+   {
+      ACTION_MULTI_FILTER,
+      "content-filter-params", "filter",
+      "F", "FILTER"
+   },
+   {
+      ACTION_MULTI_CLIENT_HEADER_FILTER,
+      "client-header-filter-params", "client-header-filter",
+      "C", "CLIENT-HEADER-FILTER"
+   },
+   {
+      ACTION_MULTI_SERVER_HEADER_FILTER,
+      "server-header-filter-params", "server-header-filter",
+      "S", "SERVER-HEADER-FILTER"
+   },
+   {
+      ACTION_MULTI_CLIENT_HEADER_TAGGER,
+      "client-header-tagger-params", "client-header-tagger",
+      "L", "CLIENT-HEADER-TAGGER"
+   },
+   {
+      ACTION_MULTI_SERVER_HEADER_TAGGER,
+      "server-header-tagger-params", "server-header-tagger",
+      "E", "SERVER-HEADER-TAGGER"
+   },
+};
 
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
 
@@ -3154,23 +3189,12 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
        */
       char *filter_template;
       int filter_identifier = 0;
-      /* XXX: Should we put these into an array? */
-      static struct cgi_filter_info content_filter = {
-        ACTION_MULTI_FILTER, NULL,
-         "filter", "F", "FILTER"
-      };
-      static struct cgi_filter_info server_header_filter = {
-         ACTION_MULTI_SERVER_HEADER_FILTER, NULL,
-         "server-header-filter", "S", "SERVER-HEADER-FILTER"
-      };
-      static struct cgi_filter_info client_header_filter = {
-         ACTION_MULTI_CLIENT_HEADER_FILTER, NULL,
-         "client-header-filter", "C", "CLIENT-HEADER-FILTER"
-      };
+      char *prepared_templates[MAX_FILTER_TYPES];
 
-      content_filter.prepared_templates = strdup("");
-      server_header_filter.prepared_templates = strdup("");
-      client_header_filter.prepared_templates = strdup("");
+      for (i = 0; i < MAX_FILTER_TYPES; i++)
+      {
+         prepared_templates[i] = strdup("");
+      }
 
       err = template_load(csp, &filter_template, "edit-actions-for-url-filter", 0);
       if (err)
@@ -3193,32 +3217,14 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
             filter_group = csp->rlist[i]->f;
             for (;(!err) && (filter_group != NULL); filter_group = filter_group->next)
             {
-               int multi_action_index;
                char current_mode = 'x';
                char number[20];
                struct list_entry *filter_name;
                struct map *line_exports;
-               struct cgi_filter_info *current_filter = NULL;
+               const int type = filter_group->type;
+               const int multi_action_index = filter_type_info[type].multi_action_index;
 
-               switch (filter_group->type)
-               {
-                  case FT_CONTENT_FILTER:
-                     current_filter = &content_filter;
-                     break;
-                  case FT_SERVER_HEADER_FILTER:
-                     current_filter = &server_header_filter;
-                     break;
-                  case FT_CLIENT_HEADER_FILTER:
-                     current_filter = &client_header_filter;
-                     break;
-                  default:
-                     log_error(LOG_LEVEL_FATAL,
-                        "cgi_edit_actions_for_url: Unknown filter type: %u for filter %s.",
-                        filter_group->type, filter_group->name);
-                     /* Not reached. */
-               }
-               assert(current_filter != NULL);
-               multi_action_index = current_filter->multi_action_index;
+               assert(type < MAX_FILTER_TYPES);
 
                filter_name = cur_line->data.action->multi_add[multi_action_index]->first;
                while ((filter_name != NULL)
@@ -3253,7 +3259,6 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                if (line_exports == NULL)
                {
                   err = JB_ERR_MEMORY;
-                  freez(current_filter->prepared_templates); /* XXX: really necessary? */
                }
                else
                {
@@ -3263,9 +3268,9 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                   if (!err) err = map(line_exports, "name",  1, filter_group->name, 1);
                   if (!err) err = map(line_exports, "description",  1, filter_group->description, 1);
                   if (!err) err = map_radio(line_exports, "this-filter", "ynx", current_mode);
-                  if (!err) err = map(line_exports, "filter-type", 1, current_filter->type, 1);
-                  if (!err) err = map(line_exports, "abbr-filter-type", 1, current_filter->abbr_type, 1);
-                  if (!err) err = map(line_exports, "anchor", 1, current_filter->anchor, 1);
+                  if (!err) err = map(line_exports, "filter-type", 1, filter_type_info[type].type, 1);
+                  if (!err) err = map(line_exports, "abbr-filter-type", 1, filter_type_info[type].abbr_type, 1);
+                  if (!err) err = map(line_exports, "anchor", 1, filter_type_info[type].anchor, 1);
 
                   if (!err)
                   {
@@ -3273,7 +3278,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                      if (filter_line == NULL) err = JB_ERR_MEMORY;
                   }
                   if (!err) err = template_fill(&filter_line, line_exports);
-                  string_join(&current_filter->prepared_templates, filter_line);
+                  string_join(&prepared_templates[type], filter_line);
 
                   free_map(line_exports);
                }
@@ -3282,14 +3287,20 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       }
       freez(filter_template);
 
-      if (!err) err = map(exports, "content-filter-params", 1, content_filter.prepared_templates, 0);
-      if (!err) err = map(exports, "server-header-filter-params", 1, server_header_filter.prepared_templates, 0);
-      if (!err) err = map(exports, "client-header-filter-params", 1, client_header_filter.prepared_templates, 0);
+      /* Replace all filter macros with the aggregated templates */
+      for (i = 0; i < MAX_FILTER_TYPES; i++)
+      {
+         if (err) break;
+         err = map(exports, filter_type_info[i].macro_name, 1, prepared_templates[i], 0);
+      }
+
       if (err)
       {
-         freez(content_filter.prepared_templates);
-         freez(server_header_filter.prepared_templates);
-         freez(client_header_filter.prepared_templates);
+         /* Free aggregated templates */
+         for (i = 0; i < MAX_FILTER_TYPES; i++)
+         {
+            freez(prepared_templates[i]);
+         }
       }
    }
 
@@ -3471,6 +3482,12 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
             break;
          case 'C':
             multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
+            break;
+         case 'L':
+            multi_action_index = ACTION_MULTI_CLIENT_HEADER_TAGGER;
+            break;
+         case 'E':
+            multi_action_index = ACTION_MULTI_SERVER_HEADER_TAGGER;
             break;
          default:
             log_error(LOG_LEVEL_ERROR,

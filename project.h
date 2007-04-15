@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.92 2007/03/17 15:20:05 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.93 2007/03/20 15:16:34 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.93  2007/03/20 15:16:34  fabiankeil
+ *    Use dedicated header filter actions instead of abusing "filter".
+ *    Replace "filter-client-headers" and "filter-client-headers"
+ *    with "server-header-filter" and "client-header-filter".
+ *
  *    Revision 1.92  2007/03/17 15:20:05  fabiankeil
  *    New config option: enforce-blocks.
  *
@@ -857,7 +862,7 @@ struct http_response
 };
 
 /**
- * A URL pattern.
+ * A URL or a tag pattern.
  */
 struct url_spec
 {
@@ -875,12 +880,13 @@ struct url_spec
    char *path;         /**< The source for the regex.                         */
    size_t pathlen;     /**< ==strlen(path).  Needed for prefix matching.  FIXME: Now obsolete?     */
    regex_t *preg;      /**< Regex for matching path part                      */
+   regex_t *tag_regex; /**< Regex for matching tags                           */
 };
 
 /**
  * If you declare a static url_spec, this is the value to initialize it to zero.
  */
-#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, 0, 0, 0, NULL, 0, NULL }
+#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, 0, 0, 0, NULL, 0, NULL, NULL }
 
 /**
  * Constant for host part matching in URLs.  If set, indicates that the start of
@@ -1064,8 +1070,12 @@ struct iob
 #define ACTION_MULTI_SERVER_HEADER_FILTER    3
 /** Index into current_action_spec::multi[] for client-header filters to apply. */
 #define ACTION_MULTI_CLIENT_HEADER_FILTER    4
+/** Index into current_action_spec::multi[] for client-header tags to apply. */
+#define ACTION_MULTI_CLIENT_HEADER_TAGGER    5
+/** Index into current_action_spec::multi[] for server-header tags to apply. */
+#define ACTION_MULTI_SERVER_HEADER_TAGGER    6
 /** Number of multi-string actions. */
-#define ACTION_MULTI_COUNT                   5
+#define ACTION_MULTI_COUNT                   7
 
 
 /**
@@ -1263,6 +1273,9 @@ struct client_state
    /** List of all headers for this request */
    struct list headers[1];
 
+   /** List of all tags that apply to this request */
+   struct list tags[1];
+
    /** List of all cookies for this request */
    struct list cookie_list[1];
 
@@ -1452,9 +1465,13 @@ struct forward_spec
 #define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
 
 /* Supported filter types */
-#define FT_CONTENT_FILTER       1
-#define FT_CLIENT_HEADER_FILTER 2
-#define FT_SERVER_HEADER_FILTER 3
+#define FT_CONTENT_FILTER       0
+#define FT_CLIENT_HEADER_FILTER 1
+#define FT_SERVER_HEADER_FILTER 2
+#define FT_CLIENT_HEADER_TAGGER 3
+#define FT_SERVER_HEADER_TAGGER 4
+
+#define MAX_FILTER_TYPES        5
 
 /**
  * This struct represents one filter (one block) from

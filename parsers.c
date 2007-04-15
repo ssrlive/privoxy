@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.95 2007/03/25 14:26:40 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.96 2007/04/12 12:53:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.95 2007/03/25 14:26:40 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.96  2007/04/12 12:53:58  fabiankeil
+ *    Log a warning if the content is compressed, filtering is
+ *    enabled and Privoxy was compiled without zlib support.
+ *    Closes FR#1673938.
+ *
  *    Revision 1.95  2007/03/25 14:26:40  fabiankeil
  *    - Fix warnings when compiled with glibc.
  *    - Don't use crumble() for cookie crunching.
@@ -688,6 +693,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.95 2007/03/25 14:26:40 fabiankeil
 #include "jbsockets.h"
 #include "miscutil.h"
 #include "list.h"
+#include "actions.h"
 
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
@@ -697,7 +703,7 @@ const char parsers_h_rcs[] = PARSERS_H_VERSION;
 
 /* Fix a problem with Solaris.  There should be no effect on other
  * platforms.
- * Solaris's isspace() is a macro which uses it's argument directly
+ * Solaris's isspace() is a macro which uses its argument directly
  * as an array index.  Therefore we need to make sure that high-bit
  * characters generate +ve values, and ideally we also want to make
  * the argument match the declared parameter type of "int".
@@ -708,6 +714,8 @@ const char parsers_h_rcs[] = PARSERS_H_VERSION;
 #define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
+jb_err header_tagger(struct client_state *csp, char *header);
+jb_err scan_headers(struct client_state *csp);
 
 const struct parsers client_patterns[] = {
    { "referer:",                  8,   client_referrer },
@@ -1365,6 +1373,40 @@ char *get_header_value(const struct list *header_list, const char *header_name)
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  scan_headers
+ *
+ * Description :  Scans headers, applies tags and updates action bits. 
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK
+ *
+ *********************************************************************/
+jb_err scan_headers(struct client_state *csp)
+{
+   struct list_entry *h; /* Header */
+   jb_err err = JB_ERR_OK;
+
+   log_error(LOG_LEVEL_HEADER, "scanning headers for: %s", csp->http->url);
+
+   for (h = csp->headers->first; (err == JB_ERR_OK) && (h != NULL) ; h = h->next)
+   {
+      /* Header crunch()ed in previous run? -> ignore */
+      if (h->str == NULL) continue;
+      log_error(LOG_LEVEL_HEADER, "scan: %s", h->str);
+      err = header_tagger(csp, h->str);
+   }
+
+   update_action_bits(csp);
+
+   return err;
+}
+
+
 /*********************************************************************
  *
  * Function    :  sed
@@ -1405,15 +1447,14 @@ char *sed(const struct parsers pats[],
 
    if (first_run) /* Parse and print */
    {
-      log_error(LOG_LEVEL_HEADER, "scanning headers for: %s", csp->http->url);
+      scan_headers(csp);
+
       for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
       {
          for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
          {
             /* Header crunch()ed in previous run? -> ignore */
             if (p->str == NULL) continue;
-
-            if (v == pats) log_error(LOG_LEVEL_HEADER, "scan: %s", p->str);
 
             /* Does the current parser handle this header? */
             if ((strncmpic(p->str, v->str, v->len) == 0) || (v->len == CHECK_EVERY_HEADER_REMAINING))
@@ -1462,6 +1503,171 @@ char *sed(const struct parsers pats[],
    return list_to_text(csp->headers);
 }
 
+
+
+/*********************************************************************
+ *
+ * Function    :  header_tagger
+ *
+ * Description :  Executes all text substitutions from applying
+ *                tag actions and saves the result as tag.
+ *
+ *                XXX: Shares enough code with filter_header() and
+ *                pcrs_filter_response() to warrant some helper functions.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = Header that is used as tagger input
+ *
+ * Returns     :  JB_ERR_OK on success and always succeeds
+ *
+ *********************************************************************/
+jb_err header_tagger(struct client_state *csp, char *header)
+{
+   int wanted_filter_type;
+   int multi_action_index;
+   int i;
+   pcrs_job *job;
+
+   struct file_list *fl;
+   struct re_filterfile_spec *b;
+   struct list_entry *tag_name;
+
+   int found_filters = 0;
+   const size_t header_length = strlen(header);
+
+   if (csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
+   {
+      wanted_filter_type = FT_SERVER_HEADER_TAGGER;
+      multi_action_index = ACTION_MULTI_SERVER_HEADER_TAGGER;
+   }
+   else
+   {
+      wanted_filter_type = FT_CLIENT_HEADER_TAGGER;
+      multi_action_index = ACTION_MULTI_CLIENT_HEADER_TAGGER;
+   }
+
+   /* Check if there are any filters */
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      fl = csp->rlist[i];
+      if (NULL != fl)
+      {
+         if (NULL != fl->f)
+         {
+           found_filters = 1;
+           break;
+         }
+      }
+   }
+
+   if (0 == found_filters)
+   {
+      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regex tagging.");
+      return(JB_ERR_OK);
+   }
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      fl = csp->rlist[i];
+      if ((NULL == fl) || (NULL == fl->f))
+      {
+         /*
+          * Either there are no filter files
+          * left, or this filter file just
+          * contains no valid filters.
+          *
+          * Continue to be sure we don't miss
+          * valid filter files that are chained
+          * after empty or invalid ones.
+          */
+         continue;
+      }
+
+      /* For all filters, */
+      for (b = fl->f; b; b = b->next)
+      {
+         if (b->type != wanted_filter_type)
+         {
+            /* skip the ones we don't care about, */
+            continue;
+         }
+         /* leaving only taggers that could apply, of which we use the ones, */
+         for (tag_name = csp->action->multi[multi_action_index]->first;
+              NULL != tag_name; tag_name = tag_name->next)
+         {
+            /* that do apply, and */
+            if (strcmp(b->name, tag_name->str) == 0)
+            {
+               char *modified_tag = NULL;
+               char *tag = header;
+               size_t size = header_length;
+
+               if (NULL == b->joblist)
+               {
+                  log_error(LOG_LEVEL_RE_FILTER,
+                     "Tagger %s has empty joblist. Nothing to do.", b->name);
+                  continue;
+               }
+
+               /* execute their pcrs_joblist on the header. */
+               for (job = b->joblist; NULL != job; job = job->next)
+               {
+                  const int hits = pcrs_execute(job, tag, size, &modified_tag, &size);
+
+                  if (0 < hits)
+                  {
+                     /* Success, continue with the modified version. */
+                     if (tag != header)
+                     {
+                        freez(tag);
+                     }
+                     tag = modified_tag;
+                  }
+                  else
+                  {
+                     /* Tagger doesn't match */
+                     if (0 > hits)
+                     {
+                        /* Regex failure, log it but continue anyway. */
+                        log_error(LOG_LEVEL_ERROR,
+                           "Problems with tagger \'%s\' and header \'%s\': %s",
+                           b->name, *header, pcrs_strerror(hits));
+                     }
+                     freez(modified_tag);
+                  }
+               }
+
+               /* If this tagger matched */
+               if (tag != header)
+               {
+                  /* and there is something left to save, */
+                  if (0 < size)
+                  {
+                     /* enlist a unique version of it as tag. */
+                     if (JB_ERR_OK != enlist_unique(csp->tags, tag, 0))
+                     {
+                        log_error(LOG_LEVEL_ERROR,
+                           "Insufficient memory to add tag \'%s\', "
+                           "based on tagger \'%s\' and header \'%s\'",
+                           tag, b->name, *header);
+                     }
+                     else
+                     {
+                        log_error(LOG_LEVEL_HEADER,
+                           "Adding tag \'%s\' created by header tagger \'%s\'",
+                           tag, b->name);
+                     }
+                  }
+                  freez(tag);
+               }
+            } /* if the tagger applies */
+         } /* for every tagger that could apply */
+      } /* for all filters */
+   } /* for all filter files */
+
+   return JB_ERR_OK;
+}
 
 /* here begins the family of parser functions that reformat header lines */
 
@@ -3415,9 +3621,6 @@ jb_err connection_close_adder(struct client_state *csp)
  *********************************************************************/
 jb_err server_http(struct client_state *csp, char **header)
 {
-   /* Signal that were now parsing server headers. */
-   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
-
    sscanf(*header, "HTTP/%*d.%*d %d", &(csp->http->status));
    if (csp->http->status == 206)
    {

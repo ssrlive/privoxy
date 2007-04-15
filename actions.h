@@ -1,14 +1,14 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.12 2002/05/06 07:56:50 oes Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.14 2006/07/18 14:48:45 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/actions.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
  *
  * Purpose     :  Declares functions to work with actions files
  *                Functions declared include: FIXME
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.14  2006/07/18 14:48:45  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.12  2002/05/06 07:56:50  oes
  *    Made actions_to_html independent of FEATURE_CGI_EDIT_ACTIONS
  *
@@ -122,6 +126,7 @@ extern void init_action(struct action_spec *dest);
 extern void free_action(struct action_spec *src);
 extern jb_err merge_actions (struct action_spec *dest, 
                              const struct action_spec *src);
+extern int update_action_bits(struct client_state *csp);
 extern jb_err copy_action (struct action_spec *dest, 
                            const struct action_spec *src);
 extern char * actions_to_text     (struct action_spec *action);

@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.43  2007/03/29 11:40:34  fabiankeil
+#    Divide @filter-params@ into @client-header-filter-params@
+#    @content-filter-params@ and @server-header-filter-params@.
+#
 #    Revision 1.42  2007/03/20 15:40:00  fabiankeil
 #    Adjust to new world order with dedicated header-filter actions.
 #
@@ -515,6 +519,7 @@ function show_send_wafer_opts(tf)
     </tr>
 
 @client-header-filter-params@
+@client-header-tagger-params@
 
    <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
@@ -1200,6 +1205,7 @@ function show_send_wafer_opts(tf)
     </tr>
 
 @server-header-filter-params@
+@server-header-tagger-params@
 
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"

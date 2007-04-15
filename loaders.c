@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.59 2007/01/25 13:38:20 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.60 2007/03/20 15:16:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,11 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.59 2007/01/25 13:38:20 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.60  2007/03/20 15:16:34  fabiankeil
+ *    Use dedicated header filter actions instead of abusing "filter".
+ *    Replace "filter-client-headers" and "filter-client-headers"
+ *    with "server-header-filter" and "client-header-filter".
+ *
  *    Revision 1.59  2007/01/25 13:38:20  fabiankeil
  *    Freez csp->error_message in sweep().
  *
@@ -379,6 +384,10 @@ static struct file_list *current_re_filterfile[MAX_AF_FILES]  = {
    NULL, NULL, NULL, NULL, NULL
 };
 
+/*
+ * Pseudo filter type for load_one_re_filterfile
+ */
+#define NO_NEW_FILTER -1
 
 
 /*********************************************************************
@@ -486,6 +495,7 @@ void sweep(void)
          free_http_request(csp->http);
 
          destroy_list(csp->headers);
+         destroy_list(csp->tags);
          destroy_list(csp->cookie_list);
 
          free_current_action(csp->action);
@@ -1423,7 +1433,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
     */
    while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
    {
-      int new_filter = 0;
+      int new_filter = NO_NEW_FILTER;
 
       if (strncmp(buf, "FILTER:", 7) == 0)
       {
@@ -1437,12 +1447,20 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
       {
          new_filter = FT_CLIENT_HEADER_FILTER;
       }
+      else if (strncmp(buf, "CLIENT-HEADER-TAGGER:", 21) == 0)
+      {
+         new_filter = FT_CLIENT_HEADER_TAGGER;
+      }
+      else if (strncmp(buf, "SERVER-HEADER-TAGGER:", 21) == 0)
+      {
+         new_filter = FT_SERVER_HEADER_TAGGER;
+      }
 
       /*
        * If this is the head of a new filter block, make it a
        * re_filterfile spec of its own and chain it to the list:
        */
-      if (new_filter != 0)
+      if (new_filter != NO_NEW_FILTER)
       {
          new_bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
          if (new_bl == NULL)
