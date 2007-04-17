@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.17 2006/07/18 14:48:46 david__schmidt Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.18 2006/12/28 19:21:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -7,7 +7,7 @@ const char list_rcs[] = "$Id: list.c,v 1.17 2006/07/18 14:48:46 david__schmidt E
  *                Functions declared include:
  *                   `destroy_list', `enlist' and `list_to_text'
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -34,6 +34,11 @@ const char list_rcs[] = "$Id: list.c,v 1.17 2006/07/18 14:48:46 david__schmidt E
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.18  2006/12/28 19:21:23  fabiankeil
+ *    Fixed gcc43 warning and enabled list_is_valid()'s loop
+ *    detection again. It was ineffective since the removal of
+ *    the arbitrary list length limit two years ago.
+ *
  *    Revision 1.17  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -866,7 +871,7 @@ jb_err list_append_list_unique(struct list *dest, const struct list *src)
  * Parameters  :
  *          1  :  the_list = pointer to list to test.
  *
- * Returns     :  Nonzero iff the list contains no entries.
+ * Returns     :  Nonzero if the list contains no entries.
  *
  *********************************************************************/
 int list_is_empty(const struct list *the_list)
@@ -875,6 +880,52 @@ int list_is_empty(const struct list *the_list)
    assert(list_is_valid(the_list));
 
    return (the_list->first == NULL);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  list_contains_item
+ *
+ * Description :  Tests whether a list item is already set.
+ *                Does not change the list.
+ *
+ * Parameters  :
+ *          1  :  the_list = list to search in
+ *          2  :  str = string to search for
+ *
+ * Returns     :  TRUE if the item was found,
+ *                FALSE otherwise.
+ *
+ *********************************************************************/
+int list_contains_item(const struct list *the_list, const char *str)
+{
+   struct list_entry *entry;
+
+   assert(the_list);
+   assert(list_is_valid(the_list));
+   assert(str);
+
+   for (entry = the_list->first; entry != NULL; entry = entry->next)
+   {
+      if (entry->str == NULL)
+      {
+         /*
+          * NULL pointers are allowed in some lists. 
+          * For example for csp->headers in case a
+          * header was removed.
+          */
+         continue;
+      }
+
+      if (0 == strcmp(str, entry->str))
+      {
+         /* Item found */
+         return TRUE;
+      }
+   }
+
+   return FALSE;
 }
 
 
