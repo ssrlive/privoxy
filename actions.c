@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.37 2007/03/11 15:56:12 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.38 2007/04/15 16:39:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,11 @@ const char actions_rcs[] = "$Id: actions.c,v 1.37 2007/03/11 15:56:12 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.38  2007/04/15 16:39:20  fabiankeil
+ *    Introduce tags as alternative way to specify which
+ *    actions apply to a request. At the moment tags can be
+ *    created based on client and server headers.
+ *
  *    Revision 1.37  2007/03/11 15:56:12  fabiankeil
  *    Add kludge to log unknown aliases and actions before exiting.
  *
@@ -873,9 +878,9 @@ jb_err merge_current_action (struct current_action_spec *dest,
 
 /*********************************************************************
  *
- * Function    :  update_action_bits
+ * Function    :  update_action_bits_for_all_tags
  *
- * Description :  Updates the action bits based on matching tags.
+ * Description :  Updates the action bits based on all matching tags.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -884,46 +889,78 @@ jb_err merge_current_action (struct current_action_spec *dest,
  *                1 otherwise
  *
  *********************************************************************/
-int update_action_bits(struct client_state *csp)
+int update_action_bits_for_all_tags(struct client_state *csp)
+{
+   struct list_entry *tag;
+   int updated = 0;
+
+   for (tag = csp->tags->first; tag != NULL; tag = tag->next)
+   {
+      if (update_action_bits_for_tag(csp, tag->str))
+      {
+         updated = 1;
+      }
+   }
+
+   return updated;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  update_action_bits_for_tag
+ *
+ * Description :  Updates the action bits based on the action sections
+ *                whose tag patterns match a provided tag.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  tag = The tag on which the update should be based on
+ *
+ * Returns     :  0 if no tag matched, or
+ *                1 otherwise
+ *
+ *********************************************************************/
+int update_action_bits_for_tag(struct client_state *csp, const char *tag)
 {
    struct file_list *fl;
    struct url_actions *b;
-   struct list_entry *tag;
+
    int updated = 0;
    int i;
 
-   /* Take each tag, */
-   for (tag = csp->tags->first; tag != NULL; tag = tag->next)
+   assert(tag);
+   assert(list_contains_item(csp->tags, tag));
+
+   /* Run through all action files, */
+   for (i = 0; i < MAX_AF_FILES; i++)
    {
-      /* run through all action files, */
-      for (i = 0; i < MAX_AF_FILES; i++)
+      if (((fl = csp->actions_list[i]) == NULL) || ((b = fl->f) == NULL))
       {
-         if (((fl = csp->actions_list[i]) == NULL) || ((b = fl->f) == NULL))
+         /* Skip empty files */
+         continue;
+      }
+
+      /* and through all the action patterns, */
+      for (b = b->next; NULL != b; b = b->next)
+      {
+         /* skip the URL patterns, */
+         if (NULL == b->url->tag_regex)
          {
-            /* Skip empty files */
             continue;
          }
-         /* and through all the action patterns, */
-         for (b = b->next; NULL != b; b = b->next)
-         {
-            /* skip the URL patterns, */
-            if (NULL == b->url->tag_regex)
-            {
-               continue;
-            }
 
-            /* and check if one of the tag patterns matches this tag, */
-            if (0 == regexec(b->url->tag_regex, tag->str, 0, NULL, 0))
+         /* and check if one of the tag patterns matches the tag, */
+         if (0 == regexec(b->url->tag_regex, tag, 0, NULL, 0))
+         {
+            /* if it does, update the action bit map, */
+            if (merge_current_action(csp->action, b->action))
             {
-               /* if it does, update the action bit map, */
-               if (merge_current_action(csp->action, b->action))
-               {
-                  log_error(LOG_LEVEL_ERROR,
-                     "Out of memorey while changing action bits");
-               }
-               /* and signal the change. */
-               updated = 1;
+               log_error(LOG_LEVEL_ERROR,
+                  "Out of memorey while changing action bits");
             }
+            /* and signal the change. */
+            updated = 1;
          }
       }
    }
