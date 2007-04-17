@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.96 2007/04/12 12:53:58 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.97 2007/04/15 16:39:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.96 2007/04/12 12:53:58 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.97  2007/04/15 16:39:21  fabiankeil
+ *    Introduce tags as alternative way to specify which
+ *    actions apply to a request. At the moment tags can be
+ *    created based on client and server headers.
+ *
  *    Revision 1.96  2007/04/12 12:53:58  fabiankeil
  *    Log a warning if the content is compressed, filtering is
  *    enabled and Privoxy was compiled without zlib support.
@@ -1401,7 +1406,16 @@ jb_err scan_headers(struct client_state *csp)
       err = header_tagger(csp, h->str);
    }
 
-   update_action_bits(csp);
+   /*
+    * header_tagger already updated the action bits
+    * for every new tag, but unless I'm confused,
+    * updating them again after all tags are collected,
+    * should give us another level of indirection when
+    * it comes to tagging based on tags which were set
+    * by tag sections which were active because of other
+    * tag sections themselves (or something like this).
+    */
+   update_action_bits_for_all_tags(csp);
 
    return err;
 }
@@ -1641,11 +1655,23 @@ jb_err header_tagger(struct client_state *csp, char *header)
                /* If this tagger matched */
                if (tag != header)
                {
-                  /* and there is something left to save, */
-                  if (0 < size)
+                  if (0 == size)
                   {
-                     /* enlist a unique version of it as tag. */
-                     if (JB_ERR_OK != enlist_unique(csp->tags, tag, 0))
+                     /*
+                      * There is to technical limitation which makes
+                      * it impossible to use empty tags, but I assume
+                      * no one would do it intentionally.
+                      */
+                     freez(tag);
+                     log_error(LOG_LEVEL_INFO,
+                        "Tagger \'%s\' created an empty tag. Ignored.",
+                        b->name);
+                     continue;
+                  }
+ 
+                  if (!list_contains_item(csp->tags, tag))
+                  {
+                     if (JB_ERR_OK != enlist(csp->tags, tag))
                      {
                         log_error(LOG_LEVEL_ERROR,
                            "Insufficient memory to add tag \'%s\', "
@@ -1654,13 +1680,35 @@ jb_err header_tagger(struct client_state *csp, char *header)
                      }
                      else
                      {
+                        char *action_message;
+                        /*
+                         * update the action bits right away, to make
+                         * tagging based on tags set by earlier taggers
+                         * of the same kind possible.
+                         */
+                        if (update_action_bits_for_tag(csp, tag))
+                        {
+                           action_message = "Action bits updated accordingly.";
+                        }
+                        else
+                        {
+                           action_message = "No action bits update necessary.";
+                        }
+
                         log_error(LOG_LEVEL_HEADER,
-                           "Adding tag \'%s\' created by header tagger \'%s\'",
-                           tag, b->name);
+                           "Tagger \'%s\' added tag \'%s\'. %s",
+                           b->name, tag, action_message);
                      }
                   }
+                  else
+                  {
+                     /* XXX: Is this log-worthy? */
+                     log_error(LOG_LEVEL_HEADER,
+                        "Tagger \'%s\' didn't add tag \'%s\'. "
+                        "Tag already present", b->name, tag);
+                  }
                   freez(tag);
-               }
+               } /* if the tagger matched */
             } /* if the tagger applies */
          } /* for every tagger that could apply */
       } /* for all filters */
