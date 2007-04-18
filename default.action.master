@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.72 2007/04/12 02:57:46 hal9 Exp $
+#  $Id: default.action.master,v 1.73 2007/04/13 22:45:40 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1857,6 +1857,13 @@ www.skweezer.net/bloglines
 #MASTER# REMARKS: the redirection.
 {+redirect{http://config.privoxy.org/}}
 .privoxy.org/config
+
+#MASTER# REMARKS: Privoxy's "unsafe" CGI pages check the referrer 
+#MASTER# REMARKS: to make sure the user reached them intentionally.
+#MASTER# REMARKS: If the referrer is blocked, CGI editing is impossible.
+{-hide-referrer}
+p.p/
+config.privoxy.org/
 
 #MASTER# REMARKS: Yahoo logout URLs need special treatment,
 #MASTER# REMARKS: the URL after "done=" is no fast-redirect. 2007-01-19 fk
