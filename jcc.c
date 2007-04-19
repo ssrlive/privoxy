@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.128 2007/03/25 16:55:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.129 2007/04/15 16:39:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.128 2007/03/25 16:55:54 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.129  2007/04/15 16:39:20  fabiankeil
+ *    Introduce tags as alternative way to specify which
+ *    actions apply to a request. At the moment tags can be
+ *    created based on client and server headers.
+ *
  *    Revision 1.128  2007/03/25 16:55:54  fabiankeil
  *    Don't CLF-log CONNECT requests twice.
  *
@@ -1475,35 +1480,25 @@ int request_contains_null_bytes(const struct client_state *csp, char *buf, int l
 
 /*********************************************************************
  *
- * Function    :  chat
+ * Function    :  crunch_response_triggered
  *
- * Description :  Once a connection to the client has been accepted,
- *                this function is called (via serve()) to handle the
- *                main business of the communication.  When this
- *                function returns, the caller must close the client
- *                socket handle.
- *
- *                FIXME: chat is nearly thousand lines long.
- *                Ridiculous.
+ * Description :  Checks if the request has to be crunched,
+ *                and delivers the crunch response if necessary.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  On success, the number of bytes written are returned (zero
- *                indicates nothing was written).  On error, -1 is returned,
- *                and errno is set appropriately.  If count is zero and the
- *                file descriptor refers to a regular file, 0 will be
- *                returned without causing any other effect.  For a special
- *                file, the results are not portable.
+ * Returns     :  TRUE if the request was answered with a crunch response
+ *                FALSE otherwise.
  *
  *********************************************************************/
-static void chat(struct client_state *csp)
+int crunch_response_triggered(struct client_state *csp)
 {
 /*
- * This next lines are a little ugly, but they simplifies the if statements
- * below.  Basically if TOGGLE, then we want the if to test if the
- * CSP_FLAG_TOGGLED_ON flag ist set, else we don't.  And if FEATURE_FORCE_LOAD,
- * then we want the if to test for CSP_FLAG_FORCED , else we don't
+ * This next lines are a little ugly, but they simplify the if statements
+ * below. Basically if TOGGLE, then we want the if to test if the
+ * CSP_FLAG_TOGGLED_ON flag ist set, else we don't. And if FEATURE_FORCE_LOAD,
+ * then we want the if to test for CSP_FLAG_FORCED, else we don't.
  */
 #ifdef FEATURE_TOGGLE
 #   define IS_TOGGLED_ON_AND (csp->flags & CSP_FLAG_TOGGLED_ON) &&
@@ -1518,6 +1513,137 @@ static void chat(struct client_state *csp)
 
 #define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
 
+   struct http_response *rsp = NULL;
+
+   if (
+       /* We may not forward the request by rfc2616 sect 14.31 */
+       (NULL != (rsp = direct_response(csp)))
+
+       /* or we are enabled and... */
+       || (IS_ENABLED_AND (
+
+            /* ..the request was blocked */
+          ( NULL != (rsp = block_url(csp)))
+
+          /* ..or untrusted */
+#ifdef FEATURE_TRUST
+          || ( NULL != (rsp = trust_url(csp)))
+#endif /* def FEATURE_TRUST */
+
+          /* ..or a redirect kicked in */
+          || ( NULL != (rsp = redirect_url(csp)))
+          ))
+       /*
+        * .. or a CGI call was detected and answered.
+        *
+        * This check comes last to give the user the power
+        * to deny acces to some (or all) of the cgi pages.
+        */
+       || (NULL != (rsp = dispatch_cgi(csp)))
+
+		 )
+   {
+      /* Deliver, log and free the interception response. */
+      send_crunch_response(csp, rsp);
+#ifdef FEATURE_STATISTICS
+      csp->flags |= CSP_FLAG_REJECTED;
+#endif /* def FEATURE_STATISTICS */
+
+      return TRUE;
+   }
+
+   return FALSE;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  build_request_line
+ *
+ * Description :  Builds the HTTP request line.
+ *
+ *                If a HTTP forwarder is used it expects the whole URL,
+ *                web servers only get the path.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  fwd = The forwarding spec used for the request
+ *
+ * Returns     :  Nothing. Terminates in case of memory problems.
+ *
+ *********************************************************************/
+void build_request_line(struct client_state *csp, const struct forward_spec *fwd)
+{
+   struct http_request *http = csp->http;
+
+   assert(http->ssl == 0);
+
+   /*
+    * Downgrade http version from 1.1 to 1.0
+    * if +downgrade action applies.
+    */
+   if ( (csp->action->flags & ACTION_DOWNGRADE)
+     && (!strcmpic(http->ver, "HTTP/1.1")))
+   {
+      freez(http->ver);
+      http->ver = strdup("HTTP/1.0");
+
+      if (http->ver == NULL)
+      {
+         log_error(LOG_LEVEL_FATAL, "Out of memory downgrading HTTP version");
+      }
+   }
+
+   /*
+    * Rebuild the request line.
+    * XXX: If a http forwarder is used and the HTTP version
+    * wasn't downgraded, we don't have to rebuild anything.
+    */
+   freez(http->cmd);
+
+   http->cmd = strdup(http->gpc);
+   string_append(&http->cmd, " ");
+
+   if (fwd->forward_host)
+   {
+      string_append(&http->cmd, http->url);
+   }
+   else
+   {
+      string_append(&http->cmd, http->path);
+   }
+   string_append(&http->cmd, " ");
+   string_append(&http->cmd, http->ver);
+
+   if (http->cmd == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory writing HTTP command");
+   }
+   log_error(LOG_LEVEL_HEADER, "New HTTP Request-Line: %s", http->cmd);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  chat
+ *
+ * Description :  Once a connection to the client has been accepted,
+ *                this function is called (via serve()) to handle the
+ *                main business of the communication.  When this
+ *                function returns, the caller must close the client
+ *                socket handle.
+ *
+ *                FIXME: chat is nearly thousand lines long.
+ *                Ridiculous.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+static void chat(struct client_state *csp)
+{
    char buf[BUFFER_SIZE];
    char *hdr;
    char *p;
@@ -1689,7 +1815,7 @@ static void chat(struct client_state *csp)
       /*
        * If we still don't know the request destination,
        * the request is invalid or the client uses
-       * Privoxy without it's knowledge.
+       * Privoxy without its knowledge.
        */
       if (JB_ERR_OK != get_request_destination_elsewhere(csp, headers))
       {
@@ -1799,23 +1925,6 @@ static void chat(struct client_state *csp)
    }
 
 
-   /*
-    * Downgrade http version from 1.1 to 1.0 if +downgrade
-    * action applies
-    */
-   if ( (http->ssl == 0)
-     && (!strcmpic(http->ver, "HTTP/1.1"))
-     && (csp->action->flags & ACTION_DOWNGRADE))
-   {
-      freez(http->ver);
-      http->ver = strdup("HTTP/1.0");
-
-      if (http->ver == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory downgrading HTTP version");
-      }
-   }
-
    /* 
     * Save a copy of the original request for logging
     */
@@ -1828,31 +1937,10 @@ static void chat(struct client_state *csp)
 
    /*
     * (Re)build the HTTP request for non-SSL requests.
-    * If forwarding, use the whole URL, else, use only the path.
     */
    if (http->ssl == 0)
    {
-      freez(http->cmd);
-
-      http->cmd = strdup(http->gpc);
-      string_append(&http->cmd, " ");
-
-      if (fwd->forward_host)
-      {
-         string_append(&http->cmd, http->url);
-      }
-      else
-      {
-         string_append(&http->cmd, http->path);
-      }
-      string_append(&http->cmd, " ");
-      string_append(&http->cmd, http->ver);
-
-      if (http->cmd == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory writing HTTP command");
-      }
-      log_error(LOG_LEVEL_HEADER, "New HTTP Request-Line: %s", http->cmd);
+      build_request_line(csp, fwd);
    }
    enlist(csp->headers, http->cmd);
 
@@ -1890,55 +1978,28 @@ static void chat(struct client_state *csp)
    jpeg_inspect               = ((csp->action->flags & ACTION_JPEG_INSPECT) != 0);
 
    /*
-    * We have a request. Now, check to see if we need to
-    * intercept it, i.e. If ..
+    * We have a request. Check if one of the crunchers wants it.
     */
-
-   if (
-       /* We may not forward the request by rfc2616 sect 14.31 */
-       (NULL != (rsp = direct_response(csp)))
-
-       /* or we are enabled and... */
-       || (IS_ENABLED_AND (
-
-            /* ..the request was blocked */
-          ( NULL != (rsp = block_url(csp)))
-
-          /* ..or untrusted */
-#ifdef FEATURE_TRUST
-          || ( NULL != (rsp = trust_url(csp)))
-#endif /* def FEATURE_TRUST */
-
-          /* ..or a redirect kicked in */
-          || ( NULL != (rsp = redirect_url(csp)))
-          ))
-
-       /*
-        * .. or a CGI call was detected and answered.
-        *
-        * This check comes last to give the user the power
-        * to deny acces to some (or all) of the cgi pages.
-        */
-       || (NULL != (rsp = dispatch_cgi(csp)))
-
-		 )
+   if (crunch_response_triggered(csp))
    {
       /*
-       * Deliver, log and free the interception
-       * response. Afterwards we're done here.
+       * Yes. The client got the crunch response
+       * and we are done here after cleaning up.
        */
-      send_crunch_response(csp, rsp);
-#ifdef FEATURE_STATISTICS
-      /* Count as a rejected request */
-      csp->flags |= CSP_FLAG_REJECTED;
-#endif /* def FEATURE_STATISTICS */
-
       freez(hdr);
       list_remove_all(csp->headers);
 
       return;
    }
 
+   /*
+    * The headers can't be removed earlier because
+    * they were still needed for the referrer check
+    * in case of CGI crunches.
+    *
+    * XXX: Would it be worth to move the referrer check
+    * into client_referrer() and set a flag if it's trusted?
+    */
    list_remove_all(csp->headers);
 
    log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
