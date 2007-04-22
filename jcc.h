@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.19 2006/12/06 19:41:39 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.20 2006/12/26 17:31:41 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,12 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.20  2006/12/26 17:31:41  fabiankeil
+ *    Mutex protect rand() if POSIX threading
+ *    is used, warn the user if that's not possible
+ *    and stop using it on _WIN32 where it could
+ *    cause crashes.
+ *
  *    Revision 1.19  2006/12/06 19:41:39  fabiankeil
  *    Privoxy is now able to run as intercepting
  *    proxy in combination with any packet filter
@@ -209,14 +215,6 @@ int main(int argc, const char *argv[]);
 /* Revision control strings from this header and associated .c file */
 extern const char jcc_rcs[];
 extern const char jcc_h_rcs[];
-
-/* HTTP snippets */
-extern const char CSUCCEED[];
-extern const char CHEADER[];
-extern const char CFORBIDDEN[];
-extern const char FTP_RESPONSE[];
-extern const char GOPHER_RESPONSE[];
-extern const char MISSING_DESTINATION_RESPONSE[];
 
 #ifdef __cplusplus
 } /* extern "C" */
