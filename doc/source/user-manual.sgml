@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.28 2006/12/10 23:42:48 hal9 Exp $
+ $Id: user-manual.sgml,v 2.29 2007/04/05 11:47:51 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.28 2006/12/10 23:42:48 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.29 2007/04/05 11:47:51 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -177,6 +177,8 @@ Hal.
 How to install the binary packages depends on your operating system:
 </para>
 
+<!-- XXX: The installation sections should be sorted -->
+
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-pack-rpm"><title>Red Hat and Fedora RPMs</title>
 
@@ -260,7 +262,7 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, FreeBSD, HP-UX</title>
+<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, HP-UX</title>
 
 <para>
  Create a new directory, <literal>cd</literal> to it, then unzip and
@@ -332,6 +334,25 @@ How to install the binary packages depends on your operating system:
  All necessary files will be installed into <application>Privoxy</application>
  directory, including all configuration and log files. To uninstall, just 
  remove this directory.
+</para>
+</sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="installation-tbz"><title>FreeBSD</title>
+
+<para>
+ Privoxy is part of FreeBSD's Ports Collection, you can build and install
+ it with <literal>cd /usr/ports/www/privoxy; make install clean</literal>.
+</para>
+<para>
+ If you don't use the ports, you can fetch and install
+ the package with <literal>pkg_add -r privoxy</literal>.
+</para>
+<para>
+ The port skeleton and the package can also be downloaded from the
+ <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">File Release
+ Page</ulink>, but if you're interested in stable releases only you don't
+ gain anything by using them.
 </para>
 </sect3>
 
@@ -1996,7 +2017,7 @@ for details.
 <para>
  The list of actions files to be used are defined in the main configuration 
  file, and are processed in the order they are defined (e.g.
- <filename>default.action</filename> is typically process before
+ <filename>default.action</filename> is typically processed before
  <filename>user.action</filename>). The content of these can all be viewed and
  edited from <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
@@ -2082,24 +2103,28 @@ for details.
 
 
 <sect2 id="actions-apply">
-<title>How Actions are Applied to URLs</title>
+<title>How Actions are Applied to Requests</title>
 <para>
  Actions files are divided into sections. There are special sections,
  like the <quote><link linkend="aliases">alias</link></quote> sections which will
  be discussed later. For now let's concentrate on regular sections: They have a
  heading line (often split up to multiple lines for readability) which consist
  of a list of actions, separated by whitespace and enclosed in curly braces.
- Below that, there is a list of URL patterns, each on a separate line.
+ Below that, there is a list of URL and tag patterns, each on a separate line.
 </para>
 
 <para>
  To determine which actions apply to a request, the URL of the request is
- compared to all patterns in each <quote>action file</quote> file. Every time it matches, the list of
- applicable actions for the URL is incrementally updated, using the heading
- of the section in which the pattern is located. If multiple matches for
- the same URL set the same action differently, the last match wins. If not, 
- the effects are aggregated. E.g. a URL might match a regular section with 
- a heading line of <literal>{ 
+ compared to all URL patterns in each <quote>action file</quote>.
+ Every time it matches, the list of applicable actions for the request is
+ incrementally updated, using the heading of the section in which the
+ pattern is located. The same is done again for tags and tag patterns later on.
+</para>
+
+<para>
+ If multiple applying sections set the same action differently,
+ the last match wins. If not, the effects are aggregated.
+ E.g. a URL might match a regular section with a heading line of <literal>{ 
  +<link linkend="handle-as-image">handle-as-image</link> }</literal>,
  then later another one with just <literal>{
  +<link linkend="block">block</link> }</literal>, resulting
@@ -2118,7 +2143,7 @@ for details.
  </para>
 
 <para>
- You can trace this process for any given URL by visiting <ulink
+ You can trace this process for URL patterns and any given URL by visiting <ulink
  url="http://config.privoxy.org/show-url-info">http://config.privoxy.org/show-url-info</ulink>.
 </para>
 
@@ -2141,7 +2166,7 @@ for details.
 </para>
  
 <para>
- Generally, a <application>Privoxy</application> pattern has the form
+ Generally, a URL pattern has the form
  <literal>&lt;domain&gt;/&lt;path&gt;</literal>, where both the
  <literal>&lt;domain&gt;</literal> and <literal>&lt;path&gt;</literal> are
  optional. (This is why the special <literal>/</literal> pattern matches all
@@ -2413,6 +2438,68 @@ for details.
 <para>
  There are many, many good examples to be found in <filename>default.action</filename>, 
  and more tutorials below in <link linkend="regex">Appendix on regular expressions</link>.
+</para>
+
+</sect3>
+
+</sect2>
+
+<!--  ~  End section  ~  -->
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="tag-pattern"><title>The Tag Pattern</title>
+
+<para>
+ Tag patterns are used to change the applying actions based on the
+ request's tags. Tags can be created with either the
+ <link linkend="CLIENT-HEADER-FILTER">client-header-tagger</link>
+ or the  <link linkend="SERVER-HEADER-FILTER">server-header-tagger</link> action.
+</para>
+
+<para>
+ Tag patterns have to start with <quote>TAG:</quote>, so &my-app;
+ can tell them apart from URL patterns. Everything after the colon
+ including white space, is interpreted as a regular expression with
+ path patterns syntax, except that tag patterns aren't left-anchored
+ automatically (Privoxy doesn't silently add a <quote>^</quote>,
+ you have to do it yourself if you need it).
+</para>
+
+<para>
+ To match all requests that are tagged with <quote>foo</quote>
+ your pattern line should be <quote>TAG:^foo$</quote>,
+ <quote>TAG:foo</quote> would work as well, but it would also
+ match requests whose tags contain <quote>foo</quote> somewhere.
+</para>
+
+<para>
+ Sections can contain URL and tag patterns at the same time,
+ but tag patterns are checked after the URL patterns and thus
+ always overrule them, even if they are located before the URL patterns.
+</para>
+
+<para>
+ Once a new tag is added, Privoxy checks right away if it's matched by one
+ of the tag patterns and updates the action settings accordingly. As a result
+ tags can be used to activate other tagger actions, as long as these other
+ taggers look for headers that haven't already be parsed.
+</para>
+
+<para>
+ For example you could tag client requests which use the POST method,
+ use this tag to activate another tagger that adds a tag if cookies
+ are send, and then block based on the cookie tag. However if you'd
+ reverse the position of the described taggers, and activated the method
+ tagger based on the cookie tagger, no method tags would be created.
+ The method tagger would look for the request line, but at the time
+ the cookie tag is created the request line has already been parsed.
+</para>
+
+<para>
+ While this is a limitation you should be aware of, this kind of
+ indirection is seldom needed anyway and even the example doesn't
+ make too much sense.
 </para>
 
 </sect3>
@@ -2770,6 +2857,7 @@ for details.
     Client-header filters are applied to each header on its own, not to
     all at once. This makes it easier to diagnose problems, but on the downside
     you can't write filters that only change header x if header y's value is z.
+    You can do that by using tags though.
    </para>
    <para>
     Client-header filters are executed after the other header actions have finished
@@ -2790,6 +2878,81 @@ for details.
      <screen>
 {+client-header-filter{hide-tor-exit-notation}}
 .exit/
+    </screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="client-header-tagger">
+<title>client-header-tagger</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Block requests based on their headers.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Client headers to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions, the result is used as
+    tag. 
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of a client-header tagger, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Client-header taggers are applied to each header on its own,
+    and as the header isn't modified, each tagger <quote>sees</quote>
+    the original.
+   </para>
+   <para>
+    Client-header taggers are the first actions that are executed
+    and their tags can be used to control every other action.
+   </para>
+
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>
+# Tag every request with the User-Agent header
+{+client-header-filter{user-agent}}
+/
     </screen>
     </para>
   </listitem>
@@ -5354,6 +5517,7 @@ my-internal-testing-server.void</screen>
     Server-header filters are applied to each header on its own, not to
     all at once. This makes it easier to diagnose problems, but on the downside
     you can't write filters that only change header x if header y's value is z.
+    You can do that by using tags though.
    </para>
    <para>
     Server-header filters are executed after the other header actions have finished
@@ -5376,6 +5540,88 @@ example.org/xml-instance-that-is-delivered-as-html
 
 {+server-header-filter{xml-to-html}}
 example.org/instance-that-is-delivered-as-xml-but-is-not
+    </screen>
+    </para>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="server-header-tagger">
+<title>server-header-tagger</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Disable or disable filters based on the Content-Type header.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Server headers to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions, the result is used as
+    tag.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of a server-header tagger, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Server-header taggers are applied to each header on its own,
+    and as the header isn't modified, each tagger <quote>sees</quote>
+    the original.
+   </para>
+   <para>
+    Server-header taggers are executed before all other header actions
+    that modify server headers. Their tags can be used to control
+    all of the other server-header actions, the content filters
+    and the crunch actions (<link linkend="redirect">redirect</link>
+    and <link linkend="block">block</link>).
+   </para>
+   <para>
+    Obviously crunching based on tags created by server-header taggers
+    doesn't prevent the request from showing up in the server's log file.
+   </para>
+
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+    <para>
+     <screen>
+# Tag every request with the declared content type
+{+client-header-filter{content-type}}
+/
     </screen>
     </para>
   </listitem>
@@ -5576,7 +5822,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
     <screen>+set-image-blocker{pattern}</screen>
    </para>
    <para>
-    Redirect to the BSD devil:
+    Redirect to the BSD daemon:
    </para>
    <para>
     <screen>+set-image-blocker{http://www.freebsd.org/gifs/dae_up3.gif}</screen>
@@ -5651,15 +5897,7 @@ new action
     For <quote>Connect</quote> requests the clients tell
     <application>Privoxy</application> which host they are interested
     in, but not which document they plan to get later. As a result, the
-    <quote>Go there anyway</quote> link becomes rather useless:
-    it lets the client request the home page of the forbidden host
-    through unencrypted HTTP, still using the port of the last request.
-   </para>
-   <para>
-    If you previously configured <application>Privoxy</application> to do the
-    request through a SSL tunnel, everything will work. Most likely you haven't
-    and the server will respond with an error message because it is expecting
-    HTTPS (SSL).
+    <quote>Go there anyway</quote> wouldn't work and is therefore suppressed.
    </para>
   </listitem>
  </varlistentry>
@@ -6516,6 +6754,18 @@ stupid-server.example.com/</screen>
 </para>
 
 <para>
+ &my-app; also supports two tagger actions:
+ <literal><link linkend="client-header-tagger">client-header-tagger</link></literal>
+ and
+ <literal><link linkend="server-header-tagger">server-header-tagger</link></literal>.
+ Taggers and filters use the same syntax in the filter files, the differnce
+ is that taggers don't modify the text they are filtering, but use a rewritten
+ version of the filtered text as tag. The tags can then be used to change the
+ applying actions through sections with <link linkend="tag-pattern">tag-patterns</link>.
+</para>
+
+
+<para>
  Multiple filter files can be defined through the <literal> <link
  linkend="filterfile">filterfile</link></literal> config directive. The filters
  as supplied by the developers will be found in
@@ -6566,6 +6816,8 @@ stupid-server.example.com/</screen>
 </para>
  
 <para>
+ Filter definitions start with a header line that contains the filter
+ type, the filter name and the filter description.
  A content filter header line for a filter called <quote>foo</quote> could look
  like this:
 </para>
@@ -8564,6 +8816,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.29  2007/04/05 11:47:51  fabiankeil
+ Some updates regarding header filtering,
+ handling of compressed content and redirect's
+ support for pcrs commands.
+
  Revision 2.28  2006/12/10 23:42:48  hal9
  Fix various typos reported by Adam P. Thanks.
 
