@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.130 2007/04/19 13:47:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.131 2007/04/22 13:24:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.130 2007/04/19 13:47:34 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.131  2007/04/22 13:24:50  fabiankeil
+ *    Make HTTP snippets static (again). Add a Content-Type for those
+ *    with content so the browser doesn't guess it based on the URL.
+ *
  *    Revision 1.130  2007/04/19 13:47:34  fabiankeil
  *    Move crunching and request line rebuilding out of chat().
  *
@@ -2255,6 +2259,12 @@ static void chat(struct client_state *csp)
                      log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
                   }
 
+                  /*
+                   * Shouldn't happen because this was the second sed run
+                   * and tags are only created for the first one.
+                   */
+                  assert(!crunch_response_triggered(csp));
+
                   if (write_socket(csp->cfd, hdr, strlen(hdr))
                    || write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length))
                   {
@@ -2319,6 +2329,18 @@ static void chat(struct client_state *csp)
                      rsp = cgi_error_memory();
                      send_crunch_response(csp, rsp);
 
+                     return;
+                  }
+
+                  if (crunch_response_triggered(csp))
+                  {
+                     /*
+                      * One of the tags created by a server-header
+                      * tagger triggered a crunch. We already
+                      * delivered the crunch response to the client
+                      * and are done here after cleaning up.
+                      */
+                     freez(hdr);
                      return;
                   }
 
@@ -2419,6 +2441,17 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
             }
 
+            if (crunch_response_triggered(csp))
+            {
+               /*
+                * One of the tags created by a server-header
+                * tagger triggered a crunch. We already
+                * delivered the crunch response to the client
+                * and are done here after cleaning up.
+                */
+                freez(hdr);
+                return;
+            }
 #ifdef FEATURE_KILL_POPUPS
             /* Start blocking popups if appropriate. */
 
