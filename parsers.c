@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.97 2007/04/15 16:39:21 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.98 2007/04/17 18:32:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,13 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.97 2007/04/15 16:39:21 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.98  2007/04/17 18:32:10  fabiankeil
+ *    - Make tagging based on tags set by earlier taggers
+ *      of the same kind possible.
+ *    - Log whether or not new tags cause action bits updates
+ *      (in which case a matching tag-pattern section exists).
+ *    - Log if the user tries to set a tag that is already set.
+ *
  *    Revision 1.97  2007/04/15 16:39:21  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -699,6 +706,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.97 2007/04/15 16:39:21 fabiankeil
 #include "miscutil.h"
 #include "list.h"
 #include "actions.h"
+#include "filters.h"
 
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
@@ -1406,17 +1414,6 @@ jb_err scan_headers(struct client_state *csp)
       err = header_tagger(csp, h->str);
    }
 
-   /*
-    * header_tagger already updated the action bits
-    * for every new tag, but unless I'm confused,
-    * updating them again after all tags are collected,
-    * should give us another level of indirection when
-    * it comes to tagging based on tags which were set
-    * by tag sections which were active because of other
-    * tag sections themselves (or something like this).
-    */
-   update_action_bits_for_all_tags(csp);
-
    return err;
 }
 
@@ -1616,8 +1613,11 @@ jb_err header_tagger(struct client_state *csp, char *header)
                char *modified_tag = NULL;
                char *tag = header;
                size_t size = header_length;
+               pcrs_job *joblist = b->joblist;
 
-               if (NULL == b->joblist)
+               if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+
+               if (NULL == joblist)
                {
                   log_error(LOG_LEVEL_RE_FILTER,
                      "Tagger %s has empty joblist. Nothing to do.", b->name);
@@ -1625,7 +1625,7 @@ jb_err header_tagger(struct client_state *csp, char *header)
                }
 
                /* execute their pcrs_joblist on the header. */
-               for (job = b->joblist; NULL != job; job = job->next)
+               for (job = joblist; NULL != job; job = job->next)
                {
                   const int hits = pcrs_execute(job, tag, size, &modified_tag, &size);
 
@@ -1651,6 +1651,8 @@ jb_err header_tagger(struct client_state *csp, char *header)
                      freez(modified_tag);
                   }
                }
+
+               if (b->dynamic) pcrs_free_joblist(joblist);
 
                /* If this tagger matched */
                if (tag != header)
@@ -1823,6 +1825,9 @@ jb_err filter_header(struct client_state *csp, char **header)
             if (strcmp(b->name, filtername->str) == 0)
             {
                int current_hits = 0;
+               pcrs_job *joblist = b->joblist;
+
+               if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
 
                if ( NULL == b->joblist )
                {
@@ -1861,6 +1866,9 @@ jb_err filter_header(struct client_state *csp, char **header)
                      }
                   }
                }
+
+               if (b->dynamic) pcrs_free_joblist(joblist);
+
                log_error(LOG_LEVEL_RE_FILTER, "... produced %d hits (new size %d).", current_hits, size);
                hits += current_hits;
             }
