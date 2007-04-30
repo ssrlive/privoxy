@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.25 2007/01/12 15:36:44 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.26 2007/03/13 11:28:43 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,11 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.26  2007/03/13 11:28:43  fabiankeil
+ *    - Fix port handling in acl_addr() and use a temporary acl spec
+ *      copy so error messages don't contain a truncated version.
+ *    - Log size of iob before and after decompression.
+ *
  *    Revision 1.25  2007/01/12 15:36:44  fabiankeil
  *    Mark *csp as immutable for is_untrusted_url()
  *    and is_imageurl(). Closes FR 1237736.
@@ -293,6 +298,8 @@ extern size_t remove_chunked_transfer_coding(char *buffer, const size_t size);
 extern char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits);
 extern char *rewrite_url(char *old_url, const char *pcrs_command);
 extern char *get_last_url(char *subject, const char *redirect_mode);
+
+extern pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const struct re_filterfile_spec *b);
 
 /*
  * Handling Max-Forwards:

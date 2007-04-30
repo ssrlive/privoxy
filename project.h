@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.93 2007/03/20 15:16:34 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.94 2007/04/15 16:39:21 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.94  2007/04/15 16:39:21  fabiankeil
+ *    Introduce tags as alternative way to specify which
+ *    actions apply to a request. At the moment tags can be
+ *    created based on client and server headers.
+ *
  *    Revision 1.93  2007/03/20 15:16:34  fabiankeil
  *    Use dedicated header filter actions instead of abusing "filter".
  *    Replace "filter-client-headers" and "filter-client-headers"
@@ -1486,6 +1491,8 @@ struct re_filterfile_spec
    struct list patterns[1];         /**< The patterns from the re_filterfile. */
    pcrs_job *joblist;               /**< The resulting compiled pcrs_jobs. */
    int type;                        /**< Filter type (content, client-header, server-header). */
+   int dynamic;                     /**< Set to one if the pattern might contain variables
+                                         and has to be recompiled for every request. */
    struct re_filterfile_spec *next; /**< The pointer for chaining. */
 };
 

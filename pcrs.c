@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.23 2006/12/29 17:53:05 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.24 2007/01/05 15:46:12 fabiankeil Exp $";
 
 /*********************************************************************
  *
@@ -8,9 +8,14 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.23 2006/12/29 17:53:05 fabiankeil Exp $
  *                <ph10@cam.ac.uk> and adds Perl-style substitution. That
  *                is, it mimics Perl's 's' operator. See pcrs(3) for details.
  *
+ *                WARNING: This file contains additional functions and bug
+ *                fixes that aren't part of the latest official pcrs package
+ *                (which apparently is no longer maintained).
  *
  * Copyright   :  Written and Copyright (C) 2000, 2001 by Andreas S. Oesterhelt
  *                <andreas@oesterhelt.org>
+ *
+ *                Copyright (C) 2006, 2007 Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it 
  *                and/or modify it under the terms of the GNU Lesser
@@ -33,6 +38,15 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.23 2006/12/29 17:53:05 fabiankeil Exp $
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.24  2007/01/05 15:46:12  fabiankeil
+ *    Don't use strlen() to calculate the length of
+ *    the pcrs substitutes. They don't have to be valid C
+ *    strings and getting their length wrong can result in
+ *    user-controlled memory corruption.
+ *
+ *    Thanks to Felix Gröbert for reporting the problem
+ *    and providing the fix [#1627140].
+ *
  *    Revision 1.23  2006/12/29 17:53:05  fabiankeil
  *    Fixed gcc43 conversion warnings.
  *
@@ -163,8 +177,12 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.23 2006/12/29 17:53:05 fabiankeil Exp $
  */
 #include "project.h"
 
+/* For snprintf only */
+#include "miscutil.h"
+
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
 
 #include "pcrs.h"
 
@@ -222,6 +240,8 @@ const char *pcrs_strerror(const int error)
          case PCRS_ERR_STUDY:          return "(pcrs:) PCRE error while studying the pattern";
          case PCRS_ERR_BADJOB:         return "(pcrs:) Bad job - NULL job, pattern or substitute";
          case PCRS_WARN_BADREF:        return "(pcrs:) Backreference out of range";
+         case PCRS_WARN_TRUNCATION:
+            return "(pcrs:) At least one variable was too big and has been truncated before compilation";
 
          /* 
           * XXX: With the exception of PCRE_ERROR_MATCHLIMIT we
@@ -830,7 +850,7 @@ int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, c
  *                 failure, which may be translated to text using pcrs_strerror().
  *
  *********************************************************************/
-int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **result, size_t *result_length)
+int pcrs_execute(pcrs_job *job, const char *subject, size_t subject_length, char **result, size_t *result_length)
 {
    int offsets[3 * PCRS_MAX_SUBMATCHES],
        offset,
@@ -991,6 +1011,243 @@ int pcrs_execute(pcrs_job *job, char *subject, size_t subject_length, char **res
    *result_length = newsize;
    free(matches);
    return matches_found;
+
+}
+
+/*
+ * Functions below this line are only part of the pcrs version
+ * included in Privoxy. If you use any of them you should not
+ * try to dynamically link against external pcrs versions.
+ */
+
+/*********************************************************************
+ *
+ * Function    :  pcrs_job_is_dynamic
+ *
+ * Description :  Checks if a job has the "D" (dynamic) option set.
+ *
+ * Parameters  :
+ *          1  :  job = The job to check
+ *
+ * Returns     :  TRUE if the job is indeed dynamic, otherwise
+ *                FALSE
+ *
+ *********************************************************************/
+int pcrs_job_is_dynamic (char *job)
+{
+   const char delimiter = job[1];
+   const size_t length = strlen(job);
+   char *option;
+
+   if (length < 5)
+   {
+      /*
+       * The shortest valid (but useless)
+       * dynamic pattern is "s@@@D"
+       */
+      return FALSE;
+   }
+
+   /*
+    * Everything between the last character
+    * and the last delimiter is an option ...
+    */
+   for (option = job + length; *option != delimiter; option--)
+   {
+      if (*option == 'D')
+      {
+         /*
+          * ... and if said option is 'D' the job is dynamic.
+          */
+         return TRUE;
+      }
+   }
+   return FALSE;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  pcrs_get_delimiter
+ *
+ * Description :  Tries to find a character that is safe to
+ *                be used as a pcrs delimiter for a certain string.
+ *
+ * Parameters  :
+ *          1  :  string = The string to search in
+ *
+ * Returns     :  A safe delimiter if one was found, otherwise '\0'.  
+ *
+ *********************************************************************/
+char pcrs_get_delimiter(const char *string)
+{
+   /*
+    * Some characters that are unlikely to
+    * be part of pcrs replacement strings.
+    */
+   char delimiters[] = "><§#+*~%^°-:;µ!@";
+   char *d = delimiters;
+
+   /* Take the first delimiter that isn't part of the string */
+   while (*d && NULL != strchr(string, *d))
+   {
+      d++;
+   }
+   return *d;
+
+}
+
+
+
+/*********************************************************************
+ *
+ * Function    :  pcrs_execute_single_command
+ *
+ * Description :  Apply single pcrs command to the subject.
+ *                The subject itself is left untouched, memory for the result
+ *                is malloc()ed and it is the caller's responsibility to free
+ *                the result when it's no longer needed.
+ *
+ * Parameters  :
+ *          1  :  subject = the subject (== original) string
+ *          2  :  pcrs_command = the pcrs command as string (s@foo@bar@) 
+ *          3  :  hits = int* for returning  the number of modifications 
+ *
+ * Returns     :  NULL in case of errors, otherwise the
+ *                result of the pcrs command.  
+ *
+ *********************************************************************/
+char *pcrs_execute_single_command(const char *subject, const char *pcrs_command, int *hits)
+{
+   size_t size;
+   char *result = NULL;
+   pcrs_job *job;
+
+   assert(subject);
+   assert(pcrs_command);
+
+   *hits = 0;
+   size = strlen(subject);
+
+   job = pcrs_compile_command(pcrs_command, hits);
+   if (NULL != job)
+   {
+      *hits = pcrs_execute(job, subject, size, &result, &size);
+      if (*hits < 0)
+      {
+         freez(result);
+      }
+      pcrs_free_job(job);
+   }
+   return result;
+
+}
+
+
+const static char warning[] = "... [too long, truncated]";
+/*********************************************************************
+ *
+ * Function    :  pcrs_compile_dynamic_command
+ *
+ * Description :  Takes a dynamic pcrs command, fills in the
+ *                values of the variables and compiles it.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  pcrs_command = The dynamic pcrs command to compile
+ *          3  :  v = NULL terminated array of variables and their values.
+ *          4  :  error = pcrs error code
+ *
+ * Returns     :  NULL in case of hard errors, otherwise the
+ *                compiled pcrs job.   
+ *
+ *********************************************************************/
+pcrs_job *pcrs_compile_dynamic_command(char *pcrs_command, const struct pcrs_variable v[], int *error)
+{
+   char buf[PCRS_BUFFER_SIZE];
+   const char *original_pcrs_command = pcrs_command;
+   char *pcrs_command_tmp = NULL;
+   pcrs_job *job = NULL;
+   int truncation = 0;
+   char d;
+   int ret;
+
+   while ((NULL != v->name) && (NULL != pcrs_command))
+   {
+      assert(NULL != v->value);
+
+      if (NULL == strstr(pcrs_command, v->name))
+      {
+         /*
+          * Skip the substitution if the variable
+          * name isn't part of the pattern.
+          */
+         v++;
+         continue;
+      }
+
+      /* Use pcrs to replace the variable with its value. */
+      d = pcrs_get_delimiter(v->value);
+      if ('\0' == d)
+      {
+         /* No proper delimiter found */
+         *error = PCRS_ERR_CMDSYNTAX;
+         return NULL;
+      }
+
+      /*
+       * Variable names are supposed to contain alpha
+       * numerical characters plus '_' only.
+       */
+      assert(NULL == strchr(v->name, d));
+
+      ret = snprintf(buf, sizeof(buf), "s%c\\$%s%c%s%cgT", d, v->name, d, v->value, d);
+      assert(ret >= 0);
+      if (ret >= sizeof(buf))
+      {
+         /*
+          * Value didn't completely fit into buffer,
+          * overwrite the end of the substitution text
+          * with a truncation message and close the pattern
+          * properly.
+          */
+         const size_t trailer_size = sizeof(warning) + 3; /* 3 for d + "gT" */
+         char *trailer_start = buf + sizeof(buf) - trailer_size;
+
+         ret = snprintf(trailer_start, trailer_size, "%s%cgT", warning, d);
+         assert(ret == trailer_size - 1);
+         assert(sizeof(buf) == strlen(buf) + 1);
+         truncation = 1;
+      }
+
+      pcrs_command_tmp = pcrs_execute_single_command(pcrs_command, buf, error);
+      if (NULL == pcrs_command_tmp)
+      {
+         return NULL;
+      }
+
+      if (pcrs_command != original_pcrs_command)
+      {
+         freez(pcrs_command);
+      }
+      pcrs_command = pcrs_command_tmp;
+
+      v++;
+   }
+
+   job = pcrs_compile_command(pcrs_command, error);
+   if (pcrs_command != original_pcrs_command)
+   {
+      freez(pcrs_command);
+   }
+
+   if (truncation)
+   {
+      *error = PCRS_WARN_TRUNCATION;
+   }
+
+   return job;
 
 }
 
