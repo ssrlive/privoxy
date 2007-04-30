@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.84 2007/03/20 15:16:34 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.85 2007/03/21 12:24:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.84 2007/03/20 15:16:34 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.85  2007/03/21 12:24:47  fabiankeil
+ *    - Log the content size after decompression in decompress_iob()
+ *      instead of pcrs_filter_response().
+ *
  *    Revision 1.84  2007/03/20 15:16:34  fabiankeil
  *    Use dedicated header filter actions instead of abusing "filter".
  *    Replace "filter-client-headers" and "filter-client-headers"
@@ -1242,57 +1246,75 @@ struct http_response *trust_url(struct client_state *csp)
 }
 #endif /* def FEATURE_TRUST */
 
+
 /*********************************************************************
  *
- * Function    :  execute_single_pcrs_command
+ * Function    :  compile_dynamic_pcrs_job_list
  *
- * Description :  Apply single pcrs command to the subject.
- *                The subject itself is left untouched, memory for the result
- *                is malloc()ed and it is the caller's responsibility to free
- *                the result when it's no longer needed.
+ * Description :  Compiles a dynamic pcrs job list (one with variables
+ *                resolved at request time)
  *
  * Parameters  :
- *          1  :  subject = the subject (== original) string
- *          2  :  pcrs_command = the pcrs command as string (s@foo@bar@) 
- *          3  :  hits = int* for returning  the number of modifications 
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  b = The filter list to compile
  *
  * Returns     :  NULL in case of errors, otherwise the
- *                result of the pcrs command.  
+ *                pcrs job list.  
  *
  *********************************************************************/
-char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits)
+pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const struct re_filterfile_spec *b)
 {
-   int error;
-   size_t size;
-   char *result = NULL;
-   pcrs_job *job;
+   struct list_entry *pattern;
+   pcrs_job *job_list = NULL;
+   pcrs_job *dummy = NULL;
+   pcrs_job *lastjob = NULL;
+   int error = 0;
 
-   assert(subject);
-   assert(pcrs_command);
-
-   *hits = 0;
-   size = strlen(subject);
-
-   if (NULL == (job = pcrs_compile_command(pcrs_command, &error)))
+   const struct pcrs_variable variables[] =
    {
-      log_error(LOG_LEVEL_ERROR, "Failed to compile pcrs command \"%s\". Error: %d.",
-         pcrs_command, error);
-   }
-   else if ((*hits = pcrs_execute(job, subject, size, &result, &size)) < 0)
+      {"url",    csp->http->url,   1},
+      {"path",   csp->http->path,  1},
+      {"host",   csp->http->host,  1},
+      {"origin", csp->ip_addr_str, 1},
+      {NULL,     NULL,             1}
+   };
+
+   for (pattern = b->patterns->first; pattern != NULL; pattern = pattern->next)
    {
-      log_error(LOG_LEVEL_ERROR, "Failed to execute pcrs command: %s", pcrs_strerror(*hits));
-      *hits = 0;
-      freez(result);
+      assert(pattern->str != NULL);
+
+      dummy = pcrs_compile_dynamic_command(pattern->str, variables, &error);
+      if (NULL == dummy)
+      {
+         assert(error < 0);
+         log_error(LOG_LEVEL_ERROR,
+            "Adding filter job \'%s\' to dynamic filter %s failed: %s",
+            pattern->str, b->name, pcrs_strerror(error));
+         continue;
+      }
+      else
+      {
+         if (error == PCRS_WARN_TRUNCATION)
+         {
+            log_error(LOG_LEVEL_ERROR,
+               "At least one of the variables in \'%s\' had to "
+               "be truncated before compilation", pattern->str);
+         }
+         if (job_list == NULL)
+         {
+            job_list = dummy;
+         }
+         else
+         {
+            lastjob->next = dummy;
+         }
+         lastjob = dummy;
+      }
    }
 
-   if (job)
-   {
-      job = pcrs_free_job(job);
-   }
-
-   return result;
-
+   return job_list;
 }
+
 
 /*********************************************************************
  *
@@ -1319,13 +1341,20 @@ char *rewrite_url(char *old_url, const char *pcrs_command)
    assert(old_url);
    assert(pcrs_command);
 
-   new_url = execute_single_pcrs_command(old_url, pcrs_command, &hits);
+   new_url = pcrs_execute_single_command(old_url, pcrs_command, &hits);
 
    if (hits == 0)
    {
       log_error(LOG_LEVEL_REDIRECTS,
          "pcrs command \"%s\" didn't change \"%s\".",
-         pcrs_command, old_url, new_url);
+         pcrs_command, old_url);
+      freez(new_url);
+   }
+   else if (hits < 0)
+   {
+      log_error(LOG_LEVEL_REDIRECTS,
+         "executing pcrs command \"%s\" to rewrite %s failed: %s",
+         pcrs_command, old_url, pcrs_strerror(hits));
       freez(new_url);
    }
    else if (strncmpic(new_url, "http://", 7) && strncmpic(new_url, "https://", 8))
@@ -1510,7 +1539,19 @@ struct http_response *redirect_url(struct client_state *csp)
       new_url = get_last_url(old_url, redirect_mode);
       freez(old_url);
    }
+
+   /*
+    * Disable redirect checkers, so that they
+    * will be only run more than once if the user
+    * also enables them through tags.
+    *
+    * From a performance point of view
+    * it doesn't matter, but the duplicated
+    * log messages are annoying.
+    */
+   csp->action->flags &= ~ACTION_FAST_REDIRECTS;
 #endif /* def FEATURE_FAST_REDIRECTS */
+   csp->action->flags &= ~ACTION_REDIRECT;
 
    /* Did any redirect action trigger? */   
    if (new_url)
@@ -1895,8 +1936,11 @@ char *pcrs_filter_response(struct client_state *csp)
             int current_hits = 0; /* Number of hits caused by this filter */
             int job_number   = 0; /* Which job we're currently executing  */
             int job_hits     = 0; /* How many hits the current job caused */
+            pcrs_job *joblist = b->joblist;
 
-            if ( NULL == b->joblist )
+            if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+
+            if (NULL == joblist)
             {
                log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
                continue;
@@ -1946,6 +1990,8 @@ char *pcrs_filter_response(struct client_state *csp)
                   break;
                }
             }
+
+            if (b->dynamic) pcrs_free_joblist(joblist);
 
             log_error(LOG_LEVEL_RE_FILTER,
                "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
