@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.73 2007/04/13 22:45:40 hal9 Exp $
+#  $Id: default.action.master,v 1.74 2007/04/18 16:51:09 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -815,6 +815,9 @@ ad.theadhost.com
 MASTER# BLOCK-REFERRER: via Yahoo groups
 MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
 .adinterax.com/(?!(.*)\.(js|gif|jpg))
+MASTER# BLOCK-REFERRER:  http://www.weilpod.com
+MASTER# REMARKS: Actionsfile feedback item #1710951 2007-05-02
+img.bluehost.com
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1367,6 +1370,10 @@ lads.myspace.com
 #MASTER# REMARKS Actionsfile feedback item #1700037 2007-04-13 HB
 #MASTER# UNBLOCK-REFERRER: http://www.mp3.com.au/popup/popup.asp?id=110433
 .mp3.com.au/.*popup
+#MASTER# REMARKS Actionsfile feedback #1700915 2007-04-15
+#MASTER# UNBLOCK-REFERRER: http://www.svd.se/ego/339/http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
+#MASTER# UNBLOCK-REFERRER: http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
+/(.*/)?dynamiskt/reklam_media/did_
 
 #############################################################################
 # Site-specific special rules:
