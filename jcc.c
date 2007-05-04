@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.131 2007/04/22 13:24:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.132 2007/04/25 15:15:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.131 2007/04/22 13:24:50 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.132  2007/04/25 15:15:17  fabiankeil
+ *    Support crunching based on tags created by server-header taggers.
+ *
  *    Revision 1.131  2007/04/22 13:24:50  fabiankeil
  *    Make HTTP snippets static (again). Add a Content-Type for those
  *    with content so the browser doesn't guess it based on the URL.
@@ -1017,6 +1020,43 @@ const static char NULL_BYTE_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Bad request. Null byte(s) before end of request.\r\n";
 
+/* A function to crunch a response */
+typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
+
+/* Crunch function flags */
+#define CF_NO_FLAGS        0
+/* Cruncher applies to forced requests as well */
+#define CF_IGNORE_FORCE    1
+/* Crunched requests are counted for the block statistics */
+#define CF_COUNT_AS_REJECT 2
+
+/* A crunch function and its flags */
+struct cruncher
+{
+   const crunch_func_ptr cruncher;
+   const int flags;
+};
+
+/* Complete list of cruncher functions */
+const static struct cruncher crunchers_all[] = {
+   { direct_response, CF_COUNT_AS_REJECT|CF_IGNORE_FORCE},
+   { block_url,       CF_COUNT_AS_REJECT },
+#ifdef FEATURE_TRUST
+   { trust_url,       CF_COUNT_AS_REJECT },
+#endif /* def FEATURE_TRUST */
+   { redirect_url,    CF_NO_FLAGS  },
+   { dispatch_cgi,    CF_IGNORE_FORCE},
+   { NULL,            0 }
+};
+
+/* Light version, used after tags are applied */
+const static struct cruncher crunchers_light[] = {
+   { block_url,       CF_COUNT_AS_REJECT },
+   { redirect_url,    CF_NO_FLAGS },
+   { NULL,            0 }
+};
+
+
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 /*********************************************************************
  *
@@ -1501,69 +1541,43 @@ int request_contains_null_bytes(const struct client_state *csp, char *buf, int l
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  crunchers = list of cruncher functions to run
  *
  * Returns     :  TRUE if the request was answered with a crunch response
  *                FALSE otherwise.
  *
  *********************************************************************/
-int crunch_response_triggered(struct client_state *csp)
+int crunch_response_triggered(struct client_state *csp, const struct cruncher crunchers[])
 {
-/*
- * This next lines are a little ugly, but they simplify the if statements
- * below. Basically if TOGGLE, then we want the if to test if the
- * CSP_FLAG_TOGGLED_ON flag ist set, else we don't. And if FEATURE_FORCE_LOAD,
- * then we want the if to test for CSP_FLAG_FORCED, else we don't.
- */
-#ifdef FEATURE_TOGGLE
-#   define IS_TOGGLED_ON_AND (csp->flags & CSP_FLAG_TOGGLED_ON) &&
-#else /* ifndef FEATURE_TOGGLE */
-#   define IS_TOGGLED_ON_AND
-#endif /* ndef FEATURE_TOGGLE */
-#ifdef FEATURE_FORCE_LOAD
-#   define IS_NOT_FORCED_AND !(csp->flags & CSP_FLAG_FORCED) &&
-#else /* ifndef FEATURE_FORCE_LOAD */
-#   define IS_NOT_FORCED_AND
-#endif /* def FEATURE_FORCE_LOAD */
-
-#define IS_ENABLED_AND   IS_TOGGLED_ON_AND IS_NOT_FORCED_AND
-
    struct http_response *rsp = NULL;
+   const struct cruncher *c;
 
-   if (
-       /* We may not forward the request by rfc2616 sect 14.31 */
-       (NULL != (rsp = direct_response(csp)))
-
-       /* or we are enabled and... */
-       || (IS_ENABLED_AND (
-
-            /* ..the request was blocked */
-          ( NULL != (rsp = block_url(csp)))
-
-          /* ..or untrusted */
-#ifdef FEATURE_TRUST
-          || ( NULL != (rsp = trust_url(csp)))
-#endif /* def FEATURE_TRUST */
-
-          /* ..or a redirect kicked in */
-          || ( NULL != (rsp = redirect_url(csp)))
-          ))
-       /*
-        * .. or a CGI call was detected and answered.
-        *
-        * This check comes last to give the user the power
-        * to deny acces to some (or all) of the cgi pages.
-        */
-       || (NULL != (rsp = dispatch_cgi(csp)))
-
-		 )
+   for (c = crunchers; c->cruncher != NULL; c++)
    {
-      /* Deliver, log and free the interception response. */
-      send_crunch_response(csp, rsp);
+      /*
+       * Check the cruncher if either Privoxy is toggled
+       * on and the request isn't forced, or if the cruncher
+       * applies to forced requests as well.
+       */
+      if (((csp->flags & CSP_FLAG_TOGGLED_ON) &&
+          !(csp->flags & CSP_FLAG_FORCED)) ||
+          (c->flags & CF_IGNORE_FORCE))
+      {
+         rsp = c->cruncher(csp);
+         if (NULL != rsp)
+         {
+            /* Deliver, log and free the interception response. */
+            send_crunch_response(csp, rsp);
 #ifdef FEATURE_STATISTICS
-      csp->flags |= CSP_FLAG_REJECTED;
+            if (c->flags & CF_COUNT_AS_REJECT)
+            {
+               csp->flags |= CSP_FLAG_REJECTED;
+            }
 #endif /* def FEATURE_STATISTICS */
 
-      return TRUE;
+            return TRUE;
+         }
+      }
    }
 
    return FALSE;
@@ -1994,7 +2008,7 @@ static void chat(struct client_state *csp)
    /*
     * We have a request. Check if one of the crunchers wants it.
     */
-   if (crunch_response_triggered(csp))
+   if (crunch_response_triggered(csp, crunchers_all))
    {
       /*
        * Yes. The client got the crunch response
@@ -2263,7 +2277,7 @@ static void chat(struct client_state *csp)
                    * Shouldn't happen because this was the second sed run
                    * and tags are only created for the first one.
                    */
-                  assert(!crunch_response_triggered(csp));
+                  assert(!crunch_response_triggered(csp, crunchers_all));
 
                   if (write_socket(csp->cfd, hdr, strlen(hdr))
                    || write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length))
@@ -2332,7 +2346,7 @@ static void chat(struct client_state *csp)
                      return;
                   }
 
-                  if (crunch_response_triggered(csp))
+                  if (crunch_response_triggered(csp, crunchers_light))
                   {
                      /*
                       * One of the tags created by a server-header
@@ -2441,7 +2455,7 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
             }
 
-            if (crunch_response_triggered(csp))
+            if (crunch_response_triggered(csp, crunchers_light))
             {
                /*
                 * One of the tags created by a server-header
