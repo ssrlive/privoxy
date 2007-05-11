@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.49 2007/04/08 16:44:15 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.50 2007/04/11 10:55:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.49 2007/04/08 16:44:15 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.50  2007/04/11 10:55:44  fabiankeil
+ *    Enforce some assertions that could be triggered
+ *    on mingw32 and other systems where we use threads
+ *    but no locks.
+ *
  *    Revision 1.49  2007/04/08 16:44:15  fabiankeil
  *    We need <sys/time.h> for gettimeofday(), not <time.h>.
  *
@@ -1012,8 +1017,8 @@ void log_error(int loglevel, const char *fmt, ...)
       assert(outbuf[log_buffer_size] == '\0');
 
       snprintf(outbuf, log_buffer_size,
-         "%s Privoxy(%08lx) Fatal error: log_error()'s sanity checks failed. length: %u\n"
-         "Exiting.", timestamp, thread_id, length);
+         "%s Privoxy(%08lx) Fatal error: log_error()'s sanity checks failed. length: %d\n"
+         "Exiting.", timestamp, thread_id, (int)length);
       loglevel = LOG_LEVEL_FATAL;
    }
 
