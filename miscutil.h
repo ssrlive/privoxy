@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.26 2007/04/08 17:04:51 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.27 2007/04/09 17:48:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.27  2007/04/09 17:48:51  fabiankeil
+ *    Check for HAVE_SNPRINTF instead of __OS2__
+ *    before including the portable snprintf() code.
+ *
  *    Revision 1.26  2007/04/08 17:04:51  fabiankeil
  *    Add macro for strlcpy() in case the libc lacks it.
  *
@@ -187,7 +191,6 @@ extern char *safe_strerror(int err);
 extern int strcmpic(const char *s1, const char *s2);
 extern int strncmpic(const char *s1, const char *s2, size_t n);
 
-extern char *strsav(char *old, const char *text_to_append);
 extern jb_err string_append(char **target_string, const char *text_to_append);
 extern jb_err string_join  (char **target_string,       char *text_to_append);
 
@@ -213,11 +216,16 @@ extern int snprintf(char *, size_t, const char *, /*args*/ ...);
 time_t timegm(struct tm *tm);
 #endif /* !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV) */
 
-#if !defined(HAVE_STRLCPY)
 /* Here's looking at you, Ulrich. */
+#if !defined(HAVE_STRLCPY)
 #define strlcpy(dst, src, size) (size_t)snprintf((dst), (size), "%s", (src))
 #define HAVE_STRLCPY 1
 #endif /* ndef HAVE_STRLCPY*/
+
+#ifndef HAVE_STRLCAT
+size_t privoxy_strlcat(char *destination, const char *source, size_t size);
+#define strlcat privoxy_strlcat
+#endif /* ndef HAVE_STRLCAT */
 
 /* Revision control strings from this header and associated .c file */
 extern const char miscutil_rcs[];

@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.47 2007/03/17 11:52:15 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.48 2007/04/09 17:48:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.47 2007/03/17 11:52:15 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.48  2007/04/09 17:48:51  fabiankeil
+ *    Check for HAVE_SNPRINTF instead of __OS2__
+ *    before including the portable snprintf() code.
+ *
  *    Revision 1.47  2007/03/17 11:52:15  fabiankeil
  *    - Use snprintf instead of sprintf.
  *    - Mention copyright for the replacement
@@ -579,59 +583,6 @@ char *chomp(char *string)
 
 /*********************************************************************
  *
- * Function    :  strsav
- *
- * Description :  Reallocate "old" and append text to it.  This makes
- *                it easier to append to malloc'd strings.
- *                Running out of memory is a FATAL error.
- *
- * Parameters  :
- *          1  :  old = Old text that is to be extended.  Will be
- *                free()d by this routine.  May be NULL.
- *          2  :  text_to_append = Text to be appended to old.
- *                May be NULL.
- *
- * Returns     :  Pointer to newly malloc'ed appended string.
- *                If there is no text to append, return old.  Caller
- *                must free().
- *
- *********************************************************************/
-char *strsav(char *old, const char *text_to_append)
-{
-   size_t old_len, new_len = 0;
-   char *p;
-
-   if ((text_to_append == NULL) || (*text_to_append == '\0'))
-   {
-      return(old);
-   }
-
-   if (NULL == old)
-   {
-      if ((p = strdup(text_to_append)) == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "strdup() failed!");
-         /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      }
-      return p;
-   }
-
-   old_len = strlen(old);
-   new_len = old_len + strlen(text_to_append) + 1;
-
-   if ((p = realloc(old, new_len)) == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "realloc(%d) bytes failed!", new_len);
-      /* Never get here - LOG_LEVEL_FATAL causes program exit */
-   }
-
-   strcpy(p + old_len, text_to_append);
-   return(p);
-}
-
-
-/*********************************************************************
- *
  * Function    :  string_append
  *
  * Description :  Reallocate target_string and append text to it.  
@@ -682,6 +633,7 @@ jb_err string_append(char **target_string, const char *text_to_append)
 {
    size_t old_len;
    char *new_string;
+   size_t new_size;
 
    assert(target_string);
    assert(text_to_append);
@@ -698,8 +650,9 @@ jb_err string_append(char **target_string, const char *text_to_append)
 
    old_len = strlen(*target_string);
 
-   if (NULL == (new_string = realloc(*target_string,
-          strlen(text_to_append) + old_len + 1)))
+   new_size = strlen(text_to_append) + old_len + 1;
+
+   if (NULL == (new_string = realloc(*target_string, new_size)))
    {
       free(*target_string);
 
@@ -707,7 +660,7 @@ jb_err string_append(char **target_string, const char *text_to_append)
       return JB_ERR_MEMORY;
    }
 
-   strcpy(new_string + old_len, text_to_append);
+   strlcpy(new_string + old_len, text_to_append, new_size - old_len);
 
    *target_string = new_string;
    return JB_ERR_OK;
@@ -1017,13 +970,17 @@ char * make_path(const char * dir, const char * file)
          strncpy(path,dir,512);
       }
       path[511]=0;
-   } else {
+   }
+   else
+   {
       path[0]=0;
    }
    if(AddPart(path,file,512))
    {
       return strdup(path);
-   } else {
+   }
+   else
+   {
       return NULL;
    }
 #else /* ndef AMIGA */
@@ -1046,42 +1003,41 @@ char * make_path(const char * dir, const char * file)
    else
    {
       char * path;
+      size_t path_size = strlen(dir) + strlen(file) + 2; /* +2 for trailing (back)slash and \0 */
 
 #if defined(unix)
       if ( *dir != '/' && basedir && *basedir )
       {
-         path = malloc( strlen( basedir ) + strlen(dir) + strlen(file) + 3);
+         /*
+          * Relative path, so start with the base directory.
+          */
+         path_size += strlen(basedir) + 1; /* +1 for the slash */
+         path = malloc(path_size);
          if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
-         strcpy(path, basedir);
-         strcat(path, "/");
-         strcat(path, dir);
+         strlcpy(path, basedir, path_size);
+         strlcat(path, "/", path_size);
+         strlcat(path, dir, path_size);
       }
       else
-      {
-         path = malloc(strlen(dir) + strlen(file) + 2);
-         if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
-         strcpy(path, dir);
-      }
-#else
-
-      path = malloc(strlen(dir) + strlen(file) + 2);
-      if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
-      strcpy(path, dir);
-
 #endif /* defined unix */
+      {
+         path = malloc(path_size);
+         if (!path ) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+         strlcpy(path, dir, path_size);
+      }
 
 #if defined(_WIN32) || defined(__OS2__)
       if(path[strlen(path)-1] != '\\')
       {
-         strcat(path, "\\");
+         strlcat(path, "\\", path_size);
       }
 #else /* ifndef _WIN32 || __OS2__ */
       if(path[strlen(path)-1] != '/')
       {
-         strcat(path, "/");
+         strlcat(path, "/", path_size);
       }
 #endif /* ifndef _WIN32 || __OS2__ */
-      strcat(path, file);
+      strlcat(path, file, path_size);
 
       return path;
    }
@@ -1103,7 +1059,6 @@ char * make_path(const char * dir, const char * file)
  * Returns     :  Picked number. 
  *
  *********************************************************************/
-
 long int pick_from_range(long int range)
 {
    long int number;
@@ -1142,6 +1097,29 @@ long int pick_from_range(long int range)
 }
 
 
+#ifndef HAVE_STRLCAT
+/*********************************************************************
+ *
+ * Function    :  privoxy_strlcat
+ *
+ * Description :  strlcat(3) look-alike for those without decent libc.
+ *
+ * Parameters  :
+ *          1  :  destination: C string.
+ *          2  :  source: String to copy.
+ *          3  :  size: Size of destination buffer.
+ *
+ * Returns     :  The length of the string that strlcat tried to create.
+ *
+ *********************************************************************/
+size_t privoxy_strlcat(char *destination, const char *source, const size_t size)
+{
+   const size_t old_length = strlen(destination);
+   return old_length + strlcpy(destination + old_length, source, size - old_length);
+}
+#endif /* ndef HAVE_STRLCAT */
+
+
 #if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 /*********************************************************************
  *
@@ -1157,7 +1135,6 @@ long int pick_from_range(long int range)
  * Returns     :  tm converted into time_t seconds. 
  *
  *********************************************************************/
-
 time_t timegm(struct tm *tm)
 {
    time_t answer;
