@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.104 2007/03/31 13:35:11 fabiankeil Exp $
+dnl $Id: configure.in,v 1.105 2007/04/09 17:34:58 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2007 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.105  2007/04/09 17:34:58  fabiankeil
+dnl Check for snprintf().
+dnl
 dnl Revision 1.104  2007/03/31 13:35:11  fabiankeil
 dnl Add checks for gettimeofday() and strlcpy().
 dnl
@@ -493,7 +496,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.104 $)
+AC_REVISION($Revision: 1.105 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1160,7 +1163,7 @@ AC_FUNC_SETPGRP
 AC_TYPE_SIGNAL
 dnl uncommenting does not work for swa. suse linux
 dnl AC_FUNC_STAT
-AC_CHECK_FUNCS([access atexit getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r gettimeofday inet_ntoa localtime_r memchr memmove memset putenv random regcomp select setlocale snprintf socket strchr strdup strerror strftime strlcpy strptime strstr strtoul timegm tzset])
+AC_CHECK_FUNCS([access atexit getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r gettimeofday inet_ntoa localtime_r memchr memmove memset putenv random regcomp select setlocale snprintf socket strchr strdup strerror strftime strlcat strlcpy strptime strstr strtoul timegm tzset])
 
 
 dnl =================================================================
