@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.94 2007/04/15 16:39:21 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.95 2007/04/30 15:02:19 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.95  2007/04/30 15:02:19  fabiankeil
+ *    Introduce dynamic pcrs jobs that can resolve variables.
+ *
  *    Revision 1.94  2007/04/15 16:39:21  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -1280,9 +1283,6 @@ struct client_state
 
    /** List of all tags that apply to this request */
    struct list tags[1];
-
-   /** List of all cookies for this request */
-   struct list cookie_list[1];
 
    /** MIME-Type key, see CT_* above */
    unsigned int content_type;

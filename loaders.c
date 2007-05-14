@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.61 2007/04/15 16:39:21 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.62 2007/04/30 15:02:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.61 2007/04/15 16:39:21 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.62  2007/04/30 15:02:18  fabiankeil
+ *    Introduce dynamic pcrs jobs that can resolve variables.
+ *
  *    Revision 1.61  2007/04/15 16:39:21  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -501,7 +504,6 @@ void sweep(void)
 
          destroy_list(csp->headers);
          destroy_list(csp->tags);
-         destroy_list(csp->cookie_list);
 
          free_current_action(csp->action);
 
