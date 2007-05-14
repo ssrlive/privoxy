@@ -2,27 +2,25 @@
 	DO NOT INCLUDE THIS FILE IN ANY DISTRO !!!!
 
 	(or users may contact these people directly,
-	 which would like to avoid. Users should
+	 which we would like to avoid. Users should
 	 always use the support forum or user
 	 mailinglist).
 
 Responsible persons for releasing packages are ...
 
-Amiga .......: Jörg Strohmayer   <joergs@users.sf.net>         (joergs)
-Conectiva ...: Rodrigo Barbosa   <privoxy@darkover.org>        (morcego)
+AmigaOS......: Jörg Strohmayer   <joergs@users.sf.net>         (joergs)
 Debian ......: Roland Rosenfeld  <roro@users.sf.net>           (roro)
+Fedora Core..: Karsten Hopp      <Karsten.Hopp@redhat.de>      (kick_)
 FreeBSD .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil)
-Gentoo Linux.. Georg Sauthoff    <g_sauthoff@web.de>           (g_sauthoff)
-HP-UX .......: Schelstraete Bart <bart1803@users.sf.net>       (bart1803)
 Mac OSX .....: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
-NetBSD ......: ? 
+OpenBSD .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil) 
 OS/2 ........: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
-RedHat ......: Rodrigo Barbosa   <privoxy@darkover.org>        (morcego)
+RedHat*......: Rodrigo Barbosa   <privoxy@darkover.org>        (morcego)
                Karsten Hopp      <Karsten.Hopp@redhat.de>      (kick_)
                Hal Burgiss       <hal@foobox.net>              (hal9)
-RedHat 6.x ..: Karsten Hopp      <Karsten.Hopp@redhat.de>      (kick_)
-Solaris .....: Schelstraete Bart <bart1803@users.sf.net>       (bart1803)
-SuSE ........: Stephan Waldherr  <stefan@waldherr.org>         (swa)
+Solaris .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil)
+SuSE*........: Stephan Waldherr  <stefan@waldherr.org>         (swa)
 Windows .....: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
 
+*: outdated
 
