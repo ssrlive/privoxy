@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.18 2006/07/18 14:48:46 david__schmidt Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.19 2007/01/25 14:09:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.18 2006/07/18 14:48:46 david__sch
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.19  2007/01/25 14:09:45  fabiankeil
+ *    - Save errors in socks4_connect() to csp->error_message.
+ *    - Silence some gcc43 warnings, hopefully the right way.
+ *
  *    Revision 1.18  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -135,6 +139,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.18 2006/07/18 14:48:46 david__sch
 
 #include <errno.h>
 #include <string.h>
+#include "assert.h"
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -153,6 +158,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.18 2006/07/18 14:48:46 david__sch
 #include "errlog.h"
 #include "jbsockets.h"
 #include "gateway.h"
+#include "miscutil.h"
 
 const char gateway_h_rcs[] = GATEWAY_H_VERSION;
 
@@ -173,7 +179,7 @@ struct socks_op {
    unsigned char cd;          /* command code */
    unsigned char dstport[2];  /* destination port */
    unsigned char dstip[4];    /* destination address */
-   unsigned char userid;      /* first byte of userid */
+   char userid;               /* first byte of userid */
    /* more bytes of the userid follow, terminated by a NULL */
 };
 
@@ -272,10 +278,9 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
                                 struct client_state *csp)
 {
    int web_server_addr;
-   char cbuf[BUFFER_SIZE];
-   char sbuf[BUFFER_SIZE];
-   struct socks_op    *c = (struct socks_op    *)cbuf;
-   struct socks_reply *s = (struct socks_reply *)sbuf;
+   char buf[BUFFER_SIZE];
+   struct socks_op    *c = (struct socks_op    *)buf;
+   struct socks_reply *s = (struct socks_reply *)buf;
    size_t n;
    size_t csiz;
    jb_socket sfd;
@@ -305,7 +310,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    /* build a socks request for connection to the web server */
 
-   strcpy((char *)&(c->userid), socks_userid);
+   strlcpy(&(c->userid), socks_userid, sizeof(buf) - sizeof(struct socks_op));
 
    csiz = sizeof(*c) + sizeof(socks_userid) - 1;
 
@@ -323,7 +328,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
       case SOCKS_4A:
          web_server_addr = 0x00000001;
          n = csiz + strlen(target_host) + 1;
-         if (n > sizeof(cbuf))
+         if (n > sizeof(buf))
          {
             errno = EINVAL;
             errstr = "buffer cbuf too small.";
@@ -332,7 +337,17 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
          }
          else
          {
-            strcpy(cbuf + csiz, target_host);
+            strlcpy(buf + csiz, target_host, sizeof(buf) - sizeof(struct socks_op) - csiz);
+            /*
+             * What we forward to the socks4a server should have the
+             * size of socks_op, plus the length of the userid plus
+             * its \0 byte (which we don't have to add because the
+             * first byte of the userid is counted twice as it's also
+             * part of sock_op), plus the length of the target_host
+             * (which is stored csiz bytes after the beginning of the buffer),
+             * plus another \0 byte.
+             */
+            assert(n == sizeof(struct socks_op) + strlen(&(c->userid)) + strlen(buf + csiz) + 1);
             csiz = n;
          }
          break;
@@ -341,6 +356,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
          log_error(LOG_LEVEL_FATAL,
             "socks4_connect: SOCKS4 impossible internal error - bad SOCKS type.");
          /* Not reached */
+         return(JB_INVALID_SOCKET);
    }
 
    if (err)
@@ -351,7 +367,6 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    c->vn          = 4;
    c->cd          = 1;
-   /* XXX: these casts surpress gcc43 warnings, but are they correct?  */
    c->dstport[0]  = (unsigned char)((target_port       >> 8  ) & 0xff);
    c->dstport[1]  = (unsigned char)((target_port             ) & 0xff);
    c->dstip[0]    = (unsigned char)((web_server_addr   >> 24 ) & 0xff);
@@ -365,7 +380,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    if (sfd == JB_INVALID_SOCKET)
    {
       /*
-       * XXX: connect_to could fill in the exact reason.
+       * XXX: connect_to should fill in the exact reason.
        * Most likely resolving the IP of the forwarder failed.
        */
       errstr = "connect_to failed: see logfile for details";
@@ -378,7 +393,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
       err = 1;
       close_socket(sfd);
    }
-   else if (read_socket(sfd, sbuf, sizeof(sbuf)) != sizeof(*s))
+   else if (read_socket(sfd, buf, sizeof(buf)) != sizeof(*s))
    {
       errstr = "SOCKS4 negotiation read failed.";
       log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
@@ -414,9 +429,9 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
          break;
       default:
          errno = ENOENT;
-         snprintf(cbuf, sizeof(cbuf),
-                 "SOCKS request rejected for reason code %d.", s->cd);
-         errstr = cbuf;
+         snprintf(buf, sizeof(buf),
+            "SOCKS request rejected for reason code %d.", s->cd);
+         errstr = buf;
    }
 
    log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
