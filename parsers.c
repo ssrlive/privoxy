@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.99 2007/04/30 15:06:26 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.100 2007/04/30 15:53:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.99 2007/04/30 15:06:26 fabiankeil
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.100  2007/04/30 15:53:11  fabiankeil
+ *    Make sure filters with dynamic jobs actually use them.
+ *
  *    Revision 1.99  2007/04/30 15:06:26  fabiankeil
  *    - Introduce dynamic pcrs jobs that can resolve variables.
  *    - Remove unnecessary update_action_bits_for_all_tags() call.
@@ -3437,9 +3440,8 @@ jb_err client_host_adder(struct client_state *csp)
  *
  * Function    :  client_cookie_adder
  *
- * Description :  Used in the add_client_headers list.  Called from `sed'.
- *
- *                XXX: Remove csp->cookie_list which is no longer used.
+ * Description :  Used in the add_client_headers list to add "wafers".
+ *                Called from `sed'.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3450,14 +3452,12 @@ jb_err client_host_adder(struct client_state *csp)
  *********************************************************************/
 jb_err client_cookie_adder(struct client_state *csp)
 {
-   struct list_entry *lst;
    char *tmp;
-   struct list_entry *list1 = csp->cookie_list->first;
-   struct list_entry *list2 = csp->action->multi[ACTION_MULTI_WAFER]->first;
-   int first_cookie = 1;
+   struct list_entry *wafer;
+   struct list_entry *wafer_list = csp->action->multi[ACTION_MULTI_WAFER]->first;
    jb_err err;
 
-   if ((list1 == NULL) && (list2 == NULL))
+   if (NULL == wafer_list)
    {
       /* Nothing to do */
       return JB_ERR_OK;
@@ -3465,30 +3465,14 @@ jb_err client_cookie_adder(struct client_state *csp)
 
    tmp = strdup("Cookie: ");
 
-   for (lst = list1; lst ; lst = lst->next)
+   for (wafer = wafer_list; (NULL != tmp) && (NULL != wafer); wafer = wafer->next)
    {
-      if (first_cookie)
+      if (wafer != wafer_list)
       {
-         first_cookie = 0;
-      }
-      else
-      {
+         /* As this isn't the first wafer, we need a delimiter. */
          string_append(&tmp, "; ");
       }
-      string_append(&tmp, lst->str);
-   }
-
-   for (lst = list2;  lst ; lst = lst->next)
-   {
-      if (first_cookie)
-      {
-         first_cookie = 0;
-      }
-      else
-      {
-         string_append(&tmp, "; ");
-      }
-      string_join(&tmp, cookie_encode(lst->str));
+      string_join(&tmp, cookie_encode(wafer->str));
    }
 
    if (tmp == NULL)
