@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.52 2007/04/12 10:41:23 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.53 2007/04/15 16:39:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.52 2007/04/12 10:41:23 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.53  2007/04/15 16:39:20  fabiankeil
+ *    Introduce tags as alternative way to specify which
+ *    actions apply to a request. At the moment tags can be
+ *    created based on client and server headers.
+ *
  *    Revision 1.52  2007/04/12 10:41:23  fabiankeil
  *    - Don't mistake VC++'s _snprintf() for a snprintf() replacement.
  *    - Move some cgi_edit_actions_for_url() variables into structs.
@@ -2082,6 +2087,7 @@ static jb_err get_file_name_param(struct client_state *csp,
    char *fullpath;
    char ch;
    size_t len;
+   size_t name_size;
 
    assert(csp);
    assert(parameters);
@@ -2123,13 +2129,14 @@ static jb_err get_file_name_param(struct client_state *csp,
    }
 
    /* Append extension */
-   name = malloc(len + strlen(suffix) + 1);
+   name_size = len + strlen(suffix) + 1;
+   name = malloc(name_size);
    if (name == NULL)
    {
       return JB_ERR_MEMORY;
    }
-   strcpy(name, param);
-   strcpy(name + len, suffix);
+   strlcpy(name, param, name_size);
+   strlcat(name, suffix, name_size);
 
    /* Prepend path */
    fullpath = make_path(csp->config->confdir, name);
@@ -2306,23 +2313,25 @@ static jb_err map_radio(struct map * exports,
                         const char * values,
                         int value)
 {
-   size_t len;
    char * buf;
    char * p;
    char c;
+   const size_t len = strlen(optionname);
+   const size_t buf_size = len + 3;
 
    assert(exports);
    assert(optionname);
    assert(values);
 
-   len = strlen(optionname);
-   buf = malloc(len + 3);
+   buf = malloc(buf_size);
    if (buf == NULL)
    {
       return JB_ERR_MEMORY;
    }
 
-   strcpy(buf, optionname);
+   strlcpy(buf, optionname, buf_size);
+
+   /* XXX: this looks ... interesting */
    p = buf + len;
    *p++ = '-';
    p[1] = '\0';
@@ -3345,6 +3354,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    unsigned sectionid;
    char * actiontext;
    char * newtext;
+   size_t newtext_size;
    size_t len;
    struct editable_file * file;
    struct file_line * cur_line;
@@ -3543,14 +3553,15 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       len = 1;
    }
 
-   if (NULL == (newtext = malloc(len + 2)))
+   newtext_size = len + 2;
+   if (NULL == (newtext = malloc(newtext_size)))
    {
       /* Out of memory */
       free(actiontext);
       edit_free_file(file);
       return JB_ERR_MEMORY;
    }
-   strcpy(newtext, actiontext);
+   strlcpy(newtext, actiontext, newtext_size);
    free(actiontext);
    newtext[0]       = '{';
    newtext[len]     = '}';

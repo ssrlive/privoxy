@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.96 2007/03/08 17:41:05 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.97 2007/04/09 18:11:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.96 2007/03/08 17:41:05 fabiankeil Exp $";
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.97  2007/04/09 18:11:35  fabiankeil
+ *    Don't mistake VC++'s _snprintf() for a snprintf() replacement.
+ *
  *    Revision 1.96  2007/03/08 17:41:05  fabiankeil
  *    Use sizeof() more often.
  *
@@ -1635,6 +1638,7 @@ jb_err cgi_error_no_template(struct client_state *csp,
       ").</p>\r\n"
       "</body>\r\n"
       "</html>\r\n";
+   const size_t body_size = strlen(body_prefix) + strlen(template_name) + strlen(body_suffix) + 1;
 
    assert(csp);
    assert(rsp);
@@ -1648,14 +1652,14 @@ jb_err cgi_error_no_template(struct client_state *csp,
    rsp->head_length = 0;
    rsp->is_static = 0;
 
-   rsp->body = malloc(strlen(body_prefix) + strlen(template_name) + strlen(body_suffix) + 1);
+   rsp->body = malloc(body_size);
    if (rsp->body == NULL)
    {
       return JB_ERR_MEMORY;
    }
-   strcpy(rsp->body, body_prefix);
-   strcat(rsp->body, template_name);
-   strcat(rsp->body, body_suffix);
+   strlcpy(rsp->body, body_prefix, body_size);
+   strlcat(rsp->body, template_name, body_size);
+   strlcat(rsp->body, body_suffix, body_size);
 
    rsp->status = strdup(status);
    if (rsp->status == NULL)
@@ -1715,6 +1719,11 @@ jb_err cgi_error_unknown(struct client_state *csp,
       "</body>\r\n"
       "</html>\r\n";
    char errnumbuf[30];
+   /*
+    * Due to sizeof(errnumbuf), body_size will be slightly
+    * bigger than necessary but it doesn't really matter.
+    */
+   const size_t body_size = strlen(body_prefix) + sizeof(errnumbuf) + strlen(body_suffix) + 1;
    assert(csp);
    assert(rsp);
 
@@ -1729,14 +1738,14 @@ jb_err cgi_error_unknown(struct client_state *csp,
 
    snprintf(errnumbuf, sizeof(errnumbuf), "%d", error_to_report);
 
-   rsp->body = malloc(strlen(body_prefix) + strlen(errnumbuf) + strlen(body_suffix) + 1);
+   rsp->body = malloc(body_size);
    if (rsp->body == NULL)
    {
       return JB_ERR_MEMORY;
    }
-   strcpy(rsp->body, body_prefix);
-   strcat(rsp->body, errnumbuf);
-   strcat(rsp->body, body_suffix);
+   strlcpy(rsp->body, body_prefix, body_size);
+   strlcat(rsp->body, errnumbuf,   body_size);
+   strlcat(rsp->body, body_suffix, body_size);
 
    rsp->status = strdup(status);
    if (rsp->status == NULL)
