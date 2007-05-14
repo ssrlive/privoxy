@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.18 2006/12/28 19:21:23 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.19 2007/04/17 18:14:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -34,6 +34,9 @@ const char list_rcs[] = "$Id: list.c,v 1.18 2006/12/28 19:21:23 fabiankeil Exp $
  *
  * Revisions   :
  *    $Log: list.c,v $
+ *    Revision 1.19  2007/04/17 18:14:06  fabiankeil
+ *    Add list_contains_item().
+ *
  *    Revision 1.18  2006/12/28 19:21:23  fabiankeil
  *    Fixed gcc43 warning and enabled list_is_valid()'s loop
  *    detection again. It was ineffective since the removal of
@@ -494,30 +497,28 @@ jb_err enlist_unique(struct list *the_list, const char *str,
 jb_err enlist_unique_header(struct list *the_list, const char *name,
                             const char *value)
 {
-   size_t length;
-   jb_err result;
-   char *str;
+   jb_err result = JB_ERR_MEMORY;
+   char *header;
+   size_t header_size;
 
    assert(the_list);
    assert(list_is_valid(the_list));
    assert(name);
    assert(value);
 
-   length = strlen(name) + 2;
-   if (NULL == (str = (char *)malloc(length + strlen(value) + 1)))
+   /* + 2 for the ': ', + 1 for the \0 */
+   header_size = strlen(name) + 2 + strlen(value) + 1;
+   header = (char *)malloc(header_size);
+
+   if (NULL != header)
    {
-      return JB_ERR_MEMORY;
+      const size_t bytes_to_compare = strlen(name) + 2;
+
+      snprintf(header, header_size, "%s: %s", name, value);
+      result = enlist_unique(the_list, header, bytes_to_compare);
+      free(header);
+      assert(list_is_valid(the_list));
    }
-   strcpy(str, name);
-   str[length - 2] = ':';
-   str[length - 1] = ' ';
-   strcpy(str + length, value);
-
-   result = enlist_unique(the_list, str, length);
-
-   free(str);
-
-   assert(list_is_valid(the_list));
 
    return result;
 
@@ -569,6 +570,9 @@ void list_remove_all(struct list *the_list)
  *                adding an empty line at the end.  NULL entries are ignored.
  *                This function does not change the_list.
  *
+ *                XXX: Should probably be renamed as it's only
+ *                useful (and used) to flatten header lists.
+ *
  * Parameters  :
  *          1  :  the_list = pointer to list
  *
@@ -579,42 +583,62 @@ void list_remove_all(struct list *the_list)
 char *list_to_text(const struct list *the_list)
 {
    struct list_entry *cur_entry;
-   char *ret = NULL;
-   char *s;
-   size_t size = 2;
+   char *text;
+   size_t text_length;
+   char *cursor;
+   size_t bytes_left;
 
    assert(the_list);
    assert(list_is_valid(the_list));
 
-   for (cur_entry = the_list->first; cur_entry ; cur_entry = cur_entry->next)
+   /*
+    * Calculate the lenght of the final text.
+    * '2' because of the '\r\n' at the end of
+    * each string and at the end of the text.
+    */
+   text_length = 2;
+   for (cur_entry = the_list->first; cur_entry; cur_entry = cur_entry->next)
    {
       if (cur_entry->str)
       {
-         size += strlen(cur_entry->str) + 2;
+         text_length += strlen(cur_entry->str) + 2;
       }
    }
 
-   if ((ret = (char *)malloc(size + 1)) == NULL)
+   bytes_left = text_length + 1;
+
+   text = (char *)malloc(bytes_left);
+   if (NULL == text)
    {
       return NULL;
    }
 
-   ret[size] = '\0';
+   cursor = text;
 
-   s = ret;
-
-   for (cur_entry = the_list->first; cur_entry ; cur_entry = cur_entry->next)
+   for (cur_entry = the_list->first; cur_entry; cur_entry = cur_entry->next)
    {
       if (cur_entry->str)
       {
-         strcpy(s, cur_entry->str);
-         s += strlen(s);
-         *s++ = '\r'; *s++ = '\n';
+         const int written = snprintf(cursor, bytes_left, "%s\r\n", cur_entry->str);
+
+         assert(written > 0);
+         assert(written < bytes_left);
+
+         bytes_left -= (size_t)written;
+         cursor += (size_t)written;
       }
    }
-   *s++ = '\r'; *s++ = '\n';
 
-   return ret;
+   assert(bytes_left == 3);
+
+   *cursor++ = '\r';
+   *cursor++ = '\n';
+   *cursor   = '\0';
+
+   assert(text_length == cursor - text);
+   assert(text[text_length] == '\0');
+
+   return text;
 }
 
 
