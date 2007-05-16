@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.132 2007/04/25 15:15:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.133 2007/05/04 11:23:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.132 2007/04/25 15:15:17 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.133  2007/05/04 11:23:19  fabiankeil
+ *    - Don't rerun crunchers that only depend on the request URL.
+ *    - Don't count redirects and CGI requests as "blocked requests".
+ *
  *    Revision 1.132  2007/04/25 15:15:17  fabiankeil
  *    Support crunching based on tags created by server-header taggers.
  *
@@ -1143,13 +1147,13 @@ int client_protocol_is_unsupported(const struct client_state *csp, char *req)
    {
       if (!strncmpic(req, "GET ftp://", 10))
       {
-         strcpy(buf, FTP_RESPONSE);
+         strlcpy(buf, FTP_RESPONSE, sizeof(buf));
          log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as FTP proxy: %s",
             csp->ip_addr_str, req);
       }
       else
       {
-         strcpy(buf, GOPHER_RESPONSE);
+         strlcpy(buf, GOPHER_RESPONSE, sizeof(buf));
          log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as gopher proxy: %s",
             csp->ip_addr_str, req);
       }
@@ -1193,7 +1197,6 @@ int client_protocol_is_unsupported(const struct client_state *csp, char *req)
  *********************************************************************/
 jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers)
 {
-   char buf[BUFFER_SIZE];
    char *req;
 
    if (!(csp->config->feature_flags & RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS))
@@ -1205,8 +1208,7 @@ jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
          csp->ip_addr_str, csp->http->cmd);
 
-      strcpy(buf, CHEADER);
-      write_socket(csp->cfd, buf, strlen(buf));
+      write_socket(csp->cfd, CHEADER, strlen(CHEADER));
       destroy_list(headers);
 
       return JB_ERR_PARSE;
@@ -1232,8 +1234,7 @@ jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *
          csp->ip_addr_str, csp->http->cmd, req);
       freez(req);
 
-      strcpy(buf, MISSING_DESTINATION_RESPONSE);
-      write_socket(csp->cfd, buf, strlen(buf));
+      write_socket(csp->cfd, MISSING_DESTINATION_RESPONSE, strlen(MISSING_DESTINATION_RESPONSE));
       destroy_list(headers);
 
       return JB_ERR_PARSE;
@@ -1519,8 +1520,7 @@ int request_contains_null_bytes(const struct client_state *csp, char *buf, int l
       log_error(LOG_LEVEL_HEADER, 
          "Offending request data with NULL bytes turned into \'°\' characters: %s", buf);
 
-      strcpy(buf, NULL_BYTE_RESPONSE);
-      write_socket(csp->cfd, buf, strlen(buf));
+      write_socket(csp->cfd, NULL_BYTE_RESPONSE, strlen(NULL_BYTE_RESPONSE));
 
       /* XXX: Log correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
@@ -1797,8 +1797,7 @@ static void chat(struct client_state *csp)
 
    if (http->cmd == NULL)
    {
-      strcpy(buf, CHEADER);
-      write_socket(csp->cfd, buf, strlen(buf));
+      write_socket(csp->cfd, CHEADER, strlen(CHEADER));
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
       log_error(LOG_LEVEL_ERROR, "Invalid header received from %s.", csp->ip_addr_str);
@@ -1943,8 +1942,7 @@ static void chat(struct client_state *csp)
          }
          else
          {
-            strcpy(buf, CFORBIDDEN);
-            write_socket(csp->cfd, buf, strlen(buf));
+            write_socket(csp->cfd, CFORBIDDEN, strlen(CFORBIDDEN));
             log_error(LOG_LEVEL_CONNECT, "Denying suspicious CONNECT request from %s", csp->ip_addr_str);
             log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 403 0", csp->ip_addr_str);
             return;
@@ -2110,7 +2108,7 @@ static void chat(struct client_state *csp)
        * so just send the "connect succeeded" message to the
        * client, flush the rest, and get out of the way.
        */
-      if (write_socket(csp->cfd, CSUCCEED, sizeof(CSUCCEED)-1))
+      if (write_socket(csp->cfd, CSUCCEED, strlen(CSUCCEED)))
       {
          freez(hdr);
          return;
@@ -2438,8 +2436,7 @@ static void chat(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "Empty server or forwarder response.");
                log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-               strcpy(buf, NO_SERVER_DATA_RESPONSE);
-               write_socket(csp->cfd, buf, strlen(buf));
+               write_socket(csp->cfd, NO_SERVER_DATA_RESPONSE, strlen(NO_SERVER_DATA_RESPONSE));
                free_http_request(http);
                return;
             }
@@ -2640,13 +2637,13 @@ static int32 server_thread(void *data)
 void usage(const char *myname)
 {
    printf("Privoxy version " VERSION " (" HOME_PAGE_URL ")\n"
-#if !defined(unix)
-           "Usage: %s [--help] [--version] [configfile]\n"
-#else
-           "Usage: %s [--help] [--version] [--no-daemon] [--pidfile pidfile] [--user user[.group]] [configfile]\n"
-#endif
-           "Aborting.\n", myname);
- 
+          "Usage: %s [--help] [--version] "
+#if defined(unix)
+          "[--no-daemon] [--pidfile pidfile] [--user user[.group]] "
+#endif /* defined(unix) */
+          "[configfile]\n"
+          "Aborting\n", myname);
+
    exit(2);
 
 }
@@ -2770,6 +2767,9 @@ int main(int argc, const char *argv[])
 
    /*
     * Parse the command line arguments
+    *
+    * XXX: simply printing usage information in case of
+    * invalid arguments isn't particular user friendly.
     */
    while (++argc_pos < argc)
    {
@@ -2850,8 +2850,19 @@ int main(int argc, const char *argv[])
       {
          do_chroot = 1;
       }
-
 #endif /* defined(unix) */
+
+      else if (argc_pos + 1 != argc)
+      {
+         /*
+          * This is neither the last command line
+          * option, nor was it recognized before,
+          * therefore it must be invalid.
+          */
+         usage(argv[0]);
+      }
+      else
+
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
       {
          configfile = argv[argc_pos];
@@ -2862,24 +2873,30 @@ int main(int argc, const char *argv[])
 #if defined(unix)
    if ( *configfile != '/' )
    {
-      char *abs_file, cwd[1024];
+      char cwd[BUFFER_SIZE];
+      char *abs_file;
+      size_t abs_file_size; 
 
       /* make config-filename absolute here */
-      if ( !(getcwd(cwd, sizeof(cwd))))
+      if (NULL == getcwd(cwd, sizeof(cwd)))
       {
-         perror("get working dir failed");
+         perror("failed to get current working directory");
          exit( 1 );
       }
 
-      if (!(basedir = strdup(cwd))
-      || (!(abs_file = malloc( strlen( basedir ) + strlen( configfile ) + 5 ))))
+      /* XXX: why + 5? */
+      abs_file_size = strlen(cwd) + strlen(configfile) + 5;
+      basedir = strdup(cwd);
+
+      if (NULL == basedir ||
+          NULL == (abs_file = malloc(abs_file_size)))
       {
          perror("malloc failed");
          exit( 1 );
       }
-      strcpy( abs_file, basedir );
-      strcat( abs_file, "/" );
-      strcat( abs_file, configfile );
+      strlcpy(abs_file, basedir, abs_file_size);
+      strlcat(abs_file, "/", abs_file_size );
+      strlcat(abs_file, configfile, abs_file_size);
       configfile = abs_file;
    }
 #endif /* defined unix */
@@ -3054,13 +3071,13 @@ int main(int argc, const char *argv[])
       {
          char putenv_dummy[64];
 
-         strcpy(putenv_dummy, "HOME=/");
+         strlcpy(putenv_dummy, "HOME=/", sizeof(putenv_dummy));
          if (putenv(putenv_dummy) != 0)
          {
             log_error(LOG_LEVEL_FATAL, "Cannot putenv(): HOME");
          }                
 
-         snprintf(putenv_dummy, 64, "USER=%s", pw->pw_name);
+         snprintf(putenv_dummy, sizeof(putenv_dummy), "USER=%s", pw->pw_name);
          if (putenv(putenv_dummy) != 0)
          {
             log_error(LOG_LEVEL_FATAL, "Cannot putenv(): USER");
