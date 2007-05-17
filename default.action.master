@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.74 2007/04/18 16:51:09 fabiankeil Exp $
+#  $Id: default.action.master,v 1.75 2007/05/02 10:49:46 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1192,15 +1192,6 @@ smartad.*.*.*
 /top\.php\?d=.*\.[a-z]{2,5}
 
 #############################################################################
-# Generic -overwrite-last-modified patterns for URLs that look
-# as if they belong to files that are often fetched through download
-# managers. Randomizing the Last-Modfied date causes problems with
-# interrupted downloads.
-#############################################################################
-{-overwrite-last-modified}
-/.*\.(tar|gz|b?zip2?|t[gb]z|iso|dmg|avi|m(p4|4v)|mpe?g)$
-
-#############################################################################
 # Site-specific unblockers:
 #############################################################################
 {-block}
@@ -1515,6 +1506,10 @@ schneegans.de/
 config.privoxy.org/
 #MASTER# PROBLEM-URL: http://users.wsj.com/lmda/do/checkLogin?mg=evo-wsj&url=http%3A%2F%2Fonline.wsj.com%2Farticle%2FSB117313867582027623.html
 .wsj.com/lmda/do/checkLogin
+#MASTER# PROBLEM-URL: http://del.icio.us/url/check\?url=http%3A%2F%2Fwww.privoxy.org
+#MASTER# REMARKS: As we already have five other PROBLEM-URLs that contain '?url=',
+#MASTER# REMARKS: it might make sense to allow '/.*?url=' in general
+del.icio.us/
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
@@ -1880,3 +1875,24 @@ config.privoxy.org/
 .yahoo./.*http://login.yahoo.com/config/login.*http://
 
 #MASTER# set vi:nowrap
+
+#----------------------------------------------------------------------------
+# Sections that modify the action settings based on tags.
+#----------------------------------------------------------------------------
+
+#############################################################################
+# Depends on +client-header-tagger{image-requests}
+#############################################################################
+{-handle-as-empty-document \
+ +handle-as-image \
+}
+TAG:^IMAGE-REQUEST$
+
+#############################################################################
+# Depends on +client-header-tagger{text-requests}
+#############################################################################
+{+handle-as-empty-document \
+ -handle-as-image \
+}
+TAG:^TEXT-REQUEST$
+
