@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.75 2007/05/02 10:49:46 hal9 Exp $
+#  $Id: default.action.master,v 1.76 2007/05/17 15:37:00 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1889,10 +1889,10 @@ config.privoxy.org/
 TAG:^IMAGE-REQUEST$
 
 #############################################################################
-# Depends on +client-header-tagger{text-requests}
+# Depends on +client-header-tagger{css-requests}
 #############################################################################
 {+handle-as-empty-document \
  -handle-as-image \
 }
-TAG:^TEXT-REQUEST$
+TAG:^CSS-REQUEST$
 
