@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.39 2007/02/21 14:10:23 fabiankeil Exp $
+#  $Id: default.filter,v 1.40 2007/03/20 15:40:00 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -37,8 +37,12 @@
 #
 # Syntax:
 #
-# Filters start with a line "FILTER: name description". They are then referrable
-# from the actionsfile with +filter{name}
+# Generally filters start with a line like "FILTER: name description".
+# They are then referrable from the actionsfile with +filter{name}
+#
+# FILTER marks a filter as content filter, other filter
+# types are CLIENT-HEADER-FILTER, CLIENT-HEADER-TAGGER,
+# SERVER-HEADER-FILTER and SERVER-HEADER-TAGGER.
 #
 # Inside the filters, write one Perl-Style substitution (job) per line.
 # Jobs that precede the first FILTER: line are ignored.
@@ -46,7 +50,7 @@
 # For Details see the pcrs manpage contained in this distribution.
 # (and the perlre, perlop and pcre manpages)
 #
-# Note that you are free to choose the delimter as you see fit.
+# Note that you are free to choose the delimiter as you see fit.
 #
 # Note2: In addidion to the Perl options gimsx, the following nonstandard
 # options are supported:
@@ -56,6 +60,11 @@
 # 'T' (trivial) prevents parsing for backreferences in the substitute.
 #     Use if you want to include text like '$&' in your substitute without
 #     quoting.
+# 'D' (Dynamic) allows the use of variables. Supported variables are:
+#     $host, $origin (the IP address the request came from), $path and $url.
+#     Note that '$' is a bad choice as delimiter for dynamic filters as you
+#     might end up with unintended variables if you use a variable name
+#     directly after the delimiter.
 # 
 #################################################################################
 
@@ -577,7 +586,7 @@ FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitatio
 s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, .yschbox, \#yschsec, .yschhd, \#yschanswr, .yschftad,\
- .yschspn, .yschspns, \#ygrp-sponsored-links {display: none !important;}\n\
+ .yschspn, .yschspns, \#ygrp-sponsored-links, \#ks-ypn-ads {display: none !important;}\n\
  \#yschpri, \#yschweb {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
 </style>\n$0@
@@ -646,7 +655,7 @@ s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*
 #
 #################################################################################
 SERVER-HEADER-FILTER: x-httpd-php-to-html Changes the Content-Type header from x-httpd-php to html.
-s@^(Content-Type:) application/x-httpd-php@$1 text/html@
+s@^(Content-Type:)\s*application/x-httpd-php@$1 text/html@i
 
 #################################################################################
 #
@@ -654,7 +663,7 @@ s@^(Content-Type:) application/x-httpd-php@$1 text/html@
 #
 #################################################################################
 SERVER-HEADER-FILTER: html-to-xml Changes the Content-Type header from html to xml.
-s@^(Content-Type:) text/html(;.*)?$@$1 application/xhtml+xml$2@
+s@^(Content-Type:)\s*text/html(;.*)?$@$1 application/xhtml+xml$2@i
 
 #################################################################################
 #
@@ -662,7 +671,7 @@ s@^(Content-Type:) text/html(;.*)?$@$1 application/xhtml+xml$2@
 #
 #################################################################################
 SERVER-HEADER-FILTER: xml-to-html Changes the Content-Type header from xml to html.
-s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
+s@^(Content-Type:)\s*(?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@i
 
 #################################################################################
 #
@@ -691,11 +700,41 @@ s@^(Content-Type:) (?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 CLIENT-HEADER-FILTER: hide-tor-exit-notation Removes the Tor exit node notation in Host and Referer headers.
 s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 
+#################################################################################
+#
+# less-download-windows: Prevents annoying download windows for content types
+#                        the browser can handle itself.
+#
+#################################################################################
+SERVER-HEADER-FILTER: less-download-windows Prevent annoying download windows for content types the browser can handle itself
+s@^Content-Disposition:.*filename=(["']?).*\.(png|gif|jpe?g|diff?|d?patch|c|h|pl|shar)\1.*$@@i
+s@^(Content-Type:)\s*(?:message/(?:news|rfc822)|text/x-.*|application/x-sh)\s*@$1 text/plain@i
+
+#################################################################################
+#
+# image-requests: Tags detected image requests as "IMAGE-REQUEST". Whether
+#                 or not the detection actually works depends on the browser.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: image-requests Tags detected image requests as "IMAGE-REQUEST".
+s@Accept:\s*image/.*@IMAGE-REQUEST@i
+
+#################################################################################
+#
+# text-requests: Tags detected CSS requests as "TEXT-REQUEST". Whether
+#                or not the detection actually works depends on the browser.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: text-requests Tags detected requests for text documents as "TEXT-REQUEST".
+s@Accept:\s*text/.*@TEXT-REQUEST@i
 
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.40  2007/03/20 15:40:00  fabiankeil
+#     Adjust to new world order with dedicated header-filter actions.
+#
 #     Revision 1.39  2007/02/21 14:10:23  fabiankeil
 #     - Fix a js-annoyances pcrs command that broke
 #       evaluated code. (BR #1124071, thanks to Bor Gergely)
