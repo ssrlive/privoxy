@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.62 2007/03/17 15:20:05 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.63 2007/04/09 18:11:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.62 2007/03/17 15:20:05 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.63  2007/04/09 18:11:36  fabiankeil
+ *    Don't mistake VC++'s _snprintf() for a snprintf() replacement.
+ *
  *    Revision 1.62  2007/03/17 15:20:05  fabiankeil
  *    New config option: enforce-blocks.
  *
@@ -669,7 +672,10 @@ struct configuration_spec * load_config(void)
                 configfile);
    }
 
-   log_error(LOG_LEVEL_INFO, "loading configuration file '%s':", configfile);
+   if (NULL != current_configfile)
+   {
+      log_error(LOG_LEVEL_INFO, "Reloading configuration file '%s'", configfile);
+   }
 
 #ifdef FEATURE_TOGGLE
    global_toggle_state      = 1;
@@ -728,7 +734,7 @@ struct configuration_spec * load_config(void)
       int vec_count;
       char *vec[3];
 
-      strcpy(tmp, buf);
+      strlcpy(tmp, buf, sizeof(tmp));
 
       /* Copy command (i.e. up to space or tab) into cmd */
       p = buf;
@@ -746,7 +752,7 @@ struct configuration_spec * load_config(void)
       }
 
       /* Copy the argument into arg */
-      strcpy(arg, p);
+      strlcpy(arg, p, sizeof(arg));
 
       /* Should never happen, but check this anyway */
       if (*cmd == '\0')
@@ -787,15 +793,8 @@ struct configuration_spec * load_config(void)
                   MAX_AF_FILES);
             }
             config->actions_file_short[i] = strdup(arg);
-            p = malloc(strlen(arg) + sizeof(".action"));
-            if (p == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "Out of memory");
-            }
-            strcpy(p, arg);
-            strcat(p, ".action");
-            config->actions_file[i] = make_path(config->confdir, p);
-            free(p);
+            config->actions_file[i] = make_path(config->confdir, arg);
+
             continue;
 /* *************************************************************************
  * accept-intercepted-requests
@@ -997,14 +996,8 @@ struct configuration_spec * load_config(void)
                   MAX_AF_FILES);
             }
             config->re_filterfile_short[i] = strdup(arg);
-            p = malloc(strlen(arg) + 1);
-            if (p == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "Out of memory");
-            }
-            strcpy(p, arg);
-            config->re_filterfile[i] = make_path(config->confdir, p);
-            free(p);
+            config->re_filterfile[i] = make_path(config->confdir, arg);
+
             continue;
 
 /* *************************************************************************
