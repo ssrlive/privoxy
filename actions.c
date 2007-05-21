@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.38 2007/04/15 16:39:20 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.39 2007/04/17 18:21:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,11 @@ const char actions_rcs[] = "$Id: actions.c,v 1.38 2007/04/15 16:39:20 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.39  2007/04/17 18:21:45  fabiankeil
+ *    Split update_action_bits() into
+ *    update_action_bits_for_all_tags()
+ *    and update_action_bits_for_tag().
+ *
  *    Revision 1.38  2007/04/15 16:39:20  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -1176,8 +1181,9 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
    }
    if (!fs)
    {
-      log_error(LOG_LEVEL_FATAL, "can't load actions file '%s': error finding file: %E",
-                csp->config->actions_file[fileid]);
+      log_error(LOG_LEVEL_FATAL, "can't load actions file '%s': %E. "
+         "Note that beginning with Privoxy 3.0.7, actions files have to be specified "
+         "with their complete file names.", csp->config->actions_file[fileid]);
       return 1; /* never get here */
    }
 
@@ -1342,7 +1348,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             init_action(cur_action);
 
             /* trim { */
-            strcpy(actions_buf, buf + 1);
+            strlcpy(actions_buf, buf + 1, sizeof(actions_buf));
 
             /* check we have a trailing } and then trim it */
             end = actions_buf + strlen(actions_buf) - 1;
@@ -1484,7 +1490,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             return 1; /* never get here */
          }
 
-         strcpy(actions_buf, start);
+         strlcpy(actions_buf, start, sizeof(actions_buf));
 
          if (get_actions(actions_buf, alias_list, new_alias->action))
          {
