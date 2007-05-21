@@ -31,6 +31,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-list,v $
+#    Revision 1.33  2007/04/08 13:21:06  fabiankeil
+#    Reference action files in CGI URLs by id instead
+#    of using the first part of the file name.
+#    Fixes BR 1694250 and BR 1590556.
+#
 #    Revision 1.32  2007/01/23 16:03:16  fabiankeil
 #    - Add favicon links.
 #    - Remove useless W3C validator links.
@@ -197,7 +202,7 @@
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
   <link rel="shortcut icon" href="@default-cgi@favicon.ico" type="image/x-icon">
 
-  <title>Privoxy: Edit actions file @f@.action</title>
+  <title>Privoxy: Edit actions file @actions-file@</title>
 
   <style type="text/css">
 

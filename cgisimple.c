@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.54 2007/04/09 18:11:35 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.55 2007/04/13 13:36:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.54 2007/04/09 18:11:35 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.55  2007/04/13 13:36:46  fabiankeil
+ *    Reference action files in CGI URLs by id instead
+ *    of using the first part of the file name.
+ *    Fixes BR 1694250 and BR 1590556.
+ *
  *    Revision 1.54  2007/04/09 18:11:35  fabiankeil
  *    Don't mistake VC++'s _snprintf() for a snprintf() replacement.
  *
@@ -544,8 +549,7 @@ jb_err cgi_show_request(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   if (map(exports, "processed-request", 1, html_encode_and_free_original(
-      sed(client_patterns, add_client_headers, csp)), 0))
+   if (map(exports, "processed-request", 1, html_encode(list_to_text(csp->headers)), 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;
@@ -1382,15 +1386,16 @@ jb_err cgi_show_url_info(struct client_state *csp,
       /*
        * Unknown prefix - assume http://
        */
-      char * url_param_prefixed = malloc(7 + 1 + strlen(url_param));
+      const size_t url_param_prefixed_size = 7 + 1 + strlen(url_param);
+      char * url_param_prefixed = malloc(url_param_prefixed_size);
       if (NULL == url_param_prefixed)
       {
          free(url_param);
          free_map(exports);
          return JB_ERR_MEMORY;
       }
-      strcpy(url_param_prefixed, "http://");
-      strcpy(url_param_prefixed + 7, url_param);
+      strlcpy(url_param_prefixed, "http://", url_param_prefixed_size);
+      strlcat(url_param_prefixed, url_param, url_param_prefixed_size);
       free(url_param);
       url_param = url_param_prefixed;
    }
@@ -1499,7 +1504,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
       for (i = 0; i < MAX_AF_FILES; i++)
       {
          if (NULL == csp->config->actions_file_short[i]
-             || !strcmp(csp->config->actions_file_short[i], "standard")) continue;
+             || !strcmp(csp->config->actions_file_short[i], "standard.action")) continue;
 
          b = NULL;
          hits = 1;
@@ -1510,7 +1515,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
                /* FIXME: Hardcoded HTML! */
                string_append(&matches, "<tr><th>In file: ");
                string_join  (&matches, html_encode(csp->config->actions_file_short[i]));
-               snprintf(buf, 150, ".action <a class=\"cmd\" href=\"/show-status?file=actions&amp;index=%d\">", i);
+               snprintf(buf, sizeof(buf), " <a class=\"cmd\" href=\"/show-status?file=actions&amp;index=%d\">", i);
                string_append(&matches, buf);
                string_append(&matches, "View</a>");
 #ifdef FEATURE_CGI_EDIT_ACTIONS
