@@ -32,6 +32,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.44  2007/04/15 16:39:21  fabiankeil
+#    Introduce tags as alternative way to specify which
+#    actions apply to a request. At the moment tags can be
+#    created based on client and server headers.
+#
 #    Revision 1.43  2007/03/29 11:40:34  fabiankeil
 #    Divide @filter-params@ into @client-header-filter-params@
 #    @content-filter-params@ and @server-header-filter-params@.
@@ -926,7 +931,7 @@ function show_send_wafer_opts(tf)
         name="hide_if_modified_since" value="X" @hide-if-modified-since-x@
         ></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE_IF_MODIFIED_SINCE">hide-if-modified-since</a></td>
-      <td>Remove or randomize If-Modified-Since header.</td>
+      <td>Remove or randomize the If-Modified-Since header.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="hide_if-modifed-since_opts">
       <td class="en1">&nbsp;</td>
@@ -1101,7 +1106,7 @@ function show_send_wafer_opts(tf)
         name="overwrite_last_modified" value="X" @overwrite-last-modified-x@
         ></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@OVERWRITE_LAST_MODIFIED">overwrite-last-modified</a></td>
-      <td>Remove or randomize If-Modified-Since header.</td>
+      <td>Remove or randomize the Last-Modified header.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="overwrite_last_modified_opts">
       <td class="en1">&nbsp;</td>
