@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.133 2007/05/04 11:23:19 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.134 2007/05/16 14:59:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,14 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.133 2007/05/04 11:23:19 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.134  2007/05/16 14:59:46  fabiankeil
+ *    - Fix config file loading on Unix if no config file is specified.
+ *      Since r1.97 Privoxy would always interpret the last argument as
+ *      config file, even if it's a valid command line option.
+ *    - Abort in case of unrecognized command line options. Closes #1719696.
+ *    - Remove a bunch of unnecessary strcpy() calls (yay for c&p without thinking).
+ *    - Replace the remaining strcpy() and strcat() calls with strlcpy() and strcat().
+ *
  *    Revision 1.133  2007/05/04 11:23:19  fabiankeil
  *    - Don't rerun crunchers that only depend on the request URL.
  *    - Don't count redirects and CGI requests as "blocked requests".
@@ -1717,7 +1725,7 @@ static void chat(struct client_state *csp)
 
    for (;;)
    {
-      len = read_socket(csp->cfd, buf, sizeof(buf)-1);
+      len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
 
       if (len <= 0) break;      /* error! */
 
@@ -1812,7 +1820,7 @@ static void chat(struct client_state *csp)
    {
       if ( ( ( p = get_header(csp) ) != NULL) && ( *p == '\0' ) )
       {
-         len = read_socket(csp->cfd, buf, sizeof(buf));
+         len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
          if (len <= 0)
          {
             log_error(LOG_LEVEL_ERROR, "read from client failed: %E");
@@ -2069,7 +2077,7 @@ static void chat(struct client_state *csp)
 
 
       /* Write the answer to the client */
-      if(rsp != NULL)
+      if (rsp != NULL)
       {
          send_crunch_response(csp, rsp);
       }
@@ -2157,7 +2165,7 @@ static void chat(struct client_state *csp)
 
       if (FD_ISSET(csp->cfd, &rfds))
       {
-         len = read_socket(csp->cfd, buf, sizeof(buf));
+         len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
 
          if (len <= 0)
          {
@@ -2637,11 +2645,15 @@ static int32 server_thread(void *data)
 void usage(const char *myname)
 {
    printf("Privoxy version " VERSION " (" HOME_PAGE_URL ")\n"
-          "Usage: %s [--help] [--version] "
+          "Usage: %s "
+#if defined(unix)
+          "[--chroot] "
+#endif /* defined(unix) */
+          "[--help] "
 #if defined(unix)
           "[--no-daemon] [--pidfile pidfile] [--user user[.group]] "
 #endif /* defined(unix) */
-          "[configfile]\n"
+          "[--version] [configfile]\n"
           "Aborting\n", myname);
 
    exit(2);
