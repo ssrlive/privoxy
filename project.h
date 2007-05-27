@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.95 2007/04/30 15:02:19 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.96 2007/05/14 10:41:15 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.96  2007/05/14 10:41:15  fabiankeil
+ *    Ditch the csp member cookie_list[] which isn't used anymore.
+ *
  *    Revision 1.95  2007/04/30 15:02:19  fabiankeil
  *    Introduce dynamic pcrs jobs that can resolve variables.
  *
@@ -1024,10 +1027,8 @@ struct iob
 #define  ACTION_REDIRECT                             0x10000000UL
 /** Action bitmap: Answer blocked Connects verbosely */
 #define ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS  0x20000000UL
-/** Action bitmap: Filter server headers with pcre */
-#define ACTION_FILTER_SERVER_HEADERS                 0x40000000UL
-/** Action bitmap: Filter client headers with pcre */
-#define ACTION_FILTER_CLIENT_HEADERS                 0x80000000UL
+/** Action bitmap: Override the forward settings in the config file */
+#define ACTION_FORWARD_OVERRIDE                      0x40000000UL
 
 
 /** Action string index: How to deanimate GIFs */
@@ -1060,8 +1061,10 @@ struct iob
 #define ACTION_STRING_REDIRECT             13
 /** Action string index: Decode before redirect? */
 #define ACTION_STRING_FAST_REDIRECTS       14
+/** Action string index: Overriding forward rule. */
+#define ACTION_STRING_FORWARD_OVERRIDE     15
 /** Number of string actions. */
-#define ACTION_STRING_COUNT                15
+#define ACTION_STRING_COUNT                16
 
 
 /* To make the ugly hack in sed easier to understand */
@@ -1214,6 +1217,12 @@ struct url_actions
  */
 #define CSP_FLAG_HOST_HEADER_IS_SET            0x00000200UL
 
+/**
+ * Flag for csp->flags: Set if filtering is disabled by X-Filter: No
+ * XXX: As we now have tags we might as well ditch this.
+ */
+#define CSP_FLAG_NO_FILTERING                  0x00000400UL
+
 
 /*
  * Flags for use in return codes of child processes
@@ -1274,6 +1283,13 @@ struct client_state
 
    /** The URL that was requested */
    struct http_request http[1];
+
+   /*
+    * The final forwarding settings.
+    * XXX: Currently this is only used for forward-override,
+    * so we can free the space in sweep.
+    */
+   struct forward_spec * fwd;
 
    /** An I/O buffer used for buffering data read from the network */
    struct iob iob[1];
