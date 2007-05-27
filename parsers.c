@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.100 2007/04/30 15:53:11 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.101 2007/05/14 10:16:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.100 2007/04/30 15:53:11 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.101  2007/05/14 10:16:41  fabiankeil
+ *    Streamline client_cookie_adder().
+ *
  *    Revision 1.100  2007/04/30 15:53:11  fabiankeil
  *    Make sure filters with dynamic jobs actually use them.
  *
@@ -1764,6 +1767,11 @@ jb_err filter_header(struct client_state *csp, char **header)
    int wanted_filter_type;
    int multi_action_index;
 
+   if (csp->flags & CSP_FLAG_NO_FILTERING)
+   {
+      return JB_ERR_OK;
+   }
+
    if (csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
    {
       wanted_filter_type = FT_SERVER_HEADER_FILTER;
@@ -3370,9 +3378,8 @@ jb_err client_x_filter(struct client_state *csp, char **header)
          }
          else
          {  
-            csp->content_type = CT_TABOO;
-            csp->action->flags &= ~ACTION_FILTER_SERVER_HEADERS;
-            csp->action->flags &= ~ACTION_FILTER_CLIENT_HEADERS;
+            csp->content_type = CT_TABOO; /* XXX: This hack shouldn't be necessary */
+            csp->flags |= CSP_FLAG_NO_FILTERING;
             log_error(LOG_LEVEL_HEADER, "Accepted the client's request to fetch without filtering.");
          }
          log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
