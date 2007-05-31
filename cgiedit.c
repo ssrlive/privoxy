@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.53 2007/04/15 16:39:20 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.54 2007/05/14 10:33:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.53 2007/04/15 16:39:20 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.54  2007/05/14 10:33:51  fabiankeil
+ *    - Use strlcpy() and strlcat() instead of strcpy() and strcat().
+ *
  *    Revision 1.53  2007/04/15 16:39:20  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -616,6 +619,11 @@ static jb_err map_copy_parameter_url(struct map *out,
                                      const struct map *in,
                                      const char *name);
 #endif /* unused function */
+
+static jb_err get_file_name_param(struct client_state *csp, 	 
+	                                   const struct map *parameters, 	 
+	                                   const char *param_name, 	 
+	                                   const char **pfilename);
 
 /* Internal convenience functions */
 static char *section_target(const unsigned sectionid);
@@ -1848,7 +1856,7 @@ jb_err edit_read_file(struct client_state *csp,
    struct file_line * lines;
    FILE * fp;
    jb_err err;
-   const char * filename = NULL;
+   const char *filename = NULL;
    struct editable_file * file;
    unsigned version = 0;
    struct stat statbuf[1];
@@ -1862,13 +1870,21 @@ jb_err edit_read_file(struct client_state *csp,
 
    *pfile = NULL;
 
-   if ((JB_ERR_OK == get_number_param(csp, parameters, "f", &i))
-      && (i < MAX_AF_FILES) && (NULL != csp->config->actions_file[i]))
+   err = get_number_param(csp, parameters, "f", &i);
+   if ((JB_ERR_OK == err) && (i < MAX_AF_FILES) && (NULL != csp->config->actions_file[i]))
    {
       filename = csp->config->actions_file[i];
    }
+   else if (JB_ERR_CGI_PARAMS == err)
+   {
+      /*
+       * Probably an old-school URL like
+       * http://config.privoxy.org/edit-actions-list?f=default
+       */
+      err = get_file_name_param(csp, parameters, "f", &filename);
+   }
 
-   if (filename == NULL || stat(filename, statbuf) < 0)
+   if (NULL == filename || stat(filename, statbuf) < 0)
    {
       /* Error, probably file not found. */
       return JB_ERR_FILE;
@@ -2032,41 +2048,21 @@ jb_err edit_read_actions_file(struct client_state *csp,
 }
 
 
-#if 0
-/*
- * Currently not needed, but may become useful again in the future.
- */
 /*********************************************************************
  *
  * Function    :  get_file_name_param
  *
  * Description :  Get the name of the file to edit from the parameters
- *                passed to a CGI function.  This function handles
- *                security checks such as blocking urls containing
- *                "/" or ".", prepending the config file directory,
- *                and adding the specified suffix.
- *
- *                (This is an essential security check, otherwise
- *                users may be able to pass "../../../etc/passwd"
- *                and overwrite the password file [linux], "prn:"
- *                and print random data [Windows], etc...)
- *
- *                This function only allows filenames contining the
- *                characters '-', '_', 'A'-'Z', 'a'-'z', and '0'-'9'.
- *                That's probably too restrictive but at least it's
- *                secure.
+ *                passed to a CGI function using the old syntax.
+ *                This function handles security checks and only
+ *                accepts files that Privoxy already knows.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  parameters = map of cgi parameters
  *          3  :  param_name = The name of the parameter to read
- *          4  :  suffix = File extension, e.g. ".actions"
- *          5  :  pfilename = destination for full filename.  Caller
- *                free()s.  Set to NULL on error.
- *          6  :  pparam = destination for partial filename,
- *                suitable for use in another URL.  Allocated as part
- *                of the map "parameters", so don't free it.
- *                Set to NULL if not specified.
+ *          4  :  pfilename = pointer to the filename in
+ *                csp->config->actions_file[] if found. Set to NULL on error.
  *
  * Returns     :  JB_ERR_OK         on success
  *                JB_ERR_MEMORY     on out-of-memory
@@ -2077,34 +2073,29 @@ jb_err edit_read_actions_file(struct client_state *csp,
 static jb_err get_file_name_param(struct client_state *csp,
                                   const struct map *parameters,
                                   const char *param_name,
-                                  const char *suffix,
-                                  char **pfilename,
-                                  const char **pparam)
+                                  const char **pfilename)
 {
    const char *param;
+   const char suffix[] = ".action";
    const char *s;
    char *name;
    char *fullpath;
    char ch;
    size_t len;
    size_t name_size;
+   int i;
 
    assert(csp);
    assert(parameters);
-   assert(suffix);
    assert(pfilename);
-   assert(pparam);
 
    *pfilename = NULL;
-   *pparam = NULL;
 
    param = lookup(parameters, param_name);
    if (!*param)
    {
       return JB_ERR_CGI_PARAMS;
    }
-
-   *pparam = param;
 
    len = strlen(param);
    if (len >= FILENAME_MAX)
@@ -2113,7 +2104,10 @@ static jb_err get_file_name_param(struct client_state *csp,
       return JB_ERR_CGI_PARAMS;
    }
 
-   /* Check every character to see if it's legal */
+   /*
+    * Check every character to see if it's legal.
+    * Totally unnecessary but we do it anyway.
+    */
    s = param;
    while ((ch = *s++) != '\0')
    {
@@ -2147,12 +2141,23 @@ static jb_err get_file_name_param(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   /* Success */
-   *pfilename = fullpath;
+   /* Check if the file is known */
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      if (NULL != csp->config->actions_file[i] &&
+          !strcmp(fullpath, csp->config->actions_file[i]))
+      {
+         /* Success */
+         *pfilename = csp->config->actions_file[i];
+         freez(fullpath);
 
-   return JB_ERR_OK;
+         return JB_ERR_OK;
+      }
+   }
+   freez(fullpath);
+
+   return JB_ERR_CGI_PARAMS;
 }
-#endif /*0*/
 
 
 /*********************************************************************
