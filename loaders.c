@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.62 2007/04/30 15:02:18 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.63 2007/05/14 10:41:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.62 2007/04/30 15:02:18 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.63  2007/05/14 10:41:15  fabiankeil
+ *    Ditch the csp member cookie_list[] which isn't used anymore.
+ *
  *    Revision 1.62  2007/04/30 15:02:18  fabiankeil
  *    Introduce dynamic pcrs jobs that can resolve variables.
  *
@@ -500,6 +503,11 @@ void sweep(void)
          freez(csp->iob->buf);
          freez(csp->error_message);
 
+         if (csp->action->flags & ACTION_FORWARD_OVERRIDE &&
+             NULL != csp->fwd)
+         {
+            unload_forward_spec(csp->fwd);
+         }
          free_http_request(csp->http);
 
          destroy_list(csp->headers);
@@ -1310,6 +1318,30 @@ static void unload_re_filterfile(void *f)
 
       b = a;
    }
+
+   return;
+}
+
+/*********************************************************************
+ *
+ * Function    :  unload_forward_spec
+ *
+ * Description :  Unload the forward spec settings by freeing all 
+ *                memory referenced by members and the memory for
+ *                the spec itself.
+ *
+ * Parameters  :
+ *          1  :  fwd = the forward spec.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void unload_forward_spec(struct forward_spec *fwd)
+{
+   free_url_spec(fwd->url);
+   freez(fwd->gateway_host);
+   freez(fwd->forward_host);
+   free(fwd);
 
    return;
 }
