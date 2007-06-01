@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.101 2007/05/14 10:16:41 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.102 2007/05/27 12:39:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.101 2007/05/14 10:16:41 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.102  2007/05/27 12:39:32  fabiankeil
+ *    Adjust "X-Filter: No" to disable dedicated header filters.
+ *
  *    Revision 1.101  2007/05/14 10:16:41  fabiankeil
  *    Streamline client_cookie_adder().
  *
@@ -1446,13 +1449,13 @@ jb_err scan_headers(struct client_state *csp)
  *                headers (client or server)
  *          3  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  Single pointer to a fully formed header, or NULL
- *                on out-of-memory error.
+ * Returns     :  JB_ERR_OK in case off success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-char *sed(const struct parsers pats[],
-          const add_header_func_ptr more_headers[],
-          struct client_state *csp)
+jb_err sed(const struct parsers pats[],
+           const add_header_func_ptr more_headers[],
+           struct client_state *csp)
 {
    struct list_entry *p;
    const struct parsers *v;
@@ -1516,12 +1519,7 @@ char *sed(const struct parsers pats[],
       }
    }
 
-   if (err != JB_ERR_OK)
-   {
-      return NULL;
-   }
-
-   return list_to_text(csp->headers);
+   return err;
 }
 
 
