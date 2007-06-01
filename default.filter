@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.41 2007/05/17 15:45:41 fabiankeil Exp $
+#  $Id: default.filter,v 1.42 2007/05/17 15:55:36 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -57,14 +57,20 @@
 # 
 # 'U' turns the default to ungreedy matching.  Add ? to quantifiers to
 #     switch back to greedy.
+#
 # 'T' (trivial) prevents parsing for backreferences in the substitute.
 #     Use if you want to include text like '$&' in your substitute without
 #     quoting.
+#
 # 'D' (Dynamic) allows the use of variables. Supported variables are:
 #     $host, $origin (the IP address the request came from), $path and $url.
+#
 #     Note that '$' is a bad choice as delimiter for dynamic filters as you
 #     might end up with unintended variables if you use a variable name
-#     directly after the delimiter.
+#     directly after the delimiter. Variables will be resolved without
+#     escaping anything, therefore you also have to be careful not to chose
+#     delimiters that appear in the replacement text. For example '<' should
+#     be save, while '?' will sooner or later cause conflicts with $url.
 # 
 #################################################################################
 
@@ -732,6 +738,10 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.42  2007/05/17 15:55:36  fabiankeil
+#     Undo an improperly tested last-minute change
+#     and turn "text-requests" back into "css-requests".
+#
 #     Revision 1.41  2007/05/17 15:45:41  fabiankeil
 #     - Mention new filter types and the 'D' option.
 #     - Header filters are now case-insensitive and accept a
