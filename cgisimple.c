@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.55 2007/04/13 13:36:46 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.56 2007/05/21 10:50:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,13 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.55 2007/04/13 13:36:46 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.56  2007/05/21 10:50:35  fabiankeil
+ *    - Use strlcpy() instead of strcpy().
+ *    - Stop treating actions files special. Expect a complete file name
+ *      (with or without path) like it's done for the rest of the files.
+ *      Closes FR#588084.
+ *    - Don't rerun sed() in cgi_show_request().
+ *
  *    Revision 1.55  2007/04/13 13:36:46  fabiankeil
  *    Reference action files in CGI URLs by id instead
  *    of using the first part of the file name.
@@ -1560,6 +1567,19 @@ jb_err cgi_show_url_info(struct client_state *csp,
       string_append(&matches, "</table>\n");
 
       /*
+       * XXX: Kludge to make sure the "Forward settings" section
+       * shows what forward-override{} would do with the requested URL.
+       * No one really cares how the CGI request would be forwarded
+       * if it wasn't intercepted as CGI request in the first place.
+       *
+       * From here on the action bitmask will no longer reflect
+       * the real url (http://config.privoxy.org/show-url-info?url=.*),
+       * but luckily it's no longer required later on anyway.
+       */
+      free_current_action(csp->action);
+      url_actions(url_to_query, csp);
+
+      /*
        * Fill in forwarding settings.
        *
        * The possibilities are:
@@ -1570,7 +1590,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
        *
        * XXX: Parts of this code could be reused for the
        * "forwarding-failed" template which currently doesn't
-       * display the proxy port and an eventuell second forwarder.
+       * display the proxy port and an eventual second forwarder.
        */
       {
          const struct forward_spec * fwd = forward_url(url_to_query, csp);
