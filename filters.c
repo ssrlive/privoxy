@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.86 2007/04/30 15:03:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.87 2007/04/30 15:53:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.86 2007/04/30 15:03:28 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.87  2007/04/30 15:53:10  fabiankeil
+ *    Make sure filters with dynamic jobs actually use them.
+ *
  *    Revision 1.86  2007/04/30 15:03:28  fabiankeil
  *    - Introduce dynamic pcrs jobs that can resolve variables.
  *    - Don't run redirect functions more than once,
@@ -586,6 +589,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.86 2007/04/30 15:03:28 fabiankeil
 #include "list.h"
 #include "deanimate.h"
 #include "urlmatch.h"
+#include "loaders.h"
 
 #ifdef _WIN32
 #include "win32.h"
@@ -2316,9 +2320,152 @@ void apply_url_actions(struct current_action_spec *action,
 
 /*********************************************************************
  *
+ * Function    :  get_forward_override_settings
+ *
+ * Description :  Returns forward settings as specified with the
+ *                forward-override{} action. forward-override accepts
+ *                forward lines similar to the one used in the
+ *                configuration file, but without the URL pattern.
+ *
+ *                For example:
+ *
+ *                   forward / .
+ *
+ *                in the configuration file can be replaced with
+ *                the action section:
+ *
+ *                 {+forward-override{forward .}}
+ *                 /
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Pointer to forwarding structure in case of success.
+ *                Invalid syntax is fatal.
+ *
+ *********************************************************************/
+const struct forward_spec *get_forward_override_settings(struct client_state *csp)
+{
+   const char *forward_override_line = csp->action->string[ACTION_STRING_FORWARD_OVERRIDE];
+   char forward_settings[BUFFER_SIZE];
+   char *http_parent = NULL;
+   /* variable names were chosen for consistency reasons. */
+   struct forward_spec *fwd = NULL;
+   int vec_count;
+   char *vec[3];
+
+   assert(csp->action->flags & ACTION_FORWARD_OVERRIDE);
+   /* Should be enforced by load_one_actions_file() */
+   assert(strlen(forward_override_line) < sizeof(forward_settings) - 1);
+
+   /* Create a copy ssplit can modify */
+   strlcpy(forward_settings, forward_override_line, sizeof(forward_settings));
+
+   if (NULL != csp->fwd)
+   {
+      /*
+       * XXX: Currently necessary to prevent memory
+       * leaks when the show-url-info cgi page is visited.
+       */
+      unload_forward_spec(csp->fwd);
+   }
+
+   /*
+    * allocate a new forward node, valid only for
+    * the lifetime of this request. Save its location
+    * in csp as well, so sweep() can free it later on.
+    */
+   fwd = csp->fwd = zalloc(sizeof(*fwd));
+   if (NULL == fwd)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "can't allocate memory for forward-override{%s}", forward_override_line);
+      /* Never get here - LOG_LEVEL_FATAL causes program exit */
+   }
+
+   vec_count = ssplit(forward_settings, " \t", vec, SZ(vec), 1, 1);
+   if ((vec_count == 2) && !strcasecmp(vec[0], "forward"))
+   {
+      fwd->type = SOCKS_NONE;
+
+      /* Parse the parent HTTP proxy host:port */
+      http_parent = vec[1];
+
+   }
+   else if (vec_count == 3)
+   {
+      char *socks_proxy = NULL;
+
+      if  (!strcasecmp(vec[0], "forward-socks4"))
+      {
+         fwd->type = SOCKS_4;
+         socks_proxy = vec[1];
+      }
+      else if (!strcasecmp(vec[0], "forward-socks4a"))
+      {
+         fwd->type = SOCKS_4A;
+         socks_proxy = vec[1];
+      }
+
+      if (NULL != socks_proxy)
+      {
+         /* Parse the SOCKS proxy host[:port] */
+         fwd->gateway_host = strdup(socks_proxy);
+
+         if (NULL != (socks_proxy = strchr(fwd->gateway_host, ':')))
+         {
+            *socks_proxy++ = '\0';
+            fwd->gateway_port = strtol(socks_proxy, NULL, 0);
+         }
+
+         if (fwd->gateway_port <= 0)
+         {
+            fwd->gateway_port = 1080;
+         }
+
+         http_parent = vec[2];
+      }
+   }
+
+   if (NULL == http_parent)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Invalid forward-override syntax in: %s", forward_override_line);
+      /* Never get here - LOG_LEVEL_FATAL causes program exit */
+   }
+
+   /* Parse http forwarding settings */
+   if (strcmp(http_parent, ".") != 0)
+   {
+      fwd->forward_host = strdup(http_parent);
+
+      if (NULL != (http_parent = strchr(fwd->forward_host, ':')))
+      {
+         *http_parent++ = '\0';
+         fwd->forward_port = strtol(http_parent, NULL, 0);
+      }
+
+      if (fwd->forward_port <= 0)
+      {
+         fwd->forward_port = 8000;
+      }
+   }
+
+   assert (NULL != fwd);
+
+   log_error(LOG_LEVEL_CONNECT,
+      "Overriding forwarding settings based on \'%s\'", forward_override_line);
+
+   return fwd;
+}
+
+/*********************************************************************
+ *
  * Function    :  forward_url
  *
  * Description :  Should we forward this to another proxy?
+ *
+ *                XXX: Should be changed to make use of csp->fwd.
  *
  * Parameters  :
  *          1  :  http = http_request request for current URL
@@ -2332,6 +2479,11 @@ const struct forward_spec * forward_url(struct http_request *http,
 {
    static const struct forward_spec fwd_default[1] = { FORWARD_SPEC_INITIALIZER };
    struct forward_spec *fwd = csp->config->forward;
+
+   if (csp->action->flags & ACTION_FORWARD_OVERRIDE)
+   {
+      return get_forward_override_settings(csp);
+   }
 
    if (fwd == NULL)
    {

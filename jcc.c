@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.134 2007/05/16 14:59:46 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.135 2007/05/24 17:03:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.134 2007/05/16 14:59:46 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.135  2007/05/24 17:03:50  fabiankeil
+ *    - Let usage() mention the --chroot parameter.
+ *    - Use read_socket() consistently and always leave
+ *      the last buffer byte alone, even in cases where
+ *      null termination (currently) doesn't matter.
+ *
  *    Revision 1.134  2007/05/16 14:59:46  fabiankeil
  *    - Fix config file loading on Unix if no config file is specified.
  *      Since r1.97 Privoxy would always interpret the last argument as
@@ -1604,11 +1610,13 @@ int crunch_response_triggered(struct client_state *csp, const struct cruncher cr
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  fwd = The forwarding spec used for the request
+ *                XXX: Should use http->fwd instead.
+ *          3  :  request_line = The old request line which will be replaced.
  *
  * Returns     :  Nothing. Terminates in case of memory problems.
  *
  *********************************************************************/
-void build_request_line(struct client_state *csp, const struct forward_spec *fwd)
+void build_request_line(struct client_state *csp, const struct forward_spec *fwd, char **request_line)
 {
    struct http_request *http = csp->http;
 
@@ -1632,30 +1640,27 @@ void build_request_line(struct client_state *csp, const struct forward_spec *fwd
 
    /*
     * Rebuild the request line.
-    * XXX: If a http forwarder is used and the HTTP version
-    * wasn't downgraded, we don't have to rebuild anything.
     */
-   freez(http->cmd);
-
-   http->cmd = strdup(http->gpc);
-   string_append(&http->cmd, " ");
+   freez(*request_line);
+   *request_line = strdup(http->gpc);
+   string_append(request_line, " ");
 
    if (fwd->forward_host)
    {
-      string_append(&http->cmd, http->url);
+      string_append(request_line, http->url);
    }
    else
    {
-      string_append(&http->cmd, http->path);
+      string_append(request_line, http->path);
    }
-   string_append(&http->cmd, " ");
-   string_append(&http->cmd, http->ver);
+   string_append(request_line, " ");
+   string_append(request_line, http->ver);
 
-   if (http->cmd == NULL)
+   if (*request_line == NULL)
    {
       log_error(LOG_LEVEL_FATAL, "Out of memory writing HTTP command");
    }
-   log_error(LOG_LEVEL_HEADER, "New HTTP Request-Line: %s", http->cmd);
+   log_error(LOG_LEVEL_HEADER, "New HTTP Request-Line: %s", *request_line);
 }
 
 
@@ -1866,9 +1871,55 @@ static void chat(struct client_state *csp)
       }
    }
 
-   /* decide how to route the HTTP request */
+   /*
+    * Determine the actions for this URL
+    */
+#ifdef FEATURE_TOGGLE
+   if (!(csp->flags & CSP_FLAG_TOGGLED_ON))
+   {
+      /* Most compatible set of actions (i.e. none) */
+      init_current_action(csp->action);
+   }
+   else
+#endif /* ndef FEATURE_TOGGLE */
+   {
+      url_actions(http, csp);
+   }
 
-   if ((fwd = forward_url(http, csp)) == NULL)
+   /* 
+    * Save a copy of the original request for logging
+    */
+   http->ocmd = strdup(http->cmd);
+
+   if (http->ocmd == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory copying HTTP request line");
+   }
+
+   enlist(csp->headers, http->cmd);
+
+   /* Append the previously read headers */
+   list_append_list_unique(csp->headers, headers);
+   destroy_list(headers);
+
+   /*
+    * If the user has not supplied any wafers, and the user has not
+    * told us to suppress the vanilla wafer, then send the vanilla wafer.
+    */
+   if (list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
+       && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
+   {
+      enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
+   }
+
+   if (JB_ERR_OK != sed(client_patterns, add_client_headers, csp))
+   {
+      log_error(LOG_LEVEL_FATAL, "Failed to parse client headers");
+   }
+   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
+
+   /* decide how to route the HTTP request */
+   if (NULL == (fwd = forward_url(http, csp)))
    {
       log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
@@ -1911,22 +1962,6 @@ static void chat(struct client_state *csp)
     */
 
    /*
-    * Determine the actions for this URL
-    */
-#ifdef FEATURE_TOGGLE
-   if (!(csp->flags & CSP_FLAG_TOGGLED_ON))
-   {
-      /* Most compatible set of actions (i.e. none) */
-      init_current_action(csp->action);
-   }
-   else
-#endif /* ndef FEATURE_TOGGLE */
-   {
-      url_actions(http, csp);
-   }
-
-
-   /*
     * Check if a CONNECT request is allowable:
     * In the absence of a +limit-connect action, allow only port 443.
     * If there is an action, allow whatever matches the specificaton.
@@ -1953,52 +1988,26 @@ static void chat(struct client_state *csp)
             write_socket(csp->cfd, CFORBIDDEN, strlen(CFORBIDDEN));
             log_error(LOG_LEVEL_CONNECT, "Denying suspicious CONNECT request from %s", csp->ip_addr_str);
             log_error(LOG_LEVEL_CLF, "%s - - [%T] \" \" 403 0", csp->ip_addr_str);
+
+            list_remove_all(csp->headers);
+
             return;
          }
       }
    }
 
-
-   /* 
-    * Save a copy of the original request for logging
-    */
-   http->ocmd = strdup(http->cmd);
-
-   if (http->ocmd == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "Out of memory copying HTTP request line");
-   }
-
-   /*
-    * (Re)build the HTTP request for non-SSL requests.
-    */
    if (http->ssl == 0)
    {
-      build_request_line(csp, fwd);
-   }
-   enlist(csp->headers, http->cmd);
-
-   /* Append the previously read headers */
-   list_append_list_unique(csp->headers, headers);
-   destroy_list(headers);
-
-   /*
-    * If the user has not supplied any wafers, and the user has not
-    * told us to suppress the vanilla wafer, then send the vanilla wafer.
-    */
-   if (list_is_empty(csp->action->multi[ACTION_MULTI_WAFER])
-       && ((csp->action->flags & ACTION_VANILLA_WAFER) != 0))
-   {
-      enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
+      freez(csp->headers->first->str);
+      build_request_line(csp, fwd, &csp->headers->first->str);
    }
 
-   hdr = sed(client_patterns, add_client_headers, csp);
+   hdr = list_to_text(csp->headers);
    if (hdr == NULL)
    {
       /* FIXME Should handle error properly */
       log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
    }
-   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
 #ifdef FEATURE_KILL_POPUPS
    block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
@@ -2271,8 +2280,12 @@ static void chat(struct client_state *csp)
                      csp->content_length = (size_t)(csp->iob->eod - csp->iob->cur);
                   }
 
-                  hdr = sed(server_patterns_light, NULL, csp);
+                  if (JB_ERR_OK != sed(server_patterns_light, NULL, csp))
+                  {
+                     log_error(LOG_LEVEL_FATAL, "Failed to parse server headers.");
+                  }
 
+                  hdr = list_to_text(csp->headers);
                   if (hdr == NULL)
                   {
                      /* FIXME Should handle error properly */
@@ -2337,8 +2350,11 @@ static void chat(struct client_state *csp)
                   int flushed;
 
                   log_error(LOG_LEVEL_ERROR, "Flushing header and buffers. Stepping back from filtering.");
-
-                  hdr = sed(server_patterns, add_server_headers, csp);
+                  if (JB_ERR_OK != sed(server_patterns, add_server_headers, csp))
+                  {
+                     log_error(LOG_LEVEL_FATAL, "Failed to parse server headers.");
+                  }
+                  hdr = list_to_text(csp->headers);
                   if (hdr == NULL)
                   {
                      /* 
@@ -2452,8 +2468,11 @@ static void chat(struct client_state *csp)
             /* we have now received the entire header.
              * filter it and send the result to the client
              */
-
-            hdr = sed(server_patterns, add_server_headers, csp);
+            if (JB_ERR_OK != sed(server_patterns, add_server_headers, csp))
+            {
+               log_error(LOG_LEVEL_FATAL, "Failed to parse server headers.");
+            }
+            hdr = list_to_text(csp->headers);
             if (hdr == NULL)
             {
                /* FIXME Should handle error properly */
@@ -2690,7 +2709,7 @@ void initialize_mutexes()
     *
     * For example older FreeBSD versions (< 6.x?)
     * have no gethostbyname_r, but gethostbyname is
-    * thead safe.
+    * thread safe.
     */
 #ifndef HAVE_GMTIME_R
    if (!err) err = pthread_mutex_init(&gmtime_mutex, 0);
