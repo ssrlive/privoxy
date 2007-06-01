@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.20 2006/12/26 17:31:41 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.21 2007/04/22 13:18:06 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: jcc.h,v $
+ *    Revision 1.21  2007/04/22 13:18:06  fabiankeil
+ *    Keep the HTTP snippets local.
+ *
  *    Revision 1.20  2006/12/26 17:31:41  fabiankeil
  *    Mutex protect rand() if POSIX threading
  *    is used, warn the user if that's not possible
@@ -190,13 +193,9 @@ extern pthread_mutex_t gmtime_mutex;
 extern pthread_mutex_t localtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
 
-#ifndef HAVE_GETHOSTBYADDR_R
-extern pthread_mutex_t gethostbyaddr_mutex;
-#endif /* ndef HAVE_GETHOSTBYADDR_R */
-
-#ifndef HAVE_GETHOSTBYNAME_R
-extern pthread_mutex_t gethostbyname_mutex;
-#endif /* ndef HAVE_GETHOSTBYNAME_R */
+#if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
+extern pthread_mutex_t resolver_mutex;
+#endif /* !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R) */
 
 #ifndef HAVE_RANDOM
 extern pthread_mutex_t rand_mutex;

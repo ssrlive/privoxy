@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.135 2007/05/24 17:03:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.136 2007/06/01 16:41:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.135 2007/05/24 17:03:50 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.136  2007/06/01 16:41:11  fabiankeil
+ *    Add forward-override{} to change the forwarding settings through
+ *    action sections. This is mainly interesting to forward different
+ *    clients differently (for example based on User-Agent or request
+ *    origin).
+ *
  *    Revision 1.135  2007/05/24 17:03:50  fabiankeil
  *    - Let usage() mention the --chroot parameter.
  *    - Use read_socket() consistently and always leave
@@ -945,6 +951,10 @@ static int32 server_thread(void *data);
 pthread_mutex_t log_mutex;
 pthread_mutex_t log_init_mutex;
 
+#if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
+pthread_mutex_t resolver_mutex;
+#endif /* !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R) */
+
 #ifndef HAVE_GMTIME_R
 pthread_mutex_t gmtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
@@ -952,14 +962,6 @@ pthread_mutex_t gmtime_mutex;
 #ifndef HAVE_LOCALTIME_R
 pthread_mutex_t localtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
-
-#ifndef HAVE_GETHOSTBYADDR_R
-pthread_mutex_t gethostbyaddr_mutex;
-#endif /* ndef HAVE_GETHOSTBYADDR_R */
-
-#ifndef HAVE_GETHOSTBYNAME_R
-pthread_mutex_t gethostbyname_mutex;
-#endif /* ndef HAVE_GETHOSTBYNAME_R */
 
 #ifndef HAVE_RANDOM
 pthread_mutex_t rand_mutex;
@@ -2711,6 +2713,13 @@ void initialize_mutexes()
     * have no gethostbyname_r, but gethostbyname is
     * thread safe.
     */
+#if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
+   if (!err) err = pthread_mutex_init(&resolver_mutex, 0);
+#endif /* !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R) */
+   /*
+    * XXX: should we use a single mutex for
+    * localtime() and gmtime() as well?
+    */
 #ifndef HAVE_GMTIME_R
    if (!err) err = pthread_mutex_init(&gmtime_mutex, 0);
 #endif /* ndef HAVE_GMTIME_R */
@@ -2718,14 +2727,6 @@ void initialize_mutexes()
 #ifndef HAVE_LOCALTIME_R
    if (!err) err = pthread_mutex_init(&localtime_mutex, 0);
 #endif /* ndef HAVE_GMTIME_R */
-
-#ifndef HAVE_GETHOSTBYADDR_R
-   if (!err) err = pthread_mutex_init(&gethostbyaddr_mutex, 0);
-#endif /* ndef HAVE_GETHOSTBYADDR_R */
-
-#ifndef HAVE_GETHOSTBYNAME_R
-   if (!err) err = pthread_mutex_init(&gethostbyname_mutex, 0);
-#endif /* ndef HAVE_GETHOSTBYNAME_R */
 
 #ifndef HAVE_RANDOM
    if (!err) err = pthread_mutex_init(&rand_mutex, 0);
