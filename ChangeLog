@@ -27,7 +27,7 @@ ChangeLog for Privoxy
 - Only unlink the pidfile if it's actually used.
 - Retries after connection problems with forced requests
   aren't blocked again.
-- On Unix SIGABRT causes a coredump as expected and is no
+- On Unix SIGABRT causes a core dump as expected and is no
   longer treated as normal shutdown signal.
 - The "access denied" CGI page is more descriptive and
   allows to circumvent the referrer check.
@@ -42,14 +42,14 @@ ChangeLog for Privoxy
   encoding. (Patch provided by Wil Mahan)
 - The CGI style sheet is no longer delivered if the referring
   page isn't a Privoxy CGI page. This prevents a JavaScript-based
-  Privoxy detection "attack".
+  Privoxy detection "attack". Note that detecting Privoxy is
+  still possible through other ways and Privoxy was never intended
+  to be invisible anyway.
 - Added support for AmigaOS 4, fixed build for AmigaOS 3.x.	
 - The show-url-info CGI page displays a warning if Privoxy
   is currently toggled off.
 - The show-status CGI page suppresses the edit button
   for action files if Privoxy has no write access.	
-- If Privoxy creates new Trustfile entries, a comment
-  with the trusted referrer is added. (Suggested by Daniel Griscom)
 - Socks errors are no longer handled by the CGI page for
   DNS resolution failures.
 - CGI pages use favicons to signal whether they are error
@@ -69,6 +69,47 @@ ChangeLog for Privoxy
 - Fixed XML syntax errors caused by banners-by-size and banners-by-url.
 - Fixed crashes and possible action file corruptions
   when lines containing hashes are written through the CGI editor.
+- Fixes possible deadlocks and crashes on OpenBSD.
+  Patch provided by Ralf Horstmann.
+- Supports dynamic filters which can contain variables.
+- Supports tags to change the actions based on client or server headers.
+- Incorrect actions are logged before program termination.
+- The "actionsfile" syntax in the configuration file is consistent
+  with the rest of the configuration options and requires the
+  whole file name. This is an incompatible change, if you use
+  an old configuration file you might have to append ".action"
+  to your "actionsfile" directives.
+- Dedicated filters and actions are used for header filtering.
+  "filter-client-headers" and "filter-client-headers" are no longer
+  supported, use server-header-filter{} and client-header-filter{}
+  instead.
+- The CGI action editor allows to edit actionfiles with previously
+  forbidden characters like dots.
+- New server-header filter: less-download-windows.
+- New client-header taggers: text-requests and image-requests.
+- The forward-override{} action allows to change the forwarding
+  settings based on client headers like the User-Agent, or the
+  request origin.
+- With the configuration file option "enforce-blocks" the
+  "go there anyway" mechanism can be disabled without recompiling
+  Privoxy.
+- On Unix-like systems nothing is logged to the console unless
+  an error occurs or Privoxy isn't running as daemon.
+- More precise error messages in case of incorrect acl syntax.
+- Logs a warning if filtering is enabled but impossible due
+  to lack of zlib support or use of the prevent-compression action.
+- Less noisy handling of Cookie:" and "Connection:" headers.
+- Don't ignore filter files if an previous filter file was empty.
+- Improved error messages in case of connection problems.
+- Fix a command-line-parsing bug that was introduced before 3.0.5
+  beta and caused Privoxy to treat the last argument as configuration
+  file if no configuration file was specified.
+- Treat unknown command line options as fatal errors instead
+  of silently ignoring them.
+- Use string functions with length checks more often.
+- Don't log CONNECT requests twice.
+- Log the source address for ACL-related connection drops.
+- Log the reason why a request was crunched.	
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring
   and Adam Piggott)
