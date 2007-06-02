@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.29 2007/04/05 11:47:51 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.30 2007/04/25 15:10:36 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.29 2007/04/05 11:47:51 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.30 2007/04/25 15:10:36 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4025,6 +4025,120 @@ new action
    <para>
      <screen>
 +force-text-mode
+     </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="forward-override">
+<title>forward-override</title>
+<!--
+new action
+-->
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Change the forwarding settings based on User-Agent or request origin</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Overrules the forward directives in the configuration files.
+   </para>    
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <itemizedlist>
+    <listitem>
+     <para><quote>forward .</quote> to use a direct connection without any additional proxies.</para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote>forward 127.0.0.1:8123</quote> to use the HTTP proxy listening at 127.0.0.1 port 8123.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote>forward-socks4a 127.0.0.1:9050 .</quote> to use the socks4a proxy listening at 127.0.0.1 port 9050.
+      Replace <q>forward-socks4a</q> with <q>forward-socks4</q> to use a socks4 connection  (with local DNS
+      resolution) instead.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote>forward-socks4a 127.0.0.1:9050 proxy.example.org:8000</quote> to use the socks4a proxy
+      listening at 127.0.0.1 port 9050 to reach the HTTP proxy listening at proxy.example.org port 8000.
+      Replace <q>forward-socks4a</q> with <q>forward-socks4</q> to use a socks4 connection  (with local DNS
+      resolution) instead.
+     </para>
+    </listitem>
+   </itemizedlist>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action takes parameters similar to the <!-- I hope this link actual works -->
+    <link linkend="forwarding">forward</link> directives in the configuration
+    file, but without the URL pattern. It can be used as replacement, but normally it's only
+    used in cases where matching based on the request URL isn't sufficient.
+   </para>
+   <warning> 
+    <para>
+     Please read the description for the <link linkend="forwarding">forward</link> directives before
+     using this action. Forwarding to the wrong people will reduce your privacy and increase the
+     chances of man-in-the-middle attacks.
+    </para>
+    <para>
+     If the ports are missing or invalid, default values will be used. This might change
+     in the future and you shouldn't rely on it. Otherwise incorrect syntax causes Privoxy
+     to exit.
+    </para>
+    <para>
+     Use the <link linkend="http://config.privoxy.org/show-url-info">show-url-info CGI page</link>
+     to verify that your forward settings do what you thought the do.
+    </para>
+   </warning>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+     <screen>
+# Always use direct connections for requests previously tagged as
+# <quote>User-Agent: fetch libfetch/2.0</quote> and make sure
+# resuming downloads continues to work.
+# This way you can continue to use Tor for your normal browsing,
+# without overloading the Tor network with your FreeBSD ports updates
+# or downloads of bigger files like ISOs.
+{+forward-override{forward .} \
+ -hide-if-modified-since      \
+ -overwrite-last-modified     \
+}
+TAG:^User-Agent: fetch libfetch/2.0$
      </screen>
    </para>
   </listitem>
@@ -8816,6 +8930,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.30  2007/04/25 15:10:36  fabiankeil
+ - Describe installation for FreeBSD.
+ - Start to document taggers and tag patterns.
+ - Don't confuse devils and daemons.
+
  Revision 2.29  2007/04/05 11:47:51  fabiankeil
  Some updates regarding header filtering,
  handling of compressed content and redirect's
