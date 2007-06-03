@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.136 2007/06/01 16:41:11 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.137 2007/06/01 18:16:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.136 2007/06/01 16:41:11 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.137  2007/06/01 18:16:36  fabiankeil
+ *    Use the same mutex for gethostbyname() and gethostbyaddr() to prevent
+ *    deadlocks and crashes on OpenBSD and possibly other OS with neither
+ *    gethostbyname_r() nor gethostaddr_r(). Closes BR#1729174.
+ *    Thanks to Ralf Horstmann for report and solution.
+ *
  *    Revision 1.136  2007/06/01 16:41:11  fabiankeil
  *    Add forward-override{} to change the forwarding settings through
  *    action sections. This is mainly interesting to forward different
@@ -1736,11 +1742,29 @@ static void chat(struct client_state *csp)
 
       if (len <= 0) break;      /* error! */
 
+#if 0
+      /*
+       * XXX: Temporary disabled to prevent problems
+       * with POST requests whose bodies are allowed to
+       * contain NULL bytes. BR#1730105.
+       *
+       * The main purpose of this check is to properly
+       * log stuff like BitTorrent traffic and other junk
+       * that hits public proxies. It's not required for
+       * Privoxy to functions as those requests are discarded
+       * later on anyway.
+       *
+       * It probably should be rewritten to only check
+       * the head of the request. Another option would
+       * be to let all POST requests pass, although that
+       * may not be good enough.
+       */
       if (request_contains_null_bytes(csp, buf, len))
       {
          /* NULL bytes found and dealt with, just hang up. */
          return;
       }
+#endif
 
       /*
        * If there is no memory left for buffering the
