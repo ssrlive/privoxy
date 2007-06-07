@@ -8,7 +8,7 @@
 diff -urNad privoxy~/configure.in privoxy/configure.in
 --- privoxy~/configure.in
 +++ privoxy/configure.in
-@@ -886,7 +886,7 @@
+@@ -923,7 +923,7 @@
  dnl =================================================================
  
  dnl Next line needed to find the gethost*_r functions on Solaris

@@ -2,7 +2,7 @@ Source: privoxy
 Section: web
 Priority: optional
 Maintainer: Roland Rosenfeld <roland@debian.org>
-Build-Depends: debhelper (>= 5.0.0), autoconf, autotools-dev, libpcre3-dev, jade, docbook-dsssl, w3m, sp, sgmlspl, groff, htmldoc (>= 1.8.25-1), man2html, dpatch
+Build-Depends: debhelper (>= 5.0.0), autoconf, autotools-dev, libpcre3-dev, jade, docbook-dsssl, w3m, sp, sgmlspl, groff, htmldoc (>= 1.8.25-1), man2html, dpatch, zlib1g-dev
 Standards-Version: 3.7.2
 
 Package: privoxy

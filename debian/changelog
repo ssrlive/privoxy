@@ -1,3 +1,34 @@
+privoxy (3.0.7~CSV20070607-0.1) UNRELEASED; urgency=low
+
+  * CVS as of 2007-06-07. 
+  * Enable new zlib feature (Closes: #368448):
+    - build-depend on zlib1g-dev
+    - disable prevent-compression in 25_standard_medium.dpatch
+  * Remove 28_pcre_returncode.dpatch, which is now applied upstream.
+  * 29_usermanual: fix some broken markup in user-manual.sgml
+  * 30_actionsfile_fullname.dpatch: The "actionsfile" syntax in the
+    configuration file is consistent with the rest of the configuration
+    options and requires the whole file name.
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu,  7 Jun 2007 12:30:02 +0200
+
+privoxy (3.0.6-3) unstable; urgency=low
+
+  * According to http://wiki.debian.org/AccountHandlingInMaintainerScripts
+    removing system users in postrm isn't a good idea. So the removal of
+    user privoxy in postrm was disabled and deluser/adduser of existing
+    user in postinst was also removed. This should avoid problems with
+    purging privoxy if passwd package isn't intalled (Closes: #417015).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 19 May 2007 21:22:42 +0200
+
+privoxy (3.0.6-2) unstable; urgency=medium
+
+  * 28_pcre_returncode: Don't crash if pcre returns an error code that
+    pcrs didn't expect (Closes: #404284).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 23 Dec 2006 21:47:12 +0100
+
 privoxy (3.0.6-1) unstable; urgency=low
 
   * New upstream release 3.0.6.
@@ -355,7 +386,7 @@ privoxy (2.9.16-1) unstable; urgency=low
 privoxy (2.9.14-beta-4) unstable; urgency=low
 
   * Damn, why did I write "i386-linux" into the rules file, when I try to
-    write a work around for hppa?  Fixed now (Closes #148227).
+    write a work around for hppa?  Fixed now (Closes: #148227).
 
  -- Roland Rosenfeld <roland@debian.org>  Sun, 26 May 2002 22:33:26 +0200
 

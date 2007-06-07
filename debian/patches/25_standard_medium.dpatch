@@ -10,7 +10,7 @@
 diff -urNad privoxy~/global.action privoxy/global.action
 --- privoxy~/global.action
 +++ privoxy/global.action
-@@ -10,29 +10,29 @@
+@@ -11,29 +11,29 @@
  -crunch-outgoing-cookies \
  -crunch-incoming-cookies \
  -crunch-server-header \
@@ -47,22 +47,24 @@ diff -urNad privoxy~/global.action privoxy/global.action
  -filter{site-specifics} \
  -filter{google} \
  -filter{yahoo} \
-@@ -52,17 +52,17 @@
+@@ -48,19 +48,19 @@
  -hide-if-modified-since \
  +hide-forwarded-for-headers \
  +hide-from-header{block} \
 --hide-referrer \
-++hide-referrer{forge} \
+++hide-referrer{conditional-block} \
  -hide-user-agent \
  -inspect-jpegs \
  -kill-popups \
  -limit-connect \
 --prevent-compression \
-++prevent-compression \
  -overwrite-last-modified \
++-prevent-compression \
  -redirect \
  -send-vanilla-wafer \
  -send-wafer \
+ -server-header-filter{xml-to-html} \
+ -server-header-filter{html-to-xml} \
 --session-cookies-only \
 ++session-cookies-only \
  +set-image-blocker{pattern} \

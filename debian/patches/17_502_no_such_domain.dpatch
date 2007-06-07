@@ -19,8 +19,8 @@ diff -urNad privoxy~/templates/no-such-domain privoxy/templates/no-such-domain
    <meta http-equiv="Content-Style-Type" content="text/css">
    <meta http-equiv="Content-Script-Type" content="text/javascript">
    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-@@ -92,7 +92,7 @@
-   <table cellpadding="20" cellspacing="10" border="0" width="100%">
+@@ -95,7 +95,7 @@
+   <table summary="" cellpadding="20" cellspacing="10" border="0" width="100%">
      <tr>
        <td class="status">
 -        404

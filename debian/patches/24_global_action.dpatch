@@ -32,16 +32,16 @@ diff -urNad privoxy~/config privoxy/config
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -530,75 +530,6 @@
- #
+@@ -537,74 +537,6 @@
  allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
  
--#############################################################################
+ #############################################################################
 -# Defaults
 -#############################################################################
 -{ \
 --add-header \
 --block \
+--client-header-filter{hide-tor-exit-notation} \
 --content-type-overwrite \
 --crunch-client-header \
 --crunch-if-none-match \
@@ -76,12 +76,7 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --filter{yahoo} \
 --filter{msn} \
 --filter{blogspot} \
---filter{xml-to-html} \
---filter{html-to-xml} \
 --filter{no-ping} \
---filter{hide-tor-exit-notation} \
---filter-client-headers \
---filter-server-headers \
 --force-text-mode \
 --handle-as-empty-document \
 --handle-as-image \
@@ -100,24 +95,29 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --redirect \
 --send-vanilla-wafer \
 --send-wafer \
+--server-header-filter{xml-to-html} \
+--server-header-filter{html-to-xml} \
 --session-cookies-only \
 -+set-image-blocker{pattern} \
 --treat-forbidden-connects-like-blocks \
 -}
 -/ # Match all URLs
- 
- #############################################################################
+-
+-#############################################################################
  # These extensions belong to images:
+ #############################################################################
+ {+handle-as-image -filter}
 diff -urNad privoxy~/global.action privoxy/global.action
 --- privoxy~/global.action
 +++ privoxy/global.action
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,67 @@
 +#############################################################################
 +# Defaults
 +#############################################################################
 +{ \
 +-add-header \
 +-block \
++-client-header-filter{hide-tor-exit-notation} \
 +-content-type-overwrite \
 +-crunch-client-header \
 +-crunch-if-none-match \
@@ -152,12 +152,7 @@ diff -urNad privoxy~/global.action privoxy/global.action
 +-filter{yahoo} \
 +-filter{msn} \
 +-filter{blogspot} \
-+-filter{xml-to-html} \
-+-filter{html-to-xml} \
 +-filter{no-ping} \
-+-filter{hide-tor-exit-notation} \
-+-filter-client-headers \
-+-filter-server-headers \
 +-force-text-mode \
 +-handle-as-empty-document \
 +-handle-as-image \
@@ -176,6 +171,8 @@ diff -urNad privoxy~/global.action privoxy/global.action
 +-redirect \
 +-send-vanilla-wafer \
 +-send-wafer \
++-server-header-filter{xml-to-html} \
++-server-header-filter{html-to-xml} \
 +-session-cookies-only \
 ++set-image-blocker{pattern} \
 +-treat-forbidden-connects-like-blocks \

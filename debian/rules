@@ -33,6 +33,7 @@ build-stamp: patch-stamp
 	env CFLAGS="$(OPTIMIZE) -g" \
 		./configure --prefix=/usr --sysconfdir=/etc \
 		--mandir=/usr/share/man	$(WITHDEBUG) \
+		--enable-zlib \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 	$(MAKE)
 #       create missing doc/pdf directory if necessary:

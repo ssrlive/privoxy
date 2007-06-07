@@ -8,7 +8,7 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -1695,6 +1695,11 @@
+@@ -1839,6 +1839,11 @@
  {+filter{tiny-textforms} +prevent-compression}
  .sourceforge.net/tracker
  

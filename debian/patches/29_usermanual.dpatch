@@ -1,0 +1,55 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 29_usermanual.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: fix some broken markup in user-manual.sgml
+
+@DPATCH@
+diff -urNad privoxy~/doc/source/user-manual.sgml privoxy/doc/source/user-manual.sgml
+--- privoxy~/doc/source/user-manual.sgml
++++ privoxy/doc/source/user-manual.sgml
+@@ -452,7 +452,7 @@
+   <listitem>
+    <para>
+     Header filtering can be done with dedicated header filters now. As a result
+-    the actions <q>filter-client-headers</q> and <q>filter-server-headers</q>
++    the actions <quote>filter-client-headers</quote> and <quote>filter-server-headers</quote>
+     that were introduced with <application>Privoxy 3.0.5</application> to apply
+     the content filters to the headers as, well have been removed again.
+    </para>
+@@ -2442,8 +2442,6 @@
+ 
+ </sect3>
+ 
+-</sect2>
+-
+ <!--  ~  End section  ~  -->
+ 
+ 
+@@ -4079,7 +4077,7 @@
+     <listitem>
+      <para>
+       <quote>forward-socks4a 127.0.0.1:9050 .</quote> to use the socks4a proxy listening at 127.0.0.1 port 9050.
+-      Replace <q>forward-socks4a</q> with <q>forward-socks4</q> to use a socks4 connection  (with local DNS
++      Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection  (with local DNS
+       resolution) instead.
+      </para>
+     </listitem>
+@@ -4087,7 +4085,7 @@
+      <para>
+       <quote>forward-socks4a 127.0.0.1:9050 proxy.example.org:8000</quote> to use the socks4a proxy
+       listening at 127.0.0.1 port 9050 to reach the HTTP proxy listening at proxy.example.org port 8000.
+-      Replace <q>forward-socks4a</q> with <q>forward-socks4</q> to use a socks4 connection  (with local DNS
++      Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection  (with local DNS
+       resolution) instead.
+      </para>
+     </listitem>
+@@ -4116,7 +4114,7 @@
+      to exit.
+     </para>
+     <para>
+-     Use the <link linkend="http://config.privoxy.org/show-url-info">show-url-info CGI page</link>
++     Use the <ulink url="http://config.privoxy.org/show-url-info">show-url-info CGI page</ulink>
+      to verify that your forward settings do what you thought the do.
+     </para>
+    </warning>

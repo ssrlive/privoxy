@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     purge)
-        deluser --quiet privoxy
+        # deluser --quiet privoxy
         rm -rf /var/log/privoxy /etc/privoxy
         ;;
 
