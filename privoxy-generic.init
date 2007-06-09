@@ -39,6 +39,19 @@
 # 
 #  Revisions   :
 #     $Log: privoxy-generic.init,v $
+#     Revision 1.7  2006/10/14 14:12:22  fabiankeil
+#     Print warnings if the user tries to run Privoxy as root
+#     or if the script is run without root privileges;
+#     only use "--user" if run with root privileges and
+#     don't depend on $USER being set to root. Fixes BR 779781.
+#
+#     Apparently $USER isn't set on all systems,
+#     but it also didn't work if the user only
+#     increased her privileges with su or sudo,
+#     but still had her real uid in $USER.
+#
+#     Thanks to Florian Effenberger for reporting.
+#
 #     Revision 1.6  2006/07/18 14:48:47  david__schmidt
 #     Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 #     with what was really the latest development (the v_3_0_branch branch)
@@ -79,7 +92,7 @@
 # logfile is writable by $P_USER (logfile is defined in config), and that 
 # there is suitable write access for $P_PIDFILE.
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin/:/usr/bin:/sbin:/bin
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/xpg4/bin:/usr/bin:/sbin:/bin
 P_NAME=Privoxy
 # Path to executable.
 P_DAEMON=privoxy
