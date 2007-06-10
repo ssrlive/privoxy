@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.48 2007/04/09 17:48:51 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.49 2007/05/11 11:48:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,13 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.48 2007/04/09 17:48:51 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.49  2007/05/11 11:48:15  fabiankeil
+ *    - Delete strsav() which was replaced
+ *      by string_append() years ago.
+ *    - Add a strlcat() look-alike.
+ *    - Use strlcat() and strlcpy() in those parts
+ *      of the code that are run on unixes.
+ *
  *    Revision 1.48  2007/04/09 17:48:51  fabiankeil
  *    Check for HAVE_SNPRINTF instead of __OS2__
  *    before including the portable snprintf() code.
@@ -1125,9 +1132,15 @@ size_t privoxy_strlcat(char *destination, const char *source, const size_t size)
  *
  * Function    :  timegm
  *
- * Description :  libc replacement function for the inverse of gmtime()
+ * Description :  libc replacement function for the inverse of gmtime().
  *                Copyright (C) 2004 Free Software Foundation, Inc.
- *                Code copied from GnuPG with minor style changes.
+ *
+ *                Code originally copied from GnuPG, modifications done
+ *                for Privoxy: style changed, minor memory leak plugged,
+ *                last putenv() call adjusted to work on mingw32.
+ *
+ *                XXX: It's very unlikely to happen, but if the malloc()
+ *                call fails the time zone will be permanently set to UTC.
  *
  * Parameters  :
  *          1  :  tm: Broken-down time struct.
@@ -1140,20 +1153,21 @@ time_t timegm(struct tm *tm)
    time_t answer;
    char *zone;
 
-   zone=getenv("TZ");
+   zone = getenv("TZ");
    putenv("TZ=UTC");
    tzset();
-   answer=mktime(tm);
-   if(zone)
+   answer = mktime(tm);
+   if (zone)
    {
       char *old_zone;
 
-      old_zone=malloc(3+strlen(zone)+1);
-      if(old_zone)
+      old_zone = malloc(3 + strlen(zone) + 1);
+      if (old_zone)
       {
-         strcpy(old_zone,"TZ=");
-         strcat(old_zone,zone);
+         strcpy(old_zone, "TZ=");
+         strcat(old_zone, zone);
          putenv(old_zone);
+         free(old_zone);
       }
    }
    else
@@ -1161,10 +1175,11 @@ time_t timegm(struct tm *tm)
 #ifdef HAVE_UNSETENV
       unsetenv("TZ");
 #else
-      putenv("TZ");
+      putenv("TZ=");
 #endif
    }
    tzset();
+
    return answer;
 }
 #endif /* !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV) */
