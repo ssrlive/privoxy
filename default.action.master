@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.76 2007/05/17 15:37:00 fabiankeil Exp $
+#  $Id: default.action.master,v 1.77 2007/05/17 15:53:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -812,12 +812,15 @@ ad.theadhost.com
 #MASTER# REMARKS: Domain squatting onload pop-ups
 #MASTER# BLOCK-REFERRER: http://www.memtest.com/
 /(t|search)\.php\?uid=ws[a-z0-9]+\.[a-z0-9]+
-MASTER# BLOCK-REFERRER: via Yahoo groups
-MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
+#MASTER# BLOCK-REFERRER: via Yahoo groups
+#MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
 .adinterax.com/(?!(.*)\.(js|gif|jpg))
-MASTER# BLOCK-REFERRER:  http://www.weilpod.com
-MASTER# REMARKS: Actionsfile feedback item #1710951 2007-05-02
+#MASTER# BLOCK-REFERRER:  http://www.weilpod.com
+#MASTER# REMARKS: Actionsfile feedback item #1710951 2007-05-02
 img.bluehost.com
+#MASTER# BLOCK-REFERRER: http://www.linuxinsider.com/story/57759.html
+#MASTER# REMARKS: Actionsfile feedback item #1736213 at 2007-06-12
+linuxinsider.com/images/sda/
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
