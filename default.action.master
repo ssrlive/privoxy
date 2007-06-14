@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.77 2007/05/17 15:53:57 fabiankeil Exp $
+#  $Id: default.action.master,v 1.78 2007/06/13 10:26:26 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -912,12 +912,15 @@ scripts.chitika.net/.*\.js
 #MASTER# REMARKS: Actionsfile tracker #1674363 2007-03-05, text ads
 #MASTER# BLOCK-REFERRER: http://www.securityfocus.com/archive/1/461489/30/0/threaded
 jlinks.industrybrains.com/
-MASTER# BLOCK-REFERRER: via Yahoo groups
-MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
+#MASTER# BLOCK-REFERRER: via Yahoo groups
+#MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
 .adinterax.com/.*\.js
 #MASTER# BLOCK-REFERRER: http://dictionary.reference.com/search?q=privacy&db=*
-MASTER# REMARKS: Actionsfile tracker 1650798 2007-02-02
+#MASTER# REMARKS: Actionsfile tracker 1650798 2007-02-02
 .googleadservices.com/gampad/.*\.js
+#MASTER# BLOCK-REFERRER:   http://www.linuxworld.com/news/2007/061307-brian-aker-interview.html
+#MASTER# REMARKS: Actionsfile feedback item #1736794 2007-06-13
+js.adsonar.
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1066,8 +1069,8 @@ scripts.chitika.net/.*\.(gif|png|jpg)
 #MASTER# BLOCK-REFERRER: http://www.multimap.com/ (sporadic)
 #MASTER# REMARKS: Actionsfile feedback item #1665682 2007-02-21
 .akamai.net/.*\.adtech\.de/.*\.(gif|png)
-MASTER# BLOCK-REFERRER: via Yahoo groups
-MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
+#MASTER# BLOCK-REFERRER: via Yahoo groups
+#MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
 .adinterax.com/.*\.(gif|jpg)
 
 #----------------------------------------------------------------------------
