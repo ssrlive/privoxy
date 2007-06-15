@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.78 2007/06/13 10:26:26 hal9 Exp $
+#  $Id: default.action.master,v 1.79 2007/06/14 10:53:02 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -895,7 +895,7 @@ spa.snap.com/
 dw.com.com/clear/
 
 #----------------------------------------------------------------------------
-# JavaScripts for ad and popup generation
+# JavaScripts and Texts for ad and popup generation
 #----------------------------------------------------------------------------
 #MASTER# BLOCK-REFERRER: http://www.chip.de/artikel/c_artikelunterseite_10423683.html
 pagead*.googlesyndication./.*\.js
@@ -918,9 +918,13 @@ jlinks.industrybrains.com/
 #MASTER# BLOCK-REFERRER: http://dictionary.reference.com/search?q=privacy&db=*
 #MASTER# REMARKS: Actionsfile tracker 1650798 2007-02-02
 .googleadservices.com/gampad/.*\.js
-#MASTER# BLOCK-REFERRER:   http://www.linuxworld.com/news/2007/061307-brian-aker-interview.html
+#MASTER# BLOCK-REFERRER: http://www.linuxworld.com/news/2007/061307-brian-aker-interview.html
 #MASTER# REMARKS: Actionsfile feedback item #1736794 2007-06-13
 js.adsonar.
+#MASTER# BLOCK-REFERRER: http://news.zdnet.co.uk/software/0,1000000121,39209666,00.htm
+#MASTER# REMARKS: Actionsfile feedback item #1736879 2007-06-13, sponsored
+links
+bwp.zdnet.
 
 #############################################################################
 # Generic block-as-image patterns:
