@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.49 2007/05/11 11:48:15 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.50 2007/06/10 14:59:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.49 2007/05/11 11:48:15 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.50  2007/06/10 14:59:59  fabiankeil
+ *    Change replacement timegm() to better match our style, plug a small
+ *    but guaranteed memory leak and fix "time zone breathing" on mingw32.
+ *
  *    Revision 1.49  2007/05/11 11:48:15  fabiankeil
  *    - Delete strsav() which was replaced
  *      by string_append() years ago.
@@ -1136,8 +1140,8 @@ size_t privoxy_strlcat(char *destination, const char *source, const size_t size)
  *                Copyright (C) 2004 Free Software Foundation, Inc.
  *
  *                Code originally copied from GnuPG, modifications done
- *                for Privoxy: style changed, minor memory leak plugged,
- *                last putenv() call adjusted to work on mingw32.
+ *                for Privoxy: style changed, #ifdefs for _WIN32 added
+ *                to have it work on mingw32.
  *
  *                XXX: It's very unlikely to happen, but if the malloc()
  *                call fails the time zone will be permanently set to UTC.
@@ -1167,15 +1171,19 @@ time_t timegm(struct tm *tm)
          strcpy(old_zone, "TZ=");
          strcat(old_zone, zone);
          putenv(old_zone);
+#ifdef _WIN32
          free(old_zone);
+#endif /* def _WIN32 */
       }
    }
    else
    {
 #ifdef HAVE_UNSETENV
       unsetenv("TZ");
-#else
+#elif defined(_WIN32)
       putenv("TZ=");
+#else
+      putenv("TZ");
 #endif
    }
    tzset();
