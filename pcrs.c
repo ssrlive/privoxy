@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.24 2007/01/05 15:46:12 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.25 2007/04/30 15:02:18 fabiankeil Exp $";
 
 /*********************************************************************
  *
@@ -38,6 +38,9 @@ const char pcrs_rcs[] = "$Id: pcrs.c,v 1.24 2007/01/05 15:46:12 fabiankeil Exp $
  *
  * Revisions   :
  *    $Log: pcrs.c,v $
+ *    Revision 1.25  2007/04/30 15:02:18  fabiankeil
+ *    Introduce dynamic pcrs jobs that can resolve variables.
+ *
  *    Revision 1.24  2007/01/05 15:46:12  fabiankeil
  *    Don't use strlen() to calculate the length of
  *    the pcrs substitutes. They don't have to be valid C
@@ -195,6 +198,8 @@ const char pcrs_h_rcs[] = PCRS_H_VERSION;
 static int              pcrs_parse_perl_options(const char *optstring, int *flags);
 static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag,
                         int capturecount, int *errptr);
+static int              is_hex_sequence(const char *sequence);
+static char             hex_to_byte(const char *sequence);
 
 /*********************************************************************
  *
@@ -422,6 +427,11 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
                   }
                   i++;
                }
+               else if (is_hex_sequence(&replacement[i]))
+               {
+                  text[k++] = hex_to_byte(&replacement[i+2]);
+                  i += 4;
+               }               
                else
                {
                   quoted = 1;
@@ -1014,6 +1024,84 @@ int pcrs_execute(pcrs_job *job, const char *subject, size_t subject_length, char
 
 }
 
+
+#define is_hex_digit(x) ((x) && strchr("0123456789ABCDEF", toupper(x)))
+
+/*********************************************************************
+ *
+ * Function    :  is_hex_sequence
+ *
+ * Description :  Checks the first four characters of a string
+ *                and decides if they are a valid hex sequence
+ *                (like '\x40').
+ *
+ * Parameters  :
+ *          1  :  sequence = The string to check
+ *
+ * Returns     :  Non-zero if it's valid sequence, or
+ *                Zero if it isn't.
+ *
+ *********************************************************************/
+static int is_hex_sequence(const char *sequence)
+{
+   return (sequence[0] == '\\' &&
+           sequence[1] == 'x'  &&
+           is_hex_digit(sequence[2]) &&
+           is_hex_digit(sequence[3]));
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  hex_to_byte
+ *
+ * Description :  Converts two bytes in hex into a single byte
+ *                with that value. For example '40' is converted
+ *                into '@'.
+ *
+ *                Based on Werner Koch's _gpgme_hextobyte()
+ *                in gpgme's conversion.c.
+ *
+ * Parameters  :
+ *          1  :  hex_sequence = Pointer to the two bytes to convert.
+ *
+ * Returns     :  The byte value.
+ *
+ *********************************************************************/
+static char hex_to_byte(const char *hex_sequence)
+{
+   const char *current_position = hex_sequence;
+   int value = 0;
+
+   do
+   {
+      const char current_digit = (char)toupper(*current_position);
+
+      if ((current_digit >= '0') && (current_digit <= '9'))
+      {
+         value += current_digit - '0';
+      }
+      else if ((current_digit >= 'A') && (current_digit <= 'F'))
+      {
+         value += current_digit - 'A' + 10; /* + 10 for the hex offset */
+      }
+
+      if (current_position == hex_sequence)
+      {
+         /*
+          * As 0xNM is N * 16**1 + M * 16**0, the value
+          * of the first byte has to be multiplied.
+          */
+         value *= 16;
+      }
+
+   } while (current_position++ < hex_sequence + 1);
+
+   return (char)value;
+
+}
+
+
 /*
  * Functions below this line are only part of the pcrs version
  * included in Privoxy. If you use any of them you should not
@@ -1097,7 +1185,6 @@ char pcrs_get_delimiter(const char *string)
    return *d;
 
 }
-
 
 
 /*********************************************************************
