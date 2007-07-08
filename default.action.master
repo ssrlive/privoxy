@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.79 2007/06/14 10:53:02 hal9 Exp $
+#  $Id: default.action.master,v 1.80 2007/06/15 11:01:27 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1076,6 +1076,9 @@ scripts.chitika.net/.*\.(gif|png|jpg)
 #MASTER# BLOCK-REFERRER: via Yahoo groups
 #MASTER# REMARKS: Actionsfile tracker 1645513 2007-01-26
 .adinterax.com/.*\.(gif|jpg)
+#MASTER# BLOCK-REFERRER: http://www.wotzon.com/profilepage.html?comp_id=1002310&CatID=2
+#MASTER# REMARKS: Ad generator per Actionsfile feedback item #1749870 2007-07-08
+img.directtrack.com
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
