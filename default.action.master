@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.80 2007/06/15 11:01:27 hal9 Exp $
+#  $Id: default.action.master,v 1.81 2007/07/08 11:06:36 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1329,8 +1329,9 @@ cels.org/.*track
 .freebsd.org
 .fsf.org
 .gnu.org
-#MASTER# REMARKS: SF tracker 09/15/06
-adiumx.com
+#MASTER# REMARKS: SF tracker 09/15/06, and #1750779 2007-07-09
+#MASTER# REMARKS: New home? http://adiumx.cachefly.net/Adium_1.0.5.dmg
+adium*.*.
 #MASTER# UNBLOCK-REFERRER: http://google.com 10/01/06
 #MASTER# REMARKS: This allows many (but not all) Google "Sponsored Links" to function. 
 #MASTER# REMARKS: Presumably if someone clicks these they want to go there.
