@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.81 2007/07/08 11:06:36 hal9 Exp $
+#  $Id: default.action.master,v 1.82 2007/07/09 22:20:30 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -985,7 +985,6 @@ bs*.einets.com
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
 #MASTER# REMARKS: Banner farms; just exclude their corp. info
 [a-vx-z]*.atdmt.com/
-view.atdmt.com/
 #MASTER# BLOCK-REFERRER: http://www.exactaudiocopy.de/ 09/11/06
 #MASTER# BLOCK-REFERRER: http://stanford.facebook.com/home.php 
 .fastclick.net
@@ -1028,11 +1027,10 @@ jmcms.cydoor.com/
 img*.mediaplex.com
 #MASTER# BLOCK-REFERRER: http://www.tomshardware.com/ 09/28/06
 #MASTER# REMARKS: There is adfarm and altfarm.mediaplex
-a*farm.mediaplex.com
+#MASTER# REMARKS: 20070711 Actionsfile feedback #1749013 /ad/fm/ appended, as click-throughs were being blocked. Could only find adverts being served from /ad/fm/
+a*farm.mediaplex.com/ad/fm/
 #MASTER# REMARKS: Support request 1312362 09/08/06
 #MASTER# DUPLICATED: adserver.itsfogo.com
-#MASTER# BLOCK-REFERRER: http://www.multiproxy.org/anon_proxy.htm 09/10/06
-view.atdmt.com
 #MASTER# REMARKS: Actionsfile feedback 09/11/06 http://matrix.mediavantage.de/mx.one?                                              p=210&pa=1060&pb=1906&pd=10944&aid=399&x=120&y=240&ts=2005.06.27.21.38.08
 #MASTER# BLOCK-REFERRER: http://www.heise.de/newsticker/meldung/61067
 matrix.mediavantage.
@@ -1379,6 +1377,8 @@ lads.myspace.com
 #MASTER# UNBLOCK-REFERRER: http://www.svd.se/ego/339/http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
 #MASTER# UNBLOCK-REFERRER: http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
 /(.*/)?dynamiskt/reklam_media/did_
+#MASTER# REMARKS 20070710 Actionsfile feedback #1751020
+switch.atdmt.com/action/
 
 #############################################################################
 # Site-specific special rules:
@@ -1496,11 +1496,10 @@ login.passport.com/logout\.(asp|srf)\?
 #MASTER# PROBLEM-URL: http://www.fileplanet.com
 download.com.com/redir\?
 www.fileplanet.com/redir\.asp\?
-#MASTER# PROBLEM-URL: http://web.archive.org/web/19970715180251/http://www.gmd.de/
-web.archive.org
 #MASTER# PROBLEM-URL: http://cyber.law.harvard.edu/filtering/china/test/
 .edu
 #MASTER# PROBLEM-URL: http://web.archive.org
+#MASTER# PROBLEM-URL: http://web.archive.org/web/19970715180251/http://www.gmd.de/
 .archive.org
 #MASTER# PROBLEM-URL: http://www.guenstiger.de/gt/link.asp?url=http://www.edv-supermarkt.de&source=produkt=238284&USID=00086443917155&hnr=2199&pnr=238284&ppr=158,00
 www.guenstiger.de
