@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.82 2007/07/09 22:20:30 hal9 Exp $
+#  $Id: default.action.master,v 1.83 2007/07/10 09:29:53 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1368,9 +1368,9 @@ lads.myspace.com
 #MASTER# UNBLOCK-REFERRER: http://www.shockwave.com/servlet/DownloadEcommTracker?sku=fizzball-pc&promoCode=SiteShockwaveLandingPage
 .shockwave.com/servlet/DownloadEcommTracker
 #MASTER# UNBLOCK-REFERRER: http://www.fish4.co.uk/iad/lettings/advert?adId=12389712&src=nestoria
-#MASTER# REMARKS 20070411 Adam Piggott fish4.co.uk is a popular UK advertising site for cars, properties and jobs and uses ad/advert all over the place, understandably.
+#MASTER# REMARKS: 20070411 Adam Piggott fish4.co.uk is a popular UK advertising site for cars, properties and jobs and uses ad/advert all over the place, understandably.
 .fish4.co.uk/.*ad
-#MASTER# REMARKS Actionsfile feedback item #1700037 2007-04-13 HB
+#MASTER# REMARKS: Actionsfile feedback item #1700037 2007-04-13 HB
 #MASTER# UNBLOCK-REFERRER: http://www.mp3.com.au/popup/popup.asp?id=110433
 .mp3.com.au/.*popup
 #MASTER# REMARKS Actionsfile feedback #1700915 2007-04-15
@@ -1379,6 +1379,8 @@ lads.myspace.com
 /(.*/)?dynamiskt/reklam_media/did_
 #MASTER# REMARKS 20070710 Actionsfile feedback #1751020
 switch.atdmt.com/action/
+#MASTER# UNBLOCK-REFERRER: http://www.parcelforce.com/portal/pw/track?catId=7500082
+.parcelforce.com/.*track
 
 #############################################################################
 # Site-specific special rules:
