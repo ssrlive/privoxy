@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.83 2007/07/10 09:29:53 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.84 2007/07/11 06:58:16 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -821,6 +821,10 @@ img.bluehost.com
 #MASTER# BLOCK-REFERRER: http://www.linuxinsider.com/story/57759.html
 #MASTER# REMARKS: Actionsfile feedback item #1736213 at 2007-06-12
 linuxinsider.com/images/sda/
+#MASTER# REMARKS: 20070711 Adam Piggott Actionsfile feedback #1700692
+#MASTER# REMARKS: Tracking JavaScript
+#MASTER# BLOCK-REFERRER: http://www.hants.gov.uk/record-office/
+[a-z].clickdensity.com
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
