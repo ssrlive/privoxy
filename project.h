@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.96 2007/05/14 10:41:15 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.97 2007/05/27 12:38:08 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.97  2007/05/27 12:38:08  fabiankeil
+ *    - Remove some left-overs from the switch to dedicated header filters.
+ *    - Adjust "X-Filter: No" to disable dedicated header filters.
+ *    - Prepare for forward-override{}
+ *
  *    Revision 1.96  2007/05/14 10:41:15  fabiankeil
  *    Ditch the csp member cookie_list[] which isn't used anymore.
  *
@@ -956,6 +961,13 @@ struct iob
  */
 #define CT_GZIP    0x0010U /**< gzip-compressed data. */
 #define CT_DEFLATE 0x0020U /**< zlib-compressed data. */
+
+/**
+ * Flag to signal that the server declared the content type,
+ * so we can differentiate between unknown and undeclared
+ * content types.
+ */
+#define CT_DECLARED 0x0040U
 
 /**
  * The mask which includes all actions.
