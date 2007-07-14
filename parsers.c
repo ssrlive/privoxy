@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.102 2007/05/27 12:39:32 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.103 2007/06/01 16:31:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.102 2007/05/27 12:39:32 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.103  2007/06/01 16:31:54  fabiankeil
+ *    Change sed() to return a jb_err in preparation for forward-override{}.
+ *
  *    Revision 1.102  2007/05/27 12:39:32  fabiankeil
  *    Adjust "X-Filter: No" to disable dedicated header filters.
  *
@@ -2041,7 +2044,7 @@ jb_err crunch_server_header(struct client_state *csp, char **header)
 jb_err server_content_type(struct client_state *csp, char **header)
 {
    /* Remove header if it isn't the first Content-Type header */
-   if(csp->content_type && (csp->content_type != CT_TABOO))
+   if ((csp->content_type & CT_DECLARED))
    {
      /*
       * Another, slightly slower, way to see if
@@ -2056,6 +2059,11 @@ jb_err server_content_type(struct client_state *csp, char **header)
 
       return JB_ERR_OK;
    }
+
+   /*
+    * Signal that the Content-Type has been set.
+    */
+   csp->content_type |= CT_DECLARED;
 
    if (!(csp->content_type & CT_TABOO))
    {
@@ -2073,29 +2081,8 @@ jb_err server_content_type(struct client_state *csp, char **header)
       {
          csp->content_type |= CT_JPEG;
       }
-      else
-      {
-         csp->content_type = 0;
-      }
    }
-   /*
-    * Are we enabling text mode by force?
-    */
-   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
-   {
-      /*
-       * Do we really have to?
-       */
-      if (csp->content_type & CT_TEXT)
-      {
-         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
-      }
-      else
-      {
-         csp->content_type |= CT_TEXT;
-         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
-      }
-   }
+
    /*
     * Are we messing with the content type?
     */ 
@@ -2124,6 +2111,7 @@ jb_err server_content_type(struct client_state *csp, char **header)
             "Enable force-text-mode if you know what you're doing.", *header);   
       }
    }  
+
    return JB_ERR_OK;
 }
 
