@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.137 2007/06/01 18:16:36 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.138 2007/06/03 18:45:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.137 2007/06/01 18:16:36 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.138  2007/06/03 18:45:18  fabiankeil
+ *    Temporary workaround for BR#1730105.
+ *
  *    Revision 1.137  2007/06/01 18:16:36  fabiankeil
  *    Use the same mutex for gethostbyname() and gethostbyaddr() to prevent
  *    deadlocks and crashes on OpenBSD and possibly other OS with neither
@@ -1046,8 +1049,18 @@ const static char NULL_BYTE_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Bad request. Null byte(s) before end of request.\r\n";
 
+/* XXX: should be a template */
+const static char MESSED_UP_REQUEST_RESPONSE[] =
+   "HTTP/1.0 400 Malformed request after rewriting\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "Bad request. Messed up with header filters.\r\n";
+
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
+
+typedef char *(*filter_function_ptr)();
 
 /* Crunch function flags */
 #define CF_NO_FLAGS        0
@@ -1674,6 +1687,124 @@ void build_request_line(struct client_state *csp, const struct forward_spec *fwd
 
 /*********************************************************************
  *
+ * Function    :  change_request_destination
+ *
+ * Description :  Parse a (rewritten) request line and regenerate
+ *                the http request data.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Forwards the parse_http_request() return code.
+ *                Terminates in case of memory problems.
+ *
+ *********************************************************************/
+jb_err change_request_destination(struct client_state *csp)
+{
+   struct http_request *http = csp->http;
+   jb_err err;
+
+   log_error(LOG_LEVEL_INFO, "Rewrite detected: %s", csp->headers->first->str);
+   free_http_request(http);
+   err = parse_http_request(csp->headers->first->str, http, csp);
+   if (JB_ERR_OK != err)
+   {
+      log_error(LOG_LEVEL_ERROR, "Couldn't parse rewritten request: %s.",
+         jb_err_to_string(err));
+   }
+   http->ocmd = strdup(http->cmd); /* XXX: ocmd is a misleading name */
+   if (http->ocmd == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory copying rewritten HTTP request line");
+   }
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_filter_function
+ *
+ * Description :  Decides which content filter function has
+ *                to be applied (if any).
+ *
+ *                XXX: Doesn't handle filter_popups()
+ *                because of the different prototype. Probably
+ *                we should ditch filter_popups() anyway, it's
+ *                even less reliable than popup blocking based
+ *                on pcrs filters.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  The content filter function to run, or
+ *                NULL if no content filter is active
+ *
+ *********************************************************************/
+filter_function_ptr get_filter_function(struct client_state *csp)
+{
+   filter_function_ptr filter_function = NULL;
+
+   /*
+    * Are we enabling text mode by force?
+    */
+   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+   {
+      /*
+       * Do we really have to?
+       */
+      if (csp->content_type & CT_TEXT)
+      {
+         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
+      }
+      else
+      {
+         csp->content_type |= CT_TEXT;
+         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
+      }
+   }
+
+   if (!(csp->content_type & CT_DECLARED))
+   {
+      /*
+       * The server didn't bother to declare a MIME-Type.
+       * Assume it's text that can be filtered.
+       *
+       * This also regulary happens with 304 responses,
+       * therefore logging anything here would cause
+       * too much noise.
+       */
+      csp->content_type |= CT_TEXT;
+   }
+
+
+   /*
+    * Choose the applying filter function based on
+    * the content type and action settings.
+    */
+   if ((csp->content_type & CT_TEXT) &&
+       (csp->rlist != NULL) &&
+       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
+   {
+      filter_function = pcrs_filter_response;
+   }
+   else if ((csp->content_type & CT_GIF)  &&
+            (csp->action->flags & ACTION_DEANIMATE))
+   {
+      filter_function = gif_deanimate_response;
+   }
+   else if ((csp->content_type & CT_JPEG)  &&
+            (csp->action->flags & ACTION_JPEG_INSPECT))
+   {
+      filter_function = jpeg_inspect_response;
+   }
+
+   return filter_function;
+}
+
+/*********************************************************************
+ *
  * Function    :  chat
  *
  * Description :  Once a connection to the client has been accepted,
@@ -1708,17 +1839,13 @@ static void chat(struct client_state *csp)
    const struct forward_spec * fwd;
    struct http_request *http;
    int len; /* for buffer sizes (and negative error codes) */
+   jb_err err;
 #ifdef FEATURE_KILL_POPUPS
-   int block_popups;         /* bool, 1==will block popups */
    int block_popups_now = 0; /* bool, 1==currently blocking popups */
 #endif /* def FEATURE_KILL_POPUPS */
 
-   int pcrs_filter;        /* bool, 1==will filter through pcrs */
-   int gif_deanimate;      /* bool, 1==will deanimate gifs */
-   int jpeg_inspect;       /* bool, 1==will inspect jpegs */
-
    /* Function that does the content filtering for the current request */
-   char *(*content_filter)() = NULL;
+   filter_function_ptr content_filter = NULL;
 
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
@@ -1736,11 +1863,28 @@ static void chat(struct client_state *csp)
     * could get blocked here if a client connected, then didn't say anything!
     */
 
-   for (;;)
+   do
    {
       len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
 
       if (len <= 0) break;      /* error! */
+
+      /*
+       * If there is no memory left for buffering the
+       * request, there is nothing we can do but hang up
+       */
+      if (add_to_iob(csp, buf, len))
+      {
+         return;
+      }
+
+      req = get_header(csp);
+
+   } while ((NULL != req) && ('\0' == *req));
+
+   if (NULL != req)
+   {
+      /* Request received. Validate and parse it. */
 
 #if 0
       /*
@@ -1765,27 +1909,6 @@ static void chat(struct client_state *csp)
          return;
       }
 #endif
-
-      /*
-       * If there is no memory left for buffering the
-       * request, there is nothing we can do but hang up
-       */
-      if (add_to_iob(csp, buf, len))
-      {
-         return;
-      }
-
-      req = get_header(csp);
-
-      if (req == NULL)
-      {
-         break;    /* no HTTP request! */
-      }
-
-      if (*req == '\0')
-      {
-         continue;   /* more to come! */
-      }
 
       /* Does the request line look invalid? */
       if (client_protocol_is_unsupported(csp, req))
@@ -1819,19 +1942,13 @@ static void chat(struct client_state *csp)
       }
 
 #endif /* def FEATURE_FORCE_LOAD */
-
-      switch( parse_http_request(req, http, csp) )
+      err = parse_http_request(req, http, csp);
+      if (JB_ERR_OK != err)
       {
-         case JB_ERR_MEMORY:
-           log_error(LOG_LEVEL_ERROR, "Out of memory while parsing request.");
-           break;
-         case JB_ERR_PARSE:
-           log_error(LOG_LEVEL_ERROR, "Couldn't parse request: %s.", req);
-           break;
+         log_error(LOG_LEVEL_ERROR, "Couldn't parse request: %s.", jb_err_to_string(err));
       }
 
       freez(req);
-      break;
    }
 
    if (http->cmd == NULL)
@@ -1938,11 +2055,31 @@ static void chat(struct client_state *csp)
       enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
    }
 
-   if (JB_ERR_OK != sed(client_patterns, add_client_headers, csp))
+   err = sed(client_patterns, add_client_headers, csp);
+   if (JB_ERR_OK != err)
    {
+      assert(err == JB_ERR_PARSE);
       log_error(LOG_LEVEL_FATAL, "Failed to parse client headers");
    }
    csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
+
+   if (strcmp(http->cmd, csp->headers->first->str))
+   {
+      /*
+       * A header filter rewrote the request line,
+       * modify the http request accordingly.
+       */
+      if (JB_ERR_OK != change_request_destination(csp))
+      {
+         write_socket(csp->cfd, MESSED_UP_REQUEST_RESPONSE, strlen(MESSED_UP_REQUEST_RESPONSE));
+         /* XXX: Use correct size */
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request generated\" 500 0", csp->ip_addr_str);
+         log_error(LOG_LEVEL_ERROR, "Invalid request line after applying header filters.");
+
+         free_http_request(http);
+         return;
+      }
+   }
 
    /* decide how to route the HTTP request */
    if (NULL == (fwd = forward_url(http, csp)))
@@ -2034,17 +2171,6 @@ static void chat(struct client_state *csp)
       /* FIXME Should handle error properly */
       log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
    }
-
-#ifdef FEATURE_KILL_POPUPS
-   block_popups               = ((csp->action->flags & ACTION_NO_POPUPS) != 0);
-#endif /* def FEATURE_KILL_POPUPS */
-
-   pcrs_filter                = (csp->rlist != NULL) &&  /* There are expressions to be used */
-                                (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]));
-
-   gif_deanimate              = ((csp->action->flags & ACTION_DEANIMATE) != 0);
-
-   jpeg_inspect               = ((csp->action->flags & ACTION_JPEG_INSPECT) != 0);
 
    /*
     * We have a request. Check if one of the crunchers wants it.
@@ -2516,50 +2642,26 @@ static void chat(struct client_state *csp)
                 freez(hdr);
                 return;
             }
-#ifdef FEATURE_KILL_POPUPS
-            /* Start blocking popups if appropriate. */
-
-            if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
-                !http->ssl    &&                  /* We talk plaintext */
-                block_popups)                     /* Policy allows */
-            {
-               block_popups_now = 1;
-               /*
-                * Filter the part of the body that came in the same read
-                * as the last headers:
-                */
-               filter_popups(csp->iob->cur, csp);
-            }
-
-#endif /* def FEATURE_KILL_POPUPS */
-
             /* Buffer and pcrs filter this if appropriate. */
 
-            if ((csp->content_type & CT_TEXT) &&  /* It's a text / * MIME-Type */
-                !http->ssl    &&                  /* We talk plaintext */
-                pcrs_filter)                      /* Policy allows */
+            if (!http->ssl) /* We talk plaintext */
             {
-               content_filter = pcrs_filter_response;
+
+#ifdef FEATURE_KILL_POPUPS
+               /* Start blocking popups if appropriate. */
+               if ((csp->content_type & CT_TEXT) &&               /* It's a text / * MIME-Type */
+                   (csp->action->flags & ACTION_NO_POPUPS) != 0)  /* Policy allows */
+               {
+                  block_popups_now = 1;
+                  /*
+                   * Filter the part of the body that came in the same read
+                   * as the last headers:
+                   */
+                  filter_popups(csp->iob->cur, csp);
+               }
+#endif /* def FEATURE_KILL_POPUPS */
+               content_filter = get_filter_function(csp);
             }
-
-            /* Buffer and gif_deanimate this if appropriate. */
-
-            if ((csp->content_type & CT_GIF)  &&  /* It's an image/gif MIME-Type */
-                !http->ssl    &&                  /* We talk plaintext */
-                gif_deanimate)                    /* Policy allows */
-            {
-               content_filter = gif_deanimate_response;
-            }
-
-            /* Buffer and jpg_inspect this if appropriate. */
-
-            if ((csp->content_type & CT_JPEG)  &&  /* It's an image/jpeg MIME-Type */
-                !http->ssl    &&                   /* We talk plaintext */
-                jpeg_inspect)                      /* Policy allows */
-            {
-               content_filter = jpeg_inspect_response;
-            }
-
             /*
              * Only write if we're not buffering for content modification
              */
