@@ -110,6 +110,9 @@ ChangeLog for Privoxy
 - Don't log CONNECT requests twice.
 - Log the source address for ACL-related connection drops.
 - Log the reason why a request was crunched.	
+- Don't ignore applying filters if the server didn't
+  specify a Content-Type. Bug reported by Amuro Namie.
+- Allow to rewrite the request destination behind the client's back.
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring
   and Adam Piggott)
