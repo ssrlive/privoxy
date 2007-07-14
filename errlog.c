@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.50 2007/04/11 10:55:44 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.51 2007/05/11 11:51:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.50 2007/04/11 10:55:44 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.51  2007/05/11 11:51:34  fabiankeil
+ *    Fix a type mismatch warning.
+ *
  *    Revision 1.50  2007/04/11 10:55:44  fabiankeil
  *    Enforce some assertions that could be triggered
  *    on mingw32 and other systems where we use threads
@@ -1506,6 +1509,48 @@ void log_error(int loglevel, const char *fmt, ...)
 }
 #endif /* defined(USE_NEW_LOG_ERROR) */
 
+
+/*********************************************************************
+ *
+ * Function    :  jb_err_to_string
+ *
+ * Description :  Translates JB_ERR_FOO codes into strings.
+ *
+ *                XXX: the type of error codes is jb_err
+ *                but the typedef'inition is currently not
+ *                visible to all files that include errlog.h.
+ *
+ * Parameters  :
+ *          1  :  error = a valid jb_err code
+ *
+ * Returns     :  A string with the jb_err translation
+ *
+ *********************************************************************/
+const char *jb_err_to_string(int error)
+{
+   switch (error)
+   {
+      case JB_ERR_OK:
+         return "Success, no error";
+      case JB_ERR_MEMORY:
+         return "Out of memory";
+      case JB_ERR_CGI_PARAMS:
+         return "Missing or corrupt CGI parameters";
+      case JB_ERR_FILE:
+         return "Error opening, reading or writing a file";
+      case JB_ERR_PARSE:
+         return "Parse error";
+      case JB_ERR_MODIFIED:
+         return "File has been modified outside of the CGI actions editor.";
+      case JB_ERR_COMPRESS:
+         return "(De)compression failure";
+      default:
+         assert(0);
+         return "Unknown error";
+   }
+   assert(0);
+   return "Internal error";
+}
 
 #ifdef _WIN32
 /*********************************************************************
