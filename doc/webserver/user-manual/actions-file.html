@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.6 User Manual"
+TITLE="Privoxy 3.0.7 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="The Main Configuration File"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.6 User Manual</TH
+>Privoxy 3.0.7 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -259,7 +259,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN2003"
+NAME="AEN2061"
 ></A
 ><P
 ><B
@@ -594,7 +594,7 @@ VALIGN="TOP"
  <TT
 CLASS="FILENAME"
 >default.action</TT
-> is typically process before
+> is typically processed before
  <TT
 CLASS="FILENAME"
 >user.action</TT
@@ -686,7 +686,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2102"
+NAME="AEN2160"
 ></A
 >8.1. Finding the Right Mix</H2
 ><P
@@ -721,7 +721,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2109"
+NAME="AEN2167"
 ></A
 >8.2. How to Edit</H2
 ><P
@@ -764,7 +764,7 @@ CLASS="SECT2"
 ><A
 NAME="ACTIONS-APPLY"
 ></A
->8.3. How Actions are Applied to URLs</H2
+>8.3. How Actions are Applied to Requests</H2
 ><P
 > Actions files are divided into sections. There are special sections,
  like the <SPAN
@@ -777,18 +777,20 @@ HREF="actions-file.html#ALIASES"
  be discussed later. For now let's concentrate on regular sections: They have a
  heading line (often split up to multiple lines for readability) which consist
  of a list of actions, separated by whitespace and enclosed in curly braces.
- Below that, there is a list of URL patterns, each on a separate line.</P
+ Below that, there is a list of URL and tag patterns, each on a separate line.</P
 ><P
 > To determine which actions apply to a request, the URL of the request is
- compared to all patterns in each <SPAN
+ compared to all URL patterns in each <SPAN
 CLASS="QUOTE"
 >"action file"</SPAN
-> file. Every time it matches, the list of
- applicable actions for the URL is incrementally updated, using the heading
- of the section in which the pattern is located. If multiple matches for
- the same URL set the same action differently, the last match wins. If not, 
- the effects are aggregated. E.g. a URL might match a regular section with 
- a heading line of <TT
+>.
+ Every time it matches, the list of applicable actions for the request is
+ incrementally updated, using the heading of the section in which the
+ pattern is located. The same is done again for tags and tag patterns later on.</P
+><P
+> If multiple applying sections set the same action differently,
+ the last match wins. If not, the effects are aggregated.
+ E.g. a URL might match a regular section with a heading line of <TT
 CLASS="LITERAL"
 >{ 
  +<A
@@ -839,7 +841,7 @@ CLASS="LITERAL"
 >
  </P
 ><P
-> You can trace this process for any given URL by visiting <A
+> You can trace this process for URL patterns and any given URL by visiting <A
 HREF="http://config.privoxy.org/show-url-info"
 TARGET="_top"
 >http://config.privoxy.org/show-url-info</A
@@ -888,10 +890,7 @@ CLASS="EMPHASIS"
  flexibility. This allows one expression to be expanded and potentially match
  against many similar patterns.</P
 ><P
-> Generally, a <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> pattern has the form
+> Generally, a URL pattern has the form
  <TT
 CLASS="LITERAL"
 >&#60;domain&#62;/&#60;path&#62;</TT
@@ -1029,7 +1028,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2192"
+NAME="AEN2250"
 ></A
 >8.4.1. The Domain Pattern</H3
 ><P
@@ -1253,7 +1252,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2263"
+NAME="AEN2321"
 ></A
 >8.4.2. The Path Pattern</H3
 ><P
@@ -1482,6 +1481,80 @@ CLASS="FILENAME"
 HREF="appendix.html#REGEX"
 >Appendix on regular expressions</A
 >.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="TAG-PATTERN"
+></A
+>8.4.3. The Tag Pattern</H3
+><P
+> Tag patterns are used to change the applying actions based on the
+ request's tags. Tags can be created with either the
+ <A
+HREF="actions-file.html#CLIENT-HEADER-FILTER"
+>client-header-tagger</A
+>
+ or the  <A
+HREF="actions-file.html#SERVER-HEADER-FILTER"
+>server-header-tagger</A
+> action.</P
+><P
+> Tag patterns have to start with <SPAN
+CLASS="QUOTE"
+>"TAG:"</SPAN
+>, so <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ can tell them apart from URL patterns. Everything after the colon
+ including white space, is interpreted as a regular expression with
+ path patterns syntax, except that tag patterns aren't left-anchored
+ automatically (Privoxy doesn't silently add a <SPAN
+CLASS="QUOTE"
+>"^"</SPAN
+>,
+ you have to do it yourself if you need it).</P
+><P
+> To match all requests that are tagged with <SPAN
+CLASS="QUOTE"
+>"foo"</SPAN
+>
+ your pattern line should be <SPAN
+CLASS="QUOTE"
+>"TAG:^foo$"</SPAN
+>,
+ <SPAN
+CLASS="QUOTE"
+>"TAG:foo"</SPAN
+> would work as well, but it would also
+ match requests whose tags contain <SPAN
+CLASS="QUOTE"
+>"foo"</SPAN
+> somewhere.</P
+><P
+> Sections can contain URL and tag patterns at the same time,
+ but tag patterns are checked after the URL patterns and thus
+ always overrule them, even if they are located before the URL patterns.</P
+><P
+> Once a new tag is added, Privoxy checks right away if it's matched by one
+ of the tag patterns and updates the action settings accordingly. As a result
+ tags can be used to activate other tagger actions, as long as these other
+ taggers look for headers that haven't already be parsed.</P
+><P
+> For example you could tag client requests which use the POST method,
+ use this tag to activate another tagger that adds a tag if cookies
+ are send, and then block based on the cookie tag. However if you'd
+ reverse the position of the described taggers, and activated the method
+ tagger based on the cookie tagger, no method tags would be created.
+ The method tagger would look for the request line, but at the time
+ the cookie tag is created the request line has already been parsed.</P
+><P
+> While this is a limitation you should be aware of, this kind of
+ indirection is seldom needed anyway and even the example doesn't
+ make too much sense.</P
 ></DIV
 ></DIV
 ><DIV
@@ -2057,9 +2130,187 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="CLIENT-HEADER-FILTER"
+></A
+>8.5.3. client-header-filter</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>   Rewrite or remove single client headers.
+   </P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>    All client headers to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+>    The name of a client-header filter, as defined in one of the
+    <A
+HREF="filter-file.html"
+>filter files</A
+>.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Client-header filters are applied to each header on its own, not to
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is z.
+    You can do that by using tags though.
+   </P
+><P
+>    Client-header filters are executed after the other header actions have finished
+    and use their output as input.
+   </P
+><P
+>    Please refer to the <A
+HREF="filter-file.html"
+>filter file chapter</A
+>
+    to learn which client-header filters are available by default, and how to
+    create your own.
+   </P
+></DD
+><DT
+>Example usage (section):</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>{+client-header-filter{hide-tor-exit-notation}}
+.exit/
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="CLIENT-HEADER-TAGGER"
+></A
+>8.5.4. client-header-tagger</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>   Block requests based on their headers.
+   </P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>    Client headers to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions, the result is used as
+    tag. 
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+>    The name of a client-header tagger, as defined in one of the
+    <A
+HREF="filter-file.html"
+>filter files</A
+>.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Client-header taggers are applied to each header on its own,
+    and as the header isn't modified, each tagger <SPAN
+CLASS="QUOTE"
+>"sees"</SPAN
+>
+    the original.
+   </P
+><P
+>    Client-header taggers are the first actions that are executed
+    and their tags can be used to control every other action.
+   </P
+></DD
+><DT
+>Example usage (section):</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+># Tag every request with the User-Agent header
+{+client-header-filter{user-agent}}
+/
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="CONTENT-TYPE-OVERWRITE"
 ></A
->8.5.3. content-type-overwrite</H4
+>8.5.5. content-type-overwrite</H4
 ><P
 ></P
 ><DIV
@@ -2165,16 +2416,15 @@ HREF="actions-file.html#FORCE-TEXT-MODE"
     This limitation exists for a reason, think twice before circumventing it.
    </P
 ><P
->    Most of the time it's easier to enable
+>    Most of the time it's easier to replace this action with a custom
     <TT
 CLASS="LITERAL"
 ><A
-HREF="actions-file.html#FILTER-SERVER-HEADERS"
->filter-server-headers</A
+HREF="actions-file.html#SERVER-HEADER-FILTER"
+>server-header filter</A
 ></TT
->
-    and replace this action with a custom regular expression. It allows you
-    to activate it for every document of a certain site and it will still
+>.
+    It allows you to activate it for every document of a certain site and it will still
     only replace the content types you aimed at.
    </P
 ><P
@@ -2204,8 +2454,8 @@ www.example.net/
 
 # but leave the content type unmodified if the URL looks like a style sheet
 {-content-type-overwrite}
-www.example.net/*.\.css$
-www.example.net/*.style</PRE
+www.example.net/.*\.css$
+www.example.net/.*style</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2222,7 +2472,7 @@ CLASS="SECT3"
 ><A
 NAME="CRUNCH-CLIENT-HEADER"
 ></A
->8.5.4. crunch-client-header</H4
+>8.5.6. crunch-client-header</H4
 ><P
 ></P
 ><DIV
@@ -2289,15 +2539,14 @@ CLASS="LITERAL"
 >crunch-client-header</TT
 > is only meant for quick tests.
     If you have to block several different headers, or only want to modify
-    parts of them, you should enable
+    parts of them, you should use a
     <TT
 CLASS="LITERAL"
 ><A
-HREF="actions-file.html#FILTER-CLIENT-HEADERS"
->filter-client-headers</A
+HREF="actions-file.html#CLIENT-HEADER-FILTER"
+>client-header filter</A
 ></TT
->
-    and create your own filter.
+>.
    </P
 ><DIV
 CLASS="WARNING"
@@ -2357,7 +2606,7 @@ CLASS="SECT3"
 ><A
 NAME="CRUNCH-IF-NONE-MATCH"
 ></A
->8.5.5. crunch-if-none-match</H4
+>8.5.7. crunch-if-none-match</H4
 ><P
 ></P
 ><DIV
@@ -2474,7 +2723,7 @@ CLASS="SECT3"
 ><A
 NAME="CRUNCH-INCOMING-COOKIES"
 ></A
->8.5.6. crunch-incoming-cookies</H4
+>8.5.8. crunch-incoming-cookies</H4
 ><P
 ></P
 ><DIV
@@ -2597,7 +2846,7 @@ CLASS="SECT3"
 ><A
 NAME="CRUNCH-SERVER-HEADER"
 ></A
->8.5.7. crunch-server-header</H4
+>8.5.9. crunch-server-header</H4
 ><P
 ></P
 ><DIV
@@ -2663,15 +2912,14 @@ CLASS="LITERAL"
 >crunch-server-header</TT
 > is only meant for quick tests.
     If you have to block several different headers, or only want to modify
-    parts of them, you should enable
+    parts of them, you should use a custom
     <TT
 CLASS="LITERAL"
 ><A
-HREF="actions-file.html#FILTER-SERVER-HEADERS"
->filter-server-headers</A
+HREF="actions-file.html#SERVER-HEADER-FILTER"
+>server-header filter</A
 ></TT
->
-    and create your own filter.
+>.
    </P
 ><DIV
 CLASS="WARNING"
@@ -2730,7 +2978,7 @@ CLASS="SECT3"
 ><A
 NAME="CRUNCH-OUTGOING-COOKIES"
 ></A
->8.5.8. crunch-outgoing-cookies</H4
+>8.5.10. crunch-outgoing-cookies</H4
 ><P
 ></P
 ><DIV
@@ -2846,7 +3094,7 @@ CLASS="SECT3"
 ><A
 NAME="DEANIMATE-GIFS"
 ></A
->8.5.9. deanimate-gifs</H4
+>8.5.11. deanimate-gifs</H4
 ><P
 ></P
 ><DIV
@@ -2936,7 +3184,7 @@ CLASS="SECT3"
 ><A
 NAME="DOWNGRADE-HTTP-VERSION"
 ></A
->8.5.10. downgrade-http-version</H4
+>8.5.12. downgrade-http-version</H4
 ><P
 ></P
 ><DIV
@@ -3012,7 +3260,7 @@ CLASS="SECT3"
 ><A
 NAME="FAST-REDIRECTS"
 ></A
->8.5.11. fast-redirects</H4
+>8.5.13. fast-redirects</H4
 ><P
 ></P
 ><DIV
@@ -3129,15 +3377,15 @@ CLASS="QUOTE"
     or lead to a <SPAN
 CLASS="QUOTE"
 >"page not found"</SPAN
-> error. It is possible to fix these redirected
-    requests with <TT
+> error. You can prevent this problem by
+    first using the <TT
 CLASS="LITERAL"
 ><A
-HREF="actions-file.html#FILTER-CLIENT-HEADERS"
->filter-client-headers</A
+HREF="actions-file.html#REDIRECT"
+>redirect</A
 ></TT
->
-    but it requires a little effort.
+> action
+    to remove the last part of the URL, but it requires a little effort.
    </P
 ><P
 >    To detect a redirection URL, <TT
@@ -3194,7 +3442,7 @@ CLASS="SECT3"
 ><A
 NAME="FILTER"
 ></A
->8.5.12. filter</H4
+>8.5.14. filter</H4
 ><P
 ></P
 ><DIV
@@ -3211,21 +3459,14 @@ CLASS="VARIABLELIST"
 >Effect:</DT
 ><DD
 ><P
->    All files of text-based type, most notably HTML and
-    JavaScript, to which this action applies, can be filtered on-the-fly
-    through the specified regular expression based substitutions. (Note: as of
-    version 3.0.3 plain text documents are exempted from filtering, because
-    web servers often use the <TT
+>    All instances of text-based type, most notably HTML and JavaScript, to which
+    this action applies, can be filtered on-the-fly through the specified regular
+    expression based substitutions. (Note: as of version 3.0.3 plain text documents
+    are exempted from filtering, because web servers often use the
+   <TT
 CLASS="LITERAL"
 >text/plain</TT
-> MIME type for all
-    files whose type they don't know.) By default, filtering works only on the
-    raw document content itself (that which can be seen with <TT
-CLASS="LITERAL"
->View
-    Source</TT
->), 
-    not the headers.
+> MIME type for all files whose type they don't know.)
    </P
 ></DD
 ><DT
@@ -3238,7 +3479,7 @@ CLASS="LITERAL"
 >Parameter:</DT
 ><DD
 ><P
->    The name of a filter, as defined in the <A
+>    The name of a content filter, as defined in the <A
 HREF="filter-file.html"
 >filter file</A
 >.
@@ -3348,13 +3589,27 @@ CLASS="LITERAL"
 > exceptions.
    </P
 ><P
->    At this time, <SPAN
+>    Compressed content can't be filtered either, unless <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> cannot uncompress compressed
-    documents. If you want filtering to work on all documents, even those that
-    would normally be sent compressed, you must use the
-    <TT
+>
+    is compiled with zlib support (requires at least <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 3.0.7),
+    in which case <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will decompress the content before filtering
+    it.
+   </P
+><P
+>    If you use a <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version without zlib support, but want filtering to work on
+    as much documents as possible, even those that would normally be sent compressed,
+    you must use the <TT
 CLASS="LITERAL"
 ><A
 HREF="actions-file.html#PREVENT-COMPRESSION"
@@ -3367,7 +3622,7 @@ CLASS="LITERAL"
 >.
    </P
 ><P
->    Filtering can achieve some of the same effects as the 
+>    Content filtering can achieve some of the same effects as the 
     <TT
 CLASS="LITERAL"
 ><A
@@ -3887,44 +4142,6 @@ CLASS="SCREEN"
    </P
 ><P
 >    <A
-NAME="FILTER-HTML-TO-XML"
-></A
->
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->+filter{html-to-xml}         # Header filter to change the Content-Type from html to xml</PRE
-></TD
-></TR
-></TABLE
->
-   </P
-><P
->    <A
-NAME="FILTER-XML-TO-HTML"
-></A
->
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->+filter{xml-to-html}         # Header filter to change the Content-Type from xml to html</PRE
-></TD
-></TR
-></TABLE
->
-   </P
-><P
->    <A
 NAME="FILTER-NO-PING"
 ></A
 >
@@ -3942,275 +4159,6 @@ CLASS="SCREEN"
 ></TABLE
 >
    </P
-><P
->    <A
-NAME="FILTER-HIDE-TOR-EXIT-NOTATION"
-></A
->
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->+filter{hide-tor-exit-notation} # Header filter to remove the Tor exit node notation in Host and Referer headers</PRE
-></TD
-></TR
-></TABLE
->
-   </P
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="FILTER-CLIENT-HEADERS"
-></A
->8.5.13. filter-client-headers</H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Typical use:</DT
-><DD
-><P
->   To apply filtering to the client's (browser's) headers
-   </P
-></DD
-><DT
->Effect:</DT
-><DD
-><P
->    By default, <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
-> filters only apply 
-    to the document content itself. This will extend those filters to 
-    include the client's headers as well.
-   </P
-></DD
-><DT
->Type:</DT
-><DD
-><P
->Boolean.</P
-></DD
-><DT
->Parameter:</DT
-><DD
-><P
->    N/A
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    Regular expressions can be used to filter headers as well. Check your
-    filters closely before activating this action, as it can easily lead to broken
-    requests.
-   </P
-><P
-> 
-    These filters are applied to each header on its own, not to them
-    all at once. This makes it easier to diagnose problems, but on the downside
-    you can't write filters that only change header x if header y's value is
-    z.
-   </P
-><P
->    The filters are used after the other header actions have finished and can
-    use their output as input.
-   </P
-><P
->    Whenever possible one should specify <TT
-CLASS="LITERAL"
->^</TT
->,
-    <TT
-CLASS="LITERAL"
->$</TT
->, the whole header name and the colon, to make sure
-    the filter doesn't cause havoc to other headers or the
-    page itself. For example if you want to transform
-    <SPAN
-CLASS="APPLICATION"
->Galeon</SPAN
-> User-Agents to 
-    <SPAN
-CLASS="APPLICATION"
->Firefox</SPAN
-> User-Agents you
-    shouldn't use:</P
-><P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->s@Galeon/\d\.\d\.\d @@</PRE
-></TD
-></TR
-></TABLE
-></P
-><P
->    but:</P
-><P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->s@^(User-Agent:.*) Galeon/\d\.\d\.\d (Firefox/\d\.\d\.\d\.\d)$@$1 $2@</PRE
-></TD
-></TR
-></TABLE
-></P
-></DD
-><DT
->Example usage (section):</DT
-><DD
-><P
->     <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->{+filter-client-headers +filter{test_filter}}
-problem-host.example.com
-    </PRE
-></TD
-></TR
-></TABLE
->
-    </P
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="FILTER-SERVER-HEADERS"
-></A
->8.5.14. filter-server-headers</H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Typical use:</DT
-><DD
-><P
->   To apply filtering to the server's headers
-   </P
-></DD
-><DT
->Effect:</DT
-><DD
-><P
->    By default, <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
-> filters only apply 
-    to the document content itself. This will extend those filters to 
-    include the server's headers as well.
-   </P
-></DD
-><DT
->Type:</DT
-><DD
-><P
->Boolean.</P
-></DD
-><DT
->Parameter:</DT
-><DD
-><P
->    N/A
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    Similar to <TT
-CLASS="LITERAL"
->filter-client-headers</TT
->, but works on 
-    the server instead. To filter both server and client, use both.
-   </P
-><P
->    As with <TT
-CLASS="LITERAL"
->filter-client-headers</TT
->, check your
-    filters before activating this action, as it can easily lead to broken
-    requests.
-   </P
-><P
-> 
-    These filters are applied to each header on its own, not to them
-    all at once. This makes it easier to diagnose problems, but on the downside
-    you can't write filters that only change header x if header y's value is
-    z.
-   </P
-><P
->    The filters are used after the other header actions have finished and can
-    use their output as input.
-   </P
-><P
->    Remember too, whenever possible one should specify <TT
-CLASS="LITERAL"
->^</TT
->,
-    <TT
-CLASS="LITERAL"
->$</TT
->, the whole header name and the colon, to make sure
-    the filter doesn't cause havoc to other headers or the
-    page itself. See above for example.
-   </P
-></DD
-><DT
->Example usage (section):</DT
-><DD
-><P
->     <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->{+filter-server-headers +filter{test_filter}}
-problem-host.example.com
-    </PRE
-></TD
-></TR
-></TABLE
->
-    </P
 ></DD
 ></DL
 ></DIV
@@ -4353,9 +4301,189 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="FORWARD-OVERRIDE"
+></A
+>8.5.16. forward-override</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>Change the forwarding settings based on User-Agent or request origin</P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>    Overrules the forward directives in the configuration files.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Multi-value.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="QUOTE"
+>"forward ."</SPAN
+> to use a direct connection without any additional proxies.</P
+></LI
+><LI
+><P
+>      <SPAN
+CLASS="QUOTE"
+>"forward 127.0.0.1:8123"</SPAN
+> to use the HTTP proxy listening at 127.0.0.1 port 8123.
+     </P
+></LI
+><LI
+><P
+>      <SPAN
+CLASS="QUOTE"
+>"forward-socks4a 127.0.0.1:9050 ."</SPAN
+> to use the socks4a proxy listening at 127.0.0.1 port 9050.
+      Replace <SPAN
+CLASS="QUOTE"
+>"forward-socks4a"</SPAN
+> with <SPAN
+CLASS="QUOTE"
+>"forward-socks4"</SPAN
+> to use a socks4 connection  (with local DNS
+      resolution) instead.
+     </P
+></LI
+><LI
+><P
+>      <SPAN
+CLASS="QUOTE"
+>"forward-socks4a 127.0.0.1:9050 proxy.example.org:8000"</SPAN
+> to use the socks4a proxy
+      listening at 127.0.0.1 port 9050 to reach the HTTP proxy listening at proxy.example.org port 8000.
+      Replace <SPAN
+CLASS="QUOTE"
+>"forward-socks4a"</SPAN
+> with <SPAN
+CLASS="QUOTE"
+>"forward-socks4"</SPAN
+> to use a socks4 connection  (with local DNS
+      resolution) instead.
+     </P
+></LI
+></UL
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This action takes parameters similar to the 
+    <A
+HREF="config.html#FORWARDING"
+>forward</A
+> directives in the configuration
+    file, but without the URL pattern. It can be used as replacement, but normally it's only
+    used in cases where matching based on the request URL isn't sufficient.
+   </P
+><DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+BORDER="1"
+WIDTH="90%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>     Please read the description for the <A
+HREF="config.html#FORWARDING"
+>forward</A
+> directives before
+     using this action. Forwarding to the wrong people will reduce your privacy and increase the
+     chances of man-in-the-middle attacks.
+    </P
+><P
+>     If the ports are missing or invalid, default values will be used. This might change
+     in the future and you shouldn't rely on it. Otherwise incorrect syntax causes Privoxy
+     to exit.
+    </P
+><P
+>     Use the <A
+HREF="http://config.privoxy.org/show-url-info"
+TARGET="_top"
+>show-url-info CGI page</A
+>
+     to verify that your forward settings do what you thought the do.
+    </P
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+># Always use direct connections for requests previously tagged as
+# <SPAN
+CLASS="QUOTE"
+>"User-Agent: fetch libfetch/2.0"</SPAN
+> and make sure
+# resuming downloads continues to work.
+# This way you can continue to use Tor for your normal browsing,
+# without overloading the Tor network with your FreeBSD ports updates
+# or downloads of bigger files like ISOs.
+{+forward-override{forward .} \
+ -hide-if-modified-since      \
+ -overwrite-last-modified     \
+}
+TAG:^User-Agent: fetch libfetch/2.0$
+     </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="HANDLE-AS-EMPTY-DOCUMENT"
 ></A
->8.5.16. handle-as-empty-document</H4
+>8.5.17. handle-as-empty-document</H4
 ><P
 ></P
 ><DIV
@@ -4479,7 +4607,7 @@ CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-IMAGE"
 ></A
->8.5.17. handle-as-image</H4
+>8.5.18. handle-as-image</H4
 ><P
 ></P
 ><DIV
@@ -4615,7 +4743,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-ACCEPT-LANGUAGE"
 ></A
->8.5.18. hide-accept-language</H4
+>8.5.19. hide-accept-language</H4
 ><P
 ></P
 ><DIV
@@ -4732,7 +4860,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-CONTENT-DISPOSITION"
 ></A
->8.5.19. hide-content-disposition</H4
+>8.5.20. hide-content-disposition</H4
 ><P
 ></P
 ><DIV
@@ -4832,7 +4960,7 @@ CLASS="SCREEN"
 { -filter \
  +content-type-overwrite{text/plain}\
  +hide-content-disposition{block} }
- .sourceforge.net/tracker/download.php</PRE
+ .sourceforge.net/tracker/download\.php</PRE
 ></TD
 ></TR
 ></TABLE
@@ -4849,7 +4977,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-IF-MODIFIED-SINCE"
 ></A
->8.5.20. hide-if-modified-since</H4
+>8.5.21. hide-if-modified-since</H4
 ><P
 ></P
 ><DIV
@@ -4974,7 +5102,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-FORWARDED-FOR-HEADERS"
 ></A
->8.5.21. hide-forwarded-for-headers</H4
+>8.5.22. hide-forwarded-for-headers</H4
 ><P
 ></P
 ><DIV
@@ -5055,7 +5183,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-FROM-HEADER"
 ></A
->8.5.22. hide-from-header</H4
+>8.5.23. hide-from-header</H4
 ><P
 ></P
 ><DIV
@@ -5166,7 +5294,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-REFERRER"
 ></A
->8.5.23. hide-referrer</H4
+>8.5.24. hide-referrer</H4
 ><A
 NAME="HIDE-REFERER"
 ></A
@@ -5334,7 +5462,7 @@ CLASS="SECT3"
 ><A
 NAME="HIDE-USER-AGENT"
 ></A
->8.5.24. hide-user-agent</H4
+>8.5.25. hide-user-agent</H4
 ><P
 ></P
 ><DIV
@@ -5469,7 +5597,7 @@ CLASS="SECT3"
 ><A
 NAME="INSPECT-JPEGS"
 ></A
->8.5.25. inspect-jpegs</H4
+>8.5.26. inspect-jpegs</H4
 ><P
 ></P
 ><DIV
@@ -5541,7 +5669,7 @@ CLASS="SECT3"
 ><A
 NAME="KILL-POPUPS"
 ></A
->8.5.26. kill-popups<A
+>8.5.27. kill-popups<A
 NAME="KILL-POPUP"
 ></A
 ></H4
@@ -5713,7 +5841,7 @@ CLASS="SECT3"
 ><A
 NAME="LIMIT-CONNECT"
 ></A
->8.5.27. limit-connect</H4
+>8.5.28. limit-connect</H4
 ><P
 ></P
 ><DIV
@@ -5833,7 +5961,7 @@ CLASS="SECT3"
 ><A
 NAME="PREVENT-COMPRESSION"
 ></A
->8.5.28. prevent-compression</H4
+>8.5.29. prevent-compression</H4
 ><P
 ></P
 ><DIV
@@ -5878,7 +6006,7 @@ HREF="actions-file.html#FILTER"
 ><DD
 ><P
 >    More and more websites send their content compressed by default, which
-    is generally a good idea and saves bandwidth. But for the <TT
+    is generally a good idea and saves bandwidth. But the <TT
 CLASS="LITERAL"
 ><A
 HREF="actions-file.html#FILTER"
@@ -5897,33 +6025,43 @@ CLASS="LITERAL"
 HREF="actions-file.html#KILL-POPUPS"
 >kill-popups</A
 ></TT
-> actions to work,
-    <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> needs access to the  uncompressed data.
-    Unfortunately, <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> can't yet(!)  uncompress, filter, and
-    re-compress the content on the fly. So if you want to ensure that all websites, including
-    those that normally compress, can be filtered, you need to use this action.
+> actions need
+    access to the uncompressed data.
    </P
 ><P
->    This will slow down transfers from those websites, though. If you use any of the above-mentioned
-    actions, you will typically want to use <TT
-CLASS="LITERAL"
->prevent-compression</TT
-> in conjunction
-    with them.
+>    When compiled with zlib support (available since <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 3.0.7), content that should be
+    filtered is decompressed on-the-fly and you don't have to worry about this action.
+    If you are using an older <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version, or one that hasn't been compiled with zlib
+    support, this action can be used to convince the server to send the content uncompressed.
+   </P
+><P
+>    Most text-based instances compress very well, the size is seldom decreased by less than 50%,
+    for markup-heavy instances like news feeds saving more than 90% of the original size isn't
+    unusual. 
+   </P
+><P
+>    Not using compression will therefore slow down the transfer, and you should only
+    enable this action if you really need it. As of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 3.0.7 it's disabled in all
+    predefined action settings.
    </P
 ><P
 >    Note that some (rare) ill-configured sites don't handle requests for uncompressed
-    documents correctly (they send an empty document body). If you use <TT
+    documents correctly. Broken PHP applications tend to send an empty document body,
+    some IIS versions only send the beginning of the content. If you enable
+    <TT
 CLASS="LITERAL"
 >prevent-compression</TT
->
-    per default, you'll have to add exceptions for those sites. See the example for how to do that.
+> per default, you might want to add
+    exceptions for those sites. See the example for how to do that.
    </P
 ></DD
 ><DT
@@ -5951,11 +6089,10 @@ CLASS="SCREEN"
 { +prevent-compression }
  / # Match all sites
 
-# Then maybe make exceptions for ill-behaved sites:
+# Then maybe make exceptions for broken sites:
 #
 { -prevent-compression }
- .debianhelp.org
- www.pclinuxonline.com</PRE
+.compusa.com/</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5972,7 +6109,7 @@ CLASS="SECT3"
 ><A
 NAME="OVERWRITE-LAST-MODIFIED"
 ></A
->8.5.29. overwrite-last-modified</H4
+>8.5.30. overwrite-last-modified</H4
 ><P
 ></P
 ><DIV
@@ -6136,7 +6273,7 @@ CLASS="SECT3"
 ><A
 NAME="REDIRECT"
 ></A
->8.5.30. redirect</H4
+>8.5.31. redirect</H4
 ><P
 ></P
 ><DIV
@@ -6167,42 +6304,17 @@ CLASS="VARIABLELIST"
 >Parameter:</DT
 ><DD
 ><P
->    Any URL.
+>    An absolute URL or a single pcrs command.
    </P
 ></DD
 ><DT
 >Notes:</DT
 ><DD
 ><P
->    This action is useful to replace whole documents with ones of your 
-    choosing. This can be used to enforce safe surfing, or just as a simple 
-    convenience.
-   </P
-><P
->    You can do the same by combining the actions
-    <TT
-CLASS="LITERAL"
-><A
-HREF="actions-file.html#BLOCK"
->block</A
-></TT
->,
-    <TT
-CLASS="LITERAL"
-><A
-HREF="actions-file.html#HANDLE-AS-IMAGE"
->handle-as-image</A
-></TT
-> and
-    <TT
-CLASS="LITERAL"
-><A
-HREF="actions-file.html#SET-IMAGE-BLOCKER"
->set-image-blocker{URL}</A
-></TT
->.
-    It doesn't sound right for non-image documents, and that's why this action
-    was created.
+>    Requests to which this action applies are answered with a
+    HTTP redirect to URLs of your choosing. The new URL is
+    either provided as parameter, or derived by applying a
+    single pcrs command to the original URL.
    </P
 ><P
 >    This action will be ignored if you use it together with
@@ -6213,6 +6325,20 @@ HREF="actions-file.html#BLOCK"
 >block</A
 ></TT
 >.
+    It can be combined with
+    <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#FAST-REDIRECTS"
+>fast-redirects{check-decoded-url}</A
+></TT
+>
+    to redirect to a decoded version of a rewritten URL.
+   </P
+><P
+>    Use this action carefully, make sure not to create redirection loops
+    and be aware that using your own redirects might make it
+    possible to fingerprint your requests.
    </P
 ></DD
 ><DT
@@ -6229,11 +6355,21 @@ WIDTH="90%"
 CLASS="SCREEN"
 ># Replace example.com's style sheet with another one
 { +redirect{http://localhost/css-replacements/example.com.css} }
- example.com/stylesheet.css
+ example.com/stylesheet\.css
 
 # Create a short, easy to remember nickname for a favorite site
+# (relies on the browser accept and forward invalid URLs to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>)
 { +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
- a</PRE
+ a
+
+# Always use the expanded view for Undeadly.org articles
+# (Note the $ at the end of the URL pattern to make sure
+# the request for the rewritten URL isn't redirected as well)
+{+redirect{s@$@&#38;mode=expanded@}}
+undeadly.org/cgi\?action=article&#38;sid=\d*$</PRE
 ></TD
 ></TR
 ></TABLE
@@ -6250,7 +6386,7 @@ CLASS="SECT3"
 ><A
 NAME="SEND-VANILLA-WAFER"
 ></A
->8.5.31. send-vanilla-wafer</H4
+>8.5.32. send-vanilla-wafer</H4
 ><P
 ></P
 ><DIV
@@ -6323,7 +6459,7 @@ CLASS="SECT3"
 ><A
 NAME="SEND-WAFER"
 ></A
->8.5.32. send-wafer</H4
+>8.5.33. send-wafer</H4
 ><P
 ></P
 ><DIV
@@ -6408,9 +6544,203 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="SERVER-HEADER-FILTER"
+></A
+>8.5.34. server-header-filter</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>   Rewrite or remove single server headers.
+   </P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>    All server headers to which this action applies are filtered on-the-fly
+    through the specified regular expression based substitutions.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+>    The name of a server-header filter, as defined in one of the
+    <A
+HREF="filter-file.html"
+>filter files</A
+>.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Server-header filters are applied to each header on its own, not to
+    all at once. This makes it easier to diagnose problems, but on the downside
+    you can't write filters that only change header x if header y's value is z.
+    You can do that by using tags though.
+   </P
+><P
+>    Server-header filters are executed after the other header actions have finished
+    and use their output as input.
+   </P
+><P
+>    Please refer to the <A
+HREF="filter-file.html"
+>filter file chapter</A
+>
+    to learn which server-header filters are available by default, and how to
+    create your own.
+   </P
+></DD
+><DT
+>Example usage (section):</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>{+server-header-filter{html-to-xml}}
+example.org/xml-instance-that-is-delivered-as-html
+
+{+server-header-filter{xml-to-html}}
+example.org/instance-that-is-delivered-as-xml-but-is-not
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="SERVER-HEADER-TAGGER"
+></A
+>8.5.35. server-header-tagger</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>   Disable or disable filters based on the Content-Type header.
+   </P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>    Server headers to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions, the result is used as
+    tag.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+>    The name of a server-header tagger, as defined in one of the
+    <A
+HREF="filter-file.html"
+>filter files</A
+>.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Server-header taggers are applied to each header on its own,
+    and as the header isn't modified, each tagger <SPAN
+CLASS="QUOTE"
+>"sees"</SPAN
+>
+    the original.
+   </P
+><P
+>    Server-header taggers are executed before all other header actions
+    that modify server headers. Their tags can be used to control
+    all of the other server-header actions, the content filters
+    and the crunch actions (<A
+HREF="actions-file.html#REDIRECT"
+>redirect</A
+>
+    and <A
+HREF="actions-file.html#BLOCK"
+>block</A
+>).
+   </P
+><P
+>    Obviously crunching based on tags created by server-header taggers
+    doesn't prevent the request from showing up in the server's log file.
+   </P
+></DD
+><DT
+>Example usage (section):</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+># Tag every request with the declared content type
+{+client-header-filter{content-type}}
+/
+    </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="SESSION-COOKIES-ONLY"
 ></A
->8.5.33. session-cookies-only</H4
+>8.5.36. session-cookies-only</H4
 ><P
 ></P
 ><DIV
@@ -6578,7 +6908,7 @@ CLASS="SECT3"
 ><A
 NAME="SET-IMAGE-BLOCKER"
 ></A
->8.5.34. set-image-blocker</H4
+>8.5.37. set-image-blocker</H4
 ><P
 ></P
 ><DIV
@@ -6791,7 +7121,7 @@ CLASS="SCREEN"
 >
    </P
 ><P
->    Redirect to the BSD devil:
+>    Redirect to the BSD daemon:
    </P
 ><P
 >    <TABLE
@@ -6837,7 +7167,7 @@ CLASS="SECT3"
 ><A
 NAME="TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS"
 ></A
->8.5.35. treat-forbidden-connects-like-blocks</H4
+>8.5.38. treat-forbidden-connects-like-blocks</H4
 ><P
 ></P
 ><DIV
@@ -6915,18 +7245,7 @@ CLASS="APPLICATION"
     <SPAN
 CLASS="QUOTE"
 >"Go there anyway"</SPAN
-> link becomes rather useless:
-    it lets the client request the home page of the forbidden host
-    through unencrypted HTTP, still using the port of the last request.
-   </P
-><P
->    If you previously configured <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to do the
-    request through a SSL tunnel, everything will work. Most likely you haven't
-    and the server will respond with an error message because it is expecting
-    HTTPS (SSL).
+> wouldn't work and is therefore suppressed.
    </P
 ></DD
 ><DT
@@ -6956,9 +7275,9 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN3952"
+NAME="AEN4122"
 ></A
->8.5.36. Summary</H3
+>8.5.39. Summary</H3
 ><P
 > Note that many of these actions have the potential to cause a page to
  misbehave, possibly even not to display at all. There are many ways 
@@ -7261,7 +7580,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4017"
+NAME="AEN4187"
 ></A
 >8.7.1. default.action</H3
 ><P
@@ -7452,6 +7771,10 @@ HREF="actions-file.html#ADD-HEADER"
 >add-header</A
 > \
  -<A
+HREF="actions-file.html#CLIENT-HEADER-FILTER"
+>client-header-filter{hide-tor-exit-notation}</A
+> \
+ -<A
 HREF="actions-file.html#BLOCK"
 >block</A
 > \
@@ -7572,44 +7895,24 @@ HREF="actions-file.html#FILTER-IE-EXPLOITS"
 >filter{ie-exploits}</A
 > \     
  -<A
-HREF="actions-file.html#FILTER-CLIENT-HEADERS"
->filter-client-headers</A
-> \
- -<A
-HREF="actions-file.html#FILTER-SERVER-HEADERS"
->filter-server-headers</A
-> \
- -<A
 HREF="actions-file.html#FILTER-GOOGLE"
->filter-google</A
+>filter{google}</A
 > \
  -<A
 HREF="actions-file.html#FILTER-YAHOO"
->filter-yahoo</A
+>filter{yahoo}</A
 > \
  -<A
 HREF="actions-file.html#FILTER-MSN"
->filter-msn</A
+>filter{msn}</A
 > \
  -<A
 HREF="actions-file.html#FILTER-BLOGSPOT"
->filter-blogspot</A
-> \
- -<A
-HREF="actions-file.html#FILTER-XML-TO-HTML"
->filter-xml-to-html</A
-> \
- -<A
-HREF="actions-file.html#FILTER-HTML-TO-XML"
->filter-html-to-xml</A
+>filter{blogspot}</A
 > \
  -<A
 HREF="actions-file.html#FILTER-NO-PING"
->filter-no-ping</A
-> \
- -<A
-HREF="actions-file.html#FILTER-HIDE-TOR-EXIT-NOTATION"
->filter-hide-tor-exit-notation</A
+>filter{no-ping}</A
 > \
  -<A
 HREF="actions-file.html#FORCE-TEXT-MODE"
@@ -7682,6 +7985,14 @@ HREF="actions-file.html#SEND-VANILLA-WAFER"
  -<A
 HREF="actions-file.html#SEND-WAFER"
 >send-wafer</A
+> \
+ -<A
+HREF="actions-file.html#SERVER-HEADER-FILTER"
+>server-header-filter{xml-to-html}</A
+> \
+ -<A
+HREF="actions-file.html#SERVER-HEADER-FILTER"
+>server-header-filter{html-to-xml}</A
 > \
  +<A
 HREF="actions-file.html#SESSION-COOKIES-ONLY"
@@ -8200,7 +8511,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4206"
+NAME="AEN4374"
 ></A
 >8.7.2. user.action</H3
 ><P
@@ -8427,7 +8738,7 @@ CLASS="SCREEN"
 HREF="actions-file.html#BLOCK"
 >block</A
 > }
- www.example.com/nasty-ads/sponsor.gif
+ www.example.com/nasty-ads/sponsor\.gif
  another.popular.site.net/more/junk/here/</PRE
 ></TD
 ></TR

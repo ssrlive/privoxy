@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.6 User Manual"
+TITLE="Privoxy 3.0.7 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Privoxy Configuration"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.6 User Manual</TH
+>Privoxy 3.0.7 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -627,9 +627,59 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="TEMPLDIR"
+></A
+>7.2.2. templdir</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>An alternative directory where the templates are loaded from</P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Path name</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>unset</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>The templates are assumed to be located in confdir/template.</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Privoxy's original templates are usually overwritten
+    with each update. Use this option to relocate customized templates
+    that should be kept. Note that you might be missing new features
+    if you use outdated templates.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="LOGDIR"
 ></A
->7.2.2. logdir</H4
+>7.2.3. logdir</H4
 ><P
 ></P
 ><DIV
@@ -705,7 +755,7 @@ CLASS="SECT3"
 ><A
 NAME="ACTIONSFILE"
 ></A
->7.2.3. actionsfile</H4
+>7.2.4. actionsfile</H4
 ><A
 NAME="DEFAULT.ACTION"
 ></A
@@ -734,13 +784,10 @@ HREF="actions-file.html"
 >Type of value:</DT
 ><DD
 ><P
->File name, relative to <TT
+>Complete file name, relative to <TT
 CLASS="LITERAL"
 >confdir</TT
->, without the <TT
-CLASS="LITERAL"
->.action</TT
-> suffix</P
+></P
 ></DD
 ><DT
 >Default values:</DT
@@ -754,7 +801,7 @@ BORDER="0"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;standard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Internal&nbsp;purposes,&nbsp;no&nbsp;editing&nbsp;recommended</P
+>&nbsp;&nbsp;standard.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Internal&nbsp;purposes,&nbsp;no&nbsp;editing&nbsp;recommended</P
 >
     </TD
 ></TR
@@ -762,7 +809,7 @@ CLASS="LITERALLAYOUT"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Main&nbsp;actions&nbsp;file</P
+>&nbsp;&nbsp;default.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Main&nbsp;actions&nbsp;file</P
 >
     </TD
 ></TR
@@ -770,7 +817,7 @@ CLASS="LITERALLAYOUT"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;user&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;User&nbsp;customizations</P
+>&nbsp;&nbsp;user.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;User&nbsp;customizations</P
 >
     </TD
 ></TR
@@ -783,7 +830,7 @@ CLASS="LITERALLAYOUT"
 >Effect if unset:</DT
 ><DD
 ><P
->    No actions are taken at all. Simple neutral proxying. 
+>    No actions are taken at all. More or less neutral proxying. 
    </P
 ></DD
 ><DT
@@ -818,6 +865,14 @@ CLASS="APPLICATION"
 > without at 
     least one actions file.
    </P
+><P
+>    Note that since Privoxy 3.0.7, the complete filename, including the <SPAN
+CLASS="QUOTE"
+>".action"</SPAN
+>
+    extension has to be specified.  The syntax change was necessary to be consistent
+    with the other file options and to allow previously forbidden characters.
+   </P
 ></DD
 ></DL
 ></DIV
@@ -829,7 +884,7 @@ CLASS="SECT3"
 ><A
 NAME="FILTERFILE"
 ></A
->7.2.4. filterfile</H4
+>7.2.5. filterfile</H4
 ><A
 NAME="DEFAULT.FILTER"
 ></A
@@ -967,7 +1022,7 @@ CLASS="SECT3"
 ><A
 NAME="LOGFILE"
 ></A
->7.2.5. logfile</H4
+>7.2.6. logfile</H4
 ><P
 ></P
 ><DIV
@@ -1072,7 +1127,7 @@ CLASS="SECT3"
 ><A
 NAME="JARFILE"
 ></A
->7.2.6. jarfile</H4
+>7.2.7. jarfile</H4
 ><P
 ></P
 ><DIV
@@ -1134,7 +1189,7 @@ CLASS="SECT3"
 ><A
 NAME="TRUSTFILE"
 ></A
->7.2.7. trustfile</H4
+>7.2.8. trustfile</H4
 ><P
 ></P
 ><DIV
@@ -1364,10 +1419,10 @@ CLASS="PROGRAMLISTING"
   debug         2 # show each connection status
   debug         4 # show I/O status
   debug         8 # show header parsing
-  debug        16 # log all data into the logfile
+  debug        16 # log all data written to the network into the logfile
   debug        32 # debug force feature
-  debug        64 # debug regular expression filter
-  debug       128 # debug fast redirects
+  debug        64 # debug regular expression filters
+  debug       128 # debug redirects
   debug       256 # debug GIF de-animation
   debug       512 # Common Log Format
   debug      1024 # debug kill pop-ups
@@ -1407,11 +1462,11 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >fatal</I
 ></SPAN
-> errors (i.e. ones which crash 
+> errors (i.e. ones which causes 
     <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->) is always on and cannot be disabled.
+> to exit) is always on and cannot be disabled.
    </P
 ><P
 >    If you want to use CLF (Common Log Format), you should set <SPAN
@@ -1425,6 +1480,17 @@ CLASS="EMPHASIS"
 >ONLY</I
 ></SPAN
 > and not enable anything else.
+   </P
+><P
+>    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> has a hard-coded limit for the
+    length of log messages. If it's reached, messages are logged truncated
+    and marked with <SPAN
+CLASS="QUOTE"
+>"... [too long, truncated]"</SPAN
+>.
    </P
 ></DD
 ></DL
@@ -1699,8 +1765,8 @@ CLASS="APPLICATION"
     <SPAN
 CLASS="QUOTE"
 >"toggled off"</SPAN
-> mode, i.e. behave like a normal, content-neutral
-    proxy where all ad blocking, filtering, etc are disabled. See
+> mode, i.e. mostly behave like a normal,
+    content-neutral proxy where all ad blocking, filtering, etc are disabled. See
     <TT
 CLASS="LITERAL"
 >enable-remote-toggle</TT
@@ -1774,7 +1840,7 @@ TARGET="_top"
 >    When toggled off, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> acts like a normal,
+> mostly acts like a normal,
     content-neutral proxy, i.e. it acts as if none of the actions applied to
     any URL.
    </P
@@ -1983,9 +2049,134 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="ENFORCE-BLOCKS"
+></A
+>7.4.6. enforce-blocks</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether the user is allowed to ignore blocks and can <SPAN
+CLASS="QUOTE"
+>"go there anyway"</SPAN
+>.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>0 or 1</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>0</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Blocks are not enforced.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is mainly used to block and filter
+    requests as a service to the user, for example to block ads and other
+    junk that clogs the pipes. <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> configuration
+    isn't perfect and sometimes innocent pages are blocked. In this situation it
+    makes sense to allow the user to enforce the request and have
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> ignore the block.
+   </P
+><P
+>    In the default configuration <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+    <SPAN
+CLASS="QUOTE"
+>"Blocked"</SPAN
+> page contains a <SPAN
+CLASS="QUOTE"
+>"go there anyway"</SPAN
+>
+    link to adds a special string (the force prefix) to the request URL.
+    If that link is used, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will
+    detect the force prefix, remove it again and let the request pass.
+   </P
+><P
+>    Of course <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can also be used to enforce
+    a network policy. In that case the user obviously should not be able to
+    bypass any blocks, and that's what the <SPAN
+CLASS="QUOTE"
+>"enforce-blocks"</SPAN
+>
+    option is for. If it's enabled, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> hides
+    the <SPAN
+CLASS="QUOTE"
+>"go there anyway"</SPAN
+> link. If the user adds the force
+    prefix by hand, it will not be accepted and the circumvention attempt
+    is logged.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    enforce-blocks 1
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="ACLS"
 ></A
->7.4.6. ACLs: permit-access and deny-access</H4
+>7.4.7. ACLs: permit-access and deny-access</H4
 ><A
 NAME="PERMIT-ACCESS"
 ></A
@@ -2119,11 +2310,11 @@ CLASS="EMPHASIS"
    </P
 ><P
 >    Multiple ACL lines are OK.
-    If any ACLs are specified, then the <SPAN
+    If any ACLs are specified, <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->
-    talks only to IP addresses that match at least one <TT
+> only talks
+    to IP addresses that match at least one <TT
 CLASS="LITERAL"
 >permit-access</TT
 > line
@@ -2181,7 +2372,8 @@ CLASS="QUOTE"
    </P
 ><P
 >    Denying access to particular sites by ACL may have undesired side effects
-    if the site in question is hosted on a machine which also hosts other sites.
+    if the site in question is hosted on a machine which also hosts other sites
+    (most sites are).
    </P
 ></DD
 ><DT
@@ -2227,7 +2419,7 @@ CLASS="SCREEN"
    </P
 ><P
 >    Allow any host on the same class C subnet as www.privoxy.org access to
-    nothing but www.example.com:
+    nothing but www.example.com (or other domains hosted on the same system):
    </P
 ><P
 >    <TABLE
@@ -2246,7 +2438,8 @@ CLASS="SCREEN"
    </P
 ><P
 >    Allow access from any host on the 26-bit subnet 192.168.45.64 to anywhere,
-    with the exception that 192.168.45.73 may not access www.dirty-stuff.example.com:
+    with the exception that 192.168.45.73 may not access the IP address behind
+    www.dirty-stuff.example.com:
    </P
 ><P
 >    <TABLE
@@ -2275,7 +2468,7 @@ CLASS="SECT3"
 ><A
 NAME="BUFFER-LIMIT"
 ></A
->7.4.7. buffer-limit</H4
+>7.4.8. buffer-limit</H4
 ><P
 ></P
 ><DIV
@@ -2365,15 +2558,25 @@ NAME="FORWARDING"
 >7.5. Forwarding</H2
 ><P
 > This feature allows routing of HTTP requests through a chain of
- multiple proxies.
- It can be used to better protect privacy and confidentiality when
- accessing specific domains by routing requests to those domains
- through an anonymous public proxy. Or to use a caching proxy to speed up browsing. Or chaining to a parent
- proxy may be necessary because the machine that <SPAN
+ multiple proxies.</P
+><P
+> Forwarding can be used to chain Privoxy with a caching proxy to speed
+ up browsing. Using a parent proxy may also be necessary if the machine
+ that <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
+> runs on has no direct Internet access.</P
+><P
+> Note that parent proxies can severely decrease your privacy level.
+ For example a parent proxy could add your IP address to the request
+ headers and if it's a caching proxy it may add the <SPAN
+CLASS="QUOTE"
+>"Etag"</SPAN
 >
- runs on has no direct Internet access.</P
+ header to revalidation requests again, even though you configured Privoxy
+ to remove it. It may also ignore Privoxy's header time randomization and use the
+ original values which could be used by the server as cookie replacement
+ to track your steps between visits.</P
 ><P
 > Also specified here are SOCKS proxies. <SPAN
 CLASS="APPLICATION"
@@ -2504,7 +2707,7 @@ CLASS="QUOTE"
 >Examples:</DT
 ><DD
 ><P
->    Everything goes to an example anonymizing proxy, except SSL on port 443 (which it doesn't handle):
+>    Everything goes to an example parent proxy, except SSL on port 443 (which it doesn't handle):
    </P
 ><P
 >    <TABLE
@@ -2515,7 +2718,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  forward   /      anon-proxy.example.org:8080
+>  forward   /      parent-proxy.example.org:8080
   forward   :443   .</PRE
 ></TD
 ></TR
@@ -2569,7 +2772,7 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    Through which SOCKS proxy (and to which parent HTTP proxy) specific requests should be routed.
+>    Through which SOCKS proxy (and optionally to which parent HTTP proxy) specific requests should be routed.
    </P
 ></DD
 ><DT
@@ -3021,7 +3224,7 @@ CLASS="EMPHASIS"
 >Effect if unset:</DT
 ><DD
 ><P
->    Forwarded connections are treated like direct connections and no retry attempts are made.
+>    Connections forwarded through other proxies are treated like direct connections and no retry attempts are made.
    </P
 ></DD
 ><DT
@@ -3034,10 +3237,20 @@ CLASS="REPLACEABLE"
 >forwarded-connect-retries</I
 ></TT
 > is mainly interesting
-    for socks4a connections, where Privoxy can't detect why the connections failed.
+    for socks4a connections, where <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can't detect why the connections failed.
     The connection might have failed because of a DNS timeout in which case a retry makes sense,
     but it might also have failed because the server doesn't exist or isn't reachable. In this
     case the retry will just delay the appearance of Privoxy's error message.
+   </P
+><P
+>    Note that in the context of this option, <SPAN
+CLASS="QUOTE"
+>"forwarded connections"</SPAN
+> includes all connections
+    that Privoxy forwards through other proxies. This option is not limited to the HTTP CONNECT method.
    </P
 ><P
 >    Only use this option, if you are getting many forwarding related error messages,
@@ -3050,6 +3263,189 @@ CLASS="REPLACEABLE"
 ><DD
 ><P
 >    forwarded-connect-retries 1
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="ACCEPT-INTERCEPTED-REQUESTS"
+></A
+>7.5.5. accept-intercepted-requests</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether intercepted requests should be treated as valid.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>0 or 1</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>0</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Only proxy requests are accepted, intercepted requests are treated as invalid.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    If you don't trust your clients and want to force them
+    to use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, enable this
+    option and configure your packet filter to redirect outgoing
+    HTTP connections into <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>. 
+   </P
+><P
+>    Make sure that <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> own requests
+    aren't redirected as well. Additionally take care that
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can't intentionally connect
+    to itself, otherwise you could run into redirection loops if
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> listening port is reachable
+    by the outside or an attacker has access to the pages you visit.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    accept-intercepted-requests 1
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="SPLIT-LARGE-FORMS"
+></A
+>7.5.6. split-large-forms</H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether the CGI interface should stay compatible with broken HTTP clients.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>0 or 1</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>0</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    The CGI form generate long GET URLs.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> CGI forms can lead to
+    rather long URLs. This isn't a problem as far as the HTTP
+    standard is concerned, but it can confuse clients with arbitrary
+    URL lenght limitations.
+   </P
+><P
+>    Enabling split-large-forms causes <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    to devide big forms into smaller ones to keep the URL length down.
+    It makes editing a lot less convenient and you can no longer
+    submit all changes at once, but at least it works around this
+    browser bug.
+   </P
+><P
+>    If you don't notice any editing problems, there is no reason
+    to enable this option, but if one of the submit buttons appears
+    to be broken, you should give it a try.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    split-large-forms 1
    </P
 ></DD
 ></DL

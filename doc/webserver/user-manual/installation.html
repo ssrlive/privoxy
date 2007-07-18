@@ -7,7 +7,7 @@ NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
 "><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.6 User Manual"
+TITLE="Privoxy 3.0.7 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Introduction"
@@ -39,7 +39,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.6 User Manual</TH
+>Privoxy 3.0.7 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -126,7 +126,7 @@ NAME="INSTALLATION-PACK-RPM"
 ><P
 > RPMs can be installed with <TT
 CLASS="LITERAL"
->rpm -Uvh privoxy-3.0.6-1.rpm</TT
+>rpm -Uvh privoxy-3.0.7-1.rpm</TT
 >,
  and will use <TT
 CLASS="FILENAME"
@@ -157,7 +157,7 @@ CLASS="COMMAND"
 > If you have problems with failed dependencies, try rebuilding the SRC RPM: 
  <TT
 CLASS="LITERAL"
->rpm --rebuild privoxy-3.0.6-1.src.rpm</TT
+>rpm --rebuild privoxy-3.0.7-1.src.rpm</TT
 >. This 
  will use your locally installed libraries and RPM version. </P
 ><P
@@ -307,7 +307,7 @@ CLASS="SECT3"
 ><A
 NAME="INSTALLATION-PACK-BINTGZ"
 ></A
->2.1.4. Solaris, NetBSD, FreeBSD, HP-UX</H3
+>2.1.4. Solaris, NetBSD, HP-UX</H3
 ><P
 > Create a new directory, <TT
 CLASS="LITERAL"
@@ -443,9 +443,39 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
+NAME="INSTALLATION-TBZ"
+></A
+>2.1.8. FreeBSD</H3
+><P
+> Privoxy is part of FreeBSD's Ports Collection, you can build and install
+ it with <TT
+CLASS="LITERAL"
+>cd /usr/ports/www/privoxy; make install clean</TT
+>.</P
+><P
+> If you don't use the ports, you can fetch and install
+ the package with <TT
+CLASS="LITERAL"
+>pkg_add -r privoxy</TT
+>.</P
+><P
+> The port skeleton and the package can also be downloaded from the
+ <A
+HREF="https://sourceforge.net/project/showfiles.php?group_id=11118"
+TARGET="_top"
+>File Release
+ Page</A
+>, but if you're interested in stable releases only you don't
+ gain anything by using them.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
 NAME="INSTALLATTION-GENTOO"
 ></A
->2.1.8. Gentoo</H3
+>2.1.9. Gentoo</H3
 ><P
 > Gentoo source packages (Ebuilds) for <SPAN
 CLASS="APPLICATION"
@@ -478,7 +508,7 @@ CLASS="FILENAME"
 >, the 
  documentation is in <TT
 CLASS="FILENAME"
->/usr/share/doc/privoxy-3.0.6</TT
+>/usr/share/doc/privoxy-3.0.7</TT
 >
  and the Log directory is in <TT
 CLASS="FILENAME"
@@ -547,8 +577,8 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-> tar xzvf privoxy-3.0.6-src* [.tgz or .tar.gz]
- cd privoxy-3.0.6</PRE
+> tar xzvf privoxy-3.0.7-src* [.tgz or .tar.gz]
+ cd privoxy-3.0.7</PRE
 ></TD
 ></TR
 ></TABLE
