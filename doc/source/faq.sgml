@@ -26,9 +26,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.23 2006/10/21 22:19:52 hal9 Exp $
+ $Id: faq.sgml,v 2.24 2006/11/14 01:57:46 hal9 Exp $
 
- Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
+ Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.23 2006/10/21 22:19:52 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.24 2006/11/14 01:57:46 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2124,6 +2124,18 @@ and related issues?</title>
 </para>
 </sect2>
 
+<sect2 renderas="sect3" id="valid">
+<title>Does Privoxy produce <quote>valid</quote> HTML (or XHTML)?</title>
+
+<para>
+ Privoxy generates HTML in both its own <quote>templates</quote>, and possibly
+ whenever there are text substitutions via a &my-app; filter. While this
+ should always conform to the HTML 4.01 specifications, it has not been
+ validated against this or any other standard. 
+</para>
+</sect2>
+
+
 </sect1>
 
 
@@ -2748,6 +2760,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.24  2006/11/14 01:57:46  hal9
+Dump all docs prior to 3.0.6 release. Various minor changes to faq and user
+manual.
+
 Revision 2.23  2006/10/21 22:19:52  hal9
 Two new FAQs, a rewrite or two, and some touch ups.
 
