@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.42 2007/05/17 15:55:36 fabiankeil Exp $
+#  $Id: default.filter,v 1.43 2007/06/01 14:17:04 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -208,8 +208,8 @@ s+([^'"]\s*</html>)(?!\s*(\\n|'|"))+$1<script>function PrivoxyWindowOpen(a, b, c
 FILTER: all-popups Kill all popups in JavaScript and HTML
 
 s@((\W\s*)(?:map)?(window|this|parent)\.?)open\s*\\?\(@$1concat(@ig  # JavaScript
-s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ notarget/ig        # HTML
-
+#s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ notarget/ig        # HTML
+s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ /ig        # (X)HTML
 
 ##################################################################################
 #
@@ -738,6 +738,9 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.43  2007/06/01 14:17:04  fabiankeil
+#     Mention possible delimiter conflicts with variables in dynamic pcrs commands.
+#
 #     Revision 1.42  2007/05/17 15:55:36  fabiankeil
 #     Undo an improperly tested last-minute change
 #     and turn "text-requests" back into "css-requests".
