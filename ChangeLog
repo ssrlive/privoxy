@@ -9,7 +9,8 @@ ChangeLog for Privoxy
 - New config option "split-large-forms" to work
   around a browser bug that caused IE6 and IE7 to ignore
   the Submit button on the edit-actions-for-url CGI page.
-- Requests for Privoxy's CGI pages can be blocked, redirected
+- New config option "allow-cgi-request-crunching" to allow
+  requests for Privoxy's CGI pages to be blocked, redirected
   or (un)trusted like ordinary requests.
 - Empty filter files no longer interrupt the filtering process
   prematurely and are correctly listed on the show-status CGI page. 
