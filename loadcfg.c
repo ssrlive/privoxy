@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.63 2007/04/09 18:11:36 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.64 2007/05/21 10:44:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,15 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.63 2007/04/09 18:11:36 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.64  2007/05/21 10:44:08  fabiankeil
+ *    - Use strlcpy() instead of strcpy().
+ *    - Stop treating actions files special. Expect a complete file name
+ *      (with or without path) like it's done for the rest of the files.
+ *      Closes FR#588084.
+ *    - Remove an unnecessary temporary memory allocation.
+ *    - Don't log anything to the console when running as
+ *      daemon and no errors occurred.
+ *
  *    Revision 1.63  2007/04/09 18:11:36  fabiankeil
  *    Don't mistake VC++'s _snprintf() for a snprintf() replacement.
  *
@@ -486,6 +495,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_actions_file                1196306641ul /* "actionsfile" */
 #define hash_accept_intercepted_requests 1513024973ul /* "accept-intercepted-requests" */
 #define hash_admin_address               4112573064ul /* "admin-address" */
+#define hash_allow_cgi_request_crunching  258915987ul /* "allow-cgi-request-crunching" */
 #define hash_buffer_limit                1881726070ul /* "buffer-limit */
 #define hash_confdir                        1978389ul /* "confdir" */
 #define hash_debug                            78263ul /* "debug" */
@@ -816,6 +826,20 @@ struct configuration_spec * load_config(void)
          case hash_admin_address :
             freez(config->admin_address);
             config->admin_address = strdup(arg);
+            continue;
+
+/* *************************************************************************
+ * allow-cgi-request-crunching
+ * *************************************************************************/
+         case hash_allow_cgi_request_crunching:
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_CGI_CRUNCHING;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_CGI_CRUNCHING;
+            }
             continue;
 
 /* *************************************************************************

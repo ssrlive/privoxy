@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.138 2007/06/03 18:45:18 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.139 2007/07/14 07:46:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,14 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.138 2007/06/03 18:45:18 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.139  2007/07/14 07:46:41  fabiankeil
+ *    - Allow to rewrite the request destination behind the client's back.
+ *    - Turn the weird-looking unconditional for loop that
+ *      reads the client request into a conditional while loop.
+ *      Move the stuff that only runs once out of the loop.
+ *    - Move parts of chat(), server_content_type() and the
+ *      necessary stuff to fix BR#1750917 into get_filter_function().
+ *
  *    Revision 1.138  2007/06/03 18:45:18  fabiankeil
  *    Temporary workaround for BR#1730105.
  *
@@ -1586,6 +1594,19 @@ int crunch_response_triggered(struct client_state *csp, const struct cruncher cr
 {
    struct http_response *rsp = NULL;
    const struct cruncher *c;
+
+   /*
+    * If CGI request crunching is disabled,
+    * check the CGI dispatcher out of order to
+    * prevent unintentional blocks or redirects. 
+    */
+   if (!(csp->config->feature_flags & RUNTIME_FEATURE_CGI_CRUNCHING)
+       && (NULL != (rsp = dispatch_cgi(csp))))
+   {
+      /* Deliver, log and free the interception response. */
+      send_crunch_response(csp, rsp);
+      return TRUE;
+   }
 
    for (c = crunchers; c->cruncher != NULL; c++)
    {
