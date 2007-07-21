@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.56 2007/05/21 10:50:35 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.57 2007/06/01 16:53:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,12 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.56 2007/05/21 10:50:35 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.57  2007/06/01 16:53:05  fabiankeil
+ *    Adjust cgi_show_url_info() to show what forward-override{}
+ *    would do with the requested URL (instead of showing how the
+ *    request for the CGI page would be forwarded if it wasn't a
+ *    CGI request).
+ *
  *    Revision 1.56  2007/05/21 10:50:35  fabiankeil
  *    - Use strlcpy() instead of strcpy().
  *    - Stop treating actions files special. Expect a complete file name
@@ -1479,6 +1485,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
          err = map(exports, "matches", 1, "<b>[Invalid URL specified!]</b>" , 1);
          if (!err) err = map(exports, "final", 1, lookup(exports, "default"), 1);
+         if (!err) err = map_block_killer(exports, "valid-url");
 
          free_current_action(action);
          free_http_request(url_to_query);
@@ -1493,7 +1500,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
       }
 
       /*
-       * We have a warning about SSL paths.  Hide it for insecure sites.
+       * We have a warning about SSL paths.  Hide it for unencrypted sites.
        */
       if (!url_to_query->ssl)
       {
