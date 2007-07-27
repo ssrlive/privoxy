@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.31 2007/06/02 14:01:37 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.32 2007/06/07 12:36:22 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.31 2007/06/02 14:01:37 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.32 2007/06/07 12:36:22 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2867,6 +2867,7 @@ for details.
     create your own.
    </para>
 
+  </listitem>
  </varlistentry>
 
  <varlistentry>
@@ -2940,7 +2941,7 @@ for details.
     Client-header taggers are the first actions that are executed
     and their tags can be used to control every other action.
    </para>
-
+ </listitem>
  </varlistentry>
 
  <varlistentry>
@@ -4882,7 +4883,10 @@ new action
     (Must be just a silly MS goof, I'm sure :-).
    </para>
    <para>
-    This action is scheduled for improvement.
+     More information on known user-agent strings can be found at 
+     <ulink url="http://www.user-agents.org/">http://www.user-agents.org/</ulink>
+     and 
+     <ulink url="http://en.wikipedia.org/wiki/User_agent">http://en.wikipedia.org/wiki/User_agent</ulink>.
    </para>
    </listitem>
  </varlistentry>
@@ -4962,8 +4966,6 @@ new action
  </varlistentry>
 </variablelist>
 </sect3>
-
-
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -5640,6 +5642,7 @@ my-internal-testing-server.void</screen>
     to learn which server-header filters are available by default, and how to
     create your own.
    </para>
+ </listitem>
  </varlistentry>
 
  <varlistentry>
@@ -5724,6 +5727,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
     doesn't prevent the request from showing up in the server's log file.
    </para>
 
+ </listitem>
  </varlistentry>
 
  <varlistentry>
@@ -8928,6 +8932,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.32  2007/06/07 12:36:22  fabiankeil
+ Apply Roland's 29_usermanual.dpatch to fix a bunch
+ of syntax errors I collected over the last months.
+
  Revision 2.31  2007/06/02 14:01:37  fabiankeil
  Start to document forward-override{}.
 
