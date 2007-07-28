@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.19 2007/01/25 14:09:45 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.20 2007/05/14 10:23:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,11 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.19 2007/01/25 14:09:45 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.20  2007/05/14 10:23:48  fabiankeil
+ *    - Use strlcpy() instead of strcpy().
+ *    - Use the same buffer for socks requests and socks responses.
+ *    - Fix bogus warning about web_server_addr being used uninitialized.
+ *
  *    Revision 1.19  2007/01/25 14:09:45  fabiankeil
  *    - Save errors in socks4_connect() to csp->error_message.
  *    - Silence some gcc43 warnings, hopefully the right way.
@@ -180,6 +185,7 @@ struct socks_op {
    unsigned char dstport[2];  /* destination port */
    unsigned char dstip[4];    /* destination address */
    char userid;               /* first byte of userid */
+   char padding[3];           /* make sure sizeof(struct socks_op) is endian-independent. */
    /* more bytes of the userid follow, terminated by a NULL */
 };
 
@@ -312,7 +318,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    strlcpy(&(c->userid), socks_userid, sizeof(buf) - sizeof(struct socks_op));
 
-   csiz = sizeof(*c) + sizeof(socks_userid) - 1;
+   csiz = sizeof(*c) + sizeof(socks_userid) - sizeof(c->userid) - sizeof(c->padding);
 
    switch (fwd->type)
    {
@@ -343,11 +349,12 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
              * size of socks_op, plus the length of the userid plus
              * its \0 byte (which we don't have to add because the
              * first byte of the userid is counted twice as it's also
-             * part of sock_op), plus the length of the target_host
+             * part of sock_op) minus the padding bytes (which are part
+             * of the userid as well), plus the length of the target_host
              * (which is stored csiz bytes after the beginning of the buffer),
              * plus another \0 byte.
              */
-            assert(n == sizeof(struct socks_op) + strlen(&(c->userid)) + strlen(buf + csiz) + 1);
+            assert(n == sizeof(struct socks_op) + strlen(&(c->userid)) - sizeof(c->padding) + strlen(buf + csiz) + 1);
             csiz = n;
          }
          break;
