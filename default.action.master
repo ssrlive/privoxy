@@ -708,7 +708,8 @@ support./(.*/)?track
 /(.*/)?ad(se?rv|click|stream|image|log|farm|script)
 #MASTER# PROBLEM URL: http://www.torrentportal.com/topad.html
 #MASTER# REMARKS: Action tracker 1637648 and a bit of imagination. Added 2007-01-20.
-/.*(top|bottom|left|right)_?ad
+#MASTER# REMARKS: Added "text" 20070730 as per http://www.pcworld.com/textad?Keywords=System Resources Tune-Up.&type=pcworld_downloads_search&count=3&ord=906010128&serveUrl=http%3A%2F%2Fwww.pcworld.com%2Fdownloads%2Ffile%2Ffid%2C7661-order%2C1-page%2C1-c%2Csystemresourcestuneup%2Fdescription.html Adam Piggott
+/.*(top|bottom|left|right|text)_?ad
 
 #############################################################################
 # Site-specific block patterns;
@@ -1385,9 +1386,6 @@ lads.myspace.com
 switch.atdmt.com/action/
 #MASTER# UNBLOCK-REFERRER: http://www.parcelforce.com/portal/pw/track?catId=7500082
 .parcelforce.com/.*track
-#MASTER# UNBLOCK-REFERRER: redirect from http://go.microsoft.com/fwlink?linkid=51093
-#MASTER# REMARKS: Actionsfile feedback item #1757121 2007-07-19
-.microsoft.com/.*/adschema/
 
 #############################################################################
 # Site-specific special rules:
