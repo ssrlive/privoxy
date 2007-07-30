@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.16 2007/02/13 13:59:24 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.17 2007/04/15 16:39:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,11 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.16 2007/02/13 13:59:24 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.17  2007/04/15 16:39:21  fabiankeil
+ *    Introduce tags as alternative way to specify which
+ *    actions apply to a request. At the moment tags can be
+ *    created based on client and server headers.
+ *
  *    Revision 1.16  2007/02/13 13:59:24  fabiankeil
  *    Remove redundant log message.
  *
@@ -459,6 +464,61 @@ jb_err parse_http_url(const char * url,
 
 /*********************************************************************
  *
+ * Function    :  unknown_method
+ *
+ * Description :  Checks whether a method is unknown.
+ *
+ * Parameters  :
+ *          1  :  method = points to a http method
+ *
+ * Returns     :  TRUE if it's unknown, FALSE otherwise.
+ *
+ *********************************************************************/
+static int unknown_method(const char *method)
+{
+   static const char *known_http_methods[] = {
+      /* Basic HTTP request type */
+      "GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT",
+      /* webDAV extensions (RFC2518) */
+      "PROPFIND", "PROPPATCH", "MOVE", "COPY", "MKCOL", "LOCK", "UNLOCK",
+      /*
+       * Microsoft webDAV extension for Exchange 2000.  See:
+       * http://lists.w3.org/Archives/Public/w3c-dist-auth/2002JanMar/0001.html
+       * http://msdn.microsoft.com/library/en-us/wss/wss/_webdav_methods.asp
+       */ 
+      "BCOPY", "BMOVE", "BDELETE", "BPROPFIND", "BPROPPATCH",
+      /*
+       * Another Microsoft webDAV extension for Exchange 2000.  See:
+       * http://systems.cs.colorado.edu/grunwald/MobileComputing/Papers/draft-cohen-gena-p-base-00.txt
+       * http://lists.w3.org/Archives/Public/w3c-dist-auth/2002JanMar/0001.html
+       * http://msdn.microsoft.com/library/en-us/wss/wss/_webdav_methods.asp
+       */ 
+      "SUBSCRIBE", "UNSUBSCRIBE", "NOTIFY", "POLL",
+      /*
+       * Yet another WebDAV extension, this time for
+       * Web Distributed Authoring and Versioning (RFC3253)
+       */
+      "VERSION-CONTROL", "REPORT", "CHECKOUT", "CHECKIN", "UNCHECKOUT",
+      "MKWORKSPACE", "UPDATE", "LABEL", "MERGE", "BASELINE-CONTROL", "MKACTIVITY",
+      NULL
+   };
+   int i;
+
+   for (i = 0; NULL != known_http_methods[i]; i++)
+   {
+      if (0 == strcmpic(method, known_http_methods[i]))
+      {
+         return FALSE;
+      }
+   }
+
+   return TRUE;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  parse_http_request
  *
  * Description :  Parse out the host and port from the URL.  Find the
@@ -480,7 +540,7 @@ jb_err parse_http_request(const char *req,
                           const struct client_state *csp)
 {
    char *buf;
-   char *v[10];
+   char *v[10]; /* XXX: Why 10? We should only need three. */
    int n;
    jb_err err;
    int is_connect = 0;
@@ -500,74 +560,25 @@ jb_err parse_http_request(const char *req,
       return JB_ERR_PARSE;
    }
 
-   /* this could be a CONNECT request */
-   if (strcmpic(v[0], "connect") == 0)
+   /*
+    * Fail in case of unknown methods
+    * which we might not handle correctly.
+    *
+    * XXX: There should be a config option
+    * to forward requests with unknown methods
+    * anyway. Most of them don't need special
+    * steps.
+    */
+   if (unknown_method(v[0]))
    {
-      /* Secure */
-      is_connect = 1;
-   }
-   /* or it could be any other basic HTTP request type */
-   else if ((0 == strcmpic(v[0], "get"))
-         || (0 == strcmpic(v[0], "head"))
-         || (0 == strcmpic(v[0], "post"))
-         || (0 == strcmpic(v[0], "put"))
-         || (0 == strcmpic(v[0], "delete"))
-         || (0 == strcmpic(v[0], "options"))
-         || (0 == strcmpic(v[0], "trace"))
- 
-         /* or a webDAV extension (RFC2518) */
-         || (0 == strcmpic(v[0], "propfind"))
-         || (0 == strcmpic(v[0], "proppatch"))
-         || (0 == strcmpic(v[0], "move"))
-         || (0 == strcmpic(v[0], "copy"))
-         || (0 == strcmpic(v[0], "mkcol"))
-         || (0 == strcmpic(v[0], "lock"))
-         || (0 == strcmpic(v[0], "unlock"))
-
-         /* Or a Microsoft webDAV extension for Exchange 2000.  See: */
-         /*   http://lists.w3.org/Archives/Public/w3c-dist-auth/2002JanMar/0001.html */
-         /*   http://msdn.microsoft.com/library/en-us/wss/wss/_webdav_methods.asp */ 
-         || (0 == strcmpic(v[0], "bcopy"))
-         || (0 == strcmpic(v[0], "bmove"))
-         || (0 == strcmpic(v[0], "bdelete"))
-         || (0 == strcmpic(v[0], "bpropfind"))
-         || (0 == strcmpic(v[0], "bproppatch"))
-
-         /* Or another Microsoft webDAV extension for Exchange 2000.  See: */
-         /*   http://systems.cs.colorado.edu/grunwald/MobileComputing/Papers/draft-cohen-gena-p-base-00.txt */
-         /*   http://lists.w3.org/Archives/Public/w3c-dist-auth/2002JanMar/0001.html */
-         /*   http://msdn.microsoft.com/library/en-us/wss/wss/_webdav_methods.asp */ 
-         || (0 == strcmpic(v[0], "subscribe"))
-         || (0 == strcmpic(v[0], "unsubscribe"))
-         || (0 == strcmpic(v[0], "notify"))
-         || (0 == strcmpic(v[0], "poll"))
-
-         /*
-          * Or yet another WebDAV extension, this time for
-          * Web Distributed Authoring and Versioning (RFC3253)
-          */
-         || (0 == strcmpic(v[0], "version-control"))
-         || (0 == strcmpic(v[0], "report"))
-         || (0 == strcmpic(v[0], "checkout"))
-         || (0 == strcmpic(v[0], "checkin"))
-         || (0 == strcmpic(v[0], "uncheckout"))
-         || (0 == strcmpic(v[0], "mkworkspace"))
-         || (0 == strcmpic(v[0], "update"))
-         || (0 == strcmpic(v[0], "label"))
-         || (0 == strcmpic(v[0], "merge"))
-         || (0 == strcmpic(v[0], "baseline-control"))
-         || (0 == strcmpic(v[0], "mkactivity"))
-         )
-   {
-      /* Normal */
-      is_connect = 0;
-   }
-   else
-   {
-      /* Unknown HTTP method */
       log_error(LOG_LEVEL_ERROR, "Unknown HTTP method detected: %s", v[0]);
       free(buf);
       return JB_ERR_PARSE;
+   }
+
+   if (strcmpic(v[0], "CONNECT") == 0)
+   {
+      is_connect = 1;
    }
 
    err = parse_http_url(v[1], http, csp);
