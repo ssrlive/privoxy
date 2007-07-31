@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.85 2007/07/11 11:04:56 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.87 2007/07/30 15:47:11 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1386,6 +1386,9 @@ lads.myspace.com
 switch.atdmt.com/action/
 #MASTER# UNBLOCK-REFERRER: http://www.parcelforce.com/portal/pw/track?catId=7500082
 .parcelforce.com/.*track
+#MASTER# UNBLOCK-REFERRER: redirect from http://go.microsoft.com/fwlink?linkid=51093
+#MASTER# REMARKS: Actionsfile feedback item #1757121 2007-07-19
+.microsoft.com/.*/adschema/
 
 #############################################################################
 # Site-specific special rules:
