@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.87 2007/07/30 15:47:11 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.88 2007/07/31 07:16:08 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -928,8 +928,9 @@ jlinks.industrybrains.com/
 js.adsonar.
 #MASTER# BLOCK-REFERRER: http://news.zdnet.co.uk/software/0,1000000121,39209666,00.htm
 #MASTER# REMARKS: Actionsfile feedback item #1736879 2007-06-13, sponsored
-links
-bwp.zdnet.
+links. 2007-08-02, more hosts using this scheme, broadening scope.
+#bwp.zdnet.
+bwp.
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1206,7 +1207,10 @@ smartad.*.*.*
 /RealMedia/ads/
 #MASTER# BLOCK-REFERRER: http://www.powerdvd.com 12/28/06 per SF tracker
 /top\.php\?d=.*\.[a-z]{2,5}
-
+#MASTER# REMARKS: Actionsfile feedback item #1764161 2007-07-31
+#MASTER# BLOCK-REFERRER: http://www.webster.com/dictionary/revering
+.google.com/afsonline
+  
 #############################################################################
 # Site-specific unblockers:
 #############################################################################
