@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.10 2006/07/18 14:48:45 david__schmidt Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.11 2006/12/28 18:25:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.10 2006/07/18 14:48:45 david__schmi
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.11  2006/12/28 18:25:53  fabiankeil
+ *    Fixed gcc43 compiler warning.
+ *
  *    Revision 1.10  2006/07/18 14:48:45  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -73,7 +76,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.10 2006/07/18 14:48:45 david__schmi
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
+#include "miscutil.h"
 #include "encode.h"
 
 const char encode_h_rcs[] = ENCODE_H_VERSION;
@@ -189,6 +194,7 @@ static const char * const cookie_code_map[256] = {
 char * html_encode(const char *s)
 {
    char * buf;
+   size_t buf_size;
    
    if (s == NULL)
    {
@@ -196,7 +202,8 @@ char * html_encode(const char *s)
    }
 
    /* each input char can expand to at most 6 chars */
-   buf = (char *) malloc((strlen(s) * 6) + 1);
+   buf_size = (strlen(s) * 6) + 1;
+   buf = (char *) malloc(buf_size);
 
    if (buf)
    {
@@ -207,8 +214,9 @@ char * html_encode(const char *s)
          const char * replace_with = html_code_map[(unsigned char) c];
          if(replace_with != NULL)
          {
-            strcpy(p, replace_with);
-            p += strlen(replace_with);
+            const size_t bytes_written = (size_t)(p - buf);
+            assert(bytes_written < buf_size);
+            p += strlcpy(p, replace_with, buf_size - bytes_written);
          }
          else
          {
@@ -219,6 +227,7 @@ char * html_encode(const char *s)
       *p = '\0';
    }
 
+   assert(strlen(buf) < buf_size);
    return(buf);
 }
 
@@ -276,6 +285,7 @@ char * html_encode_and_free_original(char *s)
 char * cookie_encode(const char *s)
 {
    char * buf;
+   size_t buf_size;
 
    if (s == NULL)
    {
@@ -283,7 +293,8 @@ char * cookie_encode(const char *s)
    }
 
    /* each input char can expand to at most 3 chars */
-   buf = (char *) malloc((strlen(s) * 3) + 1);
+   buf_size = (strlen(s) * 3) + 1;
+   buf = (char *) malloc(buf_size);
 
    if (buf)
    {
@@ -294,8 +305,9 @@ char * cookie_encode(const char *s)
          const char * replace_with = cookie_code_map[(unsigned char) c];
          if (replace_with != NULL)
          {
-            strcpy(p, replace_with);
-            p += strlen(replace_with);
+            const size_t bytes_written = (size_t)(p - buf);
+            assert(bytes_written < buf_size);
+            p += strlcpy(p, replace_with, buf_size - bytes_written);
          }
          else
          {
@@ -306,6 +318,7 @@ char * cookie_encode(const char *s)
       *p = '\0';
    }
 
+   assert(strlen(buf) < buf_size);
    return(buf);
 }
 
@@ -328,6 +341,7 @@ char * cookie_encode(const char *s)
 char * url_encode(const char *s)
 {
    char * buf;
+   size_t buf_size;
 
    if (s == NULL)
    {
@@ -335,7 +349,8 @@ char * url_encode(const char *s)
    }
 
    /* each input char can expand to at most 3 chars */
-   buf = (char *) malloc((strlen(s) * 3) + 1);
+   buf_size = (strlen(s) * 3) + 1;
+   buf = (char *) malloc(buf_size);
 
    if (buf)
    {
@@ -346,8 +361,9 @@ char * url_encode(const char *s)
          const char * replace_with = url_code_map[(unsigned char) c];
          if (replace_with != NULL)
          {
-            strcpy(p, replace_with);
-            p += strlen(replace_with);
+            const size_t bytes_written = (size_t)(p - buf);
+            assert(bytes_written < buf_size);
+            p += strlcpy(p, replace_with, buf_size - bytes_written);
          }
          else
          {
@@ -359,6 +375,7 @@ char * url_encode(const char *s)
 
    }
 
+   assert(strlen(buf) < buf_size);
    return(buf);
 }
 
