@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.64 2007/05/21 10:44:08 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.65 2007/07/21 11:51:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.64 2007/05/21 10:44:08 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.65  2007/07/21 11:51:36  fabiankeil
+ *    As Hal noticed, checking dispatch_cgi() as the last cruncher
+ *    looks like a bug if CGI requests are blocked unintentionally,
+ *    so don't do it unless the user enabled the new config option
+ *    "allow-cgi-request-crunching".
+ *
  *    Revision 1.64  2007/05/21 10:44:08  fabiankeil
  *    - Use strlcpy() instead of strcpy().
  *    - Stop treating actions files special. Expect a complete file name
@@ -549,7 +555,7 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
  * Returns     :  N/A
  *
  *********************************************************************/
-void unload_configfile (void * data)
+static void unload_configfile (void * data)
 {
    struct configuration_spec * config = (struct configuration_spec *)data;
    struct forward_spec *cur_fwd = config->forward;
