@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.15 2007/01/03 14:39:19 fabiankeil Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.16 2007/07/14 08:01:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -40,6 +40,9 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.15 2007/01/03 14:39:19 fabian
  *
  * Revisions   :
  *    $Log: deanimate.c,v $
+ *    Revision 1.16  2007/07/14 08:01:58  fabiankeil
+ *    s@failiure@failure@
+ *
  *    Revision 1.15  2007/01/03 14:39:19  fabiankeil
  *    Fix a gcc43 warning and mark the binbuffer
  *    as immutable for buf_getbyte().
@@ -153,7 +156,7 @@ void buf_free(struct binbuffer *buf)
  * Returns     :  0 on success, 1 on failure.
  *
  *********************************************************************/
-int buf_extend(struct binbuffer *buf, size_t length)
+static int buf_extend(struct binbuffer *buf, size_t length)
 {
    char *newbuf;
 
@@ -194,7 +197,7 @@ int buf_extend(struct binbuffer *buf, size_t length)
  * Returns     :  0 on success, 1 on failure.
  *
  *********************************************************************/
-int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
+static int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
 {
 
    /*
@@ -240,7 +243,7 @@ int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
  * Returns     :  The byte on success, or 0 on failure
  *
  *********************************************************************/
-unsigned char buf_getbyte(const struct binbuffer *src, size_t offset)
+static unsigned char buf_getbyte(const struct binbuffer *src, size_t offset)
 {
    if (src->offset + offset < src->size)
    {
@@ -269,7 +272,7 @@ unsigned char buf_getbyte(const struct binbuffer *src, size_t offset)
  * Returns     :  0 on success, or 1 on failure
  *
  *********************************************************************/
-int gif_skip_data_block(struct binbuffer *buf)
+static int gif_skip_data_block(struct binbuffer *buf)
 {
    unsigned char c;
 
@@ -309,7 +312,7 @@ int gif_skip_data_block(struct binbuffer *buf)
  * Returns     :  0 on success, or 1 on failure
  *
  *********************************************************************/
-int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
+static int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
 {
    unsigned char c;
 

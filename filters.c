@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.87 2007/04/30 15:53:10 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.88 2007/06/01 16:41:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,12 @@ const char filters_rcs[] = "$Id: filters.c,v 1.87 2007/04/30 15:53:10 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.88  2007/06/01 16:41:11  fabiankeil
+ *    Add forward-override{} to change the forwarding settings through
+ *    action sections. This is mainly interesting to forward different
+ *    clients differently (for example based on User-Agent or request
+ *    origin).
+ *
  *    Revision 1.87  2007/04/30 15:53:10  fabiankeil
  *    Make sure filters with dynamic jobs actually use them.
  *
@@ -2344,7 +2350,7 @@ void apply_url_actions(struct current_action_spec *action,
  *                Invalid syntax is fatal.
  *
  *********************************************************************/
-const struct forward_spec *get_forward_override_settings(struct client_state *csp)
+static const struct forward_spec *get_forward_override_settings(struct client_state *csp)
 {
    const char *forward_override_line = csp->action->string[ACTION_STRING_FORWARD_OVERRIDE];
    char forward_settings[BUFFER_SIZE];
