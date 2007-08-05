@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.24 2006/11/14 01:57:46 hal9 Exp $
+ $Id: faq.sgml,v 2.25 2007/07/18 11:00:34 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.24 2006/11/14 01:57:46 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.25 2007/07/18 11:00:34 hal9 Exp $</pubdate>
 
 <!--
 
@@ -405,8 +405,8 @@ Privoxy. Why should I use Privoxy at all?</title>
   check every line of every configuration file yourself. You can check every
   last bit of source code should you desire. And even if you can't read code, 
   there should be some comfort in knowing that thousands of other people can, 
-  and do read it. You can build the software from scratch, if you want, so
-  that you know the executable is clean, and that it is
+  and some of them do read it. You can build the software from scratch, if you want,
+  so that you know the executable is clean, and that it is
   <emphasis>yours</emphasis>. In fact, we encourage this level of scrutiny. It
   is one reason we use &my-app; ourselves.
  </para>
@@ -416,7 +416,7 @@ Privoxy. Why should I use Privoxy at all?</title>
 warranty? Registration?</title>
  <para>
   <application>Privoxy</application> is licensed under the <ulink
-  url="http://www.gnu.org/copyleft/gpl.html">GNU General Public License (GPL)</ulink>.
+  url="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License (GPL) version 2</ulink>.
   It is free to use, copy, modify or distribute as you wish under the terms of this
   license.  Please see the <link linkend="copyright">Copyright</link> section for more
   information on the license and copyright. Or the <filename>LICENSE</filename> file 
@@ -434,8 +434,12 @@ warranty? Registration?</title>
 <sect2 renderas="sect3" id="spyware">
 <title>Can Privoxy remove spyware? Adware? Viruses?</title>
 <para>
- No. &my-app; cannot remove anything. It is not a removal tool. It is a
- preventative. &my-app; can help prevent contact from sites that use such
+ No, at least not reliable enough to trust it. &my-app; is not designed to be
+ a malware removal tool and the default configuration doesn't even try to
+ filter out any malware.
+</para>
+<para>
+ &my-app; could help prevent contact from (known) sites that use such
  tactics with appropriate configuration rules, and thus could conceivably
  prevent contamination from such sites.
 </para>
@@ -801,10 +805,10 @@ the differences?</title>
 
 <sect2 renderas="sect3" id="newconfig"><title>Can I use my old config files?</title>
  <para>
-  The syntax and purpose of configuration files has remained the same
-  throughout the 3.x series. Although each release contains updated, 
-  <quote>improved</quote> versions and it is recommended to use the newer
-  configuration files.
+  The syntax and purpose of configuration files has remained roughly the
+  same throughout the 3.x series, but backwards compatibility is not guaranteed.
+  Also each release contains updated, <quote>improved</quote> versions and it is
+  therefore recommended to use the newer configuration files.
  <![%p-newstuff;[ 
    If upgrading from version prior to 3.0.4 the syntax for <literal>fast-redirects</literal>
    has changed. See the <ulink url="../user-manual/whatsnew.html">What's New section</ulink> 
@@ -937,7 +941,7 @@ with a browser? Does that not raise security issues?</title>
  <para>
   Note that in the default configuration, only local users (i.e. those on
   <quote>localhost</quote>) can connect to <application>Privoxy</application>,
-  so this is not (normally) a security problem.
+  so this is (normally) not a security problem.
  </para>
 </sect2>
 
@@ -1146,7 +1150,7 @@ and thus avoid individual browser configuration?</title>
 
 <para>
  No, its more complicated than that. This only works with special kinds 
- of proxies known as <quote>transparent</quote> proxies (see below).
+ of proxies known as <quote>intercepting</quote> proxies (see below).
 </para>
 
 </sect2>
@@ -1155,20 +1159,36 @@ and thus avoid individual browser configuration?</title>
 <title>Can Privoxy run as a <quote>transparent
 </quote> proxy?</title>
 <para>
- No, <application>Privoxy</application> currently does not have this ability, 
- though it may be added in a future release. Transparent proxies require
- special handling of the request headers beyond what
- <application>Privoxy</application> is now capable of. 
+ The whole idea of Privoxy is to modify client requests
+ and server responses in all sorts of ways and therefore
+ it's not a transparent proxy as described in
+ <ulink link="http://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
+</para>
+<para>
+ However, some people say <quote>transparent proxy</quote> when they
+ mean <quote>intercepting proxy</quote>. If you are one of them,
+ please read the <ulink url="#intercepting">next entry</ulink>.
 </para>
 
+</sect2>
+
+<sect2 renderas="sect3" id="intercepting">
+<title>Can Privoxy run as a <quote>intercepting</quote> proxy?</title>
 <para>
- Chaining <application>Privoxy</application> behind another proxy that has 
- this ability should work though. 
- See the <ulink
- url="../user-manual/config.html#FORWARDING">forwarding chapter</ulink>
- in the <ulink url="../user-manual/index.html">User Manual</ulink>. As
- a transparent proxy to be used for chaining we suggest Transproxy
- (<ulink url="http://transproxy.sourceforge.net/">http://transproxy.sourceforge.net/</ulink>).
+ <application>Privoxy</application> can't intercept traffic itself,
+  but it can handle requests that where intercepted and redirected
+  with a packet filter (like PF or iptables), as long as the Host
+  header is present.
+</para>
+<para>
+  As the Host header is required by HTTP/1.1 and as most web sites
+  don't work if it isn't set, this limitation shouldn't be a problem.
+</para>
+<para>
+  Please refer to your packet filter's documentation to learn how to
+  intercept and redirect traffic into Privoxy. Afterward you just have
+  to configure Privoxy to
+  <ulink url="../user-manual/config.html#ACCEPT-INTERCEPTED-REQUESTS">accept intercepted requests</ulink>.
 </para>
 
 </sect2>
@@ -1404,6 +1424,9 @@ and thus avoid individual browser configuration?</title>
 <title>How can I remove the <quote>Go There Anyway</quote> link from 
 the <emphasis>BLOCKED</emphasis> page?</title>
 <para>
+ There is more than one way to do it.
+</para>
+<para>
  Editing the BLOCKED template page (see above) may dissuade some users, but
  this method is easily circumvented. Where you need this level of control, you
  should build &my-app; from source, and enable various features that are
@@ -1417,17 +1440,13 @@ the <emphasis>BLOCKED</emphasis> page?</title>
 <para>
  This will create an executable with hard-coded security features so that
  &my-app; does not allow easy bypassing of blocked sites, or changing the
- current configuration via any connected user's web browser. Some of these
- features can also be toggled on/off via options in
- <application>Privoxy's</application> main 
- <ulink
- url="../user-manual/config.html#ACCESS-CONTROL">config</ulink> file. But 
- compiled-in compliance is a much better method of ensuring that a block is
- really a block. 
+ current configuration via any connected user's web browser.
 </para>
 <para>
- Default builds of &my-app; are typically built with these features
- disabled.
+ Note that all of these features can also be toggled on/off via options in
+ <application>Privoxy's</application> main  <ulink
+ url="../user-manual/config.html#ACCESS-CONTROL">config</ulink> file which
+ means you don't have to recompile anything.
 </para>
 </sect2>
 
@@ -1463,15 +1482,15 @@ has to add extra time to browsing.</title>
  url="../user-manual/actions-file.html#FILTER">filter</ulink></literal> or
  <literal><ulink
  url="../user-manual/actions-file.html#DEANIMATE-GIFS">deanimate-gifs</ulink></literal>
- actions will certainly cause a perceived slowdown, since the entire document
+ actions may cause a perceived slowdown, since the entire document
  needs to be buffered before displaying. And on very large documents, filtering may have 
  some measurable impact. How much depends on the page size, the actual
  definition of the filter(s), etc. See below. Most other actions have little
  to no impact on speed.
 </para>
 <para> 
- Also, when filtering is enabled, typically there is a disabling of 
- compression, (see <ulink
+ Also, when filtering is enabled but zlib support isn't available, compression
+ is often disabled (see <ulink
  url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>).
  This can have an impact on speed as well. Again, the page size, etc. will 
  determine how much of an impact.
@@ -1621,7 +1640,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  with <ulink url="http://tor.eff.org/">Tor</ulink>,
  an  <ulink url="http://www.eff.org/">EFF</ulink> supported onion routing system.
  The configuration details can be found in
- <ulink url="#TOR">How do I use <application>Privoxy</application> together with <application>Tor</application> section</ulink>
+ <ulink url="#TOR">How do I use <application>Privoxy</application> together
+ with <application>Tor</application> section</ulink>
  just below.
 </para>
 <!-- 
@@ -1719,7 +1739,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  is concerned, <application>Tor</application> is just another proxy that can be reached
  by socks4 or socks4a. Most likely you are interested in <application>Tor</application>
  to increase your anonymity level, therefore you should use socks4a,
- to make sure <application>Privoxy's</application> DNS requests are
+ to make sure DNS requests are
  done through <application>Tor</application> and thus invisible to your local network.
 </para>
 
@@ -1793,11 +1813,8 @@ content is being altered?</title>
 </para>
 
 <para>
- <quote>User-Agent</quote> is often used in this way to identify
- the browser, and adjust content accordingly. Changing this now (at least not
- further than removing the OS information) is not recommended, since so many
- sites do look for it. You may get undesirable results by changing just this 
- one aspect.
+ The <quote>User-Agent</quote> is sometimes used in this way to identify
+ the browser, and adjust content accordingly.
 </para>
 
 <para>
@@ -1838,8 +1855,9 @@ content is being altered?</title>
 speed up web browsing?</title>
 <para>
  No, it does not have this ability at all. You want something like 
- <ulink url="http://www.squid-cache.org/">Squid</ulink> for this. And, yes, 
- before you ask, <application>Privoxy</application> can co-exist 
+ <ulink url="http://www.squid-cache.org/">Squid</ulink> or
+ <ulink url="http://www.pps.jussieu.fr/~jch/software/polipo/">Polipo</ulink> for this.
+ And, yes, before you ask, <application>Privoxy</application> can co-exist 
  with other kinds of proxies like <application>Squid</application>.
  See the <ulink url="../user-manual/config.html#FORWARDING">forwarding
  chapter</ulink> in the <ulink url="../user-manual/index.html">user
@@ -1853,7 +1871,7 @@ speed up web browsing?</title>
  Not in the way you mean, or in the way a true firewall can. 
  <application>Privoxy</application> can help protect your privacy, but not
  protect you from intrusion attempts. It is, of course, perfectly possible
- and recommended to use <emphasis>both</emphasis>.
+ to use <emphasis>both</emphasis>.
 </para>
 </sect2>
 
@@ -2673,11 +2691,10 @@ browsing has slowed to a crawl. What gives? </title>
 <para>
  It's probably due to compression. It is a common practice for web servers to
  send their content <quote>compressed</quote> in order to speed things up, and
- then let the browser <quote>uncompress</quote> them. &my-app; does not (yet)
- support compression. But we can force the web server to bend to our will ;-) 
- So for filtering, make sure you have <ulink
- url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>
- turned ON!  
+ then let the browser <quote>uncompress</quote> them. When compiled with zlib support
+ &my-app; can decompress content before filtering, otherwise you may want to enable
+<ulink
+ url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>.
 </para>
 </sect2>
 
@@ -2760,6 +2777,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.25  2007/07/18 11:00:34  hal9
+Add misc note about valid mark-up in Privoxy.
+
 Revision 2.24  2006/11/14 01:57:46  hal9
 Dump all docs prior to 3.0.6 release. Various minor changes to faq and user
 manual.
