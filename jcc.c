@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.140 2007/07/21 11:51:36 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.141 2007/08/04 09:56:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,13 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.140 2007/07/21 11:51:36 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.141  2007/08/04 09:56:23  fabiankeil
+ *    - Log rejected CONNECT requests with LOG_LEVEL_INFO
+ *      and explain why they were rejected in the first place.
+ *    - Fix the LOG_LEVEL_CLF message for crunches of unallowed
+ *      CONNECT requests. The request line was missing.
+ *    - Add two more XXX reminders as we don't have enough already.
+ *
  *    Revision 1.140  2007/07/21 11:51:36  fabiankeil
  *    As Hal noticed, checking dispatch_cgi() as the last cruncher
  *    looks like a bug if CGI requests are blocked unintentionally,
@@ -1009,37 +1016,37 @@ static const char VANILLA_WAFER[] =
    "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 /* HTTP snipplets. */
-const static char CSUCCEED[] =
+static const char CSUCCEED[] =
    "HTTP/1.0 200 Connection established\n"
    "Proxy-Agent: Privoxy/" VERSION "\r\n\r\n";
 
-const static char CHEADER[] =
+static const char CHEADER[] =
    "HTTP/1.0 400 Invalid header received from browser\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid header received from browser.\r\n";
 
-const static char CFORBIDDEN[] =
+static const char CFORBIDDEN[] =
    "HTTP/1.0 403 Connection not allowable\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "X-Hint: If you read this message interactively, then you know why this happens ,-)\r\n"
    "Connection: close\r\n\r\n";
 
-const static char FTP_RESPONSE[] =
+static const char FTP_RESPONSE[] =
    "HTTP/1.0 400 Invalid request received from browser\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid request. Privoxy doesn't support FTP.\r\n";
 
-const static char GOPHER_RESPONSE[] =
+static const char GOPHER_RESPONSE[] =
    "HTTP/1.0 400 Invalid request received from browser\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid request. Privoxy doesn't support gopher.\r\n";
 
 /* XXX: should be a template */
-const static char MISSING_DESTINATION_RESPONSE[] =
+static const char MISSING_DESTINATION_RESPONSE[] =
    "HTTP/1.0 400 Bad request received from browser\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
@@ -1047,7 +1054,7 @@ const static char MISSING_DESTINATION_RESPONSE[] =
    "Bad request. Privoxy was unable to extract the destination.\r\n";
 
 /* XXX: should be a template */
-const static char NO_SERVER_DATA_RESPONSE[] =
+static const char NO_SERVER_DATA_RESPONSE[] =
    "HTTP/1.0 502 Server or forwarder response empty\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
@@ -1056,7 +1063,7 @@ const static char NO_SERVER_DATA_RESPONSE[] =
    "The connection was closed without sending any data.\r\n";
 
 /* XXX: should be a template */
-const static char NULL_BYTE_RESPONSE[] =
+static const char NULL_BYTE_RESPONSE[] =
    "HTTP/1.0 400 Bad request received from browser\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
@@ -1064,7 +1071,7 @@ const static char NULL_BYTE_RESPONSE[] =
    "Bad request. Null byte(s) before end of request.\r\n";
 
 /* XXX: should be a template */
-const static char MESSED_UP_REQUEST_RESPONSE[] =
+static const char MESSED_UP_REQUEST_RESPONSE[] =
    "HTTP/1.0 400 Malformed request after rewriting\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
@@ -1091,7 +1098,7 @@ struct cruncher
 };
 
 /* Complete list of cruncher functions */
-const static struct cruncher crunchers_all[] = {
+static const struct cruncher crunchers_all[] = {
    { direct_response, CF_COUNT_AS_REJECT|CF_IGNORE_FORCE},
    { block_url,       CF_COUNT_AS_REJECT },
 #ifdef FEATURE_TRUST
@@ -1103,7 +1110,7 @@ const static struct cruncher crunchers_all[] = {
 };
 
 /* Light version, used after tags are applied */
-const static struct cruncher crunchers_light[] = {
+static const struct cruncher crunchers_light[] = {
    { block_url,       CF_COUNT_AS_REJECT },
    { redirect_url,    CF_NO_FLAGS },
    { NULL,            0 }
@@ -1175,7 +1182,7 @@ static void sig_handler(int the_signal)
  *                FALSE if the request doesn't look invalid.
  *
  *********************************************************************/
-int client_protocol_is_unsupported(const struct client_state *csp, char *req)
+static int client_protocol_is_unsupported(const struct client_state *csp, char *req)
 {
    char buf[BUFFER_SIZE];
 
@@ -1244,7 +1251,7 @@ int client_protocol_is_unsupported(const struct client_state *csp, char *req)
  *                JB_ERR_PARSE if it isn't.
  *
  *********************************************************************/
-jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers)
+static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers)
 {
    char *req;
 
@@ -1311,7 +1318,7 @@ jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *
  *                JB_ERR_PARSE if the headers were incomplete.
  *
  *********************************************************************/
-jb_err get_server_headers(struct client_state *csp)
+static jb_err get_server_headers(struct client_state *csp)
 {
    int continue_hack_in_da_house = 0;
    char * header;
@@ -1397,7 +1404,7 @@ jb_err get_server_headers(struct client_state *csp)
  * Returns     :  A string with the crunch reason or an error description.
  *
  *********************************************************************/
-const char *crunch_reason(const struct http_response *rsp)
+static const char *crunch_reason(const struct http_response *rsp)
 {
    char * reason = NULL;
 
@@ -1460,7 +1467,7 @@ const char *crunch_reason(const struct http_response *rsp)
  * Returns     :  Nothing.
  *
  *********************************************************************/
-void send_crunch_response(struct client_state *csp, struct http_response *rsp)
+static void send_crunch_response(struct client_state *csp, struct http_response *rsp)
 {
       const struct http_request *http = csp->http;
       char status_code[4];
@@ -1539,7 +1546,7 @@ void send_crunch_response(struct client_state *csp, struct http_response *rsp)
  *                FALSE otherwise.
  *
  *********************************************************************/
-int request_contains_null_bytes(const struct client_state *csp, char *buf, int len)
+static int request_contains_null_bytes(const struct client_state *csp, char *buf, int len)
 {
    size_t c_len; /* Request lenght when treated as C string */
 
@@ -1596,7 +1603,7 @@ int request_contains_null_bytes(const struct client_state *csp, char *buf, int l
  *                FALSE otherwise.
  *
  *********************************************************************/
-int crunch_response_triggered(struct client_state *csp, const struct cruncher crunchers[])
+static int crunch_response_triggered(struct client_state *csp, const struct cruncher crunchers[])
 {
    struct http_response *rsp = NULL;
    const struct cruncher *c;
@@ -1664,7 +1671,7 @@ int crunch_response_triggered(struct client_state *csp, const struct cruncher cr
  * Returns     :  Nothing. Terminates in case of memory problems.
  *
  *********************************************************************/
-void build_request_line(struct client_state *csp, const struct forward_spec *fwd, char **request_line)
+static void build_request_line(struct client_state *csp, const struct forward_spec *fwd, char **request_line)
 {
    struct http_request *http = csp->http;
 
@@ -1726,7 +1733,7 @@ void build_request_line(struct client_state *csp, const struct forward_spec *fwd
  *                Terminates in case of memory problems.
  *
  *********************************************************************/
-jb_err change_request_destination(struct client_state *csp)
+static jb_err change_request_destination(struct client_state *csp)
 {
    struct http_request *http = csp->http;
    jb_err err;
@@ -1769,7 +1776,7 @@ jb_err change_request_destination(struct client_state *csp)
  *                NULL if no content filter is active
  *
  *********************************************************************/
-filter_function_ptr get_filter_function(struct client_state *csp)
+static filter_function_ptr get_filter_function(struct client_state *csp)
 {
    filter_function_ptr filter_function = NULL;
 
@@ -2827,7 +2834,7 @@ static int32 server_thread(void *data)
  * Returns     :  No. ,-)
  *
  *********************************************************************/
-void usage(const char *myname)
+static void usage(const char *myname)
 {
    printf("Privoxy version " VERSION " (" HOME_PAGE_URL ")\n"
           "Usage: %s "
@@ -2857,7 +2864,7 @@ void usage(const char *myname)
  * Returns     :  Void, exits in case of errors.
  *
  *********************************************************************/
-void initialize_mutexes()
+static void initialize_mutexes(void)
 {
    int err = 0;
 
