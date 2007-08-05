@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.51 2007/05/11 11:51:34 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.52 2007/07/14 07:28:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.51 2007/05/11 11:51:34 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.52  2007/07/14 07:28:47  fabiankeil
+ *    Add translation function for JB_ERR_FOO codes.
+ *
  *    Revision 1.51  2007/05/11 11:51:34  fabiankeil
  *    Fix a type mismatch warning.
  *
@@ -349,19 +352,19 @@ static char *os2_socket_strerr(int errcode, char *tmp_buf);
 #endif
 
 #ifdef FEATURE_PTHREAD
-static inline void lock_logfile()
+static inline void lock_logfile(void)
 {
    pthread_mutex_lock(&log_mutex);
 }
-static inline void unlock_logfile()
+static inline void unlock_logfile(void)
 {
    pthread_mutex_unlock(&log_mutex);
 }
-static inline void lock_loginit()
+static inline void lock_loginit(void)
 {
    pthread_mutex_lock(&log_init_mutex);
 }
-static inline void unlock_loginit()
+static inline void unlock_loginit(void)
 {
    pthread_mutex_unlock(&log_init_mutex);
 }
@@ -506,7 +509,7 @@ void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
  * Returns     :  thread_id
  *
  *********************************************************************/
-long get_thread_id(void)
+static long get_thread_id(void)
 {
    long this_thread = 1;  /* was: pthread_t this_thread;*/
 
@@ -676,7 +679,7 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
  * Returns     :  Log level string.
  *
  *********************************************************************/
-inline const char *get_log_level_string(int loglevel)
+static inline const char *get_log_level_string(int loglevel)
 {
    char *log_level_string = NULL;
 
