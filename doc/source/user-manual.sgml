@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.32 2007/06/07 12:36:22 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.33 2007/07/27 10:57:35 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.32 2007/06/07 12:36:22 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.33 2007/07/27 10:57:35 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1415,9 +1415,9 @@ must find a better place for this paragraph
 </para>
 
 <para>
- <application>Privoxy</application> is HTTP/1.1 compliant,  but not all of
- the optional 1.1 features are as yet supported. In the unlikely event that
- you experience inexplicable problems with browsers that use HTTP/1.1 per default
+ <application>Privoxy</application> does not support all of the optional HTTP/1.1
+ features yet. In the unlikely event that you experience inexplicable problems
+ with browsers that use HTTP/1.1 per default
  (like <application>Mozilla</application> or recent versions of I.E.), you might
  try to force HTTP/1.0 compatibility. For Mozilla, look under <literal>Edit -&gt;
  Preferences -&gt; Debug -&gt; Networking</literal>.
@@ -2204,7 +2204,16 @@ for details.
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term><literal>www.example.com/index.html</literal></term>
+  <term><literal>www.example.com/index.html$</literal></term>
+  <listitem>
+   <para>
+    matches all the documents on <literal>www.example.com</literal>
+    whose name starts with <literal>/index.html</literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>www.example.com/index.html$</literal></term>
   <listitem>
    <para>
     matches only the single document <literal>/index.html</literal>
@@ -2213,7 +2222,7 @@ for details.
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term><literal>/index.html</literal></term>
+  <term><literal>/index.html$</literal></term>
   <listitem>
    <para>
     matches the document <literal>/index.html</literal>, regardless of the domain,
@@ -2225,7 +2234,7 @@ for details.
   <term><literal>index.html</literal></term>
   <listitem>
    <para>
-    matches nothing, since it would be  interpreted as a domain name and
+    matches nothing, since it would be interpreted as a domain name and
     there is no top-level domain called <literal>.html</literal>. So its 
     a mistake.
    </para>
@@ -2387,7 +2396,7 @@ for details.
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term><literal>.example.com/.*/index.html</literal></term>
+  <term><literal>.example.com/.*/index.html$</literal></term>
   <listitem>
    <para>
     Will match any page in the domain of <quote>example.com</quote> that is
@@ -2402,7 +2411,7 @@ for details.
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term><literal>.example.com/(.*/)?index\.html</literal></term>
+  <term><literal>.example.com/(.*/)?index\.html$</literal></term>
   <listitem>
    <para>
     This regular expression is conditional so it will match any page 
@@ -2469,6 +2478,7 @@ for details.
  your pattern line should be <quote>TAG:^foo$</quote>,
  <quote>TAG:foo</quote> would work as well, but it would also
  match requests whose tags contain <quote>foo</quote> somewhere.
+ <quote>TAG: foo</quote> wouldn't work as it requires white space.
 </para>
 
 <para>
@@ -2570,7 +2580,7 @@ for details.
    the last match wins, i.e. the params from earlier matches are simply ignored.
   </para>
   <para>  
-   Example: <literal>+hide-user-agent{ Mozilla 1.0 }</literal>
+   Example: <literal>+hide-user-agent{Mozilla/5.0 (X11; U; FreeBSD i386; en-US; rv:1.8.1.4) Gecko/20070602 Firefox/2.0.0.4}</literal>
   </para>
  </listitem>
  
@@ -2963,9 +2973,6 @@ for details.
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="content-type-overwrite">
-<!-- 
-new action 
--->
 <title>content-type-overwrite</title>
 
 <variablelist>
@@ -3208,12 +3215,12 @@ new action
    </para>
    <para>
     It is also useful to make sure the header isn't used as a cookie
-    replacement.
+    replacement (unlikely but possible).
    </para>
    <para>
     Blocking the <quote>If-None-Match:</quote> header shouldn't cause any
     caching problems, as long as the <quote>If-Modified-Since:</quote> header
-    isn't blocked as well.
+    isn't blocked or missing as well.
    </para>
    <para>
     It is recommended to use this action together with
@@ -3284,10 +3291,10 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    This action is only concerned with <emphasis>incoming</emphasis> cookies. For
-    <emphasis>outgoing</emphasis> cookies, use
+    This action is only concerned with <emphasis>incoming</emphasis> HTTP cookies. For
+    <emphasis>outgoing</emphasis> HTTP cookies, use
     <literal><link linkend="crunch-outgoing-cookies">crunch-outgoing-cookies</link></literal>.
-    Use <emphasis>both</emphasis> to disable cookies completely.
+    Use <emphasis>both</emphasis> to disable HTTP cookies completely.
    </para>
    <para>
     It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
@@ -3400,7 +3407,7 @@ new action
   <term>Typical use:</term>
   <listitem>
    <para>
-    Prevent the web server from reading any cookies from your system
+    Prevent the web server from reading any HTTP cookies from your system
    </para>
   </listitem>
  </varlistentry>
@@ -3435,10 +3442,10 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    This action is only concerned with <emphasis>outgoing</emphasis> cookies. For
-    <emphasis>incoming</emphasis> cookies, use
+    This action is only concerned with <emphasis>outgoing</emphasis> HTTP cookies. For
+    <emphasis>incoming</emphasis> HTTP cookies, use
     <literal><link linkend="crunch-incoming-cookies">crunch-incoming-cookies</link></literal>.
-    Use <emphasis>both</emphasis> to disable cookies completely.
+    Use <emphasis>both</emphasis> to disable HTTP cookies completely.
    </para>
    <para>
     It makes <emphasis>no sense at all</emphasis> to use this action in conjunction
@@ -3574,8 +3581,8 @@ new action
     This is a left-over from the time when <application>Privoxy</application>
     didn't support important HTTP/1.1 features well. It is left here for the
     unlikely case that you experience HTTP/1.1 related problems with some server
-    out there. Not all (optional) HTTP/1.1 features are supported yet, so there
-    is a chance you might need this action.
+    out there. Not all HTTP/1.1 features and requirements are supported yet,
+    so there is a chance you might need this action.
    </para>
   </listitem>
  </varlistentry>
@@ -4077,17 +4084,17 @@ new action
     </listitem>
     <listitem>
      <para>
-      <quote>forward-socks4a 127.0.0.1:9050 .</quote> to use the socks4a proxy listening at 127.0.0.1 port 9050.
-      Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection  (with local DNS
-      resolution) instead.
+      <quote>forward-socks4a 127.0.0.1:9050 .</quote> to use the socks4a proxy listening at
+      127.0.0.1 port 9050. Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote>
+      to use a socks4 connection  (with local DNS resolution) instead.
      </para>
     </listitem>
     <listitem>
      <para>
       <quote>forward-socks4a 127.0.0.1:9050 proxy.example.org:8000</quote> to use the socks4a proxy
       listening at 127.0.0.1 port 9050 to reach the HTTP proxy listening at proxy.example.org port 8000.
-      Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection  (with local DNS
-      resolution) instead.
+      Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection
+      (with local DNS resolution) instead.
      </para>
     </listitem>
    </itemizedlist>
@@ -4137,7 +4144,7 @@ new action
  -hide-if-modified-since      \
  -overwrite-last-modified     \
 }
-TAG:^User-Agent: fetch libfetch/2.0$
+TAG:^User-Agent: fetch libfetch/2\.0$
      </screen>
    </para>
   </listitem>
@@ -4952,7 +4959,12 @@ new action
     allow execution of code on the target system, giving an attacker access 
     to the system in question by merely planting an altered JPEG image, which 
     would have no obvious indications of what lurks inside. This action
-    prevents unwanted intrusion.
+    prevents this exploit.
+   </para>
+   <para>
+    Note that the described exploit is only one of many,
+    using this action does not mean that you no longer
+    have to patch the client.
    </para>
   
   </listitem>
@@ -8932,6 +8944,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.33  2007/07/27 10:57:35  hal9
+ Add references for user-agent strings for hide-user-agenet
+
  Revision 2.32  2007/06/07 12:36:22  fabiankeil
  Apply Roland's 29_usermanual.dpatch to fix a bunch
  of syntax errors I collected over the last months.
