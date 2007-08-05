@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.54 2007/05/14 10:33:51 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.55 2007/05/31 11:50:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,15 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.54 2007/05/14 10:33:51 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.55  2007/05/31 11:50:20  fabiankeil
+ *    Re-enable support for old-school URLs like
+ *    http://config.privoxy.org/edit-actions-list?f=default
+ *    in the action editor.
+ *
+ *    They are no longer used by the CGI pages, but make it easier
+ *    to reach the editor directly, without knowing the requested
+ *    file's index in csp->config->actions_file[].
+ *
  *    Revision 1.54  2007/05/14 10:33:51  fabiankeil
  *    - Use strlcpy() and strlcat() instead of strcpy() and strcat().
  *
@@ -524,7 +533,7 @@ struct filter_type_info
 };
 
 /* Accessed by index, keep the order in the way the FT_ macros are defined. */
-const static struct filter_type_info filter_type_info[] =
+static const struct filter_type_info filter_type_info[] =
 {
    {
       ACTION_MULTI_FILTER,
