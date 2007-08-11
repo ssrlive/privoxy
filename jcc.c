@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.142 2007/08/05 13:50:26 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.143 2007/08/05 13:58:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.142 2007/08/05 13:50:26 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.143  2007/08/05 13:58:19  fabiankeil
+ *    Comment out request_contains_null_bytes() until it's used again.
+ *
  *    Revision 1.142  2007/08/05 13:50:26  fabiankeil
  *    #1763173 from Stefan Huehner: s@const static@static const@
  *    and declare some more functions static.
@@ -961,8 +964,24 @@ int urls_rejected = 0;     /* total nr of urls rejected */
 int g_terminate = 0;
 #endif
 
-static void listen_loop(void);
+static void sig_handler(int the_signal);
+static int client_protocol_is_unsupported(const struct client_state *csp, char *req);
+static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers);
+static jb_err get_server_headers(struct client_state *csp);
+static const char *crunch_reason(const struct http_response *rsp);
+static void send_crunch_response(struct client_state *csp, struct http_response *rsp);
+/*
+ * static int request_contains_null_bytes(const struct client_state *csp, char *buf, int len);
+ */
+static void build_request_line(struct client_state *csp, const struct forward_spec *fwd, char **request_line);
+static jb_err change_request_destination(struct client_state *csp);
 static void chat(struct client_state *csp);
+static void serve(struct client_state *csp);
+static void usage(const char *myname);
+static void initialize_mutexes(void);
+static jb_socket bind_port_helper(struct configuration_spec *config);
+static void listen_loop(void);
+
 #ifdef AMIGA
 void serve(struct client_state *csp);
 #else /* ifndef AMIGA */
@@ -1100,6 +1119,9 @@ struct cruncher
    const crunch_func_ptr cruncher;
    const int flags;
 };
+
+static int crunch_response_triggered(struct client_state *csp, const struct cruncher crunchers[]);
+static filter_function_ptr get_filter_function(struct client_state *csp);
 
 /* Complete list of cruncher functions */
 static const struct cruncher crunchers_all[] = {
