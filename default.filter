@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.43 2007/06/01 14:17:04 fabiankeil Exp $
+#  $Id: default.filter,v 1.44 2007/07/18 11:06:56 hal9 Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -445,37 +445,38 @@ s/(M|m)edien(?![^<]*>)/$1&auml;dchen/Ug
 #                 Pages are "blocked" based on keyword matching.
 #
 #################################################################################
-FILTER: crude-parental Crude parental filtering 
+FILTER: crude-parental Crude parental filtering. Note that this filter doesn't work reliable.
 
 # (Note: Middlesex, Sussex and Essex are counties in the UK, not rude words)
 # (Note #2: Is 'sex' a rude word?!)
 
-s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body><h3>Blocked due to possible adult content. Please see <a href="http://dmoz.org/Kids_and_Teens/">this site</a>.</h3></body></html>%is
+s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body>\
+<h3>Blocked by Privoxy's crude-parental filter due to possible adult content.</h3></body></html>%is
 
 s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
 
 # Remove by description
 s/^.*\
-(suck |lick |tounge |rub |fuck |fingering |finger |chicks? )?\
-(her |your |my |hard |with |big |wet |tight |pink |hot |moist |young |teen )+\
+(?:(suck|lick|tounge|rub|fuck|fingering|finger|chicks?)\s*)?\
+(?:(her|your|my|hard|with|big|wet|tight|pink|hot|moist|young|teen)\s*)+\
 (dicks?|penis|cocks?|balls?|tits?|pussy|cunt|clit|ass|mouth).*$\
 /This page has been blocked by Privoxy's crude-parental content filter\
-/is 
+/is
 
 #Remove by link text
 s/^.*\
-(download|broadband|view|watch|free|get|extreem)? \
-(sex|xxx|porn|cumshot|fuck(ing|s)?|anal|ass|asian|adult|Amateur|org(y|ies)|close ups?|hand ?      job|nail(ed)?)+ \
+(download|broadband|view|watch|free|get|extreem)?\s*\
+(sex|xxx|porn|cumshot|fuck(ing|s)?|anal|ass|asian|adult|Amateur|org(y|ies)|close ups?|hand?job|nail(ed)?)+\s*\
 (movies?|pics?|videos?|dvds?|dvd's|links?).*$\
 /This page has been blocked by Privoxy's crude-parental content filter\
-/is 
+/is
 
 #Remove by age disclaimer
 s/^.*\
-(models?|chicks?|girls?|women|persons) \
+(models?|chicks?|girls?|women|persons)\s*\
 (who|are|were)+ (over|at least) (16|18|21) years (old|of age).*$\
 /This page has been blocked by Privoxy's crude-parental content filter\
-/is 
+/is
 
 #Remove by regulations
 s/^.*(Section 2257|18 U.?S.?C.? 2257).*$\
@@ -731,13 +732,17 @@ s@Accept:\s*image/.*@IMAGE-REQUEST@i
 #                or not the detection actually works depends on the browser.
 #
 #################################################################################
-CLIENT-HEADER-TAGGER: text-requests Tags detected CSS requests as "CSS-REQUEST".
+CLIENT-HEADER-TAGGER: css-requests Tags detected CSS requests as "CSS-REQUEST".
 s@Accept:\s*text/css.*@CSS-REQUEST@i
 
 ############################################################################## 
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.44  2007/07/18 11:06:56  hal9
+#     Replace notarget with '' in all popups filter to keep from breaking xhmtl per
+#     report from Siegfried Gipp.
+#
 #     Revision 1.43  2007/06/01 14:17:04  fabiankeil
 #     Mention possible delimiter conflicts with variables in dynamic pcrs commands.
 #
