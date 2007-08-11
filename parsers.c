@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.103 2007/06/01 16:31:54 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.104 2007/07/14 07:38:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.103 2007/06/01 16:31:54 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.104  2007/07/14 07:38:19  fabiankeil
+ *    Move the ACTION_FORCE_TEXT_MODE check out of
+ *    server_content_type(). Signal other functions
+ *    whether or not a content type has been declared.
+ *    Part of the fix for BR#1750917.
+ *
  *    Revision 1.103  2007/06/01 16:31:54  fabiankeil
  *    Change sed() to return a jb_err in preparation for forward-override{}.
  *
@@ -743,8 +749,44 @@ const char parsers_h_rcs[] = PARSERS_H_VERSION;
 #define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
-jb_err header_tagger(struct client_state *csp, char *header);
-jb_err scan_headers(struct client_state *csp);
+static jb_err scan_headers(struct client_state *csp);
+static jb_err header_tagger(struct client_state *csp, char *header);
+static jb_err parse_header_time(const char *header_time, time_t *result);
+
+static jb_err crumble                   (struct client_state *csp, char **header);
+static jb_err connection                (struct client_state *csp, char **header);
+static jb_err filter_header             (struct client_state *csp, char **header);
+static jb_err client_referrer           (struct client_state *csp, char **header);
+static jb_err client_uagent             (struct client_state *csp, char **header);
+static jb_err client_ua                 (struct client_state *csp, char **header);
+static jb_err client_from               (struct client_state *csp, char **header);
+static jb_err client_send_cookie        (struct client_state *csp, char **header);
+static jb_err client_x_forwarded        (struct client_state *csp, char **header);
+static jb_err client_accept_encoding    (struct client_state *csp, char **header);
+static jb_err client_te                 (struct client_state *csp, char **header);
+static jb_err client_max_forwards       (struct client_state *csp, char **header);
+static jb_err client_host               (struct client_state *csp, char **header);
+static jb_err client_if_modified_since  (struct client_state *csp, char **header);
+static jb_err client_accept_language    (struct client_state *csp, char **header);
+static jb_err client_if_none_match      (struct client_state *csp, char **header);
+static jb_err crunch_client_header      (struct client_state *csp, char **header);
+static jb_err client_x_filter           (struct client_state *csp, char **header);
+static jb_err server_set_cookie         (struct client_state *csp, char **header);
+static jb_err server_content_type       (struct client_state *csp, char **header);
+static jb_err server_content_length     (struct client_state *csp, char **header);
+static jb_err server_content_md5        (struct client_state *csp, char **header);
+static jb_err server_content_encoding   (struct client_state *csp, char **header);
+static jb_err server_transfer_coding    (struct client_state *csp, char **header);
+static jb_err server_http               (struct client_state *csp, char **header);
+static jb_err crunch_server_header      (struct client_state *csp, char **header);
+static jb_err server_last_modified      (struct client_state *csp, char **header);
+static jb_err server_content_disposition(struct client_state *csp, char **header);
+
+static jb_err client_host_adder       (struct client_state *csp);
+static jb_err client_cookie_adder     (struct client_state *csp);
+static jb_err client_xtra_adder       (struct client_state *csp);
+static jb_err client_x_forwarded_adder(struct client_state *csp);
+static jb_err connection_close_adder  (struct client_state *csp); 
 
 const struct parsers client_patterns[] = {
    { "referer:",                  8,   client_referrer },
@@ -1415,7 +1457,7 @@ char *get_header_value(const struct list *header_list, const char *header_name)
  * Returns     :  JB_ERR_OK
  *
  *********************************************************************/
-jb_err scan_headers(struct client_state *csp)
+static jb_err scan_headers(struct client_state *csp)
 {
    struct list_entry *h; /* Header */
    jb_err err = JB_ERR_OK;
@@ -1544,7 +1586,7 @@ jb_err sed(const struct parsers pats[],
  * Returns     :  JB_ERR_OK on success and always succeeds
  *
  *********************************************************************/
-jb_err header_tagger(struct client_state *csp, char *header)
+static jb_err header_tagger(struct client_state *csp, char *header)
 {
    int wanted_filter_type;
    int multi_action_index;
@@ -1751,7 +1793,7 @@ jb_err header_tagger(struct client_state *csp, char *header)
  * Returns     :  JB_ERR_OK on success and always succeeds
  *
  *********************************************************************/
-jb_err filter_header(struct client_state *csp, char **header)
+static jb_err filter_header(struct client_state *csp, char **header)
 {
    int hits=0;
    int matches;
@@ -1926,7 +1968,7 @@ jb_err filter_header(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err connection(struct client_state *csp, char **header)
+static jb_err connection(struct client_state *csp, char **header)
 {
    char *old_header = *header;
 
@@ -1974,7 +2016,7 @@ jb_err connection(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err crumble(struct client_state *csp, char **header)
+static jb_err crumble(struct client_state *csp, char **header)
 {
    log_error(LOG_LEVEL_HEADER, "crumble crunched: %s!", *header);
    freez(*header);
@@ -1998,7 +2040,7 @@ jb_err crumble(struct client_state *csp, char **header)
  * Returns     :  JB_ERR_OK on success and always succeeds
  *
  *********************************************************************/
-jb_err crunch_server_header(struct client_state *csp, char **header)
+static jb_err crunch_server_header(struct client_state *csp, char **header)
 {
    const char *crunch_pattern;
 
@@ -2041,7 +2083,7 @@ jb_err crunch_server_header(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_content_type(struct client_state *csp, char **header)
+static jb_err server_content_type(struct client_state *csp, char **header)
 {
    /* Remove header if it isn't the first Content-Type header */
    if ((csp->content_type & CT_DECLARED))
@@ -2136,7 +2178,7 @@ jb_err server_content_type(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_transfer_coding(struct client_state *csp, char **header)
+static jb_err server_transfer_coding(struct client_state *csp, char **header)
 {
    /*
     * Turn off pcrs and gif filtering if body compressed
@@ -2204,7 +2246,7 @@ jb_err server_transfer_coding(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_content_encoding(struct client_state *csp, char **header)
+static jb_err server_content_encoding(struct client_state *csp, char **header)
 {
 #ifdef FEATURE_ZLIB
    if ((csp->flags & CSP_FLAG_MODIFIED)
@@ -2284,7 +2326,7 @@ jb_err server_content_encoding(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_content_length(struct client_state *csp, char **header)
+static jb_err server_content_length(struct client_state *csp, char **header)
 {
    const size_t max_header_length = 80;
 
@@ -2326,7 +2368,7 @@ jb_err server_content_length(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_content_md5(struct client_state *csp, char **header)
+static jb_err server_content_md5(struct client_state *csp, char **header)
 {
    if (csp->flags & CSP_FLAG_MODIFIED)
    {
@@ -2355,7 +2397,7 @@ jb_err server_content_md5(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_content_disposition(struct client_state *csp, char **header)
+static jb_err server_content_disposition(struct client_state *csp, char **header)
 {
    const char *newval;
 
@@ -2419,7 +2461,7 @@ jb_err server_content_disposition(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_last_modified(struct client_state *csp, char **header)
+static jb_err server_last_modified(struct client_state *csp, char **header)
 {
    const char *newval;
    char buf[BUFFER_SIZE];
@@ -2561,7 +2603,7 @@ jb_err server_last_modified(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_accept_encoding(struct client_state *csp, char **header)
+static jb_err client_accept_encoding(struct client_state *csp, char **header)
 {
    if ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
    {
@@ -2606,7 +2648,7 @@ jb_err client_accept_encoding(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_te(struct client_state *csp, char **header)
+static jb_err client_te(struct client_state *csp, char **header)
 {
    if ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
    {
@@ -2635,7 +2677,7 @@ jb_err client_te(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_referrer(struct client_state *csp, char **header)
+static jb_err client_referrer(struct client_state *csp, char **header)
 {
    const char *newval;
    const char *host;
@@ -2762,7 +2804,7 @@ jb_err client_referrer(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_accept_language(struct client_state *csp, char **header)
+static jb_err client_accept_language(struct client_state *csp, char **header)
 {
    const char *newval;
 
@@ -2809,6 +2851,7 @@ jb_err client_accept_language(struct client_state *csp, char **header)
    return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
 }
 
+
 /*********************************************************************
  *
  * Function    :  crunch_client_header
@@ -2826,7 +2869,7 @@ jb_err client_accept_language(struct client_state *csp, char **header)
  * Returns     :  JB_ERR_OK on success and always succeeds
  *
  *********************************************************************/
-jb_err crunch_client_header(struct client_state *csp, char **header)
+static jb_err crunch_client_header(struct client_state *csp, char **header)
 {
    const char *crunch_pattern;
 
@@ -2865,7 +2908,7 @@ jb_err crunch_client_header(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_uagent(struct client_state *csp, char **header)
+static jb_err client_uagent(struct client_state *csp, char **header)
 {
    const char *newval;
 
@@ -2906,7 +2949,7 @@ jb_err client_uagent(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_ua(struct client_state *csp, char **header)
+static jb_err client_ua(struct client_state *csp, char **header)
 {
    if ((csp->action->flags & ACTION_HIDE_USER_AGENT) != 0)
    {
@@ -2936,7 +2979,7 @@ jb_err client_ua(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_from(struct client_state *csp, char **header)
+static jb_err client_from(struct client_state *csp, char **header)
 {
    const char *newval;
 
@@ -2987,7 +3030,7 @@ jb_err client_from(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_send_cookie(struct client_state *csp, char **header)
+static jb_err client_send_cookie(struct client_state *csp, char **header)
 {
    if (csp->action->flags & ACTION_NO_COOKIE_READ)
    {
@@ -3059,7 +3102,7 @@ jb_err client_x_forwarded(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_max_forwards(struct client_state *csp, char **header)
+static jb_err client_max_forwards(struct client_state *csp, char **header)
 {
    int max_forwards;
 
@@ -3125,7 +3168,7 @@ jb_err client_max_forwards(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_host(struct client_state *csp, char **header)
+static jb_err client_host(struct client_state *csp, char **header)
 {
    char *p, *q;
 
@@ -3199,7 +3242,7 @@ jb_err client_host(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_if_modified_since(struct client_state *csp, char **header)
+static jb_err client_if_modified_since(struct client_state *csp, char **header)
 {
    char newheader[50];
 #ifdef HAVE_GMTIME_R
@@ -3319,7 +3362,7 @@ jb_err client_if_modified_since(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_if_none_match(struct client_state *csp, char **header)
+static jb_err client_if_none_match(struct client_state *csp, char **header)
 {
    if (csp->action->flags & ACTION_CRUNCH_IF_NONE_MATCH)
    {  
@@ -3391,7 +3434,7 @@ jb_err client_x_filter(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_host_adder(struct client_state *csp)
+static jb_err client_host_adder(struct client_state *csp)
 {
    char *p;
    jb_err err;
@@ -3479,7 +3522,7 @@ jb_err client_cookie_adder(struct client_state *csp)
    return err;
 }
 
-
+#if 0
 /*********************************************************************
  *
  * Function    :  client_accept_encoding_adder
@@ -3496,10 +3539,8 @@ jb_err client_cookie_adder(struct client_state *csp)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_accept_encoding_adder(struct client_state *csp)
+static jb_err client_accept_encoding_adder(struct client_state *csp)
 {
-   assert(0); /* Not in use */
-
    if (   ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
        && (!strcmpic(csp->http->ver, "HTTP/1.1")) )
    {
@@ -3508,7 +3549,7 @@ jb_err client_accept_encoding_adder(struct client_state *csp)
 
    return JB_ERR_OK;
 }
-
+#endif
 
 /*********************************************************************
  *
@@ -3523,7 +3564,7 @@ jb_err client_accept_encoding_adder(struct client_state *csp)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_xtra_adder(struct client_state *csp)
+static jb_err client_xtra_adder(struct client_state *csp)
 {
    struct list_entry *lst;
    jb_err err;
@@ -3557,7 +3598,7 @@ jb_err client_xtra_adder(struct client_state *csp)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err client_x_forwarded_adder(struct client_state *csp)
+static jb_err client_x_forwarded_adder(struct client_state *csp)
 {
    char *p = NULL;
    jb_err err;
@@ -3608,7 +3649,7 @@ jb_err client_x_forwarded_adder(struct client_state *csp)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err connection_close_adder(struct client_state *csp)
+static jb_err connection_close_adder(struct client_state *csp)
 {
    const unsigned int flags = csp->flags;
 
@@ -3656,7 +3697,7 @@ jb_err connection_close_adder(struct client_state *csp)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_http(struct client_state *csp, char **header)
+static jb_err server_http(struct client_state *csp, char **header)
 {
    sscanf(*header, "HTTP/%*d.%*d %d", &(csp->http->status));
    if (csp->http->status == 206)
@@ -3698,7 +3739,7 @@ jb_err server_http(struct client_state *csp, char **header)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err server_set_cookie(struct client_state *csp, char **header)
+static jb_err server_set_cookie(struct client_state *csp, char **header)
 {
    time_t now;
    time_t cookie_time; 
@@ -3937,7 +3978,7 @@ int strclean(const char *string, const char *substring)
  *                JB_ERR_PARSE otherwise.
  *
  *********************************************************************/
-jb_err parse_header_time(const char *header_time, time_t *result)
+static jb_err parse_header_time(const char *header_time, time_t *result)
 {
    struct tm gmt;
 
