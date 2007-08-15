@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.88 2007/07/31 07:16:08 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.89 2007/08/02 10:48:55 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1537,6 +1537,10 @@ config.privoxy.org/
 #MASTER# REMARKS: As we already have five other PROBLEM-URLs that contain '?url=',
 #MASTER# REMARKS: it might make sense to allow '/.*?url=' in general
 del.icio.us/
+#MASTER# PROBLEM-URL: http://calgary.ctv.ca/servlet/RTGAMArticleHTMLTemplate/B/20070615/goexpo?brand=generic&hub=&tf=CFCNPlus/generic/hubs/frontpage.html&cf=CFCNPlus/generic/hubs/frontpage.cfg&slug=goexpo&date=20070615&archive=CFCNPlus&ad_page_name=&nav=home&subnav=fullstory&site_cfcn=http://calgary.ctv.ca
+.ctv.ca/.*&site_cfcn=http://
+#MASTER# PROBLEM-URL: http://memberservices.informit.com/checkLogin.ashx?partner=8&r=http%3a%2f%2fwww.informit.com%2farticles%2farticle.asp%3fp%3d766375%26seqNum%3d1
+.informit.com/.*&r=http%3a%2f%2f
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
