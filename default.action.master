@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.89 2007/08/02 10:48:55 hal9 Exp $
+#  $Id: default.action.master,v 1.90 2007/08/15 17:22:20 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -753,6 +753,9 @@ rcm.amazon.com
 .intellitxt.com
 #MASTER# REMARKS: per Actions File tracker: #1597893 11/17/06, similar to intellitxt
 .kontera.com
+#MASTER# REMARKS: 2007-08-17 HB, similar to intellitxt
+#MASTER# BLOCK-REFERRER: http://www.webhostingtalk.com/archive/index.php/t-533369.html
+.tribalfusion.com/ctxt
 #MASTER# REMARKS: Video advertizer, owned by doubleclick.net.
 #MASTER# BLOCK-REFERRER: http://www.ign.com/ 09/17/06
 .klipmart.com
