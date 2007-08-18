@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.104 2007/07/14 07:38:19 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.105 2007/08/11 14:49:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.104 2007/07/14 07:38:19 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.105  2007/08/11 14:49:49  fabiankeil
+ *    - Add prototpyes for the header parsers and make them static.
+ *    - Comment out client_accept_encoding_adder() which isn't used right now.
+ *
  *    Revision 1.104  2007/07/14 07:38:19  fabiankeil
  *    Move the ACTION_FORCE_TEXT_MODE check out of
  *    server_content_type(). Signal other functions
@@ -2134,7 +2138,7 @@ static jb_err server_content_type(struct client_state *csp, char **header)
        * Make sure the user doesn't accidently
        * change the content type of binary documents. 
        */ 
-      if (csp->content_type & CT_TEXT)
+      if ((csp->content_type & CT_TEXT) || (csp->action->flags & ACTION_FORCE_TEXT_MODE))
       { 
          freez(*header);
          *header = strdup("Content-Type: ");
