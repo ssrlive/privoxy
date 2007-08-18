@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.11 2006/12/28 18:25:53 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.12 2007/08/04 10:15:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -33,6 +33,9 @@ const char encode_rcs[] = "$Id: encode.c,v 1.11 2006/12/28 18:25:53 fabiankeil E
  *
  * Revisions   :
  *    $Log: encode.c,v $
+ *    Revision 1.12  2007/08/04 10:15:51  fabiankeil
+ *    Use strlcpy() instead of strcpy().
+ *
  *    Revision 1.11  2006/12/28 18:25:53  fabiankeil
  *    Fixed gcc43 compiler warning.
  *
@@ -426,7 +429,7 @@ static int xdtoi(const int d)
  * Returns     :  The integer value, or 0 for non-hex strings.
  *
  *********************************************************************/
-static int xtoi(const char *s)
+int xtoi(const char *s)
 {
    int d1, d2;
 
