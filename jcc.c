@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.143 2007/08/05 13:58:19 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.144 2007/08/11 14:43:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.143 2007/08/05 13:58:19 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.144  2007/08/11 14:43:22  fabiankeil
+ *    Add some more prototypes for static functions.
+ *
  *    Revision 1.143  2007/08/05 13:58:19  fabiankeil
  *    Comment out request_contains_null_bytes() until it's used again.
  *
@@ -964,7 +967,9 @@ int urls_rejected = 0;     /* total nr of urls rejected */
 int g_terminate = 0;
 #endif
 
+#if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 static void sig_handler(int the_signal);
+#endif
 static int client_protocol_is_unsupported(const struct client_state *csp, char *req);
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers);
 static jb_err get_server_headers(struct client_state *csp);
@@ -977,7 +982,9 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
 static jb_err change_request_destination(struct client_state *csp);
 static void chat(struct client_state *csp);
 static void serve(struct client_state *csp);
+#if defined(unix)
 static void usage(const char *myname);
+#endif
 static void initialize_mutexes(void);
 static jb_socket bind_port_helper(struct configuration_spec *config);
 static void listen_loop(void);
@@ -2443,10 +2450,23 @@ static void chat(struct client_state *csp)
                   "CONNECT already confirmed. Unable to tell the client about the problem.");
                return;
             }
+            else if (byte_count)
+            {
+               /*
+                * Just hang up. We already transmitted the original headers
+                * and parts of the original content and therefore missed the
+                * chance to send an error message (without risking data corruption).
+                *
+                * XXX: we could retry with a fancy range request here.
+                */
+               log_error(LOG_LEVEL_ERROR, "Already forwarded the original headers. "
+                  "Unable to tell the client about the problem.");
+               return;
+            }
 
             rsp = error_response(csp, "connect-failed", errno);
 
-            if(rsp)
+            if (rsp)
             {
                send_crunch_response(csp, rsp);
             }
@@ -2619,11 +2639,12 @@ static void chat(struct client_state *csp)
                      return;
                   }
 
+                  /* XXX: adding hdrlen and flushed doesn't seem right */
                   byte_count += hdrlen + (size_t)flushed + (size_t)len;
                   freez(hdr);
                   content_filter = NULL;
                   server_body = 1;
-
+                  continue;
                }
             }
             else
@@ -2853,6 +2874,7 @@ static int32 server_thread(void *data)
 #endif
 
 
+#if defined(unix)
 /*********************************************************************
  *
  * Function    :  usage
@@ -2881,6 +2903,7 @@ static void usage(const char *myname)
    exit(2);
 
 }
+#endif /* defined(unix) */
 
 
 /*********************************************************************
