@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.144 2007/08/11 14:43:22 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.145 2007/08/19 13:13:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,13 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.144 2007/08/11 14:43:22 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.145  2007/08/19 13:13:31  fabiankeil
+ *    - If there's a connection problem after we already forwarded
+ *      parts of the original content, just hang up. Fixes BR#1776724.
+ *    - Fix warnings about unused code on mingw32.
+ *    - In case of flushes, calculate the byte count
+ *      less incorrectly (I think).
+ *
  *    Revision 1.144  2007/08/11 14:43:22  fabiankeil
  *    Add some more prototypes for static functions.
  *
@@ -2597,10 +2604,7 @@ static void chat(struct client_state *csp)
                   int flushed;
 
                   log_error(LOG_LEVEL_ERROR, "Flushing header and buffers. Stepping back from filtering.");
-                  if (JB_ERR_OK != sed(server_patterns, add_server_headers, csp))
-                  {
-                     log_error(LOG_LEVEL_FATAL, "Failed to parse server headers.");
-                  }
+
                   hdr = list_to_text(csp->headers);
                   if (hdr == NULL)
                   {
@@ -2614,19 +2618,6 @@ static void chat(struct client_state *csp)
 
                      return;
                   }
-
-                  if (crunch_response_triggered(csp, crunchers_light))
-                  {
-                     /*
-                      * One of the tags created by a server-header
-                      * tagger triggered a crunch. We already
-                      * delivered the crunch response to the client
-                      * and are done here after cleaning up.
-                      */
-                     freez(hdr);
-                     return;
-                  }
-
                   hdrlen = strlen(hdr);
 
                   if (write_socket(csp->cfd, hdr, hdrlen)
@@ -2639,12 +2630,15 @@ static void chat(struct client_state *csp)
                      return;
                   }
 
-                  /* XXX: adding hdrlen and flushed doesn't seem right */
-                  byte_count += hdrlen + (size_t)flushed + (size_t)len;
+                  /*
+                   * Reset the byte_count to the amount of bytes
+                   * we just flushed. len will be added a few lines below,
+                   * hdrlen doesn't matter for LOG_LEVEL_CLF.
+                   */
+                  byte_count = (size_t)flushed;
                   freez(hdr);
                   content_filter = NULL;
                   server_body = 1;
-                  continue;
                }
             }
             else
