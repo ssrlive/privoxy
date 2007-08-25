@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.145 2007/08/19 13:13:31 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.146 2007/08/20 17:09:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.145 2007/08/19 13:13:31 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.146  2007/08/20 17:09:32  fabiankeil
+ *    Fix byte_count calculation in case of flushes
+ *    and don't parse the server headers a second time.
+ *
  *    Revision 1.145  2007/08/19 13:13:31  fabiankeil
  *    - If there's a connection problem after we already forwarded
  *      parts of the original content, just hang up. Fixes BR#1776724.
@@ -2141,22 +2145,21 @@ static void chat(struct client_state *csp)
    }
    csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
-   if (strcmp(http->cmd, csp->headers->first->str))
+   /* Check request line for rewrites. */
+   if ((NULL == csp->headers->first->str)
+      || (strcmp(http->cmd, csp->headers->first->str) &&
+         (JB_ERR_OK != change_request_destination(csp))))
    {
       /*
-       * A header filter rewrote the request line,
-       * modify the http request accordingly.
+       * A header filter broke the request line - bail out.
        */
-      if (JB_ERR_OK != change_request_destination(csp))
-      {
-         write_socket(csp->cfd, MESSED_UP_REQUEST_RESPONSE, strlen(MESSED_UP_REQUEST_RESPONSE));
-         /* XXX: Use correct size */
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request generated\" 500 0", csp->ip_addr_str);
-         log_error(LOG_LEVEL_ERROR, "Invalid request line after applying header filters.");
+      write_socket(csp->cfd, MESSED_UP_REQUEST_RESPONSE, strlen(MESSED_UP_REQUEST_RESPONSE));
+      /* XXX: Use correct size */
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request generated\" 500 0", csp->ip_addr_str);
+      log_error(LOG_LEVEL_ERROR, "Invalid request line after applying header filters.");
 
-         free_http_request(http);
-         return;
-      }
+      free_http_request(http);
+      return;
    }
 
    /* decide how to route the HTTP request */
