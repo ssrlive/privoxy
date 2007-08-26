@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.33 2007/07/27 10:57:35 hal9 Exp $
+ $Id: user-manual.sgml,v 2.34 2007/08/05 15:19:50 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.33 2007/07/27 10:57:35 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.34 2007/08/05 15:19:50 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1738,12 +1738,9 @@ for details.
 </para>
 
 <para>
- The syntax of all configuration files has remained the same throughout the
- 3.x series. There have been enhancements, but no changes that would preclude
- the use of any configuration file from one version to the next. (There is 
- one exception: <link linkend="FAST-REDIRECTS">+fast-redirects</link> which 
- has enhanced syntax and will require updating any local configs from earlier 
- versions.)
+ The syntax of the configuration and filter files may change between different
+ Privoxy versions, unfortunately some enhancements cost backwards compatibility.
+ <!-- Add link to documentation-->
 </para>
 
 <para>
@@ -1886,7 +1883,7 @@ for details.
     </para>
     <para>
      The default profiles, and their associated actions, as pre-defined in
-     <filename>standard.action</filename> are:
+     <filename>standard.action</filename> are<!-- different than this table which is out of date -->:
     </para>
     <para>
     <table frame=all><title>Default Configurations</title>
@@ -2022,7 +2019,7 @@ for details.
  edited from <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
  The over-riding principle when applying actions, is that the last action that
- matches a given URL, wins. The broadest, most general rules go first
+ matches a given URL wins. The broadest, most general rules go first
  (defined in <filename>default.action</filename>),
  followed by any exceptions (typically also in
  <filename>default.action</filename>), which are then followed lastly by any
@@ -2041,15 +2038,15 @@ for details.
  from consulting any previous file). And then below that,
  exceptions to the defined universal policies. You can regard
  <filename>user.action</filename> as an appendix to <filename>default.action</filename>,
- with the advantage that is a separate file, which makes preserving your
+ with the advantage that it is a separate file, which makes preserving your
  personal settings across <application>Privoxy</application> upgrades easier.
 </para>
 
 <para> 
  Actions can be used to block anything you want, including ads, banners, or
- just some obnoxious URL that you would rather not see. Cookies can be accepted
+ just some obnoxious URL whose content you would rather not see. Cookies can be accepted
  or rejected, or accepted only during the current browser session (i.e. not
- written to disk), content can be modified, JavaScripts tamed, user-tracking
+ written to disk), content can be modified, some JavaScripts tamed, user-tracking
  fooled, and much more. See below for a <link linkend="actions">complete list
  of actions</link>.
 </para>
@@ -2068,7 +2065,7 @@ for details.
  will have to make later. If, for example, you want to crunch all cookies per
  default, you'll have to make exceptions from that rule for sites that you
  regularly use and that require cookies for actually useful purposes, like maybe
- your bank, favorite shop, or newspaper. 
+ your bank, favorite shop, or newspaper.
 </para>
 
 <para>
@@ -2166,7 +2163,7 @@ for details.
 </para>
  
 <para>
- Generally, a URL pattern has the form
+ Generally, an URL pattern has the form
  <literal>&lt;domain&gt;/&lt;path&gt;</literal>, where both the
  <literal>&lt;domain&gt;</literal> and <literal>&lt;path&gt;</literal> are
  optional. (This is why the special <literal>/</literal> pattern matches all
@@ -2460,15 +2457,15 @@ for details.
 <para>
  Tag patterns are used to change the applying actions based on the
  request's tags. Tags can be created with either the
- <link linkend="CLIENT-HEADER-FILTER">client-header-tagger</link>
- or the  <link linkend="SERVER-HEADER-FILTER">server-header-tagger</link> action.
+ <link linkend="CLIENT-HEADER-TAGGER">client-header-tagger</link>
+ or the  <link linkend="SERVER-HEADER-TAGGER">server-header-tagger</link> action.
 </para>
 
 <para>
  Tag patterns have to start with <quote>TAG:</quote>, so &my-app;
  can tell them apart from URL patterns. Everything after the colon
  including white space, is interpreted as a regular expression with
- path patterns syntax, except that tag patterns aren't left-anchored
+ path pattern syntax, except that tag patterns aren't left-anchored
  automatically (Privoxy doesn't silently add a <quote>^</quote>,
  you have to do it yourself if you need it).
 </para>
@@ -2612,14 +2609,14 @@ for details.
 <para>
  If nothing is specified in any actions file, no <quote>actions</quote> are
  taken. So in this case <application>Privoxy</application> would just be a
- normal, non-blocking, non-anonymizing proxy. You must specifically enable the
+ normal, non-blocking, non-filtering proxy. You must specifically enable the
  privacy and blocking features you need (although the provided default actions
  files will give a good starting point).
 </para>
 
 <para>
- Later defined actions always over-ride earlier ones.  So exceptions 
- to any rules you make, should come in the latter part of the file (or 
+ Later defined action sections always over-ride earlier ones of the same type.
+ So exceptions to any rules you make, should come in the latter part of the file (or 
  in a file that is processed later when using multiple actions files such 
  as <filename>user.action</filename>). For multi-valued actions, the actions
  are applied in the order they are specified. Actions files are processed in
@@ -3235,8 +3232,9 @@ new action
   <term>Example usage (section):</term>
   <listitem>
     <para>
-     <screen># Let the browser revalidate cached documents without being tracked across sessions
-{ +hide-if-modified-since{-60} \
+     <screen># Let the browser revalidate cached documents but don't
+# allow the server to use the revalidation headers for user tracking.
+{+hide-if-modified-since{-60} \
  +overwrite-last-modified{randomize} \
  +crunch-if-none-match}
 /   </screen>
@@ -3256,7 +3254,7 @@ new action
   <term>Typical use:</term>
   <listitem>
    <para>
-    Prevent the web server from setting any cookies on your system
+    Prevent the web server from setting HTTP cookies on your system
    </para>
   </listitem>
  </varlistentry>
@@ -3712,7 +3710,7 @@ problem-host.example.com</screen>
     <para>
      <screen>
  { +fast-redirects{simple-check} }
-   .example.com 
+   one.example.com 
 
  { +fast-redirects{check-decoded-url} }
    another.example.com/testing</screen>
@@ -3933,7 +3931,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-ie-exploits">
-    <screen>+filter{ie-exploits}         # Disable some known Internet Explorer bug exploits</screen>
+    <screen>+filter{ie-exploits}         # Disable a known Internet Explorer bug exploits</screen>
    </para>
    <para>
     <anchor id="filter-site-specifics">
@@ -4057,7 +4055,7 @@ new action
   <term>Effect:</term>
   <listitem>
    <para>
-    Overrules the forward directives in the configuration files.
+    Overrules the forward directives in the configuration file.
    </para>    
   </listitem>
  </varlistentry>
@@ -4309,7 +4307,7 @@ example.org/.*\.js$
 # blocked as images:
 #
 {+block +handle-as-image}
-some.nasty-banner-server.com/junk.cgi?output=trash
+some.nasty-banner-server.com/junk.cgi\?output=trash
 
 # Banner source! Who cares if they also have non-image content?
 ad.doubleclick.net 
@@ -4474,6 +4472,10 @@ new action
     to another one, but in most cases it isn't worth the time to set
     it up.
    </para>
+   <para>
+    This action will probably be removed in the future,
+    use server-header filters instead.
+   </para>
   </listitem>
  </varlistentry>
 
@@ -4584,14 +4586,11 @@ new action
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-forwarded-for-headers">
 <title>hide-forwarded-for-headers</title>
-<!--
-new action
--->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Improve privacy by hiding the true source of the request</para>
+   <para>Improve privacy by not embedding the source of the request in the HTTP headers.</para>
   </listitem>
  </varlistentry>
 
@@ -4626,13 +4625,7 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    It is fairly safe to leave this on.
-   </para>
-   <para>
-    This action is scheduled for improvement: It should be able to generate forged 
-    <quote>X-Forwarded-for:</quote> headers using random IP addresses from a specified network,
-    to make successive requests from the same client look like requests from a pool of different
-    users sharing the same proxy.
+    It is safe to leave this on.
    </para>
   </listitem>
  </varlistentry>
@@ -4758,6 +4751,11 @@ new action
     <listitem>
      <para><quote>conditional-block</quote> to delete the header completely if the host has changed.</para>
     </listitem>
+<!--
+    <listitem>
+     <para><quote>conditional-forge</quote> to forge the header if the host has changed.</para>
+    </listitem>
+-->
     <listitem>
      <para><quote>block</quote> to delete the header unconditionally.</para>
     </listitem>
@@ -8944,6 +8942,17 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.34  2007/08/05 15:19:50  fabiankeil
+ - Don't claim HTTP/1.1 compliance.
+ - Use $ in some of the path pattern examples.
+ - Use a hide-user-agent example argument without
+   leading and trailing space.
+ - Make it clear that the cookie actions work with
+   HTTP cookies only.
+ - Rephrase the inspect-jpegs text to underline
+   that it's only meant to protect against a single
+   exploit.
+
  Revision 2.33  2007/07/27 10:57:35  hal9
  Add references for user-agent strings for hide-user-agenet
 
