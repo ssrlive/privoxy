@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.34 2007/08/05 15:19:50 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.35 2007/08/26 14:59:49 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.34 2007/08/05 15:19:50 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.35 2007/08/26 14:59:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1513,7 +1513,6 @@ must find a better place for this paragraph
  <listitem>
   <para>
    <emphasis>--pidfile FILE</emphasis>
-  
   </para>
   <para>
    On startup, write the process ID to <emphasis>FILE</emphasis>. Delete the
@@ -1525,7 +1524,6 @@ must find a better place for this paragraph
  <listitem>
   <para>
    <emphasis>--user USER[.GROUP]</emphasis>
-  
   </para>
   <para>
    After (optionally) writing the PID file, assume the user  ID  of
@@ -1533,10 +1531,9 @@ must find a better place for this paragraph
    privileges are not sufficient to do so. Unix only.
   </para>
  </listitem>
-  <listitem>
+ <listitem>
   <para>
    <emphasis>--chroot</emphasis>
-  
   </para>
   <para>
    Before changing to the user ID given in the <emphasis>--user</emphasis> option, 
@@ -1546,6 +1543,24 @@ must find a better place for this paragraph
    Unix only.
   </para>
  </listitem>
+ <listitem>
+  <para>
+   <emphasis>--pre-chroot-nslookup hostname</emphasis>
+  </para>
+  <para>
+   Specifies a hostname to look up before doing a chroot. On some systems, initializing the
+   resolver library involves reading config files from /etc and/or loading additional shared
+   libraries from /lib. On these systems, doing a hostname lookup before the chroot reduces
+   the number of files that must be copied into the chroot tree.
+  </para>
+  <para>
+   For fastest startup speed, a good value is a hostname that is not in /etc/hosts but that
+   your local name server (listed in /etc/resolv.conf) can resolve without recursion
+   (that is, without having to ask any other name servers). The hostname doesn't need not exist,
+   but if it doesn't, an error message (which can be ignored) will be output.
+  </para>
+ </listitem>
+
  <listitem>
   <para>
     <emphasis>configfile</emphasis>
@@ -8942,6 +8957,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.35  2007/08/26 14:59:49  fabiankeil
+ Minor rewordings and fixes.
+
  Revision 2.34  2007/08/05 15:19:50  fabiankeil
  - Don't claim HTTP/1.1 compliance.
  - Use $ in some of the path pattern examples.

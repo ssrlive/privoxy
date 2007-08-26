@@ -117,9 +117,13 @@ ChangeLog for Privoxy
 - Fix socks requests on big-endian platforms. Patch provided by Song Weijia.
 - Rejected CONNECT requests are logged with log level info
   (enabled by default) and the reason for the block.
+- New command line option "--pre-chroot-nslookup hostname" to
+  intialize the resolver library before chroot'ing. On some systems this
+  reduces the number of files that must be copied into the chroot tree.
+  (Patch provided by Stephen Gildea)
 - Minor code clean-ups, filter and action file updates.
-  (Some of them reported by Davide Alberani, Markus Elfring
-  and Adam Piggott)
+  (Some of them reported by Davide Alberani, Markus Elfring,
+   Stefan Huehner and Adam Piggott)
 
 *** Version 3.0.6 ***
 

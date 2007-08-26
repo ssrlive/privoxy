@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.146 2007/08/20 17:09:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.147 2007/08/25 14:42:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.146 2007/08/20 17:09:32 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.147  2007/08/25 14:42:40  fabiankeil
+ *    Don't crash if a broken header filter wiped out the request line.
+ *
  *    Revision 1.146  2007/08/20 17:09:32  fabiankeil
  *    Fix byte_count calculation in case of flushes
  *    and don't parse the server headers a second time.
@@ -2892,7 +2895,7 @@ static void usage(const char *myname)
 #endif /* defined(unix) */
           "[--help] "
 #if defined(unix)
-          "[--no-daemon] [--pidfile pidfile] [--user user[.group]] "
+          "[--no-daemon] [--pidfile pidfile] [--pre-chroot-nslookup hostname] [--user user[.group]] "
 #endif /* defined(unix) */
           "[--version] [configfile]\n"
           "Aborting\n", myname);
@@ -3005,6 +3008,7 @@ int main(int argc, const char *argv[])
    struct group *grp = NULL;
    char *p;
    int do_chroot = 0;
+   char *pre_chroot_nslookup_to_load_resolver = NULL;
 #endif
 
    Argc = argc;
@@ -3097,6 +3101,12 @@ int main(int argc, const char *argv[])
          }
 
          if (p != NULL) *--p = '\0';
+      }
+
+      else if (strcmp(argv[argc_pos], "--pre-chroot-nslookup" ) == 0)
+      {
+         if (++argc_pos == argc) usage(argv[0]);
+         pre_chroot_nslookup_to_load_resolver = strdup(argv[argc_pos]);
       }
 
       else if (strcmp(argv[argc_pos], "--chroot" ) == 0)
@@ -3306,6 +3316,14 @@ int main(int argc, const char *argv[])
          if (!pw->pw_dir)
          {
             log_error(LOG_LEVEL_FATAL, "Home directory for %s undefined", pw->pw_name);
+         }
+         /* Read the time zone file from /etc before doing chroot. */
+         tzset();
+         if (NULL != pre_chroot_nslookup_to_load_resolver
+             && '\0' != pre_chroot_nslookup_to_load_resolver[0])
+         {
+            /* Initialize resolver library. */
+            (void) resolve_hostname_to_ip(pre_chroot_nslookup_to_load_resolver);
          }
          if (chroot(pw->pw_dir) < 0)
          {
