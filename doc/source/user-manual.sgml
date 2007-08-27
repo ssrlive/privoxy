@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.35 2007/08/26 14:59:49 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.36 2007/08/26 16:47:14 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.35 2007/08/26 14:59:49 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.36 2007/08/26 16:47:14 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1556,7 +1556,7 @@ must find a better place for this paragraph
   <para>
    For fastest startup speed, a good value is a hostname that is not in /etc/hosts but that
    your local name server (listed in /etc/resolv.conf) can resolve without recursion
-   (that is, without having to ask any other name servers). The hostname doesn't need not exist,
+   (that is, without having to ask any other name servers). The hostname need not exist,
    but if it doesn't, an error message (which can be ignored) will be output.
   </para>
  </listitem>
@@ -8957,6 +8957,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.36  2007/08/26 16:47:14  fabiankeil
+ Add Stephen Gildea's --pre-chroot-nslookup patch [#1276666],
+ extensive comments moved to user manual.
+
  Revision 2.35  2007/08/26 14:59:49  fabiankeil
  Minor rewordings and fixes.
 
