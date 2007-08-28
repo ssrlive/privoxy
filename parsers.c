@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.106 2007/08/18 14:30:32 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.107 2007/08/28 18:16:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.106 2007/08/18 14:30:32 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.107  2007/08/28 18:16:32  fabiankeil
+ *    Fix possible memory corruption in server_http, make sure it's not
+ *    executed for ordinary server headers and mark some problems for later.
+ *
  *    Revision 1.106  2007/08/18 14:30:32  fabiankeil
  *    Let content-type-overwrite{} honour force-text-mode again.
  *
@@ -1018,7 +1022,7 @@ jb_err decompress_iob(struct client_state *csp)
        * This is to protect the parsing of gzipped data,
        * but it should(?) be valid for deflated data also.
        */
-      log_error (LOG_LEVEL_ERROR, "Buffer too small decompressing iob");
+      log_error(LOG_LEVEL_ERROR, "Buffer too small decompressing iob");
       return JB_ERR_COMPRESS;
    }
 
@@ -1040,7 +1044,7 @@ jb_err decompress_iob(struct client_state *csp)
        || (*cur++ != (char)0x8b)
        || (*cur++ != Z_DEFLATED))
       {
-         log_error (LOG_LEVEL_ERROR, "Invalid gzip header when decompressing");
+         log_error(LOG_LEVEL_ERROR, "Invalid gzip header when decompressing");
          return JB_ERR_COMPRESS;
       }
       else
@@ -1053,7 +1057,7 @@ jb_err decompress_iob(struct client_state *csp)
          if (flags & 0xe0)
          {
             /* The gzip header has reserved bits set; bail out. */
-            log_error (LOG_LEVEL_ERROR, "Invalid gzip header flags when decompressing");
+            log_error(LOG_LEVEL_ERROR, "Invalid gzip header flags when decompressing");
             return JB_ERR_COMPRESS;
          }
          cur += 6;
@@ -1094,12 +1098,12 @@ jb_err decompress_iob(struct client_state *csp)
              */
             if((skip_bytes < 0) || (skip_bytes >= (csp->iob->eod - cur)))
             {
-               log_error (LOG_LEVEL_ERROR,
+               log_error(LOG_LEVEL_ERROR,
                   "Unreasonable amount of bytes to skip (%d). Stopping decompression",
                   skip_bytes);
                return JB_ERR_COMPRESS;
             }
-            log_error (LOG_LEVEL_INFO,
+            log_error(LOG_LEVEL_INFO,
                "Skipping %d bytes for gzip compression. Does this sound right?",
                skip_bytes);
             cur += skip_bytes;
@@ -1133,7 +1137,7 @@ jb_err decompress_iob(struct client_state *csp)
              * the buffer end, we were obviously tricked to skip
              * too much.
              */
-            log_error (LOG_LEVEL_ERROR,
+            log_error(LOG_LEVEL_ERROR,
                "Malformed gzip header detected. Aborting decompression.");
             return JB_ERR_COMPRESS;
          }
@@ -1145,7 +1149,7 @@ jb_err decompress_iob(struct client_state *csp)
        * XXX: The debug level should be lowered
        * before the next stable release.
        */
-      log_error (LOG_LEVEL_INFO, "Decompressing deflated iob: %d", *cur);
+      log_error(LOG_LEVEL_INFO, "Decompressing deflated iob: %d", *cur);
       /*
        * In theory (that is, according to RFC 1950), deflate-compressed
        * data should begin with a two-byte zlib header and have an
@@ -1165,7 +1169,7 @@ jb_err decompress_iob(struct client_state *csp)
    }
    else
    {
-      log_error (LOG_LEVEL_ERROR,
+      log_error(LOG_LEVEL_ERROR,
          "Unable to determine compression format for decompression");
       return JB_ERR_COMPRESS;
    }
@@ -1183,7 +1187,7 @@ jb_err decompress_iob(struct client_state *csp)
     */
    if (inflateInit2 (&zstr, -MAX_WBITS) != Z_OK)
    {
-      log_error (LOG_LEVEL_ERROR, "Error initializing decompression");
+      log_error(LOG_LEVEL_ERROR, "Error initializing decompression");
       return JB_ERR_COMPRESS;
    }
 
@@ -1192,10 +1196,10 @@ jb_err decompress_iob(struct client_state *csp)
     * We don't modify the existing iob yet, so in case there
     * is error in decompression we can recover gracefully.
     */
-   buf = zalloc (bufsize);
+   buf = zalloc(bufsize);
    if (NULL == buf)
    {
-      log_error (LOG_LEVEL_ERROR, "Out of memory decompressing iob");
+      log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob");
       return JB_ERR_MEMORY;
    }
 
