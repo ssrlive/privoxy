@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.17 2007/04/15 16:39:21 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.18 2007/07/30 16:42:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,11 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.17 2007/04/15 16:39:21 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.18  2007/07/30 16:42:21  fabiankeil
+ *    Move the method check into unknown_method()
+ *    and loop through the known methods instead
+ *    of using a screen-long OR chain.
+ *
  *    Revision 1.17  2007/04/15 16:39:21  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -161,6 +166,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.17 2007/04/15 16:39:21 fabianke
 #include "ssplit.h"
 #include "miscutil.h"
 #include "errlog.h"
+/*
+ * XXX: only for match_portlist() which I will relocate soonish.
+ */
+#include "filters.h"
 
 const char urlmatch_h_rcs[] = URLMATCH_H_VERSION;
 
@@ -807,20 +816,20 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
    }
 
    /* Only reached for URL patterns */
-   if ((p = strchr(buf, '/')) != NULL)
+   p = strchr(buf, '/');
+   if (NULL != p)
    {
-      if (NULL == (url->path = strdup(p)))
+      url->path = strdup(p);
+      if (NULL == url->path)
       {
          freez(url->spec);
          return JB_ERR_MEMORY;
       }
-      url->pathlen = strlen(url->path);
       *p = '\0';
    }
    else
    {
-      url->path    = NULL;
-      url->pathlen = 0;
+      url->path = NULL;
    }
    if (url->path)
    {
@@ -856,14 +865,20 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
          return JB_ERR_PARSE;
       }
    }
-   if ((p = strchr(buf, ':')) == NULL)
+
+   p = strchr(buf, ':');
+   if (NULL != p)
    {
-      url->port = 0;
+      *p++ = '\0';
+      url->port_list = strdup(p);
+      if (NULL == url->port_list)
+      {
+         return JB_ERR_MEMORY;
+      }
    }
    else
    {
-      *p++ = '\0';
-      url->port = atoi(p);
+      url->port_list = NULL;
    }
 
    if (buf[0] != '\0')
@@ -974,6 +989,7 @@ void free_url_spec(struct url_spec *url)
    freez(url->dbuffer);
    freez(url->dvec);
    freez(url->path);
+   freez(url->port_list);
    if (url->preg)
    {
       regfree(url->preg);
@@ -1003,17 +1019,22 @@ void free_url_spec(struct url_spec *url)
 int url_match(const struct url_spec *pattern,
               const struct http_request *url)
 {
+   int port_matches;
+   int domain_matches;
+   int path_matches;
+
    if (pattern->tag_regex != NULL)
    {
       /* It's a tag pattern and shouldn't be matched against URLs */
       return 0;
    } 
 
-   return ((pattern->port == 0) || (pattern->port == url->port))
-       && ((pattern->dbuffer == NULL) || (domain_match(pattern, url) == 0))
-       && ((pattern->path == NULL) ||
-            (regexec(pattern->preg, url->path, 0, NULL, 0) == 0)
-      );
+   port_matches = (NULL == pattern->port_list) || match_portlist(pattern->port_list, url->port);
+   domain_matches = (NULL == pattern->dbuffer) || (0 == domain_match(pattern, url));
+   path_matches = (NULL == pattern->path) || (0 == regexec(pattern->preg, url->path, 0, NULL, 0));
+
+   return (port_matches && domain_matches && path_matches);
+
 }
 
 
