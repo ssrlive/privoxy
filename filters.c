@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.88 2007/06/01 16:41:11 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.89 2007/08/05 13:42:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.88 2007/06/01 16:41:11 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.89  2007/08/05 13:42:23  fabiankeil
+ *    #1763173 from Stefan Huehner: declare some more functions static.
+ *
  *    Revision 1.88  2007/06/01 16:41:11  fabiankeil
  *    Add forward-override{} to change the forwarding settings through
  *    action sections. This is mainly interesting to forward different
@@ -2248,7 +2251,7 @@ size_t remove_chunked_transfer_coding(char *buffer, const size_t size)
    }
 
    /* FIXME: Should this get its own loglevel? */
-   log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d\n", size, newsize);
+   log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", size, newsize);
    return(newsize);
 
 }
@@ -2464,6 +2467,7 @@ static const struct forward_spec *get_forward_override_settings(struct client_st
 
    return fwd;
 }
+
 
 /*********************************************************************
  *
