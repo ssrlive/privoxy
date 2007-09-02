@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.89 2007/08/05 13:42:23 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.90 2007/09/02 12:44:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.89 2007/08/05 13:42:23 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.90  2007/09/02 12:44:17  fabiankeil
+ *    Remove newline at the end of a log_error() message.
+ *
  *    Revision 1.89  2007/08/05 13:42:23  fabiankeil
  *    #1763173 from Stefan Huehner: declare some more functions static.
  *
@@ -769,86 +772,6 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
 
 }
 #endif /* def FEATURE_ACL */
-
-
-/*********************************************************************
- *
- * Function    :  match_portlist
- *
- * Description :  Check if a given number is covered by a comma
- *                separated list of numbers and ranges (a,b-c,d,..)
- *
- * Parameters  :
- *          1  :  portlist = String with list
- *          2  :  port = port to check
- *
- * Returns     :  0 => no match
- *                1 => match
- *
- *********************************************************************/
-int match_portlist(const char *portlist, int port)
-{
-   char *min, *max, *next, *portlist_copy;
-
-   min = next = portlist_copy = strdup(portlist);
-
-   /*
-    * Zero-terminate first item and remember offset for next
-    */
-   if (NULL != (next = strchr(portlist_copy, (int) ',')))
-   {
-      *next++ = '\0';
-   }
-
-   /*
-    * Loop through all items, checking for match
-    */
-   while(min)
-   {
-      if (NULL == (max = strchr(min, (int) '-')))
-      {
-         /*
-          * No dash, check for equality
-          */
-         if (port == atoi(min))
-         {
-            free(portlist_copy);
-            return(1);
-         }
-      }
-      else
-      {
-         /*
-          * This is a range, so check if between min and max,
-          * or, if max was omitted, between min and 65K
-          */
-         *max++ = '\0';
-         if(port >= atoi(min) && port <= (atoi(max) ? atoi(max) : 65535))
-         {
-            free(portlist_copy);
-            return(1);
-         }
-
-      }
-
-      /*
-       * Jump to next item
-       */
-      min = next;
-
-      /*
-       * Zero-terminate next item and remember offset for n+1
-       */
-      if ((NULL != next) && (NULL != (next = strchr(next, (int) ','))))
-      {
-         *next++ = '\0';
-      }
-   }
-
-   free(portlist_copy);
-   return 0;
-
-}
 
 
 /*********************************************************************

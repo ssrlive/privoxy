@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.26 2007/03/13 11:28:43 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.27 2007/04/30 15:02:18 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.27  2007/04/30 15:02:18  fabiankeil
+ *    Introduce dynamic pcrs jobs that can resolve variables.
+ *
  *    Revision 1.26  2007/03/13 11:28:43  fabiankeil
  *    - Fix port handling in acl_addr() and use a temporary acl spec
  *      copy so error messages don't contain a truncated version.
@@ -254,7 +257,6 @@ struct url_spec;
 extern int block_acl(struct access_control_addr *dst, struct client_state *csp);
 extern int acl_addr(const char *aspec, struct access_control_addr *aca);
 #endif /* def FEATURE_ACL */
-extern int match_portlist(const char *portlist, int port);
 
 /*
  * Interceptors

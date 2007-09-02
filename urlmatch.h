@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.6 2006/12/06 19:12:43 fabiankeil Exp $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.7 2007/01/06 14:24:38 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: urlmatch.h,v $
+ *    Revision 1.7  2007/01/06 14:24:38  fabiankeil
+ *    Mark *csp as immutable for parse_http_url()
+ *    and url_match().
+ *
  *    Revision 1.6  2006/12/06 19:12:43  fabiankeil
  *    Added prototype for init_domain_components().
  *
@@ -89,6 +93,7 @@ extern int url_match(const struct url_spec *pattern,
 
 extern jb_err create_url_spec(struct url_spec * url, const char * buf);
 extern void free_url_spec(struct url_spec *url);
+extern int match_portlist(const char *portlist, int port);
 
 
 /* Revision control strings from this header and associated .c file */
