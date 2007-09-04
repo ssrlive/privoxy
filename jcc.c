@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.147 2007/08/25 14:42:40 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.148 2007/08/26 16:47:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.147 2007/08/25 14:42:40 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.148  2007/08/26 16:47:13  fabiankeil
+ *    Add Stephen Gildea's --pre-chroot-nslookup patch [#1276666],
+ *    extensive comments moved to user manual.
+ *
  *    Revision 1.147  2007/08/25 14:42:40  fabiankeil
  *    Don't crash if a broken header filter wiped out the request line.
  *
@@ -1912,7 +1916,7 @@ static void chat(struct client_state *csp)
    char buf[BUFFER_SIZE];
    char *hdr;
    char *p;
-   char *req;
+   char *req = NULL;
    fd_set rfds;
    int n;
    jb_socket maxfd;
