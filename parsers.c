@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.107 2007/08/28 18:16:32 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.108 2007/08/28 18:21:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.107 2007/08/28 18:16:32 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.108  2007/08/28 18:21:03  fabiankeil
+ *    A bunch of whitespace fixes, pointy hat to me.
+ *
  *    Revision 1.107  2007/08/28 18:16:32  fabiankeil
  *    Fix possible memory corruption in server_http, make sure it's not
  *    executed for ordinary server headers and mark some problems for later.
@@ -798,6 +801,11 @@ static jb_err client_cookie_adder     (struct client_state *csp);
 static jb_err client_xtra_adder       (struct client_state *csp);
 static jb_err client_x_forwarded_adder(struct client_state *csp);
 static jb_err connection_close_adder  (struct client_state *csp); 
+
+static jb_err create_forged_referrer(char **header, const char *hostport);
+static jb_err create_fake_referrer(char **header, const char *fake_referrer);
+static jb_err handle_conditional_hide_referrer_parameter(char **header,
+   const char *host, const int parameter_conditional_block);
 
 const struct parsers client_patterns[] = {
    { "referer:",                  8,   client_referrer },
@@ -2670,6 +2678,7 @@ static jb_err client_te(struct client_state *csp, char **header)
    return JB_ERR_OK;
 }
 
+
 /*********************************************************************
  *
  * Function    :  client_referrer
@@ -2690,112 +2699,64 @@ static jb_err client_te(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err client_referrer(struct client_state *csp, char **header)
 {
-   const char *newval;
-   const char *host;
-   char *referer;
-   size_t hostlenght;
+   const char *parameter;
+   /* booleans for parameters we have to check multiple times */
+   int parameter_conditional_block;
+   int parameter_conditional_forge;
  
 #ifdef FEATURE_FORCE_LOAD
-   /* Since the referrer can include the prefix even
+   /*
+    * Since the referrer can include the prefix even
     * if the request itself is non-forced, we must
-    * clean it unconditionally
+    * clean it unconditionally.
+    *
+    * XXX: strclean is too broad
     */
    strclean(*header, FORCE_PREFIX);
 #endif /* def FEATURE_FORCE_LOAD */
 
-   /*
-    * Are we sending referer?
-    */
    if ((csp->action->flags & ACTION_HIDE_REFERER) == 0)
    {
+      /* Nothing left to do */
       return JB_ERR_OK;
    }
 
-   newval = csp->action->string[ACTION_STRING_REFERER];
+   parameter = csp->action->string[ACTION_STRING_REFERER];
+   assert(parameter != NULL);
+   parameter_conditional_block = (0 == strcmpic(parameter, "conditional-block"));
+   parameter_conditional_forge = (0 == strcmpic(parameter, "conditional-forge"));
 
-   if ((0 != strcmpic(newval, "conditional-block")))
-   {  
-      freez(*header);
-   }
-   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   if (!parameter_conditional_block && !parameter_conditional_forge)
    {
       /*
-       * Blocking referer
+       * As conditional-block and conditional-forge are the only
+       * parameters that rely on the original referrer, we can
+       * remove it now for all the others.
        */
+      freez(*header);
+   }
+
+   if (0 == strcmpic(parameter, "block"))
+   {
       log_error(LOG_LEVEL_HEADER, "Referer crunched!");
       return JB_ERR_OK;
    }
-   else if (0 == strcmpic(newval, "conditional-block"))
+   else if (parameter_conditional_block || parameter_conditional_forge)
    {
-      /*
-       * Block referer if host has changed.
-       */
-
-      if (NULL == (host = strdup(csp->http->hostport)))
-      {
-         freez(*header);
-         log_error(LOG_LEVEL_HEADER, "Referer crunched! Couldn't allocate memory for temporary host copy.");
-         return JB_ERR_MEMORY;
-      }
-      if (NULL == (referer = strdup(*header)))
-      {
-         freez(*header);
-         freez(host);
-         log_error(LOG_LEVEL_HEADER, "Referer crunched! Couldn't allocate memory for temporary referer copy.");
-         return JB_ERR_MEMORY;
-      }
-      hostlenght = strlen(host);
-      if ( hostlenght < (strlen(referer)-17) ) /*referer begins with 'Referer: http[s]://'*/
-      {
-         /*Shorten referer to make sure the referer is blocked
-          *if www.example.org/www.example.com-shall-see-the-referer/
-          *links to www.example.com/
-          */
-         referer[hostlenght+17] = '\0';
-      }
-      if ( 0 == strstr(referer, host)) /*Host has changed*/
-      {
-         log_error(LOG_LEVEL_HEADER, "New host is: %s. Crunching %s!", host, *header);
-         freez(*header);
-      }
-      else
-      {
-         log_error(LOG_LEVEL_HEADER, "%s (not modified, still on %s)", *header, host);
-      }
-      freez(referer);
-      freez(host);
-      return JB_ERR_OK;    
+      return handle_conditional_hide_referrer_parameter(header,
+         csp->http->hostport, parameter_conditional_block);
    }
-   else if (0 != strcmpic(newval, "forge"))
+   else if (0 == strcmpic(parameter, "forge"))
    {
-      /*
-       * We have a specific (fixed) referer we want to send.
-       */
-      if ((0 != strncmpic(newval, "http://", 7)) && (0 != strncmpic(newval, "https://", 8)))
-      {
-         log_error(LOG_LEVEL_HEADER, "Parameter: +referrer{%s} is a bad idea, but I don't care.", newval);
-      }
-      *header = strdup("Referer: ");
-      string_append(header, newval);
-      log_error(LOG_LEVEL_HEADER, "Referer overwritten with: %s", *header);
-
-      return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+      return create_forged_referrer(header, csp->http->hostport);
    }
    else
    {
-      /*
-       * Forge a referer as http://[hostname:port of REQUEST]/
-       * to fool stupid checks for in-site links
-       */
-
-      *header = strdup("Referer: http://");
-      string_append(header, csp->http->hostport);
-      string_append(header, "/");
-      log_error(LOG_LEVEL_HEADER, "Referer forged to: %s", *header);
-      
-      return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
+      /* interpret parameter as user-supplied referer to fake */
+      return create_fake_referrer(header, parameter);
    }
 }
+
 
 /*********************************************************************
  *
@@ -3533,6 +3494,7 @@ jb_err client_cookie_adder(struct client_state *csp)
    return err;
 }
 
+
 #if 0
 /*********************************************************************
  *
@@ -3561,6 +3523,7 @@ static jb_err client_accept_encoding_adder(struct client_state *csp)
    return JB_ERR_OK;
 }
 #endif
+
 
 /*********************************************************************
  *
@@ -3710,7 +3673,6 @@ static jb_err connection_close_adder(struct client_state *csp)
  *********************************************************************/
 static jb_err server_http(struct client_state *csp, char **header)
 {
-   /* XXX: Doesn't belong here. */
    sscanf(*header, "HTTP/%*d.%*d %d", &(csp->http->status));
    if (csp->http->status == 206)
    {
@@ -4118,6 +4080,142 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  create_forged_referrer
+ *
+ * Description :  Helper for client_referrer to forge a referer as
+ *                'http://[hostname:port/' to fool stupid
+ *                checks for in-site links 
+ *
+ * Parameters  :
+ *          1  :  header   = Pointer to header pointer
+ *          2  :  hostport = Host and optionally port as string
+ *
+ * Returns     :  JB_ERR_OK in case of success, or
+ *                JB_ERR_MEMORY in case of memory problems.
+ *
+ *********************************************************************/
+static jb_err create_forged_referrer(char **header, const char *hostport)
+{
+    assert(NULL == *header);
+
+    *header = strdup("Referer: http://");
+    string_append(header, hostport);
+    string_append(header, "/");
+
+    if (NULL == *header)
+    {
+       return JB_ERR_MEMORY;
+    }
+
+    log_error(LOG_LEVEL_HEADER, "Referer forged to: %s", *header);
+
+    return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  create_fake_referrer
+ *
+ * Description :  Helper for client_referrer to create a fake referrer
+ *                based on a string supplied by the user.
+ *
+ * Parameters  :
+ *          1  :  header   = Pointer to header pointer
+ *          2  :  hosthost = Referrer to fake
+ *
+ * Returns     :  JB_ERR_OK in case of success, or
+ *                JB_ERR_MEMORY in case of memory problems.
+ *
+ *********************************************************************/
+static jb_err create_fake_referrer(char **header, const char *fake_referrer)
+{
+   assert(NULL == *header);
+
+   if ((0 != strncmpic(fake_referrer, "http://", 7)) && (0 != strncmpic(fake_referrer, "https://", 8)))
+   {
+      log_error(LOG_LEVEL_HEADER,
+         "Parameter: +hide-referrer{%s} is a bad idea, but I don't care.", fake_referrer);
+   }
+   *header = strdup("Referer: ");
+   string_append(header, fake_referrer);
+
+   if (NULL == *header)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   log_error(LOG_LEVEL_HEADER, "Referer replaced with: %s", *header);
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  handle_conditional_hide_referrer_parameter
+ *
+ * Description :  Helper for client_referrer to crunch or forge
+ *                the referrer header if the host has changed.
+ *
+ * Parameters  :
+ *          1  :  header = Pointer to header pointer
+ *          2  :  host   = The target host (may include the port)
+ *          3  :  parameter_conditional_block = Boolean to signal
+ *                if we're in conditional-block mode. If not set,
+ *                we're in conditional-forge mode.
+ *
+ * Returns     :  JB_ERR_OK in case of success, or
+ *                JB_ERR_MEMORY in case of memory problems.
+ *
+ *********************************************************************/
+static jb_err handle_conditional_hide_referrer_parameter(char **header,
+   const char *host, const int parameter_conditional_block)
+{
+   char *referer = strdup(*header);
+   const size_t hostlenght = strlen(host);
+
+   if (NULL == referer)
+   {
+      freez(*header);
+      return JB_ERR_MEMORY;
+   }
+
+   /* referer begins with 'Referer: http[s]://' */
+   if (hostlenght < (strlen(referer)-17))
+   {
+      /*
+       * Shorten referer to make sure the referer is blocked
+       * if www.example.org/www.example.com-shall-see-the-referer/
+       * links to www.example.com/
+       */
+      referer[hostlenght+17] = '\0';
+   }
+   if (NULL == strstr(referer, host))
+   {
+      /* Host has changed */
+      if (parameter_conditional_block)
+      {
+         log_error(LOG_LEVEL_HEADER, "New host is: %s. Crunching %s!", host, *header);
+         freez(*header);
+      }
+      else
+      {
+         freez(*header);
+         freez(referer);
+         return create_forged_referrer(header, host);
+      }
+   }
+   freez(referer);
+
+   return JB_ERR_OK;
+
+}
 
 /*
   Local Variables:
