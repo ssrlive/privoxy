@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.27 2007/04/09 17:48:51 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.28 2007/05/11 11:48:16 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,13 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.28  2007/05/11 11:48:16  fabiankeil
+ *    - Delete strsav() which was replaced
+ *      by string_append() years ago.
+ *    - Add a strlcat() look-alike.
+ *    - Use strlcat() and strlcpy() in those parts
+ *      of the code that are run on unixes.
+ *
  *    Revision 1.27  2007/04/09 17:48:51  fabiankeil
  *    Check for HAVE_SNPRINTF instead of __OS2__
  *    before including the portable snprintf() code.
@@ -218,7 +225,9 @@ time_t timegm(struct tm *tm);
 
 /* Here's looking at you, Ulrich. */
 #if !defined(HAVE_STRLCPY)
-#define strlcpy(dst, src, size) (size_t)snprintf((dst), (size), "%s", (src))
+size_t privoxy_strlcpy(char *destination, const char *source, size_t size);
+#define strlcpy privoxy_strlcpy
+#define USE_PRIVOXY_STRLCPY 1
 #define HAVE_STRLCPY 1
 #endif /* ndef HAVE_STRLCPY*/
 

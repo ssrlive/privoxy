@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.51 2007/06/17 16:12:22 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.52 2007/08/19 12:32:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.51 2007/06/17 16:12:22 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.52  2007/08/19 12:32:34  fabiankeil
+ *    Fix a conversion warning.
+ *
  *    Revision 1.51  2007/06/17 16:12:22  fabiankeil
  *    #ifdef _WIN32 the last commit. According to David Shaw,
  *    one of the gnupg developers, the changes are mingw32-specific.
@@ -1112,6 +1115,38 @@ long int pick_from_range(long int range)
 }
 
 
+#ifdef USE_PRIVOXY_STRLCPY
+/*********************************************************************
+ *
+ * Function    :  privoxy_strlcpy
+ *
+ * Description :  strlcpy(3) look-alike for those without decent libc.
+ *
+ * Parameters  :
+ *          1  :  destination: buffer to copy into.
+ *          2  :  source: String to copy.
+ *          3  :  size: Size of destination buffer.
+ *
+ * Returns     :  The length of the string that privoxy_strlcpy() tried to create.
+ *
+ *********************************************************************/
+size_t privoxy_strlcpy(char *destination, const char *source, const size_t size)
+{
+   snprintf(destination, size, "%s", source);
+   /*
+    * Platforms that lack strlcpy() also tend to have
+    * a broken snprintf implementation that doesn't
+    * guarantee nul termination.
+    *
+    * XXX: the configure script should detect and reject those.
+    */
+   destination[(size > 1) ? size-1 : 0] = '\0';
+
+   return strlen(source);
+}
+#endif /* def USE_PRIVOXY_STRLCPY */
+
+
 #ifndef HAVE_STRLCAT
 /*********************************************************************
  *
@@ -1124,7 +1159,7 @@ long int pick_from_range(long int range)
  *          2  :  source: String to copy.
  *          3  :  size: Size of destination buffer.
  *
- * Returns     :  The length of the string that strlcat tried to create.
+ * Returns     :  The length of the string that privoxy_strlcat() tried to create.
  *
  *********************************************************************/
 size_t privoxy_strlcat(char *destination, const char *source, const size_t size)
