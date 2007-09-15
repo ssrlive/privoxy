@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.42 2007/04/01 17:37:07 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.43 2007/06/01 18:16:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,12 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.42 2007/04/01 17:37:07 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.43  2007/06/01 18:16:36  fabiankeil
+ *    Use the same mutex for gethostbyname() and gethostbyaddr() to prevent
+ *    deadlocks and crashes on OpenBSD and possibly other OS with neither
+ *    gethostbyname_r() nor gethostaddr_r(). Closes BR#1729174.
+ *    Thanks to Ralf Horstmann for report and solution.
+ *
  *    Revision 1.42  2007/04/01 17:37:07  fabiankeil
  *    - Add DNS retries for Solaris and other systems
  *      whose gethostbyname_r version takes five arguments.
@@ -299,6 +305,11 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  * XXX: Does it make sense to make this a config option?
  */
 #define MAX_DNS_RETRIES 10
+
+#ifndef SOMAXCONN
+/* XXX: Might not be necessary. */
+#define SOMAXCONN 128
+#endif
 
 /*********************************************************************
  *
@@ -647,7 +658,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
     * duplicate instances of Privoxy from being caught.
     *
     * On UNIX, we assume the user is sensible enough not
-    * to start Junkbuster multiple times on the same IP.
+    * to start Privoxy multiple times on the same IP.
     * Without this, stopping and restarting Privoxy
     * from a script fails.
     * Note: SO_REUSEADDR is meant to only take over
@@ -676,7 +687,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       }
    }
 
-   while (listen(fd, 5) == -1)
+   while (listen(fd, SOMAXCONN) == -1)
    {
       if (errno != EINTR)
       {
