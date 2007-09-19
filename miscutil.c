@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.52 2007/08/19 12:32:34 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.53 2007/09/09 18:20:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.52 2007/08/19 12:32:34 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.53  2007/09/09 18:20:20  fabiankeil
+ *    Turn privoxy_strlcpy() into a function and try to work with
+ *    b0rked snprintf() implementations too. Reported by icmp30.
+ *
  *    Revision 1.52  2007/08/19 12:32:34  fabiankeil
  *    Fix a conversion warning.
  *
@@ -1132,16 +1136,18 @@ long int pick_from_range(long int range)
  *********************************************************************/
 size_t privoxy_strlcpy(char *destination, const char *source, const size_t size)
 {
-   snprintf(destination, size, "%s", source);
-   /*
-    * Platforms that lack strlcpy() also tend to have
-    * a broken snprintf implementation that doesn't
-    * guarantee nul termination.
-    *
-    * XXX: the configure script should detect and reject those.
-    */
-   destination[(size > 1) ? size-1 : 0] = '\0';
-
+   if (0 < size)
+   {
+      snprintf(destination, size, "%s", source);
+      /*
+       * Platforms that lack strlcpy() also tend to have
+       * a broken snprintf implementation that doesn't
+       * guarantee nul termination.
+       *
+       * XXX: the configure script should detect and reject those.
+       */
+      destination[size-1] = '\0';
+   }
    return strlen(source);
 }
 #endif /* def USE_PRIVOXY_STRLCPY */
