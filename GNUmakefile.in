@@ -1,8 +1,8 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.153 2007/01/07 07:36:36 joergs Exp $
+# $Id: GNUmakefile.in,v 1.154 2007/02/07 11:52:40 fabiankeil Exp $
 #
-# Written by and Copyright (C) 2001 - 2004 the SourceForge
+# Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -1359,6 +1359,11 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.154  2007/02/07 11:52:40  fabiankeil
+# Fix suse-dist as described in BR#1654052.
+# (I didn't test it, but it's done the same
+# way in redhat-dist which is known to work).
+#
 # Revision 1.153  2007/01/07 07:36:36  joergs
 # Added AmigaOS4 support.
 #
