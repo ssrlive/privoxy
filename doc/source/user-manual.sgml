@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.36 2007/08/26 16:47:14 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.37 2007/08/27 16:09:55 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.36 2007/08/26 16:47:14 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.37 2007/08/27 16:09:55 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8473,71 +8473,23 @@ Requests</title>
 
 <para>
  <screen>
- Matches for http://google.com:
+ Matches for http://www.google.com:
 
  In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 
- {-add-header
- -block
- -client-header-filter{hide-tor-exit-notation}
- -content-type-overwrite
- -crunch-client-header
- -crunch-if-none-match
- -crunch-incoming-cookies
- -crunch-outgoing-cookies
- -crunch-server-header
- +deanimate-gifs {last}
- -downgrade-http-version
+ {+deanimate-gifs {last}
  +fast-redirects {check-decoded-url}
- -filter {js-events}
- -filter {content-cookies}
- -filter {all-popups}
- -filter {banners-by-link}
- -filter {tiny-textforms}
- -filter {frameset-borders}
- -filter {demoronizer}
- -filter {shockwave-flash}
- -filter {quicktime-kioskmode}
- -filter {fun}
- -filter {crude-parental}
- -filter {site-specifics}
- -filter {js-annoyances}
- -filter {html-annoyances}
  +filter {refresh-tags}
- -filter {unsolicited-popups}
  +filter {img-reorder}
  +filter {banners-by-size}
  +filter {webbugs}
  +filter {jumping-windows}
  +filter {ie-exploits}
- -filter {google}
- -filter {yahoo}
- -filter {msn}
- -filter {blogspot}
- -filter {no-ping}
- -force-text-mode
- -handle-as-empty-document
- -handle-as-image
- -hide-accept-language
- -hide-content-disposition
  +hide-forwarded-for-headers
  +hide-from-header {block}
- -hide-if-modified-since
  +hide-referrer {forge}
- -hide-user-agent
- -inspect-jpegs
- -kill-popups
- -limit-connect
- -overwrite-last-modified
- +prevent-compression
- -redirect
- -send-vanilla-wafer
- -send-wafer
- -server-header-filter{xml-to-html}
- -server-header-filter{html-to-xml} 
  +session-cookies-only
  +set-image-blocker {pattern}
- -treat-forbidden-connects-like-blocks }
 /
  
  { -session-cookies-only }
@@ -8624,7 +8576,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -crunch-server-header
  +deanimate-gifs {last}
  -downgrade-http-version
- +fast-redirects {check-decoded-url}
+ -fast-redirects
  -filter {js-events}
  -filter {content-cookies}
  -filter {all-popups}
@@ -8665,7 +8617,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -kill-popups
  -limit-connect
  -overwrite-last-modified
- +prevent-compression
+ -prevent-compression
  -redirect
  -send-vanilla-wafer
  -send-wafer
@@ -8957,6 +8909,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.37  2007/08/27 16:09:55  fabiankeil
+ Fix --pre-chroot-nslookup description which I failed to
+ copy and paste properly. Reported by Stephen Gildea.
+
  Revision 2.36  2007/08/26 16:47:14  fabiankeil
  Add Stephen Gildea's --pre-chroot-nslookup patch [#1276666],
  extensive comments moved to user manual.
