@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.27 2007/04/30 15:02:18 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.28 2007/09/02 15:31:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.28  2007/09/02 15:31:20  fabiankeil
+ *    Move match_portlist() from filter.c to urlmatch.c.
+ *    It's used for url matching, not for filtering.
+ *
  *    Revision 1.27  2007/04/30 15:02:18  fabiankeil
  *    Introduce dynamic pcrs jobs that can resolve variables.
  *
@@ -293,15 +297,19 @@ extern const struct forward_spec *forward_url(struct http_request *http, struct 
 /*
  * Content modification
  */
+
+typedef char *(*filter_function_ptr)();
+extern char *execute_content_filter(struct client_state *csp, filter_function_ptr content_filter);
+
 extern char *pcrs_filter_response(struct client_state *csp);
 extern char *gif_deanimate_response(struct client_state *csp);
 extern char *jpeg_inspect_response(struct client_state *csp);
-extern size_t remove_chunked_transfer_coding(char *buffer, const size_t size);
 extern char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits);
 extern char *rewrite_url(char *old_url, const char *pcrs_command);
 extern char *get_last_url(char *subject, const char *redirect_mode);
 
 extern pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const struct re_filterfile_spec *b);
+
 
 /*
  * Handling Max-Forwards:

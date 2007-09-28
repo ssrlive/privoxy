@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.90 2007/09/02 12:44:17 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.91 2007/09/02 15:31:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.90 2007/09/02 12:44:17 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.91  2007/09/02 15:31:20  fabiankeil
+ *    Move match_portlist() from filter.c to urlmatch.c.
+ *    It's used for url matching, not for filtering.
+ *
  *    Revision 1.90  2007/09/02 12:44:17  fabiankeil
  *    Remove newline at the end of a log_error() message.
  *
@@ -618,6 +622,8 @@ const char filters_h_rcs[] = FILTERS_H_VERSION;
  */
 #define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
 
+static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
+static jb_err prepare_for_filtering(struct client_state *csp);
 
 #ifdef FEATURE_ACL
 /*********************************************************************
@@ -1724,15 +1730,8 @@ int is_untrusted_url(const struct client_state *csp)
  * Function    :  pcrs_filter_response
  *
  * Description :  Execute all text substitutions from all applying
- *                +filter actions on the text buffer that's been accumulated
- *                in csp->iob->buf. If this changes the contents, set
- *                csp->content_length to the modified size and raise the
- *                CSP_FLAG_MODIFIED flag.
- *
- *                XXX: Currently pcrs_filter_response is also responsible
- *                for dechunking and decompressing. Both should be
- *                done in separate functions so other content modifiers
- *                profit as well, even if pcrs filtering is disabled.
+ *                +filter actions on the text buffer that's been
+ *                accumulated in csp->iob->buf.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1746,7 +1745,8 @@ char *pcrs_filter_response(struct client_state *csp)
    int hits=0;
    size_t size, prev_size;
 
-   char *old = csp->iob->cur, *new = NULL;
+   char *old = NULL;
+   char *new = NULL;
    pcrs_job *job;
 
    struct file_list *fl;
@@ -1762,7 +1762,6 @@ char *pcrs_filter_response(struct client_state *csp)
    {
       return(NULL);
    }
-   size = (size_t)(csp->iob->eod - csp->iob->cur);
 
    /*
     * Need to check the set of re_filterfiles...
@@ -1786,59 +1785,8 @@ char *pcrs_filter_response(struct client_state *csp)
       return(NULL);
    }
 
-   /*
-    * If the body has a "chunked" transfer-encoding,
-    * get rid of it first, adjusting size and iob->eod
-    */
-   if (csp->flags & CSP_FLAG_CHUNKED)
-   {
-      log_error(LOG_LEVEL_RE_FILTER, "Need to de-chunk first");
-      if (0 == (size = remove_chunked_transfer_coding(csp->iob->cur, size)))
-      {
-         return(NULL);
-      }
-      csp->iob->eod = csp->iob->cur + size;
-      csp->flags |= CSP_FLAG_MODIFIED;
-   }
-
-#ifdef FEATURE_ZLIB
-   /*
-    * If the body has a compressed transfer-encoding,
-    * uncompress it first, adjusting size and iob->eod.
-    * Note that decompression occurs after de-chunking.
-    */
-   if (csp->content_type & (CT_GZIP | CT_DEFLATE))
-   {
-      /* Notice that we at least tried to decompress. */
-      if (JB_ERR_OK != decompress_iob(csp))
-      {
-         /*
-          * We failed to decompress the data; there's no point
-          * in continuing since we can't filter.
-          *
-          * XXX: Actually the Accept-Encoding header may
-          * just be incorrect in which case we could continue
-          * with filtering.
-          *
-          * Unset CT_GZIP and CT_DEFLATE to remember not
-          * to modify the Content-Encoding header later.
-          */
-          csp->content_type &= ~CT_GZIP;
-          csp->content_type &= ~CT_DEFLATE;
-          return(NULL);
-      }
-
-      /*
-       * Decompression gives us a completely new iob,
-       * so we need to update.
-       */
-      size = (size_t)(csp->iob->eod - csp->iob->cur);
-      old  = csp->iob->cur;
-
-      csp->flags |= CSP_FLAG_MODIFIED;
-      csp->content_type &= ~CT_TABOO;
-   }
-#endif
+   size = (size_t)(csp->iob->eod - csp->iob->cur);
+   old = csp->iob->cur;
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {
@@ -1986,21 +1934,6 @@ char *gif_deanimate_response(struct client_state *csp)
 
    size = (size_t)(csp->iob->eod - csp->iob->cur);
 
-   /*
-    * If the body has a "chunked" transfer-encoding,
-    * get rid of it first, adjusting size and iob->eod
-    */
-   if (csp->flags & CSP_FLAG_CHUNKED)
-   {
-      log_error(LOG_LEVEL_DEANIMATE, "Need to de-chunk first");
-      if (0 == (size = remove_chunked_transfer_coding(csp->iob->cur, size)))
-      {
-         return(NULL);
-      }
-      csp->iob->eod = csp->iob->cur + size;
-      csp->flags |= CSP_FLAG_MODIFIED;
-   }
-
    if (  (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
       || (NULL == (out = (struct binbuffer *)zalloc(sizeof *out))) )
    {
@@ -2061,21 +1994,6 @@ char *jpeg_inspect_response(struct client_state *csp)
 
    size = (size_t)(csp->iob->eod - csp->iob->cur);
 
-   /*
-    * If the body has a "chunked" transfer-encoding,
-    * get rid of it first, adjusting size and iob->eod
-    */
-   if (csp->flags & CSP_FLAG_CHUNKED)
-   {
-      log_error(LOG_LEVEL_DEANIMATE, "Need to de-chunk first");
-      if (0 == (size = remove_chunked_transfer_coding(csp->iob->cur, size)))
-      {
-         return(NULL);
-      }
-      csp->iob->eod = csp->iob->cur + size;
-      csp->flags |= CSP_FLAG_MODIFIED;
-   }
-
    if (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
    {
       log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg no mem 1)");
@@ -2125,14 +2043,15 @@ char *jpeg_inspect_response(struct client_state *csp)
  *
  * Parameters  :
  *          1  :  buffer = Pointer to the text buffer
- *          2  :  size = Number of bytes to be processed
+ *          2  :  size =  In: Number of bytes to be processed,
+ *                       Out: Number of bytes after de-chunking.
+ *                       (undefined in case of errors)
  *
- * Returns     :  The new size, i.e. the number of bytes from buffer which
- *                are occupied by the stripped body, or 0 in case something
- *                went wrong
+ * Returns     :  JB_ERR_OK for success,
+ *                JB_ERR_PARSE otherwise
  *
  *********************************************************************/
-size_t remove_chunked_transfer_coding(char *buffer, const size_t size)
+static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
 {
    size_t newsize = 0;
    unsigned int chunksize = 0;
@@ -2144,7 +2063,7 @@ size_t remove_chunked_transfer_coding(char *buffer, const size_t size)
    if (sscanf(buffer, "%x", &chunksize) != 1)
    {
       log_error(LOG_LEVEL_ERROR, "Invalid first chunksize while stripping \"chunked\" transfer coding");
-      return(0);
+      return JB_ERR_PARSE;
    }
 
    while (chunksize > 0)
@@ -2152,13 +2071,13 @@ size_t remove_chunked_transfer_coding(char *buffer, const size_t size)
       if (NULL == (from_p = strstr(from_p, "\r\n")))
       {
          log_error(LOG_LEVEL_ERROR, "Parse error while stripping \"chunked\" transfer coding");
-         return(0);
+         return JB_ERR_PARSE;
       }
 
-      if ((newsize += chunksize) >= size)
+      if ((newsize += chunksize) >= *size)
       {
          log_error(LOG_LEVEL_ERROR, "Chunksize exceeds buffer in  \"chunked\" transfer coding");
-         return(0);
+         return JB_ERR_PARSE;
       }
       from_p += 2;
 
@@ -2169,14 +2088,128 @@ size_t remove_chunked_transfer_coding(char *buffer, const size_t size)
       if (sscanf(from_p, "%x", &chunksize) != 1)
       {
          log_error(LOG_LEVEL_ERROR, "Parse error while stripping \"chunked\" transfer coding");
-         return(0);
+         return JB_ERR_PARSE;
+      }
+   }
+   
+   if (0 == newsize)
+   {
+      log_error(LOG_LEVEL_RE_FILTER, "Need to de-chunk first");
+   }
+   
+   /* XXX: Should get its own loglevel. */
+   log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", *size, newsize);
+
+   *size = newsize;
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  prepare_for_filtering
+ *
+ * Description :  If necessary, de-chunks and decompresses
+ *                the content so it can get filterd.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK for success,
+ *                JB_ERR_PARSE otherwise
+ *
+ *********************************************************************/
+static jb_err prepare_for_filtering(struct client_state *csp)
+{
+   jb_err err = JB_ERR_OK;
+
+   /*
+    * If the body has a "chunked" transfer-encoding,
+    * get rid of it, adjusting size and iob->eod
+    */
+   if (csp->flags & CSP_FLAG_CHUNKED)
+   {
+      size_t size = (size_t)(csp->iob->eod - csp->iob->cur);
+
+      log_error(LOG_LEVEL_RE_FILTER, "Need to de-chunk first");
+      err = remove_chunked_transfer_coding(csp->iob->cur, &size);
+      if (JB_ERR_OK == err)
+      {
+         csp->iob->eod = csp->iob->cur + size;
+         csp->flags |= CSP_FLAG_MODIFIED;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to de-chunk content.");
+         return JB_ERR_PARSE;
       }
    }
 
-   /* FIXME: Should this get its own loglevel? */
-   log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", size, newsize);
-   return(newsize);
+#ifdef FEATURE_ZLIB
+   /*
+    * If the body has a supported transfer-encoding,
+    * decompress it, adjusting size and iob->eod.
+    */
+   if (csp->content_type & (CT_GZIP|CT_DEFLATE))
+   {
+      err = decompress_iob(csp);
 
+      if (JB_ERR_OK == err)
+      {
+         csp->flags |= CSP_FLAG_MODIFIED;
+         csp->content_type &= ~CT_TABOO;
+      }
+      else
+      {
+         /*
+          * Unset CT_GZIP and CT_DEFLATE to remember not
+          * to modify the Content-Encoding header later.
+          */
+         csp->content_type &= ~CT_GZIP;
+         csp->content_type &= ~CT_DEFLATE;
+         log_error(LOG_LEVEL_ERROR, "Failed to decompress content.");
+      }
+   }
+#endif
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  execute_content_filter
+ *
+ * Description :  Executes a given content filter.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  content_filter = The filter function to execute
+ *
+ * Returns     :  JB_ERR_OK for success,
+ *                JB_ERR_PARSE otherwise
+ *
+ *********************************************************************/
+char *execute_content_filter(struct client_state *csp, filter_function_ptr content_filter)
+{
+   if (JB_ERR_OK != prepare_for_filtering(csp))
+   {
+      /*
+       * failed to de-chunk or decompress.
+       * XXX: if possible, we should continue anyway.
+       */
+      return NULL;
+   }
+
+   if (0 == csp->iob->eod - csp->iob->cur)
+   {
+      /* Empty buffer, nothing to do. */
+      return NULL;
+   }
+
+   return ((*content_filter)(csp));
 }
 
 
