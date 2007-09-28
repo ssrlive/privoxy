@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.148 2007/08/26 16:47:13 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.149 2007/09/04 15:08:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.148 2007/08/26 16:47:13 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.149  2007/09/04 15:08:48  fabiankeil
+ *    Initialize req to NULL to make sure it's defined if the
+ *    first read_socket() call fails. Reported by icmp30.
+ *
  *    Revision 1.148  2007/08/26 16:47:13  fabiankeil
  *    Add Stephen Gildea's --pre-chroot-nslookup patch [#1276666],
  *    extensive comments moved to user manual.
@@ -1129,8 +1133,6 @@ static const char MESSED_UP_REQUEST_RESPONSE[] =
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
 
-typedef char *(*filter_function_ptr)();
-
 /* Crunch function flags */
 #define CF_NO_FLAGS        0
 /* Cruncher applies to forced requests as well */
@@ -2176,7 +2178,8 @@ static void chat(struct client_state *csp)
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
-   /* build the http request to send to the server
+   /*
+    * build the http request to send to the server
     * we have to do one of the following:
     *
     * create = use the original HTTP request to create a new
@@ -2534,12 +2537,13 @@ static void chat(struct client_state *csp)
                 */
                if (content_filter)
                {
+                  p = execute_content_filter(csp, content_filter);
                   /*
                    * If the content filter fails, use the original
                    * buffer and length.
                    * (see p != NULL ? p : csp->iob->cur below)
                    */
-                  if (NULL == (p = (*content_filter)(csp)))
+                  if (NULL == p)
                   {
                      csp->content_length = (size_t)(csp->iob->eod - csp->iob->cur);
                   }
