@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.28 2007/09/02 15:31:20 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.29 2007/09/28 16:38:55 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,15 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.29  2007/09/28 16:38:55  fabiankeil
+ *    - Execute content filters through execute_content_filter().
+ *    - Add prepare_for_filtering() so filter functions don't have to
+ *      care about de-chunking and decompression. As a side effect this enables
+ *      decompression for gif_deanimate_response() and jpeg_inspect_response().
+ *    - Change remove_chunked_transfer_coding()'s return type to jb_err.
+ *      Some clowns feel like chunking empty responses in which case
+ *      (size == 0) is valid but previously would be interpreted as error.
+ *
  *    Revision 1.28  2007/09/02 15:31:20  fabiankeil
  *    Move match_portlist() from filter.c to urlmatch.c.
  *    It's used for url matching, not for filtering.
@@ -301,9 +310,7 @@ extern const struct forward_spec *forward_url(struct http_request *http, struct 
 typedef char *(*filter_function_ptr)();
 extern char *execute_content_filter(struct client_state *csp, filter_function_ptr content_filter);
 
-extern char *pcrs_filter_response(struct client_state *csp);
-extern char *gif_deanimate_response(struct client_state *csp);
-extern char *jpeg_inspect_response(struct client_state *csp);
+extern filter_function_ptr get_filter_function(struct client_state *csp);
 extern char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits);
 extern char *rewrite_url(char *old_url, const char *pcrs_command);
 extern char *get_last_url(char *subject, const char *redirect_mode);

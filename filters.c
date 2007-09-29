@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.91 2007/09/02 15:31:20 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.92 2007/09/28 16:38:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,15 @@ const char filters_rcs[] = "$Id: filters.c,v 1.91 2007/09/02 15:31:20 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.92  2007/09/28 16:38:55  fabiankeil
+ *    - Execute content filters through execute_content_filter().
+ *    - Add prepare_for_filtering() so filter functions don't have to
+ *      care about de-chunking and decompression. As a side effect this enables
+ *      decompression for gif_deanimate_response() and jpeg_inspect_response().
+ *    - Change remove_chunked_transfer_coding()'s return type to jb_err.
+ *      Some clowns feel like chunking empty responses in which case
+ *      (size == 0) is valid but previously would be interpreted as error.
+ *
  *    Revision 1.91  2007/09/02 15:31:20  fabiankeil
  *    Move match_portlist() from filter.c to urlmatch.c.
  *    It's used for url matching, not for filtering.
@@ -1740,7 +1749,7 @@ int is_untrusted_url(const struct client_state *csp)
  *                or NULL if there were no hits or something went wrong
  *
  *********************************************************************/
-char *pcrs_filter_response(struct client_state *csp)
+static char *pcrs_filter_response(struct client_state *csp)
 {
    int hits=0;
    size_t size, prev_size;
@@ -1926,7 +1935,7 @@ char *pcrs_filter_response(struct client_state *csp)
  *                or NULL in case something went wrong.
  *
  *********************************************************************/
-char *gif_deanimate_response(struct client_state *csp)
+static char *gif_deanimate_response(struct client_state *csp)
 {
    struct binbuffer *in, *out;
    char *p;
@@ -1985,7 +1994,7 @@ char *gif_deanimate_response(struct client_state *csp)
  *                or NULL in case something went wrong.
  *
  *********************************************************************/
-char *jpeg_inspect_response(struct client_state *csp)
+static char *jpeg_inspect_response(struct client_state *csp)
 {
    struct binbuffer  *in = NULL;
    struct binbuffer *out = NULL;
@@ -2031,6 +2040,87 @@ char *jpeg_inspect_response(struct client_state *csp)
       return(p);
    }
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_filter_function
+ *
+ * Description :  Decides which content filter function has
+ *                to be applied (if any).
+ *
+ *                XXX: Doesn't handle filter_popups()
+ *                because of the different prototype. Probably
+ *                we should ditch filter_popups() anyway, it's
+ *                even less reliable than popup blocking based
+ *                on pcrs filters.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  The content filter function to run, or
+ *                NULL if no content filter is active
+ *
+ *********************************************************************/
+filter_function_ptr get_filter_function(struct client_state *csp)
+{
+   filter_function_ptr filter_function = NULL;
+
+   /*
+    * Are we enabling text mode by force?
+    */
+   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+   {
+      /*
+       * Do we really have to?
+       */
+      if (csp->content_type & CT_TEXT)
+      {
+         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
+      }
+      else
+      {
+         csp->content_type |= CT_TEXT;
+         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
+      }
+   }
+
+   if (!(csp->content_type & CT_DECLARED))
+   {
+      /*
+       * The server didn't bother to declare a MIME-Type.
+       * Assume it's text that can be filtered.
+       *
+       * This also regulary happens with 304 responses,
+       * therefore logging anything here would cause
+       * too much noise.
+       */
+      csp->content_type |= CT_TEXT;
+   }
+
+   /*
+    * Choose the applying filter function based on
+    * the content type and action settings.
+    */
+   if ((csp->content_type & CT_TEXT) &&
+       (csp->rlist != NULL) &&
+       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
+   {
+      filter_function = pcrs_filter_response;
+   }
+   else if ((csp->content_type & CT_GIF)  &&
+            (csp->action->flags & ACTION_DEANIMATE))
+   {
+      filter_function = gif_deanimate_response;
+   }
+   else if ((csp->content_type & CT_JPEG)  &&
+            (csp->action->flags & ACTION_JPEG_INSPECT))
+   {
+      filter_function = jpeg_inspect_response;
+   }
+
+   return filter_function;
 }
 
 
@@ -2154,6 +2244,12 @@ static jb_err prepare_for_filtering(struct client_state *csp)
     */
    if (csp->content_type & (CT_GZIP|CT_DEFLATE))
    {
+      if (0 == csp->iob->eod - csp->iob->cur)
+      {
+         /* Nothing left after de-chunking. */
+         return JB_ERR_OK;
+      }
+
       err = decompress_iob(csp);
 
       if (JB_ERR_OK == err)
@@ -2188,12 +2284,21 @@ static jb_err prepare_for_filtering(struct client_state *csp)
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  content_filter = The filter function to execute
  *
- * Returns     :  JB_ERR_OK for success,
- *                JB_ERR_PARSE otherwise
+ * Returns     :  Pointer to the modified buffer, or
+ *                NULL if filtering failed or wasn't necessary.
  *
  *********************************************************************/
 char *execute_content_filter(struct client_state *csp, filter_function_ptr content_filter)
 {
+   if (0 == csp->iob->eod - csp->iob->cur)
+   {
+      /*
+       * No content (probably status code 301, 302 ...),
+       * no filtering necessary.
+       */
+      return NULL;
+   }
+
    if (JB_ERR_OK != prepare_for_filtering(csp))
    {
       /*
@@ -2205,7 +2310,9 @@ char *execute_content_filter(struct client_state *csp, filter_function_ptr conte
 
    if (0 == csp->iob->eod - csp->iob->cur)
    {
-      /* Empty buffer, nothing to do. */
+      /*
+       * Clown alarm: chunked and/or compressed nothing delivered.
+       */
       return NULL;
    }
 

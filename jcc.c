@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.149 2007/09/04 15:08:48 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.150 2007/09/28 16:39:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.149 2007/09/04 15:08:48 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.150  2007/09/28 16:39:29  fabiankeil
+ *    Execute content filters through execute_content_filter().
+ *
  *    Revision 1.149  2007/09/04 15:08:48  fabiankeil
  *    Initialize req to NULL to make sure it's defined if the
  *    first read_socket() call fails. Reported by icmp30.
@@ -1114,6 +1117,7 @@ static const char NO_SERVER_DATA_RESPONSE[] =
    "Empty server or forwarder response.\r\n"
    "The connection was closed without sending any data.\r\n";
 
+#if 0
 /* XXX: should be a template */
 static const char NULL_BYTE_RESPONSE[] =
    "HTTP/1.0 400 Bad request received from browser\r\n"
@@ -1121,6 +1125,7 @@ static const char NULL_BYTE_RESPONSE[] =
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Null byte(s) before end of request.\r\n";
+#endif
 
 /* XXX: should be a template */
 static const char MESSED_UP_REQUEST_RESPONSE[] =
@@ -1148,7 +1153,6 @@ struct cruncher
 };
 
 static int crunch_response_triggered(struct client_state *csp, const struct cruncher crunchers[]);
-static filter_function_ptr get_filter_function(struct client_state *csp);
 
 /* Complete list of cruncher functions */
 static const struct cruncher crunchers_all[] = {
@@ -1812,87 +1816,6 @@ static jb_err change_request_destination(struct client_state *csp)
    return err;
 }
 
-
-/*********************************************************************
- *
- * Function    :  get_filter_function
- *
- * Description :  Decides which content filter function has
- *                to be applied (if any).
- *
- *                XXX: Doesn't handle filter_popups()
- *                because of the different prototype. Probably
- *                we should ditch filter_popups() anyway, it's
- *                even less reliable than popup blocking based
- *                on pcrs filters.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  The content filter function to run, or
- *                NULL if no content filter is active
- *
- *********************************************************************/
-static filter_function_ptr get_filter_function(struct client_state *csp)
-{
-   filter_function_ptr filter_function = NULL;
-
-   /*
-    * Are we enabling text mode by force?
-    */
-   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
-   {
-      /*
-       * Do we really have to?
-       */
-      if (csp->content_type & CT_TEXT)
-      {
-         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
-      }
-      else
-      {
-         csp->content_type |= CT_TEXT;
-         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
-      }
-   }
-
-   if (!(csp->content_type & CT_DECLARED))
-   {
-      /*
-       * The server didn't bother to declare a MIME-Type.
-       * Assume it's text that can be filtered.
-       *
-       * This also regulary happens with 304 responses,
-       * therefore logging anything here would cause
-       * too much noise.
-       */
-      csp->content_type |= CT_TEXT;
-   }
-
-
-   /*
-    * Choose the applying filter function based on
-    * the content type and action settings.
-    */
-   if ((csp->content_type & CT_TEXT) &&
-       (csp->rlist != NULL) &&
-       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
-   {
-      filter_function = pcrs_filter_response;
-   }
-   else if ((csp->content_type & CT_GIF)  &&
-            (csp->action->flags & ACTION_DEANIMATE))
-   {
-      filter_function = gif_deanimate_response;
-   }
-   else if ((csp->content_type & CT_JPEG)  &&
-            (csp->action->flags & ACTION_JPEG_INSPECT))
-   {
-      filter_function = jpeg_inspect_response;
-   }
-
-   return filter_function;
-}
 
 /*********************************************************************
  *
