@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.92 2007/09/28 16:38:55 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.93 2007/09/29 10:21:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.92 2007/09/28 16:38:55 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.93  2007/09/29 10:21:16  fabiankeil
+ *    - Move get_filter_function() from jcc.c to filters.c
+ *      so the filter functions can be static.
+ *    - Don't bother filtering body-less responses.
+ *
  *    Revision 1.92  2007/09/28 16:38:55  fabiankeil
  *    - Execute content filters through execute_content_filter().
  *    - Add prepare_for_filtering() so filter functions don't have to
@@ -2182,11 +2187,6 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
       }
    }
    
-   if (0 == newsize)
-   {
-      log_error(LOG_LEVEL_RE_FILTER, "Need to de-chunk first");
-   }
-   
    /* XXX: Should get its own loglevel. */
    log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", *size, newsize);
 
@@ -2232,7 +2232,6 @@ static jb_err prepare_for_filtering(struct client_state *csp)
       }
       else
       {
-         log_error(LOG_LEVEL_ERROR, "Failed to de-chunk content.");
          return JB_ERR_PARSE;
       }
    }
@@ -2265,7 +2264,6 @@ static jb_err prepare_for_filtering(struct client_state *csp)
           */
          csp->content_type &= ~CT_GZIP;
          csp->content_type &= ~CT_DEFLATE;
-         log_error(LOG_LEVEL_ERROR, "Failed to decompress content.");
       }
    }
 #endif
