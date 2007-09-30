@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.43 2007/06/01 18:16:36 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.44 2007/09/15 13:01:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,11 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.43 2007/06/01 18:16:36 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.44  2007/09/15 13:01:31  fabiankeil
+ *    Increase listen() backlog to SOMAXCONN (or 128) to decrease
+ *    chances of dropped connections under load. Problem reported
+ *    and fix suggested by nobody in BR#1795281.
+ *
  *    Revision 1.43  2007/06/01 18:16:36  fabiankeil
  *    Use the same mutex for gethostbyname() and gethostbyaddr() to prevent
  *    deadlocks and crashes on OpenBSD and possibly other OS with neither
@@ -306,10 +311,8 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  */
 #define MAX_DNS_RETRIES 10
 
-#ifndef SOMAXCONN
-/* XXX: Might not be necessary. */
-#define SOMAXCONN 128
-#endif
+#define MAX_LISTEN_BACKLOG 128
+
 
 /*********************************************************************
  *
@@ -687,7 +690,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       }
    }
 
-   while (listen(fd, SOMAXCONN) == -1)
+   while (listen(fd, MAX_LISTEN_BACKLOG) == -1)
    {
       if (errno != EINTR)
       {
