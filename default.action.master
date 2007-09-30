@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.91 2007/08/17 12:52:29 hal9 Exp $
+#  $Id: default.action.master,v 1.92 2007/09/09 15:10:51 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1441,6 +1441,9 @@ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 #MASTER# REMARKS: Logout fails if we fast-redirect to the URL after "done=".
 #MASTER# REMARKS: Reported in support request #1635354.
 .yahoo.com/.*done=http
+#MASTER# PROBLEM-URL: http://us.rd.yahoo.com/reg/login1/lisu/login/uk/ym/*http://edit.europe.yahoo.com/c onfig/login?.tries=1&.src=ym&.md5=&.hash=&.js=1&.last=&...kP=Y&.done=http://mail .yahoo.com&.pd=ym_ver=0&c=&login=XXX&passwd=XXX&.persistent =&.hash=1&.md5=1
+#MASTER# REMARKS: Reported in support request #1802365.
+.rd.yahoo.com/reg/login1/
 #MASTER# PROBLEM-URL: http://validator.w3.org/check
 .w3.org
 #MASTER# PROBLEM-URL: http://www.ask.com/
@@ -1790,10 +1793,6 @@ blogs.msdn.com
 blogs.msdn.com
 
 {+fast-redirects{check-decoded-url} -block}
-#MASTER# COMMENTS: Is this still in use? 2007-01-19 fk
-#MASTER# REMARKS: Remark used to be "Basically all of Yahoo's outbound links" which is no longer true.
-#MASTER# PROBLEM-URL: http://uk.rd.yahoo.com/M=200059723.200849546.202365062.200414073/D=ukhmpg/S=15426100:TEAR/A=200396897/R=1119/id=img1_nocap_dial/*http://ad.uk.doubleclick.net/clk;5982435;8261020;g?http://www.lunnpoly.com
-.*rd.yahoo.com/
 #MASTER# REMARKS: Yahoo search results. Added 2007-01-19 fk
 #MASTER# REDIRECT-REFERRER: http://search.yahoo.com/search?p=privoxy
 #MASTER# PROBLEM-URL: http://rds.yahoo.com/_ylt=A0geuryczbBF._YAEmxXNyoA;_ylu=X3oDMTB2b2gzdDdtBGNvbG8DZQRsA1dTMQRwb3MDMQRzZWMDc3IEdnRpZAM-/SIG=11b3qg40n/EXP=1169301276/**http%3a//www.privoxy.org/
