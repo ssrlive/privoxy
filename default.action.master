@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.92 2007/09/09 15:10:51 fabiankeil Exp $
+#  $Id: default.action.master,v 1.93 2007/09/30 14:39:13 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1267,7 +1267,9 @@ adbusters.org/
 #MASTER# UNBLOCK-REFERRER:  http://www.cels.org/db/keep-track.pl?cat:1 09/11/06
 cels.org/.*track
 #MASTER# UNBLOCK-REFERRER: http://www.nic.ad.jp/ See http://jprs.co.jp/en/jpdomain.html 09/11/06
-.nic.ad.jp
+#MASTER# REMARKS: 2007-10-04, increase scope per Actionsfile feedback item #1807613
+#.nic.ad.jp
+.ad.jp
 #MASTER# UNBLOCK-REFERRER: http://www.flickr.com/photo_zoom.gne?id=32594118&size=l 09/11/06
 #MASTER# REMARKS: creativecommons.org worthwhile organization 09/11/06
 /(.*/)?somerights20.gif
