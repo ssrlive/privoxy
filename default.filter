@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.44 2007/07/18 11:06:56 hal9 Exp $
+#  $Id: default.filter,v 1.45 2007/08/11 16:54:12 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -294,14 +294,15 @@ s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:\
 | advert                              # see dict.leo.org \
 | atwola\.com/(?:link|redir)          # see www.cnn.com \
 | /jump/                              # redirs for doublecklick.net ads \
-| tracker | counter                   # common \
+| counter                             # common \
+| (?<!&type=)tracker                  # (&type=tracker is used in sf's project statistics) \
 | adlog\.pl                           # see sf.net \
 )[^>\1\s]*)\1[^>]*>\s*<img\s+(?:src\s*=\s*(['"]?)([^>\\\3\s]+)\3)?[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\6)[^>]*((?:width|height)\s*=\s*(['"]?)\d+?\8)[^>]*?(?=/?>)\
 @<img $5 $7 src="http://config.privoxy.org/send-banner?type=auto" border="0" title="Killed $4 by link to $2"@sigx
 
 # Rare case w/o explicit dimensions:
 #
-s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:ad(?:click|vert)|atwola\.com/(?:link|redir)|doubleclick\.net/jump/|tracker|counter|adlog\.pl)[^>\1\s]*)\1[^>]*>\s*<img\s+(?:src\s*=\s*(['"]?)([^>\\\3\s]+)\3)?[^>]*?(?=/?>)@<img src="http://config.privoxy.org/send-banner?type=auto" border="0" title="Killed $4 by link to $2"@sig
+s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:ad(?:click|vert)|atwola\.com/(?:link|redir)|doubleclick\.net/jump/|(?<!&type=)tracker|counter|adlog\.pl)[^>\1\s]*)\1[^>]*>\s*<img\s+(?:src\s*=\s*(['"]?)([^>\\\3\s]+)\3)?[^>]*?(?=/?>)@<img src="http://config.privoxy.org/send-banner?type=auto" border="0" title="Killed $4 by link to $2"@sig
 
 
 ################################################################################
@@ -624,6 +625,7 @@ s@</head>@<style type="text/css">\n\
 s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
 s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
+s@<div id=\"ar\">(<h2>Sponsored sites</h2>)@<div class="msn_ads">$1@
 
 #################################################################################
 #
@@ -739,6 +741,12 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.45  2007/08/11 16:54:12  fabiankeil
+#     - Complete the changes from r1.42.
+#     - Make crude-parental less sensitive to the amount of white-space,
+#       add the note that it doesn't work too well again and replace the
+#       DMOZ link with a less confusing explanation.
+#
 #     Revision 1.44  2007/07/18 11:06:56  hal9
 #     Replace notarget with '' in all popups filter to keep from breaking xhmtl per
 #     report from Siegfried Gipp.
