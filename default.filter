@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.45 2007/08/11 16:54:12 fabiankeil Exp $
+#  $Id: default.filter,v 1.46 2007/10/06 09:54:13 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -626,6 +626,7 @@ s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
 s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
 s@<div id=\"ar\">(<h2>Sponsored sites</h2>)@<div class="msn_ads">$1@
+s@(</script><div) id=\"at\"@$1 class="msn_ads"@
 
 #################################################################################
 #
@@ -741,6 +742,10 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.46  2007/10/06 09:54:13  fabiankeil
+#     - Let msn hide sponsored links in #ar divs.
+#     - Teach banners-by-link not to block the graphs for sf's tracker statistics.
+#
 #     Revision 1.45  2007/08/11 16:54:12  fabiankeil
 #     - Complete the changes from r1.42.
 #     - Make crude-parental less sensitive to the amount of white-space,
