@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.110 2007/09/29 10:42:37 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.111 2007/10/04 18:07:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.110 2007/09/29 10:42:37 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.111  2007/10/04 18:07:00  fabiankeil
+ *    Move ACTION_VANILLA_WAFER handling from jcc's chat() into
+ *    client_cookie_adder() to make sure send-vanilla-wafer can be
+ *    controlled through tags (and thus regression-tested).
+ *
  *    Revision 1.110  2007/09/29 10:42:37  fabiankeil
  *    - Remove "scanning headers for" log message again.
  *    - Some more whitespace fixes.
@@ -792,6 +797,7 @@ static jb_err client_accept_language    (struct client_state *csp, char **header
 static jb_err client_if_none_match      (struct client_state *csp, char **header);
 static jb_err crunch_client_header      (struct client_state *csp, char **header);
 static jb_err client_x_filter           (struct client_state *csp, char **header);
+static jb_err client_range              (struct client_state *csp, char **header);
 static jb_err server_set_cookie         (struct client_state *csp, char **header);
 static jb_err server_content_type       (struct client_state *csp, char **header);
 static jb_err server_content_length     (struct client_state *csp, char **header);
@@ -831,6 +837,8 @@ const struct parsers client_patterns[] = {
    { "max-forwards:",            13,   client_max_forwards },
    { "Accept-Language:",         16,   client_accept_language },
    { "if-none-match:",           14,   client_if_none_match },
+   { "Range:",                    6,   client_range },
+   { "If-Range:",                 9,   client_range },
    { "X-Filter:",                 9,   client_x_filter },
    { "*",                         0,   crunch_client_header },
    { "*",                         0,   filter_header },
@@ -3410,6 +3418,42 @@ jb_err client_x_filter(struct client_state *csp, char **header)
          freez(*header);
       }
    }
+   return JB_ERR_OK; 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_range
+ *
+ * Description :  Removes Range and If-Range headers if content
+ *                filtering is enabled. If the client's version of
+ *                the document has been altered by Privoxy, the server
+ *                could interpret the range differently than the client
+ *                intended in which case the user could end up with
+ *                corrupted content.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK
+ *
+ *********************************************************************/
+static jb_err client_range(struct client_state *csp, char **header)
+{
+   if (((csp->rlist != NULL) &&
+       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]))) ||
+       (csp->action->flags & (ACTION_DEANIMATE|ACTION_JPEG_INSPECT)))
+   {
+      log_error(LOG_LEVEL_HEADER, "Content filtering is enabled."
+         " Crunching: \'%s\' to prevent range-mismatch problems.", *header);
+      freez(*header);
+   }
+
    return JB_ERR_OK; 
 }
 
