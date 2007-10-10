@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.111 2007/10/04 18:07:00 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.112 2007/10/09 16:38:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.111 2007/10/04 18:07:00 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.112  2007/10/09 16:38:40  fabiankeil
+ *    Remove Range and If-Range headers if content filtering is enabled.
+ *
  *    Revision 1.111  2007/10/04 18:07:00  fabiankeil
  *    Move ACTION_VANILLA_WAFER handling from jcc's chat() into
  *    client_cookie_adder() to make sure send-vanilla-wafer can be
@@ -3447,7 +3450,7 @@ static jb_err client_range(struct client_state *csp, char **header)
 {
    if (((csp->rlist != NULL) &&
        (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]))) ||
-       (csp->action->flags & (ACTION_DEANIMATE|ACTION_JPEG_INSPECT)))
+       (csp->action->flags & (ACTION_DEANIMATE|ACTION_JPEG_INSPECT|ACTION_NO_POPUPS)))
    {
       log_error(LOG_LEVEL_HEADER, "Content filtering is enabled."
          " Crunching: \'%s\' to prevent range-mismatch problems.", *header);
