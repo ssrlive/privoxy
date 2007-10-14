@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.53 2007/08/05 13:53:14 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.54 2007/09/22 16:15:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.53 2007/08/05 13:53:14 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.54  2007/09/22 16:15:34  fabiankeil
+ *    - Let it compile with pcc.
+ *    - Move our includes below system includes to prevent macro conflicts.
+ *
  *    Revision 1.53  2007/08/05 13:53:14  fabiankeil
  *    #1763173 from Stefan Huehner: declare some more functions
  *    static and use void instead of empty parameter lists.
@@ -408,11 +412,11 @@ static void fatal_error(const char * error_message)
    TermLogWindow();
 
 #else /* if !defined(_WIN32) || defined(_WIN_CONSOLE) */
-   fputs(error_message, stderr);
+   fputs(error_message, logfp);
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
 #if defined(unix)
-   if(pidfile)
+   if (pidfile)
    {
       unlink(pidfile);
    }
@@ -424,10 +428,102 @@ static void fatal_error(const char * error_message)
 
 /*********************************************************************
  *
+ * Function    :  show_version
+ *
+ * Description :  Logs the Privoxy version and the program name.
+ *
+ * Parameters  :
+ *          1  :  prog_name = The program name.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+static void show_version(const char *prog_name)
+{
+   log_error(LOG_LEVEL_INFO, "Privoxy version " VERSION);
+   if (prog_name != NULL)
+   {
+      log_error(LOG_LEVEL_INFO, "Program name: %s", prog_name);
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  init_log_module
+ *
+ * Description :  Initializes the logging module to log to stderr.
+ *                Can only be called while stderr hasn't been closed
+ *                yet and is only supposed to be called once.
+ *
+ * Parameters  :
+ *          1  :  prog_name = The program name.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+void init_log_module(const char *prog_name)
+{
+   lock_logfile();
+   logfp = stderr;
+   unlock_logfile();
+   set_debug_level(debug);
+   show_version(prog_name);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  set_debug_level
+ *
+ * Description :  Sets the debug level to the provided value
+ *                plus LOG_LEVEL_MINIMUM.
+ *
+ *                XXX: we should only use the LOG_LEVEL_MINIMUM
+ *                until the frist time the configuration file has
+ *                been parsed.
+ *                
+ * Parameters  :  1: debug_level = The debug level to set.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+void set_debug_level(int debug_level)
+{
+   debug = debug_level | LOG_LEVEL_MINIMUM;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  disable_logging
+ *
+ * Description :  Disables logging.
+ *                
+ * Parameters  :  None.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+void disable_logging(void)
+{
+   lock_logfile();
+   if (logfp != NULL)
+   {
+      fclose(logfp);
+   }
+   logfp = NULL;
+   unlock_logfile();
+}
+
+
+/*********************************************************************
+ *
  * Function    :  init_error_log
  *
- * Description :  Initializes the logging module.  Must call before
- *                calling log_error.
+ * Description :  Initializes the logging module to log to a file.
+ *
+ *                XXX: should be renamed.
  *
  * Parameters  :
  *          1  :  prog_name  = The program name.
@@ -437,51 +533,43 @@ static void fatal_error(const char * error_message)
  * Returns     :  N/A
  *
  *********************************************************************/
-void init_error_log(const char *prog_name, const char *logfname, int debuglevel)
+void init_error_log(const char *prog_name, const char *logfname)
 {
    FILE *fp;
 
-   lock_loginit();
+   assert(NULL != logfname);
 
-   /* set the logging detail level */
-   debug = debuglevel | LOG_LEVEL_MINIMUM;
+   lock_loginit();
+   lock_logfile();
 
    if ((logfp != NULL) && (logfp != stderr))
    {
-      log_error(LOG_LEVEL_INFO, "(Re-)Open logfile %s", logfname ? logfname : "none");
-      lock_logfile();
-      fclose(logfp);
-   } else {
-      lock_logfile();
+      log_error(LOG_LEVEL_INFO, "(Re-)Open logfile \'%s\'", logfname ? logfname : "none");
    }
-   logfp = stderr;
-   unlock_logfile();
 
    /* set the designated log file */
-   if( logfname )
+   fp = fopen(logfname, "a");
+   if (NULL == fp)
    {
-      if( NULL == (fp = fopen(logfname, "a")) )
-      {
-         log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: %s", logfname);
-      }
-
-      /* set logging to be completely unbuffered */
-      setbuf(fp, NULL);
-
-      lock_logfile();
-      logfp = fp;
-      unlock_logfile();
+      log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: \'%s\'", logfname);
    }
 
-   log_error(LOG_LEVEL_INFO, "Privoxy version " VERSION);
-   if (prog_name != NULL)
+   /* set logging to be completely unbuffered */
+   setbuf(fp, NULL);
+
+   if (logfp != NULL)
    {
-      log_error(LOG_LEVEL_INFO, "Program name: %s", prog_name);
+      fclose(logfp);
    }
+   logfp = fp;
+   unlock_logfile();
+
+   show_version(prog_name);
 
    unlock_loginit();
 
 } /* init_error_log */
+
 
 #if defined(USE_NEW_LOG_ERROR)
 /*
@@ -791,8 +879,12 @@ void log_error(int loglevel, const char *fmt, ...)
    }
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
-   /* verify if loglevel applies to current settings and bail out if negative */
-   if ((loglevel & debug) == 0)
+   /*
+    * verify that the loglevel applies to current
+    * settings and that logging is enabled.
+    * Bail out otherwise.
+    */
+   if ((0 == (loglevel & debug)) || (logfp == NULL))
    {
       return;
    }
@@ -811,10 +903,7 @@ void log_error(int loglevel, const char *fmt, ...)
          snprintf(tempbuf, sizeof(tempbuf),
             "%s Privoxy(%08lx) Fatal error: log_error() failed to allocate buffer memory.\n"
             "\nExiting.", timestamp, thread_id);
-         if( !logfp )
-         {
-            logfp = stderr;
-         }
+         assert(NULL != logfp);
          fputs(tempbuf, logfp);
          unlock_logfile();
          fatal_error(tempbuf); /* Exit */
@@ -1034,20 +1123,14 @@ void log_error(int loglevel, const char *fmt, ...)
       loglevel = LOG_LEVEL_FATAL;
    }
 
-   /* deal with glibc stupidity - it won't let you initialize logfp */
-   /* XXX: Still necessary? */
-   if(NULL == logfp)
-   {
-      logfp = stderr;
-   }
-
-   fputs(outbuf_save, logfp);
+   assert(NULL != logfp);
 
    if (loglevel == LOG_LEVEL_FATAL)
    {
       fatal_error(outbuf_save);
       /* Never get here */
    }
+   fputs(outbuf_save, logfp);
 
    unlock_logfile();
 

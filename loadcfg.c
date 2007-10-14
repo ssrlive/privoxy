@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.65 2007/07/21 11:51:36 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.66 2007/08/05 14:02:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.65 2007/07/21 11:51:36 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.66  2007/08/05 14:02:09  fabiankeil
+ *    #1763173 from Stefan Huehner: declare unload_configfile() static.
+ *
  *    Revision 1.65  2007/07/21 11:51:36  fabiankeil
  *    As Hal noticed, checking dispatch_cgi() as the last cruncher
  *    looks like a bug if CGI requests are blocked unintentionally,
@@ -661,6 +664,9 @@ void unload_current_config_file(void)
  *
  * Description :  Load the config file and all parameters.
  *
+ *                XXX: more than thousand lines long
+ *                and thus in serious need of refactoring.
+ *
  * Parameters  :  None
  *
  * Returns     :  The configuration_spec, or NULL on error.
@@ -676,6 +682,7 @@ struct configuration_spec * load_config(void)
    struct file_list *fs;
    unsigned long linenum = 0;
    int i;
+   char *logfile = NULL;
 
    if ( !check_file_changed(current_configfile, configfile, &fs))
    {
@@ -1291,8 +1298,11 @@ struct configuration_spec * load_config(void)
  * In logdir by default
  * *************************************************************************/
          case hash_logfile :
-            freez(config->logfile);
-            config->logfile = no_daemon ? NULL : make_path(config->logdir, arg);
+            logfile = make_path(config->logdir, arg);
+            if (NULL == logfile)
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memore while creating logfile path");
+            }
             continue;
 
 /* *************************************************************************
@@ -1593,12 +1603,30 @@ struct configuration_spec * load_config(void)
 
    fclose(configfp);
 
+   set_debug_level(config->debug);
+
+   freez(config->logfile);
+
+   if (!no_daemon)
+   {
+      if (NULL != logfile)
+      {
+         config->logfile = logfile;
+         log_error(LOG_LEVEL_INFO,
+            "Switching to daemon mode. Log messages will be written to: %s", config->logfile);
+         init_error_log(Argv[0], config->logfile);
+      }
+      else
+      {
+         log_error(LOG_LEVEL_INFO, "No logfile configured while in daemon mode. Logging disabled.");
+         disable_logging();
+      }
+   }
+
    if (NULL == config->proxy_args)
    {
       log_error(LOG_LEVEL_FATAL, "Out of memory loading config - insufficient memory for config->proxy_args");
    }
-
-   init_error_log(Argv[0], config->logfile, config->debug);
 
    if (config->actions_file[0])
    {

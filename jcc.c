@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.151 2007/09/29 10:21:16 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.152 2007/10/04 18:03:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,14 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.151 2007/09/29 10:21:16 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.152  2007/10/04 18:03:34  fabiankeil
+ *    - Fix a crash when parsing invalid requests whose first header
+ *      is rejected by get_header(). Regression (re?)introduced
+ *      in r1.143 by yours truly.
+ *    - Move ACTION_VANILLA_WAFER handling into parsers.c's
+ *      client_cookie_adder() to make sure send-vanilla-wafer can be
+ *      controlled through tags (and thus regression-tested).
+ *
  *    Revision 1.151  2007/09/29 10:21:16  fabiankeil
  *    - Move get_filter_function() from jcc.c to filters.c
  *      so the filter functions can be static.
@@ -2938,6 +2946,8 @@ int main(int argc, const char *argv[])
 #endif
       ;
 
+   init_log_module(Argv[0]);
+
    /*
     * Parse the command line arguments
     *
@@ -3203,10 +3213,9 @@ int main(int argc, const char *argv[])
          close ( fd );
       }
 #endif /* 1 */
-      /* FIXME: should close stderr (fd 2) here too, but the test
-       * for existence
-       * and load config file is done in listen_loop() and puts
-       * some messages on stderr there.
+      /*
+       * stderr (fd 2) will be closed later on, when the
+       * log file has been parsed.
        */
 
       close( 0 );
@@ -3445,7 +3454,7 @@ static void listen_loop(void)
        */
       if (received_hup_signal)
       {
-         init_error_log(Argv[0], config->logfile, config->debug);
+         init_error_log(Argv[0], config->logfile);
          received_hup_signal = 0;
       }
 #endif
