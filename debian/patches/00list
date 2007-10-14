@@ -13,5 +13,6 @@
 24_global_action.dpatch
 25_standard_medium.dpatch
 27_remove_nsl.dpatch
-29_usermanual.dpatch
 30_actionsfile_fullname.dpatch
+31_usermanual-dash.dpatch
+32_faq_ulinkfix.dpatch

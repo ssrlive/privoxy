@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 32_faq_ulinkfix.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix ulink parameter.
+
+@DPATCH@
+diff -urNad privoxy~/doc/source/faq.sgml privoxy/doc/source/faq.sgml
+--- privoxy~/doc/source/faq.sgml
++++ privoxy/doc/source/faq.sgml
+@@ -1162,7 +1162,7 @@
+  The whole idea of Privoxy is to modify client requests
+  and server responses in all sorts of ways and therefore
+  it's not a transparent proxy as described in
+- <ulink link="http://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
++ <ulink url="http://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
+ </para>
+ <para>
+  However, some people say <quote>transparent proxy</quote> when they
