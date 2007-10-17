@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.93 2007/09/29 10:21:16 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.94 2007/09/29 13:20:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.93 2007/09/29 10:21:16 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.94  2007/09/29 13:20:20  fabiankeil
+ *    Remove two redundant and one useless log messages.
+ *
  *    Revision 1.93  2007/09/29 10:21:16  fabiankeil
  *    - Move get_filter_function() from jcc.c to filters.c
  *      so the filter functions can be static.
@@ -2182,8 +2185,8 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
 
       if (sscanf(from_p, "%x", &chunksize) != 1)
       {
-         log_error(LOG_LEVEL_ERROR, "Parse error while stripping \"chunked\" transfer coding");
-         return JB_ERR_PARSE;
+         log_error(LOG_LEVEL_INFO, "Invalid \"chunked\" transfer encoding detected and ignored.");
+         break;
       }
    }
    
@@ -2301,7 +2304,6 @@ char *execute_content_filter(struct client_state *csp, filter_function_ptr conte
    {
       /*
        * failed to de-chunk or decompress.
-       * XXX: if possible, we should continue anyway.
        */
       return NULL;
    }
