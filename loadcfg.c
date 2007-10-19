@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.66 2007/08/05 14:02:09 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.67 2007/10/14 14:12:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.66 2007/08/05 14:02:09 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.67  2007/10/14 14:12:41  fabiankeil
+ *    When in daemon mode, close stderr after the configuration file has been
+ *    parsed the first time. If logfile isn't set, stop logging. Fixes BR#897436.
+ *
  *    Revision 1.66  2007/08/05 14:02:09  fabiankeil
  *    #1763173 from Stefan Huehner: declare unload_configfile() static.
  *
@@ -1298,10 +1302,13 @@ struct configuration_spec * load_config(void)
  * In logdir by default
  * *************************************************************************/
          case hash_logfile :
-            logfile = make_path(config->logdir, arg);
-            if (NULL == logfile)
+            if (!no_daemon)
             {
-               log_error(LOG_LEVEL_FATAL, "Out of memore while creating logfile path");
+               logfile = make_path(config->logdir, arg);
+               if (NULL == logfile)
+               {
+                  log_error(LOG_LEVEL_FATAL, "Out of memory while creating logfile path");
+               }
             }
             continue;
 
