@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.57 2007/06/01 16:53:05 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.58 2007/07/21 12:19:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.57 2007/06/01 16:53:05 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.58  2007/07/21 12:19:50  fabiankeil
+ *    If show-url-info is called with an URL that Privoxy
+ *    would reject as invalid, don't show unresolved forwarding
+ *    variables, "final matches" or claim the site's secure.
+ *
  *    Revision 1.57  2007/06/01 16:53:05  fabiankeil
  *    Adjust cgi_show_url_info() to show what forward-override{}
  *    would do with the requested URL (instead of showing how the
@@ -562,7 +567,8 @@ jb_err cgi_show_request(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   if (map(exports, "processed-request", 1, html_encode(list_to_text(csp->headers)), 0))
+   if (map(exports, "processed-request", 1,
+         html_encode_and_free_original(list_to_text(csp->headers)), 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;
