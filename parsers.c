@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.112 2007/10/09 16:38:40 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.113 2007/10/10 17:29:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.112 2007/10/09 16:38:40 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.113  2007/10/10 17:29:57  fabiankeil
+ *    I forgot about Poland.
+ *
  *    Revision 1.112  2007/10/09 16:38:40  fabiankeil
  *    Remove Range and If-Range headers if content filtering is enabled.
  *
@@ -970,7 +973,7 @@ jb_err add_to_iob(struct client_state *csp, char *buf, int n)
     */
    if (need > csp->config->buffer_limit)
    {
-      log_error(LOG_LEVEL_ERROR, "Buffer limit reached while extending the buffer (iob)");
+      log_error(LOG_LEVEL_INFO, "Buffer limit reached while extending the buffer (iob)");
       return JB_ERR_MEMORY;
    }
 
@@ -3448,9 +3451,7 @@ jb_err client_x_filter(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err client_range(struct client_state *csp, char **header)
 {
-   if (((csp->rlist != NULL) &&
-       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]))) ||
-       (csp->action->flags & (ACTION_DEANIMATE|ACTION_JPEG_INSPECT|ACTION_NO_POPUPS)))
+   if (content_filters_enabled(csp))
    {
       log_error(LOG_LEVEL_HEADER, "Content filtering is enabled."
          " Crunching: \'%s\' to prevent range-mismatch problems.", *header);
