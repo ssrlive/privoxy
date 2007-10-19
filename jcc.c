@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.152 2007/10/04 18:03:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.153 2007/10/14 14:12:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.152 2007/10/04 18:03:34 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.153  2007/10/14 14:12:41  fabiankeil
+ *    When in daemon mode, close stderr after the configuration file has been
+ *    parsed the first time. If logfile isn't set, stop logging. Fixes BR#897436.
+ *
  *    Revision 1.152  2007/10/04 18:03:34  fabiankeil
  *    - Fix a crash when parsing invalid requests whose first header
  *      is rejected by get_header(). Regression (re?)introduced
@@ -2533,7 +2537,7 @@ static void chat(struct client_state *csp)
                   size_t hdrlen;
                   int flushed;
 
-                  log_error(LOG_LEVEL_ERROR, "Flushing header and buffers. Stepping back from filtering.");
+                  log_error(LOG_LEVEL_INFO, "Flushing header and buffers. Stepping back from filtering.");
 
                   hdr = list_to_text(csp->headers);
                   if (hdr == NULL)
