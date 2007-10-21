@@ -7,6 +7,9 @@
 ## DP: adapted to the 3.0 branch of privoxy by Roland Rosenfeld
 ## DP: adapted to 3.0.4 by higuita, but i'm no programmer, so i hope i 
 ## DP: didnt broke anything :)
+## DP: adapted to 3.0.6 by Petr Písa?? petrp@users.sf.net found on
+## DP: http://xpisar.wz.cz/privoxy-ipv6/ Use privoxy-3.0.6-stable-ipv6.diff.bz2
+## DP: and stripped
 
 @DPATCH@
 diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
@@ -305,7 +308,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and 
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -2250,7 +2253,6 @@
+@@ -2259,7 +2262,6 @@
   *********************************************************************/
  struct map *default_exports(const struct client_state *csp, const char *caller)
  {
@@ -313,7 +316,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
     jb_err err;
     struct map * exports;
     int local_help_exists = 0;
-@@ -2286,8 +2288,7 @@
+@@ -2295,8 +2297,7 @@
     if (!err) err = map_block_killer(exports, "can-toggle");
  #endif
  
@@ -326,7 +329,7 @@ diff -urNad privoxy~/cgi.c privoxy/cgi.c
 diff -urNad privoxy~/errlog.c privoxy/errlog.c
 --- privoxy~/errlog.c
 +++ privoxy/errlog.c
-@@ -739,6 +739,13 @@
+@@ -746,6 +746,13 @@
              break;
           case 'E':
              /* Non-standard: Print error code from errno */
@@ -1336,7 +1339,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and 
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -275,6 +279,7 @@
+@@ -285,6 +289,7 @@
  #include "jbsockets.h"
  #include "filters.h"
  #include "errlog.h"
@@ -1344,7 +1347,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  
  const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  
-@@ -287,141 +292,194 @@
+@@ -297,141 +302,194 @@
   *                that this is allowed according to ACL.
   *
   * Parameters  :
@@ -1626,7 +1629,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  }
  
  
-@@ -561,55 +619,30 @@
+@@ -571,55 +629,30 @@
  
  /*********************************************************************
   *
@@ -1691,7 +1694,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  
  #ifdef _WIN32
     if (fd == JB_INVALID_SOCKET)
-@@ -635,8 +668,17 @@
+@@ -645,8 +678,17 @@
      */
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
  #endif /* ndef _WIN32 */
@@ -1711,7 +1714,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
     {
  #ifdef _WIN32
        errno = WSAGetLastError();
-@@ -655,7 +697,7 @@
+@@ -665,7 +707,7 @@
        }
     }
  
@@ -1720,7 +1723,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
     {
        if (errno != EINTR)
        {
-@@ -663,7 +705,11 @@
+@@ -673,7 +715,11 @@
        }
     }
  
@@ -1733,7 +1736,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
     return 0;
  
  }
-@@ -671,6 +717,91 @@
+@@ -681,6 +727,91 @@
  
  /*********************************************************************
   *
@@ -1825,7 +1828,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
   * Function    :  accept_connection
   *
   * Description :  Accepts a connection on a socket.  Socket must have
-@@ -687,8 +818,7 @@
+@@ -697,8 +828,7 @@
   *********************************************************************/
  int accept_connection(struct client_state * csp, jb_socket fd)
  {
@@ -1835,7 +1838,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
     jb_socket afd;
  #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
     /* Wierdness - fix a warning. */
-@@ -696,15 +826,7 @@
+@@ -706,15 +836,7 @@
  #else
     socklen_t c_length, s_length;
  #endif
@@ -1852,7 +1855,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  
     c_length = s_length = sizeof(client);
  
-@@ -724,6 +846,12 @@
+@@ -734,6 +856,12 @@
        return 0;
     }
  #endif
@@ -1865,7 +1868,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  
     /* 
      * Determine the IP-Adress that the client used to reach us
-@@ -731,49 +859,50 @@
+@@ -741,49 +869,50 @@
      */
     if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
     {
@@ -1904,7 +1907,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 +         log_error(LOG_LEVEL_ERROR, "accept: Could not get my own hostname because %E");
 +         strncpy(hostname,"unknown host",NI_MAXHOST);
        }
--#elif defined(OSX_DARWIN) || defined(__OpenBSD__)
+-#elif FEATURE_PTHREAD
 -      pthread_mutex_lock(&gethostbyaddr_mutex);
 -      host = gethostbyaddr((const char *)&server.sin_addr, 
 -                           sizeof(server.sin_addr), AF_INET);
@@ -1950,7 +1953,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
  
     return 1;
  
-@@ -784,108 +913,48 @@
+@@ -794,108 +923,48 @@
   *
   * Function    :  resolve_hostname_to_ip
   *
@@ -2020,7 +2023,7 @@ diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 -      {
 -         hostp = NULL;
 -      }
--#elif defined(OSX_DARWIN) || defined(__OpenBSD__)
+-#elif FEATURE_PTHREAD
 -      pthread_mutex_lock(&gethostbyname_mutex);
 -      while ( NULL == (hostp = gethostbyname(host))
 -            && (h_errno == TRY_AGAIN) && (dns_retries++ < 10) )
@@ -2135,7 +2138,7 @@ diff -urNad privoxy~/jbsockets.h privoxy/jbsockets.h
 diff -urNad privoxy~/jcc.c privoxy/jcc.c
 --- privoxy~/jcc.c
 +++ privoxy/jcc.c
-@@ -750,6 +750,7 @@
+@@ -767,6 +767,7 @@
  #include "cgi.h"
  #include "loadcfg.h"
  #include "urlmatch.h"
@@ -2143,7 +2146,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
  
  const char jcc_h_rcs[] = JCC_H_VERSION;
  const char project_h_rcs[] = PROJECT_H_VERSION;
-@@ -2309,61 +2310,78 @@
+@@ -2338,61 +2339,78 @@
   * Returns     :  Port that was opened.
   *
   *********************************************************************/
@@ -2258,7 +2261,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
  }
  
  
-@@ -2392,12 +2410,18 @@
+@@ -2421,12 +2439,18 @@
  static void listen_loop(void)
  {
     struct client_state *csp = NULL;
@@ -2279,7 +2282,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
  
  #ifdef FEATURE_GRACEFUL_TERMINATION
     while (!g_terminate)
-@@ -2471,14 +2495,55 @@
+@@ -2500,14 +2524,55 @@
            * that this will hurt people's feelings.
            */
  
@@ -2338,7 +2341,7 @@ diff -urNad privoxy~/jcc.c privoxy/jcc.c
        {
           log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
  
-@@ -2496,6 +2561,8 @@
+@@ -2525,6 +2590,8 @@
           log_error(LOG_LEVEL_CONNECT, "OK");
        }
  
@@ -2360,7 +2363,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -402,6 +405,7 @@
+@@ -408,6 +411,7 @@
  #include "encode.h"
  #include "urlmatch.h"
  #include "cgi.h"
@@ -2368,7 +2371,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
  
  const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
  
-@@ -521,8 +525,8 @@
+@@ -527,8 +531,8 @@
        struct forward_spec * next_fwd = cur_fwd->next;
        free_url_spec(cur_fwd->url);
  
@@ -2379,7 +2382,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
        free(cur_fwd);
        cur_fwd = next_fwd;
     }
-@@ -539,7 +543,16 @@
+@@ -545,7 +549,16 @@
     freez(config->confdir);
     freez(config->logdir);
  
@@ -2397,7 +2400,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
     freez(config->logfile);
  
     for (i = 0; i < MAX_AF_FILES; i++)
-@@ -606,6 +619,28 @@
+@@ -612,6 +625,28 @@
   * Returns     :  The configuration_spec, or NULL on error.
   *
   *********************************************************************/
@@ -2426,7 +2429,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
  struct configuration_spec * load_config(void)
  {
     char buf[BUFFER_SIZE];
-@@ -637,12 +672,7 @@
+@@ -643,12 +678,7 @@
     fs->f = config = (struct configuration_spec *)zalloc(sizeof(*config));
  
     if (config==NULL)
@@ -2440,7 +2443,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
  
     /*
      * This is backwards from how it's usually done.
-@@ -659,7 +689,7 @@
+@@ -665,7 +695,7 @@
      * Set to defaults
      */
     config->multi_threaded            = 1;
@@ -2449,7 +2452,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
     config->buffer_limit              = 4096 * 1024;
     config->usermanual                = strdup(USER_MANUAL_URL);
     config->proxy_args                = strdup("");
-@@ -678,9 +708,6 @@
+@@ -684,9 +714,6 @@
        char cmd[BUFFER_SIZE];
        char arg[BUFFER_SIZE];
        char tmp[BUFFER_SIZE];
@@ -2459,7 +2462,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
        struct forward_spec *cur_fwd;
        int vec_count;
        char *vec[3];
-@@ -791,74 +818,23 @@
+@@ -797,74 +824,23 @@
   * *************************************************************************/
  #ifdef FEATURE_ACL
           case hash_deny_access:
@@ -2547,7 +2550,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
  #endif /* def FEATURE_ACL */
  
  /* *************************************************************************
-@@ -978,16 +954,18 @@
+@@ -984,16 +960,18 @@
  
              if (strcmp(p, ".") != 0)
              {
@@ -2572,7 +2575,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
                    cur_fwd->forward_port = 8000;
                 }
              }
-@@ -1041,15 +1019,27 @@
+@@ -1047,15 +1025,27 @@
  
              if (strcmp(p, ".") != 0)
              {
@@ -2604,7 +2607,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
                    cur_fwd->gateway_port = 1080;
                 }
              }
-@@ -1059,16 +1049,26 @@
+@@ -1065,16 +1055,26 @@
  
              if (strcmp(p, ".") != 0)
              {
@@ -2635,7 +2638,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
                    cur_fwd->forward_port = 8000;
                 }
              }
-@@ -1120,16 +1120,30 @@
+@@ -1126,16 +1126,30 @@
              /* Parse the SOCKS proxy host[:port] */
              p = vec[1];
  
@@ -2675,7 +2678,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
              }
  
              /* Parse the parent HTTP proxy host[:port] */
-@@ -1137,16 +1151,26 @@
+@@ -1143,16 +1157,26 @@
  
              if (strcmp(p, ".") != 0)
              {
@@ -2706,7 +2709,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
                    cur_fwd->forward_port = 8000;
                 }
              }
-@@ -1179,10 +1203,49 @@
+@@ -1185,10 +1209,49 @@
   * listen-address [ip][:port]
   * *************************************************************************/
           case hash_listen_address :
@@ -2759,7 +2762,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
  /* *************************************************************************
   * logdir directory-name
   * *************************************************************************/
-@@ -1205,75 +1268,21 @@
+@@ -1211,75 +1274,21 @@
   * *************************************************************************/
  #ifdef FEATURE_ACL
           case hash_permit_access:
@@ -2847,7 +2850,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
              continue;
  #endif /* def FEATURE_ACL */
  
-@@ -1513,32 +1522,33 @@
+@@ -1519,32 +1528,33 @@
     }
  #endif /* def FEATURE_COOKIE_JAR */
  
@@ -2906,7 +2909,7 @@ diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
     }
  
     /*
-@@ -1580,31 +1590,29 @@
+@@ -1586,31 +1596,29 @@
        struct configuration_spec * oldcfg = (struct configuration_spec *)
                                             current_configfile->f;
        /*
@@ -3008,7 +3011,7 @@ diff -urNad privoxy~/parsers.c privoxy/parsers.c
   *                Based on the Internet Junkbuster originally written
   *                by and Copyright (C) 1997 Anonymous Coders and
   *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -1938,6 +1941,167 @@
+@@ -1951,6 +1954,167 @@
     return JB_ERR_OK;
  }
  
