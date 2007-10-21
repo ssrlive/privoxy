@@ -1,11 +1,19 @@
 privoxy for Debian
 ==================
 
-- enable-edit-actions and enable-remote-toggle are disabled in the
-  Debian package for security reasons, because these options allow
-  every user of your privoxy to change its configuration. If you still
-  want to use these features, you can enable them in
-  /etc/privoxy/config and do a "/etc/init.d/privoxy restart".
+- enable-edit-actions, enable-remote-toggle, and
+  enable-remote-http-toggle are disabled in the Debian package for
+  security reasons, because these options allow every user of your
+  privoxy to change its configuration.  Except this there exist
+  exploits using Java and/or JavaScript that tell your browser to send
+  out requests for disabling the proxy or the filtering, which may
+  compromise your anonymity.  If you still want to use these features,
+  you can enable them in /etc/privoxy/config and do a
+  "/etc/init.d/privoxy restart".
+
+- Comment "debug 1" from default configuration, so GET/POST/CONNECT
+  requests are no longer logged by default to protect your privacy a
+  bit more.
 
 - Experimental IPv6 support patch is available in the source package
   but currently disabled because of too many side effects and bugs.
@@ -43,4 +51,4 @@ privoxy for Debian
   editable again.
 
 Roland Rosenfeld <roland@debian.org>
-$Id: README.Debian,v 1.6 2006-11-12 11:34:59 roland Exp $
+$Id: README.Debian,v 1.7 2007-10-21 10:07:04 roland Exp $

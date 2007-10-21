@@ -52,6 +52,15 @@ diff -urNad privoxy~/config privoxy/config
  
  #
  #  2.3. actionsfile
+@@ -575,7 +575,7 @@
+ #      If you want to use CLF (Common Log Format), you should set
+ #      "debug 512" ONLY and not enable anything else.
+ #
+-debug   1    # show each GET/POST/CONNECT request
++#debug   1    # show each GET/POST/CONNECT request
+ debug   4096 # Startup banner and warnings
+ debug   8192 # Errors - *we highly recommended enabling this*
+ 
 @@ -735,7 +735,7 @@
  #      Note that you must have compiled Privoxy with support for this
  #      feature, otherwise this option has no effect.
@@ -61,6 +70,15 @@ diff -urNad privoxy~/config privoxy/config
  
  #
  #  4.4. enable-remote-http-toggle
+@@ -770,7 +770,7 @@
+ #      untrustworthy clients and want to enforce filtering, you will
+ #      have to disable this option, otherwise you can ignore it.
+ #
+-enable-remote-http-toggle  1
++enable-remote-http-toggle  0
+ 
+ #
+ #  4.5. enable-edit-actions
 @@ -803,7 +803,7 @@
  #      Note that you must have compiled Privoxy with support for this
  #      feature, otherwise this option has no effect.

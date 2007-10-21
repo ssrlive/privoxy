@@ -1,6 +1,6 @@
-privoxy (3.0.7~CSV20071014-0.1) UNRELEASED; urgency=low
+privoxy (3.0.7~CSV20071021-0.1) UNRELEASED; urgency=low
 
-  * CVS as of 2007-10-14. 
+  * CVS as of 2007-10-21.
   * Enable new zlib feature (Closes: #368448):
     - build-depend on zlib1g-dev
     - disable prevent-compression in 25_standard_medium.dpatch
@@ -12,7 +12,19 @@ privoxy (3.0.7~CSV20071014-0.1) UNRELEASED; urgency=low
     doesn't like these.
   * 32_faq_ulinkfix: Fix ulink parameter.
 
- -- Roland Rosenfeld <roland@debian.org>  Sun, 14 Oct 2007 17:45:59 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 21 Oct 2007 14:05:00 +0200
+
+privoxy (3.0.6-4) unstable; urgency=low
+
+  * Set "enable-remote-http-toggle 0" by default because otherwise
+    requests may be able to bypass filtering by setting "X-Filter: No"
+    headers using some strange javascript code.
+  * Disable default logging of every GET/POST/CONNECT request to protect
+    your privacy a bit more.
+  * 05_defaut_action: Stop blocking Andorra ccTLD (.ad) (Closes: #445461).
+  * Run make clean/distclean only if GNUmakefile exists in debian/rules.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 21 Oct 2007 12:47:51 +0200
 
 privoxy (3.0.6-3) unstable; urgency=low
 

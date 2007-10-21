@@ -8,7 +8,16 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -1823,6 +1823,11 @@
+@@ -598,6 +598,8 @@
+ .*[epu]ad*.
+ county*.
+ countr*.
++#MASTER# Do not block Andorra ccTLD:
++.ad
+ 
+ #############################################################################
+ # Generic block patterns by path:
+@@ -1823,6 +1825,11 @@
  {+filter{tiny-textforms} +prevent-compression}
  .sourceforge.net/tracker
  

@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (C) 2002-2006 Roland Rosenfeld <roland@debian.org>, based on
+# (C) 2002-2007 Roland Rosenfeld <roland@debian.org>, based on
 # Sample debian/rules that uses debhelper.
 # This file is public domain software, originally written by Joey Hess. 
 
@@ -57,8 +57,8 @@ clean1:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
-	-$(MAKE) clean
-	-$(MAKE) distclean
+	[ ! -f GNUmakefile ] || $(MAKE) clean
+	[ ! -f GNUmakefile ] || $(MAKE) distclean
 	rm -f configure config.h GNUmakefile
 	rm -f privoxy.8
 
