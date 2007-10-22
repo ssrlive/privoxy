@@ -8,7 +8,7 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.6">
+<!entity p-version "3.0.7">
 <!entity p-status "stable">
 <!entity % p-not-stable "IGNORE">
 <!entity % p-stable "INCLUDE">
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.25 2007/07/18 11:00:34 hal9 Exp $
+ $Id: faq.sgml,v 2.26 2007/08/05 15:37:55 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -72,12 +72,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2006 by 
- <ulink url="http://www.privoxy.org">Privoxy Developers</ulink>
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2007 by 
+ <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.25 2007/07/18 11:00:34 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.26 2007/08/05 15:37:55 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1162,7 +1162,7 @@ and thus avoid individual browser configuration?</title>
  The whole idea of Privoxy is to modify client requests
  and server responses in all sorts of ways and therefore
  it's not a transparent proxy as described in
- <ulink link="http://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
+ <ulink url="http://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
 </para>
 <para>
  However, some people say <quote>transparent proxy</quote> when they
@@ -1260,7 +1260,7 @@ and thus avoid individual browser configuration?</title>
  advantage of this layer of trust, and using the data they glean from you  and 
  your browsing habits for their own purposes, and maybe to your potential
  detriment. Such sites are using you and storing their data on your system.
- That is why the security conscious watch from whom those cookies come, and why
+ That is why the privacy conscious watch from whom those cookies come, and why
  they really <emphasis>need</emphasis> to be there.
 </para>
 <para>
@@ -1277,7 +1277,7 @@ and thus avoid individual browser configuration?</title>
   There are several actions that relate to cookies. The default behavior is to 
   allow only <quote>session cookies</quote>, which means the cookies only last
   for the current browser session. This eliminates most kinds of abuse related 
-  to cookies. But there may be cases where we want cookies to last.
+  to cookies. But there may be cases where you want cookies to last.
 </para>
 <para>
   To disable all cookie actions, so that cookies are allowed unrestricted,
@@ -1289,7 +1289,7 @@ and thus avoid individual browser configuration?</title>
   .example.com</screen>
 </para>
 <para>
- Place the above in <filename>user.action</filename>. Note some of these may
+ Place the above in <filename>user.action</filename>. Note that some of these may
  be off by default anyway, so this might be redundant, but there is no harm
  being explicit in what you want to happen. <filename>user.action</filename>
  includes an alias for this situation, called
@@ -1488,7 +1488,7 @@ has to add extra time to browsing.</title>
  definition of the filter(s), etc. See below. Most other actions have little
  to no impact on speed.
 </para>
-<para> 
+<para>
  Also, when filtering is enabled but zlib support isn't available, compression
  is often disabled (see <ulink
  url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>).
@@ -1526,7 +1526,6 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  to differentiate filterable content because of the MIME type as reported by
  the server, or because of some configuration setting that enables/disables
  filtering.
-
 </para>
 </sect2>
 
@@ -1629,7 +1628,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
 <para>
  However, these proxies are called "anonymous" because you don't need
- a password, not because they would offer any real anonymity.
+ to authenticate, not because they would offer any real anonymity.
  Most of them will log your IP address and make it available to the
  authorities in case you violate the law of the country they run in. In fact
  you can't even rule out that some of them only exist to *collect* information
@@ -1644,16 +1643,6 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  with <application>Tor</application> section</ulink>
  just below.
 </para>
-<!-- 
-<para>
- There is, however, even in the single-machine case the possibility to make the
- server believe that your machine is in fact a shared proxy serving a large
- LAN, and we are looking into that.
-</para>
- I assume this is about sending fake forward IP addresses?
- David and I looked into it and considered it a waste of time to implement.
- Fabian 2006-09-04 
--->
 </sect2>
 
 <sect2 renderas="sect3">
@@ -1675,7 +1664,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  configuration and chained it with <application>Tor</application>.
 </para>
 <para>
- Most of <application>Privoxy's</application> protection can be easily subverted
+ Most of <application>Privoxy's</application> privacy-enhancing features can be easily subverted
  by an insecure browser configuration, therefore you should use a browser that can
  be configured to only execute code from trusted sites, and be careful which sites you trust.
  For example there is no point in having <application>Privoxy</application>
@@ -1738,8 +1727,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  are working, it is time to connect them. As far as <application>Privoxy</application>
  is concerned, <application>Tor</application> is just another proxy that can be reached
  by socks4 or socks4a. Most likely you are interested in <application>Tor</application>
- to increase your anonymity level, therefore you should use socks4a,
- to make sure DNS requests are
+ to increase your anonymity level, therefore you should use socks4a, to make sure DNS requests are
  done through <application>Tor</application> and thus invisible to your local network.
 </para>
 
@@ -1759,7 +1747,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  </screen>
 </para>
 <para>
- This is enough to reach the Internet, but additionally you should
+ This is enough to reach the Internet, but additionally you might want to
  uncomment the following forward rules, to make sure your local network is still
  reachable through Privoxy:
 </para>
@@ -1773,10 +1761,15 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 <para>
  Unencrypted connections to systems in these address ranges will
  be as (un)secure as the local network is, but the alternative is
- that you can't reach the network at all.
- If you also want to be able to reach servers in your local
- network by using their names, you will need additional
- exceptions that look like this:
+ that your browser can't reach the network at all. Then again,
+ that may actually be desired and if you don't know for sure
+ that your browser has to be able to reach the local network,
+ there's no reason to allow it.
+</para>
+<para>
+ If you want your browser to be able to reach servers in your local
+ network by using their names, you will need additional exceptions
+ that look like this:
 </para>
 <para>
  <screen>
@@ -1868,9 +1861,9 @@ speed up web browsing?</title>
 <sect2 renderas="sect3">
 <title id="firewall">What about as a firewall? Can Privoxy protect me?</title>
 <para>
- Not in the way you mean, or in the way a true firewall can. 
- <application>Privoxy</application> can help protect your privacy, but not
- protect you from intrusion attempts. It is, of course, perfectly possible
+ Not in the way you mean, or in the way some firewall vendors claim they can. 
+ <application>Privoxy</application> can help protect your privacy, but can't
+ protect your system from intrusion attempts. It is, of course, perfectly possible
  to use <emphasis>both</emphasis>.
 </para>
 </sect2>
@@ -1940,14 +1933,14 @@ ads used to be. Why?</title>
 <title id="secure">Privoxy runs as a <quote>server</quote>. How 
 secure is it? Do I need to take any special precautions?</title>
 <para>
- There are no known exploits that might affect
- <application>Privoxy</application>. On Unix-like systems, 
- <application>Privoxy</application> can run as a non-privileged 
- user, which is how we recommend it be run. Also, by default 
- <application>Privoxy</application> only listens to requests 
- from <quote>localhost</quote> only. The server aspect of
- <application>Privoxy</application> is not itself directly exposed to the
- Internet in this configuration. If you want to have
+ On Unix-like systems, <application>Privoxy</application> can run as a non-privileged 
+ user, which is how we recommend it be run. Also, by default
+ <application>Privoxy</application> listens to requests from <quote>localhost</quote>
+ only.
+</para>
+<para>
+ The server aspect of <application>Privoxy</application> is not itself directly 
+ exposed to the Internet in this configuration. If you want to have
  <application>Privoxy</application> serve as a LAN proxy, this will have to
  be opened up to allow for LAN requests. In this case, we'd recommend
  you specify only the LAN gateway address, e.g. 192.168.1.1, in the main 
@@ -1978,7 +1971,7 @@ secure is it? Do I need to take any special precautions?</title>
 <title>When <quote>disabled</quote> is Privoxy totally 
 out of the picture?</title>
 <para>
- No, this just means all filtering and actions are disabled.
+ No, this just means all optional filtering and actions are disabled.
  <application>Privoxy</application> is still acting as a proxy, but just not 
  doing any of the things that <application>Privoxy</application> would
  normally be expected to do. It is still a <quote>middle-man</quote> in 
@@ -2011,6 +2004,10 @@ ads, but also its own internal CGI pages. What is a <quote>crunch</quote>?</titl
  configuration is returned to the browser, and the log consequently will show
  a <quote>crunch</quote>.
 </para>
+<para>
+ Since version 3.0.7, Privoxy will also log the crunch reason.
+ If you are using an older version you might want to upgrade.
+</para>
 </sect2>
 
 <sect2 renderas="sect3" id="downloads">
@@ -2036,7 +2033,7 @@ from a webserver? FTP server?</title>
 </para>
 <para>
  <application>Privoxy</application> knows the differences in files according
- to the <quote>Document Type</quote> as reported by the webserver. If this is
+ to the <quote>Content Type</quote> as reported by the webserver. If this is
  reported accurately (e.g. <quote>application/zip</quote> for a zip archive),
  then <application>Privoxy</application> knows to ignore these where
  appropriate. <application>Privoxy</application> potentially can filter HTML
@@ -2053,11 +2050,11 @@ from a webserver? FTP server?</title>
  did filter this document type.
 </para>
 <para>
- In short, filtering is <quote>ON</quote> if a) the Document Type as reported
+ In short, filtering is <quote>ON</quote> if a) the content type as reported
  by the webserver is appropriate <emphasis>and</emphasis> b) the configuration
  allows it (or at least does not disallow it). That's it. There is no magic
  cookie anywhere to say this is <quote>good</quote> and this is
- <quote>bad</quote>. It's the configuration that let's it all happen or not.
+ <quote>bad</quote>. It's the configuration that lets it all happen or not.
 </para>
 <para>
  If you download text files, you probably do not want these to be filtered,
@@ -2096,8 +2093,8 @@ altered it! Yikes, what is wrong!</title>
  <application>Privoxy</application>. <application>Privoxy</application>
  does essentially the same thing, much more elegantly and with much more 
  flexibility. A large <filename>HOSTS</filename> file, in fact, not only
- duplicates effort, but may get in the way. It is recommended to remove 
- such entries from your <filename>HOSTS</filename> file. If you think 
+ duplicates effort, but may get in the way and seriously slow down your system.
+ It is recommended to remove such entries from your <filename>HOSTS</filename> file. If you think 
  your hosts list is neglected by <application>Privoxy's </application> 
  configuration, consider adding your list to your <filename>user.action</filename> file:
 </para>
@@ -2570,7 +2567,7 @@ Why?</title>
 </title>
 <para>
  This may also be caused by the <quote>demoronizer</quote> filter, 
- in conjunction with a web server that is misreporting a file type. Binary 
+ in conjunction with a web server that is misreporting the content type. Binary 
  files are exempted from <application>Privoxy's</application> filtering
  (unless the web server by mistake says the file is something else). Either
  upgrade <application>Privoxy</application>, or go to the most recent
@@ -2777,6 +2774,16 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.26  2007/08/05 15:37:55  fabiankeil
+- Don't claim that thousands of people read our code.
+- Specify the GPL version and link to GPLv2 instead of v3.
+- Note that configuration syntax may change between releases.
+- Mention zlib support.
+- Answer the "transparent proxy" question properly.
+- Add "intercepting proxy" entry.
+- Mention Polipo.
+- Rephrase some other sentences for various reasons.
+
 Revision 2.25  2007/07/18 11:00:34  hal9
 Add misc note about valid mark-up in Privoxy.
 
