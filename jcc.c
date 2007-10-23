@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.153 2007/10/14 14:12:41 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.154 2007/10/19 17:00:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.153 2007/10/14 14:12:41 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.154  2007/10/19 17:00:08  fabiankeil
+ *    Downgrade "Flushing header and buffers" message to LOG_LEVEL_INFO.
+ *
  *    Revision 1.153  2007/10/14 14:12:41  fabiankeil
  *    When in daemon mode, close stderr after the configuration file has been
  *    parsed the first time. If logfile isn't set, stop logging. Fixes BR#897436.
@@ -1079,7 +1082,7 @@ int received_hup_signal = 0;
 
 /* HTTP snipplets. */
 static const char CSUCCEED[] =
-   "HTTP/1.0 200 Connection established\n"
+   "HTTP/1.0 200 Connection established\r\n"
    "Proxy-Agent: Privoxy/" VERSION "\r\n\r\n";
 
 static const char CHEADER[] =
