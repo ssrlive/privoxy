@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.55 2007/10/14 14:12:41 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.56 2007/10/14 14:26:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.55 2007/10/14 14:12:41 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.56  2007/10/14 14:26:56  fabiankeil
+ *    Remove the old log_error() version.
+ *
  *    Revision 1.55  2007/10/14 14:12:41  fabiankeil
  *    When in daemon mode, close stderr after the configuration file has been
  *    parsed the first time. If logfile isn't set, stop logging. Fixes BR#897436.
@@ -511,9 +514,11 @@ void disable_logging(void)
    lock_logfile();
    if (logfp != NULL)
    {
+      log_error(LOG_LEVEL_INFO,
+         "No logfile configured while in daemon mode. Logging disabled.");
       fclose(logfp);
+      logfp = NULL;
    }
-   logfp = NULL;
    unlock_logfile();
 }
 
@@ -543,7 +548,12 @@ void init_error_log(const char *prog_name, const char *logfname)
    lock_loginit();
    lock_logfile();
 
-   if ((logfp != NULL) && (logfp != stderr))
+   if (logfp == stderr)
+   {
+      log_error(LOG_LEVEL_INFO,
+         "Switching to daemon mode. Log messages will be written to: %s", logfname);
+   }
+   else if (logfp != NULL)
    {
       log_error(LOG_LEVEL_INFO, "(Re-)Open logfile \'%s\'", logfname ? logfname : "none");
    }

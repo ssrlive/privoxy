@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.67 2007/10/14 14:12:41 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.68 2007/10/19 16:32:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.67 2007/10/14 14:12:41 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.68  2007/10/19 16:32:34  fabiankeil
+ *    Plug memory leak introduced with my last commit.
+ *
  *    Revision 1.67  2007/10/14 14:12:41  fabiankeil
  *    When in daemon mode, close stderr after the configuration file has been
  *    parsed the first time. If logfile isn't set, stop logging. Fixes BR#897436.
@@ -1619,13 +1622,10 @@ struct configuration_spec * load_config(void)
       if (NULL != logfile)
       {
          config->logfile = logfile;
-         log_error(LOG_LEVEL_INFO,
-            "Switching to daemon mode. Log messages will be written to: %s", config->logfile);
          init_error_log(Argv[0], config->logfile);
       }
       else
       {
-         log_error(LOG_LEVEL_INFO, "No logfile configured while in daemon mode. Logging disabled.");
          disable_logging();
       }
    }
