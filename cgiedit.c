@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.55 2007/05/31 11:50:20 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.56 2007/08/05 13:47:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.55 2007/05/31 11:50:20 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.56  2007/08/05 13:47:03  fabiankeil
+ *    #1763173 from Stefan Huehner: s@const static@static const@.
+ *
  *    Revision 1.55  2007/05/31 11:50:20  fabiankeil
  *    Re-enable support for old-school URLs like
  *    http://config.privoxy.org/edit-actions-list?f=default
@@ -2651,6 +2654,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
    if (err)
    {
       /* No filename specified, can't read file, or out of memory. */
+      free_map(exports);
       return (err == JB_ERR_FILE ? JB_ERR_OK : err);
    }
 
