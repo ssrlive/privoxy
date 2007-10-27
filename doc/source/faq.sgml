@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.26 2007/08/05 15:37:55 fabiankeil Exp $
+ $Id: faq.sgml,v 2.27 2007/10/22 19:47:05 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.26 2007/08/05 15:37:55 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.27 2007/10/22 19:47:05 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1700,15 +1700,15 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 <sect2 renderas="sect3" id="tor"><title>How do I use Privoxy
  together with Tor?</title>
 <para>
- Before you configure <application>Privoxy</application> to use <application>Tor</application>
- (<ulink url="http://tor.eff.org/">http://tor.eff.org/</ulink>),
+ Before you configure <application>Privoxy</application> to use
+ <ulink url="https://www.torproject.org/">Tor</ulink>,
  please follow the <citetitle>User Manual</citetitle> chapters
  <ulink url="../user-manual/installation.html">2. Installation</ulink> and
  <ulink url="../user-manual/startup.html">5. Startup</ulink> to make sure
  <application>Privoxy</application> itself is setup correctly.
 </para>
 <para> 
- If it is, refer to <ulink url="http://tor.eff.org/documentation.html.en">Tor's
+ If it is, refer to <ulink url="https://www.torproject.org/documentation.html">Tor's
  extensive documentation</ulink> to learn how to install <application>Tor</application>,
  and make sure <application>Tor</application>'s logfile says that
  <quote>Tor has successfully opened a circuit</quote> and it
@@ -1782,7 +1782,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  in your browser, confirm that <application>Privoxy</application> has reloaded its configuration
  and that there are no other forward lines, unless you know that you need them. If everything looks good,
  refer to
- <ulink url="http://wiki.noreply.org/noreply/TheOnionRouter/TorFAQ#head-0e1cc2ac330ede8c6ad1ac0d0db0ac163b0e6143">Tor
+ <ulink url="https://wiki.torproject.org/wiki/TheOnionRouter/TorFAQ#head-0e1cc2ac330ede8c6ad1ac0d0db0ac163b0e6143">Tor
  Faq 4.2</ulink> to learn how to verify that you are really using <application>Tor</application>.
 </para>
 <para>
@@ -2774,6 +2774,13 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.27  2007/10/22 19:47:05  fabiankeil
+- Bump version and copyright.
+- Adjust Tor section to make it clear that forward exceptions
+  aren't required and may not even be desired.
+- A bunch of other minor rewordings.
+- Fix markup problems Roland noticed (hopefully without adding new ones).
+
 Revision 2.26  2007/08/05 15:37:55  fabiankeil
 - Don't claim that thousands of people read our code.
 - Specify the GPL version and link to GPLv2 instead of v3.
