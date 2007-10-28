@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.56 2007/10/14 14:26:56 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.57 2007/10/27 13:02:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.56 2007/10/14 14:26:56 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.57  2007/10/27 13:02:26  fabiankeil
+ *    Relocate daemon-mode-related log messages to make sure
+ *    they aren't shown again in case of configuration reloads.
+ *
  *    Revision 1.56  2007/10/14 14:26:56  fabiankeil
  *    Remove the old log_error() version.
  *
@@ -514,8 +518,7 @@ void disable_logging(void)
    lock_logfile();
    if (logfp != NULL)
    {
-      log_error(LOG_LEVEL_INFO,
-         "No logfile configured while in daemon mode. Logging disabled.");
+      log_error(LOG_LEVEL_INFO, "No logfile configured. Logging disabled.");
       fclose(logfp);
       logfp = NULL;
    }
