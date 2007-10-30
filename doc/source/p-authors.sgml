@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.19 2006/11/14 01:57:47 hal9 Exp $
+ $Id: p-authors.sgml,v 2.20 2006/12/16 13:39:10 hal9 Exp $
 
- Copyright (C) 2001-2006 Privoxy Developers http://privoxy.org
+ Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
@@ -79,6 +79,7 @@ Current Privoxy Team:
  Ken Arromdee
  Devin Bayer
  Reiner Buehl
+ Gergely Bor
  Andrew J. Caines
  Clifford Caoile
  Frédéric Crozat
@@ -86,25 +87,35 @@ Current Privoxy Team:
  Mattes Dolak 
  Peter E
  Florian Effenberger
+ Markus Elfring
  Dean Gaudet
+ Stephen Gildea
+ Daniel Griscom
+ Felix Gröbert
  Aaron Hamid
  Darel Henman
  Magnus Holmgren
+ Peter Hyman
  Derek Jennings
+ Petr Kadlec
  David Laight
  Don Libes  
  Paul Lieverse
+ Toby Lyward
+ Wil Mahan
  Jindrich Makovicka 
  David Mediavilla 
  Raphael Moll
  Adam Piggott
- Oliver Stoeneberg
- Martin Thomas
  Roberto Ragusa
  Félix Rauch
  Maynard Riley
+ Chung-chieh Shan
  Spinor S
  Bart Schelstraete
+ Oliver Stoeneberg
+ Peter Thoenen
+ Martin Thomas
  Bobby G. Vinyard
  Jörg Weinmann 
  Darren Wiebe
@@ -120,7 +131,7 @@ Current Privoxy Team:
 <literallayout>
  Junkbusters Corp.
  Anonymous Coders
- Ulrich Drepper
- Philip Hazel
+ Ulrich Drepper (strptime fallback)
+ Philip Hazel (PCRE)
 </literallayout>
 ]]>
