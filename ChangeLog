@@ -24,7 +24,7 @@ ChangeLog for Privoxy
 - Fixed a bug in the User Manual delivery on Windows
   (mingw32 only). Images now show up correctly and HTML
   pages are no longer padded with garbage data.
-- Fixed small memory leak in case of config file reloads.
+- Fixed several minor memory leaks.
 - Only unlink the pidfile if it's actually used.
 - Retries after connection problems with forced requests
   aren't blocked again.
@@ -94,8 +94,6 @@ ChangeLog for Privoxy
 - With the configuration file option "enforce-blocks" the
   "go there anyway" mechanism can be disabled without recompiling
   Privoxy.
-- On Unix-like systems nothing is logged to the console unless
-  an error occurs or Privoxy isn't running as daemon.
 - More precise error messages in case of incorrect acl syntax.
 - Logs a warning if filtering is enabled but impossible due
   to lack of zlib support or use of the prevent-compression action.
@@ -110,7 +108,6 @@ ChangeLog for Privoxy
 - Use string functions with length checks more often.
 - Don't log CONNECT requests twice.
 - Log the source address for ACL-related connection drops.
-- Log the reason why a request was crunched.	
 - Don't ignore applying filters if the server didn't
   specify a Content-Type. Bug reported by Amuro Namie.
 - Allow to rewrite the request destination behind the client's back.
@@ -121,6 +118,19 @@ ChangeLog for Privoxy
   intialize the resolver library before chroot'ing. On some systems this
   reduces the number of files that must be copied into the chroot tree.
   (Patch provided by Stephen Gildea)
+- Fix a long-standing memory corruption bug that could cause
+  Privoxy to overwrite a single byte in memory it didn't explicitly
+  allocate (but that probably was allocated anyway due to bucket size).
+- Send template-based CGI pages as HTTP/1.1 unless the client
+  asked for HTTP/1.0.
+- Let the first line in connection established responses
+  end in \r\n as required by RFC1945. Reported by Bert van Leeuwen.
+- If no log file has been specified, disable logging instead of logging
+  to stderr.
+- Don't block stderr when in daemon mode.
+- Ignore missing zero-chunks when filtering chunk-encoded content.
+  Earlier Privoxy versions would buffer and then forward the content
+  unmodified which caused some browsers to simply show empty pages.
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring,
    Stefan Huehner and Adam Piggott)
