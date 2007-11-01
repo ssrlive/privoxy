@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.154 2007/10/19 17:00:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.155 2007/10/23 20:12:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.154 2007/10/19 17:00:08 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.155  2007/10/23 20:12:45  fabiankeil
+ *    Fix first CSUCCEED line to end in \r\n as required by RFC1945.
+ *    Reported by Bert van Leeuwen in BR#1818808.
+ *
  *    Revision 1.154  2007/10/19 17:00:08  fabiankeil
  *    Downgrade "Flushing header and buffers" message to LOG_LEVEL_INFO.
  *
@@ -2953,8 +2957,6 @@ int main(int argc, const char *argv[])
 #endif
       ;
 
-   init_log_module(Argv[0]);
-
    /*
     * Parse the command line arguments
     *
@@ -3109,6 +3111,9 @@ int main(int argc, const char *argv[])
 
    /* Prepare mutexes if supported and necessary. */
    initialize_mutexes();
+
+   /* Enable logging until further notice. */
+   init_log_module(Argv[0]);
 
    random_seed = (unsigned int)time(NULL);
 #ifdef HAVE_RANDOM
