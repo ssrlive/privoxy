@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.113 2007/10/10 17:29:57 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.114 2007/10/19 16:56:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.113 2007/10/10 17:29:57 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.114  2007/10/19 16:56:26  fabiankeil
+ *    - Downgrade "Buffer limit reached" message to LOG_LEVEL_INFO.
+ *    - Use shiny new content_filters_enabled() in client_range().
+ *
  *    Revision 1.113  2007/10/10 17:29:57  fabiankeil
  *    I forgot about Poland.
  *
@@ -3128,17 +3132,6 @@ static jb_err client_max_forwards(struct client_state *csp, char **header)
          {
             log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
             freez(*header);
-         }
-         else
-         {
-            /*
-             * Not supposed to be reached. direct_response() which
-             * was already called earlier in chat() should have
-             * intercepted the request.
-             */
-            log_error(LOG_LEVEL_ERROR,
-               "Non-intercepted %s request with Max-Forwards zero!", csp->http->gpc);
-            assert(max_forwards != 0);
          }
       }
       else
