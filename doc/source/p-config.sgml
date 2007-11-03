@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.16 2007/06/01 14:14:29 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.17 2007/07/21 11:53:40 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.16 2007/06/01 14:14:29 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.17 2007/07/21 11:53:40 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
@@ -172,7 +172,7 @@ II. FORMAT OF THE CONFIGURATION FILE
 <para>
  Note that commenting out an option and leaving it at its default
  are two completely different things! Most options behave very
- differently when unset. See the the "Effect if unset" explanation
+ differently when unset. See the "Effect if unset" explanation
  in each option's description for details.
 </para>
 <para>
@@ -337,7 +337,7 @@ II. FORMAT OF THE CONFIGURATION FILE
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para>Two example URL are provided</para>
+   <para>Two example URLs are provided</para>
   </listitem>
  </varlistentry>
  <varlistentry>
