@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.94 2007/10/05 02:02:05 hal9 Exp $
+#  $Id: default.action.master,v 1.95 2007/10/12 13:36:49 proactivesvcs Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -122,7 +122,7 @@
 # Additionally, there are wildcards that you can use in the domain names
 # themselves. They work pretty similar to shell wildcards: "*" stands for
 # zero or more arbitrary characters, "?" stands for one, and you can define
-# charachter classes in square brackets and they can be freely mixed:
+# character classes in square brackets and they can be freely mixed:
 # 
 # ad*.example.com
 #   matches adserver.example.com, ads.example.com, etc but not sfads.example.com
@@ -158,7 +158,7 @@
 #   will match only documents whose path starts with PaTtErN in exactly this
 #   capitalization.
 #
-# Partially case-sensetive and partially case-insensitive patterns are
+# Partially case-sensitive and partially case-insensitive patterns are
 # possible, but the rules about splitting them up are extremely complex
 # - see the PCRE documentation for more information.
 # 
@@ -252,10 +252,10 @@
 #    http://some.place/some_script?http://some.where-else
 #
 #    Sometimes, there are even multiple consecutive redirects encoded
-#    in the URL. These redirections via scripts make your web browing
+#    in the URL. These redirections via scripts make your web browsing
 #    more traceable, since the server from which you follow such a link
 #    can see where you go to. Apart from that, valuable bandwidth and
-#    time is wasted, while your browser aks the server for one redirect
+#    time is wasted, while your browser asks the server for one redirect
 #    after the other. Plus, it feeds the advertisers.
 #
 #    The +fast-redirects{check-decoded-url} option enables interception of 
