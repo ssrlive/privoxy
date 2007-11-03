@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.48 2007/10/17 18:11:32 fabiankeil Exp $
+#  $Id: default.filter,v 1.49 2007/11/03 14:29:41 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -77,10 +77,10 @@
 
 #################################################################################
 #
-# js-annoyances: Get rid of particularly annoying JavaScript abuse
+# js-annoyances: Get rid of particularly annoying JavaScript abuse.
 #
 #################################################################################
-FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse
+FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse.
 
 # Note: Most of these jobs would be safer if restricted to a
 # <script> context as in:
@@ -128,10 +128,10 @@ s/(open\s*\([^\)]+always(?:raised|lowered)=)(["']?)(?:yes|1)\2/$1$2no$2/sigU
 
 #################################################################################
 #
-# js-events: Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites)
+# js-events: Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
 #
 #################################################################################
-FILTER: js-events Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites)
+FILTER: js-events Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
 
 s/(on|event\.)((mouse(over|out|down|up|move))|(un)?load|contextmenu|selectstart)/never/ig
 # Not events, but abused on the same type of sites:
@@ -140,10 +140,10 @@ s/settimeout\(/concat(/ig
 
 #################################################################################
 #
-# html-annoyances: Get rid of particularly annoying HTML abuse
+# html-annoyances: Get rid of particularly annoying HTML abuse.
 #
 #################################################################################
-FILTER: html-annoyances Get rid of particularly annoying HTML abuse
+FILTER: html-annoyances Get rid of particularly annoying HTML abuse.
 
 # New browser windows (if allowed -- see no-popups filter below) should be
 # resizeable and have a location and status bar
@@ -161,10 +161,10 @@ s-</?(blink|marquee).*>--sigU
 
 #################################################################################
 #
-# content-cookies: Kill cookies that come in the HTML or JS content
+# content-cookies: Kill cookies that come in the HTML or JS content.
 #
 #################################################################################
-FILTER: content-cookies Kill cookies that come in the HTML or JS content
+FILTER: content-cookies Kill cookies that come in the HTML or JS content.
 
 # JS cookies, except those used by antiadbuster.com to detect us:
 #
@@ -177,10 +177,10 @@ s|<meta\s+http-equiv=['"]?set-cookie.*>|<!-- ZappedCookie -->|igU
 
 #################################################################################
 #
-# refresh-tags: Kill automatic refresh tags (for dial-on-demand setups)
+# refresh-tags: Kill automatic refresh tags (for dial-on-demand setups).
 #
 #################################################################################
-FILTER: refresh-tags Kill automatic refresh tags (for dial-on-demand setups)
+FILTER: refresh-tags Kill automatic refresh tags (for dial-on-demand setups).
 
 # Note: Only deactivates refreshes with more than 9 seconds delay to
 #       preserve monster-stupid but common redirections via meta tags.
@@ -190,10 +190,10 @@ s/<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;\s
 
 #################################################################################
 #
-# unsolicited-popups: Disable unsolicited pop-up windows
+# unsolicited-popups: Disable unsolicited pop-up windows.
 #
 #################################################################################
-FILTER: unsolicited-popups Disable only unsolicited pop-up windows
+FILTER: unsolicited-popups Disable only unsolicited pop-up windows.
 
 s+([^'"]\s*<head.*>)(?=\s*[^'"])+$1<script>function PrivoxyWindowOpen(){return(null);}</script>+isU
 s@([^\w\s.]\s*)((?:map)?(window|this|parent)\.?)?open\s*\(@$1PrivoxyWindowOpen(@ig
@@ -202,10 +202,10 @@ s+([^'"]\s*</html>)(?!\s*(\\n|'|"))+$1<script>function PrivoxyWindowOpen(a, b, c
 
 ##################################################################################
 #
-# all-popups: Kill all popups in JavaScript and HTML
+# all-popups: Kill all popups in JavaScript and HTML.
 #
 #################################################################################
-FILTER: all-popups Kill all popups in JavaScript and HTML
+FILTER: all-popups Kill all popups in JavaScript and HTML.
 
 s@((\W\s*)(?:map)?(window|this|parent)\.?)open\s*\\?\(@$1concat(@ig  # JavaScript
 #s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ notarget/ig        # HTML
@@ -213,10 +213,10 @@ s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ /ig        # (X)HTML
 
 ##################################################################################
 #
-# img-reorder: Reorder attributes in <img> tags to make the banners-by-* filters more effective
+# img-reorder: Reorder attributes in <img> tags to make the banners-by-* filters more effective.
 #
 #################################################################################
-FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* filters more effective
+FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* filters more effective.
 
 # In the first step src is moved to the start, then width is moved to the second
 # place to guarantee an order of src, width, height.
@@ -231,7 +231,7 @@ s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s+width\s*=\s*(["']?)(\
 
 #################################################################################
 #
-# banners-by-size: Kill banners by size
+# banners-by-size: Kill banners by size.
 #
 #################################################################################
 #
@@ -244,7 +244,7 @@ s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s+width\s*=\s*(["']?)(\
 # Note2: Use img-reorder before this filter to ensure maximum matching success
 #
 #################################################################################
-FILTER: banners-by-size Kill banners by size
+FILTER: banners-by-size Kill banners by size.
 
 # 88*31
 s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)88\4)[^>]*?(height=(['"]?)31\6)[^>]*?(?=/?>)@\
@@ -282,10 +282,10 @@ s@<img\s+(?:src\s*=\s*(['"]?)([^>\\\1\s]+)\1)?[^>]*?(width=(['"]?)336\4)[^>]*?(h
 
 #################################################################################
 #
-# banners-by-link: Kill banners by their links to known clicktrackers (Experimental)
+# banners-by-link: Kill banners by their links to known clicktrackers (Experimental).
 #
 #################################################################################
-FILTER: banners-by-link Kill banners by their links to known clicktrackers
+FILTER: banners-by-link Kill banners by their links to known clicktrackers.
 
 # Common case with width and height attributes:
 #
@@ -307,20 +307,20 @@ s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:ad(?:click|vert)|atwola\.com/(?:link|redi
 
 ################################################################################
 #
-# webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking)
+# webbugs: Squish WebBugs (1x1 invisible GIFs used for user tracking).
 #
 #################################################################################
-FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking)
+FILTER: webbugs Squish WebBugs (1x1 invisible GIFs used for user tracking).
 
 s@<img[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*\s(?:width|height)\s*=\s*['"]?[01](?=\D)[^>]*?>@@siUg
 
 
 #################################################################################
 #
-# tiny-textforms: Extend those tiny textareas up to 40x80 and kill the hard wrap
+# tiny-textforms: Extend those tiny textareas up to 40x80 and kill the hard wrap.
 #
 #################################################################################
-FILTER: tiny-textforms Extend those tiny textareas up to 40x80 and kill the hard wrap
+FILTER: tiny-textforms Extend those tiny textareas up to 40x80 and kill the hard wrap.
 
 s/(<textarea[^>]*?)(?:\s*(?:rows|cols)=(['"]?)\d+\2)+/$1 rows=$2\40$2 cols=$2\80$2/ig 
 s/(<textarea[^>]*?)wrap=(['"]?)hard\2/$1/ig
@@ -328,19 +328,19 @@ s/(<textarea[^>]*?)wrap=(['"]?)hard\2/$1/ig
 
 #################################################################################
 #
-# jumping-windows: Prevent windows from resizing and moving themselves
+# jumping-windows: Prevent windows from resizing and moving themselves.
 #
 #################################################################################
-FILTER: jumping-windows Prevent windows from resizing and moving themselves
+FILTER: jumping-windows Prevent windows from resizing and moving themselves.
 
 s/(?<=[\W])(?:window|this|self)\.(?:move|resize)(?:to|by)\(/''.concat(/ig
 
 #################################################################################
 #
-# frameset-borders: Give frames a border, make them resizable and scrollable
+# frameset-borders: Give frames a border, make them resizable and scrollable.
 #
 #################################################################################
-FILTER: frameset-borders Give frames a border and make them resizable
+FILTER: frameset-borders Give frames a border and make them resizable.
 
 s/(<frameset\s+[^>]*)framespacing=(['"]?)(no|0)\2/$1/igU
 s/(<frameset\s+[^>]*)frameborder=(['"]?)(no|0)\2/$1/igU
@@ -361,7 +361,7 @@ s/(<frame\s+[^>]*)scrolling=(['"]?)(no|0)\2/$1/igU
 #         John Walker -- January 1998, http://www.fourmilab.ch/webtools/demoroniser
 #
 #################################################################################
-FILTER: demoronizer Fix MS's non-standard use of standard charsets
+FILTER: demoronizer Fix MS's non-standard use of standard charsets.
 
 s/(&\#[0-2]\d\d)\s/$1; /g
 # per Robert Lynch: http://slate.msn.com//?id=2067547, just a guess.
@@ -390,11 +390,11 @@ s/\x9B/>/g                  # 155
 
 #################################################################################
 #
-# shockwave-flash: Kill embedded Shockwave Flash objects
+# shockwave-flash: Kill embedded Shockwave Flash objects.
 #                  Note: Better just block "/.*\.swf$"!
 #
 #################################################################################
-FILTER: shockwave-flash Kill embedded Shockwave Flash objects
+FILTER: shockwave-flash Kill embedded Shockwave Flash objects.
 
 s|<object [^>]*macromedia.*</object>|<!-- Squished Shockwave Object -->|sigU
 s|<embed [^>]*(application/x-shockwave-flash\|\.swf).*>(.*</embed>)?|<!-- Squished Shockwave Flash Embed -->|sigU
@@ -402,10 +402,10 @@ s|<embed [^>]*(application/x-shockwave-flash\|\.swf).*>(.*</embed>)?|<!-- Squish
 
 #################################################################################
 #
-# quicktime-kioskmode: Make Quicktime movies saveable
+# quicktime-kioskmode: Make Quicktime movies saveable.
 #
 #################################################################################
-FILTER: quicktime-kioskmode Make Quicktime movies saveable
+FILTER: quicktime-kioskmode Make Quicktime movies saveable.
 
 s/(<embed\s+[^>]*)kioskmode\s*=\s*(["']?)true\2/$1/ig 
 
@@ -487,10 +487,10 @@ s/^.*(Section 2257|18 U.?S.?C.? 2257).*$\
 
 #################################################################################
 #
-# IE-Exploits: Disable some known Internet Explorer bug exploits
+# IE-Exploits: Disable some known Internet Explorer bug exploits.
 #
 #################################################################################
-FILTER: ie-exploits Disable some known Internet Explorer bug exploits
+FILTER: ie-exploits Disable some known Internet Explorer bug exploits.
 
 # Note: This is basically a demo and waits for someone more interested in IE
 # security (sic!) to take over.
@@ -571,6 +571,7 @@ s@(<a(?:rea)?[^>]*?)\sping=(['"]?)([^"'>]+)\2([>\s]?)@\
 #
 #################################################################################
 FILTER: google CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.
+
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's google filter. */\n\
  \#fbc, \#fbl, \#ra, .rhh {visibility: hidden !important;}\n\
@@ -591,6 +592,7 @@ s@(<br clear=all><table)( border=0 cellpadding=9><tr><td)@$1 id="toolbar"$2@
 #
 #################################################################################
 FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitation.
+
 s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, .yschbox, \#yschsec, .yschhd, \#yschanswr, .yschftad,\
@@ -606,6 +608,7 @@ s@</head>@\n<style type="text/css">\n\
 #
 #################################################################################
 FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.
+
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
  .msn_ads {display: none !important;}\n\
@@ -639,6 +642,7 @@ s@(</script><div) id=\"at\"@$1 class="msn_ads"@
 #
 #################################################################################
 FILTER: blogspot Cleans up some Blogspot blogs. Read the fine print before using this.
+
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's blogspot filter. */\n\
  \#powered-by {display: none !important;}\n\
@@ -665,6 +669,7 @@ s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*
 #
 #################################################################################
 SERVER-HEADER-FILTER: x-httpd-php-to-html Changes the Content-Type header from x-httpd-php to html.
+
 s@^(Content-Type:)\s*application/x-httpd-php@$1 text/html@i
 
 #################################################################################
@@ -673,6 +678,7 @@ s@^(Content-Type:)\s*application/x-httpd-php@$1 text/html@i
 #
 #################################################################################
 SERVER-HEADER-FILTER: html-to-xml Changes the Content-Type header from html to xml.
+
 s@^(Content-Type:)\s*text/html(;.*)?$@$1 application/xhtml+xml$2@i
 
 #################################################################################
@@ -681,6 +687,7 @@ s@^(Content-Type:)\s*text/html(;.*)?$@$1 application/xhtml+xml$2@i
 #
 #################################################################################
 SERVER-HEADER-FILTER: xml-to-html Changes the Content-Type header from xml to html.
+
 s@^(Content-Type:)\s*(?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@i
 
 #################################################################################
@@ -708,6 +715,7 @@ s@^(Content-Type:)\s*(?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 #
 #################################################################################
 CLIENT-HEADER-FILTER: hide-tor-exit-notation Removes the Tor exit node notation in Host and Referer headers.
+
 s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 
 #################################################################################
@@ -716,7 +724,8 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 #                        the browser can handle itself.
 #
 #################################################################################
-SERVER-HEADER-FILTER: less-download-windows Prevent annoying download windows for content types the browser can handle itself
+SERVER-HEADER-FILTER: less-download-windows Prevent annoying download windows for content types the browser can handle itself.
+
 s@^Content-Disposition:.*filename=(["']?).*\.(png|gif|jpe?g|diff?|d?patch|c|h|pl|shar)\1.*$@@i
 s@^(Content-Type:)\s*(?:message/(?:news|rfc822)|text/x-.*|application/x-sh)\s*@$1 text/plain@i
 
@@ -727,6 +736,7 @@ s@^(Content-Type:)\s*(?:message/(?:news|rfc822)|text/x-.*|application/x-sh)\s*@$
 #
 #################################################################################
 CLIENT-HEADER-TAGGER: image-requests Tags detected image requests as "IMAGE-REQUEST".
+
 s@Accept:\s*image/.*@IMAGE-REQUEST@i
 
 #################################################################################
@@ -736,6 +746,7 @@ s@Accept:\s*image/.*@IMAGE-REQUEST@i
 #
 #################################################################################
 CLIENT-HEADER-TAGGER: css-requests Tags detected CSS requests as "CSS-REQUEST".
+
 s@Accept:\s*text/css.*@CSS-REQUEST@i
 
 #################################################################################
@@ -744,18 +755,20 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 #                  headers, the filters remove said headers.
 #
 #################################################################################
-CLIENT-HEADER-TAGGER: privoxy-control Creates tags with the content\
- of X-Privoxy-Control headers
+CLIENT-HEADER-TAGGER: privoxy-control Creates tags with the content of X-Privoxy-Control headers.
+
 s@^X-Privoxy-Control:\s*@@i
 
-CLIENT-HEADER-FILTER: privoxy-control Removes X-Privoxy-Control headers
+CLIENT-HEADER-FILTER: privoxy-control Removes X-Privoxy-Control headers.
+
 s@^X-Privoxy-Control:.*@@i
 
-SERVER-HEADER-TAGGER: privoxy-control Creates tags with the content\
- of X-Privoxy-Control headers
+SERVER-HEADER-TAGGER: privoxy-control Creates tags with the content of X-Privoxy-Control headers.
+
 s@^X-Privoxy-Control:\s*@@i
 
-SERVER-HEADER-FILTER: privoxy-control Removes X-Privoxy-Control headers
+SERVER-HEADER-FILTER: privoxy-control Removes X-Privoxy-Control headers.
+
 s@^X-Privoxy-Control:.*@@i
 
 
@@ -763,6 +776,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.49  2007/11/03 14:29:41  fabiankeil
+#     Spelling fixes mostly submitted by Simon Ruderich.
+#
 #     Revision 1.48  2007/10/17 18:11:32  fabiankeil
 #     Add privoxy-control header filters and taggers.
 #
