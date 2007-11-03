@@ -4,7 +4,7 @@
  *
  * Purpose     :  README file to give a short intro.
  *
- * Copyright   :  Written by and Copyright (C) 2001 - 2006  the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001 - 2007  the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -32,12 +32,13 @@
  *
  *********************************************************************/
 
-This README is included with Privoxy > 3.0.6 -> 3.0.7. 
-See http://www.privoxy.org/ for more information. The current code maturity
-level is "unknown". Development work is in progress. There may be new 
-features, bugs, partially working aspects, etc, all of which may not be 
-documented. Use 3.0.6 for production systems and where stability is necessary.
-Please report any problems.
+2007-11-03: The next stable release of Privoxy is being readied. The
+developers consider the current sources to stable, and are doing last minute
+house keeping and fine tuning. The are many new features and enhancements
+many of which may not be fully documented at this point. Please refer to the
+ChangeLog for what's new.
+
+And PLEASE report any problems or comments! 
 
 -------------------------------------------------------------------------------
 
@@ -95,10 +96,6 @@ configuration and usage issues.
 If no config_file is specified on the command line, Privoxy will look for a
 file named 'config' in the current directory (except Win32 which will look for
 'config.txt'). If no config_file is found, Privoxy will fail to start.
-
-Or for Red Hat and Fedora based distributions: /etc/rc.d/init.d/privoxy start
-
-Or Debian: /etc/init.d/privoxy start
 
 -------------------------------------------------------------------------------
 
