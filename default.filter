@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.47 2007/10/06 15:45:25 fabiankeil Exp $
+#  $Id: default.filter,v 1.48 2007/10/17 18:11:32 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -52,7 +52,7 @@
 #
 # Note that you are free to choose the delimiter as you see fit.
 #
-# Note2: In addidion to the Perl options gimsx, the following nonstandard
+# Note2: In addition to the Perl options gimsx, the following nonstandard
 # options are supported:
 # 
 # 'U' turns the default to ungreedy matching.  Add ? to quantifiers to
@@ -87,7 +87,7 @@ FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse
 #
 # s/(<script.*)nasty-item(?=.*<\/script>)/$1replacement/sigU
 #
-# but that would make them match only the first occurance of
+# but that would make them match only the first occurrence of
 # nasty-item in each <script>. We need nestable jobs!
 
 # Get rid of Javascript referrer tracking. 
@@ -744,14 +744,14 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 #                  headers, the filters remove said headers.
 #
 #################################################################################
-CLIENT-HEADER-TAGGER: privoxy-control Creates tags with he content\
+CLIENT-HEADER-TAGGER: privoxy-control Creates tags with the content\
  of X-Privoxy-Control headers
 s@^X-Privoxy-Control:\s*@@i
 
 CLIENT-HEADER-FILTER: privoxy-control Removes X-Privoxy-Control headers
 s@^X-Privoxy-Control:.*@@i
 
-SERVER-HEADER-TAGGER: privoxy-control Creates tags with he content\
+SERVER-HEADER-TAGGER: privoxy-control Creates tags with the content\
  of X-Privoxy-Control headers
 s@^X-Privoxy-Control:\s*@@i
 
@@ -763,6 +763,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.48  2007/10/17 18:11:32  fabiankeil
+#     Add privoxy-control header filters and taggers.
+#
 #     Revision 1.47  2007/10/06 15:45:25  fabiankeil
 #     Let msn hide sponsored links in #at divs.
 #
