@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.58 2007/10/28 19:04:21 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.59 2007/11/01 12:50:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.58 2007/10/28 19:04:21 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.59  2007/11/01 12:50:56  fabiankeil
+ *    Here's looking at you, deadlock.
+ *
  *    Revision 1.58  2007/10/28 19:04:21  fabiankeil
  *    Don't mention daemon mode in "Logging disabled" message. Some
  *    platforms call it differently and it's not really relevant anyway.
@@ -554,14 +557,9 @@ void init_error_log(const char *prog_name, const char *logfname)
 
    lock_loginit();
 
-   if (logfp == stderr)
+   if (logfp != NULL)
    {
-      log_error(LOG_LEVEL_INFO,
-         "Switching to daemon mode. Log messages will be written to: %s", logfname);
-   }
-   else if (logfp != NULL)
-   {
-      log_error(LOG_LEVEL_INFO, "(Re-)Open logfile \'%s\'", logfname ? logfname : "none");
+      log_error(LOG_LEVEL_INFO, "(Re-)Opening logfile \'%s\'", logfname);
    }
 
    /* set the designated log file */
@@ -582,7 +580,18 @@ void init_error_log(const char *prog_name, const char *logfname)
    logfp = fp;
    unlock_logfile();
 
+#if !defined(_WIN32)
+   /*
+    * Prevent the Windows GUI from showing the version two
+    * times in a row on startup. It already displayed the show_version()
+    * call from init_log_module() that other systems write to stderr.
+    *
+    * This means mingw32 users will never see the version in their
+    * log file, but I assume they wouldn't look for it there anyway
+    * and simply use the "Help/About Privoxy" menu.
+    */
    show_version(prog_name);
+#endif /* def unix */
 
    unlock_loginit();
 
