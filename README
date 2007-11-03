@@ -33,10 +33,11 @@
  *********************************************************************/
 
 2007-11-03: The next stable release of Privoxy is being readied. The
-developers consider the current sources to stable, and are doing last minute
-house keeping and fine tuning. The are many new features and enhancements
+developers consider the current sources to be stable, and are doing last minute
+house keeping and fine tuning. There are many new features and enhancements,
 many of which may not be fully documented at this point. Please refer to the
-ChangeLog for what's new.
+ChangeLog for what's new. 3.0.7 stable release is expected by the end of
+November.
 
 And PLEASE report any problems or comments! 
 
