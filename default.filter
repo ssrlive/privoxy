@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.49 2007/11/03 14:29:41 fabiankeil Exp $
+#  $Id: default.filter,v 1.50 2007/11/03 15:05:30 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -751,6 +751,60 @@ s@Accept:\s*text/css.*@CSS-REQUEST@i
 
 #################################################################################
 #
+# client-ip-address: Tags the request with the client's IP address.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: client-ip-address Tags the request with the client's IP address.
+
+s@^\w*\s+.*\s+HTTP/\d\.\d\s*@IP-ADDRESS: $origin@D
+
+#################################################################################
+#
+# http-method: Tags the request with its HTTP method.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: http-method Tags the request with its HTTP method.
+
+s@^(\w*).*HTTP/\d\.\d\s*$@$1@i
+
+#################################################################################
+#
+# allow-post: Tags POST requests as "ALLOWED-POST".
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: allow-post Tags POST requests as "ALLOWED-POST".
+
+s@^(?:POST)\s+.*\s+HTTP/\d\.\d\s*@ALLOWED-POST@i
+
+#################################################################################
+#
+# complete-url: Tags the request with the whole request URL.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: complete-url Tags the request with the whole request URL.
+
+s@^\w*\s+(.*)\s+HTTP/\d\.\d\s*$@$1@i
+
+#################################################################################
+#
+# user-agent: Tags the request with the complete User-Agent header.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: user-agent Tags the request with the complete User-Agent header.
+
+s@^User-Agent:.*@$0@i
+
+#################################################################################
+#
+# content-type: Tags the request with the content type declarded by the server.
+#
+#################################################################################
+SERVER-HEADER-TAGGER: content-type Tags the request with the content type declarded by the server.
+
+s@^Content-Type:\s*([^;]*).*@$1@i
+
+#################################################################################
+#
 # privoxy-control: The taggers create tags with the content of X-Privoxy-Control
 #                  headers, the filters remove said headers.
 #
@@ -776,6 +830,10 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.50  2007/11/03 15:05:30  fabiankeil
+#     Consistently use an empty line between the description and the PCRS code
+#     and end descriptions with dots. Patch submitted by Simon Ruderich.
+#
 #     Revision 1.49  2007/11/03 14:29:41  fabiankeil
 #     Spelling fixes mostly submitted by Simon Ruderich.
 #
