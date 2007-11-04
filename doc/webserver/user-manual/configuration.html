@@ -1,11 +1,11 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
 >Privoxy Configuration</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
 TITLE="Privoxy 3.0.7 User Manual"
 HREF="index.html"><LINK
@@ -76,8 +76,8 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="CONFIGURATION"
-></A
->6. Privoxy Configuration</H1
+>6. Privoxy Configuration</A
+></H1
 ><P
 >  All <SPAN
 CLASS="APPLICATION"
@@ -95,9 +95,9 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN755"
-></A
->6.1. Controlling Privoxy with Your Web Browser</H2
+NAME="AEN762"
+>6.1. Controlling Privoxy with Your Web Browser</A
+></H2
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -126,7 +126,7 @@ CLASS="SCREEN"
 > <H2
 CLASS="BRIDGEHEAD"
 ><A
-NAME="AEN763"
+NAME="AEN770"
 ></A
 >    Privoxy Menu</H2
 ><P
@@ -247,8 +247,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CONFOVERVIEW"
-></A
->6.2. Configuration Files Overview</H2
+>6.2. Configuration Files Overview</A
+></H2
 ><P
 > For Unix, *BSD and Linux, all configuration files are located in
  <TT
@@ -259,7 +259,9 @@ CLASS="FILENAME"
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> executable. </P
+> executable.  The name
+ and number of configuration files has changed from previous versions, and is
+ subject to change as development progresses.</P
 ><P
 > The installed defaults provide a reasonable starting point, though 
  some settings may be aggressive by some standards. For the time being, the
@@ -379,15 +381,9 @@ CLASS="FILENAME"
 ></UL
 ></P
 ><P
-> The syntax of all configuration files has remained the same throughout the
- 3.x series. There have been enhancements, but no changes that would preclude
- the use of any configuration file from one version to the next. (There is 
- one exception: <A
-HREF="actions-file.html#FAST-REDIRECTS"
->+fast-redirects</A
-> which 
- has enhanced syntax and will require updating any local configs from earlier 
- versions.)</P
+> The syntax of the configuration and filter files may change between different
+ Privoxy versions, unfortunately some enhancements cost backwards compatibility.
+ </P
 ><P
 > All files use the <SPAN
 CLASS="QUOTE"
@@ -444,6 +440,14 @@ CLASS="EMPHASIS"
 >old</I
 ></SPAN
 > listening address.</P
+><P
+> While under development, the configuration content is subject to change. 
+ The below documentation may not be accurate by the time you read this. 
+ Also, what constitutes a <SPAN
+CLASS="QUOTE"
+>"default"</SPAN
+> setting, may change, so 
+ please check all your configuration files on important issues.</P
 ></DIV
 ></DIV
 ><DIV

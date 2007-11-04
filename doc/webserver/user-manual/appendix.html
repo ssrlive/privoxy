@@ -1,11 +1,11 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
 >Appendix</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
 TITLE="Privoxy 3.0.7 User Manual"
 HREF="index.html"><LINK
@@ -69,16 +69,16 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="APPENDIX"
-></A
->14. Appendix</H1
+>14. Appendix</A
+></H1
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
 NAME="REGEX"
-></A
->14.1. Regular Expressions</H2
+>14.1. Regular Expressions</A
+></H2
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -745,9 +745,9 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN5252"
-></A
->14.2. Privoxy's Internal Pages</H2
+NAME="AEN5309"
+>14.2. Privoxy's Internal Pages</A
+></H2
 ><P
 > Since <SPAN
 CLASS="APPLICATION"
@@ -791,7 +791,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN5266"
+NAME="AEN5323"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -824,7 +824,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN5274"
+NAME="AEN5331"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -844,7 +844,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN5279"
+NAME="AEN5336"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -864,7 +864,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN5284"
+NAME="AEN5341"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -884,7 +884,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN5289"
+NAME="AEN5346"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -908,7 +908,7 @@ CLASS="QUOTE"
    to run, but only as a pass-through proxy, with no actions taking place:
   </P
 ><A
-NAME="AEN5295"
+NAME="AEN5352"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -925,7 +925,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN5299"
+NAME="AEN5356"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -939,7 +939,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN5302"
+NAME="AEN5359"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -963,8 +963,8 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="BOOKMARKLETS"
-></A
->14.2.1. Bookmarklets</H3
+>14.2.1. Bookmarklets</A
+></H3
 ><P
 > Below are some <SPAN
 CLASS="QUOTE"
@@ -1070,8 +1070,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="CHAIN"
-></A
->14.3. Chain of Events</H2
+>14.3. Chain of Events</A
+></H2
 ><P
 > Let's take a quick look at how some of <SPAN
 CLASS="APPLICATION"
@@ -1321,8 +1321,8 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="ACTIONSANAT"
-></A
->14.4. Troubleshooting: Anatomy of an Action</H2
+>14.4. Troubleshooting: Anatomy of an Action</A
+></H2
 ><P
 > The way <SPAN
 CLASS="APPLICATION"
@@ -1434,7 +1434,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-> Matches for http://google.com:
+> Matches for http://www.google.com:
 
  In file: default.action <SPAN
 CLASS="GUIBUTTON"
@@ -1444,67 +1444,19 @@ CLASS="GUIBUTTON"
 >[ Edit ]</SPAN
 >
 
- {-add-header
- -block
- -client-header-filter{hide-tor-exit-notation}
- -content-type-overwrite
- -crunch-client-header
- -crunch-if-none-match
- -crunch-incoming-cookies
- -crunch-outgoing-cookies
- -crunch-server-header
- +deanimate-gifs {last}
- -downgrade-http-version
+ {+deanimate-gifs {last}
  +fast-redirects {check-decoded-url}
- -filter {js-events}
- -filter {content-cookies}
- -filter {all-popups}
- -filter {banners-by-link}
- -filter {tiny-textforms}
- -filter {frameset-borders}
- -filter {demoronizer}
- -filter {shockwave-flash}
- -filter {quicktime-kioskmode}
- -filter {fun}
- -filter {crude-parental}
- -filter {site-specifics}
- -filter {js-annoyances}
- -filter {html-annoyances}
  +filter {refresh-tags}
- -filter {unsolicited-popups}
  +filter {img-reorder}
  +filter {banners-by-size}
  +filter {webbugs}
  +filter {jumping-windows}
  +filter {ie-exploits}
- -filter {google}
- -filter {yahoo}
- -filter {msn}
- -filter {blogspot}
- -filter {no-ping}
- -force-text-mode
- -handle-as-empty-document
- -handle-as-image
- -hide-accept-language
- -hide-content-disposition
  +hide-forwarded-for-headers
  +hide-from-header {block}
- -hide-if-modified-since
  +hide-referrer {forge}
- -hide-user-agent
- -inspect-jpegs
- -kill-popups
- -limit-connect
- -overwrite-last-modified
- +prevent-compression
- -redirect
- -send-vanilla-wafer
- -send-wafer
- -server-header-filter{xml-to-html}
- -server-header-filter{html-to-xml} 
  +session-cookies-only
  +set-image-blocker {pattern}
- -treat-forbidden-connects-like-blocks }
 /
  
  { -session-cookies-only }
@@ -1688,7 +1640,7 @@ CLASS="SCREEN"
  -crunch-server-header
  +deanimate-gifs {last}
  -downgrade-http-version
- +fast-redirects {check-decoded-url}
+ -fast-redirects
  -filter {js-events}
  -filter {content-cookies}
  -filter {all-popups}
@@ -1729,7 +1681,7 @@ CLASS="SCREEN"
  -kill-popups
  -limit-connect
  -overwrite-last-modified
- +prevent-compression
+ -prevent-compression
  -redirect
  -send-vanilla-wafer
  -send-wafer
