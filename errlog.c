@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.59 2007/11/01 12:50:56 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.60 2007/11/03 19:03:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,12 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.59 2007/11/01 12:50:56 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.60  2007/11/03 19:03:31  fabiankeil
+ *    - Prevent the Windows GUI from showing the version two times in a row.
+ *    - Stop using the imperative in the "(Re-)Open logfile" message.
+ *    - Ditch the "Switching to daemon mode" message as the detection
+ *      whether or not we're already in daemon mode doesn't actually work.
+ *
  *    Revision 1.59  2007/11/01 12:50:56  fabiankeil
  *    Here's looking at you, deadlock.
  *
@@ -522,14 +528,14 @@ void set_debug_level(int debug_level)
  *********************************************************************/
 void disable_logging(void)
 {
-   lock_logfile();
    if (logfp != NULL)
    {
       log_error(LOG_LEVEL_INFO, "No logfile configured. Logging disabled.");
+      lock_logfile();
       fclose(logfp);
       logfp = NULL;
+      unlock_logfile();
    }
-   unlock_logfile();
 }
 
 
