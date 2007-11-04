@@ -9,9 +9,9 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.7">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-status "UNRELEASED">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.27 2007/10/22 19:47:05 fabiankeil Exp $
+ $Id: faq.sgml,v 2.28 2007/10/27 15:14:16 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.27 2007/10/22 19:47:05 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.28 2007/10/27 15:14:16 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -149,7 +149,7 @@ Hal.
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="general"><title>General Information</title>
-<sect2 renderas="sect3" id="who_uses"><title>Who should use Privoxy?</title>
+<sect2 renderas="sect3" id="who-uses"><title>Who should use Privoxy?</title>
  <para>
   Anyone that is interested in security, privacy, or in 
   finer-grained control over their web and Internet experience.
@@ -518,7 +518,8 @@ warranty? Registration?</title>
  Any browser that can be configured to use a proxy, which 
  should be virtually all browsers, including
  <application>Firefox</application>, <application>Internet
- Explorer</application>, and <application>Opera</application> among others.
+ Explorer</application>, <application>Opera</application>, and 
+ <application>Safari</application> among others.
  Direct browser support is not an absolute requirement since
  <application>Privoxy</application> runs as a separate application and talks
  to the browser in the standardized HTTP protocol, just like a web server
@@ -553,6 +554,7 @@ Include supported.sgml here:
 </para>
 </sect2>
 
+<!-- Nobody is going to still be doing this!
 <sect2 renderas="sect3" id="newinstall"><title>Can I install  
  Privoxy over Junkbuster?</title>
  <para>
@@ -571,6 +573,7 @@ Include supported.sgml here:
  </para>
 
 </sect2>
+-->
 
 <sect2 renderas="sect3" id="firststep">
 <title>I just installed Privoxy. Is there anything 
@@ -588,7 +591,6 @@ special I have to do now?</title>
 </para>
 
 </sect2>
-
 
 <sect2 renderas="sect3" id="localhost"><title>What is the proxy address of Privoxy?</title>
  <para>
@@ -808,22 +810,8 @@ the differences?</title>
   The syntax and purpose of configuration files has remained roughly the
   same throughout the 3.x series, but backwards compatibility is not guaranteed.
   Also each release contains updated, <quote>improved</quote> versions and it is
-  therefore recommended to use the newer configuration files.
- <![%p-newstuff;[ 
-   If upgrading from version prior to 3.0.4 the syntax for <literal>fast-redirects</literal>
-   has changed. See the <ulink url="../user-manual/whatsnew.html">What's New section</ulink> 
-   of the <citetitle>User Manual</citetitle> for details.]]>
+  therefore strongly recommended to use the newer configuration files.
  </para>
- <para>
-   But all configuration files have substantially
-   changed from the <application>Junkbuster</application> days, and early
-   versions of <application>Privoxy 2.x</application>. The old files, like
-   <filename>blocklist</filename> will not work at all. 
- </para>
- <![%p-newstuff;[ <para>
-  Refer to the <ulink url="../user-manual/whatsnew.html">What's New</ulink> 
- page for information on configuration changes that may occur from one release to another.
- </para>]]>
 </sect2>
 
 <sect2 renderas="sect3" id="difficult">
@@ -927,12 +915,12 @@ with a browser? Does that not raise security issues?</title>
   When you use the browser-based editor, <application>Privoxy</application>
   itself is writing to the config files.  Because
   <application>Privoxy</application> is running as the user <quote>privoxy</quote>,
-  it can update the config files.
+  it can update its own config files.
  </para>
  <para>
   If you run <application>Privoxy</application> for multiple untrusted users (e.g. in
-  a LAN), you will probably want to turn the web-based editor and remote toggle
-  features off by setting <quote><literal><ulink
+  a LAN), you will probably want to make sure that the turn the web-based
+  editor and remote toggle features are <quote>off</quote> by setting <quote><literal><ulink
   url="../user-manual/config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</ulink>
   0</literal></quote> and <quote><literal><ulink
   url="../user-manual/config.html#ENABLE-REMOTE-TOGGLE">enable-remote-toggle</ulink>
@@ -1084,7 +1072,7 @@ with a browser? Does that not raise security issues?</title>
 </sect2>
 
 <sect2 renderas="sect3">
-<title id="blockedbytext">I see some images being replaced by a text
+<title id="blockedbytext">I see some images being replaced with text
 instead of the checkerboard image. Why and how do I get rid of this?</title>
 <para>
  This happens when the banners are not embedded in the HTML code of the
@@ -1177,17 +1165,19 @@ and thus avoid individual browser configuration?</title>
 <para>
  <application>Privoxy</application> can't intercept traffic itself,
   but it can handle requests that where intercepted and redirected
-  with a packet filter (like PF or iptables), as long as the Host
-  header is present.
-</para>
+  with a packet filter (like <application>PF</application> or
+  <application>iptables</application>), as long as the <literal>Host</literal>
+  header is present. 
+  </para>
 <para>
-  As the Host header is required by HTTP/1.1 and as most web sites
-  don't work if it isn't set, this limitation shouldn't be a problem.
+  As the <literal>Host</literal> header is required by HTTP/1.1 and as most
+  web sites don't work if it isn't set, this limitation shouldn't be a
+  problem.
 </para>
 <para>
   Please refer to your packet filter's documentation to learn how to
-  intercept and redirect traffic into Privoxy. Afterward you just have
-  to configure Privoxy to
+  intercept and redirect traffic into <application>Privoxy</application>. Afterward you just have
+  to configure <application>Privoxy</application> to
   <ulink url="../user-manual/config.html#ACCEPT-INTERCEPTED-REQUESTS">accept intercepted requests</ulink>.
 </para>
 
@@ -1500,7 +1490,7 @@ has to add extra time to browsing.</title>
 
 
 <sect2 renderas="sect3" id="loadingtimes"><title>I notice considerable
-delays in page requests compared to the old Junkbuster. What's wrong?</title>
+delays in page requests. What's wrong?</title>
 <para>
  If you use any <literal><ulink
  url="../user-manual/actions-file.html#FILTER">filter</ulink></literal> action,
@@ -1550,19 +1540,7 @@ delays in page requests compared to the old Junkbuster. What's wrong?</title>
  hence it could not be intercepted, and you have accessed the <emphasis>real</emphasis>
  web site at config.privoxy.org.
 </para>
-<para>
- With recent versions of <application>Privoxy</application> (version 2.9.x and
- later), the user interface features information on the run time status, the
- configuration, and even a built-in editor for the <ulink
- url="../user-manual/actions-file.html">actions files</ulink>.
-</para>
 
-<para>
- Note that the built-in URLs from earlier versions of <application>Junkbuster</application>
- / <application>Privoxy</application>, http://example.com/show-proxy-args and http://i.j.b/,
- are no longer supported. If you still use such an old version, you should really consider
- upgrading to &p-version;.
-</para>
 </sect2>
 
 <!--
@@ -2170,7 +2148,7 @@ and related issues?</title>
 <listitem><para>
 <application>Privoxy</application> is not running. Solution: verify 
  that &my-app; is installed correctly, has not crashed, and is indeed running.
- Look at <application>Privoxy's</application> logs to see what they say.
+ Turn on <application>Privoxy's</application> logging and look at the logs to see what they say.
 </para></listitem>
  <listitem><para>Or your browser is configured for a different port than what
  <application>Privoxy</application> is using. Solution: verify that &my-app;
@@ -2774,6 +2752,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.28  2007/10/27 15:14:16  fabiankeil
+Change Tor links to use the new domain torproject.org.
+
 Revision 2.27  2007/10/22 19:47:05  fabiankeil
 - Bump version and copyright.
 - Adjust Tor section to make it clear that forward exceptions
