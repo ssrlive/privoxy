@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.95 2007/10/12 13:36:49 proactivesvcs Exp $
+#  $Id: default.action.master,v 1.96 2007/11/03 14:25:33 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -209,6 +209,13 @@
 #    Client-header filters predefined in the supplied default.filter include:
 #
 #     hide-tor-exit-notation: Removes the Tor exit node notation in Host and Referer headers
+#
+# +client-header-tagger{string}
+#    Block requests based on their headers. Client headers to which this
+#    action applies are filtered on-the-fly through the specified regular
+#    expression based substitutions, the result is used as a tag.
+#    Client-header taggers are the first actions that are executed and their
+#    tags can be used to control every other action.
 #
 # +content-type-overwrite
 #    Replaces the "Content-Type:" HTTP server header, so that unwanted
@@ -418,6 +425,14 @@
 #
 #     html-to-xml:           Changes the Content-Type header from html to xml
 #     xml-to-html:           Changes the Content-Type header from xml to html
+#
+# +server-header-tagger{content-type}
+#    Server headers to which this action applies are filtered on-the-fly
+#    through the specified regular expression based substitutions, the result
+#    is used as a tag. Server-header taggers are executed before all other
+#    header actions that modify server headers. Their tags can be used to
+#    control all of the other server-header actions, the content filters and
+#    the crunch actions (redirect and block). 
 #
 # +session-cookies-only
 #    If the website sets cookies, make sure they are erased when you exit
