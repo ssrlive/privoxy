@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.29 2007/11/04 15:12:47 hal9 Exp $
+ $Id: faq.sgml,v 2.30 2007/11/04 15:16:40 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.29 2007/11/04 15:12:47 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.30 2007/11/04 15:16:40 hal9 Exp $</pubdate>
 
 <!--
 
@@ -756,7 +756,10 @@ way to do this?</title>
  at <ulink url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
  (Shortcut: <ulink url="http://p.p/">http://p.p/</ulink>) and then select
  <quote><ulink url="http://config.privoxy.org/show-status">View &
- change the current configuration</ulink></quote> from the menu.
+ change the current configuration</ulink></quote> from the menu. Note 
+ that this feature must be explicitly enabled in the main config file 
+ (see <ulink
+ url="../user-manual/config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</ulink>).
 </para>
 </sect2>
 
@@ -968,7 +971,12 @@ with a browser? Does that not raise security issues?</title>
  There is no GUI editor option for this part of the configuration, 
  but you can disable/enable the various pre-defined filters of the included 
  <filename>default.filter</filename> file with the <ulink
- url="http://config.privoxy.org/show-status">web-based actions file editor</ulink>.
+ url="http://config.privoxy.org/show-status">web-based actions file editor</ulink>
+ Note 
+ that the custom actions editor must be explicitly enabled in the main config file 
+ (see <ulink
+ url="../user-manual/config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</ulink>).
+
 </para>
 
 </sect2>
@@ -2148,7 +2156,7 @@ and related issues?</title>
 <listitem><para>
 <application>Privoxy</application> is not running. Solution: verify 
  that &my-app; is installed correctly, has not crashed, and is indeed running.
- Turn on <application>Privoxy's</application> logging and look at the logs to see what they say.
+ Turn on <application>Privoxy's</application> logging, and look at the logs to see what they say.
 </para></listitem>
  <listitem><para>Or your browser is configured for a different port than what
  <application>Privoxy</application> is using. Solution: verify that &my-app;
@@ -2199,7 +2207,8 @@ still getting through. How?</title>
  entirely different from the site URL itself. Most ads are hosted on different
  servers than the main site itself. If you right-click on the ad, you should
  be able to get all the relevant information you need. Alternately, you can 
- find the correct URL by looking at <application>Privoxy's</application> logs.
+ find the correct URL by looking at <application>Privoxy's</application> logs
+ (you may need to enable logging in the main config file if its disabled).
 </para>
 <para>
  Below is a slightly modified real-life log snippet that originates with one 
@@ -2281,7 +2290,8 @@ What can I do?</title>
  and paste the full URL of the page in question into the prompt. See which
  actions are being applied to the URL, and which matches in which actions
  files are responsible for that. It might be helpful also to look at your logs
- for this site too, to see what else might be happening. Many sites are
+ for this site too, to see what else might be happening (note: logging may need
+ to be enabled in the main config file). Many sites are
  complex and require a number of related pages to help present their content.
  Look at what else might be used by the page in question, and what of that
  might be <emphasis>required</emphasis>.
@@ -2752,6 +2762,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.30  2007/11/04 15:16:40  hal9
+Fix one silly typo.
+
 Revision 2.29  2007/11/04 15:12:47  hal9
 Various minor adjustments.
 

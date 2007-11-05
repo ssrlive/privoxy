@@ -12,10 +12,10 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.7">
-<!entity p-status "stable">
+<!entity p-status "UNRELEASED">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.37 2007/08/27 16:09:55 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.38 2007/09/22 16:01:42 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.37 2007/08/27 16:09:55 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.38 2007/09/22 16:01:42 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -639,6 +639,13 @@ How to install the binary packages depends on your operating system:
   </para>
  </listitem>
  <listitem>
+  <para>  
+   <filename>standard.action</filename> now only includes the enabled actions.
+   Not all actions as before.
+  </para>
+ </listitem>
+ <!--
+ <listitem>
     <para>
      See the full documentation on 
      <literal><link linkend="fast-redirects">fast-redirects</link></literal>
@@ -655,13 +662,26 @@ How to install the binary packages depends on your operating system:
 </para>
 
   </listitem>
+  -->
  <listitem>
     <para>
-     The <filename>jarfile</filename>, 
-     <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookie</ulink> logger, is off by default now.
+     Logging is off by default now. If you need logging, it can be turned on
+     in the <link linkend="logfile">config file</link>.
     </para>
   </listitem>
 
+ <listitem>
+    <para>
+     Three other config file settings are now off by default: 
+     <link linkend="enable-remote-toggle">enable-remote-toggle</link>,
+     <link linkend="enable-remote-http-toggle">enable-remote-http-toggle</link>,
+     and  <link linkend="enable-edit-actions">enable-edit-actions</link>. 
+     If you use or want these, you will need to explicitly enable them, and
+     be aware of the security issues involved. 
+    </para>
+  </listitem>
+
+<!--
  <listitem>
   <para>  
    What constitutes a <quote>default</quote> configuration has changed, 
@@ -673,7 +693,8 @@ How to install the binary packages depends on your operating system:
    settings as yet (see above).
   </para>
  </listitem>
-
+-->
+<!--
   <listitem>
    <para>
     The default actions setting is now <literal>Cautious</literal>. Previous
@@ -718,16 +739,15 @@ How to install the binary packages depends on your operating system:
 
   <listitem>
   <para>
-<!-- I think it is best to keep this somewhat vague, in case  -->
-<!-- the situation changes under our feet. -->   
    Some installers may not automatically start
    <application>Privoxy</application> after installation.
   </para>
  </listitem> 
-
+-->
 
  </itemizedlist>
 </para>
+
 </sect2>
 </sect1>
 
@@ -2098,12 +2118,15 @@ for details.
  The easiest way to edit the actions files is with a browser by
  using our browser-based editor, which can be reached from <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
- The editor allows both fine-grained control over every single feature on a
- per-URL basis, and easy choosing from wholesale sets of defaults like
- <quote>Cautious</quote>, <quote>Medium</quote> or <quote>Advanced</quote>.
- Warning: the <quote>Advanced</quote> setting is more aggressive, and 
- will be more likely to cause problems for some sites. Experienced users only!
-</para>
+ Note: the config file option <link
+ linkend="enable-edit-actions">enale-edit-actions</link> must be enabled for
+ this to work. The editor allows both fine-grained control over every single
+ feature on a per-URL basis, and easy choosing from wholesale sets of defaults
+ like <quote>Cautious</quote>, <quote>Medium</quote> or
+ <quote>Advanced</quote>. Warning: the <quote>Advanced</quote> setting is more
+ aggressive, and will be more likely to cause problems for some sites.
+ Experienced users only! 
+ </para>
 
 <para>
  If you prefer plain text editing to GUIs, you can of course also directly edit the
@@ -5761,7 +5784,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
     <para>
      <screen>
 # Tag every request with the declared content type
-{+client-header-filter{content-type}}
+{+client-header-tagger{content-type}}
 /
     </screen>
     </para>
@@ -8909,12 +8932,15 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.38  2007/09/22 16:01:42  fabiankeil
+ Update embedded show-url-info output.
+
  Revision 2.37  2007/08/27 16:09:55  fabiankeil
- Fix --pre-chroot-nslookup description which I failed to
+ Fix pre-chroot-nslookup description which I failed to
  copy and paste properly. Reported by Stephen Gildea.
 
  Revision 2.36  2007/08/26 16:47:14  fabiankeil
- Add Stephen Gildea's --pre-chroot-nslookup patch [#1276666],
+ Add Stephen Gildea's pre-chroot-nslookup patch [#1276666],
  extensive comments moved to user manual.
 
  Revision 2.35  2007/08/26 14:59:49  fabiankeil
