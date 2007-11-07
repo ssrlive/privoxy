@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.20 2007/04/12 11:33:22 fabiankeil Exp $
+#  $Id: standard.action,v 1.21 2007/09/01 11:06:04 fabiankeil Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -66,6 +66,8 @@ standard.Medium
 # sources.
 #
 { \
++client-header-tagger{css-requests} \
++client-header-tagger{image-requests} \
 +crunch-if-none-match \
 +crunch-outgoing-cookies \
 +crunch-incoming-cookies \
