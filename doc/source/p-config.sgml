@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.18 2007/11/03 14:31:27 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.19 2007/11/04 21:17:31 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.18 2007/11/03 14:31:27 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.19 2007/11/04 21:17:31 hal9 Exp $
 </para>
 <para>
 Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
@@ -1220,7 +1220,7 @@ actionsfile
    </para>
    <para>
     If you open <application>Privoxy</application> to untrusted users, you will
-    also want to turn off the <literal><link
+    also want to make sure that the following actions are disabled:  <literal><link
     linkend="enable-edit-actions">enable-edit-actions</link></literal> and
     <literal><link linkend="enable-remote-toggle">enable-remote-toggle</link></literal>
     options!
@@ -1353,7 +1353,7 @@ actionsfile
     toggle it for all users. So this option is <emphasis>not recommended</emphasis>
     for multi-user environments with untrusted users. Because of 
     the obvious security implications, this feature is off by default.
-    Note that malicious client side code (e.g JavaScript) is also potentially
+    Note that malicious client side code (e.g Java) is also potentially
     capable of changing <application>Privoxy's</application> intended
     behavior.
    </para>
@@ -1413,7 +1413,7 @@ actionsfile
     This feature is disabled by default. If you are using
     <application>Privoxy</application> in a environment with trusted clients,
     you may enable this feature at your discretion. Note that malicious client
-    side code (e.g JavaScript) is also potentially capable of changing
+    side code (e.g Java) is also potentially capable of changing
     <application>Privoxy's</application> intended behavior.
    </para>
   </listitem>
@@ -1467,7 +1467,7 @@ actionsfile
     modify its configuration for all users. This option is <emphasis>not
     recommended</emphasis> for multi-user environments with untrusted users 
     and is therefore disabled by default. Note that malicious client side code
-    (e.g JavaScript) is also potentially capable of changing
+    (e.g Java) is also potentially capable of changing
     <application>Privoxy's</application> intended behavior.
    </para>
    <para>
