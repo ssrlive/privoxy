@@ -144,171 +144,41 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->     See the full documentation on 
-     <TT
-CLASS="LITERAL"
-><A
-HREF="actions-file.html#FAST-REDIRECTS"
->fast-redirects</A
-></TT
->
-     which has changed syntax, and will require adjustments to local configs, 
-     such as <TT
+>  
+   <TT
 CLASS="FILENAME"
->user.action</TT
->. You must reference the new 
-     syntax: 
-   </P
-><P
-> <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  { +fast-redirects{check-decoded-url} }
-   .example.com
-   mybank.com
-   .google.</PRE
-></TD
-></TR
-></TABLE
-></P
+>standard.action</TT
+> now only includes the enabled actions.
+   Not all actions as before.
+  </P
 ></LI
 ><LI
 ><P
->     The <TT
-CLASS="FILENAME"
->jarfile</TT
->, 
-     <A
-HREF="http://en.wikipedia.org/wiki/Browser_cookie"
-TARGET="_top"
->cookie</A
-> logger, is off by default now.
+>     Logging is off by default now. If you need logging, it can be turned on
+     in the <A
+HREF="config.html#LOGFILE"
+>config file</A
+>.
     </P
 ></LI
 ><LI
 ><P
->  
-   What constitutes a <SPAN
-CLASS="QUOTE"
->"default"</SPAN
-> configuration has changed, 
-   and you may want to review which actions are <SPAN
-CLASS="QUOTE"
->"on"</SPAN
-> by 
-   default. This is primarily a matter of emphasis, but some features 
-   you may have been used to, may now be <SPAN
-CLASS="QUOTE"
->"off"</SPAN
-> by default.
-   There are also a number of new actions and filters you may want to
-   consider, most of which are not fully incorporated into the default
-   settings as yet (see above).
-  </P
-></LI
-><LI
-><P
->    The default actions setting is now <TT
-CLASS="LITERAL"
->Cautious</TT
->. Previous
-    releases had a default setting of <TT
-CLASS="LITERAL"
->Medium</TT
->. Experienced
-    users may want to adjust this, as it is fairly conservative by <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
-    standards and past practices. See <A
-HREF="http://config.privoxy.org/edit-actions-list?f=default"
-TARGET="_top"
->    http://config.privoxy.org/edit-actions-list?f=default</A
->. New users
-    should try the default settings for a while before turning up the volume.
-   </P
-></LI
-><LI
-><P
->    The default setting has filtering turned <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->off</I
-></SPAN
->, which
-    subsequently means that compression is <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->on</I
-></SPAN
->. Remember
-    that filtering does not work on compressed pages, so if you use, or want to
-    use, filtering, you will need to force compression off. Example:
-   </P
-><P
-> <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->  { +<A
-HREF="actions-file.html#FILTER"
->filter</A
->{google}  +<A
-HREF="actions-file.html#PREVENT-COMPRESSION"
->prevent-compression</A
-> }
-   .google.</PRE
-></TD
-></TR
-></TABLE
->
-   </P
-><P
->    Or if you use a number of filters, or filter many sites, you may just want
-    to turn off compression for all sites in
-    <TT
-CLASS="FILENAME"
->default.action</TT
-> (or
-    <TT
-CLASS="FILENAME"
->user.action</TT
->). 
-   </P
-></LI
-><LI
-><P
->   Also, <A
-HREF="actions-file.html#SESSION-COOKIES-ONLY"
->session-cookies-only</A
-> is 
-   off by default now. If you've liked this feature in the past, you may want 
-   to turn it back on in <TT
-CLASS="FILENAME"
->user.action</TT
-> now.
-  </P
-></LI
-><LI
-><P
->   
-   Some installers may not automatically start
-   <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> after installation.
-  </P
+>     Three other config file settings are now off by default: 
+     <A
+HREF="config.html#ENABLE-REMOTE-TOGGLE"
+>enable-remote-toggle</A
+>,
+     <A
+HREF="config.html#ENABLE-REMOTE-HTTP-TOGGLE"
+>enable-remote-http-toggle</A
+>,
+     and  <A
+HREF="config.html#ENABLE-EDIT-ACTIONS"
+>enable-edit-actions</A
+>. 
+     If you use or want these, you will need to explicitly enable them, and
+     be aware of the security issues involved. 
+    </P
 ></LI
 ></UL
 ></P

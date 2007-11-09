@@ -260,8 +260,12 @@ CLASS="SCREEN"
 >
   </P
 ><P
->   The User Manual is then available to anyone with access to the proxy, by 
-   following the built-in URL: <TT
+>   The User Manual is then available to anyone with access to
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>, by following the built-in URL:
+   <TT
 CLASS="LITERAL"
 >http://config.privoxy.org/user-manual/</TT
 >
@@ -411,7 +415,10 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    An email address to reach the proxy administrator.
+>    An email address to reach the <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> administrator.
    </P
 ></DD
 ><DT
@@ -665,8 +672,13 @@ CLASS="VARIABLELIST"
 ><P
 >    Privoxy's original templates are usually overwritten
     with each update. Use this option to relocate customized templates
-    that should be kept. Note that you might be missing new features
-    if you use outdated templates.
+    that should be kept. Note that template variables might change
+    between updates and templates are not guaranteed to work with
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> releases other than the one
+    they were part of.
    </P
 ></DD
 ></DL
@@ -963,7 +975,7 @@ HREF="appendix.html#REGEX"
 >regular expressions</A
 >. These rules permit
     powerful changes on the content of Web pages, and optionally the headers
-    as well, e.g., you could disable your favorite JavaScript annoyances,
+    as well, e.g., you could try to disable your favorite JavaScript annoyances,
     re-write the actual displayed text, or just have some fun 
     playing buzzword bingo with web pages.
    </P
@@ -1066,10 +1078,10 @@ CLASS="EMPHASIS"
 >Effect if unset:</DT
 ><DD
 ><P
->    No log file is used, all log messages go to the console (<TT
+>    Logging is disabled unless <TT
 CLASS="LITERAL"
->STDERR</TT
->).
+>--no-daemon</TT
+> mode is used.
    </P
 ></DD
 ><DT
@@ -1086,9 +1098,22 @@ CLASS="LITERAL"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > (e.g., it's not blocking an ad you
-    think it should block) but in most cases you probably will never look at
-    it. For this reason, it is disabled by default. For troubleshooting
-    purposes, you will have to explicitly enable it.
+    think it should block) and it can help you to monitor what your browser
+    is doing.
+   </P
+><P
+>    Many users will never look at it, however, and it's a privacy risk
+    if third parties can get access to it. It is therefore disabled by
+    default in <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> 3.0.7 and later.
+  </P
+><P
+>    For troubleshooting purposes, you will have to explicitly enable it.
+    Please don't file any support requests without trying to reproduce
+    the problem with logging enabled first. Once you read the log messages,
+    you may even be able to solve the problem on your own.
    </P
 ><P
 >    Your logfile will grow indefinitely, and you will probably want to
@@ -1103,23 +1128,11 @@ CLASS="COMMAND"
 > script has been included.
    </P
 ><P
->    On SuSE Linux systems, you can place a line like <SPAN
-CLASS="QUOTE"
->"/var/log/privoxy.*
-    +1024k 644 nobody.nogroup"</SPAN
-> in <TT
-CLASS="FILENAME"
->/etc/logfiles</TT
->, with
-    the effect that cron.daily will automatically archive, gzip, and empty the
-    log, when it exceeds 1M size.
-   </P
-><P
 >    Any log files must be writable by whatever user <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
-    is being run as (default on UNIX, user id is <SPAN
+    is being run as (on Unix, default user id is <SPAN
 CLASS="QUOTE"
 >"privoxy"</SPAN
 >).
@@ -1190,7 +1203,10 @@ CLASS="EMPHASIS"
    </P
 ><P
 >    If debug 8 (show header parsing) is enabled, cookies are
-    written to the logfile with the rest of the headers.
+    also written to the logfile with the rest of the headers.
+    Therefore this option isn't very useful and may be removed
+    in future releases. Please report to the developers if you
+    are still using it.
    </P
 ></DD
 ></DL
@@ -1566,7 +1582,7 @@ CLASS="EMPHASIS"
 >Notes:</DT
 ><DD
 ><P
->    This option is only there for debug purposes and you should never
+>    This option is only there for debugging purposes and you should never
     need to use it. <SPAN
 CLASS="emphasis"
 ><I
@@ -1681,7 +1697,7 @@ HREF="config.html#ACLS"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > to untrusted users, you will
-    also want to turn off the <TT
+    also want to make sure that the following actions are disabled:  <TT
 CLASS="LITERAL"
 ><A
 HREF="config.html#ENABLE-EDIT-ACTIONS"
@@ -1695,7 +1711,6 @@ HREF="config.html#ENABLE-REMOTE-TOGGLE"
 >enable-remote-toggle</A
 ></TT
 >
-    options!
    </P
 ></DD
 ><DT
@@ -1780,20 +1795,11 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"toggled off"</SPAN
 > mode, i.e. mostly behave like a normal,
-    content-neutral proxy where all ad blocking, filtering, etc are disabled. See
-    <TT
+    content-neutral proxy with both ad blocking and content filtering
+    disabled. See <TT
 CLASS="LITERAL"
 >enable-remote-toggle</TT
-> below. This is not really useful
-    anymore, since toggling is much easier via <A
-HREF="http://config.privoxy.org/toggle"
-TARGET="_top"
->the web interface</A
-> than via
-    editing the <TT
-CLASS="FILENAME"
->conf</TT
-> file.
+> below.
    </P
 ><P
 >    The windows version will only display the toggle icon in the system tray
@@ -1855,8 +1861,7 @@ TARGET="_top"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > mostly acts like a normal,
-    content-neutral proxy, i.e. it acts as if none of the actions applied to
-    any URL.
+    content-neutral proxy, i.e. doesn't block ads or filter content.
    </P
 ><P
 >    Access to the toggle feature can <SPAN
@@ -1888,14 +1893,18 @@ CLASS="EMPHASIS"
 >not recommended</I
 ></SPAN
 >
-    for multi-user environments with untrusted users. Because of 
-    the obvious security implications, this feature is off by default.
-    Note that malicious client side code (e.g JavaScript) is also potentially
-    capable of changing <SPAN
+    for multi-user environments with untrusted users.
+   </P
+><P
+>    Note that malicious client side code (e.g Java) is also
+    capable of using this option.
+   </P
+><P
+>    As a lot of <SPAN
 CLASS="APPLICATION"
->Privoxy's</SPAN
-> intended
-    behavior.
+>Privoxy</SPAN
+> users don't read
+    documentation, this feature has been disabled by default.
    </P
 ><P
 >    Note that you must have compiled <SPAN
@@ -1969,11 +1978,11 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > in a environment with trusted clients,
     you may enable this feature at your discretion. Note that malicious client
-    side code (e.g JavaScript) is also potentially capable of changing
-    <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
-> intended behavior.
+    side code (e.g Java) is also capable of using this feature.
+   </P
+><P
+>    This option may be removed in future releases as it has been obsoleted
+    by the more general header taggers.
    </P
 ></DD
 ></DL
@@ -2049,20 +2058,30 @@ CLASS="QUOTE"
 CLASS="LITERAL"
 >listen-address</TT
 > above) can
-    modify its configuration for all users. This option is <SPAN
+    modify its configuration for all users.
+   </P
+><P
+>    This option is <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->not
-    recommended</I
+>not recommended</I
 ></SPAN
-> for multi-user environments with untrusted users 
-    and is therefore disabled by default. Note that malicious client side code
-    (e.g JavaScript) is also potentially capable of changing
-    <SPAN
+> for environments
+    with untrusted users and is therefore disabled by default.
+   </P
+><P
+>    Note that malicious client side code (e.g Java) is also
+    capable of using the actions editor and you shouldn't enable
+    this options unless you understand the consequences and are
+    sure your browser is configured correctly.
+   </P
+><P
+>    As a lot of <SPAN
 CLASS="APPLICATION"
->Privoxy's</SPAN
-> intended behavior.
+>Privoxy</SPAN
+> users don't read
+    documentation, this feature has been disabled by default.
    </P
 ><P
 >    Note that you must have compiled <SPAN
@@ -2998,7 +3017,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  forward-socks4   /               127.0.0.1:9050 .</PRE
+>  forward-socks4a   /               127.0.0.1:9050 .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3008,8 +3027,9 @@ CLASS="SCREEN"
 >    The public <SPAN
 CLASS="APPLICATION"
 >Tor</SPAN
-> network can't be used to reach your local network,
-    therefore it's a good idea to make some exceptions:
+> network can't be used to
+    reach your local network, if you need to access local servers you
+    therefore might want to make some exceptions:
    </P
 ><P
 >    <TABLE
@@ -3031,7 +3051,11 @@ CLASS="SCREEN"
 ><P
 >    Unencrypted connections to systems in these address ranges will
     be as (un)secure as the local network is, but the alternative is that you
-    can't reach the network at all.
+    can't reach the local network through <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    at all.
    </P
 ><P
 >    If you also want to be able to reach servers in your local network by
@@ -3284,7 +3308,7 @@ CLASS="QUOTE"
     that Privoxy forwards through other proxies. This option is not limited to the HTTP CONNECT method.
    </P
 ><P
->    Only use this option, if you are getting many forwarding related error messages,
+>    Only use this option, if you are getting lots of forwarding-related error messages
     that go away when you try again manually. Start with a small value and check Privoxy's
     logfile from time to time, to see how many retries are usually needed.
    </P
