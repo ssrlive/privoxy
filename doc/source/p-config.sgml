@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.20 2007/11/07 11:36:53 hal9 Exp $
+ $Id: p-config.sgml,v 2.21 2007/11/07 18:50:39 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.20 2007/11/07 11:36:53 hal9 Exp $
+ $Id: p-config.sgml,v 2.21 2007/11/07 18:50:39 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
@@ -354,7 +354,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <listitem>
    <para>
     The value of this option only matters if the experimental trust mechanism has been
-    activated. (See <link linkend="trustfile"><emphasis>trustfile</emphasis></link> above.)
+    activated. (See <link linkend="trustfile"><emphasis>trustfile</emphasis></link> below.)
    </para>
    <para>
     If you use the trust mechanism, it is a good idea to write up some on-line
@@ -504,7 +504,7 @@ II. FORMAT OF THE CONFIGURATION FILE
  <varlistentry>
   <term>Specifies:</term>
   <listitem>
-   <para>The directory where the other configuration files are located</para>
+   <para>The directory where the other configuration files are located.</para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -529,7 +529,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Notes:</term>
   <listitem>
    <para>
-    No trailing <quote><literal>/</literal></quote>, please
+    No trailing <quote><literal>/</literal></quote>, please.
    </para>
   <!-- 
    This is really outdated and not likely to happen. HB 09/20/06
@@ -555,7 +555,7 @@ II. FORMAT OF THE CONFIGURATION FILE
  <varlistentry>
   <term>Specifies:</term>
   <listitem>
-   <para>An alternative directory where the templates are loaded from</para>
+   <para>An alternative directory where the templates are loaded from.</para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -580,12 +580,12 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Notes:</term>
   <listitem>
    <para>
-    Privoxy's original templates are usually overwritten
-    with each update. Use this option to relocate customized templates
-    that should be kept. Note that template variables might change
-    between updates and templates are not guaranteed to work with
+    <application>Privoxy's</application> original templates are usually
+    overwritten with each update. Use this option to relocate customized
+    templates that should be kept. As template variables might change
+    between updates, you shouldn't expect templates to work with
     <application>Privoxy</application> releases other than the one
-    they were part of.
+    they were part of, though.
    </para>
   </listitem>
  </varlistentry>
@@ -603,8 +603,9 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Specifies:</term>
   <listitem>
    <para>
-    The directory where all logging takes place (i.e. where <filename>logfile</filename> and 
-    <filename>jarfile</filename> are located) 
+    The directory where all logging takes place
+    (i.e. where <filename>logfile</filename> and
+    <filename>jarfile</filename> are located).
    </para>
   </listitem>
  </varlistentry>
@@ -630,7 +631,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Notes:</term>
   <listitem>
    <para>
-    No trailing <quote><literal>/</literal></quote>, please
+    No trailing <quote><literal>/</literal></quote>, please.
    </para>
   </listitem>
  </varlistentry>
@@ -694,13 +695,13 @@ actionsfile
     Multiple <literal>actionsfile</literal> lines are permitted, and are in fact recommended!
    </para>
    <para> 
-    The default values include standard.action, which is used for internal
-    purposes and should be loaded, default.action, which is the
-    <quote>main</quote> actions file maintained by the developers, and
+    The default values include <filename>standard.action</filename>, which is used
+    for internal purposes and should be loaded, <filename>default.action</filename>,
+    which is the <quote>main</quote> actions file maintained by the developers, and
     <filename>user.action</filename>, where you can make your personal additions.
    </para>
    <para> 
-    Actions files are where all the per site and per URL configuration is done for 
+    Actions files contain all the per site and per URL configuration for 
     ad blocking, cookie management, privacy considerations, etc.
     There is no point in using <application>Privoxy</application> without at 
     least one actions file.
@@ -820,7 +821,7 @@ actionsfile
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para><emphasis>Unset (commented out)</emphasis>. When activated: logfile (Unix) <emphasis>or</emphasis> privoxy.log (Windows)</para>
+   <para><emphasis>Unset (commented out)</emphasis>. When activated: logfile (Unix) <emphasis>or</emphasis> privoxy.log (Windows).</para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -912,7 +913,7 @@ fk 2007-11-07
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para><emphasis>Unset (commented out)</emphasis>. When activated: jarfile (Unix) <emphasis>or</emphasis> privoxy.jar (Windows)</para>
+   <para><emphasis>Unset (commented out)</emphasis>. When activated: jarfile (Unix) <emphasis>or</emphasis> privoxy.jar (Windows).</para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -1107,10 +1108,16 @@ fk 2007-11-07
     a hell of an output (especially 16).
     <!-- LOL -->
    </para>
+<!--
    <para>
     The reporting of <emphasis>fatal</emphasis> errors (i.e. ones which causes 
     <application>Privoxy</application> to exit) is always on and cannot be disabled.
    </para>
+   It can be disabled by not logging at all (now the default)
+   and I doubt that any user would care about not being able
+   to disable it anyway.
+   fk 2007-11-09
+-->
    <para>
     If you want to use CLF (Common Log Format), you should set <quote>debug
     512</quote> <emphasis>ONLY</emphasis> and not enable anything else.
@@ -1138,7 +1145,7 @@ fk 2007-11-07
   <term>Specifies:</term>
   <listitem>
    <para>
-    Whether to run only one server thread
+    Whether to run only one server thread.
    </para>
   </listitem>
  </varlistentry>
@@ -1167,8 +1174,8 @@ fk 2007-11-07
   <term>Notes:</term>
   <listitem>
    <para>
-    This option is only there for debugging purposes and you should never
-    need to use it. <emphasis>It will drastically reduce performance.</emphasis>
+    This option is only there for debugging purposes.
+    <emphasis>It will drastically reduce performance.</emphasis>
    </para>
   </listitem>
  </varlistentry>
@@ -1390,7 +1397,7 @@ fk 2007-11-07
    </para>
    <para>
     As a lot of <application>Privoxy</application> users don't read
-    documentation, this feature has been disabled by default.
+    documentation, this feature is disabled by default.
    </para>
    <para>
     Note that you must have compiled <application>Privoxy</application> with
@@ -1451,7 +1458,7 @@ fk 2007-11-07
     side code (e.g Java) is also capable of using this feature.
    </para>
    <para>
-    This option may be removed in future releases as it has been obsoleted
+    This option will be removed in future releases as it has been obsoleted
     by the more general header taggers.
    </para>
   </listitem>
@@ -1506,17 +1513,15 @@ fk 2007-11-07
    </para>
    <para>
     This option is <emphasis>not recommended</emphasis> for environments
-    with untrusted users and is therefore disabled by default.
+    with untrusted users and as a lot of <application>Privoxy</application>
+    users don't read documentation, this feature is disabled by default.
+   </para>
    </para>
    <para>
     Note that malicious client side code (e.g Java) is also
     capable of using the actions editor and you shouldn't enable
     this options unless you understand the consequences and are
     sure your browser is configured correctly.
-   </para>
-   <para>
-    As a lot of <application>Privoxy</application> users don't read
-    documentation, this feature has been disabled by default.
    </para>
    <para>
     Note that you must have compiled <application>Privoxy</application> with
@@ -1663,9 +1668,9 @@ ACLs: permit-access and deny-access</title>
     option. 
    </para>
    <para>
-    Please see the warnings in the FAQ that this proxy is not intended to be a substitute
-    for a firewall or to encourage anyone to defer addressing basic security
-    weaknesses.
+    Please see the warnings in the FAQ that <application>Privoxy</application>
+    is not intended to be a substitute for a firewall or to encourage anyone
+    to defer addressing basic security weaknesses.
    </para>
    <para>
     Multiple ACL lines are OK.
@@ -1899,8 +1904,8 @@ ACLs: permit-access and deny-access</title>
    </para>
    <para>
     <screen>
-  forward   /                  caching-proxy.example-isp.net:8000
-  forward   .example-isp.net   .
+  forward   /                  caching-proxy.isp.example.net:8000
+  forward   .isp.example.net   .
 </screen>
    </para>
   </listitem>
@@ -1986,7 +1991,7 @@ forward-socks4 and forward-socks4a</title>
    </para>
    <para>
     <screen>
-  forward-socks4a   /              socks-gw.example.com:1080  www-cache.example-isp.net:8080
+  forward-socks4a   /              socks-gw.example.com:1080  www-cache.isp.example.net:8080
   forward           .example.com   .
 </screen>
    </para>
@@ -2000,8 +2005,8 @@ forward-socks4 and forward-socks4a</title>
    </para>
   
     <para>
-    To chain Privoxy and Tor, both running on the same system, you should use 
-    the rule:
+    To chain Privoxy and Tor, both running on the same system, you would use 
+    something like:
    </para>
    <para>
     <screen>
@@ -2025,7 +2030,8 @@ forward-socks4 and forward-socks4a</title>
     Unencrypted connections to systems in these address ranges will
     be as (un)secure as the local network is, but the alternative is that you
     can't reach the local network through <application>Privoxy</application>
-    at all.
+    at all. Of course this may actually be desired and there is no reason
+    to make these exceptions if you aren't sure you need them.
    </para>
    <para>
     If you also want to be able to reach servers in your local network by
@@ -2055,8 +2061,8 @@ forward-socks4 and forward-socks4a</title>
 </para>
 
 <para>
- Assume that host-a has a PPP connection to isp-a.net. And host-b has a PPP connection to
- isp-b.net. Both run <application>Privoxy</application>. Their forwarding
+ Assume that host-a has a PPP connection to isp-a.example.net. And host-b has a PPP connection to
+ isp-b.example.org. Both run <application>Privoxy</application>. Their forwarding
  configuration can look like this:
 </para>
 
@@ -2067,7 +2073,7 @@ forward-socks4 and forward-socks4a</title>
 <para>
  <screen>
   forward    /           .
-  forward    .isp-b.net  host-b:8118
+  forward    .isp-b.example.net  host-b:8118
 </screen>
 </para>
 
@@ -2078,7 +2084,7 @@ forward-socks4 and forward-socks4a</title>
 <para>
  <screen>
   forward    /           .
-  forward    .isp-a.net  host-a:8118
+  forward    .isp-a.example.org  host-a:8118
 </screen>
 </para>
 
@@ -2090,7 +2096,7 @@ forward-socks4 and forward-socks4a</title>
 
 <para>
  If you intend to chain <application>Privoxy</application> and 
- <application>squid</application> locally, then chain as 
+ <application>squid</application> locally, then chaining as 
  <literal>browser -> squid -> privoxy</literal> is the recommended way. 
 </para>
 
@@ -2120,8 +2126,9 @@ forward-socks4 and forward-socks4a</title>
 </para>
 
 <para>
- You could just as well decide to only forward requests for Windows executables through
- a virus-scanning parent proxy, say, on <literal>antivir.example.com</literal>, port 8010:
+ You could just as well decide to only forward requests you suspect
+ of leading to Windows executables through a virus-scanning parent proxy,
+ say, on <literal>antivir.example.com</literal>, port 8010:
 </para>
 
 <para>
@@ -2594,7 +2601,7 @@ forward-socks4 and forward-socks4a</title>
 <para>
  The <quote>hide-console</quote> option is specific to the MS-Win console
  version of <application>Privoxy</application>. If this option is used,
- <application>Privoxy</application> will disconnect from and hide  the
+ <application>Privoxy</application> will disconnect from and hide the
  command console.
 </para>
 
