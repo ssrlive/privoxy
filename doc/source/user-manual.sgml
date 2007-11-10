@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.38 2007/09/22 16:01:42 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.39 2007/11/05 02:34:49 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.38 2007/09/22 16:01:42 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.39 2007/11/05 02:34:49 hal9 Exp $</pubdate>
 
 <!--
 
@@ -227,7 +227,7 @@ How to install the binary packages depends on your operating system:
  in the same directory as you installed <application>Privoxy</application> in. 
 </para>
 <para>
- Version 3.0.4 introduced full <application>Windows</application> service
+ Version 3.0.5 beta introduced full <application>Windows</application> service
  functionality. On Windows only, the <application>Privoxy</application>
  program has two new command line arguments to install and uninstall
  <application>Privoxy</application> as a <emphasis>service</emphasis>.
@@ -262,7 +262,7 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-bintgz"><title>Solaris, NetBSD, HP-UX</title>
+<sect3 id="installation-pack-bintgz"><title>Solaris <!--, NetBSD, HP-UX--></title>
 
 <para>
  Create a new directory, <literal>cd</literal> to it, then unzip and
@@ -351,8 +351,8 @@ How to install the binary packages depends on your operating system:
 <para>
  The port skeleton and the package can also be downloaded from the
  <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">File Release
- Page</ulink>, but if you're interested in stable releases only you don't
- gain anything by using them.
+ Page</ulink>, but there's no reason to use them unless you're interested in the
+ beta releases which are only available there.
 </para>
 </sect3>
 
@@ -789,7 +789,8 @@ How to install the binary packages depends on your operating system:
    by setting the proxy configuration for address of
    <literal>127.0.0.1</literal> and port <literal>8118</literal>.
    <emphasis>DO NOT</emphasis> activate proxying for <literal>FTP</literal> or 
-   any protocols besides HTTP and HTTPS (SSL)! It won't work!
+   any protocols besides HTTP and HTTPS (SSL) unless you intend to prevent your
+   browser from using these protocols.
   </para>
  </listitem>  
 
@@ -807,7 +808,10 @@ How to install the binary packages depends on your operating system:
    A default installation should provide a reasonable starting point for 
    most. There will undoubtedly be occasions where you will want to adjust the
    configuration, but that can be dealt with as the need arises. Little 
-   to no initial configuration is required in most cases.
+   to no initial configuration is required in most cases, you may want
+   to enable the
+   <ulink url="config.html#ENABLE-EDIT-ACTIONS">web-based action editor</ulink> though.
+   Be sure to read the warnings first.
   </para>
   <para>
    See the <link linkend="configuration">Configuration section</link> for more
@@ -834,6 +838,9 @@ How to install the binary packages depends on your operating system:
   </para>
  </listitem> 
 
+<!--
+ Did anyone test these lately?
+ fk 2007-11-10
  <listitem>
   <para>
    For easy access to &my-app;'s most important controls, drag the provided
@@ -841,6 +848,7 @@ How to install the binary packages depends on your operating system:
    personal toolbar.
   </para>
  </listitem> 
+-->
 
  <listitem>
   <para>
@@ -855,7 +863,7 @@ How to install the binary packages depends on your operating system:
    Now enjoy surfing with enhanced control, comfort and privacy!
   </para>
  </listitem> 
- 
+
  </itemizedlist>
 </para>
 
@@ -895,7 +903,7 @@ How to install the binary packages depends on your operating system:
  Secondly, a brief explanation of <application>Privoxy's </application>
  <quote>actions</quote>. <quote>Actions</quote> in this context, are 
  the directives we use to tell <application>Privoxy</application> to perform
- some task relating to WWW transactions (i.e. web browsing). We tell
+ some task relating to HTTP transactions (i.e. web browsing). We tell
  <application>Privoxy</application> to take some <quote>action</quote>. Each
  action has a unique name and function. While there are many potential
  <application>actions</application> in <application>Privoxy's</application>
@@ -1016,8 +1024,20 @@ How to install the binary packages depends on your operating system:
  the special <application>Privoxy</application> editor at <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
  (shortcut: <ulink url="http://p.p/">http://p.p/show-status</ulink>). This 
- is an internal page, and does not require Internet access. Select the
- appropriate <quote>actions</quote> file, and click
+ is an internal page, and does not require Internet access.
+</para>
+
+<para>
+ Note that as of <application>Privoxy</application> 3.0.7 beta the
+ action editor is disabled by default. Check the
+ <ulink url="config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions
+  section in the configuration file</ulink> to learn why and in which
+ cases it's safe to enable again.
+</para>
+
+<para>
+ If you decided to enable the action editor, select the appropriate
+ <quote>actions</quote> file, and click
  <quote><guibutton>Edit</guibutton></quote>. It is best to put personal or
  local preferences in <filename>user.action</filename> since this is not
  meant to be overwritten during upgrades, and will over-ride the settings in
@@ -1685,6 +1705,14 @@ for details.
  is even a toggle <link linkend="bookmarklets">Bookmarklet</link> offered, so
  that you can toggle <application>Privoxy</application> with one click from
  your browser.
+</para>
+
+<para>
+ Note that several of the features described above are disabled by default
+ in <application>Privoxy</application> 3.0.7 beta and later.
+ Check the
+ <ulink url="config.html">configuration file</ulink> to learn why
+ and in which cases it's safe to enable them again.
 </para>
 
 </sect2>
@@ -8932,6 +8960,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.39  2007/11/05 02:34:49  hal9
+ Various changes in preparation for the upcoming release. Much yet to be done.
+
  Revision 2.38  2007/09/22 16:01:42  fabiankeil
  Update embedded show-url-info output.
 
