@@ -141,20 +141,32 @@ CLASS="FILENAME"
  or exports), which <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> fills at run time. You can
- edit the templates with a normal text editor, should you want to customize them.
- (<SPAN
+> fills at run time. It
+ is possible to edit the templates with a normal text editor, should you want
+ to customize them. (<SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
->Not recommended for the casual user</I
+>Not recommended for the casual
+ user</I
 ></SPAN
->). Note that
- just like in configuration files, lines starting with <TT
+>). Should you create your own custom templates, you should use 
+ the <TT
+CLASS="FILENAME"
+>config</TT
+> setting <A
+HREF="config.html#TEMPLDIR"
+>templdir</A
+>
+ to specify an alternate location, so your templates do not get overwritten
+ during upgrades. 
+ </P
+><P
+> Note that just like in configuration files, lines starting
+ with <TT
 CLASS="LITERAL"
 >#</TT
-> are
- ignored when the templates are filled in.</P
+> are ignored when the templates are filled in.</P
 ><P
 > The place-holders are of the form <TT
 CLASS="LITERAL"

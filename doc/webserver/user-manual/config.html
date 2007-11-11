@@ -383,7 +383,7 @@ CLASS="EMPHASIS"
 >trustfile</I
 ></SPAN
 ></A
-> above.)
+> below.)
    </P
 ><P
 >    If you use the trust mechanism, it is a good idea to write up some on-line
@@ -578,7 +578,7 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->The directory where the other configuration files are located</P
+>The directory where the other configuration files are located.</P
 ></DD
 ><DT
 >Type of value:</DT
@@ -623,7 +623,7 @@ CLASS="QUOTE"
 CLASS="LITERAL"
 >/</TT
 >"</SPAN
->, please
+>, please.
    </P
 ></DD
 ></DL
@@ -646,7 +646,7 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->An alternative directory where the templates are loaded from</P
+>An alternative directory where the templates are loaded from.</P
 ></DD
 ><DT
 >Type of value:</DT
@@ -670,15 +670,18 @@ CLASS="VARIABLELIST"
 >Notes:</DT
 ><DD
 ><P
->    Privoxy's original templates are usually overwritten
-    with each update. Use this option to relocate customized templates
-    that should be kept. Note that template variables might change
-    between updates and templates are not guaranteed to work with
+>    <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> original templates are usually
+    overwritten with each update. Use this option to relocate customized
+    templates that should be kept. As template variables might change
+    between updates, you shouldn't expect templates to work with
     <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > releases other than the one
-    they were part of.
+    they were part of, though.
    </P
 ></DD
 ></DL
@@ -701,14 +704,15 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    The directory where all logging takes place (i.e. where <TT
+>    The directory where all logging takes place
+    (i.e. where <TT
 CLASS="FILENAME"
 >logfile</TT
-> and 
+> and
     <TT
 CLASS="FILENAME"
 >jarfile</TT
-> are located) 
+> are located).
    </P
 ></DD
 ><DT
@@ -754,7 +758,7 @@ CLASS="QUOTE"
 CLASS="LITERAL"
 >/</TT
 >"</SPAN
->, please
+>, please.
    </P
 ></DD
 ></DL
@@ -856,9 +860,15 @@ CLASS="LITERAL"
    </P
 ><P
 > 
-    The default values include standard.action, which is used for internal
-    purposes and should be loaded, default.action, which is the
-    <SPAN
+    The default values include <TT
+CLASS="FILENAME"
+>standard.action</TT
+>, which is used
+    for internal purposes and should be loaded, <TT
+CLASS="FILENAME"
+>default.action</TT
+>,
+    which is the <SPAN
 CLASS="QUOTE"
 >"main"</SPAN
 > actions file maintained by the developers, and
@@ -869,7 +879,7 @@ CLASS="FILENAME"
    </P
 ><P
 > 
-    Actions files are where all the per site and per URL configuration is done for 
+    Actions files contain all the per site and per URL configuration for 
     ad blocking, cookie management, privacy considerations, etc.
     There is no point in using <SPAN
 CLASS="APPLICATION"
@@ -1072,7 +1082,7 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >or</I
 ></SPAN
-> privoxy.log (Windows)</P
+> privoxy.log (Windows).</P
 ></DD
 ><DT
 >Effect if unset:</DT
@@ -1186,7 +1196,7 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >or</I
 ></SPAN
-> privoxy.jar (Windows)</P
+> privoxy.jar (Windows).</P
 ></DD
 ><DT
 >Effect if unset:</DT
@@ -1486,19 +1496,6 @@ CLASS="EMPHASIS"
     
    </P
 ><P
->    The reporting of <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->fatal</I
-></SPAN
-> errors (i.e. ones which causes 
-    <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to exit) is always on and cannot be disabled.
-   </P
-><P
 >    If you want to use CLF (Common Log Format), you should set <SPAN
 CLASS="QUOTE"
 >"debug
@@ -1543,7 +1540,7 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    Whether to run only one server thread
+>    Whether to run only one server thread.
    </P
 ></DD
 ><DT
@@ -1582,8 +1579,8 @@ CLASS="EMPHASIS"
 >Notes:</DT
 ><DD
 ><P
->    This option is only there for debugging purposes and you should never
-    need to use it. <SPAN
+>    This option is only there for debugging purposes.
+    <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
@@ -1904,7 +1901,7 @@ CLASS="EMPHASIS"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > users don't read
-    documentation, this feature has been disabled by default.
+    documentation, this feature is disabled by default.
    </P
 ><P
 >    Note that you must have compiled <SPAN
@@ -1981,7 +1978,7 @@ CLASS="APPLICATION"
     side code (e.g Java) is also capable of using this feature.
    </P
 ><P
->    This option may be removed in future releases as it has been obsoleted
+>    This option will be removed in future releases as it has been obsoleted
     by the more general header taggers.
    </P
 ></DD
@@ -2068,20 +2065,17 @@ CLASS="EMPHASIS"
 >not recommended</I
 ></SPAN
 > for environments
-    with untrusted users and is therefore disabled by default.
+    with untrusted users and as a lot of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    users don't read documentation, this feature is disabled by default.
    </P
 ><P
 >    Note that malicious client side code (e.g Java) is also
     capable of using the actions editor and you shouldn't enable
     this options unless you understand the consequences and are
     sure your browser is configured correctly.
-   </P
-><P
->    As a lot of <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> users don't read
-    documentation, this feature has been disabled by default.
    </P
 ><P
 >    Note that you must have compiled <SPAN
@@ -2354,9 +2348,12 @@ CLASS="EMPHASIS"
     option. 
    </P
 ><P
->    Please see the warnings in the FAQ that this proxy is not intended to be a substitute
-    for a firewall or to encourage anyone to defer addressing basic security
-    weaknesses.
+>    Please see the warnings in the FAQ that <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    is not intended to be a substitute for a firewall or to encourage anyone
+    to defer addressing basic security weaknesses.
    </P
 ><P
 >    Multiple ACL lines are OK.
@@ -2788,8 +2785,8 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  forward   /                  caching-proxy.example-isp.net:8000
-  forward   .example-isp.net   .</PRE
+>  forward   /                  caching-proxy.isp.example.net:8000
+  forward   .isp.example.net   .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -2979,7 +2976,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  forward-socks4a   /              socks-gw.example.com:1080  www-cache.example-isp.net:8080
+>  forward-socks4a   /              socks-gw.example.com:1080  www-cache.isp.example.net:8080
   forward           .example.com   .</PRE
 ></TD
 ></TR
@@ -3005,8 +3002,8 @@ CLASS="SCREEN"
 >
    </P
 ><P
->    To chain Privoxy and Tor, both running on the same system, you should use 
-    the rule:
+>    To chain Privoxy and Tor, both running on the same system, you would use 
+    something like:
    </P
 ><P
 >    <TABLE
@@ -3055,7 +3052,8 @@ CLASS="SCREEN"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
-    at all.
+    at all. Of course this may actually be desired and there is no reason
+    to make these exceptions if you aren't sure you need them.
    </P
 ><P
 >    If you also want to be able to reach servers in your local network by
@@ -3104,8 +3102,8 @@ CLASS="EMPHASIS"
 ></SPAN
 > users can see the internal content of all ISPs.</P
 ><P
-> Assume that host-a has a PPP connection to isp-a.net. And host-b has a PPP connection to
- isp-b.net. Both run <SPAN
+> Assume that host-a has a PPP connection to isp-a.example.net. And host-b has a PPP connection to
+ isp-b.example.org. Both run <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >. Their forwarding
@@ -3122,7 +3120,7 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >  forward    /           .
-  forward    .isp-b.net  host-b:8118</PRE
+  forward    .isp-b.example.net  host-b:8118</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3139,7 +3137,7 @@ WIDTH="100%"
 ><PRE
 CLASS="SCREEN"
 >  forward    /           .
-  forward    .isp-a.net  host-a:8118</PRE
+  forward    .isp-a.example.org  host-a:8118</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3156,7 +3154,7 @@ CLASS="APPLICATION"
  <SPAN
 CLASS="APPLICATION"
 >squid</SPAN
-> locally, then chain as 
+> locally, then chaining as 
  <TT
 CLASS="LITERAL"
 >browser -&#62; squid -&#62; privoxy</TT
@@ -3210,8 +3208,9 @@ CLASS="FILENAME"
 >squid.conf</TT
 >.</P
 ><P
-> You could just as well decide to only forward requests for Windows executables through
- a virus-scanning parent proxy, say, on <TT
+> You could just as well decide to only forward requests you suspect
+ of leading to Windows executables through a virus-scanning parent proxy,
+ say, on <TT
 CLASS="LITERAL"
 >antivir.example.com</TT
 >, port 8010:</P
@@ -3868,7 +3867,7 @@ CLASS="APPLICATION"
  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will disconnect from and hide  the
+> will disconnect from and hide the
  command console.</P
 ><P
 > <TT
