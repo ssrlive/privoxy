@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.39 2007/11/05 02:34:49 hal9 Exp $
+ $Id: user-manual.sgml,v 2.40 2007/11/10 17:10:59 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.39 2007/11/05 02:34:49 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.40 2007/11/10 17:10:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -451,12 +451,143 @@ How to install the binary packages depends on your operating system:
  <itemizedlist>
   <listitem>
    <para>
+    Two new actions <link
+          linkend="server-header-tagger">server-header-tagger</link>
+          and <link
+          linkend="client-header-tagger">client-header-tagger</link>
+          that can be used to apply arbitrary <quote>tags</quote> to 
+          each request's headers. These <quote>tags</quote> can then
+          subsequently be used by other actions, greatly increasing 
+          &my-app;'s flexibity and selectivity. See <link
+          linkend="tag-pattern">tag patterns</link> for more on tags.
+
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
     Header filtering can be done with dedicated header filters now. As a result
     the actions <quote>filter-client-headers</quote> and <quote>filter-server-headers</quote>
     that were introduced with <application>Privoxy 3.0.5</application> to apply
     the content filters to the headers as, well have been removed again.
+    See the new actions <link
+          linkend="server-header-filter">server-header-filter</link>
+          and <link
+          linkend="client-header-filter">client-header-filter</link>.
    </para>
   </listitem>
+  <listitem>
+   <para>
+     There are four new options for the main <filename>config</filename> file:
+   </para>
+
+     <itemizedlist>
+       <listitem>
+        <para>
+          <link
+          linkend="allow-cgi-request-crunching">allow-cgi-request-crunching</link>
+          which allows requests for Privoxy's internal CGI pages to be
+          blocked, redirected or (un)trusted like ordinary requests.
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+          <link
+          linkend="split-large-forms">split-large-forms</link>
+          that will work around a browser bug that caused IE6 and IE7 to
+          ignore the Submit button on the Privoxy's edit-actions-for-url CGI
+          page.
+          </para>
+       </listitem>
+       <listitem>
+        <para>
+          <link
+          linkend="accept-intercepted-requests">accept-intercepted-requests</link>
+          which will combine Privoxy with any packet filter to create an intercepting
+          proxy for HTTP/1.1 requests (and for HTTP/1.0 requests with Host
+          header set) so that explicitly setting the browser's proxy settings
+          is not necessary.
+         </para>
+       </listitem>
+       <listitem>
+        <para>
+          <link
+          linkend="templdir">templdir</link>
+          to designate an alternate location for Privoxy's own CGI templates
+          to make sure any locally customized templates aren't overwritten
+          during upgrades.         
+        </para>
+       </listitem>
+       </itemizedlist>
+    </listitem>
+
+  <listitem>
+   <para>
+   A new command line option <literal>--pre-chroot-nslookup hostname</literal> to
+   intialize the resolver library before chroot'ing. On some systems this
+   reduces the number of files that must be copied into the chroot tree.
+   (Patch provided by Stephen Gildea)
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+     The  <link
+          linkend="forward-override">forward-override</link> action 
+     allows changing of the forwarding settings based on client headers like the
+     User-Agent, or the request origin.
+  </para>
+  </listitem>
+
+  <listitem>
+   <para>
+     The  <link
+          linkend="redirect">redirect</link> action can now use regular
+          expression substitutions against the original URL.
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+     <application>zlib</application> support is now available as a compile
+     time option for compressed documents.  
+   </para>
+  </listitem>
+    <listitem>
+    <para>
+     Improve various filters, and add new ones.
+   </para>
+  </listitem>
+
+
+  <listitem>
+   <para>
+    Include support for RFC 3253 so that <filename>Subversion</filename> works
+    with &my-app;.
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+     Logging can be turned on or off.
+   </para>
+  </listitem>
+
+
+  <listitem>
+   <para>
+     A number of improvements to Privoxy's internal CGI pages, including the
+     use of favicons for error and control pages.
+   </para>
+  </listitem>
+
+  <listitem>
+   <para>
+     Many bugfixes, memory leaks addressed, code improvements, and logging 
+     improvments.
+   </para>
+  </listitem>
+
 
 <!-- pre-3.0.6 changes: 
  <listitem>
@@ -680,6 +811,18 @@ How to install the binary packages depends on your operating system:
      be aware of the security issues involved. 
     </para>
   </listitem>
+
+  <listitem>
+   <para>
+    The <quote>filter-client-headers</quote> and
+    <quote>filter-server-headers</quote> actions that were introduced with
+    <application>Privoxy 3.0.5</application> to apply the content filters to
+    the headers as, well have been removed and replaced with new actions.
+    See the <link
+          linkend="whatsnew">What's New section</link> above.
+   </para>
+  </listitem>
+
 
 <!--
  <listitem>
@@ -3023,7 +3166,7 @@ for details.
     <para>
      <screen>
 # Tag every request with the User-Agent header
-{+client-header-filter{user-agent}}
+{+client-header-tagger{user-agent}}
 /
     </screen>
     </para>
@@ -5812,7 +5955,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
     <para>
      <screen>
 # Tag every request with the declared content type
-{+client-header-tagger{content-type}}
+{+server-header-tagger{content-type}}
 /
     </screen>
     </para>
@@ -7774,11 +7917,17 @@ pre-defined filters for your convenience:
 
 <para>
  The templates are basically normal HTML files, but with place-holders (called symbols
- or exports), which <application>Privoxy</application> fills at run time. You can
- edit the templates with a normal text editor, should you want to customize them.
- (<emphasis>Not recommended for the casual user</emphasis>). Note that
- just like in configuration files, lines starting with <literal>#</literal> are
- ignored when the templates are filled in.
+ or exports), which <application>Privoxy</application> fills at run time. It
+ is possible to edit the templates with a normal text editor, should you want
+ to customize them. (<emphasis>Not recommended for the casual
+ user</emphasis>). Should you create your own custom templates, you should use 
+ the <filename>config</filename> setting <link linkend="templdir">templdir</link>
+ to specify an alternate location, so your templates do not get overwritten
+ during upgrades. 
+ </para>
+ <para>
+ Note that just like in configuration files, lines starting
+ with <literal>#</literal> are ignored when the templates are filled in.
 </para>
 
 <para>
@@ -8960,6 +9109,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.40  2007/11/10 17:10:59  fabiankeil
+ In the first third of the file, mention several times that
+ the action editor is disabled by default in 3.0.7 beta and later.
+
  Revision 2.39  2007/11/05 02:34:49  hal9
  Various changes in preparation for the upcoming release. Much yet to be done.
 
