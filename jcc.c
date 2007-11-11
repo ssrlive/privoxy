@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.156 2007/11/01 18:20:58 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.157 2007/11/03 17:34:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.156 2007/11/01 18:20:58 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.157  2007/11/03 17:34:49  fabiankeil
+ *    Log the "weak randomization factor" warning only
+ *    once for mingw32 and provide some more details.
+ *
  *    Revision 1.156  2007/11/01 18:20:58  fabiankeil
  *    Initialize log module after initializing mutexes, future
  *    deadlocks in that code should now work cross-platform.
@@ -2517,6 +2521,9 @@ static void chat(struct client_state *csp)
              * This is NOT the body, so
              * Let's pretend the server just sent us a blank line.
              */
+            log_error(LOG_LEVEL_INFO,
+               "Malformerd HTTP headers detected and MS IIS5 hack enabled. "
+               "Expect an invalid response or even no response at all.");
             snprintf(buf, sizeof(buf), "\r\n");
             len = (int)strlen(buf);
 
