@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.20 2006/12/16 13:39:10 hal9 Exp $
+ $Id: p-authors.sgml,v 2.21 2007/10/30 19:03:41 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -29,14 +29,12 @@ Current Privoxy Team:
 ]]>
 
 <literallayout>
- Fabian Keil, developer
+ Fabian Keil, lead developer
  David Schmidt, developer
 <![%p-authors-formal;[
 ]]>
  
  Hal Burgiss
- Ian Cummings
- Justin McMurtry
  Roland Rosenfeld
 <![%p-authors-formal;[
 </literallayout>
@@ -49,6 +47,7 @@ Current Privoxy Team:
  Johny Agotnes 
  Rodrigo Barbosa
  Moritz Barsnick
+ Ian Cummings
  Brian Dessent
  Jon Foster
  Karsten Hopp
@@ -58,6 +57,7 @@ Current Privoxy Team:
  Adam Lock
  Guy Laroche
  Mark Martinec 
+ Justin McMurtry
  Andreas Oesterhelt
  Haroon Rafique
  Georg Sauthoff
@@ -78,8 +78,8 @@ Current Privoxy Team:
 <literallayout>
  Ken Arromdee
  Devin Bayer
- Reiner Buehl
  Gergely Bor
+ Reiner Buehl
  Andrew J. Caines
  Clifford Caoile
  Frédéric Crozat
