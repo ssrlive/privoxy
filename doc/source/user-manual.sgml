@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.40 2007/11/10 17:10:59 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.41 2007/11/11 16:32:11 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.40 2007/11/10 17:10:59 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.41 2007/11/11 16:32:11 hal9 Exp $</pubdate>
 
 <!--
 
@@ -524,7 +524,7 @@ How to install the binary packages depends on your operating system:
   <listitem>
    <para>
    A new command line option <literal>--pre-chroot-nslookup hostname</literal> to
-   intialize the resolver library before chroot'ing. On some systems this
+   initialize the resolver library before chroot'ing. On some systems this
    reduces the number of files that must be copied into the chroot tree.
    (Patch provided by Stephen Gildea)
    </para>
@@ -8367,8 +8367,10 @@ Requests</title>
  
  <listitem>
   <para>  
-   Toggle Privoxy on or off. In this case, <quote>Privoxy</quote> continues 
-   to run, but only as a pass-through proxy, with no actions taking place:
+   Toggle Privoxy on or off. This feature can be turned off/on in the main 
+   <filename>config</filename> file. When toggled <quote>off</quote>, <quote>Privoxy</quote>
+   continues to run, but only as a pass-through proxy, with no actions taking
+   place:
   </para>
    <blockquote>
    <para> 
@@ -8631,7 +8633,9 @@ Requests</title>
  or not, is to disable it temporarily. This should be the first troubleshooting 
  step. See <link linkend="bookmarklets">the Bookmarklets</link> section on a quick 
  and easy way to do this (be sure to flush caches afterward!). Looking at the 
- logs is a good idea too.
+ logs is a good idea too. (Note that both the toggle feature and logging are 
+ enabled via <filename>config</filename> file settings, and may need to be 
+ turned <quote>on</quote>.)
 </para>
 <para>
  Another easy troubleshooting step to try is if you have done any
@@ -9109,6 +9113,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.41  2007/11/11 16:32:11  hal9
+ This is primarily syncing What's New and Note to Upgraders sections with the many
+ new features and changes (gleaned from memory but mostly from ChangeLog).
+
  Revision 2.40  2007/11/10 17:10:59  fabiankeil
  In the first third of the file, mention several times that
  the action editor is disabled by default in 3.0.7 beta and later.
