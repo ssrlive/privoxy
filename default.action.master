@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.96 2007/11/03 14:25:33 fabiankeil Exp $
+#  $Id: default.action.master,v 1.97 2007/11/05 02:28:15 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1861,8 +1861,10 @@ www.skweezer.net/bloglines
 
 #MASTER# REMARKS: Privoxy's "unsafe" CGI pages check the referrer 
 #MASTER# REMARKS: to make sure the user reached them intentionally.
-#MASTER# REMARKS: If the referrer is blocked, CGI editing is impossible.
-{-hide-referrer}
+#MASTER# REMARKS: If the referrer is blocked, CGI editing is impossible
+#MASTER# REMARKS: Disabling fast-redirects because if CGI crunching gets
+#MASTER# REMARKS: enabled it could be leveraged to fool the referrer check.
+{-hide-referrer -fast-redirects}
 p.p/
 config.privoxy.org/
 
