@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.99 2007/11/12 18:55:14 fabiankeil Exp $
+#  $Id: default.action.master,v 1.100 2007/11/12 19:00:33 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -860,7 +860,21 @@ stats./.*\.gif\?
 #MASTER# COMMENT: JS pop-ups
 spa.snap.com/
 #MASTER# BLOCK-REFERRER: http://www.gamefaqs.com/computer/doswin/game/914819.html 12/18/06
-dw.com.com/clear/
+#MASTER# COMMENT: user tracking, and run-away assorted 'junk'
+#MASTER# BLOCK-REFERRER: http://formwood.com 2007-11-12
+.insitemetrics.com/
+#MASTER# COMMENT: user tracking, and assorted 'junk'
+#MASTER# BLOCK-REFERRER: http://blogblog.com 2007-11-12
+.extreme-dm.com/
+#MASTER# COMMENT: user tracking, and assorted 'junk'
+#MASTER# BLOCK-REFERRER: http://www.schillmania.com 2007-11-12
+stats.reinvigorate.net/
+#MASTER# COMMENT: user tracking, and assorted 'junk'
+#MASTER# BLOCK-REFERRER: http://wordpress.com 2007-11-12
+.getclicky.com/
+#MASTER# COMMENT: user tracking, and assorted 'junk'
+#MASTER# BLOCK-REFERRER: http://infoworld.com 2007-11-12
+.quantserve.com
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
@@ -1168,6 +1182,8 @@ smartad.*.*.*
 #MASTER# BLOCK-REFERRER: http://www.heise.de/ 10/08/06
 #MASTER# BLOCK-REFERRER: http://www.spiegel.de/
 /RealMedia/ads/
+#MASTER# REMARKS: Variation 2007-11-12
+/RealMediaAds/
 #MASTER# BLOCK-REFERRER: http://www.powerdvd.com 12/28/06 per SF tracker
 /top\.php\?d=.*\.[a-z]{2,5}
 #MASTER# REMARKS: Actionsfile feedback item #1764161 2007-07-31
