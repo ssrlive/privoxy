@@ -3,11 +3,10 @@
 
 Current Privoxy Team:
 
- Fabian Keil, developer
+ Fabian Keil, lead developer
  David Schmidt, developer
  
  Hal Burgiss
- Ian Cummings
  Roland Rosenfeld
 
 Former Privoxy Team Members:
@@ -15,15 +14,17 @@ Former Privoxy Team Members:
  Johny Agotnes 
  Rodrigo Barbosa
  Moritz Barsnick
+ Ian Cummings
  Brian Dessent
  Jon Foster
  Karsten Hopp
  Alexander Lazic
  Daniel Leite
- Gábor Lipták
+ G bor Lipt k
  Adam Lock
  Guy Laroche
  Mark Martinec 
+ Justin McMurtry
  Andreas Oesterhelt
  Haroon Rafique
  Georg Sauthoff
@@ -44,7 +45,7 @@ alphabetical order):
  Reiner Buehl
  Andrew J. Caines
  Clifford Caoile
- Frédéric Crozat
+ Fr d ric Crozat
  Michael T. Davis
  Mattes Dolak 
  Peter E
@@ -53,7 +54,7 @@ alphabetical order):
  Dean Gaudet
  Stephen Gildea
  Daniel Griscom
- Felix Gröbert
+ Felix Gr bert
  Aaron Hamid
  Darel Henman
  Magnus Holmgren
@@ -68,8 +69,9 @@ alphabetical order):
  Jindrich Makovicka 
  David Mediavilla 
  Raphael Moll
+ Adam Piggott
  Roberto Ragusa
- Félix Rauch
+ F lix Rauch
  Maynard Riley
  Chung-chieh Shan
  Spinor S
@@ -78,7 +80,7 @@ alphabetical order):
  Peter Thoenen
  Martin Thomas
  Bobby G. Vinyard
- Jörg Weinmann 
+ J rg Weinmann 
  Darren Wiebe
  Anduin Withers
  Oliver Yeoh
@@ -88,8 +90,8 @@ Privoxy is based in part on code originally developed by:
 
  Junkbusters Corp.
  Anonymous Coders
- Ulrich Drepper
- Philip Hazel
+ Ulrich Drepper (strptime fallback)
+ Philip Hazel (PCRE)
 
 If we've missed you off this list, please let us know!
 
