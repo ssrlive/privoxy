@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.30 2007/11/04 15:16:40 hal9 Exp $
+ $Id: faq.sgml,v 2.31 2007/11/05 02:34:53 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.30 2007/11/04 15:16:40 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.31 2007/11/05 02:34:53 hal9 Exp $</pubdate>
 
 <!--
 
@@ -951,7 +951,11 @@ with a browser? Does that not raise security issues?</title>
  <ulink
  url="../user-manual/actions-file.html#FILTER"><literal>filter</literal>
  action</ulink> in one of the actions files. Filtering is automatically
- disabled for inappropriate MIME types.
+ disabled for inappropriate MIME types. Filters should
+ <emphasis>not</emphasis> be confused with <ulink
+ url="../user-manual/actions-file.html#BLOCK"><literal>blocks</literal></ulink>, which
+ is a completely different action, and is more typically used to block ads and
+ unwanted sites.
 </para>
 
 <para>
@@ -1411,10 +1415,11 @@ and thus avoid individual browser configuration?</title>
  &my-app; for various purposes and can easily be modified using any text
  editor. All the template pages are installed in a sub-directory appropriately
  named: <filename>templates</filename>.  Knowing something about HTML syntax
- will of course be helpful. You cannot rename any of these files, or create
- completely new templates, that is not possible. But you can change the page
- content to whatever you like. Be forewarned that these files are subject to
- being overwritten during upgrades, so be sure to save any customizations.
+ will of course be helpful.  Be forewarned that the default templates are
+ subject to being overwritten during upgrades. You can, however, create
+ completely new templates by specifying an alternate path for them in the main
+ <filename>config</filename>, see the <ulink
+ url="../user-manual/config.html#templdir">templdir</ulink> option. 
 </para>
 </sect2>
 
@@ -1471,8 +1476,8 @@ has to add extra time to browsing.</title>
  retrieved and displayed. The actual processing time required by
  <application>Privoxy</application> itself for each page, is relatively small
  in the overall scheme of things, and happens very quickly. This is typically
- more than offset by time saved not downloading and rendering ad images (if ad
- blocking is being used).
+ more than offset by time saved not downloading and rendering ad images and
+ other junk content (if ad blocking is being used).
 </para>
 
 <para>
@@ -1948,7 +1953,8 @@ secure is it? Do I need to take any special precautions?</title>
  url="http://config.privoxy.org/toggle">http://config.privoxy.org/toggle</ulink>.
  See the <ulink url="../user-manual/appendix.html#BOOKMARKLETS">Bookmarklets section</ulink> 
  of the <citetitle>User Manual</citetitle> for an easy way to access this 
- feature.
+ feature. Note that this is a feature that may need to be enabled in the main 
+ <filename>config</filename> file.
 </para>
 </sect2>
 
@@ -2277,7 +2283,9 @@ What can I do?</title>
 <para>
  First verify that it is indeed a <application>Privoxy</application> problem, 
  by toggling off <application>Privoxy</application> through <ulink
- url="http://config.privoxy.org/toggle">http://config.privoxy.org/toggle</ulink>,
+ url="http://config.privoxy.org/toggle">http://config.privoxy.org/toggle</ulink>
+ (the toggle feature may need to be enabled in the main
+ <filename>config</filename>),
  and then shift-reloading the problem page (i.e. holding down the shift key
  while clicking reload. Alternatively, flush your browser's disk and memory
  caches).
@@ -2762,6 +2770,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.31  2007/11/05 02:34:53  hal9
+Various changes in preparation for the upcoming release. Much yet to be done.
+
 Revision 2.30  2007/11/04 15:16:40  hal9
 Fix one silly typo.
 
