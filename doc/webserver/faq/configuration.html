@@ -212,14 +212,20 @@ TARGET="_top"
 >View &#38;
  change the current configuration</A
 >"</SPAN
-> from the menu.</P
+> from the menu. Note 
+ that this feature must be explicitly enabled in the main config file 
+ (see <A
+HREF="../user-manual/config.html#ENABLE-EDIT-ACTIONS"
+TARGET="_top"
+>enable-edit-actions</A
+>).</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN373"
+NAME="AEN374"
 >3.4. There are several different <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -595,7 +601,7 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > for multiple untrusted users (e.g. in
-  a LAN), you will probably want to make sure that the turn the web-based
+  a LAN), you will probably want to make sure that the the web-based
   editor and remote toggle features are <SPAN
 CLASS="QUOTE"
 >"off"</SPAN
@@ -644,7 +650,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN471"
+NAME="AEN472"
 >3.11. What is the <TT
 CLASS="FILENAME"
 >default.filter</TT
@@ -690,7 +696,23 @@ CLASS="LITERAL"
 >
  action</A
 > in one of the actions files. Filtering is automatically
- disabled for inappropriate MIME types.</P
+ disabled for inappropriate MIME types. Filters should
+ <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>not</I
+></SPAN
+> be confused with <A
+HREF="../user-manual/actions-file.html#BLOCK"
+TARGET="_top"
+><TT
+CLASS="LITERAL"
+>blocks</TT
+></A
+>, which
+ is a completely different action, and is more typically used to block ads and
+ unwanted sites.</P
 ><P
 > If you are familiar with regular expressions, and HTML, you can look at 
  the provided <TT
@@ -721,7 +743,14 @@ CLASS="FILENAME"
 HREF="http://config.privoxy.org/show-status"
 TARGET="_top"
 >web-based actions file editor</A
->.</P
+>
+ Note 
+ that the custom actions editor must be explicitly enabled in the main config file 
+ (see <A
+HREF="../user-manual/config.html#ENABLE-EDIT-ACTIONS"
+TARGET="_top"
+>enable-edit-actions</A
+>).&#13;</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -837,7 +866,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN514"
+NAME="AEN519"
 >3.13. Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></H3
 ><P
@@ -904,7 +933,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN531"
+NAME="AEN536"
 >3.14. Why would anybody want to see a checkerboard pattern?</A
 ></H3
 ><P
@@ -934,7 +963,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN537"
+NAME="AEN542"
 >3.15. I see some images being replaced with text
 instead of the checkerboard image. Why and how do I get rid of this?</A
 ></H3
@@ -1615,10 +1644,17 @@ CLASS="APPLICATION"
 CLASS="FILENAME"
 >templates</TT
 >.  Knowing something about HTML syntax
- will of course be helpful. You cannot rename any of these files, or create
- completely new templates, that is not possible. But you can change the page
- content to whatever you like. Be forewarned that these files are subject to
- being overwritten during upgrades, so be sure to save any customizations.</P
+ will of course be helpful.  Be forewarned that the default templates are
+ subject to being overwritten during upgrades. You can, however, create
+ completely new templates by specifying an alternate path for them in the main
+ <TT
+CLASS="FILENAME"
+>config</TT
+>, see the <A
+HREF="../user-manual/config.html#templdir"
+TARGET="_top"
+>templdir</A
+> option. </P
 ></DIV
 ><DIV
 CLASS="SECT2"

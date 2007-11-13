@@ -81,7 +81,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN1063"
+NAME="AEN1071"
 >5.1. I cannot connect to any websites. Or, I am getting
 <SPAN
 CLASS="QUOTE"
@@ -107,7 +107,7 @@ CLASS="APPLICATION"
  Turn on <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
-> logging and look at the logs to see what they say.</P
+> logging, and look at the logs to see what they say.</P
 ></LI
 ><LI
 ><P
@@ -160,7 +160,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN1086"
+NAME="AEN1094"
 >5.3. I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></H3
@@ -188,7 +188,8 @@ TARGET="_top"
  find the correct URL by looking at <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
-> logs.</P
+> logs
+ (you may need to enable logging in the main config file if its disabled).</P
 ><P
 > Below is a slightly modified real-life log snippet that originates with one 
  requested URL: <TT
@@ -294,7 +295,12 @@ CLASS="APPLICATION"
 HREF="http://config.privoxy.org/toggle"
 TARGET="_top"
 >http://config.privoxy.org/toggle</A
->,
+>
+ (the toggle feature may need to be enabled in the main
+ <TT
+CLASS="FILENAME"
+>config</TT
+>),
  and then shift-reloading the problem page (i.e. holding down the shift key
  while clicking reload. Alternatively, flush your browser's disk and memory
  caches).</P
@@ -308,7 +314,8 @@ TARGET="_top"
  and paste the full URL of the page in question into the prompt. See which
  actions are being applied to the URL, and which matches in which actions
  files are responsible for that. It might be helpful also to look at your logs
- for this site too, to see what else might be happening. Many sites are
+ for this site too, to see what else might be happening (note: logging may need
+ to be enabled in the main config file). Many sites are
  complex and require a number of related pages to help present their content.
  Look at what else might be used by the page in question, and what of that
  might be <SPAN
