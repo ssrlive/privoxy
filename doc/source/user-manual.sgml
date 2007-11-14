@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.41 2007/11/11 16:32:11 hal9 Exp $
+ $Id: user-manual.sgml,v 2.42 2007/11/12 03:32:40 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.41 2007/11/11 16:32:11 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.42 2007/11/12 03:32:40 hal9 Exp $</pubdate>
 
 <!--
 
@@ -455,25 +455,25 @@ How to install the binary packages depends on your operating system:
           linkend="server-header-tagger">server-header-tagger</link>
           and <link
           linkend="client-header-tagger">client-header-tagger</link>
-          that can be used to apply arbitrary <quote>tags</quote> to 
-          each request's headers. These <quote>tags</quote> can then
-          subsequently be used by other actions, greatly increasing 
-          &my-app;'s flexibity and selectivity. See <link
-          linkend="tag-pattern">tag patterns</link> for more on tags.
-
+          that can be used to create arbitrary <quote>tags</quote>
+          based on client and server headers.
+          These <quote>tags</quote> can then subsequently be used
+          to control the actions used for the current request,
+          greatly increasing &my-app;'s flexibity and selectivity. See <link
+          linkend="tag-pattern">tag patterns</link> for more information on tags.
    </para>
   </listitem>
 
   <listitem>
    <para>
-    Header filtering can be done with dedicated header filters now. As a result
+    Header filtering is done with dedicated header filters now. As a result
     the actions <quote>filter-client-headers</quote> and <quote>filter-server-headers</quote>
     that were introduced with <application>Privoxy 3.0.5</application> to apply
-    the content filters to the headers as, well have been removed again.
+    the content filters to the headers as well have been removed again.
     See the new actions <link
           linkend="server-header-filter">server-header-filter</link>
           and <link
-          linkend="client-header-filter">client-header-filter</link>.
+          linkend="client-header-filter">client-header-filter</link> for details.
    </para>
   </listitem>
   <listitem>
@@ -503,10 +503,10 @@ How to install the binary packages depends on your operating system:
         <para>
           <link
           linkend="accept-intercepted-requests">accept-intercepted-requests</link>
-          which will combine Privoxy with any packet filter to create an intercepting
-          proxy for HTTP/1.1 requests (and for HTTP/1.0 requests with Host
-          header set) so that explicitly setting the browser's proxy settings
-          is not necessary.
+          which allows to combine Privoxy with any packet filter to create an
+          intercepting proxy for HTTP/1.1 requests (and for HTTP/1.0 requests
+          with Host header set). This means clients can be forced to use
+          &my-app; even if their proxy settings are configured differently.
          </para>
        </listitem>
        <listitem>
@@ -515,7 +515,7 @@ How to install the binary packages depends on your operating system:
           linkend="templdir">templdir</link>
           to designate an alternate location for Privoxy's own CGI templates
           to make sure any locally customized templates aren't overwritten
-          during upgrades.         
+          during upgrades.
         </para>
        </listitem>
        </itemizedlist>
@@ -532,10 +532,11 @@ How to install the binary packages depends on your operating system:
 
   <listitem>
    <para>
-     The  <link
+     The <link
           linkend="forward-override">forward-override</link> action 
-     allows changing of the forwarding settings based on client headers like the
-     User-Agent, or the request origin.
+     allows changing of the forwarding settings through the actions files.
+     Combined with tags, this allows to choose the forwarder based on
+     client headers like the User-Agent, or the request origin.
   </para>
   </listitem>
 
@@ -550,7 +551,7 @@ How to install the binary packages depends on your operating system:
   <listitem>
    <para>
      <application>zlib</application> support is now available as a compile
-     time option for compressed documents.  
+     time option to filter compressed content. Patch provided by Wil Mahan.
    </para>
   </listitem>
     <listitem>
@@ -563,13 +564,13 @@ How to install the binary packages depends on your operating system:
   <listitem>
    <para>
     Include support for RFC 3253 so that <filename>Subversion</filename> works
-    with &my-app;.
+    with &my-app;. Patch provided by Petr Kadlec.
    </para>
   </listitem>
 
   <listitem>
    <para>
-     Logging can be turned on or off.
+     Logging can be completely turned off by not specifying a logfile directive.
    </para>
   </listitem>
 
@@ -738,6 +739,9 @@ How to install the binary packages depends on your operating system:
 -->
 
  </itemizedlist>
+</para>
+<para>
+ For a more detailed list of changes please have a look at the ChangeLog.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -5892,7 +5896,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
   <term>Typical use:</term>
   <listitem>
    <para>
-   Disable or disable filters based on the Content-Type header.
+   Enable or disable filters based on the Content-Type header.
    </para>
   </listitem>
  </varlistentry>
@@ -5954,7 +5958,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
   <listitem>
     <para>
      <screen>
-# Tag every request with the declared content type
+# Tag every request with the content type declared by the server
 {+server-header-tagger{content-type}}
 /
     </screen>
@@ -9113,6 +9117,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.42  2007/11/12 03:32:40  hal9
+ Updates for "What's New" and "Notes to Upgraders". Various other changes in
+ preparation for new release. User Manual is almost ready.
+
  Revision 2.41  2007/11/11 16:32:11  hal9
  This is primarily syncing What's New and Note to Upgraders sections with the many
  new features and changes (gleaned from memory but mostly from ChangeLog).
