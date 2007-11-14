@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.21 2007/10/30 19:03:41 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.22 2007/11/12 03:15:19 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -36,6 +36,7 @@ Current Privoxy Team:
  
  Hal Burgiss
  Roland Rosenfeld
+ Jörg Strohmayer
 <![%p-authors-formal;[
 </literallayout>
 
@@ -62,7 +63,6 @@ Current Privoxy Team:
  Haroon Rafique
  Georg Sauthoff
  Thomas Steudten
- Joerg Strohmayer
  Rodney Stromlund
  Sviatoslav Sviridov
  Sarantis Paskalis
@@ -85,7 +85,7 @@ Current Privoxy Team:
  Frédéric Crozat
  Michael T. Davis
  Mattes Dolak 
- Peter E
+ Peter E.
  Florian Effenberger
  Markus Elfring
  Dean Gaudet
@@ -95,10 +95,13 @@ Current Privoxy Team:
  Aaron Hamid
  Darel Henman
  Magnus Holmgren
+ Ralf Horstmann
+ Stefan Huehner 
  Peter Hyman
  Derek Jennings
  Petr Kadlec
  David Laight
+ Bert van Leeuwen
  Don Libes  
  Paul Lieverse
  Toby Lyward
@@ -106,32 +109,46 @@ Current Privoxy Team:
  Jindrich Makovicka 
  David Mediavilla 
  Raphael Moll
+ Amuro Namie
  Adam Piggott
+ Dan Price
+ Lee R.
  Roberto Ragusa
  Félix Rauch
  Maynard Riley
  Chung-chieh Shan
- Spinor S
+ Spinor S.
  Bart Schelstraete
  Oliver Stoeneberg
  Peter Thoenen
  Martin Thomas
- Bobby G. Vinyard
+ Song Weijia
  Jörg Weinmann 
  Darren Wiebe
+ Bobby G. Vinyard
  Anduin Withers
  Oliver Yeoh
  Jamie Zawinski
 </literallayout>
 
 <para>
- Privoxy is based in part on code originally developed by:
+ Privoxy is based in part on code originally developed by
+ Junkbusters Corp. and Anonymous Coders.
 </para>
 
-<literallayout>
- Junkbusters Corp.
- Anonymous Coders
- Ulrich Drepper (strptime fallback)
- Philip Hazel (PCRE)
-</literallayout>
+<para>
+ Privoxy heavily relies on Philip Hazel's PCRE.
+</para>
+
+<para>
+ The code to filter compressed content makes use of zlib
+ which is written by Jean-loup Gailly and Mark Adler.
+</para>
+
+<para>
+ On systems that lack snprintf(), Privoxy is using a version
+ written by Mark Martinec. On systems that lack strptime(),
+ Privoxy is using the one from the GNU C Library written
+ by Ulrich Drepper.
+</para>
 ]]>
