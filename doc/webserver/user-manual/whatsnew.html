@@ -97,28 +97,28 @@ HREF="actions-file.html#SERVER-HEADER-TAGGER"
 HREF="actions-file.html#CLIENT-HEADER-TAGGER"
 >client-header-tagger</A
 >
-          that can be used to apply arbitrary <SPAN
+          that can be used to create arbitrary <SPAN
 CLASS="QUOTE"
 >"tags"</SPAN
-> to 
-          each request's headers. These <SPAN
+>
+          based on client and server headers.
+          These <SPAN
 CLASS="QUOTE"
 >"tags"</SPAN
-> can then
-          subsequently be used by other actions, greatly increasing 
-          <SPAN
+> can then subsequently be used
+          to control the other actions used for the current request,
+          greatly increasing <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->'s flexibity and selectivity. See <A
+>'s flexibility and selectivity. See <A
 HREF="actions-file.html#TAG-PATTERN"
 >tag patterns</A
-> for more on tags.
-
+> for more information on tags.
    </P
 ></LI
 ><LI
 ><P
->    Header filtering can be done with dedicated header filters now. As a result
+>    Header filtering is done with dedicated header filters now. As a result
     the actions <SPAN
 CLASS="QUOTE"
 >"filter-client-headers"</SPAN
@@ -130,7 +130,7 @@ CLASS="QUOTE"
 CLASS="APPLICATION"
 >Privoxy 3.0.5</SPAN
 > to apply
-    the content filters to the headers as, well have been removed again.
+    content filters to the headers have been removed.
     See the new actions <A
 HREF="actions-file.html#SERVER-HEADER-FILTER"
 >server-header-filter</A
@@ -138,7 +138,7 @@ HREF="actions-file.html#SERVER-HEADER-FILTER"
           and <A
 HREF="actions-file.html#CLIENT-HEADER-FILTER"
 >client-header-filter</A
->.
+> for details.
    </P
 ></LI
 ><LI
@@ -178,10 +178,13 @@ HREF="config.html#SPLIT-LARGE-FORMS"
 HREF="config.html#ACCEPT-INTERCEPTED-REQUESTS"
 >accept-intercepted-requests</A
 >
-          which will combine Privoxy with any packet filter to create an intercepting
-          proxy for HTTP/1.1 requests (and for HTTP/1.0 requests with Host
-          header set) so that explicitly setting the browser's proxy settings
-          is not necessary.
+          which allows to combine Privoxy with any packet filter to create an
+          intercepting proxy for HTTP/1.1 requests (and for HTTP/1.0 requests
+          with Host header set). This means clients can be forced to use
+          <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> even if their proxy settings are configured differently.
          </P
 ></LI
 ><LI
@@ -190,9 +193,12 @@ HREF="config.html#ACCEPT-INTERCEPTED-REQUESTS"
 HREF="config.html#TEMPLDIR"
 >templdir</A
 >
-          to designate an alternate location for Privoxy's own CGI templates
-          to make sure any locally customized templates aren't overwritten
-          during upgrades.         
+          to designate an alternate location for <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>'s 
+          locally customized CGI templates so that
+          these are not overwritten during upgrades.         
         </P
 ></LI
 ></UL
@@ -203,19 +209,23 @@ HREF="config.html#TEMPLDIR"
 CLASS="LITERAL"
 >--pre-chroot-nslookup hostname</TT
 > to
-   intialize the resolver library before chroot'ing. On some systems this
+   initialize the resolver library before chroot'ing. On some systems this
    reduces the number of files that must be copied into the chroot tree.
    (Patch provided by Stephen Gildea)
    </P
 ></LI
 ><LI
 ><P
->     The  <A
+>     The <A
 HREF="actions-file.html#FORWARD-OVERRIDE"
 >forward-override</A
 > action 
-     allows changing of the forwarding settings based on client headers like the
-     User-Agent, or the request origin.
+     allows changing of the forwarding settings through the actions files.
+     Combined with tags, this allows to choose the forwarder based on
+     client headers like the <TT
+CLASS="LITERAL"
+>User-Agent</TT
+>, or the request origin.
   </P
 ></LI
 ><LI
@@ -233,7 +243,7 @@ HREF="actions-file.html#REDIRECT"
 CLASS="APPLICATION"
 >zlib</SPAN
 > support is now available as a compile
-     time option for compressed documents.  
+     time option to filter compressed content. Patch provided by Wil Mahan.
    </P
 ></LI
 ><LI
@@ -250,12 +260,12 @@ CLASS="FILENAME"
     with <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->.
+>. Patch provided by Petr Kadlec.
    </P
 ></LI
 ><LI
 ><P
->     Logging can be turned on or off.
+>     Logging can be completely turned off by not specifying a logfile directive.
    </P
 ></LI
 ><LI
@@ -267,11 +277,13 @@ CLASS="APPLICATION"
 ><LI
 ><P
 >     Many bugfixes, memory leaks addressed, code improvements, and logging 
-     improvments.
+     improvements.
    </P
 ></LI
 ></UL
 ></P
+><P
+> For a more detailed list of changes please have a look at the ChangeLog.</P
 ><DIV
 CLASS="SECT2"
 ><H2
@@ -359,8 +371,8 @@ CLASS="QUOTE"
     <SPAN
 CLASS="APPLICATION"
 >Privoxy 3.0.5</SPAN
-> to apply the content filters to
-    the headers as, well have been removed and replaced with new actions.
+> to apply content filters to
+    the headers  have been removed and replaced with new actions.
     See the <A
 HREF="whatsnew.html"
 >What's New section</A

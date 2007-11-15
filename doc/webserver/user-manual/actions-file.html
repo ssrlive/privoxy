@@ -259,7 +259,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN2145"
+NAME="AEN2149"
 ></A
 ><P
 ><B
@@ -528,7 +528,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2244"
+NAME="AEN2248"
 >8.1. Finding the Right Mix</A
 ></H2
 ><P
@@ -563,7 +563,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2251"
+NAME="AEN2255"
 >8.2. How to Edit</A
 ></H2
 ><P
@@ -575,7 +575,7 @@ TARGET="_top"
 >.
  Note: the config file option <A
 HREF="config.html#ENABLE-EDIT-ACTIONS"
->enale-edit-actions</A
+>enable-edit-actions</A
 > must be enabled for
  this to work. The editor allows both fine-grained control over every single
  feature on a per-URL basis, and easy choosing from wholesale sets of defaults
@@ -893,7 +893,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2342"
+NAME="AEN2346"
 >8.4.1. The Domain Pattern</A
 ></H3
 ><P
@@ -1117,7 +1117,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2413"
+NAME="AEN2417"
 >8.4.2. The Path Pattern</A
 ></H3
 ><P
@@ -1377,7 +1377,10 @@ CLASS="APPLICATION"
  can tell them apart from URL patterns. Everything after the colon
  including white space, is interpreted as a regular expression with
  path pattern syntax, except that tag patterns aren't left-anchored
- automatically (Privoxy doesn't silently add a <SPAN
+ automatically (<SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> doesn't silently add a <SPAN
 CLASS="QUOTE"
 >"^"</SPAN
 >,
@@ -1413,13 +1416,18 @@ CLASS="QUOTE"
  tags can be used to activate other tagger actions, as long as these other
  taggers look for headers that haven't already be parsed.</P
 ><P
-> For example you could tag client requests which use the POST method,
- use this tag to activate another tagger that adds a tag if cookies
- are send, and then block based on the cookie tag. However if you'd
- reverse the position of the described taggers, and activated the method
- tagger based on the cookie tagger, no method tags would be created.
+> For example you could tag client requests which use the
+ <TT
+CLASS="LITERAL"
+>POST</TT
+> method,
+ then use this tag to activate another tagger that adds a tag if cookies
+ are sent, and then use a block action based on the cookie tag. This allows
+ the outcome of one action, to be input into a subsequent action. However if
+ you'd reverse the position of the described taggers, and activated the
+ method tagger based on the cookie tagger, no method tags would be created.
  The method tagger would look for the request line, but at the time
- the cookie tag is created the request line has already been parsed.</P
+ the cookie tag is created, the request line has already been parsed.</P
 ><P
 > While this is a limitation you should be aware of, this kind of
  indirection is seldom needed anyway and even the example doesn't
@@ -6531,7 +6539,7 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->   Disable or disable filters based on the Content-Type header.
+>   Enable or disable filters based on the Content-Type header.
    </P
 ></DD
 ><DT
@@ -6601,7 +6609,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-># Tag every request with the declared content type
+># Tag every request with the content type declared by the server
 {+server-header-tagger{content-type}}
 /
     </PRE
@@ -7156,7 +7164,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4217"
+NAME="AEN4223"
 >8.5.39. Summary</A
 ></H3
 ><P
@@ -7461,7 +7469,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4282"
+NAME="AEN4288"
 >8.7.1. default.action</A
 ></H3
 ><P
@@ -8392,7 +8400,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4469"
+NAME="AEN4475"
 >8.7.2. user.action</A
 ></H3
 ><P

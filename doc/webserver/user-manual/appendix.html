@@ -745,7 +745,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN5351"
+NAME="AEN5359"
 >14.2. Privoxy's Internal Pages</A
 ></H2
 ><P
@@ -791,7 +791,7 @@ CLASS="APPLICATION"
    Privoxy main page: 
   </P
 ><A
-NAME="AEN5365"
+NAME="AEN5373"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -824,7 +824,7 @@ CLASS="APPLICATION"
     editing of actions files:
   </P
 ><A
-NAME="AEN5373"
+NAME="AEN5381"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -844,7 +844,7 @@ TARGET="_top"
     Show the source code version numbers:
   </P
 ><A
-NAME="AEN5378"
+NAME="AEN5386"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -864,7 +864,7 @@ TARGET="_top"
    Show the browser's request headers:
   </P
 ><A
-NAME="AEN5383"
+NAME="AEN5391"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -884,7 +884,7 @@ TARGET="_top"
    Show which actions apply to a URL and why:
   </P
 ><A
-NAME="AEN5388"
+NAME="AEN5396"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -901,14 +901,22 @@ TARGET="_top"
 ><LI
 ><P
 >  
-   Toggle Privoxy on or off. In this case, <SPAN
+   Toggle Privoxy on or off. This feature can be turned off/on in the main 
+   <TT
+CLASS="FILENAME"
+>config</TT
+> file. When toggled <SPAN
+CLASS="QUOTE"
+>"off"</SPAN
+>, <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
-> continues 
-   to run, but only as a pass-through proxy, with no actions taking place:
+>
+   continues to run, but only as a pass-through proxy, with no actions taking
+   place:
   </P
 ><A
-NAME="AEN5394"
+NAME="AEN5404"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -925,7 +933,7 @@ TARGET="_top"
 >   Short cuts. Turn off, then on: 
   </P
 ><A
-NAME="AEN5398"
+NAME="AEN5408"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -939,7 +947,7 @@ TARGET="_top"
    </P
 ></BLOCKQUOTE
 ><A
-NAME="AEN5401"
+NAME="AEN5411"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -1369,7 +1377,15 @@ HREF="appendix.html#BOOKMARKLETS"
 >the Bookmarklets</A
 > section on a quick 
  and easy way to do this (be sure to flush caches afterward!). Looking at the 
- logs is a good idea too.</P
+ logs is a good idea too. (Note that both the toggle feature and logging are 
+ enabled via <TT
+CLASS="FILENAME"
+>config</TT
+> file settings, and may need to be 
+ turned <SPAN
+CLASS="QUOTE"
+>"on"</SPAN
+>.)</P
 ><P
 > Another easy troubleshooting step to try is if you have done any
  customization of your installation, revert back to the installed
