@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.154 2007/02/07 11:52:40 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.155 2007/09/22 16:23:25 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -849,26 +849,31 @@ dok-pdf: dok-shtml
 # NOTE: This will require some hand editing. The new file is outputted 
 # as config.new so that problem sections can be compared to previous
 # version. This is hardcored to w3m for html/text conversion. Also, 
-# requires the shell util 'fmt'.
+# requires the shell util 'fmt'. 2007-11-14: note the perl below dies 
+# with perl 5.8.8. The same code pasted into a free standing script, 
+# without the makefile-isms, works fine.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
 	w3m -dump __tmp.html |fmt -w 70 > ../../config.new && $(RM) -r __tmp.*
-	$(PERL) -pi.bak -e 's/^1\. \@\@TITLE\@\@/     /i;\
-                     /^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;\
-                     $$header_len=0 unless $$hit_header;\
-                     if ($$hit_header) {\
-                        print "#  ";\
-                        for ($$i=1; $$i < $$header_len; $$i++) {print "=";}\
-                        print "\n";\
-                     };\
-                     $$hit_header=0;\
-                     $$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;\
-                     $$header_len = length($$_);\
-				 s/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;\
-                     s/^.*$$// if $$hit_option;\
-                     $$hit_option=0;\
-                     s/^\n//;  s/^#\s*-{20,}//; s/ *$$//;\
-                     $$hit_option=1 if s/^#\s+@@//;'   config.new
+	$(PERL)  -pi.bak -e 's/^1\. \@\@TITLE\@\@/     /i;\
+	         /^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;\
+	           my $$hit_header;\
+	           $$header_len=0 unless $$hit_header;\
+	           if ($$hit_header) {\
+	              print "#  ";\
+	              for ($$i=1; $$i < $$header_len; $$i++) {print "=";}\
+	              print "\n";\
+	           };\
+	           my $$hit_header;\
+	           $$hit_header=0;\
+	           $$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;\
+	           $$header_len = length($$_);\
+			 s/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;\
+	           s/^.*$$// if $$hit_option;\
+	           $$hit_option=0;\
+	           s/^\n//;  s/^#\s*-{20,}//; s/ *$$//;\
+	           $$hit_option=1 if s/^#\s+@@//;'   config.new
+
 	$(RM) *.bak
 	@$(ECHO)  "****************************************************"
 	@$(ECHO)  "The output file is config.new."
@@ -1359,6 +1364,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.155  2007/09/22 16:23:25  fabiankeil
+# Update copyright line.
+#
 # Revision 1.154  2007/02/07 11:52:40  fabiankeil
 # Fix suse-dist as described in BR#1654052.
 # (I didn't test it, but it's done the same
