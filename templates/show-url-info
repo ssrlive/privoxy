@@ -27,6 +27,11 @@
 #
 # Revisions   :
 #    $Log: show-url-info,v $
+#    Revision 1.20  2007/07/21 12:19:50  fabiankeil
+#    If show-url-info is called with an URL that Privoxy
+#    would reject as invalid, don't show unresolved forwarding
+#    variables, "final matches" or claim the site's secure.
+#
 #    Revision 1.19  2007/02/10 16:55:22  fabiankeil
 #    - Show forwarding settings on the show-url-info page
 #    - Fix some HTML syntax errors.
@@ -165,7 +170,7 @@
         <p>
           Requests for <a href="@url@">@url@</a> will be <!--
 
-# "Interesting" formatting to prevent white space at the end of the sentence..
+# "Interesting" formatting to prevent white space at the end of the sentence.
 
           @if-no-forwarder-start -->
 
@@ -198,11 +203,8 @@
       <td class="box">
 <!-- @if-https-start -->
         <h2>NOTE:</h2>
-        <p>This is a secure (https:) URL, so the part after the "/" is ignored.
-          This is a feature of the HTTPS protocol - the exact address of the
-          page you're visiting is hidden.  Privoxy can only detect the host
-          part of the URL.</p>
-        <p>&nbsp;</p>
+        <p>This is a HTTPS URL, so the part after the "/" is ignored
+          as Privoxy doesn't see the path for real HTTPS requests either.</p>
 <!-- if-https-end@ -->
 <!-- if-valid-url-end@ -->
         <h2>Matches for <a href="@url@">@url@</a>:</h2>
