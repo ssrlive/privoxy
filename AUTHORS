@@ -8,6 +8,7 @@ Current Privoxy Team:
  
  Hal Burgiss
  Roland Rosenfeld
+ Jörg Strohmayer
 
 Former Privoxy Team Members:
 
@@ -20,7 +21,7 @@ Former Privoxy Team Members:
  Karsten Hopp
  Alexander Lazic
  Daniel Leite
- G bor Lipt k
+ Gábor Lipták
  Adam Lock
  Guy Laroche
  Mark Martinec 
@@ -29,7 +30,6 @@ Former Privoxy Team Members:
  Haroon Rafique
  Georg Sauthoff
  Thomas Steudten
- Joerg Strohmayer
  Rodney Stromlund
  Sviatoslav Sviridov
  Sarantis Paskalis
@@ -45,23 +45,26 @@ alphabetical order):
  Reiner Buehl
  Andrew J. Caines
  Clifford Caoile
- Fr d ric Crozat
+ Frédéric Crozat
  Michael T. Davis
  Mattes Dolak 
- Peter E
+ Peter E.
  Florian Effenberger
  Markus Elfring
  Dean Gaudet
  Stephen Gildea
  Daniel Griscom
- Felix Gr bert
+ Felix Gröbert
  Aaron Hamid
  Darel Henman
  Magnus Holmgren
+ Ralf Horstmann
+ Stefan Huehner 
  Peter Hyman
  Derek Jennings
  Petr Kadlec
  David Laight
+ Bert van Leeuwen
  Don Libes  
  Paul Lieverse
  Toby Lyward
@@ -69,29 +72,38 @@ alphabetical order):
  Jindrich Makovicka 
  David Mediavilla 
  Raphael Moll
+ Amuro Namie
  Adam Piggott
+ Dan Price
+ Lee R.
  Roberto Ragusa
- F lix Rauch
+ Félix Rauch
  Maynard Riley
  Chung-chieh Shan
- Spinor S
+ Spinor S.
  Bart Schelstraete
  Oliver Stoeneberg
  Peter Thoenen
  Martin Thomas
- Bobby G. Vinyard
- J rg Weinmann 
+ Song Weijia
+ Jörg Weinmann
  Darren Wiebe
+ Bobby G. Vinyard
  Anduin Withers
  Oliver Yeoh
  Jamie Zawinski
 
-Privoxy is based in part on code originally developed by:
+Privoxy is based in part on code originally developed by Junkbusters Corp. and
+Anonymous Coders.
 
- Junkbusters Corp.
- Anonymous Coders
- Ulrich Drepper (strptime fallback)
- Philip Hazel (PCRE)
+Privoxy heavily relies on Philip Hazel's PCRE.
+
+The code to filter compressed content makes use of zlib which is written by
+Jean-loup Gailly and Mark Adler.
+
+On systems that lack snprintf(), Privoxy is using a version written by Mark
+Martinec. On systems that lack strptime(), Privoxy is using the one from the
+GNU C Library written by Ulrich Drepper.
 
 If we've missed you off this list, please let us know!
 

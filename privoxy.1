@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "12 November 2007" "Privoxy 3.0.7 UNRELEASED" ""
+.TH "PRIVOXY" "1" "14 November 2007" "Privoxy 3.0.7 beta" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
@@ -73,8 +73,10 @@ Privoxy is based on Internet Junkbuster (tm).
 .SH "INSTALLATION AND USAGE"
 .PP
 Browsers can either be individually configured to use
-\fBPrivoxy\fR as a HTTP proxy, or \fBPrivoxy\fR can
-be set to act as an intercepting proxy (see \fIconfig\fR).  The default setting is  for
+\fBPrivoxy\fR as a HTTP proxy (recommended),
+or \fBPrivoxy\fR can be combined with a packet
+filter to build an intercepting proxy
+(see \fIconfig\fR).  The default setting is  for
 localhost,  on port  8118 (configurable in the main config file).  To set the
 HTTP proxy in Netscape and Mozilla, go through:  \fBEdit\fR;
 \fBPreferences\fR;  \fBAdvanced\fR;
@@ -150,67 +152,18 @@ configuration might look like:
  ## otherwise with the '+' operator.
 
 { \\
--add-header \\
--block \\
--client-header-filter{hide-tor-exit-notation} \\
--content-type-overwrite \\
--crunch-client-header \\
--crunch-if-none-match \\
--crunch-outgoing-cookies \\
--crunch-incoming-cookies \\
--crunch-server-header \\
--deanimate-gifs \\
--downgrade-http-version \\
--fast-redirects \\
--filter{js-annoyances} \\
--filter{js-events} \\
--filter{html-annoyances} \\
--filter{content-cookies} \\
--filter{refresh-tags} \\
--filter{unsolicited-popups} \\
--filter{all-popups} \\
--filter{img-reorder} \\
--filter{banners-by-size} \\
--filter{banners-by-link} \\
--filter{webbugs} \\
--filter{tiny-textforms} \\
--filter{jumping-windows} \\
--filter{frameset-borders} \\
--filter{demoronizer} \\
--filter{shockwave-flash} \\
--filter{quicktime-kioskmode} \\
--filter{fun} \\
--filter{crude-parental} \\
--filter{ie-exploits} \\
--filter{site-specifics} \\
--filter{google} \\
--filter{yahoo} \\
--filter{msn} \\
--filter{blogspot} \\
--filter{no-ping} \\
--force-text-mode \\
--handle-as-empty-document \\
--handle-as-image \\
--hide-accept-language \\
--hide-content-disposition \\
--hide-if-modified-since \\
++deanimate-gifs{last} \\
++filter{refresh-tags} \\
++filter{img-reorder} \\
++filter{banners-by-size} \\
++filter{webbugs} \\
++filter{jumping-windows} \\
++filter{ie-exploits} \\
 +hide-forwarded-for-headers \\
 +hide-from-header{block} \\
--hide-referrer \\
--hide-user-agent \\
--inspect-jpegs \\
--kill-popups \\
--limit-connect \\
--overwrite-last-modified \\
--prevent-compression \\
--redirect \\
--send-vanilla-wafer \\
--send-wafer \\
--server-header-filter{xml-to-html} \\
--server-header-filter{html-to-xml} \\
--session-cookies-only \\
++hide-referrer{conditional-block} \\
++session-cookies-only \\
 +set-image-blocker{pattern} \\
--treat-forbidden-connects-like-blocks \\
 }
 / # '/' Match *all* URL patterns
 
@@ -268,7 +221,7 @@ narrowly defined exceptions:
 
  # Replace example.com's style sheet with one of my choosing
  { +redirect{http://localhost/css-replacements/example.com.css} }
-  example.com/stylesheet.css
+  .example.com/stylesheet.css
 .fi
 .PP
 See the comments in the configuration files themselves, or the 
@@ -305,7 +258,7 @@ config file changes by \fBSIGHUP\fR -- it will detect them
 automatically. 
 .SH "NOTES"
 .PP
-This is a UNRELEASED version of \fBPrivoxy\fR. Not 
+This is a beta version of \fBPrivoxy\fR. Not 
 all features are well tested.
 .PP
 Please see the \fIUser Manual\fR on how to contact the
@@ -364,6 +317,7 @@ the \fBPrivoxy\fR developer manual.
  
  Hal Burgiss
  Roland Rosenfeld
+ Jörg Strohmayer
 .fi
 .SH "COPYRIGHT AND LICENSE"
 .SS "COPYRIGHT"
