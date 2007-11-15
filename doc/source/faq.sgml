@@ -9,7 +9,7 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.7">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.31 2007/11/05 02:34:53 hal9 Exp $
+ $Id: faq.sgml,v 2.32 2007/11/13 03:03:42 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.31 2007/11/05 02:34:53 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.32 2007/11/13 03:03:42 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2597,7 +2597,7 @@ Why?</title>
 </para>
 <para>
  On the other hand, if you use non-Microsoft products, and you occasionally 
- notice wierd characters on pages, you might want to try it.
+ notice weird characters on pages, you might want to try it.
 </para>
 </sect2>
 
@@ -2770,6 +2770,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.32  2007/11/13 03:03:42  hal9
+Various changes to reflect new features and revised configuration for the
+upcoming release.
+
 Revision 2.31  2007/11/05 02:34:53  hal9
 Various changes in preparation for the upcoming release. Much yet to be done.
 

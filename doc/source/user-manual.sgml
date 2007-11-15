@@ -12,7 +12,7 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.7">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.42 2007/11/12 03:32:40 hal9 Exp $
+ $Id: user-manual.sgml,v 2.43 2007/11/14 18:45:39 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.42 2007/11/12 03:32:40 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.43 2007/11/14 18:45:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -458,8 +458,8 @@ How to install the binary packages depends on your operating system:
           that can be used to create arbitrary <quote>tags</quote>
           based on client and server headers.
           These <quote>tags</quote> can then subsequently be used
-          to control the actions used for the current request,
-          greatly increasing &my-app;'s flexibity and selectivity. See <link
+          to control the other actions used for the current request,
+          greatly increasing &my-app;'s flexibility and selectivity. See <link
           linkend="tag-pattern">tag patterns</link> for more information on tags.
    </para>
   </listitem>
@@ -469,7 +469,7 @@ How to install the binary packages depends on your operating system:
     Header filtering is done with dedicated header filters now. As a result
     the actions <quote>filter-client-headers</quote> and <quote>filter-server-headers</quote>
     that were introduced with <application>Privoxy 3.0.5</application> to apply
-    the content filters to the headers as well have been removed again.
+    content filters to the headers have been removed.
     See the new actions <link
           linkend="server-header-filter">server-header-filter</link>
           and <link
@@ -513,9 +513,9 @@ How to install the binary packages depends on your operating system:
         <para>
           <link
           linkend="templdir">templdir</link>
-          to designate an alternate location for Privoxy's own CGI templates
-          to make sure any locally customized templates aren't overwritten
-          during upgrades.
+          to designate an alternate location for &my-app;'s 
+          locally customized CGI templates so that
+          these are not overwritten during upgrades.         
         </para>
        </listitem>
        </itemizedlist>
@@ -536,7 +536,7 @@ How to install the binary packages depends on your operating system:
           linkend="forward-override">forward-override</link> action 
      allows changing of the forwarding settings through the actions files.
      Combined with tags, this allows to choose the forwarder based on
-     client headers like the User-Agent, or the request origin.
+     client headers like the <literal>User-Agent</literal>, or the request origin.
   </para>
   </listitem>
 
@@ -585,7 +585,7 @@ How to install the binary packages depends on your operating system:
   <listitem>
    <para>
      Many bugfixes, memory leaks addressed, code improvements, and logging 
-     improvments.
+     improvements.
    </para>
   </listitem>
 
@@ -820,8 +820,8 @@ How to install the binary packages depends on your operating system:
    <para>
     The <quote>filter-client-headers</quote> and
     <quote>filter-server-headers</quote> actions that were introduced with
-    <application>Privoxy 3.0.5</application> to apply the content filters to
-    the headers as, well have been removed and replaced with new actions.
+    <application>Privoxy 3.0.5</application> to apply content filters to
+    the headers  have been removed and replaced with new actions.
     See the <link
           linkend="whatsnew">What's New section</link> above.
    </para>
@@ -2294,7 +2294,7 @@ for details.
  using our browser-based editor, which can be reached from <ulink
  url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
  Note: the config file option <link
- linkend="enable-edit-actions">enale-edit-actions</link> must be enabled for
+ linkend="enable-edit-actions">enable-edit-actions</link> must be enabled for
  this to work. The editor allows both fine-grained control over every single
  feature on a per-URL basis, and easy choosing from wholesale sets of defaults
  like <quote>Cautious</quote>, <quote>Medium</quote> or
@@ -2679,7 +2679,7 @@ for details.
  can tell them apart from URL patterns. Everything after the colon
  including white space, is interpreted as a regular expression with
  path pattern syntax, except that tag patterns aren't left-anchored
- automatically (Privoxy doesn't silently add a <quote>^</quote>,
+ automatically (&my-app; doesn't silently add a <quote>^</quote>,
  you have to do it yourself if you need it).
 </para>
 
@@ -2705,13 +2705,15 @@ for details.
 </para>
 
 <para>
- For example you could tag client requests which use the POST method,
- use this tag to activate another tagger that adds a tag if cookies
- are send, and then block based on the cookie tag. However if you'd
- reverse the position of the described taggers, and activated the method
- tagger based on the cookie tagger, no method tags would be created.
+ For example you could tag client requests which use the
+ <literal>POST</literal> method,
+ then use this tag to activate another tagger that adds a tag if cookies
+ are sent, and then use a block action based on the cookie tag. This allows
+ the outcome of one action, to be input into a subsequent action. However if
+ you'd reverse the position of the described taggers, and activated the
+ method tagger based on the cookie tagger, no method tags would be created.
  The method tagger would look for the request line, but at the time
- the cookie tag is created the request line has already been parsed.
+ the cookie tag is created, the request line has already been parsed.
 </para>
 
 <para>
@@ -7097,7 +7099,7 @@ stupid-server.example.com/</screen>
  <literal><link linkend="client-header-tagger">client-header-tagger</link></literal>
  and
  <literal><link linkend="server-header-tagger">server-header-tagger</link></literal>.
- Taggers and filters use the same syntax in the filter files, the differnce
+ Taggers and filters use the same syntax in the filter files, the difference
  is that taggers don't modify the text they are filtering, but use a rewritten
  version of the filtered text as tag. The tags can then be used to change the
  applying actions through sections with <link linkend="tag-pattern">tag-patterns</link>.
@@ -9117,6 +9119,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.43  2007/11/14 18:45:39  fabiankeil
+ - Mention some more contributors in the "New in this Release" list.
+ - Minor rewordings.
+
  Revision 2.42  2007/11/12 03:32:40  hal9
  Updates for "What's New" and "Notes to Upgraders". Various other changes in
  preparation for new release. User Manual is almost ready.
