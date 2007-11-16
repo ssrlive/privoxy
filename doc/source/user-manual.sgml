@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.43 2007/11/14 18:45:39 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.44 2007/11/15 03:30:20 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.43 2007/11/14 18:45:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.44 2007/11/15 03:30:20 hal9 Exp $</pubdate>
 
 <!--
 
@@ -210,7 +210,7 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-deb"><title>Debian</title>
+<sect3 id="installation-deb"><title>Debian and Ubuntu</title>
 <para>
  DEBs can be installed with <literal>apt-get install privoxy</literal>,
  and will use <filename>/etc/privoxy</filename> for the location of 
@@ -1164,6 +1164,19 @@ How to install the binary packages depends on your operating system:
   </listitem> 
 
 </itemizedlist>
+</para>
+
+<para>
+ Advanced users will eventually want to explore &my-app;
+ <literal><link linkend="filter">filters</link></literal> as well. Filters 
+ are very different from <literal><link
+ linkend="block">blocks</link></literal>.
+ A <quote>block</quote> blocks a site, page, or unwanted contented. Filters
+ are a way of filtering or modifying what is actually on the page. An example
+ filter usage: a text replacement of <quote>no-no</quote> for
+ <quote>nasty-word</quote>. That is a very simple example. This process can be
+ used for ad blocking, but it is more in the realm of advanced usage and has
+ some pitfalls to be wary off.
 </para>
 
 <para>
@@ -9084,8 +9097,8 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  <emphasis>Remember to flush caches!</emphasis> Note that the 
  <literal>mail.google</literal> reference lacks the TLD portion (e.g. 
- <quote>.com</quote>. This will effectively match any TLD with 
- <literal>google</literal> in it, such as <literal>mail.google.de</literal>, 
+ <quote>.com</quote>). This will effectively match any TLD with 
+ <literal>google</literal> in it, such as <literal>mail.google.de.</literal>, 
  just as an example.
 </para>
 <para> 
@@ -9119,6 +9132,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.44  2007/11/15 03:30:20  hal9
+ Results of spell check.
+
  Revision 2.43  2007/11/14 18:45:39  fabiankeil
  - Mention some more contributors in the "New in this Release" list.
  - Minor rewordings.
