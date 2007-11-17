@@ -2,7 +2,7 @@ Privoxy 3.0.7 User Manual
 
 [ Copyright   2001 - 2007 by Privoxy Developers ]
 
-$Id: user-manual.sgml,v 2.44 2007/11/15 03:30:20 hal9 Exp $
+$Id: user-manual.sgml,v 2.46 2007/11/17 17:24:44 fabiankeil Exp $
 
 The Privoxy User Manual gives users information on how to install, configure
 and use Privoxy.
@@ -32,7 +32,7 @@ Table of Contents
     2.1. Binary Packages
 
         2.1.1. Red Hat and Fedora RPMs
-        2.1.2. Debian
+        2.1.2. Debian and Ubuntu
         2.1.3. Windows
         2.1.4. Solaris
         2.1.5. OS/2
@@ -307,7 +307,7 @@ remove Junkbuster automatically if found, before installing Privoxy.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-2.1.2. Debian
+2.1.2. Debian and Ubuntu
 
 DEBs can be installed with apt-get install privoxy, and will use /etc/privoxy
 for the location of configuration files.
@@ -813,6 +813,13 @@ handle-as-empty-document,and set-image-blocker:
 
        http://<URL> - A redirect to any image anywhere of the user's choosing
     (advanced usage).
+
+Advanced users will eventually want to explore Privoxy filters as well. Filters
+are very different from blocks. A "block" blocks a site, page, or unwanted
+contented. Filters are a way of filtering or modifying what is actually on the
+page. An example filter usage: a text replacement of "no-no" for "nasty-word".
+That is a very simple example. This process can be used for ad blocking, but it
+is more in the realm of advanced usage and has some pitfalls to be wary off.
 
 The quickest way to adjust any of these settings is with your browser through
 the special Privoxy editor at http://config.privoxy.org/show-status (shortcut:
@@ -5137,85 +5144,31 @@ can be partly or wholly overridden by later matches further down this file, or
 in user.action, but it will still be largely responsible for your overall
 browsing experience.
 
-Again, at the start of matching, all actions are disabled, so there is no real
-need to disable any actions here, but we will do that nonetheless, to have a
-complete listing for your reference. (Remember: a "+" preceding the action name
-enables the action, a "-" disables!). Also note how this long line has been
-made more readable by splitting it into multiple lines with line continuation.
+Again, at the start of matching, all actions are disabled, so there is no need
+to disable any actions here. (Remember: a "+" preceding the action name enables
+the action, a "-" disables!). Also note how this long line has been made more
+readable by splitting it into multiple lines with line continuation.
 
 ##########################################################################
 # "Defaults" section:
 ##########################################################################
  { \
- -add-header \
- -client-header-filter{hide-tor-exit-notation} \
- -block \
- -content-type-overwrite \
- -crunch-client-header \
- -crunch-if-none-match \
- -crunch-incoming-cookies \
- -crunch-server-header \
- -crunch-outgoing-cookies \
  +deanimate-gifs \
- -downgrade-http-version \
- -fast-redirects{check-decoded-url} \
- -filter{js-annoyances} \
- -filter{js-events} \
  +filter{html-annoyances} \
- -filter{content-cookies} \
  +filter{refresh-tags} \
- -filter{unsolicited-popups} \
- -filter{all-popups} \
- -filter{img-reorder} \
- -filter{banners-by-size} \
- -filter{banners-by-link} \
  +filter{webbugs} \
- -filter{tiny-textforms} \
- -filter{jumping-windows} \
- -filter{frameset-borders} \
- -filter{demoronizer} \
- -filter{shockwave-flash} \
- -filter{quicktime-kioskmode} \
- -filter{fun} \
- -filter{crude-parental} \
  +filter{ie-exploits} \
- -filter{google} \
- -filter{yahoo} \
- -filter{msn} \
- -filter{blogspot} \
- -filter{no-ping} \
- -force-text-mode \
- -handle-as-empty-document \
- -handle-as-image \
- -hide-accept-language \
- -hide-content-disposition \
- -hide-if-modified-since \
  +hide-forwarded-for-headers \
  +hide-from-header{block} \
  +hide-referrer{forge} \
- -hide-user-agent \
- -inspect-jpegs \
- -kill-popups \
- -limit-connect \
  +prevent-compression \
- -overwrite-last-modified \
- -redirect \
- -send-vanilla-wafer \
- -send-wafer \
- -server-header-filter{xml-to-html} \
- -server-header-filter{html-to-xml} \
  +session-cookies-only \
  +set-image-blocker{pattern} \
- -treat-forbidden-connects-like-blocks \
  }
  / # forward slash will match *all* potential URL patterns.
 
 
-The default behavior is now set. Note that some actions, like not hiding the
-user agent, are part of a "general policy" that applies universally and won't
-get any exceptions defined later. Other choices, like not blocking (which is
-understandably the default!) need exceptions, i.e. we need to specify
-explicitly what we want to block in later sections.
+The default behavior is now set.
 
 The first of our specialized sections is concerned with "fragile" sites, i.e.
 sites that require minimum interference, because they are either very complex
@@ -5407,7 +5360,7 @@ and you'll probably want to install updated versions from time to time.
 So let's look at a few examples of things that one might typically do in
 user.action:
 
-# My user.action file. <fred@foobar.com>
+# My user.action file. <fred@example.com>
 
 
 As aliases are local to the actions file that they are defined in, you can't
@@ -5488,7 +5441,7 @@ general rules as set in default.action anyway:
 
 { +block }
  www.example.com/nasty-ads/sponsor\.gif
- another.popular.site.net/more/junk/here/
+ another.example.net/more/junk/here/
 
 
 The URLs of dynamically generated banners, especially from large banner farms,
@@ -5520,8 +5473,7 @@ misbehave, and add those to our personalized list of troublemakers:
 
 
 You like the "fun" text replacements in default.filter, but it is disabled in
-the distributed actions file. (My colleagues on the team just don't have a
-sense of humour, that's why! ;-). So you'd like to turn it on in your private,
+the distributed actions file. So you'd like to turn it on in your private,
 update-safe config, once and for all:
 
 { +filter{fun} }
@@ -5575,7 +5527,7 @@ defined, they can then be invoked as an "action".
 Privoxy supports three different filter actions: filter to rewrite the content
 that is send to the client, client-header-filter to rewrite headers that are
 send by the client, and server-header-filter to rewrite headers that are send
-by the server, and
+by the server.
 
 Privoxy also supports two tagger actions: client-header-tagger and
 server-header-tagger. Taggers and filters use the same syntax in the filter
@@ -5584,20 +5536,23 @@ but use a rewritten version of the filtered text as tag. The tags can then be
 used to change the applying actions through sections with tag-patterns.
 
 Multiple filter files can be defined through the filterfile config directive.
-The filters as supplied by the developers will be found in default.filter. It
-is recommended that any locally defined or modified filters go in a separately
+The filters as supplied by the developers are located in default.filter. It is
+recommended that any locally defined or modified filters go in a separately
 defined file such as user.filter.
 
-Command tasks for content filters are to eliminate common annoyances in HTML
-and JavaScript, such as pop-up windows, exit consoles, crippled windows without
+Common tasks for content filters are to eliminate common annoyances in HTML and
+JavaScript, such as pop-up windows, exit consoles, crippled windows without
 navigation tools, the infamous <BLINK> tag etc, to suppress images with certain
 width and height attributes (standard banner sizes or web-bugs), or just to
 have fun.
 
-Content filtering works on any text-based document type, including HTML,
-JavaScript, CSS etc. (all text/* MIME types, except text/plain). Substitutions
-are made at the source level, so if you want to "roll your own" filters, you
-should first be familiar with HTML syntax, and, of course, regular expressions.
+Enabled content filters are applied to any content whose "Content Type" header
+is recognised as a sign of text-based content, with the exception of text/
+plain. Use the force-text-mode action to also filter other content.
+
+Substitutions are made at the source level, so if you want to "roll your own"
+filters, you should first be familiar with HTML syntax, and, of course, regular
+expressions.
 
 Just like the actions files, the filter file is organized in sections, which
 are called filters here. Each filter consists of a heading line, that starts
@@ -7082,8 +7037,8 @@ to cause trouble. This can be used as a last resort for problem sites.
 
 
 Remember to flush caches! Note that the mail.google reference lacks the TLD
-portion (e.g. ".com". This will effectively match any TLD with google in it,
-such as mail.google.de, just as an example.
+portion (e.g. ".com"). This will effectively match any TLD with google in it,
+such as mail.google.de., just as an example.
 
 If this still does not work, you will have to go through the remaining actions
 one by one to find which one(s) is causing the problem.

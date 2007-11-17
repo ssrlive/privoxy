@@ -116,7 +116,7 @@ HREF="actions-file.html#SERVER-HEADER-FILTER"
 >server-header-filter</A
 ></TT
 >
- to rewrite headers that are send by the server, and</P
+ to rewrite headers that are send by the server.</P
 ><P
 > <SPAN
 CLASS="APPLICATION"
@@ -152,7 +152,7 @@ HREF="config.html#FILTERFILE"
 >filterfile</A
 ></TT
 > config directive. The filters
- as supplied by the developers will be found in
+ as supplied by the developers are located in
  <TT
 CLASS="FILENAME"
 >default.filter</TT
@@ -164,29 +164,29 @@ CLASS="FILENAME"
 >.
  </P
 ><P
-> Command tasks for content filters are to eliminate common annoyances in
+> Common tasks for content filters are to eliminate common annoyances in
  HTML and JavaScript, such as pop-up windows,
  exit consoles, crippled windows without navigation tools, the
  infamous &#60;BLINK&#62; tag etc, to suppress images with certain
  width and height attributes (standard banner sizes or web-bugs),
  or just to have fun.</P
 ><P
-> Content filtering works on any text-based document type, including 
- HTML, JavaScript, CSS etc. (all <TT
-CLASS="LITERAL"
->text/*</TT
->
- MIME types, <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->except</I
-></SPAN
-> <TT
+> Enabled content filters are applied to any content whose
+ <SPAN
+CLASS="QUOTE"
+>"Content Type"</SPAN
+> header is recognised as a sign
+ of text-based content, with the exception of <TT
 CLASS="LITERAL"
 >text/plain</TT
->).
- Substitutions are made at the source level, so if you want to <SPAN
+>.
+ Use the <A
+HREF="actions-file.html#FORCE-TEXT-MODE"
+>force-text-mode</A
+> action
+ to also filter other content.</P
+><P
+> Substitutions are made at the source level, so if you want to <SPAN
 CLASS="QUOTE"
 >"roll
  your own"</SPAN
@@ -363,7 +363,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN4638"
+NAME="AEN4588"
 >9.1. Filter File Tutorial</A
 ></H2
 ><P
