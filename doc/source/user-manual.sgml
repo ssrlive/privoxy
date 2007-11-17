@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.44 2007/11/15 03:30:20 hal9 Exp $
+ $Id: user-manual.sgml,v 2.45 2007/11/16 11:48:46 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.44 2007/11/15 03:30:20 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.45 2007/11/16 11:48:46 hal9 Exp $</pubdate>
 
 <!--
 
@@ -6486,8 +6486,7 @@ that also explains why and how aliases are used:
 
 <para>
  Again, at the start of matching, all actions are disabled, so there is
- no real need to disable any actions here, but we will do that nonetheless,
- to have a complete listing for your reference. (Remember: a <quote>+</quote>
+ no need to disable any actions here. (Remember: a <quote>+</quote>
  preceding the action name enables the action, a <quote>-</quote> disables!).
  Also note how this long line has been made more readable by splitting it into
  multiple lines with line continuation.
@@ -6499,77 +6498,34 @@ that also explains why and how aliases are used:
 # "Defaults" section:
 ##########################################################################
  { \
- -<link linkend="ADD-HEADER">add-header</link> \
- -<link linkend="CLIENT-HEADER-FILTER">client-header-filter{hide-tor-exit-notation}</link> \
- -<link linkend="BLOCK">block</link> \
- -<link linkend="CONTENT-TYPE-OVERWRITE">content-type-overwrite</link> \
- -<link linkend="CRUNCH-CLIENT-HEADER">crunch-client-header</link> \
- -<link linkend="CRUNCH-IF-NONE-MATCH">crunch-if-none-match</link> \
- -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> \
- -<link linkend="CRUNCH-SERVER-HEADER">crunch-server-header</link> \
- -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link> \
  +<link linkend="DEANIMATE-GIFS">deanimate-gifs</link> \
- -<link linkend="DOWNGRADE-HTTP-VERSION">downgrade-http-version</link> \
- -<link linkend="FAST-REDIRECTS">fast-redirects{check-decoded-url}</link> \
- -<link linkend="FILTER-JS-ANNOYANCES">filter{js-annoyances}</link> \
- -<link linkend="FILTER-JS-EVENTS">filter{js-events}</link> \
  +<link linkend="FILTER-HTML-ANNOYANCES">filter{html-annoyances}</link> \
- -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link> \
  +<link linkend="FILTER-REFRESH-TAGS">filter{refresh-tags}</link> \
- -<link linkend="FILTER-UNSOLICITED-POPUPS">filter{unsolicited-popups}</link> \
- -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link> \
- -<link linkend="FILTER-IMG-REORDER">filter{img-reorder}</link> \
- -<link linkend="FILTER-BANNERS-BY-SIZE">filter{banners-by-size}</link> \
- -<link linkend="FILTER-BANNERS-BY-LINK">filter{banners-by-link}</link> \
  +<link linkend="FILTER-WEBBUGS">filter{webbugs}</link> \
- -<link linkend="FILTER-TINY-TEXTFORMS">filter{tiny-textforms}</link> \
- -<link linkend="FILTER-JUMPING-WINDOWS">filter{jumping-windows}</link> \
- -<link linkend="FILTER-FRAMESET-BORDERS">filter{frameset-borders}</link> \
- -<link linkend="FILTER-DEMORONIZER">filter{demoronizer}</link> \
- -<link linkend="FILTER-SHOCKWAVE-FLASH">filter{shockwave-flash}</link> \
- -<link linkend="FILTER-QUICKTIME-KIOSKMODE">filter{quicktime-kioskmode}</link> \
- -<link linkend="FILTER-FUN">filter{fun}</link> \
- -<link linkend="FILTER-CRUDE-PARENTAL">filter{crude-parental}</link> \
  +<link linkend="FILTER-IE-EXPLOITS">filter{ie-exploits}</link> \     
- -<link linkend="FILTER-GOOGLE">filter{google}</link> \
- -<link linkend="FILTER-YAHOO">filter{yahoo}</link> \
- -<link linkend="FILTER-MSN">filter{msn}</link> \
- -<link linkend="FILTER-BLOGSPOT">filter{blogspot}</link> \
- -<link linkend="FILTER-NO-PING">filter{no-ping}</link> \
- -<link linkend="FORCE-TEXT-MODE">force-text-mode</link> \
- -<link linkend="HANDLE-AS-EMPTY-DOCUMENT">handle-as-empty-document</link> \
- -<link linkend="HANDLE-AS-IMAGE">handle-as-image</link> \
- -<link linkend="HIDE-ACCEPT-LANGUAGE">hide-accept-language</link> \
- -<link linkend="HIDE-CONTENT-DISPOSITION">hide-content-disposition</link> \
- -<link linkend="HIDE-IF-MODIFIED-SINCE">hide-if-modified-since</link> \
  +<link linkend="HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</link> \
  +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
  +<link linkend="HIDE-REFERER">hide-referrer{forge}</link> \
- -<link linkend="HIDE-USER-AGENT">hide-user-agent</link> \
- -<link linkend="INSPECT-JPEGS">inspect-jpegs</link> \
- -<link linkend="KILL-POPUPS">kill-popups</link> \
- -<link linkend="LIMIT-CONNECT">limit-connect</link> \
  +<link linkend="PREVENT-COMPRESSION">prevent-compression</link> \
- -<link linkend="OVERWRITE-LAST-MODIFIED">overwrite-last-modified</link> \
- -<link linkend="REDIRECT">redirect</link> \
- -<link linkend="SEND-VANILLA-WAFER">send-vanilla-wafer</link> \
- -<link linkend="SEND-WAFER">send-wafer</link> \
- -<link linkend="SERVER-HEADER-FILTER">server-header-filter{xml-to-html}</link> \
- -<link linkend="SERVER-HEADER-FILTER">server-header-filter{html-to-xml}</link> \
  +<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> \
  +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
- -<link linkend="TREAT-FORBIDDEN-CONNECTS-LIKE-BLOCKS">treat-forbidden-connects-like-blocks</link> \
  }
  / # forward slash will match *all* potential URL patterns.</screen>
 </para>
 
 <para>
- The default behavior is now set. Note that some actions, like not hiding
+ The default behavior is now set.
+ <!--
+ This needs rewording, but it can wait for now.
+ fk 2007-11-17
+
+ Note that some actions, like not hiding
  the user agent, are part of a <quote>general policy</quote> that applies
  universally and won't get any exceptions defined later. Other choices,
  like not blocking (which is <emphasis>understandably</emphasis> the
  default!) need exceptions, i.e. we need to specify explicitly what we
  want to block in later sections.
+ -->
 </para>
 
 <para>
@@ -6858,7 +6814,7 @@ wiki.
 
 <para>
  <screen>
-# My user.action file. &lt;fred@foobar.com&gt;</screen>
+# My user.action file. &lt;fred@example.com&gt;</screen>
 </para>
 
 <para>
@@ -6961,7 +6917,7 @@ stupid-server.example.com/</screen>
  <screen>
 { +<link linkend="BLOCK">block</link> }
  www.example.com/nasty-ads/sponsor\.gif
- another.popular.site.net/more/junk/here/</screen>
+ another.example.net/more/junk/here/</screen>
 </para>
 
 <para>
@@ -7007,8 +6963,8 @@ stupid-server.example.com/</screen>
 
 <para>
  You like the <quote>fun</quote> text replacements in <filename>default.filter</filename>,
- but it is disabled in the distributed actions file. (My colleagues on the team just
- don't have a sense of humour, that's why! ;-). So you'd like to turn it on in your private,
+ but it is disabled in the distributed actions file.
+ So you'd like to turn it on in your private,
  update-safe config, once and for all:
 </para>
 
@@ -7104,7 +7060,7 @@ stupid-server.example.com/</screen>
  <literal><link linkend="client-header-filter">client-header-filter</link></literal>
  to rewrite headers that are send by the client, and
  <literal><link linkend="server-header-filter">server-header-filter</link></literal>
- to rewrite headers that are send by the server, and
+ to rewrite headers that are send by the server.
 </para>
 
 <para>
@@ -7122,7 +7078,7 @@ stupid-server.example.com/</screen>
 <para>
  Multiple filter files can be defined through the <literal> <link
  linkend="filterfile">filterfile</link></literal> config directive. The filters
- as supplied by the developers will be found in
+ as supplied by the developers are located in
  <filename>default.filter</filename>. It is recommended that any locally
  defined or modified filters go in a separately defined file such as
  <filename>user.filter</filename>.
@@ -7130,7 +7086,7 @@ stupid-server.example.com/</screen>
 </para>
 
 <para>
- Command tasks for content filters are to eliminate common annoyances in
+ Common tasks for content filters are to eliminate common annoyances in
  HTML and JavaScript, such as pop-up windows,
  exit consoles, crippled windows without navigation tools, the
  infamous &lt;BLINK&gt; tag etc, to suppress images with certain
@@ -7139,9 +7095,14 @@ stupid-server.example.com/</screen>
 </para>
 
 <para>
- Content filtering works on any text-based document type, including 
- HTML, JavaScript, CSS etc. (all <literal>text/*</literal>
- MIME types, <emphasis>except</emphasis> <literal>text/plain</literal>).
+ Enabled content filters are applied to any content whose
+ <quote>Content Type</quote> header is recognised as a sign
+ of text-based content, with the exception of <literal>text/plain</literal>.
+ Use the <link linkend="FORCE-TEXT-MODE">force-text-mode</link> action
+ to also filter other content.
+</para>
+
+<para>
  Substitutions are made at the source level, so if you want to <quote>roll
  your own</quote> filters, you should first be familiar with HTML syntax, 
  and, of course, regular expressions.
@@ -9132,6 +9093,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.45  2007/11/16 11:48:46  hal9
+ Fix one typo, and add a couple of small refinements.
+
  Revision 2.44  2007/11/15 03:30:20  hal9
  Results of spell check.
 
