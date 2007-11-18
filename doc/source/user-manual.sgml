@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.45 2007/11/16 11:48:46 hal9 Exp $
+ $Id: user-manual.sgml,v 2.46 2007/11/17 17:24:44 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.45 2007/11/16 11:48:46 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.46 2007/11/17 17:24:44 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -758,19 +758,31 @@ How to install the binary packages depends on your operating system:
  <itemizedlist>
 
  <listitem>
-  <para>  
-    Some installers may remove earlier versions completely, including 
-    configuration files. Save any important configuration files!
+  <para>
+   The recommended way to upgrade &my-app; is to backup your old 
+   configuration files, install the new ones, verify that &my-app;
+   is working correctly and finally merge back your changes using
+   <application>diff</application> and maybe <application>patch</application>.
+  </para>
+  <para>
+   There are a number of new features in each &my-app; release and
+   most of them have to be explicitly enabled in the configuration
+   files. Old configuration files obviously don't do that and due
+   to syntax changes using old configuration files with a new
+   &my-app; isn't always possible anyway.
   </para>
  </listitem>
  <listitem>
   <para>  
-   On the other hand, other installers may not overwrite any existing configuration 
-   files, thinking you will want to do that. You may want to manually check 
-   your saved files against the newer versions to see if the improvements have
-   merit, or whether there are new options that you may want to consider.
-   There are a number of new features, but most won't be available unless 
-   these features are incorporated into your configuration somehow.
+    Note that some installers remove earlier versions completely,
+    including configuration files, therefore you should really save
+    any important configuration files!
+  </para>
+ </listitem>
+ <listitem>
+  <para>  
+   On the other hand, other installers don't overwrite existing configuration 
+   files, thinking you will want to do that yourself.
   </para>
  </listitem>
  <listitem>
@@ -779,31 +791,14 @@ How to install the binary packages depends on your operating system:
    Not all actions as before.
   </para>
  </listitem>
- <!--
  <listitem>
-    <para>
-     See the full documentation on 
-     <literal><link linkend="fast-redirects">fast-redirects</link></literal>
-     which has changed syntax, and will require adjustments to local configs, 
-     such as <filename>user.action</filename>. You must reference the new 
-     syntax: 
-   </para>
-   <para>
- <screen>
-  { +fast-redirects{check-decoded-url} }
-   .example.com
-   mybank.com
-   .google.</screen>
-</para>
-
-  </listitem>
-  -->
- <listitem>
-    <para>
-     Logging is off by default now. If you need logging, it can be turned on
-     in the <link linkend="logfile">config file</link>.
-    </para>
-  </listitem>
+  <para>
+   Logging is off by default now. If you need logging, it can be turned on
+   in the <link linkend="logfile">config file</link>. You may also want
+   to enable logging until you verified that the new &my-app; version
+   is working as expected.
+  </para>
+ </listitem>
 
  <listitem>
     <para>
@@ -7082,8 +7077,7 @@ stupid-server.example.com/</screen>
  <filename>default.filter</filename>. It is recommended that any locally
  defined or modified filters go in a separately defined file such as
  <filename>user.filter</filename>.
- 
-</para>
+ </para>
 
 <para>
  Common tasks for content filters are to eliminate common annoyances in
@@ -9093,6 +9087,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.46  2007/11/17 17:24:44  fabiankeil
+ - Use new action defaults.
+ - Minor fixes and rewordings.
+
  Revision 2.45  2007/11/16 11:48:46  hal9
  Fix one typo, and add a couple of small refinements.
 
