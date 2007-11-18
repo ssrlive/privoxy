@@ -304,20 +304,50 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
->  
-    Some installers may remove earlier versions completely, including 
-    configuration files. Save any important configuration files!
+>   The recommended way to upgrade <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is to backup your old 
+   configuration files, install the new ones, verify that <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+   is working correctly and finally merge back your changes using
+   <SPAN
+CLASS="APPLICATION"
+>diff</SPAN
+> and maybe <SPAN
+CLASS="APPLICATION"
+>patch</SPAN
+>.
+  </P
+><P
+>   There are a number of new features in each <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> release and
+   most of them have to be explicitly enabled in the configuration
+   files. Old configuration files obviously don't do that and due
+   to syntax changes using old configuration files with a new
+   <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> isn't always possible anyway.
   </P
 ></LI
 ><LI
 ><P
 >  
-   On the other hand, other installers may not overwrite any existing configuration 
-   files, thinking you will want to do that. You may want to manually check 
-   your saved files against the newer versions to see if the improvements have
-   merit, or whether there are new options that you may want to consider.
-   There are a number of new features, but most won't be available unless 
-   these features are incorporated into your configuration somehow.
+    Note that some installers remove earlier versions completely,
+    including configuration files, therefore you should really save
+    any important configuration files!
+  </P
+></LI
+><LI
+><P
+>  
+   On the other hand, other installers don't overwrite existing configuration 
+   files, thinking you will want to do that yourself.
   </P
 ></LI
 ><LI
@@ -332,12 +362,17 @@ CLASS="FILENAME"
 ></LI
 ><LI
 ><P
->     Logging is off by default now. If you need logging, it can be turned on
-     in the <A
+>   Logging is off by default now. If you need logging, it can be turned on
+   in the <A
 HREF="config.html#LOGFILE"
 >config file</A
->.
-    </P
+>. You may also want
+   to enable logging until you verified that the new <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version
+   is working as expected.
+  </P
 ></LI
 ><LI
 ><P
