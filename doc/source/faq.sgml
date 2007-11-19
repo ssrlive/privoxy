@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.32 2007/11/13 03:03:42 hal9 Exp $
+ $Id: faq.sgml,v 2.33 2007/11/15 03:30:20 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.32 2007/11/13 03:03:42 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.33 2007/11/15 03:30:20 hal9 Exp $</pubdate>
 
 <!--
 
@@ -275,18 +275,9 @@ from the old Junkbuster?</title>
  The new <application>Privoxy</application> still blocks ads and banners,
  still manages <ulink
  url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>, and still
- helps protect your privacy. But, these are all greatly enhanced, and many,
+ helps protect your privacy. But, these have all been greatly enhanced, and many,
  many new features have been added, all in the same vein.
  </para>
- <para>
- The configuration has changed significantly as well. This is something that
- users will notice right off the bat if upgrading from 
- <application>Junkbuster</application> 2.0.x. The <quote>blocklist</quote>
- <quote>cookielist</quote>, <quote>imagelist</quote> and much more has been
- combined into the <quote>actions</quote> files, with a completely different
- syntax. <![%p-newstuff;[ See the <ulink url="../user-manual/whatsnew.html">What's New</ulink> 
- page for the latest updates.]]>
-</para>
 <para>
  <application>Privoxy</application>'s new features include:
 </para>
@@ -404,8 +395,8 @@ Privoxy. Why should I use Privoxy at all?</title>
   <emphasis>everything</emphasis>, and you can control everything. You can
   check every line of every configuration file yourself. You can check every
   last bit of source code should you desire. And even if you can't read code, 
-  there should be some comfort in knowing that thousands of other people can, 
-  and some of them do read it. You can build the software from scratch, if you want,
+  there should be some comfort in knowing that <!-- thousands of -->other people can, 
+  and do read it. You can build the software from scratch, if you want,
   so that you know the executable is clean, and that it is
   <emphasis>yours</emphasis>. In fact, we encourage this level of scrutiny. It
   is one reason we use &my-app; ourselves.
@@ -434,7 +425,7 @@ warranty? Registration?</title>
 <sect2 renderas="sect3" id="spyware">
 <title>Can Privoxy remove spyware? Adware? Viruses?</title>
 <para>
- No, at least not reliable enough to trust it. &my-app; is not designed to be
+ No, at least not reliably enough to trust it. &my-app; is not designed to be
  a malware removal tool and the default configuration doesn't even try to
  filter out any malware.
 </para>
@@ -2240,31 +2231,31 @@ Request: img.example.com/sr.js
 Request: example.betamarker.com/example.html
 Request: www.lik-sang.com/Banners/bestsellers/skyscraper.php?likref=BSellers
 Request: img.example.com/pb.png
-Request: www.google-analytics.com/urchin.js crunch!
-Request: www.advertising-department.com/ats/switch.ps.php?26856 crunch!
+Request: www.google-analytics.com/urchin.js crunch! (Blocked)
+Request: www.advertising-department.com/ats/switch.ps.php?26856 crunch! (Blocked)
 Request: img.example.com/p.gif
-Request: www.popuptraffic.com/assign.php?l=example&mode=behind crunch!
-Request: www.popuptraffic.com/scripts/popup.php?hid=5c3cf&tmpl=PBa.tmpl crunch!
-Request: www.popuptraffic.com/assign.php?l=example crunch!
+Request: www.popuptraffic.com/assign.php?l=example&mode=behind crunch! (Blocked)
+Request: www.popuptraffic.com/scripts/popup.php?hid=5c3cf&tmpl=PBa.tmpl crunch! (Blocked)
+Request: www.popuptraffic.com/assign.php?l=example crunch! (Blocked)
 Request: www.lik-sang.com/Banners/best_sellers/best_sellers.css
-Request: www.adtrak.net/adx.js crunch!
+Request: www.adtrak.net/adx.js crunch! (Blocked)
 Request: img.example.com/hbg.gif
 Request: img.example.com/example.jpg
 Request: img.example.com/mt.png
 Request: img.example.com/mm.png
 Request: img.example.com/mb.png
-Request: www.popuptraffic.com/scripts/popup.php?hid=a71b91fa5&tmpl=Ua.tmp crunch!
+Request: www.popuptraffic.com/scripts/popup.php?hid=a71b91fa5&tmpl=Ua.tmp crunch! (Blocked)
 Request: www.example.com/tracker.js
 Request: www.lik-sang.com/Banners/best_sellers/lsi_head.gif
-Request: www.adtrak.net/adjs.php?n=020548130&what=zone:61 crunch!
-Request: www.adtrak.net/adjs.php?n=463594413&what=zone:58&source=Ua crunch!
+Request: www.adtrak.net/adjs.php?n=020548130&what=zone:61 crunch! (Blocked)
+Request: www.adtrak.net/adjs.php?n=463594413&what=zone:58&source=Ua crunch! (Blocked)
 Request: www.lik-sang.com/Banners/best_sellers/bottomani.swf
-Request: mmm.elitemediagroup.net/install.php?allowpop=no&popupmincook=0&allowsp2=1 crunch!
+Request: mmm.elitemediagroup.net/install.php?allowpop=no&popupmincook=0&allowsp2=1 crunch! (Blocked)
 Request: www.example.com/tracker.js?screen=1400x1050&win=962x693
-Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=61 crunch!
+Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=61 crunch! (Blocked)
 Request: 66.70.21.80/scripts/click.php?hid=5c3cf599a9efd0320d26&si
 Request: 66.70.21.80/img/pixel.gif
-Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=58&source=Ua&block=86400 crunch!
+Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=58&source=Ua&block=86400 crunch! (Blocked)
 Request: 66.70.21.80/scripts/click.php?hid=a71b9f6504b0c5681fa5&si=Ua
 ]]>
 </screen>
@@ -2770,6 +2761,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.33  2007/11/15 03:30:20  hal9
+Results of spell check.
+
 Revision 2.32  2007/11/13 03:03:42  hal9
 Various changes to reflect new features and revised configuration for the
 upcoming release.
