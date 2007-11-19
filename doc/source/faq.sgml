@@ -26,9 +26,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.33 2007/11/15 03:30:20 hal9 Exp $
+ $Id: faq.sgml,v 2.34 2007/11/19 02:38:11 hal9 Exp $
 
- Copyright (C) 2001-2007 Privoxy Developers http://privoxy.org
+ Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.33 2007/11/15 03:30:20 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.34 2007/11/19 02:38:11 hal9 Exp $</pubdate>
 
 <!--
 
@@ -149,11 +149,10 @@ Hal.
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="general"><title>General Information</title>
-<sect2 renderas="sect3" id="who-uses"><title>Who should use Privoxy?</title>
+<sect2 renderas="sect3" id="who-uses"><title>Who should give &my-app; a try?</title>
  <para>
-  Anyone that is interested in security, privacy, or in 
+  Anyone who is interested in security, privacy, or in 
   finer-grained control over their web and Internet experience.
-  Everyone is encouraged to try &my-app;.
  </para>
 </sect2>
 
@@ -161,15 +160,16 @@ Hal.
 me?</title>
  <para>
   &my-app; is certainly a good choice, especially for those who want more 
-  control and security. Those that have the ability to fine-tune their installation
-  will benefit the most. One of <application>Privoxy's</application>
-  strength's is that it is highly configurable giving you the ability to
+  control and security. Those with the willingness to read the documentation
+  and the ability to fine-tune their installation will benefit the most.
+ </para>
+ <para>
+  One of <application>Privoxy's</application>
+  strengths is that it is highly configurable giving you the ability to
   completely personalize your installation. Being familiar with, or at least
   having an interest in learning about <ulink
   url="http://en.wikipedia.org/wiki/Http">HTTP</ulink> and other networking
-  protocols, <ulink url="http://en.wikipedia.org/wiki/Html">HTML</ulink>, 
-  <ulink url="http://en.wikipedia.org/wiki/Internet_Protocol">IP (Internet
-  Protocol)</ulink>, and 
+  protocols, <ulink url="http://en.wikipedia.org/wiki/Html">HTML</ulink>, and 
   <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
   Expressions</quote></ulink>
   will be a big plus and will help you get the most out of &my-app;. 
@@ -183,7 +183,9 @@ me?</title>
   with a  <ulink url="http://en.wikipedia.org/wiki/Web_browser">Web browser</ulink>.
   But there are areas where configuration is done using a 
   <ulink url="http://en.wikipedia.org/wiki/Text_editors">text editor</ulink>
-  to edit configuration files.
+  to edit configuration files. Also note that the web-based action editor
+  doesn't use authentication and should only be enabled in environments
+  where all clients with access to &my-app; listening port can be trusted.
   </para>
 </sect2>
 
@@ -275,8 +277,8 @@ from the old Junkbuster?</title>
  The new <application>Privoxy</application> still blocks ads and banners,
  still manages <ulink
  url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>, and still
- helps protect your privacy. But, these have all been greatly enhanced, and many,
- many new features have been added, all in the same vein.
+ helps protect your privacy. But, most of these features have been enhanced,
+ and many new ones have been added, all in the same vein.
  </para>
 <para>
  <application>Privoxy</application>'s new features include:
@@ -342,10 +344,11 @@ This does not sound very scientific.</title>
 <title id="configornot">Will I have to configure Privoxy
  before I can use it?</title>
 <para>
- No, not really. The default installation should give you a good starting
- point, and block <emphasis>most</emphasis> ads and unwanted content. Many of
- the more advanced features are off by default, and would require you to 
- activate them. 
+ That depends on your expectations.
+ The default installation should give you a good starting
+ point, and block <emphasis>most</emphasis> ads and unwanted content,
+ but many of the more advanced features are off by default, and require
+ you to activate them. 
 </para>
 <para>
  You do have to set up your browser to use
@@ -356,7 +359,7 @@ This does not sound very scientific.</title>
  And you will certainly run into situations where there are false positives,
  or ads not being blocked that you may not want to see. In these cases, you
  would certainly benefit by customizing <application>Privoxy's</application>
- configuration to more closely match your individual situation. And we would
+ configuration to more closely match your individual situation. And we
  encourage you to do this. This is where the real power of
  <application>Privoxy</application> lies!
 </para>
@@ -377,8 +380,9 @@ Privoxy. Why should I use Privoxy at all?</title>
  <para>
   Modern browsers do indeed have <emphasis>some</emphasis> of the same
   functionality as <application>Privoxy</application>. Maybe this is
-  adequate for you. But <application>Privoxy</application> is much more
-  versatile and powerful, and can do a number of things that browsers just can't.
+  adequate for you. But <application>Privoxy</application> is very
+  versatile and powerful, and can probably do a number of things
+  your browser just can't.
  </para>
  <para>
   In addition, a proxy is good choice if you use multiple browsers, or 
@@ -386,6 +390,13 @@ Privoxy. Why should I use Privoxy at all?</title>
   application. This way all the configuration is in one place, and you don't
   have to maintain a similar configuration for possibly many browsers or
   users.
+ </para>
+ <para>
+  Note, however, that it's recommended to leverage both your browser's
+  and <application>Privoxy's</application> privacy enhancing features
+  at the same time. While your browser probably lacks some features
+  &my-app; offers, it should also be able to do some things more
+  reliable, for example restricting and suppressing JavaScript.
  </para>
 </sect2>
 
@@ -406,7 +417,7 @@ Privoxy. Why should I use Privoxy at all?</title>
 <sect2 renderas="sect3" id="license"><title>Is there is a license or fee? What about a 
 warranty? Registration?</title>
  <para>
-  <application>Privoxy</application> is licensed under the <ulink
+  <application>Privoxy</application> is free software and licensed under the <ulink
   url="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License (GPL) version 2</ulink>.
   It is free to use, copy, modify or distribute as you wish under the terms of this
   license.  Please see the <link linkend="copyright">Copyright</link> section for more
@@ -416,8 +427,6 @@ warranty? Registration?</title>
  <para>
   There is <emphasis>no warranty</emphasis> of any kind, expressed, implied or otherwise.
   That is something that would cost real money ;-) There is no registration either.
-  <application>Privoxy</application> really is <emphasis>free</emphasis>
-  in every respect!
  </para>
 
 </sect2>
@@ -432,7 +441,10 @@ warranty? Registration?</title>
 <para>
  &my-app; could help prevent contact from (known) sites that use such
  tactics with appropriate configuration rules, and thus could conceivably
- prevent contamination from such sites.
+ prevent contamination from such sites. However, keeping such a configuration
+ up to date would require a lot of time and effort that would be better spend
+ on keeping your software itself up to date so it doesn't have known
+ vulnerabilities.
 </para>
 </sect2>
 
@@ -445,8 +457,11 @@ warranty? Registration?</title>
 <para>
  But it is probably not necessary to use &my-app; in conjunction with other
  ad-blocking products, and this could conceivably cause undesirable results.
- It would be better to choose one software or the other and work a little to
+ It might be better to choose one software or the other and work a little to
  tweak its configuration to your liking.
+</para>
+<para>
+ Note that this is an advice specific to ad blocking.
 </para>
 </sect2>
 
@@ -471,6 +486,11 @@ warranty? Registration?</title>
    url="../developer-manual/index.html">Developer's Manual</ulink>, at least
    the pertinent sections.
 </para>
+ <para>
+  You can also start helping out without SourceForge.net account,
+  simply by showing up on the mailing list, helping out other users,
+  providing general feedback or reporting problems you noticed.
+ </para>
 </sect3>
 
 <sect3 renderas="sect4" id="jointeam-money"><title>Contribute!</title>
@@ -479,7 +499,8 @@ warranty? Registration?</title>
  buying software to test <application>Privoxy</application> with, and, of course,
  for regular world-wide get-togethers (hahaha). If you enjoy the software and feel
  like helping us with a donation, just <ulink
- url="mailto: ijbswa-developers@lists.sourceforge.net">drop us a note</ulink>.
+ url="mailto: ijbswa-developers@lists.sourceforge.net">drop us a note</ulink>
+ and get your name on the list of contributors.
 </para>
 </sect3>
 
@@ -571,12 +592,15 @@ Include supported.sgml here:
 special I have to do now?</title>
 
 <para>
- All browsers must be told to use <application>Privoxy</application> 
+ All browsers should be told to use <application>Privoxy</application> 
  as a proxy by specifying the correct proxy address and port number 
- in the appropriate configuration area for the browser. See 
+ in the appropriate configuration area for the browser. It's possible
+ to combine &my-app; with a packet filter to intercept HTTP requests
+ even if the client isn't explicitly configured to use &my-app;,
+ but where possible, configuring the client is recommended. See 
  <ulink url="../user-manual/startup.html">the User Manual for more
- details</ulink>. You should also flush your browser's memory and disk cache to get rid of any
- cached junk items, and remove any stored 
+ details</ulink>. You should also flush your browser's memory and disk
+ cache to get rid of any cached junk items, and remove any stored 
  <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>.
 
 </para>
@@ -590,9 +614,10 @@ special I have to do now?</title>
   networked computer on a LAN), the proxy will be on <literal>127.0.0.1</literal> 
   (sometimes referred to as <quote>localhost</quote>,
   which is the special name used by every computer on the Internet to refer
-  to itself) and the port will be 8118 (unless you have <application>Privoxy</application>
-  to run on a different port with the <ulink
-  url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink> config option). 
+  to itself) and the port will be 8118 (unless you used the <ulink
+  url="../user-manual/config.html#LISTEN-ADDRESS">listen-address</ulink>
+  config option to tell <application>Privoxy</application> to run on
+  a different port).
  </para>
  <para>
   When configuring your browser's proxy settings you typically enter
@@ -613,8 +638,7 @@ special I have to do now?</title>
  </para>
  <para>
   <application>Privoxy</application> does not currently handle
-  any other protocols such as FTP, SMTP, IM, IRC, ICQ, etc. Be sure that
-  proxying any of these other protocols is not activated.
+  any other protocols such as FTP, SMTP, IM, IRC, ICQ, etc.
  </para>
 </sect2>
 
@@ -677,11 +701,11 @@ Privoxy is running and being used.</title>
  <guibutton>Advanced</guibutton> --> <guibutton>Cache</guibutton> and
  then click both <quote><guibutton>Clear Memory Cache</guibutton></quote>
  and <quote><guibutton>Clear Disk Cache</guibutton></quote>.
- And, <application>Firefox</application> users would click 
+ In some <application>Firefox</application> versions it's
  <guibutton>Tools</guibutton> --> <guibutton>Options</guibutton> -->
  <guibutton>Privacy</guibutton> --> <guibutton>Cache</guibutton> and
  then click <quote><guibutton>Clear Cache Now</guibutton></quote>.
-
+ <!-- In my Firefox versions it's the Netscape way. fk 2007-11-19-->
 </para>
 </sect2>
 
@@ -804,7 +828,8 @@ the differences?</title>
   The syntax and purpose of configuration files has remained roughly the
   same throughout the 3.x series, but backwards compatibility is not guaranteed.
   Also each release contains updated, <quote>improved</quote> versions and it is
-  therefore strongly recommended to use the newer configuration files.
+  therefore strongly recommended to install the newer configuration files
+  and merge back your modifications.
  </para>
 </sect2>
 
@@ -913,17 +938,16 @@ with a browser? Does that not raise security issues?</title>
  </para>
  <para>
   If you run <application>Privoxy</application> for multiple untrusted users (e.g. in
-  a LAN), you will probably want to make sure that the the web-based
-  editor and remote toggle features are <quote>off</quote> by setting <quote><literal><ulink
+  a LAN) or aren't entirely in control of your own browser, you will probably want
+  to make sure that the the web-based editor and remote toggle features are
+  <quote>off</quote> by setting <quote><literal><ulink
   url="../user-manual/config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</ulink>
   0</literal></quote> and <quote><literal><ulink
   url="../user-manual/config.html#ENABLE-REMOTE-TOGGLE">enable-remote-toggle</ulink>
   0</literal></quote> in the <ulink url="../user-manual/config.html">main configuration file</ulink>.
  </para>
  <para>
-  Note that in the default configuration, only local users (i.e. those on
-  <quote>localhost</quote>) can connect to <application>Privoxy</application>,
-  so this is (normally) not a security problem.
+  As of &my-app; 3.0.7 these options are disabled by default.
  </para>
 </sect2>
 
@@ -932,17 +956,24 @@ with a browser? Does that not raise security issues?</title>
 <title id="filterfile">What is the <filename>default.filter</filename> file? What is a <quote>filter</quote>?</title>
 <para>
  The <ulink url="../user-manual/filter-file.html"><filename>default.filter</filename></ulink>
- file is where <emphasis>filters</emphasis> as supplied by the developers are defined. 
+ file is where <emphasis>filters</emphasis> as supplied by the developers are defined.
  Filters are a special subset of actions that can be used to modify or
- remove, web page content on the fly. Filters apply to <emphasis>anything</emphasis>
- in the page source (and optionally both client and server headers), including
- HTML tags, and JavaScript. Regular expressions are used to accomplish this.
+ remove web page content or headers on the fly. Content filters can
+ be applied to <emphasis>anything</emphasis> in the page source,
+ header filters can be applied to either server or client headers.
+ Regular expressions are used to accomplish this.
+</para>
+<para>
  There are a number of pre-defined filters to deal with common annoyances. The
  filters are only defined here, to invoke them, you need to use the
  <ulink
  url="../user-manual/actions-file.html#FILTER"><literal>filter</literal>
- action</ulink> in one of the actions files. Filtering is automatically
- disabled for inappropriate MIME types. Filters should
+ action</ulink> in one of the actions files. Content filtering is automatically
+ disabled for inappropriate MIME types, but if you now better than Privoxy
+ what should or should not be filtered you can filter any content you like.
+</para>
+<para>
+ Filters should
  <emphasis>not</emphasis> be confused with <ulink
  url="../user-manual/actions-file.html#BLOCK"><literal>blocks</literal></ulink>, which
  is a completely different action, and is more typically used to block ads and
@@ -966,12 +997,16 @@ with a browser? Does that not raise security issues?</title>
  There is no GUI editor option for this part of the configuration, 
  but you can disable/enable the various pre-defined filters of the included 
  <filename>default.filter</filename> file with the <ulink
- url="http://config.privoxy.org/show-status">web-based actions file editor</ulink>
- Note 
- that the custom actions editor must be explicitly enabled in the main config file 
- (see <ulink
+ url="http://config.privoxy.org/show-status">web-based actions file editor</ulink>.
+ Note  that the custom actions editor must be explicitly enabled in
+ the main config file (see <ulink
  url="../user-manual/config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</ulink>).
+</para>
 
+<para>
+ If you intend to develop your own filters, you might want to have a look at
+ <ulink
+ url="http://www.fabiankeil.de/sourcecode/pft/">Privoxy-Filter-Test</ulink>.
 </para>
 
 </sect2>
@@ -1174,14 +1209,14 @@ and thus avoid individual browser configuration?</title>
   </para>
 <para>
   As the <literal>Host</literal> header is required by HTTP/1.1 and as most
-  web sites don't work if it isn't set, this limitation shouldn't be a
-  problem.
+  web sites rely on it anyway, this limitation shouldn't be a problem.
 </para>
 <para>
   Please refer to your packet filter's documentation to learn how to
-  intercept and redirect traffic into <application>Privoxy</application>. Afterward you just have
-  to configure <application>Privoxy</application> to
-  <ulink url="../user-manual/config.html#ACCEPT-INTERCEPTED-REQUESTS">accept intercepted requests</ulink>.
+  intercept and redirect traffic into <application>Privoxy</application>.
+  Afterward you just have to configure <application>Privoxy</application> to
+  <ulink url="../user-manual/config.html#ACCEPT-INTERCEPTED-REQUESTS">accept
+  intercepted requests</ulink>.
 </para>
 
 </sect2>
@@ -1334,18 +1369,18 @@ and thus avoid individual browser configuration?</title>
  then subsequently allowing three specific exceptions.
 </para>
 <para>
- A more interesting approach is <application>Privoxy's</application> 
+ Another approach is <application>Privoxy's</application> 
  <literal>trustfile</literal> concept, which incorporates the notion of 
  <quote>trusted referrers</quote>. See the <ulink
- url="../user-manual/config.html#TRUSTFILE">User Manual Trust</ulink>
- documentation.
+ url="../user-manual/config.html#TRUSTFILE">Trust documentation</ulink>
+ for details.
 </para>
 <para>
  These are fairly simple approaches and are not completely foolproof. There
  are various other configuration options that should be disabled (described
  elsewhere here and in <ulink url="../user-manual/">the User Manual</ulink>)
  so that users can't modify their own configuration and easily circumvent the
- whitelist.  
+ whitelist.
 </para>
 </sect2>
 
@@ -1406,10 +1441,13 @@ and thus avoid individual browser configuration?</title>
  &my-app; for various purposes and can easily be modified using any text
  editor. All the template pages are installed in a sub-directory appropriately
  named: <filename>templates</filename>.  Knowing something about HTML syntax
- will of course be helpful.  Be forewarned that the default templates are
- subject to being overwritten during upgrades. You can, however, create
- completely new templates by specifying an alternate path for them in the main
- <filename>config</filename>, see the <ulink
+ will of course be helpful.
+</para>
+<para>
+ Be forewarned that the default templates are subject to being overwritten
+ during upgrades. You can, however, create completely new templates,
+ place them in another directory and specify the alternate path in the main
+ <filename>config</filename>. For details, have a look at the <ulink
  url="../user-manual/config.html#templdir">templdir</ulink> option. 
 </para>
 </sect2>
@@ -1418,12 +1456,12 @@ and thus avoid individual browser configuration?</title>
 <title>How can I remove the <quote>Go There Anyway</quote> link from 
 the <emphasis>BLOCKED</emphasis> page?</title>
 <para>
- There is more than one way to do it.
+ There is more than one way to do it (although Perl is not involved).
 </para>
 <para>
  Editing the BLOCKED template page (see above) may dissuade some users, but
  this method is easily circumvented. Where you need this level of control, you
- should build &my-app; from source, and enable various features that are
+ might want to build &my-app; from source, and disable various features that are
  available as compile-time options. You should 
  <command>configure</command> the sources as follows:
 </para>
@@ -1437,7 +1475,7 @@ the <emphasis>BLOCKED</emphasis> page?</title>
  current configuration via any connected user's web browser.
 </para>
 <para>
- Note that all of these features can also be toggled on/off via options in
+ Finally, all of these features can also be toggled on/off via options in
  <application>Privoxy's</application> main  <ulink
  url="../user-manual/config.html#ACCESS-CONTROL">config</ulink> file which
  means you don't have to recompile anything.
@@ -1477,17 +1515,17 @@ has to add extra time to browsing.</title>
  <literal><ulink
  url="../user-manual/actions-file.html#DEANIMATE-GIFS">deanimate-gifs</ulink></literal>
  actions may cause a perceived slowdown, since the entire document
- needs to be buffered before displaying. And on very large documents, filtering may have 
- some measurable impact. How much depends on the page size, the actual
- definition of the filter(s), etc. See below. Most other actions have little
- to no impact on speed.
+ needs to be buffered before displaying. And on very large documents,
+ filtering may have some measurable impact. How much depends on the page size,
+ the actual definition of the filter(s), etc. See below. Most other actions
+ have little to no impact on speed.
 </para>
 <para>
  Also, when filtering is enabled but zlib support isn't available, compression
  is often disabled (see <ulink
  url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>).
- This can have an impact on speed as well. Again, the page size, etc. will 
- determine how much of an impact.
+ This can have an impact on speed as well, although it's probably smaller than
+ you might think. Again, the page size, etc. will determine how much of an impact.
 </para>
 
 </sect2>
@@ -1617,9 +1655,9 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  on (those suspicious) people with a more than average preference for privacy.
 </para>
 <para>
- Your best bet is to chain <application>Privoxy</application>
- with <ulink url="http://tor.eff.org/">Tor</ulink>,
- an  <ulink url="http://www.eff.org/">EFF</ulink> supported onion routing system.
+ If you want to hide your IP address from most adversaries,
+ you should consider chaining <application>Privoxy</application>
+ with <ulink url="http://tor.eff.org/">Tor</ulink>.
  The configuration details can be found in
  <ulink url="#TOR">How do I use <application>Privoxy</application> together
  with <application>Tor</application> section</ulink>
@@ -1630,10 +1668,10 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 <sect2 renderas="sect3">
 <title id="anonforsure">Can Privoxy guarantee I am anonymous?</title>
 <para>
- No. Your chances of remaining anonymous are greatly improved, but unless you
+ No. Your chances of remaining anonymous are improved, but unless you
  <ulink url="#TOR">chain <application>Privoxy</application> with <application>Tor</application></ulink>
- or a similar system and know what you're doing when it comes to configuring
- the rest of your system, it would be safest to assume that everything you do
+ or a similar proxy and know what you're doing when it comes to configuring
+ the rest of your system, you should assume that everything you do
  on the Web can be traced back to you.
 </para>
 <para>
@@ -1771,7 +1809,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  Afterward, please take the time to at least skim through the rest
  of <application>Tor's</application> documentation. Make sure you understand
  what <application>Tor</application> does, why it is no replacement for
- application level security, and why you shouldn't use it for unencrypted logins.
+ application level security, and why you probably don't want to
+ use it for unencrypted logins.
 </para> ]]>
 </sect2>
 
@@ -1793,7 +1832,7 @@ content is being altered?</title>
 </para>
 
 <para>
- Also, different browsers use different encodings of Russian and Czech
+ Also, different browsers use different encodings of non-English
  characters, certain web servers convert pages on-the-fly according to the
  User Agent header. Giving a <quote>User Agent</quote> with the wrong
  operating system or browser manufacturer causes some sites in these languages
@@ -1803,7 +1842,7 @@ content is being altered?</title>
  weather maps of Intellicast have been blocked by their server when no
  <quote>Referer</quote> or cookie is provided, is another example. (But you
  can forge both headers without giving information away). There are
- many other ways things that can go wrong when trying to fool a web server. The
+ many other ways things can go wrong when trying to fool a web server. The
  results of which could inadvertently cause pages to load incorrectly,
  partially, or even not at all. And there may be no obvious clues as to just
  what went wrong, or why. Nowhere will there be a message that says 
@@ -1937,11 +1976,17 @@ secure is it? Do I need to take any special precautions?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="turnoff">
-<title>How can I temporarily disable Privoxy?</title>
+<title>Can I temporarily disable Privoxy?</title>
 <para>
- The easiest way is to access <application>Privoxy</application> with your 
- browser by using the remote toggle URL: <ulink
+ &my-app; doesn't have a transparent proxy mode,
+ but you can toggle off blocking and content filtering.
+</para>
+<para>
+ The easiest way to do that is to point your browser
+ to the remote toggle URL: <ulink
  url="http://config.privoxy.org/toggle">http://config.privoxy.org/toggle</ulink>.
+</para>
+<para>
  See the <ulink url="../user-manual/appendix.html#BOOKMARKLETS">Bookmarklets section</ulink> 
  of the <citetitle>User Manual</citetitle> for an easy way to access this 
  feature. Note that this is a feature that may need to be enabled in the main 
@@ -1955,8 +2000,8 @@ secure is it? Do I need to take any special precautions?</title>
 out of the picture?</title>
 <para>
  No, this just means all optional filtering and actions are disabled.
- <application>Privoxy</application> is still acting as a proxy, but just not 
- doing any of the things that <application>Privoxy</application> would
+ <application>Privoxy</application> is still acting as a proxy, but just 
+ doing less of the things that <application>Privoxy</application> would
  normally be expected to do. It is still a <quote>middle-man</quote> in 
  the interaction between your browser and web sites. See below to bypass 
  the proxy.
@@ -2118,7 +2163,7 @@ and related issues?</title>
  is clearly labeled <quote>Text replacements for subversive browsing
  fun!</quote> or you are using an older Privoxy version and have implicitly
  activated it by choosing the  <quote>Adventuresome</quote> profile in the
- web-based editor. Please upgrade!
+ web-based editor. Please upgrade.
 </para>
 </sect2>
 
@@ -2625,9 +2670,11 @@ Why?</title>
  whatever the outcome was. And tries to give a coherent message if there seems
  to be a problem. In some cases, this might otherwise be mitigated by the
  browser itself which might try some work-arounds and alternate approaches (e.g
- adding <quote>www.</quote> to the URL). In other cases, if
- <application>Privoxy</application> is being chained with another proxy, this
- could complicate the issue, and cause undue
+ adding <quote>www.</quote> to the URL).
+</para>
+<para>
+ In other cases, if <application>Privoxy</application> is being chained
+ with another proxy, this could complicate the issue, and cause undue
  delays and timeouts. In the case of a <quote>socks4a</quote> proxy, the socks
  server handles all the DNS.  <application>Privoxy</application> would just be
  the <quote>messenger</quote> which is reporting whatever problem occurred
@@ -2635,7 +2682,7 @@ Why?</title>
 </para>
 <![%p-newstuff;[
 <para>
- In any case, newer versions include various improvements to help
+ In any case, versions newer than 3.0.3 include various improvements to help
  <application>Privoxy</application> better handle these cases.
 </para>]]>
 </sect2>
@@ -2761,6 +2808,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.34  2007/11/19 02:38:11  hal9
+Minor revisions and rebuild
+
 Revision 2.33  2007/11/15 03:30:20  hal9
 Results of spell check.
 
