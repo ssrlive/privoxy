@@ -157,11 +157,12 @@ If install finds previous versions of local configuration files, most of these
 will not be overwritten, and the new ones will be installed with a "new"
 extension. default.action, default.filter, and standard.action will be
 overwritten. You will then need to manually update the other installed
-configuration files as needed. All template files will be overwritten. If you
-have customized, local templates, you should save these first, and in fact it
-is wise to always save any important configuration files "just in case". If a
-previous version of Privoxy is already running, you will have to restart it
-manually.
+configuration files as needed. The default template files will be overwritten.
+If you have customized, local templates, these should be stored safely in a
+separate directory and defined in config by the "templdir" directive. It is of
+course wise to always back-up any important configuration files "just in case".
+If a previous version of Privoxy is already running, you will have to restart
+it manually.
 
 For more detailed instructions on how to build Redhat RPMs, Windows
 self-extracting installers, building on platforms with special requirements
