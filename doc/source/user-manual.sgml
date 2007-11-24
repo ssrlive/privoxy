@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.46 2007/11/17 17:24:44 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.47 2007/11/18 14:59:47 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.46 2007/11/17 17:24:44 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.47 2007/11/18 14:59:47 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3092,6 +3092,11 @@ for details.
     and use their output as input.
    </para>
    <para>
+    If the request URL gets changed, &my-app; will detect that and use the new
+    one. This can be used to rewrite the request destination behind the client's
+    back, for example to specify a Tor exit relay for certain requests.
+   </para>
+   <para>
     Please refer to the <link linkend="filter-file">filter file chapter</link>
     to learn which client-header filters are available by default, and how to
     create your own.
@@ -4361,6 +4366,8 @@ new action
 # This way you can continue to use Tor for your normal browsing,
 # without overloading the Tor network with your FreeBSD ports updates
 # or downloads of bigger files like ISOs.
+# Note that HTTP headers are easy to fake and therefore their
+# values are as (un)trustworthy as your clients and users.
 {+forward-override{forward .} \
  -hide-if-modified-since      \
  -overwrite-last-modified     \
@@ -4775,8 +4782,8 @@ new action
    </para>
    <para>
     Randomizing the value of the <quote>If-Modified-Since:</quote> makes
-    sure it isn't used as a cookie replacement, but you will run into
-    caching problems if the random range is too high.  
+    it less likely that the server can use the time as a cookie replacement,
+    but you will run into caching problems if the random range is too high.
    </para>
    <para>
     It is a good idea to only use a small negative value and let
@@ -4785,7 +4792,8 @@ new action
    </para>
    <para>
     It is also recommended to use this action together with
-    <literal><link linkend="crunch-if-none-match">crunch-if-none-match</link></literal>.
+    <literal><link linkend="crunch-if-none-match">crunch-if-none-match</link></literal>,
+    otherwise it's more or less pointless.
    </para>
   </listitem>
  </varlistentry>
@@ -4794,8 +4802,8 @@ new action
   <term>Example usage (section):</term>
   <listitem>
     <para>
-     <screen># Let the browser revalidate without being tracked across sessions
-{ +hide-if-modified-since{-60} \
+     <screen># Let the browser revalidate but make tracking based on the time less likely.
+{+hide-if-modified-since{-60} \
  +overwrite-last-modified{randomize} \
  +crunch-if-none-match}
 /</screen>
@@ -4848,7 +4856,7 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    It is safe to leave this on.
+    It is safe and strongly recommended to leave this on.
    </para>
   </listitem>
  </varlistentry>
@@ -4974,11 +4982,9 @@ new action
     <listitem>
      <para><quote>conditional-block</quote> to delete the header completely if the host has changed.</para>
     </listitem>
-<!--
     <listitem>
      <para><quote>conditional-forge</quote> to forge the header if the host has changed.</para>
     </listitem>
--->
     <listitem>
      <para><quote>block</quote> to delete the header unconditionally.</para>
     </listitem>
@@ -5012,7 +5018,7 @@ new action
    <para>
     Always blocking the referrer, or using a custom one, can lead to
     failures on servers that check the referrer before they answer any
-    requests, in an attempt to prevent their valuable content from being
+    requests, in an attempt to prevent their content from being
     embedded or linked to elsewhere.
    </para>
    <para>
@@ -5051,7 +5057,7 @@ new action
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Conceal your type of browser and client operating system</para>
+   <para>Try to conceal your type of browser and client operating system</para>
   </listitem>
  </varlistentry>
 
@@ -5091,10 +5097,6 @@ new action
      order to customize their content for different browsers (which, by the
      way, is <emphasis>NOT</emphasis> the right thing to do: good web sites
      work browser-independently). 
-     <!-- 
-     <ulink url="http://www.javascriptkit.com/javaindex.shtml">smart way to do
-     that</ulink>!).
-     -->
     </para>
    </warning>
    <para>
@@ -5134,14 +5136,11 @@ new action
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="inspect-jpegs">
 <title>inspect-jpegs</title>
-<!--
-new action
--->
 <variablelist>
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>To protect against the MS buffer over-run in JPEG processing</para>
+   <para>Try to protect against a MS buffer over-run in JPEG processing</para>
   </listitem>
  </varlistentry>
 
@@ -5180,12 +5179,13 @@ new action
     allow execution of code on the target system, giving an attacker access 
     to the system in question by merely planting an altered JPEG image, which 
     would have no obvious indications of what lurks inside. This action
-    prevents this exploit.
+    tries to prevent this exploit if delivered through unencrypted HTTP.
    </para>
    <para>
-    Note that the described exploit is only one of many,
-    using this action does not mean that you no longer
-    have to patch the client.
+    Note that the exploit mentioned is several years old
+    and it's unlikely that your client is still vulnerable
+    against it. This action may be removed in one of the
+    next releases.
    </para>
   
   </listitem>
@@ -5280,13 +5280,9 @@ new action
     This action is most appropriate for browsers that don't have any controls 
     for unwanted pop-ups. Not recommended for general usage.
    </para>
-
-  <!-- 
    <para>
-    An alternate spelling is <literal>+kill-popup</literal>, which is 
-    interchangeable.
+    This action doesn't work very reliable and may be removed in future releases.
    </para>
- --> 
   </listitem>
  </varlistentry>
 
@@ -5354,8 +5350,7 @@ new action
     (<quote>https://</quote> URLs) through proxies. It works very simply:
     the proxy connects to the server on the specified port, and then
     short-circuits its connections to the client and to the remote server.
-    This can be a big security hole, since CONNECT-enabled proxies can be
-    abused as TCP relays very easily.
+    This means CONNECT-enabled proxies can be used as TCP relays very easily.
   </para>
   <para>
    <application>Privoxy</application> relays HTTPS traffic without seeing
@@ -9087,6 +9082,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.47  2007/11/18 14:59:47  fabiankeil
+ A few "Note to Upgraders" updates.
+
  Revision 2.46  2007/11/17 17:24:44  fabiankeil
  - Use new action defaults.
  - Minor fixes and rewordings.
