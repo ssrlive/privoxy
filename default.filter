@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.50 2007/11/03 15:05:30 fabiankeil Exp $
+#  $Id: default.filter,v 1.51 2007/11/04 16:15:11 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -595,8 +595,9 @@ FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitatio
 
 s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
- \#symadbn, \#ymadbn, .yschbox, \#yschsec, .yschhd, \#yschanswr, .yschftad,\
- .yschspn, .yschspns, \#ygrp-sponsored-links, \#ks-ypn-ads {display: none !important;}\n\
+ \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
+ \#yschanswr, .yschftad,\ .yschspn, .yschspns, \#ygrp-sponsored-links,\
+ \#ks-ypn-ads {display: none !important;}\n\
  \#yschpri, \#yschweb {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
 </style>\n$0@
@@ -830,6 +831,11 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.51  2007/11/04 16:15:11  fabiankeil
+#     - Add client-header taggers: client-ip-address,
+#       http-method, allow-post, complete-url and user-agent.
+#     - Add server-header tagger: content-type.
+#
 #     Revision 1.50  2007/11/03 15:05:30  fabiankeil
 #     Consistently use an empty line between the description and the PCRS code
 #     and end descriptions with dots. Patch submitted by Simon Ruderich.
