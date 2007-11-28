@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.56 2007/08/05 13:47:03 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.57 2007/10/27 13:32:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,10 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.56 2007/08/05 13:47:03 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.57  2007/10/27 13:32:23  fabiankeil
+ *    Plug minor 5-year-old memory leak. Spotted by
+ *    Valgrind and triggered by Privoxy-Regression-Test.
+ *
  *    Revision 1.56  2007/08/05 13:47:03  fabiankeil
  *    #1763173 from Stefan Huehner: s@const static@static const@.
  *
@@ -2835,7 +2839,6 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       free(url_template);
       edit_free_file(file);
       free_map(exports);
-      free(url_template);
       return err;
    }
 
