@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.158 2007/11/11 16:44:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.159 2007/11/24 14:34:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.158 2007/11/11 16:44:17 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.159  2007/11/24 14:34:09  fabiankeil
+ *    In the HTTP snipplets, refer to the client as client.
+ *
  *    Revision 1.158  2007/11/11 16:44:17  fabiankeil
  *    Emit a log message when activating the MS IIS5 hack.
  *
@@ -2011,6 +2014,7 @@ static void chat(struct client_state *csp)
          if (len <= 0)
          {
             log_error(LOG_LEVEL_ERROR, "read from client failed: %E");
+            destroy_list(headers);
             return;
          }
          
@@ -2020,6 +2024,7 @@ static void chat(struct client_state *csp)
           */
          if (add_to_iob(csp, buf, len))
          {
+            destroy_list(headers);
             return;
          }
          continue;
@@ -2049,7 +2054,7 @@ static void chat(struct client_state *csp)
           * An error response has already been send
           * and we're done here.
           */
-          return;
+         return;
       }
    }
 
