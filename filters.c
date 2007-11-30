@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.95 2007/10/17 19:31:20 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.96 2007/10/19 16:53:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.95 2007/10/17 19:31:20 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.96  2007/10/19 16:53:28  fabiankeil
+ *    Add helper function to check if any content filters are enabled.
+ *
  *    Revision 1.95  2007/10/17 19:31:20  fabiankeil
  *    Omitting the zero chunk that ends the chunk transfer encoding seems
  *    to be the new black. Log the problem and continue filtering anyway.
@@ -746,7 +749,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
       *p++ = '\0';
       if (ijb_isdigit(*p) == 0)
       {
-         free(acl_spec);
+         freez(acl_spec);
          return(-1);
       }
       masklength = atoi(p);
@@ -754,7 +757,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
 
    if ((masklength < 0) || (masklength > 32))
    {
-      free(acl_spec);
+      freez(acl_spec);
       return(-1);
    }
 
@@ -767,7 +770,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
 
       if (port <= 0 || port > 65535 || *endptr != '\0')
       {
-         free(acl_spec);
+         freez(acl_spec);
          return(-1);
       }
    }
@@ -775,7 +778,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    aca->port = (unsigned long)port;
 
    aca->addr = ntohl(resolve_hostname_to_ip(acl_spec));
-   free(acl_spec);
+   freez(acl_spec);
 
    if (aca->addr == INADDR_NONE)
    {
@@ -1722,7 +1725,7 @@ int is_untrusted_url(const struct client_state *csp)
                   log_error(LOG_LEVEL_ERROR, "Failed to append \'%s\' to trustfile \'%s\': %E",
                      new_entry, csp->config->trustfile);
                }
-               free(new_entry);
+               freez(new_entry);
             }
             else
             {
@@ -1873,7 +1876,7 @@ static char *pcrs_filter_response(struct client_state *csp)
                   current_hits += job_hits;
                   if (old != csp->iob->cur)
                   {
-                     free(old);
+                     freez(old);
                   }
                   old = new;
                }
@@ -1919,7 +1922,7 @@ static char *pcrs_filter_response(struct client_state *csp)
     */
    if (!hits)
    {
-      free(new);
+      freez(new);
       return(NULL);
    }
 
@@ -1968,7 +1971,7 @@ static char *gif_deanimate_response(struct client_state *csp)
    if (gif_deanimate(in, out, strncmp("last", csp->action->string[ACTION_STRING_DEANIMATE], 4)))
    {
       log_error(LOG_LEVEL_DEANIMATE, "failed! (gif parsing)");
-      free(in);
+      freez(in);
       buf_free(out);
       return(NULL);
    }
@@ -1985,8 +1988,8 @@ static char *gif_deanimate_response(struct client_state *csp)
       csp->content_length = out->offset;
       csp->flags |= CSP_FLAG_MODIFIED;
       p = out->buffer;
-      free(in);
-      free(out);
+      freez(in);
+      freez(out);
       return(p);
    }
 
@@ -2037,7 +2040,7 @@ static char *jpeg_inspect_response(struct client_state *csp)
    if (jpeg_inspect(in, out))
    {
       log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg parsing)");
-      free(in);
+      freez(in);
       buf_free(out);
       return(NULL);
 
@@ -2047,8 +2050,8 @@ static char *jpeg_inspect_response(struct client_state *csp)
       csp->content_length = out->offset;
       csp->flags |= CSP_FLAG_MODIFIED;
       p = out->buffer;
-      free(in);
-      free(out);
+      freez(in);
+      freez(out);
       return(p);
    }
 
