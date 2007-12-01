@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.54 2007/09/19 20:28:37 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.55 2007/11/03 17:34:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.54 2007/09/19 20:28:37 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.55  2007/11/03 17:34:49  fabiankeil
+ *    Log the "weak randomization factor" warning only
+ *    once for mingw32 and provide some more details.
+ *
  *    Revision 1.54  2007/09/19 20:28:37  fabiankeil
  *    If privoxy_strlcpy() is called with a "buffer" size
  *    of 0, don't touch whatever destination points to.
@@ -1088,6 +1092,12 @@ char * make_path(const char * dir, const char * file)
 long int pick_from_range(long int range)
 {
    long int number;
+
+   assert(range != 0);
+   assert(range > 0);
+
+   if (range <= 0) return 0;
+
 #ifdef HAVE_RANDOM
    number = random() % range + 1; 
 #elif defined(FEATURE_PTHREAD)
@@ -1120,7 +1130,7 @@ long int pick_from_range(long int range)
 
 #endif /* (def HAVE_RANDOM) */
 
-   return (number);
+   return number;
 }
 
 
