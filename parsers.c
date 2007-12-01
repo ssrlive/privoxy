@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.114 2007/10/19 16:56:26 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.115 2007/11/02 16:52:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.114 2007/10/19 16:56:26 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.115  2007/11/02 16:52:50  fabiankeil
+ *    Remove a "can't happen" error block which, over
+ *    time, mutated into a "guaranteed to happen" block.
+ *
  *    Revision 1.114  2007/10/19 16:56:26  fabiankeil
  *    - Downgrade "Buffer limit reached" message to LOG_LEVEL_INFO.
  *    - Use shiny new content_filters_enabled() in client_range().
@@ -2595,7 +2599,16 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
          rtime = (long int)difftime(now, last_modified);
          if (rtime)
          {
+            int negative = 0;
+
+            if (rtime < 0)
+            {
+               rtime *= -1; 
+               negative = 1;
+               log_error(LOG_LEVEL_HEADER, "Server time in the future.");
+            }
             rtime = pick_from_range(rtime);
+            if (negative) rtime *= -1;
             last_modified += rtime;
 #ifdef HAVE_GMTIME_R
             timeptr = gmtime_r(&last_modified, &gmt);
