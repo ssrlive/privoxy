@@ -9,10 +9,6 @@
 17_502_no_such_domain.dpatch 
 19_manpage_fixup.dpatch
 20_makefile_fixup.dpatch
-23_fix_faq_id.dpatch
 24_global_action.dpatch
 25_standard_medium.dpatch
 27_remove_nsl.dpatch
-30_actionsfile_fullname.dpatch
-31_usermanual-dash.dpatch
-32_faq_ulinkfix.dpatch

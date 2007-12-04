@@ -8,7 +8,7 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -598,6 +598,8 @@
+@@ -613,6 +613,8 @@
  .*[epu]ad*.
  county*.
  countr*.
@@ -17,7 +17,7 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
  
  #############################################################################
  # Generic block patterns by path:
-@@ -1823,6 +1825,11 @@
+@@ -1854,6 +1856,11 @@
  {+filter{tiny-textforms} +prevent-compression}
  .sourceforge.net/tracker
  

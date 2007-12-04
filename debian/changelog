@@ -1,18 +1,13 @@
-privoxy (3.0.7~CSV20071021-0.1) UNRELEASED; urgency=low
+privoxy (3.0.7~CSV20071202-0.1) UNRELEASED; urgency=low
 
-  * CVS as of 2007-10-21.
+  * CVS as of 2007-12-01.
   * Enable new zlib feature (Closes: #368448):
     - build-depend on zlib1g-dev
     - disable prevent-compression in 25_standard_medium.dpatch
   * Remove 28_pcre_returncode.dpatch, which is now applied upstream.
-  * 30_actionsfile_fullname.dpatch: The "actionsfile" syntax in the
-    configuration file is consistent with the rest of the configuration
-    options and requires the whole file name.
-  * 31_usermanual-dash: remove "--" from log comments, because jade
-    doesn't like these.
-  * 32_faq_ulinkfix: Fix ulink parameter.
+  * Remove 23_fix_faq_id.dpatch, which is now applied upstream.
 
- -- Roland Rosenfeld <roland@debian.org>  Sun, 21 Oct 2007 14:05:00 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 02 Dec 2007 16:11:10 +0100
 
 privoxy (3.0.6-4) unstable; urgency=low
 

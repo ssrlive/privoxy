@@ -62,7 +62,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  
  
  # readme page and INSTALL file
-@@ -1127,8 +1127,8 @@
+@@ -1132,8 +1132,8 @@
  		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $$DOC/user-manual;\
  	fi
  	@# Not all platforms support gzipped man pages.
@@ -73,7 +73,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
  
  	@# Change the config file default directories according to the configured ones
  	@$(ECHO) Rewriting config for this installation
-@@ -1288,7 +1288,7 @@
+@@ -1293,7 +1293,7 @@
  
  	@# man page and docs
  	@$(ECHO) Removing $(PROGRAM) docs
