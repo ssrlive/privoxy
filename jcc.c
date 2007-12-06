@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.160 2007/11/29 18:00:29 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.161 2007/12/04 19:44:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.160 2007/11/29 18:00:29 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.161  2007/12/04 19:44:22  fabiankeil
+ *    Unbreak trustfile which previously didn't work without
+ *    FEATURE_TOGGLE. Fixes BR#1843585, reported by Lee.
+ *
  *    Revision 1.160  2007/11/29 18:00:29  fabiankeil
  *    Plug memory leak. Spotted by Valgrind, triggered by
  *    Privoxy-Regression-Test feeding proxyfuzz.py.
@@ -1147,7 +1151,7 @@ static const char NO_SERVER_DATA_RESPONSE[] =
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Empty server or forwarder response.\r\n"
-   "The connection was closed without sending any data.\r\n";
+   "The connection has been closed but Privoxy didn't receive any data.\r\n";
 
 #if 0
 /* XXX: should be a template */
