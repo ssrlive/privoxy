@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.47 2007/11/18 14:59:47 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.48 2007/11/24 19:07:17 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.47 2007/11/18 14:59:47 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.48 2007/11/24 19:07:17 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4821,7 +4821,7 @@ new action
  <varlistentry>
   <term>Typical use:</term>
   <listitem>
-   <para>Improve privacy by not embedding the source of the request in the HTTP headers.</para>
+   <para>Improve privacy by not forwarding the source of the request in the HTTP headers.</para>
   </listitem>
  </varlistentry>
 
@@ -4829,8 +4829,7 @@ new action
   <term>Effect:</term>
   <listitem>
    <para>
-    Deletes any existing <quote>X-Forwarded-for:</quote> HTTP header from client requests,
-    and prevents adding a new one.
+    Deletes any existing <quote>X-Forwarded-for:</quote> HTTP header from client requests.
    </para>
   </listitem>
  </varlistentry>
@@ -4856,7 +4855,7 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    It is safe and strongly recommended to leave this on.
+    It is safe and recommended to leave this on.
    </para>
   </listitem>
  </varlistentry>
@@ -9082,6 +9081,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.48  2007/11/24 19:07:17  fabiankeil
+ - Mention request rewriting.
+ - Enable the conditional-forge paragraph.
+ - Minor rewordings.
+
  Revision 2.47  2007/11/18 14:59:47  fabiankeil
  A few "Note to Upgraders" updates.
 

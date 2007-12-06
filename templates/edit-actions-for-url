@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.46  2007/11/10 15:06:10  fabiankeil
+#    - Add support for +hide-referrer{conditional-forge}.
+#    - Minor rewordings.
+#
 #    Revision 1.45  2007/05/24 13:38:45  fabiankeil
 #    Two minor fixes.
 #
@@ -890,7 +894,7 @@ function show_send_wafer_opts(tf)
         name="hide_forwarded_for_headers" value="X" @hide-forwarded-for-headers-x@
         ></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</a></td>
-      <td>Block any existing X-Forwarded-for header, and do not add a new one.</td>
+      <td>Remove any existing X-Forwarded-for header.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
