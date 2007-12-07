@@ -259,7 +259,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN2171"
+NAME="AEN2167"
 ></A
 ><P
 ><B
@@ -528,7 +528,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2270"
+NAME="AEN2266"
 >8.1. Finding the Right Mix</A
 ></H2
 ><P
@@ -563,7 +563,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2277"
+NAME="AEN2273"
 >8.2. How to Edit</A
 ></H2
 ><P
@@ -893,7 +893,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2368"
+NAME="AEN2364"
 >8.4.1. The Domain Pattern</A
 ></H3
 ><P
@@ -1117,7 +1117,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2439"
+NAME="AEN2435"
 >8.4.2. The Path Pattern</A
 ></H3
 ><P
@@ -2059,6 +2059,14 @@ HREF="filter-file.html"
 ><P
 >    Client-header filters are executed after the other header actions have finished
     and use their output as input.
+   </P
+><P
+>    If the request URL gets changed, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will detect that and use the new
+    one. This can be used to rewrite the request destination behind the client's
+    back, for example to specify a Tor exit relay for certain requests.
    </P
 ><P
 >    Please refer to the <A
@@ -4339,6 +4347,8 @@ CLASS="QUOTE"
 # This way you can continue to use Tor for your normal browsing,
 # without overloading the Tor network with your FreeBSD ports updates
 # or downloads of bigger files like ISOs.
+# Note that HTTP headers are easy to fake and therefore their
+# values are as (un)trustworthy as your clients and users.
 {+forward-override{forward .} \
  -hide-if-modified-since      \
  -overwrite-last-modified     \
@@ -4926,8 +4936,8 @@ CLASS="APPLICATION"
 CLASS="QUOTE"
 >"If-Modified-Since:"</SPAN
 > makes
-    sure it isn't used as a cookie replacement, but you will run into
-    caching problems if the random range is too high.  
+    it less likely that the server can use the time as a cookie replacement,
+    but you will run into caching problems if the random range is too high.
    </P
 ><P
 >    It is a good idea to only use a small negative value and let
@@ -4948,7 +4958,8 @@ CLASS="LITERAL"
 HREF="actions-file.html#CRUNCH-IF-NONE-MATCH"
 >crunch-if-none-match</A
 ></TT
->.
+>,
+    otherwise it's more or less pointless.
    </P
 ></DD
 ><DT
@@ -4963,8 +4974,8 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
-># Let the browser revalidate without being tracked across sessions
-{ +hide-if-modified-since{-60} \
+># Let the browser revalidate but make tracking based on the time less likely.
+{+hide-if-modified-since{-60} \
  +overwrite-last-modified{randomize} \
  +crunch-if-none-match}
 /</PRE
@@ -4994,7 +5005,7 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->Improve privacy by not embedding the source of the request in the HTTP headers.</P
+>Improve privacy by not forwarding the source of the request in the HTTP headers.</P
 ></DD
 ><DT
 >Effect:</DT
@@ -5003,8 +5014,7 @@ CLASS="VARIABLELIST"
 >    Deletes any existing <SPAN
 CLASS="QUOTE"
 >"X-Forwarded-for:"</SPAN
-> HTTP header from client requests,
-    and prevents adding a new one.
+> HTTP header from client requests.
    </P
 ></DD
 ><DT
@@ -5024,7 +5034,7 @@ CLASS="QUOTE"
 >Notes:</DT
 ><DD
 ><P
->    It is safe to leave this on.
+>    It is safe and recommended to leave this on.
    </P
 ></DD
 ><DT
@@ -5216,6 +5226,13 @@ CLASS="QUOTE"
 ><P
 ><SPAN
 CLASS="QUOTE"
+>"conditional-forge"</SPAN
+> to forge the header if the host has changed.</P
+></LI
+><LI
+><P
+><SPAN
+CLASS="QUOTE"
 >"block"</SPAN
 > to delete the header unconditionally.</P
 ></LI
@@ -5258,7 +5275,7 @@ CLASS="QUOTE"
 ><P
 >    Always blocking the referrer, or using a custom one, can lead to
     failures on servers that check the referrer before they answer any
-    requests, in an attempt to prevent their valuable content from being
+    requests, in an attempt to prevent their content from being
     embedded or linked to elsewhere.
    </P
 ><P
@@ -5345,7 +5362,7 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->Conceal your type of browser and client operating system</P
+>Try to conceal your type of browser and client operating system</P
 ></DD
 ><DT
 >Effect:</DT
@@ -5403,7 +5420,6 @@ CLASS="EMPHASIS"
 ></SPAN
 > the right thing to do: good web sites
      work browser-independently). 
-     
     </P
 ></TD
 ></TR
@@ -5491,7 +5507,7 @@ CLASS="VARIABLELIST"
 >Typical use:</DT
 ><DD
 ><P
->To protect against the MS buffer over-run in JPEG processing</P
+>Try to protect against a MS buffer over-run in JPEG processing</P
 ></DD
 ><DT
 >Effect:</DT
@@ -5522,12 +5538,13 @@ CLASS="VARIABLELIST"
     allow execution of code on the target system, giving an attacker access 
     to the system in question by merely planting an altered JPEG image, which 
     would have no obvious indications of what lurks inside. This action
-    prevents this exploit.
+    tries to prevent this exploit if delivered through unencrypted HTTP.
    </P
 ><P
->    Note that the described exploit is only one of many,
-    using this action does not mean that you no longer
-    have to patch the client.
+>    Note that the exploit mentioned is several years old
+    and it's unlikely that your client is still vulnerable
+    against it. This action may be removed in one of the
+    next releases.
    </P
 ></DD
 ><DT
@@ -5701,6 +5718,9 @@ CLASS="REPLACEABLE"
 >    This action is most appropriate for browsers that don't have any controls 
     for unwanted pop-ups. Not recommended for general usage.
    </P
+><P
+>    This action doesn't work very reliable and may be removed in future releases.
+   </P
 ></DD
 ><DT
 >Example usage:</DT
@@ -5793,8 +5813,7 @@ CLASS="QUOTE"
 > URLs) through proxies. It works very simply:
     the proxy connects to the server on the specified port, and then
     short-circuits its connections to the client and to the remote server.
-    This can be a big security hole, since CONNECT-enabled proxies can be
-    abused as TCP relays very easily.
+    This means CONNECT-enabled proxies can be used as TCP relays very easily.
   </P
 ><P
 >   <SPAN
@@ -7164,7 +7183,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4245"
+NAME="AEN4247"
 >8.5.39. Summary</A
 ></H3
 ><P
@@ -7469,7 +7488,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4310"
+NAME="AEN4312"
 >8.7.1. default.action</A
 ></H3
 ><P
@@ -8190,7 +8209,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4446"
+NAME="AEN4448"
 >8.7.2. user.action</A
 ></H3
 ><P

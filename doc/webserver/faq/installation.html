@@ -188,19 +188,28 @@ NAME="FIRSTSTEP"
 special I have to do now?</A
 ></H3
 ><P
-> All browsers must be told to use <SPAN
+> All browsers should be told to use <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > 
  as a proxy by specifying the correct proxy address and port number 
- in the appropriate configuration area for the browser. See 
+ in the appropriate configuration area for the browser. It's possible
+ to combine <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with a packet filter to intercept HTTP requests
+ even if the client isn't explicitly configured to use <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>,
+ but where possible, configuring the client is recommended. See 
  <A
 HREF="../user-manual/startup.html"
 TARGET="_top"
 >the User Manual for more
  details</A
->. You should also flush your browser's memory and disk cache to get rid of any
- cached junk items, and remove any stored 
+>. You should also flush your browser's memory and disk
+ cache to get rid of any cached junk items, and remove any stored 
  <A
 HREF="http://en.wikipedia.org/wiki/Browser_cookie"
 TARGET="_top"
@@ -230,15 +239,16 @@ CLASS="QUOTE"
 >"localhost"</SPAN
 >,
   which is the special name used by every computer on the Internet to refer
-  to itself) and the port will be 8118 (unless you have <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
-  to run on a different port with the <A
+  to itself) and the port will be 8118 (unless you used the <A
 HREF="../user-manual/config.html#LISTEN-ADDRESS"
 TARGET="_top"
 >listen-address</A
-> config option). 
+>
+  config option to tell <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to run on
+  a different port).
  </P
 ><P
 >  When configuring your browser's proxy settings you typically enter
@@ -295,8 +305,7 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > does not currently handle
-  any other protocols such as FTP, SMTP, IM, IRC, ICQ, etc. Be sure that
-  proxying any of these other protocols is not activated.
+  any other protocols such as FTP, SMTP, IM, IRC, ICQ, etc.
  </P
 ></DIV
 ><DIV
@@ -466,10 +475,10 @@ CLASS="GUIBUTTON"
 >Clear Disk Cache</SPAN
 >"</SPAN
 >.
- And, <SPAN
+ In some <SPAN
 CLASS="APPLICATION"
 >Firefox</SPAN
-> users would click 
+> versions it's
  <SPAN
 CLASS="GUIBUTTON"
 >Tools</SPAN
@@ -490,7 +499,8 @@ CLASS="QUOTE"
 CLASS="GUIBUTTON"
 >Clear Cache Now</SPAN
 >"</SPAN
->.&#13;</P
+>.
+ </P
 ></DIV
 ></DIV
 ><DIV

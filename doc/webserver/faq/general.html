@@ -82,15 +82,14 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="WHO-USES"
->1.1. Who should use Privoxy?</A
-></H3
-><P
->  Anyone that is interested in security, privacy, or in 
-  finer-grained control over their web and Internet experience.
-  Everyone is encouraged to try <SPAN
+>1.1. Who should give <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
->.
+> a try?</A
+></H3
+><P
+>  Anyone who is interested in security, privacy, or in 
+  finer-grained control over their web and Internet experience.
  </P
 ></DIV
 ><DIV
@@ -107,12 +106,15 @@ me?</A
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > is certainly a good choice, especially for those who want more 
-  control and security. Those that have the ability to fine-tune their installation
-  will benefit the most. One of <SPAN
+  control and security. Those with the willingness to read the documentation
+  and the ability to fine-tune their installation will benefit the most.
+ </P
+><P
+>  One of <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
 >
-  strength's is that it is highly configurable giving you the ability to
+  strengths is that it is highly configurable giving you the ability to
   completely personalize your installation. Being familiar with, or at least
   having an interest in learning about <A
 HREF="http://en.wikipedia.org/wiki/Http"
@@ -123,12 +125,6 @@ TARGET="_top"
 HREF="http://en.wikipedia.org/wiki/Html"
 TARGET="_top"
 >HTML</A
->, 
-  <A
-HREF="http://en.wikipedia.org/wiki/Internet_Protocol"
-TARGET="_top"
->IP (Internet
-  Protocol)</A
 >, and 
   <A
 HREF="http://en.wikipedia.org/wiki/Regular_expressions"
@@ -164,7 +160,12 @@ HREF="http://en.wikipedia.org/wiki/Text_editors"
 TARGET="_top"
 >text editor</A
 >
-  to edit configuration files.
+  to edit configuration files. Also note that the web-based action editor
+  doesn't use authentication and should only be enabled in environments
+  where all clients with access to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> listening port can be trusted.
   </P
 ></DIV
 ><DIV
@@ -335,7 +336,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN78"
+NAME="AEN79"
 >1.6. Why <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
@@ -440,8 +441,8 @@ HREF="http://en.wikipedia.org/wiki/Browser_cookie"
 TARGET="_top"
 >cookies</A
 >, and still
- helps protect your privacy. But, these have all been greatly enhanced, and many,
- many new features have been added, all in the same vein.
+ helps protect your privacy. But, most of these features have been enhanced,
+ and many new ones have been added, all in the same vein.
  </P
 ><P
 > <SPAN
@@ -604,7 +605,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN150"
+NAME="AEN151"
 >1.9. Can Privoxy make mistakes? 
 This does not sound very scientific.</A
 ></H3
@@ -631,21 +632,22 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN156"
+NAME="AEN157"
 >1.10. Will I have to configure Privoxy
  before I can use it?</A
 ></H3
 ><P
-> No, not really. The default installation should give you a good starting
+> That depends on your expectations.
+ The default installation should give you a good starting
  point, and block <SPAN
 CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
 >most</I
 ></SPAN
-> ads and unwanted content. Many of
- the more advanced features are off by default, and would require you to 
- activate them. </P
+> ads and unwanted content,
+ but many of the more advanced features are off by default, and require
+ you to activate them. </P
 ><P
 > You do have to set up your browser to use
  <SPAN
@@ -662,7 +664,7 @@ HREF="installation.html#FIRSTSTEP"
 CLASS="APPLICATION"
 >Privoxy's</SPAN
 >
- configuration to more closely match your individual situation. And we would
+ configuration to more closely match your individual situation. And we
  encourage you to do this. This is where the real power of
  <SPAN
 CLASS="APPLICATION"
@@ -715,8 +717,9 @@ CLASS="APPLICATION"
   adequate for you. But <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is much more
-  versatile and powerful, and can do a number of things that browsers just can't.
+> is very
+  versatile and powerful, and can probably do a number of things
+  your browser just can't.
  </P
 ><P
 >  In addition, a proxy is good choice if you use multiple browsers, or 
@@ -727,6 +730,19 @@ CLASS="APPLICATION"
   application. This way all the configuration is in one place, and you don't
   have to maintain a similar configuration for possibly many browsers or
   users.
+ </P
+><P
+>  Note, however, that it's recommended to leverage both your browser's
+  and <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> privacy enhancing features
+  at the same time. While your browser probably lacks some features
+  <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> offers, it should also be able to do some things more
+  reliable, for example restricting and suppressing JavaScript.
  </P
 ></DIV
 ><DIV
@@ -777,7 +793,7 @@ warranty? Registration?</A
 >  <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> is licensed under the <A
+> is free software and licensed under the <A
 HREF="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"
 TARGET="_top"
 >GNU General Public License (GPL) version 2</A
@@ -802,17 +818,6 @@ CLASS="EMPHASIS"
 ></SPAN
 > of any kind, expressed, implied or otherwise.
   That is something that would cost real money ;-) There is no registration either.
-  <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> really is <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->free</I
-></SPAN
->
-  in every respect!
  </P
 ></DIV
 ><DIV
@@ -836,7 +841,10 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > could help prevent contact from (known) sites that use such
  tactics with appropriate configuration rules, and thus could conceivably
- prevent contamination from such sites.</P
+ prevent contamination from such sites. However, keeping such a configuration
+ up to date would require a lot of time and effort that would be better spend
+ on keeping your software itself up to date so it doesn't have known
+ vulnerabilities.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -857,8 +865,10 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > in conjunction with other
  ad-blocking products, and this could conceivably cause undesirable results.
- It would be better to choose one software or the other and work a little to
+ It might be better to choose one software or the other and work a little to
  tweak its configuration to your liking.</P
+><P
+> Note that this is an advice specific to ad blocking.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -918,6 +928,11 @@ TARGET="_top"
 >Developer's Manual</A
 >, at least
    the pertinent sections.</P
+><P
+>  You can also start helping out without SourceForge.net account,
+  simply by showing up on the mailing list, helping out other users,
+  providing general feedback or reporting problems you noticed.
+ </P
 ></DIV
 ><DIV
 CLASS="SECT3"
@@ -938,7 +953,8 @@ CLASS="APPLICATION"
 HREF="mailto: ijbswa-developers@lists.sourceforge.net"
 TARGET="_top"
 >drop us a note</A
->.</P
+>
+ and get your name on the list of contributors.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
