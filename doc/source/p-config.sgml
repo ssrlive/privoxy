@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.22 2007/11/09 20:26:58 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.23 2007/11/15 02:47:01 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.22 2007/11/09 20:26:58 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.23 2007/11/15 02:47:01 hal9 Exp $
 </para>
 <para>
 Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
@@ -835,13 +835,6 @@ actionsfile
  <varlistentry>
   <term>Notes:</term>
   <listitem>
- <!--
-  removed per bug report 688728 02/20/03 HB
-  
-   <para>
-    The windows version will additionally log to the console.
-   </para>
-  --> 
    <para>
     The logfile is where all logging and error messages are written. The level
     of detail and number of messages are set with the <literal>debug</literal>
@@ -851,15 +844,14 @@ actionsfile
     is doing.
    </para>
    <para>
-    Many users will never look at it, however, and it's a privacy risk
-    if third parties can get access to it. It is therefore disabled by
-    default in <application>Privoxy</application> 3.0.7 and later.
+    Depending on the debug options below, the logfile may be a privacy risk
+    if third parties can get access to it. As most users will never look
+    at it, <application>Privoxy</application> 3.0.7 and later only log fatal
+    errors by default.
   </para>
   <para>
-    For troubleshooting purposes, you will have to explicitly enable it.
-    Please don't file any support requests without trying to reproduce
-    the problem with logging enabled first. Once you read the log messages,
-    you may even be able to solve the problem on your own.
+    For most troubleshooting purposes, you will have to change that,
+    please refer to the debugging section for details.
    </para>
    <para>
     Your logfile will grow indefinitely, and you will probably want to
@@ -867,19 +859,6 @@ actionsfile
     (see <quote>man cron</quote>). For Red Hat based Linux distributions, a
     <command>logrotate</command> script has been included.
    </para> 
-<!--
-No one cares enough about SuSE to build privoxy packages,
-so most Privoxy users seem to use different platforms and
-are thus unlikely to care about these instructions.
-It's also questionable if they still work.
-fk 2007-11-07
-   <para>
-    On SuSE Linux systems, you can place a line like <quote>/var/log/privoxy.*
-    +1024k 644 nobody.nogroup</quote> in <filename>/etc/logfiles</filename>, with
-    the effect that cron.daily will automatically archive, gzip, and empty the
-    log, when it exceeds 1M size.
-   </para>
--->
    <para>
     Any log files must be writable by whatever user <application>Privoxy</application>
     is being run as (on Unix, default user id is <quote>privoxy</quote>).
@@ -888,7 +867,7 @@ fk 2007-11-07
  </varlistentry>
 </variablelist>
 
-<![%config-file;[<literallayout>@@#logfile logfile</literallayout>]]>
+<![%config-file;[<literallayout>@@logfile logfile</literallayout>]]>
 </sect3>
 
 
@@ -1102,24 +1081,23 @@ fk 2007-11-07
    </para>
    <para>
     A debug level of 1 is informative because it will show you each request
-    as it happens. <emphasis>1, 4096 and 8192 are highly recommended</emphasis>
-    so that you will notice when things go wrong. The other levels are probably
-    only of interest if you are hunting down a specific problem. They can produce
-    a hell of an output (especially 16).
+    as it happens. <emphasis>1, 4096 and 8192 are recommended</emphasis>
+    so that you will notice when things go wrong. The other levels are
+    probably only of interest if you are hunting down a specific problem.
+    They can produce a hell of an output (especially 16).
     <!-- LOL -->
    </para>
-<!--
    <para>
-    The reporting of <emphasis>fatal</emphasis> errors (i.e. ones which causes 
-    <application>Privoxy</application> to exit) is always on and cannot be disabled.
+    &my-app; used to ship with the debug levels recommended above enabled by
+    default, but due to privacy concerns 3.0.7 and later are configured to
+    only log fatal errors.
    </para>
-   It can be disabled by not logging at all (now the default)
-   and I doubt that any user would care about not being able
-   to disable it anyway.
-   fk 2007-11-09
--->
    <para>
-    If you want to use CLF (Common Log Format), you should set <quote>debug
+    If you are used to the more verbose settings, simply enable the debug lines
+    below again.
+   </para>
+   <para>
+    If you want to use pure CLF (Common Log Format), you should set <quote>debug
     512</quote> <emphasis>ONLY</emphasis> and not enable anything else.
    </para>
    <para>
@@ -1127,13 +1105,18 @@ fk 2007-11-07
     length of log messages. If it's reached, messages are logged truncated
     and marked with <quote>... [too long, truncated]</quote>.
    </para>
+   <para>
+    Please don't file any support requests without trying to reproduce
+    the problem with increased debug level first. Once you read the log
+    messages, you may even be able to solve the problem on your own.
+   </para>
   </listitem>
  </varlistentry>
 </variablelist>
 
-<![%config-file;[<literallayout>@@debug   1    # show each GET/POST/CONNECT request</literallayout>]]>
-<![%config-file;[<literallayout>@@debug   4096 # Startup banner and warnings</literallayout>]]>
-<![%config-file;[<literallayout>@@debug   8192 # Errors - *we highly recommended enabling this*</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   1    # show each GET/POST/CONNECT request</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   4096 # Startup banner and warnings</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   8192 # Errors - *we highly recommended enabling this*</literallayout>]]>
 </sect3>
 
 
