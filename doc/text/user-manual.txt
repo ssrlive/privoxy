@@ -2,7 +2,7 @@ Privoxy 3.0.7 User Manual
 
 [ Copyright   2001 - 2007 by Privoxy Developers ]
 
-$Id: user-manual.sgml,v 2.47 2007/11/18 14:59:47 fabiankeil Exp $
+$Id: user-manual.sgml,v 2.49 2007/12/06 18:21:55 fabiankeil Exp $
 
 The Privoxy User Manual gives users information on how to install, configure
 and use Privoxy.
@@ -212,24 +212,16 @@ Table of Contents
 
 1. Introduction
 
-This documentation is included with the current beta version of Privoxy,
-v.3.0.7, and is mostly complete at this point. The most up to date reference
-for the time being is still the comments in the source files and in the
-individual configuration files. Development of a new version is currently
-nearing completion, and includes significant changes and enhancements over
-earlier versions. .
-
-Since this is a beta version, not all new features are well tested. This
-documentation may be slightly out of sync as a result (especially with CVS
-sources). And there may be bugs, though hopefully not many!
+This documentation is included with the current stable version of Privoxy,
+v.3.0.7.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1.1. Features
 
 In addition to the core features of ad blocking and cookie management, Privoxy
-provides many supplemental features, some of them currently under development,
-that give the end-user more control, more privacy and more freedom:
+provides many supplemental features, that give the end-user more control, more
+privacy and more freedom:
 
   • Integrated browser based configuration and control utility at http://
     config.privoxy.org/ (shortcut: http://p.p/). Browser-based tracing of rule
@@ -435,8 +427,8 @@ compiler like gcc are required.
 
 When building from a source tarball, first unpack the source:
 
- tar xzvf privoxy-3.0.7-beta-src* [.tgz or .tar.gz]
- cd privoxy-3.0.7-beta
+ tar xzvf privoxy-3.0.7-src* [.tgz or .tar.gz]
+ cd privoxy-3.0.7
 
 
 For retrieving the current CVS sources, you'll need a CVS client installed.
@@ -552,11 +544,12 @@ If install finds previous versions of local configuration files, most of these
 will not be overwritten, and the new ones will be installed with a "new"
 extension. default.action, default.filter, and standard.action will be
 overwritten. You will then need to manually update the other installed
-configuration files as needed. All template files will be overwritten. If you
-have customized, local templates, you should save these first, and in fact it
-is wise to always save any important configuration files "just in case". If a
-previous version of Privoxy is already running, you will have to restart it
-manually.
+configuration files as needed. The default template files will be overwritten.
+If you have customized, local templates, these should be stored safely in a
+separate directory and defined in config by the "templdir" directive. It is of
+course wise to always back-up any important configuration files "just in case".
+If a previous version of Privoxy is already running, you will have to restart
+it manually.
 
 For more detailed instructions on how to build Redhat RPMs, Windows
 self-extracting installers, building on platforms with special requirements
@@ -1151,9 +1144,7 @@ which cases it's safe to enable them again.
 
 For Unix, *BSD and Linux, all configuration files are located in /etc/privoxy/
 by default. For MS Windows, OS/2, and AmigaOS these are all in the same
-directory as the Privoxy executable. The name and number of configuration files
-has changed from previous versions, and is subject to change as development
-progresses.
+directory as the Privoxy executable.
 
 The installed defaults provide a reasonable starting point, though some
 settings may be aggressive by some standards. For the time being, the principle
@@ -1208,11 +1199,6 @@ changes to take effect. Privoxy detects such changes automatically. Note,
 however, that it may take one or two additional requests for the change to take
 effect. When changing the listening address of Privoxy, these "wake up"
 requests must obviously be sent to the old listening address.
-
-While under development, the configuration content is subject to change. The
-below documentation may not be accurate by the time you read this. Also, what
-constitutes a "default" setting, may change, so please check all your
-configuration files on important issues.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -3161,6 +3147,11 @@ Notes:
     Client-header filters are executed after the other header actions have
     finished and use their output as input.
 
+    If the request URL gets changed, Privoxy will detect that and use the new
+    one. This can be used to rewrite the request destination behind the
+    client's back, for example to specify a Tor exit relay for certain
+    requests.
+
     Please refer to the filter file chapter to learn which client-header
     filters are available by default, and how to create your own.
 
@@ -3905,6 +3896,8 @@ Example usage:
     # This way you can continue to use Tor for your normal browsing,
     # without overloading the Tor network with your FreeBSD ports updates
     # or downloads of bigger files like ISOs.
+    # Note that HTTP headers are easy to fake and therefore their
+    # values are as (un)trustworthy as your clients and users.
     {+forward-override{forward .} \
      -hide-if-modified-since      \
      -overwrite-last-modified     \
@@ -4145,20 +4138,20 @@ Notes:
     range of minutes where the random factor should be chosen from and Privoxy
     does the rest. A negative value means subtracting, a positive value adding.
 
-    Randomizing the value of the "If-Modified-Since:" makes sure it isn't used
-    as a cookie replacement, but you will run into caching problems if the
-    random range is too high.
+    Randomizing the value of the "If-Modified-Since:" makes it less likely that
+    the server can use the time as a cookie replacement, but you will run into
+    caching problems if the random range is too high.
 
     It is a good idea to only use a small negative value and let
     overwrite-last-modified handle the greater changes.
 
     It is also recommended to use this action together with
-    crunch-if-none-match.
+    crunch-if-none-match, otherwise it's more or less pointless.
 
 Example usage (section):
 
-    # Let the browser revalidate without being tracked across sessions
-    { +hide-if-modified-since{-60} \
+    # Let the browser revalidate but make tracking based on the time less likely.
+    {+hide-if-modified-since{-60} \
      +overwrite-last-modified{randomize} \
      +crunch-if-none-match}
     /
@@ -4170,13 +4163,12 @@ Example usage (section):
 
 Typical use:
 
-    Improve privacy by not embedding the source of the request in the HTTP
+    Improve privacy by not forwarding the source of the request in the HTTP
     headers.
 
 Effect:
 
-    Deletes any existing "X-Forwarded-for:" HTTP header from client requests,
-    and prevents adding a new one.
+    Deletes any existing "X-Forwarded-for:" HTTP header from client requests.
 
 Type:
 
@@ -4188,7 +4180,7 @@ Parameter:
 
 Notes:
 
-    It is safe to leave this on.
+    It is safe and recommended to leave this on.
 
 Example usage:
 
@@ -4260,6 +4252,8 @@ Parameter:
       □ "conditional-block" to delete the header completely if the host has
         changed.
 
+      □ "conditional-forge" to forge the header if the host has changed.
+
       □ "block" to delete the header unconditionally.
 
       □ "forge" to pretend to be coming from the homepage of the server we are
@@ -4281,7 +4275,7 @@ Notes:
 
     Always blocking the referrer, or using a custom one, can lead to failures
     on servers that check the referrer before they answer any requests, in an
-    attempt to prevent their valuable content from being embedded or linked to
+    attempt to prevent their content from being embedded or linked to
     elsewhere.
 
     Both conditional-block and forge will work with referrer checks, as long as
@@ -4309,7 +4303,7 @@ Example usage:
 
 Typical use:
 
-    Conceal your type of browser and client operating system
+    Try to conceal your type of browser and client operating system
 
 Effect:
 
@@ -4359,7 +4353,7 @@ Example usage:
 
 Typical use:
 
-    To protect against the MS buffer over-run in JPEG processing
+    Try to protect against a MS buffer over-run in JPEG processing
 
 Effect:
 
@@ -4379,11 +4373,12 @@ Notes:
     common image types found across the Internet. The exploit as described can
     allow execution of code on the target system, giving an attacker access to
     the system in question by merely planting an altered JPEG image, which
-    would have no obvious indications of what lurks inside. This action
-    prevents this exploit.
+    would have no obvious indications of what lurks inside. This action tries
+    to prevent this exploit if delivered through unencrypted HTTP.
 
-    Note that the described exploit is only one of many, using this action does
-    not mean that you no longer have to patch the client.
+    Note that the exploit mentioned is several years old and it's unlikely that
+    your client is still vulnerable against it. This action may be removed in
+    one of the next releases.
 
 Example usage:
 
@@ -4436,6 +4431,9 @@ Notes:
     This action is most appropriate for browsers that don't have any controls
     for unwanted pop-ups. Not recommended for general usage.
 
+    This action doesn't work very reliable and may be removed in future
+    releases.
+
 Example usage:
 
     +kill-popups
@@ -4473,9 +4471,8 @@ Notes:
     The CONNECT methods exists in HTTP to allow access to secure websites
     ("https://" URLs) through proxies. It works very simply: the proxy connects
     to the server on the specified port, and then short-circuits its
-    connections to the client and to the remote server. This can be a big
-    security hole, since CONNECT-enabled proxies can be abused as TCP relays
-    very easily.
+    connections to the client and to the remote server. This means
+    CONNECT-enabled proxies can be used as TCP relays very easily.
 
     Privoxy relays HTTPS traffic without seeing the decoded content. Websites
     can leverage this limitation to circumvent Privoxy's filters. By specifying
@@ -6209,7 +6206,7 @@ group_id=11118.
 
 12. Privoxy Copyright, License and History
 
-Copyright   2001 - 2007 by Privoxy Developers <
+Copyright   2001-2007 by Privoxy Developers <
 ijbswa-developers@lists.sourceforge.net>
 
 Some source code is based on code Copyright   1997 by Anonymous Coders and
