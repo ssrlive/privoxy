@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.9 2006/11/14 01:57:47 hal9 Exp $
+ $Id: readme.sgml,v 2.10 2007/11/14 18:34:33 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -128,17 +128,15 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
 <para>
- NEWS! November 2006, Privoxy 3.0.6 is released. This is a significant upgrade
- with many new and enhanced features, and many bugs fixed. It is also the
- first stable release in quite some time. There are fifteen new actions
- available, and several actions have enhanced capabilities. Multiple filter
- files are now supported as well. There are many improvements and refinements.
- See the "What's New" section and the "Upgrader's Notes" in <citetitle>the
- User Manual</citetitle> for details and specifics. Preliminary work on 
- 3.0.7 is already underway.
+ December 2007, Privoxy 3.0.7 stable is released. This is a significant upgrade
+ with many new and enhanced features, and many bugs fixed. 
+ See the "ChangeLog", and the "What's New" section and the "Upgrader's Notes"
+ in <citetitle>the User Manual</citetitle> for details and specifics. There 
+ are changes related to configuration, so anyone upgrading and keeping their
+ old configuration should read ahead first.
 </para>
 <para>
- NEWS! September 2006, Privoxy 3.0.5 BETA is released. This is a significant
+ NEWS! November 2006, Privoxy 3.0.6 stable is released. This is a significant
  upgrade with many new and enhanced features, and many bugs fixed. 
 </para>
 <para>
@@ -146,12 +144,6 @@
  was used to gather our thoughts, play with some new ideas and refine 
  some old ones. It will remain a development cycle with no actual release.
  3.0.5 is the fruit of these efforts.
-</para>
-<para>
- NEWS! January 2004, Privoxy 3.0.3 is released. This is the another 
- maintenance release of Privoxy which fixes more bugs, further refines
- the configuration and works around some known third-party problems. See the
- ChangeLog for complete details. Upgrading from 3.0.2 is recommended.
 </para>
 </sect1>
 
@@ -258,7 +250,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.9 2006/11/14 01:57:47 hal9 Exp $ -->
+<!--  $Id: readme.sgml,v 2.10 2007/11/14 18:34:33 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
