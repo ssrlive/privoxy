@@ -3,6 +3,35 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.6 ***
 
+- Added zlib support to filter content with gzip and deflate
+  encoding. (Patch provided by Wil Mahan)
+- Dedicated filters and actions are used for header filtering.
+  "filter-client-headers" and "filter-client-headers" are no longer
+  supported, use server-header-filter{} and client-header-filter{}
+  instead.
+- Tags can be used to change actions based on HTTP headers.
+- New server-header filter: less-download-windows.
+- New client-header taggers: css-requests, image-requests,
+  client-ip-address, http-method, allow-post, complete-url,
+  user-agent and privoxy-control.
+- New server-header taggers: content-type and privoxy-control.
+- The forward-override{} action allows to change the forwarding
+  settings through the action files, for example based on client
+  headers like the User-Agent, or the request origin.
+- Socks errors are no longer handled by the CGI page for
+  DNS resolution failures.
+- CGI pages use favicons to signal whether they are error
+  or control pages. This is useful if you rely heavily on
+  browser tabs.
+- The show-url-info CGI page shows the forwarding settings.
+- "Crunch!" log messages (used when Privoxy answers requests
+  by itself) now also contain the reason.
+- Allow to rewrite the request destination behind the client's back.
+- Fix socks requests on big-endian platforms. Patch provided by Song Weijia.
+- Fixes possible deadlocks and crashes on OpenBSD.
+  Patch provided by Ralf Horstmann.
+- The CGI action editor allows to edit actionfiles with previously
+  forbidden characters like dots.
 - New trust entries are saved with a comment that contains the
   trusted referring URL (Suggested by Daniel Griscom).
 - Filter descriptions are HTML encoded automatically. 	
@@ -13,7 +42,7 @@ ChangeLog for Privoxy
   requests for Privoxy's CGI pages to be blocked, redirected
   or (un)trusted like ordinary requests.
 - Empty filter files no longer interrupt the filtering process
-  prematurely and are correctly listed on the show-status CGI page. 
+  prematurely and are correctly listed on the show-status CGI page.
 - New config option "accept-intercepted-requests" to combine
   Privoxy with any packet filter to build an intercepting proxy
   for HTTP/1.1 requests (and for HTTP/1.0 requests with Host header set).
@@ -24,14 +53,14 @@ ChangeLog for Privoxy
 - Fixed a bug in the User Manual delivery on Windows
   (mingw32 only). Images now show up correctly and HTML
   pages are no longer padded with garbage data.
-- Fixed several minor memory leaks.
+- Fixed several minor memory leaks, most of them discovered with Valgrind.
 - Only unlink the pidfile if it's actually used.
 - Retries after connection problems with forced requests
   aren't blocked again.
 - On Unix SIGABRT causes a core dump as expected and is no
   longer treated as normal shutdown signal.
 - The "access denied" CGI page is more descriptive and
-  allows to circumvent the referrer check.
+  allows retries to circumvent the referrer check.
 - Updated PCRS to handle unexpected PCRE errors properly.
   Fixed crashes that could occur if Privoxy was build
   with external PCRE versions newer than Privoxy's internal
@@ -39,8 +68,6 @@ ChangeLog for Privoxy
 - Fixed crashes with null bytes in PCRS replacement strings
   (Patch provided by Felix Gröbert).
 - Fixed crashes with header time randomization on mingw32.
-- Added zlib support to filter content with gzip and deflate
-  encoding. (Patch provided by Wil Mahan)
 - The CGI style sheet is no longer delivered if the referring
   page isn't a Privoxy CGI page. This prevents a JavaScript-based
   Privoxy detection "attack". Note that detecting Privoxy is
@@ -51,11 +78,6 @@ ChangeLog for Privoxy
   is currently toggled off.
 - The show-status CGI page suppresses the edit button
   for action files if Privoxy has no write access.	
-- Socks errors are no longer handled by the CGI page for
-  DNS resolution failures.
-- CGI pages use favicons to signal whether they are error
-  or control pages. This is useful if you rely heavily on
-  browser tabs.
 - Most CGI error pages react properly to HEAD requests.
 - Requests with RFC 3253 HTTP methods (used by Subversion)
   are accepted. (Patch provided by Petr Kadlec)
@@ -63,15 +85,10 @@ ChangeLog for Privoxy
   of the CGI templates to make sure customized templates
   aren't "updated".
 - Better handling of "HTTP/1.1 100 Continue" responses.
-- "Crunch!" log messages (used when Privoxy answers requests
-  by itself) now also contain the reason.
-- The show-url-info CGI page shows the forwarding settings.
 - The background of the PNG pattern is transparent.
 - Fixed XML syntax errors caused by banners-by-size and banners-by-url.
 - Fixed crashes and possible action file corruptions
   when lines containing hashes are written through the CGI editor.
-- Fixes possible deadlocks and crashes on OpenBSD.
-  Patch provided by Ralf Horstmann.
 - Supports dynamic filters which can contain variables.
 - Supports tags to change the actions based on client or server headers.
 - Incorrect actions are logged before program termination.
@@ -80,17 +97,6 @@ ChangeLog for Privoxy
   whole file name. This is an incompatible change, if you use
   an old configuration file you might have to append ".action"
   to your "actionsfile" directives.
-- Dedicated filters and actions are used for header filtering.
-  "filter-client-headers" and "filter-client-headers" are no longer
-  supported, use server-header-filter{} and client-header-filter{}
-  instead.
-- The CGI action editor allows to edit actionfiles with previously
-  forbidden characters like dots.
-- New server-header filter: less-download-windows.
-- New client-header taggers: text-requests and image-requests.
-- The forward-override{} action allows to change the forwarding
-  settings based on client headers like the User-Agent, or the
-  request origin.
 - With the configuration file option "enforce-blocks" the
   "go there anyway" mechanism can be disabled without recompiling
   Privoxy.
@@ -98,7 +104,6 @@ ChangeLog for Privoxy
 - Logs a warning if filtering is enabled but impossible due
   to lack of zlib support or use of the prevent-compression action.
 - Less noisy handling of Cookie:" and "Connection:" headers.
-- Don't ignore filter files if an previous filter file was empty.
 - Improved error messages in case of connection problems.
 - Fix a command-line-parsing bug that was introduced before 3.0.5
   beta and caused Privoxy to treat the last argument as configuration
@@ -107,11 +112,9 @@ ChangeLog for Privoxy
   of silently ignoring them.
 - Use string functions with length checks more often.
 - Don't log CONNECT requests twice.
-- Log the source address for ACL-related connection drops.
+- Allow to log the source address for ACL-related connection drops.
 - Don't ignore applying filters if the server didn't
   specify a Content-Type. Bug reported by Amuro Namie.
-- Allow to rewrite the request destination behind the client's back.
-- Fix socks requests on big-endian platforms. Patch provided by Song Weijia.
 - Rejected CONNECT requests are logged with log level info
   (enabled by default) and the reason for the block.
 - New command line option "--pre-chroot-nslookup hostname" to
@@ -131,6 +134,10 @@ ChangeLog for Privoxy
 - Ignore missing zero-chunks when filtering chunk-encoded content.
   Earlier Privoxy versions would buffer and then forward the content
   unmodified which caused some browsers to simply show empty pages.
+- Fix double free in cgi_edit_actions_list(). Reported by Venustech AD-LAB.
+- The code to add X-Forwarded-For headers has been removed.
+- Fixed trustfile feature which previously didn't work without FEATURE_TOGGLE.
+  Reported by Lee.
 - Minor code clean-ups, filter and action file updates.
   (Some of them reported by Davide Alberani, Markus Elfring,
    Stefan Huehner and Adam Piggott)
