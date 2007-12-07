@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.99 2007/07/21 11:51:36 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.100 2007/09/02 13:42:11 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.100  2007/09/02 13:42:11  fabiankeil
+ *    - Allow port lists in url patterns.
+ *    - Ditch unused url_spec member pathlen.
+ *
  *    Revision 1.99  2007/07/21 11:51:36  fabiankeil
  *    As Hal noticed, checking dispatch_cgi() as the last cruncher
  *    looks like a bug if CGI requests are blocked unintentionally,
@@ -1322,9 +1326,6 @@ struct client_state
 
    /** MIME-Type key, see CT_* above */
    unsigned int content_type;
-
-   /** The "X-Forwarded-For:" header sent by the client */
-   char   *x_forwarded;
 
    /** Actions files associated with this client */
    struct file_list *actions_list[MAX_AF_FILES];

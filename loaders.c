@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.63 2007/05/14 10:41:15 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.64 2007/06/01 14:12:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.63 2007/05/14 10:41:15 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.64  2007/06/01 14:12:38  fabiankeil
+ *    Add unload_forward_spec() in preparation for forward-override{}.
+ *
  *    Revision 1.63  2007/05/14 10:41:15  fabiankeil
  *    Ditch the csp member cookie_list[] which isn't used anymore.
  *
@@ -499,7 +502,6 @@ void sweep(void)
          freez(csp->ip_addr_str);
          freez(csp->my_ip_addr_str);
          freez(csp->my_hostname);
-         freez(csp->x_forwarded);
          freez(csp->iob->buf);
          freez(csp->error_message);
 
