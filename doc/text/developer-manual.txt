@@ -2043,7 +2043,7 @@ First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then add a log entry
 to debian/changelog, if it is not already there, for example by running:
 
-  debchange -v 3.0.7-stable-1 "New upstream version"
+  debchange -v 3.0.7-beta-1 "New upstream version"
 
 
 Then, run:
@@ -2051,7 +2051,7 @@ Then, run:
   dpkg-buildpackage -rfakeroot -us -uc -b
 
 
-This will create ../privoxy_3.0.7-stable-1_i386.deb which can be uploaded. To
+This will create ../privoxy_3.0.7-beta-1_i386.deb which can be uploaded. To
 upload the package to Sourceforge, simply issue
 
   make debian-upload
