@@ -5,9 +5,9 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity buildsource SYSTEM "buildsource.sgml">
 <!entity p-version "3.0.7">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
 <!entity % p-doc "IGNORE">         <!-- and never a text doc             -->
 <!entity % p-readme "INCLUDE">     <!-- all your README belong to us     -->
@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.10 2007/11/14 18:34:33 fabiankeil Exp $
+ $Id: readme.sgml,v 2.11 2007/12/07 11:52:57 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -128,7 +128,7 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
 <para>
- December 2007, Privoxy 3.0.7 stable is released. This is a significant upgrade
+ December 2007, Privoxy 3.0.7 beta is released. This is a significant upgrade
  with many new and enhanced features, and many bugs fixed. 
  See the "ChangeLog", and the "What's New" section and the "Upgrader's Notes"
  in <citetitle>the User Manual</citetitle> for details and specifics. There 
@@ -250,7 +250,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.10 2007/11/14 18:34:33 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.11 2007/12/07 11:52:57 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>
