@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.48 2007/11/24 19:07:17 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.49 2007/12/06 18:21:55 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.48 2007/11/24 19:07:17 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.49 2007/12/06 18:21:55 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -589,155 +589,6 @@ How to install the binary packages depends on your operating system:
    </para>
   </listitem>
 
-
-<!-- pre-3.0.6 changes: 
- <listitem>
-  <para>  
-   There are a number of new <link linkend="actions-file">actions</link>:
-  </para>
-  
-  <para>
-  <itemizedlist>
-     
-     <listitem>
-      <para>
-       <literal><link linkend="content-type-overwrite">content-type-overwrite</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="crunch-client-header">crunch-client-header</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="crunch-if-none-match">crunch-if-none-match</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="crunch-server-header">crunch-server-header</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="filter-client-headers">filter-client-headers</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="filter-server-headers">filter-server-headers</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="force-text-mode">force-text-mode</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="handle-as-empty-document">handle-as-empty-document</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="hide-accept-language">hide-accept-language</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="hide-content-disposition">hide-content-disposition</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="hide-if-modified-since">hide-if-modified-since</link></literal>
-      </para>
-     </listitem>
-    <listitem>
-      <para>
-       <literal><link linkend="inspect-jpegs">inspect-jpegs</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="overwrite-last-modified">overwrite-last-modified</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="redirect">redirect</link></literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <literal><link linkend="treat-forbidden-connects-like-blocks">treat-forbidden-connects-like-blocks</link></literal>
-      </para>
-     </listitem>
-
-  </itemizedlist>
-  </para>
-  <para>
-     In addition, <literal><link linkend="fast-redirects">fast-redirects</link></literal>
-     has been significantly improved with enhanced syntax.
-  </para>
-   <para>
-     And <literal><link linkend="hide-referrer">hide-referrer</link></literal>
-     has a new option, <literal>conditional block</literal>.
-   </para>
- 
- </listitem>
-
-  <listitem>
-   <para>
-    <application>MS-Windows</application> versions can now be 
-    <link
-    linkend="installation-pack-win">installed and 
-    started as a <emphasis>Windows service</emphasis></link>.
-   </para>
-  </listitem>
-
-  <listitem>
-   <para>
-    <filename>config</filename> has two new options: 
-    <link
-    linkend="enable-remote-http-toggle">enable-remote-http-toggle</link>, 
-    and <link
-    linkend="forwarded-connect-retries">forwarded-connect-retries</link>.
-   </para>
-   <para>
-    And there is improved handling of the <link
-    linkend="user-manual">user-manual</link>
-    option, for placing documentation and help files on the local system.
-   </para>
-  </listitem>
-  
-  <listitem>
-   <para>
-    There are six new <link linkend="FILTER">filters</link>.
-   </para>
-  </listitem>
-
-  <listitem>
-   <para>
-    Actions files problems and suggestions are now being directed to: 
-    <ulink url="http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288">http://sourceforge.net/tracker/?group_id=11118&amp;atid=460288</ulink>.
-    Please use this to report such configuration related problems as missed
-    ads, sites that don't function properly due to one action or another, 
-    innocent images being blocked, etc.
-   </para>
-  </listitem>
-  
-  <listitem>
-   <para>
-    In addition, there are numerous bug fixes and significant enhancements,
-    including error pages should no longer be cached if the problem is fixed,
-    much better DNS error handling, various logging improvements, and 
-    configuration updates for better ad blocking and junk elimination.
-   </para>
-  </listitem>
--->
-
  </itemizedlist>
 </para>
 <para>
@@ -793,10 +644,11 @@ How to install the binary packages depends on your operating system:
  </listitem>
  <listitem>
   <para>
-   Logging is off by default now. If you need logging, it can be turned on
-   in the <link linkend="logfile">config file</link>. You may also want
-   to enable logging until you verified that the new &my-app; version
-   is working as expected.
+   In the default configuration only fatal errors are logged now.
+   You can change that in the <link linkend="DEBUG">debug section</link>
+   of the configuration file. You may also want to enable more verbose
+   logging until you verified that the new &my-app; version is working
+   as expected.
   </para>
  </listitem>
 
@@ -9081,6 +8933,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.49  2007/12/06 18:21:55  fabiankeil
+ Update hide-forwarded-for-headers description.
+
  Revision 2.48  2007/11/24 19:07:17  fabiankeil
  - Mention request rewriting.
  - Enable the conditional-forge paragraph.
