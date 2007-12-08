@@ -31,6 +31,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-add-url-form,v $
+#    Revision 1.17  2007/01/23 16:03:16  fabiankeil
+#    - Add favicon links.
+#    - Remove useless W3C validator links.
+#
 #    Revision 1.16  2006/07/18 14:49:13  david__schmidt
 #    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
 #    with what was really the latest development (the v_3_0_branch branch)
@@ -160,14 +164,14 @@
 
     <tr>
       <td class="box">
-        <h2>Add URL Pattern</h2>
+        <h2>Add URL or TAG Pattern</h2>
         <form method="GET" action="edit-actions-add-url"
               onSubmit="return validate(u.value);">
           <p>
             <input type="hidden" name="f" value="@f@">
             <input type="hidden" name="v" value="@v@">
             <input type="hidden" name="s" value="@s@">
-            <input type="text" name="u" value="" size="78"><br>
+            <input type="text" name="u" value="" size="78" class="pattern"><br>
             <input type="submit" value="Submit"> &nbsp;
             <input type="reset" value="Reset"> &nbsp;
             <a class="cmd" href="edit-actions-list?f=@f@#l@s@">Cancel</a>
