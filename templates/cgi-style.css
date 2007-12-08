@@ -30,6 +30,9 @@
 #
 # Revisions   :
 #    $Log: cgi-style.css,v $
+#    Revision 1.10  2007/01/22 13:12:43  fabiankeil
+#    White space cosmetics for #include.
+#
 #    Revision 1.9  2006/12/17 17:50:55  fabiankeil
 #    Add white space workaround for tables
 #    in show-status CGI page.
@@ -43,7 +46,7 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $Id: cgi-style.css,v 1.9 2006/12/17 17:50:55 fabiankeil Exp $
+ * $Id: cgi-style.css,v 1.10 2007/01/22 13:12:43 fabiankeil Exp $
  */
 
 /*
@@ -152,3 +155,10 @@ em.warning { color: #ff0000 }
  * and use this workaround until then.
  */
 .box table { margin-top: 1em; }
+
+/*
+ * Let the URL and pattern input fields scale with the browser
+ * width and try to prevent vertical scroll bars if the width
+ * is less than 80 characters. 
+ */
+input.url, input.pattern { width: 95%; }
