@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.100 2007/11/12 19:00:33 fabiankeil Exp $
+#  $Id: default.action.master,v 1.101 2007/11/13 02:26:59 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1740,21 +1740,10 @@ schneegans.de/sv/\?url=referer
 .rubberslug.com
 
 #----------------------------------------------------------------------------
-# These sites are so abusive that we need to kill all JS event bindings (and
-# probably a break a lot along the way)
-#----------------------------------------------------------------------------
-#MASTER# REMARKS: Surely this has changed. Commenting out 10/15/06 HB
-#{+filter{js-radical}}
-##MASTER# PROBLEM-URL: http://www.planetspiele.de/
-#.planetspiele.de
-#216.12.219.40
-
-#----------------------------------------------------------------------------
 # The "site-specifics" filter has special cures for problems found here:
 #----------------------------------------------------------------------------
 #MASTER# REMARKS: This section NOT checked 10/15/06 HB.
-{+filter{site-specifics} +prevent-compression}
-#MASTER# REMARKS: +prevent-compression in case its off as a default setting.
+{+filter{site-specifics}}
 #MASTER# PROBLEM-URL: http://www.spiegel.de/static/js/flash-plugin.js
 .spiegel.de/static/js/flash-plugin\.js
 #MASTER# PROBLEM-URL: http://www.quelle-bausparkasse.de/
@@ -1851,20 +1840,13 @@ www.skweezer.net/bloglines
 { +prevent-compression }
 .compusa.com/
 
-{+filter{tiny-textforms} +prevent-compression}
+{+filter{tiny-textforms}}
 .sourceforge.net/tracker
 
 {+downgrade-http-version}
 #MASTER# COMMENTS: This section not checked 10/17/06 HB
 #MASTER# REMARKS: This is work-around for CUPS http configuration.
 :631
-
-#MASTER# REMARKS: What is this? Something special?
-#{ -crunch-outgoing-cookies \
-#  -crunch-incoming-cookies \
-#  +session-cookies-only \
-#}
-#www.versiontracker.com/
 
 #MASTER# REMARKS: If Privoxy is disabled, requests for config.privoxy.org/
 #MASTER# REMARKS: reach privoxy.org and are redirected to privoxy.org/config.
