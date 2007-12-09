@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.11 2007/12/07 11:52:57 hal9 Exp $
+ $Id: readme.sgml,v 2.12 2007/12/08 14:01:51 hal9 Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -161,7 +161,8 @@
 <para>
  privoxy [&mdash;&mdash;help] [&mdash;&mdash;version]
  [&mdash;&mdash;no-daemon] [&mdash;&mdash;pidfile PIDFILE] [&mdash;&mdash;user
- USER[.GROUP]] [&mdash;&mdash;chroot] [config_file]
+ USER[.GROUP]] [&mdash;&mdash;chroot]  [&mdash;&mdash;pre&mdash;chroot&mdash;nslookup
+ HOSTNAME ][config_file]
 </para>
 <para>
  See the man page or <citetitle>User Manual</citetitle> for an explanation of each option, and 
@@ -250,7 +251,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.11 2007/12/07 11:52:57 hal9 Exp $ -->
+<!--  $Id: readme.sgml,v 2.12 2007/12/08 14:01:51 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>
