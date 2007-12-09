@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.7
 #
-#  $Id: config,v 1.60 2007/12/08 14:30:40 hal9 Exp $
+#  $Id: config,v 1.61 2007/12/08 15:36:28 hal9 Exp $
 #
 #  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
 #
@@ -452,7 +452,7 @@ filterfile default.filter
 #      Any log files must be writable by whatever user Privoxy is
 #      being run as (on Unix, default user id is "privoxy").
 #
-#logfile logfile
+logfile logfile
 #
 #
 #  2.7. jarfile
