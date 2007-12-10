@@ -76,8 +76,8 @@ User Manual, for all other installation types.
 
 3. RUN
 
-privoxy [??help] [??version] [??no-daemon] [??pidfile PIDFILE] [??user USER
-[.GROUP]] [??chroot] [??pre?chroot?nslookup HOSTNAME ][config_file]
+privoxy [--help] [--version] [--no-daemon] [--pidfile PIDFILE] [--user USER
+[.GROUP]] [--chroot] [--pre-chroot-nslookup HOSTNAME ][config_file]
 
 See the man page or User Manual for an explanation of each option, and other
 configuration and usage issues.
