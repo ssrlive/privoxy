@@ -30,6 +30,12 @@
 #
 # Revisions   :
 #    $Log: cgi-style.css,v $
+#    Revision 1.11  2007/12/08 14:29:06  fabiankeil
+#    Use CSS to let the URL and pattern input fields scale with
+#    the browser width and try to prevent vertical scroll bars
+#    if the width is less than 80 characters. Closes #1843596,
+#    thanks to Gerry Murphy and Lee.
+#
 #    Revision 1.10  2007/01/22 13:12:43  fabiankeil
 #    White space cosmetics for #include.
 #
@@ -46,7 +52,7 @@
 /*
  * CSS for Privoxy CGI and script output
  *
- * $Id: cgi-style.css,v 1.10 2007/01/22 13:12:43 fabiankeil Exp $
+ * $Id: cgi-style.css,v 1.11 2007/12/08 14:29:06 fabiankeil Exp $
  */
 
 /*
@@ -143,7 +149,7 @@ a.cmd:active, td.indentbuttons a:active, td.buttons a:active {
 /*
  * Special red emphasis:
  */
-em.warning { color: #ff0000 }
+em.warning, strong.warning { color: #ff0000 }
 
 /*
  * In show-status we use tables directly behind headlines
