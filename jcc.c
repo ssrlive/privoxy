@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.161 2007/12/04 19:44:22 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.162 2007/12/06 17:54:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.161 2007/12/04 19:44:22 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.162  2007/12/06 17:54:57  fabiankeil
+ *    Reword NO_SERVER_DATA_RESPONSE to make it harder
+ *    to misunderstand what the message is all about.
+ *
  *    Revision 1.161  2007/12/04 19:44:22  fabiankeil
  *    Unbreak trustfile which previously didn't work without
  *    FEATURE_TOGGLE. Fixes BR#1843585, reported by Lee.
@@ -1053,7 +1057,7 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
 static jb_err change_request_destination(struct client_state *csp);
 static void chat(struct client_state *csp);
 static void serve(struct client_state *csp);
-#if defined(unix)
+#if !defined(_WIN32) || defined(_WIN_CONSOLE)
 static void usage(const char *myname);
 #endif
 static void initialize_mutexes(void);
@@ -2836,7 +2840,7 @@ static int32 server_thread(void *data)
 #endif
 
 
-#if defined(unix)
+#if !defined(_WIN32) || defined(_WIN_CONSOLE)
 /*********************************************************************
  *
  * Function    :  usage
@@ -2865,7 +2869,7 @@ static void usage(const char *myname)
    exit(2);
 
 }
-#endif /* defined(unix) */
+#endif /* #if !defined(_WIN32) || defined(_WIN_CONSOLE) */
 
 
 /*********************************************************************
