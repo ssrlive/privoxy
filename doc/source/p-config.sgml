@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.23 2007/11/15 02:47:01 hal9 Exp $
+ $Id: p-config.sgml,v 2.24 2007/12/07 16:45:15 fabiankeil Exp $
 
  Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.23 2007/11/15 02:47:01 hal9 Exp $
+ $Id: p-config.sgml,v 2.24 2007/12/07 16:45:15 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
@@ -1040,7 +1040,7 @@ actionsfile
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para>12289 (i.e.: URLs plus informational and warning messages)</para>
+   <para>0 (i.e.: only fatal errors (that cause Privoxy to exit) are logged)</para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -1116,7 +1116,7 @@ actionsfile
 
 <![%config-file;[<literallayout>@@#debug   1    # show each GET/POST/CONNECT request</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug   4096 # Startup banner and warnings</literallayout>]]>
-<![%config-file;[<literallayout>@@#debug   8192 # Errors - *we highly recommended enabling this*</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   8192 # Non-fatal errors</literallayout>]]>
 </sect3>
 
 
