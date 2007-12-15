@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.68 2007/10/19 16:32:34 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.69 2007/10/27 13:02:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.68 2007/10/19 16:32:34 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.69  2007/10/27 13:02:27  fabiankeil
+ *    Relocate daemon-mode-related log messages to make sure
+ *    they aren't shown again in case of configuration reloads.
+ *
  *    Revision 1.68  2007/10/19 16:32:34  fabiankeil
  *    Plug memory leak introduced with my last commit.
  *
@@ -1688,7 +1692,11 @@ struct configuration_spec * load_config(void)
       }
       if (*config->haddr == '\0')
       {
-         config->haddr = NULL;
+         /*
+          * Only the port specified. We stored it in config->hport
+          * and don't need its text representation anymore.
+          */
+         freez(config->haddr);
       }
    }
 
