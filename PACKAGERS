@@ -15,12 +15,6 @@ FreeBSD .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil)
 Mac OSX .....: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
 OpenBSD .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil) 
 OS/2 ........: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
-RedHat*......: Rodrigo Barbosa   <privoxy@darkover.org>        (morcego)
-               Karsten Hopp      <Karsten.Hopp@redhat.de>      (kick_)
-               Hal Burgiss       <hal@foobox.net>              (hal9)
 Solaris .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil)
-SuSE*........: Stephan Waldherr  <stefan@waldherr.org>         (swa)
 Windows .....: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
-
-*: outdated
-
+               Gerry Murphy      <derwibbler@gmail.com>        (gjmurphy)
