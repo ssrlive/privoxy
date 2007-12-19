@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.102 2007/12/08 12:56:32 fabiankeil Exp $
+#  $Id: default.action.master,v 1.103 2007/12/13 00:38:01 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -581,7 +581,12 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 #MASTER# DONT-VERIFY (generic)
 ad*.
 .*ads.
-.ad.
+#MASTER# REMARKS: removed .ad. 2007-12-18 HB
+#MASTER# REMARKS: Modifications per Actionsfile feedback item #1807613
+.ad.?.
+.ad.[a-ik-z][a-oq-z].
+.ad.jp.*.
+.ad.???*.
 #MASTER# PROBLEM URL: http://alternativos.iw-advertising.com/
 .*advert*.
 *banner*.
@@ -1303,7 +1308,7 @@ cels.org/.*track
 #MASTER# UNBLOCK-REFERRER: http://www.nic.ad.jp/ See http://jprs.co.jp/en/jpdomain.html 09/11/06
 #MASTER# REMARKS: 2007-10-04, increase scope per Actionsfile feedback item #1807613
 #.nic.ad.jp
-.ad.jp
+#MASTER# REMARKS removed .ad.jp per Actionsfile feedback item #1807613
 #MASTER# UNBLOCK-REFERRER: http://www.flickr.com/photo_zoom.gne?id=32594118&size=l 09/11/06
 #MASTER# REMARKS: creativecommons.org worthwhile organization 09/11/06
 /(.*/)?somerights20.gif
