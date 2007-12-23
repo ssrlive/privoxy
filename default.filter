@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.51 2007/11/04 16:15:11 fabiankeil Exp $
+#  $Id: default.filter,v 1.52 2007/11/27 18:35:48 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -589,6 +589,7 @@ s@(<br clear=all><table)( border=0 cellpadding=9><tr><td)@$1 id="toolbar"$2@
 #################################################################################
 #
 # yahoo: CSS-based block for Yahoo text ads. Also removes a width limitation.
+#        XXX: the width limitation part is currently broken.
 #
 #################################################################################
 FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitation.
@@ -596,8 +597,8 @@ FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitatio
 s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
- \#yschanswr, .yschftad,\ .yschspn, .yschspns, \#ygrp-sponsored-links,\
- \#ks-ypn-ads {display: none !important;}\n\
+ \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
+ \#ks-ypn-ads, .ad, \#ygrp-vital {display: none !important;}\n\
  \#yschpri, \#yschweb {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
 </style>\n$0@
@@ -606,31 +607,25 @@ s@</head>@\n<style type="text/css">\n\
 #
 # msn: CSS-based block for MSN text ads. Also removes tracking URLs
 #      and a width limitation.
+#      XXX: the width limitation part is currently broken.
 #
 #################################################################################
 FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.
 
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
- .msn_ads {display: none !important;}\n\
- \#results, .flank, .results_area_flank, .results_area_stroke, .SearchSection .not\
- {width: 99% /*!important*/; min-width: 99% !important;\
+ .msn_ads, \#at, \#ar {display: none !important;}\n\
+ \#results, .flank, .results_area_flank, .results_area_stroke,\n\
+ \#results_area, .SearchSection, .not, .sc_rslth1\n\
+.content, \#sw_foot, \#bf, \#sw_content, \#sidebar, \#pag\n\
+ {width: 99% !important; min-width: 99% !important;\n\
  max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
- /* Make continue links harder to miss */\n\
- \#pagination_bottom a {padding: .3em .5em .3em .5em; border: 1px solid \#e6e6e6;}\n\
- \#pagination_bottom li, \#pagination_bottom li .selected, li .nextPage \
- {margin: 0 !important; cursor: auto; border: none; padding:.1em;}\n\
- \#pagination_bottom li .prevPage {padding-right: 1.5em !important;}\n\
- \#pagination_bottom li .selected {border: none;}\n\
- .selected a {background-color: \#d2eaf6; border: 1px solid \#b7d8ee;}\n\
  /* Remove "suggestions". They are next to worthless but partly overlap with the search results */\n\
- .suggestion, \#nys_right {clear: both; display:none;}\n\
+ .suggestion, \#nys_right, \#nys {clear: both; display:none;}\n\
  </style>\n$0@
 s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
 s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
-s@<div id=\"ar\">(<h2>Sponsored sites</h2>)@<div class="msn_ads">$1@
-s@(</script><div) id=\"at\"@$1 class="msn_ads"@
 
 #################################################################################
 #
@@ -831,6 +826,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.52  2007/11/27 18:35:48  fabiankeil
+#     Update CSS for the yahoo filter.
+#
 #     Revision 1.51  2007/11/04 16:15:11  fabiankeil
 #     - Add client-header taggers: client-ip-address,
 #       http-method, allow-post, complete-url and user-agent.
