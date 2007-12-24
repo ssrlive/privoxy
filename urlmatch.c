@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.19 2007/09/02 13:42:11 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.20 2007/09/02 15:31:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.19 2007/09/02 13:42:11 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.20  2007/09/02 15:31:20  fabiankeil
+ *    Move match_portlist() from filter.c to urlmatch.c.
+ *    It's used for url matching, not for filtering.
+ *
  *    Revision 1.19  2007/09/02 13:42:11  fabiankeil
  *    - Allow port lists in url patterns.
  *    - Ditch unused url_spec member pathlen.
@@ -1019,9 +1023,10 @@ void free_url_spec(struct url_spec *url)
 int url_match(const struct url_spec *pattern,
               const struct http_request *url)
 {
-   int port_matches;
-   int domain_matches;
-   int path_matches;
+   /* XXX: these should probably be functions. */
+#define PORT_MATCHES ((NULL == pattern->port_list) || match_portlist(pattern->port_list, url->port))
+#define DOMAIN_MATCHES ((NULL == pattern->dbuffer) || (0 == domain_match(pattern, url)))
+#define PATH_MATCHES ((NULL == pattern->path) || (0 == regexec(pattern->preg, url->path, 0, NULL, 0)))
 
    if (pattern->tag_regex != NULL)
    {
@@ -1029,11 +1034,7 @@ int url_match(const struct url_spec *pattern,
       return 0;
    } 
 
-   port_matches = (NULL == pattern->port_list) || match_portlist(pattern->port_list, url->port);
-   domain_matches = (NULL == pattern->dbuffer) || (0 == domain_match(pattern, url));
-   path_matches = (NULL == pattern->path) || (0 == regexec(pattern->preg, url->path, 0, NULL, 0));
-
-   return (port_matches && domain_matches && path_matches);
+   return (PORT_MATCHES && DOMAIN_MATCHES && PATH_MATCHES);
 
 }
 
