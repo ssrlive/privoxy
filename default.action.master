@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.103 2007/12/13 00:38:01 hal9 Exp $
+#  $Id: default.action.master,v 1.104 2007/12/19 02:52:23 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1534,6 +1534,8 @@ del.icio.us/
 access.adobe.com/access/getStatus.do\?jobid=&srcPdfUrl=
 #MASTER# PROBLEM-URL: http://view.samurajdata.se/ps.php?url=http%3A%2F%2Fcups.cs.cmu.edu%2Fsoups%2F2007%2Fproceedings%2Fp41_clark.pdf&submit=View%21
 view.samurajdata.se/ps\.php\?url=
+#MASTER# PROBLEM-URL: http://www.blogger.com/navbar.g?targetBlogID=8919860543765866292&blogName=Kickin%27+the+Darkness&publishMode=PUBLISH_MODE_HOSTED&navbarType=BLUE&layoutType=LAYOUTS&homepageUrl=http%3A%2F%2Fblog.kickin-the-darkness.com%2F&searchRoot=http%3A%2F%2Fblog.kickin-the-darkness.com%2Fsearch
+.blogger.com/navbar\.g
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
