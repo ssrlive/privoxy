@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.116 2007/12/01 13:04:22 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.117 2007/12/06 18:11:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.116 2007/12/01 13:04:22 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.117  2007/12/06 18:11:50  fabiankeil
+ *    Garbage-collect the code to add a X-Forwarded-For
+ *    header as it seems to be mostly used by accident.
+ *
  *    Revision 1.116  2007/12/01 13:04:22  fabiankeil
  *    Fix a crash on mingw32 with some Last Modified times in the future.
  *
@@ -2443,7 +2447,7 @@ static jb_err server_content_md5(struct client_state *csp, char **header)
  *
  * Function    :  server_content_disposition
  *
- * Description :  If enabled, blocks or modifies the "content-disposition" header.
+ * Description :  If enabled, blocks or modifies the "Content-Disposition" header.
  *                Called from `sed'.
  *
  * Parameters  :
@@ -2462,17 +2466,17 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
    const char *newval;
 
    /*
-    * Are we messing with the content-disposition header?
+    * Are we messing with the Content-Disposition header?
     */
    if ((csp->action->flags & ACTION_HIDE_CONTENT_DISPOSITION) == 0)
    {
-      /*Me tinks not*/
+      /* Me tinks not */
       return JB_ERR_OK;
    }
 
    newval = csp->action->string[ACTION_STRING_CONTENT_DISPOSITION];
 
-   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")))
    {
       /*
        * Blocking content-disposition header
@@ -2484,19 +2488,16 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
    else
    {  
       /*
-       * Replacing content-disposition header
+       * Replacing Content-Disposition header
        */
       freez(*header);
-      *header = strdup("content-disposition: ");
-      string_append(header, newval);   
+      *header = strdup("Content-Disposition: ");
+      string_append(header, newval);
 
-      if (*header == NULL)
+      if (*header != NULL)
       {
-         log_error(LOG_LEVEL_HEADER, "Insufficent memory. content-disposition header not fully replaced.");  
-      }
-      else
-      {
-         log_error(LOG_LEVEL_HEADER, "content-disposition header crunched and replaced with: %s", *header);
+         log_error(LOG_LEVEL_HEADER,
+            "Content-Disposition header crunched and replaced with: %s", *header);
       }
    }
    return (*header == NULL) ? JB_ERR_MEMORY : JB_ERR_OK;
