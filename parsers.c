@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.117 2007/12/06 18:11:50 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.118 2007/12/28 16:56:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.117 2007/12/06 18:11:50 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.118  2007/12/28 16:56:35  fabiankeil
+ *    Minor server_content_disposition() changes:
+ *    - Don't regenerate the header name all lower-case.
+ *    - Some white space fixes.
+ *    - Remove useless log message in case of ENOMEM.
+ *
  *    Revision 1.117  2007/12/06 18:11:50  fabiankeil
  *    Garbage-collect the code to add a X-Forwarded-For
  *    header as it seems to be mostly used by accident.
@@ -2172,17 +2178,22 @@ static jb_err server_content_type(struct client_state *csp, char **header)
 
    if (!(csp->content_type & CT_TABOO))
    {
-      if ((strstr(*header, " text/") && !strstr(*header, "plain"))
+      /*
+       * XXX: The assumption that text/plain is a sign of
+       * binary data seems to be somewhat unreasonable nowadays
+       * and should be dropped after 3.0.8 is out.
+       */
+      if ((strstr(*header, "text/") && !strstr(*header, "plain"))
         || strstr(*header, "xml")
         || strstr(*header, "application/x-javascript"))
       {
          csp->content_type |= CT_TEXT;
       }
-      else if (strstr(*header, " image/gif"))
+      else if (strstr(*header, "image/gif"))
       {
          csp->content_type |= CT_GIF;
       }
-      else if (strstr(*header, " image/jpeg"))
+      else if (strstr(*header, "image/jpeg"))
       {
          csp->content_type |= CT_JPEG;
       }
@@ -2190,21 +2201,21 @@ static jb_err server_content_type(struct client_state *csp, char **header)
 
    /*
     * Are we messing with the content type?
-    */ 
+    */
    if (csp->action->flags & ACTION_CONTENT_TYPE_OVERWRITE)
-   { 
+   {
       /*
        * Make sure the user doesn't accidently
        * change the content type of binary documents. 
-       */ 
+       */
       if ((csp->content_type & CT_TEXT) || (csp->action->flags & ACTION_FORCE_TEXT_MODE))
-      { 
+      {
          freez(*header);
          *header = strdup("Content-Type: ");
          string_append(header, csp->action->string[ACTION_STRING_CONTENT_TYPE]);
 
          if (header == NULL)
-         { 
+         {
             log_error(LOG_LEVEL_HEADER, "Insufficient memory to replace Content-Type!");
             return JB_ERR_MEMORY;
          }
@@ -2212,10 +2223,11 @@ static jb_err server_content_type(struct client_state *csp, char **header)
       }
       else
       {
-         log_error(LOG_LEVEL_HEADER, "%s not replaced. It doesn't look like text. "
-            "Enable force-text-mode if you know what you're doing.", *header);   
+         log_error(LOG_LEVEL_HEADER, "%s not replaced. "
+            "It doesn't look like a content type that should be filtered. "
+            "Enable force-text-mode if you know what you're doing.", *header);
       }
-   }  
+   }
 
    return JB_ERR_OK;
 }
