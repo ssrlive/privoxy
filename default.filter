@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.52 2007/11/27 18:35:48 fabiankeil Exp $
+#  $Id: default.filter,v 1.53 2007/12/23 15:48:12 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -589,7 +589,6 @@ s@(<br clear=all><table)( border=0 cellpadding=9><tr><td)@$1 id="toolbar"$2@
 #################################################################################
 #
 # yahoo: CSS-based block for Yahoo text ads. Also removes a width limitation.
-#        XXX: the width limitation part is currently broken.
 #
 #################################################################################
 FILTER: yahoo CSS-based block for Yahoo text ads. Also removes a width limitation.
@@ -599,7 +598,7 @@ s@</head>@\n<style type="text/css">\n\
  \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
  \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
  \#ks-ypn-ads, .ad, \#ygrp-vital {display: none !important;}\n\
- \#yschpri, \#yschweb {width: 100% !important; max-width: 100% !important;}\n\
+ \#yschpri, \#yschweb, \#pri, \#web {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
 </style>\n$0@
 
@@ -636,6 +635,9 @@ s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
 #           appear to early or not at all and as fixing this would require a browser
 #           that understands background-size (CSS3), they are removed instead.
 #
+#           When applied to feeds, it removes comment titles that
+#           only contain the beginning of the actual comment.
+#
 #################################################################################
 FILTER: blogspot Cleans up some Blogspot blogs. Read the fine print before using this.
 
@@ -654,6 +656,8 @@ s@<body.*(?:<div id="space-for-ie"></div>|(<div id="(?:content|wrap4|wrapper)))@
 s@(<div style=\"[^\"]*width:)30em@$1 100%@
 s@background:url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;@/*$0*/@Ug
 s@(background:\#[a-f\d]{3})( url\(\"http://www.blogblog.com/rounders[^\"]*\"\).*;)@$1 ;/*$2*/@Ug
+# Do the feed filtering magic as described above.
+s@<title\s+type=\'text\'>([^\s]*).*?\.\.\.</title>\s*(<content type=\'html\'>\1)@$2@ig
 
 #################################################################################
 #
@@ -826,6 +830,13 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.53  2007/12/23 15:48:12  fabiankeil
+#     - Lo and behold, the CSS fix for the MSN buttons is no longer necessary.
+#     - Add some new selectors the msn filter should hide.
+#     - Add the two yahoo selectors Lee reported in #1856574.
+#     - Add comments that the width limitation fixes stopped
+#       working for the msn and yahoo filter.
+#
 #     Revision 1.52  2007/11/27 18:35:48  fabiankeil
 #     Update CSS for the yahoo filter.
 #
