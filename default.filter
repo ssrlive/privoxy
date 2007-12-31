@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.53 2007/12/23 15:48:12 fabiankeil Exp $
+#  $Id: default.filter,v 1.54 2007/12/31 19:11:31 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -606,7 +606,6 @@ s@</head>@\n<style type="text/css">\n\
 #
 # msn: CSS-based block for MSN text ads. Also removes tracking URLs
 #      and a width limitation.
-#      XXX: the width limitation part is currently broken.
 #
 #################################################################################
 FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.
@@ -621,6 +620,7 @@ s@</head>@<style type="text/css">\n\
  max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
  /* Remove "suggestions". They are next to worthless but partly overlap with the search results */\n\
  .suggestion, \#nys_right, \#nys {clear: both; display:none;}\n\
+ \#content {padding-right: 0;}\n\
  </style>\n$0@
 s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
@@ -830,6 +830,11 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.54  2007/12/31 19:11:31  fabiankeil
+#     - Let the yahoo filter remove the width limitation again.
+#     - Teach the blogspot filter to remove useless feed comment
+#       titles that only contain the beginning of the actual comment.
+#
 #     Revision 1.53  2007/12/23 15:48:12  fabiankeil
 #     - Lo and behold, the CSS fix for the MSN buttons is no longer necessary.
 #     - Add some new selectors the msn filter should hide.
