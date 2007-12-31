@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.104 2007/12/19 02:52:23 hal9 Exp $
+#  $Id: default.action.master,v 1.105 2007/12/25 15:06:02 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1379,6 +1379,10 @@ switch.atdmt.com/action/
 #MASTER# UNBLOCK-REFERRER: redirect from http://go.microsoft.com/fwlink?linkid=51093
 #MASTER# REMARKS: Actionsfile feedback item #1757121 2007-07-19
 .microsoft.com/.*/adschema/
+#MASTER# UNBLOCK-REFERRER: http://upload.wikimedia.org/wikipedia/en/a/ad/Picturecarnegie.jpg
+.wikimedia.org/
+#MASTER# UNBLOCK-REFERRER: http://en.wikipedia.org/wiki/Advertisement
+.wikipedia.org/
 
 #############################################################################
 # Site-specific special rules:
