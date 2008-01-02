@@ -17,6 +17,12 @@
 #
 # Revisions   :
 #    $Log: mod-support-and-service,v $
+#    Revision 1.10  2007/03/17 11:31:36  fabiankeil
+#    - Add revision log and copyright header.
+#    - Reword instructions and link to the FAQ
+#      in an attempt to reduce the number of
+#      incomplete reports.
+#
 ##############################################################################
        <h2>Support and Service:</h2>
         <p>
@@ -43,9 +49,8 @@
             Request Tracker</a>.
           </li>
           <li>
-            read the instructions in the
-            <a title="FAQ entry: Contacting the developers, Bug Reporting and Feature Requests"
-             href="http://www.privoxy.org/faq/contact.html">Privoxy FAQ</a>
+            read the <a title="Contacting the developers, Bug Reporting and Feature Requests"
+             href="@user-manual@contact.html">instructions in the User Manual</a>
             to make sure your request contains all the information we need.
           </li>
         </ul>
