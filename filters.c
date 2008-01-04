@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.96 2007/10/19 16:53:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.97 2007/11/30 15:37:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.96 2007/10/19 16:53:28 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.97  2007/11/30 15:37:03  fabiankeil
+ *    Use freez instead of free.
+ *
  *    Revision 1.96  2007/10/19 16:53:28  fabiankeil
  *    Add helper function to check if any content filters are enabled.
  *
@@ -1805,7 +1808,8 @@ static char *pcrs_filter_response(struct client_state *csp)
 
    if (0 == found_filters)
    {
-      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
+      log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
+         "content filtering enabled, but no content filters available.");
       return(NULL);
    }
 

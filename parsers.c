@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.118 2007/12/28 16:56:35 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.119 2007/12/28 18:32:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,14 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.118 2007/12/28 16:56:35 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.119  2007/12/28 18:32:51  fabiankeil
+ *    In server_content_type():
+ *    - Don't require leading white space when detecting image content types.
+ *    - Change '... not replaced ...' message to sound less crazy if the text
+ *      type actually is 'text/plain'.
+ *    - Mark the 'text/plain == binary data' assumption for removal.
+ *    - Remove a bunch of trailing white space.
+ *
  *    Revision 1.118  2007/12/28 16:56:35  fabiankeil
  *    Minor server_content_disposition() changes:
  *    - Don't regenerate the header name all lower-case.
@@ -1695,7 +1703,8 @@ static jb_err header_tagger(struct client_state *csp, char *header)
 
    if (0 == found_filters)
    {
-      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regex tagging.");
+      log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
+         "tagging enabled, but no taggers available.");
       return(JB_ERR_OK);
    }
 
@@ -1912,7 +1921,8 @@ static jb_err filter_header(struct client_state *csp, char **header)
 
    if (0 == found_filters)
    {
-      log_error(LOG_LEVEL_ERROR, "Unable to get current state of regexp filtering.");
+      log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
+         "header filtering enabled, but no matching filters available.");
       return(JB_ERR_OK);
    }
 
