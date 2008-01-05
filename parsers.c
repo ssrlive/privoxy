@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.119 2007/12/28 18:32:51 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.120 2008/01/04 17:43:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.119 2007/12/28 18:32:51 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.120  2008/01/04 17:43:45  fabiankeil
+ *    Improve the warning messages that get logged if the action files
+ *    "enable" filters but no filters of that type have been loaded.
+ *
  *    Revision 1.119  2007/12/28 18:32:51  fabiankeil
  *    In server_content_type():
  *    - Don't require leading white space when detecting image content types.
@@ -872,6 +876,7 @@ const struct parsers client_patterns[] = {
    { "Accept-Language:",         16,   client_accept_language },
    { "if-none-match:",           14,   client_if_none_match },
    { "Range:",                    6,   client_range },
+   { "Request-Range:",           14,   client_range },
    { "If-Range:",                 9,   client_range },
    { "X-Filter:",                 9,   client_x_filter },
    { "*",                         0,   crunch_client_header },
@@ -3450,9 +3455,9 @@ jb_err client_x_filter(struct client_state *csp, char **header)
  *
  * Function    :  client_range
  *
- * Description :  Removes Range and If-Range headers if content
- *                filtering is enabled. If the client's version of
- *                the document has been altered by Privoxy, the server
+ * Description :  Removes Range, Request-Range and If-Range headers if
+ *                content filtering is enabled. If the client's version
+ *                of the document has been altered by Privoxy, the server
  *                could interpret the range differently than the client
  *                intended in which case the user could end up with
  *                corrupted content.
