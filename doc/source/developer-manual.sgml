@@ -10,8 +10,8 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.7">
 <!entity p-status "beta">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
@@ -23,9 +23,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.12 2006/11/14 01:57:46 hal9 Exp $
+ $Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $
 
- Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.12 2006/11/14 01:57:46 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1833,7 +1833,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.12 2006/11/14 01:57:46 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1894,7 +1894,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.12 2006/11/14 01:57:46 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -3026,6 +3026,13 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.13  2007/10/30 17:59:31  fabiankeil
+  - Bump p-version, p-status and copyright date.
+  - Mention that the manual is out of date.
+  - Don't use examples with HardToReadCamelCase after
+    explaining that we actually don't like that.
+  - Minor cosmetics.
+
   Revision 2.12  2006/11/14 01:57:46  hal9
   Dump all docs prior to 3.0.6 release. Various minor changes to faq and user
   manual.

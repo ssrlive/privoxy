@@ -33,9 +33,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.50 2007/12/08 12:44:36 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.51 2007/12/23 16:48:24 fabiankeil Exp $
 
- Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.50 2007/12/08 12:44:36 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.51 2007/12/23 16:48:24 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8920,6 +8920,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.51  2007/12/23 16:48:24  fabiankeil
+ Use more precise example descriptions for the mysterious domain patterns.
+
  Revision 2.50  2007/12/08 12:44:36  fabiankeil
  - Remove already commented out pre-3.0.7 changes.
  - Update the "new log defaults" paragraph.

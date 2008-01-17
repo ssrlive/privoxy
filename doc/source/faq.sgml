@@ -26,9 +26,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.34 2007/11/19 02:38:11 hal9 Exp $
+ $Id: faq.sgml,v 2.35 2007/11/19 17:57:59 fabiankeil Exp $
 
- Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.34 2007/11/19 02:38:11 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.35 2007/11/19 17:57:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2808,6 +2808,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.35  2007/11/19 17:57:59  fabiankeil
+A bunch of rewordings, minor updates and fixes.
+
 Revision 2.34  2007/11/19 02:38:11  hal9
 Minor revisions and rebuild
 
