@@ -2,19 +2,20 @@
 <!entity % dummy "IGNORE"> 
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.7">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
+<!entity p-status "beta">
+<!entity % p-not-stable "INCLUDE">
 <!entity % user-man "IGNORE">
 <!entity % config-file "IGNORE">
+<!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/config.sgml,v $
 
  Purpose     :  config file generation
                 
- $Id: config.sgml,v 2.5 2006/11/14 01:57:46 hal9 Exp $
+ $Id: config.sgml,v 2.6 2007/11/14 18:20:55 fabiankeil Exp $
 
- Copyright (C) 2001-2007 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
