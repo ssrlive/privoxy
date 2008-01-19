@@ -1,8 +1,8 @@
 Privoxy Developer Manual
 
-[ Copyright   2001-2007 by Privoxy Developers ]
+[ Copyright   2001-2008 by Privoxy Developers ]
 
-$Id: developer-manual.sgml,v 2.14 2008/01/17 01:49:51 hal9 Exp $
+$Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $
 
 The developer manual provides guidance on coding, testing, packaging,
 documentation and other issues of importance to those involved with Privoxy
@@ -1444,7 +1444,7 @@ from the project).
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.14 2008/01/17 01:49:51 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1503,7 +1503,7 @@ Example for file header comments:
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.14 2008/01/17 01:49:51 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
@@ -2396,7 +2396,7 @@ group_id=11118.
 
 9. Privoxy Copyright, License and History
 
-Copyright   2001-2007 by Privoxy Developers <
+Copyright   2001-2008 by Privoxy Developers <
 ijbswa-developers@lists.sourceforge.net>
 
 Some source code is based on code Copyright   1997 by Anonymous Coders and
