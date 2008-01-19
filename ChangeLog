@@ -34,8 +34,11 @@ ChangeLog for Privoxy
   isn't used. While it was an intentional change in 3.0.7 at least
   one user perceived it as a regression and the same effect can
   be achieved by disabling all debug directives.
+- Fixed two minor problems related to the win32 build process: a css
+  file was not being in the installer and the trustfile comment in the
+  config.txt referenced a nonexisting file
 - Minor documentation fixes.
-	
+
 *** Version 3.0.7 Beta ***
 
 - Added zlib support to filter content with gzip and deflate
