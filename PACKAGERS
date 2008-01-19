@@ -3,8 +3,8 @@
 
 	(or users may contact these people directly,
 	 which we would like to avoid. Users should
-	 always use the support forum or user
-	 mailinglist).
+	 always use the support forum, user
+	 mailinglist or bugtracker).
 
 Responsible persons for releasing packages are ...
 
@@ -17,4 +17,4 @@ OpenBSD .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil)
 OS/2 ........: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
 Solaris .....: Fabian Keil       <fk@fabiankeil.de>            (fabiankeil)
 Windows .....: David Schmidt     <david__schmidt@users.sf.net> (david__schmidt)
-               Gerry Murphy      <derwibbler@gmail.com>        (gjmurphy)
+               Gerry Murphy      <gjmurphy@users.sf.net>       (gjmurphy)
