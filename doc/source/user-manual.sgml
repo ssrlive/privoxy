@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.53 2008/01/19 15:03:05 hal9 Exp $
+ $Id: user-manual.sgml,v 2.54 2008/01/19 17:52:39 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.53 2008/01/19 15:03:05 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.54 2008/01/19 17:52:39 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1223,7 +1223,7 @@ How to install the binary packages depends on your operating system:
 </literallayout>
 
 <para>
- For <application>Internet Explorer v.5-6</application>: 
+ For <application>Internet Explorer v.5-7</application>: 
 </para>
 
 <literallayout>
@@ -8920,6 +8920,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.54  2008/01/19 17:52:39  hal9
+ Re-commit to fix various minor issues for new release.
+
  Revision 2.53  2008/01/19 15:03:05  hal9
  Doc sources tagged for 3.0.8 release.
 
