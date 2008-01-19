@@ -2,7 +2,7 @@ Privoxy Developer Manual
 
 [ Copyright   2001-2007 by Privoxy Developers ]
 
-$Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $
+$Id: developer-manual.sgml,v 2.14 2008/01/17 01:49:51 hal9 Exp $
 
 The developer manual provides guidance on coding, testing, packaging,
 documentation and other issues of importance to those involved with Privoxy
@@ -11,11 +11,11 @@ join the team. Note that it's currently out of date and may not be entirely
 correct. As always, patches are welcome.
 
 Please note that this document is constantly evolving. This copy represents the
-state at the release of version 3.0.7. You can find the latest version of the
+state at the release of version 3.0.8. You can find the latest version of the
 this manual at http://www.privoxy.org/developer-manual/. Please see the Contact
 section on how to contact the developers.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 Table of Contents
 1. Introduction
@@ -156,7 +156,7 @@ it available to as wide an audience as possible.
 One does not have to be a programmer to contribute. Packaging, testing,
 documenting and porting, are all important jobs as well.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 1.1. Quickstart to Privoxy Development
 
@@ -173,7 +173,7 @@ For the time being (read, this section is under construction), you can also
 refer to the extensive comments in the source code. In fact, reading the code
 is recommended in any case.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2. The CVS Repository
 
@@ -182,7 +182,7 @@ write access to our holy grail, the CVS repository. One of the team members
 will need to set this up for you. Please read this chapter completely before
 accessing via CVS.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1. Access to CVS
 
@@ -192,7 +192,7 @@ for your operating system. For historical reasons, the CVS server is called
 ijbswa.cvs.sourceforge.net, the repository is called ijbswa, and the source
 tree module is called current.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.2. Branches
 
@@ -216,7 +216,7 @@ At one time there were two distinct branches: stable and unstable. The more
 drastic changes were to be in the unstable branch. These branches have now been
 merged to minimize time and effort of maintaining two branches.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.3. CVS Commit Guidelines
 
@@ -228,29 +228,29 @@ guidelines:
 
 Basic Guidelines, for all branches:
 
-  • Please don't commit even a small change without testing it thoroughly
+  * Please don't commit even a small change without testing it thoroughly
     first. When we're close to a public release, ask a fellow developer to
     review your changes.
 
-  • Your commit message should give a concise overview of what you changed (no
+  * Your commit message should give a concise overview of what you changed (no
     big details) and why you changed it Just check previous messages for good
     examples.
 
-  • Don't use the same message on multiple files, unless it equally applies to
+  * Don't use the same message on multiple files, unless it equally applies to
     all those files.
 
-  • If your changes span multiple files, and the code won't recompile unless
+  * If your changes span multiple files, and the code won't recompile unless
     all changes are committed (e.g. when changing the signature of a function),
     then commit all files one after another, without long delays in between. If
     necessary, prepare the commit messages in advance.
 
-  • Before changing things on CVS, make sure that your changes are in line with
+  * Before changing things on CVS, make sure that your changes are in line with
     the team's general consensus on what should be done.
 
-  • Note that near a major public release, we get more cautious. There is
+  * Note that near a major public release, we get more cautious. There is
     always the possibility to submit a patch to the patch tracker instead.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 3. Documentation Guidelines
 
@@ -305,7 +305,7 @@ needed. This is especially important just prior to a new release! Please do
 this after the $VERSION and other release specific data in configure.in has
 been updated (this is done just prior to a new release).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 3.1. Quickstart to Docbook and SGML
 
@@ -351,7 +351,7 @@ Look at any of the existing docs for examples of all these and more.
 You might also find "Writing Documentation Using DocBook - A Crash Course"
 useful.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 3.2. Privoxy Documentation Style
 
@@ -361,9 +361,9 @@ fashion.
 
 Here it is:
 
-  • All tags should be lower case.
+  * All tags should be lower case.
 
-  • Tags delimiting a block of text (even small blocks) should be on their own
+  * Tags delimiting a block of text (even small blocks) should be on their own
     line. Like:
 
      <para>
@@ -376,7 +376,7 @@ Here it is:
       Just to <emphasis>emphasize</emphasis>, some text goes here.
            
 
-  • Tags should be nested and step indented for block text like: (except
+  * Tags should be nested and step indented for block text like: (except
     in-line tags)
 
      <para>
@@ -392,23 +392,23 @@ Here it is:
 
     This makes it easier to find the text amongst the tags ;-)
 
-  • Use white space to separate logical divisions within a document, like
+  * Use white space to separate logical divisions within a document, like
     between sections. Running everything together consistently makes it harder
     to read and work on.
 
-  • Do not hesitate to make comments. Comments can either use the <comment>
+  * Do not hesitate to make comments. Comments can either use the <comment>
     element, or the <!-- --> style comment familiar from HTML. (Note in Docbook
     v4.x <comment> is replaced by <remark>.)
 
-  • We have an international audience. Refrain from slang, or English
+  * We have an international audience. Refrain from slang, or English
     idiosyncrasies (too many to list :). Humor also does not translate well
     sometimes.
 
-  • Try to keep overall line lengths in source files to 80 characters or less
+  * Try to keep overall line lengths in source files to 80 characters or less
     for obvious reasons. This is not always possible, with lengthy URLs for
     instance.
 
-  • Our documents are available in differing formats. Right now, they are just
+  * Our documents are available in differing formats. Right now, they are just
     plain text, HTML, and PDF, but others are always a future possibility. Be
     careful with URLs (<ulink>), and avoid this mistake:
 
@@ -419,10 +419,10 @@ Here it is:
 
     My favorite site is <ulink url="http://example.com">example.com</ulink>.
 
-  • All documents should be spell checked occasionally. aspell can check SGML
+  * All documents should be spell checked occasionally. aspell can check SGML
     with the -H option. (ispell I think too.)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 3.3. Privoxy Custom Entities
 
@@ -442,7 +442,7 @@ encouraged to use these where possible. Some of these obviously require
 re-setting with each release (done by the Makefile). A sampling of custom
 entities are listed below. See any of the main docs for examples.
 
-  • Re- "boilerplate" text entities are defined like:
+  * Re- "boilerplate" text entities are defined like:
 
     <!entity supported SYSTEM "supported.sgml">
 
@@ -452,9 +452,9 @@ entities are listed below. See any of the main docs for examples.
     semi-colon), and the contents will be dumped into the finished doc at that
     point.
 
-  • Commonly used "internal entities":
+  * Commonly used "internal entities":
 
-    p-version: the Privoxy version string, e.g. "3.0.7".
+    p-version: the Privoxy version string, e.g. "3.0.8".
     p-status: the project status, either "alpha", "beta", or "stable".
     p-not-stable: use to conditionally include text in "not stable" releases
     (e.g. "beta").
@@ -464,7 +464,7 @@ entities are listed below. See any of the main docs for examples.
 There are others in various places that are defined for a specific purpose.
 Read the source!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4. Coding Guidelines
 
@@ -479,7 +479,7 @@ And that of course comes back to us as individuals. If we can increase our
 development and product efficiencies then we can solve more of the request for
 changes/improvements and in general feel good about ourselves. ;->
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.2. Using Comments
 
@@ -517,7 +517,7 @@ This demonstrates 2 cases of "what not to do".  The first is a
 is actually being done.
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.2.2. Use blocks for comments
 
@@ -558,7 +558,7 @@ If you are trying to add a small logic comment and do not wish to "disrupt" the
 flow of the code, feel free to use a 1 line comment which is NOT on the same
 line as the code.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.2.3. Keep Comments on their own line
 
@@ -609,7 +609,7 @@ short do_something_very_important(
 }   /* -END- do_something_very_important */
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.2.4. Comment each logical step
 
@@ -624,7 +624,7 @@ into it to see where you forgot to put one.
 Most "for", "while", "do", etc... loops _probably_ need a comment. After all,
 these are usually major logic containers.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.2.5. Comment All Functions Thoroughly
 
@@ -641,7 +641,7 @@ function for the problem at hand. As a result of such benefits, all functions
 should contain the information presented in the addendum section of this
 document.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.2.6. Comment at the end of braces if the content is more than one screen
 length
@@ -675,7 +675,7 @@ if ( 1 == X )
 } /* -END- if ( 1 == X ) */
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.3. Naming Conventions
 
@@ -699,7 +699,7 @@ Instead of:
 int msiis5hack = 0; int msIis5Hack = 0;
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.3.2. Function Names
 
@@ -722,7 +722,7 @@ int loadsomefile( struct client_state *csp )
 int loadSomeFile( struct client_state *csp )
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.3.3. Header file prototypes
 
@@ -744,7 +744,7 @@ Instead of:
 (.c) int load_aclfile( struct client_state *csp )
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.3.4. Enumerations, and #defines
 
@@ -773,7 +773,7 @@ Example:
 #endif /* def FEATURE_FORCE */
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.3.5. Constants
 
@@ -801,7 +801,7 @@ Instead of:
 #define UseImageList 1
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4. Using Space
 
@@ -848,7 +848,7 @@ while ( more lines are read )
 }
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4.2. ALL control statements should have a block
 
@@ -879,7 +879,7 @@ that which the developer desired (per indentation). Using code braces would
 have prevented this "feature". The "explanation" and "exception" from the point
 above also applies.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4.3. Do not belabor/blow-up boolean expressions
 
@@ -896,7 +896,7 @@ Note: The former is readable and concise. The later is wordy and inefficient.
 Please assume that any developer new to the project has at least a "good"
 knowledge of C/C++. (Hope I do not offend by that last comment ... 8-)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4.4. Use white space freely because it is free
 
@@ -917,7 +917,7 @@ if ( this_variable == this_variable )
 first_value = old_value + ( ( some_value - another_value ) - whatever )
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4.5. Don't use white space around structure operators
 
@@ -939,7 +939,7 @@ function_name();
 
 Instead of: a_struct -> a_member; a_struct . a_member; function_name ();
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4.6. Make the last brace of a function stand out
 
@@ -972,7 +972,7 @@ long if {} statements too. After all whitespace is free!
 Status: developer-discretion on the number of blank lines. Enforced is the end
 of function comments.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.4.7. Use 3 character indentions
 
@@ -1007,7 +1007,7 @@ int function1( ... )
 }
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.5. Initializing
 
@@ -1033,7 +1033,7 @@ SIGSEV vs. array_ptr[0].
 Status: developer-discretion if and only if the variable is assigned a value
 "shortly after" declaration.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6. Functions
 
@@ -1051,7 +1051,7 @@ contains_an_image();
 is_web_page_blank();
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.2. Always specify a return type for a function.
 
@@ -1061,7 +1061,7 @@ The default return for a function is an int. To avoid ambiguity, create a
 return for a function when the return has a purpose, and create a void return
 type if the function does not need to return anything.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.3. Minimize function calls when iterating by using variables
 
@@ -1103,7 +1103,7 @@ Exceptions: if the value of block_list_length() *may* change or could
 *potentially* change, then you must code the function call in the for/while
 loop.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.4. Pass and Return by Const Reference
 
@@ -1120,7 +1120,7 @@ char *argv[] ) { strcmp( argv[0], "privoxy" ); }
 Both these pointers are *const*! If the c runtime library maintainers do it, we
 should too.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.5. Pass and Return by Value
 
@@ -1133,7 +1133,7 @@ client_state csp )
 would not work. So, to be consistent, we should declare all prototypes with
 "pass by value": int load_aclfile( struct client_state *csp )
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.6. Names of include files
 
@@ -1160,7 +1160,7 @@ Exception:
 Note: Please! do not add "-I." to the Makefile without a _very_ good reason.
 This duplicates the #include "file.h" behavior.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.7. Provide multiple inclusion protection
 
@@ -1180,7 +1180,7 @@ Example:
 #endif /* ndef PROJECT_H_INCLUDED */
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.8. Use `extern "C"` when appropriate
 
@@ -1204,7 +1204,7 @@ extern "C"
 #endif /* def __cplusplus */
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.6.9. Where Possible, Use Forward Struct Declaration Instead of Includes
 
@@ -1228,7 +1228,7 @@ however, the header file is unnecessary.
 
 Status: Use with discretion.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7. General Coding Practices
 
@@ -1240,7 +1240,7 @@ Compiler warnings are meant to help you find bugs. You should turn on as many
 as possible. With GCC, the switch is "-Wall". Try and fix as many warnings as
 possible.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.2. Provide a default case for all switch statements
 
@@ -1281,7 +1281,7 @@ stream (as in load_config). Or it may really be an abort condition.
 
 Status: Programmer discretion is advised.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.3. Try to avoid falling through cases in a switch statement.
 
@@ -1300,7 +1300,7 @@ use a break statement for each case statement.
 If you choose to allow fall through, you should comment both the fact of the
 fall through and reason why you felt it was necessary.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.4. Use 'long' or 'short' Instead of 'int'
 
@@ -1314,7 +1314,7 @@ GNU-Emacs), there are typedefs to int4, int8, int16, (or equivalence ... I
 forget the exact typedefs now). Should we add these to IJB now that we have a
 "configure" script?
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.5. Don't mix size_t and other types
 
@@ -1325,7 +1325,7 @@ whether it is signed or unsigned, or about how long it is. Do not compare a
 size_t against another variable of a different type (or even against a
 constant) without casting one of the values.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.6. Declare each variable and struct on its own line.
 
@@ -1355,7 +1355,7 @@ a good comment on their functions.
 
 Status: developer-discretion.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.7. Use malloc/zalloc sparingly
 
@@ -1373,7 +1373,7 @@ If a function creates a struct and stores a pointer to it in a
 list, then it should definitely be allocated via `malloc'.
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.8. The Programmer Who Uses 'malloc' is Responsible for Ensuring 'free'
 
@@ -1400,7 +1400,7 @@ library functions ... such as `strdup'.
 Status: developer-discretion. The "main" use of this standard is for allocating
 and freeing data structures (complex or nested).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.9. Add loaders to the `file_list' structure and in order
 
@@ -1413,7 +1413,7 @@ Note: It may appear that the alpha order is broken in places by POPUP tests
 coming before PCRS tests. But since POPUPs can also be referred to as
 KILLPOPUPs, it is clear that it should come first.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.7.10. "Uncertain" new code and/or changes to existing code, use FIXME or XXX
 
@@ -1438,13 +1438,13 @@ Note: If you make it clear that this may or may not be a "good thing (tm)", it
 will be easier to identify and include in the project (or conversely exclude
 from the project).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.8. Addendum: Template for files and function comment blocks:
 
 Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.14 2008/01/17 01:49:51 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1503,7 +1503,7 @@ Example for file header comments:
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.13 2007/10/30 17:59:31 fabiankeil Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.14 2008/01/17 01:49:51 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $Source$
@@ -1595,13 +1595,13 @@ int FUNCTION_NAME( void *param1, const char *x )
 Note: If we all follow this practice, we should be able to parse our code to
 create a "self-documenting" web page.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5. Testing Guidelines
 
 To be filled.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.1. Testplan for releases
 
@@ -1611,15 +1611,15 @@ Explain release numbers. major, minor. developer releases. etc.
 
  2. Remove any file that was left over. This includes (but is not limited to)
 
-      □ /var/log/privoxy
+      + /var/log/privoxy
 
-      □ /etc/privoxy
+      + /etc/privoxy
 
-      □ /usr/sbin/privoxy
+      + /usr/sbin/privoxy
 
-      □ /etc/init.d/privoxy
+      + /etc/init.d/privoxy
 
-      □ /usr/doc/privoxy*
+      + /usr/doc/privoxy*
 
  3. Install the rpm. Any error messages?
 
@@ -1630,23 +1630,23 @@ Explain release numbers. major, minor. developer releases. etc.
 
  6. Remove the rpm. Any error messages? All files removed?
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.2. Test reports
 
 Please submit test reports only with the test form at sourceforge. Three simple
 steps:
 
-  • Select category: the distribution you test on.
+  * Select category: the distribution you test on.
 
-  • Select group: the version of Privoxy that we are about to release.
+  * Select group: the version of Privoxy that we are about to release.
 
-  • Fill the Summary and Detailed Description with something intelligent (keep
+  * Fill the Summary and Detailed Description with something intelligent (keep
     it short and precise).
 
 Do not mail to the mailing list (we cannot keep track on issues there).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6. Releasing a New Version
 
@@ -1661,7 +1661,7 @@ outlined in this chapter.
 The following programs are required to follow this process: ncftpput (ncftp),
 scp, ssh (ssh), gmake (GNU's version of make), autoconf, cvs.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.1. Version numbers
 
@@ -1669,12 +1669,12 @@ First you need to determine which version number the release will have. Privoxy
 version numbers consist of three numbers, separated by dots, like in X.Y.Z
 (e.g. 3.0.0), where:
 
-  • X, the version major, is rarely ever changed. It is increased by one if
+  * X, the version major, is rarely ever changed. It is increased by one if
     turning a development branch into stable substantially changes the
     functionality, user interface or configuration syntax. Majors 1 and 2 were
     Junkbuster, and 3 will be the first stable Privoxy release.
 
-  • Y, the version minor, represents the branch within the major version. At
+  * Y, the version minor, represents the branch within the major version. At
     any point in time, there are two branches being maintained: The stable
     branch, with an even minor, say, 2N, in which no functionality is being
     added and only bug-fixes are made, and 2N+1, the development branch, in
@@ -1686,7 +1686,7 @@ version numbers consist of three numbers, separated by dots, like in X.Y.Z
     up (i.e. no longer maintained), the former development branch 2N+1 becomes
     the new stable branch 2N+2, and a new development branch 2N+3 is opened.
 
-  • Z, the point or sub version, represents a release of the software within a
+  * Z, the point or sub version, represents a release of the software within a
     branch. It is therefore incremented immediately before each code freeze. In
     development branches, only the even point versions correspond to actual
     releases, while the odd ones denote the evolving state of the sources on
@@ -1724,22 +1724,22 @@ working on both, then this would require at least two separate check outs (i.e
 main trunk, and the stable release branch, which is v_3_0_branch at the
 moment).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.2. Before the Release: Freeze
 
 The following must be done by one of the developers prior to each new release.
 
-  • Make sure that everybody who has worked on the code in the last couple of
+  * Make sure that everybody who has worked on the code in the last couple of
     days has had a chance to yell "no!" in case they have pending changes/fixes
     in their pipelines. Announce the freeze so that nobody will interfere with
     last minute changes.
 
-  • Increment the version number (point from odd to even in development
+  * Increment the version number (point from odd to even in development
     branches!) in configure.in. (RPM spec files will need to be incremented as
     well.)
 
-  • If default.action has changed since last release (i.e. software release or
+  * If default.action has changed since last release (i.e. software release or
     standalone actions file release), bump up its version info to A.B in this
     line:
 
@@ -1749,7 +1749,7 @@ The following must be done by one of the developers prior to each new release.
     Then change the version info in doc/webserver/actions/index.php, line:
     '$required_actions_file_version = "A.B";'
 
-  • All documentation should be rebuild after the version bump. Finished docs
+  * All documentation should be rebuild after the version bump. Finished docs
     should be then be committed to CVS (for those without the ability to build
     these). Some docs may require rather obscure processing tools. config, the
     man page (and the html version of the man page), and the PDF docs fall in
@@ -1758,7 +1758,7 @@ The following must be done by one of the developers prior to each new release.
     the webserver. See the Section "Updating the webserver" in this manual for
     details.
 
-  • The User Manual is also used for context sensitive help for the CGI editor.
+  * The User Manual is also used for context sensitive help for the CGI editor.
     This is version sensitive, so that the user will get appropriate help for
     his/her release. So with each release a fresh version should be uploaded to
     the webserver (this is in addition to the main User Manual link from the
@@ -1767,24 +1767,24 @@ The following must be done by one of the developers prior to each new release.
     user-manual/. This will need to be updated for each new release. There is
     no Makefile target for this at this time!!! It needs to be done manually.
 
-  • All developers should look at the ChangeLog and make sure noteworthy
+  * All developers should look at the ChangeLog and make sure noteworthy
     changes are referenced.
 
-  • Commit all files that were changed in the above steps!
+  * Commit all files that were changed in the above steps!
 
-  • Tag all files in CVS with the version number with "cvs tag v_X_Y_Z". Don't
+  * Tag all files in CVS with the version number with "cvs tag v_X_Y_Z". Don't
     use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
 
-  • If the release was in a development branch, increase the point version from
+  * If the release was in a development branch, increase the point version from
     even to odd (X.Y.(Z+1)) again in configure.in and commit your change.
 
-  • On the webserver, copy the user manual to a new top-level directory called
+  * On the webserver, copy the user manual to a new top-level directory called
     X.Y.Z. This ensures that help links from the CGI pages, which have the
     version as a prefix, will go into the right version of the manual. If this
     is a development branch release, also symlink X.Y.(Z-1) to X.Y.Z and X.Y.
     (Z+1) to . (i.e. dot).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3. Building and Releasing the Packages
 
@@ -1805,32 +1805,32 @@ Do NOT change a single bit, including, but not limited to version information
 after export from CVS. This is to make sure that all release packages, and with
 them, all future bug reports, are based on exactly the same code.
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                   Warning                                   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│Every significant release of Privoxy has included at least one package that  │
-│either had incorrect versions of files, missing files, or incidental         │
-│leftovers from a previous build process that gave unknown numbers of users   │
-│headaches to try to figure out what was wrong. PLEASE, make sure you are     │
-│using pristene sources, and are following the prescribed process!            │
-└─────────────────────────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------+
+|                                   Warning                                   |
+|-----------------------------------------------------------------------------|
+|Every significant release of Privoxy has included at least one package that  |
+|either had incorrect versions of files, missing files, or incidental         |
+|leftovers from a previous build process that gave unknown numbers of users   |
+|headaches to try to figure out what was wrong. PLEASE, make sure you are     |
+|using pristene sources, and are following the prescribed process!            |
++-----------------------------------------------------------------------------+
 
 Please find additional instructions for the source tarball and the individual
 platform dependent binary packages below. And details on the Sourceforge
 release process below that.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.1. Note on Privoxy Packaging
 
 Please keep these general guidelines in mind when putting together your
 package. These apply to all platforms!
 
-  • Privoxy requires write access to: all *.action files, all logfiles, and the
+  * Privoxy requires write access to: all *.action files, all logfiles, and the
     trust file. You will need to determine the best way to do this for your
     platform.
 
-  • Please include up to date documentation. At a bare minimum:
+  * Please include up to date documentation. At a bare minimum:
 
     LICENSE (top-level directory)
 
@@ -1861,28 +1861,28 @@ package. These apply to all platforms!
     directory with privoxy-index.html, (i.e. one level up from the manual
     directories).
 
-  • user.action and user.filter are designed for local preferences. Make sure
+  * user.action and user.filter are designed for local preferences. Make sure
     these do not get overwritten! config should not be overwritten either. This
     has especially important configuration data in it. trust should be left in
     tact as well.
 
-  • Other configuration files (default.action, default.filter and
+  * Other configuration files (default.action, default.filter and
     standard.action) should be installed as the new defaults, but all
     previously installed configuration files should be preserved as backups.
     This is just good manners :-) These files are likely to change between
     releases and contain important new features and bug fixes.
 
-  • Please check platform specific notes in this doc, if you haven't done
+  * Please check platform specific notes in this doc, if you haven't done
     "Privoxy" packaging before for other platform specific issues. Conversely,
     please add any notes that you know are important for your platform (or
     contact one of the doc maintainers to do this if you can't).
 
-  • Packagers should do a "clean" install of their package after building it.
+  * Packagers should do a "clean" install of their package after building it.
     So any previous installs should be removed first to ensure the integrity of
     the newly built package. Then run the package for a while to make sure
     there are no obvious problems, before uploading.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.2. Source Tarball
 
@@ -1906,7 +1906,7 @@ To upload the package to Sourceforge, simply issue
 Go to the displayed URL and release the file publicly on Sourceforge. For the
 change log field, use the relevant section of the ChangeLog file.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.3. SuSE, Conectiva or Red Hat RPM
 
@@ -1944,7 +1944,7 @@ where rpm_packagerev is the RPM release number as determined above. Go to the
 displayed URL and release the file publicly on Sourceforge. Use the release
 notes and change log from the source tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.4. OS/2
 
@@ -1983,7 +1983,7 @@ Upload this anonymously to uploads.sourceforge.net/incoming, create a release
 for it, and you're done. Use the release notes and Change Log from the source
 tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.5. Solaris
 
@@ -2010,7 +2010,7 @@ on the Sourceforge machine (no ncftpput). You now have to manually upload the
 archive to Sourceforge's ftp server and release the file publicly. Use the
 release notes and Change Log from the source tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.6. Windows
 
@@ -2035,7 +2035,7 @@ Now you can manually rename privoxy_setup.exe to privoxy_setup_X_Y_Z.exe, and
 upload it to SourceForge. When releasing the package on SourceForge, use the
 release notes and Change Log from the source tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.7. Debian
 
@@ -2043,7 +2043,7 @@ First, make sure that you have freshly exported the right version into an empty
 directory. (See "Building and releasing packages" above). Then add a log entry
 to debian/changelog, if it is not already there, for example by running:
 
-  debchange -v 3.0.7-beta-1 "New upstream version"
+  debchange -v 3.0.8-stable-1 "New upstream version"
 
 
 Then, run:
@@ -2051,13 +2051,13 @@ Then, run:
   dpkg-buildpackage -rfakeroot -us -uc -b
 
 
-This will create ../privoxy_3.0.7-beta-1_i386.deb which can be uploaded. To
+This will create ../privoxy_3.0.8-stable-1_i386.deb which can be uploaded. To
 upload the package to Sourceforge, simply issue
 
   make debian-upload
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.8. Mac OSX
 
@@ -2090,7 +2090,7 @@ You can then upload privoxyosx_setup_x.y.z.zip anonymously to
 uploads.sourceforge.net/incoming, create a release for it, and you're done. Use
 the release notes and Change Log from the source tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.9. FreeBSD
 
@@ -2117,7 +2117,7 @@ on the Sourceforge machine (no ncftpput). You now have to manually upload the
 archive to Sourceforge's ftp server and release the file publicly. Use the
 release notes and Change Log from the source tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.10. HP-UX 11
 
@@ -2130,7 +2130,7 @@ directory. (See "Building and releasing packages" above). Then run:
 
 Then do FIXME.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.11. Amiga OS
 
@@ -2143,7 +2143,7 @@ directory. (See "Building and releasing packages" above). Then run:
 
 Then do FIXME.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.3.12. AIX
 
@@ -2170,18 +2170,18 @@ the Sourceforge machine (no ncftpput). You now have to manually upload the
 archive to Sourceforge's ftp server and release the file publicly. Use the
 release notes and Change Log from the source tarball package.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.4. Uploading and Releasing Your Package
 
 After the package is ready, it is time to upload it to SourceForge, and go
 through the release steps. The upload is done via FTP:
 
-  • Upload to: ftp://upload.sourceforge.net/incoming
+  * Upload to: ftp://upload.sourceforge.net/incoming
 
-  • user: anonymous
+  * user: anonymous
 
-  • password: ijbswa-developers@lists.sourceforge.net
+  * password: ijbswa-developers@lists.sourceforge.net
 
 Or use the make targets as described above.
 
@@ -2189,7 +2189,7 @@ Once this done go to http://sourceforge.net/project/admin/editpackages.php?
 group_id=11118, making sure you are logged in. Find your target platform in the
 second column, and click Add Release. You will then need to create a new
 release for your package, using the format of $VERSION ($CODE_STATUS), e.g.
-3.0.7 (beta).
+3.0.8 (beta).
 
 Now just follow the prompts. Be sure to add any appropriate Release notes. You
 should see your freshly uploaded packages in "Step 2. Add Files To This
@@ -2203,7 +2203,7 @@ This should do it!
 If you have made errors, or need to make changes, you can go through
 essentially the same steps, but select Edit Release, instead of Add Release.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.5. After the Release
 
@@ -2214,7 +2214,7 @@ Changelog. Also, post an updated News item on the project page Sourceforge, and
 update the Home page and docs linked from the Home page (see below). Other news
 sites and release oriented sites, such as Freshmeat, should also be notified.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7. Update the Webserver
 
@@ -2254,7 +2254,7 @@ avoid permission problems. Also, please do not upload docs from development
 branches or versions. The publicly posted docs should be in sync with the last
 official release.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8. Contacting the developers, Bug Reporting and Feature Requests
 
@@ -2262,7 +2262,7 @@ We value your feedback. In fact, we rely on it to improve Privoxy and its
 configuration. However, please note the following hints, so we can provide you
 with the best support:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.1. Get Support
 
@@ -2282,19 +2282,19 @@ with a proper subject. Additionally you should make it clear that you want to
 get CC'd. Otherwise some responses will be directed to the mailing list only,
 and you won't see them.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.2. Reporting Problems
 
 "Problems" for our purposes, come in two forms:
 
-  • Configuration issues, such as ads that slip through, or sites that don't
+  * Configuration issues, such as ads that slip through, or sites that don't
     function properly due to one Privoxy "action" or another being turned "on".
 
-  • "Bugs" in the programming code that makes up Privoxy, such as that might
+  * "Bugs" in the programming code that makes up Privoxy, such as that might
     cause a crash.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.2.1. Reporting Ads or Other Configuration Problems
 
@@ -2307,7 +2307,7 @@ New, improved default.action files may occasionally be made available based on
 your feedback. These will be announced on the ijbswa-announce list and
 available from our the files section of our project page.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.2.2. Reporting Bugs
 
@@ -2335,30 +2335,30 @@ your bug still exists.
 
 Please be sure to provide the following information:
 
-  • The exact Privoxy version you are using (if you got the source from CVS,
+  * The exact Privoxy version you are using (if you got the source from CVS,
     please also provide the source code revisions as shown in http://
     config.privoxy.org/show-version).
 
-  • The operating system and versions you run Privoxy on, (e.g. Windows XP
+  * The operating system and versions you run Privoxy on, (e.g. Windows XP
     SP2), if you are using a Unix flavor, sending the output of "uname -a"
     should do, in case of GNU/Linux, please also name the distribution.
 
-  • The name, platform, and version of the browser you were using (e.g.
+  * The name, platform, and version of the browser you were using (e.g.
     Internet Explorer v5.5 for Mac).
 
-  • The URL where the problem occurred, or some way for us to duplicate the
+  * The URL where the problem occurred, or some way for us to duplicate the
     problem (e.g. http://somesite.example.com/?somethingelse=123).
 
-  • Whether your version of Privoxy is one supplied by the Privoxy developers
+  * Whether your version of Privoxy is one supplied by the Privoxy developers
     via SourceForge, or if you got your copy somewhere else.
 
-  • Whether you are using Privoxy in tandem with another proxy such as Tor. If
+  * Whether you are using Privoxy in tandem with another proxy such as Tor. If
     so, please temporary disable the other proxy to see if the symptoms change.
 
-  • Whether you are using a personal firewall product. If so, does Privoxy work
+  * Whether you are using a personal firewall product. If so, does Privoxy work
     without it?
 
-  • Any other pertinent information to help identify the problem such as config
+  * Any other pertinent information to help identify the problem such as config
     or log file excerpts (yes, you should have log file entries for each action
     taken).
 
@@ -2374,7 +2374,7 @@ automatically get a mail when someone responds to your request.
 The appendix of the Privoxy User Manual also has helpful information on
 understanding actions, and action debugging.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.3. Request New Features
 
@@ -2382,7 +2382,7 @@ You are welcome to submit ideas on new features or other proposals for
 improvement through our feature request tracker at http://sourceforge.net/
 tracker/?atid=361118&group_id=11118.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.4. Other
 
@@ -2392,7 +2392,7 @@ welcome on the developers list! You can find an overview of all Privoxy-related
 mailing lists, including list archives, at: http://sourceforge.net/mail/?
 group_id=11118.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 9. Privoxy Copyright, License and History
 
@@ -2402,7 +2402,7 @@ ijbswa-developers@lists.sourceforge.net>
 Some source code is based on code Copyright   1997 by Anonymous Coders and
 Junkbusters, Inc. and licensed under the GNU General Public License.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 9.1. License
 
@@ -2424,7 +2424,7 @@ this program; if not, write to the
  Boston, MA 02110-1301
  USA 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 9.2. History
 
@@ -2454,7 +2454,7 @@ along the way.
 The result of this is Privoxy, whose first stable version, 3.0, was released
 August, 2002.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 10. See also
 

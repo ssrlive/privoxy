@@ -1,8 +1,8 @@
-Privoxy 3.0.7 User Manual
+Privoxy 3.0.8 User Manual
 
 [ Copyright   2001 - 2007 by Privoxy Developers ]
 
-$Id: user-manual.sgml,v 2.49 2007/12/06 18:21:55 fabiankeil Exp $
+$Id: user-manual.sgml,v 2.52 2008/01/17 01:49:51 hal9 Exp $
 
 The Privoxy User Manual gives users information on how to install, configure
 and use Privoxy.
@@ -20,7 +20,7 @@ You can find the latest version of the Privoxy User Manual at http://
 www.privoxy.org/user-manual/. Please see the Contact section on how to contact
 the developers.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 Table of Contents
 1. Introduction
@@ -212,63 +212,61 @@ Table of Contents
 
 1. Introduction
 
-This documentation is included with the current beta version of Privoxy,
-v.3.0.7, and is mostly complete at this point. The most up to date reference
-for the time being is still the comments in the source files and in the
-individual configuration files. Development of a new version is currently
-nearing completion, and includes significant changes and enhancements over
-earlier versions. .
+This documentation is included with the current stable version of Privoxy,
+v.3.0.8.
 
-Since this is a beta version, not all new features are well tested. This
-documentation may be slightly out of sync as a result (especially with CVS
-sources). And there may be bugs, though hopefully not many!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 1.1. Features
 
 In addition to the core features of ad blocking and cookie management, Privoxy
-provides many supplemental features, some of them currently under development,
-that give the end-user more control, more privacy and more freedom:
+provides many supplemental features, that give the end-user more control, more
+privacy and more freedom:
 
-  • Integrated browser based configuration and control utility at http://
+  * Can be run as an "intercepting" proxy, which obviates the need to configure
+    browsers individually.
+
+  * Sophisticated actions and filters for manipulating both server and client
+    headers.
+
+  * Can be chained with other proxies.
+
+  * Integrated browser based configuration and control utility at http://
     config.privoxy.org/ (shortcut: http://p.p/). Browser-based tracing of rule
     and filter effects. Remote toggling.
 
-  • Web page filtering (text replacements, removes banners based on size,
-    invisible "web-bugs", JavaScript and HTML annoyances, pop-up windows,
-    header manipulation, etc.)
+  * Web page filtering (text replacements, removes banners based on size,
+    invisible "web-bugs", JavaScript and HTML annoyances, pop-up windows, etc.)
 
-  • Modularized configuration that allows for standard settings and user
+  * Modularized configuration that allows for standard settings and user
     settings to reside in separate files, so that installing updated actions
     files won't overwrite individual user settings.
 
-  • Support for Perl Compatible Regular Expressions in the configuration files,
-    and generally a more sophisticated and flexible configuration syntax over
-    previous versions.
+  * Support for Perl Compatible Regular Expressions in the configuration files,
+    and a more sophisticated and flexible configuration syntax.
 
-  • Improved cookie management features (e.g. session based cookies).
+  * Improved cookie management features (e.g. session based cookies).
 
-  • GIF de-animation.
+  * GIF de-animation.
 
-  • Bypass many click-tracking scripts (avoids script redirection).
+  * Bypass many click-tracking scripts (avoids script redirection).
 
-  • Multi-threaded (POSIX and native threads).
+  * Multi-threaded (POSIX and native threads).
 
-  • User-customizable HTML templates for all proxy-generated pages (e.g.
+  * User-customizable HTML templates for all proxy-generated pages (e.g.
     "blocked" page).
 
-  • Auto-detection and re-reading of config file changes.
+  * Auto-detection and re-reading of config file changes.
 
-  • Improved signal handling, and a true daemon mode (Unix).
+  * Improved signal handling, and a true daemon mode (Unix).
 
-  • Every feature now controllable on a per-site or per-location basis,
+  * Every feature now controllable on a per-site or per-location basis,
     configuration more powerful and versatile over-all.
 
-  • Many smaller new features added, limitations and bugs removed, and security
+  * Many smaller new features added, limitations and bugs removed, and security
     holes fixed.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2. Installation
 
@@ -281,38 +279,38 @@ versions, if found. (See below for your platform). In any case be sure to
 backup your old configuration if it is valuable to you. See the note to
 upgraders section below.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1. Binary Packages
 
 How to install the binary packages depends on your operating system:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.1. Red Hat and Fedora RPMs
 
-RPMs can be installed with rpm -Uvh privoxy-3.0.7-1.rpm, and will use /etc/
+RPMs can be installed with rpm -Uvh privoxy-3.0.8-1.rpm, and will use /etc/
 privoxy for the location of configuration files.
 
 Note that on Red Hat, Privoxy will not be automatically started on system boot.
 You will need to enable that using chkconfig, ntsysv, or similar methods.
 
 If you have problems with failed dependencies, try rebuilding the SRC RPM: rpm
---rebuild privoxy-3.0.7-1.src.rpm. This will use your locally installed
+--rebuild privoxy-3.0.8-1.src.rpm. This will use your locally installed
 libraries and RPM version.
 
 Also note that if you have a Junkbuster RPM installed on your system, you need
 to remove it first, because the packages conflict. Otherwise, RPM will try to
 remove Junkbuster automatically if found, before installing Privoxy.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.2. Debian and Ubuntu
 
 DEBs can be installed with apt-get install privoxy, and will use /etc/privoxy
 for the location of configuration files.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.3. Windows
 
@@ -339,14 +337,14 @@ Note too that you will need to give Privoxy a user account that actually
 exists, or it will not be permitted to write to its log and configuration
 files.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.4. Solaris
 
 Create a new directory, cd to it, then unzip and untar the archive. For the
 most part, you'll have to figure out where things go.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.5. OS/2
 
@@ -362,7 +360,7 @@ starts.
 The directory you choose to install Privoxy into will contain all of the
 configuration files.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.6. Mac OSX
 
@@ -382,7 +380,7 @@ Privoxy folder. Or, type this command in the Terminal:
 
 You will be prompted for the administrator password.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.7. AmigaOS
 
@@ -390,7 +388,7 @@ Copy and then unpack the lha archive to a suitable location. All necessary
 files will be installed into Privoxy directory, including all configuration and
 log files. To uninstall, just remove this directory.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.8. FreeBSD
 
@@ -404,7 +402,7 @@ The port skeleton and the package can also be downloaded from the File Release
 Page, but there's no reason to use them unless you're interested in the beta
 releases which are only available there.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.1.9. Gentoo
 
@@ -417,9 +415,9 @@ latest changes from the Portage tree. With emerge privoxy you install the
 latest version.
 
 Configuration files are in /etc/privoxy, the documentation is in /usr/share/doc
-/privoxy-3.0.7 and the Log directory is in /var/log/privoxy.
+/privoxy-3.0.8 and the Log directory is in /var/log/privoxy.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.2. Building from Source
 
@@ -435,8 +433,8 @@ compiler like gcc are required.
 
 When building from a source tarball, first unpack the source:
 
- tar xzvf privoxy-3.0.7-beta-src* [.tgz or .tar.gz]
- cd privoxy-3.0.7-beta
+ tar xzvf privoxy-3.0.8-src* [.tgz or .tar.gz]
+ cd privoxy-3.0.8
 
 
 For retrieving the current CVS sources, you'll need a CVS client installed.
@@ -563,7 +561,7 @@ For more detailed instructions on how to build Redhat RPMs, Windows
 self-extracting installers, building on platforms with special requirements
 etc, please consult the developer manual.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 2.3. Keeping your Installation Up-to-Date
 
@@ -580,84 +578,84 @@ latest default.action file we strongly recommend that you use user.action and
 user.filter for your local customizations of Privoxy. See the Chapter on
 actions files for details.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 3. What's New in this Release
 
 There are many improvements and new features since Privoxy 3.0.6, the last
 stable release:
 
-  • Two new actions server-header-tagger and client-header-tagger that can be
+  * Two new actions server-header-tagger and client-header-tagger that can be
     used to create arbitrary "tags" based on client and server headers. These
     "tags" can then subsequently be used to control the other actions used for
     the current request, greatly increasing Privoxy's flexibility and
     selectivity. See tag patterns for more information on tags.
 
-  • Header filtering is done with dedicated header filters now. As a result the
+  * Header filtering is done with dedicated header filters now. As a result the
     actions "filter-client-headers" and "filter-server-headers" that were
     introduced with Privoxy 3.0.5 to apply content filters to the headers have
     been removed. See the new actions server-header-filter and
     client-header-filter for details.
 
-  • There are four new options for the main config file:
+  * There are four new options for the main config file:
 
-      □ allow-cgi-request-crunching which allows requests for Privoxy's
+      + allow-cgi-request-crunching which allows requests for Privoxy's
         internal CGI pages to be blocked, redirected or (un)trusted like
         ordinary requests.
 
-      □ split-large-forms that will work around a browser bug that caused IE6
+      + split-large-forms that will work around a browser bug that caused IE6
         and IE7 to ignore the Submit button on the Privoxy's
         edit-actions-for-url CGI page.
 
-      □ accept-intercepted-requests which allows to combine Privoxy with any
+      + accept-intercepted-requests which allows to combine Privoxy with any
         packet filter to create an intercepting proxy for HTTP/1.1 requests
         (and for HTTP/1.0 requests with Host header set). This means clients
         can be forced to use Privoxy even if their proxy settings are
         configured differently.
 
-      □ templdir to designate an alternate location for Privoxy's locally
+      + templdir to designate an alternate location for Privoxy's locally
         customized CGI templates so that these are not overwritten during
         upgrades.
 
-  • A new command line option --pre-chroot-nslookup hostname to initialize the
+  * A new command line option --pre-chroot-nslookup hostname to initialize the
     resolver library before chroot'ing. On some systems this reduces the number
     of files that must be copied into the chroot tree. (Patch provided by
     Stephen Gildea)
 
-  • The forward-override action allows changing of the forwarding settings
+  * The forward-override action allows changing of the forwarding settings
     through the actions files. Combined with tags, this allows to choose the
     forwarder based on client headers like the User-Agent, or the request
     origin.
 
-  • The redirect action can now use regular expression substitutions against
+  * The redirect action can now use regular expression substitutions against
     the original URL.
 
-  • zlib support is now available as a compile time option to filter compressed
+  * zlib support is now available as a compile time option to filter compressed
     content. Patch provided by Wil Mahan.
 
-  • Improve various filters, and add new ones.
+  * Improve various filters, and add new ones.
 
-  • Include support for RFC 3253 so that Subversion works with Privoxy. Patch
+  * Include support for RFC 3253 so that Subversion works with Privoxy. Patch
     provided by Petr Kadlec.
 
-  • Logging can be completely turned off by not specifying a logfile directive.
+  * Logging can be completely turned off by not specifying a logfile directive.
 
-  • A number of improvements to Privoxy's internal CGI pages, including the use
+  * A number of improvements to Privoxy's internal CGI pages, including the use
     of favicons for error and control pages.
 
-  • Many bugfixes, memory leaks addressed, code improvements, and logging
+  * Many bugfixes, memory leaks addressed, code improvements, and logging
     improvements.
 
 For a more detailed list of changes please have a look at the ChangeLog.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 3.1. Note to Upgraders
 
 A quick list of things to be aware of before upgrading from earlier versions of
 Privoxy:
 
-  • The recommended way to upgrade Privoxy is to backup your old configuration
+  * The recommended way to upgrade Privoxy is to backup your old configuration
     files, install the new ones, verify that Privoxy is working correctly and
     finally merge back your changes using diff and maybe patch.
 
@@ -666,54 +664,55 @@ Privoxy:
     files obviously don't do that and due to syntax changes using old
     configuration files with a new Privoxy isn't always possible anyway.
 
-  • Note that some installers remove earlier versions completely, including
+  * Note that some installers remove earlier versions completely, including
     configuration files, therefore you should really save any important
     configuration files!
 
-  • On the other hand, other installers don't overwrite existing configuration
+  * On the other hand, other installers don't overwrite existing configuration
     files, thinking you will want to do that yourself.
 
-  • standard.action now only includes the enabled actions. Not all actions as
+  * standard.action now only includes the enabled actions. Not all actions as
     before.
 
-  • Logging is off by default now. If you need logging, it can be turned on in
-    the config file. You may also want to enable logging until you verified
-    that the new Privoxy version is working as expected.
+  * In the default configuration only fatal errors are logged now. You can
+    change that in the debug section of the configuration file. You may also
+    want to enable more verbose logging until you verified that the new Privoxy
+    version is working as expected.
 
-  • Three other config file settings are now off by default:
+  * Three other config file settings are now off by default:
     enable-remote-toggle, enable-remote-http-toggle, and enable-edit-actions.
     If you use or want these, you will need to explicitly enable them, and be
     aware of the security issues involved.
 
-  • The "filter-client-headers" and "filter-server-headers" actions that were
+  * The "filter-client-headers" and "filter-server-headers" actions that were
     introduced with Privoxy 3.0.5 to apply content filters to the headers have
     been removed and replaced with new actions. See the What's New section
     above.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4. Quickstart to Using Privoxy
 
-  • Install Privoxy. See the Installation Section below for platform specific
+  * Install Privoxy. See the Installation Section below for platform specific
     information.
 
-  • Advanced users and those who want to offer Privoxy service to more than
+  * Advanced users and those who want to offer Privoxy service to more than
     just their local machine should check the main config file, especially the
     security-relevant options. These are off by default.
 
-  • Start Privoxy, if the installation program has not done this already (may
+  * Start Privoxy, if the installation program has not done this already (may
     vary according to platform). See the section Starting Privoxy.
 
-  • Set your browser to use Privoxy as HTTP and HTTPS (SSL) proxy by setting
+  * Set your browser to use Privoxy as HTTP and HTTPS (SSL) proxy by setting
     the proxy configuration for address of 127.0.0.1 and port 8118. DO NOT
     activate proxying for FTP or any protocols besides HTTP and HTTPS (SSL)
     unless you intend to prevent your browser from using these protocols.
 
-  • Flush your browser's disk and memory caches, to remove any cached ad
+  * Flush your browser's disk and memory caches, to remove any cached ad
     images. If using Privoxy to manage cookies, you should remove any currently
     stored cookies too.
 
-  • A default installation should provide a reasonable starting point for most.
+  * A default installation should provide a reasonable starting point for most.
     There will undoubtedly be occasions where you will want to adjust the
     configuration, but that can be dealt with as the need arises. Little to no
     initial configuration is required in most cases, you may want to enable the
@@ -723,19 +722,19 @@ Privoxy:
     customize your installation. You might also want to look at the next
     section for a quick introduction to how Privoxy blocks ads and banners.
 
-  • If you experience ads that slip through, innocent images that are blocked,
+  * If you experience ads that slip through, innocent images that are blocked,
     or otherwise feel the need to fine-tune Privoxy's behavior, take a look at
     the actions files. As a quick start, you might find the richly commented
     examples helpful. You can also view and edit the actions files through the
     web-based user interface. The Appendix "Troubleshooting: Anatomy of an
     Action" has hints on how to understand and debug actions that "misbehave".
 
-  • Please see the section Contacting the Developers on how to report bugs,
+  * Please see the section Contacting the Developers on how to report bugs,
     problems with websites or to get help.
 
-  • Now enjoy surfing with enhanced control, comfort and privacy!
+  * Now enjoy surfing with enhanced control, comfort and privacy!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 4.1. Quickstart to Ad Blocking
 
@@ -783,7 +782,7 @@ page text is not touched, but images from such-and-such server are blocked.
 The most important actions for basic ad blocking are: block, handle-as-image,
 handle-as-empty-document,and set-image-blocker:
 
-  • block - this is perhaps the single most used action, and is particularly
+  * block - this is perhaps the single most used action, and is particularly
     important for ad blocking. This action stops any contact between your
     browser and any URL patterns that match this action's configuration. It can
     be used for blocking ads, but also anything that is determined to be
@@ -791,7 +790,7 @@ handle-as-empty-document,and set-image-blocker:
     server and sends Privoxy's own built-in BLOCKED page instead to let you now
     what has happened (with some exceptions, see below).
 
-  • handle-as-image - tells Privoxy to treat this URL as an image. Privoxy's
+  * handle-as-image - tells Privoxy to treat this URL as an image. Privoxy's
     default configuration already does this for all common image types (e.g.
     GIF), but there are many situations where this is not so easy to determine.
     So we'll force it in these cases. This is particularly important for ad
@@ -801,11 +800,11 @@ handle-as-empty-document,and set-image-blocker:
     limitations to this though. For instance, you can't just brute-force an
     image substitution for an entire HTML page in most situations.
 
-  • handle-as-empty-document - sends an empty document instead of Privoxy's
+  * handle-as-empty-document - sends an empty document instead of Privoxy's
     normal BLOCKED HTML page. This is useful for file types that are neither
     HTML nor images, such as blocking JavaScript files.
 
-  • set-image-blocker - tells Privoxy what to display in place of an ad image
+  * set-image-blocker - tells Privoxy what to display in place of an ad image
     that has hit a block rule. For this to come into play, the URL must match a
     block action somewhere in the configuration, and, it must also match an
     handle-as-image action.
@@ -846,28 +845,28 @@ configuration. Privoxy will detect these changes automatically.
 
 A quick and simple step by step example:
 
-  • Right click on the ad image to be blocked, then select "Copy Link Location"
+  * Right click on the ad image to be blocked, then select "Copy Link Location"
     from the pop-up menu.
 
-  • Set your browser to http://config.privoxy.org/show-status
+  * Set your browser to http://config.privoxy.org/show-status
 
-  • Find user.action in the top section, and click on "Edit":
+  * Find user.action in the top section, and click on "Edit":
 
     Figure 1. Actions Files in Use
 
     [files-in-u]
 
-  • You should have a section with only block listed under "Actions:". If not,
+  * You should have a section with only block listed under "Actions:". If not,
     click a "Insert new section below" button, and in the new section that just
     appeared, click the Edit button right under the word "Actions:". This will
     bring up a list of all actions. Find block near the top, and click in the
     "Enabled" column, then "Submit" just below the list.
 
-  • Now, in the block actions section, click the "Add" button, and paste the
+  * Now, in the block actions section, click the "Add" button, and paste the
     URL the browser got from "Copy Link Location". Remove the http:// at the
     beginning of the URL. Then, click "Submit" (or "OK" if in a pop-up window).
 
-  • Now go back to the original page, and press SHIFT-Reload (or flush all
+  * Now go back to the original page, and press SHIFT-Reload (or flush all
     browser caches). The image should be gone now.
 
 This is a very crude and simple example. There might be good reasons to use a
@@ -883,7 +882,7 @@ There are also various filters that can be used for ad blocking (filters are a
 special subset of actions). These fall into the "advanced" usage category, and
 are explained in depth in later sections.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5. Starting Privoxy
 
@@ -941,7 +940,7 @@ to be used on the command line. If no configuration file is specified on the
 command line, Privoxy will look for a file named config in the current
 directory. Except on Win32 where it will try config.txt.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.1. Red Hat and Fedora
 
@@ -956,7 +955,7 @@ Or ...
  # service privoxy start
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.2. Debian
 
@@ -967,7 +966,7 @@ file.
  # /etc/init.d/privoxy start
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.3. Windows
 
@@ -980,7 +979,7 @@ Privoxy can run with full Windows service functionality. On Windows only, the
 Privoxy program has two new command line arguments to install and uninstall
 Privoxy as a service. See the Windows Installation instructions for details.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.4. Solaris, NetBSD, FreeBSD, HP-UX and others
 
@@ -989,7 +988,7 @@ Example Unix startup command:
  # /usr/sbin/privoxy /etc/privoxy/config
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.5. OS/2
 
@@ -997,7 +996,7 @@ During installation, Privoxy is configured to start automatically when the
 system restarts. You can start it manually by double-clicking on the Privoxy
 icon in the Privoxy folder.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.6. Mac OSX
 
@@ -1012,7 +1011,7 @@ in the Terminal:
 
 You will be prompted for the administrator password.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.7. AmigaOS
 
@@ -1022,7 +1021,7 @@ or as startup action (Miami and MiamiDx). Privoxy will automatically quit when
 you quit your TCP/IP stack (just ignore the harmless warning your TCP/IP stack
 may display that Privoxy is still running).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.8. Gentoo
 
@@ -1040,38 +1039,38 @@ change this with the rc-update command.
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 5.9. Command Line Options
 
 Privoxy may be invoked with the following command-line options:
 
-  • --version
+  * --version
 
     Print version info and exit. Unix only.
 
-  • --help
+  * --help
 
     Print short usage info and exit. Unix only.
 
-  • --no-daemon
+  * --no-daemon
 
     Don't become a daemon, i.e. don't fork and become process group leader, and
     don't detach from controlling tty. Unix only.
 
-  • --pidfile FILE
+  * --pidfile FILE
 
     On startup, write the process ID to FILE. Delete the FILE on exit. Failure
     to create or delete the FILE is non-fatal. If no FILE option is given, no
     PID file will be used. Unix only.
 
-  • --user USER[.GROUP]
+  * --user USER[.GROUP]
 
     After (optionally) writing the PID file, assume the user ID of USER, and if
     included the GID of GROUP. Exit if the privileges are not sufficient to do
     so. Unix only.
 
-  • --chroot
+  * --chroot
 
     Before changing to the user ID given in the --user option, chroot to that
     user's home directory, i.e. make the kernel pretend to the Privoxy process
@@ -1079,7 +1078,7 @@ Privoxy may be invoked with the following command-line options:
     the impact of possible vulnerabilities in Privoxy to the files contained in
     that hierarchy. Unix only.
 
-  • --pre-chroot-nslookup hostname
+  * --pre-chroot-nslookup hostname
 
     Specifies a hostname to look up before doing a chroot. On some systems,
     initializing the resolver library involves reading config files from /etc
@@ -1093,7 +1092,7 @@ Privoxy may be invoked with the following command-line options:
     servers). The hostname need not exist, but if it doesn't, an error message
     (which can be ignored) will be output.
 
-  • configfile
+  * configfile
 
     If no configfile is included on the command line, Privoxy will look for a
     file named "config" in the current directory (except on Win32 where it will
@@ -1104,7 +1103,7 @@ On MS Windows only there are two additional command-line options to allow
 Privoxy to install and run as a service. See the Window Installation section
 for details.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6. Privoxy Configuration
 
@@ -1112,7 +1111,7 @@ All Privoxy configuration is stored in text files. These files can be edited
 with a text editor. Many important aspects of Privoxy can also be controlled
 easily with a web browser.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.1. Controlling Privoxy with Your Web Browser
 
@@ -1121,12 +1120,12 @@ config.privoxy.org/ (shortcut: http://p.p/), which is a built-in page and works
 without Internet access. You will see the following section: 
 
      Privoxy Menu
-        ▪  View & change the current configuration
-        ▪  View the source code version numbers
-        ▪  View the request headers.
-        ▪  Look up which actions apply to a URL and why
-        ▪  Toggle Privoxy on or off
-        ▪  Documentation
+        ?  View & change the current configuration
+        ?  View the source code version numbers
+        ?  View the request headers.
+        ?  Look up which actions apply to a URL and why
+        ?  Toggle Privoxy on or off
+        ?  Documentation
 
 
 This should be self-explanatory. Note the first item leads to an editor for the
@@ -1146,24 +1145,22 @@ Note that several of the features described above are disabled by default in
 Privoxy 3.0.7 beta and later. Check the configuration file to learn why and in
 which cases it's safe to enable them again.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 6.2. Configuration Files Overview
 
 For Unix, *BSD and Linux, all configuration files are located in /etc/privoxy/
 by default. For MS Windows, OS/2, and AmigaOS these are all in the same
-directory as the Privoxy executable. The name and number of configuration files
-has changed from previous versions, and is subject to change as development
-progresses.
+directory as the Privoxy executable.
 
 The installed defaults provide a reasonable starting point, though some
 settings may be aggressive by some standards. For the time being, the principle
 configuration files are:
 
-  • The main configuration file is named config on Linux, Unix, BSD, OS/2, and
+  * The main configuration file is named config on Linux, Unix, BSD, OS/2, and
     AmigaOS and config.txt on Windows. This is a required file.
 
-  • default.action (the main actions file) is used to define which "actions"
+  * default.action (the main actions file) is used to define which "actions"
     relating to banner-blocking, images, pop-ups, content modification, cookie
     handling etc should be applied by default. It also defines many exceptions
     (both positive and negative) from this default set of actions that enable
@@ -1181,7 +1178,7 @@ configuration files are:
     config.privoxy.org/show-status (Shortcut: http://p.p/show-status) for the
     various actions files.
 
-  • "Filter files" (the filter file) can be used to re-write the raw page
+  * "Filter files" (the filter file) can be used to re-write the raw page
     content, including viewable text as well as embedded HTML and JavaScript,
     and whatever else lurks on any given web page. The filtering jobs are only
     pre-defined here; whether to apply them or not is up to the actions files.
@@ -1210,12 +1207,7 @@ however, that it may take one or two additional requests for the change to take
 effect. When changing the listening address of Privoxy, these "wake up"
 requests must obviously be sent to the old listening address.
 
-While under development, the configuration content is subject to change. The
-below documentation may not be accurate by the time you read this. Also, what
-constitutes a "default" setting, may change, so please check all your
-configuration files on important issues.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7. The Main Configuration File
 
@@ -1236,7 +1228,7 @@ The main config file controls all aspects of Privoxy's operation that are not
 location dependent (i.e. they apply universally, no matter where you may be
 surfing).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.1. Local Set-up Documentation
 
@@ -1244,7 +1236,7 @@ If you intend to operate Privoxy for more users than just yourself, it might be
 a good idea to let them know how to reach you, what you block and why you do
 that, your policies, etc.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.1.1. user-manual
 
@@ -1290,15 +1282,15 @@ Notes:
       user-manual  http://example.com/privoxy/user-manual/
 
 
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                             Warning                             │
-    ├─────────────────────────────────────────────────────────────────┤
-    │If set, this option should be the first option in the config     │
-    │file, because it is used while the config file is being read on  │
-    │start-up.                                                        │
-    └─────────────────────────────────────────────────────────────────┘
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |If set, this option should be the first option in the config     |
+    |file, because it is used while the config file is being read on  |
+    |start-up.                                                        |
+    +-----------------------------------------------------------------+
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.1.2. trust-info-url
 
@@ -1332,7 +1324,7 @@ Notes:
     locked out from the information on why they were locked out in the first
     place!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.1.3. admin-address
 
@@ -1357,7 +1349,7 @@ Notes:
     If both admin-address and proxy-info-url are unset, the whole "Local
     Privoxy Support" box on all generated pages will not be shown.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.1.4. proxy-info-url
 
@@ -1386,7 +1378,7 @@ Notes:
 
     This URL shouldn't be blocked ;-)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2. Configuration and Log File Locations
 
@@ -1398,7 +1390,7 @@ The user running Privoxy, must have read permission for all configuration
 files, and write permission to any files that would be modified, such as log
 files and actions files.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.1. confdir
 
@@ -1422,7 +1414,7 @@ Notes:
 
     No trailing "/", please.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.2. templdir
 
@@ -1450,7 +1442,7 @@ Notes:
     templates to work with Privoxy releases other than the one they were part
     of, though.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.3. logdir
 
@@ -1475,7 +1467,7 @@ Notes:
 
     No trailing "/", please.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.4. actionsfile
 
@@ -1517,7 +1509,7 @@ Notes:
     be consistent with the other file options and to allow previously forbidden
     characters.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.5. filterfile
 
@@ -1558,7 +1550,7 @@ Notes:
     It is recommended to place any locally adapted filters into a separate
     file, such as user.filter.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.6. logfile
 
@@ -1577,7 +1569,7 @@ Default value:
 
 Effect if unset:
 
-    Logging is disabled unless --no-daemon mode is used.
+    No logfile is written.
 
 Notes:
 
@@ -1587,14 +1579,12 @@ Notes:
     it's not blocking an ad you think it should block) and it can help you to
     monitor what your browser is doing.
 
-    Many users will never look at it, however, and it's a privacy risk if third
-    parties can get access to it. It is therefore disabled by default in
-    Privoxy 3.0.7 and later.
+    Depending on the debug options below, the logfile may be a privacy risk if
+    third parties can get access to it. As most users will never look at it,
+    Privoxy 3.0.7 and later only log fatal errors by default.
 
-    For troubleshooting purposes, you will have to explicitly enable it. Please
-    don't file any support requests without trying to reproduce the problem
-    with logging enabled first. Once you read the log messages, you may even be
-    able to solve the problem on your own.
+    For most troubleshooting purposes, you will have to change that, please
+    refer to the debugging section for details.
 
     Your logfile will grow indefinitely, and you will probably want to
     periodically remove it. On Unix systems, you can do this with a cron job
@@ -1604,7 +1594,7 @@ Notes:
     Any log files must be writable by whatever user Privoxy is being run as (on
     Unix, default user id is "privoxy").
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.7. jarfile
 
@@ -1634,7 +1624,7 @@ Notes:
     useful and may be removed in future releases. Please report to the
     developers if you are still using it.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.2.8. trustfile
 
@@ -1684,7 +1674,7 @@ Notes:
 
     Possible applications include limiting Internet access for children.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.3. Debugging
 
@@ -1692,13 +1682,13 @@ These options are mainly useful when tracing a problem. Note that you might
 also want to invoke Privoxy with the --no-daemon command line option when
 debugging.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.3.1. debug
 
 Specifies:
 
-    Key values that determine what information gets logged to the logfile.
+    Key values that determine what information gets logged.
 
 Type of value:
 
@@ -1706,17 +1696,17 @@ Type of value:
 
 Default value:
 
-    12289 (i.e.: URLs plus informational and warning messages)
+    0 (i.e.: only fatal errors (that cause Privoxy to exit) are logged)
 
 Effect if unset:
 
-    Nothing gets logged.
+    Default value is used (see above).
 
 Notes:
 
     The available debug levels are:
 
-      debug         1 # show each GET/POST/CONNECT request
+      debug         1 # log each request destination (and the crunch reason if Privoxy intercepted the request)
       debug         2 # show each connection status
       debug         4 # show I/O status
       debug         8 # show header parsing
@@ -1736,19 +1726,30 @@ Notes:
     debug lines.
 
     A debug level of 1 is informative because it will show you each request as
-    it happens. 1, 4096 and 8192 are highly recommended so that you will notice
-    when things go wrong. The other levels are probably only of interest if you
-    are hunting down a specific problem. They can produce a hell of an output
+    it happens. 1, 4096 and 8192 are recommended so that you will notice when
+    things go wrong. The other levels are probably only of interest if you are
+    hunting down a specific problem. They can produce a hell of an output
     (especially 16).
 
-    If you want to use CLF (Common Log Format), you should set "debug 512" ONLY
-    and not enable anything else.
+    Privoxy used to ship with the debug levels recommended above enabled by
+    default, but due to privacy concerns 3.0.7 and later are configured to only
+    log fatal errors.
+
+    If you are used to the more verbose settings, simply enable the debug lines
+    below again.
+
+    If you want to use pure CLF (Common Log Format), you should set "debug 512"
+    ONLY and not enable anything else.
 
     Privoxy has a hard-coded limit for the length of log messages. If it's
     reached, messages are logged truncated and marked with "... [too long,
     truncated]".
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Please don't file any support requests without trying to reproduce the
+    problem with increased debug level first. Once you read the log messages,
+    you may even be able to solve the problem on your own.
+
+-------------------------------------------------------------------------------
 
 7.3.2. single-threaded
 
@@ -1774,14 +1775,14 @@ Notes:
     This option is only there for debugging purposes. It will drastically
     reduce performance.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4. Access Control and Security
 
 This section of the config file controls the security-relevant aspects of
 Privoxy's configuration.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.1. listen-address
 
@@ -1830,7 +1831,7 @@ Example:
       listen-address  192.168.0.1:8118
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.2. toggle
 
@@ -1859,7 +1860,7 @@ Notes:
     The windows version will only display the toggle icon in the system tray if
     this option is present.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.3. enable-remote-toggle
 
@@ -1898,7 +1899,7 @@ Notes:
     Note that you must have compiled Privoxy with support for this feature,
     otherwise this option has no effect.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.4. enable-remote-http-toggle
 
@@ -1934,7 +1935,7 @@ Notes:
     This option will be removed in future releases as it has been obsoleted by
     the more general header taggers.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.5. enable-edit-actions
 
@@ -1972,7 +1973,7 @@ Notes:
     Note that you must have compiled Privoxy with support for this feature,
     otherwise this option has no effect.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.6. enforce-blocks
 
@@ -2015,7 +2016,7 @@ Examples:
 
     enforce-blocks 1
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.7. ACLs: permit-access and deny-access
 
@@ -2096,7 +2097,7 @@ Examples:
       deny-access    192.168.45.73    www.dirty-stuff.example.com
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.4.8. buffer-limit
 
@@ -2130,7 +2131,7 @@ Notes:
     require up to buffer-limit Kbytes each, unless you have enabled
     "single-threaded" above.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5. Forwarding
 
@@ -2151,7 +2152,7 @@ server as cookie replacement to track your steps between visits.
 Also specified here are SOCKS proxies. Privoxy supports the SOCKS 4 and SOCKS
 4A protocols.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.1. forward
 
@@ -2202,7 +2203,7 @@ Examples:
       forward   .isp.example.net   .
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.2. forward-socks4 and forward-socks4a
 
@@ -2286,7 +2287,7 @@ Examples:
      forward           localhost/     .
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.3. Advanced Forwarding Examples
 
@@ -2345,7 +2346,7 @@ antivir.example.com, port 8010:
   forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.4. forwarded-connect-retries
 
@@ -2388,7 +2389,7 @@ Examples:
 
     forwarded-connect-retries 1
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.5. accept-intercepted-requests
 
@@ -2425,7 +2426,7 @@ Examples:
 
     accept-intercepted-requests 1
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.6. allow-cgi-request-crunching
 
@@ -2458,7 +2459,7 @@ Examples:
 
     allow-cgi-request-crunching 1
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.5.7. split-large-forms
 
@@ -2497,7 +2498,7 @@ Examples:
 
     split-large-forms 1
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 7.6. Windows GUI Options
 
@@ -2565,7 +2566,7 @@ console.
   #hide-console
    
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8. Actions Files
 
@@ -2580,7 +2581,7 @@ aggregated when applied against a given set of URLs.
 
 There are three action files included with Privoxy with differing purposes:
 
-  • default.action - is the primary action file that sets the initial values
+  * default.action - is the primary action file that sets the initial values
     for all actions. It is intended to provide a base level of functionality
     for Privoxy's array of features. So it is a set of broad rules that should
     work reasonably well as-is for most users. This is the file that the
@@ -2588,12 +2589,12 @@ There are three action files included with Privoxy with differing purposes:
     preferences as set in standard.action, e.g. either Cautious (the default),
     Medium, or Advanced (see below).
 
-  • user.action - is intended to be for local site preferences and exceptions.
+  * user.action - is intended to be for local site preferences and exceptions.
     As an example, if your ISP or your bank has specific requirements, and need
     special handling, this kind of thing should go here. This file will not be
     upgraded.
 
-  • standard.action - is used only by the web based editor at http://
+  * standard.action - is used only by the web based editor at http://
     config.privoxy.org/edit-actions-list?f=default, to set various pre-defined
     sets of rules for the default actions section in default.action.
 
@@ -2625,35 +2626,35 @@ There are three action files included with Privoxy with differing purposes:
 
     Table 1. Default Configurations
 
-    ┌──────────────────────────┬───────────┬────────────┬───────────┐
-    │         Feature          │ Cautious  │   Medium   │ Advanced  │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Ad-blocking Aggressiveness│medium     │high        │high       │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Ad-filtering by size      │no         │yes         │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Ad-filtering by link      │no         │no          │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Pop-up killing            │blocks only│blocks only │blocks only│
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Privacy Features          │low        │medium      │medium/high│
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Cookie handling           │none       │session-only│kill       │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Referer forging           │no         │yes         │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │GIF de-animation          │no         │yes         │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Fast redirects            │no         │no          │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │HTML taming               │no         │no          │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │JavaScript taming         │no         │no          │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Web-bug killing           │no         │yes         │yes        │
-    ├──────────────────────────┼───────────┼────────────┼───────────┤
-    │Image tag reordering      │no         │no          │yes        │
-    └──────────────────────────┴───────────┴────────────┴───────────┘
+    +---------------------------------------------------------------+
+    |         Feature          | Cautious  |   Medium   | Advanced  |
+    |--------------------------+-----------+------------+-----------|
+    |Ad-blocking Aggressiveness|medium     |high        |high       |
+    |--------------------------+-----------+------------+-----------|
+    |Ad-filtering by size      |no         |yes         |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |Ad-filtering by link      |no         |no          |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |Pop-up killing            |blocks only|blocks only |blocks only|
+    |--------------------------+-----------+------------+-----------|
+    |Privacy Features          |low        |medium      |medium/high|
+    |--------------------------+-----------+------------+-----------|
+    |Cookie handling           |none       |session-only|kill       |
+    |--------------------------+-----------+------------+-----------|
+    |Referer forging           |no         |yes         |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |GIF de-animation          |no         |yes         |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |Fast redirects            |no         |no          |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |HTML taming               |no         |no          |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |JavaScript taming         |no         |no          |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |Web-bug killing           |no         |yes         |yes        |
+    |--------------------------+-----------+------------+-----------|
+    |Image tag reordering      |no         |no          |yes        |
+    +---------------------------------------------------------------+
 
 The list of actions files to be used are defined in the main configuration
 file, and are processed in the order they are defined (e.g. default.action is
@@ -2681,7 +2682,7 @@ accepted or rejected, or accepted only during the current browser session (i.e.
 not written to disk), content can be modified, some JavaScripts tamed,
 user-tracking fooled, and much more. See below for a complete list of actions.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.1. Finding the Right Mix
 
@@ -2702,7 +2703,7 @@ things. There just are too many variables, and sites are constantly changing.
 Sooner or later you will want to change the rules (and read this chapter again
 :).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.2. How to Edit
 
@@ -2719,7 +2720,7 @@ If you prefer plain text editing to GUIs, you can of course also directly edit
 the the actions files with your favorite text editor. Look at default.action
 which is richly commented with many good examples.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.3. How Actions are Applied to Requests
 
@@ -2756,7 +2757,7 @@ You can trace this process for URL patterns and any given URL by visiting http:
 Examples and more detail on this is provided in the Appendix, Troubleshooting:
 Anatomy of an Action section.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.4. Patterns
 
@@ -2806,7 +2807,7 @@ index.html
     matches nothing, since it would be interpreted as a domain name and there
     is no top-level domain called .html. So its a mistake.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.4.1. The Domain Pattern
 
@@ -2815,11 +2816,15 @@ starts or ends with a dot, it becomes unanchored at that end. For example:
 
 .example.com
 
-    matches any domain that ENDS in .example.com
+    matches any domain with first-level domain com and second-level domain
+    example. For example www.example.com, example.com and
+    foo.bar.baz.example.com. Note that it wouldn't match if the second-level
+    domain was another-example.
 
 www.
 
-    matches any domain that STARTS with www.
+    matches any domain that STARTS with www. (It also matches the domain www
+    but most of the time that doesn't matter.)
 
 .example.
 
@@ -2859,7 +2864,7 @@ www[1-9a-ez].example.c*
 While flexible, this is not the sophistication of full regular expression based
 syntax.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.4.2. The Path Pattern
 
@@ -2919,7 +2924,7 @@ path starts with PaTtErN in exactly this capitalization.
 There are many, many good examples to be found in default.action, and more
 tutorials below in Appendix on regular expressions.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.4.3. The Tag Pattern
 
@@ -2959,7 +2964,7 @@ line has already been parsed.
 While this is a limitation you should be aware of, this kind of indirection is
 seldom needed anyway and even the example doesn't make too much sense.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5. Actions
 
@@ -2978,7 +2983,7 @@ a section of the actions file.
 
 Actions fall into three categories:
 
-  • Boolean, i.e the action can only be "enabled" or "disabled". Syntax:
+  * Boolean, i.e the action can only be "enabled" or "disabled". Syntax:
 
       +name        # enable action name
       -name        # disable action name
@@ -2986,7 +2991,7 @@ Actions fall into three categories:
 
     Example: +block
 
-  • Parameterized, where some value is required in order to enable this type of
+  * Parameterized, where some value is required in order to enable this type of
     action. Syntax:
 
       +name{param}  # enable action and set parameter to param,
@@ -3001,7 +3006,7 @@ Actions fall into three categories:
     Example: +hide-user-agent{Mozilla/5.0 (X11; U; FreeBSD i386; en-US;
     rv:1.8.1.4) Gecko/20070602 Firefox/2.0.0.4}
 
-  • Multi-value. These look exactly like parameterized actions, but they behave
+  * Multi-value. These look exactly like parameterized actions, but they behave
     differently: If the action applies multiple times to the same URL, but with
     different parameters, all the parameters from all matches are remembered.
     This is used for actions that can be executed for the same request
@@ -3033,7 +3038,7 @@ actions! Last match wins.
 
 The list of valid Privoxy actions are:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.1. add-header
 
@@ -3065,7 +3070,7 @@ Example usage:
     +add-header{X-User-Tracking: sucks}
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.2. block
 
@@ -3131,7 +3136,7 @@ Example usage (section):
      adserver.exampleclick.net/.*\.js$
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.3. client-header-filter
 
@@ -3177,7 +3182,7 @@ Example usage (section):
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.4. client-header-tagger
 
@@ -3215,7 +3220,7 @@ Example usage (section):
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.5. content-type-overwrite
 
@@ -3284,7 +3289,7 @@ Example usage (sections):
     www.example.net/.*style
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.6. crunch-client-header
 
@@ -3319,11 +3324,11 @@ Notes:
     several different headers, or only want to modify parts of them, you should
     use a client-header filter.
 
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                             Warning                             │
-    ├─────────────────────────────────────────────────────────────────┤
-    │Don't block any header without understanding the consequences.   │
-    └─────────────────────────────────────────────────────────────────┘
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |Don't block any header without understanding the consequences.   |
+    +-----------------------------------------------------------------+
 Example usage (section):
 
     # Block the non-existent "Privacy-Violation:" client header
@@ -3332,7 +3337,7 @@ Example usage (section):
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.7. crunch-if-none-match
 
@@ -3378,7 +3383,7 @@ Example usage (section):
     /
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.8. crunch-incoming-cookies
 
@@ -3413,7 +3418,7 @@ Example usage:
     +crunch-incoming-cookies
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.9. crunch-server-header
 
@@ -3448,11 +3453,11 @@ Notes:
     several different headers, or only want to modify parts of them, you should
     use a custom server-header filter.
 
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                             Warning                             │
-    ├─────────────────────────────────────────────────────────────────┤
-    │Don't block any header without understanding the consequences.   │
-    └─────────────────────────────────────────────────────────────────┘
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |Don't block any header without understanding the consequences.   |
+    +-----------------------------------------------------------------+
 Example usage (section):
 
     # Crunch server headers that try to prevent caching
@@ -3460,7 +3465,7 @@ Example usage (section):
     /
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.10. crunch-outgoing-cookies
 
@@ -3495,7 +3500,7 @@ Example usage:
     +crunch-outgoing-cookies
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.11. deanimate-gifs
 
@@ -3533,7 +3538,7 @@ Example usage:
     +deanimate-gifs{last}
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.12. downgrade-http-version
 
@@ -3567,7 +3572,7 @@ Example usage (section):
     problem-host.example.com
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.13. fast-redirects
 
@@ -3586,10 +3591,10 @@ Type:
 
 Parameter:
 
-      □ "simple-check" to just search for the string "http://" to detect
+      + "simple-check" to just search for the string "http://" to detect
         redirection URLs.
 
-      □ "check-decoded-url" to decode URLs (if necessary) before searching for
+      + "check-decoded-url" to decode URLs (if necessary) before searching for
         redirection URLs.
 
 Notes:
@@ -3645,7 +3650,7 @@ Example usage:
        another.example.com/testing
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.14. filter
 
@@ -3808,7 +3813,7 @@ Example usage (with filters from the distribution default.filter file). See the
     +filter{no-ping}             # Removes non-standard ping attributes from anchor and area tags
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.15. force-text-mode
 
@@ -3836,19 +3841,19 @@ Notes:
     force-text-mode declares a document as text, without looking at the
     "Content-Type:" first.
 
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                             Warning                             │
-    ├─────────────────────────────────────────────────────────────────┤
-    │Think twice before activating this action. Filtering binary data │
-    │with regular expressions can cause file damage.                  │
-    └─────────────────────────────────────────────────────────────────┘
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |Think twice before activating this action. Filtering binary data |
+    |with regular expressions can cause file damage.                  |
+    +-----------------------------------------------------------------+
 Example usage:
 
     +force-text-mode
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.16. forward-override
 
@@ -3866,16 +3871,16 @@ Type:
 
 Parameter:
 
-      □ "forward ." to use a direct connection without any additional proxies.
+      + "forward ." to use a direct connection without any additional proxies.
 
-      □ "forward 127.0.0.1:8123" to use the HTTP proxy listening at 127.0.0.1
+      + "forward 127.0.0.1:8123" to use the HTTP proxy listening at 127.0.0.1
         port 8123.
 
-      □ "forward-socks4a 127.0.0.1:9050 ." to use the socks4a proxy listening
+      + "forward-socks4a 127.0.0.1:9050 ." to use the socks4a proxy listening
         at 127.0.0.1 port 9050. Replace "forward-socks4a" with "forward-socks4"
         to use a socks4 connection (with local DNS resolution) instead.
 
-      □ "forward-socks4a 127.0.0.1:9050 proxy.example.org:8000" to use the
+      + "forward-socks4a 127.0.0.1:9050 proxy.example.org:8000" to use the
         socks4a proxy listening at 127.0.0.1 port 9050 to reach the HTTP proxy
         listening at proxy.example.org port 8000. Replace "forward-socks4a"
         with "forward-socks4" to use a socks4 connection (with local DNS
@@ -3888,21 +3893,21 @@ Notes:
     replacement, but normally it's only used in cases where matching based on
     the request URL isn't sufficient.
 
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                             Warning                             │
-    ├─────────────────────────────────────────────────────────────────┤
-    │Please read the description for the forward directives before    │
-    │using this action. Forwarding to the wrong people will reduce    │
-    │your privacy and increase the chances of man-in-the-middle       │
-    │attacks.                                                         │
-    │                                                                 │
-    │If the ports are missing or invalid, default values will be used.│
-    │This might change in the future and you shouldn't rely on it.    │
-    │Otherwise incorrect syntax causes Privoxy to exit.               │
-    │                                                                 │
-    │Use the show-url-info CGI page to verify that your forward       │
-    │settings do what you thought the do.                             │
-    └─────────────────────────────────────────────────────────────────┘
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |Please read the description for the forward directives before    |
+    |using this action. Forwarding to the wrong people will reduce    |
+    |your privacy and increase the chances of man-in-the-middle       |
+    |attacks.                                                         |
+    |                                                                 |
+    |If the ports are missing or invalid, default values will be used.|
+    |This might change in the future and you shouldn't rely on it.    |
+    |Otherwise incorrect syntax causes Privoxy to exit.               |
+    |                                                                 |
+    |Use the show-url-info CGI page to verify that your forward       |
+    |settings do what you thought the do.                             |
+    +-----------------------------------------------------------------+
 Example usage:
 
     # Always use direct connections for requests previously tagged as
@@ -3921,7 +3926,7 @@ Example usage:
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.17. handle-as-empty-document
 
@@ -3964,7 +3969,7 @@ Example usage:
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.18. handle-as-image
 
@@ -4021,7 +4026,7 @@ Example usage (sections):
     ad.doubleclick.net
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.19. hide-accept-language
 
@@ -4069,7 +4074,7 @@ Example usage (section):
     /
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.20. hide-content-disposition
 
@@ -4122,7 +4127,7 @@ Example usage:
      .sourceforge.net/tracker/download\.php
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.21. hide-if-modified-since
 
@@ -4172,7 +4177,7 @@ Example usage (section):
     /
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.22. hide-forwarded-for-headers
 
@@ -4202,7 +4207,7 @@ Example usage:
     +hide-forwarded-for-headers
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.23. hide-from-header
 
@@ -4245,7 +4250,7 @@ Example usage:
     +hide-from-header{spam-me-senseless@sittingduck.example.com}
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.24. hide-referrer
 
@@ -4264,17 +4269,17 @@ Type:
 
 Parameter:
 
-      □ "conditional-block" to delete the header completely if the host has
+      + "conditional-block" to delete the header completely if the host has
         changed.
 
-      □ "conditional-forge" to forge the header if the host has changed.
+      + "conditional-forge" to forge the header if the host has changed.
 
-      □ "block" to delete the header unconditionally.
+      + "block" to delete the header unconditionally.
 
-      □ "forge" to pretend to be coming from the homepage of the server we are
+      + "forge" to pretend to be coming from the homepage of the server we are
         talking to.
 
-      □ Any other string to set a user defined referrer.
+      + Any other string to set a user defined referrer.
 
 Notes:
 
@@ -4312,7 +4317,7 @@ Example usage:
     +hide-referrer{http://www.yahoo.com/}
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.25. hide-user-agent
 
@@ -4335,14 +4340,14 @@ Parameter:
 
 Notes:
 
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                             Warning                             │
-    ├─────────────────────────────────────────────────────────────────┤
-    │This can lead to problems on web sites that depend on looking at │
-    │this header in order to customize their content for different    │
-    │browsers (which, by the way, is NOT the right thing to do: good  │
-    │web sites work browser-independently).                           │
-    └─────────────────────────────────────────────────────────────────┘
+    +-----------------------------------------------------------------+
+    |                             Warning                             |
+    |-----------------------------------------------------------------|
+    |This can lead to problems on web sites that depend on looking at |
+    |this header in order to customize their content for different    |
+    |browsers (which, by the way, is NOT the right thing to do: good  |
+    |web sites work browser-independently).                           |
+    +-----------------------------------------------------------------+
 
     Using this action in multi-user setups or wherever different types of
     browsers will access the same Privoxy is not recommended. In single-user,
@@ -4362,7 +4367,7 @@ Example usage:
     +hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.26. inspect-jpegs
 
@@ -4400,7 +4405,7 @@ Example usage:
     +inspect-jpegs
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.27. kill-popups
 
@@ -4454,7 +4459,7 @@ Example usage:
     +kill-popups
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.28. limit-connect
 
@@ -4505,7 +4510,7 @@ Example usages:
     +limit-connect{,}                     # No HTTPS/SSL traffic is allowed
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.29. prevent-compression
 
@@ -4574,7 +4579,7 @@ Example usage (sections):
     .compusa.com/
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.30. overwrite-last-modified
 
@@ -4628,7 +4633,7 @@ Example usage:
     /
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.31. redirect
 
@@ -4681,7 +4686,7 @@ Example usages:
     undeadly.org/cgi\?action=article&sid=\d*$
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.32. send-vanilla-wafer
 
@@ -4715,7 +4720,7 @@ Example usage:
     +send-vanilla-wafer
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.33. send-wafer
 
@@ -4749,7 +4754,7 @@ Example usage (section):
     my-internal-testing-server.void
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.34. server-header-filter
 
@@ -4793,7 +4798,7 @@ Example usage (section):
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.35. server-header-tagger
 
@@ -4836,7 +4841,7 @@ Example usage (section):
 
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.36. session-cookies-only
 
@@ -4891,7 +4896,7 @@ Example usage:
     +session-cookies-only
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.37. set-image-blocker
 
@@ -4912,16 +4917,16 @@ Type:
 
 Parameter:
 
-      □ "pattern" to send a built-in checkerboard pattern image. The image is
+      + "pattern" to send a built-in checkerboard pattern image. The image is
         visually decent, scales very well, and makes it obvious where banners
         were busted.
 
-      □ "blank" to send a built-in transparent image. This makes banners
+      + "blank" to send a built-in transparent image. This makes banners
         disappear completely, but makes it hard to detect where Privoxy has
         blocked images on a given page and complicates troubleshooting if
         Privoxy has blocked innocent images, like navigation icons.
 
-      □ "target-url" to send a redirect to target-url. You can redirect to any
+      + "target-url" to send a redirect to target-url. You can redirect to any
         image anywhere, even in your local filesystem via "file:///" URL. (But
         note that not all browsers support redirecting to a local file system).
 
@@ -4958,7 +4963,7 @@ Example usage:
     +set-image-blocker{http://config.privoxy.org/send-banner?type=pattern}
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.38. treat-forbidden-connects-like-blocks
 
@@ -4998,7 +5003,7 @@ Example usage:
     +treat-forbidden-connects-like-blocks
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.5.39. Summary
 
@@ -5008,7 +5013,7 @@ designer may choose to design his site, and what HTTP header content, and other
 criteria, he may depend on. There is no way to have hard and fast rules for all
 sites. See the Appendix for a brief example on troubleshooting actions.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.6. Aliases
 
@@ -5098,7 +5103,7 @@ up for the "/" pattern):
 Aliases like "shop" and "fragile" are typically used for "problem" sites that
 require more than one action to be disabled in order to function properly.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.7. Actions Files Tutorial
 
@@ -5107,7 +5112,7 @@ organized, how actions are specified and applied to URLs, how patterns work,
 and how to define and use aliases. Now, let's look at an example default.action
 and user.action file and see how all these pieces come together:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.7.1. default.action
 
@@ -5361,7 +5366,7 @@ wiki.
 The actual default.action is of course much more comprehensive, but we hope
 this example made clear how it works.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 8.7.2. user.action
 
@@ -5535,7 +5540,7 @@ course matches all URL paths and patterns:
 / # ALL sites
 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 9. Filter Files
 
@@ -5603,7 +5608,7 @@ Appendix on regular expressions, and see the Perl manual for the s///
 operator's syntax and Perl-style regular expressions in general. The below
 examples might also help to get you started.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 9.1. Filter File Tutorial
 
@@ -5762,7 +5767,7 @@ liberal use of (non-interpreted!) whitespace for nicer formatting.
 
 You get the idea?
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 9.2. The Pre-defined Filters
 
@@ -5774,15 +5779,15 @@ js-annoyances
     The purpose of this filter is to get rid of particularly annoying
     JavaScript abuse. To that end, it
 
-      □ replaces JavaScript references to the browser's referrer information
+      + replaces JavaScript references to the browser's referrer information
         with the string "Not Your Business!". This compliments the
         hide-referrer action on the content level.
 
-      □ removes the bindings to the DOM's unload event which we feel has no
+      + removes the bindings to the DOM's unload event which we feel has no
         right to exist and is responsible for most "exit consoles", i.e. nasty
         windows that pop up when you close another one.
 
-      □ removes code that causes new windows to be opened with undesired
+      + removes code that causes new windows to be opened with undesired
         properties, such as being full-screen, non-resizeable, without
         location, status or menu bar etc.
 
@@ -6024,7 +6029,7 @@ hide-tor-exit-notation
     headers, it doesn't make it impossible for the server to detect your Tor
     exit node based on the IP address the request is coming from.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 10. Privoxy's Template Files
 
@@ -6079,7 +6084,7 @@ All templates refer to a style located at http://config.privoxy.org/
 send-stylesheet. This is, of course, locally served by Privoxy and the source
 for it can be found and edited in the cgi-style.css template.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11. Contacting the Developers, Bug Reporting and Feature Requests
 
@@ -6087,7 +6092,7 @@ We value your feedback. In fact, we rely on it to improve Privoxy and its
 configuration. However, please note the following hints, so we can provide you
 with the best support:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11.1. Get Support
 
@@ -6107,19 +6112,19 @@ with a proper subject. Additionally you should make it clear that you want to
 get CC'd. Otherwise some responses will be directed to the mailing list only,
 and you won't see them.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11.2. Reporting Problems
 
 "Problems" for our purposes, come in two forms:
 
-  • Configuration issues, such as ads that slip through, or sites that don't
+  * Configuration issues, such as ads that slip through, or sites that don't
     function properly due to one Privoxy "action" or another being turned "on".
 
-  • "Bugs" in the programming code that makes up Privoxy, such as that might
+  * "Bugs" in the programming code that makes up Privoxy, such as that might
     cause a crash.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11.2.1. Reporting Ads or Other Configuration Problems
 
@@ -6132,7 +6137,7 @@ New, improved default.action files may occasionally be made available based on
 your feedback. These will be announced on the ijbswa-announce list and
 available from our the files section of our project page.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11.2.2. Reporting Bugs
 
@@ -6160,30 +6165,30 @@ your bug still exists.
 
 Please be sure to provide the following information:
 
-  • The exact Privoxy version you are using (if you got the source from CVS,
+  * The exact Privoxy version you are using (if you got the source from CVS,
     please also provide the source code revisions as shown in http://
     config.privoxy.org/show-version).
 
-  • The operating system and versions you run Privoxy on, (e.g. Windows XP
+  * The operating system and versions you run Privoxy on, (e.g. Windows XP
     SP2), if you are using a Unix flavor, sending the output of "uname -a"
     should do, in case of GNU/Linux, please also name the distribution.
 
-  • The name, platform, and version of the browser you were using (e.g.
+  * The name, platform, and version of the browser you were using (e.g.
     Internet Explorer v5.5 for Mac).
 
-  • The URL where the problem occurred, or some way for us to duplicate the
+  * The URL where the problem occurred, or some way for us to duplicate the
     problem (e.g. http://somesite.example.com/?somethingelse=123).
 
-  • Whether your version of Privoxy is one supplied by the Privoxy developers
+  * Whether your version of Privoxy is one supplied by the Privoxy developers
     via SourceForge, or if you got your copy somewhere else.
 
-  • Whether you are using Privoxy in tandem with another proxy such as Tor. If
+  * Whether you are using Privoxy in tandem with another proxy such as Tor. If
     so, please temporary disable the other proxy to see if the symptoms change.
 
-  • Whether you are using a personal firewall product. If so, does Privoxy work
+  * Whether you are using a personal firewall product. If so, does Privoxy work
     without it?
 
-  • Any other pertinent information to help identify the problem such as config
+  * Any other pertinent information to help identify the problem such as config
     or log file excerpts (yes, you should have log file entries for each action
     taken).
 
@@ -6199,7 +6204,7 @@ automatically get a mail when someone responds to your request.
 The appendix of the Privoxy User Manual also has helpful information on
 understanding actions, and action debugging.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11.3. Request New Features
 
@@ -6207,7 +6212,7 @@ You are welcome to submit ideas on new features or other proposals for
 improvement through our feature request tracker at http://sourceforge.net/
 tracker/?atid=361118&group_id=11118.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 11.4. Other
 
@@ -6217,7 +6222,7 @@ welcome on the developers list! You can find an overview of all Privoxy-related
 mailing lists, including list archives, at: http://sourceforge.net/mail/?
 group_id=11118.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 12. Privoxy Copyright, License and History
 
@@ -6227,7 +6232,7 @@ ijbswa-developers@lists.sourceforge.net>
 Some source code is based on code Copyright   1997 by Anonymous Coders and
 Junkbusters, Inc. and licensed under the GNU General Public License.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 12.1. License
 
@@ -6249,7 +6254,7 @@ this program; if not, write to the
  Boston, MA 02110-1301
  USA 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 12.2. History
 
@@ -6279,7 +6284,7 @@ along the way.
 The result of this is Privoxy, whose first stable version, 3.0, was released
 August, 2002.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 12.3. Authors
 
@@ -6387,7 +6392,7 @@ On systems that lack snprintf(), Privoxy is using a version written by Mark
 Martinec. On systems that lack strptime(), Privoxy is using the one from the
 GNU C Library written by Ulrich Drepper.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 13. See Also
 
@@ -6426,7 +6431,7 @@ instant messaging, IRC, SSH, and other applications.
 
 http://www.privoxy.org/developer-manual/, the Privoxy developer manual.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 14. Appendix
 
@@ -6557,7 +6562,7 @@ perlre.html
 For information on regular expression based substitutions and their
 applications in filters, please see the filter file tutorial in this manual.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 14.2. Privoxy's Internal Pages
 
@@ -6571,31 +6576,31 @@ The URLs listed below are the special ones that allow direct access to Privoxy.
 Of course, Privoxy must be running to access these. If not, you will get a
 friendly error message. Internet access is not necessary either.
 
-  • Privoxy main page:
+  * Privoxy main page:
 
         http://config.privoxy.org/
 
     There is a shortcut: http://p.p/ (But it doesn't provide a fall-back to a
     real page, in case the request is not sent through Privoxy)
 
-  • Show information about the current configuration, including viewing and
+  * Show information about the current configuration, including viewing and
     editing of actions files:
 
         http://config.privoxy.org/show-status
 
-  • Show the source code version numbers:
+  * Show the source code version numbers:
 
         http://config.privoxy.org/show-version
 
-  • Show the browser's request headers:
+  * Show the browser's request headers:
 
         http://config.privoxy.org/show-request
 
-  • Show which actions apply to a URL and why:
+  * Show which actions apply to a URL and why:
 
         http://config.privoxy.org/show-url-info
 
-  • Toggle Privoxy on or off. This feature can be turned off/on in the main
+  * Toggle Privoxy on or off. This feature can be turned off/on in the main
     config file. When toggled "off", "Privoxy" continues to run, but only as a
     pass-through proxy, with no actions taking place:
 
@@ -6609,7 +6614,7 @@ friendly error message. Internet access is not necessary either.
 
 These may be bookmarked for quick reference. See next. 
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 14.2.1. Bookmarklets
 
@@ -6626,20 +6631,20 @@ favorites/bookmarks. For even faster access, you can put them on the "Links"
 bar (IE) or the "Personal Toolbar" (Netscape), and run them with a single
 click.
 
-  • Privoxy - Enable
+  * Privoxy - Enable
 
-  • Privoxy - Disable
+  * Privoxy - Disable
 
-  • Privoxy - Toggle Privoxy (Toggles between enabled and disabled)
+  * Privoxy - Toggle Privoxy (Toggles between enabled and disabled)
 
-  • Privoxy- View Status
+  * Privoxy- View Status
 
-  • Privoxy - Why?
+  * Privoxy - Why?
 
 Credit: The site which gave us the general idea for these bookmarklets is
 www.bookmarklets.com. They have more information about bookmarklets.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 14.3. Chain of Events
 
@@ -6647,14 +6652,14 @@ Let's take a quick look at how some of Privoxy's core features are triggered,
 and the ensuing sequence of events when a web page is requested by your
 browser:
 
-  • First, your web browser requests a web page. The browser knows to send the
+  * First, your web browser requests a web page. The browser knows to send the
     request to Privoxy, which will in turn, relay the request to the remote web
     server after passing the following tests:
 
-  • Privoxy traps any request for its own internal CGI pages (e.g http://p.p/)
+  * Privoxy traps any request for its own internal CGI pages (e.g http://p.p/)
     and sends the CGI page back to the browser.
 
-  • Next, Privoxy checks to see if the URL matches any "+block" patterns. If
+  * Next, Privoxy checks to see if the URL matches any "+block" patterns. If
     so, the URL is then blocked, and the remote web server will not be
     contacted. "+handle-as-image" and "+handle-as-empty-document" are then
     checked, and if there is no match, an HTML "BLOCKED" page is sent back to
@@ -6663,30 +6668,30 @@ browser:
     depend on the setting of "+set-image-blocker" (blank, checkerboard pattern,
     or an HTTP redirect to an image elsewhere).
 
-  • Untrusted URLs are blocked. If URLs are being added to the trust file, then
+  * Untrusted URLs are blocked. If URLs are being added to the trust file, then
     that is done.
 
-  • If the URL pattern matches the "+fast-redirects" action, it is then
+  * If the URL pattern matches the "+fast-redirects" action, it is then
     processed. Unwanted parts of the requested URL are stripped.
 
-  • Now the rest of the client browser's request headers are processed. If any
+  * Now the rest of the client browser's request headers are processed. If any
     of these match any of the relevant actions (e.g. "+hide-user-agent", etc.),
     headers are suppressed or forged as determined by these actions and their
     parameters.
 
-  • Now the web server starts sending its response back (i.e. typically a web
+  * Now the web server starts sending its response back (i.e. typically a web
     page).
 
-  • First, the server headers are read and processed to determine, among other
+  * First, the server headers are read and processed to determine, among other
     things, the MIME type (document type) and encoding. The headers are then
     filtered as determined by the "+crunch-incoming-cookies",
     "+session-cookies-only", and "+downgrade-http-version" actions.
 
-  • If the "+kill-popups" action applies, and it is an HTML or JavaScript
+  * If the "+kill-popups" action applies, and it is an HTML or JavaScript
     document, the popup-code in the response is filtered on-the-fly as it is
     received.
 
-  • If any "+filter" action or "+deanimate-gifs" action applies (and the
+  * If any "+filter" action or "+deanimate-gifs" action applies (and the
     document type fits the action), the rest of the page is read into memory
     (up to a configurable limit). Then the filter rules (from default.filter
     and any other filter files) are processed against the buffered content.
@@ -6698,7 +6703,7 @@ browser:
     If neither a "+filter" action or "+deanimate-gifs" matches, then Privoxy
     passes the raw data through to the client browser as it becomes available.
 
-  • As the browser receives the now (possibly filtered) page content, it reads
+  * As the browser receives the now (possibly filtered) page content, it reads
     and then requests any URLs that may be embedded within the page source,
     e.g. ad images, stylesheets, JavaScript, other HTML documents (e.g.
     frames), sounds, etc. For each of these objects, the browser issues a
@@ -6712,7 +6717,7 @@ NOTE: This is somewhat of a simplistic overview of what happens with each URL
 request. For the sake of brevity and simplicity, we have focused on Privoxy's
 core features only.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+-------------------------------------------------------------------------------
 
 14.4. Troubleshooting: Anatomy of an Action
 
