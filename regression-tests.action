@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.52 2008/01/17 19:38:17 fk Exp $
+# $Id: regression-tests.action,v 1.1 2008/01/18 19:33:00 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test.
@@ -41,7 +41,7 @@ for-privoxy-version=3.0.7
 config.privoxy.org/
 p.p/
 
-{-hide-user-agent}
+{-hide-user-agent +limit-connect{80,443}}
 TAG:^User-Agent: Privoxy-Regression-Test
 
 #######################################################
