@@ -1,8 +1,8 @@
                        Privoxy Frequently Asked Questions
 
-   [Copyright[ © 2001-2008 by Privoxy Developers]]
+   [Copyright[ (c) 2001-2008 by Privoxy Developers]]
 
-   $Id: faq.sgml,v 2.38 2008/01/19 17:52:39 hal9 Exp $
+   $Id: faq.txt,v 1.56 2008/01/19 21:41:36 hal9 Exp $
 
    This FAQ gives quick answers to frequently asked questions about Privoxy.
    It is not a substitute for the Privoxy User Manual.
@@ -2448,10 +2448,10 @@ Request: 66.70.21.80/scripts/click.php?hid=a71b9f6504b0c5681fa5&si=Ua
 
 7. Privoxy Copyright, License and History
 
-   Copyright © 2001-2008 by Privoxy Developers
+   Copyright (c) 2001-2008 by Privoxy Developers
    <ijbswa-developers@lists.sourceforge.net>
 
-   Some source code is based on code Copyright © 1997 by Anonymous Coders
+   Some source code is based on code Copyright (c) 1997 by Anonymous Coders
    and Junkbusters, Inc. and licensed under the GNU General Public License.
 
    Portions of this document are "borrowed" from the original Junkbuster (tm)

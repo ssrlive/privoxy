@@ -1,8 +1,8 @@
                            Privoxy 3.0.8 User Manual
 
-   [Copyright[ © 2001 - 2008 by Privoxy Developers]]
+   [Copyright[ (c) 2001 - 2008 by Privoxy Developers]]
 
-   $Id: user-manual.sgml,v 2.55 2008/01/19 21:26:37 hal9 Exp $
+   $Id: user-manual.txt,v 1.74 2008/01/19 21:41:37 hal9 Exp $
 
    The Privoxy User Manual gives users information on how to install,
    configure and use Privoxy.
@@ -6423,10 +6423,10 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
 
 12. Privoxy Copyright, License and History
 
-   Copyright © 2001-2008 by Privoxy Developers
+   Copyright (c) 2001-2008 by Privoxy Developers
    <ijbswa-developers@lists.sourceforge.net>
 
-   Some source code is based on code Copyright © 1997 by Anonymous Coders
+   Some source code is based on code Copyright (c) 1997 by Anonymous Coders
    and Junkbusters, Inc. and licensed under the GNU General Public License.
 
    --------------------------------------------------------------------------

@@ -1,8 +1,8 @@
                             Privoxy Developer Manual
 
-   [Copyright[ © 2001-2008 by Privoxy Developers]]
+   [Copyright[ (c) 2001-2008 by Privoxy Developers]]
 
-   $Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $
+   $Id: developer-manual.txt,v 1.43 2008/01/19 21:41:36 hal9 Exp $
 
    The developer manual provides guidance on coding, testing, packaging,
    documentation and other issues of importance to those involved with
@@ -1501,10 +1501,10 @@
 
    Example for file comments:
 
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.txt,v 1.43 2008/01/19 21:41:36 hal9 Exp $";
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/text/developer-manual.txt,v $
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1535,7 +1535,10 @@ const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:
  *                USA
  *
  * Revisions   :
- *    $Log$
+ *    $Log: developer-manual.txt,v $
+ *    Revision 1.43  2008/01/19 21:41:36  hal9
+ *    Re-commit to solve various last minute issues for charsets, etc.
+ *
  *
  *********************************************************************/
 
@@ -1560,10 +1563,10 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.txt,v 1.43 2008/01/19 21:41:36 hal9 Exp $"
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/text/developer-manual.txt,v $
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1594,7 +1597,10 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  *                USA
  *
  * Revisions   :
- *    $Log$
+ *    $Log: developer-manual.txt,v $
+ *    Revision 1.43  2008/01/19 21:41:36  hal9
+ *    Re-commit to solve various last minute issues for charsets, etc.
+ *
  *
  *********************************************************************/
 
@@ -2447,10 +2453,10 @@ extern const char FILENAME_h_rcs[];
 
 9. Privoxy Copyright, License and History
 
-   Copyright © 2001-2008 by Privoxy Developers
+   Copyright (c) 2001-2008 by Privoxy Developers
    <ijbswa-developers@lists.sourceforge.net>
 
-   Some source code is based on code Copyright © 1997 by Anonymous Coders
+   Some source code is based on code Copyright (c) 1997 by Anonymous Coders
    and Junkbusters, Inc. and licensed under the GNU General Public License.
 
    --------------------------------------------------------------------------
