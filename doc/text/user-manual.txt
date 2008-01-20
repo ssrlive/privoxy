@@ -2,7 +2,7 @@
 
    [Copyright[ (c) 2001 - 2008 by Privoxy Developers]]
 
-   $Id: user-manual.txt,v 1.74 2008/01/19 21:41:37 hal9 Exp $
+   $Id: user-manual.txt,v 1.75 2008/01/20 08:42:48 fabiankeil Exp $
 
    The Privoxy User Manual gives users information on how to install,
    configure and use Privoxy.
@@ -926,13 +926,13 @@
 
        The configuration options on what to display instead of the ad are:
 
-          pattern - a checkerboard pattern, so that an ad replacement is
+       pattern - a checkerboard pattern, so that an ad replacement is
        obvious. This is the default.
 
-          blank - A very small empty GIF image is displayed. This is the
+       blank - A very small empty GIF image is displayed. This is the
        so-called "invisible" configuration option.
 
-          http://<URL> - A redirect to any image anywhere of the user's
+       http://<URL> - A redirect to any image anywhere of the user's
        choosing (advanced usage).
 
    Advanced users will eventually want to explore Privoxy filters as well.
@@ -1233,19 +1233,19 @@
 
 
 
-       Privoxy Menu
+   Privoxy Menu
 
-             sB  View & change the current configuration
+     View & change the current configuration
 
-             sB  View the source code version numbers
+     View the source code version numbers
 
-             sB  View the request headers.
+     View the request headers.
 
-             sB  Look up which actions apply to a URL and why
+     Look up which actions apply to a URL and why
 
-             sB  Toggle Privoxy on or off
+     Toggle Privoxy on or off
 
-             sB  Documentation
+     Documentation
 
 
    This should be self-explanatory. Note the first item leads to an editor
@@ -1396,7 +1396,7 @@
            The best all purpose solution is simply to put the full local PATH
            to where the User Manual is located:
 
-             user-manual  /usr/share/doc/privoxy/user-manual
+           user-manual /usr/share/doc/privoxy/user-manual
 
            The User Manual is then available to anyone with access to
            Privoxy, by following the built-in URL:
@@ -1406,7 +1406,7 @@
            If the documentation is not on the local system, it can be
            accessed from a remote server, as:
 
-             user-manual  http://example.com/privoxy/user-manual/
+           user-manual http://example.com/privoxy/user-manual/
 
            +---------------------------------------------------------+
            |                         Warning                         |
@@ -6493,7 +6493,7 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
     Hal Burgiss
     Gerry Murphy
     Roland Rosenfeld
-    Jörg Strohmayer
+    J�rg Strohmayer
 
    Former Privoxy Team Members:
 
@@ -6506,7 +6506,7 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
     Karsten Hopp
     Alexander Lazic
     Daniel Leite
-    Gábor Lipták
+    G�bor Lipt�k
     Adam Lock
     Guy Laroche
     Mark Martinec
@@ -6530,7 +6530,7 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
     Reiner Buehl
     Andrew J. Caines
     Clifford Caoile
-    Frédéric Crozat
+    Fr�d�ric Crozat 
     Michael T. Davis
     Mattes Dolak
     Peter E.
@@ -6539,7 +6539,7 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
     Dean Gaudet
     Stephen Gildea
     Daniel Griscom
-    Felix Gröbert
+    Felix Gr�bert
     Aaron Hamid
     Darel Henman
     Magnus Holmgren
@@ -6562,7 +6562,7 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
     Dan Price
     Lee R.
     Roberto Ragusa
-    Félix Rauch
+    F�lix Rauch
     Maynard Riley
     Chung-chieh Shan
     Spinor S.
@@ -6571,7 +6571,7 @@ s/(<body [^>]*)onunload(.*>)/$1never$2/iU
     Peter Thoenen
     Martin Thomas
     Song Weijia
-    Jörg Weinmann
+    J�rg Weinmann
     Darren Wiebe
     Bobby G. Vinyard
     Anduin Withers
