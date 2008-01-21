@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.102 2008/01/18 18:30:25 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.104 2008/01/21 18:23:49 fk Exp $
 #
 # Wish list:
 #
@@ -221,6 +221,67 @@ sub tokenize ($) {
     return ($token, $value);
 }
 
+sub enlist_new_test ($$$$$$) {
+
+    my ($regression_tests, $token, $value, $si, $ri, $number) = @_;
+
+    if ($token eq 'set header') {
+
+        l(LL_FILE_LOADING, "Header to set: " . $value);
+        ${$regression_tests}[$si][$ri]{'type'} = CLIENT_HEADER_TEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'level'} = CLIENT_HEADER_TEST;
+
+    } elsif ($token eq 'request header') {
+
+        l(LL_FILE_LOADING, "Header to request: " . $value);
+        $$regression_tests[$si][$ri]{'type'} = SERVER_HEADER_TEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
+        $$regression_tests[$si][$ri]{'level'} = SERVER_HEADER_TEST;
+
+    } elsif ($token eq 'trusted cgi request') {
+
+        l(LL_FILE_LOADING, "CGI URL to test in a dumb way: " . $value);
+        $$regression_tests[$si][$ri]{'type'} = TRUSTED_CGI_REQUEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
+        $$regression_tests[$si][$ri]{'level'} = TRUSTED_CGI_REQUEST;
+
+    } elsif ($token eq 'fetch test') {
+
+        l(LL_FILE_LOADING, "URL to test in a dumb way: " . $value);
+        $$regression_tests[$si][$ri]{'type'} = DUMB_FETCH_TEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
+        $$regression_tests[$si][$ri]{'level'} = DUMB_FETCH_TEST;
+
+    } elsif ($token eq 'method test') {
+
+        l(LL_FILE_LOADING, "Method to test: " . $value);
+        $$regression_tests[$si][$ri]{'type'} = METHOD_TEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
+        $$regression_tests[$si][$ri]{'level'} = METHOD_TEST;
+
+    } else {
+
+        die "Incomplete '" . $token . "' support detected."; 
+
+    }
+
+    check_for_forbidden_characters($value);
+
+    $$regression_tests[$si][$ri]{'data'} = $value;
+
+    # For function that only get passed single tests
+    $$regression_tests[$si][$ri]{'section-id'} = $si;
+    $$regression_tests[$si][$ri]{'regression-test-id'} = $ri;
+    $$regression_tests[$si][$ri]{'number'} = $number - 1;
+    l(LL_FILE_LOADING,
+      "Regression test " . $number . " (section:" . $si . "):");
+}
+
 sub load_action_files ($) {
 
     # initialized here
@@ -229,11 +290,10 @@ sub load_action_files ($) {
 
     my $actionfiles_ref = shift;
     my @actionfiles = @{$actionfiles_ref};
-    my $number;
 
     my $si = 0;  # Section index
     my $ri = -1; # Regression test index
-    my $number_of_regression_tests = 0;
+    my $count = 0;
 
     my $ignored = 0;
 
@@ -267,64 +327,8 @@ sub load_action_files ($) {
 
                 # Beginning of new regression test.
                 $ri++;
-                $number_of_regression_tests++;
-
-                l(LL_FILE_LOADING, "Regression test " . $number_of_regression_tests . " (section:" . $si . "):");
-
-                if ($token eq 'set header') {
-
-                    l(LL_FILE_LOADING, "Header to set: " . $value);
-                    $regression_tests[$si][$ri]{'type'} = CLIENT_HEADER_TEST;
-                    # Implicit default
-                    $regression_tests[$si][$ri]{'level'} = CLIENT_HEADER_TEST;
-
-                } elsif ($token eq 'request header') {
-
-                    l(LL_FILE_LOADING, "Header to request: " . $value);
-                    $regression_tests[$si][$ri]{'type'} = SERVER_HEADER_TEST;
-                    # Implicit default
-                    $regression_tests[$si][$ri]{'expected-status-code'} = 200;
-                    $regression_tests[$si][$ri]{'level'} = SERVER_HEADER_TEST;
-
-                } elsif ($token eq 'trusted cgi request') {
-
-                    l(LL_FILE_LOADING, "CGI URL to test in a dumb way: " . $value);
-                    $regression_tests[$si][$ri]{'type'} = TRUSTED_CGI_REQUEST;
-                    # Implicit default
-                    $regression_tests[$si][$ri]{'expected-status-code'} = 200;
-                    $regression_tests[$si][$ri]{'level'} = TRUSTED_CGI_REQUEST;
-
-                } elsif ($token eq 'fetch test') {
-
-                    l(LL_FILE_LOADING, "URL to test in a dumb way: " . $value);
-                    $regression_tests[$si][$ri]{'type'} = DUMB_FETCH_TEST;
-                    # Implicit default
-                    $regression_tests[$si][$ri]{'expected-status-code'} = 200;
-                    $regression_tests[$si][$ri]{'level'} = DUMB_FETCH_TEST;
-
-                } elsif ($token eq 'method test') {
-
-                    l(LL_FILE_LOADING, "Method to test: " . $value);
-                    $regression_tests[$si][$ri]{'type'} = METHOD_TEST;
-                    # Implicit default
-                    $regression_tests[$si][$ri]{'expected-status-code'} = 200;
-                    $regression_tests[$si][$ri]{'level'} = METHOD_TEST;
-
-                } else {
-
-                    die "Incomplete '" . $token . "' support detected."; 
-
-                }
-
-                check_for_forbidden_characters($value);
-
-                $regression_tests[$si][$ri]{'data'} = $value;
-
-                # For function that only get passed single tests
-                $regression_tests[$si][$ri]{'section-id'} = $si;
-                $regression_tests[$si][$ri]{'regression-test-id'} = $ri;
-                $regression_tests[$si][$ri]{'file'} = $actionfile;
-
+                $count++;
+                enlist_new_test(\@regression_tests, $token, $value, $si, $ri, $count);
             }
             
             if ($si == -1 || $ri == -1) {
@@ -389,7 +393,7 @@ sub load_action_files ($) {
         }
     }
 
-    l(LL_FILE_LOADING, "Done loading " . $number_of_regression_tests . " regression tests." 
+    l(LL_FILE_LOADING, "Done loading " . $count . " regression tests." 
       . " Of which " . $ignored. " will be ignored)\n");
 }
 
@@ -421,7 +425,6 @@ sub execute_regression_tests () {
         my $tests = 0;
         my $failures;
         my $skipped = 0;
-        my $test_number = 0;
 
         for my $s (0 .. @regression_tests - 1) {
 
@@ -432,9 +435,11 @@ sub execute_regression_tests () {
                 die "Section id mismatch" if ($s != $regression_tests[$s][$r]{'section-id'});
                 die "Regression test id mismatch" if ($r != $regression_tests[$s][$r]{'regression-test-id'});
 
+                my $number = $regression_tests[$s][$r]{'number'};
+
                 if ($regression_tests[$s][$r]{'ignore'}
                     or level_is_unacceptable($regression_tests[$s][$r]{'level'})
-                    or test_number_is_unacceptable($test_number)) {
+                    or test_number_is_unacceptable($number)) {
 
                     $skipped++;
 
@@ -448,7 +453,6 @@ sub execute_regression_tests () {
                     $tests++;
                 }
                 $r++;
-                $test_number++;
             }
         }
         $failures = $tests - $successes;
@@ -1131,6 +1135,8 @@ sub log_result ($$) {
     $message .= interpret_result($result);
     $message .= " for test ";
     $message .= $number;
+    $message .= '/';
+    $message .= $test{'number'};
     $message .= '/';
     $message .= $test{'section-id'};
     $message .= '/';
