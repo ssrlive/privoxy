@@ -25,8 +25,6 @@ ChangeLog for Privoxy
   don't exist.
 - Treat the non-standard Request-Range headers like standard range
   headers and suppress them if content filtering is enabled.
-- Fix build on OS/2 and other platforms that are neither
-  Windows nor Unix based.
 - Prevent the log messages for CONNECT requests to unacceptable
   ports from printing the limit-connect argument as [null] if
   limit-connect hasn't been explicitly enabled.
