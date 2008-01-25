@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.54 2007/12/31 19:11:31 fabiankeil Exp $
+#  $Id: default.filter,v 1.55 2007/12/31 19:53:59 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -293,7 +293,7 @@ s@<a\s+href\s*=\s*(['"]?)([^>\1\s]*?(?:\
   adclick                             # See www.dn.se \
 | advert                              # see dict.leo.org \
 | atwola\.com/(?:link|redir)          # see www.cnn.com \
-| /jump/                              # redirs for doublecklick.net ads \
+| doubleclick\.net/jump/              # redirs for doublecklick.net ads \
 | counter                             # common \
 | (?<!&type=)tracker                  # (&type=tracker is used in sf's project statistics) \
 | adlog\.pl                           # see sf.net \
@@ -597,7 +597,7 @@ s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
  \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
- \#ks-ypn-ads, .ad, \#ygrp-vital {display: none !important;}\n\
+ \#ks-ypn-ads, .ad, \#east, \#ygrp-vital {display: none !important;}\n\
  \#yschpri, \#yschweb, \#pri, \#web {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
 </style>\n$0@
@@ -830,6 +830,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.55  2007/12/31 19:53:59  fabiankeil
+#     Let the msn filter remove the width limitation again.
+#
 #     Revision 1.54  2007/12/31 19:11:31  fabiankeil
 #     - Let the yahoo filter remove the width limitation again.
 #     - Teach the blogspot filter to remove useless feed comment
