@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.106 2007/12/31 21:52:11 fabiankeil Exp $
+#  $Id: default.action.master,v 1.107 2008/01/20 13:19:58 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -337,7 +337,7 @@
 #   prefer to view inside the browser, for example.
 #
 # +hide-forwarded-for-headers
-#   Block any existing X-Forwarded-for header, and do not add a new one.
+#   Block any existing X-Forwarded-for header.
 #
 # +hide-from-header{block}
 # +hide-from-header{spam@sittingduck.xqq}
