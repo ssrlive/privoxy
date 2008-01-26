@@ -167,6 +167,14 @@
           </tr>
 <!-- if-trust-support-end@ -->
         </table>
+<!-- @if-cgi-editor-is-disabled-start -->
+        <p>
+          The CGI editor is currently disabled, thus no edit buttons are shown.<br>
+          Please have a look at the
+           <a href="@user-manual@config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions documentation</a>
+          to learn how to enable it and what the risks are.
+        </p>
+<!--  if-cgi-editor-is-disabled-end@ -->
       </td>
     </tr>
 
