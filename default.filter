@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.55 2007/12/31 19:53:59 fabiankeil Exp $
+#  $Id: default.filter,v 1.56 2008/01/25 19:12:40 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -727,7 +727,7 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 SERVER-HEADER-FILTER: less-download-windows Prevent annoying download windows for content types the browser can handle itself.
 
 s@^Content-Disposition:.*filename=(["']?).*\.(png|gif|jpe?g|diff?|d?patch|c|h|pl|shar)\1.*$@@i
-s@^(Content-Type:)\s*(?:message/(?:news|rfc822)|text/x-.*|application/x-sh)\s*@$1 text/plain@i
+s@^(Content-Type:)\s*(?:message/(?:news|rfc822)|text/x-.*|application/x-sh(?:\s|$))\s*@$1 text/plain@i
 
 #################################################################################
 #
@@ -830,6 +830,12 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.56  2008/01/25 19:12:40  fabiankeil
+#     - Add yet another new yahoo ad id.
+#     - Don't let the first banners-by-link job punish URLs for merely
+#       containing the pattern "/jump/" when it should really look for
+#       "doubleclick\.net/jump/".
+#
 #     Revision 1.55  2007/12/31 19:53:59  fabiankeil
 #     Let the msn filter remove the width limitation again.
 #

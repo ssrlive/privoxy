@@ -9,6 +9,8 @@ ChangeLog for Privoxy
   message after using the edit button.
 - Fixed false-positives with the link-by-url filter and URLs that
   contain the pattern "/jump/".
+- The less-download-windows filter no longer messes
+  "Content-Type: application/x-shockwave-flash" headers up.
 
 *** Version 3.0.8 ***
 
