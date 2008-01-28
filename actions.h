@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.15 2007/04/15 16:39:20 fabiankeil Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.16 2007/04/17 18:21:45 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -35,6 +35,11 @@
  *
  * Revisions   :
  *    $Log: actions.h,v $
+ *    Revision 1.16  2007/04/17 18:21:45  fabiankeil
+ *    Split update_action_bits() into
+ *    update_action_bits_for_all_tags()
+ *    and update_action_bits_for_tag().
+ *
  *    Revision 1.15  2007/04/15 16:39:20  fabiankeil
  *    Introduce tags as alternative way to specify which
  *    actions apply to a request. At the moment tags can be
@@ -131,19 +136,21 @@ extern void init_action(struct action_spec *dest);
 extern void free_action(struct action_spec *src);
 extern jb_err merge_actions (struct action_spec *dest, 
                              const struct action_spec *src);
+#if 0
 extern int update_action_bits_for_all_tags(struct client_state *csp);
+#endif
 extern int update_action_bits_for_tag(struct client_state *csp, const char *tag);
 extern jb_err copy_action (struct action_spec *dest, 
                            const struct action_spec *src);
-extern char * actions_to_text     (struct action_spec *action);
-extern char * actions_to_html     (struct client_state *csp,
-                                   struct action_spec *action);
+extern char * actions_to_text     (const struct action_spec *action);
+extern char * actions_to_html     (const struct client_state *csp,
+                                   const struct action_spec *action);
 extern void init_current_action     (struct current_action_spec *dest);
 extern void free_current_action     (struct current_action_spec *src);
 extern jb_err merge_current_action  (struct current_action_spec *dest, 
                                      const struct action_spec *src);
-extern char * current_action_to_html(struct client_state *csp,
-                                     struct current_action_spec *action);
+extern char * current_action_to_html(const struct client_state *csp,
+                                     const struct current_action_spec *action);
 
 extern jb_err get_action_token(char **line, char **name, char **value);
 extern void unload_actions_file(void *file_data);

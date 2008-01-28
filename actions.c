@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.39 2007/04/17 18:21:45 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.40 2007/05/21 10:26:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,11 @@ const char actions_rcs[] = "$Id: actions.c,v 1.39 2007/04/17 18:21:45 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.40  2007/05/21 10:26:50  fabiankeil
+ *    - Use strlcpy() instead of strcpy().
+ *    - Provide a reason why loading the actions
+ *      file might have failed.
+ *
  *    Revision 1.39  2007/04/17 18:21:45  fabiankeil
  *    Split update_action_bits() into
  *    update_action_bits_for_all_tags()
@@ -880,7 +885,7 @@ jb_err merge_current_action (struct current_action_spec *dest,
    return err;
 }
 
-
+#if 0
 /*********************************************************************
  *
  * Function    :  update_action_bits_for_all_tags
@@ -909,7 +914,7 @@ int update_action_bits_for_all_tags(struct client_state *csp)
 
    return updated;
 }
-
+#endif
 
 /*********************************************************************
  *
@@ -1596,7 +1601,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
  *                NULL on out-of-memory error.
  *
  *********************************************************************/
-char * actions_to_text(struct action_spec *action)
+char * actions_to_text(const struct action_spec *action)
 {
    unsigned mask = action->mask;
    unsigned add  = action->add;
@@ -1684,8 +1689,8 @@ char * actions_to_text(struct action_spec *action)
  *                NULL on out-of-memory error.
  *
  *********************************************************************/
-char * actions_to_html(struct client_state *csp,
-                       struct action_spec *action)
+char * actions_to_html(const struct client_state *csp,
+                       const struct action_spec *action)
 {
    unsigned mask = action->mask;
    unsigned add  = action->add;
@@ -1790,8 +1795,8 @@ char * actions_to_html(struct client_state *csp,
  *                NULL on out-of-memory error.
  *
  *********************************************************************/
-char *current_action_to_html(struct client_state *csp,
-                             struct current_action_spec *action)
+char *current_action_to_html(const struct client_state *csp,
+                             const struct current_action_spec *action)
 {
    unsigned long flags  = action->flags;
    char * result = strdup("");
