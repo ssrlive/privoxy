@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.54 2008/01/19 17:52:39 hal9 Exp $
+ $Id: user-manual.sgml,v 2.55 2008/01/19 21:26:37 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.54 2008/01/19 17:52:39 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.55 2008/01/19 21:26:37 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2949,8 +2949,9 @@ for details.
   <listitem>
     <para>
      <screen>
+# Hide Tor exit notation in Host and Referer Headers
 {+client-header-filter{hide-tor-exit-notation}}
-.exit/
+/
     </screen>
     </para>
   </listitem>
@@ -8920,6 +8921,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.55  2008/01/19 21:26:37  hal9
+ Add IE7 to configuration section per Gerry.
+
  Revision 2.54  2008/01/19 17:52:39  hal9
  Re-commit to fix various minor issues for new release.
 
