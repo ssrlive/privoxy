@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.64 2008/01/21 18:56:46 david__schmidt Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.65 2008/01/31 14:44:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,8 +33,12 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.64 2008/01/21 18:56:46 david__schmi
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.65  2008/01/31 14:44:33  fabiankeil
+ *    Use (a != b) instead of !(a == b) so the sanity check looks less insane.
+ *
  *    Revision 1.64  2008/01/21 18:56:46  david__schmidt
- *    Swap #def from negative to positive, re-joined it so it didn't span an assertion (compilation failure on OS/2)
+ *    Swap #def from negative to positive, re-joined it so it didn't
+ *    span an assertion (compilation failure on OS/2)
  *
  *    Revision 1.63  2007/12/15 19:49:32  fabiankeil
  *    Stop overloading logfile to control the mingw32 log window as well.
@@ -1158,12 +1162,13 @@ void log_error(int loglevel, const char *fmt, ...)
       loglevel = LOG_LEVEL_FATAL;
    }
 
-#ifdef _WIN32
    assert(loglevel & debug);
-#else
-   assert(
-          (NULL != logfp) ||
-          (loglevel & debug));
+#ifndef _WIN32
+   /*
+    * On Windows this is acceptable in case
+    * we are logging to the GUI window only.
+    */
+   assert(NULL != logfp);
 #endif
 
    if (loglevel == LOG_LEVEL_FATAL)
