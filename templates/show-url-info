@@ -27,6 +27,12 @@
 #
 # Revisions   :
 #    $Log: show-url-info,v $
+#    Revision 1.22  2007/12/08 14:29:06  fabiankeil
+#    Use CSS to let the URL and pattern input fields scale with
+#    the browser width and try to prevent vertical scroll bars
+#    if the width is less than 80 characters. Closes #1843596,
+#    thanks to Gerry Murphy and Lee.
+#
 #    Revision 1.21  2007/11/15 19:11:11  fabiankeil
 #    Reword HTTPS URL information.
 #
@@ -212,6 +218,14 @@
 <!-- if-valid-url-end@ -->
         <h2>Matches for <a href="@url@">@url@</a>:</h2>
         @matches@
+<!-- @if-cgi-editor-is-disabled-start -->
+        <p>
+          The CGI editor is currently disabled, thus no edit buttons are shown.<br>
+          Please have a look at the
+           <a href="@user-manual@config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions documentation</a>
+          to learn how to enable it and what the risks are.
+        </p>
+<!--  if-cgi-editor-is-disabled-end@ -->
       </td>
     </tr>
 <!-- @if-valid-url-start -->

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.61 2008/01/26 11:13:25 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.62 2008/02/01 05:52:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.61 2008/01/26 11:13:25 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.62  2008/02/01 05:52:40  fabiankeil
+ *    Hide edit buttons on the show-url-info CGI page if enable-edit-action
+ *    is disabled. Patch by Lee with additional white space adjustments.
+ *
  *    Revision 1.61  2008/01/26 11:13:25  fabiankeil
  *    If enable-edit-actions is disabled, hide the edit buttons and explain why.
  *
@@ -1690,7 +1694,14 @@ jb_err cgi_show_url_info(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      if (map(exports, "matches", 1, matches , 0))
+#ifdef FEATURE_CGI_EDIT_ACTIONS
+      if ((csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
+      {
+         err = map_block_killer(exports, "cgi-editor-is-disabled");
+      }
+#endif /* FEATURE_CGI_EDIT_ACTIONS */
+
+      if (err || map(exports, "matches", 1, matches , 0))
       {
          free_current_action(action);
          free_map(exports);
