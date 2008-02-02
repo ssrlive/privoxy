@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.163 2007/12/13 01:47:11 david__schmidt Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.164 2007/12/16 18:32:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.163 2007/12/13 01:47:11 david__schmidt Ex
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.164  2007/12/16 18:32:46  fabiankeil
+ *    Prevent the log messages for CONNECT requests to unacceptable
+ *    ports from printing the limit-connect argument as [null] if
+ *    limit-connect hasn't been explicitly enabled.
+ *
  *    Revision 1.163  2007/12/13 01:47:11  david__schmidt
  *    Make sure all console-mode apps get a usage() instance
  *
@@ -3403,16 +3408,7 @@ static jb_socket bind_port_helper(struct configuration_spec * config)
    int result;
    jb_socket bfd;
 
-   if ( (config->haddr != NULL)
-     && (config->haddr[0] == '1')
-     && (config->haddr[1] == '2')
-     && (config->haddr[2] == '7')
-     && (config->haddr[3] == '.') )
-   {
-      log_error(LOG_LEVEL_INFO, "Listening on port %d for local connections only",
-                config->hport);
-   }
-   else if (config->haddr == NULL)
+   if (config->haddr == NULL)
    {
       log_error(LOG_LEVEL_INFO, "Listening on port %d on all IP addresses",
                 config->hport);
