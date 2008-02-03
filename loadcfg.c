@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.70 2007/12/15 14:24:05 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.71 2007/12/23 15:24:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.70 2007/12/15 14:24:05 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.71  2007/12/23 15:24:56  fabiankeil
+ *    Reword "unrecognized directive" warning, use better
+ *    mark up and add a <br>. Fixes parts of #1856559.
+ *
  *    Revision 1.70  2007/12/15 14:24:05  fabiankeil
  *    Plug memory leak if listen-address only specifies the port.
  *
@@ -531,6 +535,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_forward                        2029845ul /* "forward" */
 #define hash_forward_socks4              3963965521ul /* "forward-socks4" */
 #define hash_forward_socks4a             2639958518ul /* "forward-socks4a" */
+#define hash_forward_socks5              3963965522ul /* "forward-socks5" */
 #define hash_forwarded_connect_retries    101465292ul /* "forwarded-connect-retries" */
 #define hash_jarfile                        2046641ul /* "jarfile" */
 #define hash_listen_address              1255650842ul /* "listen-address" */
@@ -770,6 +775,7 @@ struct configuration_spec * load_config(void)
       struct forward_spec *cur_fwd;
       int vec_count;
       char *vec[3];
+      unsigned long directive_hash;
 
       strlcpy(tmp, buf, sizeof(tmp));
 
@@ -809,8 +815,8 @@ struct configuration_spec * load_config(void)
       /* Save the argument for show-proxy-args */
       savearg(cmd, arg, config);
 
-
-      switch( hash_string( cmd ) )
+      directive_hash = hash_string(cmd);
+      switch (directive_hash)
       {
 /* *************************************************************************
  * actionsfile actions-file-name
@@ -1199,6 +1205,7 @@ struct configuration_spec * load_config(void)
  * forward-socks4a url-pattern socks-proxy[:port] (.|http-proxy[:port])
  * *************************************************************************/
          case hash_forward_socks4a:
+         case hash_forward_socks5:
             vec_count = ssplit(arg, " \t", vec, SZ(vec), 1, 1);
 
             if (vec_count != 3)
@@ -1220,7 +1227,14 @@ struct configuration_spec * load_config(void)
                continue;
             }
 
-            cur_fwd->type = SOCKS_4A;
+            if (directive_hash == hash_forward_socks4a)
+            {
+               cur_fwd->type = SOCKS_4A;
+            }
+            else
+            {
+               cur_fwd->type = SOCKS_5;
+            }
 
             /* Save the URL pattern */
             if (create_url_spec(cur_fwd->url, vec[0]))
