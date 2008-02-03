@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.97 2007/11/30 15:37:03 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.98 2008/01/04 17:43:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.97 2007/11/30 15:37:03 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.98  2008/01/04 17:43:45  fabiankeil
+ *    Improve the warning messages that get logged if the action files
+ *    "enable" filters but no filters of that type have been loaded.
+ *
  *    Revision 1.97  2007/11/30 15:37:03  fabiankeil
  *    Use freez instead of free.
  *
@@ -2487,6 +2491,11 @@ static const struct forward_spec *get_forward_override_settings(struct client_st
       else if (!strcasecmp(vec[0], "forward-socks4a"))
       {
          fwd->type = SOCKS_4A;
+         socks_proxy = vec[1];
+      }
+      else if (!strcasecmp(vec[0], "forward-socks5"))
+      {
+         fwd->type = SOCKS_5;
          socks_proxy = vec[1];
       }
 
