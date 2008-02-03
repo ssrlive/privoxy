@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $
+ $Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1833,7 +1833,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1894,7 +1894,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.15 2008/01/19 15:03:05 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2678,11 +2678,11 @@ at sourceforge. Three simple steps:
       </para>
     </sect3>
 
-    <sect3 id="newrelease-macosx"><title>Mac OSX</title>
+    <sect3 id="newrelease-macosx"><title>Mac OS X</title>
       <para>
 	First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then get the Mac OSX setup module:
+        packages" above). Then get the Mac OS X setup module:
 	</para>
 	<para>
 	<programlisting>
@@ -3026,6 +3026,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.16  2008/01/19 17:52:38  hal9
+  Re-commit to fix various minor issues for new release.
+
   Revision 2.15  2008/01/19 15:03:05  hal9
   Doc sources tagged for 3.0.8 release.
 
@@ -3199,7 +3202,7 @@ at sourceforge. Three simple steps:
   More boilerplate text for use across multiple docs.
 
   Revision 1.20  2002/04/04 03:28:27  david__schmidt
-  Add Mac OSX section
+  Add Mac OS X section
 
   Revision 1.19  2002/04/03 15:09:42  david__schmidt
   Add OS/2 build section

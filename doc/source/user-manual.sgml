@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.56 2008/01/31 19:11:35 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.57 2008/02/03 19:10:14 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.56 2008/01/31 19:11:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.57 2008/02/03 19:10:14 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -298,7 +298,7 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-mac"><title>Mac OSX</title>
+<sect3 id="installation-mac"><title>Mac OS X</title>
 <para>
  Unzip the downloaded file (you can either double-click on the file
  from the finder, or from the desktop if you downloaded it there).
@@ -1349,7 +1349,7 @@ Example Unix startup command:
 </sect2>
 
 <sect2 id="start-macosx">
-<title>Mac OSX</title>
+<title>Mac OS X</title>
 <para>
  During installation, <application>Privoxy</application> is configured to
  start automatically when the system restarts.  To start &my-app; manually,
@@ -8923,6 +8923,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.57  2008/02/03 19:10:14  fabiankeil
+ Mention forward-socks5.
+
  Revision 2.56  2008/01/31 19:11:35  fabiankeil
  Let the +client-header-filter{hide-tor-exit-notation} example apply
  to all requests as "tainted" Referers aren't limited to exit TLDs.
@@ -9194,7 +9197,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Spell checked (only one typo this time!).
 
  Revision 1.123.2.16  2002/08/09 19:20:54  david__schmidt
- Update to Mac OSX startup script name
+ Update to Mac OS X startup script name
 
  Revision 1.123.2.15  2002/08/07 17:32:11  oes
  Converted some internal links from ulink to link for PDF creation; no content changed
@@ -9219,7 +9222,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
  Revision 1.123.2.9  2002/07/11 03:40:28  david__schmidt
 
- Updated Mac OSX sections due to installation location change
+ Updated Mac OS X sections due to installation location change
 
  Revision 1.123.2.8  2002/06/09 16:36:32  hal9
  Clarifications on filtering and MIME. Hardcode 'latest release' in index.html.
@@ -9239,7 +9242,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Ooops missed something from David.
 
  Revision 1.123.2.3  2002/05/27 03:23:17  hal9
- Fix FIXMEs for OS2 and OSX startup. Fix Redhat typos (should be Red Hat).
+ Fix FIXMEs for OS2 and Mac OS X startup. Fix Redhat typos (should be Red Hat).
  That's a wrap, I think.
 
  Revision 1.123.2.2  2002/05/26 19:02:09  hal9
@@ -9374,7 +9377,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  Add AmigaOS install stuff.
 
  Revision 1.87  2002/04/23 02:53:15  david__schmidt
- Updated OSX installation section
+ Updated Mac OS X installation section
  Added a few English tweaks here an there
 
  Revision 1.86  2002/04/21 01:46:32  hal9

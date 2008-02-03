@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.37 2008/01/19 15:03:05 hal9 Exp $
+ $Id: faq.sgml,v 2.38 2008/01/19 17:52:39 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.37 2008/01/19 15:03:05 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.38 2008/01/19 17:52:39 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2462,8 +2462,8 @@ every time I start IE. What gives?</title>
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 id="osxie" renderas="sect3">
-<title>In Mac OSX, I can't configure Microsoft Internet Explorer to use 
+<sect2 id="macosxie" renderas="sect3">
+<title>In Mac OS X, I can't configure Microsoft Internet Explorer to use 
  Privoxy as the HTTP proxy.</title>
  <para>
   Microsoft Internet Explorer (in versions like 5.1) respects system-wide
@@ -2477,8 +2477,8 @@ every time I start IE. What gives?</title>
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 renderas="sect3" id="osxuninstall">
-<title>In Mac OSX, I dragged the Privoxy folder to the trash in order to 
+<sect2 renderas="sect3" id="macosxuninstall">
+<title>In Mac OS X, I dragged the Privoxy folder to the trash in order to 
  uninstall it.  Now the finder tells me I don't have sufficient privileges to
  empty the trash.</title>
  <para>
@@ -2497,12 +2497,12 @@ every time I start IE. What gives?</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2 renderas="sect3" id="osximages">
-<title>In Mac OSX Panther (10.3), images often fail to load and/or I
+<sect2 renderas="sect3" id="macosximages">
+<title>In Mac OS X Panther (10.3), images often fail to load and/or I
  experience random delays in page loading. I'm using
  <literal>localhost</literal> as my browser's proxy setting.</title>
  <para>
-  We believe this is due to an IPv6-related bug in OSX, but don't fully
+  We believe this is due to an IPv6-related bug in Mac OS X, but don't fully
   understand the issue yet. In any case, changing the proxy setting to 
   <literal>127.0.0.1</literal> instead of <literal>localhost</literal>
   works around the problem.
@@ -2808,6 +2808,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.38  2008/01/19 17:52:39  hal9
+Re-commit to fix various minor issues for new release.
+
 Revision 2.37  2008/01/19 15:03:05  hal9
 Doc sources tagged for 3.0.8 release.
 
@@ -2917,7 +2920,7 @@ Revision 1.61.2.41  2004/04/05 13:44:05  oes
 Fixed allow-all-cookies alias name; closes SR #929746
 
 Revision 1.61.2.40  2004/01/30 17:00:33  oes
-Added OSX Panther problem
+Added Mac OS X Panther problem
 
 Revision 1.61.2.39  2004/01/29 22:53:08  hal9
 Minor changes for exempting docs of text/plain. Change copyright date.
@@ -3004,28 +3007,28 @@ Revision 1.61.2.15  2002/08/10 11:34:22  oes
 Add disclaimer about probably being out-of-date
 
 Revision 1.61.2.14  2002/08/07 02:53:43  hal9
-Fix some minor markup errors, and move one OSX Q/A to troubleshooting section.
+Fix some minor markup errors, and move one Mac OS X Q/A to troubleshooting section.
 
 Revision 1.61.2.13  2002/08/06 11:55:32  oes
 Added missing close tag
 
 Revision 1.61.2.12  2002/08/06 11:43:46  david__schmidt
-Updated OSX uninstall FAQ... we have an uninstall script now.
+Updated Mac OS X uninstall FAQ... we have an uninstall script now.
 
 Revision 1.61.2.11  2002/08/06 08:54:03  oes
 Style police: Fixed formatting details
 
 Revision 1.61.2.10  2002/08/02 14:00:25  david__schmidt
-Made the OSX removal commands far less dangerous
+Made the Mac OS X removal commands far less dangerous
 
 Revision 1.61.2.9  2002/08/02 13:14:45  oes
-Added warning about sudo rm -r for Mac OSX deinstallation; moved this item to install section
+Added warning about sudo rm -r for Mac OS X deinstallation; moved this item to install section
 
 Revision 1.61.2.8  2002/08/02 02:01:42  david__schmidt
-Add FAQ item for MSIE on OSX HTTP proxy confusion
+Add FAQ item for MSIE on Mac OS X HTTP proxy confusion
 
 Revision 1.61.2.7  2002/08/02 01:46:01  david__schmidt
-Added FAQ item for Mac OSX uninstall woes
+Added FAQ item for Mac OS X uninstall woes
 
 Revision 1.61.2.6  2002/07/30 20:04:56  hal9
 Fix typo: 'schould'.
