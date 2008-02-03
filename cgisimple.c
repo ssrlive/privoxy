@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.62 2008/02/01 05:52:40 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.63 2008/02/01 06:04:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.62 2008/02/01 05:52:40 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.63  2008/02/01 06:04:31  fabiankeil
+ *    If edit buttons on the show-url-info CGI page are hidden, explain why.
+ *
  *    Revision 1.62  2008/02/01 05:52:40  fabiankeil
  *    Hide edit buttons on the show-url-info CGI page if enable-edit-action
  *    is disabled. Patch by Lee with additional white space adjustments.
@@ -1661,8 +1664,24 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
             if (fwd->gateway_host != NULL)
             {
-               if (!err) err = map(exports, "socks-type", 1, (fwd->type == SOCKS_4) ?
-                                  "socks4" : "socks4a", 1);
+               char *socks_type = NULL;
+
+               switch (fwd->type)
+               {
+                  case SOCKS_4:
+                     socks_type = "socks4";
+                     break;
+                  case SOCKS_4A:
+                     socks_type = "socks4a";
+                     break;
+                  case SOCKS_5:
+                     socks_type = "socks5";
+                     break;
+                  default:
+                     log_error(LOG_LEVEL_FATAL, "Unknown socks type: %d.", fwd->type);
+               }
+
+               if (!err) err = map(exports, "socks-type", 1, socks_type, 1);
                if (!err) err = map(exports, "gateway-host", 1, fwd->gateway_host, 1);
                snprintf(port, sizeof(port), "%d", fwd->gateway_port);
                if (!err) err = map(exports, "gateway-port", 1, port, 1);
