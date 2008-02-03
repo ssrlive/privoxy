@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.107 2008/01/20 13:19:58 fabiankeil Exp $
+#  $Id: default.action.master,v 1.108 2008/01/25 19:29:20 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -317,6 +317,8 @@
 # +forward-override{forward 127.0.0.1:8123}
 # +forward-override{forward-socks4a 127.0.0.1:9050 .}
 # +forward-override{forward-socks4a 127.0.0.1:9050 proxy.example.org:8000}
+# +forward-override{forward-socks5 127.0.0.1:9050 .}
+# +forward-override{forward-socks5 127.0.0.1:9050 proxy.example.org:8000}
 #   This action overrules the forward directives in the configuration file. 
 #
 # +handle-as-empty-document

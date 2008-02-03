@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.55 2008/01/19 21:26:37 hal9 Exp $
+ $Id: user-manual.sgml,v 2.56 2008/01/31 19:11:35 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.55 2008/01/19 21:26:37 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.56 2008/01/31 19:11:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4152,7 +4152,8 @@ new action
      <para>
       <quote>forward-socks4a 127.0.0.1:9050 .</quote> to use the socks4a proxy listening at
       127.0.0.1 port 9050. Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote>
-      to use a socks4 connection  (with local DNS resolution) instead.
+      to use a socks4 connection  (with local DNS resolution) instead, use <quote>forward-socks5</quote>
+      for socks5 connections (with remote DNS resolution).
      </para>
     </listitem>
     <listitem>
@@ -4160,7 +4161,8 @@ new action
       <quote>forward-socks4a 127.0.0.1:9050 proxy.example.org:8000</quote> to use the socks4a proxy
       listening at 127.0.0.1 port 9050 to reach the HTTP proxy listening at proxy.example.org port 8000.
       Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection
-      (with local DNS resolution) instead.
+      (with local DNS resolution) instead, use <quote>forward-socks5</quote>
+      for socks5 connections (with remote DNS resolution).
      </para>
     </listitem>
    </itemizedlist>
@@ -4171,7 +4173,7 @@ new action
   <term>Notes:</term>
   <listitem>
    <para>
-    This action takes parameters similar to the <!-- I hope this link actual works -->
+    This action takes parameters similar to the
     <link linkend="forwarding">forward</link> directives in the configuration
     file, but without the URL pattern. It can be used as replacement, but normally it's only
     used in cases where matching based on the request URL isn't sufficient.
@@ -8921,6 +8923,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.56  2008/01/31 19:11:35  fabiankeil
+ Let the +client-header-filter{hide-tor-exit-notation} example apply
+ to all requests as "tainted" Referers aren't limited to exit TLDs.
+
  Revision 2.55  2008/01/19 21:26:37  hal9
  Add IE7 to configuration section per Gerry.
 
