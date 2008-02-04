@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.21 2007/07/28 12:30:03 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.22 2008/02/03 13:46:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.21 2007/07/28 12:30:03 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.22  2008/02/03 13:46:15  fabiankeil
+ *    Add SOCKS5 support. Patch #1862863 by Eric M. Hopper with minor changes.
+ *
  *    Revision 1.21  2007/07/28 12:30:03  fabiankeil
  *    Modified patch from Song Weijia (#1762559) to
  *    fix socks requests on big-endian platforms.
@@ -471,6 +474,45 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
 }
 
+/*********************************************************************
+ *
+ * Function    :  translate_socks5_error
+ *
+ * Description :  Translates a SOCKS errors to a string.
+ *
+ * Parameters  :
+ *          1  :  socks_error = The error code to translate.
+ *
+ * Returns     :  The string translation.
+ *
+ *********************************************************************/
+static const char *translate_socks5_error(int socks_error)
+{
+   switch (socks_error)
+   {
+      /* XXX: these should be more descriptive */
+      case SOCKS5_REQUEST_FAILED:
+         return "SOCKS5 request failed";
+      case SOCKS5_REQUEST_DENIED:
+         return "SOCKS5 request denied";
+      case SOCKS5_REQUEST_NETWORK_UNREACHABLE:
+         return "SOCKS5 network unreachable";
+      case SOCKS5_REQUEST_HOST_UNREACHABLE:
+         return "SOCKS5 host unreachable";
+      case SOCKS5_REQUEST_CONNECTION_REFUSEDD:
+         return "SOCKS5 connection refused";
+      case SOCKS5_REQUEST_TTL_EXPIRED:
+         return "SOCKS5 TTL expired";
+      case SOCKS5_REQUEST_PROTOCOL_ERROR:
+         return "SOCKS5 client protocol error";
+      case SOCKS5_REQUEST_BAD_ADDRESS_TYPE:
+         return "SOCKS5 domain names unsupported";
+      case SOCKS5_REQUEST_GRANTED:
+         return "everything's peachy";
+      default:
+         return "SOCKS5 negotiation protocol error";
+   }
+}
 
 /*********************************************************************
  *
@@ -503,36 +545,41 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    int server_size = 0;
    size_t hostlen = 0;
    jb_socket sfd;
+   const char *errstr = NULL;
 
    if ((fwd->gateway_host == NULL) || (*fwd->gateway_host == '\0'))
    {
-      log_error(LOG_LEVEL_CONNECT, "socks5_connect: NULL gateway host specified");
+      errstr = "NULL gateway host specified";
       err = 1;
    }
 
    if (fwd->gateway_port <= 0)
    {
-      log_error(LOG_LEVEL_CONNECT, "socks5_connect: invalid gateway port specified");
+      errstr = "invalid gateway port specified";
       err = 1;
    }
 
    hostlen = strlen(target_host);
    if (hostlen > 255)
    {
-      log_error(LOG_LEVEL_CONNECT, "socks5_connect: target host name is longer than 255 characters.");
+      errstr = "target host name is longer than 255 characters";
       err = 1;
    }
 
    if (fwd->type != SOCKS_5)
    {
       /* Should never get here */
-      log_error(LOG_LEVEL_FATAL, "SOCKS5 impossible internal error - bad SOCKS type.");
+      log_error(LOG_LEVEL_FATAL,
+         "SOCKS5 impossible internal error - bad SOCKS type");
       err = 1;
    }
 
    if (err)
    {
       errno = EINVAL;
+      assert(errstr != NULL);
+      log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
+      csp->error_message = strdup(errstr);
       return(JB_INVALID_SOCKET);
    }
 
@@ -551,37 +598,42 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    if (write_socket(sfd, cbuf, client_pos))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation write failed...");
+      errstr = "SOCKS5 negotiation write failed";
+      csp->error_message = strdup(errstr);
+      log_error(LOG_LEVEL_CONNECT, "%s", errstr);
       close_socket(sfd);
       return(JB_INVALID_SOCKET);
    }
 
    if (read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation read failed...");
+      errstr = "SOCKS5 negotiation read failed";
       err = 1;
    }
 
    if (!err && (sbuf[0] != '\x05'))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation protocol version error");
+      errstr = "SOCKS5 negotiation protocol version error";
       err = 1;
    }
 
    if (!err && (sbuf[1] == '\xff'))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 authentication required");
+      errstr = "SOCKS5 authentication required";
       err = 1;
    }
 
    if (!err && (sbuf[1] != '\x00'))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation protocol error");
+      errstr = "SOCKS5 negotiation protocol error";
       err = 1;
    }
 
    if (err)
    {
+      assert(errstr != NULL);
+      log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
+      csp->error_message = strdup(errstr);
       close_socket(sfd);
       errno = EINVAL;
       return(JB_INVALID_SOCKET);
@@ -600,7 +652,9 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    if (write_socket(sfd, cbuf, client_pos))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation write failed...");
+      errstr = "SOCKS5 negotiation read failed";
+      csp->error_message = strdup(errstr);
+      log_error(LOG_LEVEL_CONNECT, "%s", errstr);
       close_socket(sfd);
       errno = EINVAL;
       return(JB_INVALID_SOCKET);
@@ -609,60 +663,35 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    server_size = read_socket(sfd, sbuf, sizeof(sbuf));
    if (server_size < 3)
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation read failed...");
+      errstr = "SOCKS5 negotiation read failed";
       err = 1;
    }
 
    if (!err && (sbuf[0] != '\x05'))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation protocol version error");
+      errstr = "SOCKS5 negotiation protocol version error";
       err = 1;
    }
 
    if (!err && (sbuf[2] != '\x00'))
    {
-      log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation protocol error");
+      errstr = "SOCKS5 negotiation protocol error";
       err = 1;
    }
 
    if (!err)
    {
-      switch (sbuf[1])
+      if (sbuf[1] == SOCKS5_REQUEST_GRANTED)
       {
-         case SOCKS5_REQUEST_GRANTED:
-            return(sfd);
-            break;
-         case SOCKS5_REQUEST_FAILED:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request failed");
-            break;
-         case SOCKS5_REQUEST_DENIED:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request denied");
-            break;
-         case SOCKS5_REQUEST_NETWORK_UNREACHABLE:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request - network unreachable");
-            break;
-         case SOCKS5_REQUEST_HOST_UNREACHABLE:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request - host unreachable");
-            break;
-         case SOCKS5_REQUEST_CONNECTION_REFUSEDD:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request - connection refused");
-            break;
-         case SOCKS5_REQUEST_TTL_EXPIRED:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request - TTL expired");
-            break;
-         case SOCKS5_REQUEST_PROTOCOL_ERROR:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request - client protocol error");
-            break;
-         case SOCKS5_REQUEST_BAD_ADDRESS_TYPE:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 request - domain names unsupported");
-            break;
-         default:
-            log_error(LOG_LEVEL_CONNECT, "SOCKS5 negotiation protocol error");
-            break;
+         return(sfd);
       }
+      errstr = translate_socks5_error(sbuf[1]);
       err = 1;
    }
 
+   assert(errstr != NULL);
+   csp->error_message = strdup(errstr);
+   log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
    close_socket(sfd);
    errno = EINVAL;
    return(JB_INVALID_SOCKET);
