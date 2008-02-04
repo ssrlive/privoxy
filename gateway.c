@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.22 2008/02/03 13:46:15 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.23 2008/02/04 13:11:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.22 2008/02/03 13:46:15 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.23  2008/02/04 13:11:35  fabiankeil
+ *    Remember the cause of the SOCKS5 error for the CGI message.
+ *
  *    Revision 1.22  2008/02/03 13:46:15  fabiankeil
  *    Add SOCKS5 support. Patch #1862863 by Eric M. Hopper with minor changes.
  *
@@ -308,7 +311,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
                                 int target_port,
                                 struct client_state *csp)
 {
-   int web_server_addr;
+   unsigned int web_server_addr;
    char buf[BUFFER_SIZE];
    struct socks_op    *c = (struct socks_op    *)buf;
    struct socks_reply *s = (struct socks_reply *)buf;
@@ -348,12 +351,16 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    switch (fwd->type)
    {
       case SOCKS_4:
-         web_server_addr = htonl(resolve_hostname_to_ip(target_host));
+         web_server_addr = resolve_hostname_to_ip(target_host);
          if (web_server_addr == INADDR_NONE)
          {
             errstr = "could not resolve target host";
             log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s %s", errstr, target_host);
             err = 1;
+         }
+         else
+         {
+            web_server_addr = htonl(web_server_addr);
          }
          break;
       case SOCKS_4A:
