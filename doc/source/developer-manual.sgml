@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $
+ $Id: developer-manual.sgml,v 2.17 2008/02/03 21:37:41 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.17 2008/02/03 21:37:41 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1833,7 +1833,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $";
+const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.17 2008/02/03 21:37:41 hal9 Exp $";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1894,7 +1894,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.16 2008/01/19 17:52:38 hal9 Exp $"
+#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.17 2008/02/03 21:37:41 hal9 Exp $"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -2864,7 +2864,9 @@ at sourceforge. Three simple steps:
      Or use the <command>make</command> targets as described above.
     </para>
     <para>
-     Once this done go to <ulink url="http://sourceforge.net/project/admin/editpackages.php?group_id=11118">http://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>, 
+     Once this done go to <ulink
+      url="https://sourceforge.net/project/admin/editpackages.php?group_id=11118"
+      >https://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>, 
      making sure you are logged in. Find your target platform in the 
      second column, and click <literal>Add Release</literal>. You will 
      then need to create a new release for your package, using the format 
@@ -3026,6 +3028,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.17  2008/02/03 21:37:41  hal9
+  Apply patch from Mark: s/OSX/OS X/
+
   Revision 2.16  2008/01/19 17:52:38  hal9
   Re-commit to fix various minor issues for new release.
 
