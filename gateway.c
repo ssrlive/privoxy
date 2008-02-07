@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.23 2008/02/04 13:11:35 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.24 2008/02/04 14:56:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.23 2008/02/04 13:11:35 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.24  2008/02/04 14:56:29  fabiankeil
+ *    - Fix a compiler warning.
+ *    - Stop assuming that htonl(INADDR_NONE) equals INADDR_NONE.
+ *
  *    Revision 1.23  2008/02/04 13:11:35  fabiankeil
  *    Remember the cause of the SOCKS5 error for the CGI message.
  *
@@ -546,14 +550,15 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
                                 struct client_state *csp)
 {
    int err = 0;
-   char cbuf[BUFFER_SIZE];
-   char sbuf[BUFFER_SIZE];
+   char cbuf[300];
+   char sbuf[30];
    size_t client_pos = 0;
    int server_size = 0;
    size_t hostlen = 0;
    jb_socket sfd;
    const char *errstr = NULL;
 
+   assert(fwd->gateway_host);
    if ((fwd->gateway_host == NULL) || (*fwd->gateway_host == '\0'))
    {
       errstr = "NULL gateway host specified";
@@ -562,6 +567,11 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    if (fwd->gateway_port <= 0)
    {
+      /*
+       * XXX: currently this can't happen because in
+       * case of invalid gateway ports we use the defaults.
+       * Of course we really shouldn't do that.
+       */
       errstr = "invalid gateway port specified";
       err = 1;
    }
@@ -595,6 +605,9 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    if (sfd == JB_INVALID_SOCKET)
    {
+      errstr = "socks5 server unreachable";
+      log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
+      csp->error_message = strdup(errstr);
       return(JB_INVALID_SOCKET);
    }
 
@@ -652,7 +665,9 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    cbuf[client_pos++] = '\x00'; /* Reserved, must be 0x00 */
    cbuf[client_pos++] = '\x03'; /* Address is domain name */
    cbuf[client_pos++] = (char)(hostlen & 0xffu);
-   strncpy(cbuf + client_pos, target_host, 0xffu);
+   assert(sizeof(cbuf) - client_pos > 255);
+   /* Using strncpy because we really want the nul byte padding. */
+   strncpy(cbuf + client_pos, target_host, sizeof(cbuf) - client_pos);
    client_pos += (hostlen & 0xffu);
    cbuf[client_pos++] = (char)((target_port >> 8) & 0xffu);
    cbuf[client_pos++] = (char)((target_port     ) & 0xffu);
@@ -672,6 +687,13 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    {
       errstr = "SOCKS5 negotiation read failed";
       err = 1;
+   }
+   else if (server_size > 20)
+   {
+      /* This is somewhat unexpected but doesn't realy matter. */
+      log_error(LOG_LEVEL_CONNECT, "socks5_connect: read %d bytes "
+         "from socks server. Would have accepted up to %d.",
+         server_size, sizeof(sbuf));
    }
 
    if (!err && (sbuf[0] != '\x05'))
@@ -701,7 +723,9 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
    close_socket(sfd);
    errno = EINVAL;
+
    return(JB_INVALID_SOCKET);
+
 }
 
 /*
