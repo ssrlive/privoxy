@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.108 2008/01/25 19:29:20 fabiankeil Exp $
+#  $Id: default.action.master,v 1.109 2008/02/03 19:07:26 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -620,6 +620,8 @@ adob*.
 adrenaline.
 adtp*.
 adv[oia]*.
+#MASTER# REMARKS: Added 2008-02-08 HB
+adventure*.
 .*road*.
 .olympiad*.
 .*load*.
