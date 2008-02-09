@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.40 2007/05/21 10:26:50 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.41 2008/01/28 20:17:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.40 2007/05/21 10:26:50 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.41  2008/01/28 20:17:40  fabiankeil
+ *    - Mark some parameters as immutable.
+ *    - Hide update_action_bits_for_all_tags() while it's unused.
+ *
  *    Revision 1.40  2007/05/21 10:26:50  fabiankeil
  *    - Use strlcpy() instead of strcpy().
  *    - Provide a reason why loading the actions
@@ -1799,52 +1803,54 @@ char *current_action_to_html(const struct client_state *csp,
                              const struct current_action_spec *action)
 {
    unsigned long flags  = action->flags;
-   char * result = strdup("");
    struct list_entry * lst;
+   char *result   = strdup("");
+   char *active   = strdup("");
+   char *inactive = strdup("");
 
 #define DEFINE_ACTION_BOOL(__name, __bit)  \
    if (flags & __bit)                      \
    {                                       \
-      string_append(&result, "\n<br>+");   \
-      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&active, "\n<br>+");   \
+      string_join(&active, add_help_link(__name, csp->config)); \
    }                                       \
    else                                    \
    {                                       \
-      string_append(&result, "\n<br>-");   \
-      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&inactive, "\n<br>-"); \
+      string_join(&inactive, add_help_link(__name, csp->config)); \
    }
 
 #define DEFINE_ACTION_STRING(__name, __bit, __index)   \
    if (flags & __bit)                                  \
    {                                                   \
-      string_append(&result, "\n<br>+");               \
-      string_join(&result, add_help_link(__name, csp->config)); \
-      string_append(&result, "{");                     \
-      string_join(&result, html_encode(action->string[__index])); \
-      string_append(&result, "}");                     \
+      string_append(&active, "\n<br>+");               \
+      string_join(&active, add_help_link(__name, csp->config)); \
+      string_append(&active, "{");                     \
+      string_join(&active, html_encode(action->string[__index])); \
+      string_append(&active, "}");                     \
    }                                                   \
    else                                                \
    {                                                   \
-      string_append(&result, "\n<br>-");               \
-      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&inactive, "\n<br>-");             \
+      string_join(&inactive, add_help_link(__name, csp->config)); \
    }
 
 #define DEFINE_ACTION_MULTI(__name, __index)           \
    lst = action->multi[__index]->first;                \
    if (lst == NULL)                                    \
    {                                                   \
-      string_append(&result, "\n<br>-");              \
-      string_join(&result, add_help_link(__name, csp->config)); \
+      string_append(&inactive, "\n<br>-");             \
+      string_join(&inactive, add_help_link(__name, csp->config)); \
    }                                                   \
    else                                                \
    {                                                   \
       while (lst)                                      \
       {                                                \
-         string_append(&result, "\n<br>+");            \
-         string_join(&result, add_help_link(__name, csp->config)); \
-         string_append(&result, "{");                  \
-         string_join(&result, html_encode(lst->str));  \
-         string_append(&result, "}");                  \
+         string_append(&active, "\n<br>+");            \
+         string_join(&active, add_help_link(__name, csp->config)); \
+         string_append(&active, "{");                  \
+         string_join(&active, html_encode(lst->str));  \
+         string_append(&active, "}");                  \
          lst = lst->next;                              \
       }                                                \
    }
@@ -1858,5 +1864,16 @@ char *current_action_to_html(const struct client_state *csp,
 #undef DEFINE_ACTION_BOOL
 #undef DEFINE_ACTION_ALIAS
 
+   if (active != NULL)
+   {
+      string_append(&result, active);
+      freez(active);
+   }
+   string_append(&result, "\n<br>");
+   if (inactive != NULL)
+   {
+      string_append(&result, inactive);
+      freez(inactive);
+   }
    return result;
 }

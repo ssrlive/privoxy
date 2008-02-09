@@ -12,6 +12,8 @@ ChangeLog for Privoxy
   contain the pattern "/jump/".
 - The less-download-windows filter no longer messes
   "Content-Type: application/x-shockwave-flash" headers up.
+- In the show-url-info page's "Final results" section active and
+  inactive actions are listed separately. Patch provided by Lee.
 
 *** Version 3.0.8 ***
 
