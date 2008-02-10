@@ -27,6 +27,9 @@
 #
 # Revisions   :
 #    $Log: show-url-info,v $
+#    Revision 1.23  2008/02/01 06:04:31  fabiankeil
+#    If edit buttons on the show-url-info CGI page are hidden, explain why.
+#
 #    Revision 1.22  2007/12/08 14:29:06  fabiankeil
 #    Use CSS to let the URL and pattern input fields scale with
 #    the browser width and try to prevent vertical scroll bars
@@ -232,7 +235,7 @@
     <tr>
       <td class="box">
         <h2>Final results:</h2>
-        <p><b>@final@</b></p>
+        <b>@final@</b>
       </td>
     </tr>
 <!-- if-valid-url-end@ -->
