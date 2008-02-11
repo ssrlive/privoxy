@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.1 2008/01/18 19:33:00 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.54 2008/02/11 20:57:49 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test.
@@ -26,7 +26,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.7
+for-privoxy-version=3.0.9
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -160,6 +160,9 @@ TAG:^add-header\{X-Custom-Header: yes, please\}$
 #
 # Set Header    = Host: p.p
 # Expect Header = NO CHANGE
+#
+# Set Header    = Referer: http://config.privoxy.org.ad356ef8e87a89e6c898b74500d58607ac691178.exit/foo/baaz.html
+# Expect Header = Referer: http://config.privoxy.org/foo/baaz.html
 
 {+client-header-filter{hide-tor-exit-notation} -hide-referer}
 TAG:^client-header-filter\{hide-tor-exit-notation\}$
@@ -687,3 +690,26 @@ p.p:1-/
 config.privoxy.org:3,79-81/
 p.p:3,22,79-81/
 
+# Fetch Test = http://oh-dear-this-hostname-is-so-very-long-that-it-can-not-possibly-be-forwarded-through-socks5-as-a-result-we-therefore-expect-privoxy-to-return-an-error-response-instead-of-forwarding-the-request-because-as-already-mentioned-this-host-is-really-very-long.example
+# Expect Status Code = 503
+{+forward-override{forward-socks5 127.0.0.1:12345 .}}
+oh-dear-this-hostname-is-so-very-long-that-it-can-not-possibly-be-forwarded-through-socks5-as-a-result-we-therefore-expect-privoxy-to-return-an-error-response-instead-of-forwarding-the-request-because-as-already-mentioned-this-host-is-really-very-long.example/
+
+# Fetch Test = http://oh-dear-this-hostname-is-short-enough-but-there-is-no-socks-server-listening.example
+# Expect Status Code = 503
+{+forward-override{forward-socks5 127.0.0.1:12345 .}}
+oh-dear-this-hostname-is-short-enough-but-there-is-no-socks-server-listening.example
+
+# This one currently triggers the same error condition as the
+# test above (socks5 server unreachable), but once Privoxy
+# starts to properly reject invalid ports it should become useful.
+
+# Fetch Test = http://invalid-forward5-gateway-port.example
+# Expect Status Code = 503
+{+forward-override{forward-socks5 127.0.0.1:-1 127.0.0.1:12345}}
+invalid-forward5-gateway-port.example
+
+# Fetch Test = http://forward5-null-gateway-host.example
+# Expect Status Code = 503
+{+forward-override{forward-socks5 :12345 127.0.0.1:12345}}
+forward5-null-gateway-host.example
