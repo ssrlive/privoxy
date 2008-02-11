@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.59 2008/02/11 00:52:34 markm68k Exp $
+ $Id: user-manual.sgml,v 2.60 2008/02/11 03:40:25 markm68k Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.59 2008/02/11 00:52:34 markm68k Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.60 2008/02/11 03:40:25 markm68k Exp $</pubdate>
 
 <!--
 
@@ -300,7 +300,7 @@ How to install the binary packages depends on your operating system:
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-mac"><title>Mac OS X</title>
 <para>
- Unzip the downloaded file (you can either double-click on the zipe file
+ Unzip the downloaded file (you can either double-click on the zip file
  icon from the Finder, or from the desktop if you downloaded it there).
  Then, double-click on the package installer icon and follow the
  installation process.
@@ -309,7 +309,7 @@ How to install the binary packages depends on your operating system:
  The privoxy service will automatically start after a successful
  installation (in addition to every time your computer starts up).  To
  prevent the privoxy service from automatically starting when your
- computer starts up,, remove or rename the folder named
+ computer starts up, remove or rename the folder named
  <literal>/Library/StartupItems/Privoxy</literal>. 
 </para>
 <para>
@@ -317,9 +317,6 @@ How to install the binary packages depends on your operating system:
  <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118&package_id=29783">Privoxy Utility</ulink> for Mac OS X.
  This application controls the privoxy service (e.g. starting and
  stopping the service as well as uninstalling the software).
-</para>
-<para>
- The Privoxy Utility also provides an option to uninstall the software.
 </para>
 </sect3>
 
@@ -8919,6 +8916,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.60  2008/02/11 03:40:25  markm68k
+ more updates for mac os x
+
  Revision 2.59  2008/02/11 00:52:34  markm68k
  reflect new changes for mac os x
 
