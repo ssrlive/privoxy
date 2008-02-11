@@ -11,11 +11,11 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.8">
-<!entity p-status "stable">
+<!entity p-version "3.0.9">
+<!entity p-status "UNRELEASED">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.58 2008/02/03 21:37:40 hal9 Exp $
+ $Id: user-manual.sgml,v 2.59 2008/02/11 00:52:34 markm68k Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.58 2008/02/03 21:37:40 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.59 2008/02/11 00:52:34 markm68k Exp $</pubdate>
 
 <!--
 
@@ -300,18 +300,23 @@ How to install the binary packages depends on your operating system:
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-mac"><title>Mac OS X</title>
 <para>
- Unzip the downloaded file (you can either double-click on the file
- from the finder, or from the desktop if you downloaded it there).
- Then, double-click on the package installer icon named
- <literal>Privoxy.pkg</literal>
- and follow the installation process.
- It will start automatically whenever you start up.  To prevent it from
- starting automatically, remove or rename the folder
+ Unzip the downloaded file (you can either double-click on the zipe file
+ icon from the Finder, or from the desktop if you downloaded it there).
+ Then, double-click on the package installer icon and follow the
+ installation process.
+</para>
+<para>
+ The privoxy service will automatically start after a successful
+ installation (in addition to every time your computer starts up).  To
+ prevent the privoxy service from automatically starting when your
+ computer starts up,, remove or rename the folder named
  <literal>/Library/StartupItems/Privoxy</literal>. 
 </para>
 <para>
- To start and stop Privoxy by hand, download and install the
+ To manually start or stop the privoxy service, download and install the
  <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118&package_id=29783">Privoxy Utility</ulink> for Mac OS X.
+ This application controls the privoxy service (e.g. starting and
+ stopping the service as well as uninstalling the software).
 </para>
 <para>
  The Privoxy Utility also provides an option to uninstall the software.
@@ -8914,6 +8919,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.59  2008/02/11 00:52:34  markm68k
+ reflect new changes for mac os x
+
  Revision 2.58  2008/02/03 21:37:40  hal9
  Apply patch from Mark: s/OSX/OS X/
 
