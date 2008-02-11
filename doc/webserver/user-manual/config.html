@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.8 User Manual"
+TITLE="Privoxy 3.0.9 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Privoxy Configuration"
@@ -42,7 +42,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.8 User Manual</TH
+>Privoxy 3.0.9 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -2811,7 +2811,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SOCKS"
->7.5.2. forward-socks4 and forward-socks4a</A
+>7.5.2. forward-socks4, forward-socks4a and forward-socks5</A
 ></H4
 ><A
 NAME="FORWARD-SOCKS4"
@@ -2870,30 +2870,32 @@ CLASS="REPLACEABLE"
 ><I
 >target_pattern</I
 ></TT
-> is a <A
+> is a
+    <A
 HREF="actions-file.html#AF-PATTERNS"
 >URL pattern</A
-> 
-    that specifies to which requests (i.e. URLs) this forward rule shall apply. Use <TT
+> that specifies to which
+    requests (i.e. URLs) this forward rule shall apply. Use <TT
 CLASS="LITERAL"
 >/</TT
 > to
     denote <SPAN
 CLASS="QUOTE"
 >"all URLs"</SPAN
->.
-    <TT
+>. <TT
 CLASS="REPLACEABLE"
 ><I
 >http_parent</I
 ></TT
-> and <TT
+>
+    and <TT
 CLASS="REPLACEABLE"
 ><I
 >socks_proxy</I
 ></TT
 >
-    are IP addresses in dotted decimal notation or valid DNS names (<TT
+    are IP addresses in dotted decimal notation or valid DNS names
+    (<TT
 CLASS="REPLACEABLE"
 ><I
 >http_parent</I
@@ -2911,7 +2913,8 @@ CLASS="REPLACEABLE"
 ><I
 >port</I
 ></TT
-> parameters are TCP ports, i.e. integer values from 1 to 64535
+> parameters are TCP ports,
+    i.e. integer values from 1 to 65535
    </P
 ></DD
 ><DT
@@ -2949,6 +2952,12 @@ CLASS="LITERAL"
 >
     is that in the SOCKS 4A protocol, the DNS resolution of the target hostname happens on the SOCKS
     server, while in SOCKS 4 it happens locally.
+   </P
+><P
+>    With <TT
+CLASS="LITERAL"
+>forward-socks5</TT
+> the DNS resolution will happen on the remote server as well.
    </P
 ><P
 >    If <TT

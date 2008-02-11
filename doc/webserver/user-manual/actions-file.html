@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.8 User Manual"
+TITLE="Privoxy 3.0.9 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="The Main Configuration File"
@@ -42,7 +42,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.8 User Manual</TH
+>Privoxy 3.0.9 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -2108,8 +2108,9 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->{+client-header-filter{hide-tor-exit-notation}}
-.exit/
+># Hide Tor exit notation in Host and Referer Headers
+{+client-header-filter{hide-tor-exit-notation}}
+/
     </PRE
 ></TD
 ></TR
@@ -4267,7 +4268,11 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"forward-socks4"</SPAN
 >
-      to use a socks4 connection  (with local DNS resolution) instead.
+      to use a socks4 connection  (with local DNS resolution) instead, use <SPAN
+CLASS="QUOTE"
+>"forward-socks5"</SPAN
+>
+      for socks5 connections (with remote DNS resolution).
      </P
 ></LI
 ><LI
@@ -4284,7 +4289,11 @@ CLASS="QUOTE"
 CLASS="QUOTE"
 >"forward-socks4"</SPAN
 > to use a socks4 connection
-      (with local DNS resolution) instead.
+      (with local DNS resolution) instead, use <SPAN
+CLASS="QUOTE"
+>"forward-socks5"</SPAN
+>
+      for socks5 connections (with remote DNS resolution).
      </P
 ></LI
 ></UL
@@ -4293,7 +4302,7 @@ CLASS="QUOTE"
 >Notes:</DT
 ><DD
 ><P
->    This action takes parameters similar to the 
+>    This action takes parameters similar to the
     <A
 HREF="config.html#FORWARDING"
 >forward</A
@@ -7202,7 +7211,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4261"
+NAME="AEN4263"
 >8.5.39. Summary</A
 ></H3
 ><P
@@ -7507,7 +7516,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4326"
+NAME="AEN4328"
 >8.7.1. default.action</A
 ></H3
 ><P
@@ -8228,7 +8237,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4462"
+NAME="AEN4464"
 >8.7.2. user.action</A
 ></H3
 ><P
