@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.60 2008/02/11 03:40:25 markm68k Exp $
+ $Id: user-manual.sgml,v 2.61 2008/02/11 03:41:47 markm68k Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.60 2008/02/11 03:40:25 markm68k Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.61 2008/02/11 03:41:47 markm68k Exp $</pubdate>
 
 <!--
 
@@ -314,7 +314,7 @@ How to install the binary packages depends on your operating system:
 </para>
 <para>
  To manually start or stop the privoxy service, download and install the
- <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118&package_id=29783">Privoxy Utility</ulink> for Mac OS X.
+ <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118&amp;package_id=29783">Privoxy Utility</ulink> for Mac OS X.
  This application controls the privoxy service (e.g. starting and
  stopping the service as well as uninstalling the software).
 </para>
@@ -8916,6 +8916,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.61  2008/02/11 03:41:47  markm68k
+ more updates for mac os x
+
  Revision 2.60  2008/02/11 03:40:25  markm68k
  more updates for mac os x
 
