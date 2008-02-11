@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.57 2008/02/03 19:10:14 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.58 2008/02/03 21:37:40 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.57 2008/02/03 19:10:14 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.58 2008/02/03 21:37:40 hal9 Exp $</pubdate>
 
 <!--
 
@@ -305,25 +305,16 @@ How to install the binary packages depends on your operating system:
  Then, double-click on the package installer icon named
  <literal>Privoxy.pkg</literal>
  and follow the installation process.
- <application>Privoxy</application> will be installed in the folder
- <literal>/Library/Privoxy</literal>.
  It will start automatically whenever you start up.  To prevent it from
  starting automatically, remove or rename the folder
  <literal>/Library/StartupItems/Privoxy</literal>. 
 </para>
 <para>
- To start Privoxy by hand, double-click on 
- <literal>StartPrivoxy.command</literal> in the
- <literal>/Library/Privoxy</literal> folder.
- Or, type this command in the Terminal:
+ To start and stop Privoxy by hand, download and install the
+ <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118&package_id=29783">Privoxy Utility</ulink> for Mac OS X.
 </para>
 <para>
-  <screen>
-  /Library/Privoxy/StartPrivoxy.command
-  </screen>
-</para>
-<para>
- You will be prompted for the administrator password.
+ The Privoxy Utility also provides an option to uninstall the software.
 </para>
 </sect3>
 
@@ -8923,6 +8914,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.58  2008/02/03 21:37:40  hal9
+ Apply patch from Mark: s/OSX/OS X/
+
  Revision 2.57  2008/02/03 19:10:14  fabiankeil
  Mention forward-socks5.
 
