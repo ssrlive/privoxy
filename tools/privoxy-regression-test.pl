@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.104 2008/01/21 18:23:49 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.2 2008/01/21 18:43:16 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -45,9 +45,9 @@ use strict;
 use Getopt::Long;
 
 use constant {
-               PRT_VERSION                => 'Privoxy-Regression-Test 0.2',
+               PRT_VERSION => 'Privoxy-Regression-Test 0.2',
  
-	       CURL                       => 'curl',
+	       CURL => 'curl',
 
                # CLI option defaults
 	       CLI_RETRIES  => 1,
@@ -383,7 +383,9 @@ sub load_action_files ($) {
 
                 l(LL_FILE_LOADING, "Method: " . $value);
                 $regression_tests[$si][$ri]{'method'} = $value;
+
             } else {
+
                 # We don't use it, so we don't need
                 $no_checks = 1;
             }
@@ -466,7 +468,6 @@ sub execute_regression_tests () {
         $all_successes += $successes;
 
     }
-
 
     if (get_cli_option('loops') > 1) {
         log_message("Total: Executed " . $all_tests . " regression tests. " .
@@ -796,7 +797,7 @@ sub get_server_header ($$) {
 
     if ($expect_header eq 'REMOVAL'
      or $expect_header eq 'NO CHANGE'
-     or  $expect_header eq 'SOME CHANGE') {
+     or $expect_header eq 'SOME CHANGE') {
 
         $expect_header = $test{'data'};
 
@@ -898,7 +899,6 @@ sub test_content_as_string ($) {
     my $s = "\n\t";
 
     foreach my $key (get_test_keys()) {
-        #$test{$key} = $test{$key} // 'undefined';
         $test{$key} = 'Not set' unless (defined $test{$key});
     }
 
@@ -1272,7 +1272,6 @@ sub cli_option_is_set ($) {
     return defined $cli_options{$cli_option};
 }
 
-
 sub get_cli_option ($) {
 
     our %cli_options;
@@ -1282,7 +1281,6 @@ sub get_cli_option ($) {
 
     return $cli_options{$cli_option};
 }
-
 
 sub main () {
 
