@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.71 2007/12/23 15:24:56 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.72 2008/02/03 13:46:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.71 2007/12/23 15:24:56 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.72  2008/02/03 13:46:15  fabiankeil
+ *    Add SOCKS5 support. Patch #1862863 by Eric M. Hopper with minor changes.
+ *
  *    Revision 1.71  2007/12/23 15:24:56  fabiankeil
  *    Reword "unrecognized directive" warning, use better
  *    mark up and add a <br>. Fixes parts of #1856559.
@@ -1823,7 +1826,7 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
 
    /*
     * Add config option name embedded in
-    * link to it's section in the user-manual
+    * link to its section in the user-manual
     */
    buf = strdup("\n<a href=\"");
    if (!strncmpic(config->usermanual, "file://", 7) ||
