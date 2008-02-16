@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.2 2008/01/21 18:43:16 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.109 2008/02/15 16:40:04 fk Exp fk $
 #
 # Wish list:
 #
@@ -156,8 +156,9 @@ sub check_for_forbidden_characters ($) {
 sub load_regressions_tests () {
 
     our $privoxy_cgi_url;
+    our @privoxy_config;
     my @actionfiles;
-    my $curl_url        = '';
+    my $curl_url = '';
     my $file_number = 0;
 
     $curl_url .= $privoxy_cgi_url;
@@ -167,10 +168,16 @@ sub load_regressions_tests () {
 
     foreach (@{get_cgi_page_or_else($curl_url)}) {
 
+        chomp;
         if (/<td>(.*?)<\/td><td class=\"buttons\"><a href=\"\/show-status\?file=actions&amp;index=(\d+)\">/) {
 
             my $url = $privoxy_cgi_url . 'show-status?file=actions&index=' . $2;
             $actionfiles[$file_number++] = $url;
+
+        } elsif (m@config\.html#.*\">([^<]*)</a>\s+(.*)<br>@) {
+
+            my $directive = $1 . " " . $2;
+            push (@privoxy_config, $directive);
         }
     }
 
@@ -330,6 +337,12 @@ sub load_action_files ($) {
                 $count++;
                 enlist_new_test(\@regression_tests, $token, $value, $si, $ri, $count);
             }
+
+            if ($token =~ /level\s+(\d+)/i) {
+
+                my $level = $1;
+                register_dependency($level, $value);
+            }
             
             if ($si == -1 || $ri == -1) {
                 # No beginning of a test detected yet,
@@ -480,6 +493,7 @@ sub level_is_unacceptable ($) {
     return ((cli_option_is_set('level') and get_cli_option('level') != $level)
             or ($level < get_cli_option('min-level'))
             or ($level > get_cli_option('max-level'))
+            or dependency_unsatisfied($level)
             );
 }
 
@@ -489,6 +503,38 @@ sub test_number_is_unacceptable ($) {
             and get_cli_option('test-number') != $test_number)
 }
 
+sub dependency_unsatisfied ($) {
+
+    my $level = shift;
+    our %dependencies;
+    our @privoxy_config;
+    my $dependency_problem = 0;
+
+    if (defined ($dependencies{$level}{'config line'})) {
+
+        my $dependency = $dependencies{$level}{'config line'};
+        $dependency_problem = 1;
+
+        foreach (@privoxy_config) {
+
+             $dependency_problem = 0 if (/$dependency/);
+        }
+    }
+
+    return $dependency_problem;
+}
+
+sub register_dependency ($$) {
+
+    my $level = shift;
+    my $dependency = shift;
+    our %dependencies;
+
+    if ($dependency =~ /config line\s+(.*)/) {
+
+       $dependencies{$level}{'config line'} = $1;
+    }
+}
 
 # XXX: somewhat misleading name
 sub execute_regression_test ($) {
