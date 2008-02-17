@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.109 2008/02/15 16:40:04 fk Exp fk $
+# $Id: privoxy-regression-test.pl,v 1.110 2008/02/16 12:55:18 fk Exp fk $
 #
 # Wish list:
 #
@@ -566,7 +566,6 @@ sub execute_regression_test ($) {
 
     }
 
-
     return $result;
 }
 
@@ -582,14 +581,9 @@ sub execute_method_test ($) {
     my $curl_parameters = '';
     my $expected_status_code = $test{'expected-status-code'};
 
-    if ($method =~ /HEAD/i) {
-
-        $curl_parameters .= '--head ';
-
-    } else {
-
-        $curl_parameters .= '-X ' . $method . ' ';
-    }
+    $curl_parameters .= '--request ' . $method . ' ';
+    # Don't complain in case about the 'missing' body
+    $curl_parameters .= '--head ' if ($method =~ /^HEAD$/i);
 
     $curl_parameters .= PRIVOXY_CGI_URL;
 
@@ -600,7 +594,6 @@ sub execute_method_test ($) {
 
     return $result;
 }
-
 
 sub execute_dumb_fetch_test ($) {
 
@@ -614,7 +607,7 @@ sub execute_dumb_fetch_test ($) {
     my $expected_status_code = $test{'expected-status-code'};
 
     if (defined $test{method}) {
-        $curl_parameters .= '-X ' . $test{method} . ' ';
+        $curl_parameters .= '--request ' . $test{method} . ' ';
     }
     if ($test{type} == TRUSTED_CGI_REQUEST) {
         $curl_parameters .= '--referer ' . PRIVOXY_CGI_URL . ' ';
@@ -762,7 +755,6 @@ sub check_header_result ($$) {
     return $success;
 }
 
-
 sub get_header_name ($) {
 
     my $header = shift;
@@ -853,60 +845,13 @@ sub get_server_header ($$) {
 
     foreach (@buffer) {
 
-        # XXX: shoul probably verify that the request
+        # XXX: should probably verify that the request
         # was actually answered by Fellatio.
         if (/^$header_to_get/) {
             $header = $_;
             $header =~ s@\s*$@@g;
             last;
         }
-    }
-
-    return $header;
-}
-
-sub get_header_to_check ($) {
-
-    # No longer in use but not removed yet.
-
-    my $buffer_ref = shift;
-    my $header;
-    my @buffer = @{$buffer_ref}; 
-    my $line;
-    my $processed_request_reached = 0;
-    my $read_header = 0;
-    my $processed_request = '';
-
-    l(LL_ERROR, "You are not supposed to use get_header_to_()!");
-
-    foreach (@buffer) {
-
-        # Skip everything before the Processed request
-        if (/Processed Request/) {
-            $processed_request_reached = 1;
-            next;
-        }
-        next unless $processed_request_reached;
-
-        # End loop after the Processed request
-        last if (/<\/pre>/);
-
-        # Ditch tags and leading/trailing white space.
-        s@^\s*<.*?>@@g;
-        s@\s*$@@g;
-
-        $processed_request .= $_;
-         
-        if (/^X-Privoxy-Regression-Test/) {
-            $read_header = 1;
-            next;
-        }
-
-        if ($read_header) {
-            $header = $_;
-            $read_header = 0;
-        }
-
     }
 
     return $header;
@@ -1051,6 +996,8 @@ sub get_page_with_curl ($) {
         $curl_line .= ' --proxy ' . get_cli_option('privoxy-address');
     }
 
+    # We want to see the HTTP status code
+    $curl_line .= " --include ";
     # Let Privoxy emit two log messages less.
     $curl_line .= ' -H \'Proxy-Connection:\' ' unless $parameters =~ /Proxy-Connection:/;
     $curl_line .= ' -H \'Connection: close\' ' unless $parameters =~ /Connection:/;
@@ -1058,8 +1005,6 @@ sub get_page_with_curl ($) {
     $curl_line .= " -s ";
     # We do care about the failure reason if any.
     $curl_line .= " -S ";
-    # We want to see the HTTP status code
-    $curl_line .= " --include ";
     # We want to advertise ourselves
     $curl_line .= " --user-agent '" . PRT_VERSION . "' ";
     # We aren't too patient
