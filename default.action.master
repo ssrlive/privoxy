@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.110 2008/02/08 11:48:53 hal9 Exp $
+#  $Id: default.action.master,v 1.111 2008/02/09 20:34:31 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.7 or later due to 
 #                 syntax changes.
@@ -1395,6 +1395,8 @@ switch.atdmt.com/action/
 .wikipedia.org/
 #MASTER# PROBLEM URL: http://curl.haxx.se/docs/adv_20070710.html
 .haxx.se/docs/adv_
+#MASTER# PROBLEM URL: http://www.google.com/adsense/
+www.google.com/adsense/
 
 #############################################################################
 # Site-specific special rules:
@@ -1552,6 +1554,8 @@ access.adobe.com/access/getStatus.do\?jobid=&srcPdfUrl=
 view.samurajdata.se/ps\.php\?url=
 #MASTER# PROBLEM-URL: http://www.blogger.com/navbar.g?targetBlogID=8919860543765866292&blogName=Kickin%27+the+Darkness&publishMode=PUBLISH_MODE_HOSTED&navbarType=BLUE&layoutType=LAYOUTS&homepageUrl=http%3A%2F%2Fblog.kickin-the-darkness.com%2F&searchRoot=http%3A%2F%2Fblog.kickin-the-darkness.com%2Fsearch
 .blogger.com/navbar\.g
+#MASTER# PROBLEM-URL: http://editors.dmoz.org/editors/editurl.cgi?url=http%3a//www.example.de/&cat=World/Deutsch/Computer/Hardware/Speichermedien
+.dmoz.org/editors/editurl\.cgi
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
