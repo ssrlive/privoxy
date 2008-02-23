@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.98 2008/01/04 17:43:45 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.99 2008/02/03 13:57:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.98 2008/01/04 17:43:45 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.99  2008/02/03 13:57:58  fabiankeil
+ *    Add SOCKS5 support for forward-override{}.
+ *
  *    Revision 1.98  2008/01/04 17:43:45  fabiankeil
  *    Improve the warning messages that get logged if the action files
  *    "enable" filters but no filters of that type have been loaded.
@@ -2431,7 +2434,7 @@ void apply_url_actions(struct current_action_spec *action,
  *                Invalid syntax is fatal.
  *
  *********************************************************************/
-static const struct forward_spec *get_forward_override_settings(struct client_state *csp)
+const static struct forward_spec *get_forward_override_settings(struct client_state *csp)
 {
    const char *forward_override_line = csp->action->string[ACTION_STRING_FORWARD_OVERRIDE];
    char forward_settings[BUFFER_SIZE];
@@ -2558,17 +2561,15 @@ static const struct forward_spec *get_forward_override_settings(struct client_st
  *
  * Description :  Should we forward this to another proxy?
  *
- *                XXX: Should be changed to make use of csp->fwd.
- *
  * Parameters  :
- *          1  :  http = http_request request for current URL
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  http = http_request request for current URL
  *
  * Returns     :  Pointer to forwarding information.
  *
  *********************************************************************/
-const struct forward_spec * forward_url(struct http_request *http,
-                                        struct client_state *csp)
+const struct forward_spec *forward_url(struct client_state *csp,
+                                       const struct http_request *http)
 {
    static const struct forward_spec fwd_default[1] = { FORWARD_SPEC_INITIALIZER };
    struct forward_spec *fwd = csp->config->forward;

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.63 2008/02/01 06:04:31 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.64 2008/02/03 13:56:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.63 2008/02/01 06:04:31 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.64  2008/02/03 13:56:07  fabiankeil
+ *    Add SOCKS5 support for show-url-info CGI page.
+ *
  *    Revision 1.63  2008/02/01 06:04:31  fabiankeil
  *    If edit buttons on the show-url-info CGI page are hidden, explain why.
  *
@@ -1649,7 +1652,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
        * display the proxy port and an eventual second forwarder.
        */
       {
-         const struct forward_spec * fwd = forward_url(url_to_query, csp);
+         const struct forward_spec *fwd = forward_url(csp, url_to_query);
 
          if ((fwd->gateway_host == NULL) && (fwd->forward_host == NULL))
          {

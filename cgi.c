@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.100 2007/10/17 18:40:53 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.101 2008/02/03 15:45:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.100 2007/10/17 18:40:53 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.101  2008/02/03 15:45:06  fabiankeil
+ *    Add SOCKS5 support for "Forwarding failure" CGI page.
+ *
  *    Revision 1.100  2007/10/17 18:40:53  fabiankeil
  *    - Send CGI pages as HTTP/1.1 unless the client asked for HTTP/1.0.
  *    - White space fix.
@@ -1432,7 +1435,7 @@ struct http_response *error_response(struct client_state *csp,
    }
    else if (!strcmp(templatename, "forwarding-failed"))
    {
-      const struct forward_spec * fwd = forward_url(csp->http, csp);
+      const struct forward_spec *fwd = forward_url(csp, csp->http);
       char *socks_type = NULL;
       if (fwd == NULL)
       {
