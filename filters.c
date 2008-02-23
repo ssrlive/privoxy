@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.99 2008/02/03 13:57:58 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.100 2008/02/23 16:33:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.99 2008/02/03 13:57:58 fabiankeil
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.100  2008/02/23 16:33:43  fabiankeil
+ *    Let forward_url() use the standard parameter ordering
+ *    and mark its second parameter immutable.
+ *
  *    Revision 1.99  2008/02/03 13:57:58  fabiankeil
  *    Add SOCKS5 support for forward-override{}.
  *
@@ -2340,19 +2344,18 @@ char *execute_content_filter(struct client_state *csp, filter_function_ptr conte
 
 /*********************************************************************
  *
- * Function    :  url_actions
+ * Function    :  get_url_actions
  *
  * Description :  Gets the actions for this URL.
  *
  * Parameters  :
- *          1  :  http = http_request request for blocked URLs
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  http = http_request request for blocked URLs
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void url_actions(struct http_request *http,
-                 struct client_state *csp)
+void get_url_actions(struct client_state *csp, struct http_request *http)
 {
    struct file_list *fl;
    struct url_actions *b;

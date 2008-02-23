@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.31 2007/10/19 16:53:28 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.32 2008/02/23 16:33:43 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.32  2008/02/23 16:33:43  fabiankeil
+ *    Let forward_url() use the standard parameter ordering
+ *    and mark its second parameter immutable.
+ *
  *    Revision 1.31  2007/10/19 16:53:28  fabiankeil
  *    Add helper function to check if any content filters are enabled.
  *
@@ -301,8 +305,8 @@ extern int is_imageurl(const struct client_state *csp);
 /*
  * Determining applicable actions
  */
-extern void url_actions(struct http_request *http, 
-                        struct client_state *csp);
+extern void get_url_actions(struct client_state *csp,
+                            struct http_request *http);
 extern void apply_url_actions(struct current_action_spec *action, 
                               struct http_request *http, 
                               struct url_actions *b);
