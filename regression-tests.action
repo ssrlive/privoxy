@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.54 2008/02/11 20:57:49 fk Exp $
+# $Id: regression-tests.action,v 1.58 2008/02/24 19:28:01 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test.
@@ -28,6 +28,11 @@
 {{settings}}
 for-privoxy-version=3.0.9
 
+# Some dependencies Privoxy-Regression-Test should know about:
+#
+# Level 9 needs  = config line user-manual\s+/
+# Level 12 needs = config line enable-edit-actions\s+1
+
 #######################################################
 # Enable taggers to activate the tests on demand
 # and suppress hiding the User-Agent for
@@ -41,7 +46,7 @@ for-privoxy-version=3.0.9
 config.privoxy.org/
 p.p/
 
-{-hide-user-agent +limit-connect{80,443}}
+{-hide-user-agent}
 TAG:^User-Agent: Privoxy-Regression-Test
 
 #######################################################
@@ -51,7 +56,7 @@ TAG:^User-Agent: Privoxy-Regression-Test
 # Set Header    = Accept-Language: de-de
 # Expect Header = Accept-Language: en-gb
 {+hide-accept-language{en-gb}}
-TAG:^hideaccept-language\{en-gb\}$
+TAG:^hide-accept-language\{en-gb\}$
 
 # Set Header    = Accept-Language: de-de
 # Expect Header = REMOVAL
@@ -492,7 +497,7 @@ TAG:^Keep-Alive header removal$
 {}
 TAG:^Proxy-Connection removal$
 
-# Set Header = proxy-connection: keep-alive
+# Set Header = Proxy-Connection: keep-alive
 # Expect Header = REMOVAL
 {}
 TAG:^Proxy-Connection removal$
@@ -645,6 +650,8 @@ TAG:^Max-Forwards header without TRACE method$
 
 # Method Test = OPTIONS
 # Method Test = GET
+# Method Test = get
+# Method Test = gEt
 # Method Test = HEAD
 # Method Test = POST
 # Method Test = PUT
@@ -682,7 +689,7 @@ TAG:^Max-Forwards header without TRACE method$
 # Method Test = PRIVOXY-REGRESSION-TEST-IN-THE-HOUSE
 # Expect Status Code = 400
 
-{+block}
+{+block{Forbidden Port. You are not supposed to see this.}}
 config.privoxy.org:1-/
 p.p:1-/
 
@@ -713,3 +720,29 @@ invalid-forward5-gateway-port.example
 # Expect Status Code = 503
 {+forward-override{forward-socks5 :12345 127.0.0.1:12345}}
 forward5-null-gateway-host.example
+
+# Fetch Test = http://www.forbidden-connect.example:444/forbidden-connect
+# Method = CONNECT
+# Expect Status Code = 403
+{+limit-connect{443} \
+ -treat-forbidden-connects-like-blocks \
+}
+www.forbidden-connect.example/forbidden-connect
+
+# Fetch Test = http://www.forbidden-connect.example:444/forbidden-connect-treated-as-block
+# Method = CONNECT
+# Expect Status Code = 403
+{+limit-connect{443} \
+ +treat-forbidden-connects-like-blocks \
+}
+www.forbidden-connect.example/forbidden-connect-treated-as-block
+
+# Fetch Test = http://www.blocked-request.example/blocked-request
+# Expect Status Code = 403
+{+block{This request failed to make it to the target destination which means the test succeeded.}}
+www.blocked-request.example/blocked-request
+
+# Fetch Test = http://www.blocked-request.example/blocked-request-with-no-reason-specified
+# Expect Status Code = 403
+{+block}
+www.blocked-request.example/blocked-request-with-no-reason-specified
