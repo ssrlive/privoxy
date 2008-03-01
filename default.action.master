@@ -9,9 +9,9 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.111 2008/02/09 20:34:31 fabiankeil Exp $
+#  $Id: default.action.master,v 1.112 2008/02/19 18:52:02 fabiankeil Exp $
 #
-#  Requires    :  This version requires Privoxy v3.0.7 or later due to 
+#  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
@@ -19,7 +19,7 @@
 #                 This file is subject to periodic updating. Local exceptions
 #                 and enhancements are better placed in user.action. 
 #
-#  Copyright   :  Written by and Copyright (C) 2001 - 2007 the
+#  Copyright   :  Written by and Copyright (C) 2001-2008 the
 #                 Privoxy team. http://www.privoxy.org/
 #
 #  Note: Updated versions of this file will be made available from time
@@ -168,7 +168,7 @@
 #
 # There are 3 kinds of actions:
 #
-# Boolean (e.g. "block"):
+# Boolean (e.g. "handle-as-image"):
 #   +name  # enable
 #   -name  # disable
 #
@@ -198,9 +198,9 @@
 #    Adds the specified HTTP header, which is not checked for validity.
 #    You may specify this many times to specify many headers.
 #
-# +block
-#    Block this URL. Privoxy will ignore this URL completely, and not request
-#    it.
+# +block{reason}
+#    Block this URL. Instead of forwarding the request, Privoxy will
+#    send a "block" page containing the specified reason.
 #
 # +client-header-filter{name}
 #    All client headers to which this action applies are filtered on-the-fly
@@ -211,7 +211,7 @@
 #     hide-tor-exit-notation: Removes the Tor exit node notation in Host and Referer headers
 #
 # +client-header-tagger{string}
-#    Block requests based on their headers. Client headers to which this
+#    Tag requests based on their headers. Client headers to which this
 #    action applies are filtered on-the-fly through the specified regular
 #    expression based substitutions, the result is used as a tag.
 #    Client-header taggers are the first actions that are executed and their
@@ -510,7 +510,7 @@
 {{settings}}
 #############################################################################
 #MASTER# COMMENT: The minimum Privoxy version:
-for-privoxy-version=3.0.7
+for-privoxy-version=3.0.9
 
 #############################################################################
 # Aliases
@@ -541,7 +541,7 @@ for-privoxy-version=3.0.7
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
  allow-all-cookies  = -crunch-all-cookies -session-cookies-only 
  allow-popups       = -filter{all-popups} -kill-popups -filter{unsolicited-popups}
-+block-as-image     = +block +handle-as-image
++block-as-image     = +block{Blocked image request.} +handle-as-image
 -block-as-image     = -block
 
 # These aliases define combinations of actions
@@ -585,7 +585,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 #############################################################################
 # Generic block patterns by host:
 #############################################################################
-{+block}
+{+block{Host matches generic block pattern.}}
 #MASTER# DONT-VERIFY (generic)
 ad*.
 .*ads.
@@ -632,7 +632,7 @@ countr*.
 #############################################################################
 # Generic block patterns by path:
 #############################################################################
-{+block}
+{+block{Path matches generic block pattern.}}
 #MASTER# DONT-VERIFY (generic)
 /(.*/)?ad(\?|/|s|v|_?(image|se?rv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log|space)
 /phpads(new)?/
@@ -672,7 +672,7 @@ support./(.*/)?track
 #############################################################################
 # Catch-all for false-positives that are just TOO obvious to let go
 #############################################################################
-{+block}
+{+block{Catch-all block for false-positives.}}
 #MASTER# PROBLEM URL: http://ads.facebook.com/ads/spreadshirt/banner120x600.jpg
 #MASTER# REMARKS: Going for adsrv, adserve, adserver*.
 .ads[erv][rv]*.
@@ -686,6 +686,7 @@ support./(.*/)?track
 #############################################################################
 # Site-specific block patterns;
 #############################################################################
+{+block{Site-specific block pattern matches.}}
 #MASTER# BLOCK-REFERRER: http://www.brooksbrothers.com/ 10/18/06
 #MASTER# BLOCK-REFERRER: http://www.autodesk.com/
 .hitbox.com 
@@ -808,7 +809,7 @@ linuxinsider.com/images/sda/
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
 #----------------------------------------------------------------------------
-{+block +handle-as-empty-document -handle-as-image}
+{+block{Might be a web-bug.} +handle-as-empty-document -handle-as-image}
 #MASTER# REMARKS: signature for user tracking nytimes, cnn.com,latimes.com and many others. 10/06/06
 /b/ss/.+
 #MASTER# BLOCK-REFERRER: http://www.thesun.co.uk/article/0,,11071-10784,00.html
@@ -1858,7 +1859,7 @@ dw.com.com/
 .bloglines.com/r\?
 www.skweezer.net/bloglines
 
-{+block}
+{+block{Looks like an anti-leech trigger URL.}}
 #MASTER# COMMENTS: This section not checked 10/17/06 HB. Still out there?
 #MASTER# PROBLEM-URL: http://www.anti-leech.com/theft_example.html
 #MASTER# REMARKS: Lame attempt at banning ad-blockers. Used by other websites as well.

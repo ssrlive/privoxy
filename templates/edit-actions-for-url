@@ -6,7 +6,7 @@
 #                particular section in an actions file.
 # 
 #
-# Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+# Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
 #                Privoxy team. http://www.privoxy.org/
 #
 #                Original Author: Copyright (C) 2001 Jonathan Foster
@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.48  2007/12/11 21:18:55  fabiankeil
+#    Make forward-override accessible through the CGI editor.
+#
 #    Revision 1.47  2007/12/06 18:21:55  fabiankeil
 #    Update hide-forwarded-for-headers description.
 #
@@ -531,6 +534,15 @@ function show_send_wafer_opts(tf)
         ></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@BLOCK">block</a></td>
       <td>Block the request.</td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="block_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>Block reason to tell the user:<br>
+        <input type="text" name="block_mode" size="40" value="@block-param@">
+      </td>
     </tr>
 
 @client-header-filter-params@

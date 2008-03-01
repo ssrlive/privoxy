@@ -4,6 +4,8 @@ ChangeLog for Privoxy
 *** Since 3.0.8 ***
 
 - Added SOCKS5 support. Patch provided by Eric M. Hopper.
+- The "blocked" CGI pages include a block reason that was
+  provided as argument to the last-applying block action.
 - If enable-edit-actions is disabled (the default since 3.0.7 beta)
   the show-status page hides the edit buttons and explains why.
   Previously the user would get the "this feature has been disabled"

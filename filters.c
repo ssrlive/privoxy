@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.100 2008/02/23 16:33:43 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.101 2008/02/23 16:57:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -13,7 +13,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.100 2008/02/23 16:33:43 fabiankei
  *                   `jpeg_inspect_response', `execute_single_pcrs_command',
  *                   `rewrite_url', `get_last_url'
  *
- * Copyright   :  Written by and Copyright (C) 2001, 2004-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001, 2004-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.100 2008/02/23 16:33:43 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.101  2008/02/23 16:57:12  fabiankeil
+ *    Rename url_actions() to get_url_actions() and let it
+ *    use the standard parameter ordering.
+ *
  *    Revision 1.100  2008/02/23 16:33:43  fabiankeil
  *    Let forward_url() use the standard parameter ordering
  *    and mark its second parameter immutable.
@@ -820,6 +824,28 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
 
 /*********************************************************************
  *
+ * Function    :  connect_port_is_forbidden
+ *
+ * Description :  Check to see if CONNECT requests to the destination
+ *                port of this request are forbidden. The check is
+ *                independend of the actual request method.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  True if yes, false otherwise.
+ *
+ *********************************************************************/
+int connect_port_is_forbidden(const struct client_state *csp)
+{
+   return ((!(csp->action->flags & ACTION_LIMIT_CONNECT) && csp->http->port != 443)
+      || (csp->action->flags & ACTION_LIMIT_CONNECT &&
+          !match_portlist(csp->action->string[ACTION_STRING_LIMIT_CONNECT], csp->http->port)));
+}
+
+
+/*********************************************************************
+ *
  * Function    :  block_url
  *
  * Description :  Called from `chat'.  Check to see if we need to block this.
@@ -1050,7 +1076,20 @@ struct http_response *block_url(struct client_state *csp)
       if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
       if (!err) err = map(exports, "path", 1, html_encode(csp->http->path), 0);
       if (!err) err = map(exports, "path-ue", 1, url_encode(csp->http->path), 0);
-
+      if (!err)
+      {
+         const char *block_reason;
+         if (csp->action->string[ACTION_STRING_BLOCK] != NULL)
+         {
+            block_reason = csp->action->string[ACTION_STRING_BLOCK];
+         }
+         else
+         {
+            assert(connect_port_is_forbidden(csp));
+            block_reason = "Forbidden CONNECT port.";
+         }
+         err = map(exports, "block-reason", 1, html_encode(block_reason), 0);
+      }
       if (err)
       {
          free_map(exports);

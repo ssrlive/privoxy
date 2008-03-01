@@ -12,7 +12,7 @@
  *                    DEFINE_ACTION_BOOL()
  *                    DEFINE_ACTION_ALIAS
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.28  2007/12/11 21:08:29  fabiankeil
+ *    Let the CGI editor suggest a forward-override
+ *    parameter whose syntax is actually valid.
+ *
  *    Revision 1.27  2007/11/10 15:04:08  fabiankeil
  *    Tell the CGI editor about +hide-referrer{conditional-forge}.
  *
@@ -166,7 +170,8 @@
 #endif /* ndef DEFINE_CGI_PARAM_RADIO */
 
 DEFINE_ACTION_MULTI      ("add-header",                 ACTION_MULTI_ADD_HEADER)
-DEFINE_ACTION_BOOL       ("block",                      ACTION_BLOCK)
+DEFINE_ACTION_STRING     ("block",                      ACTION_BLOCK, ACTION_STRING_BLOCK)
+DEFINE_CGI_PARAM_NO_RADIO("block",                      ACTION_BLOCK, ACTION_STRING_BLOCK, "No reason specified.")
 DEFINE_ACTION_MULTI      ("client-header-filter",       ACTION_MULTI_CLIENT_HEADER_FILTER)
 DEFINE_ACTION_MULTI      ("client-header-tagger",       ACTION_MULTI_CLIENT_HEADER_TAGGER)
 DEFINE_ACTION_STRING     ("content-type-overwrite",     ACTION_CONTENT_TYPE_OVERWRITE, ACTION_STRING_CONTENT_TYPE)

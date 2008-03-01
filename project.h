@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.101 2007/12/07 18:29:23 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.102 2008/02/03 13:46:14 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -10,7 +10,7 @@
  *                project.  Does not define any variables or functions
  *                (though it does declare some macros).
  *
- * Copyright   :  Written by and Copyright (C) 2001 - 2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.102  2008/02/03 13:46:14  fabiankeil
+ *    Add SOCKS5 support. Patch #1862863 by Eric M. Hopper with minor changes.
+ *
  *    Revision 1.101  2007/12/07 18:29:23  fabiankeil
  *    Remove now-obsolete csp member x_forwarded.
  *
@@ -1090,8 +1093,10 @@ struct iob
 #define ACTION_STRING_FAST_REDIRECTS       14
 /** Action string index: Overriding forward rule. */
 #define ACTION_STRING_FORWARD_OVERRIDE     15
+/** Action string index: Reason for the block. */
+#define ACTION_STRING_BLOCK                16
 /** Number of string actions. */
-#define ACTION_STRING_COUNT                16
+#define ACTION_STRING_COUNT                17
 
 
 /* To make the ugly hack in sed easier to understand */

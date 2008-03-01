@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.41 2008/01/28 20:17:40 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.42 2008/02/09 15:15:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -6,7 +6,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.41 2008/01/28 20:17:40 fabiankeil
  * Purpose     :  Declares functions to work with actions files
  *                Functions declared include: FIXME
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -33,6 +33,11 @@ const char actions_rcs[] = "$Id: actions.c,v 1.41 2008/01/28 20:17:40 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.42  2008/02/09 15:15:38  fabiankeil
+ *    List active and inactive actions in the show-url-info's
+ *    "Final results" section separately. Patch submitted by Lee
+ *    in #1830056, modified to list active actions first.
+ *
  *    Revision 1.41  2008/01/28 20:17:40  fabiankeil
  *    - Mark some parameters as immutable.
  *    - Hide update_action_bits_for_all_tags() while it's unused.
@@ -664,7 +669,25 @@ jb_err get_actions(char *line,
 
                   if ((value == NULL) || (*value == '\0'))
                   {
-                     return JB_ERR_PARSE;
+                     if (0 != strcmpic(action->name, "block"))
+                     {
+                        /*
+                         * XXX: Temporary backwards compatibility hack.
+                         */
+                        static int complaint_shown = 0;
+                        value = "No reason specified.";
+                        if (!complaint_shown)
+                        {
+                           log_error(LOG_LEVEL_ERROR, "At least one block "
+                              "without reason found. This may become a fatal "
+                              "error in future versions.");
+                           complaint_shown = 1;
+                        }
+                     }
+                     else
+                     {
+                        return JB_ERR_PARSE;
+                     }
                   }
                   /* FIXME: should validate option string here */
                   freez (cur_action->string[action->index]);
