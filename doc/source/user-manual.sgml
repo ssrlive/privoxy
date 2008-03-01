@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.62 2008/02/11 11:52:23 hal9 Exp $
+ $Id: user-manual.sgml,v 2.63 2008/02/22 05:50:37 markm68k Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.62 2008/02/11 11:52:23 hal9 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.63 2008/02/22 05:50:37 markm68k Exp $</pubdate>
 
 <!--
 
@@ -2208,7 +2208,7 @@ for details.
 
  <para>
  <screen>
-  { +<literal>handle-as-image</literal>  +<literal>block</literal> }
+  { +<literal>handle-as-image</literal>  +<literal>block{Banner ads.}</literal> }
   # Block these as if they were images. Send no block page.
    banners.example.com
    media.example.com/.*banners
@@ -2638,7 +2638,7 @@ for details.
   -<replaceable class="function">name</replaceable>        # disable action <replaceable class="parameter">name</replaceable></screen>
   </para>
   <para>  
-   Example: <literal>+block</literal>
+   Example: <literal>+handle-as-image</literal>
   </para>
  </listitem>
 
@@ -2821,14 +2821,14 @@ for details.
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Boolean.</para>
+   <para>Parameterized.</para>
   </listitem>
  </varlistentry>
 
  <varlistentry>
   <term>Parameter:</term>
   <listitem>
-   <para>N/A</para>
+   <para>A block reason that should be given to the user.</para>
   </listitem>
  </varlistentry>
  
@@ -2837,15 +2837,22 @@ for details.
   <listitem>
    <para>
     <application>Privoxy</application> sends a special <quote>BLOCKED</quote> page
-    for requests to blocked pages. This page contains links to find out why the request
-    was blocked, and a click-through to the blocked content (the latter only if compiled with the
-    force feature enabled). The <quote>BLOCKED</quote> page adapts to the available
+    for requests to blocked pages. This page contains the block reason given as
+    parameter, a link to find out why the block action applies, and a click-through
+    to the blocked content (the latter only if the force feature is available and
+    enabled).
+   </para>
+<!--
+This doesn't actually work in all browser configuration and the user probably doesn't care anyway.
+   <para>
+    The <quote>BLOCKED</quote> page adapts to the available
     screen space -- it displays full-blown if space allows, or miniaturized and text-only
     if loaded into a small frame or window. If you are using <application>Privoxy</application>
     right now, you can take a look at the 
     <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html"><quote>BLOCKED</quote>
     page</ulink>.
    </para>
+-->
    <para> 
     A very important exception occurs if <emphasis>both</emphasis> 
     <literal>block</literal> and <literal><link linkend="handle-as-image">handle-as-image</link></literal>,
@@ -2874,18 +2881,18 @@ for details.
   <term>Example usage (section):</term>
   <listitem>
     <para>
-     <screen>{+block}      
+     <screen>{+block{No nasty stuff for you.}}
 # Block and replace with "blocked" page
  .nasty-stuff.example.com
 
-{+block +handle-as-image} 
+{+block{Doubleclick banners.} +handle-as-image} 
 # Block and replace with image
  .ad.doubleclick.net
  .ads.r.us/banners/
 
-{+block +handle-as-empty-document} 
+{+block{Layered ads.} +handle-as-empty-document} 
 # Block and then ignore
- adserver.exampleclick.net/.*\.js$</screen>
+ adserver.example.net/.*\.js$</screen>
     </para>
   </listitem>
  </varlistentry>
@@ -4311,7 +4318,7 @@ new action
    <para>
      <screen># Block all documents on example.org that end with ".js",
 # but send an empty document instead of the usual HTML message. 
-{+block +handle-as-empty-document}
+{+block{Blocked JavaScript} +handle-as-empty-document}
 example.org/.*\.js$
      </screen>
    </para>
@@ -4398,11 +4405,8 @@ example.org/.*\.js$
 # These don't look like images, but they're banners and should be
 # blocked as images:
 #
-{+block +handle-as-image}
-some.nasty-banner-server.com/junk.cgi\?output=trash
-
-# Banner source! Who cares if they also have non-image content?
-ad.doubleclick.net 
+{+block{Nasty banners.} +handle-as-image}
+nasty-banner-server.example.com/junk.cgi\?output=trash
 </screen>
    </para>
   </listitem>
@@ -6193,7 +6197,7 @@ new action
  #
  +crunch-all-cookies = +<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> +<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
  -crunch-all-cookies = -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
- +block-as-image      = +block +handle-as-image
+ +block-as-image      = +block{Blocked image.} +handle-as-image
  allow-all-cookies   = -crunch-all-cookies -<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link>
 
  # These aliases define combinations of actions
@@ -6307,7 +6311,7 @@ that also explains why and how aliases are used:
  #
  +crunch-all-cookies = +<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> +<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
  -crunch-all-cookies = -<link linkend="CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</link> -<link linkend="CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</link>
- +block-as-image      = +block +handle-as-image
+ +block-as-image      = +block{Blocked image.} +handle-as-image
  mercy-for-cookies   = -crunch-all-cookies -<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> -<link linkend="FILTER-CONTENT-COOKIES">filter{content-cookies}</link>
 
  # These aliases define combinations of actions
@@ -6541,7 +6545,7 @@ bs*.gsanet.com
 ##########################################################################
 # Block these fine banners:
 ##########################################################################
-{ <link linkend="BLOCK">+block</link> }
+{ <link linkend="BLOCK">+block{Banner ads.}</link> }
 
 # Generic patterns:
 # 
@@ -6688,7 +6692,7 @@ wiki.
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
  allow-all-cookies  = -crunch-all-cookies -session-cookies-only
  allow-popups       = -filter{all-popups} -kill-popups
-+block-as-image     = +block +handle-as-image
++block-as-image     = +block{Blocked as image.} +handle-as-image
 -block-as-image     = -block
 
 # These aliases define combinations of actions that are useful for
@@ -6758,7 +6762,7 @@ stupid-server.example.com/</screen>
  seen an ad on your favourite page on example.com that you want to get rid of.
  You have right-clicked the image, selected <quote>copy image location</quote>
  and pasted the URL below while removing the leading http://, into a 
- <literal>{ +block }</literal> section. Note that <literal>{ +handle-as-image
+ <literal>{ +block{} }</literal> section. Note that <literal>{ +handle-as-image
  }</literal> need not be specified, since all URLs ending in
  <literal>.gif</literal> will be tagged as images by the general rules as set
  in default.action anyway:
@@ -6766,7 +6770,7 @@ stupid-server.example.com/</screen>
 
 <para>
  <screen>
-{ +<link linkend="BLOCK">block</link> }
+{ +<link linkend="BLOCK">block</link>{Nasty ads.} }
  www.example.com/nasty-ads/sponsor\.gif
  another.example.net/more/junk/here/</screen>
 </para>
@@ -8676,21 +8680,21 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  <screen>
 
- { +block }
+ { +block{Domains starts with "ad"} }
   ad*.
 
- { +block }
+ { +block{Domain contains "ad"} }
   .ad.
 
- { +block +handle-as-image }
+ { +block{Doubleclick banner server} +handle-as-image }
   .[a-vx-z]*.doubleclick.net
 </screen>
 </para>
 
 <para>
  We'll just show the interesting part here - the explicit matches. It is 
- matched three different times. Two <quote>+block</quote> sections, 
- and a <quote>+block +handle-as-image</quote>,
+ matched three different times. Two <quote>+block{}</quote> sections, 
+ and a <quote>+block{} +handle-as-image</quote>,
  which is the expanded form of one of our aliases that had been defined as: 
  <quote>+block-as-image</quote>. (<link
  linkend="ALIASES"><quote>Aliases</quote></link> are defined in
@@ -8705,7 +8709,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  though ;-) Note that if you want an ad or obnoxious 
  URL to be invisible, it should be defined as <quote>ad.doubleclick.net</quote>
  is done here -- as both a <link
- linkend="BLOCK"><quote>+block</quote></link>
+ linkend="BLOCK"><quote>+block{}</quote></link>
  <emphasis>and</emphasis> an 
  <link linkend="HANDLE-AS-IMAGE"><quote>+handle-as-image</quote></link>.
  The custom alias <quote><literal>+block-as-image</literal></quote> just
@@ -8785,7 +8789,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   -treat-forbidden-connects-like-blocks }
    /
 
- { +block +handle-as-image }
+ { +block{Path contains "ads".} +handle-as-image }
   /ads
 </screen>
 </para>
@@ -8827,7 +8831,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 <para>
  <screen>
 
- { +block +handle-as-image }
+ { +block{Path starts with "ads".} +handle-as-image }
  /ads
 </screen>
 </para>
@@ -8943,6 +8947,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.63  2008/02/22 05:50:37  markm68k
+ fix merge problem
+
  Revision 2.62  2008/02/11 11:52:23  hal9
  Fix entity ... s/&/&amp;
 
