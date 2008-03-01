@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.112 2008/02/19 18:52:02 fabiankeil Exp $
+#  $Id: default.action.master,v 1.113 2008/03/01 14:00:44 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -553,7 +553,7 @@ shop        = -crunch-all-cookies allow-popups
 # Your favourite blend of filters:
 #
 myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{all-popups}\
-              +filter{webbugs} +filter{nimda} +filter{banners-by-size} #+filter{fun}
+              +filter{webbugs} +filter{banners-by-size}
 
 # Allow ads for selected useful free sites:
 #
