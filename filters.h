@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.32 2008/02/23 16:33:43 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.33 2008/02/23 16:57:12 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -39,6 +39,10 @@
  *
  * Revisions   :
  *    $Log: filters.h,v $
+ *    Revision 1.33  2008/02/23 16:57:12  fabiankeil
+ *    Rename url_actions() to get_url_actions() and let it
+ *    use the standard parameter ordering.
+ *
  *    Revision 1.32  2008/02/23 16:33:43  fabiankeil
  *    Let forward_url() use the standard parameter ordering
  *    and mark its second parameter immutable.
@@ -301,6 +305,7 @@ extern int is_untrusted_url(const struct client_state *csp);
 #ifdef FEATURE_IMAGE_BLOCKING
 extern int is_imageurl(const struct client_state *csp);
 #endif /* def FEATURE_IMAGE_BLOCKING */
+extern int connect_port_is_forbidden(const struct client_state *csp);
 
 /*
  * Determining applicable actions
