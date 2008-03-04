@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.113 2008/03/01 14:00:44 fabiankeil Exp $
+#  $Id: default.action.master,v 1.114 2008/03/01 15:25:34 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -490,17 +490,6 @@
 # +send-wafer{name=value}
 #    This allows you to add an arbitrary cookie.  Specify it multiple
 #    times in order to add several cookies.
-#
-# +treat-forbidden-connects-like-blocks
-#    If this action is enabled, Privoxy no longer makes a difference between
-#    forbidden connects and ordinary blocks. 
-#
-#    By default Privoxy answers forbidden "Connect" requests  with a short
-#    error message inside the headers. If the browser doesn't display headers
-#    (most don't), you just see an empty page. With this action enabled,
-#    Privoxy displays the message that is used for ordinary blocks instead. If
-#    you decide to make an exception for the page in question, you can do so
-#    by following the "See why" link. 
 #
 #############################################################################
 

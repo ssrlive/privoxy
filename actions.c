@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.42 2008/02/09 15:15:38 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.43 2008/03/01 14:00:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.42 2008/02/09 15:15:38 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.43  2008/03/01 14:00:43  fabiankeil
+ *    Let the block action take the reason for the block
+ *    as argument and show it on the "blocked" page.
+ *
  *    Revision 1.42  2008/02/09 15:15:38  fabiankeil
  *    List active and inactive actions in the show-url-info's
  *    "Final results" section separately. Patch submitted by Lee
@@ -602,6 +606,23 @@ jb_err get_action_token(char **line, char **name, char **value)
    return JB_ERR_OK;
 }
 
+/*********************************************************************
+ *
+ * Function    :  action_used_to_valid_
+ *
+ * Description :  Checks if unrecognized actions were valid in earlier
+ *                releases.
+ *
+ * Parameters  :
+ *          1  :  action = The string containing the action to check.
+ *
+ * Returns     :  True if yes, otherwise false.
+ *
+ *********************************************************************/
+static int action_used_to_be_valid(const char *action)
+{
+   return (0 == strcmpic(action, "treat-forbidden-connects-like-blocks"));
+}
 
 /*********************************************************************
  *
@@ -780,6 +801,11 @@ jb_err get_actions(char *line,
             {
                /* Found it */
                merge_actions(cur_action, alias->action);
+            }
+            else if ((2 < strlen(option)) && action_used_to_be_valid(option+1))
+            {
+               log_error(LOG_LEVEL_ERROR, "Action '%s' is no longer valid "
+                  "in this Privoxy release. Ignored.", option+1);
             }
             else
             {

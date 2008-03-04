@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.167 2008/02/23 16:57:12 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.168 2008/03/02 12:25:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.167 2008/02/23 16:57:12 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.168  2008/03/02 12:25:25  fabiankeil
+ *    Also use shiny new connect_port_is_forbidden() in jcc.c.
+ *
  *    Revision 1.167  2008/02/23 16:57:12  fabiankeil
  *    Rename url_actions() to get_url_actions() and let it
  *    use the standard parameter ordering.
@@ -1143,12 +1146,6 @@ static const char CHEADER[] =
    "Connection: close\r\n\r\n"
    "Invalid header received from client.\r\n";
 
-static const char CFORBIDDEN[] =
-   "HTTP/1.0 403 Connection not allowable\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
-   "X-Hint: If you read this message interactively, then you know why this happens ,-)\r\n"
-   "Connection: close\r\n\r\n";
-
 static const char FTP_RESPONSE[] =
    "HTTP/1.0 400 Invalid request received from client\r\n"
    "Content-Type: text/plain\r\n"
@@ -2192,45 +2189,17 @@ static void chat(struct client_state *csp)
     *
     */
 
-   if (http->ssl)
+   if (http->ssl && connect_port_is_forbidden(csp))
    {
-      if (connect_port_is_forbidden(csp))
-      {
-         const char *acceptable_connect_ports =
-            csp->action->string[ACTION_STRING_LIMIT_CONNECT] ?
-            csp->action->string[ACTION_STRING_LIMIT_CONNECT] :
-            "443 (implied default)";
-         if (csp->action->flags & ACTION_TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS)
-         {
-            /*
-             * The response may confuse some clients,
-             * but makes unblocking easier.
-             *
-             * XXX: It seems to work with all major browsers,
-             * so we should consider returning a body by default someday ... 
-             */
-            log_error(LOG_LEVEL_INFO, "Request from %s marked for blocking. "
-               "limit-connect{%s} doesn't allow CONNECT requests to port %d.",
-               csp->ip_addr_str, acceptable_connect_ports, csp->http->port);
-            csp->action->flags |= ACTION_BLOCK;
-            http->ssl = 0;
-         }
-         else
-         {
-            write_socket(csp->cfd, CFORBIDDEN, strlen(CFORBIDDEN));
-            log_error(LOG_LEVEL_INFO, "Request from %s denied. "
-               "limit-connect{%s} doesn't allow CONNECT requests to port %d.",
-               csp->ip_addr_str, acceptable_connect_ports, csp->http->port);
-            assert(NULL != csp->http->ocmd);
-            log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 403 0", csp->ip_addr_str, csp->http->ocmd);
-
-            list_remove_all(csp->headers);
-            /*
-             * XXX: For consistency we might want to log a crunch message here.
-             */
-            return;
-         }
-      }
+      const char *acceptable_connect_ports =
+         csp->action->string[ACTION_STRING_LIMIT_CONNECT] ?
+         csp->action->string[ACTION_STRING_LIMIT_CONNECT] :
+         "443 (implied default)";
+      log_error(LOG_LEVEL_INFO, "Request from %s marked for blocking. "
+         "limit-connect{%s} doesn't allow CONNECT requests to port %d.",
+         csp->ip_addr_str, acceptable_connect_ports, csp->http->port);
+      csp->action->flags |= ACTION_BLOCK;
+      http->ssl = 0;
    }
 
    if (http->ssl == 0)

@@ -10,6 +10,9 @@ ChangeLog for Privoxy
   the show-status page hides the edit buttons and explains why.
   Previously the user would get the "this feature has been disabled"
   message after using the edit button.
+- Forbidden CONNECT requests are treated like blocks by default.
+  The now-pointless treat-forbidden-connects-like-blocks action
+  has been removed.
 - Fixed false-positives with the link-by-url filter and URLs that
   contain the pattern "/jump/".
 - The less-download-windows filter no longer messes

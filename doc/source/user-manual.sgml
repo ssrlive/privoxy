@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.63 2008/02/22 05:50:37 markm68k Exp $
+ $Id: user-manual.sgml,v 2.64 2008/03/01 14:10:28 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.63 2008/02/22 05:50:37 markm68k Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.64 2008/03/01 14:10:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5221,9 +5221,6 @@ new action
    <application>Privoxy</application> relays HTTPS traffic without seeing
    the decoded content. Websites can leverage this limitation to circumvent &my-app;'s
    filters. By specifying an invalid port range you can disable HTTPS entirely.
-   If you plan to disable SSL by default, consider enabling 
-   <literal><link linkend="treat-forbidden-connects-like-blocks ">treat-forbidden-connects-like-blocks</link></literal>
-   as well, to be able to quickly create exceptions.
   </para>
   </listitem>
  </varlistentry>
@@ -6041,81 +6038,6 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
    </para>
    <para>
     <screen>+set-image-blocker{http://config.privoxy.org/send-banner?type=pattern}</screen>
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="treat-forbidden-connects-like-blocks">
-<title>treat-forbidden-connects-like-blocks</title>
-<!--
-new action
--->
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>Block forbidden connects with an easy to find error message.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    If this action is enabled, <application>Privoxy</application> no longer
-    makes a difference between forbidden connects and ordinary blocks. 
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>N/A</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    By default <application>Privoxy</application> answers
-    <link linkend="limit-connect">forbidden <quote>Connect</quote> requests</link>
-    with a short error message inside the headers. If the browser doesn't display
-    headers (most don't), you just see an empty page.
-   </para>
-   <para>
-    With this action enabled, <application>Privoxy</application> displays
-    the message that is used for ordinary blocks instead. If you decide
-    to make an exception for the page in question, you can do so by
-    following the <quote>See why</quote> link.
-   </para>
-   <para>
-    For <quote>Connect</quote> requests the clients tell
-    <application>Privoxy</application> which host they are interested
-    in, but not which document they plan to get later. As a result, the
-    <quote>Go there anyway</quote> wouldn't work and is therefore suppressed.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para>
-    <screen>+treat-forbidden-connects-like-blocks</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -8662,8 +8584,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -server-header-filter{xml-to-html}
  -server-header-filter{html-to-xml} 
  -session-cookies-only
- +set-image-blocker {pattern}
- -treat-forbidden-connects-like-blocks </screen>
+ +set-image-blocker {pattern} </screen>
 </para>
 
 <para>
@@ -8785,8 +8706,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   -server-header-filter{xml-to-html}
   -server-header-filter{html-to-xml} 
   +session-cookies-only 
-  +set-image-blocker{blank} 
-  -treat-forbidden-connects-like-blocks }
+  +set-image-blocker{blank} }
    /
 
  { +block{Path contains "ads".} +handle-as-image }
@@ -8947,6 +8867,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.64  2008/03/01 14:10:28  fabiankeil
+ Use new block syntax. Still needs some polishing.
+
  Revision 2.63  2008/02/22 05:50:37  markm68k
  fix merge problem
 

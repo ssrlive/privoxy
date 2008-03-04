@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.49  2008/03/01 14:00:47  fabiankeil
+#    Let the block action take the reason for the block
+#    as argument and show it on the "blocked" page.
+#
 #    Revision 1.48  2007/12/11 21:18:55  fabiankeil
 #    Make forward-override accessible through the CGI editor.
 #
@@ -1320,23 +1324,6 @@ function show_send_wafer_opts(tf)
         the browser to this image URL:</label><br>
         <input type="text" name="set_image_blocker_param" id="set_image_blocker_param"
         size="40" value="@set-image-blocker-param@"></td>
-    </tr>
-   <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="treat_forbidden_connects_like_blocks" value="Y" @treat-forbidden-connects-like-blocks-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="treat_forbidden_connects_like_blocks" value="N" @treat-forbidden-connects-like-blocks-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="treat_forbidden_connects_like_blocks" value="X" @treat-forbidden-connects-like-blocks-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@TREAT_FORBIDDEN_CONNECTS_LIKE_BLOCKS">treat-forbidden-connects-like-blocks</a></td>
-      <td>
-       Answer forbidden Connect requests with the usual block message.
-       Makes unblocking easier, but the <q>go there anyway</q> link will not work
-       as expected.
-     </td>
     </tr>
   </table>
 
