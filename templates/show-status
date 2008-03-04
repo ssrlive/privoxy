@@ -253,7 +253,7 @@
             <tr>
               <td><code>FEATURE_IMAGE_BLOCKING</code></td>
               <td>@if-FEATURE_IMAGE_BLOCKING-then@ Yes @else-not-FEATURE_IMAGE_BLOCKING@ No @endif-FEATURE_IMAGE_BLOCKING@</td>
-              <td>Allows the +image action, to send <q>blocked</q> images instead of HTML.</td>
+              <td>Allows the +handle-as-image action, to send <q>blocked</q> images instead of HTML.</td>
             </tr>
             <tr>
               <td><code>FEATURE_IMAGE_DETECT_MSIE</code></td>
