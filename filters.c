@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.101 2008/02/23 16:57:12 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.102 2008/03/01 14:00:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.101 2008/02/23 16:57:12 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.102  2008/03/01 14:00:44  fabiankeil
+ *    Let the block action take the reason for the block
+ *    as argument and show it on the "blocked" page.
+ *
  *    Revision 1.101  2008/02/23 16:57:12  fabiankeil
  *    Rename url_actions() to get_url_actions() and let it
  *    use the standard parameter ordering.
@@ -838,9 +842,9 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
  *********************************************************************/
 int connect_port_is_forbidden(const struct client_state *csp)
 {
-   return ((!(csp->action->flags & ACTION_LIMIT_CONNECT) && csp->http->port != 443)
-      || (csp->action->flags & ACTION_LIMIT_CONNECT &&
-          !match_portlist(csp->action->string[ACTION_STRING_LIMIT_CONNECT], csp->http->port)));
+   return ((csp->action->flags & ACTION_LIMIT_CONNECT) &&
+     !match_portlist(csp->action->string[ACTION_STRING_LIMIT_CONNECT],
+        csp->http->port));
 }
 
 

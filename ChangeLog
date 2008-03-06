@@ -13,6 +13,9 @@ ChangeLog for Privoxy
 - Forbidden CONNECT requests are treated like blocks by default.
   The now-pointless treat-forbidden-connects-like-blocks action
   has been removed.
+- Not enabling limit-connect now allows CONNECT requests to all ports.
+  In previous versions it would only allow CONNECT requests to port 443.
+  Use +limit-connect{443} if you think you need the old default behaviour.
 - Fixed false-positives with the link-by-url filter and URLs that
   contain the pattern "/jump/".
 - The less-download-windows filter no longer messes

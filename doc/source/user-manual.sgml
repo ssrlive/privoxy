@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.64 2008/03/01 14:10:28 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.65 2008/03/04 18:30:40 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.64 2008/03/01 14:10:28 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.65 2008/03/04 18:30:40 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5205,10 +5205,9 @@ new action
   <listitem>
    <para>
     By default, i.e. if no <literal>limit-connect</literal> action applies,
-    <application>Privoxy</application> only allows HTTP CONNECT
-    requests to port 443 (the standard, secure HTTPS port). Use 
-    <literal>limit-connect</literal> if more fine-grained control is desired
-    for some or all destinations.
+    <application>Privoxy</application> allows HTTP CONNECT requests to all
+    ports. Use <literal>limit-connect</literal> if fine-grained control
+    is desired for some or all destinations.
    </para>
    <para>
     The CONNECT methods exists in HTTP to allow access to secure websites
@@ -5232,7 +5231,7 @@ new action
    <!-- I probably have the wrong font setup, bollocks. -->
    <!-- Apparently the emphasis tag uses a proportional font no matter what -->
     <para>
-     <screen>+limit-connect{443}                   # This is the default and need not be specified.
+     <screen>+limit-connect{443}                   # Port 443 is OK.
 +limit-connect{80,443}                # Ports 80 and 443 are OK.
 +limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK.
 +limit-connect{-}                     # All ports are OK
@@ -8867,6 +8866,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.65  2008/03/04 18:30:40  fabiankeil
+ Remove the treat-forbidden-connects-like-blocks action. We now
+ use the "blocked" page for forbidden CONNECT requests by default.
+
  Revision 2.64  2008/03/01 14:10:28  fabiankeil
  Use new block syntax. Still needs some polishing.
 
