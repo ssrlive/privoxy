@@ -32,6 +32,10 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.50  2008/03/04 18:30:44  fabiankeil
+#    Remove the treat-forbidden-connects-like-blocks action. We now
+#    use the "blocked" page for forbidden CONNECT requests by default.
+#
 #    Revision 1.49  2008/03/01 14:00:47  fabiankeil
 #    Let the block action take the reason for the block
 #    as argument and show it on the "blocked" page.
@@ -1141,15 +1145,15 @@ function show_send_wafer_opts(tf)
         name="limit_connect" value="X" @limit-connect-x@
         onclick="show_limit_connect_opts(false)"></td>
       <td class="action"><a href="@user-manual@@actions-help-prefix@LIMIT-CONNECT">limit-connect</a></td>
-      <td>Specify which ports are allowed for SSL (HTTP CONNECT) access.
-        Note that this allows arbitrary tunnelling.</td>
+      <td>Limit which ports are allowed in HTTP CONNECT requests. These requests are
+        used to tunnel SSL and other protocols through HTTP proxies.</td>
     </tr>
     <tr class="bg1" align="left" valign="top" id="limit_connect_opts">
       <td class="en1">&nbsp;</td>
       <td class="dis1">&nbsp;</td>
       <td class="noc1">&nbsp;</td>
       <td>&nbsp;</td>
-      <td>Legal SSL ports (comma separated, ranges allowed):<br>
+      <td>Legal ports (comma separated, ranges allowed):<br>
         <input type="text" name="limit_connect_mode" size="40"
         value="@limit-connect-param@"></td>
     </tr>
