@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.58 2007/11/28 17:57:01 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.59 2008/03/08 16:25:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -15,7 +15,7 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.58 2007/11/28 17:57:01 fabiankeil
  *
  *                Stick to the short names in this file for consistency.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.58 2007/11/28 17:57:01 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.59  2008/03/08 16:25:56  fabiankeil
+ *    After three file modification time mismatches, turn the CGI editor off.
+ *
  *    Revision 1.58  2007/11/28 17:57:01  fabiankeil
  *    Fix double free in cgi_edit_actions_list().
  *    Reported by adlab in BR#1840145.
@@ -542,6 +545,11 @@ struct filter_type_info
                                       For example "content-filter-params" */
    const char *type;             /**< Name of the filter type,
                                       for example "server-header-filter". */
+   /* XXX: check if these two can be combined. */
+   const char *disable_all_option; /**< Name of the catch-all radio option that has
+                                        to be checked or unchecked for this filter type. */
+   const char *disable_all_param;  /**< Name of the parameter that causes all filters of
+                                        this type to be disabled. */
    const char *abbr_type;        /**< Abbreviation of the filter type, usually the
                                       first or second character capitalized */
    const char *anchor;           /**< Anchor for the User Manual link,
@@ -554,26 +562,31 @@ static const struct filter_type_info filter_type_info[] =
    {
       ACTION_MULTI_FILTER,
       "content-filter-params", "filter",
+      "filter-all", "filter_all",
       "F", "FILTER"
    },
    {
       ACTION_MULTI_CLIENT_HEADER_FILTER,
       "client-header-filter-params", "client-header-filter",
+      "client-header-filter-all", "client_header_filter_all",
       "C", "CLIENT-HEADER-FILTER"
    },
    {
       ACTION_MULTI_SERVER_HEADER_FILTER,
       "server-header-filter-params", "server-header-filter",
+      "server-header-filter-all", "server_header_filter_all",
       "S", "SERVER-HEADER-FILTER"
    },
    {
       ACTION_MULTI_CLIENT_HEADER_TAGGER,
       "client-header-tagger-params", "client-header-tagger",
+      "client-header-tagger-all", "client_header_tagger_all",
       "L", "CLIENT-HEADER-TAGGER"
    },
    {
       ACTION_MULTI_SERVER_HEADER_TAGGER,
       "server-header-tagger-params", "server-header-tagger",
+      "server-header-tagger-all", "server_header_tagger_all",
       "E", "SERVER-HEADER-TAGGER"
    },
 };
@@ -3361,8 +3374,14 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       }
    }
 
-   if (!err) err = map_radio(exports, "filter-all", "nx",
-      (cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] ? 'n' : 'x'));
+   /* Check or uncheck the "disable all of this type" radio buttons. */
+   for (i = 0; i < MAX_FILTER_TYPES; i++)
+   {
+      const int a = filter_type_info[i].multi_action_index;
+      const int disable_all = cur_line->data.action->multi_remove_all[a];
+      if (err) break;
+      err = map_radio(exports, filter_type_info[i].disable_all_option, "nx", (disable_all ? 'n' : 'x'));
+   }
 
    edit_free_file(file);
 
@@ -3410,8 +3429,8 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    char target[1024];
    jb_err err;
    int filter_identifier;
+   int i;
    const char * action_set_name;
-   char ch;
    struct file_list * fl;
    struct url_actions * b;
 
@@ -3477,23 +3496,29 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       err = actions_from_radio(parameters, cur_line->data.action);
    }
 
-   if(err)
+   if (err)
    {
       /* Out of memory */
       edit_free_file(file);
       return err;
    }
 
-   ch = get_char_param(parameters, "filter_all");
-   if (ch == 'N')
+   /* Check the "disable all of this type" parameters. */
+   for (i = 0; i < MAX_FILTER_TYPES; i++)
    {
-      list_remove_all(cur_line->data.action->multi_add[ACTION_MULTI_FILTER]);
-      list_remove_all(cur_line->data.action->multi_remove[ACTION_MULTI_FILTER]);
-      cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] = 1;
-   }
-   else if (ch == 'X')
-   {
-      cur_line->data.action->multi_remove_all[ACTION_MULTI_FILTER] = 0;
+      const int multi_action_index = filter_type_info[i].multi_action_index;
+      const char ch = get_char_param(parameters, filter_type_info[i].disable_all_param);
+
+      if (ch == 'N')
+      {
+         list_remove_all(cur_line->data.action->multi_add[multi_action_index]);
+         list_remove_all(cur_line->data.action->multi_remove[multi_action_index]);
+         cur_line->data.action->multi_remove_all[multi_action_index] = 1;
+      }
+      else if (ch == 'X')
+      {
+         cur_line->data.action->multi_remove_all[multi_action_index] = 0;
+      }
    }
 
    for (filter_identifier = 0; !err; filter_identifier++)

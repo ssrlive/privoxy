@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.51  2008/03/07 16:46:49  fabiankeil
+#    Reword limit-connect{} entry.
+#
 #    Revision 1.50  2008/03/04 18:30:44  fabiankeil
 #    Remove the treat-forbidden-connects-like-blocks action. We now
 #    use the "blocked" page for forbidden CONNECT requests by default.
@@ -552,10 +555,32 @@ function show_send_wafer_opts(tf)
         <input type="text" name="block_mode" size="40" value="@block-param@">
       </td>
     </tr>
-
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="client_header_filter_all" id="client_header_filter_all_n" value="N" @client-header-filter-all-n@ ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="client_header_filter_all" id="client_header_filter_all_x" value="X" @client-header-filter-all-x@ ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CLIENT-HEADER-FILTER">client-header-filter</a> *</td>
+      <td>Filter the client headers.
+        You can use the radio buttons on this line to disable
+        all client-header filters applied by previous rules, and/or
+        you can enable or disable the filters individually below.</td>
+    </tr>
 @client-header-filter-params@
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="client_header_tagger_all" id="client_header_tagger_all_n" value="N" @client-header-tagger-all-n@ ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="client_header_tagger_all" id="client_header_tagger_all_x" value="X" @client-header-tagger-all-x@ ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CLIENT-HEADER-TAGGER">client-header-tagger</a> *</td>
+      <td>Create tags based on the client headers.
+        You can use the radio buttons on this line to disable
+        all client-header taggers applied by previous rules, and/or
+        you can enable or disable the taggers individually below.</td>
+    </tr>
 @client-header-tagger-params@
-
    <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="content_type_overwrite" value="Y" @content-type-overwrite-y@
@@ -1269,10 +1294,32 @@ function show_send_wafer_opts(tf)
         it on if it was off, is not yet supported using this web-based
         editor.</td>
     </tr>
-
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="server_header_filter_all" id="server_header_filter_all_n" value="N" @server-header-filter-all-n@ ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="server_header_filter_all" id="server_header_filter_all_x" value="X" @server-header-filter-all-x@ ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SERVER-HEADER-FILTER">server-header-filter</a> *</td>
+      <td>Filter the server headers.
+        You can use the radio buttons on this line to disable
+        all server-header filters applied by previous rules, and/or
+        you can enable or disable the filters individually below.</td>
+    </tr>
 @server-header-filter-params@
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="server_header_tagger_all" id="server_header_tagger_all_n" value="N" @server-header-tagger-all-n@ ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="server_header_tagger_all" id="server_header_tagger_all_x" value="X" @server-header-tagger-all-x@ ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SERVER-HEADER-TAGGER">server-header-tagger</a> *</td>
+      <td>Create tags based on the server headers.
+        You can use the radio buttons on this line to disable
+        all server-header taggers applied by previous rules, and/or
+        you can enable or disable the taggers individually below.</td>
+    </tr>
 @server-header-tagger-params@
-
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="session_cookies_only" value="Y" @session-cookies-only-y@

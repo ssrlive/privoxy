@@ -20,6 +20,9 @@ ChangeLog for Privoxy
   file modification timestamps. This makes life harder for attackers
   who can leverage browser bugs to send fake Referers and intend to
   brute-force edit URLs.
+- The CGI editor supports the "disable all filters of this type"
+  directives "-client-header-filter", "-server-header-filter",
+  "-client-header-tagger" and "-server-header-tagger".
 - Fixed false-positives with the link-by-url filter and URLs that
   contain the pattern "/jump/".
 - The less-download-windows filter no longer messes
