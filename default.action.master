@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.114 2008/03/01 15:25:34 fabiankeil Exp $
+#  $Id: default.action.master,v 1.115 2008/03/04 18:30:39 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1387,6 +1387,9 @@ switch.atdmt.com/action/
 .haxx.se/docs/adv_
 #MASTER# PROBLEM URL: http://www.google.com/adsense/
 www.google.com/adsense/
+#MASTER# PROBLEM URL: http://www.encyclopediadramatica.com/Advertisement
+#MASTER# PROBLEM URL: http://images.encyclopediadramatica.com/images/b/b5/Advertising-Dierentuin.jpg
+.encyclopediadramatica.com/
 
 #############################################################################
 # Site-specific special rules:
@@ -1717,6 +1720,12 @@ www.xach.com/gimp/
 javabog.dk/ijk/
 #MASTER# REMARK: Per Debian bug report #319025 09/09/06
 .w3.org
+#MASTER# PROBLEM-URL: http://www.encyclopediadramatica.com/New_Zealand_Fail_Guy
+.encyclopediadramatica.com/
+
+{-filter{banners-by-link}}
+#MASTER# PROBLEM-URL: http://www.encyclopediadramatica.com/Advertisement
+.encyclopediadramatica.com/
 
 #----------------------------------------------------------------------------
 # These don't work without the referrer information:
