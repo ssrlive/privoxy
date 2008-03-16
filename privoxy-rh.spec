@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.54 2008/01/20 14:30:59 fabiankeil Exp $
+# $Id: privoxy-rh.spec,v 1.55 2008/03/02 17:36:43 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -276,6 +276,7 @@ fi
 %config(noreplace) %{privoxyconf}/user.action
 %config %{privoxyconf}/default.action
 %config %{privoxyconf}/default.filter
+%config %{privoxyconf}/regression-tests.action
 %config(noreplace) %{privoxyconf}/user.filter
 %config(noreplace) %{privoxyconf}/trust
 
@@ -292,6 +293,7 @@ fi
 %config %{privoxyconf}/templates/cgi-style.css
 %config %{privoxyconf}/templates/connect-failed
 %config %{privoxyconf}/templates/default
+%config %{privoxyconf}/templates/forwarding-failed
 %config %{privoxyconf}/templates/edit-actions-add-url-form
 %config %{privoxyconf}/templates/edit-actions-for-url
 %config %{privoxyconf}/templates/edit-actions-for-url-filter
@@ -760,6 +762,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.55  2008/03/02 17:36:43  fabiankeil
+# Set version to 3.0.9.
+#
 # Revision 1.54  2008/01/20 14:30:59  fabiankeil
 # Set version to 3.0.8.
 #
