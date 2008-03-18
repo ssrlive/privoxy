@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.110 2008/02/16 12:55:18 fk Exp fk $
+# $Id: privoxy-regression-test.pl,v 1.114 2008/03/18 16:52:09 fk Exp $
 #
 # Wish list:
 #
@@ -86,6 +86,7 @@ use constant {
                DUMB_FETCH_TEST            =>  3,
                METHOD_TEST                =>  4,
                TRUSTED_CGI_REQUEST        =>  6,
+               BLOCK_TEST                 =>  7,
 };
 
 sub init_our_variables () {
@@ -190,7 +191,7 @@ sub token_starts_new_test ($) {
 
     my $token = shift;
     my @new_test_directives =
-        ('set header', 'fetch test', 'trusted cgi request', 'request header', 'method test');
+        ('set header', 'fetch test', 'trusted cgi request', 'request header', 'method test', 'block test');
 
     foreach my $new_test_directive (@new_test_directives) {
         return 1 if $new_test_directive eq $token;
@@ -270,6 +271,14 @@ sub enlist_new_test ($$$$$$) {
         # Implicit default
         $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
         $$regression_tests[$si][$ri]{'level'} = METHOD_TEST;
+
+    } elsif ($token eq 'block test') {
+
+        l(LL_FILE_LOADING, "URL to block-test: " . $value);
+        $$regression_tests[$si][$ri]{'type'} = BLOCK_TEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'expected-status-code'} = 403;
+        $$regression_tests[$si][$ri]{'level'} = BLOCK_TEST;
 
     } else {
 
@@ -560,9 +569,13 @@ sub execute_regression_test ($) {
 
         $result = execute_method_test($test_ref);
 
+    } elsif ($test{'type'} == BLOCK_TEST) {
+
+        $result = execute_block_test($test_ref);
+
     } else {
 
-        die "Unsuported test type detected: " . $test{'type'};
+        die "Unsupported test type detected: " . $test{'type'};
 
     }
 
@@ -621,6 +634,41 @@ sub execute_dumb_fetch_test ($) {
     $result = check_status_code_result($status_code, $expected_status_code);
 
     return $result;
+}
+
+sub execute_block_test ($) {
+
+    my $test = shift;
+    my $url = $test->{'data'};
+    my $final_results = get_final_results($url);
+
+    return defined $final_results->{'+block'};
+}
+
+sub get_final_results ($) {
+
+    my $url = shift;
+    my $curl_parameters = '';
+    my %final_results = ();
+    my $final_results_reached = 0;
+
+    $curl_parameters .= PRIVOXY_CGI_URL . 'show-url-info?url=' . $url;
+
+    foreach (@{get_cgi_page_or_else($curl_parameters)}) {
+
+        $final_results_reached = 1 if (m@<h2>Final results:</h2>@);
+
+        next unless ($final_results_reached);
+        last if (m@</td>@);
+
+        if (m@<br>([-+])<a.*>([^>]*)</a>( \{.*\})@) {
+            my $action = $1.$2;
+            my $value = $3;
+            $final_results{$action}{$value};
+        }
+    }
+
+    return \%final_results;
 }
 
 sub check_status_code_result ($$) {
@@ -1170,6 +1218,11 @@ sub log_result ($$) {
             $message .= quote($test{'data'});
             $message .= ' and expected status code ';
             $message .= quote($test{'expected-status-code'});
+
+        } elsif ($test{'type'} == BLOCK_TEST) {
+
+            $message .= ' Supposedly-blocked URL: ';
+            $message .= quote($test{'data'});
 
         } else {
 
