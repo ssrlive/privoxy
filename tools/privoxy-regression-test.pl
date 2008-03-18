@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.114 2008/03/18 16:52:09 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.115 2008/03/18 22:07:34 fk Exp $
 #
 # Wish list:
 #
@@ -213,7 +213,7 @@ sub tokenize ($) {
     s@&quot;@"@g;
 
     # Tokenize
-    if (/^\#\s*([^=]*?)\s*[=]\s*(.*?)\s*$/) {
+    if (/^\#\s*([^=:]*?)\s*[=]\s*(.*?)\s*$/) {
 
         $token = $1;
         $token =~ tr/[A-Z]/[a-z]/;
@@ -652,7 +652,10 @@ sub get_final_results ($) {
     my %final_results = ();
     my $final_results_reached = 0;
 
-    $curl_parameters .= PRIVOXY_CGI_URL . 'show-url-info?url=' . $url;
+    die "Unacceptable characterss in $url" if $url =~ m@[\\'"]@;
+    $url =~ s@\s@%20@g;
+
+    $curl_parameters .= "'" . PRIVOXY_CGI_URL . 'show-url-info?url=' . $url . "'";
 
     foreach (@{get_cgi_page_or_else($curl_parameters)}) {
 
