@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.101 2008/02/03 15:45:06 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.102 2008/02/23 16:33:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.101 2008/02/03 15:45:06 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.102  2008/02/23 16:33:43  fabiankeil
+ *    Let forward_url() use the standard parameter ordering
+ *    and mark its second parameter immutable.
+ *
  *    Revision 1.101  2008/02/03 15:45:06  fabiankeil
  *    Add SOCKS5 support for "Forwarding failure" CGI page.
  *
@@ -608,6 +612,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.101 2008/02/03 15:45:06 fabiankeil Exp $"
 #include "filters.h"
 #include "miscutil.h"
 #include "cgisimple.h"
+#include "jbsockets.h"
 #ifdef FEATURE_CGI_EDIT_ACTIONS
 #include "cgiedit.h"
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
@@ -2561,6 +2566,8 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    jb_err err;
    struct map * exports;
    int local_help_exists = 0;
+   char *ip_address = NULL;
+   char *hostname = NULL;
 
    assert(csp);
 
@@ -2570,9 +2577,13 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       return NULL;
    }
 
+   get_host_information(csp->cfd, &ip_address, &hostname);
+
    err = map(exports, "version", 1, html_encode(VERSION), 0);
-   if (!err) err = map(exports, "my-ip-address", 1, html_encode(csp->my_ip_addr_str ? csp->my_ip_addr_str : "unknown"), 0);
-   if (!err) err = map(exports, "my-hostname",   1, html_encode(csp->my_hostname ? csp->my_hostname : "unknown"), 0);
+   if (!err) err = map(exports, "my-ip-address", 1, html_encode(ip_address ? ip_address : "unknown"), 0);
+   freez(ip_address);
+   if (!err) err = map(exports, "my-hostname",   1, html_encode(hostname ? hostname : "unknown"), 0);
+   freez(hostname);
    if (!err) err = map(exports, "homepage",      1, html_encode(HOME_PAGE_URL), 0);
    if (!err) err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
    if (!err) err = map(exports, "menu",          1, make_menu(caller, csp->config->feature_flags), 0);

@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.44 2007/09/15 13:01:31 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.45 2007/09/30 16:59:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.44 2007/09/15 13:01:31 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.45  2007/09/30 16:59:22  fabiankeil
+ *    Set the maximum listen() backlog to 128. Apparently SOMAXCONN is
+ *    neither high enough, nor a hard limit on mingw32. Again for BR#1795281.
+ *
  *    Revision 1.44  2007/09/15 13:01:31  fabiankeil
  *    Increase listen() backlog to SOMAXCONN (or 128) to decrease
  *    chances of dropped connections under load. Problem reported
@@ -706,30 +710,34 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 
 /*********************************************************************
  *
- * Function    :  accept_connection
+ * Function    :  get_host_information
  *
- * Description :  Accepts a connection on a socket.  Socket must have
- *                been created using bind_port().
+ * Description :  Determines the IP address the client used to
+ *                reach us and the hostname associated with it.
+ *
+ *                XXX: Most of the code has been copy and pasted
+ *                from accept_connection() and not all of the
+ *                ifdefs paths have been tested afterwards.
  *
  * Parameters  :
- *          1  :  csp = Client state, cfd, ip_addr_str, and 
- *                ip_addr_long will be set by this routine.
- *          2  :  fd  = file descriptor returned from bind_port
+ *          1  :  afd = File descriptor returned from accept().
+ *          2  :  ip_address = Pointer to return the pointer to
+ *                             the ip address string.
+ *          3  :  hostname =   Pointer to return the pointer to
+ *                             the hostname.
  *
- * Returns     :  when a connection is accepted, it returns 1 (TRUE).
- *                On an error it returns 0 (FALSE).
+ * Returns     :  void.
  *
  *********************************************************************/
-int accept_connection(struct client_state * csp, jb_socket fd)
+void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 {
-   struct sockaddr_in client, server;
+   struct sockaddr_in server;
    struct hostent *host = NULL;
-   jb_socket afd;
 #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
-   /* Wierdness - fix a warning. */
-   int c_length, s_length;
+   /* according to accept_connection() this fixes a warning. */
+   int s_length;
 #else
-   socklen_t c_length, s_length;
+   socklen_t s_length;
 #endif
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
@@ -740,33 +748,14 @@ int accept_connection(struct client_state * csp, jb_socket fd)
    int thd_err;
 #endif /* def HAVE_GETHOSTBYADDR_R_5_ARGS */
 #endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
+   s_length = sizeof(server);
 
-   c_length = s_length = sizeof(client);
+   *hostname = NULL;
+   *ip_address = NULL;
 
-#ifdef _WIN32
-   afd = accept (fd, (struct sockaddr *) &client, &c_length);
-   if (afd == JB_INVALID_SOCKET)
-   {
-      return 0;
-   }
-#else
-   do
-   {
-      afd = accept (fd, (struct sockaddr *) &client, &c_length);
-   } while (afd < 1 && errno == EINTR);
-   if (afd < 0)
-   {
-      return 0;
-   }
-#endif
-
-   /* 
-    * Determine the IP-Adress that the client used to reach us
-    * and the hostname associated with that address
-    */
    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
    {
-      csp->my_ip_addr_str = strdup(inet_ntoa(server.sin_addr));
+      *ip_address = strdup(inet_ntoa(server.sin_addr));
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS)
       gethostbyaddr_r((const char *)&server.sin_addr,
                       sizeof(server.sin_addr), AF_INET,
@@ -802,11 +791,61 @@ int accept_connection(struct client_state * csp, jb_socket fd)
       }
       else
       {
-         csp->my_hostname = strdup(host->h_name);
+         *hostname = strdup(host->h_name);
       }
    }
 
-   csp->cfd    = afd;
+   return;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  accept_connection
+ *
+ * Description :  Accepts a connection on a socket.  Socket must have
+ *                been created using bind_port().
+ *
+ * Parameters  :
+ *          1  :  csp = Client state, cfd, ip_addr_str, and 
+ *                ip_addr_long will be set by this routine.
+ *          2  :  fd  = file descriptor returned from bind_port
+ *
+ * Returns     :  when a connection is accepted, it returns 1 (TRUE).
+ *                On an error it returns 0 (FALSE).
+ *
+ *********************************************************************/
+int accept_connection(struct client_state * csp, jb_socket fd)
+{
+   struct sockaddr_in client;
+   jb_socket afd;
+#if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
+   /* Wierdness - fix a warning. */
+   int c_length;
+#else
+   socklen_t c_length;
+#endif
+
+   c_length = sizeof(client);
+
+#ifdef _WIN32
+   afd = accept (fd, (struct sockaddr *) &client, &c_length);
+   if (afd == JB_INVALID_SOCKET)
+   {
+      return 0;
+   }
+#else
+   do
+   {
+      afd = accept (fd, (struct sockaddr *) &client, &c_length);
+   } while (afd < 1 && errno == EINTR);
+   if (afd < 0)
+   {
+      return 0;
+   }
+#endif
+
+   csp->cfd = afd;
    csp->ip_addr_str  = strdup(inet_ntoa(client.sin_addr));
    csp->ip_addr_long = ntohl(client.sin_addr.s_addr);
 
