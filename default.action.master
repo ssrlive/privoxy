@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.115 2008/03/04 18:30:39 fabiankeil Exp $
+#  $Id: default.action.master,v 1.116 2008/03/16 18:02:19 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -585,6 +585,7 @@ ad*.
 .ad.jp.*.
 .ad.???*.
 #MASTER# PROBLEM URL: http://alternativos.iw-advertising.com/
+# Blocked URL = http://alternativos.iw-advertising.com/
 .*advert*.
 *banner*.
 count*.
@@ -624,6 +625,8 @@ countr*.
 {+block{Path matches generic block pattern.}}
 #MASTER# DONT-VERIFY (generic)
 /(.*/)?ad(\?|/|s|v|_?(image|se?rv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log|space)
+# Blocked URL = http://www.example.org/adimage
+# Blocked URL = http://www.example.org/adspace
 /phpads(new)?/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
@@ -678,10 +681,14 @@ support./(.*/)?track
 {+block{Site-specific block pattern matches.}}
 #MASTER# BLOCK-REFERRER: http://www.brooksbrothers.com/ 10/18/06
 #MASTER# BLOCK-REFERRER: http://www.autodesk.com/
+# Blocked URL = http://www.hitbox.com/foobar
 .hitbox.com 
 #MASTER# BLOCK-REFERRER: http://www.the-gadgeteer.com/palmos.html 10/18/06
+# Blocked URL = http://www..the-gadgeteer.com/cgi-bin/getimage.cgi/
 .the-gadgeteer.com/cgi-bin/getimage.cgi/
 #MASTER# BLOCK-REFERRER: http://dest.travelocity.com/DestGuides/geo_frontdoor/0,,TRAVELOCITY,00.html?HPTRACK=icon_dest
+# Blocked URL = http://dest.travelocity.com/website/destinations/images/partner_frommers.gif
+# Blocked URL = http://dest.travelocity.com/website/destinations/images/travelex_logo.gif
 dest.travelocity.com/website/destinations/images/partner_frommers.gif
 dest.travelocity.com/website/destinations/images/travelex_logo.gif
 #MASTER# BLOCK-REFERRER: http://us.imdb.com/Title?0110912 10/18/06
@@ -690,6 +697,7 @@ dest.travelocity.com/website/destinations/images/travelex_logo.gif
 i.imdb.com/Photos/CMSIcons/(?!buttons|emoticons)
 rcm.amazon.com
 #MASTER# BLOCK-REFERRER: http://www.nytimes.com/ 10/18/06
+# Blocked URL = http://www.nytimes.com/adx/foo
 .nytimes.com/adx/
 #MASTER# BLOCK-REFERRER: http://www.sharereactor.com/ 10/19/06
 #MASTER# BLOCK-REFERRER: http://www.popupad.net/
@@ -833,6 +841,8 @@ tracking.
 #stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
 #MASTER# BLOCK-REFERRER: http://www.ibm.com 10/09/06
 #MASTER# REMARKS: Similar hostname and paths appear in multiple locations.
+# Blocked URL = http://stats.surfaid.ihost.com/crc/images/bounce/uc.GIF
+# Blocked URL = http://stats.surfaid.ihost.com/rc/images/bounce/uc.GIF
 stats./c?rc/.*/uc.gif
 #MASTER# BLOCK-REFERRER: http://priceline.com 10/20/06
 #MASTER# REMARKS: User tracking, webbug stuff
@@ -885,8 +895,10 @@ stats.reinvigorate.net/
 # JavaScripts and Texts for ad and popup generation
 #----------------------------------------------------------------------------
 #MASTER# BLOCK-REFERRER: http://www.chip.de/artikel/c_artikelunterseite_10423683.html
+# Blocked URL = http://pagead.googlesyndication.example.com/foo/bar/baz.js
 pagead*.googlesyndication./.*\.js
 #MASTER# REMARKS: broadening scope from a.tfag.de/js.ng/ 10/23/06
+# Blocked URL = http://a.tfag.de/js.ng/
 /js\.ng/
 #MASTER# BLOCK-REFERRER: http://www.britannica.com/ 10/23/06
 /popunder
@@ -909,8 +921,7 @@ jlinks.industrybrains.com/
 #MASTER# REMARKS: Actionsfile feedback item #1736794 2007-06-13
 js.adsonar.
 #MASTER# BLOCK-REFERRER: http://news.zdnet.co.uk/software/0,1000000121,39209666,00.htm
-#MASTER# REMARKS: Actionsfile feedback item #1736879 2007-06-13, sponsored
-links. 2007-08-02, more hosts using this scheme, broadening scope.
+#MASTER# REMARKS: Actionsfile feedback item #1736879 2007-06-13, sponsored links. 2007-08-02, more hosts using this scheme, broadening scope.
 #bwp.zdnet.
 bwp.
 
@@ -937,6 +948,7 @@ bwp.
 #MASTER# COMMENT: banner at top of page http://server2.as5000.com/AS5000/adserver/click?ID=ADST-00015&C=0&T=1169332403
 /(.*/)?adserver/image
 #MASTER# COMMENT: Also from wunderground.com: http://icons-aa.wunderground.com/ads/images/TripAdvisor-Blinky.gif 2007-01-20
+# Blocked URL = http://icons-aa.wunderground.com/ads/images/TripAdvisor-Blinky.gif
 /(.*/)?ads/images/
 
 #############################################################################
@@ -948,6 +960,8 @@ bwp.
 #MASTER# BLOCK-REFERRER: http://www.cnn.com/
 #MASTER# BLOCK-REFERRER: http://www.aol.com/
 #MASTER# COMMENT: There are at least ar.atwola and pr.atwola. 10/01/06
+# Blocked URL = http://ar.atwola.com/
+# Blocked URL = http://pr.atwola.com/
 ?r.atwola.com 
 #MASTER# BLOCK-REFERRER: http://www.altavista.com/
 #MASTER# BLOCK-REFERRER: http://www.tecchannel.de/
@@ -1012,7 +1026,8 @@ jmcms.cydoor.com/
 *[0-9].tribalfusion.com/
 #MASTER# REMARKS: Actions file tracker 1547656 09/02/06
 #MASTER# REMARKS: Update pattern: Actionsfile feedback item #1698822, was opened at 2007-04-11 to catch https://secure.img-cdn.mediaplex.com/0....
-img*.mediaplex.com
+# Blocked URL = https://secure.img-cdn.mediaplex.com/0/7454/43775/YA3149_17566_728x90_FCR_07.gif
+.img*.mediaplex.com
 #MASTER# BLOCK-REFERRER: http://www.tomshardware.com/ 09/28/06
 #MASTER# REMARKS: There is adfarm and altfarm.mediaplex
 #MASTER# REMARKS: 20070711 Actionsfile feedback #1749013 /ad/fm/ appended, as click-throughs were being blocked. Could only find adverts being served from /ad/fm/
@@ -1134,8 +1149,10 @@ insightxe./data/
 .insightfirst.com
 #MASTER# BLOCK-REFERRER: http://rss.slashdot.org/Slashdot/slashdot
 #MASTER# PROBLEM URL: rss.slashdot.org/~a/Slashdot/slashdot?i=ofbWqX
+# Blocked URL = http://rss.slashdot.org/~a/Slashdot/slashdot?i=ofbWqX
 rss.slashdot.org/~a/Slashdot/slashdot\?
 #MASTER# PROBLEM URL: rss.slashdot.org/~r/Slashdot/slashdot/~4/102113044
+# Blocked URL = http://rss.slashdot.org/~r/Slashdot/slashdot/~4/102113044
 rss.slashdot.org/~r/Slashdot/slashdot/~4/
 #MASTER# BLOCK-REFERRER: http://www.isys.ucl.ac.be/bchi/research/Kwaresmi.htm
 #MASTER# REMAKRKS: Actionsfile feedback item #1849627 2007-12-12
