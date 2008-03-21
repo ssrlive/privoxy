@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.103 2008/03/01 14:00:45 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.104 2008/03/04 18:30:40 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.104  2008/03/04 18:30:40  fabiankeil
+ *    Remove the treat-forbidden-connects-like-blocks action. We now
+ *    use the "blocked" page for forbidden CONNECT requests by default.
+ *
  *    Revision 1.103  2008/03/01 14:00:45  fabiankeil
  *    Let the block action take the reason for the block
  *    as argument and show it on the "blocked" page.
@@ -1306,14 +1310,6 @@ struct client_state
    /** Client PC's IP address, as reported by the accept() function.
        As a number. */
    long  ip_addr_long;
-
-   /** Our IP address. I.e. the IP address that the client used to reach us,
-       as a string. */
-   char *my_ip_addr_str;
-
-   /** Our hostname. I.e. the reverse DNS of the IP address that the client
-       used to reach us, as a string. */
-   char *my_hostname;
 
    /** The URL that was requested */
    struct http_request http[1];
