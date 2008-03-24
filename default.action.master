@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.116 2008/03/16 18:02:19 fabiankeil Exp $
+#  $Id: default.action.master,v 1.117 2008/03/21 13:22:20 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1566,6 +1566,9 @@ view.samurajdata.se/ps\.php\?url=
 .blogger.com/navbar\.g
 #MASTER# PROBLEM-URL: http://editors.dmoz.org/editors/editurl.cgi?url=http%3a//www.example.de/&cat=World/Deutsch/Computer/Hardware/Speichermedien
 .dmoz.org/editors/editurl\.cgi
+#MASTER# PROBLEM-URL: http://offer.ebay.de/ws/eBayISAPI.dll?stockphotourl=http%3A%2F%2Fi16.ebayimg.com%2F02%2Fc%2F02%2F88%2F21%2F5b_6.JPG&MfcISAPICommand=BinConfirm&fb=1&co_partnerid=&item=123456789112&quantity=1&input_bin=
+#MASTER# PROBLEM-URL: http://offer.ebay.de/ws/eBayISAPI.dll?maxbid=15%2C01&MfcISAPICommand=MakeBid&fromPage=284&stockphotourl=http%3A%2F%2Fi14.ebayimg.com%2F02%2Fc%2F00%2Fe9%2Fe1%2F2a_6.JPG&fb=2&co_partnerid=&item=123456789112&input_bid=
+.ebay.de/ws/eBayISAPI\.dll\?
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
@@ -1653,47 +1656,6 @@ javascriptkit.com
 bugs.
 #MASTER# REMARKS: Actionsfile tracker 1555909 09/17/06, various problems with cpu and logging in.
 quoka.de
-
-#----------------------------------------------------------------------------
-# These sites suffer from a bug in PHP < 4.2.3 (ob_gzhandler broken;
-# workaround is to use zlib.output_compression):
-# (Section obsolete as of Privoxy 3.0.3, which has workaround)
-#----------------------------------------------------------------------------
-#{-prevent-compression}
-# Surely this is rectified by now 09/16/06 ???
-#MASTER# PROBLEM-URL: http://www.powie.de/
-#www.powie.de
-#MASTER# PROBLEM-URL: http://www.phpcenter.de/
-#www.phpcenter.de
-#MASTER# PROBLEM-URL: http://www.timeanddate.com
-#www.timeanddate.com
-#MASTER# PROBLEM-URL: http://www.pclinuxonline.com/
-#MASTER# PROBLEM-URL: http://pclinuxonline.com/
-#.pclinuxonline.com
-#MASTER# PROBLEM-URL: http://www.dungeoncrawl.org/
-#.dungeoncrawl.org
-#MASTER# PROBLEM-URL: http://www.digitalspy.co.uk/
-#www.digitalspy.co.uk
-#MASTER# PROBLEM-URL: http://www.audio-illumination.org/forums/
-#www.audio-illumination.org/forums/
-#MASTER# PROBLEM-URL: http://www.catchword.com/
-#www.catchword.com
-#MASTER# PROBLEM-URL: http://www.ubernet.org
-#www.ubernet.org
-#MASTER# PROBLEM-URL: http://www.ooodocs.org/
-#www.ooodocs.org
-#MASTER# PROBLEM-URL: http://www.ntcompatible.com/
-#www.ntcompatible.com
-#MASTER# PROBLEM-URL: http://www.winehq.com/
-#.winehq.com
-#MASTER# PROBLEM-URL: http://www.dotcomtod.de/
-#.dotcomtod.de/
-#MASTER# PROBLEM-URL: http://www.tweakers.net
-#.tweakers.net
-#MASTER# PROBLEM-URL: http://www.troublesathome.nl
-#.troublesathome.nl
-#MASTER# PROBLEM-URL: http://www.art.softshape.com
-#.art.softshape.com
 
 #----------------------------------------------------------------------------
 # Innocent images in standard banner sizes found here:
