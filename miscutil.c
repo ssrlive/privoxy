@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.55 2007/11/03 17:34:49 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.56 2007/12/01 12:59:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.55 2007/11/03 17:34:49 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.56  2007/12/01 12:59:05  fabiankeil
+ *    Some sanity checks for pick_from_range().
+ *
  *    Revision 1.55  2007/11/03 17:34:49  fabiankeil
  *    Log the "weak randomization factor" warning only
  *    once for mingw32 and provide some more details.
@@ -862,14 +865,14 @@ int simplematch(char *pattern, char *text)
                {
                   return(1);
                }
-               for(i = lastchar; i <= *pat; i++)
+               for (i = lastchar; i <= *pat; i++)
                {
-                  charmap[i / 8] |= (1 << (i % 8));
+                  charmap[i / 8] |= (unsigned char)(1 << (i % 8));
                } 
             }
             else
             {
-               charmap[*pat / 8] |= (1 << (*pat % 8));
+               charmap[*pat / 8] |= (unsigned char)(1 << (*pat % 8));
                lastchar = *pat;
             }
          }
