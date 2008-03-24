@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.59 2008/03/08 16:25:56 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.60 2008/03/15 14:52:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,11 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.59 2008/03/08 16:25:56 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.60  2008/03/15 14:52:35  fabiankeil
+ *    Add CGI editor support for the "disable all filters of this type"
+ *    directives "-client-header-filter", "-server-header-filter",
+ *    "-client-header-tagger" and "-server-header-tagger".
+ *
  *    Revision 1.59  2008/03/08 16:25:56  fabiankeil
  *    After three file modification time mismatches, turn the CGI editor off.
  *
@@ -689,7 +694,7 @@ static char *section_target(const unsigned sectionid)
 {
    char buf[30];
 
-   snprintf(buf, 30, "#l%d", sectionid);
+   snprintf(buf, sizeof(buf), "#l%d", sectionid);
    return(strdup(buf));
 
 }
@@ -1239,8 +1244,8 @@ jb_err edit_write_file(struct editable_file * file)
 
    /* Correct file->version_str */
    freez(file->version_str);
-   snprintf(version_buf, 22, "%u", file->version);
-   version_buf[21] = '\0';
+   snprintf(version_buf, sizeof(version_buf), "%u", file->version);
+   version_buf[sizeof(version_buf)-1] = '\0';
    file->version_str = strdup(version_buf);
    if (version_buf == NULL)
    {
@@ -1973,8 +1978,8 @@ jb_err edit_read_file(struct client_state *csp,
 
    /* Correct file->version_str */
    freez(file->version_str);
-   snprintf(version_buf, 22, "%u", file->version);
-   version_buf[21] = '\0';
+   snprintf(version_buf, sizeof(version_buf), "%u", file->version);
+   version_buf[sizeof(version_buf)-1] = '\0';
    file->version_str = strdup(version_buf);
    if (version_buf == NULL)
    {
@@ -2799,9 +2804,9 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
        */
       if (!err) err = map_conditional(exports, "all-urls-present", 1);
 
-      snprintf(buf, 150, "%d", line_number);
+      snprintf(buf, sizeof(buf), "%d", line_number);
       if (!err) err = map(exports, "all-urls-s", 1, buf, 1);
-      snprintf(buf, 150, "%d", line_number + 2);
+      snprintf(buf, sizeof(buf), "%d", line_number + 2);
       if (!err) err = map(exports, "all-urls-s-next", 1, buf, 1);
       if (!err) err = map(exports, "all-urls-actions", 1,
                           actions_to_html(csp, cur_line->data.action), 0);
@@ -2912,7 +2917,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      snprintf(buf, 150, "%d", line_number);
+      snprintf(buf, sizeof(buf), "%d", line_number);
       err = map(section_exports, "s", 1, buf, 1);
       if (!err) err = map(section_exports, "actions", 1,
                           actions_to_html(csp, cur_line->data.action), 0);
@@ -2932,7 +2937,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       if (prev_section_line_number != ((unsigned)(-1)))
       {
          /* Not last section */
-         snprintf(buf, 150, "%d", prev_section_line_number);
+         snprintf(buf, sizeof(buf), "%d", prev_section_line_number);
          if (!err) err = map(section_exports, "s-prev", 1, buf, 1);
          if (!err) err = map_block_keep(section_exports, "s-prev-exists");
       }
@@ -2986,10 +2991,10 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
             return JB_ERR_MEMORY;
          }
 
-         snprintf(buf, 150, "%d", line_number);
+         snprintf(buf, sizeof(buf), "%d", line_number);
          err = map(url_exports, "p", 1, buf, 1);
 
-         snprintf(buf, 150, "%d", url_1_2);
+         snprintf(buf, sizeof(buf), "%d", url_1_2);
          if (!err) err = map(url_exports, "url-1-2", 1, buf, 1);
 
          if (!err) err = map(url_exports, "url-html", 1,
@@ -3052,7 +3057,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
       /* Could also do section-specific exports here, but it wouldn't be as fast */
 
-      snprintf(buf, 150, "%d", line_number);
+      snprintf(buf, sizeof(buf), "%d", line_number);
       if (!err) err = map(section_exports, "s-next", 1, buf, 1);
 
       if ( (cur_line != NULL)
@@ -3480,7 +3485,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
             {
                if (!strncmp(b->url->spec, "standard.", 9) && !strcmp(b->url->spec + 9, action_set_name))
                {
-                  copy_action(cur_line->data.action, b->action); 
+                  copy_action(cur_line->data.action, b->action);
                   goto found;
                }
             }
