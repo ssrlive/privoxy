@@ -20,6 +20,9 @@ ChangeLog for Privoxy
   file modification timestamps. This makes life harder for attackers
   who can leverage browser bugs to send fake Referers and intend to
   brute-force edit URLs.
+- Action settings for multiple patterns in the same section are
+  shared in memory. As a result these sections take up less space
+  (and are loaded slightly faster). Problem reported by Franz Schwartau.
 - Host information is gathered outside the main thread so it's less
   likely to delay other incoming connections if the host is misconfigured.
 - The CGI editor supports the "disable all filters of this type"

@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.104 2008/03/04 18:30:40 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.105 2008/03/21 11:16:27 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.105  2008/03/21 11:16:27  fabiankeil
+ *    Garbage-collect csp->my_ip_addr_str and csp->my_hostname.
+ *
  *    Revision 1.104  2008/03/04 18:30:40  fabiankeil
  *    Remove the treat-forbidden-connects-like-blocks action. We now
  *    use the "blocked" page for forbidden CONNECT requests by default.
@@ -1179,18 +1182,22 @@ struct action_spec
 
 
 /**
- * This structure is used to store the actions list.
+ * This structure is used to store action files.
  *
- * It contains a URL pattern, and the chages to the actions.
- * It is a linked list.
+ * It contains an URL or tag pattern, and the changes to
+ * the actions. It's a linked list and should only be
+ * free'd through unload_actions_file() unless there's
+ * only a single entry.
  */
 struct url_actions
 {
-   struct url_spec url[1];        /**< URL pattern. */
+   struct url_spec url[1];     /**< The URL or tag pattern. */
 
-   struct action_spec action[1];  /**< Actions. */
+   struct action_spec *action; /**< Action settings that might be shared with
+                                    the list entry before or after the current
+                                    one and can't be free'd willy nilly. */
 
-   struct url_actions * next;     /**< Next action in file, or NULL. */
+   struct url_actions *next;   /**< Next action section in file, or NULL. */
 };
 
 

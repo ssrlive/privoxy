@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.43 2008/03/01 14:00:43 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.44 2008/03/04 18:30:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.43 2008/03/01 14:00:43 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.44  2008/03/04 18:30:34  fabiankeil
+ *    Remove the treat-forbidden-connects-like-blocks action. We now
+ *    use the "blocked" page for forbidden CONNECT requests by default.
+ *
  *    Revision 1.43  2008/03/01 14:00:43  fabiankeil
  *    Let the block action take the reason for the block
  *    as argument and show it on the "blocked" page.
@@ -460,6 +464,24 @@ jb_err copy_action (struct action_spec *dest,
       }
    }
    return err;
+}
+
+/*********************************************************************
+ *
+ * Function    :  free_action_spec
+ *
+ * Description :  Frees an action_spec and the memory used by it.
+ *
+ * Parameters  :
+ *          1  :  src = Source to free.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void free_action_spec(struct action_spec *src)
+{
+   free_action(src);
+   freez(src);
 }
 
 
@@ -1119,11 +1141,19 @@ void unload_actions_file(void *file_data)
    {
       next = cur->next;
       free_url_spec(cur->url);
-      free_action(cur->action);
+      if ((next == NULL) || (next->action != cur->action))
+      {
+         /*
+          * As the action settings might be shared,
+          * we can only free them if the current
+          * url pattern is the last one, or if the
+          * next one is using different settings.
+          */
+         free_action_spec(cur->action);
+      }
       freez(cur);
       cur = next;
    }
-
 }
 
 
@@ -1388,8 +1418,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             {
                if (!cur_action_used)
                {
-                  free_action(cur_action);
-                  free(cur_action);
+                  free_action_spec(cur_action);
                }
                cur_action = NULL;
             }
@@ -1578,8 +1607,8 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             return 1; /* never get here */
          }
 
-         /* Save flags */
-         copy_action (perm->action, cur_action);
+         perm->action = cur_action;
+         cur_action_used = 1;
 
          /* Save the URL pattern */
          if (create_url_spec(perm->url, buf))
@@ -1617,9 +1646,10 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
 
    fclose(fp);
 
-   free_action(cur_action);
-   freez(cur_action);
-
+   if (!cur_action_used)
+   {
+      free_action_spec(cur_action);
+   }
    free_alias_list(alias_list);
 
    /* the old one is now obsolete */
