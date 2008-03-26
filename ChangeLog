@@ -25,6 +25,9 @@ ChangeLog for Privoxy
   (and are loaded slightly faster). Problem reported by Franz Schwartau.
 - Host information is gathered outside the main thread so it's less
   likely to delay other incoming connections if the host is misconfigured.
+- New config option "hostname" to use a hostname other than
+  the one returned by the operating system. Useful to speed-up responses
+  for CGI requests on misconfigured systems. Requested by Max Khon.
 - The CGI editor supports the "disable all filters of this type"
   directives "-client-header-filter", "-server-header-filter",
   "-client-header-tagger" and "-server-header-tagger".
