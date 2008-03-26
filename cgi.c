@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.102 2008/02/23 16:33:43 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.103 2008/03/21 11:13:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,11 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.102 2008/02/23 16:33:43 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.103  2008/03/21 11:13:57  fabiankeil
+ *    Only gather host information if it's actually needed.
+ *    Also move the code out of accept_connection() so it's less likely
+ *    to delay other incoming connections if the host is misconfigured.
+ *
  *    Revision 1.102  2008/02/23 16:33:43  fabiankeil
  *    Let forward_url() use the standard parameter ordering
  *    and mark its second parameter immutable.
@@ -2577,7 +2582,15 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       return NULL;
    }
 
-   get_host_information(csp->cfd, &ip_address, &hostname);
+   if (csp->config->hostname)
+   {
+      get_host_information(csp->cfd, &ip_address, NULL);
+      hostname = strdup(csp->config->hostname);
+   }
+   else
+   {
+      get_host_information(csp->cfd, &ip_address, &hostname);
+   }
 
    err = map(exports, "version", 1, html_encode(VERSION), 0);
    if (!err) err = map(exports, "my-ip-address", 1, html_encode(ip_address ? ip_address : "unknown"), 0);

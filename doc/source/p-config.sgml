@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.27 2008/01/17 01:49:51 hal9 Exp $
+ $Id: p-config.sgml,v 2.28 2008/02/03 19:15:54 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.27 2008/01/17 01:49:51 hal9 Exp $
+ $Id: p-config.sgml,v 2.28 2008/02/03 19:15:54 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
@@ -1164,6 +1164,62 @@ actionsfile
 </variablelist>
 
 <![%config-file;[<literallayout>@@#single-threaded</literallayout>]]>
+</sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="hostname"><title>hostname</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The hostname shown on the CGI pages.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Text</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Unset</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    The hostname provided by the operating system is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    On some misconfigured systems resolving the hostname fails or
+    takes too much time and slows Privoxy down. Setting a fixed hostname
+    works around the problem.
+   </para>
+   <para>
+    In other circumstances it might be desirable to show a hostname
+    other than the one returned by the operating system. For example
+    if the system has several different hostnames and you don't want
+    to use the first one.
+   </para>
+   <para>
+    Note that Privoxy does not validate the specified hostname value.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@#hostname hostname.example.org</literallayout>]]>
 </sect3>
 
 </sect2>

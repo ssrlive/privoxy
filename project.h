@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.105 2008/03/21 11:16:27 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.106 2008/03/24 11:21:03 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.106  2008/03/24 11:21:03  fabiankeil
+ *    Share the action settings for multiple patterns in the same
+ *    section so we waste less memory for gigantic block lists
+ *    (and load them slightly faster). Reported by Franz Schwartau.
+ *
  *    Revision 1.105  2008/03/21 11:16:27  fabiankeil
  *    Garbage-collect csp->my_ip_addr_str and csp->my_hostname.
  *
@@ -1662,6 +1667,9 @@ struct configuration_spec
 
    /** The short names of the pcre filter files. */
    const char *re_filterfile_short[MAX_AF_FILES];
+
+   /** The hostname to show on CGI pages, or NULL to use the real one. */
+   const char *hostname;
 
 #ifdef FEATURE_COOKIE_JAR
 

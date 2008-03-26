@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.45 2007/09/30 16:59:22 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.46 2008/03/21 11:13:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,11 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.45 2007/09/30 16:59:22 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.46  2008/03/21 11:13:57  fabiankeil
+ *    Only gather host information if it's actually needed.
+ *    Also move the code out of accept_connection() so it's less likely
+ *    to delay other incoming connections if the host is misconfigured.
+ *
  *    Revision 1.45  2007/09/30 16:59:22  fabiankeil
  *    Set the maximum listen() backlog to 128. Apparently SOMAXCONN is
  *    neither high enough, nor a hard limit on mingw32. Again for BR#1795281.
@@ -724,7 +729,8 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
  *          2  :  ip_address = Pointer to return the pointer to
  *                             the ip address string.
  *          3  :  hostname =   Pointer to return the pointer to
- *                             the hostname.
+ *                             the hostname or NULL if the caller
+ *                             isn't interested in it.
  *
  * Returns     :  void.
  *
@@ -750,12 +756,24 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 #endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
    s_length = sizeof(server);
 
-   *hostname = NULL;
+   if (NULL != hostname)
+   {
+      *hostname = NULL;
+   }
    *ip_address = NULL;
 
    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
    {
       *ip_address = strdup(inet_ntoa(server.sin_addr));
+
+      if (NULL == hostname)
+      {
+         /*
+          * We're done here, the caller isn't
+          * interested in knowing the hostname.
+          */
+         return;
+      }
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS)
       gethostbyaddr_r((const char *)&server.sin_addr,
                       sizeof(server.sin_addr), AF_INET,
