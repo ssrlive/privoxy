@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.9 2008/03/21 13:00:37 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.135 2008/03/26 10:58:46 fk Exp $
 #
 # Wish list:
 #
@@ -85,6 +85,7 @@ use constant {
                SERVER_HEADER_TEST         =>  2,
                DUMB_FETCH_TEST            =>  3,
                METHOD_TEST                =>  4,
+               STICKY_ACTIONS_TEST        =>  5,
                TRUSTED_CGI_REQUEST        =>  6,
                BLOCK_TEST                 =>  7,
 };
@@ -144,7 +145,7 @@ sub parse_tag ($) {
 sub check_for_forbidden_characters ($) {
 
     my $tag = shift; # XXX: also used to check values though.
-    my $allowed = '[-=\dA-Za-z~{}:.\/();\s,+@"_%\?&]';
+    my $allowed = '[-=\dA-Za-z~{}:.\/();\s,+@"_%\?&*^]';
 
     unless ($tag =~ m/^$allowed*$/) {
         my $forbidden = $tag;
@@ -190,8 +191,9 @@ sub load_regressions_tests () {
 sub token_starts_new_test ($) {
 
     my $token = shift;
-    my @new_test_directives =
-        ('set header', 'fetch test', 'trusted cgi request', 'request header', 'method test', 'blocked url');
+    my @new_test_directives = ('set header', 'fetch test',
+         'trusted cgi request', 'request header', 'method test',
+         'blocked url', 'url');
 
     foreach my $new_test_directive (@new_test_directives) {
         return 1 if $new_test_directive eq $token;
@@ -283,6 +285,14 @@ sub enlist_new_test ($$$$$$) {
         $$regression_tests[$si][$ri]{'expected-status-code'} = 403;
         $$regression_tests[$si][$ri]{'level'} = BLOCK_TEST;
 
+    } elsif ($token eq 'url') {
+
+        l(LL_FILE_LOADING, "Sticky URL to test: " . $value);
+        $$regression_tests[$si][$ri]{'type'} = STICKY_ACTIONS_TEST;
+        # Implicit default
+        $$regression_tests[$si][$ri]{'level'} = STICKY_ACTIONS_TEST;
+        $$regression_tests[$si][$ri]{'url'} = ''; 
+
     } else {
 
         die "Incomplete '" . $token . "' support detected."; 
@@ -322,6 +332,7 @@ sub load_action_files ($) {
 
         my $curl_url = ' "' . $actionfiles[$file_number] . '"';
         my $actionfile = undef;
+        my $sticky_actions = undef;
 
         foreach (@{get_cgi_page_or_else($curl_url)}) {
 
@@ -408,6 +419,26 @@ sub load_action_files ($) {
 
                 l(LL_FILE_LOADING, "Method: " . $value);
                 $regression_tests[$si][$ri]{'method'} = $value;
+
+            } elsif ($token eq 'sticky actions') {
+
+                # Will be used by each following Sticky URL.
+                $sticky_actions = $value;
+                if ($sticky_actions =~ /{[^}]*\s/) {
+                    l(LL_ERROR,
+                      "'Sticky Actions' with whitespace inside the " .
+                      "action parameters are currently unsupported.");
+                }
+
+            } elsif ($token eq 'url') {
+
+                if (defined $sticky_actions) {
+                    die "What" if defined ($regression_tests[$si][$ri]{'sticky-actions'});
+                    l(LL_FILE_LOADING, "Sticky actions: " . $sticky_actions);
+                    $regression_tests[$si][$ri]{'sticky-actions'} = $sticky_actions;
+                } else {
+                    l(LL_FILE_LOADING, "Sticky URL without Sticky Actions");
+                }
 
             } else {
 
@@ -576,6 +607,10 @@ sub execute_regression_test ($) {
 
         $result = execute_block_test($test_ref);
 
+    } elsif ($test{'type'} == STICKY_ACTIONS_TEST) {
+
+        $result = execute_sticky_actions_test($test_ref);
+
     } else {
 
         die "Unsupported test type detected: " . $test{'type'};
@@ -648,6 +683,34 @@ sub execute_block_test ($) {
     return defined $final_results->{'+block'};
 }
 
+sub execute_sticky_actions_test ($) {
+
+    my $test = shift;
+    my $url = $test->{'data'};
+    my $verified_actions = 0;
+    # XXX: splitting currently doesn't work for actions whose parameters contain spaces.
+    my @sticky_actions = split(/\s+/, $test->{'sticky-actions'});
+    my $final_results = get_final_results($url);
+
+    foreach my $sticky_action (@sticky_actions) {
+        if (defined $final_results->{$sticky_action}) {
+            # Exact match
+            $verified_actions++;
+        }elsif ($sticky_action =~ /-.*\{/ and
+                not defined $final_results->{$sticky_action}) {
+            # Disabled multi actions aren't explicitly listed as
+            # disabled and thus have to be checked by verifying
+            # that they aren't enabled.
+            $verified_actions++;
+        } else {
+            l(LL_VERBOSE_FAILURE,
+              "Ooops. '$sticky_action' is not among the final results.");
+        }
+    }
+
+    return $verified_actions == @sticky_actions;
+}
+
 sub get_final_results ($) {
 
     my $url = shift;
@@ -656,7 +719,12 @@ sub get_final_results ($) {
     my $final_results_reached = 0;
 
     die "Unacceptable characterss in $url" if $url =~ m@[\\'"]@;
+    # XXX: should be URL-encoded properly
+    $url =~ s@%@%25@g;
     $url =~ s@\s@%20@g;
+    $url =~ s@&@%26@g;
+    $url =~ s@:@%3A@g;
+    $url =~ s@/@%2F@g;
 
     $curl_parameters .= "'" . PRIVOXY_CGI_URL . 'show-url-info?url=' . $url . "'";
 
@@ -667,10 +735,18 @@ sub get_final_results ($) {
         next unless ($final_results_reached);
         last if (m@</td>@);
 
-        if (m@<br>([-+])<a.*>([^>]*)</a>( \{.*\})@) {
+        if (m@<br>([-+])<a.*>([^>]*)</a>(?: (\{.*\}))?@) {
             my $action = $1.$2;
-            my $value = $3;
-            $final_results{$action} = $value;
+            my $parameter = $3;
+            
+            if (defined $parameter) {
+                # In case the caller needs to check
+                # the action and it's parameter
+                $final_results{$action . $parameter} = 1;
+            }
+            # In case the action doesn't have paramters
+            # or the caller doesn't care for the parameter.
+            $final_results{$action} = 1;
         }
     }
 
@@ -1230,6 +1306,13 @@ sub log_result ($$) {
             $message .= ' Supposedly-blocked URL: ';
             $message .= quote($test{'data'});
 
+        } elsif ($test{'type'} == STICKY_ACTIONS_TEST) {
+
+            $message .= ' Sticky Actions: ';
+            $message .= quote($test{'sticky-actions'});
+            $message .= ' and URL: ';
+            $message .= quote($test{'data'});
+
         } else {
 
             die "Incomplete support for test type " . $test{'type'} .  " detected.";
@@ -1358,17 +1441,19 @@ B<privoxy-regression-test> [B<--debug bitmask>] [B<--fuzzer-feeding>] [B<--help>
 
 Privoxy-Regression-Test is supposed to one day become
 a regression test suite for Privoxy. It's not quite there
-yet, however, and can currently only test client header
-actions and check the returned status code for requests
-to arbitrary URLs.
+yet, however, and can currently only test header actions,
+check the returned status code for requests to arbitrary
+URLs and verify which actions are applied to them.
 
 Client header actions are tested by requesting
-B<http://config.privoxy.org/show-request> and checking whether
+B<http://p.p/show-request> and checking whether
 or not Privoxy modified the original request as expected.
 
 The original request contains both the header the action-to-be-tested
 acts upon and an additional tagger-triggering header that enables
 the action to test.
+
+Applied actions are checked through B<http://p.p/show-url-info>.
 
 =head1 CONFIGURATION FILE SYNTAX
 
@@ -1414,7 +1499,7 @@ for Valgrind or to verify that the templates are installed correctly.
 If you want to test CGI pages that require a trusted
 referer, you can use:
 
-    # Trusted CGI Request =  http://p.p/edit-actions
+    # Trusted CGI Request = http://p.p/edit-actions
 
 It works like ordinary fetch tests, but sets the referer
 header to a trusted value.
@@ -1425,14 +1510,24 @@ To verify that a URL is blocked, use:
 
     # Blocked URL = http://www.example.com/blocked
 
-Additionally all tests have test levels to let the user
+To verify that a specific set of actions is applied to an URL, use:
+
+    # Sticky Actions = +block{foo} +handle-as-empty-document -handle-as-image
+    # URL = http://www.example.org/my-first-url
+
+The sticky actions will be checked for all URLs below it
+until the next sticky actions directive.
+
+=head1 TEST LEVELS
+
+All tests have test levels to let the user
 control which ones to execute (see I<OPTIONS> below). 
 Test levels are either set with the B<Level> directive,
 or implicitly through the test type.
 
 Block tests default to level 7, fetch tests to level 6,
-tests for trusted CGI requests to level 3 and
-client-header-action tests to level 1.
+"Sticky Actions" tests default to level 5, tests for trusted CGI
+requests to level 3 and client-header-action tests to level 1.
 
 =head1 OPTIONS
 
