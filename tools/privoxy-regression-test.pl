@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.135 2008/03/26 10:58:46 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.136 2008/03/26 12:38:36 fk Exp $
 #
 # Wish list:
 #
@@ -241,7 +241,7 @@ sub enlist_new_test ($$$$$$) {
     if ($token eq 'set header') {
 
         l(LL_FILE_LOADING, "Header to set: " . $value);
-        ${$regression_tests}[$si][$ri]{'type'} = CLIENT_HEADER_TEST;
+        $$regression_tests[$si][$ri]{'type'} = CLIENT_HEADER_TEST;
         # Implicit default
         $$regression_tests[$si][$ri]{'level'} = CLIENT_HEADER_TEST;
 
@@ -625,7 +625,6 @@ sub execute_method_test ($) {
     my $test_ref = shift;
     my %test = %{$test_ref};
     my $buffer_ref;
-    my $result = 0;
     my $status_code;
     my $method = $test{'data'};
 
@@ -633,7 +632,7 @@ sub execute_method_test ($) {
     my $expected_status_code = $test{'expected-status-code'};
 
     $curl_parameters .= '--request ' . $method . ' ';
-    # Don't complain in case about the 'missing' body
+    # Don't complain in about the 'missing' body
     $curl_parameters .= '--head ' if ($method =~ /^HEAD$/i);
 
     $curl_parameters .= PRIVOXY_CGI_URL;
@@ -641,9 +640,7 @@ sub execute_method_test ($) {
     $buffer_ref = get_page_with_curl($curl_parameters);
     $status_code = get_status_code($buffer_ref);
 
-    $result = check_status_code_result($status_code, $expected_status_code);
-
-    return $result;
+    return check_status_code_result($status_code, $expected_status_code);
 }
 
 sub execute_dumb_fetch_test ($) {
@@ -651,7 +648,6 @@ sub execute_dumb_fetch_test ($) {
     my $test_ref = shift;
     my %test = %{$test_ref};
     my $buffer_ref;
-    my $result = 0;
     my $status_code;
 
     my $curl_parameters = '';
@@ -669,9 +665,7 @@ sub execute_dumb_fetch_test ($) {
     $buffer_ref = get_page_with_curl($curl_parameters);
     $status_code = get_status_code($buffer_ref);
 
-    $result = check_status_code_result($status_code, $expected_status_code);
-
-    return $result;
+    return check_status_code_result($status_code, $expected_status_code);
 }
 
 sub execute_block_test ($) {
@@ -785,14 +779,12 @@ sub execute_client_header_regression_test ($) {
     my $test_ref = shift;
     my $buffer_ref;
     my $header;
-    my $result = 0;
 
     $buffer_ref = get_show_request_with_curl($test_ref);
 
     $header = get_header($buffer_ref, $test_ref);
-    $result = check_header_result($test_ref, $header);
 
-    return $result;
+    return check_header_result($test_ref, $header);
 }
 
 sub execute_server_header_regression_test ($) {
@@ -800,14 +792,12 @@ sub execute_server_header_regression_test ($) {
     my $test_ref = shift;
     my $buffer_ref;
     my $header;
-    my $result = 0;
 
     $buffer_ref = get_head_with_curl($test_ref);
 
     $header = get_server_header($buffer_ref, $test_ref);
-    $result = check_header_result($test_ref, $header);
 
-    return $result;
+    return check_header_result($test_ref, $header);
 }
 
 
