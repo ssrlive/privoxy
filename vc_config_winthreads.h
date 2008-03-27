@@ -2,7 +2,7 @@
 #define CONFIG_H_INCLUDED
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/vc_config_winthreads.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/vc_config_winthreads.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
  *                .c file.  (Before even system headers).  It contains 
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: vc_config_winthreads.h,v $
+ *    Revision 1.5  2006/07/18 14:48:47  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.3.2.1  2006/04/08 21:57:26  david__schmidt
  *    Synchronize with a more modern copy of config.h.
  *
@@ -309,11 +313,6 @@
  * about which "Accept:" header to send.
  */
 #define FEATURE_IMAGE_DETECT_MSIE 1
-
-/*
- * Kills JavaScript popups - window.open, onunload, etc.
- */
-#define FEATURE_KILL_POPUPS 1
 
 /*
  * Use PNG instead of GIF for built-in images

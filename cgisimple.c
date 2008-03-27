@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.66 2008/02/23 16:57:12 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.67 2008/03/27 17:00:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.66 2008/02/23 16:57:12 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.67  2008/03/27 17:00:05  fabiankeil
+ *    Turn the favicon blobs into locals.
+ *
  *    Revision 1.66  2008/02/23 16:57:12  fabiankeil
  *    Rename url_actions() to get_url_actions() and let it
  *    use the standard parameter ordering.
@@ -1867,12 +1870,6 @@ static jb_err show_defines(struct map *exports)
    if (!err) err = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
 #endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
 
-#ifdef FEATURE_KILL_POPUPS
-   if (!err) err = map_conditional(exports, "FEATURE_KILL_POPUPS", 1);
-#else /* ifndef FEATURE_KILL_POPUPS */
-   if (!err) err = map_conditional(exports, "FEATURE_KILL_POPUPS", 0);
-#endif /* ndef FEATURE_KILL_POPUPS */
-
 #ifdef FEATURE_NO_GIFS
    if (!err) err = map_conditional(exports, "FEATURE_NO_GIFS", 1);
 #else /* ifndef FEATURE_NO_GIFS */
@@ -1985,10 +1982,6 @@ static char *show_rcs(void)
    SHOW_RCS(jbsockets_rcs)
    SHOW_RCS(jcc_h_rcs)
    SHOW_RCS(jcc_rcs)
-#ifdef FEATURE_KILL_POPUPS
-   SHOW_RCS(killpopup_h_rcs)
-   SHOW_RCS(killpopup_rcs)
-#endif /* def FEATURE_KILL_POPUPS */
    SHOW_RCS(list_h_rcs)
    SHOW_RCS(list_rcs)
    SHOW_RCS(loadcfg_h_rcs)

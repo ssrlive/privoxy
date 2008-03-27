@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.118 2008/03/24 11:31:10 fabiankeil Exp $
+#  $Id: default.action.master,v 1.119 2008/03/26 17:42:24 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -421,9 +421,9 @@
 #  
 # +prevent-compression
 #    Prevent the website from compressing the data. Some websites do
-#    that, which is a problem for Privoxy, since +filter, +kill-popups
-#    and +gif-deanimate will not work on compressed data. Will slow down
-#    connections to those websites, though.
+#    that, which is a problem for Privoxy when build without zlib support,
+#    since +filter and +gif-deanimate will not work on compressed data.
+#    Will slow down connections to those websites, though.
 #
 # +server-header-filter{name}
 #    All server headers to which this action applies are filtered on-the-fly
@@ -468,11 +468,6 @@
 #
 # +crunch-incoming-cookies
 #    Prevent the website from setting cookies
-#
-# +kill-popups (deprecated)
-#    Filter the website through a built-in filter to disable
-#    window.open() etc.  The two alternative spellings are
-#    equivalent.
 #
 # +redirect{<URL>}
 # +redirect{<pcrs command>}
@@ -529,14 +524,14 @@ for-privoxy-version=3.0.9
 +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
  allow-all-cookies  = -crunch-all-cookies -session-cookies-only 
- allow-popups       = -filter{all-popups} -kill-popups -filter{unsolicited-popups}
+ allow-popups       = -filter{all-popups} -filter{unsolicited-popups}
 +block-as-image     = +block{Blocked image request.} +handle-as-image
 -block-as-image     = -block
 
 # These aliases define combinations of actions
 # that are useful for certain types of sites:
 #
-fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups -prevent-compression
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -prevent-compression
 shop        = -crunch-all-cookies allow-popups
 
 # Your favourite blend of filters:
@@ -1502,7 +1497,7 @@ mail.google.
 #----------------------------------------------------------------------------
 # Semi-fragile, allow for blocks.
 #----------------------------------------------------------------------------
-{ -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups -prevent-compression }
+{ -crunch-all-cookies -filter -fast-redirects -hide-referer -prevent-compression }
 #MASTER# REMARKS: Problem URL: adserver.yahoo.com 10/01/06
 #MASTER# REMARKS: This is much too broad for my taste. It forces me to add
 #MASTER# REMARKS: a special yahoo section in my user.action file, just to

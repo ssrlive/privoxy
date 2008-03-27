@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.158 2007/12/11 21:29:25 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.159 2008/03/21 11:13:53 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -185,7 +185,7 @@ DOC_FILES = AUTHORS LICENSE README ChangeLog INSTALL \
 #############################################################################
 
 C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
-         errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
+         errlog.c filters.c gateway.c jbsockets.c jcc.c \
          list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c \
          urlmatch.c
 
@@ -964,10 +964,9 @@ errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY
 filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
 gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
 jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
-jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h killpopup.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h w32svrapi.h cgi.h
-killpopup.@OBJEXT@: killpopup.c killpopup.h config.h $(PROJECT_H_DEPS) jcc.h loadcfg.h
+jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h w32svrapi.h cgi.h
 list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h miscutil.h
-loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h killpopup.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
+loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
 loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h ssplit.h
 miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
 parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
@@ -1364,6 +1363,11 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.159  2008/03/21 11:13:53  fabiankeil
+# Only gather host information if it's actually needed.
+# Also move the code out of accept_connection() so it's less likely
+# to delay other incoming connections if the host is misconfigured.
+#
 # Revision 1.158  2007/12/11 21:29:25  fabiankeil
 # Fix dependency list for cgiedit.c.
 #

@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/user.action,v $
 # 
-#  $Id: user.action,v 1.7 2006/10/04 00:37:05 hal9 Exp $
+#  $Id: user.action,v 1.8 2008/03/01 15:13:03 fabiankeil Exp $
 #
 #  Purpose     :  User-maintained actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -49,14 +49,14 @@
 +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
  allow-all-cookies  = -crunch-all-cookies -session-cookies-only -filter{content-cookies}
- allow-popups       = -filter{all-popups} -kill-popups -filter{unsolicited-popups}
+ allow-popups       = -filter{all-popups} -filter{unsolicited-popups}
 +block-as-image     = +block{Blocked image request.} +handle-as-image
 -block-as-image     = -block
 
 # These aliases define combinations of actions
 # that are useful for certain types of sites:
 #
-fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -kill-popups -prevent-compression
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referer -prevent-compression
 shop        = -crunch-all-cookies allow-popups
 
 # Your favourite blend of filters:
@@ -92,7 +92,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 # windows, but you have chosen to kill popups uncoditionally by default.
 # This will allow it for your-example-bank.com:
 #
-{ -filter{all-popups} -kill-popups }
+{ -filter{all-popups} }
 .banking.example.com
 
 # Some hosts and some file types you may not want to filter for

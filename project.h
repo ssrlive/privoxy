@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.106 2008/03/24 11:21:03 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.107 2008/03/26 18:07:08 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.107  2008/03/26 18:07:08  fabiankeil
+ *    Add hostname directive. Closes PR#1918189.
+ *
  *    Revision 1.106  2008/03/24 11:21:03  fabiankeil
  *    Share the action settings for multiple patterns in the same
  *    section so we waste less memory for gigantic block lists
@@ -1041,8 +1044,8 @@ struct iob
 #define ACTION_NO_COOKIE_READ                        0x00001000UL
 /** Action bitmap: Block setting cookies. */
 #define ACTION_NO_COOKIE_SET                         0x00002000UL
-/** Action bitmap: Filter out popups. */
-#define ACTION_NO_POPUPS                             0x00004000UL
+/** Action bitmap: Override the forward settings in the config file */
+#define ACTION_FORWARD_OVERRIDE                      0x00004000UL
 /** Action bitmap: Send a vanilla wafer. */
 #define ACTION_VANILLA_WAFER                         0x00008000UL
 /** Action bitmap: Limit CONNECT requests to safe ports. */
@@ -1071,8 +1074,6 @@ struct iob
 #define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x08000000UL
 /** Action bitmap: Redirect request. */
 #define  ACTION_REDIRECT                             0x10000000UL
-/** Action bitmap: Override the forward settings in the config file */
-#define ACTION_FORWARD_OVERRIDE                      0x20000000UL
 
 
 /** Action string index: How to deanimate GIFs */

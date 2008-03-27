@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.58 2008/02/24 19:28:01 fk Exp $
+# $Id: regression-tests.action,v 1.60 2008/03/27 07:46:54 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test.
@@ -404,7 +404,6 @@ TAG:^send-vanilla-wafer$
  +deanimate-gifs{last} \
  -filter \
  -inspect-jpegs \
- -kill-popups \
 }
 TAG:^deanimate-gifs\{last\}$
 
@@ -418,7 +417,6 @@ TAG:^deanimate-gifs\{last\}$
  -deanimate-gifs \
  +filter{banners-by-size} \
  -inspect-jpegs \
- -kill-popups \
 }
 TAG:^filter\{banners-by-size\}$
 
@@ -432,23 +430,8 @@ TAG:^filter\{banners-by-size\}$
  -deanimate-gifs \
  -filter \
  +inspect-jpegs \
- -kill-popups \
 }
 TAG:^filter\{banners-by-size\}$
-
-# Set Header    = Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = If-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Request-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-{\
- -deanimate-gifs \
- -filter \
- -inspect-jpegs \
- +kill-popups \
-}
-TAG:^kill-popups$
 
 # Set Header    = Range: bytes=1234-5678
 # Expect Header = NO CHANGE
@@ -724,18 +707,8 @@ forward5-null-gateway-host.example
 # Fetch Test = http://www.forbidden-connect.example:444/forbidden-connect
 # Method = CONNECT
 # Expect Status Code = 403
-{+limit-connect{443} \
- -treat-forbidden-connects-like-blocks \
-}
+{+limit-connect{443}}
 www.forbidden-connect.example/forbidden-connect
-
-# Fetch Test = http://www.forbidden-connect.example:444/forbidden-connect-treated-as-block
-# Method = CONNECT
-# Expect Status Code = 403
-{+limit-connect{443} \
- +treat-forbidden-connects-like-blocks \
-}
-www.forbidden-connect.example/forbidden-connect-treated-as-block
 
 # Fetch Test = http://www.blocked-request.example/blocked-request
 # Expect Status Code = 403

@@ -263,11 +263,6 @@
                +image in the actions file.</td>
             </tr>
             <tr>
-              <td><code>FEATURE_KILL_POPUPS</code></td>
-              <td>@if-FEATURE_KILL_POPUPS-then@ Yes @else-not-FEATURE_KILL_POPUPS@ No @endif-FEATURE_KILL_POPUPS@</td>
-              <td>Allows the +no-popups action, to block JavaScript popups.</td>
-            </tr>
-            <tr>
               <td><code>FEATURE_NO_GIFS</code></td>
               <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
               <td>Use PNG instead of GIF for the built-in images.</td>

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.65 2008/01/31 14:44:33 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.66 2008/01/31 15:38:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,12 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.65 2008/01/31 14:44:33 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.66  2008/01/31 15:38:14  fabiankeil
+ *    - Make the logfp assertion more strict. As of 1.63, the "||" could
+ *      have been an "&&", which means we can use two separate assertions
+ *      and skip on of them on Windows.
+ *    - Break a long commit message line in two.
+ *
  *    Revision 1.65  2008/01/31 14:44:33  fabiankeil
  *    Use (a != b) instead of !(a == b) so the sanity check looks less insane.
  *
@@ -856,11 +862,6 @@ static inline const char *get_log_level_string(int loglevel)
       case LOG_LEVEL_DEANIMATE:
          log_level_string = "Gif-Deanimate";
          break;
-#ifdef FEATURE_KILL_POPUPS
-      case LOG_LEVEL_POPUPS:
-         log_level_string = "Kill-Popups";
-         break;
-#endif /* def FEATURE_KILL_POPUPS */
       case LOG_LEVEL_CGI:
          log_level_string = "CGI";
          break;

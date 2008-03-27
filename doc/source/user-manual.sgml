@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.65 2008/03/04 18:30:40 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.66 2008/03/06 16:33:47 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.65 2008/03/04 18:30:40 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.66 2008/03/06 16:33:47 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1456,11 +1456,9 @@ must find a better place for this paragraph
 
 <para>
  Another feature where you will probably want to define exceptions for trusted
- sites is the popup-killing (through the <ulink
- url="actions-file.html#KILL-POPUPS"><quote>+kill-popups</quote></ulink> and
- <ulink
- url="actions-file.html#FILTER-POPUPS"><quote>+filter{popups}</quote></ulink>
- actions), because your favorite shopping, banking, or leisure site may need
+ sites is the popup-killing (through  <ulink
+ url="actions-file.html#FILTER-POPUPS"><quote>+filter{popups}</quote></ulink>),
+ because your favorite shopping, banking, or leisure site may need
  popups (explained below). 
 </para>
 
@@ -5067,101 +5065,6 @@ new action
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="kill-popups">
-<title>kill-popups<anchor id="kill-popup"></title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>Eliminate those annoying pop-up windows (deprecated)</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    While loading the document, replace JavaScript code that opens
-    pop-up windows with (syntactically neutral) dummy code on the fly.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    This action is basically a built-in, hardwired special-purpose filter
-    action, but there are important differences: For <literal>kill-popups</literal>,
-    the document need not be buffered, so it can be incrementally rendered while
-    downloading. But <literal>kill-popups</literal> doesn't catch as many pop-ups as
-    <literal><link
-    linkend="FILTER-ALL-POPUPS">filter{<replaceable>all-popups</replaceable>}</link></literal>
-    does and is not as smart as <literal><link
-    linkend="FILTER-UNSOLICITED-POPUPS">filter{<replaceable>unsolicited-popups</replaceable>}</link>
-    </literal>is.
-   </para>
-   <para>
-    Think of it as a fast and efficient replacement for a filter that you
-    can use if you don't want any filtering at all. Note that it doesn't make
-    sense to combine it with any <literal><link linkend="filter">filter</link></literal> action,
-    since as soon as one <literal><link linkend="filter">filter</link></literal> applies,
-    the whole document needs to be buffered anyway, which destroys the advantage of
-    the <literal>kill-popups</literal> action over its filter equivalent.
-   </para>
-   <para>
-    Killing all pop-ups unconditionally is problematic. Many shops and banks rely on
-    pop-ups to display forms, shopping carts etc, and the <literal><link
-    linkend="FILTER-UNSOLICITED-POPUPS">filter{<replaceable>unsolicited-popups</replaceable>}</link>
-    </literal> does a better job of catching only the unwanted ones.
-   </para>
-   <para>
-    If the only kind of pop-ups that you want to kill are exit consoles (those
-    <emphasis>really nasty</emphasis> windows that appear when you close an other
-    one), you might want to use
-    <literal><link
-    linkend="filter">filter</link>{<replaceable>js-annoyances</replaceable>}</literal>
-    instead. 
-   </para>
-   <para>
-    This action is most appropriate for browsers that don't have any controls 
-    for unwanted pop-ups. Not recommended for general usage.
-   </para>
-   <para>
-    This action doesn't work very reliable and may be removed in future releases.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para><screen>+kill-popups</screen></para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="limit-connect">
 <title>limit-connect</title>
 
@@ -5289,9 +5192,9 @@ new action
    <para>
     More and more websites send their content compressed by default, which
     is generally a good idea and saves bandwidth. But the <literal><link
-    linkend="filter">filter</link></literal>, <literal><link linkend="deanimate-gifs">deanimate-gifs</link></literal>
-    and <literal><link linkend="kill-popups">kill-popups</link></literal> actions need
-    access to the uncompressed data.
+    linkend="filter">filter</link></literal> and
+    <literal><link linkend="deanimate-gifs">deanimate-gifs</link></literal>
+    actions need access to the uncompressed data.
    </para>
    <para>
     When compiled with zlib support (available since &my-app; 3.0.7), content that should be
@@ -6124,9 +6027,9 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
  # These aliases define combinations of actions
  # that are useful for certain types of sites:
  #
- fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link> -<link linkend="KILL-POPUPS">kill-popups</link> -<link linkend="PREVENT-COMPRESSION">prevent-compression</link>
+ fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link> -<link linkend="PREVENT-COMPRESSION">prevent-compression</link>
 
- shop        = -crunch-all-cookies -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link> -<link linkend="KILL-POPUPS">kill-popups</link>
+ shop        = -crunch-all-cookies -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link>
 
  # Short names for other aliases, for really lazy people ;-)
  #
@@ -6161,7 +6064,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
  # These shops require pop-ups:
  #
- {-kill-popups -filter{all-popups} -filter{unsolicited-popups}}
+ {-filter{all-popups} -filter{unsolicited-popups}}
   .dabs.com
   .overclockers.co.uk</screen>
 </para>
@@ -6238,8 +6141,8 @@ that also explains why and how aliases are used:
  # These aliases define combinations of actions
  # that are useful for certain types of sites:
  #
- fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link> -<link linkend="KILL-POPUPS">kill-popups</link>
- shop        = -crunch-all-cookies -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link> -<link linkend="KILL-POPUPS">kill-popups</link></screen>
+ fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link>
+ shop        = -crunch-all-cookies -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link></screen>
 </para>
 
 <para>
@@ -6352,8 +6255,7 @@ mail.google.com</screen>
  now. <ulink url="http://www.mozilla.org/">Mozilla</ulink> users, who
  can turn on smart handling of unwanted pop-ups in their browsers, can
  safely choose
- -<literal><link linkend="FILTER-ALL-POPUPS">filter{popups}</link></literal> (and
- -<literal><link linkend="KILL-POPUPS">kill-popups</link></literal>) above
+ -<literal><link linkend="FILTER-ALL-POPUPS">filter{popups}</link></literal> above
  and hence don't need this section. Anyway, disabling an already disabled
  action doesn't hurt, so we'll define our exceptions regardless of what was
  chosen in the defaults section:
@@ -6363,7 +6265,7 @@ mail.google.com</screen>
  <screen>
 # These sites require pop-ups too :( 
 #
-{ -<link linkend="KILL-POPUPS">kill-popups</link> -<link linkend="FILTER-ALL-POPUPS">filter{popups}</link> }
+{ -<link linkend="FILTER-ALL-POPUPS">filter{popups}</link> }
 .dabs.com
 .overclockers.co.uk
 .deutsche-bank-24.de</screen>
@@ -6612,14 +6514,14 @@ wiki.
 +crunch-all-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
 -crunch-all-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
  allow-all-cookies  = -crunch-all-cookies -session-cookies-only
- allow-popups       = -filter{all-popups} -kill-popups
+ allow-popups       = -filter{all-popups}
 +block-as-image     = +block{Blocked as image.} +handle-as-image
 -block-as-image     = -block
 
 # These aliases define combinations of actions that are useful for
 # certain types of sites:
 #
-fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referrer -kill-popups
+fragile     = -block -crunch-all-cookies -filter -fast-redirects -hide-referrer
 shop        = -crunch-all-cookies allow-popups
 
 # Allow ads for selected useful free sites:
@@ -8314,13 +8216,6 @@ Requests</title>
  </listitem> 
  <listitem>
   <para>
-   If the <link linkend="KILL-POPUPS"><quote>+kill-popups</quote></link>
-   action applies, and it is an HTML or JavaScript document, the popup-code in the
-   response is filtered on-the-fly as it is received.
-  </para>
- </listitem> 
- <listitem>
-  <para>
    If any <link linkend="FILTER"><quote>+filter</quote></link> action
    or <link
    linkend="DEANIMATE-GIFS"><quote>+deanimate-gifs</quote></link>
@@ -8573,7 +8468,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  +hide-referrer {forge}
  -hide-user-agent
  -inspect-jpegs
- -kill-popups
  -limit-connect
  -overwrite-last-modified
  -prevent-compression
@@ -8696,7 +8590,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   +hide-referer{forge} 
   -hide-user-agent 
   -inspect-jpegs
-  -kill-popups 
   -overwrite-last-modified
   +prevent-compression 
   -redirect
@@ -8866,6 +8759,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.66  2008/03/06 16:33:47  fabiankeil
+ If limit-connect isn't used, don't limit CONNECT requests to port 443.
+
  Revision 2.65  2008/03/04 18:30:40  fabiankeil
  Remove the treat-forbidden-connects-like-blocks action. We now
  use the "blocked" page for forbidden CONNECT requests by default.
