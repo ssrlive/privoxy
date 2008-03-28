@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.60 2008/03/27 07:46:54 fk Exp $
+# $Id: regression-tests.action,v 1.62 2008/03/28 08:42:51 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test.
@@ -403,7 +403,6 @@ TAG:^send-vanilla-wafer$
 {\
  +deanimate-gifs{last} \
  -filter \
- -inspect-jpegs \
 }
 TAG:^deanimate-gifs\{last\}$
 
@@ -416,20 +415,6 @@ TAG:^deanimate-gifs\{last\}$
 {\
  -deanimate-gifs \
  +filter{banners-by-size} \
- -inspect-jpegs \
-}
-TAG:^filter\{banners-by-size\}$
-
-# Set Header    = Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = If-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Request-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-{\
- -deanimate-gifs \
- -filter \
- +inspect-jpegs \
 }
 TAG:^filter\{banners-by-size\}$
 
@@ -442,8 +427,6 @@ TAG:^filter\{banners-by-size\}$
 {\
  -deanimate-gifs \
  -filter \
- -inspect-jpegs \
- -kill-popups \
 }
 TAG:^no-content-filter$
 

@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.31  2008/03/27 18:27:20  fabiankeil
+ *    Remove kill-popups action.
+ *
  *    Revision 1.30  2008/03/04 18:30:34  fabiankeil
  *    Remove the treat-forbidden-connects-like-blocks action. We now
  *    use the "blocked" page for forbidden CONNECT requests by default.
@@ -225,7 +228,6 @@ DEFINE_CGI_PARAM_RADIO   ("hide-referrer",              ACTION_HIDE_REFERER,    
 DEFINE_CGI_PARAM_CUSTOM  ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.privoxy.org/")
 DEFINE_ACTION_STRING     ("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
 DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy " VERSION)
-DEFINE_ACTION_BOOL       ("inspect-jpegs",              ACTION_JPEG_INSPECT)
 DEFINE_ACTION_STRING     ("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)
 DEFINE_CGI_PARAM_NO_RADIO("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT,  "443")
 DEFINE_ACTION_STRING     ("overwrite-last-modified",    ACTION_OVERWRITE_LAST_MODIFIED, ACTION_STRING_LAST_MODIFIED)

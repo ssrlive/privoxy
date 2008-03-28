@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.66 2008/03/06 16:33:47 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.67 2008/03/27 18:31:21 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.66 2008/03/06 16:33:47 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.67 2008/03/27 18:31:21 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4997,74 +4997,6 @@ new action
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="inspect-jpegs">
-<title>inspect-jpegs</title>
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>Try to protect against a MS buffer over-run in JPEG processing</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Protect against a known exploit
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    See Microsoft Security Bulletin MS04-028. JPEG images are one of the most 
-    common image types found across the Internet. The exploit as described can 
-    allow execution of code on the target system, giving an attacker access 
-    to the system in question by merely planting an altered JPEG image, which 
-    would have no obvious indications of what lurks inside. This action
-    tries to prevent this exploit if delivered through unencrypted HTTP.
-   </para>
-   <para>
-    Note that the exploit mentioned is several years old
-    and it's unlikely that your client is still vulnerable
-    against it. This action may be removed in one of the
-    next releases.
-   </para>
-  
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para><screen>+inspect-jpegs</screen></para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="limit-connect">
 <title>limit-connect</title>
 
@@ -8467,7 +8399,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -hide-if-modified-since
  +hide-referrer {forge}
  -hide-user-agent
- -inspect-jpegs
  -limit-connect
  -overwrite-last-modified
  -prevent-compression
@@ -8589,7 +8520,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   +hide-from-header{block} 
   +hide-referer{forge} 
   -hide-user-agent 
-  -inspect-jpegs
   -overwrite-last-modified
   +prevent-compression 
   -redirect
@@ -8759,6 +8689,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.67  2008/03/27 18:31:21  fabiankeil
+ Remove kill-popups action.
+
  Revision 2.66  2008/03/06 16:33:47  fabiankeil
  If limit-connect isn't used, don't limit CONNECT requests to port 443.
 

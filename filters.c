@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.103 2008/03/06 16:33:45 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.104 2008/03/27 18:27:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -10,8 +10,8 @@ const char filters_rcs[] = "$Id: filters.c,v 1.103 2008/03/06 16:33:45 fabiankei
  *                   `filter_popups', `forward_url', 'redirect_url',
  *                   `ij_untrusted_url', `intercept_url', `pcrs_filter_respose',
  *                   `ijb_send_banner', `trust_url', `gif_deanimate_response',
- *                   `jpeg_inspect_response', `execute_single_pcrs_command',
- *                   `rewrite_url', `get_last_url'
+ *                   `execute_single_pcrs_command', `rewrite_url',
+ *                   `get_last_url'
  *
  * Copyright   :  Written by and Copyright (C) 2001, 2004-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.103 2008/03/06 16:33:45 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.104  2008/03/27 18:27:24  fabiankeil
+ *    Remove kill-popups action.
+ *
  *    Revision 1.103  2008/03/06 16:33:45  fabiankeil
  *    If limit-connect isn't used, don't limit CONNECT requests to port 443.
  *
@@ -2059,68 +2062,6 @@ static char *gif_deanimate_response(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  jpeg_inspect_response
- *
- * Description :  
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  a pointer to the (newly allocated) modified buffer
- *                or NULL in case something went wrong.
- *
- *********************************************************************/
-static char *jpeg_inspect_response(struct client_state *csp)
-{
-   struct binbuffer  *in = NULL;
-   struct binbuffer *out = NULL;
-   char *p = NULL;
-   size_t size;
-
-   size = (size_t)(csp->iob->eod - csp->iob->cur);
-
-   if (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
-   {
-      log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg no mem 1)");
-      return NULL;
-   }
-
-   if (NULL == (out = (struct binbuffer *)zalloc(sizeof *out)))
-   {
-      log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg no mem 2)");
-      return NULL;
-   }
-
-   in->buffer = csp->iob->cur;
-   in->size = size;
-
-   /*
-    * Calling jpeg_inspect has the side-effect of creating and 
-    * modifying the image buffer of "out" directly.
-    */
-   if (jpeg_inspect(in, out))
-   {
-      log_error(LOG_LEVEL_DEANIMATE, "failed! (jpeg parsing)");
-      freez(in);
-      buf_free(out);
-      return(NULL);
-
-   }
-   else
-   {
-      csp->content_length = out->offset;
-      csp->flags |= CSP_FLAG_MODIFIED;
-      p = out->buffer;
-      freez(in);
-      freez(out);
-      return(p);
-   }
-
-}
-
-
-/*********************************************************************
- *
  * Function    :  get_filter_function
  *
  * Description :  Decides which content filter function has
@@ -2189,11 +2130,6 @@ filter_function_ptr get_filter_function(struct client_state *csp)
             (csp->action->flags & ACTION_DEANIMATE))
    {
       filter_function = gif_deanimate_response;
-   }
-   else if ((csp->content_type & CT_JPEG)  &&
-            (csp->action->flags & ACTION_JPEG_INSPECT))
-   {
-      filter_function = jpeg_inspect_response;
    }
 
    return filter_function;
@@ -2733,7 +2669,7 @@ inline int content_filters_enabled(const struct client_state *csp)
 {
    return (((csp->rlist != NULL) &&
       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]))) ||
-      (csp->action->flags & (ACTION_DEANIMATE|ACTION_JPEG_INSPECT)));
+      (csp->action->flags & ACTION_DEANIMATE));
 }
 
 /*

@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.107 2008/03/26 18:07:08 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.108 2008/03/27 18:27:36 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.108  2008/03/27 18:27:36  fabiankeil
+ *    Remove kill-popups action.
+ *
  *    Revision 1.107  2008/03/26 18:07:08  fabiankeil
  *    Add hostname directive. Closes PR#1918189.
  *
@@ -990,7 +993,6 @@ struct iob
 #define CT_TEXT    0x0001U /**< Suitable for pcrs filtering. */
 #define CT_GIF     0x0002U /**< Suitable for GIF filtering.  */
 #define CT_TABOO   0x0004U /**< DO NOT filter, irrespective of other flags. */
-#define CT_JPEG    0x0008U /**< Suitable for JPEG filtering.  */
 
 /* Although these are not, strictly speaking, content types
  * (they are content encodings), it is simple to handle them
@@ -1050,8 +1052,8 @@ struct iob
 #define ACTION_VANILLA_WAFER                         0x00008000UL
 /** Action bitmap: Limit CONNECT requests to safe ports. */
 #define ACTION_LIMIT_CONNECT                         0x00010000UL
-/** Action bitmap: Inspect if it's a JPEG. */
-#define ACTION_JPEG_INSPECT                          0x00020000UL
+/** Action bitmap: Redirect request. */
+#define  ACTION_REDIRECT                             0x00020000UL
 /** Action bitmap: Crunch or modify "if-modified-since" header. */
 #define ACTION_HIDE_IF_MODIFIED_SINCE                0x00040000UL
 /** Action bitmap: Overwrite Content-Type header. */
@@ -1072,8 +1074,6 @@ struct iob
 #define ACTION_HIDE_ACCEPT_LANGUAGE                  0x04000000UL
 /** Action bitmap: Block as empty document */
 #define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x08000000UL
-/** Action bitmap: Redirect request. */
-#define  ACTION_REDIRECT                             0x10000000UL
 
 
 /** Action string index: How to deanimate GIFs */

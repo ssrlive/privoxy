@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.120 2008/01/04 17:43:45 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.121 2008/01/05 21:37:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.120 2008/01/04 17:43:45 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.121  2008/01/05 21:37:03  fabiankeil
+ *    Let client_range() also handle Request-Range headers
+ *    which apparently are still supported by many servers.
+ *
  *    Revision 1.120  2008/01/04 17:43:45  fabiankeil
  *    Improve the warning messages that get logged if the action files
  *    "enable" filters but no filters of that type have been loaded.
@@ -2207,10 +2211,6 @@ static jb_err server_content_type(struct client_state *csp, char **header)
       else if (strstr(*header, "image/gif"))
       {
          csp->content_type |= CT_GIF;
-      }
-      else if (strstr(*header, "image/jpeg"))
-      {
-         csp->content_type |= CT_JPEG;
       }
    }
 

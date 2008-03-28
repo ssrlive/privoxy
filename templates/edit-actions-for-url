@@ -32,6 +32,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.52  2008/03/15 14:52:36  fabiankeil
+#    Add CGI editor support for the "disable all filters of this type"
+#    directives "-client-header-filter", "-server-header-filter",
+#    "-client-header-tagger" and "-server-header-tagger".
+#
 #    Revision 1.51  2008/03/07 16:46:49  fabiankeil
 #    Reword limit-connect{} entry.
 #
@@ -1131,33 +1136,6 @@ function show_send_wafer_opts(tf)
       <td>User Agent string to send:<br>
         <input type="text" name="hide_user_agent_mode" size="40"
         value="@hide-user-agent-param@"></td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="inspect_jpegs" value="Y" @inspect-jpegs-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="inspect_jpegs" value="N" @inspect-jpegs-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="inspect_jpegs" value="X" @inspect-jpegs-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@INSPECT-JPEGS">inspect-jpegs</a></td>
-      <td>Checks jpeg images for malicious content.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="kill_popups" value="Y" @kill-popups-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="kill_popups" value="N" @kill-popups-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="kill_popups" value="X" @kill-popups-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@KILL-POPUPS">kill-popups</a></td>
-      <td>Filter the website through a built-in filter to disable many JavaScript
-        pop-up windows. Not recommended.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"

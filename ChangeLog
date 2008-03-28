@@ -40,6 +40,7 @@ ChangeLog for Privoxy
 - The obsolete kill-popups action has been removed as the
   PCRS-based popup filters can do the same and are less
   unreliable.
+- The inspect-jpegs action has been removed.
 
 *** Version 3.0.8 ***
 
