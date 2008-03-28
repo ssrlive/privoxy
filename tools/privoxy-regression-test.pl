@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.138 2008/03/27 19:06:34 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.14 2008/03/27 19:13:08 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -237,67 +237,55 @@ sub tokenize ($) {
 sub enlist_new_test ($$$$$$) {
 
     my ($regression_tests, $token, $value, $si, $ri, $number) = @_;
+    my $type;
 
     if ($token eq 'set header') {
 
         l(LL_FILE_LOADING, "Header to set: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = CLIENT_HEADER_TEST;
-        # Implicit default
-        $$regression_tests[$si][$ri]{'level'} = CLIENT_HEADER_TEST;
+        $type = CLIENT_HEADER_TEST;
 
     } elsif ($token eq 'request header') {
 
         l(LL_FILE_LOADING, "Header to request: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = SERVER_HEADER_TEST;
-        # Implicit default
+        $type = SERVER_HEADER_TEST;
         $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
-        $$regression_tests[$si][$ri]{'level'} = SERVER_HEADER_TEST;
 
     } elsif ($token eq 'trusted cgi request') {
 
         l(LL_FILE_LOADING, "CGI URL to test in a dumb way: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = TRUSTED_CGI_REQUEST;
-        # Implicit default
+        $type = TRUSTED_CGI_REQUEST;
         $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
-        $$regression_tests[$si][$ri]{'level'} = TRUSTED_CGI_REQUEST;
 
     } elsif ($token eq 'fetch test') {
 
         l(LL_FILE_LOADING, "URL to test in a dumb way: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = DUMB_FETCH_TEST;
-        # Implicit default
+        $type = DUMB_FETCH_TEST;
         $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
-        $$regression_tests[$si][$ri]{'level'} = DUMB_FETCH_TEST;
 
     } elsif ($token eq 'method test') {
 
         l(LL_FILE_LOADING, "Method to test: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = METHOD_TEST;
-        # Implicit default
+        $type = METHOD_TEST;
         $$regression_tests[$si][$ri]{'expected-status-code'} = 200;
-        $$regression_tests[$si][$ri]{'level'} = METHOD_TEST;
 
     } elsif ($token eq 'blocked url') {
 
         l(LL_FILE_LOADING, "URL to block-test: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = BLOCK_TEST;
-        # Implicit default
-        $$regression_tests[$si][$ri]{'expected-status-code'} = 403;
-        $$regression_tests[$si][$ri]{'level'} = BLOCK_TEST;
+        $type = BLOCK_TEST;
 
     } elsif ($token eq 'url') {
 
         l(LL_FILE_LOADING, "Sticky URL to test: " . $value);
-        $$regression_tests[$si][$ri]{'type'} = STICKY_ACTIONS_TEST;
-        # Implicit default
-        $$regression_tests[$si][$ri]{'level'} = STICKY_ACTIONS_TEST;
-        $$regression_tests[$si][$ri]{'url'} = ''; 
+        $type = STICKY_ACTIONS_TEST;
 
     } else {
 
         die "Incomplete '" . $token . "' support detected."; 
 
     }
+
+    $$regression_tests[$si][$ri]{'type'} = $type;
+    $$regression_tests[$si][$ri]{'level'} = $type;
 
     check_for_forbidden_characters($value);
 
