@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.108 2008/03/27 18:27:36 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.109 2008/03/28 15:13:41 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.109  2008/03/28 15:13:41  fabiankeil
+ *    Remove inspect-jpegs action.
+ *
  *    Revision 1.108  2008/03/27 18:27:36  fabiankeil
  *    Remove kill-popups action.
  *
@@ -1048,8 +1051,8 @@ struct iob
 #define ACTION_NO_COOKIE_SET                         0x00002000UL
 /** Action bitmap: Override the forward settings in the config file */
 #define ACTION_FORWARD_OVERRIDE                      0x00004000UL
-/** Action bitmap: Send a vanilla wafer. */
-#define ACTION_VANILLA_WAFER                         0x00008000UL
+/** Action bitmap: Block as empty document */
+#define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x00008000UL
 /** Action bitmap: Limit CONNECT requests to safe ports. */
 #define ACTION_LIMIT_CONNECT                         0x00010000UL
 /** Action bitmap: Redirect request. */
@@ -1072,8 +1075,6 @@ struct iob
 #define ACTION_OVERWRITE_LAST_MODIFIED               0x02000000UL
 /** Action bitmap: Replace or block Accept-Language header */
 #define ACTION_HIDE_ACCEPT_LANGUAGE                  0x04000000UL
-/** Action bitmap: Block as empty document */
-#define  ACTION_HANDLE_AS_EMPTY_DOCUMENT             0x08000000UL
 
 
 /** Action string index: How to deanimate GIFs */
@@ -1120,20 +1121,18 @@ struct iob
 
 /** Index into current_action_spec::multi[] for headers to add. */
 #define ACTION_MULTI_ADD_HEADER              0
-/** Index into current_action_spec::multi[] for headers to add. */
-#define ACTION_MULTI_WAFER                   1
 /** Index into current_action_spec::multi[] for content filters to apply. */
-#define ACTION_MULTI_FILTER                  2
+#define ACTION_MULTI_FILTER                  1
 /** Index into current_action_spec::multi[] for server-header filters to apply. */
-#define ACTION_MULTI_SERVER_HEADER_FILTER    3
+#define ACTION_MULTI_SERVER_HEADER_FILTER    2
 /** Index into current_action_spec::multi[] for client-header filters to apply. */
-#define ACTION_MULTI_CLIENT_HEADER_FILTER    4
+#define ACTION_MULTI_CLIENT_HEADER_FILTER    3
 /** Index into current_action_spec::multi[] for client-header tags to apply. */
-#define ACTION_MULTI_CLIENT_HEADER_TAGGER    5
+#define ACTION_MULTI_CLIENT_HEADER_TAGGER    4
 /** Index into current_action_spec::multi[] for server-header tags to apply. */
-#define ACTION_MULTI_SERVER_HEADER_TAGGER    6
+#define ACTION_MULTI_SERVER_HEADER_TAGGER    5
 /** Number of multi-string actions. */
-#define ACTION_MULTI_COUNT                   7
+#define ACTION_MULTI_COUNT                   6
 
 
 /**

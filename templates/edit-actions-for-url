@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.53  2008/03/28 15:13:45  fabiankeil
+#    Remove inspect-jpegs action.
+#
 #    Revision 1.52  2008/03/15 14:52:36  fabiankeil
 #    Add CGI editor support for the "disable all filters of this type"
 #    directives "-client-header-filter", "-server-header-filter",
@@ -435,18 +438,6 @@ function show_limit_connect_opts(tf)
         target = document.getElementById("limit_connect_opts");
     } else if (document.all) {
         target = document.limit_connect_opts;
-    } else {
-        return;
-    }
-    target.style.display = (tf ? "" : "none");
-}
-
-function show_send_wafer_opts(tf)
-{
-    if (document.getElementById) {
-        target = document.getElementById("send_wafer_opts");
-    } else if (document.all) {
-        target = document.send_wafer_opts;
     } else {
         return;
     }
@@ -1237,41 +1228,6 @@ function show_send_wafer_opts(tf)
         value="@redirect-param@"></td>
     </tr>
 
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="send_vanilla_wafer" value="Y" @send-vanilla-wafer-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="send_vanilla_wafer" value="N" @send-vanilla-wafer-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="send_vanilla_wafer" value="X" @send-vanilla-wafer-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@SEND-VANILLA-WAFER">send-vanilla-wafer</a></td>
-      <td>Adds a special wafer (standard cookie) to all your requests. Not recommended.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="send_wafer" id="send_wafer_y" value="Y" @send-wafer-y@
-        onclick="show_send_wafer_opts(true)"></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="send_wafer" id="send_wafer_n" value="N" @send-wafer-n@
-        onclick="show_send_wafer_opts(false)"></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="send_wafer" id="send_wafer_x" value="X" @send-wafer-x@
-        onclick="show_send_wafer_opts(false)"></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@SEND-WAFER">send-wafer</a></td>
-      <td>Adds user-specified cookies.</td>
-    </tr>
-    <tr class="bg1" align="left" valign="top" id="send_wafer_opts">
-      <td class="en1">&nbsp;</td>
-      <td class="dis1">&nbsp;</td>
-      <td class="noc1">&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>Editing the settings for this option, or turning
-        it on if it was off, is not yet supported using this web-based
-        editor.</td>
-    </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1">&nbsp;</td>
       <td class="dis1" align="center" valign="middle"><input type="radio"

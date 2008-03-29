@@ -41,6 +41,9 @@ ChangeLog for Privoxy
   PCRS-based popup filters can do the same and are less
   unreliable.
 - The inspect-jpegs action has been removed.
+- The send-wafer and send-vanilla-wafer actions have been removed.
+  They weren't particular useful and their behaviour could be emulated
+  with add-header anyway.
 
 *** Version 3.0.8 ***
 

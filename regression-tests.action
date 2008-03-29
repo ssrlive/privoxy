@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.62 2008/03/28 08:42:51 fk Exp $
+# $Id: regression-tests.action,v 1.63 2008/03/28 19:03:49 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test.
@@ -364,30 +364,6 @@ TAG:^hide-from-header\{siebenzwerge@example.org\}$
  +prevent-compression\
 }
 TAG:^prevent-compression$
-
-#######################################################
-# Test send-wafer.
-#######################################################
-
-# Set Header    = X-Does-Not-Matter: Foo bar
-# Expect Header = Cookie: Tracking+me+is+easy+due+to+my+stupid+wafer+cookie
-{\
- +send-wafer{Tracking me is easy due to my stupid wafer cookie}\
- -send-vanilla-wafer \
-}
-TAG:^send-wafer\{Tracking me is easy due to my stupid wafer cookie\}$
-
-#######################################################
-# Test send-vanilla-wafer.
-#######################################################
-
-# Set Header    = X-Does-Not-Matter: Foo bar
-# Expect Header = Cookie: NOTICE=TO_WHOM_IT_MAY_CONCERN_Do_not_send_me_any_copyrighted_information_other_than_the_document_that_I_am_requesting_or_any_of_its_necessary_components._In_particular_do_not_send_me_any_cookies_that_are_subject_to_a_claim_of_copyright_by_anybody._Take_notice_that_I_refuse_to_be_bound_by_any_license_condition_(copyright_or_otherwise)_applying_to_any_cookie._
-{\
- +send-vanilla-wafer \
- -send-wafer \
-}
-TAG:^send-vanilla-wafer$
 
 #######################################################
 # Test content filters which could cause problems with

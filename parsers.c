@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.121 2008/01/05 21:37:03 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.122 2008/03/28 15:13:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.121 2008/01/05 21:37:03 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.122  2008/03/28 15:13:39  fabiankeil
+ *    Remove inspect-jpegs action.
+ *
  *    Revision 1.121  2008/01/05 21:37:03  fabiankeil
  *    Let client_range() also handle Request-Range headers
  *    which apparently are still supported by many servers.
@@ -853,7 +856,6 @@ static jb_err server_last_modified      (struct client_state *csp, char **header
 static jb_err server_content_disposition(struct client_state *csp, char **header);
 
 static jb_err client_host_adder       (struct client_state *csp);
-static jb_err client_cookie_adder     (struct client_state *csp);
 static jb_err client_xtra_adder       (struct client_state *csp);
 static jb_err connection_close_adder  (struct client_state *csp); 
 
@@ -915,7 +917,6 @@ const struct parsers server_patterns_light[] = {
 
 const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
-   client_cookie_adder,
    client_xtra_adder,
    /* Temporarily disabled:    client_accept_encoding_adder, */
    connection_close_adder,
@@ -926,16 +927,6 @@ const add_header_func_ptr add_server_headers[] = {
    connection_close_adder,
    NULL
 };
-
-/* The vanilla wafer. */
-static const char VANILLA_WAFER[] =
-   "NOTICE=TO_WHOM_IT_MAY_CONCERN_"
-   "Do_not_send_me_any_copyrighted_information_other_than_the_"
-   "document_that_I_am_requesting_or_any_of_its_necessary_components._"
-   "In_particular_do_not_send_me_any_cookies_that_"
-   "are_subject_to_a_claim_of_copyright_by_anybody._"
-   "Take_notice_that_I_refuse_to_be_bound_by_any_license_condition_"
-   "(copyright_or_otherwise)_applying_to_any_cookie._";
 
 /*********************************************************************
  *
@@ -3535,69 +3526,6 @@ static jb_err client_host_adder(struct client_state *csp)
    err = enlist_unique_header(csp->headers, "Host", p);
    return err;
 
-}
-
-
-/*********************************************************************
- *
- * Function    :  client_cookie_adder
- *
- * Description :  Used in the add_client_headers list to add "wafers".
- *                Called from `sed'.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  JB_ERR_OK on success, or
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-jb_err client_cookie_adder(struct client_state *csp)
-{
-   char *tmp;
-   struct list_entry *wafer;
-   struct list_entry *wafer_list;
-   jb_err err;
-
-   /*
-    * If the user has not supplied any wafers, and the user has not
-    * told us to suppress the vanilla wafer, then send the vanilla wafer.
-    */
-   if ((0 != (csp->action->flags & ACTION_VANILLA_WAFER))
-      && list_is_empty(csp->action->multi[ACTION_MULTI_WAFER]))
-   {
-      enlist(csp->action->multi[ACTION_MULTI_WAFER], VANILLA_WAFER);
-   }
-
-   wafer_list = csp->action->multi[ACTION_MULTI_WAFER]->first;
-
-   if (NULL == wafer_list)
-   {
-      /* Nothing to do */
-      return JB_ERR_OK;
-   }
-
-   tmp = strdup("Cookie: ");
-
-   for (wafer = wafer_list; (NULL != tmp) && (NULL != wafer); wafer = wafer->next)
-   {
-      if (wafer != wafer_list)
-      {
-         /* As this isn't the first wafer, we need a delimiter. */
-         string_append(&tmp, "; ");
-      }
-      string_join(&tmp, cookie_encode(wafer->str));
-   }
-
-   if (tmp == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   log_error(LOG_LEVEL_HEADER, "addh: %s", tmp);
-   err = enlist(csp->headers, tmp);
-   free(tmp);
-   return err;
 }
 
 

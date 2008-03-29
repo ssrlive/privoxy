@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.120 2008/03/27 18:27:36 fabiankeil Exp $
+#  $Id: default.action.master,v 1.121 2008/03/28 15:13:39 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -176,7 +176,7 @@
 #   +name{param}  # enable and set parameter to "param"
 #   -name         # disable
 #
-# Multi-value (e.g. "add-header", "send-wafer"):
+# Multi-value (e.g. "add-header", "filter"):
 #   +name{param}  # enable and add parameter "param"
 #   -name{param}  # remove the parameter "param"
 #   -name         # disable totally
@@ -471,17 +471,6 @@
 #    Convinces the browser that the requested document has been moved to
 #    another location and the browser should get it from the specified
 #    URL.
-#
-# +send-vanilla-wafer
-#    This action only applies if you are using a jarfile.  It sends a
-#    cookie to every site stating that you do not accept any copyright
-#    on cookies sent to you, and asking them not to track you.  Of
-#    course, this is a (relatively) unique header they could use to 
-#    track you.
-#
-# +send-wafer{name=value}
-#    This allows you to add an arbitrary cookie.  Specify it multiple
-#    times in order to add several cookies.
 #
 #############################################################################
 

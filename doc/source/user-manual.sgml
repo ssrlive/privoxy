@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.67 2008/03/27 18:31:21 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.68 2008/03/28 15:13:43 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.67 2008/03/27 18:31:21 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.68 2008/03/28 15:13:43 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5375,138 +5375,6 @@ undeadly.org/cgi\?action=article&amp;sid=\d*$</screen>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="send-vanilla-wafer">
-<title>send-vanilla-wafer</title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-    Feed log analysis scripts with useless data.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Sends a cookie with each request stating that you do not accept any copyright
-    on cookies sent to you, and asking the site operator not to track you.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    The vanilla wafer is a (relatively) unique header and could conceivably be used to track you.
-   </para>
-   <para>
-    This action is rarely used and not enabled in the default configuration.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-   <para>
-     <screen>+send-vanilla-wafer</screen>
-   </para>
-  </listitem>
- </varlistentry>
-
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="send-wafer">
-<title>send-wafer</title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>
-    Send custom cookies or feed log analysis scripts with even more useless data.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Sends a custom, user-defined cookie with each request.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Multi-value.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    A string of the form <quote><replaceable class="option">name</replaceable>=<replaceable
-    class="parameter">value</replaceable></quote>.
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    Being multi-valued, multiple instances of this action can apply to the same request,
-    resulting in multiple cookies being sent.
-   </para>
-   <para>
-    This action is rarely used and not enabled in the default configuration.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Example usage (section):</term>
-  <listitem>
-   <para>
-    <screen>{+send-wafer{UsingPrivoxy=true}}
-my-internal-testing-server.void</screen>
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="server-header-filter">
 <title>server-header-filter</title>
 
@@ -8403,8 +8271,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -overwrite-last-modified
  -prevent-compression
  -redirect
- -send-vanilla-wafer
- -send-wafer
  -server-header-filter{xml-to-html}
  -server-header-filter{html-to-xml} 
  -session-cookies-only
@@ -8523,8 +8389,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   -overwrite-last-modified
   +prevent-compression 
   -redirect
-  -send-vanilla-wafer 
-  -send-wafer
   -server-header-filter{xml-to-html}
   -server-header-filter{html-to-xml} 
   +session-cookies-only 
@@ -8689,6 +8553,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.68  2008/03/28 15:13:43  fabiankeil
+ Remove inspect-jpegs action.
+
  Revision 2.67  2008/03/27 18:31:21  fabiankeil
  Remove kill-popups action.
 
