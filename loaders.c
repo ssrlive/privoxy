@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.65 2007/12/07 18:29:23 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.66 2008/03/21 11:16:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.65 2007/12/07 18:29:23 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.66  2008/03/21 11:16:30  fabiankeil
+ *    Garbage-collect csp->my_ip_addr_str and csp->my_hostname.
+ *
  *    Revision 1.65  2007/12/07 18:29:23  fabiankeil
  *    Remove now-obsolete csp member x_forwarded.
  *
@@ -1381,9 +1384,9 @@ void unload_current_re_filterfile(void)
 
 /*********************************************************************
  *
- * Function    :  load_re_filterfile
+ * Function    :  load_re_filterfiles
  *
- * Description :  Load the re_filterfile. 
+ * Description :  Loads all the filterfiles. 
  *                Generate a chained list of re_filterfile_spec's from
  *                the "FILTER: " blocks, compiling all their substitutions
  *                into chained lists of pcrs_job structs.
@@ -1394,7 +1397,7 @@ void unload_current_re_filterfile(void)
  * Returns     :  0 => Ok, everything else is an error.
  *
  *********************************************************************/
-int load_re_filterfile(struct client_state *csp)
+int load_re_filterfiles(struct client_state *csp)
 {
    int i;
    int result;

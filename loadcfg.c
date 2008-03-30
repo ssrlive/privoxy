@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.73 2008/02/16 16:54:51 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.74 2008/03/26 18:07:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.73 2008/02/16 16:54:51 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.74  2008/03/26 18:07:07  fabiankeil
+ *    Add hostname directive. Closes PR#1918189.
+ *
  *    Revision 1.73  2008/02/16 16:54:51  fabiankeil
  *    Fix typo.
  *
@@ -1678,12 +1681,12 @@ struct configuration_spec * load_config(void)
 
    if (config->actions_file[0])
    {
-      add_loader(load_actions_file, config);
+      add_loader(load_action_files, config);
    }
 
-   if (config->re_filterfile)
+   if (config->re_filterfile[0])
    {
-      add_loader(load_re_filterfile, config);
+      add_loader(load_re_filterfiles, config);
    }
 
 #ifdef FEATURE_TRUST
