@@ -37,6 +37,8 @@ ChangeLog for Privoxy
   "Content-Type: application/x-shockwave-flash" headers up.
 - In the show-url-info page's "Final results" section active and
   inactive actions are listed separately. Patch provided by Lee.
+- The GNUmakefile supports the DESTDIR variable. Patch for
+  the install target submitted by Radoslaw Zielinski.
 - The obsolete kill-popups action has been removed as the
   PCRS-based popup filters can do the same and are less
   unreliable.
