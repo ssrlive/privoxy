@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.20 2007/09/02 15:31:20 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.21 2007/12/24 16:34:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,11 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.20 2007/09/02 15:31:20 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.21  2007/12/24 16:34:23  fabiankeil
+ *    Band-aid (and micro-optimization) that makes it less likely to run out of
+ *    stack space with overly-complex path patterns. Probably masks the problem
+ *    reported by Lee in #1856679. Hohoho.
+ *
  *    Revision 1.20  2007/09/02 15:31:20  fabiankeil
  *    Move match_portlist() from filter.c to urlmatch.c.
  *    It's used for url matching, not for filtering.
@@ -513,11 +518,10 @@ static int unknown_method(const char *method)
        */
       "VERSION-CONTROL", "REPORT", "CHECKOUT", "CHECKIN", "UNCHECKOUT",
       "MKWORKSPACE", "UPDATE", "LABEL", "MERGE", "BASELINE-CONTROL", "MKACTIVITY",
-      NULL
    };
    int i;
 
-   for (i = 0; NULL != known_http_methods[i]; i++)
+   for (i = 0; i < SZ(known_http_methods); i++)
    {
       if (0 == strcmpic(method, known_http_methods[i]))
       {
