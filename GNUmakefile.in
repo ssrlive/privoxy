@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.160 2008/03/27 18:27:19 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.161 2008/03/30 13:19:13 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -1261,89 +1261,93 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	@$(ECHO) Starting Privoxy uninstallation
 	@# KILL privoxy if running
-	-@if [ -f /etc/redhat-release ] && [ -x /etc/rc.d/init.d/privoxy ]; then \
-		/etc/rc.d/init.d/privoxy stop >/dev/null 2>/dev/null ;\
+	@# XXX: the chkconfig line may need a DESTDIR prefix.
+	-@if [ -f $(DESTDIR)/etc/redhat-release ] && [ -x $(DESTDIR)/etc/rc.d/init.d/privoxy ]; then \
+		$(DESTDIR)/etc/rc.d/init.d/privoxy stop >/dev/null 2>/dev/null ;\
 		chkconfig --del $(PROGRAM) 2>/dev/null;\
 	fi
-	-@test -f $(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
-         $(KILL) `$(CAT) $(PID_DEST)/privoxy.pid` || :
-	-@test -f /var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
-          $(KILL) `$(CAT) /var/run/privoxy.pid ` || :
+	-@test -f $(DESTDIR)$(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
+         $(KILL) `$(CAT) $(DESTDIR)$(PID_DEST)/privoxy.pid` || :
+	-@test -f $(DESTDIR)/var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
+          $(KILL) `$(CAT) $(DESTDIR)/var/run/privoxy.pid ` || :
 
 	@# Program binary
 	@$(ECHO) Removing $(PROGRAM) binary
-	$(RM) $(SBIN_DEST)/$(PROGRAM) $(SBIN_DEST)/$(PROGRAM)~
+	$(RM) $(DESTDIR)$(SBIN_DEST)/$(PROGRAM) $(SBIN_DEST)/$(PROGRAM)~
 
 	@# config files and dir, and maybe old install backups
-	-@if [ -d $(CONF_DEST) ]; then \
-		$(ECHO) Saving $(PROGRAM) config files to /tmp/$(PROGRAM)-save ;\
-		$(MKDIR) /tmp/$(PROGRAM)-save ;\
-		cd $(CONF_DEST) ;\
-		for i in $(CONFIGS); do \
-			[ -f $$i ] && $(CP) $$i /tmp/$(PROGRAM)-save ;\
+	-@if [ -d $(DESTDIR)$(CONF_DEST) ]; then \
+		$(ECHO) Saving $(PROGRAM) config files to $(DESTDIR)/tmp/$(PROGRAM)-save ;\
+		$(MKDIR) $(DESTDIR)/tmp/$(PROGRAM)-save ;\
+		cd $(DESTDIR)$(CONF_DEST) ;\
+		for i in $(DESTDIR)$(CONFIGS); do \
+			[ -f $$i ] && $(CP) $$i $(DESTDIR)/tmp/$(PROGRAM)-save ;\
 		done ;\
 	fi
 	@$(ECHO) Removing $(PROGRAM) config files
-	-@for i in $(CONFIGS); do \
+	-@for i in $(DESTDIR)$(CONFIGS); do \
 		test -f $(CONF_DEST)/$$i && $(ECHO) Removing $$i ;\
-		$(RM) $(CONF_DEST)/$$i $(CONF_DEST)/$$i~ $(CONF_DEST)/$$i.new ;\
+		$(RM) $(DESTDIR)$(CONF_DEST)/$$i $(DESTDIR)$(CONF_DEST)/$$i~ $(DESTDIR)$(CONF_DEST)/$$i.new ;\
 	done
-	-@test -d $(CONF_DEST)/templates && $(RM) -r $(CONF_DEST)/templates &&\
-	$(ECHO) "Removing $(CONF_DEST)/templates/*"
+	-@test -d $(DESTDIR)$(CONF_DEST)/templates && $(RM) -r $(DESTDIR)$(CONF_DEST)/templates &&\
+	$(ECHO) "Removing $(DESTDIR)$(CONF_DEST)/templates/*"
 
 	@# man page and docs
 	@$(ECHO) Removing $(PROGRAM) docs
-	-$(RM) $(MAN_DEST)/privoxy.1*
-	-$(RM) -r $(DOC_DEST) || $(RM) -r $(prefix)/doc/privoxy
+	-$(RM) $(DESTDIR)$(MAN_DEST)/privoxy.1*
+	-$(RM) -r $(DESTDIR)$(DOC_DEST) || $(RM) -r $(DESTDIR)$(prefix)/doc/privoxy
 
 	@# Log and jarfile and pidfile
 	@$(ECHO) Removing $(PROGRAM) logs
-	-$(RM) $(LOG_DEST)/logfile $(PID_DEST)/privoxy.pid $(LOG_DEST)/jarfile
+	-$(RM) $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(PID_DEST)/privoxy.pid $(DESTDIR)$(LOG_DEST)/jarfile
 
 	@# Final clean up of unused directories. Special handling of CONF and LOG
      # destinations.
 	@$(ECHO) Removing $(PROGRAM) directories
-	@for i in $(LOG_DEST) $(CONF_DEST); do \
+	@for i in $(DESTDIR)$(LOG_DEST) $(DESTDIR)$(CONF_DEST); do \
 		if test -d $$i; then \
 			$(ECHO) Removing $$i ;\
 			$(RMDIR) $$i || $(ECHO) "$$i is not empty, not removed" ;\
 		fi;\
 	done
 	@if [  ! "$(prefix)" = "/usr/local" ] ;then \
-		for i in $(MAN_DEST) $(MAN_DIR) $(SHARE_DEST)/doc $(SHARE_DEST) $(SBIN_DEST); do \
+		for i in $(DESTDIR)$(MAN_DEST) $(DESTDIR)$(MAN_DIR) $(DESTDIR)$(SHARE_DEST)/doc \
+                         $(DESTDIR)$(SHARE_DEST) $(DESTDIR)$(SBIN_DEST); do \
 			if test -d $$i; then \
 				$(ECHO) Removing $$i ;\
 				$(RMDIR) $$i || $(ECHO) "$$i is not empty, not removed" ;\
 			fi;\
 		done;\
-		if test $(LOG_DEST) != /var/log/privoxy && test -d $(prefix)/var/log; then \
-			$(ECHO) Removing $(prefix)/var/log ;\
-			$(RMDIR) $(prefix)/var/log || $(ECHO) "$(prefix)/var/log is not empty, not removed";\
+		if test $(LOG_DEST) != /var/log/privoxy && test -d $(DESTDIR)$(prefix)/var/log; then \
+			$(ECHO) Removing $(DESTDIR)$(prefix)/var/log ;\
+			$(RMDIR) $(DESTDIR)$(prefix)/var/log || $(ECHO) "$(DESTDIR)$(prefix)/var/log is not empty, not removed";\
 		fi ;\
-		if test $(PID_DEST) != /var/run && test -d $(prefix)/var/run; then \
-			$(ECHO) Removing $(prefix)/var/run ;\
-			$(RMDIR) $(prefix)/var/run || $(ECHO) "$(prefix)/var/run is not empty, not removed";\
+		if test $(PID_DEST) != /var/run && test -d $(DESTDIR)$(prefix)/var/run; then \
+			$(ECHO) Removing $(DESTDIR)$(prefix)/var/run ;\
+			$(RMDIR) $(DESTDIR)$(prefix)/var/run || $(ECHO) "$(DESTDIR)$(prefix)/var/run is not empty, not removed";\
 		fi ;\
-		if test $(prefix)/var != /var && test -d $(prefix)/var; then \
-			$(ECHO) Removing $(prefix)/var ;\
-			$(RMDIR) $(prefix)/var || $(ECHO) "$(prefix)/var is not empty, not removed" ;\
+		if test $(prefix)/var != /var && test -d $(DESTDIR)$(prefix)/var; then \
+			$(ECHO) Removing $(DESTDIR)$(prefix)/var ;\
+			$(RMDIR) $(DESTDIR)$(prefix)/var || $(ECHO) "$(DESTDIR)$(prefix)/var is not empty, not removed" ;\
 		fi ;\
-		if test $(prefix) != / && test $(prefix) != /usr && test -d $(prefix); then \
-			$(ECHO) Removing $(prefix) ;\
-			$(ECHO) Removing installation directory $(prefix) ;\
-			$(RMDIR) $(prefix) || $(ECHO) "$(prefix) is not empty, not removed" ;\
+		if test $(prefix) != / && test $(prefix) != /usr && test -d $(DESTDIR)$(prefix); then \
+			$(ECHO) Removing $(DESTDIR)$(prefix) ;\
+			$(ECHO) Removing installation directory $(DESTDIR)$(prefix) ;\
+			$(RMDIR) $(DESTDIR)$(prefix) || $(ECHO) "$(DESTDIR)$(prefix) is not empty, not removed" ;\
 		fi;\
 	fi
 
 	@# init scripts and logrotate
 	@if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		$(ECHO) Removing $(PROGRAM) init script ;\
-		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ]  && [ -w /etc/rc.d/ ] ; then \
-			$(RM) /etc/rc.d/rc.privoxy ;\
-		elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ]  && [ -w /etc/rc.d/init.d/ ] ; then \
-			$(RM) /etc/rc.d/init.d/privoxy /etc/logrotate.d/privoxy;\
-		elif [ -d /etc/init.d ] && [ -w /etc/init.d ] ; then \
-			$(RM) /etc/init.d/privoxy ;\
+		if [ -f $(DESTDIR)/etc/slackware-version ] && \
+	                [ -d $(DESTDIR)/etc/rc.d/ ]  && [ -w $(DESTDIR)/etc/rc.d/ ] ; then \
+			$(RM) $(DESTDIR)/etc/rc.d/rc.privoxy ;\
+		elif [ -f $(DESTDIR)/etc/redhat-release ] && [ -d $(DESTDIR)/etc/rc.d/init.d/ ] \
+                       && [ -w $(DESTDIR)/etc/rc.d/init.d/ ] ; then \
+			$(RM) $(DESTDIR)/etc/rc.d/init.d/privoxy $(DESTDIR)/etc/logrotate.d/privoxy;\
+		elif [ -d $(DESTDIR)/etc/init.d ] && [ -w $(DESTDIR)/etc/init.d ] ; then \
+			$(RM) $(DESTDIR)/etc/init.d/privoxy ;\
 		else \
 			$(ECHO) "Unable to remove privoxy init script, not installed or permission denied" ;\
 		fi ;\
@@ -1364,6 +1368,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.161  2008/03/30 13:19:13  fabiankeil
+# Add DESTDIR support for the install target. Closes PR#1910612.
+# Patch by Radoslaw Zielinski with minor modifications.
+#
 # Revision 1.160  2008/03/27 18:27:19  fabiankeil
 # Remove kill-popups action.
 #
