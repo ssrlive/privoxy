@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.14 2008/03/27 19:13:08 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.143 2008/04/04 17:17:32 fk Exp $
 #
 # Wish list:
 #
@@ -326,7 +326,7 @@ sub load_action_files ($) {
 
             my $no_checks = 0;
             chomp;
-            
+
             if (/<h2>Contents of Actions File (.*?)</) {
                 $actionfile = $1;
                 next;
@@ -353,6 +353,17 @@ sub load_action_files ($) {
 
                 my $level = $1;
                 register_dependency($level, $value);
+            }
+
+            if ($token eq 'sticky actions') {
+
+                # Will be used by each following Sticky URL.
+                $sticky_actions = $value;
+                if ($sticky_actions =~ /{[^}]*\s/) {
+                    l(LL_ERROR,
+                      "'Sticky Actions' with whitespace inside the " .
+                      "action parameters are currently unsupported.");
+                }
             }
             
             if ($si == -1 || $ri == -1) {
@@ -408,24 +419,16 @@ sub load_action_files ($) {
                 l(LL_FILE_LOADING, "Method: " . $value);
                 $regression_tests[$si][$ri]{'method'} = $value;
 
-            } elsif ($token eq 'sticky actions') {
-
-                # Will be used by each following Sticky URL.
-                $sticky_actions = $value;
-                if ($sticky_actions =~ /{[^}]*\s/) {
-                    l(LL_ERROR,
-                      "'Sticky Actions' with whitespace inside the " .
-                      "action parameters are currently unsupported.");
-                }
-
             } elsif ($token eq 'url') {
 
                 if (defined $sticky_actions) {
-                    die "What" if defined ($regression_tests[$si][$ri]{'sticky-actions'});
+                    die "WTF? Attempted to overwrite Sticky Actions"
+                        if defined ($regression_tests[$si][$ri]{'sticky-actions'});
+
                     l(LL_FILE_LOADING, "Sticky actions: " . $sticky_actions);
                     $regression_tests[$si][$ri]{'sticky-actions'} = $sticky_actions;
                 } else {
-                    l(LL_FILE_LOADING, "Sticky URL without Sticky Actions");
+                    l(LL_ERROR, "Sticky URL without Sticky Actions: $value");
                 }
 
             } else {
@@ -884,6 +887,8 @@ sub get_header ($$) {
 
     my $expect_header = $test{'expect-header'};
 
+    die "get_header called with no expect header" unless defined $expect_header;
+
     my $line;
     my $processed_request_reached = 0;
     my $read_header = 0;
@@ -940,6 +945,10 @@ sub get_server_header ($$) {
     my $expect_header = $test{'expect-header'};
     my $header;
     my $header_to_get;
+
+    # XXX: Should be caught before starting to test.
+    l(LL_ERROR, "No expect header for test " . $test{'number'})
+        unless defined $expect_header;
 
     if ($expect_header eq 'REMOVAL'
      or $expect_header eq 'NO CHANGE'
