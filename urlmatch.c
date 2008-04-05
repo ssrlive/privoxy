@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.21 2007/12/24 16:34:23 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.22 2008/03/30 15:02:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.21 2007/12/24 16:34:23 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.22  2008/03/30 15:02:32  fabiankeil
+ *    SZitify unknown_method().
+ *
  *    Revision 1.21  2007/12/24 16:34:23  fabiankeil
  *    Band-aid (and micro-optimization) that makes it less likely to run out of
  *    stack space with overly-complex path patterns. Probably masks the problem
@@ -213,6 +216,7 @@ void free_http_request(struct http_request *http)
    http->dcount = 0;
 }
 
+
 /*********************************************************************
  *
  * Function    :  init_domain_components
@@ -276,6 +280,7 @@ jb_err init_domain_components(struct http_request *http)
 
    return JB_ERR_OK;
 }
+
 
 /*********************************************************************
  *
@@ -629,6 +634,105 @@ jb_err parse_http_request(const char *req,
 
 /*********************************************************************
  *
+ * Function    :  compile_host_pattern
+ *
+ * Description :  Parses and "compiles" an old-school host pattern.
+ *
+ * Parameters  :
+ *          1  :  url = Target url_spec to be filled in.
+ *          2  :  host_pattern = Host pattern to parse.
+ *
+ * Returns     :  JB_ERR_OK - Success
+ *                JB_ERR_MEMORY - Out of memory
+ *                JB_ERR_PARSE - Cannot parse regex
+ *
+ *********************************************************************/
+static jb_err compile_host_pattern(struct url_spec *url, const char *host_pattern)
+{
+   char *v[150];
+   size_t size;
+   char *p;
+
+   /*
+    * Parse domain part
+    */
+   if (host_pattern[strlen(host_pattern) - 1] == '.')
+   {
+      url->unanchored |= ANCHOR_RIGHT;
+   }
+   if (host_pattern[0] == '.')
+   {
+      url->unanchored |= ANCHOR_LEFT;
+   }
+
+   /* 
+    * Split domain into components
+    */
+   url->dbuffer = strdup(host_pattern);
+   if (NULL == url->dbuffer)
+   {
+      freez(url->spec);
+      freez(url->path);
+      regfree(url->preg);
+      freez(url->preg);
+      return JB_ERR_MEMORY;
+   }
+
+   /* 
+    * Map to lower case
+    */
+   for (p = url->dbuffer; *p ; p++)
+   {
+      *p = (char)tolower((int)(unsigned char)*p);
+   }
+
+   /* 
+    * Split the domain name into components
+    */
+   url->dcount = ssplit(url->dbuffer, ".", v, SZ(v), 1, 1);
+
+   if (url->dcount < 0)
+   {
+      freez(url->spec);
+      freez(url->path);
+      regfree(url->preg);
+      freez(url->preg);
+      freez(url->dbuffer);
+      url->dcount = 0;
+      return JB_ERR_MEMORY;
+   }
+   else if (url->dcount != 0)
+   {
+      /* 
+       * Save a copy of the pointers in dvec
+       */
+      size = (size_t)url->dcount * sizeof(*url->dvec);
+      
+      url->dvec = (char **)malloc(size);
+      if (NULL == url->dvec)
+      {
+         freez(url->spec);
+         freez(url->path);
+         regfree(url->preg);
+         freez(url->preg);
+         freez(url->dbuffer);
+         url->dcount = 0;
+         return JB_ERR_MEMORY;
+      }
+
+      memcpy(url->dvec, v, size);
+   }
+   /*
+    * else dcount == 0 in which case we needn't do anything,
+    * since dvec will never be accessed and the pattern will
+    * match all domains.
+    */
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  simple_domaincmp
  *
  * Description :  Domain-wise Compare fqdn's.  The comparison is
@@ -891,84 +995,7 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
 
    if (buf[0] != '\0')
    {
-      char *v[150];
-      size_t size;
-
-      /*
-       * Parse domain part
-       */
-      if (buf[strlen(buf) - 1] == '.')
-      {
-         url->unanchored |= ANCHOR_RIGHT;
-      }
-      if (buf[0] == '.')
-      {
-         url->unanchored |= ANCHOR_LEFT;
-      }
-
-      /* 
-       * Split domain into components
-       */
-      url->dbuffer = strdup(buf);
-      if (NULL == url->dbuffer)
-      {
-         freez(url->spec);
-         freez(url->path);
-         regfree(url->preg);
-         freez(url->preg);
-         return JB_ERR_MEMORY;
-      }
-
-      /* 
-       * Map to lower case
-       */
-      for (p = url->dbuffer; *p ; p++)
-      {
-         *p = (char)tolower((int)(unsigned char)*p);
-      }
-
-      /* 
-       * Split the domain name into components
-       */
-      url->dcount = ssplit(url->dbuffer, ".", v, SZ(v), 1, 1);
-
-      if (url->dcount < 0)
-      {
-         freez(url->spec);
-         freez(url->path);
-         regfree(url->preg);
-         freez(url->preg);
-         freez(url->dbuffer);
-         url->dcount = 0;
-         return JB_ERR_MEMORY;
-      }
-      else if (url->dcount != 0)
-      {
-
-         /* 
-          * Save a copy of the pointers in dvec
-          */
-         size = (size_t)url->dcount * sizeof(*url->dvec);
-
-         url->dvec = (char **)malloc(size);
-         if (NULL == url->dvec)
-         {
-            freez(url->spec);
-            freez(url->path);
-            regfree(url->preg);
-            freez(url->preg);
-            freez(url->dbuffer);
-            url->dcount = 0;
-            return JB_ERR_MEMORY;
-         }
-
-         memcpy(url->dvec, v, size);
-      }
-      /*
-       * else dcount == 0 in which case we needn't do anything,
-       * since dvec will never be accessed and the pattern will
-       * match all domains.
-       */
+      return compile_host_pattern(url, buf);
    }
 
    return JB_ERR_OK;
