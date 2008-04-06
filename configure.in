@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.111 2008/02/03 14:40:47 fabiankeil Exp $
+dnl $Id: configure.in,v 1.112 2008/03/27 18:27:22 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2007 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.112  2008/03/27 18:27:22  fabiankeil
+dnl Remove kill-popups action.
+dnl
 dnl Revision 1.111  2008/02/03 14:40:47  fabiankeil
 dnl Remove unused OSX_DARWIN macro. Reported by Mark Miller in #1852529.
 dnl
@@ -514,7 +517,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.111 $)
+AC_REVISION($Revision: 1.112 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1311,6 +1314,12 @@ AC_ARG_ENABLE(graceful-termination,
 [  --enable-graceful-termination   Allow to shutdown Privoxy through the webinterface.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_GRACEFUL_TERMINATION)
+fi])
+
+AC_ARG_ENABLE(pcre-host-patterns,
+[  --enable-pcre-host-patterns     Allow PCRE syntax in host patterns.],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_PCRE_HOST_PATTERNS)
 fi])
 
 dnl pcre/pcrs is needed for CGI anyway, so

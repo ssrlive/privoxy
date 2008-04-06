@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.109 2008/03/28 15:13:41 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.110 2008/03/29 12:13:46 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.110  2008/03/29 12:13:46  fabiankeil
+ *    Remove send-wafer and send-vanilla-wafer actions.
+ *
  *    Revision 1.109  2008/03/28 15:13:41  fabiankeil
  *    Remove inspect-jpegs action.
  *
@@ -930,10 +933,14 @@ struct url_spec
        Used for debugging or display only.  */
    char  *spec;
 
+#ifdef FEATURE_PCRE_HOST_PATTERNS
+   regex_t *host_regex;/**< Regex for host matching                          */
+#else
    char  *dbuffer;     /**< Buffer with '\0'-delimited domain name, or NULL to match all hosts. */
    char **dvec;        /**< List of pointers to the strings in dbuffer.       */
    int    dcount;      /**< How many parts to this domain? (length of dvec)   */
    int    unanchored;  /**< Bitmap - flags are ANCHOR_LEFT and ANCHOR_RIGHT.  */
+#endif /* defined FEATURE_PCRE_HOST_PATTERNS */
 
    char  *port_list;   /**< List of acceptable ports, or NULL to match all ports */
 
@@ -945,7 +952,11 @@ struct url_spec
 /**
  * If you declare a static url_spec, this is the value to initialize it to zero.
  */
+#ifndef FEATURE_PCRE_HOST_PATTERNS
 #define URL_SPEC_INITIALIZER { NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL }
+#else
+#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, NULL, NULL, NULL }
+#endif /* def FEATURE_PCRE_HOST_PATTERNS */
 
 /**
  * Constant for host part matching in URLs.  If set, indicates that the start of
