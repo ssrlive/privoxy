@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.112 2008/03/27 18:27:22 fabiankeil Exp $
+dnl $Id: configure.in,v 1.113 2008/04/06 14:54:26 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001 - 2007 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.113  2008/04/06 14:54:26  fabiankeil
+dnl Use PCRE syntax in host patterns when configured
+dnl with --enable-pcre-host-patterns.
+dnl
 dnl Revision 1.112  2008/03/27 18:27:22  fabiankeil
 dnl Remove kill-popups action.
 dnl
@@ -517,7 +521,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.112 $)
+AC_REVISION($Revision: 1.113 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1316,10 +1320,10 @@ AC_ARG_ENABLE(graceful-termination,
   AC_DEFINE(FEATURE_GRACEFUL_TERMINATION)
 fi])
 
-AC_ARG_ENABLE(pcre-host-patterns,
-[  --enable-pcre-host-patterns     Allow PCRE syntax in host patterns.],
+AC_ARG_ENABLE(extended-host-patterns,
+[  --enable-extended-host-patterns Allow extended regular expressions in host patterns.],
 [if test $enableval = yes; then
-  AC_DEFINE(FEATURE_PCRE_HOST_PATTERNS)
+  AC_DEFINE(FEATURE_EXTENDED_HOST_PATTERNS)
 fi])
 
 dnl pcre/pcrs is needed for CGI anyway, so

@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: acconfig.h,v $
+ *    Revision 1.34  2008/04/06 14:54:26  fabiankeil
+ *    Use PCRE syntax in host patterns when configured
+ *    with --enable-pcre-host-patterns.
+ *
  *    Revision 1.33  2006/12/17 19:15:26  fabiankeil
  *    Added ./configure switch for FEATURE_GRACEFUL_TERMINATION.
  *
@@ -355,7 +359,7 @@
 /*
  * Allow PCRE syntax in host patterns.
  */
-#undef FEATURE_PCRE_HOST_PATTERNS
+#undef FEATURE_EXTENDED_HOST_PATTERNS
 
 /*
  * Use POSIX threads instead of native threads.
