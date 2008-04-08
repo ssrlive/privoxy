@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.25 2008/04/06 15:18:38 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.26 2008/04/07 16:57:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.25 2008/04/06 15:18:38 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.26  2008/04/07 16:57:18  fabiankeil
+ *    - Use free_url_spec() more consistently.
+ *    - Let it reset url->dcount just in case.
+ *
  *    Revision 1.25  2008/04/06 15:18:38  fabiankeil
  *    Oh well, rename the --enable-pcre-host-patterns option to
  *    --enable-extended-host-patterns as it's not really PCRE syntax.
@@ -982,11 +986,23 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
    p = strchr(buf, '/');
    if (NULL != p)
    {
-      url->path = strdup(p);
-      if (NULL == url->path)
+      if (*(p+1) != '\0')
       {
-         free_url_spec(url);
-         return JB_ERR_MEMORY;
+         url->path = strdup(p);
+         if (NULL == url->path)
+         {
+            free_url_spec(url);
+            return JB_ERR_MEMORY;
+         }
+      }
+      else
+      {
+         /*
+          * The path pattern is a single slash and can
+          * be ignored as it won't affect the result.
+          */
+         assert(NULL == url->path);
+         url->path = NULL;
       }
       *p = '\0';
    }
