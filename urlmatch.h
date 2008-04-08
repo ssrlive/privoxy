@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.7 2007/01/06 14:24:38 fabiankeil Exp $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.8 2007/09/02 15:31:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -35,6 +35,10 @@
  *
  * Revisions   :
  *    $Log: urlmatch.h,v $
+ *    Revision 1.8  2007/09/02 15:31:20  fabiankeil
+ *    Move match_portlist() from filter.c to urlmatch.c.
+ *    It's used for url matching, not for filtering.
+ *
  *    Revision 1.7  2007/01/06 14:24:38  fabiankeil
  *    Mark *csp as immutable for parse_http_url()
  *    and url_match().
@@ -89,7 +93,7 @@ extern jb_err parse_http_url(const char * url,
                              const struct client_state *csp);
 
 extern int url_match(const struct url_spec *pattern,
-                     const struct http_request *url);
+                     const struct http_request *http);
 
 extern jb_err create_url_spec(struct url_spec * url, const char * buf);
 extern void free_url_spec(struct url_spec *url);

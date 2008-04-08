@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.26 2008/04/07 16:57:18 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.27 2008/04/08 15:44:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.26 2008/04/07 16:57:18 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.27  2008/04/08 15:44:33  fabiankeil
+ *    Save a bit of memory (and a few cpu cycles) by not bothering to
+ *    compile slash-only path regexes that don't affect the result.
+ *
  *    Revision 1.26  2008/04/07 16:57:18  fabiankeil
  *    - Use free_url_spec() more consistently.
  *    - Let it reset url->dcount just in case.
@@ -1122,16 +1126,16 @@ void free_url_spec(struct url_spec *url)
  *
  *********************************************************************/
 int url_match(const struct url_spec *pattern,
-              const struct http_request *url)
+              const struct http_request *http)
 {
    /* XXX: these should probably be functions. */
-#define PORT_MATCHES ((NULL == pattern->port_list) || match_portlist(pattern->port_list, url->port))
+#define PORT_MATCHES ((NULL == pattern->port_list) || match_portlist(pattern->port_list, http->port))
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
-#define DOMAIN_MATCHES ((NULL == pattern->host_regex) || (0 == regexec(pattern->host_regex, url->host, 0, NULL, 0)))
+#define DOMAIN_MATCHES ((NULL == pattern->host_regex) || (0 == regexec(pattern->host_regex, http->host, 0, NULL, 0)))
 #else
-#define DOMAIN_MATCHES ((NULL == pattern->dbuffer) || (0 == domain_match(pattern, url)))
+#define DOMAIN_MATCHES ((NULL == pattern->dbuffer) || (0 == domain_match(pattern, http)))
 #endif
-#define PATH_MATCHES ((NULL == pattern->path) || (0 == regexec(pattern->preg, url->path, 0, NULL, 0)))
+#define PATH_MATCHES ((NULL == pattern->path) || (0 == regexec(pattern->preg, http->path, 0, NULL, 0)))
 
    if (pattern->tag_regex != NULL)
    {
