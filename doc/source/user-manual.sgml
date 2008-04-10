@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.69 2008/03/29 12:14:25 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.70 2008/04/10 15:59:12 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.69 2008/03/29 12:14:25 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.70 2008/04/10 15:59:12 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2248,9 +2248,9 @@ for details.
 <para>
  The pattern matching syntax is different for the domain and path parts of
  the URL. The domain part uses a simple globbing type matching technique, 
- while the path part uses a more flexible 
+ while the path part uses more flexible 
  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
-  Expressions (PCRE)</quote></ulink> based syntax.
+  Expressions</quote></ulink> (POSIX 1003.2).
 </para>
 
 <variablelist>
@@ -2429,20 +2429,16 @@ for details.
 <sect3><title>The Path Pattern</title>
 
 <para>
- <application>Privoxy</application> uses Perl compatible (PCRE)
+ <application>Privoxy</application> uses <quote>modern</quote> POSIX 1003.2
   <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
-  Expression</quote></ulink> based syntax 
- (through the <ulink url="http://www.pcre.org/">PCRE</ulink> library) for
- matching the path portion (after the slash), and is thus more flexible.
+  Expressions</quote></ulink> for matching the path portion (after the slash),
+  and is thus more flexible.
 </para>
 
 <para>
  There is an <link linkend="regex">Appendix</link> with a brief quick-start into regular
- expressions, and full (very technical) documentation on PCRE regex syntax is available on-line
- at <ulink url="http://www.pcre.org/man.txt">http://www.pcre.org/man.txt</ulink>.
- You might also find the Perl man page on regular expressions (<literal>man perlre</literal>)
- useful, which is available on-line at <ulink
- url="http://perldoc.perl.org/perlre.html">http://perldoc.perl.org/perlre.html</ulink>.
+ expressions, you also might want to have a look at your operating system's documentation
+ on regular expressions (try <literal>man re_format</literal>).
 </para>
 
 <para>
@@ -8572,6 +8568,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.70  2008/04/10 15:59:12  fabiankeil
+ Add another section to the client-header-tagger example that shows
+ how to actually change the action settings once the tag is created.
+
  Revision 2.69  2008/03/29 12:14:25  fabiankeil
  Remove send-wafer and send-vanilla-wafer actions.
 
