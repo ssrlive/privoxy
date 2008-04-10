@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.28 2008/04/08 16:07:39 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.29 2008/04/10 04:17:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,12 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.28 2008/04/08 16:07:39 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.29  2008/04/10 04:17:56  fabiankeil
+ *    In url_match(), check the right member for NULL when determining
+ *    whether there's a path regex to execute. Looking for a plain-text
+ *    representation works as well, but it looks "interesting" and that
+ *    member will be removed soonish anyway.
+ *
  *    Revision 1.28  2008/04/08 16:07:39  fabiankeil
  *    Make it harder to mistake url_match()'s
  *    second parameter for an url_spec.
@@ -994,57 +1000,40 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
    p = strchr(buf, '/');
    if (NULL != p)
    {
+      /*
+       * Only compile the regex if it consists of more than
+       * a single slash, otherwise it wouldn't affect the result.
+       */
       if (*(p+1) != '\0')
       {
-         url->path = strdup(p);
-         if (NULL == url->path)
+         /* XXX: mostly duplicated code, should be factored out. */
+         url->preg = zalloc(sizeof(*url->preg));
+         if (NULL == url->preg)
          {
             free_url_spec(url);
             return JB_ERR_MEMORY;
          }
-      }
-      else
-      {
-         /*
-          * The path pattern is a single slash and can
-          * be ignored as it won't affect the result.
-          */
-         assert(NULL == url->path);
-         url->path = NULL;
+
+         snprintf(rebuf, sizeof(rebuf), "^(%s)", p);
+         errcode = regcomp(url->preg, rebuf,
+            (REG_EXTENDED|REG_NOSUB|REG_ICASE));
+         if (errcode)
+         {
+            errlen = regerror(errcode, url->preg, rebuf, sizeof(rebuf));
+
+            if (errlen > (sizeof(rebuf) - (size_t)1))
+            {
+               errlen = sizeof(rebuf) - (size_t)1;
+            }
+            rebuf[errlen] = '\0';
+            log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
+               url->spec, rebuf);
+            free_url_spec(url);
+
+            return JB_ERR_PARSE;
+         }
       }
       *p = '\0';
-   }
-   else
-   {
-      url->path = NULL;
-   }
-   if (url->path)
-   {
-      if (NULL == (url->preg = zalloc(sizeof(*url->preg))))
-      {
-         free_url_spec(url);
-         return JB_ERR_MEMORY;
-      }
-
-      snprintf(rebuf, sizeof(rebuf), "^(%s)", url->path);
-
-      errcode = regcomp(url->preg, rebuf,
-            (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-      if (errcode)
-      {
-         errlen = regerror(errcode, url->preg, rebuf, sizeof(rebuf));
-
-         if (errlen > (sizeof(rebuf) - (size_t)1))
-         {
-            errlen = sizeof(rebuf) - (size_t)1;
-         }
-         rebuf[errlen] = '\0';
-         log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
-            url->spec, rebuf);
-         free_url_spec(url);
-
-         return JB_ERR_PARSE;
-      }
    }
 
    p = strchr(buf, ':');
