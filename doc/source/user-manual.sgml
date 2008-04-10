@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.68 2008/03/28 15:13:43 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.69 2008/03/29 12:14:25 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.68 2008/03/28 15:13:43 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.69 2008/03/29 12:14:25 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3052,6 +3052,25 @@ This doesn't actually work in all browser configuration and the user probably do
 # Tag every request with the User-Agent header
 {+client-header-tagger{user-agent}}
 /
+
+# Tagging itself doesn't change the action
+# settings, sections with TAG patterns do:
+#
+# If it's a download agent, use a different forwarding proxy,
+# show the real User-Agent and make sure resume works.
+{+forward-override{forward-socks5 10.0.0.2:2222 .} \
+ -hide-if-modified-since      \
+ -overwrite-last-modified     \
+ -hide-user-agent             \
+ -filter                      \
+ -deanimate-gifs              \
+}
+TAG:^User-Agent: NetBSD-ftp/
+TAG:^User-Agent: Novell ZYPP Installer
+TAG:^User-Agent: RPM APT-HTTP/
+TAG:^User-Agent: fetch libfetch/
+TAG:^User-Agent: Ubuntu APT-HTTP/
+TAG:^User-Agent: MPlayer/
     </screen>
     </para>
   </listitem>
@@ -8553,6 +8572,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.69  2008/03/29 12:14:25  fabiankeil
+ Remove send-wafer and send-vanilla-wafer actions.
+
  Revision 2.68  2008/03/28 15:13:43  fabiankeil
  Remove inspect-jpegs action.
 
