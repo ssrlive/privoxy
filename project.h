@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.112 2008/04/06 15:18:34 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.113 2008/04/10 14:41:04 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.113  2008/04/10 14:41:04  fabiankeil
+ *    Ditch url_spec's path member now that it's no longer used.
+ *
  *    Revision 1.112  2008/04/06 15:18:34  fabiankeil
  *    Oh well, rename the --enable-pcre-host-patterns option to
  *    --enable-extended-host-patterns as it's not really PCRE syntax.
@@ -960,9 +963,9 @@ struct url_spec
  * If you declare a static url_spec, this is the value to initialize it to zero.
  */
 #ifndef FEATURE_EXTENDED_HOST_PATTERNS
-#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL }
+#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, 0, 0, NULL, NULL, NULL }
 #else
-#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, NULL, NULL, NULL }
+#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, NULL, NULL }
 #endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
 
 /**
