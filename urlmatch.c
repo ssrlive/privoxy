@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.31 2008/04/10 14:41:04 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.32 2008/04/12 12:38:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.31 2008/04/10 14:41:04 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.32  2008/04/12 12:38:06  fabiankeil
+ *    Factor out duplicated code to compile host, path and tag patterns.
+ *
  *    Revision 1.31  2008/04/10 14:41:04  fabiankeil
  *    Ditch url_spec's path member now that it's no longer used.
  *
@@ -1011,15 +1014,11 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
    assert(url);
    assert(buf);
 
-   /*
-    * Zero memory
-    */
    memset(url, '\0', sizeof(*url));
 
-   /*
-    * Save a copy of the orignal specification
-    */
-   if ((url->spec = strdup(buf)) == NULL)
+   /* Remember the original specification for the CGI pages. */
+   url->spec = strdup(buf);
+   if (NULL == url->spec)
    {
       return JB_ERR_MEMORY;
    }
