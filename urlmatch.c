@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.30 2008/04/10 04:24:24 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.31 2008/04/10 14:41:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.30 2008/04/10 04:24:24 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.31  2008/04/10 14:41:04  fabiankeil
+ *    Ditch url_spec's path member now that it's no longer used.
+ *
  *    Revision 1.30  2008/04/10 04:24:24  fabiankeil
  *    Stop duplicating the plain text representation of the path regex
  *    (and keeping the copy around). Once the regex is compiled it's no
@@ -219,6 +222,7 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.30 2008/04/10 04:24:24 fabianke
 
 const char urlmatch_h_rcs[] = URLMATCH_H_VERSION;
 
+enum regex_anchoring {NO_ANCHORING, LEFT_ANCHORED, RIGHT_ANCHORED};
 
 /*********************************************************************
  *
@@ -666,12 +670,94 @@ jb_err parse_http_request(const char *req,
 }
 
 
+/*********************************************************************
+ *
+ * Function    :  compile_pattern
+ *
+ * Description :  Compiles a host, domain or TAG pattern.
+ *
+ * Parameters  :
+ *          1  :  pattern = The pattern to compile.
+ *          2  :  anchoring = How the regex should be anchored.
+ *                            Can be either one of NO_ANCHORING,
+ *                            LEFT_ANCHORED or RIGHT_ANCHORED.
+ *          3  :  url     = In case of failures, the spec member is
+ *                          logged and the structure freed.
+ *          4  :  regex   = Where the compiled regex should be stored.
+ *
+ * Returns     :  JB_ERR_OK - Success
+ *                JB_ERR_MEMORY - Out of memory
+ *                JB_ERR_PARSE - Cannot parse regex
+ *
+ *********************************************************************/
+static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchoring,
+                              struct url_spec *url, regex_t **regex)
+{
+   int errcode;
+   char rebuf[BUFFER_SIZE];
+   const char *fmt;
+
+   assert(pattern);
+   assert(strlen(pattern) < sizeof(rebuf) - 2);
+
+   if (pattern[0] == '\0')
+   {
+      *regex = NULL;
+      return JB_ERR_OK;
+   }
+
+   switch (anchoring)
+   {
+      case NO_ANCHORING:
+         fmt = "%s";
+         break;
+      case RIGHT_ANCHORED:
+         fmt = "%s$";
+         break;
+      case LEFT_ANCHORED:
+         fmt = "^%s";
+         break;
+      default:
+         log_error(LOG_LEVEL_FATAL,
+            "Invalid anchoring in compile_pattern %d", anchoring);
+   }
+
+   *regex = zalloc(sizeof(**regex));
+   if (NULL == *regex)
+   {
+      free_url_spec(url);
+      return JB_ERR_MEMORY;
+   }
+
+   snprintf(rebuf, sizeof(rebuf), fmt, pattern);
+
+   errcode = regcomp(*regex, rebuf, (REG_EXTENDED|REG_NOSUB|REG_ICASE));
+
+   if (errcode)
+   {
+      size_t errlen = regerror(errcode, *regex, rebuf, sizeof(rebuf));
+      if (errlen > (sizeof(rebuf) - (size_t)1))
+      {
+         errlen = sizeof(rebuf) - (size_t)1;
+      }
+      rebuf[errlen] = '\0';
+      log_error(LOG_LEVEL_ERROR, "error compiling %s from %s: %s",
+         pattern, url->spec, rebuf);
+      free_url_spec(url);
+
+      return JB_ERR_PARSE;
+   }
+
+   return JB_ERR_OK;
+
+}
+
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
 /*********************************************************************
  *
  * Function    :  compile_host_pattern
  *
- * Description :  Parses and compiles a PCRE host pattern..
+ * Description :  Parses and compiles a host pattern..
  *
  * Parameters  :
  *          1  :  url = Target url_spec to be filled in.
@@ -684,40 +770,7 @@ jb_err parse_http_request(const char *req,
  *********************************************************************/
 static jb_err compile_host_pattern(struct url_spec *url, const char *host_pattern)
 {
-   int errcode;
-   char rebuf[BUFFER_SIZE];
-
-   assert(host_pattern);
-   assert(strlen(host_pattern) < sizeof(rebuf) - 2);
-
-   url->host_regex = zalloc(sizeof(*url->host_regex));
-   if (NULL == url->host_regex)
-   {
-      free_url_spec(url);
-      return JB_ERR_MEMORY;
-   }
-
-   snprintf(rebuf, sizeof(rebuf), "%s$", host_pattern);
-
-   errcode = regcomp(url->host_regex, rebuf,
-      (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-
-   if (errcode)
-   {
-      size_t errlen = regerror(errcode, url->host_regex, rebuf, sizeof(rebuf));
-      if (errlen > (sizeof(rebuf) - (size_t)1))
-      {
-         errlen = sizeof(rebuf) - (size_t)1;
-      }
-      rebuf[errlen] = '\0';
-      log_error(LOG_LEVEL_ERROR, "error compiling %s: %s", url->spec, rebuf);
-      free_url_spec(url);
-
-      return JB_ERR_PARSE;
-   }
-
-   return JB_ERR_OK;
-
+   return compile_pattern(host_pattern, RIGHT_ANCHORED, url, &url->host_regex);
 }
 
 #else
@@ -954,9 +1007,6 @@ static int domain_match(const struct url_spec *pattern, const struct http_reques
 jb_err create_url_spec(struct url_spec * url, const char * buf)
 {
    char *p;
-   int errcode;
-   size_t errlen;
-   char rebuf[BUFFER_SIZE];
 
    assert(url);
    assert(buf);
@@ -977,31 +1027,12 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
    /* Is it tag pattern? */
    if (0 == strncmpic("TAG:", url->spec, 4))
    {
-      if (NULL == (url->tag_regex = zalloc(sizeof(*url->tag_regex))))
-      {
-         freez(url->spec);
-         return JB_ERR_MEMORY;
-      }
-
-      /* buf + 4 to skip "TAG:" */
-      errcode = regcomp(url->tag_regex, buf + 4, (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-      if (errcode)
-      {
-         errlen = regerror(errcode, url->preg, rebuf, sizeof(rebuf));
-         if (errlen > (sizeof(rebuf) - 1))
-         {
-            errlen = sizeof(rebuf) - 1;
-         }
-         rebuf[errlen] = '\0';
-         log_error(LOG_LEVEL_ERROR, "error compiling %s: %s", url->spec, rebuf);
-         free_url_spec(url);
-
-         return JB_ERR_PARSE;
-      }
-      return JB_ERR_OK;
+      /* The pattern starts with the first character after "TAG:" */
+      const char *tag_pattern = buf + 4;
+      return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->tag_regex);
    }
 
-   /* Only reached for URL patterns */
+   /* Only reached for URL patterns. XXX: should be factored out. */
    p = strchr(buf, '/');
    if (NULL != p)
    {
@@ -1011,31 +1042,14 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
        */
       if (*(p+1) != '\0')
       {
-         /* XXX: mostly duplicated code, should be factored out. */
-         url->preg = zalloc(sizeof(*url->preg));
-         if (NULL == url->preg)
+         /*
+          * XXX: does it make sense to compile the slash at the beginning?
+          */
+         jb_err err = compile_pattern(p, LEFT_ANCHORED, url, &url->preg);
+
+         if (JB_ERR_OK != err)
          {
-            free_url_spec(url);
-            return JB_ERR_MEMORY;
-         }
-
-         snprintf(rebuf, sizeof(rebuf), "^(%s)", p);
-         errcode = regcomp(url->preg, rebuf,
-            (REG_EXTENDED|REG_NOSUB|REG_ICASE));
-         if (errcode)
-         {
-            errlen = regerror(errcode, url->preg, rebuf, sizeof(rebuf));
-
-            if (errlen > (sizeof(rebuf) - (size_t)1))
-            {
-               errlen = sizeof(rebuf) - (size_t)1;
-            }
-            rebuf[errlen] = '\0';
-            log_error(LOG_LEVEL_ERROR, "error compiling %s: %s",
-               url->spec, rebuf);
-            free_url_spec(url);
-
-            return JB_ERR_PARSE;
+            return err;
          }
       }
       *p = '\0';
