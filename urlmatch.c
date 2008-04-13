@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.32 2008/04/12 12:38:06 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.33 2008/04/12 14:03:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.32 2008/04/12 12:38:06 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.33  2008/04/12 14:03:13  fabiankeil
+ *    Remove an obvious comment and improve another one.
+ *
  *    Revision 1.32  2008/04/12 12:38:06  fabiankeil
  *    Factor out duplicated code to compile host, path and tag patterns.
  *
@@ -226,6 +229,7 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.32 2008/04/12 12:38:06 fabianke
 const char urlmatch_h_rcs[] = URLMATCH_H_VERSION;
 
 enum regex_anchoring {NO_ANCHORING, LEFT_ANCHORED, RIGHT_ANCHORED};
+static jb_err compile_host_pattern(struct url_spec *url, const char *host_pattern);
 
 /*********************************************************************
  *
@@ -755,6 +759,73 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  compile_url_pattern
+ *
+ * Description :  Compiles the three parts of an URL pattern.
+ *
+ * Parameters  :
+ *          1  :  url = Target url_spec to be filled in.
+ *          2  :  buf = The url pattern to compile. Will be messed up.
+ *
+ * Returns     :  JB_ERR_OK - Success
+ *                JB_ERR_MEMORY - Out of memory
+ *                JB_ERR_PARSE - Cannot parse regex
+ *
+ *********************************************************************/
+static jb_err compile_url_pattern(struct url_spec *url, char *buf)
+{
+   char *p;
+
+   p = strchr(buf, '/');
+   if (NULL != p)
+   {
+      /*
+       * Only compile the regex if it consists of more than
+       * a single slash, otherwise it wouldn't affect the result.
+       */
+      if (p[1] != '\0')
+      {
+         /*
+          * XXX: does it make sense to compile the slash at the beginning?
+          */
+         jb_err err = compile_pattern(p, LEFT_ANCHORED, url, &url->preg);
+
+         if (JB_ERR_OK != err)
+         {
+            return err;
+         }
+      }
+      *p = '\0';
+   }
+
+   p = strchr(buf, ':');
+   if (NULL != p)
+   {
+      *p++ = '\0';
+      url->port_list = strdup(p);
+      if (NULL == url->port_list)
+      {
+         return JB_ERR_MEMORY;
+      }
+   }
+   else
+   {
+      url->port_list = NULL;
+   }
+
+   if (buf[0] != '\0')
+   {
+      return compile_host_pattern(url, buf);
+   }
+
+   return JB_ERR_OK;
+
+}
+
+
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
 /*********************************************************************
  *
@@ -999,7 +1070,7 @@ static int domain_match(const struct url_spec *pattern, const struct http_reques
  *                      function.  If this function succeeds, the
  *                      buffer is copied to url->spec.  If this
  *                      function fails, the contents of the buffer
- *                      are lost forever.
+ *                      are lost forever. XXX: Why is this const?
  *
  * Returns     :  JB_ERR_OK - Success
  *                JB_ERR_MEMORY - Out of memory
@@ -1009,8 +1080,6 @@ static int domain_match(const struct url_spec *pattern, const struct http_reques
  *********************************************************************/
 jb_err create_url_spec(struct url_spec * url, const char * buf)
 {
-   char *p;
-
    assert(url);
    assert(buf);
 
@@ -1031,51 +1100,8 @@ jb_err create_url_spec(struct url_spec * url, const char * buf)
       return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->tag_regex);
    }
 
-   /* Only reached for URL patterns. XXX: should be factored out. */
-   p = strchr(buf, '/');
-   if (NULL != p)
-   {
-      /*
-       * Only compile the regex if it consists of more than
-       * a single slash, otherwise it wouldn't affect the result.
-       */
-      if (*(p+1) != '\0')
-      {
-         /*
-          * XXX: does it make sense to compile the slash at the beginning?
-          */
-         jb_err err = compile_pattern(p, LEFT_ANCHORED, url, &url->preg);
-
-         if (JB_ERR_OK != err)
-         {
-            return err;
-         }
-      }
-      *p = '\0';
-   }
-
-   p = strchr(buf, ':');
-   if (NULL != p)
-   {
-      *p++ = '\0';
-      url->port_list = strdup(p);
-      if (NULL == url->port_list)
-      {
-         return JB_ERR_MEMORY;
-      }
-   }
-   else
-   {
-      url->port_list = NULL;
-   }
-
-   if (buf[0] != '\0')
-   {
-      return compile_host_pattern(url, buf);
-   }
-
-   return JB_ERR_OK;
-
+   /* If it isn't a tag pattern it must be a URL pattern. */
+   return compile_url_pattern(url, (char *)buf);
 }
 
 
