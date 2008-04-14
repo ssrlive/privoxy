@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.33 2008/04/12 14:03:13 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.34 2008/04/13 13:32:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.33 2008/04/12 14:03:13 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.34  2008/04/13 13:32:07  fabiankeil
+ *    Factor URL pattern compilation out of create_url_spec().
+ *
  *    Revision 1.33  2008/04/12 14:03:13  fabiankeil
  *    Remove an obvious comment and improve another one.
  *
@@ -1070,7 +1073,7 @@ static int domain_match(const struct url_spec *pattern, const struct http_reques
  *                      function.  If this function succeeds, the
  *                      buffer is copied to url->spec.  If this
  *                      function fails, the contents of the buffer
- *                      are lost forever. XXX: Why is this const?
+ *                      are lost forever.
  *
  * Returns     :  JB_ERR_OK - Success
  *                JB_ERR_MEMORY - Out of memory
@@ -1078,7 +1081,7 @@ static int domain_match(const struct url_spec *pattern, const struct http_reques
  *                               written to system log)
  *
  *********************************************************************/
-jb_err create_url_spec(struct url_spec * url, const char * buf)
+jb_err create_url_spec(struct url_spec *url, char *buf)
 {
    assert(url);
    assert(buf);
