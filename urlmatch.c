@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.34 2008/04/13 13:32:07 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.35 2008/04/14 18:11:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,11 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.34 2008/04/13 13:32:07 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.35  2008/04/14 18:11:21  fabiankeil
+ *    The compiler might not notice it, but the buffer passed to
+ *    create_url_spec() is modified later on and thus shouldn't
+ *    be declared immutable.
+ *
  *    Revision 1.34  2008/04/13 13:32:07  fabiankeil
  *    Factor URL pattern compilation out of create_url_spec().
  *
@@ -1104,7 +1109,7 @@ jb_err create_url_spec(struct url_spec *url, char *buf)
    }
 
    /* If it isn't a tag pattern it must be a URL pattern. */
-   return compile_url_pattern(url, (char *)buf);
+   return compile_url_pattern(url, buf);
 }
 
 
