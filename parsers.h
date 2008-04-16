@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.39 2007/06/01 16:31:55 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.40 2007/08/11 14:47:26 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.40  2007/08/11 14:47:26  fabiankeil
+ *    Remove the prototypes for functions that are only
+ *    used in parsers.c and thus should be static.
+ *
  *    Revision 1.39  2007/06/01 16:31:55  fabiankeil
  *    Change sed() to return a jb_err in preparation for forward-override{}.
  *
@@ -257,7 +261,7 @@ extern const struct parsers server_patterns_light[];
 extern const add_header_func_ptr add_client_headers[];
 extern const add_header_func_ptr add_server_headers[];
 
-extern int flush_socket(jb_socket fd, struct client_state *csp);
+extern int flush_socket(jb_socket fd, struct iob *iob);
 extern jb_err add_to_iob(struct client_state *csp, char *buf, int n);
 extern jb_err decompress_iob(struct client_state *csp);
 extern char *get_header(struct client_state *csp);

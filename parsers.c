@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.122 2008/03/28 15:13:39 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.123 2008/03/29 12:13:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.122 2008/03/28 15:13:39 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.123  2008/03/29 12:13:46  fabiankeil
+ *    Remove send-wafer and send-vanilla-wafer actions.
+ *
  *    Revision 1.122  2008/03/28 15:13:39  fabiankeil
  *    Remove inspect-jpegs action.
  *
@@ -936,7 +939,7 @@ const add_header_func_ptr add_server_headers[] = {
  *
  * Parameters  :
  *          1  :  fd = file descriptor of the socket to read
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  iob = The I/O buffer to flush, usually csp->iob.
  *
  * Returns     :  On success, the number of bytes written are returned (zero
  *                indicates nothing was written).  On error, -1 is returned,
@@ -946,9 +949,8 @@ const add_header_func_ptr add_server_headers[] = {
  *                file, the results are not portable.
  *
  *********************************************************************/
-int flush_socket(jb_socket fd, struct client_state *csp)
+int flush_socket(jb_socket fd, struct iob *iob)
 {
-   struct iob *iob = csp->iob;
    int len = iob->eod - iob->cur;
 
    if (len <= 0)
