@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.40 2007/08/11 14:47:26 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.41 2008/04/16 16:38:21 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.41  2008/04/16 16:38:21  fabiankeil
+ *    Don't pass the whole csp structure to flush_socket()
+ *    when it only needs a file descriptor and a buffer.
+ *
  *    Revision 1.40  2007/08/11 14:47:26  fabiankeil
  *    Remove the prototypes for functions that are only
  *    used in parsers.c and thus should be static.
@@ -267,7 +271,7 @@ extern jb_err decompress_iob(struct client_state *csp);
 extern char *get_header(struct client_state *csp);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern jb_err sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
-extern void get_http_time(int time_offset, char *buf);
+extern void get_http_time(int time_offset, char *buf, size_t buffer_size);
 extern jb_err get_destination_from_headers(const struct list *headers, struct http_request *http);
 
 #ifdef FEATURE_FORCE_LOAD

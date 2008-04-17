@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.67 2008/03/27 17:00:05 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.68 2008/03/27 18:27:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.67 2008/03/27 17:00:05 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.68  2008/03/27 18:27:21  fabiankeil
+ *    Remove kill-popups action.
+ *
  *    Revision 1.67  2008/03/27 17:00:05  fabiankeil
  *    Turn the favicon blobs into locals.
  *
@@ -1795,7 +1798,7 @@ jb_err cgi_robots_txt(struct client_state *csp,
 
    rsp->is_static = 1;
 
-   get_http_time(7 * 24 * 60 * 60, buf); /* 7 days into future */
+   get_http_time(7 * 24 * 60 * 60, buf, sizeof(buf)); /* 7 days into future */
    if (!err) err = enlist_unique_header(rsp->headers, "Expires", buf);
 
    return (err ? JB_ERR_MEMORY : JB_ERR_OK);

@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.32 2006/12/17 17:53:39 fabiankeil Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.33 2007/01/28 13:41:17 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -38,6 +38,10 @@
  *
  * Revisions   :
  *    $Log: cgi.h,v $
+ *    Revision 1.33  2007/01/28 13:41:17  fabiankeil
+ *    - Add HEAD support to finish_http_response.
+ *    - Add error favicon to internal HTML error messages.
+ *
  *    Revision 1.32  2006/12/17 17:53:39  fabiankeil
  *    Suppress the toggle link if remote toggling is disabled.
  *
@@ -248,7 +252,7 @@ extern char   get_char_param(const struct map *parameters,
 /*
  * Text generators
  */
-extern void get_http_time(int time_offset, char * buf);
+extern void get_http_time(int time_offset, char *buf, size_t buffer_size);
 extern char *add_help_link(const char *item, struct configuration_spec *config);
 extern char *make_menu(const char *self, const unsigned feature_flags);
 extern char *dump_map(const struct map *the_map);
