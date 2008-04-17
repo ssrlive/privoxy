@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.28 2007/05/11 11:48:16 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.29 2007/09/09 18:20:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: miscutil.h,v $
+ *    Revision 1.29  2007/09/09 18:20:20  fabiankeil
+ *    Turn privoxy_strlcpy() into a function and try to work with
+ *    b0rked snprintf() implementations too. Reported by icmp30.
+ *
  *    Revision 1.28  2007/05/11 11:48:16  fabiankeil
  *    - Delete strsav() which was replaced
  *      by string_append() years ago.
@@ -203,8 +207,6 @@ extern jb_err string_join  (char **target_string,       char *text_to_append);
 
 extern char *string_toupper(const char *string);
 extern char *chomp(char *string);
-extern int simplematch(char *pattern, char *text);
-
 extern char *bindup(const char *string, size_t len);
 
 extern char *make_path(const char * dir, const char * file);

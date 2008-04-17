@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.35 2008/04/14 18:11:21 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.36 2008/04/14 18:19:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.35 2008/04/14 18:11:21 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.36  2008/04/14 18:19:48  fabiankeil
+ *    Remove now-pointless cast in create_url_spec().
+ *
  *    Revision 1.35  2008/04/14 18:11:21  fabiankeil
  *    The compiler might not notice it, but the buffer passed to
  *    create_url_spec() is modified later on and thus shouldn't
@@ -940,6 +943,144 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
     * match all domains.
     */
    return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  simplematch
+ *
+ * Description :  String matching, with a (greedy) '*' wildcard that
+ *                stands for zero or more arbitrary characters and
+ *                character classes in [], which take both enumerations
+ *                and ranges.
+ *
+ * Parameters  :
+ *          1  :  pattern = pattern for matching
+ *          2  :  text    = text to be matched
+ *
+ * Returns     :  0 if match, else nonzero
+ *
+ *********************************************************************/
+static int simplematch(char *pattern, char *text)
+{
+   unsigned char *pat = (unsigned char *) pattern;
+   unsigned char *txt = (unsigned char *) text;
+   unsigned char *fallback = pat; 
+   int wildcard = 0;
+  
+   unsigned char lastchar = 'a';
+   unsigned i;
+   unsigned char charmap[32];
+  
+   while (*txt)
+   {
+
+      /* EOF pattern but !EOF text? */
+      if (*pat == '\0')
+      {
+         if (wildcard)
+         {
+            pat = fallback;
+         }
+         else
+         {
+            return 1;
+         }
+      }
+
+      /* '*' in the pattern?  */
+      if (*pat == '*') 
+      {
+     
+         /* The pattern ends afterwards? Speed up the return. */
+         if (*++pat == '\0')
+         {
+            return 0;
+         }
+     
+         /* Else, set wildcard mode and remember position after '*' */
+         wildcard = 1;
+         fallback = pat;
+      }
+
+      /* Character range specification? */
+      if (*pat == '[')
+      {
+         memset(charmap, '\0', sizeof(charmap));
+
+         while (*++pat != ']')
+         {
+            if (!*pat)
+            { 
+               return 1;
+            }
+            else if (*pat == '-')
+            {
+               if ((*++pat == ']') || *pat == '\0')
+               {
+                  return(1);
+               }
+               for (i = lastchar; i <= *pat; i++)
+               {
+                  charmap[i / 8] |= (unsigned char)(1 << (i % 8));
+               } 
+            }
+            else
+            {
+               charmap[*pat / 8] |= (unsigned char)(1 << (*pat % 8));
+               lastchar = *pat;
+            }
+         }
+      } /* -END- if Character range specification */
+
+
+      /* 
+       * Char match, or char range match? 
+       */
+      if ( (*pat == *txt)
+      ||   (*pat == '?')
+      ||   ((*pat == ']') && (charmap[*txt / 8] & (1 << (*txt % 8)))) )
+      {
+         /* 
+          * Sucess: Go ahead
+          */
+         pat++;
+      }
+      else if (!wildcard)
+      {
+         /* 
+          * No match && no wildcard: No luck
+          */
+         return 1;
+      }
+      else if (pat != fallback)
+      {
+         /*
+          * Increment text pointer if in char range matching
+          */
+         if (*pat == ']')
+         {
+            txt++;
+         }
+         /*
+          * Wildcard mode && nonmatch beyond fallback: Rewind pattern
+          */
+         pat = fallback;
+         /*
+          * Restart matching from current text pointer
+          */
+         continue;
+      }
+      txt++;
+   }
+
+   /* Cut off extra '*'s */
+   if(*pat == '*')  pat++;
+
+   /* If this is the pattern's end, fine! */
+   return(*pat);
+
 }
 
 
