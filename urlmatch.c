@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.36 2008/04/14 18:19:48 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.37 2008/04/17 14:53:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.36 2008/04/14 18:19:48 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.37  2008/04/17 14:53:29  fabiankeil
+ *    Move simplematch() into urlmatch.c as it's only
+ *    used to match (old-school) domain patterns.
+ *
  *    Revision 1.36  2008/04/14 18:19:48  fabiankeil
  *    Remove now-pointless cast in create_url_spec().
  *
@@ -962,11 +966,11 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
  * Returns     :  0 if match, else nonzero
  *
  *********************************************************************/
-static int simplematch(char *pattern, char *text)
+static int simplematch(const char *pattern, const char *text)
 {
-   unsigned char *pat = (unsigned char *) pattern;
-   unsigned char *txt = (unsigned char *) text;
-   unsigned char *fallback = pat; 
+   const unsigned char *pat = (const unsigned char *)pattern;
+   const unsigned char *txt = (const unsigned char *)text;
+   const unsigned char *fallback = pat; 
    int wildcard = 0;
   
    unsigned char lastchar = 'a';
