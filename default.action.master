@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.121 2008/03/28 15:13:39 fabiankeil Exp $
+#  $Id: default.action.master,v 1.122 2008/03/29 12:13:45 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1458,6 +1458,8 @@ www.google.com/adsense/
 #MASTER# PROBLEM URL: http://images.encyclopediadramatica.com/images/b/b5/Advertising-Dierentuin.jpg
 # URL = http://images.encyclopediadramatica.com/images/b/b5/Advertising-Dierentuin.jpg
 .encyclopediadramatica.com/
+#MASTER# UNBLOCK-REFERRER: http://lifehacker.com 2008-04-18 HB
+tags.gawker.com/.*css
 
 #############################################################################
 # Site-specific special rules:
