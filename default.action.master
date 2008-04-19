@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.122 2008/03/29 12:13:45 fabiankeil Exp $
+#  $Id: default.action.master,v 1.123 2008/04/18 10:50:43 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1459,6 +1459,8 @@ www.google.com/adsense/
 # URL = http://images.encyclopediadramatica.com/images/b/b5/Advertising-Dierentuin.jpg
 .encyclopediadramatica.com/
 #MASTER# UNBLOCK-REFERRER: http://lifehacker.com 2008-04-18 HB
+# URL = tags.gawker.com/assets/minify.php?files=/assets/base.v6/css/global.css,/assets/base.v6/css/header.css,/assets/base.v6/css/sidebar.css,/assets/base.v6/css/content.css,/assets/base.v6/css/images.css,/assets/base.v6/css/ads.css,/assets/base.v6/css/community.css,/assets/base.v6/css/comments.css,/assets/base.v6/css/messages.css,/assets/base.v6/css/ui.css
+crunch
 tags.gawker.com/.*css
 
 #############################################################################
@@ -1644,6 +1646,9 @@ view.samurajdata.se/ps\.php\?url=
 # URL = http://offer.ebay.de/ws/eBayISAPI.dll?stockphotourl=http%3A%2F%2Fi16.ebayimg.com%2F02%2Fc%2F02%2F88%2F21%2F5b_6.JPG&MfcISAPICommand=BinConfirm&fb=1&co_partnerid=&item=123456789112&quantity=1&input_bin=
 # URL = http://offer.ebay.de/ws/eBayISAPI.dll?maxbid=15%2C01&MfcISAPICommand=MakeBid&fromPage=284&stockphotourl=http%3A%2F%2Fi14.ebayimg.com%2F02%2Fc%2F00%2Fe9%2Fe1%2F2a_6.JPG&fb=2&co_partnerid=&item=123456789112&input_bid=
 .ebay.de/ws/eBayISAPI\.dll\?
+#MASTER# REMARKS: While this is a redirect, the token isn't part of the URL redirected to.
+# URL = http://www.amazon.com/gp/redirect.html/ref=cm_plog_item_link/105-3659773-0844420?ie=UTF8&location=http%3A%2F%2Fjoltawards.com%2F2007%2F&token=A07736D870C02EF10CB13BCC8A33C302F689BBBA
+.amazon.com/gp/redirect.html/.*location.*&token
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
