@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.123 2008/04/18 10:50:43 hal9 Exp $
+#  $Id: default.action.master,v 1.124 2008/04/19 12:21:53 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -565,7 +565,6 @@ ad*.
 .ad.[a-ik-z][a-oq-z].
 .ad.jp.*.
 .ad.???*.
-#MASTER# PROBLEM URL: http://alternativos.iw-advertising.com/
 # Blocked URL = http://alternativos.iw-advertising.com/
 .*advert*.
 *banner*.
@@ -573,8 +572,8 @@ count*.
 *counter.
 #MASTER# PROBLEM URL: http://www.newegg.com
 promotions.
-#MASTER# PROBLEM URL: http://metrics.performancing.com/ 11/04/06
 #MASTER# BLOCK-REFERRER: http://tech.cybernetnews.com/
+# Blocked URL = http://metrics.performancing.com/
 metrics.
 
 #############################################################################
@@ -641,19 +640,18 @@ support./(.*/)?track
 .fh-*.de
 #MASTER# REMARKS: Try to avoid harmless names in non-commercial organizations. Added 10/24/06
 # URL = http://www.gnu.org/graphics/gnu-head-banner.png
-#MASTER# PROBLEM URL: http://www.gnu.org/graphics/gnu-head-banner.png
 .org/.*(image|banner)
 
 #############################################################################
 # Catch-all for false-positives that are just TOO obvious to let go
 #############################################################################
 {+block{Catch-all block for false-positives.}}
-#MASTER# PROBLEM URL: http://ads.facebook.com/ads/spreadshirt/banner120x600.jpg
 #MASTER# REMARKS: Going for adsrv, adserve, adserver*.
 .ads[erv][rv]*.
+# Blocked URL = http://ads.facebook.com/ads/spreadshirt/banner120x600.jpg
 .ads.
 /(.*/)?ad(se?rv|click|stream|image|log|farm|script)
-#MASTER# PROBLEM URL: http://www.torrentportal.com/topad.html
+# Blocked URL = http://www.torrentportal.com/topad.html
 #MASTER# REMARKS: Action tracker 1637648 and a bit of imagination. Added 2007-01-20.
 #MASTER# REMARKS: Added "text" 20070730 as per http://www.pcworld.com/textad?Keywords=System Resources Tune-Up.&type=pcworld_downloads_search&count=3&ord=906010128&serveUrl=http%3A%2F%2Fwww.pcworld.com%2Fdownloads%2Ffile%2Ffid%2C7661-order%2C1-page%2C1-c%2Csystemresourcestuneup%2Fdescription.html Adam Piggott
 /.*(top|bottom|left|right|text)_?ad
@@ -1040,7 +1038,6 @@ matrix.mediavantage.
 #MASTER# BLOCK-REFERRER:  http://torrent.to/torrent/ 09/12/06
 # URL = http://partner.gonamic.de/Affiliate/ViewCounter/index.cfm?trackingID=368232&bIsAffiliate=0
 .gonamic.de
-#MASTER# REMARKS: 09/11/06 example: img.webads.nl
 # URL = http://img.webads.nl/
 .webads.
 #MASTER# REMARKS: Ad generator http://media.adlegend.com/centrport/20060/511290/GM_emplyee_300x250.gif
@@ -1143,11 +1140,9 @@ insightxe./data/
 #MASTER# REMARKS: Actionsfile feedback item #1650797 2007-02-05
 .insightfirst.com
 #MASTER# BLOCK-REFERRER: http://rss.slashdot.org/Slashdot/slashdot
-#MASTER# PROBLEM URL: rss.slashdot.org/~a/Slashdot/slashdot?i=ofbWqX
 # Blocked URL = http://rss.slashdot.org/~a/Slashdot/slashdot?i=ofbWqX
 # URL = http://rss.slashdot.org/~a/Slashdot/slashdot?i=ofbWqX
 rss.slashdot.org/~a/Slashdot/slashdot\?
-#MASTER# PROBLEM URL: rss.slashdot.org/~r/Slashdot/slashdot/~4/102113044
 # Blocked URL = http://rss.slashdot.org/~r/Slashdot/slashdot/~4/102113044
 # URL = http://rss.slashdot.org/~r/Slashdot/slashdot/~4/102113044
 rss.slashdot.org/~r/Slashdot/slashdot/~4/
@@ -1239,7 +1234,6 @@ banners.wunderground.com/
 #MASTER# UNBLOCK-REFERRER: http://www.washingtonpost.com/wp-dyn/articles/A43890-2002Aug4.html
 #MASTER# REMARKS: Javascripts whose absence messes the page
 .washingtonpost.com/wp-srv/
-#MASTER# UNBLOCK-REFERRER: http://www.gnome.org/images/banner-gnomeis 10/09/06
 # URL = http://www.gnome.org/images/banner-gnomeis
 .gnome.org
 #MASTER# UNBLOCK-REFERRER: http://www.nycsubway.org/ 10/09/06
@@ -1247,7 +1241,6 @@ banners.wunderground.com/
 #MASTER# UNBLOCK-REFERRER: http://www.forgotten-ny.com/ADS/manhattanads/moremahnattan.html
 # URL = http://www.forgotten-ny.com/ADS/manhattanads/moremahnattan.html
 .forgotten-ny.com/ADS/
-#MASTER# UNBLOCK-REFERRER: http://counter.li.org 10/09/06
 # URL = http://counter.li.org
 counter.li.org
 #MASTER# UNBLOCK-REFERRER: http://adrian.adrian.org/ 10/09/06
@@ -1275,32 +1268,24 @@ adzapper.
 #MASTER# UNBLOCK-REFERRER: http://de.altavista.com/web/adv
 # URL = http://de.altavista.com/web/adv
 .altavista.com/web/adv
-#MASTER# UNBLOCK-REFERRER: http://rads.mcafee.com/rads/scripts/RADS.dll?QueryProduct2
 # URL = http://rads.mcafee.com/rads/scripts/RADS.dll?QueryProduct2
 rads.mcafee.com/
-#MASTER# UNBLOCK-REFERRER: http://linuxfromscratch.org/cgi-bin/lfscounter.cgi
 # URL = http://linuxfromscratch.org/cgi-bin/lfscounter.cgi
 linuxfromscratch.org/
 #MASTER# UNBLOCK-REFERRER: http://dv411.com/advc50.html
 # URL = http://dv411.com/advc50.html
 dv411.com/.*advc50
-#MASTER# UNBLOCK-REFERRER: http://www.freeswan.org/freeswan_trees/freeswan-1.98b/doc/adv_config.html
 # URL = http://www.freeswan.org/freeswan_trees/freeswan-1.98b/doc/adv_config.html
 .freeswan.org/
-#MASTER# UNBLOCK-REFERRER: http://www.arm.com/support/ads_faq?OpenDocument&ExpandSection=11 10/09/06
 # URL = http://www.arm.com/support/ads_faq?OpenDocument&ExpandSection=11
 www.arm.com/.*ads
-#MASTER# UNBLOCK-REFERRER: http://www.anybrowser.org/campaign/ 10/09/06
 # URL = http://www.anybrowser.org/campaign/
 www.anybrowser.org/
-#MASTER# UNBLOCK-REFERRER: http://www.tads.org/ 10/09/06
 # URL = http://www.tads.org/
 www.tads.org/
-#MASTER# UNBLOCK-REFERRER: http://www.mbe.com/redir/packtrack.asp 10/10/06
 # URL = http://www.mbe.com/redir/packtrack.asp
 .mbe.com/redir/packtrack.asp
 .iship.com/trackit/
-#MASTER# UNBLOCK-REFERRER: http://www.esis.com.au/AdvSerialCards/Firewire.htm 10/11/06
 # URL = http://www.esis.com.au/AdvSerialCards/Firewire.htm
 .esis.com.au/AdvSerialCards
 #MASTER# UNBLOCK-REFERRER: http://www.familysearch.org/ 10/11/06
@@ -1319,42 +1304,32 @@ arnolds.dhs.org/static/adv_tools.html
 .schooner.com/~loverso/no-ads/
 #MASTER# UNBLOCK-REFERRER: http://source.bungie.org/ 10/11/06
 source.bungie.org/
-#MASTER# UNBLOCK-REFERRER: http://adonthell.linuxgames.com/ 10/11/06
 # URL = http://adonthell.linuxgames.com/
 adonthell.linuxgames.com/
 #MASTER# UNBLOCK-REFERRER: http://news.bbc.co.uk/furniture/chinese/banner/bbccantonese_600.gif
 #MASTER# REMARKS: Banner-free site(s).
 .bbc.co.uk/
-#MASTER# UNBLOCK-REFERRER: http://adc.netlabs.org/ 10/11/06
 # URL = http://adc.netlabs.org/
 adc.netlabs.org/
 #MASTER# UNBLOCK-REFERRER: http://www.tela.bc.ca/tads/authoring/multimedia-tads-docs/latin2.htm 10/11/06
 # URL = http://www.tela.bc.ca/tads/authoring/multimedia-tads-docs/latin2.htm
 .tela.bc.ca/tads/
-#MASTER# UNBLOCK-REFERRER: http://adbusters.org/information/ 10/19/06
 # URL = http://adbusters.org/information/
 adbusters.org/
-#MASTER# UNBLOCK-REFERRER: http://www.eads.com/ 10/11/06
-#MASTER# UNBLOCK-REFERRER: http://www.eads.net/
-#MASTER# UNBLOCK-REFERRER: http://www.eads.de/
 # URL = http://www.eads.com/
 # URL = http://www.eads.net/
 # URL = http://www.eads.de/
 .eads.*/
-#MASTER# UNBLOCK-REFERRER: http://brew.qualcomm.com/brew/en/developer/resources/ad/documentation.html 10/11/06 
 # URL = http://brew.qualcomm.com/brew/en/developer/resources/ad/documentation.html
 .qualcomm.com/brew/en/developer/resources/ad/
-#MASTER# UNBLOCK-REFERRER: http://upgrade.bitdefender.com/update71/avx/Plugins/adsntfs.xmd.gzip 09/04/06
 # URL = http://upgrade.bitdefender.com/update71/avx/Plugins/adsntfs.xmd.gzip
 /update\d\d/.*adsnt.*
 #MASTER# UNBLOCK-REFERRER: http://msdn.microsoft.com/ 09/11/06
 .microsoft.com/.*masthead
 #MASTER# UNBLOCK-REFERRER: http://indymedia.org adfree site 09/11/06
 .indymedia.org
-#MASTER# UNBLOCK-REFERRER: http://www.seanbaby.com/stupid/comicads05.shtml 09/11/06
 # URL = http://www.seanbaby.com/stupid/comicads05.shtml
 .seanbaby.com
-#MASTER# UNBLOCK-REFERRER:  http://www.cels.org/db/keep-track.pl?cat:1 09/11/06
 # URL = http://www.cels.org/db/keep-track.pl?cat:1
 .cels.org/.*track
 #MASTER# UNBLOCK-REFERRER: http://www.nic.ad.jp/ See http://jprs.co.jp/en/jpdomain.html 09/11/06
@@ -1365,7 +1340,6 @@ adbusters.org/
 #MASTER# REMARKS: creativecommons.org worthwhile organization 09/11/06
 /(.*/)?somerights20.gif
 .creativecommons.org
-#MASTER# UNBLOCK-REFERRER: http://www.ups.com/WebTracking/track?loc=en_US 09/11/06
 # URL = http://www.ups.com/WebTracking/track?loc=en_US
 .ups.com/.*/track
 #MASTER# UNBLOCK-REFERRER: http://adju.st 09/12/06
@@ -1408,7 +1382,6 @@ edge.macworld.com
 #MASTER# REMARKS: Actionsfile feedback item #1672918 2007-03-03
 # URL = http://mozilla.hongo.wide.ad.jp/pub/mozilla.org//thunderbird/releases/
 .ad.*/pub/mozilla.org/
-#MASTER# UNBLOCK-REFERRER: http://lads.myspace.com/mini/mini.swf?b=NDgwNzU1ODE=&o=NjQwNzIzMA==&d=MTE3NDI4ODcwNg==&i=MA==&a=VHJ1ZQ==
 # URL = http://lads.myspace.com/mini/mini.swf?b=NDgwNzU1ODE=&o=NjQwNzIzMA==&d=MTE3NDI4ODcwNg==&i=MA==&a=VHJ1ZQ==
 #MASTER# UNBLOCK-REFERRER: http://profile.myspace.com/index.cfm?fuseaction=user.viewprofile&friendid=5282733
 #MASTER# UNBLOCK-REFERRER: http://lads.myspace.com/videos/vplayer.swf
@@ -1419,43 +1392,32 @@ lads.myspace.com
 #MASTER# UNBLOCK-REFERRER: http://www.shockwave.com/servlet/DownloadEcommTracker?sku=fizzball-pc&promoCode=SiteShockwaveLandingPage
 # URL = http://www.shockwave.com/servlet/DownloadEcommTracker?sku=fizzball-pc&promoCode=SiteShockwaveLandingPage
 .shockwave.com/servlet/DownloadEcommTracker
-#MASTER# UNBLOCK-REFERRER: http://www.fish4.co.uk/iad/lettings/advert?adId=12389712&src=nestoria
 #MASTER# REMARKS: 20070411 Adam Piggott fish4.co.uk is a popular UK advertising site for cars, properties and jobs and uses ad/advert all over the place, understandably.
 # URL = http://www.fish4.co.uk/iad/lettings/advert?adId=12389712&src=nestoria
 .fish4.co.uk/.*ad
 #MASTER# REMARKS: Actionsfile feedback item #1700037 2007-04-13 HB
-#MASTER# UNBLOCK-REFERRER: http://www.mp3.com.au/popup/popup.asp?id=110433
 # URL = http://www.mp3.com.au/popup/popup.asp?id=110433
 .mp3.com.au/.*popup
 #MASTER# REMARKS Actionsfile feedback #1700915 2007-04-15
-#MASTER# UNBLOCK-REFERRER: http://www.svd.se/ego/339/http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
 # URL = http://www.svd.se/ego/339/http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
-#MASTER# UNBLOCK-REFERRER: http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
 # URL = http://www.e24.se/dynamiskt/reklam_media/did_15092793.asp
 /(.*/)?dynamiskt/reklam_media/did_
 #MASTER# REMARKS 20070710 Actionsfile feedback #1751020
 switch.atdmt.com/action/
-#MASTER# UNBLOCK-REFERRER: http://www.parcelforce.com/portal/pw/track?catId=7500082
 # URL = http://www.parcelforce.com/portal/pw/track?catId=7500082
 .parcelforce.com/.*track
 #MASTER# UNBLOCK-REFERRER: redirect from http://go.microsoft.com/fwlink?linkid=51093
 #MASTER# REMARKS: Actionsfile feedback item #1757121 2007-07-19
 .microsoft.com/.*/adschema/
-#MASTER# UNBLOCK-REFERRER: http://upload.wikimedia.org/wikipedia/en/a/ad/Picturecarnegie.jpg
 # URL = http://upload.wikimedia.org/wikipedia/en/a/ad/Picturecarnegie.jpg
 .wikimedia.org/
-#MASTER# UNBLOCK-REFERRER: http://en.wikipedia.org/wiki/Advertisement
 # URL = http://en.wikipedia.org/wiki/Advertisement
 .wikipedia.org/
-#MASTER# PROBLEM URL: http://curl.haxx.se/docs/adv_20070710.html
 # URL = http://curl.haxx.se/docs/adv_20070710.html
 .haxx.se/docs/adv_
-#MASTER# PROBLEM URL: http://www.google.com/adsense/
 # URL = http://www.google.com/adsense/
 www.google.com/adsense/
-#MASTER# PROBLEM URL: http://www.encyclopediadramatica.com/Advertisement
 # URL = http://www.encyclopediadramatica.com/Advertisement
-#MASTER# PROBLEM URL: http://images.encyclopediadramatica.com/images/b/b5/Advertising-Dierentuin.jpg
 # URL = http://images.encyclopediadramatica.com/images/b/b5/Advertising-Dierentuin.jpg
 .encyclopediadramatica.com/
 #MASTER# UNBLOCK-REFERRER: http://lifehacker.com 2008-04-18 HB
@@ -1561,17 +1523,15 @@ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 .speedfind.de
 #MASTER# PROBLEM-URL: http://www.nytimes.com/
 .nytimes.com
-#MASTER# PROBLEM-URL: http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 #MASTER# REMARKS: Yahoo logout URL after first redirect. fk 2007-01-19
 #MASTER# REMARKS: Logout fails if we fast-redirect to the URL after "done=".
 #MASTER# REMARKS: Reported in support request #1635354.
 # URL = http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 .yahoo.com/.*done=http
-#MASTER# PROBLEM-URL: http://us.rd.yahoo.com/reg/login1/lisu/login/uk/ym/*http://edit.europe.yahoo.com/c onfig/login?.tries=1&.src=ym&.md5=&.hash=&.js=1&.last=&...kP=Y&.done=http://mail .yahoo.com&.pd=ym_ver=0&c=&login=XXX&passwd=XXX&.persistent =&.hash=1&.md5=1
 #MASTER# REMARKS: Reported in support request #1802365.
 # URL = http://us.rd.yahoo.com/reg/login1/lisu/login/uk/ym/*http://edit.europe.yahoo.com/c onfig/login?.tries=1&.src=ym&.md5=&.hash=&.js=1&.last=&...kP=Y&.done=http://mail .yahoo.com&.pd=ym_ver=0&c=&login=XXX&passwd=XXX&.persistent =&.hash=1&.md5=1
 .rd.yahoo.com/reg/login1/
-#MASTER# PROBLEM-URL: http://validator.w3.org/check
+# URL = http://validator.w3.org/check
 .w3.org
 #MASTER# PROBLEM-URL: http://www.ask.com/
 .directhit.com
@@ -1589,60 +1549,42 @@ www.fileplanet.com/redir\.asp\?
 #MASTER# PROBLEM-URL: http://cyber.law.harvard.edu/filtering/china/test/
 .edu
 #MASTER# PROBLEM-URL: http://web.archive.org
-#MASTER# PROBLEM-URL: http://web.archive.org/web/19970715180251/http://www.gmd.de/
 # URL = http://web.archive.org/web/19970715180251/http://www.gmd.de/
 .archive.org
-#MASTER# PROBLEM-URL: http://www.guenstiger.de/gt/link.asp?url=http://www.edv-supermarkt.de&source=produkt=238284&USID=00086443917155&hnr=2199&pnr=238284&ppr=158,00
 # URL = http://www.guenstiger.de/gt/link.asp?url=http://www.edv-supermarkt.de&source=produkt=238284&USID=00086443917155&hnr=2199&pnr=238284&ppr=158,00
 www.guenstiger.de
-#MASTER# PROBLEM-URL: http://anon.free.anonymizer.com/http://www.privoxy.org/
 # URL = http://anon.free.anonymizer.com/http://www.privoxy.org/
 .anonymizer.com
-#MASTER# PROBLEM-URL: http://www.mailtothefuture.com/public/logon?http://www.mailtothefuture.com/
 # URL = http://www.mailtothefuture.com/public/logon?http://www.mailtothefuture.com/
 www.mailtothefuture.com
 #MASTER# PROBLEM-URL: http://support.microsoft.com/default.aspx?scid=KB;en-us;q219110
 support.microsoft.com/
-#MASTER# PROBLEM-URL: http://www.alexa.com/data/details/traffic_details?q=blogspot&url=http://www.blogalia.com
 # URL = http://www.alexa.com/data/details/traffic_details?q=blogspot&url=http://www.blogalia.com
 .alexa.com
-#MASTER# PROBLEM-URL: http://www.translate.ru/url/tran_url.asp?lang=es&url=http%3A%2F%2Fos2progg.by.ru%2Findex.shtml&direction=rs&template=General&cp1=NO&cp2=NO&autotranslate=on&transliterate=on&psubmit2.x=68&psubmit2.y=12
 # URL = http://www.translate.ru/url/tran_url.asp?lang=es&url=http%3A%2F%2Fos2progg.by.ru%2Findex.shtml&direction=rs&template=General&cp1=NO&cp2=NO&autotranslate=on&transliterate=on&psubmit2.x=68&psubmit2.y=12
 www.translate.ru/url/
-#MASTER# PROBLEM-URL: http://schneegans.de/sv/?url=http%3A%2F%2Fwww.freebsd.org%2F&schema=%28Detect+automatically%29&encoding=%28Detect+automatically%29&htmlcomp=%28Detect+automatically%29
 # URL = http://schneegans.de/sv/?url=http%3A%2F%2Fwww.freebsd.org%2F&schema=%28Detect+automatically%29&encoding=%28Detect+automatically%29&htmlcomp=%28Detect+automatically%29
 schneegans.de/
-#MASTER# PROBLEM-URL: http://config.privoxy.org/edit-actions-submit?f=user ... &redirect_mode=http%3A%2F%2Fwww.privoxy.org%2F
 # URL = http://config.privoxy.org/edit-actions-submit?f=user..&redirect_mode=http%3A%2F%2Fwww.privoxy.org%2F
 config.privoxy.org/
-#MASTER# PROBLEM-URL: http://users.wsj.com/lmda/do/checkLogin?mg=evo-wsj&url=http%3A%2F%2Fonline.wsj.com%2Farticle%2FSB117313867582027623.html
 # URL = http://users.wsj.com/lmda/do/checkLogin?mg=evo-wsj&url=http%3A%2F%2Fonline.wsj.com%2Farticle%2FSB117313867582027623.html
 .wsj.com/lmda/do/checkLogin
-#MASTER# PROBLEM-URL: http://del.icio.us/url/check\?url=http%3A%2F%2Fwww.privoxy.org
 #MASTER# REMARKS: As we already have five other PROBLEM-URLs that contain '?url=',
 #MASTER# REMARKS: it might make sense to allow '/.*?url=' in general
 # URL = http://del.icio.us/url/check?url=http%3A%2F%2Fwww.privoxy.org
 del.icio.us/
-#MASTER# PROBLEM-URL: http://calgary.ctv.ca/servlet/RTGAMArticleHTMLTemplate/B/20070615/goexpo?brand=generic&hub=&tf=CFCNPlus/generic/hubs/frontpage.html&cf=CFCNPlus/generic/hubs/frontpage.cfg&slug=goexpo&date=20070615&archive=CFCNPlus&ad_page_name=&nav=home&subnav=fullstory&site_cfcn=http://calgary.ctv.ca
 # URL = http://calgary.ctv.ca/servlet/RTGAMArticleHTMLTemplate/B/20070615/goexpo?brand=generic&hub=&tf=CFCNPlus/generic/hubs/frontpage.html&cf=CFCNPlus/generic/hubs/frontpage.cfg&slug=goexpo&date=20070615&archive=CFCNPlus&ad_page_name=&nav=home&subnav=fullstory&site_cfcn=http://calgary.ctv.ca
 .ctv.ca/.*&site_cfcn=http://
-#MASTER# PROBLEM-URL: http://memberservices.informit.com/checkLogin.ashx?partner=8&r=http%3a%2f%2fwww.informit.com%2farticles%2farticle.asp%3fp%3d766375%26seqNum%3d1
 # URL = http://memberservices.informit.com/checkLogin.ashx?partner=8&r=http%3a%2f%2fwww.informit.com%2farticles%2farticle.asp%3fp%3d766375%26seqNum%3d1
 .informit.com/.*&r=http%3a%2f%2f
-#MASTER# PROBLEM-URL: http://access.adobe.com/access/getStatus.do?jobid=&srcPdfUrl=http://cups.cs.cmu.edu/soups/2007/proceedings/p41_clark.pdf&convertTo=html&visuallyImpaired=preferhtml&preferHTMLReason=&platform=&comments=&starttime=1187362172109 
 # URL = http://access.adobe.com/access/getStatus.do?jobid=&srcPdfUrl=http://cups.cs.cmu.edu/soups/2007/proceedings/p41_clark.pdf&convertTo=html&visuallyImpaired=preferhtml&preferHTMLReason=&platform=&comments=&starttime=1187362172109
 access.adobe.com/access/getStatus.do\?jobid=&srcPdfUrl=
-#MASTER# PROBLEM-URL: http://view.samurajdata.se/ps.php?url=http%3A%2F%2Fcups.cs.cmu.edu%2Fsoups%2F2007%2Fproceedings%2Fp41_clark.pdf&submit=View%21
 # URL = http://view.samurajdata.se/ps.php?url=http%3A%2F%2Fcups.cs.cmu.edu%2Fsoups%2F2007%2Fproceedings%2Fp41_clark.pdf&submit=View%21
 view.samurajdata.se/ps\.php\?url=
-#MASTER# PROBLEM-URL: http://www.blogger.com/navbar.g?targetBlogID=8919860543765866292&blogName=Kickin%27+the+Darkness&publishMode=PUBLISH_MODE_HOSTED&navbarType=BLUE&layoutType=LAYOUTS&homepageUrl=http%3A%2F%2Fblog.kickin-the-darkness.com%2F&searchRoot=http%3A%2F%2Fblog.kickin-the-darkness.com%2Fsearch
 # URL = http://www.blogger.com/navbar.g?targetBlogID=8919860543765866292&blogName=Kickin%27+the+Darkness&publishMode=PUBLISH_MODE_HOSTED&navbarType=BLUE&layoutType=LAYOUTS&homepageUrl=http%3A%2F%2Fblog.kickin-the-darkness.com%2F&searchRoot=http%3A%2F%2Fblog.kickin-the-darkness.com%2Fsearch
 .blogger.com/navbar\.g
-#MASTER# PROBLEM-URL: http://editors.dmoz.org/editors/editurl.cgi?url=http%3a//www.example.de/&cat=World/Deutsch/Computer/Hardware/Speichermedien
 # URL = http://editors.dmoz.org/editors/editurl.cgi?url=http%3a//www.example.de/&cat=World/Deutsch/Computer/Hardware/Speichermedien
 .dmoz.org/editors/editurl\.cgi
-#MASTER# PROBLEM-URL: http://offer.ebay.de/ws/eBayISAPI.dll?stockphotourl=http%3A%2F%2Fi16.ebayimg.com%2F02%2Fc%2F02%2F88%2F21%2F5b_6.JPG&MfcISAPICommand=BinConfirm&fb=1&co_partnerid=&item=123456789112&quantity=1&input_bin=
-#MASTER# PROBLEM-URL: http://offer.ebay.de/ws/eBayISAPI.dll?maxbid=15%2C01&MfcISAPICommand=MakeBid&fromPage=284&stockphotourl=http%3A%2F%2Fi14.ebayimg.com%2F02%2Fc%2F00%2Fe9%2Fe1%2F2a_6.JPG&fb=2&co_partnerid=&item=123456789112&input_bid=
 # URL = http://offer.ebay.de/ws/eBayISAPI.dll?stockphotourl=http%3A%2F%2Fi16.ebayimg.com%2F02%2Fc%2F02%2F88%2F21%2F5b_6.JPG&MfcISAPICommand=BinConfirm&fb=1&co_partnerid=&item=123456789112&quantity=1&input_bin=
 # URL = http://offer.ebay.de/ws/eBayISAPI.dll?maxbid=15%2C01&MfcISAPICommand=MakeBid&fromPage=284&stockphotourl=http%3A%2F%2Fi14.ebayimg.com%2F02%2Fc%2F00%2Fe9%2Fe1%2F2a_6.JPG&fb=2&co_partnerid=&item=123456789112&input_bid=
 .ebay.de/ws/eBayISAPI\.dll\?
@@ -1655,37 +1597,30 @@ view.samurajdata.se/ps\.php\?url=
 #----------------------------------------------------------------------------
 {-filter -prevent-compression}
 # Sticky Actions = -filter -prevent-compression
-#MASTER# PROBLEM-URL: http://ijbswa.cvs.sourceforge.net/ijbswa/current/
 # URL = http://ijbswa.cvs.sourceforge.net/ijbswa/current/
 .cvs.
 /.*(cvs(view|web)|viewcvs)
 #MASTER# REMARKS: The same for Subversion
-#MASTER# PROBLEM-URL: http://svn.sourceforge.net/
 # URL = http://svn.sourceforge.net/
 .svn.
 .websvn.
 /(.*/)?svn/
-#MASTER# PROBLEM-URL: http://liveupdate.symantec.com/ennlu.x86
 #MASTER# REMARKS: Jeez, could you please stay with one of them?
 # URL = http://liveupdate.symantec.com/ennlu.x86
 liveupdate.symantec.com
 liveupdate.liveupdatesymantec.com
 liveupdate.symantecliveupdate.com
-#MASTER# PROBLEM-URL: http://www.bookmarklets.com/
 # URL = http://www.bookmarklets.com/
 .bookmarklets.com
-#MASTER# PROBLEM-URL: http://www.squarefree.com/bookmarklets/
 # URL = http://www.squarefree.com/bookmarklets/
 .squarefree.com/bookmarklets/
 #MASTER# DONT-VERIFY
 #MASTER# REMARKS: Used by Mac OSX's automatic software update feature
 swquery.apple.com
 swscan.apple.com
-#MASTER# PROBLEM-URL: http://atl.speakeasy.net/300k
 #MASTER# REMARKS: These are various US DSL speed tests sites, where MIME is wrong
 # URL = http://atl.speakeasy.net/300k
 .speakeasy.net/\d+k
-#MASTER# PROBLEM-URL: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=185033
 # URL = http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=185033
 .debian.org
 #MASTER# DONT-VERIFY
@@ -1750,14 +1685,11 @@ quoka.de
 #----------------------------------------------------------------------------
 {-filter{banners-by-size}}
 # Sticky Actions = -filter{banners-by-size}
-#MASTER# PROBLEM-URL: http://www.pricegrabber.com/search_getprod.php?masterid=580330&zip_code=92840&found=1&ut=40a6c41f2c9d1244 10/14/06
 # URL = http://www.pricegrabber.com/search_getprod.php?masterid=580330&zip_code=92840&found=1&ut=40a6c41f2c9d1244
 .pricegrabber.com/search_getprod.php
-#MASTER# PROBLEM-URL: http://www.cnn.com/WORLD/
 #MASTER# REMARKS: URL-based filtering is enough here. 120x90 content images
 # URL = http://www.cnn.com/WORLD/
 .cnn.com
-#MASTER# PROBLEM-URL: http://gamespot.com/gamespot/filters/0,10850,6013054,00.html
 #MASTER# REMARKS: 120x90 content images
 # URL = http://gamespot.com/gamespot/filters/0,10850,6013054,00.html
 .gamespot.com/gamespot
@@ -1765,49 +1697,37 @@ quoka.de
 www.wral.com
 #MASTER# PROBLEM-URL: http://www.cartoonnetwork.com/ 10/15/06
 .cartoonnetwork.com/
-#MASTER# PROBLEM-URL: http://www.anybrowser.org/campaign/  10/15/06
 # URL = http://www.anybrowser.org/campaign/
 .anybrowser.org
-#MASTER# PROBLEM-URL: http://images.google.de/images?q=cookie+monster&svnum=10&hl=de&lr=&ie=UTF-8&oe=UTF-8&start=40&sa=N
 # URL = http://images.google.de/images?q=cookie+monster&svnum=10&hl=de&lr=&ie=UTF-8&oe=UTF-8&start=40&sa=N
 images.google.
-#MASTER# PROBLEM-URL: http://www.pbs.org/wgbh/pages/roadshow/series/highlights/2003/albuquerque/index.html 10/15/06
 # URL =  http://www.pbs.org/wgbh/pages/roadshow/series/highlights/2003/albuquerque/index.html
 .pbs.org/.*/roadshow/
-#MASTER# PROBLEM-URL: http://objects.povworld.org/cat/Food/ 10/15/06
 # URL = http://objects.povworld.org/cat/Food/
 objects.povworld.org/cat/
-#MASTER# PROBLEM-URL: http://www.xach.com/gimp/tutorials/tiles.html 10/15/06
 # URL = http://www.xach.com/gimp/tutorials/tiles.html
 www.xach.com/gimp/
-#MASTER# PROBLEM-URL: http://www.mapquest.com/directions/main.adp?go=1&do=nw&ct=NA&1y=US&1a=255+w+88+st&1p=&1c=&1s=&1z=10024&2y=US&2a=20+milltown+rd&2p=&2c=&2s=&2z=10509&lr=2
 #MASTER# REMARKS: The destination map at the bottom of the page.
 # URL = http://www.mapquest.com/directions/main.adp?go=1&do=nw&ct=NA&1y=US&1a=255+w+88+st&1p=&1c=&1s=&1z=10024&2y=US&2a=20+milltown+rd&2p=&2c=&2s=&2z=10509&lr=2
 .mapquest.com/directions/
 #MASTER# PROBLEM-URL: http://www.theonion.com/ 10/15/06
 #MASTER# REMARKS: A nasty "premercial" ad is required to enter this site.
 .theonion.com/content/
-#MASTER# PROBLEM-URL: http://www.pattilupone.net/gallery.html 10/15/06
 # URL = http://www.pattilupone.net/gallery.html
 .pattilupone.net/gallery.html
-#MASTER# PROBLEM-URL: http://www.ambrosiasw.com/games/evn/desktops.html 10/15/06
 # URL = http://www.ambrosiasw.com/games/evn/desktops.html
 .ambrosiasw.com/
-#MASTER# PROBLEM-URL: http://oca.microsoft.com/en/Welcome.asp 10/14/06
 # URL = http://oca.microsoft.com/en/Welcome.asp
 .microsoft.com
-#MASTER# PROBLEM-URL: http://javabog.dk/ijk/ 10/15/06
 # URL = http://javabog.dk/ijk/
 javabog.dk/ijk/
 #MASTER# REMARK: Per Debian bug report #319025 09/09/06
 .w3.org
-#MASTER# PROBLEM-URL: http://www.encyclopediadramatica.com/New_Zealand_Fail_Guy
 # URL = http://www.encyclopediadramatica.com/New_Zealand_Fail_Guy
 .encyclopediadramatica.com/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
-#MASTER# PROBLEM-URL: http://www.encyclopediadramatica.com/Advertisement
 # URL = http://www.encyclopediadramatica.com/Advertisement
 .encyclopediadramatica.com/
 
@@ -1819,7 +1739,6 @@ javabog.dk/ijk/
 #MASTER# REMARKS: This section NOT checked 10/18/06 HB
 #MASTER# REMARKS: These are movie clips, linked from http://us.imdb.com
 .totaleclips.com
-#MASTER# PROBLEM-URL: http://www.mandrakelinux.com/en/ftp.php3
 #MASTER# REMARKS: Link to download page breaks
 # URL = http://www.mandrakelinux.com/en/ftp.php3
 .mandrakelinux.com/en/ftp.php3
@@ -1840,7 +1759,6 @@ schneegans.de/sv/\?url=referer
 #----------------------------------------------------------------------------
 {-deanimate-gifs}
 # Sticky Actions = -deanimate-gifs
-#MASTER# PROBLEM-URL: http://www.care2.com/
 #MASTER# REMARKS: Wanted animations on ecards
 #MASTER# REMARKS: Leaving 10/18/06 though most animated seem flash now.
 # URL = http://www.care2.com/
@@ -1848,8 +1766,7 @@ schneegans.de/sv/\?url=referer
 .care-mail.com
 #MASTER# PROBLEM-URL: http://weather.chicagotribune.com/radar/station.asp?ID=LOT19&type=loop
 #MASTER# REMARKS: These are weather radar images. 10/18/06
-#MASTER# PROBLEM-URL: http://www.wunderground.com/radar/station.asp?ID=MPX19&type=loop&clutter=1 10/18/06
-# URL = http://www.wunderground.com/radar/station.asp?ID=MPX19&type=loop&clutter=1 10/18/06
+# URL = http://www.wunderground.com/radar/station.asp?ID=MPX19&type=loop&clutter=1
 .wunderground.com
 66.28.250.180/data/
 #MASTER# PROBLEM-URL: http://www.teamquest.com/html/gunther/laquiz.shtml
@@ -1863,16 +1780,12 @@ schneegans.de/sv/\?url=referer
 #MASTER# REMARKS: This section NOT checked 10/15/06 HB.
 {+filter{site-specifics}}
 # Sticky Actions = +filter{site-specifics}
-#MASTER# PROBLEM-URL: http://www.spiegel.de/static/js/flash-plugin.js
 # URL = http://www.spiegel.de/static/js/flash-plugin.js
 .spiegel.de/static/js/flash-plugin\.js
-#MASTER# PROBLEM-URL: http://www.quelle-bausparkasse.de/
 # URL = http://www.quelle-bausparkasse.de/
 .quelle-bausparkasse.de/$
-#MASTER# PROBLEM-URL: http://de.groups.yahoo.com/group/die-spinner/interrupt?st=2&ln=die-spinner&m=1&done=%2Fgroup%2Fdie-spinner%2Fmessage%2F416
 # URL = http://de.groups.yahoo.com/group/die-spinner/interrupt?st=2&ln=die-spinner&m=1&done=%2Fgroup%2Fdie-spinner%2Fmessage%2F416
 .groups.yahoo.com/group/
-#MASTER PROBLEM-URL: http://www.nytimes.com/
 # URL = http://www.nytimes.com/
 .nytimes.com/
 
@@ -1892,18 +1805,15 @@ schneegans.de/sv/\?url=referer
 #----------------------------------------------------------------------------
 {-filter{content-cookies} -filter{webbugs}}
 # Sticky Actions = -filter{content-cookies} -filter{webbugs}
-#MASTER# PROBLEM-URL: http://www.friendscout24.de/
 #MASTER# REMARKS: Needs content-cookies for cookie test on index page; needs webbugs for storing profile(!)
 # URL = http://www.friendscout24.de/
 .friendscout24.de
-#MASTER# PROBLEM-URL:  http://www.webreference.com/js/column8/property.html 10/15/06
 #MASTER# REMARKS: Explains how content cookies work
 # URL = http://www.webreference.com/js/column8/property.html
 .webreference.com/js/column8/property.html
 
 {-filter{fun}}
 # Sticky Actions = -filter{fun}
-#MASTER# PROBLEM-URL: http://www.privoxy.org/user-manual/filter-file.html
 #MASTER# REMARKS: Don't change the filter code with itself ;-)
 # URL = http://www.privoxy.org/user-manual/filter-file.html
 /(.*/)?user-manual/filter-file.html
@@ -1916,7 +1826,6 @@ schneegans.de/sv/\?url=referer
 
 {-filter{img-reorder}}
 # Sticky Actions = -filter{img-reorder}
-#MASTER# PROBLEM-URL: http://images.google.com
 #MASTER# REMARKS: Google images don't show up with img-reorder on
 #MASTER# REMARKS: Also images on finance.google.com 09/25/06
 # URL = http://images.google.com
@@ -1928,16 +1837,13 @@ schneegans.de/sv/\?url=referer
 
 {-filter{js-annoyances}}
 # Sticky Actions = -filter{js-annoyances}
-#MASTER# PROBLEM-URL: http://www.nasa.gov 10/16/06, still breaks.
 #MASTER# REMARKS: No progress past main page without js-annoyances
 # URL = http://www.nasa.gov
 .nasa.gov
 #MASTER# REMARKS: Exclude per Debian bug report #377843
-#MASTER# PROBLEM-URL: http://www2.cnrs.fr/presse/communique/900.htm
 # URL = http://www2.cnrs.fr/presse/communique/900.htm
 .cnrs.fr 
 #MASTER# REMARKS: Exclude per Debian bug report #377843
-#MASTER# PROBLEM-URL: http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 blogs.msdn.com
 
@@ -1947,11 +1853,9 @@ blogs.msdn.com
 #MASTER# REMARKS: Breaks Movable Type's admin interface (http://www.movabletype.org/)
 /.*mt.cgi$
 #MASTER# REMARKS: Exclude per Debian bug report #377843 09/17/06
-#MASTER# PROBLEM-URL: http://www2.cnrs.fr/presse/communique/900.htm
 # URL = http://www2.cnrs.fr/presse/communique/900.htm
 .cnrs.fr 
 #MASTER# REMARKS: Exclude per Debian bug report #377843 09/17/06
-#MASTER# PROBLEM-URL: http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 blogs.msdn.com
 
@@ -1959,16 +1863,13 @@ blogs.msdn.com
 # Sticky Actions = +fast-redirects{check-decoded-url} -block
 #MASTER# REMARKS: Yahoo search results. Added 2007-01-19 fk
 #MASTER# REDIRECT-REFERRER: http://search.yahoo.com/search?p=privoxy
-#MASTER# PROBLEM-URL: http://rds.yahoo.com/_ylt=A0geuryczbBF._YAEmxXNyoA;_ylu=X3oDMTB2b2gzdDdtBGNvbG8DZQRsA1dTMQRwb3MDMQRzZWMDc3IEdnRpZAM-/SIG=11b3qg40n/EXP=1169301276/**http%3a//www.privoxy.org/
 # URL = http://rds.yahoo.com/_ylt=A0geuryczbBF._YAEmxXNyoA;_ylu=X3oDMTB2b2gzdDdtBGNvbG8DZQRsA1dTMQRwb3MDMQRzZWMDc3IEdnRpZAM-/SIG=11b3qg40n/EXP=1169301276/**http%3a//www.privoxy.org/
 rds.yahoo.com/
 #MASTER# COMMENTS: Verified 2007-01-19 fk
 #MASTER# REDIRECT-REFERRER: http://www.gamefaqs.com/computer/doswin/game/914819.html
-#MASTER# PROBLEM-URL: http://dw.com.com/redir?asid=0&astid=8&siteid=19&edid=107&destCat=33862&destURL=http%3A%2F%2Fdb.gamefaqs.com%2Fcomputer%2Fdoswin%2Ffile%2Fvampire_tmb_b.txt
 # URL = http://dw.com.com/redir?asid=0&astid=8&siteid=19&edid=107&destCat=33862&destURL=http%3A%2F%2Fdb.gamefaqs.com%2Fcomputer%2Fdoswin%2Ffile%2Fvampire_tmb_b.txt
 dw.com.com/
 #MASTER# REMARKS: Action tracker 1593393. Added 2007-01-20.
-#MASTER# PROBLEM-URL: http://wzus.bloglines.com/r?t=a&d=us&s=bl&c=blen&ti=1&ai=51060&l=dir&o=0&sv=z6f537f5b&ip=971AC44B&u=http%3A%2F%2Fwww.skweezer.net%2Fbloglines%2Fskweeze.aspx%3F%26i%3Dd%26l%3Den%26r%3Dhttp%253A%252F%252Fwww.bloglines.com%252Fmyblogs_display%253Fsub%253D29302699%2526site%253D5382440%26url%3Dhttp%253A%252F%252Fpermalink.gmane.org%252Fgmane.linux.debian.devel.changes.unstable%252F97340
 # URL = http://wzus.bloglines.com/r?t=a&d=us&s=bl&c=blen&ti=1&ai=51060&l=dir&o=0&sv=z6f537f5b&ip=971AC44B&u=http%3A%2F%2Fwww.skweezer.net%2Fbloglines%2Fskweeze.aspx%3F%26i%3Dd%26l%3Den%26r%3Dhttp%253A%252F%252Fwww.bloglines.com%252Fmyblogs_display%253Fsub%253D29302699%2526site%253D5382440%26url%3Dhttp%253A%252F%252Fpermalink.gmane.org%252Fgmane.linux.debian.devel.changes.unstable%252F97340
 .bloglines.com/r\?
 www.skweezer.net/bloglines
@@ -2016,7 +1917,6 @@ config.privoxy.org/
 #MASTER# REMARKS: Yahoo logout URLs need special treatment,
 #MASTER# REMARKS: the URL after "done=" is no fast-redirect. 2007-01-19 fk
 #MASTER# REMARKS: Reported in support request #1635354.
-#MASTER# PROBLEM-URL: http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 {-fast-redirects +redirect{s@^.*\*(http://login\.yahoo\.com/.*)$@$1@i}}
 # XXX: Privoxy-Regression-Test currently doesn't allow backslashes.
 # Sticky Actions = -fast-redirects +redirect
