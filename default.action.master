@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.124 2008/04/19 12:21:53 fabiankeil Exp $
+#  $Id: default.action.master,v 1.125 2008/04/20 16:08:29 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -783,6 +783,10 @@ linuxinsider.com/images/sda/
 #MASTER# REMARKS: Obnoxious "widget" adverts
 #MASTER# BLOCK-REFERRER: http://www.quickonlinetips.com/archives/2007/08/nokia-offers-free-bl-5c-battery-replacement-for-overheating/
 .widgetbucks.com
+#MASTER# BLOCK-REFERRER: http://www.dailymail.co.uk/pages/live/articles/news/news.html?in_article_id=559547&in_page_id=1770
+# Blocked URL = http://img.dailymail.co.uk/i/promo_boxes/groTime_promo.jpg
+# Blocked URL = http://img.dailymail.co.uk/i/promo_boxes/idealhome_promo.gif
+img.dailymail.co.uk/i/promo_boxes/
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1149,6 +1153,15 @@ rss.slashdot.org/~r/Slashdot/slashdot/~4/
 #MASTER# BLOCK-REFERRER: http://www.isys.ucl.ac.be/bchi/research/Kwaresmi.htm
 #MASTER# REMAKRKS: Actionsfile feedback item #1849627 2007-12-12
 [a-z][0-9].nedstatbasic.net/
+#MASTER# BLOCK-REFERER: http://feeds.feedburner.com/dilbertdailystrip/
+# Blocked URL = http://feeds.feedburner.com/~r/DilbertDailyStrip/~4/274512747
+#MASTER# BLOCK-REFERER: http://feeds.feedburner.com/PCLoadLetter
+# Blocked URL = http://feeds.feedburner.com/~r/PCLoadLetter/~4/270448381
+#MASTER# REMAKRKS: This seem to be a common pattern for web bugs in feedburner feeds.
+feeds.feedburner.com/~r/.*/~4/
+# Blocked URL = http://feeds.feedburner.com/~a/DilbertDailyStrip?a=Ebzxel
+#MASTER# REMAKRKS: This looks like a pattern as well, maybe we should block feeds.feedburner.com/~a/ here.
+feeds.feedburner.com/~a/DilbertDailyStrip\?
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1923,8 +1936,6 @@ config.privoxy.org/
 # URL = http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 .yahoo./.*http://login.yahoo.com/config/login.*http://
 
-#MASTER# set vi:nowrap
-
 #----------------------------------------------------------------------------
 # Sections that modify the action settings based on tags.
 #----------------------------------------------------------------------------
@@ -1945,3 +1956,4 @@ TAG:^IMAGE-REQUEST$
 }
 TAG:^CSS-REQUEST$
 
+#MASTER# set vi:nowrap
