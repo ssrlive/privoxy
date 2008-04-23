@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.38 2008/04/18 05:17:18 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.39 2008/04/22 16:27:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.38 2008/04/18 05:17:18 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.39  2008/04/22 16:27:42  fabiankeil
+ *    In parse_http_request(), remove a pointless
+ *    temporary variable and free the buffer earlier.
+ *
  *    Revision 1.38  2008/04/18 05:17:18  fabiankeil
  *    Mark simplematch()'s parameters as immutable.
  *
@@ -532,7 +536,7 @@ jb_err parse_http_url(const char * url,
 
       http->host = strdup(host);
 
-      free(buf);
+      freez(buf);
 
       if (http->host == NULL)
       {
@@ -640,7 +644,7 @@ jb_err parse_http_request(const char *req,
    n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
    if (n != 3)
    {
-      free(buf);
+      freez(buf);
       return JB_ERR_PARSE;
    }
 
@@ -656,14 +660,14 @@ jb_err parse_http_request(const char *req,
    if (unknown_method(v[0]))
    {
       log_error(LOG_LEVEL_ERROR, "Unknown HTTP method detected: %s", v[0]);
-      free(buf);
+      freez(buf);
       return JB_ERR_PARSE;
    }
 
    err = parse_http_url(v[1], http, csp);
    if (err)
    {
-      free(buf);
+      freez(buf);
       return err;
    }
 
@@ -1375,7 +1379,7 @@ int match_portlist(const char *portlist, int port)
           */
          if (port == atoi(min))
          {
-            free(portlist_copy);
+            freez(portlist_copy);
             return(1);
          }
       }
@@ -1388,7 +1392,7 @@ int match_portlist(const char *portlist, int port)
          *max++ = '\0';
          if(port >= atoi(min) && port <= (atoi(max) ? atoi(max) : 65535))
          {
-            free(portlist_copy);
+            freez(portlist_copy);
             return(1);
          }
 
@@ -1408,7 +1412,7 @@ int match_portlist(const char *portlist, int port)
       }
    }
 
-   free(portlist_copy);
+   freez(portlist_copy);
    return 0;
 
 }
