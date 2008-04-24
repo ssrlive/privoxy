@@ -1,8 +1,9 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.63 2008/03/28 19:03:49 fk Exp $
+# $Id: regression-tests.action,v 1.65 2008/04/24 16:28:32 fk Exp $
 #############################################################################
 #
-# This is a configuration file for Privoxy-Regression-Test.
+# This is a configuration file for Privoxy-Regression-Test
+# (included in the source tarball's tools directory).
 #
 # After referencing it in your Privoxy configuration both Privoxy and
 # Privoxy-Regression-Test should be good to go.
@@ -476,6 +477,17 @@ TAG:^Max-Forwards header without TRACE method$
 # Fetch Test = http://p.p/die
 # Expect Status Code = 404
 # Fetch Test = http://p.p/show-status
+# Fetch Test = http://config.privoxy.org/show-status?file=actions&index=0
+# Fetch Test = http://config.privoxy.org/show-status?file=filter&index=0
+# XXX: for the invalid ones we probably shouldn't return status code 200.
+# Fetch Test = http://config.privoxy.org/show-status?file=actions&index=100
+# Fetch Test = http://config.privoxy.org/show-status?file=actions&index=NaN
+# Fetch Test = http://config.privoxy.org/show-status?file=actions
+# Fetch Test = http://config.privoxy.org/show-status?file=filter&index=100
+# Fetch Test = http://config.privoxy.org/show-status?file=filter&index=NaN
+# Fetch Test = http://config.privoxy.org/show-status?file=filter
+# Fetch Test = http://config.privoxy.org/show-status?file=invalid
+# Fetch Test = http://config.privoxy.org/show-status?file=trust
 # Fetch Test = http://p.p/show-version
 # Fetch Test = http://p.p/show-request
 # Fetch Test = http://p.p/show-url-info
