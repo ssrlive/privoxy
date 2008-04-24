@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.68 2008/03/27 18:27:21 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.69 2008/04/17 14:40:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.68 2008/03/27 18:27:21 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.69  2008/04/17 14:40:48  fabiankeil
+ *    Provide get_http_time() with the buffer size so it doesn't
+ *    have to blindly assume that the buffer is big enough.
+ *
  *    Revision 1.68  2008/03/27 18:27:21  fabiankeil
  *    Remove kill-popups action.
  *
@@ -1168,7 +1172,7 @@ jb_err cgi_show_status(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      if ((fp = fopen(filename, "r")) == NULL)
+      if ((fp = fopen(filename, "rb")) == NULL)
       {
          if (map(exports, "content", 1, "<h1>ERROR OPENING FILE!</h1>", 1))
          {
@@ -1178,12 +1182,39 @@ jb_err cgi_show_status(struct client_state *csp,
       }
       else
       {
-         s = strdup("");
-         while ((s != NULL) && fgets(buf, sizeof(buf), fp))
+         /*
+          * XXX: this code is "quite similar" to the one
+          * in cgi_send_user_manual() and should be refactored.
+          * While at it, the return codes for ftell() and fseek
+          * should be verified.
+          */
+         size_t length;
+         /* Get file length */
+         fseek(fp, 0, SEEK_END);
+         length = (size_t)ftell(fp);
+         fseek(fp, 0, SEEK_SET);
+
+         s = (char *)zalloc(length+1);
+         if (NULL == s)
          {
-            string_join  (&s, html_encode(buf));
+            fclose(fp);
+            return JB_ERR_MEMORY;
+         }
+         if (!fread(s, length, 1, fp))
+         {
+            /*
+             * May happen if the file size changes between fseek() and fread().
+             * If it does, we just log it and serve what we got.
+             */
+            log_error(LOG_LEVEL_ERROR, "Couldn't completely read file %s.", filename);
          }
          fclose(fp);
+
+         s = html_encode_and_free_original(s);
+         if (NULL == s)
+         {
+            return JB_ERR_MEMORY;
+         }
 
          if (map(exports, "contents", 1, s, 0))
          {

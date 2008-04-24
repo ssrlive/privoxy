@@ -39,6 +39,12 @@ ChangeLog for Privoxy
   inactive actions are listed separately. Patch provided by Lee.
 - The GNUmakefile supports the DESTDIR variable. Patch for
   the install target submitted by Radoslaw Zielinski.
+- Embedding the content of configuration files in the show-status
+  page is significantly faster now. For a largish action file (1 MB)
+  a speedup of about 2450 times has been measured. This is mostly
+  interesting if you are using large action files or regularly use
+  Privoxy-Regression-Test while running Privoxy through Valgrind,
+  for stock configuration files it doesn't really matter.
 - The obsolete kill-popups action has been removed as the
   PCRS-based popup filters can do the same and are less
   unreliable.
