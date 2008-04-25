@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.69 2008/04/17 14:40:48 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.70 2008/04/24 16:12:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.69 2008/04/17 14:40:48 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.70  2008/04/24 16:12:38  fabiankeil
+ *    In cgi_show_status(), load the requested file at once.
+ *    Using string_join() for every line really doesn't scale.
+ *
  *    Revision 1.69  2008/04/17 14:40:48  fabiankeil
  *    Provide get_http_time() with the buffer size so it doesn't
  *    have to blindly assume that the buffer is big enough.
@@ -390,9 +394,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.69 2008/04/17 14:40:48 fabian
 
 const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 
-
 static char *show_rcs(void);
 static jb_err show_defines(struct map *exports);
+static jb_err cgi_show_file(struct client_state *csp,
+                            struct http_response *rsp,
+                            const struct map *parameters);
 
 /*********************************************************************
  *
@@ -1079,7 +1085,7 @@ jb_err cgi_show_version(struct client_state *csp,
    return template_fill_for_cgi(csp, "show-version", exports, rsp);
 }
 
- 
+
 /*********************************************************************
  *
  * Function    :  cgi_show_status
@@ -1095,7 +1101,7 @@ jb_err cgi_show_version(struct client_state *csp,
  * CGI Parameters :
  *        file :  Which file to show.  Only first letter is checked,
  *                valid values are:
- *                - "p"ermissions (actions) file
+ *                - "a"ction file
  *                - "r"egex
  *                - "t"rust
  *                Default is to show menu and other information.
@@ -1112,10 +1118,7 @@ jb_err cgi_show_status(struct client_state *csp,
    unsigned i;
    int j;
 
-   FILE * fp;
    char buf[BUFFER_SIZE];
-   const char * filename = NULL;
-   char * file_description = NULL;
 #ifdef FEATURE_STATISTICS
    float perc_rej;   /* Percentage of http requests rejected */
    int local_urls_read;
@@ -1129,101 +1132,14 @@ jb_err cgi_show_status(struct client_state *csp,
    assert(rsp);
    assert(parameters);
 
+   if ('\0' != *(lookup(parameters, "file")))
+   {
+      return cgi_show_file(csp, rsp, parameters);
+   }
+
    if (NULL == (exports = default_exports(csp, "show-status")))
    {
       return JB_ERR_MEMORY;
-   }
-
-   switch (*(lookup(parameters, "file")))
-   {
-   case 'a':
-      if (!get_number_param(csp, parameters, "index", &i) && i < MAX_AF_FILES && csp->actions_list[i])
-      {
-         filename = csp->actions_list[i]->filename;
-         file_description = "Actions File";
-      }
-      break;
-
-   case 'f':
-      if (!get_number_param(csp, parameters, "index", &i) && i < MAX_AF_FILES && csp->rlist[i])
-      {
-         filename = csp->rlist[i]->filename;
-         file_description = "Filter File";
-      }
-      break;
-
-#ifdef FEATURE_TRUST
-   case 't':
-      if (csp->tlist)
-      {
-         filename = csp->tlist->filename;
-         file_description = "Trust File";
-      }
-      break;
-#endif /* def FEATURE_TRUST */
-   }
-
-   if (NULL != filename)
-   {
-      if ( map(exports, "file-description", 1, file_description, 1)
-        || map(exports, "filepath", 1, html_encode(filename), 0) )
-      {
-         free_map(exports);
-         return JB_ERR_MEMORY;
-      }
-
-      if ((fp = fopen(filename, "rb")) == NULL)
-      {
-         if (map(exports, "content", 1, "<h1>ERROR OPENING FILE!</h1>", 1))
-         {
-            free_map(exports);
-            return JB_ERR_MEMORY;
-         }
-      }
-      else
-      {
-         /*
-          * XXX: this code is "quite similar" to the one
-          * in cgi_send_user_manual() and should be refactored.
-          * While at it, the return codes for ftell() and fseek
-          * should be verified.
-          */
-         size_t length;
-         /* Get file length */
-         fseek(fp, 0, SEEK_END);
-         length = (size_t)ftell(fp);
-         fseek(fp, 0, SEEK_SET);
-
-         s = (char *)zalloc(length+1);
-         if (NULL == s)
-         {
-            fclose(fp);
-            return JB_ERR_MEMORY;
-         }
-         if (!fread(s, length, 1, fp))
-         {
-            /*
-             * May happen if the file size changes between fseek() and fread().
-             * If it does, we just log it and serve what we got.
-             */
-            log_error(LOG_LEVEL_ERROR, "Couldn't completely read file %s.", filename);
-         }
-         fclose(fp);
-
-         s = html_encode_and_free_original(s);
-         if (NULL == s)
-         {
-            return JB_ERR_MEMORY;
-         }
-
-         if (map(exports, "contents", 1, s, 0))
-         {
-            free_map(exports);
-            return JB_ERR_MEMORY;
-         }
-      }
-
-      return template_fill_for_cgi(csp, "show-status-file", exports, rsp);
    }
 
    s = strdup("");
@@ -2051,6 +1967,152 @@ static char *show_rcs(void)
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  cgi_show_file
+ *
+ * Description :  CGI function that shows the content of a
+ *                configuration file.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters :
+ *        file :  Which file to show.  Only first letter is checked,
+ *                valid values are:
+ *                - "a"ction file
+ *                - "r"egex
+ *                - "t"rust
+ *                Default is to show menu and other information.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+static jb_err cgi_show_file(struct client_state *csp,
+                            struct http_response *rsp,
+                            const struct map *parameters)
+{
+   unsigned i;
+   const char * filename = NULL;
+   char * file_description = NULL;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   switch (*(lookup(parameters, "file")))
+   {
+   case 'a':
+      if (!get_number_param(csp, parameters, "index", &i) && i < MAX_AF_FILES && csp->actions_list[i])
+      {
+         filename = csp->actions_list[i]->filename;
+         file_description = "Actions File";
+      }
+      break;
+
+   case 'f':
+      if (!get_number_param(csp, parameters, "index", &i) && i < MAX_AF_FILES && csp->rlist[i])
+      {
+         filename = csp->rlist[i]->filename;
+         file_description = "Filter File";
+      }
+      break;
+
+#ifdef FEATURE_TRUST
+   case 't':
+      if (csp->tlist)
+      {
+         filename = csp->tlist->filename;
+         file_description = "Trust File";
+      }
+      break;
+#endif /* def FEATURE_TRUST */
+   }
+
+   if (NULL != filename)
+   {
+      struct map *exports;
+      char *s;
+      FILE * fp;
+
+      exports = default_exports(csp, "show-status");
+      if (NULL == exports)
+      {
+         return JB_ERR_MEMORY;
+      }
+
+      if ( map(exports, "file-description", 1, file_description, 1)
+        || map(exports, "filepath", 1, html_encode(filename), 0) )
+      {
+         free_map(exports);
+         return JB_ERR_MEMORY;
+      }
+
+      if ((fp = fopen(filename, "rb")) == NULL)
+      {
+         if (map(exports, "content", 1, "<h1>ERROR OPENING FILE!</h1>", 1))
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
+      }
+      else
+      {
+         /*
+          * XXX: this code is "quite similar" to the one
+          * in cgi_send_user_manual() and should be refactored.
+          * While at it, the return codes for ftell() and fseek
+          * should be verified.
+          */
+         size_t length;
+         /* Get file length */
+         fseek(fp, 0, SEEK_END);
+         length = (size_t)ftell(fp);
+         fseek(fp, 0, SEEK_SET);
+
+         s = (char *)zalloc(length+1);
+         if (NULL == s)
+         {
+            fclose(fp);
+            return JB_ERR_MEMORY;
+         }
+         if (!fread(s, length, 1, fp))
+         {
+            /*
+             * May happen if the file size changes between fseek() and fread().
+             * If it does, we just log it and serve what we got.
+             */
+            log_error(LOG_LEVEL_ERROR, "Couldn't completely read file %s.", filename);
+         }
+         fclose(fp);
+
+         s = html_encode_and_free_original(s);
+         if (NULL == s)
+         {
+            return JB_ERR_MEMORY;
+         }
+
+         if (map(exports, "contents", 1, s, 0))
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
+      }
+
+      return template_fill_for_cgi(csp, "show-status-file", exports, rsp);
+   }
+
+   /*
+    * XXX: should return JB_ERR_PARSE but CGI handlers
+    * currently aren't expected to do that.
+    */
+   return JB_ERR_OK;
+}
+ 
 
 /*
   Local Variables:
