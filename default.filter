@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.58 2008/02/02 15:27:19 fabiankeil Exp $
+#  $Id: default.filter,v 1.59 2008/04/23 16:18:18 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -612,7 +612,7 @@ FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a w
 
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
- .msn_ads, \#at, \#ar {display: none !important;}\n\
+ .msn_ads, \#at, \#ar, .mktmsg {display: none !important;}\n\
  \#results, .flank, .results_area_flank, .results_area_stroke,\n\
  \#results_area, .SearchSection, .not, .sc_rslth1\n\
 .content, \#sw_foot, \#bf, \#sw_content, \#sidebar, \#pag\n\
@@ -830,6 +830,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.59  2008/04/23 16:18:18  fabiankeil
+#     s@declarded@declared@
+#
 #     Revision 1.58  2008/02/02 15:27:19  fabiankeil
 #     Yet another yahoo update to get the width limitation removal working again.
 #
