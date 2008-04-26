@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.71 2008/04/25 13:33:56 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.72 2008/04/26 10:34:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.71 2008/04/25 13:33:56 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.72  2008/04/26 10:34:15  fabiankeil
+ *    If zlib support is unavailable and there are content filters active
+ *    but the prevent-compression action is disabled, include a warning
+ *    on the show-url-info page that compression might prevent filtering.
+ *
  *    Revision 1.71  2008/04/25 13:33:56  fabiankeil
  *    - Factor cgi_show_file() out of cgi_show_status().
  *    - Adjust cgi_show_status()'s parameter description to match reality.
@@ -2127,11 +2132,7 @@ static jb_err cgi_show_file(struct client_state *csp,
       return template_fill_for_cgi(csp, "show-status-file", exports, rsp);
    }
 
-   /*
-    * XXX: should return JB_ERR_PARSE but CGI handlers
-    * currently aren't expected to do that.
-    */
-   return JB_ERR_OK;
+   return JB_ERR_CGI_PARAMS;
 }
  
 
