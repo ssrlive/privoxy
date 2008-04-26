@@ -27,6 +27,10 @@
 #
 # Revisions   :
 #    $Log: show-url-info,v $
+#    Revision 1.24  2008/02/10 17:26:52  fabiankeil
+#    Reduce superfluous white space by not marking
+#    up the final results list as paragraph.
+#
 #    Revision 1.23  2008/02/01 06:04:31  fabiankeil
 #    If edit buttons on the show-url-info CGI page are hidden, explain why.
 #
@@ -231,6 +235,20 @@
 <!--  if-cgi-editor-is-disabled-end@ -->
       </td>
     </tr>
+<!-- @if-filters-might-be-ineffective-start -->
+    <tr>
+      <td class="warning">
+        <h2>Warning:</h2>
+        <p>
+          This Privoxy version has been build without zlib support,
+          <strong>content filters will not work if the server sends compressed content.</strong>
+          Consider enabling the <a title="prevent-compression documentation"
+           href="@user-manual@actions-file.html#PREVENT-COMPRESSION">prevent-compression</a>
+          action for this URL or rebuild Privoxy with zlib support.
+        </p>
+      </td>
+    </tr>
+<!-- if-filters-might-be-ineffective-end@ -->
 <!-- @if-valid-url-start -->
     <tr>
       <td class="box">

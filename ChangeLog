@@ -45,6 +45,10 @@ ChangeLog for Privoxy
   interesting if you are using large action files or regularly use
   Privoxy-Regression-Test while running Privoxy through Valgrind,
   for stock configuration files it doesn't really matter.
+- If zlib support is unavailable and there are content
+  filters active but the prevent-compression action is disabled,
+  the show-url-info page includes a warning that compression
+  might prevent filtering.
 - The obsolete kill-popups action has been removed as the
   PCRS-based popup filters can do the same and are less
   unreliable.
