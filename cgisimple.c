@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.73 2008/04/26 12:21:55 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.74 2008/04/26 15:50:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.73 2008/04/26 12:21:55 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.74  2008/04/26 15:50:56  fabiankeil
+ *    Fix macro name in cgi_show_file() error path.
+ *
  *    Revision 1.73  2008/04/26 12:21:55  fabiankeil
  *    Forget about JB_ERR_PARSE. JB_ERR_CGI_PARAMS to the rescue.
  *
@@ -411,6 +414,7 @@ static jb_err show_defines(struct map *exports);
 static jb_err cgi_show_file(struct client_state *csp,
                             struct http_response *rsp,
                             const struct map *parameters);
+static jb_err load_file(const char *filename, char **buffer, size_t *length);
 
 /*********************************************************************
  *
@@ -963,7 +967,6 @@ jb_err cgi_send_user_manual(struct client_state *csp,
 {
    const char * filename;
    char *full_path;
-   FILE *fp;
    jb_err err = JB_ERR_OK;
    size_t length;
 
@@ -994,40 +997,18 @@ jb_err cgi_send_user_manual(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   /* Open user-manual file */
-   if (NULL == (fp = fopen(full_path, "rb")))
+   err = load_file(full_path, &rsp->body, &rsp->content_length);
+   if (JB_ERR_OK != err)
    {
-      log_error(LOG_LEVEL_ERROR, "Cannot open user-manual file %s: %E", full_path);
-      err = cgi_error_no_template(csp, rsp, full_path);
-      free(full_path);
+      assert((JB_ERR_FILE == err) || (JB_ERR_MEMORY == err));
+      if (JB_ERR_FILE == err)
+      {
+         err = cgi_error_no_template(csp, rsp, full_path);
+      }
+      freez(full_path);
       return err;
    }
-
-   /* Get file length */
-   fseek(fp, 0, SEEK_END);
-   length = (size_t)ftell(fp);
-   fseek(fp, 0, SEEK_SET);
-
-   /* Allocate memory and load the file directly into the body */
-   rsp->body = (char *)zalloc(length+1);
-   if (!rsp->body)
-   {
-      fclose(fp);
-      free(full_path);
-      return JB_ERR_MEMORY;
-   }
-   if (!fread(rsp->body, length, 1, fp))
-   {
-      /*
-       * May happen if the file size changes between fseek() and fread().
-       * If it does, we just log it and serve what we got.
-       */
-      log_error(LOG_LEVEL_ERROR, "Couldn't completely read user-manual file %s.", full_path);
-   }
-   fclose(fp);
-   free(full_path);
-
-   rsp->content_length = length;
+   freez(full_path);
 
    /* Guess correct Content-Type based on the filename's ending */
    if (filename)
@@ -2066,7 +2047,8 @@ static jb_err cgi_show_file(struct client_state *csp,
    {
       struct map *exports;
       char *s;
-      FILE * fp;
+      jb_err err;
+      size_t length;
 
       exports = default_exports(csp, "show-status");
       if (NULL == exports)
@@ -2081,7 +2063,8 @@ static jb_err cgi_show_file(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      if ((fp = fopen(filename, "rb")) == NULL)
+      err = load_file(filename, &s, &length);
+      if (JB_ERR_OK != err)
       {
          if (map(exports, "contents", 1, "<h1>ERROR OPENING FILE!</h1>", 1))
          {
@@ -2091,34 +2074,6 @@ static jb_err cgi_show_file(struct client_state *csp,
       }
       else
       {
-         /*
-          * XXX: this code is "quite similar" to the one
-          * in cgi_send_user_manual() and should be refactored.
-          * While at it, the return codes for ftell() and fseek
-          * should be verified.
-          */
-         size_t length;
-         /* Get file length */
-         fseek(fp, 0, SEEK_END);
-         length = (size_t)ftell(fp);
-         fseek(fp, 0, SEEK_SET);
-
-         s = (char *)zalloc(length+1);
-         if (NULL == s)
-         {
-            fclose(fp);
-            return JB_ERR_MEMORY;
-         }
-         if (!fread(s, length, 1, fp))
-         {
-            /*
-             * May happen if the file size changes between fseek() and fread().
-             * If it does, we just log it and serve what we got.
-             */
-            log_error(LOG_LEVEL_ERROR, "Couldn't completely read file %s.", filename);
-         }
-         fclose(fp);
-
          s = html_encode_and_free_original(s);
          if (NULL == s)
          {
@@ -2137,7 +2092,85 @@ static jb_err cgi_show_file(struct client_state *csp,
 
    return JB_ERR_CGI_PARAMS;
 }
+
  
+/*********************************************************************
+ *
+ * Function    :  load_file
+ *
+ * Description :  Loads a file into a buffer.
+ *
+ * Parameters  :
+ *          1  :  filename = Name of the file to be loaded.
+ *          2  :  buffer   = Used to return the file's content.
+ *          3  :  length   = Used to return the size of the file.
+ *
+ * Returns     :  JB_ERR_OK in case of success,
+ *                JB_ERR_FILE in case of ordinary file loading errors
+ *                            (fseek() and ftell() errors are fatal)
+ *                JB_ERR_MEMORY in case of out-of-memory.
+ *
+ *********************************************************************/
+static jb_err load_file(const char *filename, char **buffer, size_t *length)
+{
+   FILE *fp;
+   int ret;
+
+   fp = fopen(filename, "rb");
+   if (NULL == fp)
+   {
+      return JB_ERR_FILE;
+   }
+
+   /* Get file length */
+   if (fseek(fp, 0, SEEK_END))
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Unexpected erro while fseek()ing to the end of %s: %E",
+         filename);
+   }
+   ret = ftell(fp);
+   if (-1 == ret)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Unexpected ftell() error while loading %s: %E",
+         filename);
+   }
+   *length = (size_t)ret;
+
+   /* Go back to the beginning. */
+   if (fseek(fp, 0, SEEK_SET))
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Unexpected error while fseek()ing to the beginning of %s: %E",
+         filename);
+   }
+
+   *buffer = (char *)zalloc(*length + 1);
+   if (NULL == *buffer)
+   {
+      fclose(fp);
+      return JB_ERR_MEMORY;
+   }
+
+   if (!fread(*buffer, *length, 1, fp))
+   {
+      /*
+       * May happen if the file size changes between fseek() and
+       * fread(). If it does, we just log it and serve what we got.
+       */
+      log_error(LOG_LEVEL_ERROR,
+         "Couldn't completely read file %s.", filename);
+      fclose(fp);
+      return JB_ERR_FILE;
+   }
+
+   fclose(fp);
+
+   return JB_ERR_OK;
+
+}
+
 
 /*
   Local Variables:
