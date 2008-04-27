@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.49 2008/03/29 12:13:45 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.50 2008/03/30 14:52:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.49 2008/03/29 12:13:45 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.50  2008/03/30 14:52:00  fabiankeil
+ *    Rename load_actions_file() and load_re_filterfile()
+ *    as they load multiple files "now".
+ *
  *    Revision 1.49  2008/03/29 12:13:45  fabiankeil
  *    Remove send-wafer and send-vanilla-wafer actions.
  *
@@ -753,16 +757,12 @@ jb_err get_actions(char *line,
                      {
                         /*
                          * XXX: Temporary backwards compatibility hack.
+                         * XXX: should include line number.
                          */
-                        static int complaint_shown = 0;
                         value = "No reason specified.";
-                        if (!complaint_shown)
-                        {
-                           log_error(LOG_LEVEL_ERROR, "At least one block "
-                              "without reason found. This may become a fatal "
-                              "error in future versions.");
-                           complaint_shown = 1;
-                        }
+                        log_error(LOG_LEVEL_ERROR, "block action without "
+                           "reason found. This may become a fatal error"
+                           "in future versions.");
                      }
                      else
                      {
