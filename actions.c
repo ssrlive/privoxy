@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.50 2008/03/30 14:52:00 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.51 2008/04/27 16:20:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.50 2008/03/30 14:52:00 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.51  2008/04/27 16:20:19  fabiankeil
+ *    Complain about every block action without reason found.
+ *
  *    Revision 1.50  2008/03/30 14:52:00  fabiankeil
  *    Rename load_actions_file() and load_re_filterfile()
  *    as they load multiple files "now".
@@ -760,9 +763,9 @@ jb_err get_actions(char *line,
                          * XXX: should include line number.
                          */
                         value = "No reason specified.";
-                        log_error(LOG_LEVEL_ERROR, "block action without "
-                           "reason found. This may become a fatal error"
-                           "in future versions.");
+                        log_error(LOG_LEVEL_ERROR,
+                           "block action without reason found. This may "
+                           "become a fatal error in future versions.");
                      }
                      else
                      {
