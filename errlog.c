@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.66 2008/01/31 15:38:14 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.67 2008/03/27 18:27:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.66 2008/01/31 15:38:14 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.67  2008/03/27 18:27:23  fabiankeil
+ *    Remove kill-popups action.
+ *
  *    Revision 1.66  2008/01/31 15:38:14  fabiankeil
  *    - Make the logfp assertion more strict. As of 1.63, the "||" could
  *      have been an "&&", which means we can use two separate assertions
@@ -1163,7 +1166,6 @@ void log_error(int loglevel, const char *fmt, ...)
       loglevel = LOG_LEVEL_FATAL;
    }
 
-   assert(loglevel & debug);
 #ifndef _WIN32
    /*
     * On Windows this is acceptable in case
