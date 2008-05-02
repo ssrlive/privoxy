@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.75 2008/04/27 13:52:52 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.76 2008/04/28 09:13:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.75 2008/04/27 13:52:52 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.76  2008/04/28 09:13:30  fabiankeil
+ *    In load_file(), remember the error reason and fclose()
+ *    and return later on instead of right away.
+ *
  *    Revision 1.75  2008/04/27 13:52:52  fabiankeil
  *    Move CGI file loading code into load_file() and
  *    add checks for unexpected errors.
@@ -1460,7 +1464,9 @@ jb_err cgi_show_url_info(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
+      memset(url_to_query, '\0', sizeof(url_to_query));
       err = parse_http_url(url_param, url_to_query, csp);
+      assert(url_to_query->ssl == !strncmp(url_param, "https://", 8));
 
       free(url_param);
 
