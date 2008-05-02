@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.39 2008/04/22 16:27:42 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.40 2008/04/23 16:12:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.39 2008/04/22 16:27:42 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.40  2008/04/23 16:12:28  fabiankeil
+ *    Free with freez().
+ *
  *    Revision 1.39  2008/04/22 16:27:42  fabiankeil
  *    In parse_http_request(), remove a pointless
  *    temporary variable and free the buffer earlier.
@@ -359,9 +362,7 @@ jb_err init_domain_components(struct http_request *http)
  * Parameters  :
  *          1  :  url = URL (or is it URI?) to break down
  *          2  :  http = pointer to the http structure to hold elements.
- *                       Will be zeroed before use.  Note that this
- *                       function sets the http->gpc and http->ver
- *                       members to NULL.
+ *                       Must be initialized with valid values (like NULLs).
  *          3  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  JB_ERR_OK on success
@@ -375,12 +376,6 @@ jb_err parse_http_url(const char * url,
                       const struct client_state *csp)
 {
    int host_available = 1; /* A proxy can dream. */
-
-   /*
-    * Zero out the results structure
-    */
-   memset(http, '\0', sizeof(*http));
-
 
    /*
     * Save our initial URL
@@ -429,10 +424,12 @@ jb_err parse_http_url(const char * url,
       if (strncmpic(url_noproto, "http://",  7) == 0)
       {
          url_noproto += 7;
-         http->ssl = 0;
       }
       else if (strncmpic(url_noproto, "https://", 8) == 0)
       {
+         /*
+          * Should only happen when called from cgi_show_url_info().
+          */
          url_noproto += 8;
          http->ssl = 1;
       }
@@ -443,13 +440,8 @@ jb_err parse_http_url(const char * url,
          * Most likely because the client's request
          * was intercepted and redirected into Privoxy.
          */
-         http->ssl = 0;
          http->host = NULL;
          host_available = 0;
-      }
-      else
-      {
-         http->ssl = 0;
       }
 
       url_path = strchr(url_noproto, '/');
