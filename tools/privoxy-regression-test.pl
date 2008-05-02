@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.145 2008/04/12 12:27:51 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.146 2008/05/02 10:16:37 fk Exp $
 #
 # Wish list:
 #
@@ -1307,7 +1307,7 @@ sub log_result ($$) {
         }
     }
 
-    log_message($message) unless ($result && cli_option_is_set('silent'));
+    log_message($message) if (!$result or cli_option_is_set('verbose'));
 }
 
 sub quote ($) {
@@ -1338,7 +1338,7 @@ Options and their default values if they have any:
     [--min-level $cli_options{'min-level'}]
     [--privoxy-address]
     [--retries $cli_options{'retries'}]
-    [--silent]
+    [--verbose]
     [--version]
 see "perldoc $0" for more information
     EOF
@@ -1369,7 +1369,6 @@ sub parse_cli_options () {
     GetOptions (
                 'debug=s' => \$cli_options{'debug'},
                 'help'     => sub { help },
-                'silent' => \$cli_options{'silent'},
                 'min-level=s' => \$cli_options{'min-level'},
                 'max-level=s' => \$cli_options{'max-level'},
                 'privoxy-address=s' => \$cli_options{'privoxy-address'},
@@ -1379,6 +1378,7 @@ sub parse_cli_options () {
                 'fuzzer-feeding' => \$cli_options{'fuzzer-feeding'},
                 'retries=s' => \$cli_options{'retries'},
                 'max-time=s' => \$cli_options{'max-time'},
+                'verbose' => \$cli_options{'verbose'},
                 'version'  => sub { print_version && exit(0) }
     );
     $log_level |= $cli_options{'debug'};
@@ -1422,7 +1422,7 @@ B<privoxy-regression-test> - A regression test "framework" for Privoxy.
 B<privoxy-regression-test> [B<--debug bitmask>] [B<--fuzzer-feeding>] [B<--help>]
 [B<--level level>] [B<--loops count>] [B<--max-level max-level>]
 [B<--max-time max-time>] [B<--min-level min-level>] B<--privoxy-address proxy-address>
-[B<--retries retries>] [B<--silent>] [B<--version>]
+[B<--retries retries>] [B<--verbose>] [B<--version>]
 
 =head1 DESCRIPTION
 
@@ -1557,7 +1557,7 @@ syntax.
 
 B<--retries retries> Retry B<retries> times.
 
-B<--silent> Don't log succesful test runs.
+B<--verbose> Also log succesful test runs.
 
 B<--version> Print version and exit.
 
