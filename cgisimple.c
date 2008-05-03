@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.76 2008/04/28 09:13:30 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.77 2008/05/02 09:47:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,11 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.76 2008/04/28 09:13:30 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.77  2008/05/02 09:47:48  fabiankeil
+ *    In cgi_show_url_info, pass an initialized http structure
+ *    to parse_http_url() as that will be required soonish and
+ *    assert that https URLs are recognized correctly.
+ *
  *    Revision 1.76  2008/04/28 09:13:30  fabiankeil
  *    In load_file(), remember the error reason and fclose()
  *    and return later on instead of right away.
@@ -1689,14 +1694,10 @@ jb_err cgi_show_url_info(struct client_state *csp,
        * If zlib support is available, if no content filters
        * are enabled or if the prevent-compression action is enabled,
        * suppress the "compression could prevent filtering" warning.
-       *
-       * XXX: Change content_filters_enabled()'s prototype so we can
-       * use it here.
        */
 #ifndef FEATURE_ZLIB
-      if ((list_is_empty(action->multi[ACTION_MULTI_FILTER])
-             && !(action->flags & ACTION_DEANIMATE))
-         || (action->flags & ACTION_NO_COMPRESSION))
+      if (!content_filters_enabled(action) ||
+         (action->flags & ACTION_NO_COMPRESSION))
 #endif
       {
          if (!err) err = map_block_killer(exports, "filters-might-be-ineffective");
