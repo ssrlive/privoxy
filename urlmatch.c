@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.42 2008/05/04 13:24:16 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.43 2008/05/04 13:30:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.42 2008/05/04 13:24:16 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.43  2008/05/04 13:30:55  fabiankeil
+ *    Streamline parse_http_url()'s prototype.
+ *
  *    Revision 1.42  2008/05/04 13:24:16  fabiankeil
  *    If the method isn't CONNECT, reject URLs without protocol.
  *
@@ -371,6 +374,8 @@ jb_err init_domain_components(struct http_request *http)
  *          1  :  url = URL (or is it URI?) to break down
  *          2  :  http = pointer to the http structure to hold elements.
  *                       Must be initialized with valid values (like NULLs).
+ *          3  :  require_protocol = Whether or not URLs without
+ *                                   protocol are acceptable.
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out of memory
@@ -378,7 +383,7 @@ jb_err init_domain_components(struct http_request *http)
  *                             or >100 domains deep.
  *
  *********************************************************************/
-jb_err parse_http_url(const char * url, struct http_request *http)
+jb_err parse_http_url(const char *url, struct http_request *http, int require_protocol)
 {
    int host_available = 1; /* A proxy can dream. */
 
@@ -448,7 +453,7 @@ jb_err parse_http_url(const char * url, struct http_request *http)
          http->host = NULL;
          host_available = 0;
       }
-      else if (!http->ssl)
+      else if (require_protocol)
       {
          freez(buf);
          return JB_ERR_PARSE;
@@ -668,7 +673,7 @@ jb_err parse_http_request(const char *req,
 
    http->ssl = !strcmpic(v[0], "CONNECT");
 
-   err = parse_http_url(v[1], http);
+   err = parse_http_url(v[1], http, !http->ssl);
    if (err)
    {
       freez(buf);
