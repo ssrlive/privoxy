@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.77 2008/05/02 09:47:48 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.78 2008/05/03 16:50:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.77 2008/05/02 09:47:48 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.78  2008/05/03 16:50:11  fabiankeil
+ *    Leverage content_filters_enabled() in cgi_show_url_info().
+ *
  *    Revision 1.77  2008/05/02 09:47:48  fabiankeil
  *    In cgi_show_url_info, pass an initialized http structure
  *    to parse_http_url() as that will be required soonish and
@@ -1470,7 +1473,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
       }
 
       memset(url_to_query, '\0', sizeof(url_to_query));
-      err = parse_http_url(url_param, url_to_query, csp);
+      err = parse_http_url(url_param, url_to_query);
       assert(url_to_query->ssl == !strncmp(url_param, "https://", 8));
 
       free(url_param);

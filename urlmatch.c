@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.41 2008/05/02 09:51:34 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.42 2008/05/04 13:24:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.41 2008/05/02 09:51:34 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.42  2008/05/04 13:24:16  fabiankeil
+ *    If the method isn't CONNECT, reject URLs without protocol.
+ *
  *    Revision 1.41  2008/05/02 09:51:34  fabiankeil
  *    In parse_http_url(), don't muck around with values
  *    that are none of its business: require an initialized
@@ -368,7 +371,6 @@ jb_err init_domain_components(struct http_request *http)
  *          1  :  url = URL (or is it URI?) to break down
  *          2  :  http = pointer to the http structure to hold elements.
  *                       Must be initialized with valid values (like NULLs).
- *          3  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out of memory
@@ -376,9 +378,7 @@ jb_err init_domain_components(struct http_request *http)
  *                             or >100 domains deep.
  *
  *********************************************************************/
-jb_err parse_http_url(const char * url,
-                      struct http_request *http,
-                      const struct client_state *csp)
+jb_err parse_http_url(const char * url, struct http_request *http)
 {
    int host_available = 1; /* A proxy can dream. */
 
@@ -668,7 +668,7 @@ jb_err parse_http_request(const char *req,
 
    http->ssl = !strcmpic(v[0], "CONNECT");
 
-   err = parse_http_url(v[1], http, csp);
+   err = parse_http_url(v[1], http);
    if (err)
    {
       freez(buf);
