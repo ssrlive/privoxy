@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.40 2008/04/23 16:12:28 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.41 2008/05/02 09:51:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,11 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.40 2008/04/23 16:12:28 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.41  2008/05/02 09:51:34  fabiankeil
+ *    In parse_http_url(), don't muck around with values
+ *    that are none of its business: require an initialized
+ *    http structure and never unset http->ssl.
+ *
  *    Revision 1.40  2008/04/23 16:12:28  fabiankeil
  *    Free with freez().
  *
@@ -443,6 +448,11 @@ jb_err parse_http_url(const char * url,
          http->host = NULL;
          host_available = 0;
       }
+      else if (!http->ssl)
+      {
+         freez(buf);
+         return JB_ERR_PARSE;
+      }
 
       url_path = strchr(url_noproto, '/');
       if (url_path != NULL)
@@ -656,6 +666,8 @@ jb_err parse_http_request(const char *req,
       return JB_ERR_PARSE;
    }
 
+   http->ssl = !strcmpic(v[0], "CONNECT");
+
    err = parse_http_url(v[1], http, csp);
    if (err)
    {
@@ -666,7 +678,6 @@ jb_err parse_http_request(const char *req,
    /*
     * Copy the details into the structure
     */
-   http->ssl = !strcmpic(v[0], "CONNECT");
    http->cmd = strdup(req);
    http->gpc = strdup(v[0]);
    http->ver = strdup(v[2]);
