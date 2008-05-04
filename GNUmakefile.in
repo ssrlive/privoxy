@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.161 2008/03/30 13:19:13 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.162 2008/03/30 13:31:42 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -957,11 +957,11 @@ dok-get:
 actions.@OBJEXT@:   actions.c   actions.h   config.h $(PROJECT_H_DEPS) errlog.h jcc.h list.h loaders.h miscutil.h actionlist.h ssplit.h
 cgi.@OBJEXT@:       cgi.c       cgi.h       config.h $(PROJECT_H_DEPS) cgiedit.h cgisimple.h jbsockets.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
 cgiedit.@OBJEXT@:   cgiedit.c   cgiedit.h   config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actionlist.h actions.h errlog.h miscutil.h
-cgisimple.@OBJEXT@: cgisimple.c cgisimple.h config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h
+cgisimple.@OBJEXT@: cgisimple.c cgisimple.h config.h $(PROJECT_H_DEPS) cgi.h list.h pcrs.h encode.h ssplit.h jcc.h filters.h actions.h errlog.h miscutil.h urlmatch.h
 deanimate.@OBJEXT@: deanimate.c deanimate.h config.h $(PROJECT_H_DEPS)
 encode.@OBJEXT@:    encode.c    encode.h    config.h
 errlog.@OBJEXT@:    errlog.c    errlog.h    config.h $(PROJECT_H_DEPS) @WIN_ONLY@w32log.h
-filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h @WIN_ONLY@win32.h 
+filters.@OBJEXT@:   filters.c   filters.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h gateway.h jbsockets.h jcc.h loadcfg.h parsers.h ssplit.h cgi.h deanimate.h urlmatch.h @WIN_ONLY@win32.h 
 gateway.@OBJEXT@:   gateway.c   gateway.h   config.h $(PROJECT_H_DEPS) errlog.h jbsockets.h jcc.h loadcfg.h
 jbsockets.@OBJEXT@: jbsockets.c jbsockets.h config.h $(PROJECT_H_DEPS) filters.h
 jcc.@OBJEXT@:       jcc.c       jcc.h       config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h loadcfg.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h w32svrapi.h cgi.h
@@ -1368,6 +1368,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.162  2008/03/30 13:31:42  fabiankeil
+# Add DESTDIR support for the uninstall target.
+#
 # Revision 1.161  2008/03/30 13:19:13  fabiankeil
 # Add DESTDIR support for the install target. Closes PR#1910612.
 # Patch by Radoslaw Zielinski with minor modifications.
