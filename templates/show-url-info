@@ -27,6 +27,11 @@
 #
 # Revisions   :
 #    $Log: show-url-info,v $
+#    Revision 1.25  2008/04/26 10:34:18  fabiankeil
+#    If zlib support is unavailable and there are content filters active
+#    but the prevent-compression action is disabled, include a warning
+#    on the show-url-info page that compression might prevent filtering.
+#
 #    Revision 1.24  2008/02/10 17:26:52  fabiankeil
 #    Reduce superfluous white space by not marking
 #    up the final results list as paragraph.
@@ -225,6 +230,7 @@
 <!-- if-valid-url-end@ -->
         <h2>Matches for <a href="@url@">@url@</a>:</h2>
         @matches@
+<!-- @if-valid-url-start -->
 <!-- @if-cgi-editor-is-disabled-start -->
         <p>
           The CGI editor is currently disabled, thus no edit buttons are shown.<br>
@@ -233,8 +239,10 @@
           to learn how to enable it and what the risks are.
         </p>
 <!--  if-cgi-editor-is-disabled-end@ -->
+<!-- @if-valid-url-end -->
       </td>
     </tr>
+<!-- @if-valid-url-start -->
 <!-- @if-filters-might-be-ineffective-start -->
     <tr>
       <td class="warning">
@@ -249,7 +257,6 @@
       </td>
     </tr>
 <!-- if-filters-might-be-ineffective-end@ -->
-<!-- @if-valid-url-start -->
     <tr>
       <td class="box">
         <h2>Final results:</h2>
