@@ -7,15 +7,12 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.146 2008/05/02 10:16:37 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.147 2008/05/04 18:17:45 fk Exp $
 #
 # Wish list:
 #
 # - Update documentation
 # - Validate HTTP times.
-# - Understand default.action.master comment syntax
-#   and verify that we actually block and unblock what
-#   the comments claim we do.
 # - Implement a HTTP_VERSION directive or allow to
 #   specify whole request lines.
 # - Support filter regression tests.
@@ -1103,15 +1100,15 @@ sub get_head_with_curl ($) {
 
 sub get_page_with_curl ($) {
 
+    our $proxy;
+
     my $parameters = shift;
     my @buffer;
     my $curl_line = CURL;
     my $retries_left = get_cli_option('retries') + 1;
     my $failure_reason;
 
-    if (cli_option_is_set('privoxy-address')) {
-        $curl_line .= ' --proxy ' . get_cli_option('privoxy-address');
-    }
+    $curl_line .= ' --proxy ' . $proxy if (defined $proxy);
 
     # We want to see the HTTP status code
     $curl_line .= " --include ";
@@ -1329,6 +1326,7 @@ sub help () {
 
 Options and their default values if they have any:
     [--debug $cli_options{'debug'}]
+    [--fuzzer-address]
     [--fuzzer-feeding]
     [--help]
     [--level]
@@ -1372,6 +1370,7 @@ sub parse_cli_options () {
                 'min-level=s' => \$cli_options{'min-level'},
                 'max-level=s' => \$cli_options{'max-level'},
                 'privoxy-address=s' => \$cli_options{'privoxy-address'},
+                'fuzzer-address=s' => \$cli_options{'fuzzer-address'},
                 'level=s' => \$cli_options{'level'},
                 'loops=s' => \$cli_options{'loops'},
                 'test-number=s' => \$cli_options{'test-number'},
@@ -1402,12 +1401,32 @@ sub get_cli_option ($) {
     return $cli_options{$cli_option};
 }
 
+sub init_proxy_settings($) {
+
+    my $choice = shift;
+    our $proxy = undef;
+
+    if (($choice eq 'fuzz-proxy') and cli_option_is_set('fuzzer-address')) {
+        $proxy = get_cli_option('fuzzer-address');
+    }
+
+    if ((not defined $proxy) or ($choice eq 'vanilla-proxy')) {
+
+        if (cli_option_is_set('privoxy-address')) {
+            $proxy .=  get_cli_option('privoxy-address');
+        }
+
+    }
+}
+
 sub main () {
 
     init_our_variables();
     parse_cli_options();
     check_for_curl();
+    init_proxy_settings('vanilla-proxy');
     load_regressions_tests();
+    init_proxy_settings('fuzz-proxy');
     execute_regression_tests();
 }
 
@@ -1419,9 +1438,10 @@ B<privoxy-regression-test> - A regression test "framework" for Privoxy.
 
 =head1 SYNOPSIS
 
-B<privoxy-regression-test> [B<--debug bitmask>] [B<--fuzzer-feeding>] [B<--help>]
-[B<--level level>] [B<--loops count>] [B<--max-level max-level>]
-[B<--max-time max-time>] [B<--min-level min-level>] B<--privoxy-address proxy-address>
+B<privoxy-regression-test> [B<--debug bitmask>] [B<--fuzzer-feeding>]
+[B<--fuzzer-feeding>] [B<--help>] [B<--level level>] [B<--loops count>]
+[B<--max-level max-level>] [B<--max-time max-time>]
+[B<--min-level min-level>] B<--privoxy-address proxy-address>
 [B<--retries retries>] [B<--verbose>] [B<--version>]
 
 =head1 DESCRIPTION
@@ -1520,6 +1540,10 @@ requests to level 3 and client-header-action tests to level 1.
 
 B<--debug bitmask> Add the bitmask provided as integer
 to the debug settings.
+
+B<--fuzzer-address> Listening address used when executing
+the regression tests. Useful to make sure that the requests
+to load the regression tests don't fail due to fuzzing.
 
 B<--fuzzer-feeding> Ignore some errors that would otherwise
 cause Privoxy-Regression-Test to abort the test because
