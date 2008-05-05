@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.79 2008/05/04 13:30:56 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.80 2008/05/04 16:18:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.79 2008/05/04 13:30:56 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.80  2008/05/04 16:18:32  fabiankeil
+ *    Provide parse_http_url() with a third parameter to specify
+ *    whether or not URLs without protocol are acceptable.
+ *
  *    Revision 1.79  2008/05/04 13:30:56  fabiankeil
  *    Streamline parse_http_url()'s prototype.
  *
@@ -1401,22 +1405,16 @@ jb_err cgi_show_url_info(struct client_state *csp,
          url_param[0] = '\0';
       }
    }
-   else if (url_param[0] != '\0')
+   else if (NULL == strstr(url_param, "://"))
    {
-      /*
-       * Unknown prefix - assume http://
-       */
-      const size_t url_param_prefixed_size = 7 + 1 + strlen(url_param);
-      char * url_param_prefixed = malloc(url_param_prefixed_size);
-      if (NULL == url_param_prefixed)
+      /* No prefix - assume http:// */
+      char *url_param_prefixed = strdup("http://");
+
+      if (JB_ERR_OK != string_join(&url_param_prefixed, url_param))
       {
-         free(url_param);
          free_map(exports);
          return JB_ERR_MEMORY;
       }
-      strlcpy(url_param_prefixed, "http://", url_param_prefixed_size);
-      strlcat(url_param_prefixed, url_param, url_param_prefixed_size);
-      free(url_param);
       url_param = url_param_prefixed;
    }
 
