@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.171 2008/03/27 18:27:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.172 2008/04/16 16:38:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.171 2008/03/27 18:27:25 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.172  2008/04/16 16:38:21  fabiankeil
+ *    Don't pass the whole csp structure to flush_socket()
+ *    when it only needs a file descriptor and a buffer.
+ *
  *    Revision 1.171  2008/03/27 18:27:25  fabiankeil
  *    Remove kill-popups action.
  *
@@ -1183,6 +1187,14 @@ static const char NO_SERVER_DATA_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Empty server or forwarder response.\r\n"
    "The connection has been closed but Privoxy didn't receive any data.\r\n";
+
+/* XXX: should be a template */
+static const char INVALID_SERVER_HEADERS_RESPONSE[] =
+   "HTTP/1.0 502 Server or forwarder response invalid\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "Bad response. The server or forwarder response doesn't look like HTTP.\r\n";
 
 #if 0
 /* XXX: should be a template */
@@ -2658,6 +2670,29 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_ERROR, "Empty server or forwarder response.");
                log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
                write_socket(csp->cfd, NO_SERVER_DATA_RESPONSE, strlen(NO_SERVER_DATA_RESPONSE));
+               free_http_request(http);
+               return;
+            }
+
+            assert(csp->headers->first->str);
+            assert(!http->ssl);
+            if (strncmpic(csp->headers->first->str, "HTTP", 4))
+            {
+               /*
+                * It doesn't look like a HTTP response:
+                * tell the client and log the problem.
+                */
+               if (strlen(csp->headers->first->str) > 30)
+               {
+                  csp->headers->first->str[30] = '\0';
+               }
+               log_error(LOG_LEVEL_ERROR,
+                  "Invalid server or forwarder response. Starts with: %s",
+                  csp->headers->first->str);
+               log_error(LOG_LEVEL_CLF,
+                  "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
+               write_socket(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
+                  strlen(INVALID_SERVER_HEADERS_RESPONSE));
                free_http_request(http);
                return;
             }
