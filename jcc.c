@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.172 2008/04/16 16:38:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.173 2008/05/06 15:09:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.172 2008/04/16 16:38:21 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.173  2008/05/06 15:09:00  fabiankeil
+ *    Least-effort fix for bug #1821930 (reported by Lee):
+ *    If the response doesn't look like HTTP,
+ *    tell the client and log the problem.
+ *
  *    Revision 1.172  2008/04/16 16:38:21  fabiankeil
  *    Don't pass the whole csp structure to flush_socket()
  *    when it only needs a file descriptor and a buffer.
@@ -1320,8 +1325,6 @@ static void sig_handler(int the_signal)
  *********************************************************************/
 static int client_protocol_is_unsupported(const struct client_state *csp, char *req)
 {
-   char buf[BUFFER_SIZE];
-
    /*
     * If it's a FTP or gopher request, we don't support it.
     *
@@ -1337,21 +1340,26 @@ static int client_protocol_is_unsupported(const struct client_state *csp, char *
     */
    if (!strncmpic(req, "GET ftp://", 10) || !strncmpic(req, "GET gopher://", 13))
    {
+      const char *response = NULL;
+      const char *protocol = NULL;
+
       if (!strncmpic(req, "GET ftp://", 10))
       {
-         strlcpy(buf, FTP_RESPONSE, sizeof(buf));
-         log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as FTP proxy: %s",
-            csp->ip_addr_str, req);
+         response = FTP_RESPONSE;
+         protocol = "FTP";
       }
       else
       {
-         strlcpy(buf, GOPHER_RESPONSE, sizeof(buf));
-         log_error(LOG_LEVEL_ERROR, "%s tried to use Privoxy as gopher proxy: %s",
-            csp->ip_addr_str, req);
+         response = GOPHER_RESPONSE;
+         protocol = "GOPHER";
       }
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, req);
+      log_error(LOG_LEVEL_ERROR,
+         "%s tried to use Privoxy as %s proxy: %s",
+         csp->ip_addr_str, protocol, req);
+      log_error(LOG_LEVEL_CLF,
+         "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, req);
       freez(req);
-      write_socket(csp->cfd, buf, strlen(buf));
+      write_socket(csp->cfd, response, strlen(response));
 
       return TRUE;
    }
