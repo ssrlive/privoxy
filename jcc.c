@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.173 2008/05/06 15:09:00 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.174 2008/05/07 18:05:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.173 2008/05/06 15:09:00 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.174  2008/05/07 18:05:53  fabiankeil
+ *    Remove the pointless buffer in client_protocol_is_unsupported().
+ *
  *    Revision 1.173  2008/05/06 15:09:00  fabiankeil
  *    Least-effort fix for bug #1821930 (reported by Lee):
  *    If the response doesn't look like HTTP,
@@ -3004,7 +3007,7 @@ int main(int argc, const char *argv[])
     * Parse the command line arguments
     *
     * XXX: simply printing usage information in case of
-    * invalid arguments isn't particular user friendly.
+    * invalid arguments isn't particularly user friendly.
     */
    while (++argc_pos < argc)
    {
