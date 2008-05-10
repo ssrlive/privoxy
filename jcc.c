@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.174 2008/05/07 18:05:53 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.175 2008/05/09 18:53:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.174 2008/05/07 18:05:53 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.175  2008/05/09 18:53:59  fabiankeil
+ *    Fix comment grammar.
+ *
  *    Revision 1.174  2008/05/07 18:05:53  fabiankeil
  *    Remove the pointless buffer in client_protocol_is_unsupported().
  *
@@ -1521,7 +1524,6 @@ static jb_err get_server_headers(struct client_state *csp)
          return JB_ERR_PARSE;
       }
 
-      /* Enlist header */
       if (JB_ERR_MEMORY == enlist(csp->headers, header))
       {
          /*
@@ -2547,9 +2549,6 @@ static void chat(struct client_state *csp)
              * This is NOT the body, so
              * Let's pretend the server just sent us a blank line.
              */
-            log_error(LOG_LEVEL_INFO,
-               "Malformerd HTTP headers detected and MS IIS5 hack enabled. "
-               "Expect an invalid response or even no response at all.");
             snprintf(buf, sizeof(buf), "\r\n");
             len = (int)strlen(buf);
 
@@ -2662,6 +2661,8 @@ static void chat(struct client_state *csp)
                    * and there isn't anything
                    * we can do about it.
                    */
+                  log_error(LOG_LEVEL_INFO,
+                     "MS IIS5 hack didn't produce valid headers.");
                   break;
                }
                else
@@ -2777,6 +2778,8 @@ static void chat(struct client_state *csp)
              */
             if (ms_iis5_hack)
             {
+               log_error(LOG_LEVEL_INFO,
+                  "Closed server connection detected with MS IIS5 hack enabled.");
                break;
             }
          }
