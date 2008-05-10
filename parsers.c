@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.125 2008/04/17 14:40:49 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.126 2008/05/03 16:40:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.125 2008/04/17 14:40:49 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.126  2008/05/03 16:40:45  fabiankeil
+ *    Change content_filters_enabled()'s parameter from
+ *    csp->action to action so it can be also used in the
+ *    CGI code. Don't bother checking if there are filters
+ *    loaded, as that's somewhat besides the point.
+ *
  *    Revision 1.125  2008/04/17 14:40:49  fabiankeil
  *    Provide get_http_time() with the buffer size so it doesn't
  *    have to blindly assume that the buffer is big enough.
@@ -1433,7 +1439,7 @@ jb_err decompress_iob(struct client_state *csp)
  * Description :  This (odd) routine will parse the csp->iob
  *
  * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  iob = The I/O buffer to parse, usually csp->iob.
  *
  * Returns     :  Any one of the following:
  *
@@ -1443,11 +1449,9 @@ jb_err decompress_iob(struct client_state *csp)
  *          a complete header line.
  *
  *********************************************************************/
-char *get_header(struct client_state *csp)
+char *get_header(struct iob *iob)
 {
-   struct iob *iob;
    char *p, *q, *ret;
-   iob = csp->iob;
 
    if ((iob->cur == NULL)
       || ((p = strchr(iob->cur, '\n')) == NULL))

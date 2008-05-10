@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.41 2008/04/16 16:38:21 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.42 2008/04/17 14:40:49 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.42  2008/04/17 14:40:49  fabiankeil
+ *    Provide get_http_time() with the buffer size so it doesn't
+ *    have to blindly assume that the buffer is big enough.
+ *
  *    Revision 1.41  2008/04/16 16:38:21  fabiankeil
  *    Don't pass the whole csp structure to flush_socket()
  *    when it only needs a file descriptor and a buffer.
@@ -268,7 +272,7 @@ extern const add_header_func_ptr add_server_headers[];
 extern int flush_socket(jb_socket fd, struct iob *iob);
 extern jb_err add_to_iob(struct client_state *csp, char *buf, int n);
 extern jb_err decompress_iob(struct client_state *csp);
-extern char *get_header(struct client_state *csp);
+extern char *get_header(struct iob *iob);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern jb_err sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf, size_t buffer_size);

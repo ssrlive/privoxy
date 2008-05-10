@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.176 2008/05/10 11:37:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.177 2008/05/10 11:51:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.176 2008/05/10 11:37:57 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.177  2008/05/10 11:51:12  fabiankeil
+ *    Make the "read the rest of the headers" loop a bit more readable.
+ *
  *    Revision 1.176  2008/05/10 11:37:57  fabiankeil
  *    - Instead of logging when the IIS5 hack is enabled, log when it fails.
  *    - Remove useless comment.
@@ -1477,7 +1480,7 @@ static jb_err get_server_headers(struct client_state *csp)
    int continue_hack_in_da_house = 0;
    char * header;
 
-   while (((header = get_header(csp)) != NULL) || continue_hack_in_da_house)
+   while (((header = get_header(csp->iob)) != NULL) || continue_hack_in_da_house)
    {
       if (header == NULL)
       {
@@ -1985,7 +1988,7 @@ static void chat(struct client_state *csp)
          return;
       }
 
-      req = get_header(csp);
+      req = get_header(csp->iob);
 
    } while ((NULL != req) && ('\0' == *req));
 
@@ -2073,7 +2076,7 @@ static void chat(struct client_state *csp)
    init_list(headers);
    for (;;)
    {
-      p = get_header(csp);
+      p = get_header(csp->iob);
 
       if (p == NULL)
       {
