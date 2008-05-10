@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.175 2008/05/09 18:53:59 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.176 2008/05/10 11:37:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.175 2008/05/09 18:53:59 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.176  2008/05/10 11:37:57  fabiankeil
+ *    - Instead of logging when the IIS5 hack is enabled, log when it fails.
+ *    - Remove useless comment.
+ *
  *    Revision 1.175  2008/05/09 18:53:59  fabiankeil
  *    Fix comment grammar.
  *
@@ -2069,8 +2073,20 @@ static void chat(struct client_state *csp)
    init_list(headers);
    for (;;)
    {
-      if ( ( ( p = get_header(csp) ) != NULL) && ( *p == '\0' ) )
+      p = get_header(csp);
+
+      if (p == NULL)
       {
+         /* There are no additional headers to read. */
+         break;
+      }
+
+      if (*p == '\0')
+      {
+         /*
+          * We didn't receive a complete header
+          * line yet, get the rest of it.
+          */
          len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
          if (len <= 0)
          {
@@ -2079,23 +2095,25 @@ static void chat(struct client_state *csp)
             return;
          }
          
-         /*
-          * If there is no memory left for buffering the
-          * request, there is nothing we can do but hang up
-          */
          if (add_to_iob(csp, buf, len))
          {
+            /*
+             * If there is no memory left for buffering the
+             * request, there is nothing we can do but hang up
+             */
             destroy_list(headers);
             return;
          }
-         continue;
       }
-
-      if (p == NULL) break;
-
-      enlist(headers, p);
-      freez(p);
-
+      else
+      {
+         /*
+          * We were able to read a complete
+          * header and can finaly enlist it.
+          */
+         enlist(headers, p);
+         freez(p);
+      }
    }
 
    if (http->host == NULL)
