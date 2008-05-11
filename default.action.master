@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.125 2008/04/20 16:08:29 fabiankeil Exp $
+#  $Id: default.action.master,v 1.126 2008/04/22 16:05:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -282,32 +282,32 @@
 #   
 #    Filters predefined in the supplied default.filter include:
 #
-#     js-annoyances:         Get rid of particularly annoying JavaScript abuse
-#     js-events:             Kill all JS event bindings (Radically destructive! Use only on real suckers)
-#     html-annoyances:       Get rid of particularly annoying HTML abuse
-#     content-cookies:       Kill cookies that come in the HTML or JS content
-#     refresh-tags:          Kill automatic refresh tags (for dial-on-demand setups)
-#     unsolicited-popups:    Disable only unsolicited pop-up windows
-#     all-popups:            Kill all popups in JavaScript and HTML
-#     img-reorder:           Reorder attributes in <img> tags to make the banners-by-* filters more effective
-#     banners-by-size:       Kill banners by size (very efficient!)
-#     banners-by-link:       Kill banners by their links to known clicktrackers 
-#     webbugs:               Squish WebBugs (1x1 invisible GIFs used for user tracking)
-#     tiny-textforms:        Extend those tiny textareas up to 40x80 and kill the hard wrap
-#     jumping-windows:       Prevent windows from resizing and moving themselves
-#     frameset-borders:      Give frames a border
-#     demoronizer:           Fix MS's non-standard use of standard charsets
-#     shockwave-flash:       Kill embedded Shockwave Flash objects
-#     quicktime-kioskmode:   Make Quicktime movies saveable
-#     fun:                   Text replacements  for subversive browsing fun!
-#     crude-parental:        Kill all web pages that contain the words "sex" or "warez"
-#     ie-exploits:           Disable some known Internet Explorer bug exploits
-#     site-specifics:        Cure for site-specific problems. Don't apply generally!
-#     google:                Removes text ads and other Google specific improvements
-#     yahoo:                 Removes text ads and other Yahoo specific improvements
-#     msn:                   Removes text ads and other MSN specific improvements
-#     blogspot:              Cleans up Blogspot blogs
-#     no-ping:               Removes non-standard ping attributes from anchor and area tags
+#     js-annoyances:       Get rid of particularly annoying JavaScript abuse.
+#     js-events:           Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
+#     html-annoyances:     Get rid of particularly annoying HTML abuse.
+#     content-cookies:     Kill cookies that come in the HTML or JS content.
+#     refresh-tags:        Kill automatic refresh tags (for dial-on-demand setups).
+#     unsolicited-popups:  Disable only unsolicited pop-up windows.
+#     all-popups:          Kill all popups in JavaScript and HTML.
+#     img-reorder:         Reorder attributes in <img> tags to make the banners-by-* filters more effective.
+#     banners-by-size:     Kill banners by size.
+#     banners-by-link:     Kill banners by their links to known clicktrackers.
+#     webbugs:             Squish WebBugs (1x1 invisible GIFs used for user tracking).
+#     tiny-textforms:      Extend those tiny textareas up to 40x80 and kill the hard wrap.
+#     jumping-windows:     Prevent windows from resizing and moving themselves.
+#     frameset-borders:    Give frames a border and make them resizable.
+#     demoronizer:         Fix MS's non-standard use of standard charsets.
+#     shockwave-flash:     Kill embedded Shockwave Flash objects.
+#     quicktime-kioskmode: Make Quicktime movies saveable.
+#     fun:                 Text replacements for subversive browsing fun!
+#     crude-parental:      Crude parental filtering. Note that this filter doesn't work reliable.
+#     ie-exploits:         Disable some known Internet Explorer bug exploits.
+#     site-specifics:      Cure for site-specific problems. Don't apply generally!
+#     no-ping:             Removes non-standard ping attributes in <a> and <area> tags.
+#     google:              CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.
+#     yahoo:               CSS-based block for Yahoo text ads. Also removes a width limitation.
+#     msn:                 CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.
+#     blogspot:            Cleans up some Blogspot blogs. Read the fine print before using this.
 #
 # +force-text-mode
 #    Declares a document as plain text, even if the "Content-Type:" isn't detected 
