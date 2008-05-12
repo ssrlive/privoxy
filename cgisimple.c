@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.81 2008/05/05 09:54:39 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.82 2008/05/10 20:01:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.81 2008/05/05 09:54:39 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.82  2008/05/10 20:01:47  fabiankeil
+ *    Fix an assertion that could erroneously
+ *    trigger in case of memory shortage.
+ *
  *    Revision 1.81  2008/05/05 09:54:39  fabiankeil
  *    In cgi_show_url_info(), make sure ftp URLs are
  *    declared invalid. Also simplify the code that adds
@@ -1410,7 +1414,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
          url_param[0] = '\0';
       }
    }
-   else if (NULL == strstr(url_param, "://"))
+   else if ((url_param[0] != '\0') && (NULL == strstr(url_param, "://")))
    {
       /* No prefix - assume http:// */
       char *url_param_prefixed = strdup("http://");
