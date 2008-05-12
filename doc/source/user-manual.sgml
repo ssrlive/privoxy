@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.70 2008/04/10 15:59:12 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.71 2008/04/10 17:37:16 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.70 2008/04/10 15:59:12 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.71 2008/04/10 17:37:16 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3963,23 +3963,23 @@ problem-host.example.com</screen>
   <listitem>
    <para>
     <anchor id="filter-js-annoyances">
-    <screen>+filter{js-annoyances}       # Get rid of particularly annoying JavaScript abuse</screen>
+    <screen>+filter{js-annoyances}       # Get rid of particularly annoying JavaScript abuse.</screen>
    </para>
    <para>
     <anchor id="filter-js-events">
-    <screen>+filter{js-events}           # Kill all JS event bindings (Radically destructive! Only for extra nasty sites)</screen>
+    <screen>+filter{js-events}           # Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).</screen>
    </para>
    <para>
     <anchor id="filter-html-annoyances">
-    <screen>+filter{html-annoyances}     # Get rid of particularly annoying HTML abuse</screen>
+    <screen>+filter{html-annoyances}     # Get rid of particularly annoying HTML abuse.</screen>
    </para>
    <para>
     <anchor id="filter-content-cookies">
-    <screen>+filter{content-cookies}     # Kill cookies that come in the HTML or JS content</screen>
+    <screen>+filter{content-cookies}     # Kill cookies that come in the HTML or JS content.</screen>
    </para>
    <para>
     <anchor id="filter-refresh-tags">
-    <screen>+filter{refresh-tags}        # Kill automatic refresh tags (for dial-on-demand setups)</screen>
+    <screen>+filter{refresh-tags}        # Kill automatic refresh tags (for dial-on-demand setups).</screen>
    </para>
    <para>
     <anchor id="filter-unsolicited-popups">
@@ -3991,43 +3991,43 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-img-reorder">
-    <screen>+filter{img-reorder}         # Reorder attributes in &lt;img&gt; tags to make the banners-by-* filters more effective</screen>
+    <screen>+filter{img-reorder}         # Reorder attributes in &lt;img&gt; tags to make the banners-by-* filters more effective.</screen>
    </para>
    <para>
     <anchor id="filter-banners-by-size">
-    <screen>+filter{banners-by-size}     # Kill banners by size</screen>
+    <screen>+filter{banners-by-size}     # Kill banners by size.</screen>
    </para>
    <para>
     <anchor id="filter-banners-by-link">
-    <screen>+filter{banners-by-link}     # Kill banners by their links to known clicktrackers</screen>
+    <screen>+filter{banners-by-link}     # Kill banners by their links to known clicktrackers.</screen>
    </para>
    <para>
     <anchor id="filter-webbugs">
-    <screen>+filter{webbugs}             # Squish WebBugs (1x1 invisible GIFs used for user tracking)</screen>
+    <screen>+filter{webbugs}             # Squish WebBugs (1x1 invisible GIFs used for user tracking).</screen>
    </para>
    <para>
     <anchor id="filter-tiny-textforms">
-    <screen>+filter{tiny-textforms}      # Extend those tiny textareas up to 40x80 and kill the hard wrap</screen>
+    <screen>+filter{tiny-textforms}      # Extend those tiny textareas up to 40x80 and kill the hard wrap.</screen>
    </para>
    <para>
     <anchor id="filter-jumping-windows">
-    <screen>+filter{jumping-windows}     # Prevent windows from resizing and moving themselves</screen>
+    <screen>+filter{jumping-windows}     # Prevent windows from resizing and moving themselves.</screen>
    </para>
    <para>
     <anchor id="filter-frameset-borders">
-    <screen>+filter{frameset-borders}    # Give frames a border and make them resizeable</screen>
+    <screen>+filter{frameset-borders}    # Give frames a border and make them resizable.</screen>
    </para>
    <para>
     <anchor id="filter-demoronizer">
-    <screen>+filter{demoronizer}         # Fix MS's non-standard use of standard charsets</screen>
+    <screen>+filter{demoronizer}         # Fix MS's non-standard use of standard charsets.</screen>
    </para>
    <para>
     <anchor id="filter-shockwave-flash">
-    <screen>+filter{shockwave-flash}     # Kill embedded Shockwave Flash objects</screen>
+    <screen>+filter{shockwave-flash}     # Kill embedded Shockwave Flash objects.</screen>
    </para>
    <para>
     <anchor id="filter-quicktime-kioskmode">
-    <screen>+filter{quicktime-kioskmode} # Make Quicktime movies savable</screen>
+    <screen>+filter{quicktime-kioskmode} # Make Quicktime movies saveable.</screen>
    </para>
    <para>
     <anchor id="filter-fun">
@@ -4035,35 +4035,35 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-crude-parental">
-    <screen>+filter{crude-parental}      # Crude parental filtering (demo only)</screen>
+    <screen>+filter{crude-parental}      # Crude parental filtering. Note that this filter doesn't work reliable.</screen>
    </para>
    <para>
     <anchor id="filter-ie-exploits">
-    <screen>+filter{ie-exploits}         # Disable a known Internet Explorer bug exploits</screen>
+    <screen>+filter{ie-exploits}         # Disable some known Internet Explorer bug exploits.</screen>
    </para>
    <para>
     <anchor id="filter-site-specifics">
-    <screen>+filter{site-specifics}      # Custom filters for specific site related problems</screen>
-   </para>
-   <para>
-    <anchor id="filter-google">
-    <screen>+filter{google}              # Removes text ads and other Google specific improvements</screen>
-   </para>
-   <para>
-    <anchor id="filter-yahoo">
-    <screen>+filter{yahoo}               # Removes text ads and other Yahoo specific improvements</screen>
-   </para>
-   <para>
-    <anchor id="filter-msn">
-    <screen>+filter{msn}                 # Removes text ads and other MSN specific improvements</screen>
-   </para>
-   <para>
-    <anchor id="filter-blogspot">
-    <screen>+filter{blogspot}            # Cleans up Blogspot blogs</screen>
+    <screen>+filter{site-specifics}      # Cure for site-specific problems. Don't apply generally!</screen>
    </para>
    <para>
     <anchor id="filter-no-ping">
-    <screen>+filter{no-ping}             # Removes non-standard ping attributes from anchor and area tags</screen>
+    <screen>+filter{no-ping}             # Removes non-standard ping attributes in &lt;a&gt; and &lt;area&gt; tags.</screen>
+   </para>
+   <para>
+    <anchor id="filter-google">
+    <screen>+filter{google}              # CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.</screen>
+   </para>
+   <para>
+    <anchor id="filter-yahoo">
+    <screen>+filter{yahoo}               # CSS-based block for Yahoo text ads. Also removes a width limitation.</screen>
+   </para>
+   <para>
+    <anchor id="filter-msn">
+    <screen>+filter{msn}                 # CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.</screen>
+   </para>
+   <para>
+    <anchor id="filter-blogspot">
+    <screen>+filter{blogspot}            # Cleans up some Blogspot blogs. Read the fine print before using this.</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -8568,6 +8568,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.71  2008/04/10 17:37:16  fabiankeil
+ Actually we use "modern" POSIX 1003.2 regular
+ expressions in path patterns, not PCRE.
+
  Revision 2.70  2008/04/10 15:59:12  fabiankeil
  Add another section to the client-header-tagger example that shows
  how to actually change the action settings once the tag is created.
