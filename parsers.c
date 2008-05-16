@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.126 2008/05/03 16:40:45 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.127 2008/05/10 13:23:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -17,7 +17,7 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.126 2008/05/03 16:40:45 fabiankei
  *                   `client_if_none_match', `get_destination_from_headers',
  *                   `parse_header_time', `decompress_iob' and `server_set_cookie'.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.126 2008/05/03 16:40:45 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.127  2008/05/10 13:23:38  fabiankeil
+ *    Don't provide get_header() with the whole client state
+ *    structure when it only needs access to csp->iob.
+ *
  *    Revision 1.126  2008/05/03 16:40:45  fabiankeil
  *    Change content_filters_enabled()'s parameter from
  *    csp->action to action so it can be also used in the
@@ -838,6 +842,7 @@ const char parsers_h_rcs[] = PARSERS_H_VERSION;
 #define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
+static char *get_header_line(struct iob *iob);
 static jb_err scan_headers(struct client_state *csp);
 static jb_err header_tagger(struct client_state *csp, char *header);
 static jb_err parse_header_time(const char *header_time, time_t *result);
@@ -1437,6 +1442,7 @@ jb_err decompress_iob(struct client_state *csp)
  * Function    :  get_header
  *
  * Description :  This (odd) routine will parse the csp->iob
+ *                to get the next complete header.
  *
  * Parameters  :
  *          1  :  iob = The I/O buffer to parse, usually csp->iob.
@@ -1450,6 +1456,77 @@ jb_err decompress_iob(struct client_state *csp)
  *
  *********************************************************************/
 char *get_header(struct iob *iob)
+{
+   char *header;
+
+   header = get_header_line(iob);
+
+   if ((header == NULL) || (*header == '\0'))
+   {
+      /*
+       * No complete header read yet, tell the client.
+       */
+      return header;
+   }
+
+   while ((iob->cur[0] == ' ') || (iob->cur[0] == '\t'))
+   {
+      /*
+       * Header spans multiple lines, append the next one.
+       */
+      char *continued_header;
+      
+      continued_header = get_header_line(iob);
+      if ((continued_header == NULL) || (*continued_header == '\0'))
+      {
+         /*
+          * No complete header read yet, return what we got.
+          * XXX: Should "unread" header instead.
+          */
+         log_error(LOG_LEVEL_INFO,
+            "Failed to read a multi-line header properly: '%s'",
+            header);
+         break;
+      }
+
+      if (JB_ERR_OK != string_join(&header, continued_header))
+      {
+         log_error(LOG_LEVEL_FATAL,
+            "Out of memory while appending multiple headers.");
+      }
+      else
+      {
+         /* XXX: remove before next stable release. */
+         log_error(LOG_LEVEL_HEADER,
+            "Merged multiple header lines to: '%s'",
+            header);
+      }
+   }
+
+   return header;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_header_line
+ *
+ * Description :  This (odd) routine will parse the csp->iob
+ *                to get the next header line.
+ *
+ * Parameters  :
+ *          1  :  iob = The I/O buffer to parse, usually csp->iob.
+ *
+ * Returns     :  Any one of the following:
+ *
+ * 1) a pointer to a dynamically allocated string that contains a header line
+ * 2) NULL  indicating that the end of the header was reached
+ * 3) ""    indicating that the end of the iob was reached before finding
+ *          a complete header line.
+ *
+ *********************************************************************/
+static char *get_header_line(struct iob *iob)
 {
    char *p, *q, *ret;
 
@@ -1465,7 +1542,7 @@ char *get_header(struct iob *iob)
    if (ret == NULL)
    {
       /* FIXME No way to handle error properly */
-      log_error(LOG_LEVEL_FATAL, "Out of memory in get_header()");
+      log_error(LOG_LEVEL_FATAL, "Out of memory in get_header_line()");
    }
 
    iob->cur = p+1;
