@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.127 2008/05/10 13:23:38 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.128 2008/05/16 16:39:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.127 2008/05/10 13:23:38 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.128  2008/05/16 16:39:03  fabiankeil
+ *    If a header is split across multiple lines,
+ *    merge them to a single line before parsing them.
+ *
  *    Revision 1.127  2008/05/10 13:23:38  fabiankeil
  *    Don't provide get_header() with the whole client state
  *    structure when it only needs access to csp->iob.
@@ -1439,6 +1443,77 @@ jb_err decompress_iob(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  normalize_lws
+ *
+ * Description :  Reduces unquoted linear white space in headers
+ *                to a single space in accordance with RFC 2616 2.2.
+ *                This simplifies parsing and filtering later on.
+ *
+ *                XXX: Remove log messages before
+ *                     the next stable release?
+ *
+ * Parameters  :
+ *          1  :  header = A header with linear white space to reduce.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void normalize_lws(char *header)
+{
+   char *p = header;
+
+   while (*p != '\0')
+   {
+      if (ijb_isspace(*p) && ijb_isspace(*(p+1)))
+      {
+         char *q = p+1;
+
+         while (ijb_isspace(*q))
+         {
+            q++;
+         }
+         log_error(LOG_LEVEL_HEADER, "Reducing white space in '%s'", header);
+         memmove(p+1, q, strlen(q)+1);
+      }
+
+      if (*p == '\t')
+      {
+         log_error(LOG_LEVEL_HEADER,
+            "Converting tab to space in '%s'", header);
+         *p = ' ';
+      }
+      else if (*p == '"')
+      {
+         char *end_of_token = strstr(p+1, "\"");
+
+         if (NULL != end_of_token)
+         {
+            /* Don't mess with quoted text. */
+            p = end_of_token;
+         }
+         else
+         {
+            log_error(LOG_LEVEL_HEADER,
+               "Ignoring single quote in '%s'", header);
+         }
+      }
+      p++;
+   }
+
+   p = strchr(header, ':');
+   if ((p != NULL) && (p != header) && ijb_isspace(*(p-1)))
+   {
+      /*
+       * There's still space before the colon.
+       * We don't want it.
+       */
+      memmove(p-1, p, strlen(p)+1);
+   }
+}
+
+
+/*********************************************************************
+ *
  * Function    :  get_header
  *
  * Description :  This (odd) routine will parse the csp->iob
@@ -1502,6 +1577,8 @@ char *get_header(struct iob *iob)
             header);
       }
    }
+
+   normalize_lws(header);
 
    return header;
 
