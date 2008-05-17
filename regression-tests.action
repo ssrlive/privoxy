@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.66 2008/05/04 18:41:07 fk Exp $
+# $Id: regression-tests.action,v 1.69 2008/05/17 13:56:41 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -691,3 +691,32 @@ www.blocked-request.example/blocked-request
 # Expect Status Code = 403
 {+block}
 www.blocked-request.example/blocked-request-with-no-reason-specified
+
+# Just in case there is no white-space fuzzer in the house ...
+#
+# Set Header = X-LWS-Test: no superfluous white space here
+# Expect Header = NO CHANGE
+# Set Header = X-LWS-Test:  superfluous   white space  in  the   house
+# Expect Header = X-LWS-Test: superfluous white space in the house
+# Set Header = X-LWS-Test   :  superfluous   white   space   in   the    house
+# Expect Header = X-LWS-Test: superfluous white space in the house
+# Set Header = X-LWS-Test:  :superfluous white space in the house
+# Expect Header = X-LWS-Test: :superfluous white space in the house
+# Set Header = X-LWS-Test: :no superfluous white space here
+# Expect Header = NO CHANGE
+# Set Header = X-LWS-Test:	superfluous 		white 			tabs in the house
+# Expect Header = X-LWS-Test: superfluous white tabs in the house
+# Set Header = X-LWS-Test	:	superfluous 		white 			tabs in the house
+# Expect Header = X-LWS-Test: superfluous white tabs in the house
+# Set Header = X-LWS-Test: "leave  quoted  lws alone"
+# Expect Header = X-LWS-Test: "leave  quoted  lws alone"
+# Set Header = X-LWS-Test:  "leave  quoted  lws alone"  thxbye
+# Expect Header = X-LWS-Test: "leave  quoted  lws alone" thxbye
+# Set Header = X-LWS-Test: " Do I Look like	quoted  text? Me    thinks  not.
+# Expect Header = X-LWS-Test: " Do I Look like quoted text? Me thinks not.
+# Set Header = X-LWS-Test: "This  is  quoted" this  is  not "but   this  is  again"
+# Expect Header = X-LWS-Test: "This  is  quoted" this is not "but   this  is  again"
+# Set Header = X-LWS-Test:  "This  is  quoted" this   is  not "this  is  "  but  "  this again   is  not
+# Expect Header = X-LWS-Test: "This  is  quoted" this is not "this  is  " but " this again is not
+{}
+TAG:^LWS Tests$
