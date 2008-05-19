@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.113 2008/04/10 14:41:04 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.114 2008/04/11 16:35:39 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.114  2008/04/11 16:35:39  fabiankeil
+ *    Oops, I forgot to shorten the URL_SPEC_INITIALIZER in my last commit.
+ *
  *    Revision 1.113  2008/04/10 14:41:04  fabiankeil
  *    Ditch url_spec's path member now that it's no longer used.
  *
@@ -1410,13 +1413,13 @@ typedef jb_err (*parser_func_ptr    )(struct client_state *, char **);
 struct parsers
 {
    /** The header prefix to match */
-   char   *str;
+   const char *str;
    
    /** The length of the prefix to match */
-   size_t len;
+   const size_t len;
    
    /** The function to apply to this line */
-   parser_func_ptr parser;
+   const parser_func_ptr parser;
 };
 
 
