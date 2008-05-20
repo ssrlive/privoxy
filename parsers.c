@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.129 2008/05/17 14:02:07 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.130 2008/05/19 17:18:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.129 2008/05/17 14:02:07 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.130  2008/05/19 17:18:04  fabiankeil
+ *    Wrap memmove() calls in string_move()
+ *    to document the purpose in one place.
+ *
  *    Revision 1.129  2008/05/17 14:02:07  fabiankeil
  *    Normalize linear header white space.
  *
@@ -935,15 +939,6 @@ const struct parsers server_patterns[] = {
    { NULL, 0, NULL }
 };
 
-const struct parsers server_patterns_light[] = {
-   { "Content-Length:",          15, server_content_length },
-   { "Transfer-Encoding:",       18, server_transfer_coding },
-#ifdef FEATURE_ZLIB
-   { "Content-Encoding:",        17, server_content_encoding },
-#endif /* def FEATURE_ZLIB */
-   { NULL, 0, NULL }
-};
-
 const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
    client_xtra_adder,
@@ -1758,8 +1753,6 @@ static jb_err scan_headers(struct client_state *csp)
  *                As a side effect it frees the space used by the original
  *                header lines.
  *
- *                XXX: should be split to remove the first_run hack.
- *
  * Parameters  :
  *          1  :  pats = list of patterns to match against headers
  *          2  :  more_headers = list of functions to add more
@@ -1778,59 +1771,79 @@ jb_err sed(const struct parsers pats[],
    const struct parsers *v;
    const add_header_func_ptr *f;
    jb_err err = JB_ERR_OK;
-   int first_run;
 
-   /*
-    * If filtering is enabled, sed is run twice,
-    * but most of the work needs to be done only once.
-    */
-   first_run = (more_headers != NULL ) ? 1 : 0;
+   assert(more_headers != NULL);
 
-   if (first_run) /* Parse and print */
+   scan_headers(csp);
+
+   for (v = pats; (err == JB_ERR_OK) && (v->str != NULL); v++)
    {
-      scan_headers(csp);
-
-      for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
+      for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL); p = p->next)
       {
-         for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
+         /* Header crunch()ed in previous run? -> ignore */
+         if (p->str == NULL) continue;
+
+         /* Does the current parser handle this header? */
+         if ((strncmpic(p->str, v->str, v->len) == 0) ||
+             (v->len == CHECK_EVERY_HEADER_REMAINING))
+         {
+            err = v->parser(csp, (char **)&(p->str));
+         }
+      }
+   }
+
+   /* place any additional headers on the csp->headers list */
+   for (f = more_headers; (err == JB_ERR_OK) && (*f) ; f++)
+   {
+      err = (*f)(csp);
+   }
+
+   return err;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  update_server_headers
+ *
+ * Description :  Updates server headers after the body has been modified.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK in case off success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err update_server_headers(struct client_state *csp)
+{
+   jb_err err = JB_ERR_OK;
+
+   static const struct parsers server_patterns_light[] = {
+      { "Content-Length:",    15, server_content_length },
+      { "Transfer-Encoding:", 18, server_transfer_coding },
+#ifdef FEATURE_ZLIB
+      { "Content-Encoding:",  17, server_content_encoding },
+#endif /* def FEATURE_ZLIB */
+      { NULL, 0, NULL }
+   };
+
+   if (strncmpic(csp->http->cmd, "HEAD", 4))
+   {
+      const struct parsers *v;
+      struct list_entry *p;
+
+      for (v = server_patterns_light; (err == JB_ERR_OK) && (v->str != NULL); v++)
+      {
+         for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL); p = p->next)
          {
             /* Header crunch()ed in previous run? -> ignore */
             if (p->str == NULL) continue;
 
             /* Does the current parser handle this header? */
-            if ((strncmpic(p->str, v->str, v->len) == 0) || (v->len == CHECK_EVERY_HEADER_REMAINING))
+            if (strncmpic(p->str, v->str, v->len) == 0)
             {
                err = v->parser(csp, (char **)&(p->str));
-            }
-         }
-      }
-      /* place any additional headers on the csp->headers list */
-      for (f = more_headers; (err == JB_ERR_OK) && (*f) ; f++)
-      {
-         err = (*f)(csp);
-      }
-   }
-   else /* Parse only */
-   {
-      /*
-       * The second run is only needed if the body was modified
-       * and the content-lenght has changed.
-       */
-      if (strncmpic(csp->http->cmd, "HEAD", 4))
-      {
-         /*XXX: Code duplication */
-         for (v = pats; (err == JB_ERR_OK) && (v->str != NULL) ; v++)
-         {
-            for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL) ; p = p->next)
-            {
-               /* Header crunch()ed in previous run? -> ignore */
-               if (p->str == NULL) continue;
-
-               /* Does the current parser handle this header? */
-               if (strncmpic(p->str, v->str, v->len) == 0)
-               {
-                  err = v->parser(csp, (char **)&(p->str));
-               }
             }
          }
       }
@@ -1838,7 +1851,6 @@ jb_err sed(const struct parsers pats[],
 
    return err;
 }
-
 
 
 /*********************************************************************

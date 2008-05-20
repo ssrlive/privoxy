@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.177 2008/05/10 11:51:12 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.178 2008/05/10 13:23:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.177 2008/05/10 11:51:12 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.178  2008/05/10 13:23:38  fabiankeil
+ *    Don't provide get_header() with the whole client state
+ *    structure when it only needs access to csp->iob.
+ *
  *    Revision 1.177  2008/05/10 11:51:12  fabiankeil
  *    Make the "read the rest of the headers" loop a bit more readable.
  *
@@ -2532,9 +2536,10 @@ static void chat(struct client_state *csp)
                      csp->content_length = (size_t)(csp->iob->eod - csp->iob->cur);
                   }
 
-                  if (JB_ERR_OK != sed(server_patterns_light, NULL, csp))
+                  if (JB_ERR_OK != update_server_headers(csp))
                   {
-                     log_error(LOG_LEVEL_FATAL, "Failed to parse server headers.");
+                     log_error(LOG_LEVEL_FATAL,
+                        "Failed to update server headers. after filtering.");
                   }
 
                   hdr = list_to_text(csp->headers);
@@ -2543,12 +2548,6 @@ static void chat(struct client_state *csp)
                      /* FIXME Should handle error properly */
                      log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
                   }
-
-                  /*
-                   * Shouldn't happen because this was the second sed run
-                   * and tags are only created for the first one.
-                   */
-                  assert(!crunch_response_triggered(csp, crunchers_all));
 
                   if (write_socket(csp->cfd, hdr, strlen(hdr))
                    || write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length))

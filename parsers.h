@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.43 2008/05/10 13:23:38 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.44 2008/05/20 16:05:09 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,9 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.44  2008/05/20 16:05:09  fabiankeil
+ *    Move parsers structure definition from project.h to parsers.h.
+ *
  *    Revision 1.43  2008/05/10 13:23:38  fabiankeil
  *    Don't provide get_header() with the whole client state
  *    structure when it only needs access to csp->iob.
@@ -284,7 +287,6 @@ struct parsers
 
 extern const struct parsers client_patterns[];
 extern const struct parsers server_patterns[];
-extern const struct parsers server_patterns_light[];
 
 extern const add_header_func_ptr add_client_headers[];
 extern const add_header_func_ptr add_server_headers[];
@@ -295,6 +297,7 @@ extern jb_err decompress_iob(struct client_state *csp);
 extern char *get_header(struct iob *iob);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
 extern jb_err sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
+extern jb_err update_server_headers(struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf, size_t buffer_size);
 extern jb_err get_destination_from_headers(const struct list *headers, struct http_request *http);
 
