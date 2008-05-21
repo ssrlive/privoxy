@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.45 2008/05/20 20:13:30 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.46 2008/05/21 15:47:14 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.46  2008/05/21 15:47:14  fabiankeil
+ *    Streamline sed()'s prototype and declare
+ *    the header parse and add structures static.
+ *
  *    Revision 1.45  2008/05/20 20:13:30  fabiankeil
  *    Factor update_server_headers() out of sed(), ditch the
  *    first_run hack and make server_patterns_light static.
@@ -288,7 +292,7 @@ extern void get_http_time(int time_offset, char *buf, size_t buffer_size);
 extern jb_err get_destination_from_headers(const struct list *headers, struct http_request *http);
 
 #ifdef FEATURE_FORCE_LOAD
-extern int strclean(const char *string, const char *substring);
+extern int strclean(char *string, const char *substring);
 #endif /* def FEATURE_FORCE_LOAD */
 
 /* Revision control strings from this header and associated .c file */
