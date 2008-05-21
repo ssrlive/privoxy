@@ -2,11 +2,11 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.59 2008/04/23 16:18:18 fabiankeil Exp $
+#  $Id: default.filter,v 1.60 2008/04/26 10:36:41 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
-#  Copyright   :  Written by and Copyright (C) 2001 - 2007 the
+#  Copyright   :  Written by and Copyright (C) 2001-2008 the
 #                 Privoxy team. http://www.privoxy.org/
 #
 # We value your feedback. However, to provide you with the best support,
@@ -801,7 +801,7 @@ s@^User-Agent:.*@$0@i
 #################################################################################
 SERVER-HEADER-TAGGER: content-type Tags the request with the content type declared by the server.
 
-s@^Content-Type:\s*([^;]*).*@$1@i
+s@^Content-Type:\s*([^;]+).*@$1@i
 
 #################################################################################
 #
@@ -830,6 +830,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.60  2008/04/26 10:36:41  fabiankeil
+#     Let the msn filter hide another class.
+#
 #     Revision 1.59  2008/04/23 16:18:18  fabiankeil
 #     s@declarded@declared@
 #
@@ -1228,7 +1231,3 @@ s@^X-Privoxy-Control:.*@@i
 #     Revision 1.6  2001/06/09 14:01:57  swa
 #     header. cosmetics. default: no messing ala microsuck.
 #
-#
-# 
-
-
