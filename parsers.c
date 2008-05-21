@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.130 2008/05/19 17:18:04 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.131 2008/05/20 20:13:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.130 2008/05/19 17:18:04 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.131  2008/05/20 20:13:30  fabiankeil
+ *    Factor update_server_headers() out of sed(), ditch the
+ *    first_run hack and make server_patterns_light static.
+ *
  *    Revision 1.130  2008/05/19 17:18:04  fabiankeil
  *    Wrap memmove() calls in string_move()
  *    to document the purpose in one place.
@@ -897,7 +901,22 @@ static jb_err create_fake_referrer(char **header, const char *fake_referrer);
 static jb_err handle_conditional_hide_referrer_parameter(char **header,
    const char *host, const int parameter_conditional_block);
 
-const struct parsers client_patterns[] = {
+/*
+ * List of functions to run on a list of headers.
+ */
+struct parsers
+{
+   /** The header prefix to match */
+   const char *str;
+   
+   /** The length of the prefix to match */
+   const size_t len;
+   
+   /** The function to apply to this line */
+   const parser_func_ptr parser;
+};
+
+static const struct parsers client_patterns[] = {
    { "referer:",                  8,   client_referrer },
    { "user-agent:",              11,   client_uagent },
    { "ua-",                       3,   client_ua },
@@ -923,7 +942,7 @@ const struct parsers client_patterns[] = {
    { NULL,                        0,   NULL }
 };
 
-const struct parsers server_patterns[] = {
+static const struct parsers server_patterns[] = {
    { "HTTP/",                     5, server_http },
    { "set-cookie:",              11, server_set_cookie },
    { "connection:",              11, connection },
@@ -939,7 +958,7 @@ const struct parsers server_patterns[] = {
    { NULL, 0, NULL }
 };
 
-const add_header_func_ptr add_client_headers[] = {
+static const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
    client_xtra_adder,
    /* Temporarily disabled:    client_accept_encoding_adder, */
@@ -947,7 +966,7 @@ const add_header_func_ptr add_client_headers[] = {
    NULL
 };
 
-const add_header_func_ptr add_server_headers[] = {
+static const add_header_func_ptr add_server_headers[] = {
    connection_close_adder,
    NULL
 };
@@ -1754,29 +1773,36 @@ static jb_err scan_headers(struct client_state *csp)
  *                header lines.
  *
  * Parameters  :
- *          1  :  pats = list of patterns to match against headers
- *          2  :  more_headers = list of functions to add more
- *                headers (client or server)
- *          3  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  filter_server_headers = Boolean to switch between
+ *                                        server and header filtering.
  *
  * Returns     :  JB_ERR_OK in case off success, or
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err sed(const struct parsers pats[],
-           const add_header_func_ptr more_headers[],
-           struct client_state *csp)
+jb_err sed(struct client_state *csp, int filter_server_headers)
 {
+   /* XXX: use more descriptive names. */
    struct list_entry *p;
    const struct parsers *v;
    const add_header_func_ptr *f;
    jb_err err = JB_ERR_OK;
 
-   assert(more_headers != NULL);
+   if (filter_server_headers)
+   {
+      v = server_patterns;
+      f = add_server_headers;
+   }
+   else
+   {
+      v = client_patterns;
+      f = add_client_headers;
+   }
 
    scan_headers(csp);
 
-   for (v = pats; (err == JB_ERR_OK) && (v->str != NULL); v++)
+   while ((err == JB_ERR_OK) && (v->str != NULL))
    {
       for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL); p = p->next)
       {
@@ -1790,12 +1816,14 @@ jb_err sed(const struct parsers pats[],
             err = v->parser(csp, (char **)&(p->str));
          }
       }
+      v++;
    }
 
-   /* place any additional headers on the csp->headers list */
-   for (f = more_headers; (err == JB_ERR_OK) && (*f) ; f++)
+   /* place additional headers on the csp->headers list */
+   while ((err == JB_ERR_OK) && (*f))
    {
       err = (*f)(csp);
+      f++;
    }
 
    return err;

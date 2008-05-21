@@ -1,6 +1,6 @@
 #ifndef PARSERS_H_INCLUDED
 #define PARSERS_H_INCLUDED
-#define PARSERS_H_VERSION "$Id: parsers.h,v 1.44 2008/05/20 16:05:09 fabiankeil Exp $"
+#define PARSERS_H_VERSION "$Id: parsers.h,v 1.45 2008/05/20 20:13:30 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.h,v $
@@ -43,6 +43,10 @@
  *
  * Revisions   :
  *    $Log: parsers.h,v $
+ *    Revision 1.45  2008/05/20 20:13:30  fabiankeil
+ *    Factor update_server_headers() out of sed(), ditch the
+ *    first_run hack and make server_patterns_light static.
+ *
  *    Revision 1.44  2008/05/20 16:05:09  fabiankeil
  *    Move parsers structure definition from project.h to parsers.h.
  *
@@ -269,34 +273,16 @@
 extern "C" {
 #endif
 
-/**
- * List of functions to run on a list of headers.
- * XXX: make parsers local to parsers.c.
- */
-struct parsers
-{
-   /** The header prefix to match */
-   const char *str;
-   
-   /** The length of the prefix to match */
-   const size_t len;
-   
-   /** The function to apply to this line */
-   const parser_func_ptr parser;
-};
-
-extern const struct parsers client_patterns[];
-extern const struct parsers server_patterns[];
-
-extern const add_header_func_ptr add_client_headers[];
-extern const add_header_func_ptr add_server_headers[];
+/* Used for sed()'s second argument. */
+#define FILTER_CLIENT_HEADERS 0
+#define FILTER_SERVER_HEADERS 1
 
 extern int flush_socket(jb_socket fd, struct iob *iob);
 extern jb_err add_to_iob(struct client_state *csp, char *buf, int n);
 extern jb_err decompress_iob(struct client_state *csp);
 extern char *get_header(struct iob *iob);
 extern char *get_header_value(const struct list *header_list, const char *header_name);
-extern jb_err sed(const struct parsers pats[], const add_header_func_ptr more_headers[], struct client_state *csp);
+extern jb_err sed(struct client_state *csp, int filter_server_headers);
 extern jb_err update_server_headers(struct client_state *csp);
 extern void get_http_time(int time_offset, char *buf, size_t buffer_size);
 extern jb_err get_destination_from_headers(const struct list *headers, struct http_request *http);
