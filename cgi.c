@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.104 2008/03/26 18:07:06 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.105 2008/04/17 14:40:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.104 2008/03/26 18:07:06 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.105  2008/04/17 14:40:47  fabiankeil
+ *    Provide get_http_time() with the buffer size so it doesn't
+ *    have to blindly assume that the buffer is big enough.
+ *
  *    Revision 1.104  2008/03/26 18:07:06  fabiankeil
  *    Add hostname directive. Closes PR#1918189.
  *
@@ -1551,7 +1555,7 @@ struct http_response *error_response(struct client_state *csp,
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-jb_err cgi_error_disabled(struct client_state *csp,
+jb_err cgi_error_disabled(const struct client_state *csp,
                           struct http_response *rsp)
 {
    struct map *exports;
@@ -1654,7 +1658,7 @@ struct http_response *cgi_error_memory(void)
  *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-jb_err cgi_error_no_template(struct client_state *csp,
+jb_err cgi_error_no_template(const struct client_state *csp,
                              struct http_response *rsp,
                              const char *template_name)
 {
@@ -1741,7 +1745,7 @@ jb_err cgi_error_no_template(struct client_state *csp,
  *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-jb_err cgi_error_unknown(struct client_state *csp,
+jb_err cgi_error_unknown(const struct client_state *csp,
                          struct http_response *rsp,
                          jb_err error_to_report)
 {
@@ -1820,7 +1824,7 @@ jb_err cgi_error_unknown(struct client_state *csp,
  *                JB_ERR_MEMORY on out-of-memory error.  
  *
  *********************************************************************/
-jb_err cgi_error_bad_param(struct client_state *csp,
+jb_err cgi_error_bad_param(const struct client_state *csp,
                            struct http_response *rsp)
 {
    struct map *exports;
@@ -2245,7 +2249,7 @@ void free_http_response(struct http_response *rsp)
  *                JB_ERR_FILE if the template file cannot be read
  *
  *********************************************************************/
-jb_err template_load(struct client_state *csp, char **template_ptr, 
+jb_err template_load(const struct client_state *csp, char **template_ptr, 
                      const char *templatename, int recursive)
 {
    jb_err err;
@@ -2524,7 +2528,7 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
  *                JB_ERR_MEMORY on out-of-memory error
  *
  *********************************************************************/
-jb_err template_fill_for_cgi(struct client_state *csp,
+jb_err template_fill_for_cgi(const struct client_state *csp,
                              const char *templatename,
                              struct map *exports,
                              struct http_response *rsp)
