@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.178 2008/05/10 13:23:38 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.179 2008/05/20 20:13:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.178 2008/05/10 13:23:38 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.179  2008/05/20 20:13:32  fabiankeil
+ *    Factor update_server_headers() out of sed(), ditch the
+ *    first_run hack and make server_patterns_light static.
+ *
  *    Revision 1.178  2008/05/10 13:23:38  fabiankeil
  *    Don't provide get_header() with the whole client state
  *    structure when it only needs access to csp->iob.
@@ -1108,7 +1112,7 @@ static int client_protocol_is_unsupported(const struct client_state *csp, char *
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers);
 static jb_err get_server_headers(struct client_state *csp);
 static const char *crunch_reason(const struct http_response *rsp);
-static void send_crunch_response(struct client_state *csp, struct http_response *rsp);
+static void send_crunch_response(const struct client_state *csp, struct http_response *rsp);
 /*
  * static int request_contains_null_bytes(const struct client_state *csp, char *buf, int len);
  */
@@ -1501,7 +1505,7 @@ static jb_err get_server_headers(struct client_state *csp)
       {
          /*
           * It's a bodyless continue response, don't
-          * stop header parsing after reaching it's end.
+          * stop header parsing after reaching its end.
           *
           * As a result Privoxy will concatenate the
           * next response's head and parse and deliver
@@ -1627,7 +1631,7 @@ static const char *crunch_reason(const struct http_response *rsp)
  * Returns     :  Nothing.
  *
  *********************************************************************/
-static void send_crunch_response(struct client_state *csp, struct http_response *rsp)
+static void send_crunch_response(const struct client_state *csp, struct http_response *rsp)
 {
       const struct http_request *http = csp->http;
       char status_code[4];
