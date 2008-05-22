@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.162 2008/03/30 13:31:42 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.163 2008/05/04 18:01:53 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -969,7 +969,7 @@ list.@OBJEXT@:      list.c      list.h      config.h $(PROJECT_H_DEPS) list.h mi
 loadcfg.@OBJEXT@:   loadcfg.c   loadcfg.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h gateway.h jbsockets.h jcc.h loaders.h miscutil.h parsers.h @WIN_ONLY@w32log.h win32.h
 loaders.@OBJEXT@:   loaders.c   loaders.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h gateway.h jcc.h loadcfg.h miscutil.h parsers.h ssplit.h
 miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
-parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h encode.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
+parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
 ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
 urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 
@@ -1022,7 +1022,7 @@ clean:
 
 tidy:
 	$(RM) `find . -name "*~"`
-#	$(RM) `find . -name "#*#"` # what is this for??
+	$(RM) `find . -name "#*#"` # Emacs backup files
 	$(RM) `find . -name ".\#*"`
 
 clobber: tidy
@@ -1102,7 +1102,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(ECHO) Installing $(PROGRAM) stripped executable to $(SBIN_DEST) ||\
 	$(ECHO) Installing $(PROGRAM) executable to $(DESTDIR)$(SBIN_DEST)
 	$(INSTALL) $(INSTALL_P) $(STRIP) $(PROGRAM) $(DESTDIR)$(SBIN_DEST)
-     
+
 	@# Install the DOCS and man page. install-sh only does one file at a time.
 	@# FIXME: only handles jpegs.
 	-@if [ $(check_doc) = 0 ]; then \
@@ -1368,6 +1368,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.163  2008/05/04 18:01:53  fabiankeil
+# Dependency fixes: cgisimple.c and filters.c depend on urlmatch.h.
+#
 # Revision 1.162  2008/03/30 13:31:42  fabiankeil
 # Add DESTDIR support for the uninstall target.
 #
