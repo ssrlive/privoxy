@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.71 2008/04/10 17:37:16 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.72 2008/05/12 10:26:14 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.71 2008/04/10 17:37:16 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.72 2008/05/12 10:26:14 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2836,17 +2836,6 @@ for details.
     to the blocked content (the latter only if the force feature is available and
     enabled).
    </para>
-<!--
-This doesn't actually work in all browser configuration and the user probably doesn't care anyway.
-   <para>
-    The <quote>BLOCKED</quote> page adapts to the available
-    screen space -- it displays full-blown if space allows, or miniaturized and text-only
-    if loaded into a small frame or window. If you are using <application>Privoxy</application>
-    right now, you can take a look at the 
-    <ulink url="http://ads.bannerserver.example.com/nasty-ads/sponsor.html"><quote>BLOCKED</quote>
-    page</ulink>.
-   </para>
--->
    <para> 
     A very important exception occurs if <emphasis>both</emphasis> 
     <literal>block</literal> and <literal><link linkend="handle-as-image">handle-as-image</link></literal>,
@@ -8568,6 +8557,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.72  2008/05/12 10:26:14  fabiankeil
+ Synchronize content filter descriptions with the ones in default.filter.
+
  Revision 2.71  2008/04/10 17:37:16  fabiankeil
  Actually we use "modern" POSIX 1003.2 regular
  expressions in path patterns, not PCRE.
