@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.166 2008/05/23 14:04:57 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.167 2008/05/23 14:39:09 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -743,7 +743,7 @@ dok-readme: dok-release
 dok-webserver: 
 	cd doc/source/webserver && $(DB)-notoc -ip-homepage -V nochunks index.sgml > ../../webserver/index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
-     s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
+	s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps users to protect their privacy.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
 	s/\.\d\. //;\
 	s/__copy/&copy;/'\
@@ -753,7 +753,7 @@ dok-webserver:
 dok-index: 
 	cd doc/source/webserver && $(DB)-notoc -ip-index -V nochunks index.sgml > ../../webserver/privoxy-index.html
 	$(PERL) -pi.bak -e 's/..\/p_doc.css/p_doc.css/;\
-     s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps consumers reduce unwanted junk email and protect their privacy from direct marketing companies.\"><\/HEAD/;\
+	s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps users to protect their privacy.\"><\/HEAD/;\
 	s/<\/HEAD/\n<meta name="MSSmartTagsPreventParsing" content="TRUE"><\/HEAD/;\
 	s/\.\d\. //;\
 	s/__copy/&copy;/' \
@@ -852,7 +852,7 @@ dok-pdf: dok-shtml
 # requires the shell util 'fmt'.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
-	w3m -dump __tmp.html |fmt -w 70 > ../../config.new && $(RM) -r __tmp.*
+	env -u LANG w3m -dump __tmp.html | fmt -w 70 > ../../config.new && $(RM) -r __tmp.*
 	$(PERL) -pi.bak \
 		-e 's/^1\. \@\@TITLE\@\@/     /i;'		\
 	        -e '/^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;'		\
@@ -864,7 +864,6 @@ config-file: dok-release
 		-e '		{print "=";}'			\
 	        -e '	print "\n";'				\
 	        -e '};'						\
-	        -e 'my $$hit_header;'				\
 	        -e '$$hit_header=0;'				\
 	        -e '$$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;'\
 	        -e '$$header_len = length($$_);'		\
@@ -1372,6 +1371,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.167  2008/05/23 14:39:09  fabiankeil
+# Silence dok-user complaint about @# not being found.
+#
 # Revision 1.166  2008/05/23 14:04:57  fabiankeil
 # - Get config-file target working with more recent Perl
 #   versions. The generated file is still messed up, though.
