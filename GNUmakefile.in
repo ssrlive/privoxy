@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.165 2008/05/22 16:57:23 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.166 2008/05/23 14:04:57 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -672,9 +672,9 @@ dok-user:
 	$(RM) -r doc/source/user-manual/
 	mkdir -p doc/text doc/source/user-manual
 	cd doc/source/user-manual && $(DB) -iuser-man ../user-manual.sgml && cd .. && cp user-manual/*.html ../webserver/user-manual/
-	@#FIXME: temp fix so same stylesheet gets in more than one place so it works \
-	@# for all doc set-ups, including the 'user manual' config option in local \
-	@#system where it MUST be in same directory as html.
+	# FIXME: temp fix so same stylesheet gets in more than one place so it works
+	# for all doc set-ups, including the 'user manual' config option in local
+	# system where it MUST be in same directory as html.
 	$(PERL) -pi.bak -e 's/<\/head/\n<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"p_doc.css\">\n<\/head/i' doc/webserver/user-manual/*html
 	cd doc/source && $(DB) -iuser-man -V nochunks user-manual.sgml > tmp.html && env -u LANG $(WDUMP) tmp.html > ../text/user-manual.txt && $(RM) -r tmp.html user-manual
 
@@ -1372,6 +1372,11 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.166  2008/05/23 14:04:57  fabiankeil
+# - Get config-file target working with more recent Perl
+#   versions. The generated file is still messed up, though.
+# - Fix comment typo.
+#
 # Revision 1.165  2008/05/22 16:57:23  fabiankeil
 # Fix coffee machine.
 #
