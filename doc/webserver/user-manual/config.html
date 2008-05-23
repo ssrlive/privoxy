@@ -1457,7 +1457,7 @@ CLASS="APPLICATION"
   debug       128 # debug redirects
   debug       256 # debug GIF de-animation
   debug       512 # Common Log Format
-  debug      1024 # debug kill pop-ups
+  debug      1024 # Unused
   debug      2048 # CGI user interface
   debug      4096 # Startup banner and warnings.
   debug      8192 # Non-fatal errors</PRE
@@ -1596,6 +1596,72 @@ CLASS="EMPHASIS"
 >It will drastically reduce performance.</I
 ></SPAN
 >
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="HOSTNAME"
+>7.3.3. hostname</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The hostname shown on the CGI pages.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>Text</P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></SPAN
+></P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    The hostname provided by the operating system is used.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    On some misconfigured systems resolving the hostname fails or
+    takes too much time and slows Privoxy down. Setting a fixed hostname
+    works around the problem.
+   </P
+><P
+>    In other circumstances it might be desirable to show a hostname
+    other than the one returned by the operating system. For example
+    if the system has several different hostnames and you don't want
+    to use the first one.
+   </P
+><P
+>    Note that Privoxy does not validate the specified hostname value.
    </P
 ></DD
 ></DL
