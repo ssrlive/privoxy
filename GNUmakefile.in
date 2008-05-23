@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.164 2008/05/22 10:26:26 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.165 2008/05/22 16:57:23 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -849,30 +849,32 @@ dok-pdf: dok-shtml
 # NOTE: This will require some hand editing. The new file is outputted 
 # as config.new so that problem sections can be compared to previous
 # version. This is hardcored to w3m for html/text conversion. Also, 
-# requires the shell util 'fmt'. 2007-11-14: note the perl below dies 
-# with perl 5.8.8. The same code pasted into a free standing script, 
-# without the makefile-isms, works fine.
+# requires the shell util 'fmt'.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
 	w3m -dump __tmp.html |fmt -w 70 > ../../config.new && $(RM) -r __tmp.*
-	$(PERL)  -pi.bak -e 's/^1\. \@\@TITLE\@\@/     /i;\
-	         /^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;\
-	           my $$hit_header;\
-	           $$header_len=0 unless $$hit_header;\
-	           if ($$hit_header) {\
-	              print "#  ";\
-	              for ($$i=1; $$i < $$header_len; $$i++) {print "=";}\
-	              print "\n";\
-	           };\
-	           my $$hit_header;\
-	           $$hit_header=0;\
-	           $$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;\
-	           $$header_len = length($$_);\
-			 s/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;\
-	           s/^.*$$// if $$hit_option;\
-	           $$hit_option=0;\
-	           s/^\n//;  s/^#\s*-{20,}//; s/ *$$//;\
-	           $$hit_option=1 if s/^#\s+@@//;'   config.new
+	$(PERL) -pi.bak \
+		-e 's/^1\. \@\@TITLE\@\@/     /i;'		\
+	        -e '/^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;'		\
+	        -e 'my $$hit_header;'				\
+	        -e '$$header_len=0 unless $$hit_header;'	\
+	        -e 'if ($$hit_header) {'			\
+	        -e '	print "#  ";'				\
+	        -e '	for ($$i=1; $$i < $$header_len; $$i++)'	\
+		-e '		{print "=";}'			\
+	        -e '	print "\n";'				\
+	        -e '};'						\
+	        -e 'my $$hit_header;'				\
+	        -e '$$hit_header=0;'				\
+	        -e '$$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;'\
+	        -e '$$header_len = length($$_);'		\
+		-e 's/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;'	\
+	        -e 's/^.*$$// if $$hit_option;'			\
+	        -e '$$hit_option=0;'				\
+	        -e 's/^\n//;'					\
+		-e 's/^#\s*-{20,}//;'				\
+		-e 's/ *$$//;'					\
+	        -e '$$hit_option=1 if s/^#\s+@@//;' config.new
 
 	$(RM) *.bak
 	@$(ECHO)  "****************************************************"
@@ -884,7 +886,7 @@ config-file: dok-release
 	@$(ECHO)  "probably got hammered."
 	@$(ECHO)  "****************************************************"
 
-# config file, alternate verison using lynx (perl stuff unfinished). Lynx
+# config file, alternate version using lynx (perl stuff unfinished). Lynx
 # does not do so good a job.
 config-file-alt: 
 	cd doc/source && $(ECHO) -e ".h2 JUSTIFY\\nJUSTIFY:FALSE" > __tmp.lynx_cfg &&\
@@ -1370,6 +1372,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.165  2008/05/22 16:57:23  fabiankeil
+# Fix coffee machine.
+#
 # Revision 1.164  2008/05/22 10:26:26  fabiankeil
 # - Remove parsers.@OBJEXT@'s dependency on encode.h.
 # - Include Emacs backup files in tidy target again.
