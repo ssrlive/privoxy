@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.149 2008/05/17 14:11:29 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.152 2008/05/19 17:30:14 fk Exp $
 #
 # Wish list:
 #
@@ -1019,6 +1019,20 @@ sub test_content_as_string ($) {
     return $s;
 }
 
+sub fuzz_header($) {
+    my $header = shift;
+    my $white_space = int(rand(2)) - 1 ? " " : "\t";
+
+    $white_space = $white_space x (1 + int(rand(5)));
+
+    # Only fuzz white space before the first quoted token.
+    # (Privoxy doesn't touch white space inside quoted tokens
+    # and modifying it would cause the tests to fail).
+    $header =~ s@(^[^"]*?)\s@$1$white_space@g;
+
+    return $header;
+}
+
 ############################################################################
 #
 # HTTP fetch functions
@@ -1057,6 +1071,7 @@ sub get_cgi_page_or_else ($) {
     return $content_ref;
 }
 
+# XXX: misleading name
 sub get_show_request_with_curl ($) {
 
     our $privoxy_cgi_url;
@@ -1064,11 +1079,16 @@ sub get_show_request_with_curl ($) {
     my %test = %{$test_ref};
 
     my $curl_parameters = ' ';
+    my $header = $test{'data'};
+
+    if (cli_option_is_set('header-fuzzing')) {
+        $header = fuzz_header($header);
+    }
 
     # Enable the action to test
     $curl_parameters .= '-H \'X-Privoxy-Control: ' . $test{'tag'} . '\' ';
     # The header to filter
-    $curl_parameters .= '-H \'' . $test{'data'} . '\' ';
+    $curl_parameters .= '-H \'' . $header . '\' ';
 
     $curl_parameters .= ' ';
     $curl_parameters .= $privoxy_cgi_url;
@@ -1330,6 +1350,7 @@ Options and their default values if they have any:
     [--fuzzer-address]
     [--fuzzer-feeding]
     [--help]
+    [--header-fuzzing]
     [--level]
     [--loops $cli_options{'loops'}]
     [--max-level $cli_options{'max-level'}]
@@ -1368,6 +1389,7 @@ sub parse_cli_options () {
     GetOptions (
                 'debug=s' => \$cli_options{'debug'},
                 'help'     => sub { help },
+                'header-fuzzing' => \$cli_options{'header-fuzzing'},
                 'min-level=s' => \$cli_options{'min-level'},
                 'max-level=s' => \$cli_options{'max-level'},
                 'privoxy-address=s' => \$cli_options{'privoxy-address'},
@@ -1555,6 +1577,9 @@ that Privoxy gets an invalid request and returns an error
 message.
 
 B<--help> Shows available command line options.
+
+B<--header-fuzzing> Modifies linear white space in
+headers in a way that should not affect the test result.
 
 B<--level level> Only execute tests with the specified B<level>. 
 
