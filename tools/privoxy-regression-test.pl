@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.152 2008/05/19 17:30:14 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.153 2008/05/25 18:48:07 fk Exp $
 #
 # Wish list:
 #
@@ -54,7 +54,7 @@ use constant {
 	       CLI_MAX_LEVEL => 25,
 
                PRIVOXY_CGI_URL => 'http://p.p/',
-               FELLATIO_URL    => 'http://10.0.0.1:8080/',
+               FELLATIO_URL    => 'http://127.0.0.1:8080/',
                LEADING_LOG_DATE => 1,
                LEADING_LOG_TIME => 1,
 
