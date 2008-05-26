@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.105 2008/04/17 14:40:47 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.106 2008/05/21 15:24:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.105 2008/04/17 14:40:47 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.106  2008/05/21 15:24:38  fabiankeil
+ *    Mark csp as immutable for a bunch of functions.
+ *
  *    Revision 1.105  2008/04/17 14:40:47  fabiankeil
  *    Provide get_http_time() with the buffer size so it doesn't
  *    have to blindly assume that the buffer is big enough.
@@ -963,7 +966,7 @@ static char *grep_cgi_referrer(const struct client_state *csp)
 static int referrer_is_safe(const struct client_state *csp)
 {
    char *referrer;
-   const char alternative_prefix[] = "http://" CGI_SITE_1_HOST "/";
+   static const char alternative_prefix[] = "http://" CGI_SITE_1_HOST "/";
 
    referrer = grep_cgi_referrer(csp);
 
@@ -1675,7 +1678,7 @@ jb_err cgi_error_no_template(const struct client_state *csp,
       "<p>Privoxy encountered an error while processing your request:</p>\r\n"
       "<p><b>Could not load template file <code>";
    static const char body_suffix[] =
-      "</code> or one of it's included components.</b></p>\r\n"
+      "</code> or one of its included components.</b></p>\r\n"
       "<p>Please contact your proxy administrator.</p>\r\n"
       "<p>If you are the proxy administrator, please put the required file(s)"
       "in the <code><i>(confdir)</i>/templates</code> directory.  The "
