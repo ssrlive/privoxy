@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.134 2008/05/21 19:27:25 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.135 2008/05/21 20:12:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.134 2008/05/21 19:27:25 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.135  2008/05/21 20:12:10  fabiankeil
+ *    The whole point of strclean() is to modify the
+ *    first parameter, so don't mark it immutable,
+ *    even though the compiler lets us get away with it.
+ *
  *    Revision 1.134  2008/05/21 19:27:25  fabiankeil
  *    As the wafer actions are gone, we can stop including encode.h.
  *
@@ -2832,7 +2837,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 
       if (*header == NULL)
       {
-         log_error(LOG_LEVEL_HEADER, "Insufficent memory. Last-Modified header got lost, boohoo.");  
+         log_error(LOG_LEVEL_HEADER, "Insufficient memory. Last-Modified header got lost, boohoo.");  
       }
       else
       {
@@ -2891,7 +2896,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 
             if (*header == NULL)
             {
-               log_error(LOG_LEVEL_ERROR, "Insufficent memory, header crunched without replacement.");
+               log_error(LOG_LEVEL_ERROR, "Insufficient memory, header crunched without replacement.");
                return JB_ERR_MEMORY;  
             }
 
@@ -3127,7 +3132,7 @@ static jb_err client_accept_language(struct client_state *csp, char **header)
       if (*header == NULL)
       {
          log_error(LOG_LEVEL_ERROR,
-            "Insufficent memory. Accept-Language header crunched without replacement.");  
+            "Insufficient memory. Accept-Language header crunched without replacement.");  
       }
       else
       {
@@ -3590,7 +3595,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
 
             if (*header == NULL)
             {
-               log_error(LOG_LEVEL_HEADER, "Insufficent memory, header crunched without replacement.");
+               log_error(LOG_LEVEL_HEADER, "Insufficient memory, header crunched without replacement.");
                return JB_ERR_MEMORY;  
             }
 
