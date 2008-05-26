@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.75 2008/03/30 14:52:05 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.76 2008/05/10 09:03:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.75 2008/03/30 14:52:05 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.76  2008/05/10 09:03:16  fabiankeil
+ *    - Merge three string_append() calls.
+ *    - Remove useless assertion.
+ *
  *    Revision 1.75  2008/03/30 14:52:05  fabiankeil
  *    Rename load_actions_file() and load_re_filterfile()
  *    as they load multiple files "now".
@@ -1650,7 +1654,7 @@ struct configuration_spec * load_config(void)
              * to LOG_LEVEL_FATAL.
              */
             log_error(LOG_LEVEL_ERROR, "Ignoring unrecognized directive '%s' (%luul) in line %lu "
-                  "in configuration file (%s).",  buf, hash_string(cmd), linenum, configfile);
+                  "in configuration file (%s).",  buf, directive_hash, linenum, configfile);
             string_append(&config->proxy_args,
                " <strong class='warning'>Warning: ignored unrecognized directive above.</strong><br>");
             continue;
