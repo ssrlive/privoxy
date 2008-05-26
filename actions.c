@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.51 2008/04/27 16:20:19 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.52 2008/04/27 16:26:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.51 2008/04/27 16:20:19 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.52  2008/04/27 16:26:59  fabiankeil
+ *    White space fix for the last commit.
+ *
  *    Revision 1.51  2008/04/27 16:20:19  fabiankeil
  *    Complain about every block action without reason found.
  *
@@ -1082,7 +1085,7 @@ int update_action_bits_for_tag(struct client_state *csp, const char *tag)
             if (merge_current_action(csp->action, b->action))
             {
                log_error(LOG_LEVEL_ERROR,
-                  "Out of memorey while changing action bits");
+                  "Out of memory while changing action bits");
             }
             /* and signal the change. */
             updated = 1;
