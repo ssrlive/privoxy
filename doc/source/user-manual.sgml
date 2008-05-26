@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.72 2008/05/12 10:26:14 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.73 2008/05/23 14:43:18 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.72 2008/05/12 10:26:14 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.73 2008/05/23 14:43:18 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1954,7 +1954,7 @@ for details.
     </para>
     <para>
      The default profiles, and their associated actions, as pre-defined in
-     <filename>standard.action</filename> are<!-- different than this table which is out of date -->:
+     <filename>standard.action</filename> are
     </para>
     <para>
     <table frame=all><title>Default Configurations</title>
@@ -2069,7 +2069,7 @@ for details.
     <row>
       <entry>Image tag reordering</entry>
       <entry>no</entry>
-      <entry>no</entry>
+      <entry>yes</entry>
       <entry>yes</entry>
     </row>
 
@@ -5349,6 +5349,10 @@ new action
     and be aware that using your own redirects might make it
     possible to fingerprint your requests.
    </para>
+   <para>
+    In case of problems with your redirects, or simply to watch
+    them working, enable <link linkend="DEBUG">debug 128</link>.
+   </para>
   </listitem>
  </varlistentry>
 
@@ -5369,7 +5373,20 @@ new action
 # (Note the $ at the end of the URL pattern to make sure
 # the request for the rewritten URL isn't redirected as well)
 {+redirect{s@$@&amp;mode=expanded@}}
-undeadly.org/cgi\?action=article&amp;sid=\d*$</screen>
+undeadly.org/cgi\?action=article&amp;sid=\d*$
+
+# Redirect Google search requests to MSN
+{+redirect{s@^http://[^/]*/search\?q=([^&amp;]*).*@http://search.msn.com/results.aspx?q=$1@}}
+.google.com/search
+
+# Redirect MSN search requests to Yahoo
+{+redirect{s@^http://[^/]*/results\.aspx\?q=([^&amp;]*).*@http://search.yahoo.com/search?p=$1@}}
+search.msn.com//results\.aspx\?q=
+
+# Redirect remote requests for this manual
+# to the local version delivered by Privoxy
+{+redirect{s@^http://www@http://config@}}
+www.privoxy.org/user-manual/</screen>
    </para>
   </listitem>
  </varlistentry>
@@ -8557,6 +8574,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.73  2008/05/23 14:43:18  fabiankeil
+ Remove previously out-commented block that caused syntax problems.
+
  Revision 2.72  2008/05/12 10:26:14  fabiankeil
  Synchronize content filter descriptions with the ones in default.filter.
 
