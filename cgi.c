@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.106 2008/05/21 15:24:38 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.107 2008/05/26 16:23:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -11,7 +11,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.106 2008/05/21 15:24:38 fabiankeil Exp $"
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001-2004, 2006-2007
+ * Copyright   :  Written by and Copyright (C) 2001-2004, 2006-2008
  *                the SourceForge Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.106 2008/05/21 15:24:38 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.107  2008/05/26 16:23:19  fabiankeil
+ *    - Fix spelling in template-not-found message.
+ *    - Declare referrer_is_safe()'s alternative_prefix[] static.
+ *
  *    Revision 1.106  2008/05/21 15:24:38  fabiankeil
  *    Mark csp as immutable for a bunch of functions.
  *
@@ -768,6 +772,9 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "t",
          cgi_transparent_image, 
          NULL, TRUE /* Send a transparent image (short name) */ },
+   { "url-info-osd.xml",
+         cgi_send_url_info_osd, 
+         NULL, TRUE /* Send templates/url-info-osd.xml */ },
    { "user-manual",
           cgi_send_user_manual,
           NULL, TRUE /* Send user-manual */ },

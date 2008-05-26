@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.14 2006/09/06 18:45:03 fabiankeil Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.15 2007/01/23 15:51:17 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -38,6 +38,9 @@
  *
  * Revisions   :
  *    $Log: cgisimple.h,v $
+ *    Revision 1.15  2007/01/23 15:51:17  fabiankeil
+ *    Add favicon delivery functions.
+ *
  *    Revision 1.14  2006/09/06 18:45:03  fabiankeil
  *    Incorporate modified version of Roland Rosenfeld's patch to
  *    optionally access the user-manual via Privoxy. Closes patch 679075.
@@ -147,6 +150,9 @@ extern jb_err cgi_send_default_favicon (struct client_state *csp,
 extern jb_err cgi_send_stylesheet(struct client_state *csp,
                                   struct http_response *rsp,
                                   const struct map *parameters);
+extern jb_err cgi_send_url_info_osd(struct client_state *csp,
+                                    struct http_response *rsp,
+                                    const struct map *parameters);
 extern jb_err cgi_send_user_manual(struct client_state *csp,
                                    struct http_response *rsp,
                                    const struct map *parameters);

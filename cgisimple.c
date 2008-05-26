@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.83 2008/05/12 14:51:30 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.84 2008/05/26 16:16:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.83 2008/05/12 14:51:30 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.84  2008/05/26 16:16:55  fabiankeil
+ *    Spell error correctly.
+ *
  *    Revision 1.83  2008/05/12 14:51:30  fabiankeil
  *    Don't complain about an invalid URL if show-url-info is requested
  *    without parameters. Regression introduced in 1.81 by yours truly.
@@ -978,6 +981,49 @@ jb_err cgi_send_stylesheet(struct client_state *csp,
    return JB_ERR_OK;
 
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  cgi_send_url_info_osd
+ *
+ * Description :  CGI function that sends the OpenSearch Description
+ *                template for the show-url-info page. It allows to
+ *                access the page through "search engine plugins".
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.  
+ *
+ *********************************************************************/
+jb_err cgi_send_url_info_osd(struct client_state *csp,
+                               struct http_response *rsp,
+                               const struct map *parameters)
+{
+   jb_err err = JB_ERR_MEMORY;
+   struct map *exports = default_exports(csp, NULL);
+
+   if (NULL != exports)
+   {
+      err = template_fill_for_cgi(csp, "url-info-osd.xml", exports, rsp);
+      if (JB_ERR_OK == err)
+      {
+         err = enlist(rsp->headers,
+            "Content-Type: application/opensearchdescription+xml");
+      }
+   }
+
+   return err;
+
+}
+
+
 /*********************************************************************
  *
  * Function    :  cgi_send_user_manual
