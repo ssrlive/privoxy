@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.70 2008/05/24 18:26:55 fk Exp $
+# $Id: regression-tests.action,v 1.71 2008/05/26 07:07:20 fk Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -526,6 +526,8 @@ TAG:^Max-Forwards header without TRACE method$
 # Fetch Test = http://p.p/send-banner
 # Fetch Test = http://p.p/send-stylesheet
 # Fetch Test = http://p.p/t
+# Fetch Test = http://p.p/url-info-osd.xml
+
 # Trusted CGI Request = http://p.p/edit-actions
 # Expect Status Code = 302
 # Level = 12 # Depends on the CGI editor being enabled
