@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.135 2008/05/21 20:12:10 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.136 2008/05/26 16:02:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.135 2008/05/21 20:12:10 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.136  2008/05/26 16:02:24  fabiankeil
+ *    s@Insufficent@Insufficient@
+ *
  *    Revision 1.135  2008/05/21 20:12:10  fabiankeil
  *    The whole point of strclean() is to modify the
  *    first parameter, so don't mark it immutable,
@@ -2900,17 +2903,15 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
                return JB_ERR_MEMORY;  
             }
 
-            if (LOG_LEVEL_HEADER & debug) /* Save cycles if the user isn't interested. */
-            {
-               days    = rtime / (3600 * 24);
-               hours   = rtime / 3600 % 24;
-               minutes = rtime / 60 % 60;
-               seconds = rtime % 60;            
+            days    = rtime / (3600 * 24);
+            hours   = rtime / 3600 % 24;
+            minutes = rtime / 60 % 60;
+            seconds = rtime % 60;
 
-               log_error(LOG_LEVEL_HEADER, "Randomized:  %s (added %d da%s %d hou%s %d minut%s %d second%s",
-                  *header, days, (days == 1) ? "y" : "ys", hours, (hours == 1) ? "r" : "rs",
-                  minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
-            }
+            log_error(LOG_LEVEL_HEADER,
+               "Randomized:  %s (added %d da%s %d hou%s %d minut%s %d second%s",
+               *header, days, (days == 1) ? "y" : "ys", hours, (hours == 1) ? "r" : "rs",
+               minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
          }
          else
          {
@@ -3599,16 +3600,15 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                return JB_ERR_MEMORY;  
             }
 
-            if (LOG_LEVEL_HEADER & debug) /* Save cycles if the user isn't interested. */
-            {
-               hours   = rtime / 3600;
-               minutes = rtime / 60 % 60;
-               seconds = rtime % 60;            
+            hours   = rtime / 3600;
+            minutes = rtime / 60 % 60;
+            seconds = rtime % 60;
 
-               log_error(LOG_LEVEL_HEADER, "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
-                  *header, (negative) ? "subtracted" : "added", hours, (hours == 1) ? "r" : "rs",
-                  minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
-            }
+            log_error(LOG_LEVEL_HEADER,
+               "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
+               *header, (negative) ? "subtracted" : "added", hours,
+               (hours == 1) ? "r" : "rs", minutes, (minutes == 1) ? "e" : "es",
+               seconds, (seconds == 1) ? ")" : "s)");
          }
       }
    }
