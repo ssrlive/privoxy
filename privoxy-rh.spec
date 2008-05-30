@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.55 2008/03/02 17:36:43 fabiankeil Exp $
+# $Id: privoxy-rh.spec,v 1.56 2008/03/16 14:17:25 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -35,7 +35,7 @@
 
 Name: privoxy
 # ATTENTION
-# Version and release should be updated acordingly on configure.in and
+# Version and release should be updated accordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
 Version: 3.0.9
 Release: 1
@@ -316,6 +316,7 @@ fi
 %config %{privoxyconf}/templates/toggle
 %config %{privoxyconf}/templates/toggle-mini
 %config %{privoxyconf}/templates/untrusted
+%config %{privoxyconf}/templates/url-info-osd.xml
 
 # Attention, new defattr change here !
 %defattr(0644,root,root,0755)
@@ -762,6 +763,10 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.56  2008/03/16 14:17:25  fabiankeil
+# Add %config lines for regression-tests.action and forwarding-failed.
+# This might or might not help with #1915185, reported by Bernardo Bacic.
+#
 # Revision 1.55  2008/03/02 17:36:43  fabiankeil
 # Set version to 3.0.9.
 #
