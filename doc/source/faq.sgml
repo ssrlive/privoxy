@@ -8,10 +8,10 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.8">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-version "3.0.9">
+<!entity p-status "UNRELEASED">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.39 2008/02/03 21:37:41 hal9 Exp $
+ $Id: faq.sgml,v 2.40 2008/02/22 05:54:27 markm68k Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.39 2008/02/03 21:37:41 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.40 2008/02/22 05:54:27 markm68k Exp $</pubdate>
 
 <!--
 
@@ -193,14 +193,12 @@ me?</title>
 Privoxy work? </title>
  <para>
   A  <ulink url="http://en.wikipedia.org/wiki/Proxy_server">web proxy</ulink>
-  is a service, based on a software such as
-  <application>Privoxy</application>, that clients (i.e. browsers) can use
-  instead of connecting directly to web servers on the Internet. The
-  clients then ask the proxy to fetch the objects they need (web pages,
-  images, movies etc) on their behalf, and when the proxy has done so, it
-  hands the results back to the client. It is a <quote>go-between</quote>. See
-  the <ulink url="http://en.wikipedia.org/wiki/Proxy_server">Wikipedia proxy
-  definition</ulink> for more.
+  is a service, based on a software such as &my-app;, that clients
+  (i.e. browsers) can use instead of connecting to web servers directly.
+  The clients then ask the proxy to request objects (web pages, images, movies etc)
+  on their behalf and to forward the data to the clients.
+  It is a <quote>go-between</quote>. For details, see
+  <ulink url="http://en.wikipedia.org/wiki/Proxy_server">Wikipedia's proxy definition</ulink>.
  </para>
  <para>
   There are many reasons to use web proxies, such as security (firewalling),
@@ -208,9 +206,9 @@ Privoxy work? </title>
   to accommodate those needs.
  </para>
  <para>
-  <application>Privoxy</application> is a proxy that is primarily focused on privacy
-  protection, ad and junk elimination and freeing the user from restrictions placed on his 
-  activities. Sitting between your browser(s) and the Internet,
+  &my-app; is a proxy that is primarily focused on
+  privacy enhancement, ad and junk elimination and freeing the user from
+  restrictions placed on his activities. Sitting between your browser(s) and the Internet,
   it is in a perfect position to filter outbound personal information that your
   browser is leaking, as well as inbound junk. It uses a variety of techniques to do
   this, all of which are under your complete control via the various configuration
@@ -273,7 +271,7 @@ Junkbuster at all?</title>
 from the old Junkbuster?</title> 
 <para>
  <application>Privoxy</application> picks up where
- <application>Junkbuster</application> left off. All the old features remain.
+ <application>Junkbuster</application> left off.
  The new <application>Privoxy</application> still blocks ads and banners,
  still manages <ulink
  url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>, and still
@@ -2811,6 +2809,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.40  2008/02/22 05:54:27  markm68k
+updates for mac os x
+
 Revision 2.39  2008/02/03 21:37:41  hal9
 Apply patch from Mark: s/OSX/OS X/
 
