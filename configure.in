@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.114 2008/04/06 15:18:33 fabiankeil Exp $
+dnl $Id: configure.in,v 1.115 2008/05/25 15:50:14 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2008 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,10 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.115  2008/05/25 15:50:14  fabiankeil
+dnl Try to use zlib by default, but just show a warning if it's
+dnl unavailable. Remove --enable-zlib, add  --disable-zlib.
+dnl
 dnl Revision 1.114  2008/04/06 15:18:33  fabiankeil
 dnl Oh well, rename the --enable-pcre-host-patterns option to
 dnl --enable-extended-host-patterns as it's not really PCRE syntax.
@@ -525,7 +529,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.114 $)
+AC_REVISION($Revision: 1.115 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1378,7 +1382,8 @@ if test $have_pcre = "yes"; then
   STATIC_PCRE_ONLY=#
   LIBS="$LIBS -lpcre -lpcreposix"
 else
-  echo "using built-in static pcre"
+  AC_MSG_WARN([You are using the static PCRE code which is scheduled for removal, for details see: 
+    https://sourceforge.net/mailarchive/message.php?msg_id=20080511195555.2dc6cfdc%40fabiankeil.de])
   pcre_dyn=no
   AC_DEFINE(STATIC_PCRE)
   STATIC_PCRE_ONLY=
@@ -1397,7 +1402,7 @@ dnl  echo "using libpcrs"
 dnl  STATIC_PCRS_ONLY=#
 dnl  LIBS="$LIBS -lpcrs"
 dnl else
-  echo "using built-in static pcrs"
+dnl  echo "using built-in static pcrs"
   AC_DEFINE(STATIC_PCRS)
   STATIC_PCRS_ONLY=
 dnl fi
