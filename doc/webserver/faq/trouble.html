@@ -535,18 +535,18 @@ CLASS="SECT2"
 ><A
 NAME="MACOSXUNINSTALL"
 >5.8. In Mac OS X, I dragged the Privoxy folder to the trash in order to 
- uninstall it.  Now the finder tells me I don't have sufficient privileges to
+ uninstall it. Now the finder tells me I don't have sufficient privileges to
  empty the trash.</A
 ></H3
 ><P
 > Note: This ONLY applies to privoxy 3.0.6 and earlier.
  </P
 ><P
-> Just dragging the <SPAN
+>  Just dragging the <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > folder to the trash is
-  not enough to delete it.  <SPAN
+  not enough to delete it. <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > supplies an
@@ -554,11 +554,11 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >uninstall.command</SPAN
 > file that takes care of
-  these details.  Open the trash, drag the <SPAN
+  these details. Open the trash, drag the <SPAN
 CLASS="APPLICATION"
 >uninstall.command</SPAN
 >
-  file out of the trash and double-click on it.  You will be prompted for
+  file out of the trash and double-click on it. You will be prompted for
   confirmation and the administration password.
  </P
 ><P
@@ -710,6 +710,13 @@ CLASS="FILENAME"
  file. If this file has been changed from the original, try reverting it to
  see if that helps. Make sure whatever name(s) are used for the local system,
  that they resolve both ways.</P
+><P
+> You should also be able to work around the problem with the
+ <A
+HREF="../user-manual/config.html#HOSTNAME"
+TARGET="_top"
+>hostname option</A
+>.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -912,7 +919,7 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 >
  merely initiates the process and hands it off, and then later reports
- whatever the outcome was. And tries to give a coherent message if there seems
+ whatever the outcome was and tries to give a coherent message if there seems
  to be a problem. In some cases, this might otherwise be mitigated by the
  browser itself which might try some work-arounds and alternate approaches (e.g
  adding <SPAN
@@ -966,16 +973,21 @@ CLASS="APPLICATION"
 >Privoxy's</SPAN
 > page filtering
  mechanism is trying to match against absurdly long strings and this becomes
- very CPU-intensive, taking a long, long time to complete. Until a better
- solution comes along, disable filtering on these pages, particularly the
- <TT
+ very CPU-intensive, taking a long, long time to complete.</P
+><P
+> Until a better solution comes along, disable filtering on these pages,
+ particularly the <TT
 CLASS="LITERAL"
 >js-annoyances</TT
-> and <TT
+> and
+ <TT
 CLASS="LITERAL"
 >unsolicited-popups</TT
->
- filters.</P
+> filters. If you run into this problem
+ with a recent <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version, please send a problem report.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -991,7 +1003,11 @@ browsing has slowed to a crawl. What gives?</A
  it does not happen. I would suspect some inadvertent interaction of software
  components such as anti-virus software, spyware protectors, personal
  firewalls or similar components. Try disabling (or uninstalling) these one
- at a time and see if that helps.</P
+ at a time and see if that helps. Either way, if you are using a
+ recent <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> version, please report the problem.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
