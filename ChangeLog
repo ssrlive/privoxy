@@ -1,9 +1,10 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Since 3.0.8 ***
+*** Version 3.0.9 Beta ***
 
-- Added SOCKS5 support. Patch provided by Eric M. Hopper.
+- Added SOCKS5 support (with address resolution done by
+  the SOCKS5 server). Patch provided by Eric M. Hopper.
 - The "blocked" CGI pages include a block reason that was
   provided as argument to the last-applying block action.
 - If enable-edit-actions is disabled (the default since 3.0.7 beta)
@@ -23,6 +24,18 @@ ChangeLog for Privoxy
 - Action settings for multiple patterns in the same section are
   shared in memory. As a result these sections take up less space
   (and are loaded slightly faster). Problem reported by Franz Schwartau.
+- Linear white space in HTTP headers will be normalized to single
+  spaces before parsing the header's content, headers split across
+  multiple lines get merged first. This should prevent problems like:
+   * letting the session-cookies-only action slip
+     some Cookies through unmodified,
+   * only suppressing the first line of a header,
+     thus creating an invalid one, and
+   * to incorrectly block headers with valid timestamps
+     that weren't properly recognized.
+  Headers that could trigger these problems are unlikely to appear
+  in "normal" web traffic, but could be intentionally generated to
+  fool some of Privoxy's header parsers.
 - Host information is gathered outside the main thread so it's less
   likely to delay other incoming connections if the host is misconfigured.
 - New config option "hostname" to use a hostname other than
@@ -49,13 +62,20 @@ ChangeLog for Privoxy
   filters active but the prevent-compression action is disabled,
   the show-url-info page includes a warning that compression
   might prevent filtering.
+- The show-url-info page provides an OpenSearch Description that
+  allows to access the page through browser search plugins.
 - The obsolete kill-popups action has been removed as the
-  PCRS-based popup filters can do the same and are less
-  unreliable.
+  PCRS-based popup filters can do the same and are slightly
+  less unreliable.
 - The inspect-jpegs action has been removed.
 - The send-wafer and send-vanilla-wafer actions have been removed.
   They weren't particular useful and their behaviour could be emulated
   with add-header anyway.
+- Privoxy-Regression-Test has been significantly improved.
+- Most sections in the default.action file contain tests for
+  Privoxy-Regression-Test to verify that they are working as intended.
+- Parts of Privoxy have been refactored to increase maintainability.
+- Building with zlib (if available) is done by default.
 
 *** Version 3.0.8 ***
 
@@ -566,7 +586,7 @@ being a mix of "U.S. English", "U.K. English" and "Irish English".
 
 
 ----------------------------------------------------------------------
-Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
                Privoxy team. http://www.privoxy.org/
 
                Based on the Internet Junkbuster originally written
