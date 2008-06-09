@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.167 2008/05/23 14:39:09 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.168 2008/05/23 18:03:12 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -55,6 +55,7 @@ SNAPVERSION   = $(RPM_VERSION)-$(shell date "+%Y%m%d")
 USER         = @USER@
 GROUP	   = @GROUP@
 
+datarootdir  = @datarootdir@
 prefix       = @prefix@
 exec_prefix  = @exec_prefix@
 CONF_BASE    = @sysconfdir@
@@ -452,7 +453,7 @@ redhat-upload: check-release
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) https://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
      # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
@@ -492,7 +493,7 @@ suse-upload: check-release
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) https://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
 
@@ -547,7 +548,7 @@ gen-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming ../privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) https://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
 
@@ -643,7 +644,7 @@ tarball-upload:
 	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming ../privoxy-$(VERSION)-$(CODE_STATUS)-src.tar.gz
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) Now goto
-	@$(ECHO) http://sourceforge.net/project/admin/editpackages.php?group_id=11118
+	@$(ECHO) https://sourceforge.net/project/admin/editpackages.php?group_id=11118
 	@$(ECHO) ... and release the files.
 	@$(ECHO) -------------------------------------------------------
 
@@ -1371,6 +1372,12 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.168  2008/05/23 18:03:12  fabiankeil
+# - Shorten meta description inserted in dok-webserver
+#   and dok-index target.
+# - In config-file target, unset LANG for w3m as we
+#   might otherwise end up with multi-byte characters.
+#
 # Revision 1.167  2008/05/23 14:39:09  fabiankeil
 # Silence dok-user complaint about @# not being found.
 #
