@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.168 2008/05/23 18:03:12 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.169 2008/06/09 17:28:31 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -948,7 +948,7 @@ dok-put:
 
 dok-get:
 	cd /tmp ;\
-	$(WGET) http://privoxy.org/docs/$(DOC_FILE) ;\
+	$(WGET) http://www.privoxy.org/docs/$(DOC_FILE) ;\
 	$(TAR) -zxvf $(DOC_FILE)
 
 
@@ -1372,6 +1372,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.169  2008/06/09 17:28:31  fabiankeil
+# - Recommend https for releasing files.
+# - Fix a warning about datarootdir being ignored.
+#
 # Revision 1.168  2008/05/23 18:03:12  fabiankeil
 # - Shorten meta description inserted in dok-webserver
 #   and dok-index target.
