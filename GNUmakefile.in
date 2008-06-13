@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.169 2008/06/09 17:28:31 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.170 2008/06/12 16:38:50 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2007 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -854,27 +854,7 @@ dok-pdf: dok-shtml
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
 	env -u LANG w3m -dump __tmp.html | fmt -w 70 > ../../config.new && $(RM) -r __tmp.*
-	$(PERL) -pi.bak \
-		-e 's/^1\. \@\@TITLE\@\@/     /i;'		\
-	        -e '/^\d\.\d\.\s+/ && tr/[a-z]/[A-Z]/;'		\
-	        -e 'my $$hit_header;'				\
-	        -e '$$header_len=0 unless $$hit_header;'	\
-	        -e 'if ($$hit_header) {'			\
-	        -e '	print "#  ";'				\
-	        -e '	for ($$i=1; $$i < $$header_len; $$i++)'	\
-		-e '		{print "=";}'			\
-	        -e '	print "\n";'				\
-	        -e '};'						\
-	        -e '$$hit_header=0;'				\
-	        -e '$$hit_header=1 if m/^(\d\.)(\d\.)(\d\.)?\s/ && s/^(\d\.)//;'\
-	        -e '$$header_len = length($$_);'		\
-		-e 's/^/#  /;  /^#  #{12,}/ && s/^#  #/####/;'	\
-	        -e 's/^.*$$// if $$hit_option;'			\
-	        -e '$$hit_option=0;'				\
-	        -e 's/^\n//;'					\
-		-e 's/^#\s*-{20,}//;'				\
-		-e 's/ *$$//;'					\
-	        -e '$$hit_option=1 if s/^#\s+@@//;' config.new
+	$(PERL) -i.bak utils/prepare-configfile.pl config.new
 
 	$(RM) *.bak
 	@$(ECHO)  "****************************************************"
@@ -1372,6 +1352,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.170  2008/06/12 16:38:50  fabiankeil
+# Add third-level domain to URL in dok-get target.
+#
 # Revision 1.169  2008/06/09 17:28:31  fabiankeil
 # - Recommend https for releasing files.
 # - Fix a warning about datarootdir being ignored.
