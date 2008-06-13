@@ -70,6 +70,7 @@
 #
 #
 #  1. LOCAL SET-UP DOCUMENTATION
+#  ==============================
 #
 #  If you intend to operate Privoxy for more users than just yourself,
 #  it might be a good idea to let them know how to reach you, what
@@ -78,6 +79,7 @@
 #
 #
 #  1.1. user-manual
+#  =================
 #
 #  Specifies:
 #
@@ -132,6 +134,7 @@
 #
 #
 #  1.2. trust-info-url
+#  ====================
 #
 #  Specifies:
 #
@@ -168,6 +171,7 @@ trust-info-url  http://www.example.com/what_we_allow.html
 #
 #
 #  1.3. admin-address
+#  ===================
 #
 #  Specifies:
 #
@@ -196,6 +200,7 @@ trust-info-url  http://www.example.com/what_we_allow.html
 #
 #
 #  1.4. proxy-info-url
+#  ====================
 #
 #  Specifies:
 #
@@ -227,6 +232,7 @@ trust-info-url  http://www.example.com/what_we_allow.html
 #
 #
 #  2. CONFIGURATION AND LOG FILE LOCATIONS
+#  ========================================
 #
 #  Privoxy can (and normally does) use a number of other files for
 #  additional configuration, help and logging. This section of the
@@ -239,6 +245,7 @@ trust-info-url  http://www.example.com/what_we_allow.html
 #
 #
 #  2.1. confdir
+#  =============
 #
 #  Specifies:
 #
@@ -264,6 +271,7 @@ confdir .
 #
 #
 #  2.2. templdir
+#  ==============
 #
 #  Specifies:
 #
@@ -293,6 +301,7 @@ confdir .
 #
 #
 #  2.3. logdir
+#  ============
 #
 #  Specifies:
 #
@@ -319,6 +328,7 @@ logdir .
 #
 #
 #  2.4. actionsfile
+#  =================
 #
 #  Specifies:
 #
@@ -366,6 +376,7 @@ actionsfile user.action      # User customizations
 #
 #
 #  2.5. filterfile
+#  ================
 #
 #  Specifies:
 #
@@ -410,6 +421,7 @@ filterfile default.filter
 #
 #
 #  2.6. logfile
+#  =============
 #
 #  Specifies:
 #
@@ -457,6 +469,7 @@ logfile logfile
 #
 #
 #  2.7. jarfile
+#  =============
 #
 #  Specifies:
 #
@@ -489,6 +502,7 @@ logfile logfile
 #
 #
 #  2.8. trustfile
+#  ===============
 #
 #  Specifies:
 #
@@ -545,6 +559,7 @@ logfile logfile
 #
 #
 #  3. DEBUGGING
+#  =============
 #
 #  These options are mainly useful when tracing a problem. Note that
 #  you might also want to invoke Privoxy with the --no-daemon command
@@ -553,6 +568,7 @@ logfile logfile
 #
 #
 #  3.1. debug
+#  ===========
 #
 #  Specifies:
 #
@@ -624,6 +640,7 @@ logfile logfile
 #
 #
 #  3.2. single-threaded
+#  =====================
 #
 #  Specifies:
 #
@@ -651,6 +668,7 @@ logfile logfile
 #
 #
 #  3.3. hostname
+#  ==============
 #
 #  Specifies:
 #
@@ -685,6 +703,7 @@ logfile logfile
 #
 #
 #  4. ACCESS CONTROL AND SECURITY
+#  ===============================
 #
 #  This section of the config file controls the security-relevant
 #  aspects of Privoxy's configuration.
@@ -692,6 +711,7 @@ logfile logfile
 #
 #
 #  4.1. listen-address
+#  ====================
 #
 #  Specifies:
 #
@@ -744,6 +764,7 @@ listen-address  127.0.0.1:8118
 #
 #
 #  4.2. toggle
+#  ============
 #
 #  Specifies:
 #
@@ -775,6 +796,7 @@ toggle  1
 #
 #
 #  4.3. enable-remote-toggle
+#  ==========================
 #
 #  Specifies:
 #
@@ -816,6 +838,7 @@ enable-remote-toggle  0
 #
 #
 #  4.4. enable-remote-http-toggle
+#  ===============================
 #
 #  Specifies:
 #
@@ -854,6 +877,7 @@ enable-remote-http-toggle  0
 #
 #
 #  4.5. enable-edit-actions
+#  =========================
 #
 #  Specifies:
 #
@@ -894,6 +918,7 @@ enable-edit-actions 0
 #
 #
 #  4.6. enforce-blocks
+#  ====================
 #
 #  Specifies:
 #
@@ -942,6 +967,7 @@ enforce-blocks 0
 #
 #
 #  4.7. ACLs: permit-access and deny-access
+#  =========================================
 #
 #  Specifies:
 #
@@ -1026,6 +1052,7 @@ enforce-blocks 0
 #
 #
 #  4.8. buffer-limit
+#  ==================
 #
 #  Specifies:
 #
@@ -1061,6 +1088,7 @@ buffer-limit 4096
 #
 #
 #  5. FORWARDING
+#  ==============
 #
 #  This feature allows routing of HTTP requests through a chain of
 #  multiple proxies.
@@ -1083,6 +1111,7 @@ buffer-limit 4096
 #
 #
 #  5.1. forward
+#  =============
 #
 #  Specifies:
 #
@@ -1134,6 +1163,7 @@ buffer-limit 4096
 #
 #
 #  5.2. forward-socks4, forward-socks4a and forward-socks5
+#  ========================================================
 #
 #  Specifies:
 #
@@ -1224,6 +1254,7 @@ buffer-limit 4096
 #
 #
 #  5.3. forwarded-connect-retries
+#  ===============================
 #
 #  Specifies:
 #
@@ -1270,6 +1301,7 @@ forwarded-connect-retries  0
 #
 #
 #  5.4. accept-intercepted-requests
+#  =================================
 #
 #  Specifies:
 #
@@ -1308,6 +1340,7 @@ accept-intercepted-requests 0
 #
 #
 #  5.5. allow-cgi-request-crunching
+#  =================================
 #
 #  Specifies:
 #
@@ -1345,6 +1378,7 @@ allow-cgi-request-crunching 0
 #
 #
 #  5.6. split-large-forms
+#  =======================
 #
 #  Specifies:
 #
@@ -1386,21 +1420,22 @@ split-large-forms 0
 #
 #
 #  6. WINDOWS GUI OPTIONS
+#  =======================
 #
 #  Privoxy has a number of options specific to the Windows GUI
 #  interface:
 #
-
+#
 #  If "activity-animation" is set to 1, the Privoxy icon will animate
 #  when "Privoxy" is active. To turn off, set to 0.
 #
 #activity-animation   1
-
+#
 #  If "log-messages" is set to 1, Privoxy will log messages to the
 #  console window:
 #
 #log-messages   1
-
+#
 #  If "log-buffer-size" is set to 1, the size of the log buffer,
 #  i.e. the amount of memory used for the log messages displayed in
 #  the console window, will be limited to "log-max-lines" (see below).
@@ -1409,36 +1444,36 @@ split-large-forms 0
 #  infinitely and eat up all your memory!
 #
 #log-buffer-size 1
-
+#
 #  log-max-lines is the maximum number of lines held in the log
 #  buffer. See above.
 #
 #log-max-lines 200
-
+#
 #  If "log-highlight-messages" is set to 1, Privoxy will highlight
 #  portions of the log messages with a bold-faced font:
 #
 #log-highlight-messages 1
-
+#
 #  The font used in the console window:
 #
 #log-font-name Comic Sans MS
-
+#
 #  Font size used in the console window:
 #
 #log-font-size 8
-
+#
 #  "show-on-task-bar" controls whether or not Privoxy will appear as
 #  a button on the Task bar when minimized:
 #
 #show-on-task-bar 0
-
+#
 #  If "close-button-minimizes" is set to 1, the Windows close button
 #  will minimize Privoxy instead of closing the program (close with
 #  the exit option on the File menu).
 #
 #close-button-minimizes 1
-
+#
 #  The "hide-console" option is specific to the MS-Win console version
 #  of Privoxy.  If this option is used, Privoxy will disconnect from
 #  and hide the command console.
