@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.73 2008/05/23 14:43:18 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.74 2008/05/26 15:55:46 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.73 2008/05/23 14:43:18 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.74 2008/05/26 15:55:46 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -436,153 +436,178 @@ How to install the binary packages depends on your operating system:
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- There are many improvements and new features since <application>Privoxy 3.0.6</application>, the last stable release:
+ There are many improvements and new features since <application>Privoxy 3.0.8</application>, the last stable release:
 </para>
 
 <para>
  <itemizedlist>
   <listitem>
    <para>
-    Two new actions <link
-          linkend="server-header-tagger">server-header-tagger</link>
-          and <link
-          linkend="client-header-tagger">client-header-tagger</link>
-          that can be used to create arbitrary <quote>tags</quote>
-          based on client and server headers.
-          These <quote>tags</quote> can then subsequently be used
-          to control the other actions used for the current request,
-          greatly increasing &my-app;'s flexibility and selectivity. See <link
-          linkend="tag-pattern">tag patterns</link> for more information on tags.
-   </para>
-  </listitem>
-
-  <listitem>
-   <para>
-    Header filtering is done with dedicated header filters now. As a result
-    the actions <quote>filter-client-headers</quote> and <quote>filter-server-headers</quote>
-    that were introduced with <application>Privoxy 3.0.5</application> to apply
-    content filters to the headers have been removed.
-    See the new actions <link
-          linkend="server-header-filter">server-header-filter</link>
-          and <link
-          linkend="client-header-filter">client-header-filter</link> for details.
+    Added SOCKS5 support (with address resolution done by
+    the SOCKS5 server). Patch provided by Eric M. Hopper.
    </para>
   </listitem>
   <listitem>
    <para>
-     There are four new options for the main <filename>config</filename> file:
+    The "blocked" CGI pages include a block reason that was
+    provided as argument to the last-applying block action.
    </para>
-
-     <itemizedlist>
-       <listitem>
-        <para>
-          <link
-          linkend="allow-cgi-request-crunching">allow-cgi-request-crunching</link>
-          which allows requests for Privoxy's internal CGI pages to be
-          blocked, redirected or (un)trusted like ordinary requests.
-        </para>
-       </listitem>
-       <listitem>
-        <para>
-          <link
-          linkend="split-large-forms">split-large-forms</link>
-          that will work around a browser bug that caused IE6 and IE7 to
-          ignore the Submit button on the Privoxy's edit-actions-for-url CGI
-          page.
-          </para>
-       </listitem>
-       <listitem>
-        <para>
-          <link
-          linkend="accept-intercepted-requests">accept-intercepted-requests</link>
-          which allows to combine Privoxy with any packet filter to create an
-          intercepting proxy for HTTP/1.1 requests (and for HTTP/1.0 requests
-          with Host header set). This means clients can be forced to use
-          &my-app; even if their proxy settings are configured differently.
-         </para>
-       </listitem>
-       <listitem>
-        <para>
-          <link
-          linkend="templdir">templdir</link>
-          to designate an alternate location for &my-app;'s 
-          locally customized CGI templates so that
-          these are not overwritten during upgrades.         
-        </para>
-       </listitem>
-       </itemizedlist>
-    </listitem>
-
+  </listitem>
   <listitem>
    <para>
-   A new command line option <literal>--pre-chroot-nslookup hostname</literal> to
-   initialize the resolver library before chroot'ing. On some systems this
-   reduces the number of files that must be copied into the chroot tree.
-   (Patch provided by Stephen Gildea)
+    If enable-edit-actions is disabled (the default since 3.0.7 beta)
+    the show-status page hides the edit buttons and explains why.
+    Previously the user would get the "this feature has been disabled"
+    message after using the edit button.
    </para>
   </listitem>
-
   <listitem>
    <para>
-     The <link
-          linkend="forward-override">forward-override</link> action 
-     allows changing of the forwarding settings through the actions files.
-     Combined with tags, this allows to choose the forwarder based on
-     client headers like the <literal>User-Agent</literal>, or the request origin.
-  </para>
+    Forbidden CONNECT requests are treated like blocks by default.
+    The now-pointless treat-forbidden-connects-like-blocks action
+    has been removed.
+   </para>
   </listitem>
-
   <listitem>
    <para>
-     The  <link
-          linkend="redirect">redirect</link> action can now use regular
-          expression substitutions against the original URL.
+    Not enabling limit-connect now allows CONNECT requests to all ports.
+    In previous versions it would only allow CONNECT requests to port 443.
+    Use +limit-connect{443} if you think you need the old default behaviour.
    </para>
   </listitem>
-
   <listitem>
    <para>
-     <application>zlib</application> support is now available as a compile
-     time option to filter compressed content. Patch provided by Wil Mahan.
+    The CGI editor gets turned off after three edit requests with invalid
+    file modification timestamps. This makes life harder for attackers
+    who can leverage browser bugs to send fake Referers and intend to
+    brute-force edit URLs.
    </para>
   </listitem>
-    <listitem>
-    <para>
-     Improve various filters, and add new ones.
-   </para>
-  </listitem>
-
-
   <listitem>
    <para>
-    Include support for RFC 3253 so that <filename>Subversion</filename> works
-    with &my-app;. Patch provided by Petr Kadlec.
+    Action settings for multiple patterns in the same section are
+    shared in memory. As a result these sections take up less space
+    (and are loaded slightly faster). Problem reported by Franz Schwartau.
    </para>
   </listitem>
-
   <listitem>
    <para>
-     Logging can be completely turned off by not specifying a logfile directive.
+    Linear white space in HTTP headers will be normalized to single
+    spaces before parsing the header's content, headers split across
+    multiple lines get merged first.
    </para>
   </listitem>
-
-
   <listitem>
    <para>
-     A number of improvements to Privoxy's internal CGI pages, including the
-     use of favicons for error and control pages.
+    Host information is gathered outside the main thread so it's less
+    likely to delay other incoming connections if the host is misconfigured.
    </para>
   </listitem>
-
   <listitem>
    <para>
-     Many bugfixes, memory leaks addressed, code improvements, and logging 
-     improvements.
+    New config option "hostname" to use a hostname other than
+    the one returned by the operating system. Useful to speed-up responses
+    for CGI requests on misconfigured systems. Requested by Max Khon.
    </para>
   </listitem>
-
+  <listitem>
+   <para>
+    The CGI editor supports the "disable all filters of this type"
+    directives "-client-header-filter", "-server-header-filter",
+    "-client-header-tagger" and "-server-header-tagger".
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Fixed false-positives with the link-by-url filter and URLs that
+    contain the pattern "/jump/".
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The less-download-windows filter no longer messes
+    "Content-Type: application/x-shockwave-flash" headers up.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    In the show-url-info page's "Final results" section active and
+    inactive actions are listed separately. Patch provided by Lee.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The GNUmakefile supports the DESTDIR variable. Patch for
+    the install target submitted by Radoslaw Zielinski.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Embedding the content of configuration files in the show-status
+    page is significantly faster now. For a largish action file (1 MB)
+    a speedup of about 2450 times has been measured. This is mostly
+    interesting if you are using large action files or regularly use
+    Privoxy-Regression-Test while running Privoxy through Valgrind,
+    for stock configuration files it doesn't really matter.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    If zlib support is unavailable and there are content
+    filters active but the prevent-compression action is disabled,
+    the show-url-info page includes a warning that compression
+    might prevent filtering.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The show-url-info page provides an OpenSearch Description that
+    allows to access the page through browser search plugins.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The obsolete kill-popups action has been removed as the
+    PCRS-based popup filters can do the same and are slightly
+    less unreliable.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The inspect-jpegs action has been removed.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The send-wafer and send-vanilla-wafer actions have been removed.
+    They weren't particular useful and their behaviour could be emulated
+    with add-header anyway.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Privoxy-Regression-Test has been significantly improved.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Most sections in the default.action file contain tests for
+    Privoxy-Regression-Test to verify that they are working as intended.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Parts of Privoxy have been refactored to increase maintainability.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Building with zlib (if available) is done by default.
+   </para>
+  </listitem>
  </itemizedlist>
 </para>
+
 <para>
  For a more detailed list of changes please have a look at the ChangeLog.
 </para>
@@ -8574,6 +8599,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.74  2008/05/26 15:55:46  fabiankeil
+ - Update "default profiles" table.
+ - Add some more pcrs redirect examples and note that
+   enabling debug 128 helps to get redirects working.
+
  Revision 2.73  2008/05/23 14:43:18  fabiankeil
  Remove previously out-commented block that caused syntax problems.
 
