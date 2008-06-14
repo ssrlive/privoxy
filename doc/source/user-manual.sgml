@@ -12,7 +12,7 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.9">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.74 2008/05/26 15:55:46 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.75 2008/06/13 16:06:48 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.74 2008/05/26 15:55:46 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.75 2008/06/13 16:06:48 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8599,6 +8599,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.75  2008/06/13 16:06:48  fabiankeil
+ Update the "What's New in this Release" section with
+ the ChangeLog entries changelog2doc.pl could handle.
+
  Revision 2.74  2008/05/26 15:55:46  fabiankeil
  - Update "default profiles" table.
  - Add some more pcrs redirect examples and note that

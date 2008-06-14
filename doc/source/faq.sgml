@@ -9,7 +9,7 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.9">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.41 2008/06/06 15:32:09 fabiankeil Exp $
+ $Id: faq.sgml,v 2.42 2008/06/07 13:11:15 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.41 2008/06/06 15:32:09 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.42 2008/06/07 13:11:15 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2817,6 +2817,15 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.42  2008/06/07 13:11:15  fabiankeil
+- Note that the "100% cpu problem" is worth
+  reporting if it happens with a recent release.
+- Mention the hostname option as a workaround for
+  the "can't get my own hostname" issue.
+- The profile formerly known as "Adventuresome"
+  is called "Advanced" now.
+- Some white-space fixes.
+
 Revision 2.41  2008/06/06 15:32:09  fabiankeil
 - Minor rewordings.
 - Don't claim that all the old Junkbuster features remain.
