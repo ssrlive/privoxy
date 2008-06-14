@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.127 2008/05/11 14:58:39 fabiankeil Exp $
+#  $Id: default.action.master,v 1.128 2008/05/12 09:44:40 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1758,6 +1758,8 @@ javabog.dk/ijk/
 .w3.org
 # URL = http://www.encyclopediadramatica.com/New_Zealand_Fail_Guy
 .encyclopediadramatica.com/
+# URL = http://www.ikea.com/us/en/catalog/products/00103102
+.ikea.com/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
