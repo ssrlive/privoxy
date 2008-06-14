@@ -262,7 +262,7 @@ CLASS="FILENAME"
 >    <DIV
 CLASS="TABLE"
 ><A
-NAME="AEN2207"
+NAME="AEN2199"
 ></A
 ><P
 ><B
@@ -420,7 +420,7 @@ TITLE="C4"><THEAD
 ><TD
 >no</TD
 ><TD
->no</TD
+>yes</TD
 ><TD
 >yes</TD
 ></TR
@@ -531,7 +531,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2306"
+NAME="AEN2298"
 >8.1. Finding the Right Mix</A
 ></H2
 ><P
@@ -566,7 +566,7 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="AEN2313"
+NAME="AEN2305"
 >8.2. How to Edit</A
 ></H2
 ><P
@@ -896,7 +896,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2404"
+NAME="AEN2396"
 >8.4.1. The Domain Pattern</A
 ></H3
 ><P
@@ -1136,7 +1136,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN2480"
+NAME="AEN2472"
 >8.4.2. The Path Pattern</A
 ></H3
 ><P
@@ -5994,6 +5994,13 @@ HREF="actions-file.html#FAST-REDIRECTS"
     and be aware that using your own redirects might make it
     possible to fingerprint your requests.
    </P
+><P
+>    In case of problems with your redirects, or simply to watch
+    them working, enable <A
+HREF="config.html#DEBUG"
+>debug 128</A
+>.
+   </P
 ></DD
 ><DT
 >Example usages:</DT
@@ -6023,7 +6030,20 @@ CLASS="APPLICATION"
 # (Note the $ at the end of the URL pattern to make sure
 # the request for the rewritten URL isn't redirected as well)
 {+redirect{s@$@&#38;mode=expanded@}}
-undeadly.org/cgi\?action=article&#38;sid=\d*$</PRE
+undeadly.org/cgi\?action=article&#38;sid=\d*$
+
+# Redirect Google search requests to MSN
+{+redirect{s@^http://[^/]*/search\?q=([^&#38;]*).*@http://search.msn.com/results.aspx?q=$1@}}
+.google.com/search
+
+# Redirect MSN search requests to Yahoo
+{+redirect{s@^http://[^/]*/results\.aspx\?q=([^&#38;]*).*@http://search.yahoo.com/search?p=$1@}}
+search.msn.com//results\.aspx\?q=
+
+# Redirect remote requests for this manual
+# to the local version delivered by Privoxy
+{+redirect{s@^http://www@http://config@}}
+www.privoxy.org/user-manual/</PRE
 ></TD
 ></TR
 ></TABLE
@@ -6659,7 +6679,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4101"
+NAME="AEN4095"
 >8.5.34. Summary</A
 ></H3
 ><P
@@ -6958,7 +6978,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4164"
+NAME="AEN4158"
 >8.7.1. default.action</A
 ></H3
 ><P
@@ -7673,7 +7693,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4298"
+NAME="AEN4292"
 >8.7.2. user.action</A
 ></H3
 ><P
