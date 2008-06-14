@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.75 2008/06/13 16:06:48 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.76 2008/06/14 13:21:28 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.75 2008/06/13 16:06:48 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.76 2008/06/14 13:21:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1979,7 +1979,7 @@ for details.
     </para>
     <para>
      The default profiles, and their associated actions, as pre-defined in
-     <filename>standard.action</filename> are
+     <filename>standard.action</filename> are:
     </para>
     <para>
     <table frame=all><title>Default Configurations</title>
@@ -8599,6 +8599,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.76  2008/06/14 13:21:28  fabiankeil
+ Prepare for the upcoming 3.0.9 beta release.
+
  Revision 2.75  2008/06/13 16:06:48  fabiankeil
  Update the "What's New in this Release" section with
  the ChangeLog entries changelog2doc.pl could handle.
