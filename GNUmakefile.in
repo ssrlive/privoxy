@@ -1,8 +1,8 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.170 2008/06/12 16:38:50 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.171 2008/06/13 15:24:57 fabiankeil Exp $
 #
-# Written by and Copyright (C) 2001 - 2007 the SourceForge
+# Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -175,7 +175,6 @@ CONFIG_FILES = $(CONFIGS) \
 		`find templates/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"`
 
 DOC_FILES = AUTHORS LICENSE README ChangeLog INSTALL \
-		`find doc/text/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"` \
 		`find doc/webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html"` \
 		`find doc/webserver/ -name "*.css"` \
                 privoxy.1 \
@@ -655,7 +654,7 @@ tarball-clean:
 #
 # Documentation
 #
-# converts doc/source/*.sgml into html, text, pdf and man pages
+# converts doc/source/*.sgml into html, pdf and man pages
 #
 #############################################################################
 
@@ -663,29 +662,26 @@ tarball-clean:
 dok-devel: 
 	$(RM) doc/webserver/developer-manual/*.html
 	$(RM) -r doc/source/developer-manual
-	mkdir -p doc/text doc/source/developer-manual
+	mkdir -p doc/source/developer-manual
 	cd doc/source/developer-manual && $(DB) ../developer-manual.sgml && cd .. && cp developer-manual/*.html ../webserver/developer-manual/
-	cd doc/source && $(DB) -V nochunks developer-manual.sgml > tmp.html && env -u LANG $(WDUMP) tmp.html > ../text/developer-manual.txt && $(RM) -r tmp.html developer-manual
 
 # user manual
 dok-user: 
 	$(RM) doc/webserver/user-manual/*.html
 	$(RM) -r doc/source/user-manual/
-	mkdir -p doc/text doc/source/user-manual
+	mkdir -p doc/source/user-manual
 	cd doc/source/user-manual && $(DB) -iuser-man ../user-manual.sgml && cd .. && cp user-manual/*.html ../webserver/user-manual/
 	# FIXME: temp fix so same stylesheet gets in more than one place so it works
 	# for all doc set-ups, including the 'user manual' config option in local
 	# system where it MUST be in same directory as html.
 	$(PERL) -pi.bak -e 's/<\/head/\n<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"p_doc.css\">\n<\/head/i' doc/webserver/user-manual/*html
-	cd doc/source && $(DB) -iuser-man -V nochunks user-manual.sgml > tmp.html && env -u LANG $(WDUMP) tmp.html > ../text/user-manual.txt && $(RM) -r tmp.html user-manual
 
 # faq
 dok-faq: 
 	$(RM) doc/webserver/faq/*.html
 	$(RM) -r doc/source/faq
-	mkdir -p doc/text doc/source/faq
+	mkdir -p doc/source/faq
 	cd doc/source/faq && $(DB) ../faq.sgml && cd .. && cp faq/*.html ../webserver/faq/
-	cd doc/source && $(DB) -V nochunks faq.sgml > tmp.html && env -u LANG $(WDUMP) tmp.html > ../text/faq.txt && $(RM) -r tmp.html faq
 
 # man page, one variation. Try to use the next target, just 'make man'. 
 dok-man: 
@@ -1352,6 +1348,11 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.171  2008/06/13 15:24:57  fabiankeil
+# Move previously inline'd Perl code for the config-file target
+# into a separate file, have it work with older perl releases,
+# clean it up a bit and fix the "underlining" code.
+#
 # Revision 1.170  2008/06/12 16:38:50  fabiankeil
 # Add third-level domain to URL in dok-get target.
 #
