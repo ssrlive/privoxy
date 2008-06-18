@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.171 2008/06/13 15:24:57 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.172 2008/06/17 16:16:08 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -177,8 +177,7 @@ CONFIG_FILES = $(CONFIGS) \
 DOC_FILES = AUTHORS LICENSE README ChangeLog INSTALL \
 		`find doc/webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html"` \
 		`find doc/webserver/ -name "*.css"` \
-                privoxy.1 \
-		doc/pdf/*.pdf
+                privoxy.1
 
 #############################################################################
 # Filenames and libraries
@@ -628,7 +627,7 @@ tarball-dist: dist-check clean clobber
 
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" -o -path "*/pdf/*" \)`; do \
+	-name "PACKAGERS" \)`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) -cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
@@ -654,7 +653,7 @@ tarball-clean:
 #
 # Documentation
 #
-# converts doc/source/*.sgml into html, pdf and man pages
+# converts doc/source/*.sgml into html and man pages
 #
 #############################################################################
 
@@ -798,39 +797,6 @@ else
 	$(RM) -r doc/source/*bak doc/source/*/*bak
 endif
 
-# Generate single page html. Used only for creating pdf docs (ATM).
-# Currently using: See http://www.easysw.com/htmldoc/pdf-o-matic.php.
-# If using this generator, remember U-M has a couple of graphics in 
-# a parallel directory.
-#
-dok-shtml: dok-release 
-	mkdir -p doc/source/temp # this directory not in cvs
-	cd doc/source && $(DB) -iuser-man -V nochunks user-manual.sgml > temp/privoxy-user-manual.html
-	cd doc/source && $(DB) -V nochunks developer-manual.sgml > temp/privoxy-developer-manual.html
-	cd doc/source && $(DB) -V nochunks faq.sgml > temp/privoxy-faq.html
-# one could use html2ps and ps2pdf. well, that does not work. htmlps produces incorrect output.
-
-# Make pdf docs from single page html. Requires htmldoc, see
-# (http://www.easysw.com/htmldoc/). Note: 1.8.20 has a TOC bug.
-# PDF docs are uploaded to webserver as zip archive.
-dok-pdf: dok-shtml
-	@$(ECHO) -n "starting htmldoc version: ";
-	if htmldoc --version ; then : ; \
-	   else $(ECHO) "WARNING: could not get htmldoc version" ; fi
-	cd utils/ldp_print && $(RM) *html *bak *jpg *tmp *pdf *zip
-	cp -f doc/source/temp/*html doc/webserver/user-manual/*jpg utils/ldp_print
-	cd utils/ldp_print ;\
-	$(PERL) -pi.bak -e 's/\.\.\/images\///; s/(<\/?)SUB/$$1small/i;\
-	                    s/\.\.\/user-manual\/index\.html/privoxy-user-manual.pdf/;\
-					s/\.\.\/developer-manual\/index\.html/privoxy-developer-manual.pdf/;\
-					s/\.\.\/faq\/index\.html/privoxy-faq.pdf/' *.html ;\
-	for i in developer-manual user-manual faq; do \
-		./ldp_print privoxy-$$i.html ;\
-		$(ECHO) DONE: privoxy-$$i.pdf ;\
-	done ;\
-	$(MV) *.pdf  ../../doc/pdf ;\
-	$(RM) -r *html *bak *jpg *pdf *zip ../../doc/source/temp
-
 # Create release announcement in text and html, with short and long versions.
 # This is a standalone target, and must be invoked directly.
 # announce: dok-release
@@ -889,11 +855,6 @@ webserver: tidy
 	@cd doc/webserver; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
           $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
-
-	@$(ECHO) Uploading pdf
-	@cd doc/pdf;\
-          zip privoxy-pdf-docs *.pdf  ;\
-		scp -q privoxy-pdf-docs.zip ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/pdf
 
 	@$(ECHO) Fixing permissions
 	@ssh ijbswa.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
@@ -1348,6 +1309,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.172  2008/06/17 16:16:08  fabiankeil
+# - Stop building text files nobody cares about.
+# - Update copyright year.
+#
 # Revision 1.171  2008/06/13 15:24:57  fabiankeil
 # Move previously inline'd Perl code for the config-file target
 # into a separate file, have it work with older perl releases,
