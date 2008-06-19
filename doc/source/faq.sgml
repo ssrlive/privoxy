@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.42 2008/06/07 13:11:15 fabiankeil Exp $
+ $Id: faq.sgml,v 2.43 2008/06/14 13:21:25 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.42 2008/06/07 13:11:15 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.43 2008/06/14 13:21:25 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2736,6 +2736,9 @@ browsing has slowed to a crawl. What gives? </title>
 <ulink
  url="../user-manual/actions-file.html#PREVENT-COMPRESSION">prevent-compression</ulink>.
 </para>
+<para>
+ As of &my-app; 3.0.9, zlib support is enabled in the default builds.
+</para>
 </sect2>
 
 
@@ -2817,6 +2820,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.43  2008/06/14 13:21:25  fabiankeil
+Prepare for the upcoming 3.0.9 beta release.
+
 Revision 2.42  2008/06/07 13:11:15  fabiankeil
 - Note that the "100% cpu problem" is worth
   reporting if it happens with a recent release.
