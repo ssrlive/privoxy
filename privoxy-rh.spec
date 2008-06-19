@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.56 2008/03/16 14:17:25 fabiankeil Exp $
+# $Id: privoxy-rh.spec,v 1.57 2008/05/30 15:06:42 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -250,7 +250,7 @@ fi
 %files
 %defattr(0644,root,root,0755)
 %doc README AUTHORS ChangeLog LICENSE 
-%doc doc/text/developer-manual.txt doc/text/user-manual.txt doc/text/faq.txt
+#%doc doc/text/developer-manual.txt doc/text/user-manual.txt doc/text/faq.txt
 %doc doc/webserver/developer-manual
 %doc doc/webserver/user-manual
 %doc doc/webserver/faq
@@ -327,6 +327,9 @@ fi
 %{_mandir}/man1/%{name}.*
 
 %changelog
+* Sat Jun 18 2008 Hal Burgiss <hal@foobox.net>
+- Remove reference to txt docs.
+
 * Sat Oct 18 2006 Hal Burgiss <hal@foobox.net>
 - Bump version to 3.0.6
 
@@ -763,6 +766,11 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.57  2008/05/30 15:06:42  fabiankeil
+# - Add %config directive for url-info-osd.xml.
+#   As usual, this hasn't been tested.
+# - Fix comment typo.
+#
 # Revision 1.56  2008/03/16 14:17:25  fabiankeil
 # Add %config lines for regression-tests.action and forwarding-failed.
 # This might or might not help with #1915185, reported by Bernardo Bacic.
