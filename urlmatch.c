@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.43 2008/05/04 13:30:55 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.44 2008/05/04 16:18:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,10 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.43 2008/05/04 13:30:55 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.44  2008/05/04 16:18:32  fabiankeil
+ *    Provide parse_http_url() with a third parameter to specify
+ *    whether or not URLs without protocol are acceptable.
+ *
  *    Revision 1.43  2008/05/04 13:30:55  fabiankeil
  *    Streamline parse_http_url()'s prototype.
  *
@@ -726,7 +730,7 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
 {
    int errcode;
    char rebuf[BUFFER_SIZE];
-   const char *fmt;
+   const char *fmt = NULL;
 
    assert(pattern);
    assert(strlen(pattern) < sizeof(rebuf) - 2);
