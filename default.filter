@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.60 2008/04/26 10:36:41 fabiankeil Exp $
+#  $Id: default.filter,v 1.61 2008/05/21 18:44:43 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -446,7 +446,7 @@ s/(M|m)edien(?![^<]*>)/$1&auml;dchen/Ug
 #                 Pages are "blocked" based on keyword matching.
 #
 #################################################################################
-FILTER: crude-parental Crude parental filtering. Note that this filter doesn't work reliable.
+FILTER: crude-parental Crude parental filtering. Note that this filter doesn't work reliably.
 
 # (Note: Middlesex, Sussex and Essex are counties in the UK, not rude words)
 # (Note #2: Is 'sex' a rude word?!)
@@ -830,6 +830,10 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.61  2008/05/21 18:44:43  fabiankeil
+#     - Let the content-type tagger ignore headers without value.
+#     - Remove a few unused lines at the end of the file.
+#
 #     Revision 1.60  2008/04/26 10:36:41  fabiankeil
 #     Let the msn filter hide another class.
 #

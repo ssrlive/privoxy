@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.76 2008/06/14 13:21:28 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.77 2008/06/14 13:45:22 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.76 2008/06/14 13:21:28 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.77 2008/06/14 13:45:22 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4049,7 +4049,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-crude-parental">
-    <screen>+filter{crude-parental}      # Crude parental filtering. Note that this filter doesn't work reliable.</screen>
+    <screen>+filter{crude-parental}      # Crude parental filtering. Note that this filter doesn't work reliably.</screen>
    </para>
    <para>
     <anchor id="filter-ie-exploits">
@@ -8599,6 +8599,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.77  2008/06/14 13:45:22  fabiankeil
+ Re-add a colon I unintentionally removed a few revisions ago.
+
  Revision 2.76  2008/06/14 13:21:28  fabiankeil
  Prepare for the upcoming 3.0.9 beta release.
 
