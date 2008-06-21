@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.153 2008/05/25 18:48:07 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.154 2008/06/21 16:44:09 fk Exp $
 #
 # Wish list:
 #
@@ -741,7 +741,13 @@ sub check_status_code_result ($$) {
     my $expected_status_code = shift;
     my $result = 0;
 
-    if ($expected_status_code == $status_code) {
+    unless (defined $status_code) {
+
+        # XXX: should probably be caught earlier.
+        l(LL_VERBOSE_FAILURE,
+          "Ooops. We expected status code " . $expected_status_code . ", but didn't get any status code at all.");
+
+    } elsif ($expected_status_code == $status_code) {
 
         $result = 1;
         l(LL_VERBOSE_SUCCESS,
