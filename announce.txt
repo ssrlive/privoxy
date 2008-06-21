@@ -108,8 +108,8 @@ various other flavors of Unix.
 In addition to the traditional features of ad and junk blocking, and cookie
 management, Privoxy adds these features:
 
-   * Can be run as an "intercepting" proxy, which obviates the need to
-     configure browsers individually.
+  * Can be run as an "intercepting" proxy, which obviates the need to
+    configure browsers individually.
 
   * Sophisticated actions and filters for manipulating both server and client
     headers.        
@@ -134,9 +134,8 @@ management, Privoxy adds these features:
   * Every feature now controllable on a per-site or per-location basis,
     configuration more powerful and versatile over-all.
    
-  * Many smaller new features added, limitations and bugs removed, and security
-    holes fixed.
-   
+  * Many smaller new features added, limitations and bugs removed.
+
 Download location: 
    http://sourceforge.net/project/showfiles.php?group_id=11118
  
