@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.17 2008/02/05 00:47:12 hal9 Exp $
+ $Id: readme.sgml,v 2.18 2008/06/14 13:21:27 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -127,6 +127,7 @@
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
+<!--
 <para>
  Privoxy is in development mode for the time being. Some of the current cvs
  sources may not be well tested, and/or well documented. Current cvs is
@@ -134,6 +135,14 @@
  problems, please report them on the appropriate SourceForge tracker, or the
  developer's mailing list: ijbswa-developers@lists.sourceforge.net. Your help
  will be appreciated!
+</para>
+-->
+<para>
+ June 2008, Privoxy 3.0.9 beta is released. There are no major new
+ features, but many improvements and refinements. As usual there are changes
+ that affect the configuration. See the "ChangeLog", and the "What's New"
+ section and the "Upgrader's Notes" in the User Manual for details and
+ specifics.
 </para>
 <para>
  NEWS! January 2008, Privoxy 3.0.8 stable is released. This is a significant
@@ -263,7 +272,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.17 2008/02/05 00:47:12 hal9 Exp $ -->
+<!--  $Id: readme.sgml,v 2.18 2008/06/14 13:21:27 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
