@@ -2,8 +2,8 @@
 -----------------------------------------------------------------
 
 3.0.9 is a beta release which includes many enhancements but no major 
-new features. The most prominent improvements features are SOCKS5 
-support and zlib support for the default Privoxy builds.
+new features. The most prominent improvements are SOCKS5 support and 
+zlib support for the default Privoxy builds.
 
 See http://www.privoxy.org/3.0.9/user-manual/whatsnew.html for details.
 
