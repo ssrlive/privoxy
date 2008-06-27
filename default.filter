@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.61 2008/05/21 18:44:43 fabiankeil Exp $
+#  $Id: default.filter,v 1.62 2008/06/21 17:02:03 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -737,7 +737,7 @@ s@^(Content-Type:)\s*(?:message/(?:news|rfc822)|text/x-.*|application/x-sh(?:\s|
 #################################################################################
 CLIENT-HEADER-TAGGER: image-requests Tags detected image requests as "IMAGE-REQUEST".
 
-s@Accept:\s*image/.*@IMAGE-REQUEST@i
+s@^Accept:\s*image/.*@IMAGE-REQUEST@i
 
 #################################################################################
 #
@@ -747,7 +747,7 @@ s@Accept:\s*image/.*@IMAGE-REQUEST@i
 #################################################################################
 CLIENT-HEADER-TAGGER: css-requests Tags detected CSS requests as "CSS-REQUEST".
 
-s@Accept:\s*text/css.*@CSS-REQUEST@i
+s@^Accept:\s*text/css.*@CSS-REQUEST@i
 
 #################################################################################
 #
@@ -830,6 +830,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.62  2008/06/21 17:02:03  fabiankeil
+#     Fix typo.
+#
 #     Revision 1.61  2008/05/21 18:44:43  fabiankeil
 #     - Let the content-type tagger ignore headers without value.
 #     - Remove a few unused lines at the end of the file.
