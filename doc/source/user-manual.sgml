@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.77 2008/06/14 13:45:22 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.78 2008/06/21 17:03:03 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.77 2008/06/14 13:45:22 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.78 2008/06/21 17:03:03 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1394,21 +1394,6 @@ Example Unix startup command:
 <para>
   An administrator username and password must be supplied in order for
   the Privoxy Utility to perform any of the tasks.
-</para>
-<para>
- During installation, <application>Privoxy</application> is configured to
- start automatically when the system restarts.  To start &my-app; manually,
- double-click on the <literal>StartPrivoxy.command</literal> icon in the
- <literal>/Library/Privoxy</literal> folder.  Or, type this command
- in the Terminal:
-</para>
-<para>
-  <screen>
-  /Library/Privoxy/StartPrivoxy.command
-  </screen>
-</para>
-<para>
- You will be prompted for the administrator password.
 </para>
 </sect2>
 
@@ -8599,6 +8584,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.78  2008/06/21 17:03:03  fabiankeil
+ Fix typo.
+
  Revision 2.77  2008/06/14 13:45:22  fabiankeil
  Re-add a colon I unintentionally removed a few revisions ago.
 
