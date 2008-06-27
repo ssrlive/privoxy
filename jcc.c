@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.180 2008/05/21 15:26:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.181 2008/05/21 15:47:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.180 2008/05/21 15:26:32 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.181  2008/05/21 15:47:15  fabiankeil
+ *    Streamline sed()'s prototype and declare
+ *    the header parse and add structures static.
+ *
  *    Revision 1.180  2008/05/21 15:26:32  fabiankeil
  *    - Mark csp as immutable for send_crunch_response().
  *    - Fix comment spelling.
@@ -1918,10 +1922,15 @@ static jb_err change_request_destination(struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Couldn't parse rewritten request: %s.",
          jb_err_to_string(err));
    }
-   http->ocmd = strdup(http->cmd); /* XXX: ocmd is a misleading name */
-   if (http->ocmd == NULL)
+   else
    {
-      log_error(LOG_LEVEL_FATAL, "Out of memory copying rewritten HTTP request line");
+      /* XXX: ocmd is a misleading name */
+      http->ocmd = strdup(http->cmd);
+      if (http->ocmd == NULL)
+      {
+         log_error(LOG_LEVEL_FATAL,
+            "Out of memory copying rewritten HTTP request line");
+      }
    }
 
    return err;
