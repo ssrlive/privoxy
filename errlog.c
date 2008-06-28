@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.68 2008/04/27 16:50:46 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.69 2008/05/30 15:55:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.68 2008/04/27 16:50:46 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.69  2008/05/30 15:55:25  fabiankeil
+ *    Declare variable "debug" static and complain about its name.
+ *
  *    Revision 1.68  2008/04/27 16:50:46  fabiankeil
  *    Remove an incorrect assertion. The value of debug may change if
  *    the configuration is reloaded in another thread. While we could
@@ -724,7 +727,7 @@ static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
 #endif
 
    length = strftime(buffer, buffer_size, "%b %d %H:%M:%S", &tm_now);
-   if (length > 0);
+   if (length > 0)
    {
       msecs_length = snprintf(buffer+length, buffer_size - length, ".%.3ld", msecs);               
    }
