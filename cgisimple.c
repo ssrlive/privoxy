@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.84 2008/05/26 16:16:55 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.85 2008/05/26 17:30:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.84 2008/05/26 16:16:55 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.85  2008/05/26 17:30:55  fabiankeil
+ *    Provide an OpenSearch Description to access the
+ *    show-url-info page through "search engine plugins".
+ *
  *    Revision 1.84  2008/05/26 16:16:55  fabiankeil
  *    Spell error correctly.
  *
@@ -1534,7 +1538,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
       memset(url_to_query, '\0', sizeof(url_to_query));
       err = parse_http_url(url_param, url_to_query, REQUIRE_PROTOCOL);
-      assert((err != JB_ERR_OK) || (url_to_query->ssl == !strncmp(url_param, "https://", 8)));
+      assert((err != JB_ERR_OK) || (url_to_query->ssl == !strncmpic(url_param, "https://", 8)));
 
       free(url_param);
 
