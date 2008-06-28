@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.69 2008/05/30 15:55:25 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.70 2008/06/28 17:10:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.69 2008/05/30 15:55:25 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.70  2008/06/28 17:10:29  fabiankeil
+ *    Remove stray semicolon in get_log_timestamp().
+ *    Reported by Jochen Voss in #2005221.
+ *
  *    Revision 1.69  2008/05/30 15:55:25  fabiankeil
  *    Declare variable "debug" static and complain about its name.
  *
@@ -798,7 +802,7 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
 
    length = strftime(buffer, buffer_size, "%d/%b/%Y:%H:%M:%S ", tm_now);
 
-   if (length > 0);
+   if (length > 0)
    {
       tz_length = snprintf(buffer+length, buffer_size-length,
                      "%+03d%02d", mins / 60, abs(mins) % 60);
