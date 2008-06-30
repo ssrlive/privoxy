@@ -64,6 +64,8 @@ ChangeLog for Privoxy
   might prevent filtering.
 - The show-url-info page provides an OpenSearch Description that
   allows to access the page through browser search plugins.
+- Custom client-header filters that rewrite the request line
+  incorrectly no longer cause Privoxy to crash. Reported by din_a4.
 - The obsolete kill-popups action has been removed as the
   PCRS-based popup filters can do the same and are slightly
   less unreliable.
