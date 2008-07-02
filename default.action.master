@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.128 2008/05/12 09:44:40 fabiankeil Exp $
+#  $Id: default.action.master,v 1.129 2008/06/14 13:48:22 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -807,6 +807,16 @@ linuxinsider.com/images/sda/
 # Blocked URL = http://img.dailymail.co.uk/i/promo_boxes/groTime_promo.jpg
 # Blocked URL = http://img.dailymail.co.uk/i/promo_boxes/idealhome_promo.gif
 img.dailymail.co.uk/i/promo_boxes/
+#MASTER# REMARKS: Flash ad, Actionsfile feedback item #2003465 2008-07-01
+# Blocked URL = http://cache.opt.fimserve.com/contents/325/84/84325/LIN728x90.swf?%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20clickTag=http%3A//delb.opt.fimserve.com/lnk/%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Fk%3DODk1ODc7Mzs0MDA7ODQzMjU7Zi44LjkuaHYuaGdseHBzbG9uaCBvem0uNzYuZkBAeHp5b3ZAQGxobmxAQCs4XzlAQHhsbnN2biBoZHZ3dm1AQGh2QEBmOzEyMTQ1MTE1MjgzMzA7Mjs7MTMxfDsxOzQ7NzIxODs4ODAyODc3NQ%3D%3Dhref%3Dhttp%3A//www.myspace.com/liveinnordics&clickTarget=_new
+.fimserve.com
+#MASTER# REMARKS: Actionsfile feedback item #2004311 2008-07-01, are they all images?
+# Blocked URL = http://static.lycos-europe.net/lea/se/pricerunner/040608_728x90_payback_digitalkamer.gif
+static.lycos-europe.net
+#MASTER# REMARKS: Actionsfile feedback item #2005285
+#MASTER# BLOCK-REFERRER: http://hitta.se
+# Blocked URL = http://82.99.18.195/media.1/112/9460/146016/150x175_Hitta_FV_Feb08.gif
+82.99.18.195
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
