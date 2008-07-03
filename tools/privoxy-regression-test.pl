@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.156 2008/07/03 11:26:35 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.157 2008/07/03 11:32:14 fk Exp $
 #
 # Wish list:
 #
@@ -40,7 +40,7 @@ use strict;
 use Getopt::Long;
 
 use constant {
-               PRT_VERSION => 'Privoxy-Regression-Test 0.2',
+               PRT_VERSION => 'Privoxy-Regression-Test 0.3',
  
                CURL => 'curl',
 
