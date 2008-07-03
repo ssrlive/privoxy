@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.155 2008/06/28 16:39:59 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.156 2008/07/03 11:26:35 fk Exp $
 #
 # Wish list:
 #
@@ -42,14 +42,14 @@ use Getopt::Long;
 use constant {
                PRT_VERSION => 'Privoxy-Regression-Test 0.2',
  
-	       CURL => 'curl',
+               CURL => 'curl',
 
                # CLI option defaults
-	       CLI_RETRIES   => 1,
-	       CLI_LOOPS     => 1,
-	       CLI_MAX_TIME  => 5,
-	       CLI_MIN_LEVEL => 0,
-	       CLI_MAX_LEVEL => 25,
+               CLI_RETRIES   => 1,
+               CLI_LOOPS     => 1,
+               CLI_MAX_TIME  => 5,
+               CLI_MIN_LEVEL => 0,
+               CLI_MAX_LEVEL => 25,
                CLI_FORKS     => 0,
 
                PRIVOXY_CGI_URL => 'http://p.p/',
@@ -793,7 +793,6 @@ sub execute_server_header_regression_test ($) {
     return check_header_result($test_ref, $header);
 }
 
-
 sub interpret_result ($) {
     my $success = shift;
     return $success ? "Success" : "Failure";
@@ -1102,7 +1101,6 @@ sub get_show_request_with_curl ($) {
     return get_cgi_page_or_else($curl_parameters);
 }
 
-
 sub get_head_with_curl ($) {
 
     our $fellatio_url = FELLATIO_URL;
@@ -1122,7 +1120,6 @@ sub get_head_with_curl ($) {
 
     return get_page_with_curl($curl_parameters);
 }
-
 
 sub get_page_with_curl ($) {
 
@@ -1192,7 +1189,6 @@ sub array_as_string ($) {
 
     return $string;
 }
-
 
 sub show_test ($) {
     my $test_ref = shift;
@@ -1463,7 +1459,6 @@ sub start_forks($) {
         }
     }
 }
-
 
 sub main () {
 
