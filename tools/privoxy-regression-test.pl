@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.154 2008/06/21 16:44:09 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.155 2008/06/28 16:39:59 fk Exp $
 #
 # Wish list:
 #
@@ -16,8 +16,6 @@
 # - Implement a HTTP_VERSION directive or allow to
 #   specify whole request lines.
 # - Support filter regression tests.
-# - Add option to fork regression tests and run them in parallel,
-#   possibly optional forever.
 # - Document magic Expect Header values
 # - Internal fuzz support?
 #
@@ -47,11 +45,12 @@ use constant {
 	       CURL => 'curl',
 
                # CLI option defaults
-	       CLI_RETRIES  => 1,
-	       CLI_LOOPS    => 1,
-	       CLI_MAX_TIME => 5,
+	       CLI_RETRIES   => 1,
+	       CLI_LOOPS     => 1,
+	       CLI_MAX_TIME  => 5,
 	       CLI_MIN_LEVEL => 0,
 	       CLI_MAX_LEVEL => 25,
+               CLI_FORKS     => 0,
 
                PRIVOXY_CGI_URL => 'http://p.p/',
                FELLATIO_URL    => 'http://127.0.0.1:8080/',
@@ -1353,6 +1352,7 @@ sub help () {
 
 Options and their default values if they have any:
     [--debug $cli_options{'debug'}]
+    [--forks $cli_options{'forks'}]
     [--fuzzer-address]
     [--fuzzer-feeding]
     [--help]
@@ -1383,6 +1383,7 @@ sub init_cli_options () {
     $cli_options{'loops'}  = CLI_LOOPS;
     $cli_options{'max-time'}  = CLI_MAX_TIME;
     $cli_options{'retries'}  = CLI_RETRIES;
+    $cli_options{'forks'}    = CLI_FORKS;
 }
 
 sub parse_cli_options () {
@@ -1394,6 +1395,7 @@ sub parse_cli_options () {
 
     GetOptions (
                 'debug=s' => \$cli_options{'debug'},
+                'forks=s' => \$cli_options{'forks'},
                 'help'     => sub { help },
                 'header-fuzzing' => \$cli_options{'header-fuzzing'},
                 'min-level=s' => \$cli_options{'min-level'},
@@ -1448,6 +1450,21 @@ sub init_proxy_settings($) {
     }
 }
 
+sub start_forks($) {
+    my $forks = shift;
+
+    l(LL_ERROR, "Invalid --fork value: " . $forks . ".") if ($forks < 0); 
+
+    foreach my $fork (1 .. $forks) {
+        log_message("Starting fork $fork");
+        my $pid = fork();
+        if (defined $pid && !$pid) {
+            return;
+        }
+    }
+}
+
+
 sub main () {
 
     init_our_variables();
@@ -1456,6 +1473,7 @@ sub main () {
     init_proxy_settings('vanilla-proxy');
     load_regressions_tests();
     init_proxy_settings('fuzz-proxy');
+    start_forks(get_cli_option('forks')) if cli_option_is_set('forks');
     execute_regression_tests();
 }
 
@@ -1467,9 +1485,9 @@ B<privoxy-regression-test> - A regression test "framework" for Privoxy.
 
 =head1 SYNOPSIS
 
-B<privoxy-regression-test> [B<--debug bitmask>] [B<--fuzzer-feeding>]
-[B<--fuzzer-feeding>] [B<--help>] [B<--level level>] [B<--loops count>]
-[B<--max-level max-level>] [B<--max-time max-time>]
+B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
+[B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
+[B<--loops count>] [B<--max-level max-level>] [B<--max-time max-time>]
 [B<--min-level min-level>] B<--privoxy-address proxy-address>
 [B<--retries retries>] [B<--verbose>] [B<--version>]
 
@@ -1569,6 +1587,9 @@ requests to level 3 and client-header-action tests to level 1.
 
 B<--debug bitmask> Add the bitmask provided as integer
 to the debug settings.
+
+B<--forks forks> Number of forks to start before executing
+the regression tests. This is mainly useful for stress-testing.
 
 B<--fuzzer-address> Listening address used when executing
 the regression tests. Useful to make sure that the requests
