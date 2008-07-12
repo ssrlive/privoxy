@@ -1,6 +1,10 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Since 3.0.9 Beta ***
+- The img-reorder filter is less likely to mess up JavaScript code in
+  img tags. Problem and solution reported by Glenn Washburn in #2014552.
+
 *** Version 3.0.9 Beta ***
 
 - Added SOCKS5 support (with address resolution done by
