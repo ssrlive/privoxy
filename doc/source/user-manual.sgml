@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.78 2008/06/21 17:03:03 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.79 2008/06/27 18:00:53 markm68k Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.78 2008/06/21 17:03:03 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.79 2008/06/27 18:00:53 markm68k Exp $</pubdate>
 
 <!--
 
@@ -1696,8 +1696,8 @@ for details.
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/toggle">Toggle Privoxy on or off</ulink>
  </member>
  <member>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://www.privoxy.org/
-  &p-version;/user-manual/">Documentation</ulink>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink
+  url="http://www.privoxy.org/&p-version;/user-manual/">Documentation</ulink>
  </member>
  </simplelist>
  </msgtext>
@@ -8584,6 +8584,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.79  2008/06/27 18:00:53  markm68k
+ remove outdated startup information for mac os x
+
  Revision 2.78  2008/06/21 17:03:03  fabiankeil
  Fix typo.
 
