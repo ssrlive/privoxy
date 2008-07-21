@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.63 2008/06/27 12:53:41 fabiankeil Exp $
+#  $Id: default.filter,v 1.64 2008/07/12 15:49:09 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -226,7 +226,7 @@ FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* fi
 s|<img\s+?([^>]*) src\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2 $1|siUg
 s|<img\s+?([^>]*) src\s*=\s*([^'">\\\s]+)|<img src=$2 $1|sig
 
-s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s+width\s*=\s*((["']?)\d+?\5[\s>])|<img $1 width=$4$3|siUg
+s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s+width\s*=\s*((["']?)\d+?\5)(?=[\s>])|<img $1 width=$4$3|siUg
 
 
 #################################################################################
@@ -830,6 +830,13 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.64  2008/07/12 15:49:09  fabiankeil
+#     - Don't let img-reorder touch width attributes
+#       that aren't followed by either whitespace or '>',
+#       as those usually indicate onclick nonsense.
+#       Problem and solution reported by Glenn Washburn in #2014552.
+#     - While at it, don't use more groups than necessary.
+#
 #     Revision 1.63  2008/06/27 12:53:41  fabiankeil
 #     Make sure the taggers css-requests and image-requests
 #     only match at the beginning of the header.
