@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.157 2008/07/03 11:32:14 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.158 2008/07/23 18:47:11 fk Exp $
 #
 # Wish list:
 #
@@ -310,7 +310,8 @@ sub load_action_files ($) {
 
     my $ignored = 0;
 
-    l(LL_STATUS, "Loading regression tests from action file(s) delivered by Privoxy.");
+    l(LL_STATUS, "Gathering regression tests from " .
+      @actionfiles . " action file(s) delivered by Privoxy.");
 
     for my $file_number (0 .. @actionfiles - 1) {
 
