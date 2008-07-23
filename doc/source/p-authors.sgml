@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.30 2008/07/12 16:30:30 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.31 2008/07/21 09:04:36 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -35,9 +35,9 @@ Current Privoxy Team:
 ]]>
  
  Hal Burgiss
- Lee
  Mark Miller
  Gerry Murphy
+ Lee Rian
  Roland Rosenfeld
  Jörg Strohmayer
 <![%p-authors-formal;[
