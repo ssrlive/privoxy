@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.70 2008/06/28 17:10:29 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.71 2008/06/28 17:17:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.70 2008/06/28 17:10:29 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.71  2008/06/28 17:17:15  fabiankeil
+ *    Remove another stray semicolon.
+ *
  *    Revision 1.70  2008/06/28 17:10:29  fabiankeil
  *    Remove stray semicolon in get_log_timestamp().
  *    Reported by Jochen Voss in #2005221.
@@ -543,7 +546,7 @@ void init_log_module(const char *prog_name)
  *                plus LOG_LEVEL_MINIMUM.
  *
  *                XXX: we should only use the LOG_LEVEL_MINIMUM
- *                until the frist time the configuration file has
+ *                until the first time the configuration file has
  *                been parsed.
  *                
  * Parameters  :  1: debug_level = The debug level to set.
