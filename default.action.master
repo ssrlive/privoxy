@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.129 2008/06/14 13:48:22 fabiankeil Exp $
+#  $Id: default.action.master,v 1.130 2008/07/02 01:17:13 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -339,6 +339,11 @@
 #   decides whether an HTML "blocked"  page, or an empty document will be sent
 #   to the client as a substitute for the blocked content.
 #
+# +handle-as-image
+#    Treat this URL as an image.  This only matters if it's also "+block"ed,
+#    in which case a "blocked" image can be sent rather than a HTML page.
+#    See +set-image-blocker{} for the control over what is actually sent.
+#
 # +hide-accept-language{lang}
 # +hide-accept-language{block}
 #   Deletes or replaces the "Accept-Language:" HTTP header in client
@@ -386,11 +391,6 @@
 #    Or to identify yourself explicitly as a Privoxy user:
 #      +hide-user-agent{Privoxy/1.0}
 #    (Don't change the version number from 1.0 - after all, why tell them?)
-#
-# +handle-as-image
-#    Treat this URL as an image.  This only matters if it's also "+block"ed,
-#    in which case a "blocked" image can be sent rather than a HTML page.
-#    See +set-image-blocker{} for the control over what is actually sent.
 #
 # +limit-connect{portlist}
 #   The CONNECT methods exists in HTTP to allow access to secure websites
