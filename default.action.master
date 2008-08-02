@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.130 2008/07/02 01:17:13 hal9 Exp $
+#  $Id: default.action.master,v 1.131 2008/07/30 15:58:36 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1105,6 +1105,9 @@ scripts.chitika.net/.*\.(gif|png|jpg)
 #MASTER# REMARKS: Ad generator per Actionsfile feedback item #1749870 2007-07-08
 # URL = http://img.directtrack.com
 img.directtrack.com
+#MASTER# BLOCK-REFERRER: http://www.thinkbroadband.com/news/3621-complaint-about-orange-broadband-advertising-upheld.html
+# URL = http://eas.apm.emediate.eu/media.5/1/1228/19193/ACT1215_120x600_v3.gif
+.emediate.eu/
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1467,6 +1470,8 @@ www.google.com/adsense/
 # URL = tags.gawker.com/assets/minify.php?files=/assets/base.v6/css/global.css,/assets/base.v6/css/header.css,/assets/base.v6/css/sidebar.css,/assets/base.v6/css/content.css,/assets/base.v6/css/images.css,/assets/base.v6/css/ads.css,/assets/base.v6/css/community.css,/assets/base.v6/css/comments.css,/assets/base.v6/css/messages.css,/assets/base.v6/css/ui.css
 crunch
 tags.gawker.com/.*css
+# URL = http://cgi.tnt.co.uk/TrackNTrace/quicktrack.asp
+.tnt.co.uk/TrackNTrace/
 
 #############################################################################
 # Site-specific special rules:
