@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.132 2008/08/02 12:43:40 fabiankeil Exp $
+#  $Id: default.action.master,v 1.133 2008/08/02 13:44:10 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1304,7 +1304,6 @@ adela.karlin.mff.cuni.cz
 # URL = http://www.privoxy.org/actions/index.php
 .privoxy.org
 #MASTER# UNBLOCK-REFERRER: http://sourceforge.net/help/tracker.php
-# URL = http://www.brawnylads.com/
 sourceforge.net/.*tracker
 #MASTER# UNBLOCK-REFERRER: http://www.brawnylads.com/
 # URL = http://www.brawnylads.com/
@@ -1473,6 +1472,9 @@ crunch
 tags.gawker.com/.*css
 # URL = http://cgi.tnt.co.uk/TrackNTrace/quicktrack.asp
 .tnt.co.uk/TrackNTrace/
+#MASTER# UNBLOCK-REFERRER: http://www.supermediastore.com/trackorder.html
+# URL = http://secure.howtoburndvd.net/ups/track.php
+/ups/track\.php
 
 #############################################################################
 # Site-specific special rules:
