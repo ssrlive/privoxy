@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.133 2008/08/02 13:44:10 fabiankeil Exp $
+#  $Id: default.action.master,v 1.134 2008/08/02 16:27:56 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -430,7 +430,7 @@
 #  
 # +prevent-compression
 #    Prevent the website from compressing the data. Some websites do
-#    that, which is a problem for Privoxy when build without zlib support,
+#    that, which is a problem for Privoxy when built without zlib support,
 #    since +filter and +gif-deanimate will not work on compressed data.
 #    Will slow down connections to those websites, though.
 #
@@ -1468,7 +1468,6 @@ www.google.com/adsense/
 .encyclopediadramatica.com/
 #MASTER# UNBLOCK-REFERRER: http://lifehacker.com 2008-04-18 HB
 # URL = tags.gawker.com/assets/minify.php?files=/assets/base.v6/css/global.css,/assets/base.v6/css/header.css,/assets/base.v6/css/sidebar.css,/assets/base.v6/css/content.css,/assets/base.v6/css/images.css,/assets/base.v6/css/ads.css,/assets/base.v6/css/community.css,/assets/base.v6/css/comments.css,/assets/base.v6/css/messages.css,/assets/base.v6/css/ui.css
-crunch
 tags.gawker.com/.*css
 # URL = http://cgi.tnt.co.uk/TrackNTrace/quicktrack.asp
 .tnt.co.uk/TrackNTrace/
@@ -1873,8 +1872,8 @@ schneegans.de/sv/\?url=referer
 
 #{+filter{img-reorder} +filter{banners-by-link}}
 #MASTER# REMARKS: Temporarily decommissioning 10/15/06. Violates Cautious no filter policy. HB
-##MASTER# PROBLEM-URL: http://www.dn.se/
-##MASTER# REMARKS: Can't catch by size or location
+#MASTER# PROBLEM-URL: http://www.dn.se/
+#MASTER# REMARKS: Can't catch by size or location
 #www.dn.se
 
 {-filter{img-reorder}}
