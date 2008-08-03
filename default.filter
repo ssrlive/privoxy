@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.64 2008/07/12 15:49:09 fabiankeil Exp $
+#  $Id: default.filter,v 1.65 2008/07/21 13:43:44 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -622,7 +622,9 @@ s@</head>@<style type="text/css">\n\
  .suggestion, \#nys_right, \#nys {clear: both; display:none;}\n\
  \#content {padding-right: 0;}\n\
  </style>\n$0@
+# Are these ids still in use?
 s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
+s@(<div[^>]*) class=(["']?)sb_ads[^\2]*\2@$1 class="msn_ads"@Uig
 s@(<a[^>]*href=\")http://g.msn.com/.*\?(http://.*)(&amp;&amp;DI=.*)(\")@$1$2$4@Ug
 s@(<a[^>]*)gping=\".*\"@$1 title="URL cleaned up by Privoxy's msn filter"@Ug
 
@@ -830,6 +832,11 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.65  2008/07/21 13:43:44  fabiankeil
+#     Fix img-reorder regression introduced with my last commit.
+#     Some tags were terminated too soon, letting the browser render
+#     some of their arguments as text. Oops.
+#
 #     Revision 1.64  2008/07/12 15:49:09  fabiankeil
 #     - Don't let img-reorder touch width attributes
 #       that aren't followed by either whitespace or '>',
