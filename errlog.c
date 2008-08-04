@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.71 2008/06/28 17:17:15 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.72 2008/07/27 12:04:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.71 2008/06/28 17:17:15 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.72  2008/07/27 12:04:28  fabiankeil
+ *    Fix a comment typo.
+ *
  *    Revision 1.71  2008/06/28 17:17:15  fabiankeil
  *    Remove another stray semicolon.
  *
@@ -616,6 +619,33 @@ void init_error_log(const char *prog_name, const char *logfname)
 
    /* set the designated log file */
    fp = fopen(logfname, "a");
+   if ((NULL == fp) && (logfp != NULL))
+   {
+      /*
+       * Some platforms (like OS/2) don't allow us to open
+       * the same file twice, therefore we give it another
+       * shot after closing the old file descriptor first.
+       *
+       * We don't do it right away because it prevents us
+       * from logging the "can't open logfile" message to
+       * the old logfile.
+       *
+       * XXX: this is a lame workaround and once the next
+       * release is out we should stop bothering reopening
+       * the logfile unless we have to.
+       *
+       * Currently we reopen it every time the config file
+       * has been reloaded, but actually we only have to
+       * reopen it if the file name changed or if the
+       * configuration reloas was caused by a SIGHUP.
+       */
+      lock_logfile();
+      fclose(logfp);
+      logfp = NULL;
+      unlock_logfile();
+      fp = fopen(logfname, "a");
+   }
+
    if (NULL == fp)
    {
       log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: \'%s\'", logfname);
