@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.65 2008/07/21 13:43:44 fabiankeil Exp $
+#  $Id: default.filter,v 1.66 2008/08/03 17:27:47 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -219,12 +219,15 @@ s/\starget\s*=\s*(['"]?)_?(blank|new)\1?/ /ig        # (X)HTML
 FILTER: img-reorder Reorder attributes in <img> tags to make the banners-by-* filters more effective.
 
 # In the first step src is moved to the start, then width is moved to the second
-# place to guarantee an order of src, width, height.
+# place to guarantee an order of src, width, height. Also does some white-space
+# normalization.
+#
 # This makes banners-by-size more effective and allows both banners-by-size
 # and banners-by-link to preserve the original image URL in the title attribute.
 
-s|<img\s+?([^>]*) src\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2 $1|siUg
-s|<img\s+?([^>]*) src\s*=\s*([^'">\\\s]+)|<img src=$2 $1|sig
+s|<img\s+?([^>]*)\ssrc\s*=\s*(['"])([^>\\\2]+)\2|<img src=$2$3$2 $1|siUg
+s|<img\s+?([^>]*)\ssrc\s*=\s*([^'">\\\s]+)|<img src=$2 $1|sig
+s|(<img[^>]+height)\s*=\s*|$1=|sig
 
 s|<img (src=(?:(['"])[^>\\\\2]*\2\|[^'">\\\s]+?))([^>]*)\s+width\s*=\s*((["']?)\d+?\5)(?=[\s>])|<img $1 width=$4$3|siUg
 
@@ -832,6 +835,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.66  2008/08/03 17:27:47  fabiankeil
+#     Teach msn filter to catch a few new ad classes.
+#
 #     Revision 1.65  2008/07/21 13:43:44  fabiankeil
 #     Fix img-reorder regression introduced with my last commit.
 #     Some tags were terminated too soon, letting the browser render
