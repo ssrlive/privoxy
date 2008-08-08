@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.135 2008/08/03 00:37:22 ler762 Exp $
+#  $Id: default.action.master,v 1.136 2008/08/03 18:25:43 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -312,7 +312,7 @@
 #     shockwave-flash:     Kill embedded Shockwave Flash objects.
 #     quicktime-kioskmode: Make Quicktime movies saveable.
 #     fun:                 Text replacements for subversive browsing fun!
-#     crude-parental:      Crude parental filtering. Note that this filter doesn't work reliable.
+#     crude-parental:      Crude parental filtering. Note that this filter doesn't work reliably.
 #     ie-exploits:         Disable some known Internet Explorer bug exploits.
 #     site-specifics:      Cure for site-specific problems. Don't apply generally!
 #     no-ping:             Removes non-standard ping attributes in <a> and <area> tags.
@@ -817,6 +817,12 @@ static.lycos-europe.net
 #MASTER# BLOCK-REFERRER: http://hitta.se
 # Blocked URL = http://82.99.18.195/media.1/112/9460/146016/150x175_Hitta_FV_Feb08.gif
 82.99.18.195
+#MASTER# REMARKS: Actionsfile feedback item #1888197  2008-02-06
+#MASTER# REMARKS: Have a "go there anyway" link for clk.atdmt.com
+#MASTER# BLOCK-REFERRER: http://www.networkworld.com/resourcelibrary/?tid=4&type=special%20report
+# Blocked URL = http://clk.atdmt.com/
+.atdmt.com/
+
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1005,7 +1011,9 @@ bs*.einets.com
 #MASTER# BLOCK-REFERRER: http://salon.com/ 10/19/06
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
 #MASTER# REMARKS: Banner farms; just exclude their corp. info
-[a-vx-z]*.atdmt.com/
+#MASTER# REMARKS: and have a "go there anyway" link for clk.atdmt.com
+#MASTER# REMARKS:   (Actionsfile feedback item #1888197)
+[abd-vx-z]*.atdmt.com/
 #MASTER# BLOCK-REFERRER: http://www.exactaudiocopy.de/ 09/11/06
 #MASTER# BLOCK-REFERRER: http://stanford.facebook.com/home.php 
 # URL = http://www.fastclick.net/
@@ -1474,6 +1482,16 @@ tags.gawker.com/.*css
 #MASTER# UNBLOCK-REFERRER: http://www.supermediastore.com/trackorder.html
 # URL = http://secure.howtoburndvd.net/ups/track.php
 /ups/track\.php
+#MASTER# REMARKS: Actionsfile feedback item #1886140  2008-02-04
+#MASTER# UNBLOCK-REFERRER: http://idonthateyouall.imeem.com/video/8zH0_f9i/kiley_rilo_pull_me_in_tighter_art_video/
+# URL = http://ad.doubleclick.net/crossdomain.xml
+ad.doubleclick.net/crossdomain\.xml
+#MASTER# REMARKS: Actionsfile feedback item #2021509  2008-07-18
+#MASTER# REMARKS: Allow realplayer site help popup windows
+#MASTER# UNBLOCK-REFERRER: http://real.custhelp.com/cgi-bin/real.cfg/php/enduser/std_adp.php?p_faqid=4512
+# URL = http://real.custhelp.com/cgi-bin/real.cfg/php/enduser/popup_adp.php
+real.custhelp.com/cgi-bin/real\.cfg/php/enduser/popup_adp\.php
+
 
 #############################################################################
 # Site-specific special rules:
