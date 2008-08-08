@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.137 2008/08/08 13:22:58 ler762 Exp $
+#  $Id: default.action.master,v 1.138 2008/08/08 17:22:14 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1845,6 +1845,8 @@ schneegans.de/sv/\?url=referer
 .teamquest.com/gifs/gunther/
 #MASTER# REMARKS: 09/12/06 Art site, and ad-free
 .rubberslug.com
+#MASTER# REMARKS: Actionsfile feedback item #2040467, allow animated gifs from wikipedia.org
+.wikipedia.org/
 
 #----------------------------------------------------------------------------
 # The "site-specifics" filter has special cures for problems found here:
