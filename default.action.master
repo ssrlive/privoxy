@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.140 2008/08/09 13:09:02 fabiankeil Exp $
+#  $Id: default.action.master,v 1.141 2008/08/09 14:00:32 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -576,7 +576,6 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 # Generic block patterns by host:
 #############################################################################
 {+block{Host matches generic block pattern.}}
-#MASTER# DONT-VERIFY (generic)
 ad*.
 .*ads.
 #MASTER# REMARKS: removed .ad. 2007-12-18 HB
@@ -600,7 +599,6 @@ metrics.
 # Generic unblockers by host:
 #############################################################################
 {-block}
-#MASTER# DONT-VERIFY (generic)
 adsl.
 ad[udmw]*.
 adbl*.
@@ -610,7 +608,6 @@ adob*.
 adrenaline.
 adtp*.
 adv[oia]*.
-#MASTER# REMARKS: Added 2008-02-08 HB
 adventure*.
 .*road*.
 .olympiad*.
@@ -623,7 +620,6 @@ countr*.
 # Generic block patterns by path:
 #############################################################################
 {+block{Path matches generic block pattern.}}
-#MASTER# DONT-VERIFY (generic)
 /(.*/)?ad(\?|/|s|v|_?(image|se?rv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log|space)
 # Blocked URL = http://www.example.org/adimage
 # Blocked URL = http://www.example.org/adspace
@@ -632,7 +628,6 @@ countr*.
 /(.*/)?(publicite|werbung|rekla(me|am)|annonse|maino(kset|nta|s)?/)
 /.*(count|track|compteur|(?<!relo)adframe|adse?rve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
 /(.*/)?clicktrack
-#MASTER# REMARKS: Added 12/28/06 per Adam Piggott
 /(.*/)?(full)?pop[-_]?(up|over|under|open(er)?)?s?(/|\.)
 /(.*/)?((flash)?pop|live(cnt|count(er)?)).*\.(js|php|cgi)
 
@@ -641,7 +636,6 @@ countr*.
 #############################################################################
 {-block}
 # Sticky Actions = -block
-#MASTER# DONT-VERIFY (generic)
 /.*ad(sl|v(i[cs]|o|an|ertencia|ent|.*search|erse)) # advice/advisories/advan*/advertencia (spanish) adverse
 /.*(lo|thre|he|d|gr|l|ro|re|squ|class(ified)?)ads
 /.*account
@@ -655,7 +649,6 @@ support./(.*/)?track
 .uni-*.de
 .tu-*.de
 .gov
-#MASTER# REMARKS: 09/18/06 Tracker request
 .hs-*.de 
 .fh-*.de
 #MASTER# REMARKS: Try to avoid harmless names in non-commercial organizations. Added 10/24/06
@@ -1003,10 +996,8 @@ bwp.
 #.yimg.com/a/.*/flash/
 #MASTER# REMARKS: The above replaced with below. Actions file tracker #1645616 2007-01-27
 .yimg.com/.*\.yimg\.com/a/
-#MASTER# DONT-VERIFY
 bs*.gsanet.com
 bs*.einets.com
-#MASTER# DONT-VERIFY 
 .qkimg.net
 #MASTER# BLOCK-REFERRER: http://salon.com/ 10/19/06
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
@@ -1043,7 +1034,6 @@ a.tribalfusion.com/
 www.smartadserver.com/
 #MASTER# BLOCK-REFERRER: http://www.chez.tiscali.fr/ 10/07/06
 admedia.
-#MASTER# DONT-VERIFY
 #MASTER# REMARKS: Bannerfarm used by Morpheus file sharing software
 jmcms.cydoor.com/
 #MASTER# BLOCK-REFERRER: http://www.tech-report.com/etc/2003q2/3dmurk03/index.x?pg=7
@@ -1224,7 +1214,6 @@ bilbo.counted.com/
 #MASTER# BLOCK-REFERRER: http://www.travelocity.com/Vacations/0,,TRAVELOCITY||Y,00.html?HPTRACK=mpc_vac
 #MASTER# BLOCK-REFERRER: http://dest.travelocity.com/DestGuides/geo_frontdoor/0,,TRAVELOCITY,00.html?HPTRACK=icon_dest 10/07/06
 .travelocity./Sponsor_gifs/
-#MASTER# DONT-VERIFY
 #MASTER# REMARKS: Referenced from HTML-Emails (not checked 10/08/06)
 # URL = http://foo.weather.com/creatives/
 # URL = http://bar.weather.com/web/services/email/
@@ -1686,7 +1675,6 @@ liveupdate.symantecliveupdate.com
 .bookmarklets.com
 # URL = http://www.squarefree.com/bookmarklets/
 .squarefree.com/bookmarklets/
-#MASTER# DONT-VERIFY
 #MASTER# REMARKS: Used by Mac OSX's automatic software update feature
 swquery.apple.com
 swscan.apple.com
@@ -1927,7 +1915,6 @@ blogs.msdn.com
 
 {-filter{unsolicited-popups}}
 # Sticky Actions = -filter{unsolicited-popups}
-#MASTER# DONT-VERIFY
 #MASTER# REMARKS: Breaks Movable Type's admin interface (http://www.movabletype.org/)
 /.*mt.cgi$
 #MASTER# REMARKS: Exclude per Debian bug report #377843 09/17/06
