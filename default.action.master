@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.138 2008/08/08 17:22:14 ler762 Exp $
+#  $Id: default.action.master,v 1.139 2008/08/08 17:44:57 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1491,6 +1491,10 @@ ad.doubleclick.net/crossdomain\.xml
 #MASTER# UNBLOCK-REFERRER: http://real.custhelp.com/cgi-bin/real.cfg/php/enduser/std_adp.php?p_faqid=4512
 # URL = http://real.custhelp.com/cgi-bin/real.cfg/php/enduser/popup_adp.php
 real.custhelp.com/cgi-bin/real\.cfg/php/enduser/popup_adp\.php
+# URL = http://fritz.fonwlan.box/cgi-bin/webcm?getpage=../html/de/help/popup.html&var:lang=de&var:pagename=hilfe_syslog&var:anker=24
+fritz.fonwlan.box/
+# URL = http://fritz.box/cgi-bin/webcm?getpage=../html/de/help/popup.html&var:lang=de&var:pagename=hilfe_syslog&var:anker=24
+fritz.box/
 
 
 #############################################################################
