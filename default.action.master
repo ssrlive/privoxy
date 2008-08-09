@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.139 2008/08/08 17:44:57 ler762 Exp $
+#  $Id: default.action.master,v 1.140 2008/08/09 13:09:02 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -629,7 +629,7 @@ countr*.
 # Blocked URL = http://www.example.org/adspace
 /phpads(new)?/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
-/(.*/)?(publicite|werbung|reklaa?m|annonse|maino(kset|nta|s)?/)
+/(.*/)?(publicite|werbung|rekla(me|am)|annonse|maino(kset|nta|s)?/)
 /.*(count|track|compteur|(?<!relo)adframe|adse?rve?|banner)(er|run)?(\?|\.(pl|cgi|exe|dll|asp|php|cpt))
 /(.*/)?clicktrack
 #MASTER# REMARKS: Added 12/28/06 per Adam Piggott
