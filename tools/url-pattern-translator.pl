@@ -18,7 +18,7 @@
 # Only convert your files once, or, as RoboCop used to say,
 # there will be... trouble.
 #
-# $Id: url-pattern-translator.pl 1.9 2008/04/06 16:01:49 fk Exp $
+# $Id: url-pattern-translator.pl 1.10 2008/08/10 16:32:59 fk Exp $
 #
 # Copyright (c) 2008 Fabian Keil <fk@fabiankeil.de>
 #
@@ -65,18 +65,14 @@ sub convert_host_pattern ($) {
     # Match-all syntax has changed ...
     $hp =~ s@\*@.*@g;
 
-    if ($hp =~ m@\.$@) {
-        # Extended host patterns are right-anchored by default
-        $hp = $hp . '.*';
-    }
+    # Extended host patterns are right-anchored by default
+    $hp =~ s@\.$@(\..*)?@;
 
     # Literal dots have to be escaped    
-    $hp =~ s@(\.[^*])@\\$1@g;
+    $hp =~ s@((?<!\\)\.[^*])@\\$1@g;
 
     # Match single character with a dot.
-    $hp =~ s@\?@.@g;
-
-    #p("converted $host_pattern to: $hp");
+    $hp =~ s@(?<!\))\?@.@g;
 
     return $hp;
 }
