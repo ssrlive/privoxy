@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.141 2008/08/09 14:00:32 fabiankeil Exp $
+#  $Id: default.action.master,v 1.142 2008/08/09 14:21:55 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1484,7 +1484,9 @@ real.custhelp.com/cgi-bin/real\.cfg/php/enduser/popup_adp\.php
 fritz.fonwlan.box/
 # URL = http://fritz.box/cgi-bin/webcm?getpage=../html/de/help/popup.html&var:lang=de&var:pagename=hilfe_syslog&var:anker=24
 fritz.box/
-
+#MASTER# REMARKS: Actionsfile feedback item #2043327 2008-08-08
+# URL = http://kb.adobe.com/selfservice/viewContent.do?externalId=kb402747&sliceId=1
+.adobe.com
 
 #############################################################################
 # Site-specific special rules:
