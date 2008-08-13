@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.57 2008/05/30 15:06:42 fabiankeil Exp $
+# $Id: privoxy-rh.spec,v 1.58 2008/06/19 01:52:17 hal9 Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -37,7 +37,7 @@ Name: privoxy
 # ATTENTION
 # Version and release should be updated accordingly on configure.in and
 # configure. Otherwise, the package can be build with the wrong value
-Version: 3.0.9
+Version: 3.0.10
 Release: 1
 Summary: Privoxy - privacy enhancing proxy
 License: GPL
@@ -70,7 +70,7 @@ Privoxy is based on the Internet Junkbuster.
 # We check to see if versions match
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=9
+VERSION_POINT=10
 
 # find CVS files and remove it.
 find -name CVS | xargs rm -rf
@@ -766,6 +766,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.58  2008/06/19 01:52:17  hal9
+# Remove txt docs from spec file.
+#
 # Revision 1.57  2008/05/30 15:06:42  fabiankeil
 # - Add %config directive for url-info-osd.xml.
 #   As usual, this hasn't been tested.
