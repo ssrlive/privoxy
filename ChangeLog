@@ -1,7 +1,7 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Since 3.0.9 Beta ***
+*** Version 3.0.10 ***
 - Ordinary configuration file changes no longer cause program
   termination on OS/2 if the name of the logfile hasn't been
   changed as well. This regression probably crept in with the
