@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.13 2008/07/03 11:10:43 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.14 2008/07/31 04:47:33 ler762 Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -697,6 +697,13 @@ www.blocked-request.example/blocked-request
 # Expect Status Code = 403
 {+block}
 www.blocked-request.example/blocked-request-with-no-reason-specified
+
+# Some domain pattern tests
+#
+{+block{domain pattern test}}
+# Blocked URL = http://domain-pattern-test.example/
+# Blocked URL = http://domain-pattern-test.example.org/
+domain-pattern-test.example.
 
 # Just in case there is no white-space fuzzer in the house ...
 #
