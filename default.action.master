@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.142 2008/08/09 14:21:55 fabiankeil Exp $
+#  $Id: default.action.master,v 1.143 2008/08/11 00:39:42 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1194,6 +1194,9 @@ feeds.feedburner.com/~r/.*/~4/
 # Blocked URL = http://feeds.feedburner.com/~a/DilbertDailyStrip?a=Ebzxel
 #MASTER# REMAKRKS: This looks like a pattern as well, maybe we should block feeds.feedburner.com/~a/ here.
 feeds.feedburner.com/~a/DilbertDailyStrip\?
+#MASTER# BLOCK-REFERER: http://www.buch.de/
+# URL = http://track.webtrekk.de/471497967328727/wt.pl?p=177,de.buch.show.home,1,1024x768,24,1,1218816426275,0,884x653,0&enc1=%FC&enc2=iso-8859-1&st=view&la=en-US&np=Default%20Plugi
+track.webtrekk.de/
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
