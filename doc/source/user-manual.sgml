@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.84 2008/08/16 09:42:45 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.85 2008/08/16 10:04:59 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.84 2008/08/16 09:42:45 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.85 2008/08/16 10:04:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -622,10 +622,10 @@ How to install the binary packages depends on your operating system:
   <listitem>
    <para>
     The source tar ball now includes Privoxy-Log-Parser,
-    a syntax-highlighter for Privoxy logs. For fancy screenshots see:
+    a syntax-highlighter for Privoxy logs. Documentation is available
+    through perldoc(1), for fancy screenshots see:
     <ulink url="http://www.fabiankeil.de/sourcecode/privoxy-log-parser/"
-     >http://www.fabiankeil.de/sourcecode/privoxy-log-parser/</ulink>
-    Documentation is available through perldoc(1).
+     >http://www.fabiankeil.de/sourcecode/privoxy-log-parser/</ulink>.
    </para>
   </listitem>
  </itemizedlist>
@@ -8607,6 +8607,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.85  2008/08/16 10:04:59  fabiankeil
+ Some more syntax fixes. This version actually builds.
+
  Revision 2.84  2008/08/16 09:42:45  fabiankeil
  Turns out building docs works better if the syntax is valid.
 
