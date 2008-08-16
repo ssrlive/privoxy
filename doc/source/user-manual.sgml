@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.80 2008/07/18 16:54:30 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.81 2008/08/16 08:51:28 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.80 2008/07/18 16:54:30 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.81 2008/08/16 08:51:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2285,7 +2285,7 @@ for details.
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term><literal>www.example.com/index.html$</literal></term>
+  <term><literal>www.example.com/index.html</literal></term>
   <listitem>
    <para>
     matches all the documents on <literal>www.example.com</literal>
@@ -8584,6 +8584,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.81  2008/08/16 08:51:28  fabiankeil
+ Update version-related entities.
+
  Revision 2.80  2008/07/18 16:54:30  fabiankeil
  Remove erroneous whitespace in documentation link.
  Reported by John Chronister in #2021611.
