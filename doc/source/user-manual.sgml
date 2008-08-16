@@ -11,11 +11,11 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.9">
-<!entity p-status "beta">
+<!entity p-version "3.0.10">
+<!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.79 2008/06/27 18:00:53 markm68k Exp $
+ $Id: user-manual.sgml,v 2.80 2008/07/18 16:54:30 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.79 2008/06/27 18:00:53 markm68k Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.80 2008/07/18 16:54:30 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8584,6 +8584,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.80  2008/07/18 16:54:30  fabiankeil
+ Remove erroneous whitespace in documentation link.
+ Reported by John Chronister in #2021611.
+
  Revision 2.79  2008/06/27 18:00:53  markm68k
  remove outdated startup information for mac os x
 
