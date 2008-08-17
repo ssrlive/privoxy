@@ -1,7 +1,7 @@
                  Announcing Privoxy v.3.0.10
 -----------------------------------------------------------------
 
-3.0.9 is a stable release which includes many enhancements but no major 
+3.0.10 is a stable release which includes many enhancements but no major 
 new features. The most prominent improvements are SOCKS5 support and 
 zlib support for the default Privoxy builds.
 
