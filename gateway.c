@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.24 2008/02/04 14:56:29 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.25 2008/02/07 18:09:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,15 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.24 2008/02/04 14:56:29 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.25  2008/02/07 18:09:46  fabiankeil
+ *    In socks5_connect:
+ *    - make the buffers quite a bit smaller.
+ *    - properly report "socks5 server unreachable" failures.
+ *    - let strncpy() use the whole buffer. Using a length of 0xffu wasn't actually
+ *      wrong, but requires too much thinking as it doesn't depend on the buffer size.
+ *    - log a message if the socks5 server sends more data than expected.
+ *    - add some assertions and comments.
+ *
  *    Revision 1.24  2008/02/04 14:56:29  fabiankeil
  *    - Fix a compiler warning.
  *    - Stop assuming that htonl(INADDR_NONE) equals INADDR_NONE.
@@ -202,7 +211,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 #define SOCKS5_REQUEST_DENIED              2
 #define SOCKS5_REQUEST_NETWORK_UNREACHABLE 3
 #define SOCKS5_REQUEST_HOST_UNREACHABLE    4
-#define SOCKS5_REQUEST_CONNECTION_REFUSEDD 5
+#define SOCKS5_REQUEST_CONNECTION_REFUSED  5
 #define SOCKS5_REQUEST_TTL_EXPIRED         6
 #define SOCKS5_REQUEST_PROTOCOL_ERROR      7
 #define SOCKS5_REQUEST_BAD_ADDRESS_TYPE    8
@@ -510,7 +519,7 @@ static const char *translate_socks5_error(int socks_error)
          return "SOCKS5 network unreachable";
       case SOCKS5_REQUEST_HOST_UNREACHABLE:
          return "SOCKS5 host unreachable";
-      case SOCKS5_REQUEST_CONNECTION_REFUSEDD:
+      case SOCKS5_REQUEST_CONNECTION_REFUSED:
          return "SOCKS5 connection refused";
       case SOCKS5_REQUEST_TTL_EXPIRED:
          return "SOCKS5 TTL expired";
