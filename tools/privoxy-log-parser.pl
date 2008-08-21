@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.113 2008/08/13 16:27:07 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.114 2008/08/21 07:18:57 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -688,10 +688,11 @@ sub highlight_response_line ($) {
     my ($http_version, $status_code, $status_message);
 
     #HTTP/1.1 200 OK
+    #ICY 200 OK
 
     # TODO: Mark different status codes differently
 
-    if ($rl =~ m/(HTTP\/\d\.\d) (\d+) (.*)/) {
+    if ($rl =~ m/((?:HTTP\/\d\.\d|ICY)) (\d+) (.*)/) {
         ($http_version, $status_code, $status_message) = ($1, $2, $3);
     } else {
         debug_message ("Can't parse response line: $rl") and die 'Fix this';
@@ -824,7 +825,7 @@ sub handle_loglevel_header ($) {
 
             $content = highlight_request_line($1);
 
-    } elsif ($c =~ m/^(scan: )(HTTP\/\d\.\d (\d+) (.*))/) {
+    } elsif ($c =~ m/^(scan: )((?:HTTP\/\d\.\d|ICY) (\d+) (.*))/) {
 
             # Server response line
             $req{$t}{'response_line'} = $2;
