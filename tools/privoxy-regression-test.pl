@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.158 2008/07/23 18:47:11 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.159 2008/08/22 16:53:06 fk Exp $
 #
 # Wish list:
 #
@@ -1361,6 +1361,7 @@ Options and their default values if they have any:
     [--min-level $cli_options{'min-level'}]
     [--privoxy-address]
     [--retries $cli_options{'retries'}]
+    [--test-number]
     [--verbose]
     [--version]
 see "perldoc $0" for more information
@@ -1485,7 +1486,8 @@ B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
 [B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
 [B<--loops count>] [B<--max-level max-level>] [B<--max-time max-time>]
 [B<--min-level min-level>] B<--privoxy-address proxy-address>
-[B<--retries retries>] [B<--verbose>] [B<--version>]
+[B<--retries retries>] [B<--test-number test-number>] [B<--verbose>]
+[B<--version>]
 
 =head1 DESCRIPTION
 
@@ -1629,6 +1631,9 @@ will be used. B<proxy-address> has to be specified in http_proxy
 syntax.
 
 B<--retries retries> Retry B<retries> times.
+
+B<--test-number test-number> Only run the test with the specified
+number.
 
 B<--verbose> Also log succesful test runs.
 
