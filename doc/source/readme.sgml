@@ -4,10 +4,10 @@
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity buildsource SYSTEM "buildsource.sgml">
-<!entity p-version "3.0.10">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-version "3.0.11">
+<!entity p-status "UNRELEASED">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
 <!entity % p-doc "IGNORE">         <!-- and never a text doc             -->
 <!entity % p-readme "INCLUDE">     <!-- all your README belong to us     -->
@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.19 2008/06/21 13:43:06 fabiankeil Exp $
+ $Id: readme.sgml,v 2.20 2008/08/14 16:57:40 hal9 Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -127,6 +127,10 @@
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
+<para>
+Privoxy development is between releases. The current sources are development
+quality. If you find problems please report them to the developers.
+</para>
 <para>
  August 2008, Privoxy 3.0.10 is released! There are not any major new
  features, but many improvements and refinements. As usual there are changes
@@ -256,7 +260,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.19 2008/06/21 13:43:06 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.20 2008/08/14 16:57:40 hal9 Exp $ -->
 <!-- </para> -->
 
 </article>
