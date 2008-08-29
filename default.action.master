@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.143 2008/08/11 00:39:42 hal9 Exp $
+#  $Id: default.action.master,v 1.144 2008/08/15 16:46:51 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1794,6 +1794,8 @@ javabog.dk/ijk/
 .ikea.com/
 # URL = http://www.froscon.de/en/projects.html
 .froscon.de/
+# URL = http://www.fsfe.org/en/supporters
+.fsfe.org/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
