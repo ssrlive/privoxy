@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.85 2008/05/26 17:30:55 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.86 2008/06/28 14:19:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.85 2008/05/26 17:30:55 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.86  2008/06/28 14:19:05  fabiankeil
+ *    Protocol detection is done case-insensitive, fix assertion
+ *    to do the same. Yay for Privoxy-Regression-Test and zzuf.
+ *
  *    Revision 1.85  2008/05/26 17:30:55  fabiankeil
  *    Provide an OpenSearch Description to access the
  *    show-url-info page through "search engine plugins".
@@ -1866,9 +1870,9 @@ static jb_err show_defines(struct map *exports)
 
 #ifdef FEATURE_CGI_EDIT_ACTIONS
    if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 1);
-#else /* ifndef FEATURE_COOKIE_JAR */
+#else /* ifndef FEATURE_CGI_EDIT_ACTIONS */
    if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 0);
-#endif /* ndef FEATURE_COOKIE_JAR */
+#endif /* ndef FEATURE_CGI_EDIT_ACTIONS */
 
 #ifdef FEATURE_COOKIE_JAR
    if (!err) err = map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
