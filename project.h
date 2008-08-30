@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.115 2008/05/19 16:57:20 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.116 2008/05/20 16:05:02 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.116  2008/05/20 16:05:02  fabiankeil
+ *    Move parsers structure definition from project.h to parsers.h.
+ *
  *    Revision 1.115  2008/05/19 16:57:20  fabiankeil
  *    Declare all members of the parsers structure immutable.
  *
@@ -1681,16 +1684,6 @@ struct configuration_spec
 
    /** The hostname to show on CGI pages, or NULL to use the real one. */
    const char *hostname;
-
-#ifdef FEATURE_COOKIE_JAR
-
-   /** The file name of the cookie jar file */
-   const char * jarfile;
-
-   /** The handle to the cookie jar file */
-   FILE * jar;
-
-#endif /* def FEATURE_COOKIE_JAR */
 
    /** IP address to bind to.  Defaults to HADDR_DEFAULT == 127.0.0.1. */
    const char *haddr;

@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.30 2008/03/27 18:31:20 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.31 2008/06/14 13:16:40 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.30 2008/03/27 18:31:20 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.31 2008/06/14 13:16:40 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
@@ -604,8 +604,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <listitem>
    <para>
     The directory where all logging takes place
-    (i.e. where <filename>logfile</filename> and
-    <filename>jarfile</filename> are located).
+    (i.e. where the <filename>logfile</filename> is located).
    </para>
   </listitem>
  </varlistentry>
@@ -868,59 +867,6 @@ actionsfile
 </variablelist>
 
 <![%config-file;[<literallayout>@@logfile logfile</literallayout>]]>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="jarfile"><title>jarfile</title>
-
-<variablelist>
- <varlistentry>
-  <term>Specifies:</term>
-  <listitem>
-   <para>
-    The file to store intercepted cookies in
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Type of value:</term>
-  <listitem>
-   <para>File name, relative to <literal>logdir</literal></para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Default value:</term>
-  <listitem>
-   <para><emphasis>Unset (commented out)</emphasis>. When activated: jarfile (Unix) <emphasis>or</emphasis> privoxy.jar (Windows).</para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Effect if unset:</term>
-  <listitem>
-   <para>
-    Intercepted cookies are not stored in a dedicated log file.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    The jarfile may grow to ridiculous sizes over time.
-   </para>
-   <para>
-    If debug 8 (show header parsing) is enabled, cookies are
-    also written to the logfile with the rest of the headers.
-    Therefore this option isn't very useful and may be removed
-    in future releases. Please report to the developers if you
-    are still using it.
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-
-<![%config-file;[<literallayout>@@#jarfile jarfile</literallayout>]]>
 </sect3>
 
 

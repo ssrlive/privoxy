@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.86 2008/06/28 14:19:05 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.87 2008/08/29 15:59:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.86 2008/06/28 14:19:05 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.87  2008/08/29 15:59:22  fabiankeil
+ *    Fix two comments.
+ *
  *    Revision 1.86  2008/06/28 14:19:05  fabiankeil
  *    Protocol detection is done case-insensitive, fix assertion
  *    to do the same. Yay for Privoxy-Regression-Test and zzuf.
@@ -1873,12 +1876,6 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef FEATURE_CGI_EDIT_ACTIONS */
    if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 0);
 #endif /* ndef FEATURE_CGI_EDIT_ACTIONS */
-
-#ifdef FEATURE_COOKIE_JAR
-   if (!err) err = map_conditional(exports, "FEATURE_COOKIE_JAR", 1);
-#else /* ifndef FEATURE_COOKIE_JAR */
-   if (!err) err = map_conditional(exports, "FEATURE_COOKIE_JAR", 0);
-#endif /* ndef FEATURE_COOKIE_JAR */
 
 #ifdef FEATURE_FAST_REDIRECTS
    if (!err) err = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);

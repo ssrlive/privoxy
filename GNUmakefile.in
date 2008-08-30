@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.173 2008/06/18 18:28:42 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.174 2008/07/18 17:50:47 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -285,7 +285,6 @@ inifiles: $(W32_INIS)
 
 config.txt: config
 	$(SED) -e 's!\trustfile trust!trustfile trust.txt!' \
-	       -e 's!\jarfile jarfile!jarfile jar.log!' \
 	       -e 's!\logfile logfile!logfile privoxy.log!' \
 	       -e 's!#Win32-only: !!' \
 	       < $< | \
@@ -1153,16 +1152,16 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	fi ;\
 	[ ! -f $(DESTDIR)$(LOG_DEST)/logfile ] && $(ECHO) Creating logfiles in $(DESTDIR)$(LOG_DEST) || \
 		$(ECHO) Checking logfiles in $(DESTDIR)$(LOG_DEST) ;\
-		$(TOUCH) $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(LOG_DEST)/jarfile || exit 1 ;\
+		$(TOUCH) $(DESTDIR)$(LOG_DEST)/logfile || exit 1 ;\
 	if [ x$$USER != x ]; then \
-		$(CHOWN) $$USER $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(LOG_DEST)/jarfile || \
+		$(CHOWN) $$USER $(DESTDIR)$(LOG_DEST)/logfile || \
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
 	if [ x$$GROUP_T != x ]; then \
-		$(CHGRP) $$GROUP_T $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(LOG_DEST)/jarfile || \
+		$(CHGRP) $$GROUP_T $(DESTDIR)$(LOG_DEST)/logfile || \
 		$(ECHO) "** WARNING ** current install user different from configured user. Logging may fail!!" ;\
 	fi ;\
-	$(CHMOD) $(RWD_MODE) $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(LOG_DEST)/jarfile || exit 1 ;\
+	$(CHMOD) $(RWD_MODE) $(DESTDIR)$(LOG_DEST)/logfile || exit 1 ;\
 	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
                $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
@@ -1236,9 +1235,9 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	-$(RM) $(DESTDIR)$(MAN_DEST)/privoxy.1*
 	-$(RM) -r $(DESTDIR)$(DOC_DEST) || $(RM) -r $(DESTDIR)$(prefix)/doc/privoxy
 
-	@# Log and jarfile and pidfile
+	@# Log and pidfile
 	@$(ECHO) Removing $(PROGRAM) logs
-	-$(RM) $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(PID_DEST)/privoxy.pid $(DESTDIR)$(LOG_DEST)/jarfile
+	-$(RM) $(DESTDIR)$(LOG_DEST)/logfile $(DESTDIR)$(PID_DEST)/privoxy.pid
 
 	@# Final clean up of unused directories. Special handling of CONF and LOG
      # destinations.
@@ -1309,6 +1308,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.174  2008/07/18 17:50:47  fabiankeil
+# Fix whitespace.
+#
 # Revision 1.173  2008/06/18 18:28:42  fabiankeil
 # Remove PDF-related stuff.
 #
