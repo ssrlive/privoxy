@@ -1,4 +1,4 @@
-# $Id: privoxy-suse.spec,v 1.29 2008/03/02 17:36:43 fabiankeil Exp $
+# $Id: privoxy-suse.spec,v 1.30 2008/08/13 16:57:46 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -120,7 +120,6 @@ cat config | \
 #    sed 's/^permissionsfile.*/permissionsfile \/etc\/privoxy\/permissionsfile/g' | \
 #    sed 's/^filterfile.*/default.filter \/etc\/privoxy\/default.filter/g' | \
 #    sed 's/^logfile.*/logfile \/var\/log\/privoxy\/logfile/g' | \
-#    sed 's/^jarfile.*/jarfile \/var\/log\/privoxy\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/privoxy\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/privoxy\/aclfile/g' > \
     sed 's/^logdir.*/logdir \/var\/log\/privoxy/g' > \
@@ -355,6 +354,9 @@ id privoxy > /dev/null 2>&1 && /usr/sbin/userdel privoxy || /bin/true
 - new package: version 2.0
 
 # $Log: privoxy-suse.spec,v $
+# Revision 1.30  2008/08/13 16:57:46  fabiankeil
+# Change version to 3.0.10.
+#
 # Revision 1.29  2008/03/02 17:36:43  fabiankeil
 # Set version to 3.0.9.
 #

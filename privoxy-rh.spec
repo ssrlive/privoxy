@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.58 2008/06/19 01:52:17 hal9 Exp $
+# $Id: privoxy-rh.spec,v 1.59 2008/08/13 16:57:46 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -144,7 +144,6 @@ cat config | \
 #    sed 's/^permissionsfile.*/permissionsfile \/etc\/%{name}\/permissionsfile/g' | \
 #    sed 's/^filterfile.*/default.filter \/etc\/%{name}\/default.filter/g' | \
 #    sed 's/^logfile.*/logfile \%{_localstatedir}\/log\/%{name}\/logfile/g' | \
-#    sed 's/^jarfile.*/jarfile \%{_localstatedir}\/log\/%{name}\/jarfile/g' | \
 #    sed 's/^forward.*/forward \/etc\/%{name}\/forward/g' | \
 #    sed 's/^aclfile.*/aclfile \/etc\/%{name}\/aclfile/g' > \
     sed 's@^logdir.*@logdir %{_localstatedir}/log/%{name}@g' | \
@@ -766,6 +765,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.59  2008/08/13 16:57:46  fabiankeil
+# Change version to 3.0.10.
+#
 # Revision 1.58  2008/06/19 01:52:17  hal9
 # Remove txt docs from spec file.
 #
