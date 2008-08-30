@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.10 User Manual"
+TITLE="Privoxy 3.0.11 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Privoxy Configuration"
@@ -42,7 +42,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.10 User Manual</TH
+>Privoxy 3.0.11 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -708,14 +708,10 @@ CLASS="VARIABLELIST"
 ><DD
 ><P
 >    The directory where all logging takes place
-    (i.e. where <TT
+    (i.e. where the <TT
 CLASS="FILENAME"
 >logfile</TT
-> and
-    <TT
-CLASS="FILENAME"
->jarfile</TT
-> are located).
+> is located).
    </P
 ></DD
 ><DT
@@ -1155,79 +1151,8 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="JARFILE"
->7.2.7. jarfile</A
-></H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Specifies:</DT
-><DD
-><P
->    The file to store intercepted cookies in
-   </P
-></DD
-><DT
->Type of value:</DT
-><DD
-><P
->File name, relative to <TT
-CLASS="LITERAL"
->logdir</TT
-></P
-></DD
-><DT
->Default value:</DT
-><DD
-><P
-><SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Unset (commented out)</I
-></SPAN
->. When activated: jarfile (Unix) <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->or</I
-></SPAN
-> privoxy.jar (Windows).</P
-></DD
-><DT
->Effect if unset:</DT
-><DD
-><P
->    Intercepted cookies are not stored in a dedicated log file.
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    The jarfile may grow to ridiculous sizes over time.
-   </P
-><P
->    If debug 8 (show header parsing) is enabled, cookies are
-    also written to the logfile with the rest of the headers.
-    Therefore this option isn't very useful and may be removed
-    in future releases. Please report to the developers if you
-    are still using it.
-   </P
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
 NAME="TRUSTFILE"
->7.2.8. trustfile</A
+>7.2.7. trustfile</A
 ></H4
 ><P
 ></P
