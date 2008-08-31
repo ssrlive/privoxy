@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.110 2008/08/31 14:55:43 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.111 2008/08/31 15:59:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.110 2008/08/31 14:55:43 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.111  2008/08/31 15:59:02  fabiankeil
+ *    There's no reason to let remote toggling support depend
+ *    on FEATURE_CGI_EDIT_ACTIONS, so make sure it doesn't.
+ *
  *    Revision 1.110  2008/08/31 14:55:43  fabiankeil
  *    Add a @date@ symbol to include a date(1)-like time string
  *    in templates. Modified version of the patch Endre Szabo
@@ -689,7 +693,7 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
           TRUE }, 
    { "show-request", 
          cgi_show_request,  
-         "View the request headers.",
+         "View the request headers",
          TRUE }, 
    { "show-url-info",
          cgi_show_url_info, 
