@@ -1,7 +1,16 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Since 3.0.10
+	
+- Support for remote toggling is controlled by the configure
+  option --disable-toggle only. In previous versions it also
+  depended on the action editor and thus configuring with the
+  --disable-editor option would disable remote toggling support
+  as well.
+
 *** Version 3.0.10 ***
+
 - Ordinary configuration file changes no longer cause program
   termination on OS/2 if the name of the logfile hasn't been
   changed as well. This regression probably crept in with the

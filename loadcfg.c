@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.78 2008/08/02 08:23:22 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.79 2008/08/30 12:03:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.78 2008/08/02 08:23:22 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.79  2008/08/30 12:03:07  fabiankeil
+ *    Remove FEATURE_COOKIE_JAR.
+ *
  *    Revision 1.78  2008/08/02 08:23:22  fabiankeil
  *    If the enforce-blocks directive is used with FEATURE_FORCE_LOAD
  *    disabled, log a message that blocks will always be enforced
@@ -1007,7 +1010,7 @@ struct configuration_spec * load_config(void)
 /* *************************************************************************
  * enable-remote-toggle 0|1
  * *************************************************************************/
-#ifdef FEATURE_CGI_EDIT_ACTIONS
+#ifdef FEATURE_TOGGLE
          case hash_enable_remote_toggle:
             if ((*arg != '\0') && (0 != atoi(arg)))
             {
@@ -1018,7 +1021,7 @@ struct configuration_spec * load_config(void)
                config->feature_flags &= ~RUNTIME_FEATURE_CGI_TOGGLE;
             }
             continue;
-#endif /* def FEATURE_CGI_EDIT_ACTIONS */
+#endif /* def FEATURE_TOGGLE */
 
 /* *************************************************************************
  * enable-remote-http-toggle 0|1
@@ -1598,8 +1601,10 @@ struct configuration_spec * load_config(void)
 #endif /* ndef FEATURE_ACL */
 #ifndef FEATURE_CGI_EDIT_ACTIONS
          case hash_enable_edit_actions:
+#endif /* ndef FEATURE_CGI_EDIT_ACTIONS */
+#ifndef FEATURE_TOGGLE
          case hash_enable_remote_toggle:
-#endif /* def FEATURE_CGI_EDIT_ACTIONS */
+#endif /* ndef FEATURE_TOGGLE */
 #ifndef FEATURE_ACL
          case hash_permit_access:
 #endif /* ndef FEATURE_ACL */
