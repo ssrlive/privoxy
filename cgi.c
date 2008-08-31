@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.108 2008/05/26 17:30:53 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.109 2008/07/26 09:40:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,12 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.108 2008/05/26 17:30:53 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.109  2008/07/26 09:40:27  fabiankeil
+ *    Remove the unconditional block in get_http_time().
+ *    It's pointless now that it's no longer used to limit
+ *    dummy's scope. While at it, remove obvious comments
+ *    and a trailing space.
+ *
  *    Revision 1.108  2008/05/26 17:30:53  fabiankeil
  *    Provide an OpenSearch Description to access the
  *    show-url-info page through "search engine plugins".
@@ -2007,6 +2013,51 @@ void get_http_time(int time_offset, char *buf, size_t buffer_size)
 
 }
 
+/*********************************************************************
+ *
+ * Function    :  get_locale_time
+ *
+ * Description :  Get the time in a date(1)-like format
+ *                according to the current locale - e.g.:
+ *                "Fri Aug 29 19:37:12 CEST 2008"
+ *
+ *                XXX: Should we allow the user to change the format?
+ *
+ * Parameters  :
+ *          1  :  buf         = Destination for result.
+ *          2  :  buffer_size = Size of the buffer above. Must be big
+ *                              enough to hold 29 characters plus a
+ *                              trailing zero.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void get_locale_time(char *buf, size_t buffer_size)
+{
+   struct tm *timeptr;
+   time_t current_time;
+#if defined(HAVE_LOCALTIME_R)
+   struct tm dummy;
+#endif
+
+   assert(buf);
+   assert(buffer_size > 29);
+
+   time(&current_time);
+
+#if HAVE_LOCALTIME_R
+   timeptr = localtime_r(&current_time, &dummy);
+#elif FEATURE_PTHREAD
+   pthread_mutex_lock(&localtime_mutex);
+   timeptr = localtime(&current_time);
+   pthread_mutex_unlock(&localtime_mutex);
+#else
+   timeptr = localtime(&current_time);
+#endif
+
+   strftime(buf, buffer_size, "%a %b %d %X %Z %Y", timeptr);
+
+}
 
 /*********************************************************************
  *
@@ -2580,7 +2631,7 @@ jb_err template_fill_for_cgi(const struct client_state *csp,
  *********************************************************************/
 struct map *default_exports(const struct client_state *csp, const char *caller)
 {
-   char buf[20];
+   char buf[30];
    jb_err err;
    struct map * exports;
    int local_help_exists = 0;
@@ -2606,6 +2657,8 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    }
 
    err = map(exports, "version", 1, html_encode(VERSION), 0);
+   get_locale_time(buf, sizeof(buf));
+   if (!err) err = map(exports, "time",          1, html_encode(buf), 0);
    if (!err) err = map(exports, "my-ip-address", 1, html_encode(ip_address ? ip_address : "unknown"), 0);
    freez(ip_address);
    if (!err) err = map(exports, "my-hostname",   1, html_encode(hostname ? hostname : "unknown"), 0);
