@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.73 2008/08/04 19:06:55 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.74 2008/08/06 18:33:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.73 2008/08/04 19:06:55 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.74  2008/08/06 18:33:36  fabiankeil
+ *    If the "close fd first" workaround doesn't work,
+ *    the fatal error message will be lost, so we better
+ *    explain the consequences while we still can.
+ *
  *    Revision 1.73  2008/08/04 19:06:55  fabiankeil
  *    Add a lame workaround for the "can't open an already open
  *    logfile on OS/2" problem reported by Maynard in #2028842
@@ -434,19 +439,19 @@ static char *os2_socket_strerr(int errcode, char *tmp_buf);
 #ifdef FEATURE_PTHREAD
 static inline void lock_logfile(void)
 {
-   pthread_mutex_lock(&log_mutex);
+   privoxy_mutex_lock(&log_mutex);
 }
 static inline void unlock_logfile(void)
 {
-   pthread_mutex_unlock(&log_mutex);
+   privoxy_mutex_unlock(&log_mutex);
 }
 static inline void lock_loginit(void)
 {
-   pthread_mutex_lock(&log_init_mutex);
+   privoxy_mutex_lock(&log_init_mutex);
 }
 static inline void unlock_loginit(void)
 {
-   pthread_mutex_unlock(&log_init_mutex);
+   privoxy_mutex_unlock(&log_init_mutex);
 }
 #else /* ! FEATURE_PTHREAD */
 /*
@@ -765,9 +770,9 @@ static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
 #ifdef HAVE_LOCALTIME_R
    tm_now = *localtime_r(&now, &tm_now);
 #elif FEATURE_PTHREAD
-   pthread_mutex_lock(&localtime_mutex);
+   privoxy_mutex_lock(&localtime_mutex);
    tm_now = *localtime(&now); 
-   pthread_mutex_unlock(&localtime_mutex);
+   privoxy_mutex_unlock(&localtime_mutex);
 #else
    tm_now = *localtime(&now); 
 #endif
@@ -823,18 +828,18 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
 #ifdef HAVE_GMTIME_R
    gmt = *gmtime_r(&now, &gmt);
 #elif FEATURE_PTHREAD
-   pthread_mutex_lock(&gmtime_mutex);
+   privoxy_mutex_lock(&gmtime_mutex);
    gmt = *gmtime(&now);
-   pthread_mutex_unlock(&gmtime_mutex);
+   privoxy_mutex_unlock(&gmtime_mutex);
 #else
    gmt = *gmtime(&now);
 #endif
 #ifdef HAVE_LOCALTIME_R
    tm_now = localtime_r(&now, &dummy);
 #elif FEATURE_PTHREAD
-   pthread_mutex_lock(&localtime_mutex);
+   privoxy_mutex_lock(&localtime_mutex);
    tm_now = localtime(&now); 
-   pthread_mutex_unlock(&localtime_mutex);
+   privoxy_mutex_unlock(&localtime_mutex);
 #else
    tm_now = localtime(&now); 
 #endif

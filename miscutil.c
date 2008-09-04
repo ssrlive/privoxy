@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.57 2008/03/24 15:29:51 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.58 2008/04/17 14:53:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.57 2008/03/24 15:29:51 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.58  2008/04/17 14:53:30  fabiankeil
+ *    Move simplematch() into urlmatch.c as it's only
+ *    used to match (old-school) domain patterns.
+ *
  *    Revision 1.57  2008/03/24 15:29:51  fabiankeil
  *    Pet gcc43.
  *
@@ -969,9 +973,9 @@ long int pick_from_range(long int range)
 #ifdef HAVE_RANDOM
    number = random() % range + 1; 
 #elif defined(FEATURE_PTHREAD)
-   pthread_mutex_lock(&rand_mutex);
+   privoxy_mutex_lock(&rand_mutex);
    number = rand() % (long int)(range + 1);
-   pthread_mutex_unlock(&rand_mutex);
+   privoxy_mutex_unlock(&rand_mutex);
 #else
 #ifdef _WIN32
    /*

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.184 2008/08/22 15:34:45 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.185 2008/08/30 12:03:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.184 2008/08/22 15:34:45 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.185  2008/08/30 12:03:07  fabiankeil
+ *    Remove FEATURE_COOKIE_JAR.
+ *
  *    Revision 1.184  2008/08/22 15:34:45  fabiankeil
  *    - Silence LLVM/Clang complaint.
  *    - Make received_hup_signal static.
@@ -1168,23 +1171,26 @@ static int32 server_thread(void *data);
 #endif
 
 #ifdef FEATURE_PTHREAD
-pthread_mutex_t log_mutex;
-pthread_mutex_t log_init_mutex;
+/*
+ * XXX: Does the locking stuff really belong in this file?
+ */
+privoxy_mutex_t log_mutex;
+privoxy_mutex_t log_init_mutex;
 
 #if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
-pthread_mutex_t resolver_mutex;
+privoxy_mutex_t resolver_mutex;
 #endif /* !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R) */
 
 #ifndef HAVE_GMTIME_R
-pthread_mutex_t gmtime_mutex;
+privoxy_mutex_t gmtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
 
 #ifndef HAVE_LOCALTIME_R
-pthread_mutex_t localtime_mutex;
+privoxy_mutex_t localtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
 
 #ifndef HAVE_RANDOM
-pthread_mutex_t rand_mutex;
+privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
 
 #endif /* FEATURE_PTHREAD */
@@ -2952,6 +2958,86 @@ static void usage(const char *myname)
 #endif /* #if !defined(_WIN32) || defined(_WIN_CONSOLE) */
 
 
+#ifdef FEATURE_PTHREAD
+/*********************************************************************
+ *
+ * Function    :  privoxy_mutex_lock
+ *
+ * Description :  Locks a mutex using pthread_mutex_lock.
+ *
+ * Parameters  :
+ *          1  :  mutex = The mutex to lock.
+ *
+ * Returns     :  Void, exits in case of errors.
+ *
+ *********************************************************************/
+void privoxy_mutex_lock(privoxy_mutex_t *mutex)
+{
+   int err = pthread_mutex_lock(mutex);
+   if (err)
+   {
+      if (mutex != &log_mutex)
+      {
+         log_error(LOG_LEVEL_FATAL,
+            "Mutex locking failed: %s.\n", strerror(err));
+      }
+      exit(1);
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  privoxy_mutex_unlock
+ *
+ * Description :  Unlocks a mutex using pthread_mutex_unlock.
+ *
+ * Parameters  :
+ *          1  :  mutex = The mutex to unlock.
+ *
+ * Returns     :  Void, exits in case of errors.
+ *
+ *********************************************************************/
+void privoxy_mutex_unlock(privoxy_mutex_t *mutex)
+{
+   int err = pthread_mutex_unlock(mutex);
+   if (err)
+   {
+      if (mutex != &log_mutex)
+      {
+         log_error(LOG_LEVEL_FATAL,
+            "Mutex unlocking failed: %s.\n", strerror(err));
+      }
+      exit(1);
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  privoxy_mutex_init
+ *
+ * Description :  Prepares a mutex using pthread_mutex_init.
+ *
+ * Parameters  :
+ *          1  :  mutex = The mutex to initialize.
+ *
+ * Returns     :  Void, exits in case of errors.
+ *
+ *********************************************************************/
+static void privoxy_mutex_init(privoxy_mutex_t *mutex)
+{
+   int err = pthread_mutex_init(mutex, 0);
+   if (err)
+   {
+      printf("Fatal error. Mutex initialization failed: %s.\n",
+         strerror(err));
+      exit(1);
+   }
+}
+#endif /* def FEATURE_PTHREAD */
+
+
 /*********************************************************************
  *
  * Function    :  initialize_mutexes
@@ -2965,15 +3051,13 @@ static void usage(const char *myname)
  *********************************************************************/
 static void initialize_mutexes(void)
 {
-   int err = 0;
-
 #ifdef FEATURE_PTHREAD
    /*
     * Prepare global mutex semaphores
     */
-   err = pthread_mutex_init(&log_mutex, 0);
+   privoxy_mutex_init(&log_mutex);
 
-   if (!err) err = pthread_mutex_init(&log_init_mutex, 0);
+   privoxy_mutex_init(&log_init_mutex);
 
    /*
     * XXX: The assumptions below are a bit naive
@@ -2984,22 +3068,22 @@ static void initialize_mutexes(void)
     * thread safe.
     */
 #if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
-   if (!err) err = pthread_mutex_init(&resolver_mutex, 0);
+   privoxy_mutex_init(&resolver_mutex);
 #endif /* !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R) */
    /*
     * XXX: should we use a single mutex for
     * localtime() and gmtime() as well?
     */
 #ifndef HAVE_GMTIME_R
-   if (!err) err = pthread_mutex_init(&gmtime_mutex, 0);
+   privoxy_mutex_init(&gmtime_mutex);
 #endif /* ndef HAVE_GMTIME_R */
 
 #ifndef HAVE_LOCALTIME_R
-   if (!err) err = pthread_mutex_init(&localtime_mutex, 0);
+   privoxy_mutex_init(&localtime_mutex);
 #endif /* ndef HAVE_GMTIME_R */
 
 #ifndef HAVE_RANDOM
-   if (!err) err = pthread_mutex_init(&rand_mutex, 0);
+   privoxy_mutex_init(&rand_mutex);
 #endif /* ndef HAVE_RANDOM */
 #endif /* FEATURE_PTHREAD */
 
@@ -3007,14 +3091,6 @@ static void initialize_mutexes(void)
     * TODO: mutex support for mingw32 would be swell.
     */
 
-   if (err)
-   {
-      printf("Fatal error. Mutex initialization failed: %s.\n",
-         strerror(err));
-      exit(1);
-   }
-
-   return;
 }
 
 
