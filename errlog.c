@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.75 2008/09/04 08:13:58 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.76 2008/09/07 12:35:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.75 2008/09/04 08:13:58 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.76  2008/09/07 12:35:05  fabiankeil
+ *    Add mutex lock support for _WIN32.
+ *
  *    Revision 1.75  2008/09/04 08:13:58  fabiankeil
  *    Prepare for critical sections on Windows by adding a
  *    layer of indirection before the pthread mutex functions.
@@ -1246,12 +1249,13 @@ void log_error(int loglevel, const char *fmt, ...)
    {
       fputs(outbuf_save, logfp);
    }
-   unlock_logfile();
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /* Write to display */
    LogPutString(outbuf_save);
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
+
+   unlock_logfile();
 
 }
 
