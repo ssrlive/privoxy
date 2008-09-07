@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.76 2008/09/07 12:35:05 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.77 2008/09/07 12:43:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.76 2008/09/07 12:35:05 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.77  2008/09/07 12:43:44  fabiankeil
+ *    Move the LogPutString() call in log_error() into the locked
+ *    region so the Windows GUI log is consistent with the logfile.
+ *
  *    Revision 1.76  2008/09/07 12:35:05  fabiankeil
  *    Add mutex lock support for _WIN32.
  *
@@ -1052,9 +1056,9 @@ void log_error(int loglevel, const char *fmt, ...)
       {
          outbuf[length++] = ch;
          /*
-          * XXX: Only necessary on platforms which don't use pthread
-          * mutexes (mingw32 for example), where multiple threads can
-          * write to the buffer at the same time.
+          * XXX: Only necessary on platforms where multiple threads
+          * can write to the buffer at the same time because we
+          * don't support mutexes (OS/2 for example).
           */
          outbuf[length] = '\0';
          continue;
