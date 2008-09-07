@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.74 2008/08/06 18:33:36 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.75 2008/09/04 08:13:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,10 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.74 2008/08/06 18:33:36 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.75  2008/09/04 08:13:58  fabiankeil
+ *    Prepare for critical sections on Windows by adding a
+ *    layer of indirection before the pthread mutex functions.
+ *
  *    Revision 1.74  2008/08/06 18:33:36  fabiankeil
  *    If the "close fd first" workaround doesn't work,
  *    the fatal error message will be lost, so we better
@@ -436,7 +440,7 @@ static char *w32_socket_strerr(int errcode, char *tmp_buf);
 static char *os2_socket_strerr(int errcode, char *tmp_buf);
 #endif
 
-#ifdef FEATURE_PTHREAD
+#ifdef MUTEX_LOCKS_AVAILABLE
 static inline void lock_logfile(void)
 {
    privoxy_mutex_lock(&log_mutex);
@@ -453,7 +457,7 @@ static inline void unlock_loginit(void)
 {
    privoxy_mutex_unlock(&log_init_mutex);
 }
-#else /* ! FEATURE_PTHREAD */
+#else /* ! MUTEX_LOCKS_AVAILABLE */
 /*
  * FIXME we need a cross-platform locking mechanism.
  * The locking/unlocking functions below should be 

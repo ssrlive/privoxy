@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.58 2008/04/17 14:53:30 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.59 2008/09/04 08:13:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,10 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.58 2008/04/17 14:53:30 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.59  2008/09/04 08:13:58  fabiankeil
+ *    Prepare for critical sections on Windows by adding a
+ *    layer of indirection before the pthread mutex functions.
+ *
  *    Revision 1.58  2008/04/17 14:53:30  fabiankeil
  *    Move simplematch() into urlmatch.c as it's only
  *    used to match (old-school) domain patterns.
@@ -972,33 +976,22 @@ long int pick_from_range(long int range)
 
 #ifdef HAVE_RANDOM
    number = random() % range + 1; 
-#elif defined(FEATURE_PTHREAD)
+#elif defined(MUTEX_LOCKS_AVAILABLE)
    privoxy_mutex_lock(&rand_mutex);
+#ifdef _WIN32
+   srand((unsigned)(GetCurrentThreadId()+GetTickCount()));
+#endif /* def _WIN32 */
    number = rand() % (long int)(range + 1);
    privoxy_mutex_unlock(&rand_mutex);
-#else
-#ifdef _WIN32
-   /*
-    * On Windows and mingw32 srand() has to be called in every
-    * rand()-using thread, but can cause crashes if it's not
-    * mutex protected.
-    *
-    * Currently we don't have mutexes for mingw32, and for
-    * our purpose this cludge is probably preferable to crashes.
-    *
-    * The warning is shown once on startup from jcc.c.
-    */
-   number = (range + GetCurrentThreadId() % range) / 2;
 #else
    /*
     * XXX: Which platforms reach this and are there
     * better options than just using rand() and hoping
     * that it's safe?
     */
-   log_error(LOG_LEVEL_INFO, "No thread-safe PRNG available? Header time randomization might cause "
-      "crashes, predictable results or even combine these fine options.");
+   log_error(LOG_LEVEL_INFO, "No thread-safe PRNG available? Header time randomization "
+      "might cause crashes, predictable results or even combine these fine options.");
    number = rand() % (long int)(range + 1);
-#endif /* def _WIN32 */ 
 
 #endif /* (def HAVE_RANDOM) */
 

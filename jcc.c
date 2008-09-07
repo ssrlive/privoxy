@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.185 2008/08/30 12:03:07 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.186 2008/09/04 08:13:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.185 2008/08/30 12:03:07 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.186  2008/09/04 08:13:58  fabiankeil
+ *    Prepare for critical sections on Windows by adding a
+ *    layer of indirection before the pthread mutex functions.
+ *
  *    Revision 1.185  2008/08/30 12:03:07  fabiankeil
  *    Remove FEATURE_COOKIE_JAR.
  *
@@ -1170,7 +1174,7 @@ static int32 server_thread(void *data);
 #define sleep(N)  DosSleep(((N) * 100))
 #endif
 
-#ifdef FEATURE_PTHREAD
+#ifdef MUTEX_LOCKS_AVAILABLE
 /*
  * XXX: Does the locking stuff really belong in this file?
  */
@@ -1193,7 +1197,7 @@ privoxy_mutex_t localtime_mutex;
 privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
 
-#endif /* FEATURE_PTHREAD */
+#endif /* def MUTEX_LOCKS_AVAILABLE */
 
 #if defined(unix)
 const char *basedir = NULL;
@@ -2958,21 +2962,22 @@ static void usage(const char *myname)
 #endif /* #if !defined(_WIN32) || defined(_WIN_CONSOLE) */
 
 
-#ifdef FEATURE_PTHREAD
+#ifdef MUTEX_LOCKS_AVAILABLE
 /*********************************************************************
  *
  * Function    :  privoxy_mutex_lock
  *
- * Description :  Locks a mutex using pthread_mutex_lock.
+ * Description :  Locks a mutex.
  *
  * Parameters  :
  *          1  :  mutex = The mutex to lock.
  *
- * Returns     :  Void, exits in case of errors.
+ * Returns     :  Void. May exit in case of errors.
  *
  *********************************************************************/
 void privoxy_mutex_lock(privoxy_mutex_t *mutex)
 {
+#ifdef FEATURE_PTHREAD
    int err = pthread_mutex_lock(mutex);
    if (err)
    {
@@ -2983,6 +2988,9 @@ void privoxy_mutex_lock(privoxy_mutex_t *mutex)
       }
       exit(1);
    }
+#else
+   EnterCriticalSection(mutex);
+#endif /* def FEATURE_PTHREAD */
 }
 
 
@@ -2990,16 +2998,17 @@ void privoxy_mutex_lock(privoxy_mutex_t *mutex)
  *
  * Function    :  privoxy_mutex_unlock
  *
- * Description :  Unlocks a mutex using pthread_mutex_unlock.
+ * Description :  Unlocks a mutex.
  *
  * Parameters  :
  *          1  :  mutex = The mutex to unlock.
  *
- * Returns     :  Void, exits in case of errors.
+ * Returns     :  Void. May exit in case of errors.
  *
  *********************************************************************/
 void privoxy_mutex_unlock(privoxy_mutex_t *mutex)
 {
+#ifdef FEATURE_PTHREAD
    int err = pthread_mutex_unlock(mutex);
    if (err)
    {
@@ -3010,6 +3019,9 @@ void privoxy_mutex_unlock(privoxy_mutex_t *mutex)
       }
       exit(1);
    }
+#else
+   LeaveCriticalSection(mutex);
+#endif /* def FEATURE_PTHREAD */
 }
 
 
@@ -3017,16 +3029,17 @@ void privoxy_mutex_unlock(privoxy_mutex_t *mutex)
  *
  * Function    :  privoxy_mutex_init
  *
- * Description :  Prepares a mutex using pthread_mutex_init.
+ * Description :  Prepares a mutex.
  *
  * Parameters  :
  *          1  :  mutex = The mutex to initialize.
  *
- * Returns     :  Void, exits in case of errors.
+ * Returns     :  Void. May exit in case of errors.
  *
  *********************************************************************/
 static void privoxy_mutex_init(privoxy_mutex_t *mutex)
 {
+#ifdef FEATURE_PTHREAD
    int err = pthread_mutex_init(mutex, 0);
    if (err)
    {
@@ -3034,9 +3047,11 @@ static void privoxy_mutex_init(privoxy_mutex_t *mutex)
          strerror(err));
       exit(1);
    }
-}
+#else
+   InitializeCriticalSection(mutex);
 #endif /* def FEATURE_PTHREAD */
-
+}
+#endif /* def MUTEX_LOCKS_AVAILABLE */
 
 /*********************************************************************
  *
@@ -3051,7 +3066,7 @@ static void privoxy_mutex_init(privoxy_mutex_t *mutex)
  *********************************************************************/
 static void initialize_mutexes(void)
 {
-#ifdef FEATURE_PTHREAD
+#ifdef MUTEX_LOCKS_AVAILABLE
    /*
     * Prepare global mutex semaphores
     */
@@ -3085,12 +3100,7 @@ static void initialize_mutexes(void)
 #ifndef HAVE_RANDOM
    privoxy_mutex_init(&rand_mutex);
 #endif /* ndef HAVE_RANDOM */
-#endif /* FEATURE_PTHREAD */
-
-   /*
-    * TODO: mutex support for mingw32 would be swell.
-    */
-
+#endif /* def MUTEX_LOCKS_AVAILABLE */
 }
 
 
@@ -3306,15 +3316,6 @@ int main(int argc, const char *argv[])
    random_seed = (unsigned int)time(NULL);
 #ifdef HAVE_RANDOM
    srandom(random_seed);
-#elif defined (_WIN32)
-   /*
-    * See pick_from_range() in miscutil.c for details.
-    */
-   log_error(LOG_LEVEL_INFO,
-      "No thread-safe PRNG implemented for your platform. "
-      "Using weak \'randomization\' factor which will "
-      "limit the already questionable usefulness of "
-      "header-time-randomizing actions (disabled by default).");
 #else
    srand(random_seed);
 #endif /* ifdef HAVE_RANDOM */
