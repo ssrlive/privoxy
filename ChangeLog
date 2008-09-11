@@ -2,7 +2,7 @@
 ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.10
-	
+
 - Support for remote toggling is controlled by the configure
   option --disable-toggle only. In previous versions it also
   depended on the action editor and thus configuring with the
@@ -633,12 +633,3 @@ Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
                http://www.gnu.org/copyleft/gpl.html
                or write to the Free Software Foundation, Inc., 59
                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-               Note that parts of Privoxy are under licenses that are
-               GPL-compatible but less restrictive - for details see
-               Privoxy's source code. The Privoxy team doesn't hold the
-               copyright for these parts and doesn't relicense them either.
-               You are free to extract them again to distribute them under
-               their own license.
-	
-set vi:tw=68
