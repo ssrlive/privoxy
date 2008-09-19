@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/standard.action,v $
 # 
-#  $Id: standard.action,v 1.22 2007/11/07 18:01:10 fabiankeil Exp $
+#  $Id: standard.action,v 1.23 2008/03/04 18:30:40 fabiankeil Exp $
 #
 #  Purpose     :  Provide prefedined sets of actions, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -28,7 +28,7 @@
 # Cautious settings -- safe for all sites, but offer little privacy protection
 #
 { \
-+hide-forwarded-for-headers \
++change-x-forwarded-for{block} \
 +hide-from-header{block} \
 +set-image-blocker{pattern} \
 }
@@ -39,6 +39,7 @@ standard.Cautious
 # Medium settings -- safe for most sites, with reasonable protection/damage tradeoff
 #
 { \
++change-x-forwarded-for{block} \
 +deanimate-gifs{last} \
 +filter{refresh-tags} \
 +filter{img-reorder} \
@@ -46,7 +47,6 @@ standard.Cautious
 +filter{webbugs} \
 +filter{jumping-windows} \
 +filter{ie-exploits} \
-+hide-forwarded-for-headers \
 +hide-from-header{block} \
 +hide-referrer{conditional-block} \
 +session-cookies-only \
@@ -66,6 +66,7 @@ standard.Medium
 # sources.
 #
 { \
++change-x-forwarded-for{block} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +crunch-if-none-match \
@@ -84,7 +85,6 @@ standard.Medium
 +filter{frameset-borders} \
 +filter{quicktime-kioskmode} \
 +hide-if-modified-since{-60} \
-+hide-forwarded-for-headers \
 +hide-from-header{block} \
 +hide-referrer{conditional-block} \
 +limit-connect{,} \
