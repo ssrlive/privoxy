@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.66 2008/08/03 17:27:47 fabiankeil Exp $
+#  $Id: default.filter,v 1.67 2008/08/06 17:38:06 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -461,7 +461,7 @@ s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not sea
 
 # Remove by description
 s/^.*\
-(?:(suck|lick|tounge|rub|fuck|fingering|finger|chicks?)\s*)?\
+(?:(suck|lick|tongue|rub|fuck|fingering|finger|chicks?)\s*)?\
 (?:(her|your|my|hard|with|big|wet|tight|pink|hot|moist|young|teen)\s*)+\
 (dicks?|penis|cocks?|balls?|tits?|pussy|cunt|clit|ass|mouth).*$\
 /This page has been blocked by Privoxy's crude-parental content filter\
@@ -835,6 +835,11 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.67  2008/08/06 17:38:06  fabiankeil
+#     In banners-by-size, make sure white-space around the height
+#     attribute is removed as well and replace two spaces with
+#     "\s" so we don't get fooled by tabs. Fixes #2036125.
+#
 #     Revision 1.66  2008/08/03 17:27:47  fabiankeil
 #     Teach msn filter to catch a few new ad classes.
 #
