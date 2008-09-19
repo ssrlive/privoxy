@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.139 2008/09/04 08:13:58 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.140 2008/09/12 17:51:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.139 2008/09/04 08:13:58 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.140  2008/09/12 17:51:43  fabiankeil
+ *    - A few style fixes.
+ *    - Remove a pointless cast.
+ *
  *    Revision 1.139  2008/09/04 08:13:58  fabiankeil
  *    Prepare for critical sections on Windows by adding a
  *    layer of indirection before the pthread mutex functions.
@@ -922,6 +926,7 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
 
 static jb_err client_host_adder       (struct client_state *csp);
 static jb_err client_xtra_adder       (struct client_state *csp);
+static jb_err client_x_forwarded_for_adder(struct client_state *csp);
 static jb_err connection_close_adder  (struct client_state *csp); 
 
 static jb_err create_forged_referrer(char **header, const char *hostport);
@@ -988,6 +993,7 @@ static const struct parsers server_patterns[] = {
 
 static const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
+   client_x_forwarded_for_adder,
    client_xtra_adder,
    /* Temporarily disabled:    client_accept_encoding_adder, */
    connection_close_adder,
@@ -3367,10 +3373,26 @@ static jb_err client_send_cookie(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_x_forwarded(struct client_state *csp, char **header)
 {
-   if ((csp->action->flags & ACTION_HIDE_FORWARDED) != 0)
+   int block_header = (((csp->action->flags & ACTION_HIDE_FORWARDED) != 0)
+      || ((csp->action->flags & ACTION_CHANGE_X_FORWARDED_FOR) &&
+         (0 == strcmpic(csp->action->string[ACTION_STRING_CHANGE_X_FORWARDED_FOR], "block"))));
+
+   if (block_header)
    {
       freez(*header);
       log_error(LOG_LEVEL_HEADER, "crunched x-forwarded-for!");
+   }
+   else if (0 == strcmpic(csp->action->string[ACTION_STRING_CHANGE_X_FORWARDED_FOR], "add"))
+   {
+      /* Save it so we can re-add it later */
+      freez(csp->x_forwarded_for);
+      csp->x_forwarded_for = *header;
+
+      /*
+       * Always set *header = NULL, since this information
+       * will be sent at the end of the header.
+       */
+      *header = NULL;
    }
 
    return JB_ERR_OK;
@@ -3851,6 +3873,54 @@ static jb_err client_xtra_adder(struct client_state *csp)
    }
 
    return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_x_forwarded_for_adder
+ *
+ * Description :  Used in the add_client_headers list.  Called from `sed'.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+static jb_err client_x_forwarded_for_adder(struct client_state *csp)
+{
+   char *header = NULL;
+   jb_err err;
+
+   if (!((csp->action->flags & ACTION_CHANGE_X_FORWARDED_FOR) &&
+         (0 == strcmpic(csp->action->string[ACTION_STRING_CHANGE_X_FORWARDED_FOR], "add"))))
+   {
+      return JB_ERR_OK;
+   }
+
+   if (csp->x_forwarded_for)
+   {
+      header = strdup(csp->x_forwarded_for);
+      string_append(&header, ", ");
+   }
+   else
+   {
+      header = strdup("X-Forwarded-For: ");
+   }
+   string_append(&header, csp->ip_addr_str);
+
+   if (header == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   log_error(LOG_LEVEL_HEADER, "addh: %s", header);
+   err = enlist(csp->headers, header);
+   freez(header);
+
+   return err;
 }
 
 

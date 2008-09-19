@@ -32,6 +32,9 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.54  2008/03/29 12:14:27  fabiankeil
+#    Remove send-wafer and send-vanilla-wafer actions.
+#
 #    Revision 1.53  2008/03/28 15:13:45  fabiankeil
 #    Remove inspect-jpegs action.
 #
@@ -550,6 +553,31 @@ function show_limit_connect_opts(tf)
       <td>Block reason to tell the user:<br>
         <input type="text" name="block_mode" size="40" value="@block-param@">
       </td>
+    </tr>
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="change_x_forwarded_for" id="change_x_forwarded_for_y" value="Y" @change-x-forwarded-for-y@
+        onclick="show_change_x_forwarded_for_opts(true)"></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="change_x_forwarded_for" value="N" @change-x-forwarded-for-n@
+        onclick="show_change_x_forwarded_for_opts(false)"></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="change_x_forwarded_for" value="X" @change-x-forwarded-for-x@
+        onclick="show_change_x_forwarded_for_opts(false)"></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CHANGE-X-FORWARDED-FOR">change-x-forwarded-for</a></td>
+      <td>Specifies whether to block or add X-Forwarded-For headers.</td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="change_x_forwarded_for_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td><input type="radio" name="change_x_forwarded_for_mode" value="block"
+        id="change_x_forwarded_for_mode_block" @change-x-forwarded-for-param-block@><label
+        for="change_x_forwarded_for_mode_block">Block the header.</label><br>
+        <input type="radio" name="change_x_forwarded_for_mode" value="add"
+        id="change_x_forwarded_for_mode_add" @change-x-forwarded-for-param-add@><label 
+        for="change_x_forwarded_for_mode_add">Add the header.</label><br>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1">&nbsp;</td>

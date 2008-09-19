@@ -39,6 +39,9 @@
  *
  * Revisions   :
  *    $Log: actionlist.h,v $
+ *    Revision 1.33  2008/03/29 12:13:45  fabiankeil
+ *    Remove send-wafer and send-vanilla-wafer actions.
+ *
  *    Revision 1.32  2008/03/28 15:13:42  fabiankeil
  *    Remove inspect-jpegs action.
  *
@@ -247,6 +250,9 @@ DEFINE_ACTION_STRING     ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   
 DEFINE_CGI_PARAM_RADIO   ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "pattern", 1)
 DEFINE_CGI_PARAM_RADIO   ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
 DEFINE_CGI_PARAM_CUSTOM  ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER,  CGI_PREFIX "send-banner?type=pattern")
+DEFINE_ACTION_STRING     ("change-x-forwarded-for",     ACTION_CHANGE_X_FORWARDED_FOR,  ACTION_STRING_CHANGE_X_FORWARDED_FOR)
+DEFINE_CGI_PARAM_RADIO   ("change-x-forwarded-for",     ACTION_CHANGE_X_FORWARDED_FOR,  ACTION_STRING_CHANGE_X_FORWARDED_FOR, "block", 0)
+DEFINE_CGI_PARAM_RADIO   ("change-x-forwarded-for",     ACTION_CHANGE_X_FORWARDED_FOR,  ACTION_STRING_CHANGE_X_FORWARDED_FOR, "add", 1)
 
 #if DEFINE_ACTION_ALIAS
 

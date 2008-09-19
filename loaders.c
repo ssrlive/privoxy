@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.66 2008/03/21 11:16:30 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.67 2008/03/30 14:52:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,10 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.66 2008/03/21 11:16:30 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.67  2008/03/30 14:52:08  fabiankeil
+ *    Rename load_actions_file() and load_re_filterfile()
+ *    as they load multiple files "now".
+ *
  *    Revision 1.66  2008/03/21 11:16:30  fabiankeil
  *    Garbage-collect csp->my_ip_addr_str and csp->my_hostname.
  *
@@ -507,6 +511,7 @@ void sweep(void)
 
          freez(csp->ip_addr_str);
          freez(csp->iob->buf);
+         freez(csp->x_forwarded_for);
          freez(csp->error_message);
 
          if (csp->action->flags & ACTION_FORWARD_OVERRIDE &&
