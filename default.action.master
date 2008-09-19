@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.144 2008/08/15 16:46:51 fabiankeil Exp $
+#  $Id: default.action.master,v 1.145 2008/08/29 14:24:45 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -201,6 +201,11 @@
 # +block{reason}
 #    Block this URL. Instead of forwarding the request, Privoxy will
 #    send a "block" page containing the specified reason.
+#
+# +change-x-forwarded-for{add}
+# +change-x-forwarded-for{block}
+#   Adds or blocks the "X-Forwarded-For:" HTTP header in client
+#   requests.
 #
 # +client-header-filter{name}
 #    All client headers to which this action applies are filtered on-the-fly
@@ -553,7 +558,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 # Defaults
 #############################################################################
 { \
-+hide-forwarded-for-headers \
++change-x-forwarded-for{block} \
 +hide-from-header{block} \
 +set-image-blocker{pattern} \
 }
