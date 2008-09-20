@@ -8,6 +8,12 @@ ChangeLog for Privoxy
   depended on the action editor and thus configuring with the
   --disable-editor option would disable remote toggling support
   as well.
+- The hide-forwarded-for-headers action has been replaced with
+  the change-x-forwarded-for{} action which can also be used to
+  add X-Forwarded-For headers. The latter functionality already
+  existed in Privoxy versions prior to 3.0.7 but has been removed
+  as it was often used unintentionally (by not using the
+  hide-forwarded-for-headers action).
 
 *** Version 3.0.10 ***
 
