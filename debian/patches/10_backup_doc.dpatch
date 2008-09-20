@@ -7,7 +7,7 @@
 dpatch_patch ()
 {
     tar cf debian/patched/doc.bak.tar README
-    for i in doc/source doc/text doc/webserver doc/pdf \
+    for i in doc/source doc/text doc/webserver \
              INSTALL AUTHORS privoxy.1
     do
        if [ -e $i ]
@@ -19,7 +19,6 @@ dpatch_patch ()
 
 dpatch_unpatch ()
 {
-    rm -rf doc/pdf
     tar xf debian/patched/doc.bak.tar
 }
 

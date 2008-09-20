@@ -27,7 +27,7 @@ case "$1" in
     configure)
         adduser --quiet --system --home /etc/privoxy --no-create-home \
 	    --ingroup nogroup --disabled-password privoxy
-        chown -R privoxy.adm /var/log/privoxy
+        chown -R privoxy:adm /var/log/privoxy
         chmod 750 /var/log/privoxy
 	chown privoxy /etc/privoxy/user.action /etc/privoxy/trust
 	[ -f /etc/privoxy/global.action ] \
@@ -39,6 +39,17 @@ case "$1" in
 	    chown root /etc/privoxy/standard.action \
 		       /etc/privoxy/default.action
 	fi
+
+	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.7" \
+	    && grep -q '^actionsfile [a-z]*[[:space:]]*#.*$' /etc/privoxy/config
+	then
+	    # Upgrading from version before 3.0.7 where the user kept his old 
+	    # (modified) config file:
+	    # Try to change   "actionsfile foo"  to  "actionsfile foo.action"
+	    # as needed in 3.0.7:
+	    sed 's/^actionsfile \([a-z]*\)\([ 	]*\#\)/actionsfile \1.action\2/' \
+		-i.bak /etc/privoxy/config
+	fi	
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

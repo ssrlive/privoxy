@@ -5,14 +5,8 @@ Abstract: The provoxy developer manual gives the users information on
  how to help the developer team.  It provides guidance on coding,
  testing, documentation and other issues.  Privoxy is a filtering web
  proxy.
-Section: Apps/Net
+Section: Network/Web Browsing
 
 Format: HTML
 Index: /usr/share/doc/privoxy/developer-manual/index.html
 Files: /usr/share/doc/privoxy/developer-manual/*.html
-
-Format: text
-Files: /usr/share/doc/privoxy/developer-manual.txt.gz
-
-Format: pdf
-Files: /usr/share/doc/privoxy/privoxy-developer-manual.pdf

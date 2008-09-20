@@ -9,7 +9,7 @@
 diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
 --- privoxy~/GNUmakefile.in
 +++ privoxy/GNUmakefile.in
-@@ -166,7 +166,7 @@
+@@ -167,7 +167,7 @@
  #############################################################################
  # We include these files in our distributions
  #############################################################################
@@ -21,7 +21,7 @@ diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
 diff -urNad privoxy~/config privoxy/config
 --- privoxy~/config
 +++ privoxy/config
-@@ -361,6 +361,7 @@
+@@ -371,6 +371,7 @@
  #      to allow previously forbidden characters.
  #
  actionsfile standard.action  # Internal purpose, recommended
@@ -32,7 +32,7 @@ diff -urNad privoxy~/config privoxy/config
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -552,16 +552,6 @@
+@@ -550,16 +550,6 @@
  allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
  
  #############################################################################

@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (C) 2002-2007 Roland Rosenfeld <roland@debian.org>, based on
+# (C) 2002-2008 Roland Rosenfeld <roland@debian.org>, based on
 # Sample debian/rules that uses debhelper.
 # This file is public domain software, originally written by Joey Hess. 
 
@@ -36,18 +36,9 @@ build-stamp: patch-stamp
 		--enable-zlib \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 	$(MAKE)
-#       create missing doc/pdf directory if necessary:
-	[ -d doc/pdf ] || mkdir doc/pdf
-	$(MAKE) dok-pdf
 	$(MAKE) dok
 	env -u LANG $(MAKE) man
 	$(MAKE) man2html
-
-# 	remove trailing whitespaces:
-	for x in developer-manual user-manual faq; do \
-		sed -e 's/[ 	]*$$//' < doc/text/$$x.txt > doc/text/$$x.nws;\
-		mv -f doc/text/$$x.nws doc/text/$$x.txt; \
-	done
 
 	touch build-stamp
 
@@ -68,7 +59,6 @@ clean1:
 
 	rm -f doc/source/ldp.dsl
 	rm -rf doc/source/temp
-#	rm -rf doc/pdf
 
 	dh_clean -Xrc.privoxy.orig
 
@@ -87,6 +77,11 @@ install: build-stamp
 	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
 	install -m 0644 default.filter $(DEBDIR)/etc/privoxy/default.filter
 	install -m 0644 trust $(DEBDIR)/etc/privoxy/trust
+
+	install -m 0755 tools/privoxy-log-parser.pl \
+		$(DEBDIR)/usr/bin/privoxy-log-parser
+	pod2man tools/privoxy-log-parser.pl \
+		> $(DEBDIR)/usr/share/man/man1/privoxy-log-parser.1
 
 	cp -r templates $(DEBDIR)/etc/privoxy/
 	rm -f $(DEBDIR)/etc/privoxy/templates/*~
@@ -129,11 +124,11 @@ binary-arch: build-stamp install
 	dh_installchangelogs ChangeLog
 	dh_link
 	dh_strip
-	dh_compress -Xpdf
+	dh_compress
 	dh_fixperms
 #	dh_makeshlibs
 	dh_installdeb
-#	dh_perl
+	dh_perl
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums

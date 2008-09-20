@@ -5,4 +5,4 @@ version=3
 
 #http://sourceforge.net/project/showfiles.php?group_id=11118 http://prdownloads.sourceforge.net/ijbswa/privoxy-(.*)-stable-src.tar.gz\?download
 
-http://prdownloads.sourceforge.net/ijbswa/privoxy-(.*)-stable-src.tar.gz
+http://sf.net/ijbswa/privoxy-(\d+.*)-(?:stable|beta)-src.tar.gz

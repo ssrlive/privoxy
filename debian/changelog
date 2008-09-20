@@ -1,13 +1,64 @@
-privoxy (3.0.7~CSV20071202-0.1) UNRELEASED; urgency=low
+privoxy (3.0.10-1) unstable; urgency=low
 
-  * CVS as of 2007-12-01.
+  * New upstream version 3.0.10-stable.
+  * Install privoxy-log-parser into /usr/bin.
+  * Add lintian-override for libtool warnings according pcre, because we
+    do not use this version of pcre but the one from libpcre3-dev.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 20 Sep 2008 17:33:30 +0200
+
+privoxy (3.0.9-1) unstable; urgency=low
+
+  * New upstream version 3.0.9-beta.
+  * Upgrade all patches to new version:
+    - 20_makefile_fixup included upstream.
+  * The new version doesn't support PDF documentation any more, so remove
+    it from the Debian package.
+    -> Stop Build-Depending on htmldoc.
+  * The new version doesn't support text/plain documentation any more, so
+    remove it from the Debian package.
+  * Upgrade to Standards-Version 3.8.0 (no changes)
+  * Move documentation from doc-base section Apps/Net to Network/Web Browsing.
+  * chown user:group instead of user.group in postinst to be more compatible.
+  * 05_defaut_action: unblock qa.debian.org/popcon.php (Closes: #479525).
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 07 Jul 2008 22:35:17 +0200
+
+privoxy (3.0.8-1) unstable; urgency=low
+
+  * New upstream release 3.0.8-stable.
+  * Upgrade all patches to new version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 20 Jan 2008 22:19:02 +0100
+
+privoxy (3.0.7-2) unstable; urgency=low
+
+  * Remove trailing space from debian/patches/00list to make lintian happy.
+  * postinst: On upgrade from 3.0.6 and below the config file format
+    changed: actionsfile now needs filename.action as parameter instead of
+    filename. Fix this config file change in postinst if necessary.
+    (Closes: #456274).
+  * Upgrade to Standards-Version 3.7.3 (no changes).
+  * 19_manpage_fixup: Replace "ö" by "\[:o]" in privoxy.8.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 12 Jan 2008 16:02:14 +0100
+
+privoxy (3.0.7-1) unstable; urgency=low
+
+  * New upstream version 3.0.7-beta.
+  * Adapt all patches to new version.
   * Enable new zlib feature (Closes: #368448):
     - build-depend on zlib1g-dev
     - disable prevent-compression in 25_standard_medium.dpatch
   * Remove 28_pcre_returncode.dpatch, which is now applied upstream.
   * Remove 23_fix_faq_id.dpatch, which is now applied upstream.
+  * Fix Homepage header in control file.
+  * 05_defaut_action: disable filter{js-annoyances} for
+    http://www.memo.de/ (Closes: #441256).
+  * Update debian/watch file based on an idea of Raphael Geissert.
+    (Closes: #449643)
 
- -- Roland Rosenfeld <roland@debian.org>  Sun, 02 Dec 2007 16:11:10 +0100
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 11 Dec 2007 19:34:35 +0100
 
 privoxy (3.0.6-4) unstable; urgency=low
 

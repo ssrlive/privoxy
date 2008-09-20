@@ -1,4 +1,3 @@
-02_linkcolor.dpatch
 # 03_ipv6.dpatch # still has bugs: #391600, #393605
 05_defaut_action.dpatch
 06_8bit_manual.dpatch
@@ -6,9 +5,8 @@
 11_backup_autotools.dpatch
 14_config.dpatch
 15_mansection8.dpatch
-17_502_no_such_domain.dpatch 
+17_502_no_such_domain.dpatch
 19_manpage_fixup.dpatch
-20_makefile_fixup.dpatch
 24_global_action.dpatch
 25_standard_medium.dpatch
 27_remove_nsl.dpatch
