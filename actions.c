@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.52 2008/04/27 16:26:59 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.53 2008/05/26 16:04:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,9 @@ const char actions_rcs[] = "$Id: actions.c,v 1.52 2008/04/27 16:26:59 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.53  2008/05/26 16:04:04  fabiankeil
+ *    s@memorey@memory@
+ *
  *    Revision 1.52  2008/04/27 16:26:59  fabiankeil
  *    White space fix for the last commit.
  *
@@ -871,6 +874,12 @@ jb_err get_actions(char *line,
             {
                log_error(LOG_LEVEL_ERROR, "Action '%s' is no longer valid "
                   "in this Privoxy release. Ignored.", option+1);
+            }
+            else if ((2 < strlen(option)) && 0 == strcmpic(option+1, "hide-forwarded-for-headers"))
+            {
+               log_error(LOG_LEVEL_FATAL, "The action 'hide-forwarded-for-headers' "
+                  "is no longer valid in this Privoxy release. "
+                  "Use 'change-x-forwarded-for' instead.");
             }
             else
             {

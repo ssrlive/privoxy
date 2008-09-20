@@ -32,6 +32,11 @@
 #
 # Revisions   :
 #    $Log: edit-actions-for-url,v $
+#    Revision 1.55  2008/09/19 15:26:29  fabiankeil
+#    Add change-x-forwarded-for{} action to block or add
+#    X-Forwarded-For headers. Mostly based on code removed
+#    before 3.0.7.
+#
 #    Revision 1.54  2008/03/29 12:14:27  fabiankeil
 #    Remove send-wafer and send-vanilla-wafer actions.
 #
@@ -981,20 +986,6 @@ function show_limit_connect_opts(tf)
         id="hide_content_disposition_param" size="40"
         value="@hide-content-disposition-param@"><br>
      </td>
-    </tr>
-
-    <tr class="bg1" align="left" valign="top">
-      <td class="en1" align="center" valign="middle"><input type="radio"
-        name="hide_forwarded_for_headers" value="Y" @hide-forwarded-for-headers-y@
-        ></td>
-      <td class="dis1" align="center" valign="middle"><input type="radio"
-        name="hide_forwarded_for_headers" value="N" @hide-forwarded-for-headers-n@
-        ></td>
-      <td class="noc1" align="center" valign="middle"><input type="radio"
-        name="hide_forwarded_for_headers" value="X" @hide-forwarded-for-headers-x@
-        ></td>
-      <td class="action"><a href="@user-manual@@actions-help-prefix@HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</a></td>
-      <td>Remove any existing X-Forwarded-for header.</td>
     </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"

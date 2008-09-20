@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.140 2008/09/12 17:51:43 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.141 2008/09/19 15:26:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.140 2008/09/12 17:51:43 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.141  2008/09/19 15:26:28  fabiankeil
+ *    Add change-x-forwarded-for{} action to block or add
+ *    X-Forwarded-For headers. Mostly based on code removed
+ *    before 3.0.7.
+ *
  *    Revision 1.140  2008/09/12 17:51:43  fabiankeil
  *    - A few style fixes.
  *    - Remove a pointless cast.
@@ -3373,26 +3378,27 @@ static jb_err client_send_cookie(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_x_forwarded(struct client_state *csp, char **header)
 {
-   int block_header = (((csp->action->flags & ACTION_HIDE_FORWARDED) != 0)
-      || ((csp->action->flags & ACTION_CHANGE_X_FORWARDED_FOR) &&
-         (0 == strcmpic(csp->action->string[ACTION_STRING_CHANGE_X_FORWARDED_FOR], "block"))));
-
-   if (block_header)
+   if (0 != (csp->action->flags & ACTION_CHANGE_X_FORWARDED_FOR))
    {
-      freez(*header);
-      log_error(LOG_LEVEL_HEADER, "crunched x-forwarded-for!");
-   }
-   else if (0 == strcmpic(csp->action->string[ACTION_STRING_CHANGE_X_FORWARDED_FOR], "add"))
-   {
-      /* Save it so we can re-add it later */
-      freez(csp->x_forwarded_for);
-      csp->x_forwarded_for = *header;
+      const char *param = csp->action->string[ACTION_STRING_CHANGE_X_FORWARDED_FOR];
 
-      /*
-       * Always set *header = NULL, since this information
-       * will be sent at the end of the header.
-       */
-      *header = NULL;
+      if (0 == strcmpic(param, "block"))
+      {
+         freez(*header);
+         log_error(LOG_LEVEL_HEADER, "crunched x-forwarded-for!");
+      }
+      else if (0 == strcmpic(param, "add"))
+      {
+         /* Save it so we can re-add it later */
+         freez(csp->x_forwarded_for);
+         csp->x_forwarded_for = *header;
+
+         /*
+          * Always set *header = NULL, since this information
+          * will be sent at the end of the header.
+          */
+         *header = NULL;
+      }
    }
 
    return JB_ERR_OK;
