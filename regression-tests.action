@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.16 2008/09/19 15:31:38 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.17 2008/09/20 10:04:33 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -27,7 +27,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.9
+for-privoxy-version=3.0.11
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
