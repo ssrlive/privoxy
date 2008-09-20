@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.145 2008/08/29 14:24:45 fabiankeil Exp $
+#  $Id: default.action.master,v 1.146 2008/09/19 16:49:37 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -360,9 +360,6 @@
 #   servers. This can be used to prevent download menus for content you 
 #   prefer to view inside the browser, for example.
 #
-# +hide-forwarded-for-headers
-#   Block any existing X-Forwarded-for header.
-#
 # +hide-from-header{block}
 # +hide-from-header{spam@sittingduck.xqq}
 #   If the browser sends a "From:" header containing your e-mail address, 
@@ -505,7 +502,7 @@
 {{settings}}
 #############################################################################
 #MASTER# COMMENT: The minimum Privoxy version:
-for-privoxy-version=3.0.9
+for-privoxy-version=3.0.11
 
 #############################################################################
 # Aliases
