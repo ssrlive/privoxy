@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.118 2008/09/19 15:26:29 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.119 2008/09/20 10:04:33 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.119  2008/09/20 10:04:33  fabiankeil
+ *    Remove hide-forwarded-for-headers action which has
+ *    been obsoleted by change-x-forwarded-for{block}.
+ *
  *    Revision 1.118  2008/09/19 15:26:29  fabiankeil
  *    Add change-x-forwarded-for{} action to block or add
  *    X-Forwarded-For headers. Mostly based on code removed
@@ -1313,6 +1317,12 @@ struct url_actions
  */
 #define CSP_FLAG_NO_FILTERING                  0x00000400UL
 
+/**
+ * Flag for csp->flags: Set the client IP has appended to
+ * an already existing X-Forwarded-For header in which case
+ * no new header has to be generated.
+ */
+#define CSP_FLAG_X_FORWARDED_FOR_APPENDED      0x00000800UL
 
 /*
  * Flags for use in return codes of child processes
@@ -1384,13 +1394,6 @@ struct client_state
 
    /** MIME-Type key, see CT_* above */
    unsigned int content_type;
-
-   /** The "X-Forwarded-For:" header sent by the client */
-   /*
-    * XXX: this is a hack that causes problems if
-    * there's more than one X-Forwarded-For header.
-    */
-   char *x_forwarded_for;
 
    /** Actions files associated with this client */
    struct file_list *actions_list[MAX_AF_FILES];
