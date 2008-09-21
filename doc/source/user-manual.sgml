@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.87 2008/08/30 15:37:35 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.88 2008/09/21 14:42:52 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.87 2008/08/30 15:37:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.88 2008/09/21 14:42:52 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -358,7 +358,7 @@ How to install the binary packages depends on your operating system:
 </para>
 <para>
  Before installing <application>Privoxy</application> under Gentoo just do 
- first <literal>emerge rsync</literal> to get the latest changes from the 
+ first <literal>emerge --sync</literal> to get the latest changes from the 
  Portage tree. With <literal>emerge privoxy</literal> you install the latest 
  version.
 </para>
@@ -8619,6 +8619,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.88  2008/09/21 14:42:52  fabiankeil
+ Add documentation for change-x-forwarded-for{},
+ remove documentation for hide-forwarded-for-headers.
+
  Revision 2.87  2008/08/30 15:37:35  fabiankeil
  Update entities.
 
