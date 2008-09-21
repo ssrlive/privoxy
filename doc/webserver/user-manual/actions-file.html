@@ -1997,8 +1997,104 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="CHANGE-X-FORWARDED-FOR"
+>8.5.3. change-x-forwarded-for</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Typical use:</DT
+><DD
+><P
+>Improve privacy by not forwarding the source of the request in the HTTP headers.</P
+></DD
+><DT
+>Effect:</DT
+><DD
+><P
+>    Deletes the <SPAN
+CLASS="QUOTE"
+>"X-Forwarded-For:"</SPAN
+> HTTP header from the client request,
+    or adds a new one.
+   </P
+></DD
+><DT
+>Type:</DT
+><DD
+><P
+>Parameterized.</P
+></DD
+><DT
+>Parameter:</DT
+><DD
+><P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="QUOTE"
+>"block"</SPAN
+> to delete the header.</P
+></LI
+><LI
+><P
+>       <SPAN
+CLASS="QUOTE"
+>"add"</SPAN
+> to create the header (or append
+       the client's IP address to an already existing one).
+     </P
+></LI
+></UL
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    It is safe and recommended to use <TT
+CLASS="LITERAL"
+>block</TT
+>.
+   </P
+><P
+>    Forwarding the source address of the request may make
+    sense in some multi-user setups but is also a privacy risk.
+   </P
+></DD
+><DT
+>Example usage:</DT
+><DD
+><P
+>     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>+change-x-forwarded-for{block}</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="CLIENT-HEADER-FILTER"
->8.5.3. client-header-filter</A
+>8.5.4. client-header-filter</A
 ></H4
 ><P
 ></P
@@ -2098,7 +2194,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CLIENT-HEADER-TAGGER"
->8.5.4. client-header-tagger</A
+>8.5.5. client-header-tagger</A
 ></H4
 ><P
 ></P
@@ -2204,7 +2300,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CONTENT-TYPE-OVERWRITE"
->8.5.5. content-type-overwrite</A
+>8.5.6. content-type-overwrite</A
 ></H4
 ><P
 ></P
@@ -2366,7 +2462,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-CLIENT-HEADER"
->8.5.6. crunch-client-header</A
+>8.5.7. crunch-client-header</A
 ></H4
 ><P
 ></P
@@ -2500,7 +2596,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-IF-NONE-MATCH"
->8.5.7. crunch-if-none-match</A
+>8.5.8. crunch-if-none-match</A
 ></H4
 ><P
 ></P
@@ -2618,7 +2714,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-INCOMING-COOKIES"
->8.5.8. crunch-incoming-cookies</A
+>8.5.9. crunch-incoming-cookies</A
 ></H4
 ><P
 ></P
@@ -2741,7 +2837,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-SERVER-HEADER"
->8.5.9. crunch-server-header</A
+>8.5.10. crunch-server-header</A
 ></H4
 ><P
 ></P
@@ -2873,7 +2969,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="CRUNCH-OUTGOING-COOKIES"
->8.5.10. crunch-outgoing-cookies</A
+>8.5.11. crunch-outgoing-cookies</A
 ></H4
 ><P
 ></P
@@ -2989,7 +3085,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DEANIMATE-GIFS"
->8.5.11. deanimate-gifs</A
+>8.5.12. deanimate-gifs</A
 ></H4
 ><P
 ></P
@@ -3079,7 +3175,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="DOWNGRADE-HTTP-VERSION"
->8.5.12. downgrade-http-version</A
+>8.5.13. downgrade-http-version</A
 ></H4
 ><P
 ></P
@@ -3155,7 +3251,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FAST-REDIRECTS"
->8.5.13. fast-redirects</A
+>8.5.14. fast-redirects</A
 ></H4
 ><P
 ></P
@@ -3337,7 +3433,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FILTER"
->8.5.14. filter</A
+>8.5.15. filter</A
 ></H4
 ><P
 ></P
@@ -4065,7 +4161,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FORCE-TEXT-MODE"
->8.5.15. force-text-mode</A
+>8.5.16. force-text-mode</A
 ></H4
 ><P
 ></P
@@ -4198,7 +4294,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="FORWARD-OVERRIDE"
->8.5.16. forward-override</A
+>8.5.17. forward-override</A
 ></H4
 ><P
 ></P
@@ -4388,7 +4484,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-EMPTY-DOCUMENT"
->8.5.17. handle-as-empty-document</A
+>8.5.18. handle-as-empty-document</A
 ></H4
 ><P
 ></P
@@ -4512,7 +4608,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HANDLE-AS-IMAGE"
->8.5.18. handle-as-image</A
+>8.5.19. handle-as-image</A
 ></H4
 ><P
 ></P
@@ -4645,7 +4741,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-ACCEPT-LANGUAGE"
->8.5.19. hide-accept-language</A
+>8.5.20. hide-accept-language</A
 ></H4
 ><P
 ></P
@@ -4762,7 +4858,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-CONTENT-DISPOSITION"
->8.5.20. hide-content-disposition</A
+>8.5.21. hide-content-disposition</A
 ></H4
 ><P
 ></P
@@ -4883,7 +4979,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="HIDE-IF-MODIFIED-SINCE"
->8.5.21. hide-if-modified-since</A
+>8.5.22. hide-if-modified-since</A
 ></H4
 ><P
 ></P
@@ -4994,77 +5090,6 @@ CLASS="SCREEN"
  +overwrite-last-modified{randomize} \
  +crunch-if-none-match}
 /</PRE
-></TD
-></TR
-></TABLE
->
-   </P
-></DD
-></DL
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H4
-CLASS="SECT3"
-><A
-NAME="HIDE-FORWARDED-FOR-HEADERS"
->8.5.22. hide-forwarded-for-headers</A
-></H4
-><P
-></P
-><DIV
-CLASS="VARIABLELIST"
-><DL
-><DT
->Typical use:</DT
-><DD
-><P
->Improve privacy by not forwarding the source of the request in the HTTP headers.</P
-></DD
-><DT
->Effect:</DT
-><DD
-><P
->    Deletes any existing <SPAN
-CLASS="QUOTE"
->"X-Forwarded-for:"</SPAN
-> HTTP header from client requests.
-   </P
-></DD
-><DT
->Type:</DT
-><DD
-><P
->Boolean.</P
-></DD
-><DT
->Parameter:</DT
-><DD
-><P
->    N/A
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    It is safe and recommended to leave this on.
-   </P
-></DD
-><DT
->Example usage:</DT
-><DD
-><P
->     <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="SCREEN"
->+hide-forwarded-for-headers</PRE
 ></TD
 ></TR
 ></TABLE
@@ -6679,7 +6704,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4066"
+NAME="AEN4074"
 >8.5.34. Summary</A
 ></H3
 ><P
@@ -6978,7 +7003,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4129"
+NAME="AEN4137"
 >8.7.1. default.action</A
 ></H3
 ><P
@@ -7158,6 +7183,10 @@ CLASS="SCREEN"
 ##########################################################################
  { \
  +<A
+HREF="actions-file.html#CHANGE-X-FORWARDED-FOR"
+>change-x-forwarded-for{block}</A
+> \
+ +<A
 HREF="actions-file.html#DEANIMATE-GIFS"
 >deanimate-gifs</A
 > \
@@ -7177,10 +7206,6 @@ HREF="actions-file.html#FILTER-WEBBUGS"
 HREF="actions-file.html#FILTER-IE-EXPLOITS"
 >filter{ie-exploits}</A
 > \     
- +<A
-HREF="actions-file.html#HIDE-FORWARDED-FOR-HEADERS"
->hide-forwarded-for-headers</A
-> \
  +<A
 HREF="actions-file.html#HIDE-FROM-HEADER"
 >hide-from-header{block}</A
@@ -7693,7 +7718,7 @@ CLASS="SECT3"
 ><H3
 CLASS="SECT3"
 ><A
-NAME="AEN4263"
+NAME="AEN4271"
 >8.7.2. user.action</A
 ></H3
 ><P
