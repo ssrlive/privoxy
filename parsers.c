@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.142 2008/09/20 10:04:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.143 2008/09/21 13:36:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,12 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.142 2008/09/20 10:04:33 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.143  2008/09/21 13:36:52  fabiankeil
+ *    If change-x-forwarded-for{add} is used and the client
+ *    sends multiple X-Forwarded-For headers, append the client's
+ *    IP address to each one of them. "Traditionally" we would
+ *    lose all but the last one.
+ *
  *    Revision 1.142  2008/09/20 10:04:33  fabiankeil
  *    Remove hide-forwarded-for-headers action which has
  *    been obsoleted by change-x-forwarded-for{block}.
@@ -3403,6 +3409,11 @@ jb_err client_x_forwarded(struct client_state *csp, char **header)
          log_error(LOG_LEVEL_HEADER,
             "Appended client IP address to %s", *header);
          csp->flags |= CSP_FLAG_X_FORWARDED_FOR_APPENDED;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_FATAL,
+            "Invalid change-x-forwarded-for parameter: '%s'", parameter);
       }
    }
 
