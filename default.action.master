@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.146 2008/09/19 16:49:37 fabiankeil Exp $
+#  $Id: default.action.master,v 1.147 2008/09/20 10:11:49 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1492,6 +1492,8 @@ fritz.box/
 #MASTER# REMARKS: Actionsfile feedback item #2043327 2008-08-08
 # URL = http://kb.adobe.com/selfservice/viewContent.do?externalId=kb402747&sliceId=1
 .adobe.com
+# URL = http://qa.debian.org/popcon.php
+qa.debian.org/popcon\.php
 
 #############################################################################
 # Site-specific special rules:
