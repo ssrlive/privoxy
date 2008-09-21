@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.86 2008/08/16 10:12:23 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.87 2008/08/30 15:37:35 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.86 2008/08/16 10:12:23 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.87 2008/08/30 15:37:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2919,6 +2919,76 @@ for details.
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="change-x-forwarded-for">
+<title>change-x-forwarded-for</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Improve privacy by not forwarding the source of the request in the HTTP headers.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Deletes the <quote>X-Forwarded-For:</quote> HTTP header from the client request,
+    or adds a new one.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <itemizedlist>
+    <listitem>
+     <para><quote>block</quote> to delete the header.</para>
+    </listitem>
+    <listitem>
+     <para>
+       <quote>add</quote> to create the header (or append
+       the client's IP address to an already existing one).
+     </para>
+    </listitem>
+   </itemizedlist>
+  </listitem>
+ </varlistentry>
+ 
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    It is safe and recommended to use <literal>block</literal>.
+   </para>
+   <para>
+    Forwarding the source address of the request may make
+    sense in some multi-user setups but is also a privacy risk.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+    <para>
+     <screen>+change-x-forwarded-for{block}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="client-header-filter">
 <title>client-header-filter</title>
 
@@ -4716,64 +4786,6 @@ new action
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="hide-forwarded-for-headers">
-<title>hide-forwarded-for-headers</title>
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>Improve privacy by not forwarding the source of the request in the HTTP headers.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Deletes any existing <quote>X-Forwarded-for:</quote> HTTP header from client requests.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- Boolean, Parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
- 
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    It is safe and recommended to leave this on.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage:</term>
-  <listitem>
-    <para>
-     <screen>+hide-forwarded-for-headers</screen>
-   </para>
-  </listitem>
- </varlistentry>
-</variablelist>
-</sect3>
-
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="hide-from-header">
 <title>hide-from-header</title>
 
@@ -6031,12 +6043,12 @@ that also explains why and how aliases are used:
 # "Defaults" section:
 ##########################################################################
  { \
+ +<link linkend="CHANGE-X-FORWARDED-FOR">change-x-forwarded-for{block}</link> \
  +<link linkend="DEANIMATE-GIFS">deanimate-gifs</link> \
  +<link linkend="FILTER-HTML-ANNOYANCES">filter{html-annoyances}</link> \
  +<link linkend="FILTER-REFRESH-TAGS">filter{refresh-tags}</link> \
  +<link linkend="FILTER-WEBBUGS">filter{webbugs}</link> \
  +<link linkend="FILTER-IE-EXPLOITS">filter{ie-exploits}</link> \     
- +<link linkend="HIDE-FORWARDED-FOR-HEADERS">hide-forwarded-for-headers</link> \
  +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
  +<link linkend="HIDE-REFERER">hide-referrer{forge}</link> \
  +<link linkend="PREVENT-COMPRESSION">prevent-compression</link> \
@@ -8185,7 +8197,8 @@ Requests</title>
 
  In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
 
- {+deanimate-gifs {last}
+ {+change-x-forwarded-for{block}
+ +deanimate-gifs {last}
  +fast-redirects {check-decoded-url}
  +filter {refresh-tags}
  +filter {img-reorder}
@@ -8193,7 +8206,6 @@ Requests</title>
  +filter {webbugs}
  +filter {jumping-windows}
  +filter {ie-exploits}
- +hide-forwarded-for-headers
  +hide-from-header {block}
  +hide-referrer {forge}
  +session-cookies-only
@@ -8275,6 +8287,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  
  -add-header
  -block
+ +change-x-forwarded-for{block} 
  -client-header-filter{hide-tor-exit-notation}
  -content-type-overwrite
  -crunch-client-header
@@ -8316,7 +8329,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  -handle-as-image
  -hide-accept-language
  -hide-content-disposition
- +hide-forwarded-for-headers
  +hide-from-header {block}
  -hide-if-modified-since
  +hide-referrer {forge}
@@ -8395,6 +8407,7 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
  {-add-header 
   -block
+  +change-x-forwarded-for{block} 
   -client-header-filter{hide-tor-exit-notation}
   -content-type-overwrite
   -crunch-client-header
@@ -8436,7 +8449,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
   -handle-as-image 
   -hide-accept-language
   -hide-content-disposition  
-  +hide-forwarded-for-headers 
   +hide-from-header{block} 
   +hide-referer{forge} 
   -hide-user-agent 
@@ -8607,6 +8619,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.87  2008/08/30 15:37:35  fabiankeil
+ Update entities.
+
  Revision 2.86  2008/08/16 10:12:23  fabiankeil
  Merge two sentences and move the URL to the end of the item.
 
