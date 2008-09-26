@@ -3,6 +3,9 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.10
 
+- The mingw32 version uses mutex locks now which prevents
+  log message corruption under load. As a side effect,
+  the "no thread-safe PRNG" warning could be removed as well.
 - Support for remote toggling is controlled by the configure
   option --disable-toggle only. In previous versions it also
   depended on the action editor and thus configuring with the
