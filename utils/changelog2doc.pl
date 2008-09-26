@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-# $Id:$
-# $Source:$
+# $Id: changelog2doc.pl,v 1.1 2008/06/09 17:53:02 fabiankeil Exp $
+# $Source: /cvsroot/ijbswa/current/utils/changelog2doc.pl,v $
 
 # Filter to parse the ChangeLog and translate the changes for
 # the most recent version into something that looks like markup
@@ -33,7 +33,7 @@ sub read_entries() {
 
         $entries[$i] .= $_;
     }
-    print "Parsed $i entries.\n";
+    print "Parsed " . @entries . " entries.\n";
 }
 
 sub generate_markup() {
