@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.21 2008/08/16 08:51:28 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.22 2008/08/30 15:37:35 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.21 2008/08/16 08:51:28 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.22 2008/08/30 15:37:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1833,7 +1833,7 @@ static void unload_re_filterfile( void *f ) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$Id: developer-manual.sgml,v 2.21 2008/08/16 08:51:28 fabiankeil Exp $";
+const char FILENAME_rcs[] = "$I<!-- Break CVS Substitution -->d$";
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
@@ -1894,19 +1894,15 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id: developer-manual.sgml,v 2.21 2008/08/16 08:51:28 fabiankeil Exp $"
+#define FILENAME_H_VERSION "$I<!-- Break CVS Substitution -->d$"
 /*********************************************************************
  *
  * File        :  $S<!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
- *                Privoxy team. http://www.privoxy.org/
- *
- *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and
- *                Junkbusters Corporation.  http://www.junkbusters.com
+ * Copyright   :  Written by and Copyright (C) 2001-2008
+ *                the Privoxy team. http://www.privoxy.org/
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -3028,6 +3024,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.22  2008/08/30 15:37:35  fabiankeil
+  Update entities.
+
   Revision 2.21  2008/08/16 08:51:28  fabiankeil
   Update version-related entities.
 
