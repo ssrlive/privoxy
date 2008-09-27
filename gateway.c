@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.25 2008/02/07 18:09:46 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.26 2008/08/18 17:42:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.25 2008/02/07 18:09:46 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.26  2008/08/18 17:42:06  fabiankeil
+ *    Fix typo in macro name.
+ *
  *    Revision 1.25  2008/02/07 18:09:46  fabiankeil
  *    In socks5_connect:
  *    - make the buffers quite a bit smaller.
@@ -259,6 +262,7 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
 {
    const char * dest_host;
    int dest_port;
+   jb_socket sfd = JB_INVALID_SOCKET;
 
    /* Figure out if we need to connect to the web server or a HTTP proxy. */
    if (fwd->forward_host)
@@ -278,21 +282,23 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
    switch (fwd->type)
    {
       case SOCKS_NONE:
-         return (connect_to(dest_host, dest_port, csp));
-
+         sfd = connect_to(dest_host, dest_port, csp);
+         break;
       case SOCKS_4:
       case SOCKS_4A:
-         return (socks4_connect(fwd, dest_host, dest_port, csp));
-
+         sfd = socks4_connect(fwd, dest_host, dest_port, csp);
+         break;
       case SOCKS_5:
-         return (socks5_connect(fwd, dest_host, dest_port, csp));
-
+         sfd = socks5_connect(fwd, dest_host, dest_port, csp);
+         break;
       default:
          /* Should never get here */
-         log_error(LOG_LEVEL_FATAL, "SOCKS4 impossible internal error - bad SOCKS type.");
-         errno = EINVAL;
-         return(JB_INVALID_SOCKET);
+         log_error(LOG_LEVEL_FATAL,
+            "SOCKS4 impossible internal error - bad SOCKS type.");
    }
+
+   return sfd;
+
 }
 
 
