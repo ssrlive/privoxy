@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.186 2008/09/04 08:13:58 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.187 2008/09/07 12:35:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.186 2008/09/04 08:13:58 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.187  2008/09/07 12:35:05  fabiankeil
+ *    Add mutex lock support for _WIN32.
+ *
  *    Revision 1.186  2008/09/04 08:13:58  fabiankeil
  *    Prepare for critical sections on Windows by adding a
  *    layer of indirection before the pthread mutex functions.
@@ -1180,6 +1183,7 @@ static int32 server_thread(void *data);
  */
 privoxy_mutex_t log_mutex;
 privoxy_mutex_t log_init_mutex;
+privoxy_mutex_t connection_reuse_mutex;
 
 #if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
 privoxy_mutex_t resolver_mutex;
@@ -1970,6 +1974,52 @@ static jb_err change_request_destination(struct client_state *csp)
 }
 
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/*********************************************************************
+ *
+ * Function    :  server_response_is_complete
+ *
+ * Description :  Determines whether we should stop reading
+ *                from the server socket.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  TRUE if the response is complete,
+ *                FALSE otherwise.
+ *
+ *********************************************************************/
+static int server_response_is_complete(struct client_state *csp)
+{
+   int content_length_known = (csp->flags & CSP_FLAG_CONTENT_LENGTH_SET);
+
+   if (!strcmpic(csp->http->gpc, "HEAD"))
+   {
+      /*
+       * "HEAD" implies no body, we are thus expecting
+       * no content. XXX: incomplete "list" of methods?
+       */
+      log_error(LOG_LEVEL_INFO, "Method %s implies no body.", csp->http->gpc);
+      csp->expected_content_length = 0;
+      content_length_known = TRUE;
+   }
+
+   if (csp->http->status == 304)
+   {
+      /*
+       * Expect no body. XXX: incomplete "list" of status codes?
+       */
+      log_error(LOG_LEVEL_INFO, "Status code %d implies no body.", csp->http->status);
+      csp->expected_content_length = 0;
+      content_length_known = TRUE;
+   }
+
+   return (content_length_known && ((0 == csp->expected_content_length)
+            || (csp->expected_content_length <= (csp->iob->eod - csp->iob->cur))));
+}
+#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
+
+
 /*********************************************************************
  *
  * Function    :  chat
@@ -2460,6 +2510,22 @@ static void chat(struct client_state *csp)
       FD_SET(csp->cfd, &rfds);
       FD_SET(csp->sfd, &rfds);
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      if (server_body && server_response_is_complete(csp))
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Stopped reading from server. Expected content length: %d. "
+            "Actual content length: %d. Most recently received: %d.",
+            csp->expected_content_length, (csp->iob->eod - csp->iob->cur), len);
+         len = 0;
+         /*
+          * XXX: should not jump around,
+          * chat() is complicated enough already.
+          */
+         goto reading_done;
+      }
+#endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
+
       n = select((int)maxfd+1, &rfds, NULL, NULL, NULL);
 
       if (n < 0)
@@ -2539,6 +2605,10 @@ static void chat(struct client_state *csp)
 
             return;
          }
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         reading_done:
+#endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
          /* Add a trailing zero.  This lets filter_popups
           * use string operations.
@@ -2900,7 +2970,19 @@ static void serve(struct client_state *csp)
 
    if (csp->sfd != JB_INVALID_SOCKET)
    {
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      if ((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
+      {
+         remember_connection(csp->sfd, csp->http, forward_url(csp, csp->http));
+      }
+      else
+      {
+         forget_connection(csp->sfd);
+         close_socket(csp->sfd);
+      }
+#else
       close_socket(csp->sfd);
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
    }
 
    csp->flags &= ~CSP_FLAG_ACTIVE;
@@ -3071,8 +3153,8 @@ static void initialize_mutexes(void)
     * Prepare global mutex semaphores
     */
    privoxy_mutex_init(&log_mutex);
-
    privoxy_mutex_init(&log_init_mutex);
+   privoxy_mutex_init(&connection_reuse_mutex);
 
    /*
     * XXX: The assumptions below are a bit naive
@@ -3628,6 +3710,14 @@ static void listen_loop(void)
    struct configuration_spec * config;
 
    config = load_config();
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   /*
+    * XXX: Should be relocated once it no
+    * longer needs to emit log messages.
+    */
+   initialize_reusable_connections();
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    bfd = bind_port_helper(config);
 

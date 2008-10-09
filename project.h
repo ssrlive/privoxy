@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.119 2008/09/20 10:04:33 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.120 2008/09/21 13:36:52 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,12 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.120  2008/09/21 13:36:52  fabiankeil
+ *    If change-x-forwarded-for{add} is used and the client
+ *    sends multiple X-Forwarded-For headers, append the client's
+ *    IP address to each one of them. "Traditionally" we would
+ *    lose all but the last one.
+ *
  *    Revision 1.119  2008/09/20 10:04:33  fabiankeil
  *    Remove hide-forwarded-for-headers action which has
  *    been obsoleted by change-x-forwarded-for{block}.
@@ -1288,10 +1294,10 @@ struct url_actions
 #define CSP_FLAG_TOGGLED_ON 0x20
 
 /**
- * Flag for csp->flags: Set if adding the 'Connection: close' header
- * for the client isn't necessary.
+ * Flag for csp->flags: Set if an acceptable Connection header
+ * is already set.
  */
-#define CSP_FLAG_CLIENT_CONNECTION_CLOSE_SET   0x00000040UL
+#define CSP_FLAG_CLIENT_CONNECTION_HEADER_SET   0x00000040UL
 
 /**
  * Flag for csp->flags: Set if adding the 'Connection: close' header
@@ -1323,6 +1329,23 @@ struct url_actions
  * no new header has to be generated.
  */
 #define CSP_FLAG_X_FORWARDED_FOR_APPENDED      0x00000800UL
+
+/**
+ * Flag for csp->flags: Set if the server wants to keep
+ * the connection alive.
+ *
+ * XXX: Incomplete implementation, we currently only
+ * look for "Connection: keep-alive".
+ */
+#define CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE  0x00001000UL
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/**
+ * Flag for csp->flags: Set if the server specified the
+ * content length.
+ */
+#define CSP_FLAG_CONTENT_LENGTH_SET            0x00002000UL
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 /*
  * Flags for use in return codes of child processes
@@ -1403,6 +1426,14 @@ struct client_state
 
    /** Length after content modification. */
    size_t content_length;
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   /** Expected length of content after which we
+    * should stop reading from the server socket.
+    */
+   /* XXX: is this the right location? */
+   size_t expected_content_length;
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #ifdef FEATURE_TRUST
 
