@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.189 2008/10/11 09:53:00 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.190 2008/10/11 14:58:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.189 2008/10/11 09:53:00 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.190  2008/10/11 14:58:00  fabiankeil
+ *    In case of chunk-encoded content, stop reading if
+ *    the buffer looks like it ends with the last chunk.
+ *
  *    Revision 1.189  2008/10/11 09:53:00  fabiankeil
  *    Let server_response_is_complete() deal properly with
  *    content that is neither buffered nor read all at once.
@@ -2443,7 +2447,6 @@ static void chat(struct client_state *csp)
                 http->hostport);
       }
 
-
       /* Write the answer to the client */
       if (rsp != NULL)
       {
@@ -2456,10 +2459,10 @@ static void chat(struct client_state *csp)
 
    if (fwd->forward_host || (http->ssl == 0))
    {
-      /* write the client's (modified) header to the server
+      /*
+       * Write the client's (modified) header to the server
        * (along with anything else that may be in the buffer)
        */
-
       if (write_socket(csp->sfd, hdr, strlen(hdr))
        || (flush_socket(csp->sfd, csp->iob) <  0))
       {
@@ -2543,10 +2546,10 @@ static void chat(struct client_state *csp)
          return;
       }
 
-      /* this is the body of the browser's request
-       * just read it and write it.
+      /*
+       * This is the body of the browser's request,
+       * just read and write it.
        */
-
       if (FD_ISSET(csp->cfd, &rfds))
       {
          len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
@@ -2565,12 +2568,10 @@ static void chat(struct client_state *csp)
       }
 
       /*
-       * The server wants to talk.  It could be the header or the body.
+       * The server wants to talk. It could be the header or the body.
        * If `hdr' is null, then it's the header otherwise it's the body.
        * FIXME: Does `hdr' really mean `host'? No.
        */
-
-
       if (FD_ISSET(csp->sfd, &rfds))
       {
          fflush( 0 );
@@ -2632,12 +2633,14 @@ static void chat(struct client_state *csp)
          reading_done:
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-         /* Add a trailing zero.  This lets filter_popups
-          * use string operations.
+         /*
+          * Add a trailing zero to let be able to use string operations.
+          * XXX: do we still need this with filter_popups gone?
           */
          buf[len] = '\0';
 
-         /* Normally, this would indicate that we've read
+         /*
+          * Normally, this would indicate that we've read
           * as much as the server has sent us and we can
           * close the client connection.  However, Microsoft
           * in its wisdom has released IIS/5 with a bug that
@@ -2727,7 +2730,6 @@ static void chat(struct client_state *csp)
           * of the server document, just write it to the client,
           * unless we need to buffer the body for later content-filtering
           */
-
          if (server_body || http->ssl)
          {
             if (content_filter)
@@ -2793,15 +2795,10 @@ static void chat(struct client_state *csp)
          }
          else
          {
-            /* we're still looking for the end of the
-             * server's header ... (does that make header
-             * parsing an "out of body experience" ?
-             */
-
-            /* 
-             * buffer up the data we just read.  If that fails, 
-             * there's little we can do but send our static
-             * out-of-memory page.
+            /*
+             * We're still looking for the end of the server's header.
+             * Buffer up the data we just read.  If that fails, there's
+             * little we can do but send our static out-of-memory page.
              */
             if (add_to_iob(csp, buf, len))
             {
@@ -2817,10 +2814,9 @@ static void chat(struct client_state *csp)
             {
                if (ms_iis5_hack)
                {
-                  /* Well, we tried our MS IIS/5
-                   * hack and it didn't work.
-                   * The header is incomplete
-                   * and there isn't anything
+                  /*
+                   * Well, we tried our MS IIS/5 hack and it didn't work.
+                   * The header is incomplete and there isn't anything
                    * we can do about it.
                    */
                   log_error(LOG_LEVEL_INFO,
@@ -2829,10 +2825,9 @@ static void chat(struct client_state *csp)
                }
                else
                {
-                  /* Since we have to wait for
-                   * more from the server before
-                   * we can parse the headers
-                   * we just continue here.
+                  /*
+                   * Since we have to wait for more from the server before
+                   * we can parse the headers we just continue here.
                    */
                   continue;
                }
@@ -2909,7 +2904,8 @@ static void chat(struct client_state *csp)
              */
             if (!content_filter)
             {
-               /* write the server's (modified) header to
+               /*
+                * Write the server's (modified) header to
                 * the client (along with anything else that
                 * may be in the buffer)
                 */
@@ -2919,9 +2915,9 @@ static void chat(struct client_state *csp)
                {
                   log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
 
-                  /* the write failed, so don't bother
-                   * mentioning it to the client...
-                   * it probably can't hear us anyway.
+                  /*
+                   * The write failed, so don't bother mentioning it
+                   * to the client... it probably can't hear us anyway.
                    */
                   freez(hdr);
                   return;
@@ -2935,10 +2931,10 @@ static void chat(struct client_state *csp)
             freez(hdr);
             server_body = 1;
 
-            /* If this was a MS IIS/5 hack then it means
-             * the server has already closed the
-             * connection.  Nothing more to read.  Time
-             * to bail.
+            /*
+             * If this was a MS IIS/5 hack then it means the server
+             * has already closed the connection. Nothing more to read.
+             * Time to bail.
              */
             if (ms_iis5_hack)
             {
@@ -2956,9 +2952,8 @@ static void chat(struct client_state *csp)
    if (csp->content_length == 0)
    {
       /*
-       * If Privoxy didn't recalculate the
-       * Content-Lenght, byte_count is still
-       * correct.
+       * If Privoxy didn't recalculate the Content-Lenght,
+       * byte_count is still correct.
        */
       csp->content_length = byte_count;
    }
