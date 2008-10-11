@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.115 2008/10/11 10:13:15 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.116 2008/10/11 10:36:19 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -920,7 +920,9 @@ sub handle_loglevel_header ($) {
 
         # Modified: User-Agent: Mozilla/5.0 (X11; U; SunOS i86pc; pl-PL; rv:1.8.1.1) Gecko/20070214 Firefox/2.0.0.1
         # Accept-Language header crunched and replaced with: Accept-Language: pl-pl
-        # cookie 'Set-Cookie: eZSessionCookie=07bfec287c197440d299f81580593c3d; expires=Thursday, 12-Apr-07 15:16:18 GMT; path=/' send by http://wirres.net/article/articleview/4265/1/6/ appears to be using time format 1 (XXX: gone with the wind)
+        # cookie 'Set-Cookie: eZSessionCookie=07bfec287c197440d299f81580593c3d; \
+        #  expires=Thursday, 12-Apr-07 15:16:18 GMT; path=/' send by \
+        #  http://wirres.net/article/articleview/4265/1/6/ appears to be using time format 1 (XXX: gone with the wind)
         # Cookie rewritten to a temporary one: Set-Cookie: NSC_gffe-iuuq-mc-wtfswfs=8efb33a53660;path=/
         # Text mode is already enabled
         # Denied request with NULL byte(s) turned into line break(s)
@@ -946,7 +948,8 @@ sub handle_loglevel_header ($) {
         # Content-Disposition header crunched and replaced with: content-disposition: filename=baz
         # Reducing white space in 'X-LWS-Test: "This  is  quoted" this is not "this  is  " but " this again   is  not'
         # Ignoring single quote in 'X-LWS-Test: "This  is  quoted" this is not "this  is  " but "  this again   is  not'
-        # Converting tab to space in 'X-LWS-Test:   "This  is  quoted" this   is  not "this  is  "  but  "  this again   is  not'
+        # Converting tab to space in 'X-LWS-Test:   "This  is  quoted" this   is  not "this  is  "  but  "\
+        #  this again   is  not'
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
@@ -966,7 +969,8 @@ sub handle_loglevel_header ($) {
  
     } elsif ($c =~ m/^(Transforming \")(.*?)(\" to \")(.*?)(\")/) {
 
-        # Transforming "Proxy-Authenticate: Basic realm="Correos Proxy Server"" to "Proxy-Authenticate: Basic realm="Correos Proxy Server""
+        # Transforming "Proxy-Authenticate: Basic realm="Correos Proxy Server"" to\
+        #  "Proxy-Authenticate: Basic realm="Correos Proxy Server""
 
        $content =~ s@(?<=^Transforming \")(.*)(?=\" to)@$h{'Header'}$1$h{'Standard'}@;
        $content =~ s@(?<=to \")(.*)(?=\")@$h{'Header'}$1$h{'Standard'}@;
@@ -978,7 +982,8 @@ sub handle_loglevel_header ($) {
 
     } elsif ($c =~ m/^Content-Type: .* not replaced/) {
 
-        # Content-Type: application/octet-stream not replaced. It doesn't look like text. Enable force-text-mode if you know what you're doing.
+        # Content-Type: application/octet-stream not replaced. It doesn't look like text.\
+        #  Enable force-text-mode if you know what you're doing.
         # XXX: Could highlight more here.
         $content =~ s@(?<=^Content-Type: )(.*)(?= not replaced)@$h{'content-type'}$1$h{'Standard'}@;
 
@@ -1160,7 +1165,8 @@ sub handle_loglevel_re_filter ($) {
         return ''  if (SUPPRESS_SUCCEEDED_FILTER_ADDITIONS && m/succeeded/);
 
         # Adding re_filter job ...
-        # Adding dynamic re_filter job s@^(?:\w*)\s+.*\s+HTTP/\d\.\d\s*@IP-ADDRESS: $origin@D to filter client-ip-address succeeded.
+        # Adding dynamic re_filter job s@^(?:\w*)\s+.*\s+HTTP/\d\.\d\s*@IP-ADDRESS: $origin@D\
+        #  to filter client-ip-address succeeded.
 
     } elsif ($c =~ m/^Reading in filter/) {
 
@@ -1191,7 +1197,8 @@ sub handle_loglevel_redirect ($) {
 
     } elsif ($c =~ m/^Checking/) {
 
-         # Checking /_ylt=A0geu.Z76BRGR9kAH2RXNyoA/SIG=14gqhtscv/EXP=1175861755/**http://search.yahoo.com/search?p=view+odb+presentation+on+freebsd&ei=UTF-8&xargs=0&pstart=1&fr=moz2&b=11 for redirects.
+         # Checking /_ylt=A0geu.Z76BRGR9k/**http://search.yahoo.com/search?p=view+odb+presentation+on+freebsd\
+         #  &ei=UTF-8&xargs=0&pstart=1&fr=moz2&b=11 for redirects.
 
          # TODO: Change colour if really url-decoded
          $req{$t}{'decoded-original-destination'} = $1;
@@ -1200,7 +1207,8 @@ sub handle_loglevel_redirect ($) {
 
     } elsif ($c =~ m/^pcrs command "([^""]*)" changed "([^""]*)" to "([^""]*)" \((\d+) hits?\)/) {
 
-        # pcrs command "s@&from=rss@@" changed "http://it.slashdot.org/article.pl?sid=07/03/02/1657247&from=rss" to "http://it.slashdot.org/article.pl?sid=07/03/02/1657247" (1 hit).
+        # pcrs command "s@&from=rss@@" changed "http://it.slashdot.org/article.pl?sid=07/03/02/1657247&from=rss"\
+        #  to "http://it.slashdot.org/article.pl?sid=07/03/02/1657247" (1 hit).
 
         my ($pcrs_command, $url_before, $url_after, $hits) = ($1, $2, $3, $4); # XXX: save these?
 
@@ -1219,7 +1227,8 @@ sub handle_loglevel_redirect ($) {
         $c = $1 . h('rewritten-URL') . $2 . h('Standard');
 
     } elsif ($c =~ m/No pcrs command recognized, assuming that/) {
-        # No pcrs command recognized, assuming that "http://config.privoxy.org/user-manual/favicon.png" is already properly formatted.
+        # No pcrs command recognized, assuming that "http://config.privoxy.org/user-manual/favicon.png"\
+        #  is already properly formatted.
         # XXX: assume the same?
         $c = higlight_matched_url($c, '(?<=assuming that \")[^"]*');
 
@@ -1486,7 +1495,8 @@ sub handle_loglevel_info ($) {
             ) {
         # Decompressing deflated iob: 117
         # Decompression didn't result in any content.
-        # Compressed content detected, content filtering disabled. Consider recompiling Privoxy with zlib support or enable the prevent-compression action.
+        # Compressed content detected, content filtering disabled. Consider recompiling Privoxy\
+        #  with zlib support or enable the prevent-compression action.
         # Tagger 'complete-url' created empty tag. Ignored.
 
         # Ignored for now
@@ -1551,7 +1561,8 @@ sub handle_loglevel_info ($) {
              ) {
 
         # No logfile configured. Please enable it before reporting any problems.
-        # Malformerd HTTP headers detected and MS IIS5 hack enabled. Expect an invalid response or even no response at all.
+        # Malformerd HTTP headers detected and MS IIS5 hack enabled. Expect an invalid \
+        #  response or even no response at all.
         # No logfile configured. Logging disabled.
         # Invalid "chunked" transfer encoding detected and ignored.
         # Support for 'Connection: keep-alive' is experimental, incomplete and\
@@ -1785,7 +1796,9 @@ sub parse_loop () {
         } elsif (m/^(\d+\.\d+\.\d+\.\d+) - - \[(.*)\] "(.*)" (\d+) (\d+)/) {
 
             # LOG_LEVEL_CLF lines look like this
-            # 61.152.239.32 - - [04/Mar/2007:18:28:23 +0100] "GET http://ad.yieldmanager.com/imp?z=1&Z=120x600&s=109339&u=http%3A%2F%2Fwww.365loan.co.uk%2F&r=1 HTTP/1.1" 403 1730
+            # 61.152.239.32 - - [04/Mar/2007:18:28:23 +0100] "GET \
+            #  http://ad.yieldmanager.com/imp?z=1&Z=120x600&s=109339&u=http%3A%2F%2Fwww.365loan.co.uk%2F&r=1\
+            #  HTTP/1.1" 403 1730
             our ($ip, $timestamp, $request_line, $status_code, $size) = ($1, $2, $3, $4, $5);
 
             print_clf_message();
