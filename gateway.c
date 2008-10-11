@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.27 2008/09/27 15:05:51 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.28 2008/10/09 18:21:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.27 2008/09/27 15:05:51 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.28  2008/10/09 18:21:41  fabiankeil
+ *    Flush work-in-progress changes to keep outgoing connections
+ *    alive where possible. Incomplete and mostly #ifdef'd out.
+ *
  *    Revision 1.27  2008/09/27 15:05:51  fabiankeil
  *    Return only once in forwarded_connect().
  *
@@ -612,7 +616,7 @@ static jb_socket get_reusable_connection(const struct http_request *http,
          else
          {
             log_error(LOG_LEVEL_CONNECT,
-               "Failed to poll socket %d for %s:%d in slot %d",
+               "Failed to poll socket %d for %s:%d in slot %d.",
                reusable_connection[slot].sfd, reusable_connection[slot].host,
                reusable_connection[slot].port, slot);
          }
@@ -623,7 +627,7 @@ static jb_socket get_reusable_connection(const struct http_request *http,
             reusable_connection[slot].in_use = TRUE;
             sfd = reusable_connection[slot].sfd;
             log_error(LOG_LEVEL_CONNECT,
-               "Found reusable socket %d for %s:%d in slot %d",
+               "Found reusable socket %d for %s:%d in slot %d.",
                sfd, reusable_connection[slot].host, reusable_connection[slot].port, slot);
             break;
          }
