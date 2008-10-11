@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.187 2008/09/07 12:35:05 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.188 2008/10/09 18:21:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.187 2008/09/07 12:35:05 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.188  2008/10/09 18:21:41  fabiankeil
+ *    Flush work-in-progress changes to keep outgoing connections
+ *    alive where possible. Incomplete and mostly #ifdef'd out.
+ *
  *    Revision 1.187  2008/09/07 12:35:05  fabiankeil
  *    Add mutex lock support for _WIN32.
  *
@@ -1984,12 +1988,13 @@ static jb_err change_request_destination(struct client_state *csp)
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  content_length = Length of content received so far.
  *
  * Returns     :  TRUE if the response is complete,
  *                FALSE otherwise.
  *
  *********************************************************************/
-static int server_response_is_complete(struct client_state *csp)
+static int server_response_is_complete(struct client_state *csp, size_t content_length)
 {
    int content_length_known = (csp->flags & CSP_FLAG_CONTENT_LENGTH_SET);
 
@@ -2015,7 +2020,7 @@ static int server_response_is_complete(struct client_state *csp)
    }
 
    return (content_length_known && ((0 == csp->expected_content_length)
-            || (csp->expected_content_length <= (csp->iob->eod - csp->iob->cur))));
+            || (csp->expected_content_length <= content_length)));
 }
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
@@ -2511,12 +2516,12 @@ static void chat(struct client_state *csp)
       FD_SET(csp->sfd, &rfds);
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if (server_body && server_response_is_complete(csp))
+      if (server_body && server_response_is_complete(csp, byte_count))
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Stopped reading from server. Expected content length: %d. "
+            "Done reading from server. Expected content length: %d. "
             "Actual content length: %d. Most recently received: %d.",
-            csp->expected_content_length, (csp->iob->eod - csp->iob->cur), len);
+            csp->expected_content_length, byte_count, len);
          len = 0;
          /*
           * XXX: should not jump around,
