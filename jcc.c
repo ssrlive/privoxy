@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.188 2008/10/09 18:21:41 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.189 2008/10/11 09:53:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.188 2008/10/09 18:21:41 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.189  2008/10/11 09:53:00  fabiankeil
+ *    Let server_response_is_complete() deal properly with
+ *    content that is neither buffered nor read all at once.
+ *
  *    Revision 1.188  2008/10/09 18:21:41  fabiankeil
  *    Flush work-in-progress changes to keep outgoing connections
  *    alive where possible. Incomplete and mostly #ifdef'd out.
@@ -2612,6 +2616,19 @@ static void chat(struct client_state *csp)
          }
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         if (csp->flags & CSP_FLAG_CHUNKED)
+         {
+            if ((len > 5) && !memcmp(buf+len-5, "0\r\n\r\n", 5))
+            {
+               /* XXX: this is a temporary hack */
+               log_error(LOG_LEVEL_CONNECT,
+                  "Looks like we reached the end of the last chunk: "
+                  "%d %d %d %d %d. We better stop reading.",
+                  buf[len-5], buf[len-4], buf[len-3], buf[len-2], buf[len-1]);
+               csp->expected_content_length = byte_count + len;
+               csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
+            }
+         }
          reading_done:
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
