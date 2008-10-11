@@ -230,6 +230,11 @@
                  editor@if-FEATURE_CGI_EDIT_ACTIONS-then@</a>@else-not-FEATURE_CGI_EDIT_ACTIONS@@endif-FEATURE_CGI_EDIT_ACTIONS@.</td>
             </tr>
             <tr>
+              <td><code>FEATURE_CONNECTION_KEEP_ALIVE</code></td>
+              <td>@if-FEATURE_CONNECTION_KEEP_ALIVE-then@ Yes @else-not-FEATURE_CONNECTION_KEEP_ALIVE@ No @endif-FEATURE_CONNECTION_KEEP_ALIVE@</td>
+              <td>Keep outgoing connections alive if possible. <strong>Incomplete and experimental.</strong></td>
+            </tr>
+            <tr>
               <td><code>FEATURE_FAST_REDIRECTS</code></td>
               <td>@if-FEATURE_FAST_REDIRECTS-then@ Yes @else-not-FEATURE_FAST_REDIRECTS@ No @endif-FEATURE_FAST_REDIRECTS@</td>
               <td>Allows the +fast-redirects action, to bypass redirect and logging scripts.</td>
