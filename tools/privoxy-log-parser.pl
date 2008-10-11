@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.114 2008/08/21 07:18:57 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.115 2008/10/11 10:13:15 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1410,6 +1410,54 @@ sub handle_loglevel_connect ($) {
     
         $c =~ s@(?<=socks5_connect: )(.*)@$h{'error'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Found reusable socket/) {
+
+        # Found reusable socket 9 for www.privoxy.org:80 in slot 0.
+        $c =~ s@(?<=Found reusable socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Marking open socket/) {
+
+        # Marking open socket 9 for www.privoxy.org:80 in slot 0 as unused.
+        $c =~ s@(?<=Marking open socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^No reusable/) {
+
+        # No reusable socket for addons.mozilla.org:443 found. Opening a new one.
+        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+
+    } elsif ($c =~ m/^(Remembering|Forgetting) socket/) {
+
+        # Remembering socket 13 for www.privoxy.org:80 in slot 0.
+        # Forgetting socket 38 for www.privoxy.org:80 in slot 5.
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Socket/) {
+
+        # Socket 18 for www.privoxy.org:80 in slot 0 is no longer usable. Closing.
+        # Socket 16 already forgotten or never remembered.
+        $c =~ s@(?<=Socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Initialized/) {
+
+        # Initialized 20 socket slots.
+        $c =~ s@(?<=Initialized )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Done reading from server/) {
+
+        # Done reading from server. Expected content length: 24892. \
+        #  Actual content length: 24892. Most recently received: 4412.
+        $c =~ s@(?<=Expected content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=Actual content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=received: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } else {
 
         found_unknown_content($c);
@@ -1486,15 +1534,28 @@ sub handle_loglevel_info ($) {
         $c =~ s@(CONNECT)@$h{'method'}$1$h{'Standard'}@;
         $c =~ s@(?<=to port )(\d+)@$h{'port'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Status code/) {
+
+        # Status code 304 implies no body.
+        $c =~ s@(?<=Status code )(\d+)@$h{'status-code'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Method/) {
+
+        # Method HEAD implies no body.
+        $c =~ s@(?<=Method )([^\s]+)@$h{'method'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^No logfile configured/ or
              $c =~ m/^Malformerd HTTP headers detected and MS IIS5 hack enabled/ or
-             $c =~ m/^Invalid \"chunked\" transfer/
+             $c =~ m/^Invalid \"chunked\" transfer/ or
+             $c =~ m/^Support for/
              ) {
 
         # No logfile configured. Please enable it before reporting any problems.
         # Malformerd HTTP headers detected and MS IIS5 hack enabled. Expect an invalid response or even no response at all.
         # No logfile configured. Logging disabled.
         # Invalid "chunked" transfer encoding detected and ignored.
+        # Support for 'Connection: keep-alive' is experimental, incomplete and\
+        #  known not to work properly in some situations.
 
     } else {
 
