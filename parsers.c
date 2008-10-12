@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.144 2008/09/21 13:59:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.145 2008/10/09 18:21:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.144 2008/09/21 13:59:33 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.145  2008/10/09 18:21:41  fabiankeil
+ *    Flush work-in-progress changes to keep outgoing connections
+ *    alive where possible. Incomplete and mostly #ifdef'd out.
+ *
  *    Revision 1.144  2008/09/21 13:59:33  fabiankeil
  *    Treat unknown change-x-forwarded-for parameters as fatal errors.
  *
@@ -2640,13 +2644,6 @@ static jb_err server_transfer_coding(struct client_state *csp, char **header)
          log_error(LOG_LEVEL_HEADER, "Removing: %s", *header);
          freez(*header);
       }
-
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      log_error(LOG_LEVEL_ERROR,
-         "Chunked transfer encoding detected with experimental "
-         "keep-alive support enabled. Expect delayed delivery.");
-#endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
-
    }
 
    return JB_ERR_OK;
