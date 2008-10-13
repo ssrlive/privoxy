@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.193 2008/10/12 15:57:35 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.194 2008/10/12 18:35:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.193 2008/10/12 15:57:35 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.194  2008/10/12 18:35:18  fabiankeil
+ *    The last commit was a bit too ambitious, apparently the content
+ *    length adjustment is only necessary if we aren't buffering.
+ *
  *    Revision 1.193  2008/10/12 15:57:35  fabiankeil
  *    Fix content length calculation if we read headers
  *    and the start of the body at once. Now that we have
@@ -2553,7 +2557,7 @@ static void chat(struct client_state *csp)
       if (n < 0)
       {
          log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
-         return;
+         break;
       }
 
       /*
@@ -2572,7 +2576,7 @@ static void chat(struct client_state *csp)
          if (write_socket(csp->sfd, buf, (size_t)len))
          {
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
-            return;
+            break;
          }
          continue;
       }
@@ -2613,7 +2617,7 @@ static void chat(struct client_state *csp)
                 */
                log_error(LOG_LEVEL_ERROR, "Already forwarded the original headers. "
                   "Unable to tell the client about the problem.");
-               return;
+               break;
             }
 
             rsp = error_response(csp, "connect-failed", errno);
@@ -2709,7 +2713,7 @@ static void chat(struct client_state *csp)
                      log_error(LOG_LEVEL_ERROR, "write modified content to client failed: %E");
                      freez(hdr);
                      freez(p);
-                     return;
+                     break;
                   }
 
                   freez(hdr);
@@ -2766,8 +2770,7 @@ static void chat(struct client_state *csp)
                      log_error(LOG_LEVEL_ERROR, "Out of memory while trying to flush.");
                      rsp = cgi_error_memory();
                      send_crunch_response(csp, rsp);
-
-                     return;
+                     break;
                   }
                   hdrlen = strlen(hdr);
 
@@ -2778,7 +2781,7 @@ static void chat(struct client_state *csp)
                      log_error(LOG_LEVEL_CONNECT,
                         "Flush header and buffers to client failed: %E");
                      freez(hdr);
-                     return;
+                     break;
                   }
 
                   /*
@@ -2797,7 +2800,7 @@ static void chat(struct client_state *csp)
                if (write_socket(csp->cfd, buf, (size_t)len))
                {
                   log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
-                  return;
+                  break;
                }
             }
             byte_count += (size_t)len;
@@ -2816,8 +2819,7 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
                rsp = cgi_error_memory();
                send_crunch_response(csp, rsp);               
-
-               return;
+               break;
             }
 
             header_start = csp->iob->cur;
@@ -2853,7 +2855,7 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
                write_socket(csp->cfd, NO_SERVER_DATA_RESPONSE, strlen(NO_SERVER_DATA_RESPONSE));
                free_http_request(http);
-               return;
+               break;
             }
 
             assert(csp->headers->first->str);
@@ -2877,7 +2879,7 @@ static void chat(struct client_state *csp)
                write_socket(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
                   strlen(INVALID_SERVER_HEADERS_RESPONSE));
                free_http_request(http);
-               return;
+               break;
             }
 
             /*
@@ -2904,7 +2906,7 @@ static void chat(struct client_state *csp)
                 * and are done here after cleaning up.
                 */
                 freez(hdr);
-                return;
+                break;
             }
             /* Buffer and pcrs filter this if appropriate. */
 
@@ -2933,7 +2935,7 @@ static void chat(struct client_state *csp)
                    * to the client... it probably can't hear us anyway.
                    */
                   freez(hdr);
-                  return;
+                  break;
                }
 
                byte_count += (size_t)len;
@@ -2968,8 +2970,17 @@ static void chat(struct client_state *csp)
          }
          continue;
       }
-
-      return; /* huh? we should never get here */
+      /*
+       * If we reach this point, the server socket is tainted
+       * (most likely because we didn't read everything the
+       * server sent us) and reusing it would lead to garbage.
+       */
+      if ((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
+      {
+         log_error(LOG_LEVEL_CONNECT, "Unsetting keep-alive flag.");
+         csp->flags &= ~CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
+      }
+      return;
    }
 
    if (csp->content_length == 0)
