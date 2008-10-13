@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.28 2008/10/09 18:21:41 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.29 2008/10/11 16:59:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.28 2008/10/09 18:21:41 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.29  2008/10/11 16:59:41  fabiankeil
+ *    Add missing dots for two log messages.
+ *
  *    Revision 1.28  2008/10/09 18:21:41  fabiankeil
  *    Flush work-in-progress changes to keep outgoing connections
  *    alive where possible. Incomplete and mostly #ifdef'd out.
@@ -611,6 +614,7 @@ static jb_socket get_reusable_connection(const struct http_request *http,
                   reusable_connection[slot].sfd, reusable_connection[slot].host,
                   reusable_connection[slot].port, slot);
                mark_connection_closed(&reusable_connection[slot]);
+               continue;
             }
          }
          else
@@ -620,7 +624,6 @@ static jb_socket get_reusable_connection(const struct http_request *http,
                reusable_connection[slot].sfd, reusable_connection[slot].host,
                reusable_connection[slot].port, slot);
          }
-
 
          if (connection_destination_matches(&reusable_connection[slot], http, fwd))
          {
