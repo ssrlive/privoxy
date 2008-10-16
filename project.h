@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.120 2008/09/21 13:36:52 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.121 2008/10/09 18:21:41 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.121  2008/10/09 18:21:41  fabiankeil
+ *    Flush work-in-progress changes to keep outgoing connections
+ *    alive where possible. Incomplete and mostly #ifdef'd out.
+ *
  *    Revision 1.120  2008/09/21 13:36:52  fabiankeil
  *    If change-x-forwarded-for{add} is used and the client
  *    sends multiple X-Forwarded-For headers, append the client's
@@ -1264,34 +1268,34 @@ struct url_actions
  * Flag for csp->flags: Set if this client is processing data.
  * Cleared when the thread associated with this structure dies.
  */
-#define CSP_FLAG_ACTIVE     0x01
+#define CSP_FLAG_ACTIVE     0x01U
 
 /**
  * Flag for csp->flags: Set if the server's reply is in "chunked"
  * transfer encoding
  */
-#define CSP_FLAG_CHUNKED    0x02
+#define CSP_FLAG_CHUNKED    0x02U
 
 /**
  * Flag for csp->flags: Set if this request was enforced, although it would
  * normally have been blocked.
  */
-#define CSP_FLAG_FORCED     0x04
+#define CSP_FLAG_FORCED     0x04U
 
 /**
  * Flag for csp->flags: Set if any modification to the body was done.
  */
-#define CSP_FLAG_MODIFIED   0x08
+#define CSP_FLAG_MODIFIED   0x08U
 
 /**
  * Flag for csp->flags: Set if request was blocked.
  */
-#define CSP_FLAG_REJECTED   0x10
+#define CSP_FLAG_REJECTED   0x10U
 
 /**
  * Flag for csp->flags: Set if we are toggled on (FEATURE_TOGGLE).
  */
-#define CSP_FLAG_TOGGLED_ON 0x20
+#define CSP_FLAG_TOGGLED_ON 0x20U
 
 /**
  * Flag for csp->flags: Set if an acceptable Connection header
@@ -1655,25 +1659,25 @@ struct access_control_list
 
 
 /** configuration_spec::feature_flags: CGI actions editor. */
-#define RUNTIME_FEATURE_CGI_EDIT_ACTIONS             1
+#define RUNTIME_FEATURE_CGI_EDIT_ACTIONS             1U
 
 /** configuration_spec::feature_flags: Web-based toggle. */
-#define RUNTIME_FEATURE_CGI_TOGGLE                   2
+#define RUNTIME_FEATURE_CGI_TOGGLE                   2U
 
 /** configuration_spec::feature_flags: HTTP-header-based toggle. */
-#define RUNTIME_FEATURE_HTTP_TOGGLE                  4
+#define RUNTIME_FEATURE_HTTP_TOGGLE                  4U
 
 /** configuration_spec::feature_flags: Split large forms to limit the number of GET arguments. */
-#define RUNTIME_FEATURE_SPLIT_LARGE_FORMS            8
+#define RUNTIME_FEATURE_SPLIT_LARGE_FORMS            8U
 
 /** configuration_spec::feature_flags: Check the host header for requests with host-less request lines. */
-#define RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS 16
+#define RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS 16U
 
 /** configuration_spec::feature_flags: Don't allow to circumvent blocks with the force prefix. */
-#define RUNTIME_FEATURE_ENFORCE_BLOCKS              32
+#define RUNTIME_FEATURE_ENFORCE_BLOCKS              32U
 
 /** configuration_spec::feature_flags: Allow to block or redirect CGI requests. */
-#define RUNTIME_FEATURE_CGI_CRUNCHING               64
+#define RUNTIME_FEATURE_CGI_CRUNCHING               64U
 
 
 /**
