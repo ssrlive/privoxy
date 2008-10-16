@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.30 2008/10/13 17:31:03 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.31 2008/10/16 07:31:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,11 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.30 2008/10/13 17:31:03 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.31  2008/10/16 07:31:11  fabiankeil
+ *    - Factor socket_is_still_usable() out of get_reusable_connection().
+ *    - If poll() isn't available, show a warning and assume the socket
+ *      is still usable.
+ *
  *    Revision 1.30  2008/10/13 17:31:03  fabiankeil
  *    If a remembered connection is no longer usable and
  *    has been marked closed, don't bother checking if the
@@ -693,7 +698,7 @@ static jb_socket get_reusable_connection(const struct http_request *http,
 static int mark_connection_unused(jb_socket sfd)
 {
    unsigned int slot = 0;
-   unsigned int socket_found = FALSE;
+   int socket_found = FALSE;
 
    assert(sfd != JB_INVALID_SOCKET);
 
