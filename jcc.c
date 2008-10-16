@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.194 2008/10/12 18:35:18 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.195 2008/10/13 16:04:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.194 2008/10/12 18:35:18 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.195  2008/10/13 16:04:37  fabiankeil
+ *    Make sure we don't try to reuse tainted server sockets.
+ *
  *    Revision 1.194  2008/10/12 18:35:18  fabiankeil
  *    The last commit was a bit too ambitious, apparently the content
  *    length adjustment is only necessary if we aren't buffering.
@@ -2636,10 +2639,9 @@ static void chat(struct client_state *csp)
             {
                /* XXX: this is a temporary hack */
                log_error(LOG_LEVEL_CONNECT,
-                  "Looks like we reached the end of the last chunk: "
-                  "%d %d %d %d %d. We better stop reading.",
-                  buf[len-5], buf[len-4], buf[len-3], buf[len-2], buf[len-1]);
-               csp->expected_content_length = byte_count + len;
+                  "Looks like we reached the end of the last chunk. "
+                  "We better stop reading.");
+               csp->expected_content_length = byte_count + (size_t)len;
                csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
             }
          }
@@ -2948,7 +2950,7 @@ static void chat(struct client_state *csp)
                 */
                int header_length = csp->iob->cur - header_start;
                assert(csp->iob->cur > header_start);
-               byte_count += len - header_length;
+               byte_count += (size_t)len - header_length;
             }
 
             /* we're finished with the server's header */
