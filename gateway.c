@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.32 2008/10/16 16:27:22 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.33 2008/10/16 16:34:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.32 2008/10/16 16:27:22 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.33  2008/10/16 16:34:21  fabiankeil
+ *    Fix two gcc44 warnings.
+ *
  *    Revision 1.32  2008/10/16 16:27:22  fabiankeil
  *    Fix compiler warning.
  *
@@ -275,6 +278,8 @@ static const char socks_userid[] = "anonymous";
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 
 #define MAX_REUSABLE_CONNECTIONS 100
+/* XXX: should be a config option. */
+#define CONNECTION_KEEP_ALIVE_TIMEOUT 3 * 60
 
 struct reusable_connection
 {
@@ -282,6 +287,7 @@ struct reusable_connection
    int       in_use;
    char      *host;
    int       port;
+   time_t    timestamp;
 
    int       forwarder_type;
    char      *gateway_host;
@@ -386,6 +392,7 @@ void remember_connection(jb_socket sfd, const struct http_request *http,
    reusable_connection[slot].sfd = sfd;
    reusable_connection[slot].port = http->port;
    reusable_connection[slot].in_use = 0;
+   reusable_connection[slot].timestamp = time(NULL);
 
    assert(NULL != fwd);
    assert(reusable_connection[slot].gateway_host == NULL);
@@ -446,6 +453,7 @@ static void mark_connection_closed(struct reusable_connection *closed_connection
    closed_connection->sfd = JB_INVALID_SOCKET;
    freez(closed_connection->host);
    closed_connection->port = 0;
+   closed_connection->timestamp = 0;
    closed_connection->forwarder_type = SOCKS_NONE;
    freez(closed_connection->gateway_host);
    closed_connection->gateway_port = 0;
@@ -656,6 +664,18 @@ static jb_socket get_reusable_connection(const struct http_request *http,
       if (!reusable_connection[slot].in_use
          && (JB_INVALID_SOCKET != reusable_connection[slot].sfd))
       {
+         time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
+
+         if (CONNECTION_KEEP_ALIVE_TIMEOUT < time_open)
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "The connection to %s:%d in slot %d timed out. Closing.",
+               reusable_connection[slot].host, reusable_connection[slot].port,
+               slot);
+            mark_connection_closed(&reusable_connection[slot]);
+            continue;
+         }
+
          if (!socket_is_still_usable(reusable_connection[slot].sfd))
          {
             log_error(LOG_LEVEL_CONNECT,
@@ -723,6 +743,7 @@ static int mark_connection_unused(jb_socket sfd)
          "Marking open socket %d for %s:%d in slot %d as unused.",
          sfd, reusable_connection[slot].host, reusable_connection[slot].port, slot);
       reusable_connection[slot].in_use = 0;
+      reusable_connection[slot].timestamp = time(NULL);
    }
 
    privoxy_mutex_unlock(&connection_reuse_mutex);
