@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.33 2008/10/16 16:34:21 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.34 2008/10/17 17:07:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.33 2008/10/16 16:34:21 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.34  2008/10/17 17:07:13  fabiankeil
+ *    Add preliminary timeout support.
+ *
  *    Revision 1.33  2008/10/16 16:34:21  fabiankeil
  *    Fix two gcc44 warnings.
  *
@@ -611,6 +614,7 @@ static int socket_is_still_usable(jb_socket sfd)
 #ifdef HAVE_POLL
    int poll_result;
    struct pollfd poll_fd[1];
+
    memset(poll_fd, 0, sizeof(poll_fd));
    poll_fd[0].fd = sfd;
    poll_fd[0].events = POLLIN;
@@ -627,11 +631,34 @@ static int socket_is_still_usable(jb_socket sfd)
       return FALSE;
    }
 #else
+   fd_set readable_fds;
+   struct timeval timeout;
+   int ret;
+   int socket_is_alive = 0;
+
+   memset(&timeout, '\0', sizeof(timeout));
+   /*   timeout.tv_usec = 150;*/
+   FD_ZERO(&readable_fds);
+   FD_SET(sfd, &readable_fds);
+
+   ret = select((int)sfd+1, &readable_fds, NULL, NULL, &timeout);
+   if (ret < 0)
+   {
+      log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
+   }
+
+   /*
+    * XXX: I'm not sure why !FD_ISSET() works,
+    * but apparently it does.
+    */
+   socket_is_alive = !FD_ISSET(sfd, &readable_fds);
+
    log_error(LOG_LEVEL_INFO,
-      "Detecting already dead sockets isn't implemented for your "
-      "platform yet. Assuming sockets stay alive forever, expect "
-      "an increase in connection problems.");
-   return TRUE;
+      "Detecting already dead sockets might not work correctly "
+      "on your platform. Anyway, socket %d appears to be %s.",
+      sfd, (socket_is_alive ? "still alive" : "already dead"));
+
+   return socket_is_alive;
 #endif /* def HAVE_POLL */
 }
 
