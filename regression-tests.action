@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.17 2008/09/20 10:04:33 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.18 2008/09/20 10:11:13 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -415,10 +415,14 @@ TAG:^filter\{banners-by-size\}$
 }
 TAG:^no-content-filter$
 
+# XXX: We should be able to check for
+# FEATURE_CONNECTION_KEEP_ALIVE and act accordingly.
 # Set Header    = Connection: keep-alive
 # Expect Header = Connection: close
+# Ignore = Yes
 # Set Header    = Connection:
 # Expect Header = Connection: close
+# Ignore = Yes
 {}
 TAG:^Connection: close$
 
