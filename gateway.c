@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.34 2008/10/17 17:07:13 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.35 2008/10/17 17:12:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.34 2008/10/17 17:07:13 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.35  2008/10/17 17:12:01  fabiankeil
+ *    In socket_is_still_usable(), use select()
+ *    and FD_ISSET() if poll() isn't available.
+ *
  *    Revision 1.34  2008/10/17 17:07:13  fabiankeil
  *    Add preliminary timeout support.
  *
@@ -303,6 +307,8 @@ static struct reusable_connection reusable_connection[MAX_REUSABLE_CONNECTIONS];
 
 static int mark_connection_unused(jb_socket sfd);
 static void mark_connection_closed(struct reusable_connection *closed_connection);
+static int socket_is_still_usable(jb_socket sfd);
+
 
 /*********************************************************************
  *
@@ -599,6 +605,55 @@ static int connection_destination_matches(const struct reusable_connection *conn
 
 /*********************************************************************
  *
+ * Function    :  close_unusable_connections
+ *
+ * Description :  Closes remembered connections that have timed
+ *                out or have been closed on the other side.
+ *
+ * Parameters  :  none
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void close_unusable_connections(void)
+{
+   unsigned int slot = 0;
+
+   for (slot = 0; slot < SZ(reusable_connection); slot++)
+   {
+      if (!reusable_connection[slot].in_use
+         && (JB_INVALID_SOCKET != reusable_connection[slot].sfd))
+      {
+         time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
+
+         if (CONNECTION_KEEP_ALIVE_TIMEOUT < time_open)
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "The connection to %s:%d in slot %d timed out. Closing.",
+               reusable_connection[slot].host, reusable_connection[slot].port,
+               slot);
+            close_socket(reusable_connection[slot].sfd);
+            mark_connection_closed(&reusable_connection[slot]);
+            continue;
+         }
+
+         if (!socket_is_still_usable(reusable_connection[slot].sfd))
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Socket %d for %s:%d in slot %d is no longer usable. Closing.",
+               reusable_connection[slot].sfd, reusable_connection[slot].host,
+               reusable_connection[slot].port, slot);
+            close_socket(reusable_connection[slot].sfd);
+            mark_connection_closed(&reusable_connection[slot]);
+            continue;
+         }
+      }
+   }
+}
+
+
+/*********************************************************************
+ *
  * Function    :  socket_is_still_usable
  *
  * Description :  Decides whether or not an open socket is still usable.
@@ -686,33 +741,13 @@ static jb_socket get_reusable_connection(const struct http_request *http,
 
    privoxy_mutex_lock(&connection_reuse_mutex);
 
+   close_unusable_connections();
+
    for (slot = 0; slot < SZ(reusable_connection); slot++)
    {
       if (!reusable_connection[slot].in_use
          && (JB_INVALID_SOCKET != reusable_connection[slot].sfd))
       {
-         time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
-
-         if (CONNECTION_KEEP_ALIVE_TIMEOUT < time_open)
-         {
-            log_error(LOG_LEVEL_CONNECT,
-               "The connection to %s:%d in slot %d timed out. Closing.",
-               reusable_connection[slot].host, reusable_connection[slot].port,
-               slot);
-            mark_connection_closed(&reusable_connection[slot]);
-            continue;
-         }
-
-         if (!socket_is_still_usable(reusable_connection[slot].sfd))
-         {
-            log_error(LOG_LEVEL_CONNECT,
-               "Socket %d for %s:%d in slot %d is no longer usable. Closing.",
-               reusable_connection[slot].sfd, reusable_connection[slot].host,
-               reusable_connection[slot].port, slot);
-            mark_connection_closed(&reusable_connection[slot]);
-            continue;
-         }
-
          if (connection_destination_matches(&reusable_connection[slot], http, fwd))
          {
             reusable_connection[slot].in_use = TRUE;
