@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.116 2008/10/11 10:36:19 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.117 2008/10/18 16:22:45 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1454,6 +1454,12 @@ sub handle_loglevel_connect ($) {
         $c = higlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^The connection to/) {
+
+        # The connection to www.privoxy.org:80 in slot 0 timed out. Closing.
+        $c = higlight_matched_host($c, '(?<=connection to )[^\s]+');
+        $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Initialized/) {
 
         # Initialized 20 socket slots.
@@ -1466,6 +1472,10 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=Expected content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Actual content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=received: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Looks like we reached/) {
+
+        # Looks like we reached the end of the last chunk. We better stop reading.
 
     } else {
 
