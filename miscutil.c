@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.59 2008/09/04 08:13:58 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.60 2008/09/07 12:35:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.59 2008/09/04 08:13:58 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.60  2008/09/07 12:35:05  fabiankeil
+ *    Add mutex lock support for _WIN32.
+ *
  *    Revision 1.59  2008/09/04 08:13:58  fabiankeil
  *    Prepare for critical sections on Windows by adding a
  *    layer of indirection before the pthread mutex functions.
@@ -968,6 +971,9 @@ char * make_path(const char * dir, const char * file)
 long int pick_from_range(long int range)
 {
    long int number;
+#ifdef _WIN32
+   static unsigned long seed = 0;
+#endif /* def _WIN32 */
 
    assert(range != 0);
    assert(range > 0);
@@ -979,9 +985,14 @@ long int pick_from_range(long int range)
 #elif defined(MUTEX_LOCKS_AVAILABLE)
    privoxy_mutex_lock(&rand_mutex);
 #ifdef _WIN32
-   srand((unsigned)(GetCurrentThreadId()+GetTickCount()));
+   if (!seed)
+   {
+      seed = (unsigned long)(GetCurrentThreadId()+GetTickCount());
+   }
+   srand(seed);
+   seed = (unsigned long)((rand() << 16) + rand());
 #endif /* def _WIN32 */
-   number = rand() % (long int)(range + 1);
+   number = (unsigned long)((rand() << 16) + (rand())) % (unsigned long)(range + 1);
    privoxy_mutex_unlock(&rand_mutex);
 #else
    /*
