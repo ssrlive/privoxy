@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.120 2008/08/21 17:19:50 fabiankeil Exp $
+dnl $Id: configure.in,v 1.121 2008/08/30 12:03:07 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2008 the SourceForge
 dnl Privoxy team. http://www.privoxy.org/
@@ -28,6 +28,9 @@ dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 dnl 
 dnl $Log: configure.in,v $
+dnl Revision 1.121  2008/08/30 12:03:07  fabiankeil
+dnl Remove FEATURE_COOKIE_JAR.
+dnl
 dnl Revision 1.120  2008/08/21 17:19:50  fabiankeil
 dnl Change version to 3.0.11 UNRELEASED.
 dnl
@@ -547,7 +550,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.120 $)
+AC_REVISION($Revision: 1.121 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1218,7 +1221,7 @@ AC_FUNC_SETPGRP
 AC_TYPE_SIGNAL
 dnl uncommenting does not work for swa. suse linux
 dnl AC_FUNC_STAT
-AC_CHECK_FUNCS([access atexit getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r gettimeofday inet_ntoa localtime_r memchr memmove memset putenv random regcomp select setlocale snprintf socket strchr strdup strerror strftime strlcat strlcpy strptime strstr strtoul timegm tzset])
+AC_CHECK_FUNCS([access atexit getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r gettimeofday inet_ntoa localtime_r memchr memmove memset poll putenv random regcomp select setlocale snprintf socket strchr strdup strerror strftime strlcat strlcpy strptime strstr strtoul timegm tzset])
 
 
 dnl =================================================================
@@ -1347,6 +1350,12 @@ AC_ARG_ENABLE(extended-host-patterns,
 [  --enable-extended-host-patterns Allow extended regular expressions in host patterns.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_EXTENDED_HOST_PATTERNS)
+fi])
+
+AC_ARG_ENABLE(connection-keep-alive,
+[  --enable-connection-keep-alive  Keep outgoing connections alive if possible. Experimental.],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_CONNECTION_KEEP_ALIVE)
 fi])
 
 dnl pcre/pcrs is needed for CGI anyway, so
