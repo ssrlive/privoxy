@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.195 2008/10/13 16:04:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.196 2008/10/16 09:16:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.195 2008/10/13 16:04:37 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.196  2008/10/16 09:16:41  fabiankeil
+ *    - Fix two gcc44 conversion warnings.
+ *    - Don't bother logging the last five bytes
+ *      of the 0-chunk.
+ *
  *    Revision 1.195  2008/10/13 16:04:37  fabiankeil
  *    Make sure we don't try to reuse tainted server sockets.
  *
@@ -3798,7 +3803,14 @@ static void listen_loop(void)
        */
       if (received_hup_signal)
       {
-         init_error_log(Argv[0], config->logfile);
+         if (!no_daemon)
+         {
+            /*
+             * If we aren't in daemon mode, there is no log to re-open.
+             * XXX: Probably we should ignore SIGHUP then.
+             */
+            init_error_log(Argv[0], config->logfile);
+         }
          received_hup_signal = 0;
       }
 #endif
