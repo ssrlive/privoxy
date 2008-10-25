@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.18 2008/09/20 10:11:13 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.19 2008/10/18 16:37:12 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -33,6 +33,8 @@ for-privoxy-version=3.0.11
 #
 # Level 9 needs  = config line user-manual\s+(/|[A-Za-z]:)
 # Level 12 needs = config line enable-edit-actions\s+1
+# Level 13 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE Yes
+# Level 14 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE No
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -415,14 +417,24 @@ TAG:^filter\{banners-by-size\}$
 }
 TAG:^no-content-filter$
 
-# XXX: We should be able to check for
-# FEATURE_CONNECTION_KEEP_ALIVE and act accordingly.
+# Set Header    = Connection: close
+# Expect Header = Connection: keep-alive
+# Level = 13
+# Set Header    = Connection: keep-alive
+# Expect Header = NO CHANGE
+# Level = 13
+# Set Header    = Connection:
+# Expect Header = Connection: keep-alive
+# Level = 13
+{}
+TAG:^Connection: keep-alive$
+
 # Set Header    = Connection: keep-alive
 # Expect Header = Connection: close
-# Ignore = Yes
+# Level = 14
 # Set Header    = Connection:
 # Expect Header = Connection: close
-# Ignore = Yes
+# Level = 14
 {}
 TAG:^Connection: close$
 
