@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.159 2008/08/22 16:53:06 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.160 2008/10/25 15:39:27 fk Exp $
 #
 # Wish list:
 #
@@ -155,9 +155,11 @@ sub load_regressions_tests () {
 
     our $privoxy_cgi_url;
     our @privoxy_config;
+    our %privoxy_features;
     my @actionfiles;
     my $curl_url = '';
     my $file_number = 0;
+    my $feature;
 
     $curl_url .= $privoxy_cgi_url;
     $curl_url .= 'show-status';
@@ -176,6 +178,15 @@ sub load_regressions_tests () {
 
             my $directive = $1 . " " . $2;
             push (@privoxy_config, $directive);
+
+        } elsif (m@<td><code>([^<]*)</code></td>@) {
+
+            $feature = $1;
+
+        } elsif (m@<td> (Yes|No) </td>@) {
+
+            $privoxy_features{$feature} = $1 if defined $feature;
+            $feature = undef;
         }
     }
 
@@ -539,6 +550,8 @@ sub dependency_unsatisfied ($) {
     my $level = shift;
     our %dependencies;
     our @privoxy_config;
+    our %privoxy_features;
+
     my $dependency_problem = 0;
 
     if (defined ($dependencies{$level}{'config line'})) {
@@ -549,6 +562,19 @@ sub dependency_unsatisfied ($) {
         foreach (@privoxy_config) {
 
              $dependency_problem = 0 if (/$dependency/);
+             last;
+        }
+
+    } elsif (defined ($dependencies{$level}{'feature status'})) {
+
+        my $dependency = $dependencies{$level}{'feature status'};
+        $dependency_problem = 1;
+        my ($feature, $status) = $dependency =~ /([^\s]*)\s+(Yes|No)/;
+
+        if (defined($privoxy_features{$feature})
+            and ($privoxy_features{$feature} eq $status))
+        {
+            $dependency_problem = 0;
         }
     }
 
@@ -563,7 +589,12 @@ sub register_dependency ($$) {
 
     if ($dependency =~ /config line\s+(.*)/) {
 
-       $dependencies{$level}{'config line'} = $1;
+        $dependencies{$level}{'config line'} = $1;
+
+    } elsif ($dependency =~ /feature status\s+(.*)/) {
+
+        $dependencies{$level}{'feature status'} = $1;
+
     }
 }
 
