@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.37 2008/10/23 17:40:53 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.38 2008/10/24 17:33:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,12 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.37 2008/10/23 17:40:53 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.38  2008/10/24 17:33:00  fabiankeil
+ *    - Tone the "keep-alive support is experimental" warning
+ *      down a bit as hackish 0-chunk detection has been
+ *      implemented recently.
+ *    - Only show the "ndef HAVE_POLL" warning once on start-up.
+ *
  *    Revision 1.37  2008/10/23 17:40:53  fabiankeil
  *    Fix forget_connection() and mark_connection_unused(),
  *    which would both under certain circumstances access
@@ -706,7 +712,6 @@ static int socket_is_still_usable(jb_socket sfd)
    int socket_is_alive = 0;
 
    memset(&timeout, '\0', sizeof(timeout));
-   /*   timeout.tv_usec = 150;*/
    FD_ZERO(&readable_fds);
    FD_SET(sfd, &readable_fds);
 
