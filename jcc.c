@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.197 2008/10/20 17:02:40 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.198 2008/10/22 15:19:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.197 2008/10/20 17:02:40 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.198  2008/10/22 15:19:55  fabiankeil
+ *    Once More, With Feeling: if there is no logfile
+ *    because the user didn't specify one, we shouldn't
+ *    call init_error_log() after receiving SIGHUP either.
+ *
  *    Revision 1.197  2008/10/20 17:02:40  fabiankeil
  *    If SIGHUP is received while we aren't running in daemon
  *    mode, calling init_error_log() would be a mistake.
@@ -2039,7 +2044,6 @@ static int server_response_is_complete(struct client_state *csp, size_t content_
        * "HEAD" implies no body, we are thus expecting
        * no content. XXX: incomplete "list" of methods?
        */
-      log_error(LOG_LEVEL_INFO, "Method %s implies no body.", csp->http->gpc);
       csp->expected_content_length = 0;
       content_length_known = TRUE;
    }
@@ -2049,7 +2053,6 @@ static int server_response_is_complete(struct client_state *csp, size_t content_
       /*
        * Expect no body. XXX: incomplete "list" of status codes?
        */
-      log_error(LOG_LEVEL_INFO, "Status code %d implies no body.", csp->http->status);
       csp->expected_content_length = 0;
       content_length_known = TRUE;
    }
