@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.117 2008/10/18 16:22:45 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.118 2008/11/01 14:10:53 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -612,7 +612,7 @@ sub h ($) {
     return $result;
 }
 
-sub higlight_known_headers ($) {
+sub highlight_known_headers ($) {
 
     my $content = shift;
     our %header_colours;
@@ -630,7 +630,7 @@ sub higlight_known_headers ($) {
     return $content;
 }
 
-sub higlight_matched_request_line ($$) {
+sub highlight_matched_request_line ($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -657,9 +657,9 @@ sub highlight_request_line ($) {
         # XXX: save these: ($method, $path, $http_version) = ($1, $2, $3);
         $rl =~ s@^(\w+)@$h{'method'}$1$h{'Standard'}@;
         if ($rl =~ /http:\/\//) {
-            $rl = higlight_matched_url($rl, '[^\s]*(?=\sHTTP)');
+            $rl = highlight_matched_url($rl, '[^\s]*(?=\sHTTP)');
         } else {
-            $rl = higlight_matched_pattern($rl, 'request_', '[^\s]*(?=\sHTTP)');
+            $rl = highlight_matched_pattern($rl, 'request_', '[^\s]*(?=\sHTTP)');
         }
 
         $rl =~ s@(HTTP\/\d\.\d)$@$h{'http-version'}$1$h{'Standard'}@;
@@ -667,7 +667,7 @@ sub highlight_request_line ($) {
     } elsif ($rl =~ m/\.\.\. \[too long, truncated\]$/) {
 
         $rl =~ s@^(\w+)@$h{'method'}$1$h{'Standard'}@;
-        $rl = higlight_matched_url($rl, '[^\s]*(?=\.\.\.)');
+        $rl = highlight_matched_url($rl, '[^\s]*(?=\.\.\.)');
 
     } elsif ($rl =~ m/^ $/) {
 
@@ -709,7 +709,7 @@ sub highlight_response_line ($) {
     return $rl;
 }
 
-sub higlight_matched_url ($$) {
+sub highlight_matched_url ($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -724,7 +724,7 @@ sub higlight_matched_url ($$) {
     return $result;
 }
 
-sub higlight_matched_host ($$) {
+sub highlight_matched_host ($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -736,7 +736,7 @@ sub higlight_matched_host ($$) {
     return $result;
 }
 
-sub higlight_matched_pattern ($$$) {
+sub highlight_matched_pattern ($$$) {
 
     our %h;
     my $result = shift; # XXX: Stupid name;
@@ -753,7 +753,7 @@ sub higlight_matched_pattern ($$$) {
 }
 
 
-sub higlight_matched_path ($$) {
+sub highlight_matched_path ($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -842,8 +842,8 @@ sub handle_loglevel_header ($) {
     } elsif ($c =~ m/^New host is: ([^\s]*)\./) {
 
         # New host is: trac.vidalia-project.net. Crunching Referer: http://www.vidalia-project.net/
-        $c = higlight_matched_host($c, '(?<=New host is: )[^\s]+');
-        $content = higlight_matched_url($c, '(?<=Crunching Referer: )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=New host is: )[^\s]+');
+        $content = highlight_matched_url($c, '(?<=Crunching Referer: )[^\s]+');
 
     } elsif ($c =~ m/^Text mode enabled by force. (Take cover)!/) {
 
@@ -860,12 +860,12 @@ sub handle_loglevel_header ($) {
         # Adjusted Content-Length to 2132
         # Adjust Content-Length to 33533
         $content =~ s@(?<=Content-Length to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $content = higlight_known_headers($content);
+        $content = highlight_known_headers($content);
 
     } elsif ($c =~ m/^Destination extracted from "Host:" header. New request URL:/) {
 
         # Destination extracted from "Host:" header. New request URL: http://www.cccmz.de/~ridcully/blog/
-        $content = higlight_matched_url($content, '(?<=New request URL: ).*');
+        $content = highlight_matched_url($content, '(?<=New request URL: ).*');
 
     } elsif ($c =~ m/^Couldn\'t parse:/) {
 
@@ -994,7 +994,7 @@ sub handle_loglevel_header ($) {
 
     # Highlight headers   
     unless ($c =~ m/^Transforming/) {
-        $content = higlight_known_headers($content) unless $no_special_header_highlighting;
+        $content = highlight_known_headers($content) unless $no_special_header_highlighting;
     }
 
     return $content;
@@ -1113,7 +1113,7 @@ sub handle_loglevel_re_filter ($) {
         $c =~ s@(?<=produced )(\d+)(?= hits)@$h{'Number'}$1$h{'Standard'}@;
 
         $c =~ s@([^\s]+?)(\'? produced)@$h{'filter'}$1$h{'Standard'}$2@;
-        $c = higlight_matched_host($c, '(?<=filtering )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=filtering )[^\s]+');
 
         $c =~ s@\.$@ @;
         $c .= "(" . $h{'Number'};
@@ -1192,7 +1192,7 @@ sub handle_loglevel_redirect ($) {
     if ($c =~ m/^Decoding "([^""]*)"/) {
 
          $req{$t}{'original-destination'} = $1;
-         $c = higlight_matched_path($c, '(?<=Decoding ")[^"]*');
+         $c = highlight_matched_path($c, '(?<=Decoding ")[^"]*');
          $c =~ s@\"@@g;
 
     } elsif ($c =~ m/^Checking/) {
@@ -1202,7 +1202,7 @@ sub handle_loglevel_redirect ($) {
 
          # TODO: Change colour if really url-decoded
          $req{$t}{'decoded-original-destination'} = $1;
-         $c = higlight_matched_path($c, '(?<=Checking ")[^"]*');
+         $c = highlight_matched_path($c, '(?<=Checking ")[^"]*');
          $c =~ s@\"@@g;
 
     } elsif ($c =~ m/^pcrs command "([^""]*)" changed "([^""]*)" to "([^""]*)" \((\d+) hits?\)/) {
@@ -1213,9 +1213,9 @@ sub handle_loglevel_redirect ($) {
         my ($pcrs_command, $url_before, $url_after, $hits) = ($1, $2, $3, $4); # XXX: save these?
 
         $c =~ s@(?<=pcrs command )"([^""]*)"@$h{'filter'}$1$h{'Standard'}@;
-        $c = higlight_matched_url($c, '(?<=changed ")[^""]*');
+        $c = highlight_matched_url($c, '(?<=changed ")[^""]*');
         $c =~ s@(?<=changed )"([^""]*)"@$1@; # Remove quotes
-        $c = higlight_matched_url($c, '(?<=to ")[^""]*');
+        $c = highlight_matched_url($c, '(?<=to ")[^""]*');
         $c =~ s@(?<=to )"([^""]*)"@$1@; # Remove quotes
         $c =~ s@(\d+)(?= hits?)@$h{'hits'}$1$h{'Standard'}@;
 
@@ -1230,7 +1230,7 @@ sub handle_loglevel_redirect ($) {
         # No pcrs command recognized, assuming that "http://config.privoxy.org/user-manual/favicon.png"\
         #  is already properly formatted.
         # XXX: assume the same?
-        $c = higlight_matched_url($c, '(?<=assuming that \")[^"]*');
+        $c = highlight_matched_url($c, '(?<=assuming that \")[^"]*');
 
     } else {
 
@@ -1308,13 +1308,13 @@ sub handle_loglevel_request ($) {
             $content =~ s@\(($reason)\)@$reason_colours{$reason}($1)$h{'Standard'}@g;
         }
         # Highlight request URL domain and ditch 'crunch!'
-        $content = higlight_matched_pattern($content, 'request_', '[^ ]*(?= crunch!)');
+        $content = highlight_matched_pattern($content, 'request_', '[^ ]*(?= crunch!)');
         $content =~ s@ crunch!@@;
 
     } elsif ($content =~ m/\[too long, truncated\]$/) {
 
         # config.privoxy.org/edit-actions-submit?f=3&v=1176116716&s=7&Submit=Submit[...]&filter... [too long, truncated]
-        $content = higlight_matched_pattern($content, 'request_', '^.*(?=\.\.\. \[too long, truncated\]$)');
+        $content = highlight_matched_pattern($content, 'request_', '^.*(?=\.\.\. \[too long, truncated\]$)');
 
     } elsif ($content =~ m/(.*)/) { # XXX: Pretty stupid
 
@@ -1341,14 +1341,14 @@ sub handle_loglevel_connect ($) {
 
         # Connect: via 10.0.0.1:8123 to: www.example.org.noconnect
 
-        $c = higlight_matched_host($c, '(?<=via )[^\s]+');
-        $c = higlight_matched_host($c, '(?<=to: )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=via )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=to: )[^\s]+');
 
     } elsif ($c =~ m/connect to: .* failed: .*/) {
 
         # connect to: www.example.org.noconnect failed: Operation not permitted
 
-        $c = higlight_matched_host($c, '(?<=connect to: )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=connect to: )[^\s]+');
 
         $c =~ s@(?<=failed: )(.*)@$h{'error'}$1$h{'Standard'}@;
 
@@ -1357,13 +1357,13 @@ sub handle_loglevel_connect ($) {
         # Connect: to www.nzherald.co.nz successful
 
         return '' if SUPPRESS_SUCCESSFUL_CONNECTIONS;
-        $c = higlight_matched_host($c, '(?<=to )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=to )[^\s]+');
 
     } elsif ($c =~ m/to ([^\s]*)$/) {
 
         # Connect: to lists.sourceforge.net:443
 
-        $c = higlight_matched_host($c, '(?<=to )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=to )[^\s]+');
 
     } elsif ($c =~ m/^accepted connection from .*/ or
              $c =~ m/^OK/) {
@@ -1372,13 +1372,13 @@ sub handle_loglevel_connect ($) {
         # Privoxy 3.0.6 and earlier just say:
         # OK
         return '' if SUPPRESS_ACCEPTED_CONNECTIONS;
-        $c = higlight_matched_host($c, '(?<=connection from ).*');
+        $c = highlight_matched_host($c, '(?<=connection from ).*');
 
     } elsif ($c =~ m/^write header to: .* failed:/) {
 
         # write header to: 10.0.0.1 failed: Broken pipe
 
-        $c = higlight_matched_host($c, '(?<=write header to: )[^\s]*');
+        $c = highlight_matched_host($c, '(?<=write header to: )[^\s]*');
         $c =~ s@(?<=failed: )(.*)@$h{'Error'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^write header to client failed:/) {
@@ -1413,7 +1413,7 @@ sub handle_loglevel_connect ($) {
     } elsif ($c =~ m/^Denying suspicious CONNECT request from/) {
 
         # Denying suspicious CONNECT request from 10.0.0.1
-        $c = higlight_matched_host($c, '(?<=from )[^\s]+'); # XXX: not an URL
+        $c = highlight_matched_host($c, '(?<=from )[^\s]+'); # XXX: not an URL
 
     } elsif ($c =~ m/^socks5_connect:/) {
     
@@ -1423,27 +1423,27 @@ sub handle_loglevel_connect ($) {
 
         # Found reusable socket 9 for www.privoxy.org:80 in slot 0.
         $c =~ s@(?<=Found reusable socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Marking open socket/) {
 
         # Marking open socket 9 for www.privoxy.org:80 in slot 0 as unused.
         $c =~ s@(?<=Marking open socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^No reusable/) {
 
         # No reusable socket for addons.mozilla.org:443 found. Opening a new one.
-        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+');
 
     } elsif ($c =~ m/^(Remembering|Forgetting) socket/) {
 
         # Remembering socket 13 for www.privoxy.org:80 in slot 0.
         # Forgetting socket 38 for www.privoxy.org:80 in slot 5.
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Socket/) {
@@ -1451,13 +1451,13 @@ sub handle_loglevel_connect ($) {
         # Socket 18 for www.privoxy.org:80 in slot 0 is no longer usable. Closing.
         # Socket 16 already forgotten or never remembered.
         $c =~ s@(?<=Socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $c = higlight_matched_host($c, '(?<=for )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^The connection to/) {
 
         # The connection to www.privoxy.org:80 in slot 0 timed out. Closing.
-        $c = higlight_matched_host($c, '(?<=connection to )[^\s]+');
+        $c = highlight_matched_host($c, '(?<=connection to )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Initialized/) {
@@ -1497,7 +1497,7 @@ sub handle_loglevel_info ($) {
     if ($c =~ m/^Rewrite detected:/) {
 
         # Rewrite detected: GET http://10.0.0.2:88/blah.txt HTTP/1.1
-        $c = higlight_matched_request_line($c, '(?<=^Rewrite detected: ).*');
+        $c = highlight_matched_request_line($c, '(?<=^Rewrite detected: ).*');
 
     } elsif ($c =~ m/^Decompress(ing deflated|ion didn)/ or
              $c =~ m/^Compressed content detected/ or
@@ -1623,12 +1623,12 @@ sub handle_loglevel_force ($) {
       
         # Ignored force prefix in request: "GET http://10.0.0.1/PRIVOXY-FORCE/block HTTP/1.1"
         $c =~ s@^(Ignored)@$h{'ignored'}$1$h{'Standard'}@;
-        $c = higlight_matched_request_line($c, '(?<=request: ")[^"]*');
+        $c = highlight_matched_request_line($c, '(?<=request: ")[^"]*');
 
     } elsif ($c =~ m/^Enforcing request:/) {
       
         # Enforcing request: "GET http://10.0.0.1/block HTTP/1.1".
-        $c = higlight_matched_request_line($c, '(?<=request: ")[^"]*');
+        $c = highlight_matched_request_line($c, '(?<=request: ")[^"]*');
 
     } else {
 
