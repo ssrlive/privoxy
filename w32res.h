@@ -1,9 +1,9 @@
 #ifndef W32RES_H_INCLUDED
 #define W32RES_H_INCLUDED
-#define W32RES_H_VERSION "$Id: w32res.h,v 1.13.2.1 2002/08/21 17:59:06 oes Exp $"
+#define W32RES_H_VERSION "$Id: w32res.h,v 1.15 2006/07/18 14:48:48 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/w32res.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/w32res.h,v $
  *
  * Purpose     :  Identifiers for Windows GUI resources.
  *
@@ -34,6 +34,10 @@
  *
  * Revisions   :
  *    $Log: w32res.h,v $
+ *    Revision 1.15  2006/07/18 14:48:48  david__schmidt
+ *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
+ *    with what was really the latest development (the v_3_0_branch branch)
+ *
  *    Revision 1.13.2.1  2002/08/21 17:59:06  oes
  *     - "Show Privoxy Window" now a toggle
  *     - Temp kludge to let user and default action file be edited through win32 GUI (FR 592080)
@@ -163,13 +167,6 @@
 #define ID_TOOLS_EDITTRUST                5004
 #endif /* def FEATURE_TRUST */
 
-/*
- * The following symbols are declared in <afxres.h> in VC++.
- * However, mingw32 doesn't have that header.  Let's 
- * always declare them here, for consistency.
- * These are the VC++ values.
- */
-#define IDC_STATIC      (-1)
 #define ID_EDIT_COPY  30000
 
 

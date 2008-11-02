@@ -31,6 +31,10 @@
  *
  * Revisions   :
  *    $Log: w32.rc,v $
+ *    Revision 1.20  2006/08/18 02:06:25  david__schmidt
+ *    Making icon go back to blue when idle.
+ *    See: bug #967648.
+ *
  *    Revision 1.19  2006/07/18 14:48:48  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -269,7 +273,7 @@ BEGIN
     END
     POPUP "&View"
     BEGIN
-        MENUITEM "&Clear Log",                  ID_VIEW_CLEARLOG
+        MENUITEM "&Clear Log\tCtrl+D",          ID_VIEW_CLEARLOG
         MENUITEM                                SEPARATOR
         MENUITEM "&Log Messages",               ID_VIEW_LOGMESSAGES, CHECKED
         MENUITEM "Message &Highlighting",       ID_VIEW_MESSAGEHIGHLIGHTING, CHECKED
@@ -318,6 +322,7 @@ END
 IDR_ACCELERATOR ACCELERATORS DISCARDABLE
 BEGIN
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "D",            ID_VIEW_CLEARLOG,       VIRTKEY, CONTROL, NOINVERT
 END
 
 #endif /* English (U.S.) resources */
