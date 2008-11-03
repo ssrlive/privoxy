@@ -3,6 +3,8 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Since 3.0.10
 
+- A "clear log" view option was added to the mingw32 version
+  to clear out all of the lines in the Privoxy log window.
 - The mingw32 version uses mutex locks now which prevents
   log message corruption under load. As a side effect,
   the "no thread-safe PRNG" warning could be removed as well.
