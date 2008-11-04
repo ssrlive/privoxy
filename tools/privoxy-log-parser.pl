@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.119 2008/11/03 16:30:50 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.120 2008/11/04 17:33:28 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -914,6 +914,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/^Reducing white space in /
           or $c =~ m/^Ignoring single quote in /
           or $c =~ m/^Converting tab to space in /
+          or $c =~ m/A HTTP\/1\.1 response without/
             )
     {
         # XXX: Some of these may need highlighting
@@ -950,6 +951,7 @@ sub handle_loglevel_header ($) {
         # Ignoring single quote in 'X-LWS-Test: "This  is  quoted" this is not "this  is  " but "  this again   is  not'
         # Converting tab to space in 'X-LWS-Test:   "This  is  quoted" this   is  not "this  is  "  but  "\
         #  this again   is  not'
+        # A HTTP/1.1 response without Connection header implies keep-alive.
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
