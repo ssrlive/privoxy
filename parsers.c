@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.145 2008/10/09 18:21:41 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.146 2008/10/12 16:46:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.145 2008/10/09 18:21:41 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.146  2008/10/12 16:46:35  fabiankeil
+ *    Remove obsolete warning about delayed delivery with chunked
+ *    transfer encoding and FEATURE_CONNECTION_KEEP_ALIVE enabled.
+ *
  *    Revision 1.145  2008/10/09 18:21:41  fabiankeil
  *    Flush work-in-progress changes to keep outgoing connections
  *    alive where possible. Incomplete and mostly #ifdef'd out.
@@ -4068,11 +4072,23 @@ static jb_err client_x_forwarded_for_adder(struct client_state *csp)
 static jb_err server_connection_close_adder(struct client_state *csp)
 {
    const unsigned int flags = csp->flags;
+   const char *response_status_line = csp->headers->first->str;
 
    if ((flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
     && (flags & CSP_FLAG_SERVER_CONNECTION_CLOSE_SET))
    {
       return JB_ERR_OK;
+   }
+
+   /*
+    * XXX: if we downgraded the response, this check will fail.
+    */
+   if ((NULL != response_status_line)
+    && !strncmpic(response_status_line, "HTTP/1.1", 8))
+   {
+      log_error(LOG_LEVEL_HEADER, "A HTTP/1.1 response "
+         "without Connection header implies keep-alive.");
+      csp->flags |= CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
    }
 
    log_error(LOG_LEVEL_HEADER, "Adding: Connection: close");
