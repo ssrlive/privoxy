@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.201 2008/11/02 16:48:20 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.202 2008/11/02 18:40:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.201 2008/11/02 16:48:20 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.202  2008/11/02 18:40:34  fabiankeil
+ *    If we received a different amount of data than we expected,
+ *    log a warning and make sure the server socket isn't reused.
+ *
  *    Revision 1.201  2008/11/02 16:48:20  fabiankeil
  *    Revert revision 1.195 and try again.
  *
@@ -1198,9 +1202,9 @@ static jb_err get_request_destination_elsewhere(struct client_state *csp, struct
 static jb_err get_server_headers(struct client_state *csp);
 static const char *crunch_reason(const struct http_response *rsp);
 static void send_crunch_response(const struct client_state *csp, struct http_response *rsp);
-/*
- * static int request_contains_null_bytes(const struct client_state *csp, char *buf, int len);
- */
+static char *get_request_line(struct client_state *csp);
+static jb_err receive_client_request(struct client_state *csp);
+static jb_err parse_client_request(struct client_state *csp);
 static void build_request_line(struct client_state *csp, const struct forward_spec *fwd, char **request_line);
 static jb_err change_request_destination(struct client_state *csp);
 static void chat(struct client_state *csp);
@@ -2096,47 +2100,73 @@ static void mark_server_socket_tainted(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  chat
+ * Function    :  get_request_line
  *
- * Description :  Once a connection to the client has been accepted,
- *                this function is called (via serve()) to handle the
- *                main business of the communication.  When this
- *                function returns, the caller must close the client
- *                socket handle.
- *
- *                FIXME: chat is nearly thousand lines long.
- *                Ridiculous.
+ * Description : Read the client request line.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  Nothing.
+ * Returns     :  Pointer to request line or NULL in case of errors.
  *
  *********************************************************************/
-static void chat(struct client_state *csp)
+static char *get_request_line(struct client_state *csp)
 {
    char buf[BUFFER_SIZE];
-   char *hdr;
+   char *request_line = NULL;
+   int len;
+
+   memset(buf, 0, sizeof(buf));
+
+   do
+   {
+      len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
+
+      if (len <= 0) return NULL;
+
+      /*
+       * If there is no memory left for buffering the
+       * request, there is nothing we can do but hang up
+       */
+      if (add_to_iob(csp, buf, len))
+      {
+         return NULL;
+      }
+
+      request_line = get_header(csp->iob);
+
+   } while ((NULL != request_line) && ('\0' == *request_line));
+
+   return request_line;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  receive_client_request
+ *
+ * Description : Read the client's request (more precisely the
+ *               client headers) and answer it if necessary.
+ *
+ *               Note that since we're not using select() we could get
+ *               blocked here if a client connected, then didn't say
+ *               anything!
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK, JB_ERR_PARSE or JB_ERR_MEMORY
+ *
+ *********************************************************************/
+static jb_err receive_client_request(struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
    char *p;
    char *req = NULL;
-   fd_set rfds;
-   int n;
-   jb_socket maxfd;
-   int server_body;
-   int ms_iis5_hack = 0;
-   size_t byte_count = 0;
-   int forwarded_connect_retries = 0;
-   int max_forwarded_connect_retries = csp->config->forwarded_connect_retries;
-   const struct forward_spec * fwd;
    struct http_request *http;
-   int len; /* for buffer sizes (and negative error codes) */
+   int len;
    jb_err err;
-
-   /* Function that does the content filtering for the current request */
-   filter_function_ptr content_filter = NULL;
-
-   /* Skeleton for HTTP response, if we should intercept the request */
-   struct http_response *rsp;
 
    /* Temporary copy of the client's headers before they get enlisted in csp->headers */
    struct list header_list;
@@ -2146,57 +2176,11 @@ static void chat(struct client_state *csp)
 
    memset(buf, 0, sizeof(buf));
 
-   /*
-    * Read the client's request.  Note that since we're not using select() we
-    * could get blocked here if a client connected, then didn't say anything!
-    */
-
-   do
-   {
-      len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
-
-      if (len <= 0) break;      /* error! */
-
-      /*
-       * If there is no memory left for buffering the
-       * request, there is nothing we can do but hang up
-       */
-      if (add_to_iob(csp, buf, len))
-      {
-         return;
-      }
-
-      req = get_header(csp->iob);
-
-   } while ((NULL != req) && ('\0' == *req));
+   req = get_request_line(csp);
 
    if ((NULL != req) && ('\0' != *req))
    {
       /* Request received. Validate and parse it. */
-
-#if 0
-      /*
-       * XXX: Temporary disabled to prevent problems
-       * with POST requests whose bodies are allowed to
-       * contain NULL bytes. BR#1730105.
-       *
-       * The main purpose of this check is to properly
-       * log stuff like BitTorrent traffic and other junk
-       * that hits public proxies. It's not required for
-       * Privoxy to functions as those requests are discarded
-       * later on anyway.
-       *
-       * It probably should be rewritten to only check
-       * the head of the request. Another option would
-       * be to let all POST requests pass, although that
-       * may not be good enough.
-       */
-      if (request_contains_null_bytes(csp, buf, len))
-      {
-         /* NULL bytes found and dealt with, just hang up. */
-         return;
-      }
-#endif
 
       /* Does the request line look invalid? */
       if (client_protocol_is_unsupported(csp, req))
@@ -2206,7 +2190,7 @@ static void chat(struct client_state *csp)
           * answered with a error response, the buffers
           * were freed and we're done with chatting.
           */
-         return;
+         return JB_ERR_PARSE;
       }
 
 #ifdef FEATURE_FORCE_LOAD
@@ -2228,8 +2212,8 @@ static void chat(struct client_state *csp)
             csp->flags |= CSP_FLAG_FORCED;
          }
       }
-
 #endif /* def FEATURE_FORCE_LOAD */
+
       err = parse_http_request(req, http, csp);
       if (JB_ERR_OK != err)
       {
@@ -2247,7 +2231,7 @@ static void chat(struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Invalid header received from %s.", csp->ip_addr_str);
 
       free_http_request(http);
-      return;
+      return JB_ERR_PARSE;
    }
 
    /* grab the rest of the client's headers */
@@ -2273,7 +2257,7 @@ static void chat(struct client_state *csp)
          {
             log_error(LOG_LEVEL_ERROR, "read from client failed: %E");
             destroy_list(headers);
-            return;
+            return JB_ERR_PARSE;
          }
          
          if (add_to_iob(csp, buf, len))
@@ -2283,7 +2267,7 @@ static void chat(struct client_state *csp)
              * request, there is nothing we can do but hang up
              */
             destroy_list(headers);
-            return;
+            return JB_ERR_MEMORY;
          }
       }
       else
@@ -2314,7 +2298,7 @@ static void chat(struct client_state *csp)
           * An error response has already been send
           * and we're done here.
           */
-         return;
+         return JB_ERR_PARSE;
       }
    }
 
@@ -2337,23 +2321,50 @@ static void chat(struct client_state *csp)
     * Save a copy of the original request for logging
     */
    http->ocmd = strdup(http->cmd);
-
    if (http->ocmd == NULL)
    {
-      log_error(LOG_LEVEL_FATAL, "Out of memory copying HTTP request line");
+      log_error(LOG_LEVEL_FATAL,
+         "Out of memory copying HTTP request line");
    }
-
    enlist(csp->headers, http->cmd);
 
    /* Append the previously read headers */
    list_append_list_unique(csp->headers, headers);
    destroy_list(headers);
 
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    : parse_client_request
+ *
+ * Description : Parses the client's request and decides what to do
+ *               with it.
+ *
+ *               Note that since we're not using select() we could get
+ *               blocked here if a client connected, then didn't say
+ *               anything!
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK or JB_ERR_PARSE
+ *
+ *********************************************************************/
+static jb_err parse_client_request(struct client_state *csp)
+{
+   struct http_request *http = csp->http;
+   jb_err err;
+
    err = sed(csp, FILTER_CLIENT_HEADERS);
    if (JB_ERR_OK != err)
    {
+      /* XXX: Should be handled in sed(). */
       assert(err == JB_ERR_PARSE);
-      log_error(LOG_LEVEL_FATAL, "Failed to parse client headers");
+      log_error(LOG_LEVEL_FATAL, "Failed to parse client headers.");
    }
    csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
@@ -2367,10 +2378,72 @@ static void chat(struct client_state *csp)
        */
       write_socket(csp->cfd, MESSED_UP_REQUEST_RESPONSE, strlen(MESSED_UP_REQUEST_RESPONSE));
       /* XXX: Use correct size */
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request generated\" 500 0", csp->ip_addr_str);
-      log_error(LOG_LEVEL_ERROR, "Invalid request line after applying header filters.");
-
+      log_error(LOG_LEVEL_CLF,
+         "%s - - [%T] \"Invalid request generated\" 500 0", csp->ip_addr_str);
+      log_error(LOG_LEVEL_ERROR,
+         "Invalid request line after applying header filters.");
       free_http_request(http);
+
+      return JB_ERR_PARSE;
+   }
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  chat
+ *
+ * Description :  Once a connection to the client has been accepted,
+ *                this function is called (via serve()) to handle the
+ *                main business of the communication.  When this
+ *                function returns, the caller must close the client
+ *                socket handle.
+ *
+ *                FIXME: chat is nearly thousand lines long.
+ *                Ridiculous.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+static void chat(struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
+   char *hdr;
+   char *p;
+   fd_set rfds;
+   int n;
+   jb_socket maxfd;
+   int server_body;
+   int ms_iis5_hack = 0;
+   size_t byte_count = 0;
+   int forwarded_connect_retries = 0;
+   int max_forwarded_connect_retries = csp->config->forwarded_connect_retries;
+   const struct forward_spec *fwd;
+   struct http_request *http;
+   int len; /* for buffer sizes (and negative error codes) */
+
+   /* Function that does the content filtering for the current request */
+   filter_function_ptr content_filter = NULL;
+
+   /* Skeleton for HTTP response, if we should intercept the request */
+   struct http_response *rsp;
+
+   memset(buf, 0, sizeof(buf));
+
+   http = csp->http;
+
+   if (receive_client_request(csp) != JB_ERR_OK)
+   {
+      return;
+   }
+   if (parse_client_request(csp) != JB_ERR_OK)
+   {
       return;
    }
 
