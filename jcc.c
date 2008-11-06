@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.202 2008/11/02 18:40:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.203 2008/11/06 18:34:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.202 2008/11/02 18:40:34 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.203  2008/11/06 18:34:35  fabiankeil
+ *    Factor receive_client_request() and
+ *    parse_client_request() out of chat().
+ *
  *    Revision 1.202  2008/11/02 18:40:34  fabiankeil
  *    If we received a different amount of data than we expected,
  *    log a warning and make sure the server socket isn't reused.
@@ -2756,7 +2760,7 @@ static void chat(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          if (csp->flags & CSP_FLAG_CHUNKED)
          {
-            if ((len > 5) && !memcmp(buf+len-5, "0\r\n\r\n", 5))
+            if ((len >= 5) && !memcmp(buf+len-5, "0\r\n\r\n", 5))
             {
                /* XXX: this is a temporary hack */
                log_error(LOG_LEVEL_CONNECT,
