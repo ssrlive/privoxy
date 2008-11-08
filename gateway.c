@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.38 2008/10/24 17:33:00 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.39 2008/10/25 11:33:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.38 2008/10/24 17:33:00 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.39  2008/10/25 11:33:01  fabiankeil
+ *    Remove already out-commented line left over from debugging.
+ *
  *    Revision 1.38  2008/10/24 17:33:00  fabiankeil
  *    - Tone the "keep-alive support is experimental" warning
  *      down a bit as hackish 0-chunk detection has been
@@ -583,10 +586,10 @@ static int connection_destination_matches(const struct reusable_connection *conn
          connection->forward_port, fwd->forward_port, http->host);
       return FALSE;
    }
-   if (connection->forward_port   != fwd->forward_port)
+   if (connection->port != http->port)
    {
       log_error(LOG_LEVEL_CONNECT, "Server port mismatch: %d %d (%s)",
-         connection->forward_port, fwd->forward_port, http->host);
+         connection->port, http->port, http->host);
       return FALSE;
    }
 
