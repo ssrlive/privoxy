@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.107 2008/05/04 17:52:56 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.108 2008/05/21 15:35:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.107 2008/05/04 17:52:56 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.108  2008/05/21 15:35:08  fabiankeil
+ *    - Mark csp as immutable for block_acl().
+ *    - Remove an obsolete complaint about filter_popups().
+ *
  *    Revision 1.107  2008/05/04 17:52:56  fabiankeil
  *    Adjust parse_http_url() call to new prototype.
  *
@@ -2184,7 +2188,9 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
 
       if ((newsize += chunksize) >= *size)
       {
-         log_error(LOG_LEVEL_ERROR, "Chunksize exceeds buffer in  \"chunked\" transfer coding");
+         log_error(LOG_LEVEL_ERROR,
+            "Chunk size %d exceeds buffer size %d in  \"chunked\" transfer coding",
+            chunksize, *size);
          return JB_ERR_PARSE;
       }
       from_p += 2;
