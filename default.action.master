@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.147 2008/09/20 10:11:49 fabiankeil Exp $
+#  $Id: default.action.master,v 1.148 2008/09/21 11:36:59 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1661,6 +1661,8 @@ view.samurajdata.se/ps\.php\?url=
 #MASTER# REMARKS: While this is a redirect, the token isn't part of the URL redirected to.
 # URL = http://www.amazon.com/gp/redirect.html/ref=cm_plog_item_link/105-3659773-0844420?ie=UTF8&location=http%3A%2F%2Fjoltawards.com%2F2007%2F&token=A07736D870C02EF10CB13BCC8A33C302F689BBBA
 .amazon.com/gp/redirect.html/.*location.*&token
+# URL = http://en.groundspring.org/EmailNow/pub.php?module=WebSignup&cmd=thankyou&gotoUrl=http%3A%2F%2Fwww.freebsdfoundation.org&gotoText=Return+to+Home+Page&listNames=The+FreeBSD+Foundation+Mailing+List
+.groundspring.org/
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
