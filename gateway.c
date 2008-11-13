@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.41 2008/11/08 15:29:58 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.42 2008/11/13 09:08:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.41 2008/11/08 15:29:58 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.42  2008/11/13 09:08:42  fabiankeil
+ *    Add new config option: keep-alive-timeout.
+ *
  *    Revision 1.41  2008/11/08 15:29:58  fabiankeil
  *    Unify two debug messages.
  *
@@ -313,7 +316,7 @@ static const char socks_userid[] = "anonymous";
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 
 #define MAX_REUSABLE_CONNECTIONS 100
-int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
+static int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
 
 struct reusable_connection
 {
