@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.79 2008/08/30 12:03:07 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.80 2008/08/31 15:59:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.79 2008/08/30 12:03:07 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.80  2008/08/31 15:59:03  fabiankeil
+ *    There's no reason to let remote toggling support depend
+ *    on FEATURE_CGI_EDIT_ACTIONS, so make sure it doesn't.
+ *
  *    Revision 1.79  2008/08/30 12:03:07  fabiankeil
  *    Remove FEATURE_COOKIE_JAR.
  *
@@ -504,6 +508,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.79 2008/08/30 12:03:07 fabiankeil
 #include "encode.h"
 #include "urlmatch.h"
 #include "cgi.h"
+#include "gateway.h"
 
 const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
@@ -567,6 +572,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_forward_socks5              3963965522ul /* "forward-socks5" */
 #define hash_forwarded_connect_retries    101465292ul /* "forwarded-connect-retries" */
 #define hash_hostname                      10308071ul /* "hostname" */
+#define hash_keep_alive_timeout          3878599515ul /* "keep-alive-timeout" */
 #define hash_listen_address              1255650842ul /* "listen-address" */
 #define hash_logdir                          422889ul /* "logdir" */
 #define hash_logfile                        2114766ul /* "logfile" */
@@ -720,6 +726,9 @@ struct configuration_spec * load_config(void)
    unsigned long linenum = 0;
    int i;
    char *logfile = NULL;
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
+#endif
 
    if ( !check_file_changed(current_configfile, configfile, &fs))
    {
@@ -1328,6 +1337,27 @@ struct configuration_spec * load_config(void)
             continue;
 
 /* *************************************************************************
+ * keep-alive-timeout timeout
+ * *************************************************************************/
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         case hash_keep_alive_timeout :
+            if (*arg != '\0')
+            {
+               int timeout = atoi(arg);
+               if (0 <= timeout)
+               {
+                  keep_alive_timeout = timeout;
+               }
+               else
+               {
+                  log_error(LOG_LEVEL_FATAL,
+                     "Invalid keep-alive-timeout value: %s.", arg);
+               }
+            }
+            continue;
+#endif
+
+/* *************************************************************************
  * listen-address [ip][:port]
  * *************************************************************************/
          case hash_listen_address :
@@ -1656,6 +1686,9 @@ struct configuration_spec * load_config(void)
    fclose(configfp);
 
    set_debug_level(config->debug);
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   set_keep_alive_timeout(keep_alive_timeout);
+#endif
 
    freez(config->logfile);
 

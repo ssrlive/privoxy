@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.40 2008/11/08 15:14:05 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.41 2008/11/08 15:29:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.40 2008/11/08 15:14:05 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.41  2008/11/08 15:29:58  fabiankeil
+ *    Unify two debug messages.
+ *
  *    Revision 1.40  2008/11/08 15:14:05  fabiankeil
  *    Fix duplicated debugging check.
  *
@@ -310,8 +313,7 @@ static const char socks_userid[] = "anonymous";
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 
 #define MAX_REUSABLE_CONNECTIONS 100
-/* XXX: should be a config option. */
-#define CONNECTION_KEEP_ALIVE_TIMEOUT 3 * 60
+int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
 
 struct reusable_connection
 {
@@ -652,13 +654,14 @@ static void close_unusable_connections(void)
       {
          time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
 
-         if (CONNECTION_KEEP_ALIVE_TIMEOUT < time_open)
+         if (keep_alive_timeout < time_open)
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d timed out. "
-               "Closing socket %d.", reusable_connection[slot].host,
+               "Closing socket %d. Timeout is: %d.",
+               reusable_connection[slot].host,
                reusable_connection[slot].port, slot,
-               reusable_connection[slot].sfd);
+               reusable_connection[slot].sfd, keep_alive_timeout);
             close_socket(reusable_connection[slot].sfd);
             mark_connection_closed(&reusable_connection[slot]);
             continue;
@@ -831,6 +834,25 @@ static int mark_connection_unused(jb_socket sfd)
 
    return socket_found;
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  set_keep_alive_timeout
+ *
+ * Description :  Sets the timeout after which open
+ *                connections will no longer be reused.
+ *
+ * Parameters  :
+ *          1  :  timeout = The timeout in seconds.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void set_keep_alive_timeout(int timeout)
+{
+   keep_alive_timeout = timeout;
 }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 

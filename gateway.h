@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.9 2006/07/18 14:48:46 david__schmidt Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.10 2008/10/09 18:21:41 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.10  2008/10/09 18:21:41  fabiankeil
+ *    Flush work-in-progress changes to keep outgoing connections
+ *    alive where possible. Incomplete and mostly #ifdef'd out.
+ *
  *    Revision 1.9  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -104,6 +108,14 @@ extern jb_socket forwarded_connect(const struct forward_spec * fwd,
                                    struct http_request *http, 
                                    struct client_state *csp);
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+
+/*
+ * Default number of seconds after which an
+ * open connection will no longer be reused.
+ */
+#define DEFAULT_KEEP_ALIVE_TIMEOUT 180
+
+extern void set_keep_alive_timeout(int timeout);
 extern void initialize_reusable_connections(void);
 extern void forget_connection(jb_socket sfd);
 extern void remember_connection(jb_socket sfd,
