@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.80 2008/08/31 15:59:03 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.81 2008/11/13 09:08:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.80 2008/08/31 15:59:03 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.81  2008/11/13 09:08:42  fabiankeil
+ *    Add new config option: keep-alive-timeout.
+ *
  *    Revision 1.80  2008/08/31 15:59:03  fabiankeil
  *    There's no reason to let remote toggling support depend
  *    on FEATURE_CGI_EDIT_ACTIONS, so make sure it doesn't.
@@ -1346,12 +1349,12 @@ struct configuration_spec * load_config(void)
                int timeout = atoi(arg);
                if (0 <= timeout)
                {
+                  config->feature_flags |= RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
                   keep_alive_timeout = timeout;
                }
                else
                {
-                  log_error(LOG_LEVEL_FATAL,
-                     "Invalid keep-alive-timeout value: %s.", arg);
+                  config->feature_flags &= ~RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
                }
             }
             continue;

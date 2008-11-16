@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.203 2008/11/06 18:34:35 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.204 2008/11/06 19:42:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.203 2008/11/06 18:34:35 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.204  2008/11/06 19:42:17  fabiankeil
+ *    Fix last-chunk detection hack to also apply
+ *    if buf[] contains nothing but the last-chunk.
+ *
  *    Revision 1.203  2008/11/06 18:34:35  fabiankeil
  *    Factor receive_client_request() and
  *    parse_client_request() out of chat().
@@ -3158,7 +3162,8 @@ static void serve(struct client_state *csp)
    if (csp->sfd != JB_INVALID_SOCKET)
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if ((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
+      if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+       && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
       {
          remember_connection(csp->sfd, csp->http, forward_url(csp, csp->http));
       }

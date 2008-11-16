@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.122 2008/10/16 07:11:34 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.123 2008/11/10 16:55:59 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.123  2008/11/10 16:55:59  fabiankeil
+ *    Fix a gcc44 warning (in filters.c).
+ *
  *    Revision 1.122  2008/10/16 07:11:34  fabiankeil
  *    Fix a bunch of gcc44 conversion warnings.
  *
@@ -1682,6 +1685,8 @@ struct access_control_list
 /** configuration_spec::feature_flags: Allow to block or redirect CGI requests. */
 #define RUNTIME_FEATURE_CGI_CRUNCHING               64U
 
+/** configuration_spec::feature_flags: Try to keep the connection to the server alive. */
+#define RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE      128U
 
 /**
  * Data loaded from the configuration file.

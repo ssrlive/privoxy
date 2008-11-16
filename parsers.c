@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.146 2008/10/12 16:46:35 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.147 2008/11/04 17:20:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.146 2008/10/12 16:46:35 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.147  2008/11/04 17:20:31  fabiankeil
+ *    HTTP/1.1 responses without Connection
+ *    header imply keep-alive. Act accordingly.
+ *
  *    Revision 1.146  2008/10/12 16:46:35  fabiankeil
  *    Remove obsolete warning about delayed delivery with chunked
  *    transfer encoding and FEATURE_CONNECTION_KEEP_ALIVE enabled.
@@ -965,6 +969,7 @@ static jb_err create_forged_referrer(char **header, const char *hostport);
 static jb_err create_fake_referrer(char **header, const char *fake_referrer);
 static jb_err handle_conditional_hide_referrer_parameter(char **header,
    const char *host, const int parameter_conditional_block);
+static const char *get_appropiate_connection_header(const struct client_state *csp);
 
 /*
  * List of functions to run on a list of headers.
@@ -2361,7 +2366,9 @@ static jb_err server_connection(struct client_state *csp, char **header)
    if (strcmpic(*header, "Connection: close"))
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if (!strcmpic(*header, "Connection: keep-alive"))
+      if ((csp->config->feature_flags &
+           RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+         && !strcmpic(*header, "Connection: keep-alive"))
       {
          /* Remember to keep the connection alive. */
          csp->flags |= CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
@@ -2405,11 +2412,7 @@ static jb_err server_connection(struct client_state *csp, char **header)
 static jb_err client_connection(struct client_state *csp, char **header)
 {
    char *old_header = *header;
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   static const char wanted_header[] = "Connection: keep-alive";
-#else
-   static const char wanted_header[] = "Connection: close";
-#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
+   const char *wanted_header = get_appropiate_connection_header(csp);
 
    if (strcmpic(*header, wanted_header))
    {
@@ -4083,7 +4086,9 @@ static jb_err server_connection_close_adder(struct client_state *csp)
    /*
     * XXX: if we downgraded the response, this check will fail.
     */
-   if ((NULL != response_status_line)
+   if ((csp->config->feature_flags &
+        RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+    && (NULL != response_status_line)
     && !strncmpic(response_status_line, "HTTP/1.1", 8))
    {
       log_error(LOG_LEVEL_HEADER, "A HTTP/1.1 response "
@@ -4113,12 +4118,8 @@ static jb_err server_connection_close_adder(struct client_state *csp)
  *********************************************************************/
 static jb_err client_connection_header_adder(struct client_state *csp)
 {
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   static const char wanted_header[] = "Connection: keep-alive";
-#else
-   static const char wanted_header[] = "Connection: close";
-#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
    const unsigned int flags = csp->flags;
+   const char *wanted_header = get_appropiate_connection_header(csp);
 
    if (!(flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
      && (flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
@@ -4670,6 +4671,32 @@ static jb_err handle_conditional_hide_referrer_parameter(char **header,
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  get_appropiate_connection_header
+ *
+ * Description :  Returns an appropiate Connection header
+ *                depending on whether or not we try to keep
+ *                the connection to the server alive.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Pointer to statically allocated header buffer.
+ *
+ *********************************************************************/
+static const char *get_appropiate_connection_header(const struct client_state *csp)
+{
+   static const char connection_keep_alive[] = "Connection: keep-alive";
+   static const char connection_close[] = "Connection: close";
+
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
+   {
+      return connection_keep_alive;
+   }
+   return connection_close;
+}
 /*
   Local Variables:
   tab-width: 3
