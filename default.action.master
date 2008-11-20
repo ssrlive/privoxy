@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.149 2008/11/10 17:16:21 fabiankeil Exp $
+#  $Id: default.action.master,v 1.150 2008/11/20 11:19:34 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1706,6 +1706,8 @@ webmail.
 .wiki*.
 .*wiki.
 /.*wiki/
+#MASTER# REMARKS Actionsfile feedback item #2299717 2008-11-16
+.wiktionary.org/
 #MASTER# REMARKS: protect some google projects from accidental JS/HTML tampering, etc
 maps.google.
 .google.com/(calendar|reader)
