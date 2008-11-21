@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.147 2008/11/04 17:20:31 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.148 2008/11/16 12:43:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,11 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.147 2008/11/04 17:20:31 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.148  2008/11/16 12:43:49  fabiankeil
+ *    Turn keep-alive support into a runtime feature
+ *    that is disabled by setting keep-alive-timeout
+ *    to a negative value.
+ *
  *    Revision 1.147  2008/11/04 17:20:31  fabiankeil
  *    HTTP/1.1 responses without Connection
  *    header imply keep-alive. Act accordingly.
@@ -4691,7 +4696,8 @@ static const char *get_appropiate_connection_header(const struct client_state *c
    static const char connection_keep_alive[] = "Connection: keep-alive";
    static const char connection_close[] = "Connection: close";
 
-   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+    && (csp->http->ssl == 0))
    {
       return connection_keep_alive;
    }
