@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.204 2008/11/06 19:42:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.205 2008/11/16 12:43:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.204 2008/11/06 19:42:17 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.205  2008/11/16 12:43:49  fabiankeil
+ *    Turn keep-alive support into a runtime feature
+ *    that is disabled by setting keep-alive-timeout
+ *    to a negative value.
+ *
  *    Revision 1.204  2008/11/06 19:42:17  fabiankeil
  *    Fix last-chunk detection hack to also apply
  *    if buf[] contains nothing but the last-chunk.
@@ -2555,7 +2560,7 @@ static void chat(struct client_state *csp)
    if (fwd->forward_host)
    {
       log_error(LOG_LEVEL_CONNECT, "via %s:%d to: %s",
-               fwd->forward_host, fwd->forward_port, http->hostport);
+         fwd->forward_host, fwd->forward_port, http->hostport);
    }
    else
    {
@@ -2564,11 +2569,13 @@ static void chat(struct client_state *csp)
 
    /* here we connect to the server, gateway, or the forwarder */
 
-   while ( (csp->sfd = forwarded_connect(fwd, http, csp))
-         && (errno == EINVAL) && (forwarded_connect_retries++ < max_forwarded_connect_retries))
+   while ((csp->sfd = forwarded_connect(fwd, http, csp))
+      && (errno == EINVAL)
+      && (forwarded_connect_retries++ < max_forwarded_connect_retries))
    {
-      log_error(LOG_LEVEL_ERROR, "failed request #%u to connect to %s. Trying again.",
-                forwarded_connect_retries, http->hostport);
+      log_error(LOG_LEVEL_ERROR,
+         "failed request #%u to connect to %s. Trying again.",
+         forwarded_connect_retries, http->hostport);
    }
 
    if (csp->sfd == JB_INVALID_SOCKET)
@@ -2586,7 +2593,7 @@ static void chat(struct client_state *csp)
       {
          rsp = error_response(csp, "connect-failed", errno);
          log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
-                http->hostport);
+            http->hostport);
       }
 
       /* Write the answer to the client */
