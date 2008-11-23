@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.79 2008/10/20 17:09:25 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.80 2008/11/23 15:49:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -6,7 +6,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.79 2008/10/20 17:09:25 fabiankeil E
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.79 2008/10/20 17:09:25 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.80  2008/11/23 15:49:49  fabiankeil
+ *    In log_error(), don't surround the thread id with "Privoxy(" and ")".
+ *
  *    Revision 1.79  2008/10/20 17:09:25  fabiankeil
  *    Update init_error_log() description to match reality.
  *
@@ -1023,8 +1026,8 @@ void log_error(int loglevel, const char *fmt, ...)
       if (NULL == outbuf_save)
       {
          snprintf(tempbuf, sizeof(tempbuf),
-            "%s %08lx Fatal error: log_error() failed to allocate buffer memory.\n"
-            "\nExiting.", timestamp, thread_id);
+            "%s %08lx Fatal error: Out of memory in log_error().",
+            timestamp, thread_id);
          fatal_error(tempbuf); /* Exit */
       }
    }
