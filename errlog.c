@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.80 2008/11/23 15:49:49 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.81 2008/11/23 15:59:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.80 2008/11/23 15:49:49 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.81  2008/11/23 15:59:27  fabiankeil
+ *    - Update copyright range.
+ *    - Remove stray line breaks in a log message
+ *      nobody is supposed to see anyway.
+ *
  *    Revision 1.80  2008/11/23 15:49:49  fabiankeil
  *    In log_error(), don't surround the thread id with "Privoxy(" and ")".
  *
@@ -1240,8 +1245,9 @@ void log_error(int loglevel, const char *fmt, ...)
       assert(outbuf[log_buffer_size] == '\0');
 
       snprintf(outbuf, log_buffer_size,
-         "%s Privoxy(%08lx) Fatal error: log_error()'s sanity checks failed. length: %d\n"
-         "Exiting.", timestamp, thread_id, (int)length);
+         "%s %08lx Fatal error: log_error()'s sanity checks failed."
+         "length: %d. Exiting.",
+         timestamp, thread_id, (int)length);
       loglevel = LOG_LEVEL_FATAL;
    }
 
