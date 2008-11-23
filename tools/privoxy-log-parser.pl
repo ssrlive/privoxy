@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.124 2008/11/22 10:02:52 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.125 2008/11/23 15:43:05 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1759,7 +1759,7 @@ sub parse_loop () {
  
         $output = '';
 
-        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\(([^\)]*)\)) ([\w -]*): (.*)$/) {
+        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*)$/) {
             # XXX: Put in req hash?
             $day = $1;
             $time_stamp = $2;
