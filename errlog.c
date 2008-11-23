@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.78 2008/09/07 16:59:31 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.79 2008/10/20 17:09:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.78 2008/09/07 16:59:31 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.79  2008/10/20 17:09:25  fabiankeil
+ *    Update init_error_log() description to match reality.
+ *
  *    Revision 1.78  2008/09/07 16:59:31  fabiankeil
  *    Update a comment to reflect that we
  *    have mutex support on mingw32 now.
@@ -1020,7 +1023,7 @@ void log_error(int loglevel, const char *fmt, ...)
       if (NULL == outbuf_save)
       {
          snprintf(tempbuf, sizeof(tempbuf),
-            "%s Privoxy(%08lx) Fatal error: log_error() failed to allocate buffer memory.\n"
+            "%s %08lx Fatal error: log_error() failed to allocate buffer memory.\n"
             "\nExiting.", timestamp, thread_id);
          fatal_error(tempbuf); /* Exit */
       }
@@ -1036,8 +1039,8 @@ void log_error(int loglevel, const char *fmt, ...)
    /* Add prefix for everything but Common Log Format messages */
    if (loglevel != LOG_LEVEL_CLF)
    {
-      length = (size_t)snprintf(outbuf, log_buffer_size, "%s Privoxy(%08lx) %s: ",
-                                timestamp, thread_id, get_log_level_string(loglevel));
+      length = (size_t)snprintf(outbuf, log_buffer_size, "%s %08lx %s: ",
+         timestamp, thread_id, get_log_level_string(loglevel));
    }
 
    /* get ready to scan var. args. */
