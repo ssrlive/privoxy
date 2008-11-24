@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.45 2008/08/16 08:51:28 fabiankeil Exp $
+ $Id: faq.sgml,v 2.46 2008/08/30 15:37:35 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.45 2008/08/16 08:51:28 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.46 2008/08/30 15:37:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1655,7 +1655,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 <para>
  If you want to hide your IP address from most adversaries,
  you should consider chaining <application>Privoxy</application>
- with <ulink url="http://tor.eff.org/">Tor</ulink>.
+ with <ulink url="https://www.torproject.org/">Tor</ulink>.
  The configuration details can be found in
  <ulink url="#TOR">How do I use <application>Privoxy</application> together
  with <application>Tor</application> section</ulink>
@@ -1800,7 +1800,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  in your browser, confirm that <application>Privoxy</application> has reloaded its configuration
  and that there are no other forward lines, unless you know that you need them. If everything looks good,
  refer to
- <ulink url="https://wiki.torproject.org/wiki/TheOnionRouter/TorFAQ#head-0e1cc2ac330ede8c6ad1ac0d0db0ac163b0e6143">Tor
+ <ulink url="https://wiki.torproject.org/noreply/TheOnionRouter/TorFAQ#IsMyConnectionPrivate">Tor
  Faq 4.2</ulink> to learn how to verify that you are really using <application>Tor</application>.
 </para>
 <para>
@@ -2820,6 +2820,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.46  2008/08/30 15:37:35  fabiankeil
+Update entities.
+
 Revision 2.45  2008/08/16 08:51:28  fabiankeil
 Update version-related entities.
 
