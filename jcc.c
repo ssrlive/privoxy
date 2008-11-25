@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.205 2008/11/16 12:43:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.206 2008/11/23 17:00:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.205 2008/11/16 12:43:49 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.206  2008/11/23 17:00:11  fabiankeil
+ *    Some more chat() cosmetics.
+ *
  *    Revision 1.205  2008/11/16 12:43:49  fabiankeil
  *    Turn keep-alive support into a runtime feature
  *    that is disabled by setting keep-alive-timeout
@@ -2523,13 +2526,6 @@ static void chat(struct client_state *csp)
       build_request_line(csp, fwd, &csp->headers->first->str);
    }
 
-   hdr = list_to_text(csp->headers);
-   if (hdr == NULL)
-   {
-      /* FIXME Should handle error properly */
-      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
-   }
-
    /*
     * We have a request. Check if one of the crunchers wants it.
     */
@@ -2539,21 +2535,11 @@ static void chat(struct client_state *csp)
        * Yes. The client got the crunch response
        * and we are done here after cleaning up.
        */
-      freez(hdr);
+      /* XXX: why list_remove_all()? */
       list_remove_all(csp->headers);
 
       return;
    }
-
-   /*
-    * The headers can't be removed earlier because
-    * they were still needed for the referrer check
-    * in case of CGI crunches.
-    *
-    * XXX: Would it be worth to move the referrer check
-    * into client_referrer() and set a flag if it's trusted?
-    */
-   list_remove_all(csp->headers);
 
    log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
 
@@ -2602,9 +2588,16 @@ static void chat(struct client_state *csp)
          send_crunch_response(csp, rsp);
       }
 
-      freez(hdr);
       return;
    }
+
+   hdr = list_to_text(csp->headers);
+   if (hdr == NULL)
+   {
+      /* FIXME Should handle error properly */
+      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
+   }
+   list_remove_all(csp->headers);
 
    if (fwd->forward_host || (http->ssl == 0))
    {
