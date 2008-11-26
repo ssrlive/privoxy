@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.125 2008/11/23 15:43:05 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.126 2008/11/26 18:05:01 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1482,10 +1482,12 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=Actual content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=received: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Looks like we reached/ or
+    } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
+        # Looks like we read the end of the last chunk together with the server \
+        #  headers. We better stop reading.
         # Unsetting keep-alive flag.
 
     } else {
