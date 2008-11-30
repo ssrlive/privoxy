@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.150 2008/11/20 11:19:34 hal9 Exp $
+#  $Id: default.action.master,v 1.151 2008/11/20 11:22:30 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1199,6 +1199,9 @@ feeds.feedburner.com/~a/DilbertDailyStrip\?
 #MASTER# BLOCK-REFERER: http://www.buch.de/
 # URL = http://track.webtrekk.de/471497967328727/wt.pl?p=177,de.buch.show.home,1,1024x768,24,1,1218816426275,0,884x653,0&enc1=%FC&enc2=iso-8859-1&st=view&la=en-US&np=Default%20Plugi
 track.webtrekk.de/
+# URL = http://feedads.googleadservices.com/~a/dPlpGU767u4D4kVO8EGuUlnf1Q0/i
+# URL = http://feedads.googleadservices.com/~at/EpX-FnAXxwdaBSq-GRze37-rG0M/i
+.googleadservices.com/~
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
@@ -1462,6 +1465,7 @@ switch.atdmt.com/action/
 # URL = http://en.wikipedia.org/wiki/Advertisement
 .wikipedia.org/
 #MASTER# REMARKS Actionsfile feedback item #2299717 2008-11-16
+# URL = http://en.wiktionary.org/wiki/advertisement
 .wiktionary.org/
 # URL = http://curl.haxx.se/docs/adv_20070710.html
 .haxx.se/docs/adv_
@@ -1496,6 +1500,16 @@ fritz.box/
 .adobe.com
 # URL = http://qa.debian.org/popcon.php
 qa.debian.org/popcon\.php
+#MASTER# REMARKS: We also use this as a light character class test, therefore the additional URL directives.
+# URL = http://www.proaurum.de/bannerA2/image/pro_master_r3_01_04.gif
+# URL = http://www.proaurum.de/bannerA1/image/limitorder2.gif
+# URL = http://www.proaurum.de/bannerA3/image/pro_master_r5_banken_01_01+.gif
+# URL = http://www.proaurum.de/bannerB2/image/pro_banner_mitte.gif
+# URL = http://www.proaurum.de/bannerB1_/image/pro_banner_links.gif
+# URL = http://www.proaurum.de/bannerC1/image/partner1.png
+.proaurum.de/banner[ABC]\d_?/
+# URL = http://www.goldmoney.com/en/images/home/banner_r4_c1.gif
+.goldmoney.com/
 
 #############################################################################
 # Site-specific special rules:
@@ -1665,6 +1679,8 @@ view.samurajdata.se/ps\.php\?url=
 .amazon.com/gp/redirect.html/.*location.*&token
 # URL = http://en.groundspring.org/EmailNow/pub.php?module=WebSignup&cmd=thankyou&gotoUrl=http%3A%2F%2Fwww.freebsdfoundation.org&gotoText=Return+to+Home+Page&listNames=The+FreeBSD+Foundation+Mailing+List
 .groundspring.org/
+# URL = http://www1.landsend.de/pp/undefined/images/error.gif?onerr=true&ts=1227969386837&file=http%3A//s7.landsend.com/is-viewers/dhtml/include/sj_textloader.js%3Fver%3Dle.1&line=0&msg=Script%20error.&sid=
+.landsend.de/
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
@@ -1707,6 +1723,7 @@ webmail.
 .*wiki.
 /.*wiki/
 #MASTER# REMARKS Actionsfile feedback item #2299717 2008-11-16
+# URL = http://en.wiktionary.org/
 .wiktionary.org/
 #MASTER# REMARKS: protect some google projects from accidental JS/HTML tampering, etc
 maps.google.
