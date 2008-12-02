@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.208 2008/11/26 18:24:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.209 2008/11/27 09:44:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.208 2008/11/26 18:24:17 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.209  2008/11/27 09:44:04  fabiankeil
+ *    Cosmetics for the last commit: Don't watch out for
+ *    the last chunk if the content isn't chunk-encoded or
+ *    if we already determined the content length previously.
+ *
  *    Revision 1.208  2008/11/26 18:24:17  fabiankeil
  *    Recognize that the server response is complete if the
  *    last chunk is read together with the server headers.
@@ -3000,6 +3005,12 @@ static void chat(struct client_state *csp)
                    * Since we have to wait for more from the server before
                    * we can parse the headers we just continue here.
                    */
+                  int header_offset = csp->iob->cur - header_start;
+                  assert(csp->iob->cur >= header_start);
+                  byte_count += (size_t)(len - header_offset);
+                  log_error(LOG_LEVEL_CONNECT, "Continuing buffering headers. "
+                     "byte_count: %d. header_offset: %d. len: %d.",
+                     byte_count, header_offset, len);
                   continue;
                }
             }
