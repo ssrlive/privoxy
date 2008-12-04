@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.148 2008/11/16 12:43:49 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.149 2008/11/21 18:39:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.148 2008/11/16 12:43:49 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.149  2008/11/21 18:39:53  fabiankeil
+ *    In case of CONNECT requests there's no point
+ *    in trying to keep the connection alive.
+ *
  *    Revision 1.148  2008/11/16 12:43:49  fabiankeil
  *    Turn keep-alive support into a runtime feature
  *    that is disabled by setting keep-alive-timeout
@@ -1204,7 +1208,7 @@ jb_err decompress_iob(struct client_state *csp)
 
    cur = csp->iob->cur;
 
-   if (bufsize < 10)
+   if (bufsize < (size_t)10)
    {
       /*
        * This is to protect the parsing of gzipped data,
@@ -1459,7 +1463,7 @@ jb_err decompress_iob(struct client_state *csp)
           */
          assert(zstr.avail_out == tmpbuf + bufsize - (char *)zstr.next_out);
          assert((char *)zstr.next_out == tmpbuf + ((char *)oldnext_out - buf));
-         assert(zstr.avail_out > 0);
+         assert(zstr.avail_out > 0U);
 
          buf = tmpbuf;
       }
@@ -1511,7 +1515,7 @@ jb_err decompress_iob(struct client_state *csp)
     && (csp->iob->eod <= csp->iob->buf + csp->iob->size))
    {
       const size_t new_size = (size_t)(csp->iob->eod - csp->iob->cur);
-      if (new_size > 0)
+      if (new_size > (size_t)0)
       {
          log_error(LOG_LEVEL_RE_FILTER,
             "Decompression successful. Old size: %d, new size: %d.",
@@ -2457,6 +2461,7 @@ static jb_err client_connection(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err crumble(struct client_state *csp, char **header)
 {
+   (void)csp;
    log_error(LOG_LEVEL_HEADER, "crumble crunched: %s!", *header);
    freez(*header);
    return JB_ERR_OK;
@@ -3563,12 +3568,13 @@ static jb_err client_max_forwards(struct client_state *csp, char **header)
        (0 == strcmpic(csp->http->gpc, "options")))
    {
       assert(*(*header+12) == ':');
-      if (1 == sscanf(*header+12, ": %u", &max_forwards))
+      if (1 == sscanf(*header+12, ": %d", &max_forwards))
       {
          if (max_forwards > 0)
          {
-            snprintf(*header, strlen(*header)+1, "Max-Forwards: %u", --max_forwards);
-            log_error(LOG_LEVEL_HEADER, "Max-Forwards value for %s request reduced to %u.",
+            snprintf(*header, strlen(*header)+1, "Max-Forwards: %d", --max_forwards);
+            log_error(LOG_LEVEL_HEADER,
+               "Max-Forwards value for %s request reduced to %d.",
                csp->http->gpc, max_forwards);
          }
          else if (max_forwards < 0)
