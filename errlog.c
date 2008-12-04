@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.81 2008/11/23 15:59:27 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.82 2008/11/23 16:06:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.81 2008/11/23 15:59:27 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.82  2008/11/23 16:06:58  fabiankeil
+ *    Update a log message I missed in 1.80.
+ *
  *    Revision 1.81  2008/11/23 15:59:27  fabiankeil
  *    - Update copyright range.
  *    - Remove stray line breaks in a log message
@@ -803,7 +806,7 @@ static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
 #endif
 
    length = strftime(buffer, buffer_size, "%b %d %H:%M:%S", &tm_now);
-   if (length > 0)
+   if (length > (size_t)0)
    {
       msecs_length = snprintf(buffer+length, buffer_size - length, ".%.3ld", msecs);               
    }
@@ -874,7 +877,7 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
 
    length = strftime(buffer, buffer_size, "%d/%b/%Y:%H:%M:%S ", tm_now);
 
-   if (length > 0)
+   if (length > (size_t)0)
    {
       tz_length = snprintf(buffer+length, buffer_size-length,
                      "%+03d%02d", mins / 60, abs(mins) % 60);
@@ -1153,7 +1156,7 @@ void log_error(int loglevel, const char *fmt, ...)
                   format_string = "[counted string lenght < 0]";
                }
             }
-            else if (ival >= sizeof(tempbuf))
+            else if ((size_t)ival >= sizeof(tempbuf))
             {
                /*
                 * String is too long, copy as much as possible.

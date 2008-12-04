@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.43 2008/11/13 09:15:51 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.44 2008/11/22 11:54:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.43 2008/11/13 09:15:51 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.44  2008/11/22 11:54:04  fabiankeil
+ *    Move log message around to include the socket number.
+ *
  *    Revision 1.43  2008/11/13 09:15:51  fabiankeil
  *    Make keep_alive_timeout static.
  *
@@ -1106,7 +1109,6 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    {
       case SOCKS_REQUEST_GRANTED:
          return(sfd);
-         break;
       case SOCKS_REQUEST_REJECT:
          errstr = "SOCKS request rejected or failed.";
          errno = EINVAL;
@@ -1229,7 +1231,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    }
 
    hostlen = strlen(target_host);
-   if (hostlen > 255)
+   if (hostlen > (size_t)255)
    {
       errstr = "target host name is longer than 255 characters";
       err = 1;
@@ -1317,7 +1319,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    cbuf[client_pos++] = '\x00'; /* Reserved, must be 0x00 */
    cbuf[client_pos++] = '\x03'; /* Address is domain name */
    cbuf[client_pos++] = (char)(hostlen & 0xffu);
-   assert(sizeof(cbuf) - client_pos > 255);
+   assert(sizeof(cbuf) - client_pos > (size_t)255);
    /* Using strncpy because we really want the nul byte padding. */
    strncpy(cbuf + client_pos, target_host, sizeof(cbuf) - client_pos);
    client_pos += (hostlen & 0xffu);

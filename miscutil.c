@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.60 2008/09/07 12:35:05 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.61 2008/10/18 11:09:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -44,6 +44,9 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.60 2008/09/07 12:35:05 fabianke
  *
  * Revisions   :
  *    $Log: miscutil.c,v $
+ *    Revision 1.61  2008/10/18 11:09:23  fabiankeil
+ *    Improve seed used by pick_from_range() on mingw32.
+ *
  *    Revision 1.60  2008/09/07 12:35:05  fabiankeil
  *    Add mutex lock support for _WIN32.
  *
@@ -556,7 +559,7 @@ int strcmpic(const char *s1, const char *s2)
  *********************************************************************/
 int strncmpic(const char *s1, const char *s2, size_t n)
 {
-   if (n <= 0) return(0);
+   if (n <= (size_t)0) return(0);
    if (!s1) s1 = "";
    if (!s2) s2 = "";
    
@@ -567,7 +570,7 @@ int strncmpic(const char *s1, const char *s2, size_t n)
          break;
       }
 
-      if (--n <= 0) break;
+      if (--n <= (size_t)0) break;
 
       s1++, s2++;
    }
@@ -761,7 +764,7 @@ jb_err string_join(char **target_string, char *text_to_append)
 
    err = string_append(target_string, text_to_append);
 
-   free(text_to_append);
+   freez(text_to_append);
 
    return err;
 }
