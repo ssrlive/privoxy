@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.109 2008/11/08 15:48:41 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.110 2008/11/10 16:40:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.109 2008/11/08 15:48:41 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.110  2008/11/10 16:40:25  fabiankeil
+ *    Fix a gcc44 warning.
+ *
  *    Revision 1.109  2008/11/08 15:48:41  fabiankeil
  *    Mention actual values when complaining about
  *    the chunk size exceeding the buffer size.
@@ -2182,7 +2185,7 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
       return JB_ERR_PARSE;
    }
 
-   while (chunksize > 0)
+   while (chunksize > 0U)
    {
       if (NULL == (from_p = strstr(from_p, "\r\n")))
       {
