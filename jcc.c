@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.209 2008/11/27 09:44:04 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.210 2008/12/02 22:03:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.209 2008/11/27 09:44:04 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.210  2008/12/02 22:03:18  fabiankeil
+ *    Don't miscalculate byte_count if we don't get all the
+ *    server headers with one read_socket() call. With keep-alive
+ *    support enabled, this caused delays until the server closed
+ *    the connection.
+ *
  *    Revision 1.209  2008/11/27 09:44:04  fabiankeil
  *    Cosmetics for the last commit: Don't watch out for
  *    the last chunk if the content isn't chunk-encoded or
@@ -3157,7 +3163,7 @@ static void chat(struct client_state *csp)
    if ((csp->flags & CSP_FLAG_CONTENT_LENGTH_SET)
       && (csp->expected_content_length != byte_count))
    {
-      log_error(LOG_LEVEL_ERROR,
+      log_error(LOG_LEVEL_CONNECT,
          "Received %d bytes while expecting %d.",
          byte_count, csp->expected_content_length);
       mark_server_socket_tainted(csp);
