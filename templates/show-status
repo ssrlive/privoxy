@@ -232,7 +232,10 @@
             <tr>
               <td><code>FEATURE_CONNECTION_KEEP_ALIVE</code></td>
               <td>@if-FEATURE_CONNECTION_KEEP_ALIVE-then@ Yes @else-not-FEATURE_CONNECTION_KEEP_ALIVE@ No @endif-FEATURE_CONNECTION_KEEP_ALIVE@</td>
-              <td>Keep outgoing connections alive if possible. <strong>Incomplete and experimental.</strong></td>
+              <td>
+               Allows to reuse outgoing connections if the server supports it.
+               Requires the keep-alive-timeout config directive to be set.
+              </td>
             </tr>
             <tr>
               <td><code>FEATURE_FAST_REDIRECTS</code></td>
