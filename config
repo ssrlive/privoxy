@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.11
 #
-#  $Id: p-config.sgml,v 2.32 2008/08/30 12:03:09 fabiankeil Exp $
+#  $Id: config,v 1.67 2008/08/30 15:31:53 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
 #
@@ -1384,6 +1384,38 @@ allow-cgi-request-crunching 0
 #      split-large-forms 1
 #
 split-large-forms 0
+#
+#
+#  5.7. keep-alive-timeout
+#  ========================
+#
+#  Specifies:
+#
+#      Number of seconds after which an open connection will no longer
+#      be reused.
+#
+#  Type of value:
+#
+#      Time in seconds.
+#
+#  Default value:
+#
+#      None
+#
+#  Effect if unset:
+#
+#      Connections are not reused.
+#
+#  Notes:
+#
+#      This option has no effect if Privoxy has been compiled without
+#      keep-alive support.
+#
+#  Examples:
+#
+#      keep-alive-timeout 300
+#
+keep-alive-timeout 300
 #
 #
 #  6. WINDOWS GUI OPTIONS
