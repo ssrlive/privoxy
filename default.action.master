@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.151 2008/11/20 11:22:30 hal9 Exp $
+#  $Id: default.action.master,v 1.152 2008/11/30 17:30:17 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.9 or later due to 
 #                 syntax changes.
@@ -1193,6 +1193,8 @@ rss.slashdot.org/~r/Slashdot/slashdot/~4/
 # Blocked URL = http://feeds.feedburner.com/~r/PCLoadLetter/~4/270448381
 #MASTER# REMAKRKS: This seem to be a common pattern for web bugs in feedburner feeds.
 feeds.feedburner.com/~r/.*/~4/
+# Blocked URL = http://feedproxy.google.com/~r/DilbertDailyStrip/~4/y_kXD1z1HO0
+feedproxy.google.com/~r/.*/~4/
 # Blocked URL = http://feeds.feedburner.com/~a/DilbertDailyStrip?a=Ebzxel
 #MASTER# REMAKRKS: This looks like a pattern as well, maybe we should block feeds.feedburner.com/~a/ here.
 feeds.feedburner.com/~a/DilbertDailyStrip\?
