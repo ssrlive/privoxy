@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.124 2008/11/16 12:43:49 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.125 2008/11/20 08:22:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.125  2008/11/20 08:22:28  fabiankeil
+ *    Remove an obsolete comment.
+ *
  *    Revision 1.124  2008/11/16 12:43:49  fabiankeil
  *    Turn keep-alive support into a runtime feature
  *    that is disabled by setting keep-alive-timeout
@@ -815,7 +818,7 @@ typedef int jb_err;
 /**
  * Max length of CGI parameters (arbitrary limit).
  */
-#define CGI_PARAM_LEN_MAX 500
+#define CGI_PARAM_LEN_MAX 500U
 
 /**
  * Buffer size for capturing struct hostent data in the
