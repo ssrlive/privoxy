@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.128 2008/12/06 16:18:41 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.129 2008/12/14 16:24:53 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -106,6 +106,7 @@ sub prepare_our_stuff () {
         CGI             => 'light_green',
         Redirect        => 'cyan',
         Error           => 'light_red',
+        Crunch          => 'cyan',
         'Fatal error'   => 'light_red',
         'Gif-Deanimate' => 'blue',
         Force           => 'red',
@@ -264,7 +265,6 @@ sub paint_it ($) {
 
     return $colour_code;
 }
-
 
 sub get_semantic_html_markup ($) {
 ###############################################################
@@ -438,7 +438,6 @@ sub print_outro () {
     }
 }
 
-
 sub get_line_end () {
 
     my $line_end = "\n";
@@ -466,7 +465,6 @@ sub get_colour_html_markup ($) {
 
     return $code;
 }
-
 
 sub default_colours () {
     # XXX: Properly
@@ -752,7 +750,6 @@ sub highlight_matched_pattern ($$$) {
     return $result;
 }
 
-
 sub highlight_matched_path ($$) {
 
     my $result = shift; # XXX: Stupid name;
@@ -764,7 +761,6 @@ sub highlight_matched_path ($$) {
 
     return $result;
 }
-
 
 sub highlight_url ($) {
 
@@ -1185,7 +1181,6 @@ sub handle_loglevel_re_filter ($) {
     return $content;
 }
 
-
 sub handle_loglevel_redirect ($) {
 
     my $c = shift;
@@ -1294,7 +1289,6 @@ sub handle_loglevel_gif_deanimate ($) {
     return $content;
 }
 
-
 sub handle_loglevel_request ($) {
 
     my $content = shift;
@@ -1331,6 +1325,32 @@ sub handle_loglevel_request ($) {
 
     }
             
+    return $content;
+}
+
+sub handle_loglevel_crunch ($) {
+
+    my $content = shift;
+    our %h;
+    our %reason_colours;
+
+    # Blocked: ads.example.org/
+
+    # Highlight crunch reason
+    foreach my $reason (keys %reason_colours) {
+        $content =~ s@($reason)@$reason_colours{$reason}$1$h{'Standard'}@g;
+    }
+    # Highlight request URL
+    $content = highlight_matched_pattern($content, 'request_', '(?<= )[^ \[]*$');
+
+    if ($content =~ m/\[too long, truncated\]$/) {
+
+        # Blocked: config.privoxy.org/edit-actions-submit?f=3&v=1176116716&s=7&Submit=Submit\
+        #  [...]&filter... [too long, truncated]
+        $content = highlight_matched_pattern($content, 'request_', '^.*(?=\.\.\. \[too long, truncated\]$)');
+
+    }
+
     return $content;
 }
 
@@ -1761,6 +1781,7 @@ sub parse_loop () {
         'Connect'       => \&handle_loglevel_connect,
         'Redirect'      => \&handle_loglevel_redirect,
         'Request'       => \&handle_loglevel_request,
+        'Crunch'        => \&handle_loglevel_crunch,
         'Gif-Deanimate' => \&handle_loglevel_gif_deanimate,
         'Info'          => \&handle_loglevel_info,
         'CGI'           => \&handle_loglevel_cgi,
