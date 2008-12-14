@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.11
 #
-#  $Id: config,v 1.67 2008/08/30 15:31:53 fabiankeil Exp $
+#  $Id: config,v 1.68 2008/12/13 18:19:44 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
 #
@@ -557,7 +557,7 @@ logfile logfile
 #
 #      The available debug levels are:
 #
-#        debug         1 # log each request destination (and the crunch reason if Privoxy intercepted the request)
+#        debug         1 # Log the destination for each request Privoxy let through. See also debug 1024.
 #        debug         2 # show each connection status
 #        debug         4 # show I/O status
 #        debug         8 # show header parsing
@@ -567,7 +567,7 @@ logfile logfile
 #        debug       128 # debug redirects
 #        debug       256 # debug GIF de-animation
 #        debug       512 # Common Log Format
-#        debug      1024 # Unused
+#        debug      1024 # Log the destination for requests Privoxy didn't let through, and the reason why.
 #        debug      2048 # CGI user interface
 #        debug      4096 # Startup banner and warnings.
 #        debug      8192 # Non-fatal errors
@@ -601,7 +601,8 @@ logfile logfile
 #      you read the log messages, you may even be able to solve the
 #      problem on your own.
 #
-#debug      1 # log each request destination (and the crunch reason if Privoxy intercepted the request)
+#debug      1 # Log the destination for each request Privoxy let through.
+#debug   1024 # Log the destination for requests Privoxy didn't let through, and the reason why.
 #debug   4096 # Startup banner and warnings
 #debug   8192 # Non-fatal errors
 #

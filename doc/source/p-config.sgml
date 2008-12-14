@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.32 2008/08/30 12:03:09 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.33 2008/12/13 10:48:21 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.32 2008/08/30 12:03:09 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.33 2008/12/13 10:48:21 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
@@ -1004,7 +1004,7 @@ actionsfile
    </para>
    <para>
     <programlisting>
-  debug     1 # log each request destination (and the crunch reason if &my-app; intercepted the request)
+  debug     1 # Log the destination for each request &my-app; let through. See also debug 1024.
   debug     2 # show each connection status
   debug     4 # show I/O status
   debug     8 # show header parsing
@@ -1014,6 +1014,7 @@ actionsfile
   debug   128 # debug redirects
   debug   256 # debug GIF de-animation
   debug   512 # Common Log Format
+  debug  1024 # Log the destination for requests &my-app; didn't let through, and the reason why.
   debug  2048 # CGI user interface
   debug  4096 # Startup banner and warnings.
   debug  8192 # Non-fatal errors
@@ -1058,7 +1059,8 @@ actionsfile
  </varlistentry>
 </variablelist>
 
-<![%config-file;[<literallayout>@@#debug     1 # log each request destination (and the crunch reason if &my-app; intercepted the request)</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     1 # Log the destination for each request &my-app; let through.</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug  1024 # Log the destination for requests &my-app; didn't let through, and the reason why.</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  4096 # Startup banner and warnings</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  8192 # Non-fatal errors</literallayout>]]>
 </sect3>

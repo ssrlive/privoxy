@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.210 2008/12/02 22:03:18 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.211 2008/12/06 10:05:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.210 2008/12/02 22:03:18 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.211  2008/12/06 10:05:03  fabiankeil
+ *    Downgrade "Received x bytes while expecting y." message to
+ *    LOG_LEVEL_CONNECT as it doesn't necessarily indicate an error.
+ *
  *    Revision 1.210  2008/12/02 22:03:18  fabiankeil
  *    Don't miscalculate byte_count if we don't get all the
  *    server headers with one read_socket() call. With keep-alive
@@ -1817,8 +1821,8 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
       }
 
       /* Log that the request was crunched and why. */
-      log_error(LOG_LEVEL_GPC, "%s%s crunch! (%s)",
-         http->hostport, http->path, crunch_reason(rsp));
+      log_error(LOG_LEVEL_CRUNCH, "%s: %s%s",
+         crunch_reason(rsp), http->hostport, http->path);
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %d",
          csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
 
