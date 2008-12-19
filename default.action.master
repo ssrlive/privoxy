@@ -9,9 +9,9 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.152 2008/11/30 17:30:17 fabiankeil Exp $
+#  $Id: default.action.master,v 1.153 2008/12/13 10:05:29 fabiankeil Exp $
 #
-#  Requires    :  This version requires Privoxy v3.0.9 or later due to 
+#  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
 #
 #  Purpose     :  Default actions file, see
@@ -1683,6 +1683,8 @@ view.samurajdata.se/ps\.php\?url=
 .groundspring.org/
 # URL = http://www1.landsend.de/pp/undefined/images/error.gif?onerr=true&ts=1227969386837&file=http%3A//s7.landsend.com/is-viewers/dhtml/include/sj_textloader.js%3Fver%3Dle.1&line=0&msg=Script%20error.&sid=
 .landsend.de/
+# URL = http://www.youtube.com/swf/l.swf?swf=http%3A//s.ytimg.com/yt/swf/cps-vfl68942.swf&video_id=2cpd6rHIfyA&rel=1&showsearch=1&eurl=&iurl=http%3A//i3.ytimg.com/vi/2cpd6rHIfyA/hqdefault.jpg&sk=5E3I2RCcOLknk1qyI_JgVVnb8FKwgpHzC&use_get_video_info=1&load_modules=1&fs=1&hl=en
+.youtube.com/swf/.*swf=
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
@@ -1825,6 +1827,8 @@ javabog.dk/ijk/
 .froscon.de/
 # URL = http://www.fsfe.org/en/supporters
 .fsfe.org/
+# URL = http://www.couchsurfing.com/mapsurf.html
+.couchsurfing.com/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
