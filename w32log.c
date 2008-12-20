@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.27 2006/07/18 14:48:48 david__schmidt Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.28 2008/11/02 14:37:47 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,17 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.27 2006/07/18 14:48:48 david__schmi
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.28  2008/11/02 14:37:47  ler762
+ *    commit the part of the patches I've been using that were written by torford and gjmurphy
+ *      [ 1824315 ] Minor code cleanup
+ *      [ 1781135 ] Patch - Add clear log, select all, and Accelerators for w32
+ *        http://sourceforge.net/tracker/?func=detail&atid=311118&aid=1781135&group_id=11118
+ *    The full patch adds control keys A(select all), C(copy) and D(delete all) to the
+ *    Privoxy log window menu.  Select all and copy work for me without the patch
+ *    (albeit without showing the accelerator keys on the menu), so the only part of the
+ *    patch I've been using for the last year or so has been the ctrl-d to delete
+ *    everything in the Privoxy log window.
+ *
  *    Revision 1.27  2006/07/18 14:48:48  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -303,7 +314,16 @@ static struct _Pattern
    { RE_URL,                STYLE_LINK },
 /* { "[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[a-zA-Z0-9]+\\.[^ \n\r]*", STYLE_LINK }, */
    /* interesting text to highlight */
-   { "crunch!",           STYLE_HIGHLIGHT },
+   /*   see jcc.c crunch_reason for the full list */
+   { "Crunch: Blocked:",            STYLE_HIGHLIGHT },
+   { "Crunch: Untrusted",           STYLE_HIGHLIGHT },
+   { "Crunch: Redirected:",         STYLE_HIGHLIGHT },
+   { "Crunch: DNS failure",         STYLE_HIGHLIGHT },
+   { "Crunch: Forwarding failed",   STYLE_HIGHLIGHT },
+   { "Crunch: Connection failure",  STYLE_HIGHLIGHT },
+   { "Crunch: Out of memory",       STYLE_HIGHLIGHT },
+   /* what are all the possible error strings?? */
+   { "Error:",                      STYLE_HIGHLIGHT },
    /* http headers */
    { "referer:",            STYLE_HEADER },
    { "proxy-connection:",   STYLE_HEADER },
