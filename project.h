@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.125 2008/11/20 08:22:28 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.126 2008/12/14 17:02:54 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.126  2008/12/14 17:02:54  fabiankeil
+ *    Fix a cparser warning.
+ *
  *    Revision 1.125  2008/11/20 08:22:28  fabiankeil
  *    Remove an obsolete comment.
  *
@@ -1787,6 +1790,9 @@ struct configuration_spec
 
    /** Number of retries in case a forwarded connection attempt fails */
    int         forwarded_connect_retries;
+
+   /* Timeout when waiting on sockets for data to become available. */
+   int socket_timeout;
 
    /** All options from the config file, HTML-formatted. */
    char *proxy_args;

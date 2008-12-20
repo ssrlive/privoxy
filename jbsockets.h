@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.12 2006/07/18 14:48:46 david__schmidt Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.13 2008/03/21 11:13:59 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.13  2008/03/21 11:13:59  fabiankeil
+ *    Only gather host information if it's actually needed.
+ *    Also move the code out of accept_connection() so it's less likely
+ *    to delay other incoming connections if the host is misconfigured.
+ *
  *    Revision 1.12  2006/07/18 14:48:46  david__schmidt
  *    Reorganizing the repository: swapping out what was HEAD (the old 3.1 branch)
  *    with what was really the latest development (the v_3_0_branch branch)
@@ -113,6 +118,7 @@ extern int write_socket(jb_socket fd, const char *buf, ssize_t n);
 extern int write_socket(jb_socket fd, const char *buf, size_t n);
 #endif
 extern int read_socket(jb_socket fd, char *buf, int n);
+extern int data_is_available(jb_socket fd, int seconds_to_wait);
 extern void close_socket(jb_socket fd);
 
 extern int bind_port(const char *hostnam, int portnum, jb_socket *pfd);

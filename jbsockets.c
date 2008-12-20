@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.48 2008/09/04 08:13:58 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.49 2008/11/10 17:03:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.48 2008/09/04 08:13:58 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.49  2008/11/10 17:03:57  fabiankeil
+ *    Fix a gcc44 warning and remove a now-obsolete cast.
+ *
  *    Revision 1.48  2008/09/04 08:13:58  fabiankeil
  *    Prepare for critical sections on Windows by adding a
  *    layer of indirection before the pthread mutex functions.
@@ -580,6 +583,46 @@ int read_socket(jb_socket fd, char *buf, int len)
 #else
    return(read(fd, buf, (size_t)len));
 #endif
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  data_is_available
+ *
+ * Description :  Waits for data to arrive on a socket.
+ *
+ * Parameters  :
+ *          1  :  fd = file descriptor of the socket to read
+ *          2  :  seconds_to_wait = number of seconds after which we give up.
+ *
+ * Returns     :  TRUE if data arrived in time,
+ *                FALSE otherwise.
+ *
+ *********************************************************************/
+int data_is_available(jb_socket fd, int seconds_to_wait)
+{
+   fd_set rfds;
+   struct timeval timeout;
+   int n;
+
+   memset(&timeout, 0, sizeof(timeout));
+   timeout.tv_sec = seconds_to_wait;
+
+#ifdef __OS2__
+   /* Copy and pasted from jcc.c ... */
+   memset(&rfds, 0, sizeof(fd_set));
+#else
+   FD_ZERO(&rfds);
+#endif
+   FD_SET(fd, &rfds);
+
+   n = select(fd+1, &rfds, NULL, NULL, &timeout);
+
+   /*
+    * XXX: Do we care about the different error conditions?
+    */
+   return (n == 1);
 }
 
 

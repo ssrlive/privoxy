@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.81 2008/11/13 09:08:42 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.82 2008/11/16 12:43:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.81 2008/11/13 09:08:42 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.82  2008/11/16 12:43:49  fabiankeil
+ *    Turn keep-alive support into a runtime feature
+ *    that is disabled by setting keep-alive-timeout
+ *    to a negative value.
+ *
  *    Revision 1.81  2008/11/13 09:08:42  fabiankeil
  *    Add new config option: keep-alive-timeout.
  *
@@ -582,6 +587,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_permit_access               3587953268ul /* "permit-access" */
 #define hash_proxy_info_url              3903079059ul /* "proxy-info-url" */
 #define hash_single_threaded             4250084780ul /* "single-threaded" */
+#define hash_socket_timeout              1809001761ul /* "socket-timeout" */
 #define hash_split_large_cgi_forms        671658948ul /* "split-large-cgi-forms" */
 #define hash_suppress_blocklists         1948693308ul /* "suppress-blocklists" */
 #define hash_templdir                      11067889ul /* "templdir" */
@@ -783,6 +789,7 @@ struct configuration_spec * load_config(void)
    config->usermanual                = strdup(USER_MANUAL_URL);
    config->proxy_args                = strdup("");
    config->forwarded_connect_retries = 0;
+   config->socket_timeout            = 180;
    config->feature_flags            &= ~RUNTIME_FEATURE_CGI_TOGGLE;
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
@@ -1480,6 +1487,25 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_single_threaded :
             config->multi_threaded = 0;
+            continue;
+
+/* *************************************************************************
+ * socket-timeout numer_of_seconds
+ * *************************************************************************/
+         case hash_socket_timeout :
+            if (*arg != '\0')
+            {
+               int socket_timeout = atoi(arg);
+               if (0 < socket_timeout)
+               {
+                  config->socket_timeout = socket_timeout;
+               }
+               else
+               {
+                  log_error(LOG_LEVEL_FATAL,
+                     "Invalid socket-timeout: '%s'", arg);
+               }
+            }
             continue;
 
 /* *************************************************************************
