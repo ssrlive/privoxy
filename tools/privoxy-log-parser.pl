@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.129 2008/12/14 16:24:53 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.130 2008/12/22 18:57:59 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1361,14 +1361,14 @@ sub handle_loglevel_connect ($) {
     our %req;
     our %h;
 
-    if ($c =~ m/via [^\s]+ to: [^\s]+/) {
+    if ($c =~ m/^via [^\s]+ to: [^\s]+/) {
 
         # Connect: via 10.0.0.1:8123 to: www.example.org.noconnect
 
         $c = highlight_matched_host($c, '(?<=via )[^\s]+');
         $c = highlight_matched_host($c, '(?<=to: )[^\s]+');
 
-    } elsif ($c =~ m/connect to: .* failed: .*/) {
+    } elsif ($c =~ m/^connect to: .* failed: .*/) {
 
         # connect to: www.example.org.noconnect failed: Operation not permitted
 
@@ -1376,14 +1376,14 @@ sub handle_loglevel_connect ($) {
 
         $c =~ s@(?<=failed: )(.*)@$h{'error'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/to ([^\s]*) successful$/) {
+    } elsif ($c =~ m/^to ([^\s]*) successful$/) {
 
         # Connect: to www.nzherald.co.nz successful
 
         return '' if SUPPRESS_SUCCESSFUL_CONNECTIONS;
         $c = highlight_matched_host($c, '(?<=to )[^\s]+');
 
-    } elsif ($c =~ m/to ([^\s]*)$/) {
+    } elsif ($c =~ m/^to ([^\s]*)$/) {
 
         # Connect: to lists.sourceforge.net:443
 
@@ -1449,7 +1449,7 @@ sub handle_loglevel_connect ($) {
         $c = highlight_matched_host($c, '(?<=connection to )[^\s]+');
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Found reusable socket/) {
+    } elsif ($c =~ m/^^Found reusable socket/) {
 
         # Found reusable socket 9 for www.privoxy.org:80 in slot 0.
         $c =~ s@(?<=Found reusable socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
