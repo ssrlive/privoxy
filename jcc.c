@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.213 2008/12/15 18:45:51 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.214 2008/12/20 14:53:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.213 2008/12/15 18:45:51 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.214  2008/12/20 14:53:55  fabiankeil
+ *    Add config option socket-timeout to control the time
+ *    Privoxy waits for data to arrive on a socket. Useful
+ *    in case of stale ssh tunnels or when fuzz-testing.
+ *
  *    Revision 1.213  2008/12/15 18:45:51  fabiankeil
  *    When logging crunches, log the whole URL, so one can easily
  *    differentiate between vanilla HTTP and CONNECT requests.
@@ -3209,6 +3214,34 @@ static void chat(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  wait_for_alive_connections
+ *
+ * Description :  Waits for alive connections to timeout.
+ *
+ * Parameters  :  N/A
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void wait_for_alive_connections()
+{
+   int connections_alive = close_unusable_connections();
+
+   while (0 < connections_alive)
+   {
+      log_error(LOG_LEVEL_CONNECT,
+         "Waiting for %d connections to timeout.",
+         connections_alive);
+      sleep(60);
+      connections_alive = close_unusable_connections();
+   }
+
+   log_error(LOG_LEVEL_CONNECT, "No connections to wait for left.");
+
+}
+
+/*********************************************************************
+ *
  * Function    :  serve
  *
  * Description :  This is little more than chat.  We only "serve" to
@@ -3232,10 +3265,22 @@ static void serve(struct client_state *csp)
    if (csp->sfd != JB_INVALID_SOCKET)
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      static int monitor_thread_running = 0;
+
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
        && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
       {
          remember_connection(csp->sfd, csp->http, forward_url(csp, csp->http));
+         privoxy_mutex_lock(&connection_reuse_mutex);
+         if (!monitor_thread_running)
+         {
+            monitor_thread_running = 1;
+            privoxy_mutex_unlock(&connection_reuse_mutex);
+            wait_for_alive_connections();
+            privoxy_mutex_lock(&connection_reuse_mutex);
+            monitor_thread_running = 0;
+         }
+         privoxy_mutex_unlock(&connection_reuse_mutex);
       }
       else
       {

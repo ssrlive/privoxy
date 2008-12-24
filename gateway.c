@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.45 2008/12/04 18:17:07 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.46 2008/12/13 11:07:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.45 2008/12/04 18:17:07 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.46  2008/12/13 11:07:23  fabiankeil
+ *    Remove duplicated debugging checks
+ *    in connection_destination_matches().
+ *
  *    Revision 1.45  2008/12/04 18:17:07  fabiankeil
  *    Fix some cparser warnings.
  *
@@ -619,12 +623,15 @@ static int connection_destination_matches(const struct reusable_connection *conn
  *
  * Parameters  :  none
  *
- * Returns     :  void
+ * Returns     :  Number of connections that are still alive.
  *
  *********************************************************************/
-static void close_unusable_connections(void)
+int close_unusable_connections(void)
 {
    unsigned int slot = 0;
+   int connections_alive = 0;
+
+   privoxy_mutex_lock(&connection_reuse_mutex);
 
    for (slot = 0; slot < SZ(reusable_connection); slot++)
    {
@@ -643,10 +650,8 @@ static void close_unusable_connections(void)
                reusable_connection[slot].sfd, keep_alive_timeout);
             close_socket(reusable_connection[slot].sfd);
             mark_connection_closed(&reusable_connection[slot]);
-            continue;
          }
-
-         if (!socket_is_still_usable(reusable_connection[slot].sfd))
+         else if (!socket_is_still_usable(reusable_connection[slot].sfd))
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d is no longer usable. "
@@ -655,10 +660,18 @@ static void close_unusable_connections(void)
                reusable_connection[slot].sfd);
             close_socket(reusable_connection[slot].sfd);
             mark_connection_closed(&reusable_connection[slot]);
-            continue;
+         }
+         else
+         {
+            connections_alive++;
          }
       }
    }
+
+   privoxy_mutex_unlock(&connection_reuse_mutex);
+
+   return connections_alive;
+
 }
 
 
@@ -743,9 +756,9 @@ static jb_socket get_reusable_connection(const struct http_request *http,
    jb_socket sfd = JB_INVALID_SOCKET;
    unsigned int slot = 0;
 
-   privoxy_mutex_lock(&connection_reuse_mutex);
-
    close_unusable_connections();
+
+   privoxy_mutex_lock(&connection_reuse_mutex);
 
    for (slot = 0; slot < SZ(reusable_connection); slot++)
    {

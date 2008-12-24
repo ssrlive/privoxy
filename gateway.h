@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.10 2008/10/09 18:21:41 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.11 2008/11/13 09:08:42 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.11  2008/11/13 09:08:42  fabiankeil
+ *    Add new config option: keep-alive-timeout.
+ *
  *    Revision 1.10  2008/10/09 18:21:41  fabiankeil
  *    Flush work-in-progress changes to keep outgoing connections
  *    alive where possible. Incomplete and mostly #ifdef'd out.
@@ -121,6 +124,7 @@ extern void forget_connection(jb_socket sfd);
 extern void remember_connection(jb_socket sfd,
                                 const struct http_request *http,
                                 const struct forward_spec *fwd);
+extern int close_unusable_connections(void);
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 
