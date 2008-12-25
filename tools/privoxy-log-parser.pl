@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.130 2008/12/22 18:57:59 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.131 2008/12/25 18:37:07 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1483,11 +1483,17 @@ sub handle_loglevel_connect ($) {
 
     } elsif ($c =~ m/^The connection to/) {
 
-        # The connection to www.privoxy.org:80 in slot 6 timed out. Closing socket 19.
+        # The connection to www.privoxy.org:80 in slot 6 timed out. Closing socket 19. Timeout is: 61.
         # The connection to 10.0.0.1:80 in slot 0 is no longer usable. Closing socket 4.
         $c = highlight_matched_host($c, '(?<=connection to )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Closing socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=Timeout is )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Waiting for/) {
+
+        # Waiting for 1 connections to timeout.
+        $c =~ s@(?<=^Waiting for )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Initialized/) {
 
@@ -1516,12 +1522,14 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=expecting )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we rea/ or
-             $c =~ m/^Unsetting keep-alive flag/) {
+             $c =~ m/^Unsetting keep-alive flag/ or
+             $c =~ m/^No connections to wait/) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
         # Looks like we read the end of the last chunk together with the server \
         #  headers. We better stop reading.
         # Unsetting keep-alive flag.
+        # No connections to wait for left.
 
     } else {
 
