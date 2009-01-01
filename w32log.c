@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.28 2008/11/02 14:37:47 ler762 Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.29 2008/12/20 15:27:40 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,10 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.28 2008/11/02 14:37:47 ler762 Exp $
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.29  2008/12/20 15:27:40  ler762
+ *    The crunch log message format changed, so update the strings to highlight
+ *    in the log window.
+ *
  *    Revision 1.28  2008/11/02 14:37:47  ler762
  *    commit the part of the patches I've been using that were written by torford and gjmurphy
  *      [ 1824315 ] Minor code cleanup
@@ -367,6 +371,7 @@ static HWND g_hwndLogBox;
 static WNDPROC g_fnLogBox;
 static HICON g_hiconAnim[ANIM_FRAMES];
 static HICON g_hiconIdle;
+static HICON g_hiconOff;
 static int g_nAnimFrame;
 static BOOL g_bClipPending = FALSE;
 static int g_nRichEditVersion = 0;
@@ -384,6 +389,7 @@ static void LogClipBuffer(void);
 static void LogCreatePatternMatchingBuffers(void);
 static void LogDestroyPatternMatchingBuffers(void);
 static int LogPutStringNoMatch(const char *pszText, int style);
+static void SetIdleIcon(void);
 
 
 /*********************************************************************
@@ -403,6 +409,7 @@ BOOL InitLogWindow(void)
 
    /* Load the icons */
    g_hiconIdle = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_IDLE));
+   g_hiconOff  = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_OFF));
    for (i = 0; i < ANIM_FRAMES; i++)
    {
       g_hiconAnim[i] = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_ANIMATED1 + i));
@@ -445,6 +452,7 @@ void TermLogWindow(void)
    TrayDeleteIcon(g_hwndTray, 1);
    DeleteObject(g_hiconApp);
    DeleteObject(g_hiconIdle);
+   DeleteObject(g_hiconOff);
    for (i = 0; i < ANIM_FRAMES; i++)
    {
       DeleteObject(g_hiconAnim[i]);
@@ -1159,6 +1167,7 @@ void OnLogCommand(int nCommand)
          {
             log_error(LOG_LEVEL_INFO, "Now toggled OFF.");
          }
+         SetIdleIcon();
          break;
 #endif /* def FEATURE_TOGGLE */
 
@@ -1271,7 +1280,7 @@ void OnLogTimer(int nTimer)
 
       case TIMER_ANIMSTOP_ID:
          g_nAnimFrame = 0;
-         TraySetIcon(g_hwndTray, 1, g_hiconIdle);
+         SetIdleIcon();
          KillTimer(g_hwndLogFrame, TIMER_ANIM_ID);
          KillTimer(g_hwndLogFrame, TIMER_ANIMSTOP_ID);
          break;
@@ -1289,6 +1298,31 @@ void OnLogTimer(int nTimer)
          break;
    }
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  SetIdleIcon
+ *
+ * Description :  Sets the tray icon to either idle or off
+ *
+ * Parameters  :  none
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void SetIdleIcon()
+{
+#ifdef FEATURE_TOGGLE
+         if (!global_toggle_state)
+         {
+            TraySetIcon(g_hwndTray, 1, g_hiconOff);
+            /* log_error(LOG_LEVEL_INFO, "Privoxy OFF icon selected."); */
+         }
+         else
+#endif /* def FEATURE_TOGGLE */
+         TraySetIcon(g_hwndTray, 1, g_hiconIdle);
 }
 
 
