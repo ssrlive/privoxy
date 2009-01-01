@@ -27,6 +27,9 @@
 #
 # Revisions   :
 #    $Log: show-url-info,v $
+#    Revision 1.28  2009/01/01 14:51:21  ler762
+#    keep the input field and 'go' button on the same line.
+#
 #    Revision 1.27  2008/05/26 17:30:58  fabiankeil
 #    Provide an OpenSearch Description to access the
 #    show-url-info page through "search engine plugins".
@@ -296,10 +299,8 @@
           URL:</h2>
         <form method="GET" action="@default-cgi@show-url-info">
           <p>
-            <nobr>
             <input type="text" name="url" size="80" value="@url@" class="url"> 
             <input type="submit" value="Go">
-            </nobr>
           </p>
         </form>
       </td>
