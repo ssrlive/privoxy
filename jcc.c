@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.215 2008/12/24 17:06:19 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.216 2008/12/24 22:13:11 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.215 2008/12/24 17:06:19 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.216  2008/12/24 22:13:11  ler762
+ *    fix GCC 3.4.4 warning
+ *
  *    Revision 1.215  2008/12/24 17:06:19  fabiankeil
  *    Keep a thread around to timeout alive connections
  *    even if no new requests are coming in.
@@ -1388,6 +1391,14 @@ static const char MESSED_UP_REQUEST_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Bad request. Messed up with header filters.\r\n";
 
+/* XXX: should be a template */
+static const char CONNECTION_TIMEOUT_RESPONSE[] =
+   "HTTP/1.0 502 Connection timeout\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "The connection timed out.\r\n";
+
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
 
@@ -2178,7 +2189,9 @@ static char *get_request_line(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR,
             "Stopped waiting for the request line.");
-         return '\0';
+         write_socket(csp->cfd, CONNECTION_TIMEOUT_RESPONSE,
+            strlen(CONNECTION_TIMEOUT_RESPONSE));
+         return NULL;
       }
 
       len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
@@ -2238,9 +2251,14 @@ static jb_err receive_client_request(struct client_state *csp)
    memset(buf, 0, sizeof(buf));
 
    req = get_request_line(csp);
-
-   if ((NULL != req) && ('\0' != *req))
+   if (req == NULL)
    {
+      return JB_ERR_PARSE;
+   }
+   else
+   {
+      /* XXX: We don't need an else block here. */
+      assert(*req != '\0');
       /* Request received. Validate and parse it. */
 
       /* Does the request line look invalid? */
@@ -2751,6 +2769,11 @@ static void chat(struct client_state *csp)
       if (n == 0)
       {
          log_error(LOG_LEVEL_ERROR, "Didn't receive data in time.");
+         if ((byte_count == 0) && (http->ssl == 0))
+         {
+            write_socket(csp->cfd, CONNECTION_TIMEOUT_RESPONSE,
+               strlen(CONNECTION_TIMEOUT_RESPONSE));
+         }
          mark_server_socket_tainted(csp);
          return;
       }
