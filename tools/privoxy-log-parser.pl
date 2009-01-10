@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.132 2008/12/25 19:52:57 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.134 2009/01/10 16:31:22 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -799,7 +799,7 @@ sub handle_loglevel_header ($) {
     # scan: Accept: image/png,image/*;q=0.8,*/*;q=0.5
     if ($c =~ m/^scan: ((?>[^:]+)):/) {
         my $header = $1;
-        if (!defined($header_colours{$header})) {
+        if (!defined($header_colours{$header}) and $header =~ /^[\d\w-]*$/) {
             debug_message "Registering previously unknown header $1" if DEBUG_HEADER_REGISTERING;
 
             if (REGISTER_HEADERS_WITH_THE_SAME_COLOUR) {
@@ -1520,6 +1520,11 @@ sub handle_loglevel_connect ($) {
         # Received 206 bytes while expecting 12103.
         $c =~ s@(?<=Received )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=expecting )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Connection from/) {
+
+        # Connection from 81.163.28.218 dropped due to ACL
+        $c =~ s@(?<=^Connection from )((?:\d+\.?){4})@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
