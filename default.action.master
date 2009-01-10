@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.155 2009/01/01 14:46:25 ler762 Exp $
+#  $Id: default.action.master,v 1.156 2009/01/01 15:31:37 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -826,7 +826,9 @@ static.lycos-europe.net
 #MASTER# BLOCK-REFERRER: http://www.networkworld.com/resourcelibrary/?tid=4&type=special%20report
 # Blocked URL = http://clk.atdmt.com/
 .atdmt.com/
-
+#MASTER# REMARKS: Actionsfile feedback item #2498279 2009-01-10, rss feed ads. HB
+# Blocked URL = http://feedads.googleadservices.com/
+feedads.googleadservices.
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
@@ -1511,6 +1513,9 @@ fritz.box/
 .adobe.com
 # URL = http://qa.debian.org/popcon.php
 qa.debian.org/popcon\.php
+#MASTER# REMARKS: Support Requests item #2432535 2008-12-16
+# URL = http://www.mta.info/bandt/traffic/advmain.htm
+mta.info/.*advmain.htm$
 #MASTER# REMARKS: We also use this as a light character class test, therefore the additional URL directives.
 # URL = http://www.proaurum.de/bannerA2/image/pro_master_r3_01_04.gif
 # URL = http://www.proaurum.de/bannerA1/image/limitorder2.gif
