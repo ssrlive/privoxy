@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.157 2009/01/10 21:23:28 hal9 Exp $
+#  $Id: default.action.master,v 1.158 2009/01/11 16:02:53 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -1117,6 +1117,9 @@ img.directtrack.com
 #MASTER# BLOCK-REFERRER: http://www.thinkbroadband.com/news/3621-complaint-about-orange-broadband-advertising-upheld.html
 # URL = http://eas.apm.emediate.eu/media.5/1/1228/19193/ACT1215_120x600_v3.gif
 .emediate.eu/
+# URL = http://feedads.googleadservices.com/~a/dPlpGU767u4D4kVO8EGuUlnf1Q0/i
+# URL = http://feedads.googleadservices.com/~at/EpX-FnAXxwdaBSq-GRze37-rG0M/i
+.googleadservices.com/~
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1209,9 +1212,6 @@ feeds.feedburner.com/~a/DilbertDailyStrip\?
 #MASTER# BLOCK-REFERER: http://www.buch.de/
 # URL = http://track.webtrekk.de/471497967328727/wt.pl?p=177,de.buch.show.home,1,1024x768,24,1,1218816426275,0,884x653,0&enc1=%FC&enc2=iso-8859-1&st=view&la=en-US&np=Default%20Plugi
 track.webtrekk.de/
-# URL = http://feedads.googleadservices.com/~a/dPlpGU767u4D4kVO8EGuUlnf1Q0/i
-# URL = http://feedads.googleadservices.com/~at/EpX-FnAXxwdaBSq-GRze37-rG0M/i
-.googleadservices.com/~
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
