@@ -816,14 +816,6 @@ BORDER="0"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;standard.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Internal&nbsp;purposes,&nbsp;no&nbsp;editing&nbsp;recommended</P
->
-    </TD
-></TR
-><TR
-><TD
->     <P
-CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;default.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Main&nbsp;actions&nbsp;file</P
 >
     </TD
@@ -859,15 +851,11 @@ CLASS="LITERAL"
    </P
 ><P
 > 
-    The default values include <TT
-CLASS="FILENAME"
->standard.action</TT
->, which is used
-    for internal purposes and should be loaded, <TT
+    The default values are <TT
 CLASS="FILENAME"
 >default.action</TT
->,
-    which is the <SPAN
+>, which is the
+    <SPAN
 CLASS="QUOTE"
 >"main"</SPAN
 > actions file maintained by the developers, and
@@ -1369,10 +1357,10 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  debug     1 # log each request destination (and the crunch reason if <SPAN
+>  debug     1 # Log the destination for each request <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> intercepted the request)
+> let through. See also debug 1024.
   debug     2 # show each connection status
   debug     4 # show I/O status
   debug     8 # show header parsing
@@ -1382,6 +1370,10 @@ CLASS="APPLICATION"
   debug   128 # debug redirects
   debug   256 # debug GIF de-animation
   debug   512 # Common Log Format
+  debug  1024 # Log the destination for requests <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> didn't let through, and the reason why.
   debug  2048 # CGI user interface
   debug  4096 # Startup banner and warnings.
   debug  8192 # Non-fatal errors</PRE
@@ -3591,6 +3583,72 @@ CLASS="APPLICATION"
 ><DD
 ><P
 >    split-large-forms 1
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="KEEP-ALIVE-TIMEOUT"
+>7.5.8. keep-alive-timeout</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Number of seconds after which an open connection will no longer be reused.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>Time in seconds.</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>None</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Connections are not reused.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This option has no effect if <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    has been compiled without keep-alive support.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    keep-alive-timeout 300
    </P
 ></DD
 ></DL
