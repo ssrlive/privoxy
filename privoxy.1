@@ -3,35 +3,35 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "PRIVOXY" "1" "14 August 2008" "Privoxy 3.0.10" ""
+.TH "PRIVOXY" "1" "13 January 2009" "Privoxy 3.0.11 UNRELEASED" ""
 .SH NAME
 privoxy \- Privacy Enhancing Proxy
 .SH SYNOPSIS
 
-\fBprivoxy\fR [\fB--help\fR ] [\fB--version\fR ] [\fB--no-daemon\fR ] [\fB--pidfile \fIpidfile\fB\fR ] [\fB--user \fIuser[.group]\fB\fR ] [\fB--chroot\fR ] [\fB--pre-chroot-nslookup \fIhostname\fB\fR ] [\fB\fIconfigfile\fB\fR ]
+\fBprivoxy\fR [\fB\-\-help\fR ] [\fB\-\-version\fR ] [\fB\-\-no-daemon\fR ] [\fB\-\-pidfile \fIpidfile\fB\fR ] [\fB\-\-user \fIuser[.group]\fB\fR ] [\fB\-\-chroot\fR ] [\fB\-\-pre-chroot-nslookup \fIhostname\fB\fR ] [\fB\fIconfigfile\fB\fR ]
 
 .SH "OPTIONS"
 .PP
 \fBPrivoxy\fR may be invoked with the following command line
 options:
 .TP
-\fB--help\fR
+\fB\-\-help\fR
 Print brief usage info and exit.
 .TP
-\fB--version\fR
+\fB\-\-version\fR
 Print version info and exit.
 .TP
-\fB--no-daemon\fR
+\fB\-\-no-daemon\fR
 Don't  become  a daemon, i.e. don't fork and become process group
 leader, don't detach from controlling tty, and do all logging there.
 .TP
-\fB--pidfile \fIpidfile\fB\fR
+\fB\-\-pidfile \fIpidfile\fB\fR
 On startup, write the process ID to \fIpidfile\fR.
 Delete the \fIpidfile\fR on exit.
 Failure to create or delete the \fIpidfile\fR
-is non-fatal. If no \fB--pidfile\fR option is given, no PID file will be used.
+is non-fatal. If no \fB\-\-pidfile\fR option is given, no PID file will be used.
 .TP
-\fB--user \fIuser[.group]\fB\fR
+\fB\-\-user \fIuser[.group]\fB\fR
 After (optionally) writing the PID file, assume the user ID of
 \fIuser\fR and the GID of
 \fIgroup\fR, or, if the optional
@@ -39,15 +39,15 @@ After (optionally) writing the PID file, assume the user ID of
 \fIuser\fR. Exit if the privileges are not
 sufficient to do so.
 .TP
-\fB--chroot\fR
-Before changing to the user ID given in the --user option, chroot to
+\fB\-\-chroot\fR
+Before changing to the user ID given in the \-\-user option, chroot to
 that user's home directory, i.e. make the kernel pretend to the
 \fBPrivoxy\fR process that the directory tree starts
 there. If set up carefully, this can limit the impact of possible
 vulnerabilities in \fBPrivoxy\fR to the files contained in
 that hierarchy. 
 .TP
-\fB--pre-chroot-nslookup \fIhostname\fB\fR
+\fB\-\-pre-chroot-nslookup \fIhostname\fB\fR
 Initialize the resolver library using \fIhostname\fR
 before chroot'ing. On some systems this reduces the number of files
 that must be copied into the chroot tree.
@@ -140,18 +140,19 @@ configuration might look like:
 
  # Useful aliases that combine more than one action
  +crunch-cookies = +crunch-incoming-cookies +crunch-outgoing-cookies
- -crunch-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+ \-crunch-cookies = \-crunch-incoming-cookies \-crunch-outgoing-cookies
  +block-as-image = +block +handle-as-image
 
  # Fragile sites should have the minimum changes
- fragile     = -block -deanimate-gifs -fast-redirects -filter \\
-               -hide-referer -prevent-cookies
+ fragile     = \-block \-deanimate-gifs \-fast-redirects \-filter \\
+               \-hide-referer \-prevent-cookies
 
  ## Turn some actions on ################################
  ## NOTE: Actions are off by default, unless explictily turned on 
  ## otherwise with the '+' operator.
 
 { \\
++change-x-forwarded-for{block} \\
 +deanimate-gifs{last} \\
 +filter{refresh-tags} \\
 +filter{img-reorder} \\
@@ -159,7 +160,6 @@ configuration might look like:
 +filter{webbugs} \\
 +filter{jumping-windows} \\
 +filter{ie-exploits} \\
-+hide-forwarded-for-headers \\
 +hide-from-header{block} \\
 +hide-referrer{conditional-block} \\
 +session-cookies-only \\
@@ -187,7 +187,7 @@ configuration might look like:
 
  # Make exceptions for these harmless ones that would be 
  # caught by our +block patterns just above.
- { -block }
+ { \-block }
   adsl.
   adobe.
   advice.
@@ -204,12 +204,12 @@ narrowly defined exceptions:
  {{alias}}
 
  # Useful aliases
- -crunch-cookies = -crunch-incoming-cookies -crunch-outgoing-cookies
+ \-crunch-cookies = \-crunch-incoming-cookies \-crunch-outgoing-cookies
  
  # Set personal exceptions to the policies in default.action #######
 
  # Sites where we want persistent cookies, so allow *all* cookies
- { -crunch-cookies -session-cookies-only }
+ { \-crunch-cookies \-session-cookies-only }
   .redhat.com
   .sun.com
   .msdn.microsoft.com
@@ -235,7 +235,6 @@ configuration options.
  \fI/usr/sbin/privoxy\fR
  \fI/etc/privoxy/config\fR
  \fI/etc/privoxy/default.action\fR
- \fI/etc/privoxy/standard.action\fR
  \fI/etc/privoxy/user.action\fR
  \fI/etc/privoxy/default.filter\fR
  \fI/etc/privoxy/user.filter\fR
@@ -257,6 +256,9 @@ other daemons,  \fBPrivoxy\fR does not need to be made aware of
 config file changes by \fBSIGHUP\fR -- it will detect them
 automatically. 
 .SH "NOTES"
+.PP
+This is a UNRELEASED version of \fBPrivoxy\fR. Not 
+all features are well tested.
 .PP
 Please see the \fIUser Manual\fR on how to contact the
 developers, for feature requests, reporting problems, and other questions.
@@ -317,7 +319,7 @@ the \fBPrivoxy\fR developer manual.
  Gerry Murphy
  Lee Rian
  Roland Rosenfeld
- Jörg Strohmayer
+ J\[:o]rg Strohmayer
 .fi
 .SH "COPYRIGHT AND LICENSE"
 .SS "COPYRIGHT"
