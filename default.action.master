@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.158 2009/01/11 16:02:53 hal9 Exp $
+#  $Id: default.action.master,v 1.159 2009/01/11 20:26:00 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -19,7 +19,7 @@
 #                 This file is subject to periodic updating. Local exceptions
 #                 and enhancements are better placed in user.action. 
 #
-#  Copyright   :  Written by and Copyright (C) 2001-2008 the
+#  Copyright   :  Written by and Copyright (C) 2001-2009 the
 #                 Privoxy team. http://www.privoxy.org/
 #
 #  Note: Updated versions of this file will be made available from time
@@ -560,6 +560,76 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 +set-image-blocker{pattern} \
 }
 / # Match all URLs
+
+################
+#
+# Cautious settings -- safe for all sites, but offer little privacy protection
+#
+{ \
++change-x-forwarded-for{block} \
++hide-from-header{block} \
++set-image-blocker{pattern} \
+}
+standard.Cautious
+
+################
+#
+# Medium settings -- safe for most sites, with reasonable protection/damage tradeoff
+#
+{ \
++change-x-forwarded-for{block} \
++deanimate-gifs{last} \
++filter{refresh-tags} \
++filter{img-reorder} \
++filter{banners-by-size} \
++filter{webbugs} \
++filter{jumping-windows} \
++filter{ie-exploits} \
++hide-from-header{block} \
++hide-referrer{conditional-block} \
++session-cookies-only \
++set-image-blocker{pattern} \
+}
+standard.Medium
+
+################
+#
+# Advanced settings -- reasonable privacy protection but
+# require some exceptions for trusted sites, most likely
+# because of cookies or SSL. Also testing ground for
+# new options.
+#
+# CAUTION: These settings can still be subverted by a
+# misconfigured client that executes code from untrusted
+# sources.
+#
+{ \
++change-x-forwarded-for{block} \
++client-header-tagger{css-requests} \
++client-header-tagger{image-requests} \
++crunch-if-none-match \
++crunch-outgoing-cookies \
++crunch-incoming-cookies \
++deanimate-gifs{last} \
++fast-redirects{check-decoded-url} \
++filter{html-annoyances} \
++filter{content-cookies} \
++filter{refresh-tags} \
++filter{img-reorder} \
++filter{banners-by-size} \
++filter{banners-by-link} \
++filter{webbugs} \
++filter{jumping-windows} \
++filter{frameset-borders} \
++filter{quicktime-kioskmode} \
++hide-if-modified-since{-60} \
++hide-from-header{block} \
++hide-referrer{conditional-block} \
++limit-connect{,} \
++overwrite-last-modified{randomize} \
++set-image-blocker{pattern} \
+}
+standard.Advanced
 
 #############################################################################
 # These extensions belong to images:

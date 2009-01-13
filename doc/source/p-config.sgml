@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.33 2008/12/13 10:48:21 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.34 2008/12/14 15:46:23 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.33 2008/12/13 10:48:21 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.34 2008/12/14 15:46:23 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
@@ -668,9 +668,6 @@ actionsfile
   <listitem>
    <simplelist>
     <member>
-     <msgtext><literallayout>  standard.action     # Internal purposes, no editing recommended</literallayout></msgtext>
-    </member>
-    <member>
      <msgtext><literallayout>  default.action      # Main actions file</literallayout></msgtext>
     </member>
     <member>
@@ -694,9 +691,8 @@ actionsfile
     Multiple <literal>actionsfile</literal> lines are permitted, and are in fact recommended!
    </para>
    <para> 
-    The default values include <filename>standard.action</filename>, which is used
-    for internal purposes and should be loaded, <filename>default.action</filename>,
-    which is the <quote>main</quote> actions file maintained by the developers, and
+    The default values are <filename>default.action</filename>, which is the
+    <quote>main</quote> actions file maintained by the developers, and
     <filename>user.action</filename>, where you can make your personal additions.
    </para>
    <para> 
@@ -716,7 +712,6 @@ actionsfile
 
 <!-- NOTE: alternate markup to make a simpler list doesn't work due to -->
 <!-- html -> text conversion, blah -->
-<![%config-file;[<literallayout>@@actionsfile standard.action  # Internal purpose, recommended</literallayout>]]>
 <![%config-file;[<literallayout>@@actionsfile default.action   # Main actions file</literallayout>]]>
 <!--
  XXX: Like user.filter, user.action should probably be commented out

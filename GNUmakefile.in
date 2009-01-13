@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.175 2008/08/30 12:03:07 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.176 2008/09/21 13:24:37 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -167,7 +167,7 @@ RPM_BASE = @RPM_BASE@
 #############################################################################
 # We include these files in our distributions
 #############################################################################
-CONFIGS = config trust default.action standard.action user.action default.filter user.filter
+CONFIGS = config trust default.action user.action default.filter user.filter
 # take care that no CVS .cvsignore or other crappy files
 # are included here
 # and escape every '#' in the find. doh.
@@ -1140,7 +1140,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	fi ;\
 	$(ECHO) Installing configuration files to $(DESTDIR)$(CONF_DEST);\
 	for i in $(CONFIGS); do \
-		if [ "$$i" = "default.action" ] || [ "$$i" = "default.filter" ] || [ "$$i" = "standard.action" ]; then \
+		if [ "$$i" = "default.action" ] || [ "$$i" = "default.filter" ] ; then \
 			$(RM) $(DESTDIR)$(CONF_DEST)/$$i ;\
 			$(ECHO) Installing fresh $$i;\
 			$(INSTALL) $$INSTALL_CONF $$i $(DESTDIR)$(CONF_DEST) || exit 1;\
@@ -1314,6 +1314,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.176  2008/09/21 13:24:37  fabiankeil
+# Add Roland's man page fixes from 19_manpage_fixup.dpatch.
+#
 # Revision 1.175  2008/08/30 12:03:07  fabiankeil
 # Remove FEATURE_COOKIE_JAR.
 #

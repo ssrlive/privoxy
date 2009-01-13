@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.11
 #
-#  $Id: config,v 1.68 2008/12/13 18:19:44 fabiankeil Exp $
+#  $Id: config,v 1.69 2008/12/14 15:46:22 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
 #
@@ -340,8 +340,6 @@ logdir .
 #
 #  Default values:
 #
-#        standard.action     # Internal purposes, no editing recommended
-#
 #        default.action      # Main actions file
 #
 #        user.action         # User customizations
@@ -355,10 +353,9 @@ logdir .
 #      Multiple actionsfile lines are permitted, and are in fact
 #      recommended!
 #
-#      The default values include standard.action, which is used
-#      for internal purposes and should be loaded, default.action,
-#      which is the "main" actions file maintained by the developers,
-#      and user.action, where you can make your personal additions.
+#      The default values are default.action, which is the "main"
+#      actions file maintained by the developers, and user.action,
+#      where you can make your personal additions.
 #
 #      Actions files contain all the per site and per URL configuration
 #      for ad blocking, cookie management, privacy considerations,
@@ -370,7 +367,6 @@ logdir .
 #      was necessary to be consistent with the other file options and
 #      to allow previously forbidden characters.
 #
-actionsfile standard.action  # Internal purpose, recommended
 actionsfile default.action   # Main actions file
 actionsfile user.action      # User customizations
 #
