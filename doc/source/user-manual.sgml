@@ -33,9 +33,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.89 2008/09/21 15:38:56 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.90 2008/09/26 16:53:09 fabiankeil Exp $
 
- Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.89 2008/09/21 15:38:56 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.90 2008/09/26 16:53:09 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -518,8 +518,8 @@ How to install the binary packages depends on your operating system:
  </listitem>
  <listitem>
   <para>  
-   <filename>standard.action</filename> now only includes the enabled actions.
-   Not all actions as before.
+   <filename>standard.action</filename> has been merged into
+   the <filename>default.action</filename> file.
   </para>
  </listitem>
  <listitem>
@@ -1649,8 +1649,7 @@ for details.
     <filename>default.action</filename> (which you will most probably want
     to define sooner or later) are probably best applied in
     <filename>user.action</filename>, where you can preserve them across
-    upgrades. <filename>standard.action</filename> is only for
-    <application>Privoxy's</application> internal use.
+    upgrades.
    </para>
    <para>    
     There is also a web based editor that can be accessed from
@@ -1772,8 +1771,8 @@ for details.
      a set of broad rules that should work reasonably well as-is for most users.
      This is the file that the developers are keeping updated, and <link
      linkend="installation-keepupdated">making available to users</link>.
-     The user's preferences as set in <filename>standard.action</filename>,
-     e.g. either <literal>Cautious</literal> (the default),
+     It also contains the pre-defined sets of rules for the default actions,
+     e.g. <literal>Cautious</literal> (the default),
      <literal>Medium</literal>, or <literal>Advanced</literal> (see
      below).
     </para>
@@ -1785,15 +1784,8 @@ for details.
      has specific requirements, and need special handling, this kind of 
      thing should go here. This file will not be upgraded.
     </para>
-  </listitem> 
+   </listitem> 
    <listitem>
-    <para>
-     <filename>standard.action</filename> - is used only by the web based editor
-     at <ulink url="http://config.privoxy.org/edit-actions-list?f=default">
-     http://config.privoxy.org/edit-actions-list?f=default</ulink>, 
-     to set various pre-defined sets of rules for the default actions section
-     in <filename>default.action</filename>. 
-     </para>
      <para>
      <guibutton>Edit</guibutton>  <guibutton>Set to Cautious</guibutton> <guibutton>Set to Medium</guibutton>  <guibutton>Set to Advanced</guibutton>
      </para>
@@ -1821,13 +1813,9 @@ for details.
       <guibutton>Edit</guibutton> button. More fine-tuning can be done in the
       lower sections of this internal page.
      </para>
-     <para>
-     It is not recommend to edit the <filename>standard.action</filename> file
-     itself.
-    </para>
     <para>
      The default profiles, and their associated actions, as pre-defined in
-     <filename>standard.action</filename> are:
+     <filename>default.action</filename> are:
     </para>
     <para>
     <table frame=all><title>Default Configurations</title>
@@ -8459,6 +8447,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.90  2008/09/26 16:53:09  fabiankeil
+ Update "What's new" section.
+
  Revision 2.89  2008/09/21 15:38:56  fabiankeil
  Fix Portage tree sync instructions in Gentoo section.
  Anonymously reported at ijbswa-developers@.

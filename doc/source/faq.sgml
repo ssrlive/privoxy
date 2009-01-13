@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.46 2008/08/30 15:37:35 fabiankeil Exp $
+ $Id: faq.sgml,v 2.47 2008/11/24 18:29:39 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.46 2008/08/30 15:37:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.47 2008/11/24 18:29:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -786,9 +786,8 @@ the differences?</title>
  different purposes: These are 
  <filename>default.action</filename>, the <quote>main</quote> actions file
  which is actively maintained by the <application>Privoxy</application>
- developers and typically sets the default policies, <filename>user.action</filename>, where users are encouraged
- to make their private customizations, and <filename>standard.action</filename>, 
- which is for internal <application>Privoxy</application> use only.
+ developers and typically sets the default policies, <filename>user.action</filename>,
+ where users are encouraged to make their private customizations.
  Please see <ulink url="../user-manual/actions-file.html">the actions chapter</ulink>
  in the <ulink url="../user-manual/index.html">User Manual</ulink> for a more
  detailed explanation.
@@ -2820,6 +2819,12 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.47  2008/11/24 18:29:39  fabiankeil
+Two changes suggested by Roger Dingledine:
+- Use https://www.torproject.org/ in section 4.7, too.
+- Replace the Tor wiki URL in section 4.10 with one
+  with a more useful anchor name.
+
 Revision 2.46  2008/08/30 15:37:35  fabiankeil
 Update entities.
 

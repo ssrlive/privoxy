@@ -23,7 +23,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.22 2008/08/30 15:37:35 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.23 2008/09/26 17:02:01 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,7 +50,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.22 2008/08/30 15:37:35 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.23 2008/09/26 17:02:01 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2387,9 +2387,8 @@ at sourceforge. Three simple steps:
       </listitem> 
       <listitem>
        <para>
-        Other configuration files (<filename>default.action</filename>,
-        <filename>default.filter</filename> and
-        <filename>standard.action</filename>) should be installed as the new
+        Other configuration files (<filename>default.action</filename> and
+        <filename>default.filter</filename>) should be installed as the new
         defaults, but all previously installed configuration files should be
         preserved as backups. This is just good manners :-) These files are
         likely to change between releases and contain important new features
@@ -3024,6 +3023,11 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.23  2008/09/26 17:02:01  fabiankeil
+  - Break some more CVS substitutions in examples.
+  - Remove Junkbusters reference in example header
+    for new files.
+
   Revision 2.22  2008/08/30 15:37:35  fabiankeil
   Update entities.
 

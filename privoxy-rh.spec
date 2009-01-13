@@ -1,4 +1,4 @@
-# $Id: privoxy-rh.spec,v 1.59 2008/08/13 16:57:46 fabiankeil Exp $
+# $Id: privoxy-rh.spec,v 1.60 2008/08/30 12:46:49 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2006 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -271,7 +271,6 @@ fi
 # -- morcego
 # WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING ! WARNING !
 %config(noreplace) %{privoxyconf}/config
-%config %{privoxyconf}/standard.action
 %config(noreplace) %{privoxyconf}/user.action
 %config %{privoxyconf}/default.action
 %config %{privoxyconf}/default.filter
@@ -765,6 +764,9 @@ fi
 	additional "-r @" flag.
 
 # $Log: privoxy-rh.spec,v $
+# Revision 1.60  2008/08/30 12:46:49  fabiankeil
+# The jarfile directive is gone. Update accordingly.
+#
 # Revision 1.59  2008/08/13 16:57:46  fabiankeil
 # Change version to 3.0.10.
 #
