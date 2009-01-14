@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.82 2008/11/16 12:43:49 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.83 2008/12/20 14:53:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.82 2008/11/16 12:43:49 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.83  2008/12/20 14:53:55  fabiankeil
+ *    Add config option socket-timeout to control the time
+ *    Privoxy waits for data to arrive on a socket. Useful
+ *    in case of stale ssh tunnels or when fuzz-testing.
+ *
  *    Revision 1.82  2008/11/16 12:43:49  fabiankeil
  *    Turn keep-alive support into a runtime feature
  *    that is disabled by setting keep-alive-timeout
@@ -1807,8 +1812,8 @@ struct configuration_spec * load_config(void)
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
-   g_default_actions_file  = config->actions_file[1]; /* FIXME Hope this is default.action */
-   g_user_actions_file = config->actions_file[2]; /* FIXME Hope this is user.action */
+   g_default_actions_file  = config->actions_file[0]; /* FIXME Hope this is default.action */
+   g_user_actions_file = config->actions_file[1]; /* FIXME Hope this is user.action */
    g_re_filterfile    = config->re_filterfile[0]; /* FIXME Hope this is default.filter */
 
 #ifdef FEATURE_TRUST
