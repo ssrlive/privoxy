@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.159 2009/01/11 20:26:00 hal9 Exp $
+#  $Id: default.action.master,v 1.160 2009/01/13 16:44:32 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -1582,7 +1582,7 @@ fritz.box/
 qa.debian.org/popcon\.php
 #MASTER# REMARKS: Support Requests item #2432535 2008-12-16
 # URL = http://www.mta.info/bandt/traffic/advmain.htm
-mta.info/.*advmain.htm$
+.mta.info/.*advmain.htm$
 #MASTER# REMARKS: We also use this as a light character class test, therefore the additional URL directives.
 # URL = http://www.proaurum.de/bannerA2/image/pro_master_r3_01_04.gif
 # URL = http://www.proaurum.de/bannerA1/image/limitorder2.gif
