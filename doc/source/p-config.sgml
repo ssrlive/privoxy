@@ -3,9 +3,9 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.34 2008/12/14 15:46:23 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.35 2009/01/13 16:44:32 fabiankeil Exp $
 
- Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -95,10 +95,10 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.34 2008/12/14 15:46:23 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.35 2009/01/13 16:44:32 fabiankeil Exp $
 </para>
 <para>
-Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 </para>
 
 <para>
@@ -2429,6 +2429,52 @@ forward-socks4, forward-socks4a and forward-socks5</title>
  </varlistentry>
 </variablelist>
 <![%config-file;[<literallayout>@@keep-alive-timeout 300</literallayout>]]>
+</sect3>
+
+
+<sect3 renderas="sect4" id="socket-timeout"><title>socket-timeout</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Number of seconds after which a socket times out if
+    no data is received.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>Time in seconds.</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    A default value of 180 seconds is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    socket-timeout 180
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@socket-timeout 180</literallayout>]]>
 </sect3>
 
 
