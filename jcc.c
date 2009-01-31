@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.217 2009/01/07 19:50:09 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.218 2009/01/31 12:25:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.217 2009/01/07 19:50:09 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.218  2009/01/31 12:25:54  fabiankeil
+ *    Flatten indentation in receive_client_request().
+ *
  *    Revision 1.217  2009/01/07 19:50:09  fabiankeil
  *    - If the socket-timeout has been reached and the client
  *      hasn't received any data yet, send an explanation before
@@ -2290,18 +2293,15 @@ static jb_err receive_client_request(struct client_state *csp)
 #endif /* def FEATURE_FORCE_LOAD */
 
    err = parse_http_request(req, http, csp);
-   if (JB_ERR_OK != err)
-   {
-      log_error(LOG_LEVEL_ERROR, "Couldn't parse request: %s.", jb_err_to_string(err));
-   }
    freez(req);
-
-   if (http->cmd == NULL)
+   if (JB_ERR_OK != err)
    {
       write_socket(csp->cfd, CHEADER, strlen(CHEADER));
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
-      log_error(LOG_LEVEL_ERROR, "Invalid header received from %s.", csp->ip_addr_str);
+      log_error(LOG_LEVEL_ERROR,
+         "Couldn't parse request line received from %s: %s",
+         csp->ip_addr_str, jb_err_to_string(err));
 
       free_http_request(http);
       return JB_ERR_PARSE;
