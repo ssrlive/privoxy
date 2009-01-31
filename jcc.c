@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.216 2008/12/24 22:13:11 ler762 Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.217 2009/01/07 19:50:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.216 2008/12/24 22:13:11 ler762 Exp $";
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.217  2009/01/07 19:50:09  fabiankeil
+ *    - If the socket-timeout has been reached and the client
+ *      hasn't received any data yet, send an explanation before
+ *      closing the connection.
+ *    - In get_request_line(), signal timeouts the right way.
+ *
  *    Revision 1.216  2008/12/24 22:13:11  ler762
  *    fix GCC 3.4.4 warning
  *
@@ -2255,52 +2261,40 @@ static jb_err receive_client_request(struct client_state *csp)
    {
       return JB_ERR_PARSE;
    }
-   else
-   {
-      /* XXX: We don't need an else block here. */
-      assert(*req != '\0');
-      /* Request received. Validate and parse it. */
+   assert(*req != '\0');
 
-      /* Does the request line look invalid? */
-      if (client_protocol_is_unsupported(csp, req))
-      {
-         /* 
-          * Yes. The request has already been
-          * answered with a error response, the buffers
-          * were freed and we're done with chatting.
-          */
-         return JB_ERR_PARSE;
-      }
+   if (client_protocol_is_unsupported(csp, req))
+   {
+      return JB_ERR_PARSE;
+   }
 
 #ifdef FEATURE_FORCE_LOAD
-      /*
-       * If this request contains the FORCE_PREFIX and blocks
-       * aren't enforced, get rid of it and set the force flag.
-       */
-      if (strstr(req, FORCE_PREFIX))
+   /*
+    * If this request contains the FORCE_PREFIX and blocks
+    * aren't enforced, get rid of it and set the force flag.
+    */
+   if (strstr(req, FORCE_PREFIX))
+   {
+      if (csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS)
       {
-         if (csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS)
-         {
-            log_error(LOG_LEVEL_FORCE,
-               "Ignored force prefix in request: \"%s\".", req);
-         }
-         else
-         {
-            strclean(req, FORCE_PREFIX);
-            log_error(LOG_LEVEL_FORCE, "Enforcing request: \"%s\".", req);
-            csp->flags |= CSP_FLAG_FORCED;
-         }
+         log_error(LOG_LEVEL_FORCE,
+            "Ignored force prefix in request: \"%s\".", req);
       }
+      else
+      {
+         strclean(req, FORCE_PREFIX);
+         log_error(LOG_LEVEL_FORCE, "Enforcing request: \"%s\".", req);
+         csp->flags |= CSP_FLAG_FORCED;
+      }
+   }
 #endif /* def FEATURE_FORCE_LOAD */
 
-      err = parse_http_request(req, http, csp);
-      if (JB_ERR_OK != err)
-      {
-         log_error(LOG_LEVEL_ERROR, "Couldn't parse request: %s.", jb_err_to_string(err));
-      }
-
-      freez(req);
+   err = parse_http_request(req, http, csp);
+   if (JB_ERR_OK != err)
+   {
+      log_error(LOG_LEVEL_ERROR, "Couldn't parse request: %s.", jb_err_to_string(err));
    }
+   freez(req);
 
    if (http->cmd == NULL)
    {
