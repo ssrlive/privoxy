@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.218 2009/01/31 12:25:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.219 2009/01/31 16:08:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.218 2009/01/31 12:25:54 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.219  2009/01/31 16:08:21  fabiankeil
+ *    Remove redundant error check in receive_client_request().
+ *
  *    Revision 1.218  2009/01/31 12:25:54  fabiankeil
  *    Flatten indentation in receive_client_request().
  *
@@ -3564,6 +3567,9 @@ int main(int argc, const char *argv[])
 #endif
       ;
 
+   /* Enable logging until further notice. */
+   init_log_module(Argv[0]);
+
    /*
     * Parse the command line arguments
     *
@@ -3719,9 +3725,6 @@ int main(int argc, const char *argv[])
 
    /* Prepare mutexes if supported and necessary. */
    initialize_mutexes();
-
-   /* Enable logging until further notice. */
-   init_log_module(Argv[0]);
 
    random_seed = (unsigned int)time(NULL);
 #ifdef HAVE_RANDOM
