@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.219 2009/01/31 16:08:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.220 2009/02/04 18:29:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.219 2009/01/31 16:08:21 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.220  2009/02/04 18:29:07  fabiankeil
+ *    Initialize the log module before parsing arguments.
+ *    Thanks to Matthias Drochner for the report.
+ *
  *    Revision 1.219  2009/01/31 16:08:21  fabiankeil
  *    Remove redundant error check in receive_client_request().
  *
@@ -3858,6 +3862,17 @@ int main(int argc, const char *argv[])
       if (setgid((NULL != grp) ? grp->gr_gid : pw->pw_gid))
       {
          log_error(LOG_LEVEL_FATAL, "Cannot setgid(): Insufficient permissions.");
+      }
+      if (NULL != grp)
+      {
+         if (setgroups(1, &grp->gr_gid))
+         {
+            log_error(LOG_LEVEL_FATAL, "setgroups() failed: %E");
+         }
+      }
+      else if (initgroups(pw->pw_name, pw->pw_gid))
+      {
+         log_error(LOG_LEVEL_FATAL, "initgroups() failed: %E");
       }
       if (do_chroot)
       {
