@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.83 2008/12/04 18:14:32 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.84 2008/12/14 15:46:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.83 2008/12/04 18:14:32 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.84  2008/12/14 15:46:22  fabiankeil
+ *    Give crunched requests their own log level.
+ *
  *    Revision 1.83  2008/12/04 18:14:32  fabiankeil
  *    Fix some cparser warnings.
  *
@@ -1025,6 +1028,11 @@ void log_error(int loglevel, const char *fmt, ...)
 #endif
       )
    {
+      if (loglevel == LOG_LEVEL_FATAL)
+      {
+         fatal_error("Fatal error. You're not supposed to"
+            "see this message. Please file a bug report.");
+      }
       return;
    }
 
