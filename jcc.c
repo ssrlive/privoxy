@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.220 2009/02/04 18:29:07 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.221 2009/02/06 18:02:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.220 2009/02/04 18:29:07 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.221  2009/02/06 18:02:58  fabiankeil
+ *    When dropping privileges, also give up membership in supplementary
+ *    groups. Thanks to Matthias Drochner for reporting the problem,
+ *    providing the initial patch and testing the final version.
+ *
  *    Revision 1.220  2009/02/04 18:29:07  fabiankeil
  *    Initialize the log module before parsing arguments.
  *    Thanks to Matthias Drochner for the report.
@@ -3571,6 +3576,9 @@ int main(int argc, const char *argv[])
 #endif
       ;
 
+   /* Prepare mutexes if supported and necessary. */
+   initialize_mutexes();
+
    /* Enable logging until further notice. */
    init_log_module(Argv[0]);
 
@@ -3726,9 +3734,6 @@ int main(int argc, const char *argv[])
 #elif defined(_WIN32)
    InitWin32();
 #endif
-
-   /* Prepare mutexes if supported and necessary. */
-   initialize_mutexes();
 
    random_seed = (unsigned int)time(NULL);
 #ifdef HAVE_RANDOM
