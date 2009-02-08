@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.32 2008/07/23 18:07:07 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.33 2009/02/07 11:12:02 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,6 @@ Current Privoxy Team:
  Gábor Lipták
  Adam Lock
  Guy Laroche
- Mark Martinec
  Justin McMurtry
  Andreas Oesterhelt
  Haroon Rafique
@@ -74,7 +73,7 @@ Current Privoxy Team:
 </literallayout>
 <![%p-authors-formal;[
 <para>
- Thanks to the many people who have tested Privoxy, reported bugs, provided 
+ Thanks to the many people who have tested Privoxy, reported bugs, provided
  patches, made suggestions or contributed in some way. These include (in
  alphabetical order):
 </para>
