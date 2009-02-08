@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.176 2008/09/21 13:24:37 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.177 2009/01/13 16:44:32 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -167,7 +167,7 @@ RPM_BASE = @RPM_BASE@
 #############################################################################
 # We include these files in our distributions
 #############################################################################
-CONFIGS = config trust default.action user.action default.filter user.filter
+CONFIGS = config trust default.action match-all.action user.action default.filter user.filter
 # take care that no CVS .cvsignore or other crappy files
 # are included here
 # and escape every '#' in the find. doh.
@@ -1314,6 +1314,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.177  2009/01/13 16:44:32  fabiankeil
+# Delete the standard.action file after moving
+# the pre-settings over to the default actions.
+#
 # Revision 1.176  2008/09/21 13:24:37  fabiankeil
 # Add Roland's man page fixes from 19_manpage_fixup.dpatch.
 #

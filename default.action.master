@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.160 2009/01/13 16:44:32 fabiankeil Exp $
+#  $Id: default.action.master,v 1.161 2009/01/14 21:50:58 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -550,16 +550,6 @@ myfilters   = +filter{html-annoyances} +filter{js-annoyances} +filter{all-popups
 # Allow ads for selected useful free sites:
 #
 allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
-
-#############################################################################
-# Defaults
-#############################################################################
-{ \
-+change-x-forwarded-for{block} \
-+hide-from-header{block} \
-+set-image-blocker{pattern} \
-}
-/ # Match all URLs
 
 ################
 #
