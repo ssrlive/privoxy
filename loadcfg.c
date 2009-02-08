@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.84 2009/01/14 16:14:36 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.85 2009/01/22 12:06:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.84 2009/01/14 16:14:36 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.85  2009/01/22 12:06:26  fabiankeil
+ *    Don't keep connections alive when running single-threaded.
+ *
  *    Revision 1.84  2009/01/14 16:14:36  fabiankeil
  *    Due to the standard.action file removal, the other action
  *    files changed their position in config->actions_file[].
@@ -1836,8 +1839,8 @@ struct configuration_spec * load_config(void)
 /* FIXME: this is a kludge for win32 */
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
-   g_default_actions_file  = config->actions_file[0]; /* FIXME Hope this is default.action */
-   g_user_actions_file = config->actions_file[1]; /* FIXME Hope this is user.action */
+   g_default_actions_file = config->actions_file[1]; /* FIXME Hope this is default.action */
+   g_user_actions_file = config->actions_file[2]; /* FIXME Hope this is user.action */
    g_re_filterfile    = config->re_filterfile[0]; /* FIXME Hope this is default.filter */
 
 #ifdef FEATURE_TRUST
