@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.20 2008/03/27 18:27:23 fabiankeil Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.21 2008/12/14 15:46:22 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -35,6 +35,9 @@
  *
  * Revisions   :
  *    $Log: errlog.h,v $
+ *    Revision 1.21  2008/12/14 15:46:22  fabiankeil
+ *    Give crunched requests their own log level.
+ *
  *    Revision 1.20  2008/03/27 18:27:23  fabiankeil
  *    Remove kill-popups action.
  *
@@ -183,8 +186,9 @@ extern "C" {
 
 extern void init_error_log(const char *prog_name, const char *logfname);
 extern void set_debug_level(int debuglevel);
-void disable_logging(void);
-void init_log_module(const char *prog_name);
+extern void disable_logging(void);
+extern void init_log_module(void);
+extern void show_version(const char *prog_name);
 extern void log_error(int loglevel, const char *fmt, ...);
 extern const char *jb_err_to_string(int error);
 

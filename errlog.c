@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.84 2008/12/14 15:46:22 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.85 2009/02/06 17:51:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -6,7 +6,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.84 2008/12/14 15:46:22 fabiankeil E
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.84 2008/12/14 15:46:22 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.85  2009/02/06 17:51:38  fabiankeil
+ *    Be prepared if I break the log module initialization again.
+ *
  *    Revision 1.84  2008/12/14 15:46:22  fabiankeil
  *    Give crunched requests their own log level.
  *
@@ -552,7 +555,7 @@ static void fatal_error(const char * error_message)
  * Returns     :  Nothing.
  *
  *********************************************************************/
-static void show_version(const char *prog_name)
+void show_version(const char *prog_name)
 {
    log_error(LOG_LEVEL_INFO, "Privoxy version " VERSION);
    if (prog_name != NULL)
@@ -576,13 +579,12 @@ static void show_version(const char *prog_name)
  * Returns     :  Nothing.
  *
  *********************************************************************/
-void init_log_module(const char *prog_name)
+void init_log_module(void)
 {
    lock_logfile();
    logfp = stderr;
    unlock_logfile();
    set_debug_level(debug);
-   show_version(prog_name);
 }
 
 
@@ -714,7 +716,7 @@ void init_error_log(const char *prog_name, const char *logfname)
    /*
     * Prevent the Windows GUI from showing the version two
     * times in a row on startup. It already displayed the show_version()
-    * call from init_log_module() that other systems write to stderr.
+    * call from main() that other systems write to stderr.
     *
     * This means mingw32 users will never see the version in their
     * log file, but I assume they wouldn't look for it there anyway
