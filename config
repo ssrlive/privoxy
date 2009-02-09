@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.11
 #
-#  $Id: p-config.sgml,v 2.36 2009/01/23 14:06:07 fabiankeil Exp $
+#  $Id: config,v 1.71 2009/02/08 18:35:48 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -147,7 +147,7 @@
 #
 #  Default value:
 #
-#      Two example URLs are provided
+#      Unset
 #
 #  Effect if unset:
 #
@@ -166,8 +166,8 @@
 #      don't end up locked out from the information on why they were
 #      locked out in the first place!
 #
-trust-info-url  http://www.example.com/why_we_block.html
-trust-info-url  http://www.example.com/what_we_allow.html
+#trust-info-url  http://www.example.com/why_we_block.html
+#trust-info-url  http://www.example.com/what_we_allow.html
 #
 #
 #  1.3. admin-address
