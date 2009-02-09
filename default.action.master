@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.162 2009/02/08 18:35:48 fabiankeil Exp $
+#  $Id: default.action.master,v 1.163 2009/02/09 18:39:08 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -397,22 +397,24 @@
 #    (Don't change the version number from 1.0 - after all, why tell them?)
 #
 # +limit-connect{portlist}
-#   The CONNECT methods exists in HTTP to allow access to secure websites
-#   (https:// URLs) through proxies. It works very simply: The proxy
-#   connects to the server on the specified port, and then short-circuits
-#   its connections to the client and to the remote proxy.
-#   This can be a big security hole, since CONNECT-enabled proxies can
-#   be abused as TCP relays very easily.
-#   By default, i.e. in the absence of a +limit-connect action, Privoxy
-#   will only allow CONNECT requests to port 443, which is the standard port
-#   for https.
-#   If you want to allow CONNECT for more ports than that, or want to forbid
-#   CONNECT altogether, you can specify a comma separated list of ports and port
-#   ranges (the latter using dashes, with the minimum defaulting to 0 and max to 65K):
 #
-#   +limit-connect{443} # This is the default and need no be specified.
-#   +limit-connect{80,443} # Ports 80 and 443 are OK.
-#   +limit-connect{-3, 7, 20-100, 500-} # Port less than 3, 7, 20 to 100, and above 500 are OK.
+#    By default, i.e. if no limit-connect action applies, Privoxy
+#    allows HTTP CONNECT requests to all ports. Use limit-connect
+#    if fine-grained control is desired for some or all destinations.
+#    The CONNECT methods exists in HTTP to allow access to secure websites
+#    ("https://" URLs) through proxies. It works very simply: the proxy
+#    connects to the server on the specified port, and then short-circuits
+#    its connections to the client and to the remote server. This means
+#    CONNECT-enabled proxies can be used as TCP relays very easily. Privoxy
+#    relays HTTPS traffic without seeing the decoded content. Websites can
+#    leverage this limitation to circumvent Privoxy's filters. By specifying
+#    an invalid port range you can disable HTTPS entirely. 
+#
+#    +limit-connect{443}                   # Only port 443 is OK.
+#    +limit-connect{80,443}                # Ports 80 and 443 are OK.
+#    +limit-connect{-3, 7, 20-100, 500-}   # Ports less than 3, 7, 20 to 100 and above 500 are OK.
+#    +limit-connect{-}                     # All ports are OK
+#    +limit-connect{,}                     # No HTTPS/SSL traffic is allowed
 #
 # +overwrite-last-modified{block}
 # +overwrite-last-modified{reset-to-request-time}
