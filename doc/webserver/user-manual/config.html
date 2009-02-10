@@ -363,7 +363,13 @@ CLASS="VARIABLELIST"
 >Default value:</DT
 ><DD
 ><P
->Two example URLs are provided</P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Unset</I
+></SPAN
+></P
 ></DD
 ><DT
 >Effect if unset:</DT
@@ -816,7 +822,7 @@ BORDER="0"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;default.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Main&nbsp;actions&nbsp;file</P
+>&nbsp;&nbsp;match-all.action&nbsp;#&nbsp;Actions&nbsp;that&nbsp;are&nbsp;applied&nbsp;to&nbsp;all&nbsp;sites&nbsp;and&nbsp;maybe&nbsp;overruled&nbsp;later&nbsp;on.</P
 >
     </TD
 ></TR
@@ -824,7 +830,15 @@ CLASS="LITERALLAYOUT"
 ><TD
 >     <P
 CLASS="LITERALLAYOUT"
->&nbsp;&nbsp;user.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;User&nbsp;customizations</P
+>&nbsp;&nbsp;default.action&nbsp;&nbsp;&nbsp;#&nbsp;Main&nbsp;actions&nbsp;file</P
+>
+    </TD
+></TR
+><TR
+><TD
+>     <P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;user.action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;User&nbsp;customizations</P
 >
     </TD
 ></TR
@@ -3649,6 +3663,62 @@ CLASS="APPLICATION"
 ><DD
 ><P
 >    keep-alive-timeout 300
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="SOCKET-TIMEOUT"
+>7.5.9. socket-timeout</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Number of seconds after which a socket times out if
+    no data is received.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>Time in seconds.</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>None</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    A default value of 180 seconds is used.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    socket-timeout 180
    </P
 ></DD
 ></DL
