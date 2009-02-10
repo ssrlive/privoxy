@@ -26,9 +26,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.47 2008/11/24 18:29:39 fabiankeil Exp $
+ $Id: faq.sgml,v 2.48 2009/01/13 16:50:35 fabiankeil Exp $
 
- Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -72,12 +72,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2008 by 
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2009 by 
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.47 2008/11/24 18:29:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.48 2009/01/13 16:50:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2510,6 +2510,7 @@ every time I start IE. What gives?</title>
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<!-- XXX: Is this still relevant now that we have gzip support? -->
 <sect2 renderas="sect3" id="blankpage">
 <title>I get a completely blank page at one site. <quote>View Source</quote>
  shows only: <markup><![CDATA[<html><body></body></html>]]></markup>. Without
@@ -2556,7 +2557,7 @@ Why?</title>
  some platforms due to DNS timeouts.
 </para>
 <para>
- This can be caused by a problem with the local <filename>HOSTS</filename>
+ This can be caused by a problem with the local <filename>hosts</filename>
  file. If this file has been changed from the original, try reverting it to
  see if that helps. Make sure whatever name(s) are used for the local system,
  that they resolve both ways.
@@ -2741,6 +2742,39 @@ browsing has slowed to a crawl. What gives? </title>
 </sect2>
 
 
+<sect2 renderas="sect3" id="ssl-warnings">
+<title>On some HTTPS sites my browser warns me about unauthenticated content,
+ the URL bar doesn't get highlighted and the lock symbol appears to be broken.
+ What's going on?</title>
+<para>
+ Probably the browser is requesting ads through HTTPS and &my-app;
+ is blocking the requests. Privoxy's error messages are delivered
+ unencrypted and while it's obvious for the browser that the HTTPS
+ request is already blocked by the proxy, some warn about unauthenticated
+ content anyway.
+</para>
+<para>
+ To work around the problem you can redirect those requests to an invalid
+ local address instead of blocking them. While the redirects aren't
+ encrypted either, many browsers don't care. They simply follow the
+ redirect, fail to reach a server and display an error message instead
+ of the ad.
+</para>
+<para>
+ To do that, enable logging to figure out which requests get blocked by
+ &my-app; and add the hosts (no path patterns) to a section like this:
+</para>
+<para>
+<screen>
+<![CDATA[
+{+redirect{http://127.0.0.1:0/} -block -limit-connect}
+.ivwbox.de:443/
+]]>
+</screen>
+</para>
+</sect2>
+
+
 </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
@@ -2819,6 +2853,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.48  2009/01/13 16:50:35  fabiankeil
+The standard.action file is gone.
+
 Revision 2.47  2008/11/24 18:29:39  fabiankeil
 Two changes suggested by Roger Dingledine:
 - Use https://www.torproject.org/ in section 4.7, too.
