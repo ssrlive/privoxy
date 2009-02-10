@@ -84,7 +84,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN1079"
+NAME="AEN1076"
 >5.1. I cannot connect to any websites. Or, I am getting
 <SPAN
 CLASS="QUOTE"
@@ -163,7 +163,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN1102"
+NAME="AEN1099"
 >5.3. I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></H3
@@ -705,7 +705,7 @@ CLASS="APPLICATION"
 ><P
 > This can be caused by a problem with the local <TT
 CLASS="FILENAME"
->HOSTS</TT
+>hosts</TT
 >
  file. If this file has been changed from the original, try reverting it to
  see if that helps. Make sure whatever name(s) are used for the local system,
@@ -1041,6 +1041,53 @@ TARGET="_top"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > 3.0.9, zlib support is enabled in the default builds.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="SSL-WARNINGS"
+>5.21. On some HTTPS sites my browser warns me about unauthenticated content,
+ the URL bar doesn't get highlighted and the lock symbol appears to be broken.
+ What's going on?</A
+></H3
+><P
+> Probably the browser is requesting ads through HTTPS and <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+ is blocking the requests. Privoxy's error messages are delivered
+ unencrypted and while it's obvious for the browser that the HTTPS
+ request is already blocked by the proxy, some warn about unauthenticated
+ content anyway.</P
+><P
+> To work around the problem you can redirect those requests to an invalid
+ local address instead of blocking them. While the redirects aren't
+ encrypted either, many browsers don't care. They simply follow the
+ redirect, fail to reach a server and display an error message instead
+ of the ad.</P
+><P
+> To do that, enable logging to figure out which requests get blocked by
+ <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and add the hosts (no path patterns) to a section like this:</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>{+redirect{http://127.0.0.1:0/} -block -limit-connect}
+.ivwbox.de:443/</PRE
+></TD
+></TR
+></TABLE
+></P
 ></DIV
 ></DIV
 ><DIV
