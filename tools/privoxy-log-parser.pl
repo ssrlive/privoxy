@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.134 2009/01/10 16:31:22 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.135 2009/02/11 19:12:53 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -24,7 +24,7 @@
 #       - Use generic highlighting function that takes a regex and the
 #         hash key as input.
 #
-# Copyright (c) 2007-2008 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2009 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -44,7 +44,7 @@ use warnings;
 use Getopt::Long;
 
 use constant {
-    PRIVOXY_LOG_PARSER_VERSION => '0.4',
+    PRIVOXY_LOG_PARSER_VERSION => '0.5',
     # Feel free to mess with these ...
     DEFAULT_BACKGROUND => 'black',  # Choose registered colour (like 'black')
     DEFAULT_TEXT_COLOUR => 'white', # Choose registered colour (like 'black')
@@ -1334,14 +1334,10 @@ sub handle_loglevel_crunch ($) {
     our %h;
     our %reason_colours;
 
-    # Blocked: ads.example.org/
-
     # Highlight crunch reason
     foreach my $reason (keys %reason_colours) {
         $content =~ s@($reason)@$reason_colours{$reason}$1$h{'Standard'}@g;
     }
-    # Highlight request URL
-    $content = highlight_matched_pattern($content, 'request_', '(?<= )[^ \[]*$');
 
     if ($content =~ m/\[too long, truncated\]$/) {
 
@@ -1349,6 +1345,10 @@ sub handle_loglevel_crunch ($) {
         #  [...]&filter... [too long, truncated]
         $content = highlight_matched_pattern($content, 'request_', '^.*(?=\.\.\. \[too long, truncated\]$)');
 
+    } else {
+
+        # Blocked: http://ads.example.org/
+        $content = highlight_matched_pattern($content, 'request_', '(?<=: ).*');
     }
 
     return $content;
@@ -1896,7 +1896,7 @@ sub VersionMessage {
     my $version_message;
 
     $version_message .= 'Privoxy-Log-Parser ' . PRIVOXY_LOG_PARSER_VERSION  . "\n";
-    $version_message .= 'Copyright (C) 2007-2008 Fabian Keil <fk@fabiankeil.de>' . "\n";
+    $version_message .= 'Copyright (C) 2007-2009 Fabian Keil <fk@fabiankeil.de>' . "\n";
     $version_message .= 'http://www.fabiankeil.de/sourcecode/privoxy-log-parser/' . "\n";
 
     print $version_message;
