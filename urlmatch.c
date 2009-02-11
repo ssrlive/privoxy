@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.44 2008/05/04 16:18:32 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.45 2008/06/21 21:19:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -6,8 +6,8 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.44 2008/05/04 16:18:32 fabianke
  * Purpose     :  Declares functions to match URLs against URL
  *                patterns.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2003, 2006-2008 the SourceForge
- *                Privoxy team. http://www.privoxy.org/
+ * Copyright   :  Written by and Copyright (C) 2001-2009
+ *                the Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.44 2008/05/04 16:18:32 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.45  2008/06/21 21:19:18  fabiankeil
+ *    Silence bogus compiler warning.
+ *
  *    Revision 1.44  2008/05/04 16:18:32  fabiankeil
  *    Provide parse_http_url() with a third parameter to specify
  *    whether or not URLs without protocol are acceptable.
@@ -671,6 +674,14 @@ jb_err parse_http_request(const char *req,
    if (unknown_method(v[0]))
    {
       log_error(LOG_LEVEL_ERROR, "Unknown HTTP method detected: %s", v[0]);
+      freez(buf);
+      return JB_ERR_PARSE;
+   }
+
+   if (strcmpic(v[2], "HTTP/1.1") && strcmpic(v[2], "HTTP/1.0"))
+   {
+      log_error(LOG_LEVEL_ERROR, "The only supported HTTP "
+         "versions are 1.0 and 1.1. This rules out: %s", v[2]);
       freez(buf);
       return JB_ERR_PARSE;
    }
