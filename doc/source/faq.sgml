@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.48 2009/01/13 16:50:35 fabiankeil Exp $
+ $Id: faq.sgml,v 2.49 2009/02/10 16:30:20 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.48 2009/01/13 16:50:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.49 2009/02/10 16:30:20 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2772,6 +2772,17 @@ browsing has slowed to a crawl. What gives? </title>
 ]]>
 </screen>
 </para>
+<para>
+ Additionally you have to configure your browser to contact
+ <quote>127.0.0.1:0</quote> directly (instead of through &my-app;).
+</para>
+<para>
+ To add a proxy exception in <application>Mozilla Firefox</application>
+ open the <quote>Preferences</quote>, click the <quote>Settings</quote>
+ button located on the <quote>Network</quote> tab in the <quote>Advanced</quote>
+ section, and add <quote>127.0.0.1:0</quote> in the <quote>No Proxy for:</quote>
+ field.
+</para>
 </sect2>
 
 
@@ -2853,6 +2864,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.49  2009/02/10 16:30:20  fabiankeil
+Add a workaround for "unauthenticated content" warnings on HTTPS sites.
+
 Revision 2.48  2009/01/13 16:50:35  fabiankeil
 The standard.action file is gone.
 
