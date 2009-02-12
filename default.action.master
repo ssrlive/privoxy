@@ -9,7 +9,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.163 2009/02/09 18:39:08 fabiankeil Exp $
+#  $Id: default.action.master,v 1.164 2009/02/09 18:51:17 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -1184,6 +1184,8 @@ img.directtrack.com
 # URL = http://feedads.googleadservices.com/~a/dPlpGU767u4D4kVO8EGuUlnf1Q0/i
 # URL = http://feedads.googleadservices.com/~at/EpX-FnAXxwdaBSq-GRze37-rG0M/i
 .googleadservices.com/~
+#MASTER# REMARKS: Yahoo email banner ad: http://ts.richmedia.yahoo.com/...hummingbird.jpg?adxq=NNN
+.richmedia.yahoo.com/.*\.(gif|jpe?g)\?ad	# block yahoo email & ygroups banner ad
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
