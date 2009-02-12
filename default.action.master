@@ -1,15 +1,17 @@
 #MASTER# COMMENT:   
-#MASTER# COMMENT:   Anyone adding specific rules to this file,
-#MASTER# COMMENT:   wherever possible please include a *full* URL 
-#MASTER# COMMENT:   which can be used to verify the problem, and if
-#MASTER# COMMENT:   the problem may not always be fully obvious, a 
-#MASTER# COMMENT:   brief explanation. Thanks.
+#MASTER# COMMENT:  Anyone adding specific rules to this file,
+#MASTER# COMMENT:  wherever possible please include a *full* URL 
+#MASTER# COMMENT:  which can be used to verify the problem, and if
+#MASTER# COMMENT:  the problem may not always be fully obvious, a 
+#MASTER# COMMENT:  brief explanation. Please also add tests for
+#MASTER# COMMENT:  Privoxy-Regression-Test so we can automatically
+#MASTER# COMMENT:  verify that your rules are effective. Thanks. 
 #MASTER# COMMENT:   
 ######################################################################
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 # 
-#  $Id: default.action.master,v 1.164 2009/02/09 18:51:17 fabiankeil Exp $
+#  $Id: default.action.master,v 1.165 2009/02/12 16:58:03 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to 
 #                 syntax changes.
@@ -1184,8 +1186,9 @@ img.directtrack.com
 # URL = http://feedads.googleadservices.com/~a/dPlpGU767u4D4kVO8EGuUlnf1Q0/i
 # URL = http://feedads.googleadservices.com/~at/EpX-FnAXxwdaBSq-GRze37-rG0M/i
 .googleadservices.com/~
-#MASTER# REMARKS: Yahoo email banner ad: http://ts.richmedia.yahoo.com/...hummingbird.jpg?adxq=NNN
-.richmedia.yahoo.com/.*\.(gif|jpe?g)\?ad	# block yahoo email & ygroups banner ad
+#MASTER# REMARKS: Block yahoo email & ygroups banner ad
+# URL = http://ts.richmedia.yahoo.com/...hummingbird.jpg?adxq=NNN
+.richmedia.yahoo.com/.*\.(gif|jpe?g)\?ad 
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
