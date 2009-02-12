@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.37 2009/02/08 18:35:48 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.38 2009/02/09 16:49:47 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.37 2009/02/08 18:35:48 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.38 2009/02/09 16:49:47 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -2466,6 +2466,16 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   <listitem>
    <para>
     A default value of 180 seconds is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    For SOCKS requests the timeout currently doesn't start until
+    the SOCKS server accepted the request. This will be fixed in
+    the next release.
    </para>
   </listitem>
  </varlistentry>
