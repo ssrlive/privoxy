@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.67 2008/08/06 17:38:06 fabiankeil Exp $
+#  $Id: default.filter,v 1.68 2008/09/19 13:26:04 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -600,10 +600,12 @@ s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
  \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
+ \#nwad, \
  \#ks-ypn-ads, .ad, \#east, \#ygrp-vital {display: none !important;}\n\
  \#yschpri, \#yschweb, \#pri, \#web, \#main {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
-</style>\n$0@
+ \#northbanner{min-height:1px !important; height:1px !important; display: none !important;}\n\
+ </style>\n$0@
 
 #################################################################################
 #
@@ -835,6 +837,9 @@ s@^X-Privoxy-Control:.*@@i
 #
 #  Revisions   :
 #     $Log: default.filter,v $
+#     Revision 1.68  2008/09/19 13:26:04  fabiankeil
+#     s@tounge@tongue@. Anonymously reported in #1648657.
+#
 #     Revision 1.67  2008/08/06 17:38:06  fabiankeil
 #     In banners-by-size, make sure white-space around the height
 #     attribute is removed as well and replace two spaces with
