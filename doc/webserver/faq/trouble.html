@@ -1088,6 +1088,75 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ></P
+><P
+> Additionally you have to configure your browser to contact
+ <SPAN
+CLASS="QUOTE"
+>"127.0.0.1:0"</SPAN
+> directly (instead of through <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>).</P
+><P
+> To add a proxy exception in <SPAN
+CLASS="APPLICATION"
+>Mozilla Firefox</SPAN
+>
+ open the <SPAN
+CLASS="QUOTE"
+>"Preferences"</SPAN
+>, click the <SPAN
+CLASS="QUOTE"
+>"Settings"</SPAN
+>
+ button located on the <SPAN
+CLASS="QUOTE"
+>"Network"</SPAN
+> tab in the <SPAN
+CLASS="QUOTE"
+>"Advanced"</SPAN
+>
+ section, and add <SPAN
+CLASS="QUOTE"
+>"127.0.0.1:0"</SPAN
+> in the <SPAN
+CLASS="QUOTE"
+>"No Proxy for:"</SPAN
+>
+ field.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="SE-LINUX"
+>5.22. I get selinux error messages. How can I fix this?</A
+></H3
+><P
+> Please report the problem to the creator of your selinux policies.</P
+><P
+> The problem is that some selinux policy writers aren't familiar
+ with the application they are trying to <SPAN
+CLASS="QUOTE"
+>"secure"</SPAN
+> and
+ thus create policies that make no sense.</P
+><P
+> In <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> case the problem usually
+ is that the policy only allows outgoing connections for certain
+ destination ports (e.g. 80 and 443). While the standard ports
+ maybe covered, websites occasionally use other ports as well.
+ This isn't a security problem and therefore <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+ default configuration doesn't block these requests.</P
+><P
+></P
 ></DIV
 ></DIV
 ><DIV
