@@ -9,9 +9,9 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.11">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
@@ -23,9 +23,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.24 2009/01/13 16:50:35 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.25 2009/02/12 15:37:05 fabiankeil Exp $
 
- Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -44,13 +44,13 @@
      <subscript>
     <!-- Completely the wrong markup, but very little is allowed  -->
     <!-- in this part of an article. FIXME -->
-      <link linkend="copyright">Copyright</link> &my-copy; 2001-2008 by 
+      <link linkend="copyright">Copyright</link> &my-copy; 2001-2009 by 
       <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
      </subscript>
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.24 2009/01/13 16:50:35 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.25 2009/02/12 15:37:05 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3010,6 +3010,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.25  2009/02/12 15:37:05  fabiankeil
+  Update templates.
+
   Revision 2.24  2009/01/13 16:50:35  fabiankeil
   The standard.action file is gone.
 

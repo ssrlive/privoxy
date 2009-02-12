@@ -12,10 +12,10 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.11">
-<!entity p-status "UNRELEASED">
+<!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.90 2008/09/26 16:53:09 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.91 2009/01/13 16:50:35 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -54,12 +54,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001 - 2008 by 
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2009 by 
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.90 2008/09/26 16:53:09 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.91 2009/01/13 16:50:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8447,6 +8447,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.91  2009/01/13 16:50:35  fabiankeil
+ The standard.action file is gone.
+
  Revision 2.90  2008/09/26 16:53:09  fabiankeil
  Update "What's new" section.
 

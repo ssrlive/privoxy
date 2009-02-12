@@ -2,8 +2,8 @@
 <!entity % dummy "IGNORE"> 
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.11">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
 <!entity % user-man "IGNORE">
 <!entity % config-file "IGNORE">
 <!entity  my-app "<application>Privoxy</application>">
@@ -13,9 +13,9 @@
 
  Purpose     :  config file generation
                 
- $Id: config.sgml,v 2.10 2008/08/16 08:51:28 fabiankeil Exp $
+ $Id: config.sgml,v 2.11 2008/08/30 15:37:35 fabiankeil Exp $
 
- Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================

@@ -9,9 +9,9 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.11">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.49 2009/02/10 16:30:20 fabiankeil Exp $
+ $Id: faq.sgml,v 2.50 2009/02/11 18:13:36 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.49 2009/02/10 16:30:20 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.50 2009/02/11 18:13:36 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2786,6 +2786,29 @@ browsing has slowed to a crawl. What gives? </title>
 </sect2>
 
 
+<sect2 renderas="sect3" id="se-linux">
+<title>I get selinux error messages. How can I fix this?</title>
+<para>
+ Please report the problem to the creator of your selinux policies.
+</para>
+<para>
+ The problem is that some selinux policy writers aren't familiar
+ with the application they are trying to <quote>secure</quote> and
+ thus create policies that make no sense.
+</para>
+<para>
+ In <application>Privoxy's</application> case the problem usually
+ is that the policy only allows outgoing connections for certain
+ destination ports (e.g. 80 and 443). While the standard ports
+ maybe covered, websites occasionally use other ports as well.
+ This isn't a security problem and therefore <application>Privoxy's</application>
+ default configuration doesn't block these requests.
+</para>
+<para>
+</para>
+</sect2>
+
+
 </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
@@ -2864,6 +2887,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.50  2009/02/11 18:13:36  fabiankeil
+State the obvious.
+
 Revision 2.49  2009/02/10 16:30:20  fabiankeil
 Add a workaround for "unauthenticated content" warnings on HTTPS sites.
 
