@@ -1,13 +1,13 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.46 2008/12/13 11:07:23 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.47 2008/12/24 17:06:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
  *
  * Purpose     :  Contains functions to connect to a server, possibly
  *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
- *                proxy).
+ *                or SOCKS5 proxy).
  *
- * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.46 2008/12/13 11:07:23 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.47  2008/12/24 17:06:19  fabiankeil
+ *    Keep a thread around to timeout alive connections
+ *    even if no new requests are coming in.
+ *
  *    Revision 1.46  2008/12/13 11:07:23  fabiankeil
  *    Remove duplicated debugging checks
  *    in connection_destination_matches().
@@ -369,13 +373,12 @@ extern void initialize_reusable_connections(void)
 {
    unsigned int slot = 0;
 
+#if !defined(HAVE_POLL) && !defined(_WIN32)
    log_error(LOG_LEVEL_INFO,
-      "Support for 'Connection: keep-alive' is experimental."
-#ifndef HAVE_POLL
-      " Detecting already dead connections might not work"
-      " correctly on your platform."
-#endif /* ndef HAVE_POLL */
-   );
+      "Detecting already dead connections might not work "
+      "correctly on your platform. In case of problems, "
+      "unset the keep-alive-timeout option.");
+#endif
 
    for (slot = 0; slot < SZ(reusable_connection); slot++)
    {
