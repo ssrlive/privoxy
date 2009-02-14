@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.95 2009/02/14 12:51:26 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.96 2009/02/14 13:14:03 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.95 2009/02/14 12:51:26 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.96 2009/02/14 13:14:03 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -444,9 +444,71 @@ How to install the binary packages depends on your operating system:
  <itemizedlist>
   <listitem>
    <para>
-    The mingw32 version uses mutex locks now which prevents
-    log message corruption under load. As a side effect,
-    the "no thread-safe PRNG" warning could be removed as well.
+    On most platforms, outgoing connections can be kept alive and
+    reused if the server supports it. Whether or not this improves
+    things depends on the connection.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    When dropping privileges, membership in supplementary groups
+    is given up as well. Not doing that can lead to Privoxy running
+    with more rights than necessary and violates the principle of
+    least privilege. Users of the --user option are advised to update.
+    Thanks to Matthias Drochner for reporting the problem,
+    providing the initial patch and testing the final version.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Passing invalid users or groups with the --user option
+    didn't lead to program exit. Regression introduced in 3.0.7.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The match all section has been moved from default.action
+    to a new file called match-all.action. As a result the
+    default.action no longer needs to be touched by the user
+    and can be safely overwritten by updates.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The standard.action file has been removed. Its content
+    is now part of the default.action file.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    In some situations the logged content length was slightly too low.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Crunched requests are logged with their own log level.
+    If you used "debug 1" in the past, you'll probably want
+    to additionally enable "debug 1024", otherwise only passed
+    requests will be logged. If you only care about crunched
+    requests, simply replace "debug 1" with "debug 1024".
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The crunch reason has been moved to the beginning of the
+    crunch message. For HTTP URLs, the protocol is logged as well.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Log messages are shortened by not printing the thread id
+    on its own (as opposed to putting it inside "Privoxy()".
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The config option socket-timeout has been added to control
+    the time Privoxy waits for data to arrive on a socket.
    </para>
   </listitem>
   <listitem>
@@ -460,12 +522,49 @@ How to install the binary packages depends on your operating system:
   </listitem>
   <listitem>
    <para>
+    Requests with invalid HTTP versions are rejected.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The template symbol @date@ can be used to include a date(1)-like
+    time string. Initial patch submitted by Endre Szabo.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Responses from shoutcast servers are accepted again.
+    Problem reported and fix suggested by Stefan.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
     The hide-forwarded-for-headers action has been replaced with
     the change-x-forwarded-for{} action which can also be used to
     add X-Forwarded-For headers. The latter functionality already
     existed in Privoxy versions prior to 3.0.7 but has been removed
     as it was often used unintentionally (by not using the
     hide-forwarded-for-headers action).
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    A "clear log" view option was added to the mingw32 version
+    to clear out all of the lines in the Privoxy log window.
+    Based on a patch submitted by T Ford.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The mingw32 version uses "critical sections" now, which prevents
+    log message corruption under load. As a side effect, the
+    "no thread-safe PRNG" warning could be removed as well.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The mingw32 version's task bar icon is crossed out and
+    the color changed to gray if Privoxy is toggled off.
    </para>
   </listitem>
  </itemizedlist>
@@ -542,18 +641,6 @@ How to install the binary packages depends on your operating system:
      be aware of the security issues involved. 
     </para>
   </listitem>
-
-  <listitem>
-   <para>
-    The <quote>filter-client-headers</quote> and
-    <quote>filter-server-headers</quote> actions that were introduced with
-    <application>Privoxy 3.0.5</application> to apply content filters to
-    the headers  have been removed and replaced with new actions.
-    See the <link
-          linkend="whatsnew">What's New section</link> above.
-   </para>
-  </listitem>
-
 
 <!--
  <listitem>
@@ -8415,6 +8502,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.96  2009/02/14 13:14:03  fabiankeil
+ Unbreak syntax.
+
  Revision 2.95  2009/02/14 12:51:26  fabiankeil
  Mention match-all.action in the "Actions Files Tutorial" section.
 
