@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.93 2009/02/14 10:14:42 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.94 2009/02/14 11:50:31 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.93 2009/02/14 10:14:42 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.94 2009/02/14 11:50:31 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5791,24 +5791,68 @@ hal stop here
  linkend="actions">specified</link> and <link linkend="actions-apply">applied
  to URLs</link>, how <link linkend="af-patterns">patterns</link> work, and how to
  define and use <link linkend="aliases">aliases</link>. Now, let's look at an
- example <filename>default.action</filename> and <filename>user.action</filename>
- file and see how all these pieces come together:
+ example <filename>match-all.action</filename>, <filename>default.action</filename>
+ and <filename>user.action</filename> file and see how all these pieces come together:
 </para>
 
-<sect3><title>default.action</title>
-
+<sect3>
+<title>match-all.action</title>
 <para>
-Every config file should start with a short comment stating its purpose:
-</para>
-
-<para>
- <screen># Sample default.action file &lt;ijbswa-developers@lists.sourceforge.net&gt;</screen>
+ Remember <emphasis>all actions are disabled when matching starts</emphasis>,
+ so we have to explicitly enable the ones we want.
 </para>
 
 <para>
-Then, since this is the <filename>default.action</filename> file, the
-first section is a special section for internal use that you needn't
-change or worry about:
+ While the <filename>match-all.action</filename> file only contains a
+ single section, it is probably the most important one. It has only one
+ pattern, <quote><literal>/</literal></quote>, but this pattern
+ <link linkend="af-patterns">matches all URLs</link>. Therefore, the set of
+ actions used in this <quote>default</quote> section <emphasis>will
+ be applied to all requests as a start</emphasis>. It can  be partly or
+ wholly overridden by other actions files like <filename>default.action</filename>
+ and <filename>user.action</filename>, but it will still be largely responsible
+ for your overall browsing experience.
+</para>
+
+<para>
+ Again, at the start of matching, all actions are disabled, so there is
+ no need to disable any actions here. (Remember: a <quote>+</quote>
+ preceding the action name enables the action, a <quote>-</quote> disables!).
+ Also note how this long line has been made more readable by splitting it into
+ multiple lines with line continuation.
+</para> 
+
+<para>
+ <screen>
+{ \
+ +<link linkend="CHANGE-X-FORWARDED-FOR">change-x-forwarded-for{block}</link> \
+ +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
+ +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
+}
+/ # Match all URLs
+</para>
+
+<para>
+ The default behavior is now set.
+</para>
+
+<title>default.action</title>
+
+<para>
+ If you aren't a developer, there's no need for you to edit the
+ <filename>default.action</filename> file. It is maintained by
+ the &my-app; developers and if you disagree with some of the
+ sections, you should overrule them in your <filename>user.action</filename>.
+</para>
+
+<para>
+ Understanding the <filename>default.action</filename> file can
+ help you with your <filename>user.action</filename>, though.
+</para>
+
+<para>
+ The first section in this file is a special section for internal use
+ that prevents older &my-app; versions from reading the file:
 </para>
 
 <para>
@@ -5816,15 +5860,14 @@ change or worry about:
 ##########################################################################
 # Settings -- Don't change! For internal Privoxy use ONLY.
 ##########################################################################
-
 {{settings}}
-for-privoxy-version=3.0</screen>
+for-privoxy-version=3.0.11</screen>
 </para>
 
 <para>
-After that comes the (optional) alias section. We'll use the example
-section from the above <link linkend="aliases">chapter on aliases</link>,
-that also explains why and how aliases are used:
+ After that comes the (optional) alias section. We'll use the example
+ section from the above <link linkend="aliases">chapter on aliases</link>,
+ that also explains why and how aliases are used:
 </para>
 
 <para>
@@ -5847,68 +5890,6 @@ that also explains why and how aliases are used:
  #
  fragile     = -<link linkend="BLOCK">block</link> -<link linkend="FILTER">filter</link> -crunch-all-cookies -<link linkend="FAST-REDIRECTS">fast-redirects</link> -<link linkend="HIDE-REFERER">hide-referrer</link>
  shop        = -crunch-all-cookies -<link linkend="FILTER-ALL-POPUPS">filter{all-popups}</link></screen>
-</para>
-
-<para>
- Now come the regular sections, i.e. sets of actions, accompanied
- by URL patterns to which they apply. Remember <emphasis>all actions
- are disabled when matching starts</emphasis>, so we have to explicitly
- enable the ones we want.
-</para>
-
-<para>
- The first regular section is probably the most important. It has only
- one pattern, <quote><literal>/</literal></quote>, but this pattern
- <link linkend="af-patterns">matches all URLs</link>. Therefore, the
- set of actions used in this <quote>default</quote> section <emphasis>will
- be applied to all requests as a start</emphasis>. It can  be partly or
- wholly overridden by later matches further down this file, or in user.action,
- but it will still be largely responsible for your overall browsing
- experience.
-</para>
-
-<para>
- Again, at the start of matching, all actions are disabled, so there is
- no need to disable any actions here. (Remember: a <quote>+</quote>
- preceding the action name enables the action, a <quote>-</quote> disables!).
- Also note how this long line has been made more readable by splitting it into
- multiple lines with line continuation.
-</para> 
-
-<para>
- <screen>
-##########################################################################
-# "Defaults" section:
-##########################################################################
- { \
- +<link linkend="CHANGE-X-FORWARDED-FOR">change-x-forwarded-for{block}</link> \
- +<link linkend="DEANIMATE-GIFS">deanimate-gifs</link> \
- +<link linkend="FILTER-HTML-ANNOYANCES">filter{html-annoyances}</link> \
- +<link linkend="FILTER-REFRESH-TAGS">filter{refresh-tags}</link> \
- +<link linkend="FILTER-WEBBUGS">filter{webbugs}</link> \
- +<link linkend="FILTER-IE-EXPLOITS">filter{ie-exploits}</link> \     
- +<link linkend="HIDE-FROM-HEADER">hide-from-header{block}</link> \
- +<link linkend="HIDE-REFERER">hide-referrer{forge}</link> \
- +<link linkend="PREVENT-COMPRESSION">prevent-compression</link> \
- +<link linkend="SESSION-COOKIES-ONLY">session-cookies-only</link> \
- +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
- }
- / # forward slash will match *all* potential URL patterns.</screen>
-</para>
-
-<para>
- The default behavior is now set.
- <!--
- This needs rewording, but it can wait for now.
- fk 2007-11-17
-
- Note that some actions, like not hiding
- the user agent, are part of a <quote>general policy</quote> that applies
- universally and won't get any exceptions defined later. Other choices,
- like not blocking (which is <emphasis>understandably</emphasis> the
- default!) need exceptions, i.e. we need to specify explicitly what we
- want to block in later sections.
- -->
 </para>
 
 <para>
@@ -5951,36 +5932,10 @@ mail.google.com</screen>
 .scan.co.uk</screen>
 </para>
 
-<!-- No longer needed BEGIN OF COMMENTED OUT BLOCK 
-
-<para>
- Then, there are sites which rely on pop-up windows (yuck!) to work.
- Since we made pop-up-killing our default above, we need to make exceptions
- now. <ulink url="http://www.mozilla.org/">Mozilla</ulink> users, who
- can turn on smart handling of unwanted pop-ups in their browsers, can
- safely choose
- -<literal><link linkend="FILTER-ALL-POPUPS">filter{popups}</link></literal> above
- and hence don't need this section. Anyway, disabling an already disabled
- action doesn't hurt, so we'll define our exceptions regardless of what was
- chosen in the defaults section:
-</para>
-
-<para>
- <screen>
-# These sites require pop-ups too :( 
-#
-{ -<link linkend="FILTER-ALL-POPUPS">filter{popups}</link> }
-.dabs.com
-.overclockers.co.uk
-.deutsche-bank-24.de</screen>
-</para>
-
- END OF COMMENTED OUT BLOCK -->
-
 <para>
  The <literal><link linkend="FAST-REDIRECTS">fast-redirects</link></literal>
- action, which we enabled per default above,  breaks some sites. So disable
- it for popular sites where we know it misbehaves:
+ action, which may have been enabled in <filename>match-all.action</filename>,
+ breaks some sites. So disable it for popular sites where we know it misbehaves:
 </para>
 
 <para>
@@ -6000,8 +5955,8 @@ edit.*.yahoo.com
  be blocked, a substitute image can be sent, rather than an HTML page.
  Contacting the remote site to find out is not an option, since it
  would destroy the loading time advantage of banner blocking, and it
- would feed the advertisers (in terms of money <emphasis>and</emphasis>
- information). We can mark any URL as an image with the <literal><link
+ would feed the advertisers information about you. We can mark any
+ URL as an image with the <literal><link
  linkend="handle-as-image">handle-as-image</link></literal> action,
  and marking all URLs that end in a known image file extension is a
  good start:
@@ -8457,6 +8412,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.94  2009/02/14 11:50:31  fabiankeil
+ Some indentation fixes.
+
  Revision 2.93  2009/02/14 10:14:42  fabiankeil
  Mention match-all.action in the action file descriptions.
 
