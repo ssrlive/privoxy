@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.161 2008/10/25 15:44:26 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.162 2009/02/13 18:51:37 fk Exp $
 #
 # Wish list:
 #
@@ -19,7 +19,7 @@
 # - Document magic Expect Header values
 # - Internal fuzz support?
 #
-# Copyright (c) 2007-2008 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2009 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -49,7 +49,8 @@ use constant {
                CLI_LOOPS     => 1,
                CLI_MAX_TIME  => 5,
                CLI_MIN_LEVEL => 0,
-               CLI_MAX_LEVEL => 25,
+               # XXX: why limit at all.
+               CLI_MAX_LEVEL => 100,
                CLI_FORKS     => 0,
 
                PRIVOXY_CGI_URL => 'http://p.p/',
@@ -518,8 +519,8 @@ sub execute_regression_tests () {
             'Skipped ' . $skipped . '. ' . 
             $successes . " successes, " . $failures . " failures.");
 
-        $all_tests    += $tests;
-        $all_failures += $failures;
+        $all_tests     += $tests;
+        $all_failures  += $failures;
         $all_successes += $successes;
 
     }
@@ -562,7 +563,7 @@ sub dependency_unsatisfied ($) {
         foreach (@privoxy_config) {
 
              $dependency_problem = 0 if (/$dependency/);
-             last;
+             last; # XXX: this looks ... interesting.
         }
 
     } elsif (defined ($dependencies{$level}{'feature status'})) {
@@ -1275,9 +1276,7 @@ sub log_message ($) {
         $message = $time_stamp . ": " . $message;
     }
 
-
     printf(STDERR "%s\n", $message);
-
 }
 
 sub log_result ($$) {
@@ -1368,7 +1367,7 @@ sub quote ($) {
 }
 
 sub print_version () {
-    printf PRT_VERSION . "\n" . 'Copyright (C) 2007-2008 Fabian Keil <fk@fabiankeil.de>' . "\n";
+    printf PRT_VERSION . "\n" . 'Copyright (C) 2007-2009 Fabian Keil <fk@fabiankeil.de>' . "\n";
 }
 
 sub help () {
