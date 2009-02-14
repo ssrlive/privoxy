@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.94 2009/02/14 11:50:31 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.95 2009/02/14 12:51:26 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.94 2009/02/14 11:50:31 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.95 2009/02/14 12:51:26 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5830,12 +5830,15 @@ hal stop here
  +<link linkend="SET-IMAGE-BLOCKER">set-image-blocker{pattern}</link> \
 }
 / # Match all URLs
+ </screen>
 </para>
 
 <para>
  The default behavior is now set.
 </para>
+</sect3>
 
+<sect3>
 <title>default.action</title>
 
 <para>
@@ -8412,6 +8415,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.95  2009/02/14 12:51:26  fabiankeil
+ Mention match-all.action in the "Actions Files Tutorial" section.
+
  Revision 2.94  2009/02/14 11:50:31  fabiankeil
  Some indentation fixes.
 
