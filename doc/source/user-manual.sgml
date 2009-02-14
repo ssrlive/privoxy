@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.92 2009/02/12 16:08:26 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.93 2009/02/14 10:14:42 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.92 2009/02/12 16:08:26 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.93 2009/02/14 10:14:42 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1765,71 +1765,71 @@ for details.
  There 
  are three action files included with <application>Privoxy</application> with
  differing purposes:
- </para>
- <para>
-  <itemizedlist>
-   <listitem>
-    <para>
-     <filename>match-all.action</filename> - is used to define which
-     <quote>actions</quote> relating to banner-blocking, images, pop-ups,
-     content modification, cookie handling etc should be applied by default.
-     It should be the first actions file loaded
-    </para>
-   </listitem> 
-   <listitem>
-    <para>
-     <filename>default.action</filename> - defines many exceptions (both
-     positive and negative) from the default set of actions that's configured
-     in <filename>match-all.action</filename>. It is a set of rules that should
-     work reasonably well as-is for most users. This file is only supposed to
-     be edited by the developers. It should be the second actions file loaded.
-    </para>
-   </listitem> 
-   <listitem>
-    <para>
-     <filename>user.action</filename> - is intended to be for local site 
-     preferences and exceptions. As an example, if your ISP or your bank
-     has specific requirements, and need special handling, this kind of 
-     thing should go here. This file will not be upgraded.
-    </para>
-   </listitem> 
-   <listitem>
-     <para>
-     <guibutton>Edit</guibutton>  <guibutton>Set to Cautious</guibutton> <guibutton>Set to Medium</guibutton>  <guibutton>Set to Advanced</guibutton>
-     </para>
-     <para>
-     These have increasing levels of aggressiveness <emphasis>and have no
-     influence on your browsing unless you select them explicitly in the
-     editor</emphasis>. A default installation should be pre-set to 
-     <literal>Cautious</literal>. New users should try this for a while before
-     adjusting the settings to more aggressive levels. The more aggressive 
-     the settings, then the more likelihood there is of problems such as sites 
-     not working as they should.
-     </para>
-     <para>
-      The <guibutton>Edit</guibutton> button allows you to turn each 
-      action on/off individually for fine-tuning. The <guibutton>Cautious</guibutton>
-      button changes the actions list to low/safe settings which will activate 
-      ad blocking and a minimal set of &my-app;'s features, and subsequently
-      there will be less of a chance for accidental problems. The
-      <guibutton>Medium</guibutton> button sets the list to a medium level of
-      other features and a low level set of privacy features. The
-      <guibutton>Advanced</guibutton> button sets the list to a high level of
-      ad blocking and medium level of privacy. See the chart below. The latter
-      three buttons over-ride any changes via with the
-      <guibutton>Edit</guibutton> button. More fine-tuning can be done in the
-      lower sections of this internal page.
-     </para>
-    <para>
-     While the actions file editor allows to enable these settings in all
-     actions files, they are only supposed to be enabled in the first one
-     to make sure you don't unintentionally overrule earlier rules.
-    </para>
-    <para>
-     The default profiles, and their associated actions, as pre-defined in
-     <filename>default.action</filename> are:
-    </para>
-    <para>
+</para>
+<para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    <filename>match-all.action</filename> - is used to define which
+    <quote>actions</quote> relating to banner-blocking, images, pop-ups,
+    content modification, cookie handling etc should be applied by default.
+    It should be the first actions file loaded
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    <filename>default.action</filename> - defines many exceptions (both
+    positive and negative) from the default set of actions that's configured
+    in <filename>match-all.action</filename>. It is a set of rules that should
+    work reasonably well as-is for most users. This file is only supposed to
+    be edited by the developers. It should be the second actions file loaded.
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    <filename>user.action</filename> - is intended to be for local site 
+    preferences and exceptions. As an example, if your ISP or your bank
+    has specific requirements, and need special handling, this kind of 
+    thing should go here. This file will not be upgraded.
+   </para>
+  </listitem> 
+  <listitem>
+   <para>
+    <guibutton>Edit</guibutton>  <guibutton>Set to Cautious</guibutton> <guibutton>Set to Medium</guibutton>  <guibutton>Set to Advanced</guibutton>
+   </para>
+   <para>
+    These have increasing levels of aggressiveness <emphasis>and have no
+    influence on your browsing unless you select them explicitly in the
+    editor</emphasis>. A default installation should be pre-set to 
+    <literal>Cautious</literal>. New users should try this for a while before
+    adjusting the settings to more aggressive levels. The more aggressive 
+    the settings, then the more likelihood there is of problems such as sites 
+    not working as they should.
+   </para>
+   <para>
+    The <guibutton>Edit</guibutton> button allows you to turn each 
+    action on/off individually for fine-tuning. The <guibutton>Cautious</guibutton>
+    button changes the actions list to low/safe settings which will activate 
+    ad blocking and a minimal set of &my-app;'s features, and subsequently
+    there will be less of a chance for accidental problems. The
+    <guibutton>Medium</guibutton> button sets the list to a medium level of
+    other features and a low level set of privacy features. The
+    <guibutton>Advanced</guibutton> button sets the list to a high level of
+    ad blocking and medium level of privacy. See the chart below. The latter
+    three buttons over-ride any changes via with the
+    <guibutton>Edit</guibutton> button. More fine-tuning can be done in the
+    lower sections of this internal page.
+   </para>
+   <para>
+    While the actions file editor allows to enable these settings in all
+    actions files, they are only supposed to be enabled in the first one
+    to make sure you don't unintentionally overrule earlier rules.
+   </para>
+   <para>
+    The default profiles, and their associated actions, as pre-defined in
+    <filename>default.action</filename> are:
+   </para>
+   <para>
     <table frame=all><title>Default Configurations</title>
     <tgroup cols=4 align=left colsep=1 rowsep=1>
     <colspec colname=c1>
@@ -1902,14 +1902,12 @@ for details.
       <entry>yes</entry>
     </row>
 
-
     <row>
       <entry>GIF de-animation</entry>
       <entry>no</entry>
       <entry>yes</entry>
       <entry>yes</entry>
     </row>
-
 
     <row>
       <entry>Fast redirects</entry>
@@ -1951,9 +1949,9 @@ for details.
     </table>
     </para>
 
-   </listitem> 
-  </itemizedlist>
- </para> 
+  </listitem> 
+ </itemizedlist>
+</para> 
 
 <para>
  The list of actions files to be used are defined in the main configuration 
@@ -8459,6 +8457,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.93  2009/02/14 10:14:42  fabiankeil
+ Mention match-all.action in the action file descriptions.
+
  Revision 2.92  2009/02/12 16:08:26  fabiankeil
  Declare the code stable.
 
