@@ -93,9 +93,71 @@ CLASS="APPLICATION"
 ><UL
 ><LI
 ><P
->    The mingw32 version uses mutex locks now which prevents
-    log message corruption under load. As a side effect,
-    the "no thread-safe PRNG" warning could be removed as well.
+>    On most platforms, outgoing connections can be kept alive and
+    reused if the server supports it. Whether or not this improves
+    things depends on the connection.
+   </P
+></LI
+><LI
+><P
+>    When dropping privileges, membership in supplementary groups
+    is given up as well. Not doing that can lead to Privoxy running
+    with more rights than necessary and violates the principle of
+    least privilege. Users of the --user option are advised to update.
+    Thanks to Matthias Drochner for reporting the problem,
+    providing the initial patch and testing the final version.
+   </P
+></LI
+><LI
+><P
+>    Passing invalid users or groups with the --user option
+    didn't lead to program exit. Regression introduced in 3.0.7.
+   </P
+></LI
+><LI
+><P
+>    The match all section has been moved from default.action
+    to a new file called match-all.action. As a result the
+    default.action no longer needs to be touched by the user
+    and can be safely overwritten by updates.
+   </P
+></LI
+><LI
+><P
+>    The standard.action file has been removed. Its content
+    is now part of the default.action file.
+   </P
+></LI
+><LI
+><P
+>    In some situations the logged content length was slightly too low.
+   </P
+></LI
+><LI
+><P
+>    Crunched requests are logged with their own log level.
+    If you used "debug 1" in the past, you'll probably want
+    to additionally enable "debug 1024", otherwise only passed
+    requests will be logged. If you only care about crunched
+    requests, simply replace "debug 1" with "debug 1024".
+   </P
+></LI
+><LI
+><P
+>    The crunch reason has been moved to the beginning of the
+    crunch message. For HTTP URLs, the protocol is logged as well.
+   </P
+></LI
+><LI
+><P
+>    Log messages are shortened by not printing the thread id
+    on its own (as opposed to putting it inside "Privoxy()".
+   </P
+></LI
+><LI
+><P
+>    The config option socket-timeout has been added to control
+    the time Privoxy waits for data to arrive on a socket.
    </P
 ></LI
 ><LI
@@ -109,12 +171,49 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
+>    Requests with invalid HTTP versions are rejected.
+   </P
+></LI
+><LI
+><P
+>    The template symbol @date@ can be used to include a date(1)-like
+    time string. Initial patch submitted by Endre Szabo.
+   </P
+></LI
+><LI
+><P
+>    Responses from shoutcast servers are accepted again.
+    Problem reported and fix suggested by Stefan.
+   </P
+></LI
+><LI
+><P
 >    The hide-forwarded-for-headers action has been replaced with
     the change-x-forwarded-for{} action which can also be used to
     add X-Forwarded-For headers. The latter functionality already
     existed in Privoxy versions prior to 3.0.7 but has been removed
     as it was often used unintentionally (by not using the
     hide-forwarded-for-headers action).
+   </P
+></LI
+><LI
+><P
+>    A "clear log" view option was added to the mingw32 version
+    to clear out all of the lines in the Privoxy log window.
+    Based on a patch submitted by T Ford.
+   </P
+></LI
+><LI
+><P
+>    The mingw32 version uses "critical sections" now, which prevents
+    log message corruption under load. As a side effect, the
+    "no thread-safe PRNG" warning could be removed as well.
+   </P
+></LI
+><LI
+><P
+>    The mingw32 version's task bar icon is crossed out and
+    the color changed to gray if Privoxy is toggled off.
    </P
 ></LI
 ></UL
@@ -233,27 +332,6 @@ HREF="config.html#ENABLE-EDIT-ACTIONS"
      If you use or want these, you will need to explicitly enable them, and
      be aware of the security issues involved. 
     </P
-></LI
-><LI
-><P
->    The <SPAN
-CLASS="QUOTE"
->"filter-client-headers"</SPAN
-> and
-    <SPAN
-CLASS="QUOTE"
->"filter-server-headers"</SPAN
-> actions that were introduced with
-    <SPAN
-CLASS="APPLICATION"
->Privoxy 3.0.5</SPAN
-> to apply content filters to
-    the headers  have been removed and replaced with new actions.
-    See the <A
-HREF="whatsnew.html"
->What's New section</A
-> above.
-   </P
 ></LI
 ></UL
 ></P
