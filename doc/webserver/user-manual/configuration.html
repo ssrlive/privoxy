@@ -304,22 +304,24 @@ CLASS="FILENAME"
 ><P
 >    <TT
 CLASS="FILENAME"
->default.action</TT
-> (the main <A
-HREF="actions-file.html"
->actions file</A
->)
-    is used to define which <SPAN
+>match-all.action</TT
+> is used to define which <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
-> relating to banner-blocking, images, pop-ups,
-    content modification, cookie handling etc should be applied by default. It also defines many
-    exceptions (both positive and negative) from this default set of actions that enable 
-    <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> to selectively eliminate the junk, and only the junk, on
-    as many websites as possible.
+>
+    relating to banner-blocking, images, pop-ups, content modification, cookie handling
+    etc should be applied by default. It should be the first actions file loaded.
+   </P
+><P
+>    <TT
+CLASS="FILENAME"
+>default.action</TT
+> defines many exceptions (both positive and negative)
+    from the default set of actions that's configured in <TT
+CLASS="FILENAME"
+>match-all.action</TT
+>.
+    It should be the second actions file loaded and shouldn't be edited by the user.
    </P
 ><P
 >    Multiple actions files may be defined in <TT
@@ -327,17 +329,17 @@ CLASS="FILENAME"
 >config</TT
 >. These 
     are processed in the order they are defined. Local customizations and locally 
-    preferred exceptions to the default policies  as defined in
+    preferred exceptions to the default policies as defined in
     <TT
 CLASS="FILENAME"
->default.action</TT
+>match-all.action</TT
 > (which you will most probably want
-    to define sooner or later) are probably best applied in
-    <TT
+    to define sooner or later) are best applied in <TT
 CLASS="FILENAME"
 >user.action</TT
->, where you can preserve them across
-    upgrades.
+>,
+    where you can preserve them across upgrades. The file isn't installed by all
+    installers, but you can easily create it yourself with a text editor.
    </P
 ><P
 >    
