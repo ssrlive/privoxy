@@ -38,8 +38,8 @@ ChangeLog for Privoxy
 - The mingw32 version uses "critical sections" now, which prevents
   log message corruption under load. As a side effect, the
   "no thread-safe PRNG" warning could be removed as well.
-- The mingw32 version's task bar icon is changed if Privoxy
-  is toggled of. XXX: Describe how.
+- The mingw32 version's task bar icon is crossed out and
+  the color changed to gray if Privoxy is toggled off.
 - Support for remote toggling is controlled by the configure
   option --disable-toggle only. In previous versions it also
   depended on the action editor and thus configuring with the
