@@ -20,8 +20,7 @@ ChangeLog for Privoxy
   and can be safely overwritten by updates.
 - The standard.action file has been removed. Its content
   is now part of the default.action file.
-- In some situations the logged content length was
-  slightly too low.
+- In some situations the logged content length was slightly too low.
 - Crunched requests are logged with their own log level.
   If you used "debug 1" in the past, you'll probably want
   to additionally enable "debug 1024", otherwise only passed
@@ -36,9 +35,9 @@ ChangeLog for Privoxy
 - A "clear log" view option was added to the mingw32 version
   to clear out all of the lines in the Privoxy log window.
   Based on a patch submitted by T Ford.
-- The mingw32 version uses "critical sections" now which
-  prevents log message corruption under load. As a side effect,
-  the "no thread-safe PRNG" warning could be removed as well.
+- The mingw32 version uses "critical sections" now, which prevents
+  log message corruption under load. As a side effect, the
+  "no thread-safe PRNG" warning could be removed as well.
 - The mingw32 version's task bar icon is changed if Privoxy
   is toggled of. XXX: Describe how.
 - Support for remote toggling is controlled by the configure
