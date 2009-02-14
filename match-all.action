@@ -1,5 +1,10 @@
 #############################################################################
-# Defaults
+# $Id:$
+#
+# This file contains the actions that are applied to all requests and
+# may be overruled later on by other actions files. Less experienced
+# users should only edit this file through the actions file editor.
+#
 #############################################################################
 { \
 +change-x-forwarded-for{block} \
