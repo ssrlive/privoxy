@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.91 2009/01/13 16:50:35 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.92 2009/02/12 16:08:26 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.91 2009/01/13 16:50:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.92 2009/02/12 16:08:26 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1635,21 +1635,23 @@ for details.
 
   <listitem>
    <para>
-    <filename>default.action</filename> (the main <link linkend="actions-file">actions file</link>)
-    is used to define which <quote>actions</quote> relating to banner-blocking, images, pop-ups,
-    content modification, cookie handling etc should be applied by default. It also defines many
-    exceptions (both positive and negative) from this default set of actions that enable 
-    <application>Privoxy</application> to selectively eliminate the junk, and only the junk, on
-    as many websites as possible.
+    <filename>match-all.action</filename> is used to define which <quote>actions</quote>
+    relating to banner-blocking, images, pop-ups, content modification, cookie handling
+    etc should be applied by default. It should be the first actions file loaded.
+   </para>
+   <para>
+    <filename>default.action</filename> defines many exceptions (both positive and negative)
+    from the default set of actions that's configured in <filename>match-all.action</filename>.
+    It should be the second actions file loaded and shouldn't be edited by the user.
    </para>
    <para>
     Multiple actions files may be defined in <filename>config</filename>. These 
     are processed in the order they are defined. Local customizations and locally 
-    preferred exceptions to the default policies  as defined in
-    <filename>default.action</filename> (which you will most probably want
-    to define sooner or later) are probably best applied in
-    <filename>user.action</filename>, where you can preserve them across
-    upgrades.
+    preferred exceptions to the default policies as defined in
+    <filename>match-all.action</filename> (which you will most probably want
+    to define sooner or later) are best applied in <filename>user.action</filename>,
+    where you can preserve them across upgrades. The file isn't installed by all
+    installers, but you can easily create it yourself with a text editor.
    </para>
    <para>    
     There is also a web based editor that can be accessed from
@@ -1743,6 +1745,11 @@ for details.
 
 <sect1 id="actions-file"><title>Actions Files</title>
 
+
+<!--
+  XXX: similar descriptions are in the Configuration Files sections.
+  We should only describe them at one place.
+-->
 <para>
  The actions files are used to define what <emphasis>actions</emphasis>
  <application>Privoxy</application> takes for which URLs, and thus determines
@@ -1759,22 +1766,23 @@ for details.
  are three action files included with <application>Privoxy</application> with
  differing purposes:
  </para>
- 
  <para>
   <itemizedlist>
    <listitem>
     <para>
-     <filename>default.action</filename> - is the primary action file 
-     that sets the initial values for all actions. It is intended to 
-     provide a base level of functionality for
-     <application>Privoxy's</application> array of features. So it is 
-     a set of broad rules that should work reasonably well as-is for most users.
-     This is the file that the developers are keeping updated, and <link
-     linkend="installation-keepupdated">making available to users</link>.
-     It also contains the pre-defined sets of rules for the default actions,
-     e.g. <literal>Cautious</literal> (the default),
-     <literal>Medium</literal>, or <literal>Advanced</literal> (see
-     below).
+     <filename>match-all.action</filename> - is used to define which
+     <quote>actions</quote> relating to banner-blocking, images, pop-ups,
+     content modification, cookie handling etc should be applied by default.
+     It should be the first actions file loaded
+    </para>
+   </listitem> 
+   <listitem>
+    <para>
+     <filename>default.action</filename> - defines many exceptions (both
+     positive and negative) from the default set of actions that's configured
+     in <filename>match-all.action</filename>. It is a set of rules that should
+     work reasonably well as-is for most users. This file is only supposed to
+     be edited by the developers. It should be the second actions file loaded.
     </para>
    </listitem> 
    <listitem>
@@ -1793,8 +1801,7 @@ for details.
      These have increasing levels of aggressiveness <emphasis>and have no
      influence on your browsing unless you select them explicitly in the
      editor</emphasis>. A default installation should be pre-set to 
-     <literal>Cautious</literal> (versions prior to 3.0.5 were set to
-     <literal>Medium</literal>). New users should try this for a while before
+     <literal>Cautious</literal>. New users should try this for a while before
      adjusting the settings to more aggressive levels. The more aggressive 
      the settings, then the more likelihood there is of problems such as sites 
      not working as they should.
@@ -1813,6 +1820,11 @@ for details.
       <guibutton>Edit</guibutton> button. More fine-tuning can be done in the
       lower sections of this internal page.
      </para>
+    <para>
+     While the actions file editor allows to enable these settings in all
+     actions files, they are only supposed to be enabled in the first one
+     to make sure you don't unintentionally overrule earlier rules.
+    </para>
     <para>
      The default profiles, and their associated actions, as pre-defined in
      <filename>default.action</filename> are:
@@ -8447,6 +8459,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.92  2009/02/12 16:08:26  fabiankeil
+ Declare the code stable.
+
  Revision 2.91  2009/01/13 16:50:35  fabiankeil
  The standard.action file is gone.
 
