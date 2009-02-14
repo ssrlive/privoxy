@@ -32,14 +32,6 @@ ChangeLog for Privoxy
   on its own (as opposed to putting it inside "Privoxy()".
 - The config option socket-timeout has been added to control
   the time Privoxy waits for data to arrive on a socket.
-- A "clear log" view option was added to the mingw32 version
-  to clear out all of the lines in the Privoxy log window.
-  Based on a patch submitted by T Ford.
-- The mingw32 version uses "critical sections" now, which prevents
-  log message corruption under load. As a side effect, the
-  "no thread-safe PRNG" warning could be removed as well.
-- The mingw32 version's task bar icon is crossed out and
-  the color changed to gray if Privoxy is toggled off.
 - Support for remote toggling is controlled by the configure
   option --disable-toggle only. In previous versions it also
   depended on the action editor and thus configuring with the
@@ -56,6 +48,14 @@ ChangeLog for Privoxy
   existed in Privoxy versions prior to 3.0.7 but has been removed
   as it was often used unintentionally (by not using the
   hide-forwarded-for-headers action).
+- A "clear log" view option was added to the mingw32 version
+  to clear out all of the lines in the Privoxy log window.
+  Based on a patch submitted by T Ford.
+- The mingw32 version uses "critical sections" now, which prevents
+  log message corruption under load. As a side effect, the
+  "no thread-safe PRNG" warning could be removed as well.
+- The mingw32 version's task bar icon is crossed out and
+  the color changed to gray if Privoxy is toggled off.
 
 *** Version 3.0.10 ***
 
