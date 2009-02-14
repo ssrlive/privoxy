@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.222 2009/02/08 12:56:51 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.223 2009/02/09 21:21:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.222 2009/02/08 12:56:51 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.223  2009/02/09 21:21:16  fabiankeil
+ *    Now that init_log_module() is called earlier, call show_version()
+ *    later on from main() directly so it doesn't get called for --help
+ *    or --version.
+ *
  *    Revision 1.222  2009/02/08 12:56:51  fabiankeil
  *    Call initialize_mutexes() before init_log_module() again.
  *    Broken since r220, might be the cause of Lee's #2579448.
@@ -2778,7 +2783,8 @@ static void chat(struct client_state *csp)
 
       if (n == 0)
       {
-         log_error(LOG_LEVEL_ERROR, "Didn't receive data in time.");
+         log_error(LOG_LEVEL_ERROR,
+            "Didn't receive data in time: %s", http->url);
          if ((byte_count == 0) && (http->ssl == 0))
          {
             write_socket(csp->cfd, CONNECTION_TIMEOUT_RESPONSE,
