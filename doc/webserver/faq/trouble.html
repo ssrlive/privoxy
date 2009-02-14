@@ -1148,15 +1148,18 @@ CLASS="APPLICATION"
 >Privoxy's</SPAN
 > case the problem usually
  is that the policy only allows outgoing connections for certain
- destination ports (e.g. 80 and 443). While the standard ports
- maybe covered, websites occasionally use other ports as well.
+ destination ports (e.g. 80 and 443). While this may cover the
+ standard ports, websites occasionally use other ports as well.
  This isn't a security problem and therefore <SPAN
 CLASS="APPLICATION"
 >Privoxy's</SPAN
 >
  default configuration doesn't block these requests.</P
 ><P
-></P
+> If you really want to block these ports (and don't be able
+ to load websites that don't use standard ports), you should
+ configure Privoxy to block these ports as well, so it doesn't
+ trigger the selinux warnings.</P
 ></DIV
 ></DIV
 ><DIV
