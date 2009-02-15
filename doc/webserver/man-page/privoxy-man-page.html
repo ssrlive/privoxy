@@ -3,7 +3,7 @@
 <HTML><HEAD><TITLE>Man page of PRIVOXY</TITLE>
 <LINK REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></HEAD><BODY>
 <H1>PRIVOXY</H1>
-Section:  (1)<BR>Updated: 14 August 2008<BR><A HREF="#index">Index</A>
+Section:  (1)<BR>Updated: 15 February 2009<BR><A HREF="#index">Index</A>
 <HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -59,7 +59,7 @@ that must be copied into the chroot tree.
 
 If the <I>configfile</I> is not specified on  the  command  line,
 <B>Privoxy</B>  will  look for a file named
-<I>config</I> in the current directory . If no
+<I>config</I> in the current directory. If no
 <I>configfile</I> is found, <B>Privoxy</B> will 
 fail to start.
 <A NAME="lbAE">&nbsp;</A>
@@ -177,6 +177,7 @@ configuration might look like:
  ## otherwise with the '+' operator.
 
 { \
++change-x-forwarded-for{block} \
 +deanimate-gifs{last} \
 +filter{refresh-tags} \
 +filter{img-reorder} \
@@ -184,7 +185,6 @@ configuration might look like:
 +filter{webbugs} \
 +filter{jumping-windows} \
 +filter{ie-exploits} \
-+hide-forwarded-for-headers \
 +hide-from-header{block} \
 +hide-referrer{conditional-block} \
 +session-cookies-only \
@@ -265,8 +265,8 @@ configuration options.
  
  <I>/usr/sbin/privoxy</I>
  <I>/etc/privoxy/config</I>
+ <I>/etc/privoxy/match-all.action</I>
  <I>/etc/privoxy/default.action</I>
- <I>/etc/privoxy/standard.action</I>
  <I>/etc/privoxy/user.action</I>
  <I>/etc/privoxy/default.filter</I>
  <I>/etc/privoxy/user.filter</I>
@@ -315,7 +315,7 @@ the <B>Privoxy</B> Home page.
 <A HREF="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/,</A> 
 the <B>Privoxy</B> FAQ. 
 <P>
-<A HREF="http://sourceforge.net/projects/ijbswa/">http://sourceforge.net/projects/ijbswa/,</A> 
+<A HREF="https://sourceforge.net/projects/ijbswa/">https://sourceforge.net/projects/ijbswa/,</A> 
 the Project Page for <B>Privoxy</B> on 
 SourceForge.
 <P>
@@ -323,7 +323,7 @@ SourceForge.
 the web-based user interface. <B>Privoxy</B> must be
 running for this to work. Shortcut: <A HREF="http://p.p/">http://p.p/</A>
 <P>
-<A HREF="http://sourceforge.net/tracker/?group_id=11118">http://sourceforge.net/tracker/?group_id=11118</A>&amp;atid=460288, to submit ``misses'' and other
+<A HREF="https://sourceforge.net/tracker/?group_id=11118">https://sourceforge.net/tracker/?group_id=11118</A>&amp;atid=460288, to submit ``misses'' and other
 configuration related suggestions to the developers. 
 <P>
 <A HREF="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html,</A>
@@ -331,9 +331,6 @@ an explanation how cookies are used to track web users.
 <P>
 <A HREF="http://www.junkbusters.com/ijb.html">http://www.junkbusters.com/ijb.html,</A>
 the original Internet Junkbuster.
-<P>
-<A HREF="http://privacy.net/">http://privacy.net/,</A> a useful site
-to check what information about you is leaked while you browse the web.
 <P>
 <A HREF="http://www.squid-cache.org/">http://www.squid-cache.org/,</A> a popular
 caching proxy, which is often used together with <B>Privoxy</B>.
@@ -343,7 +340,7 @@ caching proxy, which is often used together with <B>Privoxy</B>.
 like pipelining, multiplexing and caching of partial instances. In many setups
 it can be used as <B>Squid</B> replacement.
 <P>
-<A HREF="http://tor.eff.org/">http://tor.eff.org/,</A> 
+<A HREF="https://www.torproject.org/">https://www.torproject.org/,</A> 
 <B>Tor</B> can help anonymize web browsing, 
 web publishing, instant messaging, IRC, SSH, and other applications.
 <P>
@@ -356,13 +353,13 @@ the <B>Privoxy</B> developer manual.
 <PRE>
  Fabian Keil, lead developer
  David Schmidt, developer
- 
+
  Hal Burgiss
  Mark Miller
  Gerry Murphy
  Lee Rian
  Roland Rosenfeld
- Jörg Strohmayer
+ J&ouml;rg Strohmayer
 </PRE>
 
 <A NAME="lbAN">&nbsp;</A>
@@ -373,7 +370,7 @@ the <B>Privoxy</B> developer manual.
 
 <P>
 
-Copyright (C) 2001-2008 by Privoxy Developers &lt;<A HREF="mailto:ijbswa-developers@lists.sourceforge.net">ijbswa-developers@lists.sourceforge.net</A>&gt;
+Copyright (C) 2001-2009 by Privoxy Developers &lt;<A HREF="mailto:ijbswa-developers@lists.sourceforge.net">ijbswa-developers@lists.sourceforge.net</A>&gt;
 <P>
 
 Some source code is based on code Copyright (C) 1997 by Anonymous Coders
@@ -427,6 +424,6 @@ USA
 This document was created by
 man2html,
 using the manual pages.<BR>
-Time: 16:43:53 GMT, August 14, 2008
+Time: 18:45:33 GMT, February 15, 2009
 </BODY>
 </HTML>
