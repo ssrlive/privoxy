@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.51 2009/02/12 16:08:26 fabiankeil Exp $
+ $Id: faq.sgml,v 2.52 2009/02/14 10:27:52 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.51 2009/02/12 16:08:26 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.52 2009/02/14 10:27:52 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -553,7 +553,7 @@ Include supported.sgml here:
  <quote>browser</quote> or not. Though this may not be the best approach for
  dealing with some of the common abuses of HTML in email. See <link
  linkend="outlook">How can I configure <application>Privoxy</application>
- with <application>Outlook Express</application>?</link> below for more on
+ with <application>Outlook</application>?</link> below for more on
  this. 
 </para>
 <para>
@@ -1219,13 +1219,19 @@ and thus avoid individual browser configuration?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="outlook">
-<title>How can I configure Privoxy for use with Outlook
- Express?</title>
+<title>How can I configure Privoxy for use with Outlook?</title>
 <para>
- <application>Outlook Express</application> uses <application>Internet Explorer</application> 
- components to both render HTML, and fetch any HTTP requests that may be embedded in an HTML email.
- So however you have <application>Privoxy</application> configured to work
- with IE, this configuration should automatically be shared.
+ Versions of <application>Outlook</application> prior to Office 2007, use
+ <application>Internet Explorer</application> components to both render HTML,
+ and fetch any HTTP requests that may be embedded in an HTML email. So however
+ you have <application>Privoxy</application> configured to work with IE, this
+ configuration should automatically be shared, at least with older version of
+ Internet Explorer.
+</para>
+<para>
+ Starting with Office 2007, Microsoft is using the MS-Word rendering engine
+ with Outlook. It is unknown whether this can be configured to use a proxy.  d
+ <!-- FIXME HB 2009-02-15 -->
 </para>
 </sect2>
 
@@ -2891,6 +2897,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.52  2009/02/14 10:27:52  fabiankeil
+Finish last paragraph in the selinux entry which
+I unintentionally committed with the last commit.
+
 Revision 2.51  2009/02/12 16:08:26  fabiankeil
 Declare the code stable.
 
