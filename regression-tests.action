@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.19 2008/10/18 16:37:12 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.20 2008/10/25 15:49:48 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -10,7 +10,7 @@
 #
 #############################################################################
 #
-# Copyright (c) 2007-2008 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2009 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -83,6 +83,18 @@ TAG:^hide-accept-language\{block\}$
 #
 # Set Header    = Referer: http://p.p/foo
 # Expect Header = NO CHANGE
+#
+# Set Header    = Referer: p.p/
+# Expect Header = REMOVAL
+#
+# Set Header    = Referer: p
+# Expect Header = REMOVAL
+#
+# Set Header    = Referer: http://
+# Expect Header = REMOVAL
+#
+# Set Header    = Referer: https://p.p/
+# Expect Header = REMOVAL
 {+hide-referrer{conditional-block}}
 TAG:^hide-referrer\{conditional-block\}$
 
@@ -91,6 +103,18 @@ TAG:^hide-referrer\{conditional-block\}$
 #
 # Set Header    = Referer: http://p.p/foo
 # Expect Header = NO CHANGE
+#
+# Set Header    = Referer: p.p/
+# Expect Header = Referer: http://p.p/
+#
+# Set Header    = Referer: p
+# Expect Header = Referer: http://p.p/
+#
+# Set Header    = Referer: http://
+# Expect Header = Referer: http://p.p/
+#
+# Set Header    = Referer: https://p.p/
+# Expect Header = Referer: http://p.p/
 {+hide-referrer{conditional-forge}}
 TAG:^hide-referrer\{conditional-forge\}$
 
