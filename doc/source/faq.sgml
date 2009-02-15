@@ -26,7 +26,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.52 2009/02/14 10:27:52 fabiankeil Exp $
+ $Id: faq.sgml,v 2.53 2009/02/15 20:46:13 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +77,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.52 2009/02/14 10:27:52 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.53 2009/02/15 20:46:13 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1229,8 +1229,9 @@ and thus avoid individual browser configuration?</title>
  Internet Explorer.
 </para>
 <para>
- Starting with Office 2007, Microsoft is using the MS-Word rendering engine
- with Outlook. It is unknown whether this can be configured to use a proxy.  d
+ Starting with Office 2007, Microsoft is instead using the MS-Word rendering
+ engine with Outlook. It is unknown whether this can be configured to use a
+ proxy.
  <!-- FIXME HB 2009-02-15 -->
 </para>
 </sect2>
@@ -2897,6 +2898,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.53  2009/02/15 20:46:13  hal9
+Update Outlook HTML rendering engine comments re: Office 2007.
+
 Revision 2.52  2009/02/14 10:27:52  fabiankeil
 Finish last paragraph in the selinux entry which
 I unintentionally committed with the last commit.
