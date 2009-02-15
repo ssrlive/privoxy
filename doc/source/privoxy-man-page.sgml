@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.23 2009/01/13 16:50:35 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.24 2009/02/12 16:08:26 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -53,7 +53,7 @@
 
 <refentry id="privoxy">
 <refentryinfo>
- <date>2009-01-12</date>
+ <date>2009-02-15</date>
 </refentryinfo>
 <refmeta>
  <refentrytitle>privoxy</refentrytitle> 
@@ -385,6 +385,7 @@
 <literallayout> 
  <filename>/usr/sbin/privoxy</filename>
  <filename>/etc/privoxy/config</filename>
+ <filename>/etc/privoxy/match-all.action</filename>
  <filename>/etc/privoxy/default.action</filename>
  <filename>/etc/privoxy/user.action</filename>
  <filename>/etc/privoxy/default.filter</filename>
