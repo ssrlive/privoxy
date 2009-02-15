@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.25 2009/02/15 13:09:52 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.26 2009/02/15 15:19:35 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -235,12 +235,12 @@
 <para>
  <command>Privoxy</command> can be configured with the various configuration
  files. The default configuration files are: <filename>config</filename>,
- <filename>default.filter</filename>, and
+ <filename>default.filter</filename>, <filename>default.action</filename> and
  <filename>default.action</filename>. <filename>user.action</filename> should 
- be used for locally defined exceptions to the default rules of
- <filename>default.action</filename>, and <filename>user.filter</filename> for 
- locally defined filters. These are well commented.  On Unix
- and Unix-like systems, these are located in
+ be used for locally defined exceptions to the default rules in
+ <filename>match-all.action</filename> and <filename>default.action</filename>,
+ and <filename>user.filter</filename> for locally defined filters. These are
+ well commented.  On Unix and Unix-like systems, these are located in
  <filename>/etc/privoxy/</filename> by default. 
 </para>
 <para> 
