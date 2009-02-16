@@ -33,7 +33,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.96 2009/02/14 13:14:03 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.97 2009/02/14 18:01:00 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +59,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.96 2009/02/14 13:14:03 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.97 2009/02/14 18:01:00 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -501,8 +501,8 @@ How to install the binary packages depends on your operating system:
   </listitem>
   <listitem>
    <para>
-    Log messages are shortened by not printing the thread id
-    on its own (as opposed to putting it inside "Privoxy()".
+    Log messages are shortened by printing the thread id on its
+    own (as opposed to putting it inside the string "Privoxy()").
    </para>
   </listitem>
   <listitem>
@@ -8502,6 +8502,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.97  2009/02/14 18:01:00  fabiankeil
+ Import ChangeLog.
+
  Revision 2.96  2009/02/14 13:14:03  fabiankeil
  Unbreak syntax.
 
