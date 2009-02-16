@@ -4,7 +4,7 @@
  *
  * Purpose     :  README file to give a short intro.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2008  the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009  the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -50,26 +50,19 @@ Privoxy is based on Internet Junkbuster (tm).
 
 1. IMPORTANT CHANGES
 
-Privoxy development is between releases. The current sources are development
-quality. If you find problems please report them to the developers.
+February 2009, Privoxy 3.0.11 is released. This is a stable release, and marks
+a departure for Privoxy development. Previously, odd numbered releases were
+considered beta releases. Each release now will be considered stable.
+
+As usual there are changes that effect the configuration. See the "ChangeLog",
+and the "What's New" section and the "Upgrader's Notes" in the User Manual for
+details and specifics.
 
 August 2008, Privoxy 3.0.10 is released! There are not any major new features,
-but many improvements and refinements. As usual there are changes that effect
-the configuration. See the "ChangeLog", and the "What's New" section and the
-"Upgrader's Notes" in the User Manual for details and specifics.
+but many improvements and refinements.
 
 June 2008, Privoxy 3.0.9 beta is released. There are no major new features, but
 many improvements and refinements.
-
-NEWS! January 2008, Privoxy 3.0.8 stable is released. This is a significant
-upgrade with many new and enhanced features, and many bugs fixed. All Privoxy
-users are encouraged to upgrade. See the "ChangeLog", and the "What's New"
-section and the "Upgrader's Notes" in the User Manual for details and
-specifics. There are changes related to configuration, so anyone upgrading and
-keeping their old configuration should read ahead first.
-
-December 2007, Privoxy 3.0.7 is released. This is a beta release in preparation
-for the forthcoming 3.0.8 release.
 
 -------------------------------------------------------------------------------
 
