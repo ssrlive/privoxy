@@ -28,8 +28,8 @@ ChangeLog for Privoxy
   requests, simply replace "debug 1" with "debug 1024".
 - The crunch reason has been moved to the beginning of the
   crunch message. For HTTP URLs, the protocol is logged as well.
-- Log messages are shortened by not printing the thread id
-  on its own (as opposed to putting it inside "Privoxy()".
+- Log messages are shortened by printing the thread id on its
+  own (as opposed to putting it inside the string "Privoxy()".
 - The config option socket-timeout has been added to control
   the time Privoxy waits for data to arrive on a socket.
 - Support for remote toggling is controlled by the configure
