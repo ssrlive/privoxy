@@ -2,8 +2,8 @@
 -----------------------------------------------------------------
 
 3.0.11 is a stable release which includes many enhancements but no major 
-new features. The most prominent new feature is support for "keep-alive"
-connection. There are many small improvements.
+new features. The most prominent new feature is "keep-alive" support for 
+outgoing connections.
 
 See http://www.privoxy.org/3.0.11/user-manual/whatsnew.html for details.
 
