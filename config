@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.11
 #
-#  $Id: config,v 1.72 2009/02/09 16:49:47 fabiankeil Exp $
+#  $Id: config,v 1.73 2009/02/15 08:06:22 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -1410,6 +1410,21 @@ split-large-forms 0
 #
 #      This option has no effect if Privoxy has been compiled without
 #      keep-alive support.
+#
+#  Notes:
+#
+#      Note that reusing connections doesn't necessary cause
+#      speedups. There are also a few privacy implications you should
+#      be aware of.
+#
+#      Outgoing connections are shared between clients (if there are
+#      more than one) and closing the client that initiated the outgoing
+#      connection does not affect the connection between Privoxy and
+#      the server unless the client's request hasn't been completed
+#      yet. If the outgoing connection is idle, it will not be closed
+#      until either Privoxy's or the server's timeout is reached. While
+#      it's open, the server knows that the system running Privoxy is
+#      still there.
 #
 #  Examples:
 #
