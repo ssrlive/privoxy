@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.98 2009/02/16 17:10:33 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.99 2009/02/19 02:20:22 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.98 2009/02/16 17:10:33 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.99 2009/02/19 02:20:22 hal9 Exp $</pubdate>
 
 <!--
 
@@ -572,7 +572,17 @@ How to install the binary packages depends on your operating system:
 </para>
 
 <para>
- For a more detailed list of changes please have a look at the ChangeLog.
+ This release marks a departure for Privoxy development.
+</para>
+<para>
+ Previously, odd numbered releases were considered beta versions and
+ were only released at the end of the development cycle when the code
+ was already believed to be stable. Usually it was, so the stable release
+ contained pretty much the same code, but got a higher version number.
+ In the future we intend to release several snapshots between stable releases.
+ There will probably still be about two stable releases per year,
+ but hopefully about six snapshots instead of the two betas we have now.
+ The intentions is to make testing without CVS access easier.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -8503,6 +8513,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.99  2009/02/19 02:20:22  hal9
+ Make some links in seealso conditional. Man page is now privoxy only links.
+
  Revision 2.98  2009/02/16 17:10:33  fabiankeil
  Fix entry about shortened log messages. Noticed by Lee.
 
