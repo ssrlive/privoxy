@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.54 2009/02/15 20:47:12 hal9 Exp $
+ $Id: faq.sgml,v 2.55 2009/02/19 02:20:21 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.54 2009/02/15 20:47:12 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.55 2009/02/19 02:20:21 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2821,6 +2821,26 @@ browsing has slowed to a crawl. What gives? </title>
 </sect2>
 
 
+<sect2 renderas="sect3" id="gentoo-ricers">
+<title>I compiled &my-app; with Gentoo's portage and it appears to be very slow. Why?</title>
+<para>
+ Probably you unintentionally compiled &my-app; without threading support
+ in which case requests have to be serialized and only one can be served
+ at the same time.
+</para>
+<para>
+ Check your <quote>USE</quote> flags and make sure they include
+ <quote>threads</quote>. If they don't, add the flag and rebuild &my-app;.
+</para>
+<para>
+ If you compiled &my-app; with threading support (on POSIX-based systems),
+ the <quote>Conditional #defines</quote> section on <ulink
+ url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
+ will list <quote>FEATURE_PTHREAD</quote> as <quote>enabled</quote>. 
+</para>
+</sect2>
+
+
 </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
@@ -2899,6 +2919,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.55  2009/02/19 02:20:21  hal9
+Make some links in seealso conditional. Man page is now privoxy only links.
+
 Revision 2.54  2009/02/15 20:47:12  hal9
 Fix small typo.
 
