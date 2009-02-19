@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.39 2009/02/12 15:39:22 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.40 2009/02/15 07:56:26 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.39 2009/02/12 15:39:22 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.40 2009/02/15 07:56:26 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -2420,6 +2420,24 @@ forward-socks4, forward-socks4a and forward-socks5</title>
    <para>
     This option has no effect if <application>Privoxy</application>
     has been compiled without keep-alive support.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Note that reusing connections doesn't necessary cause speedups.
+    There are also a few privacy implications you should be aware of.
+   </para>
+   <para>
+    Outgoing connections are shared between clients (if there are more
+    than one) and closing the client that initiated the outgoing connection
+    does not affect the connection between &my-app; and the server unless
+    the client's request hasn't been completed yet. If the outgoing connection
+    is idle, it will not be closed until either <application>Privoxy's</application>
+    or the server's timeout is reached. While it's open, the server knows
+    that the system running &my-app; is still there.
    </para>
   </listitem>
  </varlistentry>
