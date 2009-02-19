@@ -24,6 +24,7 @@
 <!entity % p-supp-userman "IGNORE"> <!-- Omit some from supported.sgml    -->
 <!entity  my-copy "&copy;">         <!-- kludge for docbook2man           -->
 <!entity % draft "IGNORE">          <!-- WIP stuff    -->
+<!entity % seealso-extra "INCLUDE"> <!-- extra stuff from seealso.sgml    -->
 <!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
@@ -33,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.97 2009/02/14 18:01:00 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.98 2009/02/16 17:10:33 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -59,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.97 2009/02/14 18:01:00 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.98 2009/02/16 17:10:33 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8502,6 +8503,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.98  2009/02/16 17:10:33  fabiankeil
+ Fix entry about shortened log messages. Noticed by Lee.
+
  Revision 2.97  2009/02/14 18:01:00  fabiankeil
  Import ChangeLog.
 

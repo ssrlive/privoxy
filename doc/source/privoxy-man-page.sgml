@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: privoxy-man-page.sgml,v 2.27 2009/02/15 17:30:01 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.28 2009/02/15 18:58:15 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -49,6 +49,7 @@
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
 <!entity % p-authors-formal "IGNORE"> <!-- exclude additional formating      -->
 <!entity my-copy "(C)">               <!-- db2man barfs on copyright symbol  -->
+<!entity % seealso-extra "IGNORE">    <!-- for excluding sections of seealso -->
 ]>
 
 <refentry id="privoxy">

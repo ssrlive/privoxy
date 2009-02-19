@@ -14,6 +14,7 @@
 <!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
+<!entity % seealso-extra "INCLUDE"> <!-- extra stuff from seealso.sgml    -->
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
 ]>
 <!--
@@ -23,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.25 2009/02/12 15:37:05 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.26 2009/02/12 16:08:26 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.25 2009/02/12 15:37:05 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.26 2009/02/12 16:08:26 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3010,6 +3011,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.26  2009/02/12 16:08:26  fabiankeil
+  Declare the code stable.
+
   Revision 2.25  2009/02/12 15:37:05  fabiankeil
   Update templates.
 

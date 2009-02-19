@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: seealso.sgml,v 2.9 2009/01/15 17:25:30 fabiankeil Exp $
+ $Id: seealso.sgml,v 2.10 2009/02/15 18:56:58 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -67,7 +67,8 @@
    configuration related suggestions to the developers. 
   </member>
  </simplelist>
- <!-- HB 2009-02-15, seeing if we can live without these:
+ <![%seealso-extra;[
+ <!-- This part only goes into user-manual -->
  <simplelist>
   <member>
    <ulink url="http://www.junkbusters.com/ht/en/cookies.html">http://www.junkbusters.com/ht/en/cookies.html</ulink>,
@@ -101,7 +102,7 @@
    web publishing, instant messaging, IRC, SSH, and other applications.
   </member>
  </simplelist>
- -->
+ ]]>
  <simplelist>
   <member>
    <ulink

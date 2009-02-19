@@ -17,6 +17,7 @@
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
 <!entity  my-copy "&copy;">          <!-- kludge for docbook2man          -->
 <!entity % p-newstuff "INCLUDE">      <!-- exclude stuff from devel versions -->
+<!entity % seealso-extra "INCLUDE"> <!-- extra stuff from seealso.sgml    -->
 <!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
@@ -26,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.53 2009/02/15 20:46:13 hal9 Exp $
+ $Id: faq.sgml,v 2.54 2009/02/15 20:47:12 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.53 2009/02/15 20:46:13 hal9 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.54 2009/02/15 20:47:12 hal9 Exp $</pubdate>
 
 <!--
 
@@ -2898,6 +2899,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.54  2009/02/15 20:47:12  hal9
+Fix small typo.
+
 Revision 2.53  2009/02/15 20:46:13  hal9
 Update Outlook HTML rendering engine comments re: Office 2007.
 
