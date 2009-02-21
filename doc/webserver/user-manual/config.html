@@ -3659,6 +3659,32 @@ CLASS="APPLICATION"
    </P
 ></DD
 ><DT
+>Notes:</DT
+><DD
+><P
+>    Note that reusing connections doesn't necessary cause speedups.
+    There are also a few privacy implications you should be aware of.
+   </P
+><P
+>    Outgoing connections are shared between clients (if there are more
+    than one) and closing the client that initiated the outgoing connection
+    does not affect the connection between <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> and the server unless
+    the client's request hasn't been completed yet. If the outgoing connection
+    is idle, it will not be closed until either <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+>
+    or the server's timeout is reached. While it's open, the server knows
+    that the system running <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is still there.
+   </P
+></DD
+><DT
 >Examples:</DT
 ><DD
 ><P

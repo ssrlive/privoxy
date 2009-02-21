@@ -84,7 +84,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN1080"
+NAME="AEN1081"
 >5.1. I cannot connect to any websites. Or, I am getting
 <SPAN
 CLASS="QUOTE"
@@ -163,7 +163,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN1103"
+NAME="AEN1104"
 >5.3. I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></H3
@@ -1160,6 +1160,57 @@ CLASS="APPLICATION"
  to load websites that don't use standard ports), you should
  configure Privoxy to block these ports as well, so it doesn't
  trigger the selinux warnings.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="GENTOO-RICERS"
+>5.23. I compiled <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with Gentoo's portage and it appears to be very slow. Why?</A
+></H3
+><P
+> Probably you unintentionally compiled <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> without threading support
+ in which case requests have to be serialized and only one can be served
+ at the same time.</P
+><P
+> Check your <SPAN
+CLASS="QUOTE"
+>"USE"</SPAN
+> flags and make sure they include
+ <SPAN
+CLASS="QUOTE"
+>"threads"</SPAN
+>. If they don't, add the flag and rebuild <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.</P
+><P
+> If you compiled <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with threading support (on POSIX-based systems),
+ the <SPAN
+CLASS="QUOTE"
+>"Conditional #defines"</SPAN
+> section on <A
+HREF="http://config.privoxy.org/show-status"
+TARGET="_top"
+>http://config.privoxy.org/show-status</A
+>
+ will list <SPAN
+CLASS="QUOTE"
+>"FEATURE_PTHREAD"</SPAN
+> as <SPAN
+CLASS="QUOTE"
+>"enabled"</SPAN
+>. </P
 ></DIV
 ></DIV
 ><DIV
