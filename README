@@ -50,19 +50,22 @@ Privoxy is based on Internet Junkbuster (tm).
 
 1. IMPORTANT CHANGES
 
-February 2009, Privoxy 3.0.11 is released. This is a stable release, and marks
-a departure for Privoxy development. Previously, odd numbered releases were
-considered beta releases. Each release now will be considered stable.
+February 2009, Privoxy 3.0.11 is released.
 
 As usual there are changes that effect the configuration. See the "ChangeLog",
 and the "What's New" section and the "Upgrader's Notes" in the User Manual for
 details and specifics.
 
-August 2008, Privoxy 3.0.10 is released! There are not any major new features,
-but many improvements and refinements.
+This is a stable release, and marks a departure for Privoxy development.
 
-June 2008, Privoxy 3.0.9 beta is released. There are no major new features, but
-many improvements and refinements.
+Previously, odd numbered releases were considered beta versions and were only
+released at the end of the development cycle when the code was already believed
+to be stable. Usually it was, so the stable release contained pretty much the
+same code, but got a higher version number. In the future we intend to release
+several snapshots between stable releases. There will probably still be about
+two stable releases per year, but hopefully about six snapshots instead of the
+two betas we have now. The intentions is to make testing without CVS access
+easier.
 
 -------------------------------------------------------------------------------
 
