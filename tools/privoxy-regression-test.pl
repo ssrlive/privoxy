@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.162 2009/02/13 18:51:37 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.164 2009/02/23 09:40:24 fk Exp $
 #
 # Wish list:
 #
@@ -494,11 +494,26 @@ sub execute_regression_tests () {
                 die "Regression test id mismatch" if ($r != $regression_tests[$s][$r]{'regression-test-id'});
 
                 my $number = $regression_tests[$s][$r]{'number'};
+                my $skip_reason = undef;
 
-                if ($regression_tests[$s][$r]{'ignore'}
-                    or level_is_unacceptable($regression_tests[$s][$r]{'level'})
-                    or test_number_is_unacceptable($number)) {
+                if ($regression_tests[$s][$r]{'ignore'}) {
 
+                    $skip_reason = "Ignore flag is set";
+
+                } elsif (cli_option_is_set('test-number')
+                         and get_cli_option('test-number') != $number) {
+
+                    $skip_reason = "Only executing test " . get_cli_option('test-number');
+
+                } else {
+
+                    $skip_reason = level_is_unacceptable($regression_tests[$s][$r]{'level'});
+                }
+
+                if (defined $skip_reason) {
+
+                    my $message = "Skipping test " . $number . ": " . $skip_reason . ".";
+                    log_message($message) if cli_option_is_set('verbose');
                     $skipped++;
 
                 } else {
@@ -533,17 +548,31 @@ sub execute_regression_tests () {
 
 sub level_is_unacceptable ($) {
     my $level = shift;
-    return ((cli_option_is_set('level') and get_cli_option('level') != $level)
-            or ($level < get_cli_option('min-level'))
-            or ($level > get_cli_option('max-level'))
-            or dependency_unsatisfied($level)
-            );
-}
+    my $min_level = get_cli_option('min-level');
+    my $max_level = get_cli_option('max-level');
+    my $required_level = cli_option_is_set('level') ?
+        get_cli_option('level') : $level;
+    my $reason = undef;
 
-sub test_number_is_unacceptable ($) {
-    my $test_number = shift;
-    return (cli_option_is_set('test-number')
-            and get_cli_option('test-number') != $test_number)
+    if ($required_level != $level) {
+
+        $reason = "Level doesn't match (" . $level .
+                  " != " . $required_level . ")"
+
+    } elsif ($level < $min_level) {
+
+        $reason = "Level to low (" . $level . " < " . $min_level . ")";
+
+    } elsif ($level > $max_level) {
+
+        $reason = "Level to high (" . $level . " > " . $max_level . ")";
+
+    } else {
+
+        $reason = dependency_unsatisfied($level);
+    }
+
+    return $reason;
 }
 
 sub dependency_unsatisfied ($) {
@@ -553,16 +582,16 @@ sub dependency_unsatisfied ($) {
     our @privoxy_config;
     our %privoxy_features;
 
-    my $dependency_problem = 0;
+    my $dependency_problem = undef;
 
     if (defined ($dependencies{$level}{'config line'})) {
 
         my $dependency = $dependencies{$level}{'config line'};
-        $dependency_problem = 1;
+        $dependency_problem = "depends on config line matching: '" . $dependency . "'";
 
         foreach (@privoxy_config) {
 
-             $dependency_problem = 0 if (/$dependency/);
+             $dependency_problem = undef if (/$dependency/);
              last; # XXX: this looks ... interesting.
         }
 
@@ -571,12 +600,11 @@ sub dependency_unsatisfied ($) {
         my $dependency = $dependencies{$level}{'feature status'};
         my ($feature, $status) = $dependency =~ /([^\s]*)\s+(Yes|No)/;
 
-        $dependency_problem = 1;
-
-        if (defined($privoxy_features{$feature})
-            and ($privoxy_features{$feature} eq $status))
+        unless (defined($privoxy_features{$feature})
+                and ($privoxy_features{$feature} eq $status))
         {
-            $dependency_problem = 0;
+            $dependency_problem = "depends on '" . $feature .
+                "' being set to '" . $status . "'";
         }
     }
 
