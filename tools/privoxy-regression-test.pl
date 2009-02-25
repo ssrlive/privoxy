@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.164 2009/02/23 09:40:24 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.165 2009/02/25 17:17:47 fk Exp $
 #
 # Wish list:
 #
@@ -513,7 +513,8 @@ sub execute_regression_tests () {
                 if (defined $skip_reason) {
 
                     my $message = "Skipping test " . $number . ": " . $skip_reason . ".";
-                    log_message($message) if cli_option_is_set('verbose');
+                    log_message($message) if (cli_option_is_set('verbose') or
+                                              cli_option_is_set('show-skipped-tests'));
                     $skipped++;
 
                 } else {
@@ -1420,6 +1421,7 @@ Options and their default values if they have any:
     [--min-level $cli_options{'min-level'}]
     [--privoxy-address]
     [--retries $cli_options{'retries'}]
+    [--show-skipped-tests]
     [--test-number]
     [--verbose]
     [--version]
@@ -1461,6 +1463,7 @@ sub parse_cli_options () {
                 'fuzzer-address=s' => \$cli_options{'fuzzer-address'},
                 'level=s' => \$cli_options{'level'},
                 'loops=s' => \$cli_options{'loops'},
+                'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
                 'test-number=s' => \$cli_options{'test-number'},
                 'fuzzer-feeding' => \$cli_options{'fuzzer-feeding'},
                 'retries=s' => \$cli_options{'retries'},
@@ -1545,7 +1548,8 @@ B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
 [B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
 [B<--loops count>] [B<--max-level max-level>] [B<--max-time max-time>]
 [B<--min-level min-level>] B<--privoxy-address proxy-address>
-[B<--retries retries>] [B<--test-number test-number>] [B<--verbose>]
+[B<--retries retries>] [B<--test-number test-number>]
+[B<--show-skipped-tests>] [B<--verbose>]
 [B<--version>]
 
 =head1 DESCRIPTION
@@ -1694,7 +1698,9 @@ B<--retries retries> Retry B<retries> times.
 B<--test-number test-number> Only run the test with the specified
 number.
 
-B<--verbose> Also log succesful test runs.
+B<--show-skipped-tests> Log skipped tests even if verbose mode is off.
+
+B<--verbose> Log succesful and skipped tests.
 
 B<--version> Print version and exit.
 
