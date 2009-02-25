@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.166 2009/02/12 19:08:32 fabiankeil Exp $
+#  $Id: default.action.master,v 1.167 2009/02/25 18:56:10 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -434,7 +434,7 @@
 #
 #    "reset-to-request-time" overwrites the value of the "Last-Modified:"
 #    header with the current time. You could use this option together with
-#    hided-if-modified-since to further customize your random range.
+#    hide-if-modified-since to further customize your random range.
 #
 # +prevent-compression
 #    Prevent the website from compressing the data. Some websites do
