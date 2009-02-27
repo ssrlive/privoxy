@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.165 2009/02/25 17:17:47 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.166 2009/02/27 18:33:39 fk Exp $
 #
 # Wish list:
 #
@@ -40,51 +40,50 @@ use strict;
 use Getopt::Long;
 
 use constant {
-               PRT_VERSION => 'Privoxy-Regression-Test 0.3',
+    PRT_VERSION => 'Privoxy-Regression-Test 0.3',
  
-               CURL => 'curl',
+    CURL => 'curl',
 
-               # CLI option defaults
-               CLI_RETRIES   => 1,
-               CLI_LOOPS     => 1,
-               CLI_MAX_TIME  => 5,
-               CLI_MIN_LEVEL => 0,
-               # XXX: why limit at all.
-               CLI_MAX_LEVEL => 100,
-               CLI_FORKS     => 0,
+    # CLI option defaults
+    CLI_RETRIES   => 1,
+    CLI_LOOPS     => 1,
+    CLI_MAX_TIME  => 5,
+    CLI_MIN_LEVEL => 0,
+    # XXX: why limit at all?
+    CLI_MAX_LEVEL => 100,
+    CLI_FORKS     => 0,
 
-               PRIVOXY_CGI_URL => 'http://p.p/',
-               FELLATIO_URL    => 'http://127.0.0.1:8080/',
-               LEADING_LOG_DATE => 1,
-               LEADING_LOG_TIME => 1,
+    PRIVOXY_CGI_URL  => 'http://p.p/',
+    FELLATIO_URL     => 'http://127.0.0.1:8080/',
+    LEADING_LOG_DATE => 1,
+    LEADING_LOG_TIME => 1,
 
-               DEBUG_LEVEL_FILE_LOADING    => 0,
-               DEBUG_LEVEL_PAGE_FETCHING   => 0,
+    DEBUG_LEVEL_FILE_LOADING    => 0,
+    DEBUG_LEVEL_PAGE_FETCHING   => 0,
+    DEBUG_LEVEL_VERBOSE_FAILURE => 1,
+    # XXX: Only partly implemented and mostly useless.
+    DEBUG_LEVEL_VERBOSE_SUCCESS => 0,
+    DEBUG_LEVEL_STATUS          => 1,
 
-               VERBOSE_TEST_DESCRIPTION    => 1,
+    VERBOSE_TEST_DESCRIPTION    => 1,
 
-               DEBUG_LEVEL_VERBOSE_FAILURE => 1,
-               # XXX: Only partly implemented and mostly useless.
-               DEBUG_LEVEL_VERBOSE_SUCCESS => 0,
-               DEBUG_LEVEL_STATUS          => 1,
+    # Internal use, don't modify
+    # Available debug bits:
+    LL_ERROR            =>  1,
+    LL_VERBOSE_FAILURE  =>  2,
+    LL_PAGE_FETCHING    =>  4,
+    LL_FILE_LOADING     =>  8,
+    LL_VERBOSE_SUCCESS  => 16,
+    LL_STATUS           => 32,
+    LL_SOFT_ERROR       => 64,
 
-               # Internal use, don't modify
-               # Available debug bits:
-               LL_ERROR                   =>  1,
-               LL_VERBOSE_FAILURE         =>  2,
-               LL_PAGE_FETCHING           =>  4,
-               LL_FILE_LOADING            =>  8,
-               LL_VERBOSE_SUCCESS         => 16,
-               LL_STATUS                  => 32,
-               LL_SOFT_ERROR              => 64,
-
-               CLIENT_HEADER_TEST         =>  1,
-               SERVER_HEADER_TEST         =>  2,
-               DUMB_FETCH_TEST            =>  3,
-               METHOD_TEST                =>  4,
-               STICKY_ACTIONS_TEST        =>  5,
-               TRUSTED_CGI_REQUEST        =>  6,
-               BLOCK_TEST                 =>  7,
+    CLIENT_HEADER_TEST  =>  1,
+    SERVER_HEADER_TEST  =>  2,
+    DUMB_FETCH_TEST     =>  3,
+    METHOD_TEST         =>  4,
+    STICKY_ACTIONS_TEST =>  5,
+    TRUSTED_CGI_REQUEST =>  6,
+    BLOCK_TEST          =>  7,
 };
 
 sub init_our_variables () {
@@ -206,8 +205,8 @@ sub token_starts_new_test ($) {
     foreach my $new_test_directive (@new_test_directives) {
         return 1 if $new_test_directive eq $token;
     }
-    return 0;
 
+    return 0;
 }
 
 sub tokenize ($) {
@@ -236,7 +235,6 @@ sub tokenize ($) {
 
         $token = 'tag';
         $value = $1;
-
     }
 
     return ($token, $value);
@@ -289,7 +287,6 @@ sub enlist_new_test ($$$$$$) {
     } else {
 
         die "Incomplete '" . $token . "' support detected."; 
-
     }
 
     $$regression_tests[$si][$ri]{'type'} = $type;
@@ -664,7 +661,6 @@ sub execute_regression_test ($) {
     } else {
 
         die "Unsupported test type detected: " . $test{'type'};
-
     }
 
     return $result;
@@ -824,7 +820,6 @@ sub check_status_code_result ($$) {
 
         l(LL_VERBOSE_FAILURE,
           "Ooops. We expected status code " . $expected_status_code . ", but received: " . $status_code . '.');
-
     }
     
     return $result;
@@ -895,7 +890,6 @@ sub check_header_result ($$) {
             # XXX: Use more reliable check here and make sure
             # the header has a different name.
             $success = 1;
-
         }
 
     } elsif ($expect_header eq 'SOME CHANGE') {
@@ -1020,7 +1014,6 @@ sub get_server_header ($$) {
      or $expect_header eq 'SOME CHANGE') {
 
         $expect_header = $test{'data'};
-
     }
 
     $header_to_get = get_header_name($expect_header);
@@ -1131,7 +1124,6 @@ sub get_cgi_page_or_else ($) {
         } else {
 
             l(LL_ERROR, $log_message);
-
         }
     }
     
@@ -1383,7 +1375,6 @@ sub log_result ($$) {
         } else {
 
             die "Incomplete support for test type " . $test{'type'} .  " detected.";
-
         }
     }
 
@@ -1436,13 +1427,13 @@ sub init_cli_options () {
     our %cli_options;
     our $log_level;
 
-    $cli_options{'min-level'} = CLI_MIN_LEVEL;
+    $cli_options{'debug'}     = $log_level;
+    $cli_options{'forks'}     = CLI_FORKS;
+    $cli_options{'loops'}     = CLI_LOOPS;
     $cli_options{'max-level'} = CLI_MAX_LEVEL;
-    $cli_options{'debug'}  = $log_level;
-    $cli_options{'loops'}  = CLI_LOOPS;
     $cli_options{'max-time'}  = CLI_MAX_TIME;
-    $cli_options{'retries'}  = CLI_RETRIES;
-    $cli_options{'forks'}    = CLI_FORKS;
+    $cli_options{'min-level'} = CLI_MIN_LEVEL;
+    $cli_options{'retries'}   = CLI_RETRIES;
 }
 
 sub parse_cli_options () {
@@ -1453,23 +1444,23 @@ sub parse_cli_options () {
     init_cli_options();
 
     GetOptions (
-                'debug=s' => \$cli_options{'debug'},
-                'forks=s' => \$cli_options{'forks'},
-                'help'     => sub { help },
-                'header-fuzzing' => \$cli_options{'header-fuzzing'},
-                'min-level=s' => \$cli_options{'min-level'},
-                'max-level=s' => \$cli_options{'max-level'},
-                'privoxy-address=s' => \$cli_options{'privoxy-address'},
-                'fuzzer-address=s' => \$cli_options{'fuzzer-address'},
-                'level=s' => \$cli_options{'level'},
-                'loops=s' => \$cli_options{'loops'},
-                'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
-                'test-number=s' => \$cli_options{'test-number'},
-                'fuzzer-feeding' => \$cli_options{'fuzzer-feeding'},
-                'retries=s' => \$cli_options{'retries'},
-                'max-time=s' => \$cli_options{'max-time'},
-                'verbose' => \$cli_options{'verbose'},
-                'version'  => sub { print_version && exit(0) }
+        'debug=s'            => \$cli_options{'debug'},
+        'forks=s'            => \$cli_options{'forks'},
+        'fuzzer-address=s'   => \$cli_options{'fuzzer-address'},
+        'fuzzer-feeding'     => \$cli_options{'fuzzer-feeding'},
+        'header-fuzzing'     => \$cli_options{'header-fuzzing'},
+        'help'               => sub {help},
+        'level=s'            => \$cli_options{'level'},
+        'loops=s'            => \$cli_options{'loops'},
+        'max-level=s'        => \$cli_options{'max-level'},
+        'max-time=s'         => \$cli_options{'max-time'},
+        'min-level=s'        => \$cli_options{'min-level'},
+        'privoxy-address=s'  => \$cli_options{'privoxy-address'},
+        'retries=s'          => \$cli_options{'retries'},
+        'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
+        'test-number=s'      => \$cli_options{'test-number'},
+        'verbose'            => \$cli_options{'verbose'},
+        'version'            => sub {print_version && exit(0)}
     );
     $log_level |= $cli_options{'debug'};
 }
