@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.178 2009/02/08 18:35:48 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.179 2009/02/22 14:48:31 hal9 Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -924,7 +924,7 @@ urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h 
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
 
 # PCRS
-pcrs.@OBJEXT@: pcrs.c pcrs.h config.h pcre/pcre.h 
+pcrs.@OBJEXT@: pcrs.c pcrs.h config.h @STATIC_PCRE_ONLY@pcre/pcre.h 
 
 # PCRE
 pcre/get.@OBJEXT@:        pcre/get.c        pcre/config.h pcre/internal.h pcre/pcre.h
@@ -1317,6 +1317,10 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.179  2009/02/22 14:48:31  hal9
+# Updates to the 'make webserver' target that recreates the home page and uploads
+# fresh documents to reflect new SF realities, and more explanation of process.
+#
 # Revision 1.178  2009/02/08 18:35:48  fabiankeil
 # Move the match-all section into a separate file
 # (match-all.action) so we can safely overwrite the
