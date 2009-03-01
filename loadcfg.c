@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.87 2009/02/15 07:56:13 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.88 2009/02/28 10:57:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.87 2009/02/15 07:56:13 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.88  2009/02/28 10:57:10  fabiankeil
+ *    Gimme a break or two. Don't let the show-status page
+ *    link to the website documentation for the user-manual
+ *    directive itself.
+ *
  *    Revision 1.87  2009/02/15 07:56:13  fabiankeil
  *    Increase default socket timeout to 300 seconds.
  *
@@ -761,15 +766,16 @@ struct configuration_spec * load_config(void)
    int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
 #endif
 
-   if ( !check_file_changed(current_configfile, configfile, &fs))
+   if (!check_file_changed(current_configfile, configfile, &fs))
    {
       /* No need to load */
       return ((struct configuration_spec *)current_configfile->f);
    }
-   if (!fs)
+   if (NULL == fs)
    {
-      log_error(LOG_LEVEL_FATAL, "can't check configuration file '%s':  %E",
-                configfile);
+      log_error(LOG_LEVEL_FATAL,
+         "can't check configuration file '%s':  %E", configfile);
+      return NULL;
    }
 
    if (NULL != current_configfile)
@@ -778,17 +784,17 @@ struct configuration_spec * load_config(void)
    }
 
 #ifdef FEATURE_TOGGLE
-   global_toggle_state      = 1;
+   global_toggle_state = 1;
 #endif /* def FEATURE_TOGGLE */
 
    fs->f = config = (struct configuration_spec *)zalloc(sizeof(*config));
 
-   if (config==NULL)
+   if (NULL == config)
    {
       freez(fs->filename);
       freez(fs);
       log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-      /* Never get here - LOG_LEVEL_FATAL causes program exit */
+      return NULL;
    }
 
    /*
@@ -816,10 +822,11 @@ struct configuration_spec * load_config(void)
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
 
-   if ((configfp = fopen(configfile, "r")) == NULL)
+   configfp = fopen(configfile, "r");
+   if (NULL == configfp)
    {
-      log_error(LOG_LEVEL_FATAL, "can't open configuration file '%s':  %E",
-              configfile);
+      log_error(LOG_LEVEL_FATAL,
+         "can't open configuration file '%s':  %E", configfile);
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
@@ -863,7 +870,7 @@ struct configuration_spec * load_config(void)
       }
 
       /* Make sure the command field is lower case */
-      for (p=cmd; *p; p++)
+      for (p = cmd; *p; p++)
       {
          if (ijb_isupper(*p))
          {
