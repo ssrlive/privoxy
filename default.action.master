@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.167 2009/02/25 18:56:10 fabiankeil Exp $
+#  $Id: default.action.master,v 1.168 2009/02/25 19:01:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -980,6 +980,8 @@ stats.reinvigorate.net/
 #MASTER# COMMENT: user tracking, and assorted 'junk'
 #MASTER# BLOCK-REFERRER: http://infoworld.com 2007-11-12
 .quantserve.com
+# Blocked URL = http://media.adrevolver.com/adrevolver/trace?sip=123&cpy=123
+media.adrevolver.com/
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
@@ -1014,6 +1016,12 @@ js.adsonar.
 #MASTER# REMARKS: Actionsfile feedback item #1736879 2007-06-13, sponsored links. 2007-08-02, more hosts using this scheme, broadening scope.
 #bwp.zdnet.
 bwp.
+# Blocked URL = http://us.mc123.mail.yahoo.com/mc/stampNonJs
+.yahoo.com/mc/stampNonJs
+# Blocked URL = http://richmedia.yimg.com/js/123/personnals_banners/PER_happy_sara1_4_425x600/ad.js?q=123
+/.*/ad\.js\?
+# Blocked URL = http://ad.yieldmanager.com/st?ad_type=iframe&ad_size=728x90&site=123&section_code=123
+/.*\?ad_(type|size)=
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1189,6 +1197,14 @@ img.directtrack.com
 #MASTER# REMARKS: Block yahoo email & ygroups banner ad
 # URL = http://ts.richmedia.yahoo.com/...hummingbird.jpg?adxq=NNN
 .richmedia.yahoo.com/.*\.(gif|jpe?g)\?ad
+# Blocked URL = http://this.content.served.by.adshuffle.com/p/a=/view.pxl
+.served.by.adshuffle.com/
+# Blocked URL = http://newsletter.adsonar.com/nwrss/imgs/nwr_123.PNG?placementId=123&plid=123&rotation=1&type=2&&url=NA
+.adsonar.com/.*/imgs/
+# Blocked URL = http://rtb.pclick.yahoo.com/images/nojs.gif?p=3
+.pclick.yahoo.com/images/
+# Blocked URL = http://rover.ebay.com/ar/1/2/3?mpt=123&adtype=1&size=728x90
+/.*\&adtype=
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1596,6 +1612,9 @@ qa.debian.org/popcon\.php
 #MASTER# REMARKS: The dutch newspaper site of Algemeen Dagblad (http://www.ad.nl) is blocked
 # URL = http://www.ad.nl/
 .ad.nl/
+#MASTER# REMARKS: yahoo groups self-promotion - and the page is uglier without it
+# URL = http://us.i1.yimg.com/us.yimg.com/i/yg/img/ads/bestofygroups.jpg
+.yimg.com/.*/ads/bestofygroups.jpg$
 
 #############################################################################
 # Site-specific special rules:
