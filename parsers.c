@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.150 2008/12/04 18:12:19 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.151 2009/02/15 14:46:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.150 2008/12/04 18:12:19 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.151  2009/02/15 14:46:35  fabiankeil
+ *    Don't let hide-referrer{conditional-*}} pass
+ *    Referer headers without http URLs.
+ *
  *    Revision 1.150  2008/12/04 18:12:19  fabiankeil
  *    Fix some cparser warnings.
  *
@@ -1751,6 +1755,7 @@ static char *get_header_line(struct iob *iob)
       /* FIXME No way to handle error properly */
       log_error(LOG_LEVEL_FATAL, "Out of memory in get_header_line()");
    }
+   assert(ret != NULL);
 
    iob->cur = p+1;
 
@@ -2098,6 +2103,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                      if (0 > hits)
                      {
                         /* Regex failure, log it but continue anyway. */
+                        assert(NULL != header);
                         log_error(LOG_LEVEL_ERROR,
                            "Problems with tagger \'%s\' and header \'%s\': %s",
                            b->name, *header, pcrs_strerror(hits));
