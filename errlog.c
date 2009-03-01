@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.85 2009/02/06 17:51:38 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.86 2009/02/09 21:21:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.85 2009/02/06 17:51:38 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.86  2009/02/09 21:21:15  fabiankeil
+ *    Now that init_log_module() is called earlier, call show_version()
+ *    later on from main() directly so it doesn't get called for --help
+ *    or --version.
+ *
  *    Revision 1.85  2009/02/06 17:51:38  fabiankeil
  *    Be prepared if I break the log module initialization again.
  *
@@ -1053,6 +1058,7 @@ void log_error(int loglevel, const char *fmt, ...)
             "%s %08lx Fatal error: Out of memory in log_error().",
             timestamp, thread_id);
          fatal_error(tempbuf); /* Exit */
+         return;
       }
    }
    outbuf = outbuf_save;

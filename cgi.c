@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.113 2008/09/04 08:13:58 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.114 2008/12/04 18:15:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,9 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.113 2008/09/04 08:13:58 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.114  2008/12/04 18:15:04  fabiankeil
+ *    Fix some cparser warnings.
+ *
  *    Revision 1.113  2008/09/04 08:13:58  fabiankeil
  *    Prepare for critical sections on Windows by adding a
  *    layer of indirection before the pthread mutex functions.
@@ -1501,6 +1504,7 @@ struct http_response *error_response(struct client_state *csp,
        * XXX: While the template is called forwarding-failed,
        * it currently only handles socks forwarding failures.
        */
+      assert(fwd != NULL);
       assert(fwd->type != SOCKS_NONE);
 
       /*

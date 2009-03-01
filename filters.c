@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.110 2008/11/10 16:40:25 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.111 2008/12/04 18:13:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.110 2008/11/10 16:40:25 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.111  2008/12/04 18:13:46  fabiankeil
+ *    Fix a cparser warning.
+ *
  *    Revision 1.110  2008/11/10 16:40:25  fabiankeil
  *    Fix a gcc44 warning.
  *
@@ -2475,6 +2478,7 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
       log_error(LOG_LEVEL_FATAL,
          "can't allocate memory for forward-override{%s}", forward_override_line);
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
+      return NULL;
    }
 
    vec_count = ssplit(forward_settings, " \t", vec, SZ(vec), 1, 1);
