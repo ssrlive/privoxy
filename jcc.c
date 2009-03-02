@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.225 2009/02/19 18:09:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.226 2009/03/01 18:28:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.225 2009/02/19 18:09:32 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.226  2009/03/01 18:28:24  fabiankeil
+ *    Help clang understand that we aren't dereferencing
+ *    NULL pointers here.
+ *
  *    Revision 1.225  2009/02/19 18:09:32  fabiankeil
  *    Unbreak build without FEATURE_CONNECTION_KEEP_ALIVE.
  *    Noticed by David.
@@ -2113,7 +2117,7 @@ static jb_err change_request_destination(struct client_state *csp)
 
    log_error(LOG_LEVEL_INFO, "Rewrite detected: %s", csp->headers->first->str);
    free_http_request(http);
-   err = parse_http_request(csp->headers->first->str, http, csp);
+   err = parse_http_request(csp->headers->first->str, http);
    if (JB_ERR_OK != err)
    {
       log_error(LOG_LEVEL_ERROR, "Couldn't parse rewritten request: %s.",
@@ -2351,7 +2355,7 @@ static jb_err receive_client_request(struct client_state *csp)
    }
 #endif /* def FEATURE_FORCE_LOAD */
 
-   err = parse_http_request(req, http, csp);
+   err = parse_http_request(req, http);
    freez(req);
    if (JB_ERR_OK != err)
    {
