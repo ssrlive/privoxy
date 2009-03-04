@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.168 2009/02/25 19:01:57 fabiankeil Exp $
+#  $Id: default.action.master,v 1.169 2009/03/01 18:31:43 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1615,6 +1615,12 @@ qa.debian.org/popcon\.php
 #MASTER# REMARKS: yahoo groups self-promotion - and the page is uglier without it
 # URL = http://us.i1.yimg.com/us.yimg.com/i/yg/img/ads/bestofygroups.jpg
 .yimg.com/.*/ads/bestofygroups.jpg$
+#MASTER# REMARKS: NYT home page is messed up because .css files are blocked
+#MASTER# UNBLOCK-REFERRER: http://www.nytimes.com/
+# URL = http://graphics8.nytimes.com/css/0.1/screen/common/ads.css
+# URL = http://graphics8.nytimes.com/css/0.1/screen/homepage/ads.css
+.nytimes.com/.*/ads\.css$
+
 
 #############################################################################
 # Site-specific special rules:
