@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.226 2009/03/01 18:28:24 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.227 2009/03/02 19:18:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.226 2009/03/01 18:28:24 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.227  2009/03/02 19:18:11  fabiankeil
+ *    Streamline parse_http_request()'s prototype. As
+ *    cparser pointed out it doesn't actually use csp.
+ *
  *    Revision 1.226  2009/03/01 18:28:24  fabiankeil
  *    Help clang understand that we aren't dereferencing
  *    NULL pointers here.
@@ -1891,7 +1895,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
 
       /* Log that the request was crunched and why. */
       log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %d",
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
          csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
 
       /* Clean up and return */
@@ -1948,7 +1952,7 @@ static int request_contains_null_bytes(const struct client_state *csp, char *buf
       } while (tmp_len < len);
 
       log_error(LOG_LEVEL_ERROR, "%s\'s request contains at least one NULL byte "
-         "(length=%d, strlen=%d).", csp->ip_addr_str, len, c_len);
+         "(length=%d, strlen=%u).", csp->ip_addr_str, len, c_len);
       log_error(LOG_LEVEL_HEADER, 
          "Offending request data with NULL bytes turned into \'°\' characters: %s", buf);
 
@@ -2810,8 +2814,8 @@ static void chat(struct client_state *csp)
       if (server_body && server_response_is_complete(csp, byte_count))
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Done reading from server. Expected content length: %d. "
-            "Actual content length: %d. Most recently received: %d.",
+            "Done reading from server. Expected content length: %u. "
+            "Actual content length: %u. Most recently received: %d.",
             csp->expected_content_length, byte_count, len);
          len = 0;
          /*
@@ -3139,7 +3143,7 @@ static void chat(struct client_state *csp)
                   assert(csp->iob->cur >= header_start);
                   byte_count += (size_t)(len - header_offset);
                   log_error(LOG_LEVEL_CONNECT, "Continuing buffering headers. "
-                     "byte_count: %d. header_offset: %d. len: %d.",
+                     "byte_count: %u. header_offset: %d. len: %d.",
                      byte_count, header_offset, len);
                   continue;
                }
@@ -3289,13 +3293,13 @@ static void chat(struct client_state *csp)
       && (csp->expected_content_length != byte_count))
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Received %d bytes while expecting %d.",
+         "Received %u bytes while expecting %u.",
          byte_count, csp->expected_content_length);
       mark_server_socket_tainted(csp);
    }
 #endif
 
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %d",
+   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %u",
       csp->ip_addr_str, http->ocmd, csp->content_length);
 }
 
