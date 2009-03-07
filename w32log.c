@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.29 2008/12/20 15:27:40 ler762 Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.30 2009/01/01 15:09:23 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -6,7 +6,7 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.29 2008/12/20 15:27:40 ler762 Exp $
  * Purpose     :  Functions for creating and destroying the log window,
  *                ouputting strings, processing messages and so on.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2002 members of
+ * Copyright   :  Written by and Copyright (C) 2001-2009 members of
  *                the Privoxy team.  http://www.privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
@@ -32,6 +32,9 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.29 2008/12/20 15:27:40 ler762 Exp $
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.30  2009/01/01 15:09:23  ler762
+ *    Change the Windows taskbar icon when privoxy is toggled off.
+ *
  *    Revision 1.29  2008/12/20 15:27:40  ler762
  *    The crunch log message format changed, so update the strings to highlight
  *    in the log window.
@@ -284,7 +287,7 @@ BOOL g_bLimitBufferSize = 1;
 int g_nMaxBufferLines = DEFAULT_MAX_BUFFER_LINES;
 
 /* Font to use */
-char g_szFontFaceName[255] = DEFAULT_LOG_FONT_NAME;
+char g_szFontFaceName[32] = DEFAULT_LOG_FONT_NAME;
 
 /* Size of font to use */
 int g_nFontSize = DEFAULT_LOG_FONT_SIZE;
@@ -704,7 +707,7 @@ int LogPutStringNoMatch(const char *pszText, int style)
    format.cbSize = sizeof(format);
    format.dwMask = CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT | CFM_ITALIC | CFM_COLOR | CFM_FACE | CFM_SIZE;
    format.yHeight = (g_nFontSize * 1440) / 72;
-   strcpy(format.szFaceName, g_szFontFaceName);
+   strlcpy(format.szFaceName, g_szFontFaceName, sizeof(format.szFaceName));
    if (style == STYLE_NONE)
    {
       /* DO NOTHING */
