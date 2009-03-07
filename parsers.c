@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.151 2009/02/15 14:46:35 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.152 2009/03/01 18:43:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.151 2009/02/15 14:46:35 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.152  2009/03/01 18:43:48  fabiankeil
+ *    Help clang understand that we aren't dereferencing
+ *    NULL pointers here.
+ *
  *    Revision 1.151  2009/02/15 14:46:35  fabiankeil
  *    Don't let hide-referrer{conditional-*}} pass
  *    Referer headers without http URLs.
@@ -2826,11 +2830,11 @@ static jb_err server_adjust_content_length(struct client_state *csp, char **head
  *********************************************************************/
 static jb_err server_save_content_length(struct client_state *csp, char **header)
 {
-   unsigned int content_length = 0;
+   unsigned long long content_length = 0;
 
    assert(*(*header+14) == ':');
 
-   if (1 != sscanf(*header+14, ": %u", &content_length))
+   if (1 != sscanf(*header+14, ": %llu", &content_length))
    {
       log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
       freez(*header);

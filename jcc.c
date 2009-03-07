@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.228 2009/03/06 20:30:13 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.229 2009/03/07 11:17:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.228 2009/03/06 20:30:13 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.229  2009/03/07 11:17:01  fabiankeil
+ *    Fix compiler warning.
+ *
  *    Revision 1.228  2009/03/06 20:30:13  fabiankeil
  *    Log unsigned values as such.
  *
@@ -2161,7 +2164,8 @@ static jb_err change_request_destination(struct client_state *csp)
  *                FALSE otherwise.
  *
  *********************************************************************/
-static int server_response_is_complete(struct client_state *csp, size_t content_length)
+static int server_response_is_complete(struct client_state *csp,
+   unsigned long long content_length)
 {
    int content_length_known = !!(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET);
 
@@ -2571,7 +2575,7 @@ static void chat(struct client_state *csp)
    jb_socket maxfd;
    int server_body;
    int ms_iis5_hack = 0;
-   size_t byte_count = 0;
+   unsigned long long byte_count = 0;
    int forwarded_connect_retries = 0;
    int max_forwarded_connect_retries = csp->config->forwarded_connect_retries;
    const struct forward_spec *fwd;
@@ -2810,15 +2814,15 @@ static void chat(struct client_state *csp)
          log_error(LOG_LEVEL_CONNECT,
             "Looks like we read the last chunk together with "
             "the server headers. We better stop reading.");
-         byte_count = (size_t)(csp->iob->eod - csp->iob->cur);
+         byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
          csp->expected_content_length = byte_count;
          csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
       }
       if (server_body && server_response_is_complete(csp, byte_count))
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Done reading from server. Expected content length: %u. "
-            "Actual content length: %u. Most recently received: %d.",
+            "Done reading from server. Expected content length: %llu. "
+            "Actual content length: %llu. Most recently received: %d.",
             csp->expected_content_length, byte_count, len);
          len = 0;
          /*
@@ -2932,7 +2936,7 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_CONNECT,
                   "Looks like we reached the end of the last chunk. "
                   "We better stop reading.");
-               csp->expected_content_length = byte_count + (size_t)len;
+               csp->expected_content_length = byte_count + (unsigned long long)len;
                csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
             }
          }
@@ -3001,7 +3005,8 @@ static void chat(struct client_state *csp)
                   }
 
                   if (write_socket(csp->cfd, hdr, strlen(hdr))
-                   || write_socket(csp->cfd, p != NULL ? p : csp->iob->cur, csp->content_length))
+                   || write_socket(csp->cfd,
+                         ((p != NULL) ? p : csp->iob->cur), (size_t)csp->content_length))
                   {
                      log_error(LOG_LEVEL_ERROR, "write modified content to client failed: %E");
                      freez(hdr);
@@ -3085,7 +3090,7 @@ static void chat(struct client_state *csp)
                    * we just flushed. len will be added a few lines below,
                    * hdrlen doesn't matter for LOG_LEVEL_CLF.
                    */
-                  byte_count = (size_t)flushed;
+                  byte_count = (unsigned long long)flushed;
                   freez(hdr);
                   content_filter = NULL;
                   server_body = 1;
@@ -3100,7 +3105,7 @@ static void chat(struct client_state *csp)
                   return;
                }
             }
-            byte_count += (size_t)len;
+            byte_count += (unsigned long long)len;
             continue;
          }
          else
@@ -3144,9 +3149,9 @@ static void chat(struct client_state *csp)
                    */
                   int header_offset = csp->iob->cur - header_start;
                   assert(csp->iob->cur >= header_start);
-                  byte_count += (size_t)(len - header_offset);
+                  byte_count += (unsigned long long)(len - header_offset);
                   log_error(LOG_LEVEL_CONNECT, "Continuing buffering headers. "
-                     "byte_count: %u. header_offset: %d. len: %d.",
+                     "byte_count: %llu. header_offset: %d. len: %d.",
                      byte_count, header_offset, len);
                   continue;
                }
@@ -3246,7 +3251,7 @@ static void chat(struct client_state *csp)
                   return;
                }
 
-               byte_count += (size_t)len;
+               byte_count += (unsigned long long)len;
             }
             else
             {
@@ -3256,7 +3261,7 @@ static void chat(struct client_state *csp)
                 */
                int header_length = csp->iob->cur - header_start;
                assert(csp->iob->cur > header_start);
-               byte_count += (size_t)(len - header_length);
+               byte_count += (unsigned long long)(len - header_length);
             }
 
             /* we're finished with the server's header */
@@ -3296,13 +3301,13 @@ static void chat(struct client_state *csp)
       && (csp->expected_content_length != byte_count))
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Received %u bytes while expecting %u.",
+         "Received %llu bytes while expecting %llu.",
          byte_count, csp->expected_content_length);
       mark_server_socket_tainted(csp);
    }
 #endif
 
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %u",
+   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %llu",
       csp->ip_addr_str, http->ocmd, csp->content_length);
 }
 
