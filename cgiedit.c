@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.63 2008/12/04 18:15:38 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.64 2009/03/01 18:43:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -42,6 +42,9 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.63 2008/12/04 18:15:38 fabiankeil
  *
  * Revisions   :
  *    $Log: cgiedit.c,v $
+ *    Revision 1.64  2009/03/01 18:43:09  fabiankeil
+ *    Fix cparser warnings.
+ *
  *    Revision 1.63  2008/12/04 18:15:38  fabiankeil
  *    Fix some cparser warnings.
  *
@@ -4579,8 +4582,8 @@ static void javascriptify(char * identifier)
 static jb_err actions_to_radio(struct map * exports,
                                const struct action_spec *action)
 {
-   unsigned mask = action->mask;
-   unsigned add  = action->add;
+   unsigned long mask;
+   unsigned long add;
    int mapped_param;
    int checked;
    char current_mode;

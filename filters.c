@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.111 2008/12/04 18:13:46 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.112 2009/03/01 18:28:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.111 2008/12/04 18:13:46 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.112  2009/03/01 18:28:23  fabiankeil
+ *    Help clang understand that we aren't dereferencing
+ *    NULL pointers here.
+ *
  *    Revision 1.111  2008/12/04 18:13:46  fabiankeil
  *    Fix a cparser warning.
  *
@@ -1791,7 +1795,7 @@ int is_untrusted_url(const struct client_state *csp)
                /* since this path points into a user's home space
                 * be sure to include this spec in the trustfile.
                 */
-               int path_len = path_end - path; /* save offset */
+               long path_len = path_end - path; /* save offset */
                path = strdup(path); /* Copy string */
                if (path != NULL)
                {
@@ -2518,7 +2522,7 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
          if (NULL != (socks_proxy = strchr(fwd->gateway_host, ':')))
          {
             *socks_proxy++ = '\0';
-            fwd->gateway_port = strtol(socks_proxy, NULL, 0);
+            fwd->gateway_port = (int)strtol(socks_proxy, NULL, 0);
          }
 
          if (fwd->gateway_port <= 0)
@@ -2545,7 +2549,7 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
       if (NULL != (http_parent = strchr(fwd->forward_host, ':')))
       {
          *http_parent++ = '\0';
-         fwd->forward_port = strtol(http_parent, NULL, 0);
+         fwd->forward_port = (int)strtol(http_parent, NULL, 0);
       }
 
       if (fwd->forward_port <= 0)

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.89 2008/10/11 11:31:14 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.90 2009/03/01 18:43:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.89 2008/10/11 11:31:14 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.90  2009/03/01 18:43:09  fabiankeil
+ *    Fix cparser warnings.
+ *
  *    Revision 1.89  2008/10/11 11:31:14  fabiankeil
  *    Add FEATURE_CONNECTION_KEEP_ALIVE to the list
  *    of conditional defines on the show-status page.
@@ -2225,7 +2228,7 @@ static jb_err cgi_show_file(struct client_state *csp,
 static jb_err load_file(const char *filename, char **buffer, size_t *length)
 {
    FILE *fp;
-   int ret;
+   long ret;
    jb_err err = JB_ERR_OK;
 
    fp = fopen(filename, "rb");
