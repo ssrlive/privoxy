@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.230 2009/03/07 13:09:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.231 2009/03/08 14:19:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.230 2009/03/07 13:09:17 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.231  2009/03/08 14:19:23  fabiankeil
+ *    Fix justified (but harmless) compiler warnings
+ *    on platforms where sizeof(int) < sizeof(long).
+ *
  *    Revision 1.230  2009/03/07 13:09:17  fabiankeil
  *    Change csp->expected_content and_csp->expected_content_length from
  *    size_t to unsigned long long to reduce the likelihood of integer
@@ -2596,8 +2600,6 @@ static void chat(struct client_state *csp)
    struct timeval timeout;
 
    memset(buf, 0, sizeof(buf));
-   memset(&timeout, 0, sizeof(timeout));
-   timeout.tv_sec = csp->config->socket_timeout;
 
    http = csp->http;
 
@@ -2839,6 +2841,8 @@ static void chat(struct client_state *csp)
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
+      timeout.tv_sec = csp->config->socket_timeout;
+      timeout.tv_usec = 0;
       n = select((int)maxfd+1, &rfds, NULL, NULL, &timeout);
 
       if (n == 0)
