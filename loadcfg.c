@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.89 2009/03/01 18:46:33 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.90 2009/03/07 17:58:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.89 2009/03/01 18:46:33 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.90  2009/03/07 17:58:02  fabiankeil
+ *    Fix two mingw32-only buffer overflows. Note that triggering
+ *    them requires control over the configuration file in which
+ *    case all bets are off anyway.
+ *
  *    Revision 1.89  2009/03/01 18:46:33  fabiankeil
  *    - Help clang understand that we aren't
  *      dereferencing NULL pointers here.
@@ -1752,7 +1757,7 @@ struct configuration_spec * load_config(void)
             log_error(LOG_LEVEL_ERROR, "Ignoring unrecognized directive '%s' (%luul) in line %lu "
                   "in configuration file (%s).",  buf, directive_hash, linenum, configfile);
             string_append(&config->proxy_args,
-               " <strong class='warning'>Warning: ignored unrecognized directive above.</strong><br>");
+               " <strong class='warning'>Warning: Ignoring unrecognized directive:</strong>");
             break;
 
 /* *************************************************************************/
