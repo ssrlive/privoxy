@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.31 2009/03/07 17:58:02 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.32 2009/03/09 18:32:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -32,6 +32,10 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.31 2009/03/07 17:58:02 fabiankeil E
  *
  * Revisions   :
  *    $Log: w32log.c,v $
+ *    Revision 1.32  2009/03/09 18:32:48  fabiankeil
+ *    Use the Privoxy icon in the alt+tab window.
+ *    Patch submitted by Burberry in #2674342.
+ *
  *    Revision 1.31  2009/03/07 17:58:02  fabiankeil
  *    Fix two mingw32-only buffer overflows. Note that triggering
  *    them requires control over the configuration file in which
@@ -710,7 +714,9 @@ int LogPutStringNoMatch(const char *pszText, int style)
    /* Apply a formatting style */
    memset(&format, 0, sizeof(format));
    format.cbSize = sizeof(format);
-   format.dwMask = CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT | CFM_ITALIC | CFM_COLOR | CFM_FACE | CFM_SIZE;
+   format.dwMask = CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT |
+      CFM_ITALIC | CFM_COLOR | CFM_FACE | CFM_SIZE | CFM_CHARSET;
+   format.bCharSet = DEFAULT_CHARSET;
    format.yHeight = (g_nFontSize * 1440) / 72;
    strlcpy(format.szFaceName, g_szFontFaceName, sizeof(format.szFaceName));
    if (style == STYLE_NONE)
