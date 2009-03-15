@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.114 2008/12/04 18:15:04 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.115 2009/03/01 18:28:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -38,6 +38,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.114 2008/12/04 18:15:04 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: cgi.c,v $
+ *    Revision 1.115  2009/03/01 18:28:23  fabiankeil
+ *    Help clang understand that we aren't dereferencing
+ *    NULL pointers here.
+ *
  *    Revision 1.114  2008/12/04 18:15:04  fabiankeil
  *    Fix some cparser warnings.
  *
@@ -2413,10 +2417,10 @@ jb_err template_load(const struct client_state *csp, char **template_ptr,
     * Read the file, ignoring comments, and honoring #include
     * statements, unless we're already called recursively.
     *
-    * FIXME: The comment handling could break with lines >BUFFER_SIZE long.
-    *        This is unlikely in practise.
+    * XXX: The comment handling could break with lines lengths > sizeof(buf).
+    *      This is unlikely in practise.
     */
-   while (fgets(buf, BUFFER_SIZE, fp))
+   while (fgets(buf, sizeof(buf), fp))
    {
       if (!recursive && !strncmp(buf, "#include ", 9))
       {
@@ -2486,7 +2490,7 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
    char buf[BUFFER_SIZE];
    char *tmp_out_buffer;
    char *file_buffer;
-   size_t  size;
+   size_t size;
    int error;
    const char *flags;
 
@@ -2509,7 +2513,7 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
           * character and allow backreferences ($1 etc) in the
           * "replace with" text.
           */
-         snprintf(buf, BUFFER_SIZE, "%s", m->name + 1);
+         snprintf(buf, sizeof(buf), "%s", m->name + 1);
          flags = "sigU";
       }
       else
@@ -2522,9 +2526,8 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
          flags = "sigTU";
 
          /* Enclose name in @@ */
-         snprintf(buf, BUFFER_SIZE, "@%s@", m->name);
+         snprintf(buf, sizeof(buf), "@%s@", m->name);
       }
-
 
       log_error(LOG_LEVEL_CGI, "Substituting: s/%s/%s/%s", buf, m->value, flags);
 
