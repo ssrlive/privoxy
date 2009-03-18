@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.232 2009/03/08 19:29:16 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.233 2009/03/13 14:10:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.232 2009/03/08 19:29:16 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.233  2009/03/13 14:10:07  fabiankeil
+ *    Fix some more harmless warnings on amd64.
+ *
  *    Revision 1.232  2009/03/08 19:29:16  fabiankeil
  *    Reinitialize the timeout structure every time before passing
  *    it to select(). Apparently some implementations mess with it.
@@ -3687,6 +3690,7 @@ int main(int argc, const char *argv[])
 
       else if (strcmp(argv[argc_pos], "--no-daemon" ) == 0)
       {
+         set_debug_level(LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
          no_daemon = 1;
       }
 
