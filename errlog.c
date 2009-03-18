@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.89 2009/03/07 12:56:12 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.90 2009/03/18 20:43:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,11 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.89 2009/03/07 12:56:12 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.90  2009/03/18 20:43:19  fabiankeil
+ *    Don't enable LOG_LEVEL_INFO by default and don't apply the user's
+ *    debug settings until the logfile has been opened (if there is one).
+ *    Patch submitted by Roland in #2624120.
+ *
  *    Revision 1.89  2009/03/07 12:56:12  fabiankeil
  *    Add log_error() support for unsigned long long (%lld).
  *
@@ -680,7 +685,7 @@ void init_error_log(const char *prog_name, const char *logfname)
 
    lock_loginit();
 
-   if (logfp != NULL)
+   if ((logfp != NULL) && (logfp != stderr))
    {
       log_error(LOG_LEVEL_INFO, "(Re-)Opening logfile \'%s\'", logfname);
    }
