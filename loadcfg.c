@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.91 2009/03/09 17:29:08 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.92 2009/03/18 20:43:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.91 2009/03/09 17:29:08 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.92  2009/03/18 20:43:19  fabiankeil
+ *    Don't enable LOG_LEVEL_INFO by default and don't apply the user's
+ *    debug settings until the logfile has been opened (if there is one).
+ *    Patch submitted by Roland in #2624120.
+ *
  *    Revision 1.91  2009/03/09 17:29:08  fabiankeil
  *    As of r1.88, the show-status page can use a single line for
  *    warnings about ignored directives and the names of the ignored
@@ -1775,6 +1780,8 @@ struct configuration_spec * load_config(void)
 
    fclose(configfp);
 
+   set_debug_level(config->debug);
+
    freez(config->logfile);
 
    if (!no_daemon)
@@ -1789,8 +1796,6 @@ struct configuration_spec * load_config(void)
          disable_logging();
       }
    }
-
-   set_debug_level(config->debug);
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if (config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
