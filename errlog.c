@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.88 2009/03/07 11:34:36 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.89 2009/03/07 12:56:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.88 2009/03/07 11:34:36 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.89  2009/03/07 12:56:12  fabiankeil
+ *    Add log_error() support for unsigned long long (%lld).
+ *
  *    Revision 1.88  2009/03/07 11:34:36  fabiankeil
  *    Omit timestamp and thread id in the mingw32 message box.
  *
@@ -475,7 +478,7 @@ const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 static FILE *logfp = NULL;
 
 /* logging detail level. XXX: stupid name. */
-static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);  
+static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR);
 
 /* static functions */
 static void fatal_error(const char * error_message);

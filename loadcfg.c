@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.90 2009/03/07 17:58:02 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.91 2009/03/09 17:29:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.90 2009/03/07 17:58:02 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.91  2009/03/09 17:29:08  fabiankeil
+ *    As of r1.88, the show-status page can use a single line for
+ *    warnings about ignored directives and the names of the ignored
+ *    directives themselves. Reminded by Lee, finally closes #1856559.
+ *
  *    Revision 1.90  2009/03/07 17:58:02  fabiankeil
  *    Fix two mingw32-only buffer overflows. Note that triggering
  *    them requires control over the configuration file in which
@@ -1770,8 +1775,6 @@ struct configuration_spec * load_config(void)
 
    fclose(configfp);
 
-   set_debug_level(config->debug);
-
    freez(config->logfile);
 
    if (!no_daemon)
@@ -1786,6 +1789,8 @@ struct configuration_spec * load_config(void)
          disable_logging();
       }
    }
+
+   set_debug_level(config->debug);
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if (config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
