@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.233 2009/03/13 14:10:07 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.234 2009/03/18 20:48:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.233 2009/03/13 14:10:07 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.234  2009/03/18 20:48:42  fabiankeil
+ *    If the --no-daemon option is used, enable LOG_LEVEL_INFO
+ *    before the config file has been parsed (as we always did).
+ *
  *    Revision 1.233  2009/03/13 14:10:07  fabiankeil
  *    Fix some more harmless warnings on amd64.
  *
@@ -3906,8 +3910,8 @@ int main(int argc, const char *argv[])
       }
 #endif /* 1 */
       /*
-       * stderr (fd 2) will be closed later on, when the
-       * log file has been parsed.
+       * stderr (fd 2) will be closed later on,
+       * when the config file has been parsed.
        */
 
       close( 0 );
