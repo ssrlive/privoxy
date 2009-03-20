@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.90 2009/03/18 20:43:19 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.91 2009/03/18 21:56:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -33,6 +33,12 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.90 2009/03/18 20:43:19 fabiankeil E
  *
  * Revisions   :
  *    $Log: errlog.c,v $
+ *    Revision 1.91  2009/03/18 21:56:30  fabiankeil
+ *    In init_error_log(), suppress the "(Re-)Opening logfile" message if
+ *    we're still logging to stderr. This restores the "silent mode", but
+ *    with LOG_LEVEL_INFO enabled, the show_version() info is written to
+ *    the logfile as intended.
+ *
  *    Revision 1.90  2009/03/18 20:43:19  fabiankeil
  *    Don't enable LOG_LEVEL_INFO by default and don't apply the user's
  *    debug settings until the logfile has been opened (if there is one).
@@ -739,18 +745,7 @@ void init_error_log(const char *prog_name, const char *logfname)
    logfp = fp;
    unlock_logfile();
 
-#if !defined(_WIN32)
-   /*
-    * Prevent the Windows GUI from showing the version two
-    * times in a row on startup. It already displayed the show_version()
-    * call from main() that other systems write to stderr.
-    *
-    * This means mingw32 users will never see the version in their
-    * log file, but I assume they wouldn't look for it there anyway
-    * and simply use the "Help/About Privoxy" menu.
-    */
    show_version(prog_name);
-#endif /* def unix */
 
    unlock_loginit();
 
