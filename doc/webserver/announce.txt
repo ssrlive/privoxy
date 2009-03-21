@@ -56,6 +56,9 @@ networks.
 
 Privoxy is Free Software and licensed under the GPL2.
 
+Privoxy is an associated project of Software in the Public Interest (SPI).
+Donations are welcome: http://www.privoxy.org/faq/general.html#DONATE
+
 At present, Privoxy is known to run on Windows(95, 98, ME, 2000,
 XP, Vista), Linux (Ubuntu, RedHat, SuSE, Debian, Fedora, Gentoo and
 others), Mac OSX, OS/2, AmigaOS, FreeBSD, NetBSD, OpenBSD, Solaris, and
