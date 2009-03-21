@@ -1,6 +1,6 @@
-#        Sample Configuration File for Privoxy v3.0.11
+#        Sample Configuration File for Privoxy v3.0.12
 #
-#  $Id: config,v 1.73 2009/02/15 08:06:22 fabiankeil Exp $
+#  $Id: config,v 1.74 2009/02/19 17:26:26 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -130,7 +130,7 @@
 #          If set, this option should be the first option in the config
 #          file, because it is used while the config file is being read.
 #
-#user-manual http://www.privoxy.org/user-manual/
+user-manual /home/halb/privoxy/share/doc/privoxy/user-manual/
 #
 #
 #  1.2. trust-info-url
@@ -267,7 +267,7 @@
 #
 #      No trailing "/", please.
 #
-confdir .
+confdir /home/halb/privoxy/etc
 #
 #
 #  2.2. templdir
@@ -324,7 +324,7 @@ confdir .
 #
 #      No trailing "/", please.
 #
-logdir .
+logdir /home/halb/privoxy/var/log/privoxy
 #
 #
 #  2.4. actionsfile
