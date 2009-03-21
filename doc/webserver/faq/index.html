@@ -48,7 +48,7 @@ TARGET="_top"
 ><BR></P
 ><P
 CLASS="PUBDATE"
->$Id: faq.sgml,v 2.56 2009/02/19 17:05:05 fabiankeil Exp $<BR></P
+>$Id: faq.sgml,v 2.57 2009/03/19 19:07:49 fabiankeil Exp $<BR></P
 ><DIV
 ><DIV
 CLASS="ABSTRACT"
@@ -78,28 +78,16 @@ CLASS="CITETITLE"
 ><P
 >What is Privoxy?</P
 ><P
-> Privoxy is a non-caching
- <A
-HREF="http://en.wikipedia.org/wiki/Proxy_server"
-TARGET="_top"
->web proxy</A
->
- with advanced filtering capabilities for enhancing privacy,
- modifying web page data, managing HTTP
- <A
-HREF="http://en.wikipedia.org/wiki/Browser_cookie"
-TARGET="_top"
->cookies</A
->, 
- controlling access, and removing ads, banners, pop-ups and other obnoxious
- Internet junk. Privoxy has a flexible configuration and can be
- customized to suit individual needs and tastes. Privoxy has application for
- both stand-alone systems and multi-user networks.</P
+> Privoxy is a non-caching web proxy with advanced filtering capabilities
+ for enhancing privacy, modifying web page data and HTTP headers, controlling
+ access, and removing ads and other obnoxious Internet junk. Privoxy has a
+ flexible configuration and can be customized to suit individual needs and tastes.
+ It has application for both stand-alone systems and multi-user networks.</P
 ><P
-> Privoxy is based on Internet Junkbuster (tm).</P
+> Privoxy is Free Software and licensed under the GPL2.</P
 ><P
 >  Please note that this document is a work in progress. This copy represents
-  the state at the release of version 3.0.11.
+  the state at the release of version 3.0.12.
   You can find the latest version of the document at <A
 HREF="http://www.privoxy.org/faq/"
 TARGET="_top"
@@ -169,7 +157,7 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >1.6. <A
-HREF="general.html#AEN79"
+HREF="general.html#AEN76"
 >Why <SPAN
 CLASS="QUOTE"
 >"Privoxy"</SPAN
@@ -190,13 +178,13 @@ an ad, and what is not?</A
 ></DT
 ><DT
 >1.9. <A
-HREF="general.html#AEN161"
+HREF="general.html#AEN158"
 >Can Privoxy make mistakes? 
 This does not sound very scientific.</A
 ></DT
 ><DT
 >1.10. <A
-HREF="general.html#AEN167"
+HREF="general.html#AEN164"
 >Will I have to configure Privoxy
  before I can use it?</A
 ></DT
@@ -246,13 +234,8 @@ HREF="general.html#JOINTEAM-WORK"
 ></DT
 ><DT
 >1.17.2. <A
-HREF="general.html#JOINTEAM-MONEY"
->Contribute!</A
-></DT
-><DT
->1.17.3. <A
-HREF="general.html#JOINTEAM-SOFTWARE"
->Software</A
+HREF="general.html#DONATING"
+>Donating</A
 ></DT
 ></DL
 ></DD
@@ -317,7 +300,7 @@ HREF="configuration.html"
 ><DL
 ><DT
 >3.1. <A
-HREF="configuration.html#AEN351"
+HREF="configuration.html#AEN352"
 >What exactly is an <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -337,13 +320,13 @@ CLASS="QUOTE"
 ></DT
 ><DT
 >3.3. <A
-HREF="configuration.html#AEN374"
+HREF="configuration.html#AEN375"
 >How are actions files configured? What is the easiest
 way to do this?</A
 ></DT
 ><DT
 >3.4. <A
-HREF="configuration.html#AEN383"
+HREF="configuration.html#AEN384"
 >There are several different <SPAN
 CLASS="QUOTE"
 >"actions"</SPAN
@@ -393,7 +376,7 @@ with a browser? Does that not raise security issues?</A
 ></DT
 ><DT
 >3.11. <A
-HREF="configuration.html#AEN478"
+HREF="configuration.html#AEN479"
 >What is the <TT
 CLASS="FILENAME"
 >default.filter</TT
@@ -410,17 +393,17 @@ HREF="configuration.html#LANCONFIG"
 ></DT
 ><DT
 >3.13. <A
-HREF="configuration.html#AEN529"
+HREF="configuration.html#AEN530"
 >Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</A
 ></DT
 ><DT
 >3.14. <A
-HREF="configuration.html#AEN546"
+HREF="configuration.html#AEN547"
 >Why would anybody want to see a checkerboard pattern?</A
 ></DT
 ><DT
 >3.15. <A
-HREF="configuration.html#AEN552"
+HREF="configuration.html#AEN553"
 >I see some images being replaced with text
 instead of the checkerboard image. Why and how do I get rid of this?</A
 ></DT
@@ -540,7 +523,7 @@ HREF="misc.html"
 ><DL
 ><DT
 >4.1. <A
-HREF="misc.html#AEN726"
+HREF="misc.html#AEN727"
 >How much does Privoxy slow my browsing down? This 
 has to add extra time to browsing.</A
 ></DT
@@ -581,12 +564,12 @@ HREF="misc.html#IP"
 ></DT
 ><DT
 >4.8. <A
-HREF="misc.html#AEN791"
+HREF="misc.html#AEN792"
 >Can Privoxy guarantee I am anonymous?</A
 ></DT
 ><DT
 >4.9. <A
-HREF="misc.html#AEN809"
+HREF="misc.html#AEN810"
 >A test site says I am not using a Proxy.</A
 ></DT
 ><DT
@@ -597,13 +580,13 @@ HREF="misc.html#TOR"
 ></DT
 ><DT
 >4.11. <A
-HREF="misc.html#AEN865"
+HREF="misc.html#AEN866"
 >Might some things break because header information or
 content is being altered?</A
 ></DT
 ><DT
 >4.12. <A
-HREF="misc.html#AEN879"
+HREF="misc.html#AEN880"
 >Can Privoxy act as a <SPAN
 CLASS="QUOTE"
 >"caching"</SPAN
@@ -612,23 +595,23 @@ speed up web browsing?</A
 ></DT
 ><DT
 >4.13. <A
-HREF="misc.html#AEN889"
+HREF="misc.html#AEN890"
 >What about as a firewall? Can Privoxy protect me?</A
 ></DT
 ><DT
 >4.14. <A
-HREF="misc.html#AEN894"
+HREF="misc.html#AEN895"
 >I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</A
 ></DT
 ><DT
 >4.15. <A
-HREF="misc.html#AEN902"
+HREF="misc.html#AEN903"
 >How can Privoxy filter Secure (HTTPS) URLs?</A
 ></DT
 ><DT
 >4.16. <A
-HREF="misc.html#AEN916"
+HREF="misc.html#AEN917"
 >Privoxy runs as a <SPAN
 CLASS="QUOTE"
 >"server"</SPAN
@@ -723,7 +706,7 @@ HREF="trouble.html"
 ><DL
 ><DT
 >5.1. <A
-HREF="trouble.html#AEN1081"
+HREF="trouble.html#AEN1082"
 >I cannot connect to any websites. Or, I am getting
 <SPAN
 CLASS="QUOTE"
@@ -737,7 +720,7 @@ HREF="trouble.html#ERROR503"
 ></DT
 ><DT
 >5.3. <A
-HREF="trouble.html#AEN1104"
+HREF="trouble.html#AEN1105"
 >I just added a new rule, but the steenkin ad is 
 still getting through. How?</A
 ></DT
@@ -941,12 +924,12 @@ HREF="copyright.html"
 ><DL
 ><DT
 >7.1. <A
-HREF="copyright.html#AEN1448"
+HREF="copyright.html#AEN1449"
 >License</A
 ></DT
 ><DT
 >7.2. <A
-HREF="copyright.html#AEN1464"
+HREF="copyright.html#AEN1465"
 >History</A
 ></DT
 ></DL
