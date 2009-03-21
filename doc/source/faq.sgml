@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.56 2009/02/19 17:05:05 fabiankeil Exp $
+ $Id: faq.sgml,v 2.57 2009/03/19 19:07:49 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.56 2009/02/19 17:05:05 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.57 2009/03/19 19:07:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -492,7 +492,7 @@ warranty? Registration?</title>
  </para>
 </sect3>
 
-<sect3 renderas="sect4" id="donating"><title>Donating</title>
+<sect3 renderas="sect4" id="donate"><title>Would you like to donate?</title>
 <para>
  <application>Privoxy</application> is developed by unpaid volunteers
  and thus our current running costs are pretty low. Nevertheless, we
@@ -502,17 +502,16 @@ warranty? Registration?</title>
 
 <para>
  <application>Privoxy</application> has therefore become an associated
- project of <ulink url="http://www.spi-inc.org/">Software in the Public
- Interest</ulink>, which allows us to receive tax-deductible donations
- in most western countries. Before donating you should probably read on,
- though, to learn what we want your money for.
+ project of <ulink url="http://www.spi-inc.org/about-spi/about-spi">Software
+ in the Public Interest (SPI)</ulink>, which allows us to receive tax-deductible
+ donations in most western countries.
 </para>
 
 <para>
- First of all we intend to transfer our domain to SPI to make sure
- there's no single point of failure and the bill gets paid and the
- site keeps running even if a some of the currently active developers
- were to suddenly disappear for a while.
+ We intend to use the donations to pay for our domain after transfering
+ it to SPI. Our goal is to make sure there's no single point of failure
+ and the bill gets paid and the site keeps running even if a some of
+ the currently active developers were to suddenly disappear for a while.
 </para>
 
 <para>
@@ -527,7 +526,7 @@ warranty? Registration?</title>
  If you enjoy our software and feel like helping out with a donation,
  please have a look at
  <ulink url="http://www.spi-inc.org/donations">SPI's donation page</ulink>
- to see what the options are. Small donations help too.
+ to see what the options are.
 <para>
 </sect3>
 
@@ -2936,6 +2935,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.57  2009/03/19 19:07:49  fabiankeil
+First draft of a "Donating" entry. To be polished tomorrow.
+
 Revision 2.56  2009/02/19 17:05:05  fabiankeil
 Explain slowness when build with Gentoo's portage.
 
