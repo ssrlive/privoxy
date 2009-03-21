@@ -1,7 +1,7 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Version 3.0.12 (UNRELEASED) ***
+*** Version 3.0.12 ***
 
 - The socket-timeout option now also works on platforms whose
   select() implementation modifies the timeout structure.
