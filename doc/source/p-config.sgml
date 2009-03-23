@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.40 2009/02/15 07:56:26 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.41 2009/02/19 16:59:41 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.40 2009/02/15 07:56:26 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.41 2009/02/19 16:59:41 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -1025,7 +1025,7 @@ actionsfile
    </para>
    <para>
     A debug level of 1 is informative because it will show you each request
-    as it happens. <emphasis>1, 4096 and 8192 are recommended</emphasis>
+    as it happens. <emphasis>1, 1024, 4096 and 8192 are recommended</emphasis>
     so that you will notice when things go wrong. The other levels are
     probably only of interest if you are hunting down a specific problem.
     They can produce a hell of an output (especially 16).
