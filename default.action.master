@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.169 2009/03/01 18:31:43 ler762 Exp $
+#  $Id: default.action.master,v 1.170 2009/03/04 15:05:00 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1020,8 +1020,7 @@ bwp.
 .yahoo.com/mc/stampNonJs
 # Blocked URL = http://richmedia.yimg.com/js/123/personnals_banners/PER_happy_sara1_4_425x600/ad.js?q=123
 /.*/ad\.js\?
-# Blocked URL = http://ad.yieldmanager.com/st?ad_type=iframe&ad_size=728x90&site=123&section_code=123
-/.*\?ad_(type|size)=
+
 
 #############################################################################
 # Generic block-as-image patterns:
@@ -1052,6 +1051,8 @@ bwp.
 # Blocked URL = http://icons-aa.wunderground.com/ads/images/TripAdvisor-Blinky.gif
 # URL = http://icons-aa.wunderground.com/ads/images/TripAdvisor-Blinky.gif
 /(.*/)?ads/images/
+# Blocked URL = http://ad.yieldmanager.com/st?ad_type=iframe&ad_size=728x90&site=123&section_code=123
+/.*\?ad_(type|size)=
 
 #############################################################################
 # Site-specific block-as-image patterns:
