@@ -8,18 +8,16 @@
 diff -urNad privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -1490,6 +1490,10 @@
- #MASTER# REMARKS: Actionsfile feedback item #2043327 2008-08-08
+@@ -1594,7 +1594,7 @@
  # URL = http://kb.adobe.com/selfservice/viewContent.do?externalId=kb402747&sliceId=1
  .adobe.com
-+#MASTER# REMARKS: Debian Bug report #479525
-+# URL = http://qa.debian.org/popcon.php
-+qa.debian.org/popcon.php
-+
- 
- #############################################################################
- # Site-specific special rules:
-@@ -1917,6 +1921,9 @@
+ # URL = http://qa.debian.org/popcon.php
+-qa.debian.org/popcon\.php
++qa.debian.org/popcon
+ #MASTER# REMARKS: Support Requests item #2432535 2008-12-16
+ # URL = http://www.mta.info/bandt/traffic/advmain.htm
+ .mta.info/.*advmain.htm$
+@@ -2061,6 +2061,9 @@
  #MASTER# REMARKS: Exclude per Debian bug report #377843
  # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
  blogs.msdn.com
@@ -29,7 +27,7 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
  
  {-filter{unsolicited-popups}}
  # Sticky Actions = -filter{unsolicited-popups}
-@@ -1958,6 +1965,11 @@
+@@ -2102,6 +2105,11 @@
  {+filter{tiny-textforms}}
  .sourceforge.net/tracker
  

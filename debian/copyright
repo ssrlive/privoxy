@@ -19,7 +19,7 @@ Originally developed by:
  Junkbusters Corp.
  Anonymous Coders
 
-Copyright:     Written by and Copyright (C) 2001-2008 the SourceForge
+Copyright:     Written by and Copyright (C) 2001-2009 the SourceForge
                Privoxy team.  http://www.privoxy.org/
 
                Based on the Internet Junkbuster originally written
@@ -45,4 +45,4 @@ Copyright:     Written by and Copyright (C) 2001-2008 the SourceForge
                51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 
 The complete GNU General Public License can be found at
-/usr/share/common-licenses/GPL
+/usr/share/common-licenses/GPL-2

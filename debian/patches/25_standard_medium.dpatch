@@ -7,13 +7,13 @@
 ## DP: doesn't change too much.
 
 @DPATCH@
-diff -urNad privoxy~/global.action privoxy/global.action
---- privoxy~/global.action
-+++ privoxy/global.action
-@@ -2,8 +2,17 @@
- # Defaults
+diff -urNad privoxy~/match-all.action privoxy/match-all.action
+--- privoxy~/match-all.action
++++ privoxy/match-all.action
+@@ -8,7 +8,16 @@
  #############################################################################
  { \
+ +change-x-forwarded-for{block} \
 ++deanimate-gifs{last} \
 ++filter{refresh-tags} \
 ++filter{img-reorder} \
@@ -21,7 +21,6 @@ diff -urNad privoxy~/global.action privoxy/global.action
 ++filter{webbugs} \
 ++filter{jumping-windows} \
 ++filter{ie-exploits} \
- +hide-forwarded-for-headers \
  +hide-from-header{block} \
 ++hide-referrer{conditional-block} \
 ++session-cookies-only \

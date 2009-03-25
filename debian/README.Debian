@@ -11,44 +11,37 @@ privoxy for Debian
   you can enable them in /etc/privoxy/config and do a
   "/etc/init.d/privoxy restart".
 
-- Comment "debug 1" from default configuration, so GET/POST/CONNECT
-  requests are no longer logged by default to protect your privacy a
-  bit more.
+- Experimental IPv6 support was added to the package.
 
-- Experimental IPv6 support patch is available in the source package
-  but currently disabled because of too many side effects and bugs.
-  If you really need it, you can try to compile the Debian package
-  sources yourself and enable it in debian/patches/00list.
-
-- The global default for all URLs (/) is no longer set in
-  default.action but in a new file global.action, so your local
-  changes should go to global.action and user.action only, while
-  default.action is maintained by package upgrades automatically.
+- The global default for all URLs (/) is now set in match-all.action
+  in contrast to versions up to 3.0.10, where a Debian only patch
+  configured them in global.action.
 
 - Since 3.0.5 the upstream package uses the Cautious default settings
   instead of Medium (like 3.0.3 did).  To avoid problems on upgrades
   of old packages, the Debian package still uses the Medium settings.
-  You can find the different profiles in /etc/privoxy/standard.action.
-  To change the default, go to http://p.p/edit-actions-list?f=global
+  You can find the different profiles in /etc/privoxy/default.action.
+  To change the default, go to http://p.p/edit-actions-list?f=match-all
   (this can also be reached from http://p.p/show-status via the
-  global.action edit link.  p.p is a privoxy internal address, so you
+  match-all.action edit link.  p.p is a privoxy internal address, so you
   need to use privoxy as your HTTP proxy before you can access these
   URLs) and modify the default to your needs.  You can either set one
   of the standard profiles (Cautious, Medium, or Advanced) or change
   every single setting using the "Edit" button.  It is necessary to
   set "enable-edit-actions 1" (see above) in /etc/privoxy/config to
   use the web interface.  Alternatively you can modify
-  /etc/privoxy/global.action by hand.  The other templates are
-  available in /etc/privoxy/standard.action.
+  /etc/privoxy/match-all.action by hand.  The other templates are
+  available in /etc/privoxy/default.action (search for lines starting
+  with "standard.".
 
 - /etc/privoxy/default.action is now owned by root, so you can not
   modify it via http://p.p/edit-actions-list?f=default any longer
   (assumed that you set "enable-edit-action 1" above).  You should
-  realize your local adaptions in /etc/privoxy/global.action and
+  realize your local adaptions in /etc/privoxy/match-all.action and
   /etc/privoxy/user.action, so default.action can be easily upgraded
   by new package versions.  If you do not like this change, feel free
   to change the owner of default.action to "privoxy" and the file is
   editable again.
 
 Roland Rosenfeld <roland@debian.org>
-$Id: README.Debian,v 1.7 2007-10-21 10:07:04 roland Exp $
+$Id: README.Debian,v 1.8 2009-02-22 21:07:20 roland Exp $

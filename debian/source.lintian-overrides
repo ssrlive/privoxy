@@ -1,0 +1,4 @@
+# we don't use the local pcre source but use the ones from libpcre3-dev,
+# so we can ignore the warnings about old libtool versions:
+privoxy source: ancient-libtool pcre/ltconfig
+privoxy source: ancient-libtool pcre/ltmain.sh 1.3.4

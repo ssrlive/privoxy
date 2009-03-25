@@ -1,6 +1,58 @@
-privoxy (3.0.10-1) unstable; urgency=low
+privoxy (3.0.12-2) unstable; urgency=low
 
-  * New upstream version 3.0.10-stable.
+  * 03_ipv6: Use s6_addr instead of in6_u, which is not portable.
+
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 25 Mar 2009 21:41:20 +0100
+
+privoxy (3.0.12-1) unstable; urgency=low
+
+  * New upstream version 3.0.12-stable.
+  * Adapt all patches to new upstream version.
+  * Remove 30_quiet_start, because this is provided upstream now.
+
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 25 Mar 2009 13:27:30 +0100
+
+privoxy (3.0.11-1) unstable; urgency=low
+
+  * New upstream version 3.0.11-stable.
+  * 19_manpage_fixup incorporated upstream now.
+  * 24_global_action is incorporated upstream in a simlar way.
+  * postinst: try to make removal of standards.action and global.action
+    and new file match-all.action smooth to a user who does not want to
+    modify his config file.
+  * 30_quiet_start: Suppress INFO log messages on stderr at program startup.
+  * Stop redirecting stderr to errorlog file but print all config file
+    errors to stderr at startup.  This closes the stderr filehandle since
+    upstream fixed the behavior in jcc.c 1.153.
+    This also solves the problem, that syntax errors in config file
+    weren't noticed, cause they are written to the console on start now
+    (Closes: #375174)
+  * Modify init.d script to be more lsb compliant.
+    Depends on lsb-base (>= 3.2-13) 
+  * Allow disabling privoxy via RUN_DAEMON=no in /etc/default/privoxy.
+    (Closes: #482563).
+  * Update README.Debian to fit all changes.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 22 Feb 2009 22:07:08 +0100
+
+privoxy (3.0.10-2) unstable; urgency=low
+
+  * IPv6 patch added again: 03_ipv6: privoxy-3.0.10-ipv6-all-6.diff by
+    Petr Písař (Closes: #179461).
+    It seems that the old bugs #391600 and #393605, which appeared with 
+    the previous version, are fixed now.
+  * 28_listen_localhost: Listen on localhost:8118 instead of 127.0.0.1:8118,
+    because this is independent from localhost IP (127.0.0.1 vs. 127.0.1.1)
+    and also supports IPv6 (Closes: #512888).
+  * 05_default_action: unblock qa.debian.org/popcon-graph.php (Closes: #479525)
+  * Create log dir in init script, if it does not exist (Closes: #491423).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 15 Feb 2009 13:39:10 +0100
+
+privoxy (3.0.10-1) UNRELEASED; urgency=low
+
+  * Not released to Debian but only on sourceforge.net.
+  * New upstream version 3.0.10-stable (Closes: #499324).
   * Install privoxy-log-parser into /usr/bin.
   * Add lintian-override for libtool warnings according pcre, because we
     do not use this version of pcre but the one from libpcre3-dev.

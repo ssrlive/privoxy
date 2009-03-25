@@ -1,3237 +1,1302 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 03_ipv6.dpatch by Lionel Elie Mamane <lionel@mamane.lu>
+## 03_ipv6.dpatch by Petr Písař <petrp@users.sf.net>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: privoxy_CVS_20030523_ipv6_5.patch.bz2 from
-## DP: ftp://ftp.deepspace6.net/pub/ds6/sources/privoxy/privoxy_CVS_20030523_ipv6_5.patch.bz2
-## DP: adapted to the 3.0 branch of privoxy by Roland Rosenfeld
-## DP: adapted to 3.0.4 by higuita, but i'm no programmer, so i hope i 
-## DP: didnt broke anything :)
-## DP: adapted to 3.0.6 by Petr Písa?? petrp@users.sf.net found on
-## DP: http://xpisar.wz.cz/privoxy-ipv6/ Use privoxy-3.0.6-stable-ipv6.diff.bz2
-## DP: and stripped
+## DP: IPv6 support for privoxy.
+## DP: http://xpisar.wz.cz/privoxy-ipv6/privoxy-3.0.10-ipv6-all-6.diff
+## DP: Former versions by Lionel Elie Mamane <lionel@mamane.lu>
 
 @DPATCH@
-diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
---- privoxy~/GNUmakefile.in
-+++ privoxy/GNUmakefile.in
-@@ -187,7 +187,7 @@
- C_SRC  = actions.c cgi.c cgiedit.c cgisimple.c deanimate.c encode.c \
-          errlog.c filters.c gateway.c jbsockets.c jcc.c killpopup.c \
-          list.c loadcfg.c loaders.c miscutil.c parsers.c ssplit.c \
--         urlmatch.c
-+         urlmatch.c addrlist.c jb_socket_set.c
+diff -urNad privoxy~/configure.in privoxy/configure.in
+--- privoxy~/configure.in
++++ privoxy/configure.in
+@@ -1237,7 +1237,7 @@
+ AC_TYPE_SIGNAL
+ dnl uncommenting does not work for swa. suse linux
+ dnl AC_FUNC_STAT
+-AC_CHECK_FUNCS([access atexit getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r gettimeofday inet_ntoa localtime_r memchr memmove memset poll putenv random regcomp select setlocale snprintf socket strchr strdup strerror strftime strlcat strlcpy strptime strstr strtoul timegm tzset])
++AC_CHECK_FUNCS([access atexit getaddrinfo getcwd gethostbyaddr gethostbyaddr_r gethostbyname gethostbyname_r getnameinfo gettimeofday inet_ntoa localtime_r memchr memmove memset poll putenv random regcomp select setlocale snprintf socket strchr strdup strerror strftime strlcat strlcpy strptime strstr strtoul timegm tzset])
  
- C_OBJS = $(C_SRC:.c=.@OBJEXT@)
- C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
-@@ -241,7 +241,7 @@
- SPECIAL_CFLAGS = @SPECIAL_CFLAGS@
  
- # Add your flags here 
--OTHER_CFLAGS =   
-+OTHER_CFLAGS = -DINET6
+ dnl =================================================================
+diff -urNad privoxy~/doc/source/p-config.sgml privoxy/doc/source/p-config.sgml
+--- privoxy~/doc/source/p-config.sgml
++++ privoxy/doc/source/p-config.sgml
+@@ -1213,9 +1213,9 @@
+   <term>Effect if unset:</term>
+   <listitem>
+    <para>
+-    Bind to 127.0.0.1 (localhost), port 8118. This is suitable and recommended for
+-    home users who run <application>Privoxy</application> on the same machine as
+-    their browser.
++    Bind to 127.0.0.1 (IPv4 localhost), port 8118. This is suitable and
++    recommended for home users who run <application>Privoxy</application> on
++    the same machine as their browser.
+    </para>
+   </listitem>
+  </varlistentry>
+@@ -1231,6 +1231,9 @@
+     will need to override the default.
+    </para>
+    <para>
++    IPv6 address containing colons has to be quoted by brackets.
++   </para>
++   <para>
+     If you leave out the IP address, <application>Privoxy</application> will
+     bind to all interfaces (addresses) on your machine and may become reachable
+     from the Internet. In that case, consider using <link
+@@ -1259,6 +1262,15 @@
+   listen-address  192.168.0.1:8118
+ </programlisting>
+    </para>
++   <para>
++    Suppose you are running <application>Privoxy</application> on IPv6 capable
++    machine and you want to listen on IPv6 loopback device:
++   </para>
++   <para>
++    <programlisting>
++  listen-address [::1]:8118
++</programlisting>
++   </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+@@ -1611,23 +1623,41 @@
+   <term>Type of value:</term>
+   <listitem>
+    <para>
+-    <replaceable class="parameter">src_addr</replaceable>[/<replaceable class="parameter">src_masklen</replaceable>]
+-    [<replaceable class="parameter">dst_addr</replaceable>[/<replaceable class="parameter">dst_masklen</replaceable>]]
++    <replaceable class="parameter">src_addr</replaceable>[:<replaceable class="parameter">port</replaceable>][/<replaceable class="parameter">src_masklen</replaceable>]
++    [<replaceable class="parameter">dst_addr</replaceable>[:<replaceable class="parameter">port</replaceable>][/<replaceable class="parameter">dst_masklen</replaceable>]]
+    </para>
+    <para>
+     Where <replaceable class="parameter">src_addr</replaceable> and 
+-   <replaceable class="parameter">dst_addr</replaceable> are IP addresses in dotted decimal notation or valid
+-    DNS names, and <replaceable class="parameter">src_masklen</replaceable> and
++   <replaceable class="parameter">dst_addr</replaceable> are IPv4 addresses in dotted decimal notation or valid
++    DNS names, <replaceable class="parameter">port</replaceable> is port
++    number, and <replaceable class="parameter">src_masklen</replaceable> and
+     <replaceable class="parameter">dst_masklen</replaceable> are subnet masks in CIDR notation, i.e. integer
+     values from 2 to 30 representing the length (in bits) of the network address. The masks and the whole
+     destination part are optional.
+    </para>
++   <para>
++    If your system implements
++    <ulink url="http://tools.ietf.org/html/rfc2553">RFC 2553</ulink>, then
++    <replaceable class="parameter">src_addr</replaceable> and <replaceable
++    class="parameter">dst_addr</replaceable> can be IPv6 addresses delimeted by
++    brackets, <replaceable class="parameter">port</replaceable> can be number
++    or service name, and
++    <replaceable class="parameter">src_masklen</replaceable> and
++    <replaceable class="parameter">dst_masklen</replaceable> can be number
++    from 0 to 128.
++   </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Default value:</term>
+   <listitem>
+    <para><emphasis>Unset</emphasis></para>
++   <para>
++    No <replaceable class="parameter">port</replaceable> means match any port
++    and no <replaceable class="parameter">src_masklen</replaceable> or
++    no <replaceable class="parameter">src_masklen</replaceable> means exactly
++    given IP address (i.e. 32 for IPv4 and 128 for IPv6).
++   </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+@@ -1677,6 +1707,13 @@
+     IP addresses, only the first one is used.
+    </para>
+    <para>
++     Some systems allows IPv4 client to connect to IPv6 server socket.
++     Then the client's IPv4 address will be translated by system into
++     IPv6 address space with special prefix ::ffff/96 (so called IPv4
++     mapped IPv6 address). <application>Privoxy</application> can handle it
++     and maps such ACL addresses automatically.
++   </para>
++   <para>
+     Denying access to particular sites by ACL may have undesired side effects
+     if the site in question is hosted on a machine which also hosts other sites
+     (most sites are).
+@@ -1717,6 +1754,24 @@
+   deny-access    192.168.45.73    www.dirty-stuff.example.com
+ </screen>
+    </para>
++   <para>
++     Allow access from IPv4 network 192.0.2.0/24 even if listening on
++     IPv6 wild card address (where supported by operating system):
++   </para>
++   <para>
++    <programlisting>
++  permit-access  192.0.2.0/24
++</programlisting>
++   </para>
++   <para>
++     This is equivalent to the following line even if listening on IPv4
++     address (where supported by operating system):
++   </para>
++   <para>
++    <programlisting>
++  permit-access  [::ffff:192.0.2.0]/120
++</programlisting>
++   </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+@@ -1838,7 +1893,7 @@
+     denote <quote>all URLs</quote>.
+     <replaceable class="parameter">http_parent</replaceable>[:<replaceable class="parameter">port</replaceable>]
+     is the DNS name or IP address of the parent HTTP proxy through which the requests should be forwarded,
+-    optionally followed by its listening port (default: 8080).
++    optionally followed by its listening port (default: 8000).
+     Use a single dot (<literal>.</literal>) to denote <quote>no forwarding</quote>.
+    </para>
+   </listitem>
+@@ -1865,6 +1920,16 @@
+     forwarded to another HTTP proxy but are made directly to the web servers.
+    </para>
+    <para>
++    <replaceable class="parameter">http_parent</replaceable> can be IPv6
++    numerical address (if
++    <ulink url="http://tools.ietf.org/html/rfc2553">RFC 2553</ulink> is
++    implemented). However not to clash with port delimiter, quote
++    whole IP address with brackets. On the other hand <replaceable
++    class="parameter">target_pattern</replaceable> containing IPv6 address
++    must be delimited by angle brackets (normal brackets are reserved for
++    regular expression already).
++   </para>
++   <para>
+     Multiple lines are OK, they are checked in sequence, and the last match wins.
+    </para>
+   </listitem>
+@@ -1891,6 +1956,24 @@
+   forward   .isp.example.net   .
+ </screen>
+    </para>
++   <para>
++    Parent proxy specified by IPv6 address:
++   </para>
++   <para>
++    <programlisting>
++  foward   /                   [2001:DB8::1]:8000
++</programlisting>
++   </para>
++   <para>
++    Suppose your parent proxy doesn't support IPv6:
++   </para>
++   <para>
++    <programlisting>
++  forward  /                        parent-proxy.example.org:8000 
++  forward  ipv6-server.example.org  .
++  forward  &lt;[2-3][0-9a-f][0-9a-f][0-9a-f]:*&gt;   .
++</programlisting>
++   </para>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+@@ -1963,6 +2046,18 @@
+     With <literal>forward-socks5</literal> the DNS resolution will happen on the remote server as well.
+    </para>
+    <para>
++    <replaceable class="parameter">socks_proxy</replaceable> and
++    <replaceable class="parameter">http_parent</replaceable> can be IPv6
++    numerical address (if
++    <ulink url="http://tools.ietf.org/html/rfc2553">RFC 2553</ulink> is
++    implemented). However not to clash with port
++    delimiter, quote whole IP address with brackets. On the other
++    hand <replaceable class="parameter">target_pattern</replaceable> containing
++    IPv6 address must be delimited by angle brackets (normal brackets are
++    reserved for regular expression already). The only exception is SOCKS 4
++    version where only IPv4 is suppored. 
++   </para>
++   <para>
+     If <replaceable class="parameter">http_parent</replaceable> is <quote>.</quote>, then requests are not
+     forwarded to another HTTP proxy but are made (HTTP-wise) directly to the web servers, albeit through
+     a SOCKS proxy.
+diff -urNad privoxy~/doc/source/user-manual.sgml privoxy/doc/source/user-manual.sgml
+--- privoxy~/doc/source/user-manual.sgml
++++ privoxy/doc/source/user-manual.sgml
+@@ -2147,12 +2147,12 @@
+  
+ <para>
+  Generally, an URL pattern has the form
+- <literal>&lt;domain&gt;/&lt;path&gt;</literal>, where both the
+- <literal>&lt;domain&gt;</literal> and <literal>&lt;path&gt;</literal> are
+- optional. (This is why the special <literal>/</literal> pattern matches all
+- URLs). Note that the protocol portion of the URL pattern (e.g.
+- <literal>http://</literal>) should <emphasis>not</emphasis> be included in
+- the pattern. This is assumed already!
++ <literal>&lt;domain&gt;&lt;port&gt;/&lt;path&gt;</literal>, where both the
++ <literal>&lt;domain&gt;</literal> and <literal>&lt;port&gt;</literal>
++ and <literal>&lt;path&gt;</literal> are optional. (This is why the special
++ <literal>/</literal> pattern matches all URLs). Note that the protocol
++ portion of the URL pattern (e.g. <literal>http://</literal>) should
++ <emphasis>not</emphasis> be included in the pattern. This is assumed already!
+ </para>
+ <para>
+  The pattern matching syntax is different for the domain and path parts of
+@@ -2161,6 +2161,12 @@
+  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+   Expressions</quote></ulink> (POSIX 1003.2).
+ </para>
++<para>
++ The port part of pattern is decimal port number preceeded by a colon
++ (<literal>:</literal>). If domain part contains numeric IPv6 address, you
++ will need to quote the domain part by angle brackets
++ (<literal>&lt;</literal>, <literal>&gt;</literal>).
++</para>
  
- CFLAGS = @CFLAGS@ @CPPFLAGS@ $(OTHER_CFLAGS) $(SPECIAL_CFLAGS) -Wall \
-          @STATIC_PCRE_ONLY@ -Ipcre 
-diff -urNad privoxy~/addrlist.c privoxy/addrlist.c
---- privoxy~/addrlist.c
-+++ privoxy/addrlist.c
-@@ -0,0 +1,198 @@
-+const char addrlist_rcs[] = "$Id: $";
-+/*********************************************************************
-+ *
-+ * File        :  $Source: $
-+ *
-+ * Purpose     :  Declares functions to handle lists of network addresses.
-+ *                Functions declared include:
-+ *                   `destroy_addr_list', head_addr_list and `tail_addr_list'
-+ *
-+ * Copyright   :  Written by and Copyright (C) 2002 Lionel Elie Mamane
-+ *                <lionel@mamane.lu>
-+ *
-+ *                This program is free software; you can redistribute it
-+ *                and/or modify it under the terms of the GNU General
-+ *                Public License as published by the Free Software
-+ *                Foundation; either version 2 of the License, or (at
-+ *                your option) any later version.
-+ *
-+ *                This program is distributed in the hope that it will
-+ *                be useful, but WITHOUT ANY WARRANTY; without even the
-+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
-+ *                PARTICULAR PURPOSE.  See the GNU General Public
-+ *                License for more details.
-+ *
-+ *                The GNU General Public License should be included with
-+ *                this file.  If not, you can view it at
-+ *                http://www.gnu.org/copyleft/gpl.html
-+ *                or write to the Free Software Foundation, Inc., 59
-+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ *
-+ * Revisions   :
-+ *    $Log: addrlist.c,v $
-+ *
-+ *********************************************************************/
-+
-+#include "addrlist.h"
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <netdb.h>
-+#include <string.h>
-+
-+/*********************************************************************
-+ *
-+ * Function    :  acceptable
-+ *
-+ * Description :  Test wheter an address is acceptable for our use
-+ *                Currently, this means either an IPv4 or an IPv6 address
-+ *
-+ * Parameters  :
-+ *          0  :  addr = the address to test
-+ *
-+ * Returns     :  0             = false / no
-+ *                anything else = true / yes
-+ *
-+ *********************************************************************/
-+static int acceptable (struct sockaddr_storage *addr)
-+{
-+   switch(addr->ss_family)
-+   {
-+   case AF_INET:
-+#ifdef INET6
-+   case AF_INET6:
-+#endif
-+      return !0;
-+   default:
-+      return 0;
-+   }
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  skim
-+ *
-+ * Description :  Get the first acceptable address in head position
-+ *                Assumes there is one
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to skim
-+ *
-+ * Returns     :  the skimmed list
-+ *
-+ *********************************************************************/
-+static addr_list *skim (addr_list *l)
-+{
-+   if (acceptable((struct sockaddr_storage*)l->ai_addr))
-+      return l;
-+   return skim(l->ai_next);
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  tail_addr_list
-+ *
-+ * Description :  Get the tail of an address list
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to get the tail of
-+ *
-+ * Returns     :  the tail of the list
-+ *                If the list has no tail (i.e. is nil), unspecified
-+ *                behaviour
-+ *
-+ *********************************************************************/
-+addr_list *tail_addr_list(addr_list *l)
-+{
-+   return skim(l)->ai_next;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  head_addr_list
-+ *
-+ * Description :  Get the head of an address list
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to get the head of
-+ *
-+ * Returns     :  the head of the list
-+ *                If the list has no head (i.e. is nil), unspecified
-+ *                behaviour
-+ *
-+ *********************************************************************/
-+struct sockaddr_storage *head_addr_list(addr_list *l)
-+{
-+   return (struct sockaddr_storage *)skim(l)->ai_addr;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  cpy_head_addr_list
-+ *
-+ * Description :  Copy the head of an address list to the given destination
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to get the head of
-+ *          1  :  r = where to put the result
-+ *
-+ * Returns     :  Nothing
-+ *                If the list has no head (i.e. is nil), unspecified
-+ *                behaviour
-+ *
-+ *********************************************************************/
-+void cpy_head_addr_list(addr_list *l, struct sockaddr_storage *r, size_t *addrlen)
-+{
-+   addr_list *sl = skim(l);
-+   memcpy(r, sl->ai_addr, sl->ai_addrlen);
-+   *addrlen = sl->ai_addrlen;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  destroy_addr_list
-+ *
-+ * Description :  Unallocate memory allocated to an address list
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to unallocate
-+ *
-+ * Returns     :  nothing
-+ *
-+ *********************************************************************/
-+void destroy_addr_list(addr_list *l)
-+{
-+   freeaddrinfo(l);
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  is_nil_addr_list
-+ *
-+ * Description :  Test wheter a list is nil (empty)
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to test
-+ *
-+ * Returns     :  0             = false if list has a head,
-+ *                anything else = true if list is nil
-+ *
-+ *********************************************************************/
-+int is_nil_addr_list(addr_list *l)
-+{
-+   /* We are searching for a witness of non-nilness (modulo acceptability)
-+    * If none is found, the list is nil
-+    */
-+   if (l==NULL)
-+      /* Empty list*/
-+      return !0;
-+   if (acceptable(head_addr_list(l)))
-+      /* Witness found */
-+      return 0;
-+   return is_nil_addr_list(l->ai_next);
-+}
-+
-+/*
-+  Local Variables:
-+  tab-width: 3
-+  end:
-+*/
-diff -urNad privoxy~/addrlist.h privoxy/addrlist.h
---- privoxy~/addrlist.h
-+++ privoxy/addrlist.h
-@@ -0,0 +1,56 @@
-+#ifndef ADDR_LIST_H_INCLUDED
-+#define ADDR_LIST_H_INCLUDED
-+#define ADDR_LIST_H_VERSION "$Id: $"
-+/*********************************************************************
-+ *
-+ * File        :  $Source: $
-+ *
-+ * Purpose     :  Declares functions to handle lists of network addresses.
-+ *                Functions declared include:
-+ *                   `destroy_addr_list', head_addr_list and `tail_addr_list'
-+ *
-+ * Copyright   :  Written by and Copyright (C) 2002 Lionel Elie Mamane
-+ *                <lionel@mamane.lu>
-+ *
-+ *                This program is free software; you can redistribute it
-+ *                and/or modify it under the terms of the GNU General
-+ *                Public License as published by the Free Software
-+ *                Foundation; either version 2 of the License, or (at
-+ *                your option) any later version.
-+ *
-+ *                This program is distributed in the hope that it will
-+ *                be useful, but WITHOUT ANY WARRANTY; without even the
-+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
-+ *                PARTICULAR PURPOSE.  See the GNU General Public
-+ *                License for more details.
-+ *
-+ *                The GNU General Public License should be included with
-+ *                this file.  If not, you can view it at
-+ *                http://www.gnu.org/copyleft/gpl.html
-+ *                or write to the Free Software Foundation, Inc., 59
-+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ *
-+ * Revisions   :
-+ *    $Log: addrlist.h,v $
-+ *
-+ *********************************************************************/
-+
-+#include <sys/socket.h>
-+
-+typedef struct addrinfo addr_list;
-+
-+addr_list *tail_addr_list(addr_list *l);
-+struct sockaddr_storage *head_addr_list(addr_list *l);
-+void cpy_head_addr_list(addr_list *l, struct sockaddr_storage *r, size_t *addrlen);
-+void destroy_addr_list(addr_list *l);
-+int is_nil_addr_list(addr_list *l);
-+
-+#define freez_addr_list(X)  { if(X) { destroy_addr_list(X); X = NULL ; } }
-+
-+#endif /* ndef LIST_H_INCLUDED */
-+
-+/*
-+  Local Variables:
-+  tab-width: 3
-+  end:
-+*/
-diff -urNad privoxy~/cgi.c privoxy/cgi.c
---- privoxy~/cgi.c
-+++ privoxy/cgi.c
-@@ -14,6 +14,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and 
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -2259,7 +2262,6 @@
-  *********************************************************************/
- struct map *default_exports(const struct client_state *csp, const char *caller)
- {
--   char buf[20];
-    jb_err err;
-    struct map * exports;
-    int local_help_exists = 0;
-@@ -2295,8 +2297,7 @@
-    if (!err) err = map_block_killer(exports, "can-toggle");
- #endif
- 
--   snprintf(buf, 20, "%d", csp->config->hport);
--   if (!err) err = map(exports, "my-port", 1, buf, 1);
-+   if (!err) err = map(exports, "my-port", 1, csp->my_port_str, 1);
- 
-    if(!strcmp(CODE_STATUS, "stable"))
-    {
-diff -urNad privoxy~/errlog.c privoxy/errlog.c
---- privoxy~/errlog.c
-+++ privoxy/errlog.c
-@@ -746,6 +746,13 @@
-             break;
-          case 'E':
-             /* Non-standard: Print error code from errno */
-+            /* TODO
-+             * This is not only not standard, but clashes
-+             * with the E modifier on the GNU (and possibly
-+             * other systems): It means double (floating point)
-+             * number in exponential notation, with capital E
-+             * for mantiss / exponenent separator
-+             */
- #ifdef _WIN32
-             ival = WSAGetLastError();
-             sval = w32_socket_strerr(ival, tempbuf);
+ <variablelist>
+  <varlistentry>
+@@ -2211,6 +2217,23 @@
+   </listitem>
+  </varlistentry>
+  <varlistentry>
++  <term><literal>:8000/</literal></term>
++  <listitem>
++   <para>
++    Matches any URL pointing to TCP port 8000.
++   </para>
++  </listitem>
++ </varlistentry>
++ <varlistentry>
++  <term><literal>&lt;2001:db8::1&gt;/</literal></term>
++  <listitem>
++   <para>
++    Matches any URL having <literal>2001:db8::1</literal> as a domain.
++    (Note that real URL uses plain brackets, not an angle brackets.)
++   </para>
++  </listitem>
++ </varlistentry>
++ <varlistentry>
+   <term><literal>index.html</literal></term>
+   <listitem>
+    <para>
 diff -urNad privoxy~/filters.c privoxy/filters.c
 --- privoxy~/filters.c
 +++ privoxy/filters.c
-@@ -15,6 +15,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001, 2004 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -471,6 +474,9 @@
- #include <ctype.h>
+@@ -665,6 +665,11 @@
  #include <string.h>
  #include <assert.h>
-+#ifdef INET6
-+#include <netdb.h>
-+#endif
  
++#ifdef HAVE_GETADDRINFO
++#include <netdb.h>
++#include <sys/socket.h>
++#endif /* def HAVE_GETADDRINFO */
++
  #ifndef _WIN32
  #ifndef __OS2__
-@@ -505,17 +511,119 @@
+ #include <unistd.h>
+@@ -712,6 +717,152 @@
+ static jb_err prepare_for_filtering(struct client_state *csp);
  
- const char filters_h_rcs[] = FILTERS_H_VERSION;
- 
--/* Fix a problem with Solaris.  There should be no effect on other
-- * platforms.
-- * Solaris's isspace() is a macro which uses it's argument directly
-- * as an array index.  Therefore we need to make sure that high-bit
-- * characters generate +ve values, and ideally we also want to make
-- * the argument match the declared parameter type of "int".
-- */
--#define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
-+#ifdef FEATURE_ACL
+ #ifdef FEATURE_ACL
++#ifdef HAVE_GETADDRINFO
 +/*********************************************************************
 + *
-+ * Function    :  addr_equal_under_mask
++ * Function    :  sockaddr_storage_to_ip
 + *
-+ * Description :  Are these addresses equal modulo this mask?
-+ *                Assumes the second argument is already in
-+ *                mask-normal form
++ * Description :  Access internal structure of sockaddr_storage
 + *
 + * Parameters  :
-+ *          0  :  addr1 = First address to compare
-+ *          1  :  addr2 = Second address to compare
-+ *                        MUST be in mask-normal form
-+ *          2  :  mask = for IPv4 addresses, a bitmask
-+ *                       for IPv6 addresses, a prefixlen in bits
++ *          1  :  addr = socket address
++ *          2  :  ip   = IP address as array of octets in network order
++ *                       (it points into addr)
++ *          3  :  len  = length of IP address in octets
++ *          4  :  port = port number in network order;
 + *
-+ * Returns     : 0 = FALSE (not equal) and non-zero = TRUE (equal)
++ * Returns     :  0 = no errror; otherwise 
 + *
 + *********************************************************************/
-+static
-+int
-+addr_equal_under_mask(struct sockaddr_storage *addr1, struct sockaddr_storage *addr2, unsigned long  mask)
++int sockaddr_storage_to_ip(const struct sockaddr_storage *addr, uint8_t **ip,
++      unsigned int *len, in_port_t **port)
 +{
-+   if (!mask)
-+       return 1;
- 
-+   /* only identical families can be compared */
-+   /* TODO: Should we code the special case of "IPv4 addresses as IPv6 addresses"? */
-+   if (addr1->ss_family != addr2-> ss_family)
-+     {
-+       /*fprintf(stderr, "equal_under_mask: diff sa_family: %d %d\n",
-+         sa1->sa_family, sa2-> sa_family); */
-+       return 0;
-+     }
-+  
-+   switch (addr1->ss_family)
-+      {
++   if (!addr)
++   {
++      return(-1);
++   }
++
++   switch (addr->ss_family)
++   {
 +      case AF_INET:
++         if (len)
 +         {
-+            /* IPv4 - mask is a bitmask */
-+            struct sockaddr_in *sin1 = (struct sockaddr_in *)addr1;
-+            struct sockaddr_in *sin2 = (struct sockaddr_in *)addr2;
-+            
-+            /*fprintf(stderr, "AF_INET: %08x %08x %08x\n", 
-+              sin1->sin_addr.s_addr,
-+              sin2->sin_addr.s_addr,
-+              mask); */
-+            return (sin1->sin_addr.s_addr & mask) == sin2->sin_addr.s_addr;
++            *len = 4;
++         }
++         if (ip)
++         {
++            *ip = (uint8_t *)
++               &(( (struct sockaddr_in *) addr)->sin_addr.s_addr);
++         }
++         if (port)
++         {
++            *port = &((struct sockaddr_in *) addr)->sin_port;
 +         }
 +         break;
-+#ifdef INET6
++
 +      case AF_INET6:
++         if (len)
 +         {
-+            /* IPv6 - mask is a prefixlength in bits. */
-+            struct sockaddr_in6 *sin1 = (struct sockaddr_in6 *)addr1;
-+            struct sockaddr_in6 *sin2 = (struct sockaddr_in6 *)addr2;
-+            char bitmask;
-+            char *a1, *a2;
-+            const int maskbytes = mask / 8;
-+            static char m[] = { 0x00, 0x80, 0xC0, 0xE0,
-+                                0xF0, 0xF8, 0xFC, 0xFE };
-+/*             { */
-+/*                int i; */
-+/*                fprintf(stderr, "PF_INET6: "); */
-+/*                for (i = 0; i < 16; i++) { */
-+/*                   fprintf(stderr, "%02x ", sin1->sin6_addr.s6_addr[i]); */
-+/*                } */
-+/*                fprintf(stderr, "   "); */
-+/*                for (i = 0; i < 16; i++) { */
-+/*                   fprintf(stderr, "%02x ", sin2->sin6_addr.s6_addr[i]); */
-+/*                } */
-+/*                fprintf(stderr, "mask %d scopeids %x %x\n", mask, sin1->sin6_scope_id, sin2->sin6_scope_id); */
-+/*             } */
-+            /* should we compare scope ids and such too? */
-+            /*
-+             * LEM: I see no reason for this comparison
-+             * Quite the contrary: A client coming to us with
-+             * a small-scope address should be able to a bigger-scope
-+             * address.
-+             */
-+/*             if (sin1->sin6_scope_id != sin2->sin6_scope_id) */
-+/*                return 0; */
-+
-+            if (mask > 128ul)
-+            {
-+               log_error(LOG_LEVEL_ERROR, "%s%d", "Tried to compare IPv6 addresses with invalid prefixlen: ", mask);
-+               return 0;
-+            }
-+
-+            a1 = sin1->sin6_addr.s6_addr;
-+            a2 = sin2->sin6_addr.s6_addr;
-+
-+            if (memcmp(a1, a2, maskbytes) != 0)
-+               return 0;
-+
-+            mask %= 8;
-+            /* This special case is necessary for when mask==128
-+               else, we would go over the array size in a1/a2
-+             */
-+            if (mask==0)
-+               return 1;
-+
-+            bitmask = m[mask];
-+
-+            return (a1[maskbytes] & bitmask) == a2[maskbytes];
-+      }
++            *len = 16;
++         }
++         if (ip)
++         {
++            *ip = (uint8_t *)
++               &(( (struct sockaddr_in6 *) addr)->sin6_addr.s6_addr);
++         }
++         if (port)
++         {
++            *port = &((struct sockaddr_in6 *) addr)->sin6_port;
++         }
 +         break;
-+#endif
++
 +      default:
++         /* Unsupported address family */
++         return(-1);
++   }
++
++   return(0);
++}
++
++
++/*********************************************************************
++ *
++ * Function    :  match_sockaddr
++ *
++ * Description :  Check whether address matches network (IP address and port)
++ *
++ * Parameters  :
++ *          1  :  network = socket address of subnework
++ *          3  :  netmask = network mask as socket address 
++ *          2  :  address = checked socket address against given network
++ *
++ * Returns     :  0 = doesn't match; 1 = does match
++ *
++ *********************************************************************/
++int match_sockaddr(const struct sockaddr_storage *network,
++      const struct sockaddr_storage *netmask,
++      const struct sockaddr_storage *address)
++{
++   uint8_t *network_addr, *netmask_addr, *address_addr;
++   unsigned int addr_len;
++   in_port_t *network_port, *netmask_port, *address_port;
++   int i;
++
++   if (network->ss_family != netmask->ss_family) 
++   {
++      /* This should never happen */
++      log_error(LOG_LEVEL_ERROR,
++            "Internal error at %s:%llu: network and netmask differ in family",
++            __FILE__, __LINE__);
++      return 0;
++   }
++
++   sockaddr_storage_to_ip(network, &network_addr, &addr_len, &network_port);
++   sockaddr_storage_to_ip(netmask, &netmask_addr, NULL, &netmask_port);
++   sockaddr_storage_to_ip(address, &address_addr, NULL, &address_port);
++
++   /* Check for family */
++   if (network->ss_family == AF_INET && address->ss_family == AF_INET6 &&
++         IN6_IS_ADDR_V4MAPPED(address_addr))
++   {
++      /* Map AF_INET6 V4MAPPED address into AF_INET */
++      address_addr += 12;
++      addr_len = 4;
++   }
++   else if (network->ss_family == AF_INET6 && address->ss_family == AF_INET &&
++         IN6_IS_ADDR_V4MAPPED(network_addr))
++   {
++      /* Map AF_INET6 V4MAPPED network into AF_INET */
++      network_addr += 12;
++      netmask_addr += 12;
++      addr_len = 4;
++   }
++   else if (network->ss_family != address->ss_family)
++   {
++      return 0;
++   }
++
++   /* XXX: Port check is signaled in netmask */
++   if (*netmask_port && *network_port != *address_port)
++   {
++      return 0;
++   }
++
++   /* TODO: Optimize by checking by words insted of octets */
++   for (i=0; i < addr_len && netmask_addr[i]; i++)
++   {
++      if ( (network_addr[i] & netmask_addr[i]) !=
++           (address_addr[i] & netmask_addr[i]) )
++      {
 +         return 0;
 +      }
++   }
++   
++   return 1;
 +}
- 
--#ifdef FEATURE_ACL
++#endif /* def HAVE_GETADDRINFO */
++
++
  /*********************************************************************
   *
   * Function    :  block_acl
-@@ -545,7 +653,7 @@
+@@ -741,7 +892,13 @@
     /* search the list */
     while (acl != NULL)
     {
 -      if ((csp->ip_addr_long & acl->src->mask) == acl->src->addr)
-+      if (addr_equal_under_mask(&csp->ip_addr_addr, &acl->src->addr, acl->src->mask))
++      if (
++#ifdef HAVE_GETADDRINFO
++            match_sockaddr(&acl->src->addr, &acl->src->mask, &csp->tcp_addr) 
++#else
++            (csp->ip_addr_long & acl->src->mask) == acl->src->addr
++#endif
++            )
        {
           if (dst == NULL)
           {
-@@ -555,8 +663,8 @@
+@@ -751,8 +908,23 @@
                 return(0);
              }
           }
 -         else if ( ((dst->addr & acl->dst->mask) == acl->dst->addr)
 -           && ((dst->port == acl->dst->port) || (acl->dst->port == 0)))
-+         else if ( addr_equal_under_mask(&dst->addr, &acl->dst->addr, acl->dst->mask)
-+                   && ((dst->port == acl->dst->port) || (acl->dst->port == 0)))
++         else if (
++#ifdef HAVE_GETADDRINFO
++               /* XXX: Undefined acl->dst is full of zeros and should be
++                * considered as wildcard address.
++                * sockaddr_storage_to_ip() failes on such dst because of
++                * uknown sa_familly on glibc. However this test is not
++                * portable.
++                *
++                * So, we signal the acl->dst is wildcard in wildcard_dst.
++                */
++               acl->wildcard_dst ||
++                  match_sockaddr(&acl->dst->addr, &acl->dst->mask, &dst->addr)
++#else
++               ((dst->addr & acl->dst->mask) == acl->dst->addr)
++           && ((dst->port == acl->dst->port) || (acl->dst->port == 0))
++#endif
++           )
           {
              if (acl->action == ACL_PERMIT)
              {
-@@ -575,81 +683,249 @@
- 
- }
- 
--
- /*********************************************************************
-  *
-- * Function    :  acl_addr
-+ * Function    :  fill_acl_addr_mask
-  *
-- * Description :  Called from `load_config' to parse an ACL address.
-+ * Description :  Fill in the mask-related members of a
-+ *                struct access_control_addr
-  *
-  * Parameters  :
-- *          1  :  aspec = String specifying ACL address.
-- *          2  :  aca = struct access_control_addr to fill in.
-+ *          0  :  aca = struct access_control_addr to fill in.
-+ *          1  :  masklength = mask length.
-  *
-- * Returns     :  0 => Ok, everything else is an error.
-+ * Returns     :  nothing
-  *
-  *********************************************************************/
--int acl_addr(char *aspec, struct access_control_addr *aca)
-+void fill_acl_addr_mask(struct access_control_addr *aca, int masklength)
+@@ -788,12 +960,24 @@
+ int acl_addr(const char *aspec, struct access_control_addr *aca)
  {
--   int i, masklength, port;
--   char *p;
-+   int pf;
+    int i, masklength;
++#ifdef HAVE_GETADDRINFO
++   struct addrinfo hints, *result;
++   uint8_t *mask_data;
++   in_port_t *mask_port;
++   unsigned int addr_len;
++#else
+    long port;
++#endif /* def HAVE_GETADDRINFO */
+    char *p;
+    char *acl_spec = NULL;
  
--   masklength = 32;
--   port       =  0;
-+   pf = aca->addr.ss_family;
++#ifdef HAVE_GETADDRINFO
++   /* FIXME: Depend on ai_family */
++   masklength = 128;
++#else
+    masklength = 32;
+    port       =  0;
++#endif
  
--   if ((p = strchr(aspec, '/')) != NULL)
-+   switch (pf)
-    {
--      *p++ = '\0';
--
--      if (ijb_isdigit(*p) == 0)
-+   case PF_INET:
-+      /* build the netmask */
-+      if (masklength == -1)
-+         masklength = 32;
-+      aca->mask = 0;
-+      for(pf=1; pf <= masklength ; ++pf)
-       {
--         return(-1);
-+         aca->mask |= (1 << (32 - pf));
-       }
--      masklength = atoi(p);
--   }
-+      aca->mask = htonl(aca->mask);
-+      
-+      /* now mask off the host portion of the ip address
-+       * (i.e. save on the network portion of the address).
-+       */
-+      ((struct sockaddr_in*) &aca->addr)->sin_addr.s_addr &= aca->mask;
-+      aca->port = ((struct sockaddr_in*) &aca->addr)->sin_port;
-+      break;
-+#ifdef INET6
-+   case PF_INET6:
-+      {
-+         static char m[] = { 0x00, 0x80, 0xC0, 0xE0,
-+                             0xF0, 0xF8, 0xFC, 0xFE };
-+         int i;
-+         struct sockaddr_in6 *sa6 = (struct sockaddr_in6*)&aca->addr;
+    /*
+     * Use a temporary acl spec copy so we can log
+@@ -817,13 +1001,53 @@
+       masklength = atoi(p);
+    }
  
 -   if ((masklength < 0) || (masklength > 32))
--   {
--      return(-1);
-+         aca->mask = (masklength == -1) ? masklength : 128 ;
-+         /* now mask off the host portion of the ip address
-+          * (i.e. save on the network portion of the address).
-+          */
-+         i = aca->mask / 8;
-+         if (i < 16)
-+         {
-+            sa6->sin6_addr.s6_addr[i] &= m[aca->mask % 8];
-+            /* The following loop is not strictly necessary,
-+               because of the way addr_equal_under_mask is
-+               written. Better safe than sorry, though:
-+               New code might make the full mask-normal
-+               form assumption.
-+             */
-+            for(++i; i < 16 ; ++i)
-+               sa6->sin6_addr.s6_addr[i] = 0;
-+         }
-+         aca -> port = sa6->sin6_port;
-+         break;
-+      }
++   if ((masklength < 0) ||
++#ifdef HAVE_GETADDRINFO
++         (masklength > 128)
++#else
++         (masklength > 32)
 +#endif
-+   default:
-+      /* FATAL because access_control_addr's are created only with adresses
-+         deemed 'acceptable' by the addr_list stuff, thus currently IPv4 and
-+         IPv6.
-+       */
-+      log_error(LOG_LEVEL_FATAL,"%s%d","Unknown address family in ACL address: ",pf);
-    }
-+}
- 
--   if ((p = strchr(aspec, ':')) != NULL)
--   {
--      *p++ = '\0';
-+/*********************************************************************
-+ *
-+ * Function    :  acl_addrs
-+ *
-+ * Description :  Parse an ACL address (adress + mask prefix)
-+ *                Resolve the parsed address
-+ *                Describe errors in *proxy_args.
-+ *
-+ * Parameters  :
-+ *          0  :  aspec = the string containing the ACL address/mask
-+ *          1  :  masklength = pointer used to return the mask
-+ *          2  :  proxy_args = Pointer to string to append description of errors to.
-+ *          3  :  type = type of ACL adress (source / destination).
-+ *                       Used for error reporting.
-+ *
-+ * Returns     :  the list of adresses the ACL address resolves to
-+ *
-+ *********************************************************************/
-+static addr_list *acl_addrs(char *aspec, int *masklength, char**proxy_args, const char *type)
-+{
-+   char *host;
-+   char *port;
-+   int pf;
- 
--      if (ijb_isdigit(*p) == 0)
--      {
--         return(-1);
--      }
--      port = atoi(p);
-+   pf = -1;
-+   if (parse_pf_ip_netmask(aspec, &host, &port, &pf, masklength) != 0)
-+   {
-+      log_error(LOG_LEVEL_ERROR, "Invalid %s IP for (deny|permit)-access "
-+                "directive in configuration file: \"%s\"", type, aspec);
-+      string_append(proxy_args,"<br>\nWARNING: Invalid ");
-+      string_append(proxy_args, type);
-+      string_append(proxy_args," IP for (deny|permit)-access directive"
-+                    " in configuration file: \"");
-+      string_append(proxy_args, aspec);
-+      string_append(proxy_args,"\"<br><br>\n");
-+      return NULL;
-    }
- 
--   aca->port = port;
-+   return resolve_hostname_to_ip(host, port, pf);
-+}
- 
--   aca->addr = ntohl(resolve_hostname_to_ip(aspec));
-+/*********************************************************************
-+ *
-+ * Function    :  add_one_to_acl_list
-+ *
-+ * Description :  Add one entry to an access_control_list.
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to add to
-+ *          1  :  action = ACL_DENY or ACL_PERMIT
-+ *          2  :  src_addrs = the head of this list will be used as source
-+ *                            in the ACL entry.
-+ *          3  :  dst_addrs = the head of this list will be used as destination
-+ *                            in the ACL entry.
-+ *                            NULL for none
-+ *          4  :  src_masklength = mask length for the source
-+ *          5  :  src_masklength = mask length for the destination
-+ *
-+ * Returns     :  the new list
-+ *
-+ *********************************************************************/
-+struct access_control_list *add_one_to_acl_list(struct access_control_list *l, short action,
-+                                                addr_list *src_addrs, addr_list *dst_addrs,
-+                                                int src_masklength, int dst_masklength)
-+{
-+   struct access_control_list *cur_acl;
-+   /* allocate a new node */
-+   cur_acl = (struct access_control_list *) zalloc(sizeof(*cur_acl));
- 
--   if (aca->addr == INADDR_NONE)
-+   if (cur_acl == NULL)
++         )
     {
--      return(-1);
-+      log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-+      /* Never get here - LOG_LEVEL_FATAL causes program exit */
-+      return l;
+       freez(acl_spec);
+       return(-1);
     }
  
--   /* build the netmask */
--   aca->mask = 0;
--   for (i=1; i <= masklength ; i++)
-+   cur_acl->action = action;
-+
-+   cpy_head_addr_list(src_addrs, &cur_acl->src->addr, &cur_acl->src->addrlen);
-+   fill_acl_addr_mask(cur_acl->src, src_masklength);
-+   if (dst_addrs != NULL)
-    {
--      aca->mask |= (1 << (32 - i));
-+      cpy_head_addr_list(dst_addrs, &cur_acl->dst->addr, &cur_acl->dst->addrlen);
-+      fill_acl_addr_mask(cur_acl->src, src_masklength);
-    }
- 
--   /* now mask off the host portion of the ip address
--    * (i.e. save on the network portion of the address).
-+   /*
-+    * Add it to the list.  Note we reverse the list to get the
-+    * behaviour the user expects.  With both the ACL and
-+    * actions file, the last match wins.  However, the internal
-+    * implementations are different:  The actions file is stored
-+    * in the same order as the file, and scanned completely.
-+    * With the ACL, we reverse the order as we load it, then
-+    * when we scan it we stop as soon as we get a match.
-     */
--   aca->addr = aca->addr & aca->mask;
-+   cur_acl->next  = l;
- 
--   return(0);
-+   return cur_acl;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  add_to_acl_list
-+ *
-+ * Description :  Add entries to an access_control_list.
-+ *                Describe errors in *proxy_args.
-+ *
-+ * Parameters  :
-+ *          0  :  l = the list to add to
-+ *          1  :  action = ACL_DENY or ACL_PERMIT
-+ *          2  :  src_spec = String giving the source of the acl entry
-+ *          3  :  dst_spec = String giving the destination of the acl entry,
-+ *                           or NULL
-+ *          4  :  proxy_args = Pointer to string to append description of errors to.
-+ *
-+ * Returns     :  the new list
-+ *
-+ *********************************************************************/
-+struct access_control_list *add_to_acl_list(struct access_control_list *l,
-+                                            short action,
-+                                            char *src_spec,
-+                                            char *dst_spec,
-+                                            char **proxy_args)
-+{
-+   int src_masklength, dst_masklength;
-+   addr_list *src_addrs, *dst_addrs;
-+   addr_list *src_addrs_remaining, *dst_addrs_remaining;
-+
-+   src_addrs = acl_addrs(src_spec, &src_masklength, proxy_args, "source");
-+   if (is_nil_addr_list(src_addrs))
+-   if ((p = strchr(acl_spec, ':')) != NULL)
++   if (*acl_spec == '[' && NULL != (p = strchr(acl_spec, ']')))
 +   {
-+      log_error(LOG_LEVEL_ERROR, "Source of ACL resolves to no address",dst_spec);
-+      return l;
-+   }
-+   if (dst_spec != NULL)
-+   {
-+      dst_addrs = acl_addrs(dst_spec, &dst_masklength, proxy_args, "destination");
-+      if (is_nil_addr_list(dst_addrs))
++      *p = '\0';
++      memmove(acl_spec, acl_spec + 1, (size_t) (p - acl_spec));
++
++      if (*++p != ':')
 +      {
-+         log_error(LOG_LEVEL_ERROR, "Destination of ACL resolves to no address",dst_spec);
-+         destroy_addr_list(src_addrs);
-+         return l;
++         p = NULL;
 +      }
 +   }
 +   else
-+      dst_addrs = NULL;
-+
-+   for(src_addrs_remaining = src_addrs;
-+       is_nil_addr_list(src_addrs);
-+       src_addrs_remaining=tail_addr_list(src_addrs_remaining))
 +   {
-+      if (dst_addrs == NULL)
-+         l = add_one_to_acl_list(l, action, src_addrs_remaining, NULL, src_masklength,0);
-+      else for(dst_addrs_remaining = dst_addrs;
-+               is_nil_addr_list(dst_addrs);
-+               dst_addrs_remaining=tail_addr_list(dst_addrs_remaining))
-+         l = add_one_to_acl_list(l, action, src_addrs_remaining, dst_addrs_remaining,
-+                                 src_masklength, dst_masklength);
++      p = strchr(acl_spec, ':');
 +   }
-+   destroy_addr_list(src_addrs);
-+   destroy_addr_list(dst_addrs);
++
++#ifdef HAVE_GETADDRINFO
++   memset(&hints, 0, sizeof(struct addrinfo));
++   hints.ai_family = AF_UNSPEC;
++   hints.ai_socktype = SOCK_STREAM;
++
++   i = getaddrinfo(acl_spec, (p) ? ++p : NULL, &hints, &result);
++   freez(acl_spec);
++
++   if (i != 0)
++   {
++      log_error(LOG_LEVEL_ERROR, "Can not resolve [%s]:%s: %s", acl_spec, p,
++            gai_strerror(i));
++      return(-1);
++   }
++
++   /* TODO: Allow multihomed hostnames */
++   memcpy(&(aca->addr), result->ai_addr, sizeof(aca->addr));
++   freeaddrinfo(result);
++#else
++   if (p != NULL)
+    {
+       char *endptr;
  
-+   return l;
- }
--#endif /* def FEATURE_ACL */
- 
-+#endif /* def FEATURE_ACL */
- 
- /*********************************************************************
-  *
-diff -urNad privoxy~/filters.h privoxy/filters.h
---- privoxy~/filters.h
-+++ privoxy/filters.h
-@@ -15,6 +15,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001, 2004 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and 
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -234,7 +237,11 @@
-  */
- #ifdef FEATURE_ACL
- extern int block_acl(struct access_control_addr *dst, struct client_state *csp);
--extern int acl_addr(char *aspec, struct access_control_addr *aca);
-+extern struct access_control_list *add_to_acl_list(struct access_control_list *l,
-+                                                   short action,
-+                                                   char *src_spec,
-+                                                   char *dst_spec,
-+                                                   char **proxy_args);
- #endif /* def FEATURE_ACL */
- extern int match_portlist(const char *portlist, int port);
- 
-diff -urNad privoxy~/gateway.c privoxy/gateway.c
---- privoxy~/gateway.c
-+++ privoxy/gateway.c
-@@ -10,6 +10,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -203,12 +206,14 @@
-  * Returns     :  JB_INVALID_SOCKET => failure, else it is the socket file descriptor.
-  *
-  *********************************************************************/
--jb_socket forwarded_connect(const struct forward_spec * fwd,
-+jb_socket forwarded_connect(const struct forward_spec *fwd,
-                             struct http_request *http,
-                             struct client_state *csp)
- {
-    const char * dest_host;
--   int dest_port;
-+   const char * dest_port_str;
-+   unsigned long dest_port;
-+   int dest_pf;
- 
-    /* Figure out if we need to connect to the web server or a HTTP proxy. */
-    if (fwd->forward_host)
-@@ -216,19 +221,23 @@
-       /* HTTP proxy */
-       dest_host = fwd->forward_host;
-       dest_port = fwd->forward_port;
-+      dest_port_str = fwd->forward_port_str;
-+      dest_pf = fwd->forward_family;
+@@ -847,8 +1071,49 @@
+       /* XXX: This will be logged as parse error. */
+       return(-1);
     }
-    else
-    {
-       /* Web server */
-       dest_host = http->host;
-       dest_port = http->port;
-+      dest_port_str = http->port_str;
-+      dest_pf = PF_UNSPEC;
-    }
++#endif /* def HAVE_GETADDRINFO */
  
-    /* Connect, maybe using a SOCKS proxy */
-    switch (fwd->type)
-    {
-       case SOCKS_NONE:
--         return (connect_to(dest_host, dest_port, csp));
-+         return (connect_to(dest_host, dest_port_str, dest_port, dest_pf, csp));
- 
-       case SOCKS_4:
-       case SOCKS_4A:
-@@ -262,74 +271,19 @@
-  * Returns     :  JB_INVALID_SOCKET => failure, else a socket file descriptor.
-  *
-  *********************************************************************/
--static jb_socket socks4_connect(const struct forward_spec * fwd,
--                                const char * target_host,
--                                int target_port,
--                                struct client_state *csp)
-+static jb_socket socks4_connect_one_ip(const struct forward_spec * fwd,
-+                                       unsigned long web_server_addr,
-+                                       int target_port,
-+                                       struct client_state *csp,
-+                                       size_t csiz,
-+                                       char *cbuf)
- {
--   int web_server_addr;
--   char cbuf[BUFFER_SIZE];
-    char sbuf[BUFFER_SIZE];
--   struct socks_op    *c = (struct socks_op    *)cbuf;
-    struct socks_reply *s = (struct socks_reply *)sbuf;
--   size_t n;
--   size_t csiz;
-+   struct socks_reply *c = (struct socks_reply *)cbuf;
-    jb_socket sfd;
--   int err = 0;
-    char *errstr;
- 
--   if ((fwd->gateway_host == NULL) || (*fwd->gateway_host == '\0'))
--   {
--      log_error(LOG_LEVEL_CONNECT, "socks4_connect: NULL gateway host specified");
--      err = 1;
--   }
--
--   if (fwd->gateway_port <= 0)
--   {
--      log_error(LOG_LEVEL_CONNECT, "socks4_connect: invalid gateway port specified");
--      err = 1;
--   }
--
--   if (err)
--   {
--      errno = EINVAL;
--      return(JB_INVALID_SOCKET);
--   }
--
--   /* build a socks request for connection to the web server */
--
--   strcpy((char *)&(c->userid), socks_userid);
--
--   csiz = sizeof(*c) + sizeof(socks_userid) - 1;
--
--   switch (fwd->type)
--   {
--      case SOCKS_4:
--         web_server_addr = htonl(resolve_hostname_to_ip(target_host));
--         if (web_server_addr == INADDR_NONE)
--         {
--            log_error(LOG_LEVEL_CONNECT, "socks4_connect: could not resolve target host %s", target_host);
--            return(JB_INVALID_SOCKET);
--         }
--         break;
--      case SOCKS_4A:
--         web_server_addr = 0x00000001;
--         n = csiz + strlen(target_host) + 1;
--         if (n > sizeof(cbuf))
--         {
--            errno = EINVAL;
--            return(JB_INVALID_SOCKET);
--         }
--         strcpy(cbuf + csiz, target_host);
--         csiz = n;
--         break;
--      default:
--         /* Should never get here */
--         log_error(LOG_LEVEL_FATAL, "SOCKS4 impossible internal error - bad SOCKS type.");
--         errno = EINVAL;
--         return(JB_INVALID_SOCKET);
--   }
--
-    c->vn          = 4;
-    c->cd          = 1;
-    c->dstport[0]  = (target_port       >> 8  ) & 0xff;
-@@ -340,7 +294,7 @@
-    c->dstip[3]    = (web_server_addr         ) & 0xff;
- 
-    /* pass the request to the socks server */
--   sfd = connect_to(fwd->gateway_host, fwd->gateway_port, csp);
-+   sfd = connect_to(fwd->gateway_host, fwd->gateway_port_str, fwd->gateway_port, PF_INET ,csp);
- 
-    if (sfd == JB_INVALID_SOCKET)
-    {
-@@ -395,6 +349,92 @@
- 
- }
- 
-+static jb_socket socks4_connect(const struct forward_spec * fwd,
-+                                const char * target_host,
-+                                int target_port,
-+                                struct client_state *csp)
-+{
-+   char cbuf[BUFFER_SIZE];
-+   struct socks_op    *c = (struct socks_op    *)cbuf;
-+   size_t csiz;
-+   int err = 0;
-+
-+   /**
-+    * SOCKS4 is IPv4-specific. At least I think so.
-+    */
-+   if ((fwd->gateway_host == NULL) || (*fwd->gateway_host == '\0'))
+    /* build the netmask */
++#ifdef HAVE_GETADDRINFO
++   /* Clip masklength according current family */
++   if (aca->addr.ss_family == AF_INET && masklength > 32)
 +   {
-+      log_error(LOG_LEVEL_CONNECT, "socks4_connect: NULL gateway host specified");
-+      err = 1;
++      masklength = 32;
 +   }
 +
-+   if (fwd->gateway_port <= 0)
++   aca->mask.ss_family = aca->addr.ss_family;
++   if (sockaddr_storage_to_ip(&aca->mask, &mask_data, &addr_len, &mask_port))
 +   {
-+      log_error(LOG_LEVEL_CONNECT, "socks4_connect: invalid gateway port specified");
-+      err = 1;
++      return(-1);
 +   }
 +
-+   if (err)
++   if (p)
 +   {
-+      errno = EINVAL;
-+      return(JB_INVALID_SOCKET);
++      /* Port number in ACL has been specified, check ports in future */
++      *mask_port = 1;
 +   }
 +
-+   /* build a socks request for connection to the web server */
-+
-+   strcpy((char *)&(c->userid), socks_userid);
-+
-+   csiz = sizeof(*c) + sizeof(socks_userid) - 1;
-+
-+   switch (fwd->type)
++   /* XXX: This could be optimized to operate on whole words instead of octets
++    * (128-bit CPU could do it in one iteration). */
++   /* Octets after prefix can be ommitted because of previous initialization
++    * to zeros. */
++   for (i=0; i < addr_len && masklength; i++)
 +   {
-+      case SOCKS_4:
++      if (masklength >= 8)
 +      {
-+         addr_list *web_server_addrs = resolve_hostname_to_ip(target_host,NULL,PF_INET);
-+         jb_socket return_value = JB_INVALID_SOCKET;
-+         if (is_nil_addr_list(web_server_addrs))
-+         {
-+            log_error(LOG_LEVEL_CONNECT, "socks4_connect: could not resolve target host %s", target_host);
-+         }
-+         else
-+         {
-+            addr_list *addrs_to_try;
-+            
-+            for(addrs_to_try = web_server_addrs;
-+                !is_nil_addr_list(addrs_to_try);
-+                addrs_to_try = tail_addr_list(addrs_to_try))
-+            {
-+               const unsigned long web_server_addr = ((struct sockaddr_in*) head_addr_list(addrs_to_try))->sin_addr.s_addr;
-+               return_value=socks4_connect_one_ip(fwd, web_server_addr, target_port, csp, csiz, cbuf);
-+               if(return_value != JB_INVALID_SOCKET)
-+                  break;
-+            }
-+         }
-+         destroy_addr_list(web_server_addrs);
-+         return return_value;
-+         break;
++         mask_data[i] = 0xFF;
++         masklength -= 8;
 +      }
-+      case SOCKS_4A:
++      else
 +      {
-+         size_t n;
-+         n = csiz + strlen(target_host) + 1;
-+         if (n > sizeof(cbuf))
-+         {
-+            errno = EINVAL;
-+            return(JB_INVALID_SOCKET);
-+         }
-+         strcpy(cbuf + csiz, target_host);
-+         csiz = n;
-+         return socks4_connect_one_ip(fwd, 0x00000001, target_port, csp, csiz, cbuf);
-+         break;
++         /* XXX: This assumes MSB of octet is on the left site. This should be
++          * true for all architectures or solved on link layer of OSI model. */
++         mask_data[i] = ~((1 << (8 - masklength)) - 1);
++         masklength = 0;
 +      }
-+      default:
-+         /* Should never get here */
-+         log_error(LOG_LEVEL_FATAL, "SOCKS4 impossible internal error - bad SOCKS type.");
-+         errno = EINVAL;
-+         return(JB_INVALID_SOCKET);
 +   }
-+}
++
++#else
+    aca->mask = 0;
+    for (i=1; i <= masklength ; i++)
+    {
+@@ -859,6 +1124,7 @@
+     * (i.e. save on the network portion of the address).
+     */
+    aca->addr = aca->addr & aca->mask;
++#endif /* def HAVE_GETADDRINFO */
  
- /*
+    return(0);
+ 
+@@ -2706,4 +2972,6 @@
    Local Variables:
-diff -urNad privoxy~/jb_socket_set.c privoxy/jb_socket_set.c
---- privoxy~/jb_socket_set.c
-+++ privoxy/jb_socket_set.c
-@@ -0,0 +1,174 @@
-+const char jb_socket_set_rcs[] = "$Id: $";
-+/*********************************************************************
-+ *
-+ * File        :  $Source: $
-+ *
-+ * Purpose     :  Declares functions to handle sets of sockets
-+ *
-+ * Copyright   :  Written by and Copyright (C) 2002 Lionel Elie Mamane
-+ *                <lionel@mamane.lu>
-+ *
-+ *                This program is free software; you can redistribute it
-+ *                and/or modify it under the terms of the GNU General
-+ *                Public License as published by the Free Software
-+ *                Foundation; either version 2 of the License, or (at
-+ *                your option) any later version.
-+ *
-+ *                This program is distributed in the hope that it will
-+ *                be useful, but WITHOUT ANY WARRANTY; without even the
-+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
-+ *                PARTICULAR PURPOSE.  See the GNU General Public
-+ *                License for more details.
-+ *
-+ *                The GNU General Public License should be included with
-+ *                this file.  If not, you can view it at
-+ *                http://www.gnu.org/copyleft/gpl.html
-+ *                or write to the Free Software Foundation, Inc., 59
-+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ *
-+ * Revisions   :
-+ *    $Log: jb_socket_set.c,v $
-+ *
-+ *********************************************************************/
+   tab-width: 3
+   end:
 +
-+#include "jb_socket_set.h"
-+#include <sys/time.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include "project.h"
-+
-+/*********************************************************************
-+ *
-+ * Function    :  jb_socket_set_add
-+ *
-+ * Description :  Add a socket to the set
-+ *
-+ * Parameters  :
-+ *          0  :  l = the set to add to
-+ *          1  :  the elemen to add to the set
-+ *
-+ * Returns     :  0 on success
-+ *                non-0 on failure
-+ *
-+ *********************************************************************/
-+
-+int jb_socket_set_add(jb_socket_set *l, jb_socket e)
-+{
-+   if (l->data==NULL)
-+   {
-+      l->size=2;
-+      l->data=malloc(l->size * sizeof(jb_socket));
-+      if (l->data==NULL)
-+      {
-+         l->size = 0;
-+         return -1;
-+      }
-+      l->occupied=0;
-+   }
-+   l->data[(l->occupied)++] = e;
-+   if (l->occupied == l->size)
-+   {
-+      jb_socket *new_data;
-+      l->size *= 2;
-+      new_data = realloc(l->data,l->size * sizeof(jb_socket));
-+      if (new_data == NULL)
-+      {
-+         /* Not enough memory to continue. Cancel changes. */
-+         l->data[--(l->occupied)] = JB_INVALID_SOCKET;
-+         l->size /= 2;
-+         return -1;
-+      }
-+      l->data = new_data;
-+   }
-+   l->data[l->occupied] = JB_INVALID_SOCKET;
-+   return 0;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  destroy_jb_socket_set
-+ *
-+ * Description :  Unallocate memory allocated to a socket set
-+ *
-+ * Parameters  :
-+ *          0  :  l = the set to unallocate
-+ *
-+ * Returns     :  nothing
-+ *
-+ *********************************************************************/
-+void destroy_jb_socket_set(jb_socket_set *l)
-+{
-+   free(l->data);
-+   init_jb_socket_set(l);
-+}
-+/*********************************************************************
-+ *
-+ * Function    :  is_empty_jb_socket_set
-+ *
-+ * Description :  Test wheter a set is empty
-+ *
-+ * Parameters  :
-+ *          0  :  l = the set to test
-+ *
-+ * Returns     :  0             = false if set has a head,
-+ *                anything else = true if set is nil
-+ *
-+ *********************************************************************/
-+int is_nil_jb_socket_set(jb_socket_set *l)
-+{
-+   return (l->occupied == 0);
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  init_jb_socket_set
-+ *
-+ * Description :  Init a set to empty
-+ *
-+ * Parameters  :
-+ *          0  :  l = the set to init
-+ *
-+ *********************************************************************/
-+void init_jb_socket_set(jb_socket_set *l)
-+{
-+   l->data=NULL;
-+   l->size=0;
-+   l->occupied=0;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  jb_socket_set_iteration_begin
-+ *
-+ * Description :  Return an iterator on the set
-+ *
-+ * Parameters  :
-+ *          0  :  l = the set
-+ *
-+ *********************************************************************/
-+jb_socket_set_iterate_state jb_socket_set_iteration_begin(jb_socket_set *l)
-+{
-+   return l->data;
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  jb_socket_set_iteration_next
-+ *
-+ * Description :  Return value pointed to by iterator and step
-+ *                iterator to next position
-+ *
-+ * Parameters  :
-+ *          0  :  s = the iterator
-+ *
-+ *********************************************************************/
-+jb_socket jb_socket_set_iteration_next(jb_socket_set_iterate_state*s)
-+{
-+   return(*((*s)++));
-+}
-+
-+/*
-+  Local Variables:
-+  tab-width: 3
-+  end:
-+*/
-diff -urNad privoxy~/jb_socket_set.h privoxy/jb_socket_set.h
---- privoxy~/jb_socket_set.h
-+++ privoxy/jb_socket_set.h
-@@ -0,0 +1,71 @@
-+#ifndef JB_SOCKET_SET_H_INCLUDED
-+#define JB_SOCKET_SET_H_INCLUDED
-+#define JB_SOCKET_SET_H_VERSION "$Id: $"
-+/*********************************************************************
-+ *
-+ * File        :  $Source: $
-+ *
-+ * Purpose     :  Declares functions to handle sets of sockets
-+ *
-+ * Copyright   :  Written by and Copyright (C) 2002 Lionel Elie Mamane
-+ *                <lionel@mamane.lu>
-+ *
-+ *                This program is free software; you can redistribute it
-+ *                and/or modify it under the terms of the GNU General
-+ *                Public License as published by the Free Software
-+ *                Foundation; either version 2 of the License, or (at
-+ *                your option) any later version.
-+ *
-+ *                This program is distributed in the hope that it will
-+ *                be useful, but WITHOUT ANY WARRANTY; without even the
-+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
-+ *                PARTICULAR PURPOSE.  See the GNU General Public
-+ *                License for more details.
-+ *
-+ *                The GNU General Public License should be included with
-+ *                this file.  If not, you can view it at
-+ *                http://www.gnu.org/copyleft/gpl.html
-+ *                or write to the Free Software Foundation, Inc., 59
-+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ *
-+ * Revisions   :
-+ *    $Log: jb_socket_set.h,v $
-+ *
-+ *********************************************************************/
-+#include <sys/time.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include "project.h"
-+
-+struct jb_socket_set_struct
-+{
-+   unsigned int size; /* size allocated*/
-+   unsigned int occupied; /* size occupied - 1 == index of final JB_INVALID_SOCKET
-+                             == number of sockets in the set */
-+   jb_socket *data; /* Array containing the sockets, JB_INVALID_SOCKET-terminated */
-+};
-+
-+typedef struct jb_socket_set_struct jb_socket_set;
-+typedef const jb_socket* jb_socket_set_iterate_state;
-+
-+void init_jb_socket_set(jb_socket_set*);
-+
-+jb_socket_set_iterate_state jb_socket_set_iteration_begin(jb_socket_set *);
-+jb_socket jb_socket_set_iteration_next(jb_socket_set_iterate_state*);
-+
-+int jb_socket_set_add(jb_socket_set*, jb_socket);
-+
-+void destroy_jb_socket_set(jb_socket_set *l);
-+int is_empty_jb_socket_set(jb_socket_set *l);
-+
-+#define freez_jb_socket_set(X)  { if(X) { destroy_jb_socket_set(X); X = NULL ; } }
-+
-+int jb_select(jb_socket_set *readfds, jb_socket_set *writefds, jb_socket_set *exceptfds, struct timeval *timeout);
-+
-+#endif /* ndef JB_SOCKET_SET_H_INCLUDED */
-+
-+/*
-+  Local Variables:
-+  tab-width: 3
-+  end:
-+*/
++  vim:softtabstop=3 shiftwidth=3
+ */
 diff -urNad privoxy~/jbsockets.c privoxy/jbsockets.c
 --- privoxy~/jbsockets.c
 +++ privoxy/jbsockets.c
-@@ -11,6 +11,10 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8-9 December 2002, 24 January 2003,
-+ *                13 February 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and 
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -285,6 +289,7 @@
- #include "jbsockets.h"
- #include "filters.h"
- #include "errlog.h"
-+#include "addrlist.h"
- 
- const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
- 
-@@ -297,141 +302,194 @@
-  *                that this is allowed according to ACL.
-  *
-  * Parameters  :
-- *          1  :  host = hostname to connect to
-- *          2  :  portnum = port to connent on
-+ *          0  :  host = hostname to connect to
-+ *          1  :  port = port to connect on, as string
-+ *          2  :  portnum = port to connect on, as integer
-  *          3  :  csp = Current client state (buffers, headers, etc...)
-- *                      Not modified, only used for source IP and ACL.
-  *
-  * Returns     :  JB_INVALID_SOCKET => failure, else it is the socket
-  *                file descriptor.
-  *
+@@ -357,19 +357,52 @@
   *********************************************************************/
--jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
-+jb_socket connect_to_one_ip(struct sockaddr_storage *addr, size_t addrlen, const char *host, unsigned long portnum, struct client_state *csp)
+ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
  {
--   struct sockaddr_in inaddr;
++#ifdef HAVE_GETADDRINFO
++   struct addrinfo hints, *result, *rp;
++   char service[6];
++   int retval;
++#else
+    struct sockaddr_in inaddr;
 -   jb_socket fd;
--   int addr;
--   fd_set wfds;
--   struct timeval tv[1];
--#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
--   int   flags;
--#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
--
+    unsigned int addr;
++#endif /* def HAVE_GETADDRINFO */
++   jb_socket fd;
+    fd_set wfds;
+    struct timeval tv[1];
+ #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+    int   flags;
+ #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
++   int connect_failed;
+ 
  #ifdef FEATURE_ACL
--   struct access_control_addr dst[1];
--#endif /* def FEATURE_ACL */
--
--   memset((char *)&inaddr, 0, sizeof inaddr);
--
--   if ((addr = resolve_hostname_to_ip(host)) == INADDR_NONE)
-+   if (csp)
-    {
--      csp->http->host_ip_addr_str = strdup("unknown");
--      return(JB_INVALID_SOCKET);
--   }
-+      struct access_control_addr dst[1];
-+      char hostname[NI_MAXHOST];
-+      char port[NI_MAXSERV];
-+      if (getnameinfo((struct sockaddr*)addr, addrlen, hostname, NI_MAXHOST,
-+                      port, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV) != 0)
-+      {
-+         log_error(LOG_LEVEL_ERROR, "connect: Could not get string address and port back from sockaddr because %E");
-+         strncpy(hostname,"unknown",NI_MAXHOST);
-+         strncpy(port,"unknown",NI_MAXSERV);
-+      }
+    struct access_control_addr dst[1];
+ #endif /* def FEATURE_ACL */
  
--#ifdef FEATURE_ACL
--   dst->addr = ntohl((unsigned long) addr);
--   dst->port = portnum;
-+      csp->http->host_ip_addr_str = strdup(hostname);
- 
--   if (block_acl(dst, csp))
--   {
-+      dst->addr = *addr;
-+      dst->addrlen = addrlen;
-+      dst->port = portnum;
++#ifdef HAVE_GETADDRINFO
++   retval = snprintf(service, sizeof(service), "%d", portnum);
++   if (-1 == retval || sizeof(service) <= retval)
++   {
++      log_error(LOG_LEVEL_ERROR,
++            "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
++            portnum);
++      csp->http->host_ip_addr_str = strdup("unknown");
++      return(JB_INVALID_SOCKET);
++   }
 +
-+      if (block_acl(dst, csp))
-+      {
- #ifdef __OS2__
--      errno = SOCEPERM;
-+         errno = SOCEPERM;
- #else
--      errno = EPERM;
-+         errno = EPERM;
- #endif
--      return(JB_INVALID_SOCKET);
--   }
--#endif /* def FEATURE_ACL */
-+         return(JB_INVALID_SOCKET);
-+      }
++   memset((char *)&hints, 0, sizeof hints);
++   hints.ai_family = AF_UNSPEC;
++   hints.ai_socktype = SOCK_STREAM;
++   hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV; /* avoid service look-up */
++   if ((retval = getaddrinfo(host, service, &hints, &result)))
++   {
++      log_error(LOG_LEVEL_INFO,
++            "Can not resolve %s: %s", host, gai_strerror(retval));
++      csp->http->host_ip_addr_str = strdup("unknown");
++      return(JB_INVALID_SOCKET);
++   }
++
++   for (rp = result; rp != NULL; rp = rp->ai_next)
++   {
++#else
+    memset((char *)&inaddr, 0, sizeof inaddr);
  
--   inaddr.sin_addr.s_addr = addr;
--   inaddr.sin_family      = AF_INET;
--   csp->http->host_ip_addr_str = strdup(inet_ntoa(inaddr.sin_addr));
- 
--#ifndef _WIN32
--   if (sizeof(inaddr.sin_port) == sizeof(short))
--#endif /* ndef _WIN32 */
--   {
--      inaddr.sin_port = htons((unsigned short) portnum);
+    if ((addr = resolve_hostname_to_ip(host)) == INADDR_NONE)
+@@ -377,10 +410,15 @@
+       csp->http->host_ip_addr_str = strdup("unknown");
+       return(JB_INVALID_SOCKET);
     }
--#ifndef _WIN32
--   else
-+#endif /* def FEATURE_ACL */
-+
-    {
--      inaddr.sin_port = htonl((unsigned long)portnum);
--   }
--#endif /* ndef _WIN32 */
-+      jb_socket fd;
++#endif /* def HAVE_GETADDRINFO */
  
- #ifdef _WIN32
--   if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) == JB_INVALID_SOCKET)
-+      if ((fd = socket(addr->ss_family, SOCK_STREAM, 0)) == JB_INVALID_SOCKET)
+ #ifdef FEATURE_ACL
++#ifdef HAVE_GETADDRINFO
++   memcpy(&dst->addr, rp->ai_addr, sizeof(dst->addr));
++#else
+    dst->addr = ntohl(addr);
+    dst->port = portnum;
++#endif /* def HAVE_GETADDRINFO */
+ 
+    if (block_acl(dst, csp))
+    {
+@@ -389,14 +427,43 @@
  #else
--   if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) < 0)
-+      if ((fd = socket(addr->ss_family, SOCK_STREAM, 6)) < 0)
+       errno = EPERM;
  #endif
--   {
--      return(JB_INVALID_SOCKET);
--   }
-+      {
-+         return(JB_INVALID_SOCKET);
-+      }
++#ifdef HAVE_GETADDRINFO
++      continue;
++#else
+       return(JB_INVALID_SOCKET);
++#endif /* def HAVE_GETADDRINFO */
+    }
+ #endif /* def FEATURE_ACL */
+ 
++#ifdef HAVE_GETNAMEINFO
++   csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
++   retval = getnameinfo(rp->ai_addr, rp->ai_addrlen,
++         csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
++   if (!csp->http->host_ip_addr_str || retval)
++   {
++      log_error(LOG_LEVEL_ERROR, "Can not save csp->http->host_ip_addr_str: %s",
++            (csp->http->host_ip_addr_str) ? gai_strerror(retval) :
++            "Insufficient memory");
++      freez(csp->http->host_ip_addr_str);
++      continue;
++   }
++#else
+    inaddr.sin_addr.s_addr = addr;
+    inaddr.sin_family      = AF_INET;
+    csp->http->host_ip_addr_str = strdup(inet_ntoa(inaddr.sin_addr));
++#endif /* def HAVE_GETNAMERINFO */
+ 
++#ifdef HAVE_GETADDRINFO
++#ifdef _WIN32
++   if ((fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) ==
++         JB_INVALID_SOCKET)
++#else
++   if ((fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) < 0)
++#endif
++   {
++      continue;
++   }
++#else
+ #ifndef _WIN32
+    if (sizeof(inaddr.sin_port) == sizeof(short))
+ #endif /* ndef _WIN32 */
+@@ -418,6 +485,7 @@
+    {
+       return(JB_INVALID_SOCKET);
+    }
++#endif /* HAVE_GETADDRINFO */
  
  #ifdef TCP_NODELAY
--   {  /* turn off TCP coalescence */
--      int mi = 1;
--      setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &mi, sizeof (int));
--   }
-+      {  /* turn off TCP coalescence */
-+         int mi = 1;
-+         setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, (char *) &mi, sizeof (int));
-+      }
- #endif /* def TCP_NODELAY */
- 
- #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
--   if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
--   {
--      flags |= O_NDELAY;
--      fcntl(fd, F_SETFL, flags);
--   }
-+      {
-+         int flags;
-+
-+         if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
-+         {
-+            flags |= O_NDELAY;
-+            fcntl(fd, F_SETFL, flags);
-+         }
-+      }
- #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
- 
--   while (connect(fd, (struct sockaddr *) & inaddr, sizeof inaddr) == JB_INVALID_SOCKET)
--   {
-+      while (connect(fd, (struct sockaddr *) addr, addrlen) == JB_INVALID_SOCKET)
-+      {
- #ifdef _WIN32
--      if (errno == WSAEINPROGRESS)
-+         if (errno == WSAEINPROGRESS)
- #elif __OS2__ 
--      if (sock_errno() == EINPROGRESS)
-+         if (sock_errno() == EINPROGRESS)
- #else /* ifndef _WIN32 */
--      if (errno == EINPROGRESS)
-+         if (errno == EINPROGRESS)
- #endif /* ndef _WIN32 || __OS2__ */
--      {
--         break;
--      }
-+         {
-+            break;
-+         }
- 
- #ifdef __OS2__ 
--      if (sock_errno() != EINTR)
-+         if (sock_errno() != EINTR)
- #else
--      if (errno != EINTR)
-+         if (errno != EINTR)
- #endif /* __OS2__ */
-+         {
-+            close_socket(fd);
-+            return(JB_INVALID_SOCKET);
-+         }
-+      }
-+
-+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
-       {
--         close_socket(fd);
--         return(JB_INVALID_SOCKET);
-+         int flags;
-+         if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
-+         {
-+            flags &= ~O_NDELAY;
-+            fcntl(fd, F_SETFL, flags);
-+         }
-       }
--   }
-+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
- 
-+      {
-+         fd_set wfds;
-+         struct timeval tv[1];
-+
-+         /* wait for connection to complete */
-+         FD_ZERO(&wfds);
-+         FD_SET(fd, &wfds);
-+
-+         tv->tv_sec  = 30;
-+         tv->tv_usec = 0;
-+
-+         /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
-+         if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
-+         {
-+            close_socket(fd);
-+            return(JB_INVALID_SOCKET);
-+         }
- #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
--   if (flags != -1)
--   {
--      flags &= ~O_NDELAY;
--      fcntl(fd, F_SETFL, flags);
--   }
-+         else
-+         {
-+            int connect_result;
-+            socklen_t connect_result_len = sizeof connect_result;
-+
-+            if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &connect_result, &connect_result_len) != 0)
-+            {
-+               log_error(LOG_LEVEL_ERROR, "Could not determine whether connection to %s port %d was successful because %E. Assuming failure.",
-+                         csp->http->host_ip_addr_str, portnum);
-+               close_socket(fd);
-+               return(JB_INVALID_SOCKET);
-+            }
-+            else if( connect_result != 0 )
-+            {
-+               log_error(LOG_LEVEL_CONNECT, "Connection to %s port %d failed because %s.",
-+                         csp->http->host_ip_addr_str, portnum, strerror(connect_result));
-+               close_socket(fd);
-+               return(JB_INVALID_SOCKET);
-+            }
-+         }
- #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
-+      }
-+      return(fd);
-+   }
-+}
- 
--   /* wait for connection to complete */
--   FD_ZERO(&wfds);
--   FD_SET(fd, &wfds);
-+jb_socket connect_to(const char *host, const char *port, unsigned long portnum, int pf, struct client_state *csp)
-+{
-+   jb_socket fd = JB_INVALID_SOCKET;
-+   struct sockaddr_storage addr;
-+   addr_list *addrs, *addrs_to_try;
- 
--   tv->tv_sec  = 30;
--   tv->tv_usec = 0;
-+   addrs = resolve_hostname_to_ip(host,port,pf);
- 
--   /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
--   if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
-+   if (is_nil_addr_list(addrs))
-    {
--      close_socket(fd);
--      return(JB_INVALID_SOCKET);
-+      errno = EINVAL;
-+      return fd;
-+   }
-+
-+   for(addrs_to_try=addrs;
-+       !is_nil_addr_list(addrs_to_try);
-+       addrs_to_try = tail_addr_list(addrs_to_try))
-+   {
-+      size_t addrlen;
-+      memset((char *)&addr, 0, sizeof addr);
-+      cpy_head_addr_list(addrs_to_try, &addr,&addrlen);
-+      fd = connect_to_one_ip(&addr, addrlen, host, portnum, csp);
-+      if (fd != JB_INVALID_SOCKET)
-+         break;
+    {  /* turn off TCP coalescence */
+@@ -434,7 +502,12 @@
     }
--   return(fd);
+ #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
  
-+   if (fd == JB_INVALID_SOCKET)
++   connect_failed = 0;
++#ifdef HAVE_GETADDRINFO
++   while (connect(fd, rp->ai_addr, rp->ai_addrlen) == JB_INVALID_SOCKET)
++#else
+    while (connect(fd, (struct sockaddr *) & inaddr, sizeof inaddr) == JB_INVALID_SOCKET)
++#endif /* HAVE_GETADDRINFO */
+    {
+ #ifdef _WIN32
+       if (errno == WSAEINPROGRESS)
+@@ -454,9 +527,18 @@
+ #endif /* __OS2__ */
+       {
+          close_socket(fd);
+-         return(JB_INVALID_SOCKET);
++         connect_failed = 1;
++         break;
+       }
+    }
++   if (connect_failed)
 +   {
-+      csp->http->host_ip_addr_str = strdup("unknown");
++#ifdef HAVE_GETADDRINFO
++         continue;
++#else
++         return(JB_INVALID_SOCKET);
++#endif
++   }
+ 
+ #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+    if (flags != -1)
+@@ -477,8 +559,32 @@
+    if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
+    {
+       close_socket(fd);
++#ifdef HAVE_GETADDRINFO
++      continue;
++#else
+       return(JB_INVALID_SOCKET);
++#endif
+    }
++   
++#ifdef HAVE_GETADDRINFO
++   break; /* for */
 +   }
 +
-+   destroy_addr_list(addrs);
-+   return fd;
++   freeaddrinfo(result);
++   if (!rp)
++   {
++      log_error(LOG_LEVEL_INFO, "Could not connect to TCP/[%s]:%s", host, service);
++      return(JB_INVALID_SOCKET);
++   }
++   /* XXX: Current connection verification (EINPROGRESS && select() for
++    * writing) is not sufficient. E.g. on my Linux-2.6.27 with glibc-2.6
++    * select returns socket ready for writing, however subsequential write(2)
++    * fails with ENOCONNECT. Read Linux connect(2) man page about non-blocking
++    * sockets.
++    * Thus we can not log here the socket is connected. */
++   /*log_error(LOG_LEVEL_INFO, "Connected to TCP/[%s]:%s", host, service);*/
++#endif
++
+    return(fd);
+ 
  }
- 
- 
-@@ -571,55 +629,30 @@
- 
- /*********************************************************************
-  *
-- * Function    :  bind_port
-+ * Function    :  bind_port_one_ip
-  *
-  * Description :  Call socket, set socket options, and listen.
-- *                Called by listen_loop to "boot up" our proxy address.
-  *
-  * Parameters  :
-- *          1  :  hostnam = TCP/IP address to bind/listen to
-- *          2  :  portnum = port to listen on
-- *          3  :  pfd = pointer used to return file descriptor.
-+ *          0  :  addr = TCP/IP address and port to bind/listen to
-+ *          1  :  fds = jb_socket_set where the new socket should go
-  *
-- * Returns     :  if success, returns 0 and sets *pfd.
-+ * Returns     :  if success returns 0 and adds sockets to fds.
-  *                if failure, returns -3 if address is in use,
-- *                                    -2 if address unresolvable,
-+ *                                    -2 if memory error
-  *                                    -1 otherwise
+@@ -677,7 +783,16 @@
   *********************************************************************/
--int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
-+int bind_port_one_ip(struct sockaddr *addr, const socklen_t addr_len, jb_socket_set *fds)
+ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
  {
--   struct sockaddr_in inaddr;
++#ifdef HAVE_GETADDRINFO
++   struct addrinfo hints;
++   struct addrinfo *result, *rp;
++   /* TODO: portnum shuld be string to allow symbolic service names in
++    * configuration and to avoid following int2string */
++   char servnam[6];
++   int retval;
++#else
+    struct sockaddr_in inaddr;
++#endif /* def HAVE_GETADDRINFO */
     jb_socket fd;
-+   int flags;
  #ifndef _WIN32
     int one = 1;
+@@ -685,6 +800,32 @@
+ 
+    *pfd = JB_INVALID_SOCKET;
+ 
++#ifdef HAVE_GETADDRINFO
++   retval = snprintf(servnam, sizeof(servnam), "%d", portnum);
++   if (-1 == retval || sizeof(servnam) <= retval)
++   {
++      log_error(LOG_LEVEL_ERROR,
++            "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
++            portnum);
++      return -1;
++   }
++
++   memset(&hints, 0, sizeof(struct addrinfo));
++   hints.ai_family=AF_UNSPEC;
++   hints.ai_socktype=SOCK_STREAM;
++   hints.ai_flags=AI_PASSIVE|AI_ADDRCONFIG;
++   hints.ai_protocol=0; /* Realy any stream protocol or TCP only */
++   hints.ai_canonname=NULL;
++   hints.ai_addr=NULL;
++   hints.ai_next=NULL;
++
++   if ((retval = getaddrinfo(hostnam, servnam, &hints, &result)))
++   {
++      log_error(LOG_LEVEL_ERROR,
++            "Can not resolve %s: %s", hostnam, gai_strerror(retval));
++      return -2;
++   }
++#else
+    memset((char *)&inaddr, '\0', sizeof inaddr);
+ 
+    inaddr.sin_family      = AF_INET;
+@@ -707,8 +848,15 @@
+       inaddr.sin_port = htonl((unsigned long) portnum);
+    }
  #endif /* ndef _WIN32 */
++#endif /* def HAVE_GETADDRINFO */
  
--   *pfd = JB_INVALID_SOCKET;
--
--   memset((char *)&inaddr, '\0', sizeof inaddr);
--
--   inaddr.sin_family      = AF_INET;
--   inaddr.sin_addr.s_addr = resolve_hostname_to_ip(hostnam);
--
--   if (inaddr.sin_addr.s_addr == INADDR_NONE)
--   {
--      return(-2);
--   }
--
--#ifndef _WIN32
--   if (sizeof(inaddr.sin_port) == sizeof(short))
--#endif /* ndef _WIN32 */
--   {
--      inaddr.sin_port = htons((unsigned short) portnum);
--   }
--#ifndef _WIN32
--   else
--   {
--      inaddr.sin_port = htonl((unsigned long) portnum);
--   }
--#endif /* ndef _WIN32 */
-+   fd = JB_INVALID_SOCKET;
- 
--   fd = socket(AF_INET, SOCK_STREAM, 0);
-+   fd = socket(addr->sa_family, SOCK_STREAM, 6);
++#ifdef HAVE_GETADDRINFO
++   for (rp = result; rp != NULL; rp = rp->ai_next)
++   {
++      fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
++#else
+    fd = socket(AF_INET, SOCK_STREAM, 0);
++#endif /* def HAVE_GETADDRINFO */
  
  #ifdef _WIN32
     if (fd == JB_INVALID_SOCKET)
-@@ -645,8 +678,17 @@
-     */
+@@ -716,7 +864,11 @@
+    if (fd < 0)
+ #endif
+    {
++#ifdef HAVE_GETADDRINFO
++      continue;
++#else
+       return(-1);
++#endif
+    }
+ 
+ #ifndef _WIN32
+@@ -735,7 +887,11 @@
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
  #endif /* ndef _WIN32 */
--
--   if (bind(fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
-+   /* As we are now listening on more than one socket,
-+    * this is important: The only way to be sure accept
-+    * won't block!!
-+    */
-+   if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
-+   {
-+      flags |= O_NONBLOCK;
-+      fcntl(fd, F_SETFL, flags);
-+   }
-+   
-+   if (bind (fd, addr, addr_len) < 0)
+ 
++#ifdef HAVE_GETADDRINFO
++   if (bind(fd, rp->ai_addr, rp->ai_addrlen) < 0)
++#else
+    if (bind(fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
++#endif
     {
  #ifdef _WIN32
        errno = WSAGetLastError();
-@@ -665,7 +707,7 @@
-       }
-    }
- 
--   while (listen(fd, 5) == -1)
-+   while (listen(fd, 25) == -1)
-    {
-       if (errno != EINTR)
+@@ -744,15 +900,36 @@
+       if (errno == EADDRINUSE)
+ #endif
        {
-@@ -673,7 +715,11 @@
++#ifdef HAVE_GETADDRINFO
++         freeaddrinfo(result);
++#endif
+          close_socket(fd);
+          return(-3);
+       }
+       else
+       {
+          close_socket(fd);
++#ifndef HAVE_GETADDRINFO
+          return(-1);
        }
     }
- 
--   *pfd = fd;
-+   if (jb_socket_set_add(fds,fd) != 0)
-+   {
-+      close_socket(fd);
-+      return -2;
-+   }
-    return 0;
- 
- }
-@@ -681,6 +727,91 @@
- 
- /*********************************************************************
-  *
-+ * Function    :  bind_port
-+ *
-+ * Description :  Call bind_port_one_ip on all addresses host resolves to
-+ *                Called by listen_loop to "boot up" our proxy address.
-+ *
-+ * Parameters  :
-+ *          0  :  host = TCP/IP hostname to bind/listen to
-+ *          1  :  port = port to listen to, as string
-+ *          2  :  fds = socket set the sockets should be added to
-+ *
-+ * Returns     :  if success on at least one address resolving from hostnam,
-+ *                 returns 0 and adds sockets to fds.
-+ *                if failure, returns non-zero
-+ *********************************************************************/
-+int bind_port(const char *host, const char *port, int pf, jb_socket_set *fds)
-+{
-+   int result;
-+   int failure = 1;
-+   struct sockaddr_storage addr;
-+   struct sockaddr * const addr_addr = (struct sockaddr *)&addr;
-+   addr_list *addrs, *addrs_to_try;
-+
-+   const char * const log_host = (host != NULL) ? host : "ADDR_ANY";
-+
-+   addrs = resolve_hostname_to_ip(host,port,pf);
-+
-+   if (is_nil_addr_list(addrs))
-+      log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s: " 
-+                "Name resolution didn't give any address",
-+                log_host, port);
-+
-+   log_error(LOG_LEVEL_INFO, "Binding to %s:%s...",  log_host, port);
-+
-+   for(addrs_to_try=addrs;
-+       !is_nil_addr_list(addrs_to_try);
-+       addrs_to_try = tail_addr_list(addrs_to_try))
-+   {
-+      char numeric_hostname[NI_MAXHOST];
-+      char numeric_port[NI_MAXSERV];
-+      size_t addrlen;
-+      memset((char *)addr_addr, 0, sizeof addr);
-+      cpy_head_addr_list(addrs_to_try, &addr, &addrlen);
-+      result = getnameinfo(addr_addr, addrlen, numeric_hostname, NI_MAXHOST,
-+                           numeric_port, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
-+      if (result != 0)
-+      {
-+         log_error(LOG_LEVEL_ERROR, "bind: Could not get string address and port back from sockaddr because %E");
-+         strncpy(numeric_hostname,"unknown",NI_MAXHOST);
-+         strncpy(numeric_port,"unknown",NI_MAXSERV);
-+      }
-+      result = bind_port_one_ip(addr_addr, addrlen, fds);
-+      if( result == 0 )
-+      {
-+         failure = 0;
-+         log_error(LOG_LEVEL_INFO, "Successfully bound to %s:%s", numeric_hostname, numeric_port);
-+      }
-+      else
-+      {
-+         switch(result)
-+         {
-+         case -3 :
-+            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s (%s:%s): "
-+                      "There may be another Privoxy or some other "
-+                      "proxy running on port %s",
-+                      log_host, port, numeric_hostname, numeric_port, numeric_port);
-+            break;
-+         case -2 :
-+            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s (%s:%s): "
-+                      "Out of memory",
-+                      log_host, port, numeric_hostname, numeric_port);
-+            break;
-+         default :
-+            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s: because %E",
-+                      log_host, numeric_port);
-+         }
++#else
 +      }
 +   }
++   else
++      /* bind() succeeded, escape from for-loop */
++      /* TODO: Support multiple listening sockets (e.g. localhost resolves to
++       * AF_INET and AF_INET6, but only fist address is used */
++      break;
++   }
 +
-+   destroy_addr_list(addrs);
-+   return failure;
-+}
++   freeaddrinfo(result);
++   if (rp == NULL)
++   {
++      /* All bind()s failed */
++      return(-1);
++   }
++#endif /* ndef HAVE_GETADDRINFO */
+ 
+    while (listen(fd, MAX_LISTEN_BACKLOG) == -1)
+    {
+@@ -792,14 +969,20 @@
+  *********************************************************************/
+ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
+ {
++#ifdef HAVE_GETNAMEINFO
++   struct sockaddr_storage server;
++   int retval;
++#else
+    struct sockaddr_in server;
+    struct hostent *host = NULL;
++#endif /* HAVE_GETNAMEINFO */
+ #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
+    /* according to accept_connection() this fixes a warning. */
+-   int s_length;
++   int s_length, s_length_provided;
+ #else
+-   socklen_t s_length;
++   socklen_t s_length, s_length_provided;
+ #endif
++#ifndef HAVE_GETNAMEINFO
+ #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
+    struct hostent result;
+ #if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
+@@ -809,7 +992,8 @@
+    int thd_err;
+ #endif /* def HAVE_GETHOSTBYADDR_R_5_ARGS */
+ #endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
+-   s_length = sizeof(server);
++#endif /* ifndef HAVE_GETNAMEINFO */
++   s_length = s_length_provided = sizeof(server);
+ 
+    if (NULL != hostname)
+    {
+@@ -819,8 +1003,23 @@
+ 
+    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
+    {
++      if (s_length > s_length_provided)
++      {
++         log_error(LOG_LEVEL_ERROR, "getsockname() truncated server address");
++         return;
++      }
++#ifdef HAVE_GETNAMEINFO
++      *ip_address = malloc(NI_MAXHOST);
++      if ((retval = getnameinfo((struct sockaddr *) &server, s_length,
++                  *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST))) {
++         log_error(LOG_LEVEL_ERROR, "Unable to print my own IP address: %s",
++               gai_strerror(retval));
++         freez(*ip_address);
++         return;
++      }
++#else
+       *ip_address = strdup(inet_ntoa(server.sin_addr));
+-
++#endif /* HAVE_GETNAMEINFO */
+       if (NULL == hostname)
+       {
+          /*
+@@ -829,6 +1028,16 @@
+           */
+          return;
+       }
 +
-+
-+/*********************************************************************
-+ *
-  * Function    :  accept_connection
-  *
-  * Description :  Accepts a connection on a socket.  Socket must have
-@@ -697,8 +828,7 @@
++#ifdef HAVE_GETNAMEINFO
++      *hostname = malloc(NI_MAXHOST);
++      if ((retval = getnameinfo((struct sockaddr *) &server, s_length,
++                  *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD))) {
++         log_error(LOG_LEVEL_ERROR, "Unable to resolve my own IP address: %s",
++               gai_strerror(retval));
++         freez(*hostname);
++      }
++#else
+ #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS)
+       gethostbyaddr_r((const char *)&server.sin_addr,
+                       sizeof(server.sin_addr), AF_INET,
+@@ -866,6 +1075,7 @@
+       {
+          *hostname = strdup(host->h_name);
+       }
++#endif /* else def HAVE_GETNAMEINFO */
+    }
+ 
+    return;
+@@ -890,7 +1100,13 @@
   *********************************************************************/
  int accept_connection(struct client_state * csp, jb_socket fd)
  {
--   struct sockaddr_in client, server;
--   struct hostent *host = NULL;
-+   struct sockaddr_storage client, server;
++#ifdef HAVE_GETNAMEINFO
++   /* XXX: client is stored directly into csp->tcp_addr */
++#define client (csp->tcp_addr)
++   int retval;
++#else
+    struct sockaddr_in client;
++#endif
     jb_socket afd;
  #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
     /* Wierdness - fix a warning. */
-@@ -706,15 +836,7 @@
- #else
-    socklen_t c_length, s_length;
+@@ -919,8 +1135,21 @@
  #endif
--#if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
--   struct hostent result;
--#if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
--   struct hostent_data hdata;
--#else
--   char hbuf[HOSTENT_BUFFER_SIZE];
--   int thd_err;
--#endif /* def HAVE_GETHOSTBYADDR_R_5_ARGS */
--#endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
-+   int flags;
  
-    c_length = s_length = sizeof(client);
- 
-@@ -734,6 +856,12 @@
-       return 0;
-    }
- #endif
-+   /* If we inherited O_NONBLOCK from the listening fd, unset it */
-+   if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
+    csp->cfd = afd;
++#ifdef HAVE_GETNAMEINFO
++   csp->ip_addr_str = malloc(NI_MAXHOST);
++   retval = getnameinfo((struct sockaddr *) &client, c_length,
++         csp->ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
++   if (!csp->ip_addr_str || retval)
 +   {
-+      flags &= ~O_NONBLOCK;
-+      fcntl(fd, F_SETFL, flags);
++      log_error(LOG_LEVEL_ERROR, "Can not save csp->ip_addr_str: %s",
++            (csp->ip_addr_str) ? gai_strerror(retval) : "Insuffcient memory");
++      freez(csp->ip_addr_str);
 +   }
- 
-    /* 
-     * Determine the IP-Adress that the client used to reach us
-@@ -741,49 +869,50 @@
-     */
-    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
-    {
--      csp->my_ip_addr_str = strdup(inet_ntoa(server.sin_addr));
--#if defined(HAVE_GETHOSTBYADDR_R_8_ARGS)
--      gethostbyaddr_r((const char *)&server.sin_addr,
--                      sizeof(server.sin_addr), AF_INET,
--                      &result, hbuf, HOSTENT_BUFFER_SIZE,
--                      &host, &thd_err);
--#elif defined(HAVE_GETHOSTBYADDR_R_7_ARGS)
--      host = gethostbyaddr_r((const char *)&server.sin_addr,
--                      sizeof(server.sin_addr), AF_INET,
--                      &result, hbuf, HOSTENT_BUFFER_SIZE, &thd_err);
--#elif defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
--      if (0 == gethostbyaddr_r((const char *)&server.sin_addr,
--                               sizeof(server.sin_addr), AF_INET,
--                               &result, &hdata))
-+      char hostname[NI_MAXHOST];
-+      char port[NI_MAXSERV];
-+
-+      if (getnameinfo((struct sockaddr *)&server, s_length, hostname, NI_MAXHOST,
-+                      port, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV) != 0)
-       {
--         host = &result;
-+         log_error(LOG_LEVEL_ERROR, "accept: Could not get string address and port back from server sockaddr because %E");
-+         strncpy(hostname,"unknown IP",NI_MAXHOST);
-+         strncpy(port,"unknown port",NI_MAXSERV);
-       }
--      else
-+      csp->my_ip_addr_str = strdup(hostname);
-+      csp->my_port_str = strdup(port);
-+
-+      if (getnameinfo((struct sockaddr *)&server, s_length, hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD) != 0)
-       {
--         host = NULL;
-+         log_error(LOG_LEVEL_ERROR, "accept: Could not get my own hostname because %E");
-+         strncpy(hostname,"unknown host",NI_MAXHOST);
-       }
--#elif FEATURE_PTHREAD
--      pthread_mutex_lock(&gethostbyaddr_mutex);
--      host = gethostbyaddr((const char *)&server.sin_addr, 
--                           sizeof(server.sin_addr), AF_INET);
--      pthread_mutex_unlock(&gethostbyaddr_mutex);
--#else
--      host = gethostbyaddr((const char *)&server.sin_addr, 
--                           sizeof(server.sin_addr), AF_INET);
--#endif
--      if (host == NULL)
-+      csp->my_hostname = strdup(hostname);
-+   }
-+   else
-+   {
-+      log_error(LOG_LEVEL_ERROR, "accept: Could not get sockaddr from socket fd because %E");
-+   }
-+
-+   csp->cfd    = afd;
-+   {
-+      char hostname[NI_MAXHOST];
-+
-+      if (getnameinfo((struct sockaddr *)&client, c_length, hostname, NI_MAXHOST, NULL, 0, NI_NUMERICHOST) != 0)
-       {
--         log_error(LOG_LEVEL_ERROR, "Unable to get my own hostname: %E\n");
-+         log_error(LOG_LEVEL_ERROR, "accept: Could not get client IP address string because %E");
-+         strncpy(hostname,"unknown IP",NI_MAXHOST);
-       }
--      else
-+      csp->my_ip_addr_str = strdup(hostname);
-+
-+      if (getnameinfo((struct sockaddr *)&server, s_length, hostname, NI_MAXHOST, NULL, 0, 0) != 0)
-       {
--         csp->my_hostname = strdup(host->h_name);
-+         log_error(LOG_LEVEL_ERROR, "accept: Could not get my own hostname because %E");
-+         strncpy(hostname,"unknown host",NI_MAXHOST);
-       }
-+      csp->ip_addr_str = strdup(hostname);
-    }
--
--   csp->cfd    = afd;
--   csp->ip_addr_str  = strdup(inet_ntoa(client.sin_addr));
--   csp->ip_addr_long = ntohl(client.sin_addr.s_addr);
-+   csp->ip_addr_addr = client;
++#undef client
++#else
+    csp->ip_addr_str  = strdup(inet_ntoa(client.sin_addr));
+    csp->ip_addr_long = ntohl(client.sin_addr.s_addr);
++#endif /* def HAVE_GETNAMEINFO */
  
     return 1;
  
-@@ -794,108 +923,48 @@
-  *
-  * Function    :  resolve_hostname_to_ip
-  *
-- * Description :  Resolve a hostname to an internet tcp/ip address.
-- *                NULL or an empty string resolve to INADDR_ANY.
-+ * Description :  Resolve a hostname to a list of internet tcp/ip addresses.
-  *
-  * Parameters  :
-- *          1  :  host = hostname to resolve
-+ *          0  :  host = hostname to resolve
-+ *          1  :  result = where to store the result
-+ *          2  :  pf = preferred address family. PF_UNSPEC for no preference (recommended).
-  *
-- * Returns     :  INADDR_NONE => failure, INADDR_ANY or tcp/ip address if succesful.
-+ * Returns     :  A (possibly empty) list of adresses
-  *
-  *********************************************************************/
--unsigned long resolve_hostname_to_ip(const char *host)
--{
--   struct sockaddr_in inaddr;
--   struct hostent *hostp;
-+addr_list *resolve_hostname_to_ip(const char *host, const char *port, int pf)
-+ {
-+   /* TODO 
-+    * Do all supported platforms have "getaddrinfo"?
-+    */
-+    
-+   struct addrinfo hints, *res0;
-+   int result;
-    unsigned int dns_retries = 0;
--#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS) || defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
--   struct hostent result;
--#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
--   char hbuf[HOSTENT_BUFFER_SIZE];
--   int thd_err;
--#else /* defined(HAVE_GETHOSTBYNAME_R_3_ARGS) */
--   struct hostent_data hdata;
--#endif /* def HAVE_GETHOSTBYNAME_R_(6|5)_ARGS */
--#endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
- 
--   if ((host == NULL) || (*host == '\0'))
--   {
--      return(INADDR_ANY);
--   }
--
--   memset((char *) &inaddr, 0, sizeof inaddr);
--
--   if ((inaddr.sin_addr.s_addr = inet_addr(host)) == -1)
--   {
--#if defined(HAVE_GETHOSTBYNAME_R_6_ARGS)
--       while ( gethostbyname_r(host, &result, hbuf,
--                      HOSTENT_BUFFER_SIZE, &hostp, &thd_err)
--               && (thd_err == TRY_AGAIN) && (dns_retries++ < 10) )
--      {   
--         log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
--                                                dns_retries, host);
--      }
--#elif defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
--      hostp = gethostbyname_r(host, &result, hbuf,
--                      HOSTENT_BUFFER_SIZE, &thd_err);
--#elif defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
--      if (0 == gethostbyname_r(host, &result, &hdata))
--      {
--         hostp = &result;
--      }
--      else
--      {
--         hostp = NULL;
--      }
--#elif FEATURE_PTHREAD
--      pthread_mutex_lock(&gethostbyname_mutex);
--      while ( NULL == (hostp = gethostbyname(host))
--            && (h_errno == TRY_AGAIN) && (dns_retries++ < 10) )
--      {   
--         log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
--                                                dns_retries, host);
--      }
--      pthread_mutex_unlock(&gethostbyname_mutex);
--#else
--      while ( NULL == (hostp = gethostbyname(host))
--            && (h_errno == TRY_AGAIN) && (dns_retries++ < 10) )
--      {
--         log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
--                                                dns_retries, host);
--      }
--#endif /* def HAVE_GETHOSTBYNAME_R_(6|5|3)_ARGS */
--      /*
--       * On Mac OSX, if a domain exists but doesn't have a type A
--       * record associated with it, the h_addr member of the struct
--       * hostent returned by gethostbyname is NULL, even if h_length
--       * is 4. Therefore the second test below.
--       */
--      if (hostp == NULL || hostp->h_addr == NULL)
--      {
--         errno = EINVAL;
--         log_error(LOG_LEVEL_ERROR, "could not resolve hostname %s", host);
--         return(INADDR_NONE);
--      }
--      if (hostp->h_addrtype != AF_INET)
--      {
--#ifdef _WIN32
--         errno = WSAEPROTOTYPE;
--#else
--         errno = EPROTOTYPE;
--#endif 
--         log_error(LOG_LEVEL_ERROR, "hostname %s resolves to unknown address type.", host);
--         return(INADDR_NONE);
--      }
--      memcpy(
--         (char *) &inaddr.sin_addr,
--         (char *) hostp->h_addr,
--         sizeof(inaddr.sin_addr)
--      );
-+   memset(&hints, 0, sizeof(hints));
-+   hints.ai_family = pf;
-+   hints.ai_socktype = SOCK_STREAM;
-+  
-+   while ((result = getaddrinfo(host, port, &hints, &res0)) 
-+          && (result == EAI_AGAIN) && (dns_retries++ < 10)) {
-+      log_error(LOG_LEVEL_ERROR, "Timeout #%u while trying to resolve %s. Trying again.",
-+                dns_retries, host);
-    }
--   return(inaddr.sin_addr.s_addr);
--
--}
--
-+   if ( result != 0 )
-+     {
-+      log_error(LOG_LEVEL_ERROR, "could not resolve hostname %s because %s", host,gai_strerror(result));
-+      if (result == EAI_SYSTEM)
-+         log_error(LOG_LEVEL_ERROR, "The system error is %E");
-+      return NULL;
-+     }
-+   else
-+      if (res0==0)
-+         log_error(LOG_LEVEL_ERROR, "Problem in resolving hostname %s: succeeded, but no information returned", host);
-+  
-+   return res0;
-+ }
- 
- /*
+@@ -1051,4 +1280,6 @@
    Local Variables:
-diff -urNad privoxy~/jbsockets.h privoxy/jbsockets.h
---- privoxy~/jbsockets.h
-+++ privoxy/jbsockets.h
-@@ -13,6 +13,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and 
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -104,9 +107,11 @@
- extern "C" {
- #endif
- 
-+#include "addrlist.h"
+   tab-width: 3
+   end:
 +
- struct client_state;
- 
--extern jb_socket connect_to(const char *host, int portnum, struct client_state *csp);
-+extern jb_socket connect_to(const char *host, const char *port, unsigned long portnum, int pf, struct client_state *csp);
- #ifdef AMIGA
- extern int write_socket(jb_socket fd, const char *buf, ssize_t n);
- #else
-@@ -115,10 +120,10 @@
- extern int read_socket(jb_socket fd, char *buf, int n);
- extern void close_socket(jb_socket fd);
- 
--extern int bind_port(const char *hostnam, int portnum, jb_socket *pfd);
-+extern int bind_port(const char *host, const char *port, int pf, jb_socket_set *fds);
- extern int accept_connection(struct client_state * csp, jb_socket fd);
- 
--extern unsigned long resolve_hostname_to_ip(const char *host);
-+extern addr_list *resolve_hostname_to_ip(const char *host, const char *port, int pf);
- 
- /* Revision control strings from this header and associated .c file */
- extern const char jbsockets_rcs[];
++  vim:softtabstop=3 shiftwidth=3
+ */
 diff -urNad privoxy~/jcc.c privoxy/jcc.c
 --- privoxy~/jcc.c
 +++ privoxy/jcc.c
-@@ -767,6 +767,7 @@
- #include "cgi.h"
- #include "loadcfg.h"
- #include "urlmatch.h"
-+#include "jb_socket_set.h"
+@@ -2710,7 +2710,7 @@
  
- const char jcc_h_rcs[] = JCC_H_VERSION;
- const char project_h_rcs[] = PROJECT_H_VERSION;
-@@ -2338,61 +2339,78 @@
-  * Returns     :  Port that was opened.
-  *
-  *********************************************************************/
--static jb_socket bind_port_helper(struct configuration_spec * config)
-+static void bind_port_helper(struct configuration_spec * config, jb_socket_set *bfds)
- {
-    int result;
--   jb_socket bfd;
-+   struct bind_spec *bs;
-+   unsigned int bs_index;
-+   int never_bound;
- 
--   if ( (config->haddr != NULL)
--     && (config->haddr[0] == '1')
--     && (config->haddr[1] == '2')
--     && (config->haddr[2] == '7')
--     && (config->haddr[3] == '.') )
--   {
--      log_error(LOG_LEVEL_INFO, "Listening on port %d for local connections only",
--                config->hport);
--   }
--   else if (config->haddr == NULL)
--   {
--      log_error(LOG_LEVEL_INFO, "Listening on port %d on all IP addresses",
--                config->hport);
--   }
--   else
-+   never_bound = 1;
-+   for (bs_index = 0; bs_index < config->hspecs_occupied;++bs_index)
+    if (fwd->forward_host)
     {
--      log_error(LOG_LEVEL_INFO, "Listening on port %d on IP address %s",
--                config->hport, config->haddr);
--   }
-+      bs = &config->hspecs[bs_index];
-+      
-+      /* This check misses about a trillion zillion different manners to describe
-+         the local interface in IPv6. Who cares? */
-+      if ( (bs->haddr != NULL)
-+           && (((bs->haddr[0] == '1')
-+                && (bs->haddr[1] == '2')
-+                && (bs->haddr[2] == '7')
-+                && (bs->haddr[3] == '.'))
-+               || ((bs->haddr[0] == ':')
-+                   && (bs->haddr[1] == ':')
-+                   && (bs->haddr[2] == '1'))))
-+      {
-+         log_error(LOG_LEVEL_INFO, "Listening on port %s for local connections only",
-+                   bs->hport);
-+      }
-+      else if (bs->haddr == NULL || bs->haddr[0]=='\0')
-+      {
-+         log_error(LOG_LEVEL_INFO, "Listening on port %s on all IP addresses",
-+                   bs->hport);
-+      }
-+      else
-+      {
-+         log_error(LOG_LEVEL_INFO, "Listening on port %s on IP address %s",
-+                   bs->hport, bs->haddr);
-+      }
- 
--   result = bind_port(config->haddr, config->hport, &bfd);
-+      result = bind_port(bs->haddr, bs->hport, bs->pf, bfds);
- 
--   if (result < 0)
--   {
--      switch(result)
-+      if (result != 0)
-       {
-+         switch(result)
-+         {
-          case -3 :
--            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: "
-+            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s: "
-                "There may be another Privoxy or some other "
--               "proxy running on port %d",
--               (NULL != config->haddr) ? config->haddr : "INADDR_ANY",
--                      config->hport, config->hport);
-+               "proxy running on port %s",
-+               (NULL != bs->haddr) ? bs->haddr : "INADDR_ANY",
-+                      bs->hport, bs->hport);
-+            break;
- 
-          case -2 :
--            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: " 
-+            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s: " 
-                "The hostname is not resolvable",
--               (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
-+               (NULL != bs->haddr) ? bs->haddr : "INADDR_ANY", bs->hport);
-+            break;
- 
-          default :
--            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: because %E",
--               (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
-+            log_error(LOG_LEVEL_ERROR, "can't bind to %s:%s: because %E",
-+               (NULL != bs->haddr) ? bs->haddr : "INADDR_ANY", bs->hport);
-+         }
-       }
-+      else
-+         never_bound = 0;
-+   }
- 
-+   if(never_bound)
-+   {
-+      log_error(LOG_LEVEL_FATAL, "Couldn't bind at all - bailing out");
-       /* shouldn't get here */
--      return JB_INVALID_SOCKET;
+-      log_error(LOG_LEVEL_CONNECT, "via %s:%d to: %s",
++      log_error(LOG_LEVEL_CONNECT, "via [%s]:%d to: %s",
+          fwd->forward_host, fwd->forward_port, http->hostport);
     }
--
-    config->need_bind = 0;
--
--   return bfd;
- }
- 
- 
-@@ -2421,12 +2439,18 @@
- static void listen_loop(void)
- {
-    struct client_state *csp = NULL;
--   jb_socket bfd;
-+   jb_socket_set bfds;
-+   fd_set bfds_fs;
-+   jb_socket_set_iterate_state bfds_iterate_state;
-+   jb_socket bfd_current;
-    struct configuration_spec * config;
- 
-+   init_jb_socket_set(&bfds);
+    else
+@@ -4483,4 +4483,6 @@
+   Local Variables:
+   tab-width: 3
+   end:
 +
-    config = load_config();
- 
--   bfd = bind_port_helper(config);
-+   bind_port_helper(config,&bfds);
-+   bfd_current=JB_INVALID_SOCKET;
- 
- #ifdef FEATURE_GRACEFUL_TERMINATION
-    while (!g_terminate)
-@@ -2500,14 +2524,55 @@
-           * that this will hurt people's feelings.
-           */
- 
--         close_socket(bfd);
-+         jb_socket_set_iterate_state s;
-+         jb_socket bfd;
-+         s=jb_socket_set_iteration_begin(&bfds);
-+         for(bfd=jb_socket_set_iteration_next(&s);bfd!=JB_INVALID_SOCKET;bfd=jb_socket_set_iteration_next(&s))
-+         {
-+            close_socket(bfd);
-+         }
-+         destroy_jb_socket_set(&bfds);
-+         bind_port_helper(config,&bfds);
-+         /* We have a new set of fd's to accept. Restart iteration over bfds. */
-+         bfd_current = JB_INVALID_SOCKET;
-+      }
- 
--         bfd = bind_port_helper(config);
-+      /* Here: select call on listening sockets: bfd=sockets */
-+      if (bfd_current == JB_INVALID_SOCKET)
-+      {
-+         jb_socket max;
-+         log_error(LOG_LEVEL_CONNECT, "select connections ... ");
-+         bfds_iterate_state=jb_socket_set_iteration_begin(&bfds);
-+         FD_ZERO(&bfds_fs);
-+         max = 0;
-+         for(bfd_current=jb_socket_set_iteration_next(&bfds_iterate_state);
-+             bfd_current!=JB_INVALID_SOCKET;
-+             bfd_current=jb_socket_set_iteration_next(&bfds_iterate_state))
-+         {
-+            FD_SET(bfd_current,&bfds_fs);
-+            if (bfd_current >= max)
-+               max = bfd_current + 1;
-+         }
-+         if(!select(max,&bfds_fs,NULL,NULL,NULL))
-+         {
-+            log_error(LOG_LEVEL_CONNECT, "select failed: %E");
-+            bfd_current=JB_INVALID_SOCKET;
-+            continue;
-+         }
-+         log_error(LOG_LEVEL_CONNECT, "OK");
-+         bfds_iterate_state=jb_socket_set_iteration_begin(&bfds);
-+         bfd_current=jb_socket_set_iteration_next(&bfds_iterate_state);
-+      }
-+      if (!FD_ISSET(bfd_current,&bfds_fs))
-+      {
-+         bfd_current=jb_socket_set_iteration_next(&bfds_iterate_state);
-+         freez(csp);
-+         continue;
-       }
- 
-       log_error(LOG_LEVEL_CONNECT, "accept connection ... ");
- 
--      if (!accept_connection(csp, bfd))
-+      if (!accept_connection(csp, bfd_current))
-       {
-          log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
- 
-@@ -2525,6 +2590,8 @@
-          log_error(LOG_LEVEL_CONNECT, "OK");
-       }
- 
-+      bfd_current=jb_socket_set_iteration_next(&bfds_iterate_state);
-+
- #ifdef FEATURE_TOGGLE
-       if (global_toggle_state)
-       {
++  vim:softtabstop=3 shiftwidth=3
+ */
 diff -urNad privoxy~/loadcfg.c privoxy/loadcfg.c
 --- privoxy~/loadcfg.c
 +++ privoxy/loadcfg.c
-@@ -11,6 +11,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -408,6 +411,7 @@
- #include "encode.h"
- #include "urlmatch.h"
- #include "cgi.h"
-+#include "parsers.h"
- 
- const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
- 
-@@ -527,8 +531,8 @@
-       struct forward_spec * next_fwd = cur_fwd->next;
-       free_url_spec(cur_fwd->url);
- 
--      freez(cur_fwd->gateway_host);
--      freez(cur_fwd->forward_host);
-+      freez(cur_fwd->gateway_malloc);
-+      freez(cur_fwd->forward_malloc);
-       free(cur_fwd);
-       cur_fwd = next_fwd;
-    }
-@@ -545,7 +549,16 @@
-    freez(config->confdir);
-    freez(config->logdir);
- 
--   freez(config->haddr);
-+   if(config -> hspecs != NULL)
-+   {
-+      int i;
-+      for (i=0; i < config->hspecs_occupied; ++i)
-+      {
-+         freez(config->hspecs[i].haddr);
-+         freez(config->hspecs[i].hport);
-+      }
-+   }
-+   freez(config->hspecs);
-    freez(config->logfile);
- 
-    for (i = 0; i < MAX_AF_FILES; i++)
-@@ -612,6 +625,28 @@
-  * Returns     :  The configuration_spec, or NULL on error.
-  *
-  *********************************************************************/
-+static void fail_load_config_memory(struct file_list *fs, struct configuration_spec *config)
-+{
-+   freez(fs->filename);
-+   freez(fs);
-+   if (config != NULL)
-+   {
-+      if(config -> hspecs != NULL)
-+      {
-+         int i;
-+         for (i=0; i < config->hspecs_occupied; ++i)
-+         {
-+            freez(config->hspecs[i].haddr);
-+            freez(config->hspecs[i].hport);
-+         }
-+      }
-+      freez(config -> hspecs);
-+   }
-+   freez(config);
-+   log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-+   /* Never get here - LOG_LEVEL_FATAL causes program exit */
-+}
-+
- struct configuration_spec * load_config(void)
- {
-    char buf[BUFFER_SIZE];
-@@ -643,12 +678,7 @@
-    fs->f = config = (struct configuration_spec *)zalloc(sizeof(*config));
- 
-    if (config==NULL)
--   {
--      freez(fs->filename);
--      freez(fs);
--      log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
--      /* Never get here - LOG_LEVEL_FATAL causes program exit */
--   }
-+      fail_load_config_memory(fs,config);
- 
-    /*
-     * This is backwards from how it's usually done.
-@@ -665,7 +695,7 @@
+@@ -835,7 +835,6 @@
      * Set to defaults
      */
     config->multi_threaded            = 1;
 -   config->hport                     = HADDR_PORT;
-+   config->hspecs                    = NULL;
     config->buffer_limit              = 4096 * 1024;
     config->usermanual                = strdup(USER_MANUAL_URL);
     config->proxy_args                = strdup("");
-@@ -684,9 +714,6 @@
-       char cmd[BUFFER_SIZE];
-       char arg[BUFFER_SIZE];
-       char tmp[BUFFER_SIZE];
--#ifdef FEATURE_ACL
--      struct access_control_list *cur_acl;
--#endif /* def FEATURE_ACL */
-       struct forward_spec *cur_fwd;
-       int vec_count;
-       char *vec[3];
-@@ -797,74 +824,23 @@
-  * *************************************************************************/
- #ifdef FEATURE_ACL
-          case hash_deny_access:
--            vec_count = ssplit(arg, " \t", vec, SZ(vec), 1, 1);
--
--            if ((vec_count != 1) && (vec_count != 2))
--            {
--               log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
--                     "deny-access directive in configuration file.");
--               string_append(&config->proxy_args,
--                  "<br>\nWARNING: Wrong number of parameters for "
--                  "deny-access directive in configuration file.<br><br>\n");
--               continue;
--            }
--
--            /* allocate a new node */
--            cur_acl = (struct access_control_list *) zalloc(sizeof(*cur_acl));
--
--            if (cur_acl == NULL)
--            {
--               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
--               /* Never get here - LOG_LEVEL_FATAL causes program exit */
--               continue;
--            }
--            cur_acl->action = ACL_DENY;
--
--            if (acl_addr(vec[0], cur_acl->src) < 0)
--            {
--               log_error(LOG_LEVEL_ERROR, "Invalid source IP for deny-access "
--                     "directive in configuration file: \"%s\"", vec[0]);
--               string_append(&config->proxy_args,
--                  "<br>\nWARNING: Invalid source IP for deny-access directive"
--                  " in configuration file: \"");
--               string_append(&config->proxy_args,
--                  vec[0]);
--               string_append(&config->proxy_args,
--                  "\"<br><br>\n");
--               freez(cur_acl);
--               continue;
--            }
--            if (vec_count == 2)
-+            switch (ssplit(arg, " \t", vec, SZ(vec), 1, 1))
-             {
--               if (acl_addr(vec[1], cur_acl->dst) < 0)
--               {
--                  log_error(LOG_LEVEL_ERROR, "Invalid destination IP for deny-access "
--                        "directive in configuration file: \"%s\"", vec[0]);
--                  string_append(&config->proxy_args,
--                     "<br>\nWARNING: Invalid destination IP for deny-access directive"
--                     " in configuration file: \"");
--                  string_append(&config->proxy_args,
--                     vec[0]);
-+               case 1:
-+                  config->acl = add_to_acl_list(config->acl, ACL_DENY, vec[0], NULL, &config->proxy_args);
-+                  break;
-+               case 2:
-+                  config->acl = add_to_acl_list(config->acl, ACL_DENY, vec[0], vec[1], &config->proxy_args);
-+                  break;
-+               default:
-+                  log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
-+                            "deny-access directive in configuration file.");
-                   string_append(&config->proxy_args,
--                     "\"<br><br>\n");
--                  freez(cur_acl);
--                  continue;
--               }
-+                                "<br>\nWARNING: Wrong number of parameters for "
-+                                "deny-access directive in configuration file.<br><br>\n");
+@@ -1044,6 +1043,12 @@
+                   break;
+                }
              }
--
--            /*
--             * Add it to the list.  Note we reverse the list to get the
--             * behaviour the user expects.  With both the ACL and
--             * actions file, the last match wins.  However, the internal
--             * implementations are different:  The actions file is stored
--             * in the same order as the file, and scanned completely.
--             * With the ACL, we reverse the order as we load it, then
--             * when we scan it we stop as soon as we get a match.
--             */
--            cur_acl->next  = config->acl;
--            config->acl = cur_acl;
--
-             continue;
-+
- #endif /* def FEATURE_ACL */
++#ifdef HAVE_GETADDRINFO
++            else
++            {
++               cur_acl->wildcard_dst = 1;
++            }
++#endif /* def HAVE_GETADDRINFO */
  
- /* *************************************************************************
-@@ -984,16 +960,18 @@
- 
-             if (strcmp(p, ".") != 0)
+             /*
+              * Add it to the list.  Note we reverse the list to get the
+@@ -1193,7 +1198,18 @@
              {
--               cur_fwd->forward_host = strdup(p);
-+               cur_fwd->forward_malloc = strdup(p);
-+               cur_fwd->forward_family = -1;
+                cur_fwd->forward_host = strdup(p);
  
 -               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
--               {
--                  *p++ = '\0';
--                  cur_fwd->forward_port = atoi(p);
--               }
-+               parse_pf_ip(cur_fwd->forward_malloc,
-+                           &cur_fwd->forward_host,
-+                           &cur_fwd->forward_port_str,
-+                           &cur_fwd->forward_family);
-+               cur_fwd->forward_port = atoi(cur_fwd->forward_port_str);
- 
-                if (cur_fwd->forward_port <= 0)
++               if (*cur_fwd->forward_host == '[' && 
++                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
++               {
++                  *p++ = '\0';
++                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
++                        (size_t) (p - cur_fwd->forward_host));
++                  if (*p == ':')
++                  {
++                     cur_fwd->forward_port = atoi(++p);
++                  }
++               }
++               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                 {
-+                  cur_fwd->forward_port_str = "8000";
-                   cur_fwd->forward_port = 8000;
-                }
-             }
-@@ -1047,15 +1025,27 @@
- 
-             if (strcmp(p, ".") != 0)
+                   *p++ = '\0';
+                   cur_fwd->forward_port = atoi(p);
+@@ -1257,11 +1273,23 @@
              {
--               cur_fwd->gateway_host = strdup(p);
-+               /* SOCKS is IPv4-specific */
-+               int pf = PF_INET;
+                cur_fwd->gateway_host = strdup(p);
  
 -               if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
-+               cur_fwd->gateway_malloc = strdup(p);
-+               if (parse_pf_ip(cur_fwd->gateway_malloc,
-+                               &cur_fwd->gateway_host,
-+                               &cur_fwd->gateway_port_str,
-+                               &pf) != 0)
++               if (*cur_fwd->gateway_host == '[' && 
++                     NULL != (p = strchr(cur_fwd->gateway_host, ']')))
++               {
++                  *p++ = '\0';
++                  memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
++                        (size_t) (p - cur_fwd->gateway_host));
++                  if (*p == ':')
++                  {
++                     cur_fwd->gateway_port = atoi(++p);
++                  }
++               }
++               else if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
                 {
--                  *p++ = '\0';
--                  cur_fwd->gateway_port = atoi(p);
-+                 log_error(LOG_LEVEL_ERROR, "Could not parse forward-socks4 host: %s",p);
-+                 cur_fwd->gateway_host = NULL;
-+                 cur_fwd->gateway_port_str = NULL;
-+                 freez(cur_fwd->gateway_malloc);
-+                 continue;
+                   *p++ = '\0';
+                   cur_fwd->gateway_port = atoi(p);
                 }
-+
-+               cur_fwd->gateway_port = atoi(cur_fwd->gateway_port_str);
 +
                 if (cur_fwd->gateway_port <= 0)
                 {
-+                  cur_fwd->gateway_port_str = "1080";
                    cur_fwd->gateway_port = 1080;
-                }
-             }
-@@ -1065,16 +1055,26 @@
- 
-             if (strcmp(p, ".") != 0)
+@@ -1275,7 +1303,18 @@
              {
--               cur_fwd->forward_host = strdup(p);
-+               cur_fwd->forward_malloc = strdup(p);
-+               cur_fwd->forward_family = -1;
+                cur_fwd->forward_host = strdup(p);
  
 -               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
-+               parse_pf_ip(cur_fwd->forward_malloc,
-+                           &cur_fwd->forward_host,
-+                           &cur_fwd->forward_port_str,
-+                           &cur_fwd->forward_family);
-+               cur_fwd->forward_port = atoi(cur_fwd->forward_port_str);
-+
-+               if (cur_fwd->forward_port <= 0)
-                {
--                  *p++ = '\0';
--                  cur_fwd->forward_port = atoi(p);
-+                  cur_fwd->forward_port_str = "8000";
-+                  cur_fwd->forward_port = 8000;
-                }
- 
-+               cur_fwd->forward_port = atoi(p);
-+
-                if (cur_fwd->forward_port <= 0)
-                {
-+                  cur_fwd->forward_port_str = "8000";
-                   cur_fwd->forward_port = 8000;
-                }
-             }
-@@ -1126,16 +1126,30 @@
-             /* Parse the SOCKS proxy host[:port] */
-             p = vec[1];
- 
--            cur_fwd->gateway_host = strdup(p);
--
--            if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
--            {
--               *p++ = '\0';
--               cur_fwd->gateway_port = atoi(p);
--            }
--            if (cur_fwd->gateway_port <= 0)
-             {
--               cur_fwd->gateway_port = 1080;
-+               /* SOCKS is IPv4-specific */
-+               int pf = PF_INET;
-+
-+               cur_fwd->gateway_malloc = strdup(p);
-+               if (parse_pf_ip(cur_fwd->gateway_malloc,
-+                               &cur_fwd->gateway_host,
-+                               &cur_fwd->gateway_port_str,
-+                               &pf) != 0)
++               if (*cur_fwd->forward_host == '[' && 
++                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
 +               {
-+                 log_error(LOG_LEVEL_ERROR, "Could not parse forward-socks4a host: %s",p);
-+                 cur_fwd->gateway_host = NULL;
-+                 cur_fwd->gateway_port_str = NULL;
-+                 freez(cur_fwd->gateway_malloc);
-+                 continue;
-+               }
-+
-+               cur_fwd->gateway_port = atoi(cur_fwd->gateway_port_str);
-+
-+               if (cur_fwd->gateway_port <= 0)
-+               {
-+                  cur_fwd->gateway_port_str = "1080";
-+                  cur_fwd->gateway_port = 1080;
-+               }
-             }
- 
-             /* Parse the parent HTTP proxy host[:port] */
-@@ -1143,16 +1157,26 @@
- 
-             if (strcmp(p, ".") != 0)
-             {
--               cur_fwd->forward_host = strdup(p);
-+               cur_fwd->forward_malloc = strdup(p);
-+               cur_fwd->forward_family = -1;
- 
--               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
-+               parse_pf_ip(cur_fwd->forward_malloc,
-+                           &cur_fwd->forward_host,
-+                           &cur_fwd->forward_port_str,
-+                           &cur_fwd->forward_family);
-+               cur_fwd->forward_port = atoi(cur_fwd->forward_port_str);
-+
-+               if (cur_fwd->forward_port <= 0)
-                {
--                  *p++ = '\0';
--                  cur_fwd->forward_port = atoi(p);
-+                  cur_fwd->forward_port_str = "8000";
-+                  cur_fwd->forward_port = 8000;
-                }
- 
-+               cur_fwd->forward_port = atoi(p);
-+
-                if (cur_fwd->forward_port <= 0)
-                {
-+                  cur_fwd->forward_port_str = "8000";
-                   cur_fwd->forward_port = 8000;
-                }
-             }
-@@ -1185,10 +1209,49 @@
-  * listen-address [ip][:port]
-  * *************************************************************************/
-          case hash_listen_address :
--            freez(config->haddr);
--            config->haddr = strdup(arg);
-+         {
-+            struct bind_spec *bs;
-+            char *arg_cpy;
-+            if (config->hspecs == NULL)
-+            {
-+               /* This is the first we'll bind to */
-+               config->hspecs = calloc(2,sizeof(struct bind_spec));
-+               if (config->hspecs == NULL)
-+                  fail_load_config_memory(fs,config);
-+               config->hspecs_size = 2;
-+               config->hspecs_occupied = 0;
-+            }
-+            
-+            arg_cpy = strdup(arg);
-+            if (arg_cpy == NULL)
-+               fail_load_config_memory(fs,config);
-+            if (config->hspecs_occupied == config->hspecs_size)
-+              {
-+                struct bind_spec *new_hspecs;
-+                config->hspecs_size *= 2;
-+                new_hspecs = realloc(config->hspecs,config->hspecs_size * sizeof(struct bind_spec));
-+                if (new_hspecs == NULL)
++                  *p++ = '\0';
++                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
++                        (size_t) (p - cur_fwd->forward_host));
++                  if (*p == ':')
 +                  {
-+                    /* Not enough memory to continue. Cancel changes. */
-+                    config->hspecs_size /= 2;
-+                    fail_load_config_memory(fs,config);
++                     cur_fwd->forward_port = atoi(++p);
 +                  }
-+                config->hspecs = new_hspecs;
-+              }
-+            bs = &config->hspecs[(config->hspecs_occupied)++];
-+            bs->pf = -1;
-+            parse_pf_ip(arg,&bs->haddr,&bs->hport,&bs->pf);
-+            if (*bs->haddr == '\0')
++               }
++               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
+                {
+                   *p++ = '\0';
+                   cur_fwd->forward_port = atoi(p);
+@@ -1345,11 +1384,23 @@
+ 
+             cur_fwd->gateway_host = strdup(p);
+ 
+-            if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
++            if (*cur_fwd->gateway_host == '[' && 
++                  NULL != (p = strchr(cur_fwd->gateway_host, ']')))
 +            {
-+               bs->haddr = NULL;
++               *p++ = '\0';
++               memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
++                     (size_t) (p - cur_fwd->gateway_host));
++               if (*p == ':')
++               {
++                  cur_fwd->gateway_port = atoi(++p);
++               }
 +            }
++            else if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
+             {
+                *p++ = '\0';
+                cur_fwd->gateway_port = atoi(p);
+             }
++
+             if (cur_fwd->gateway_port <= 0)
+             {
+                cur_fwd->gateway_port = 1080;
+@@ -1362,7 +1413,18 @@
+             {
+                cur_fwd->forward_host = strdup(p);
+ 
+-               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
++               if (*cur_fwd->forward_host == '[' && 
++                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
++               {
++                  *p++ = '\0';
++                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
++                        (size_t) (p - cur_fwd->forward_host));
++                  if (*p == ':')
++                  {
++                     cur_fwd->forward_port = atoi(++p);
++                  }
++               }
++               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
+                {
+                   *p++ = '\0';
+                   cur_fwd->forward_port = atoi(p);
+@@ -1512,6 +1574,12 @@
+                   break;
+                }
+             }
++#ifdef HAVE_GETADDRINFO
 +            else
 +            {
-+               (bs->haddr = strdup(bs->haddr));
++               cur_acl->wildcard_dst = 1;
 +            }
-+            bs->hport = strdup(bs->hport);
-             continue;
--
-+         }
- /* *************************************************************************
-  * logdir directory-name
-  * *************************************************************************/
-@@ -1211,75 +1274,21 @@
-  * *************************************************************************/
- #ifdef FEATURE_ACL
-          case hash_permit_access:
--            vec_count = ssplit(arg, " \t", vec, SZ(vec), 1, 1);
--
--            if ((vec_count != 1) && (vec_count != 2))
--            {
--               log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
--                     "permit-access directive in configuration file.");
--               string_append(&config->proxy_args,
--                  "<br>\nWARNING: Wrong number of parameters for "
--                  "permit-access directive in configuration file.<br><br>\n");
--
--               continue;
--            }
--
--            /* allocate a new node */
--            cur_acl = (struct access_control_list *) zalloc(sizeof(*cur_acl));
--
--            if (cur_acl == NULL)
--            {
--               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
--               /* Never get here - LOG_LEVEL_FATAL causes program exit */
--               continue;
--            }
--            cur_acl->action = ACL_PERMIT;
--
--            if (acl_addr(vec[0], cur_acl->src) < 0)
--            {
--               log_error(LOG_LEVEL_ERROR, "Invalid source IP for permit-access "
--                     "directive in configuration file: \"%s\"", vec[0]);
--               string_append(&config->proxy_args,
--                  "<br>\nWARNING: Invalid source IP for permit-access directive"
--                  " in configuration file: \"");
--               string_append(&config->proxy_args,
--                  vec[0]);
--               string_append(&config->proxy_args,
--                  "\"<br><br>\n");
--               freez(cur_acl);
--               continue;
--            }
--            if (vec_count == 2)
-+            switch (ssplit(arg, " \t", vec, SZ(vec), 1, 1))
-             {
--               if (acl_addr(vec[1], cur_acl->dst) < 0)
--               {
--                  log_error(LOG_LEVEL_ERROR, "Invalid destination IP for "
--                        "permit-access directive in configuration file: \"%s\"",
--                        vec[0]);
--                  string_append(&config->proxy_args,
--                     "<br>\nWARNING: Invalid destination IP for permit-access directive"
--                     " in configuration file: \"");
--                  string_append(&config->proxy_args,
--                     vec[0]);
-+               case 1:
-+                  config->acl = add_to_acl_list(config->acl, ACL_PERMIT, vec[0], NULL, &config->proxy_args);
-+                  break;
-+               case 2:
-+                  config->acl = add_to_acl_list(config->acl, ACL_PERMIT, vec[0], vec[1], &config->proxy_args);
-+                  break;
-+               default:
-+                  log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
-+                            "permit-access directive in configuration file.");
-                   string_append(&config->proxy_args,
--                     "\"<br><br>\n");
--                  freez(cur_acl);
--                  continue;
--               }
-+                                "<br>\nWARNING: Wrong number of parameters for "
-+                                "permit-access directive in configuration file.<br><br>\n");
-             }
--
--            /*
--             * Add it to the list.  Note we reverse the list to get the
--             * behaviour the user expects.  With both the ACL and
--             * actions file, the last match wins.  However, the internal
--             * implementations are different:  The actions file is stored
--             * in the same order as the file, and scanned completely.
--             * With the ACL, we reverse the order as we load it, then
--             * when we scan it we stop as soon as we get a match.
--             */
--            cur_acl->next  = config->acl;
--            config->acl = cur_acl;
--
-             continue;
- #endif /* def FEATURE_ACL */
++#endif /* def HAVE_GETADDRINFO */
  
-@@ -1519,32 +1528,33 @@
-    }
- #endif /* def FEATURE_COOKIE_JAR */
+             /*
+              * Add it to the list.  Note we reverse the list to get the
+@@ -1851,18 +1919,20 @@
  
--   if ( NULL == config->haddr )
--   {
--      config->haddr = strdup( HADDR_DEFAULT );
--   }
--
--   if ( NULL != config->haddr )
-+   if ( config->hspecs == NULL )
+    if ( NULL != config->haddr )
     {
 -      if (NULL != (p = strchr(config->haddr, ':')))
--      {
++      if (*config->haddr == '[' && NULL != (p = strchr(config->haddr, ']')) &&
++            p[1] == ':' && 0 < (config->hport = atoi(p + 2)))
+       {
 -         *p++ = '\0';
 -         if (*p)
 -         {
 -            config->hport = atoi(p);
 -         }
--      }
++         *p='\0';
++         memmove((void *) config->haddr, config->haddr + 1,
++               (size_t) (p - config->haddr));
+       }
 -
 -      if (config->hport <= 0)
--      {
--         *--p = ':';
--         log_error(LOG_LEVEL_FATAL, "invalid bind port spec %s", config->haddr);
--         /* Never get here - LOG_LEVEL_FATAL causes program exit */
--      }
--      if (*config->haddr == '\0')
--      {
--         config->haddr = NULL;
--      }
-+      /* No listen-address set. The default is localhost on port 8118, on IPv4
-+         and (if INET6 is defined) IPv6.
-+       */
-+      struct bind_spec *bs;
-+#ifdef INET6
-+      config->hspecs = calloc(2,sizeof(struct bind_spec));
-+      if (config->hspecs == NULL)
-+         fail_load_config_memory(fs,config);
-+      config->hspecs_size=2;
-+      config->hspecs_occupied=1;
-+      bs = &config->hspecs[0];
-+      bs->haddr = strdup("::1");
-+      bs->hport = strdup("8118");
-+      bs->pf = PF_UNSPEC;
-+#else
-+      config->hspecs = calloc(1,sizeof(struct bind_spec));
-+      if (config->hspecs == NULL)
-+         fail_load_config_memory(fs,config);
-+      config->hspecs_size=1;
-+      config->hspecs_occupied=0;
-+#endif
-+      bs = &config->hspecs[config->hspecs_occupied++];
-+      bs->haddr = strdup("127.0.0.1");
-+      bs->hport = strdup("8118");
-+      bs->pf = PF_UNSPEC;
-    }
- 
-    /*
-@@ -1586,31 +1596,29 @@
-       struct configuration_spec * oldcfg = (struct configuration_spec *)
-                                            current_configfile->f;
-       /*
--       * Check if config->haddr,hport == oldcfg->haddr,hport
--       *
--       * The following could be written more compactly as a single,
--       * (unreadably long) if statement.
-+       * Check if the listening addresses have changed
-        */
-       config->need_bind = 0;
--      if (config->hport != oldcfg->hport)
--      {
--         config->need_bind = 1;
--      }
--      else if (config->haddr == NULL)
-+      if (config -> hspecs_occupied == oldcfg -> hspecs_occupied)
++      else if (NULL != (p = strchr(config->haddr, ':')) &&
++            0 < (config->hport = atoi(p + 1)))
++      {
++         *p = '\0';
++      }
++      else 
        {
--         if (oldcfg->haddr != NULL)
-+         int bs_index;
-+         struct bind_spec *hspec;
-+         struct bind_spec *oldhspec;
-+         hspec = config -> hspecs;
-+         oldhspec = oldcfg -> hspecs;
-+         for(bs_index = 0; bs_index < oldcfg->hspecs_occupied; ++bs_index)
-          {
--            config->need_bind = 1;
-+           if (strcmp(hspec[bs_index].haddr,oldhspec[bs_index].haddr) != 0
-+               || strcmp(hspec[bs_index].hport,oldhspec[bs_index].hport) != 0
-+               || hspec[bs_index].pf != hspec[bs_index].pf)
-+           {
-+              config -> need_bind = 1;
-+              break;
-+           }
-          }
+-         *--p = ':';
+          log_error(LOG_LEVEL_FATAL, "invalid bind port spec %s", config->haddr);
+          /* Never get here - LOG_LEVEL_FATAL causes program exit */
        }
--      else if (oldcfg->haddr == NULL)
--      {
--         config->need_bind = 1;
--      }
--      else if (0 != strcmp(config->haddr, oldcfg->haddr))
--      {
--         config->need_bind = 1;
--      }
-+      else
-+         config-> need_bind = 1;
- 
-       current_configfile->unloader = unload_configfile;
-    }
-diff -urNad privoxy~/loaders.c privoxy/loaders.c
---- privoxy~/loaders.c
-+++ privoxy/loaders.c
-@@ -11,6 +11,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 8 December 2002, 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -465,6 +468,7 @@
- 
-          freez(csp->ip_addr_str);
-          freez(csp->my_ip_addr_str);
-+         freez(csp->my_port_str);
-          freez(csp->my_hostname);
-          freez(csp->x_forwarded);
-          freez(csp->iob->buf);
-diff -urNad privoxy~/miscutil.h privoxy/miscutil.h
---- privoxy~/miscutil.h
-+++ privoxy/miscutil.h
-@@ -162,6 +162,15 @@
- 
- #include "project.h"
- 
-+/* Fix a problem with Solaris.  There should be no effect on other
-+ * platforms.
-+ * Solaris's isspace() is a macro which uses it's argument directly
-+ * as an array index.  Therefore we need to make sure that high-bit
-+ * characters generate +ve values, and ideally we also want to make
-+ * the argument match the declared parameter type of "int".
-+ */
-+#define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
+@@ -2038,4 +2108,6 @@
+   Local Variables:
+   tab-width: 3
+   end:
 +
- #if defined(__cplusplus)
- extern "C" {
- #endif
-diff -urNad privoxy~/parsers.c privoxy/parsers.c
---- privoxy~/parsers.c
-+++ privoxy/parsers.c
-@@ -16,6 +16,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -1951,6 +1954,167 @@
-    return JB_ERR_OK;
- }
- 
-+/*********************************************************************
-+ *
-+ * Function    :  parse_pf_ip_netmask
-+ *
-+ * Description :  Parse an IPv{4,6} litteral or hostname
-+ *                with optional port and optional explicit family
-+ *                and optional netmask
-+ *
-+ * Parameters  :
-+ *          0  :  string = the string to parse
-+ *          1  :  host = Is set to point to the hostname or IP literal
-+ *                       part
-+ *          2  :  port = Is set to point to the port part,
-+ *                       or NULL if no port in string
-+ *          3  :  pf = pointer used to return the address family
-+ *                     pf is a value-result argument:
-+ *                     If it is set to -1, then parse_pf_ip will set it
-+ *                      to the address family of the pf_ip string
-+ *                     else, it won't touch it, and fail if the two
-+ *                      cannot match
-+ *          4  :  pointer used to return the mask length
-+ *                Set to -1 if no mask
-+ *
-+ * Returns     :  0 on success
-+ *
-+ *********************************************************************/
-+int parse_pf_ip_netmask(char *string, char **host, char **port, int *pf, int *masklength)
-+{
-+   int i;
-+   char *p;
-+
-+   *masklength = -1;
-+
-+   if ((p = strchr(string, '/')) != NULL)
-+   {
-+      *p++ = '\0';
-+
-+      if (ijb_isdigit(*p) == 0)
-+      {
-+         return -1;
-+      }
-+      i = atoi(p);
-+      if ( i < 0 )
-+         return -1;
-+      *masklength = i;
-+   }
-+
-+   return parse_pf_ip(string, host, port, pf);
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  parse_pf_ip
-+ *
-+ * Description :  Parse an IPv{4,6} litteral or hostname
-+ *                with optional port and optional explicit family
-+ *
-+ * Parameters  :
-+ *          0  :  string = the string to parse
-+ *          1  :  host = Is set to point to the hostname or IP literal
-+ *                       part
-+ *          2  :  port = Is set to point to the port part,
-+ *                       or NULL if no port in string
-+ *          3  :  pf = pointer used to return the address family
-+ *                     pf is a value-result argument:
-+ *                     If it is set to -1, then parse_pf_ip will set it
-+ *                      to the address family of the pf_ip string
-+ *                     else, it won't touch it, and fail if the two
-+ *                      cannot match
-+ *
-+ * Returns     :  0 on success
-+ *
-+ *********************************************************************/
-+int parse_pf_ip(char *string, char **host, char **port, int *pf)
-+{
-+   if (pf != NULL && *pf == -1)
-+      *pf = PF_UNSPEC;
-+
-+   /* See if we want to override the default protocol family */
-+   if (strncmpic(string, "ipv4:", 5) == 0)
-+   {
-+      string += 5;
-+      if (pf!=NULL)
-+      {
-+         if(*pf==PF_INET || *pf==PF_UNSPEC)
-+            *pf = AF_INET;
-+         else
-+         {
-+            log_error(LOG_LEVEL_ERROR,"%s","IPv4 address found where other awaited");
-+            return -2;
-+         }
-+      }
-+   }
-+   else if (strncmpic(string, "ipv6:", 5) == 0)
-+   {
-+#ifdef INET6
-+      string += 5;
-+      if(*pf==PF_INET6 || *pf==PF_UNSPEC)
-+         *pf = AF_INET6;
-+      else
-+      {
-+        log_error(LOG_LEVEL_ERROR,"%s","IPv6 address found where other awaited");
-+        return -2;
-+      }
-+#else
-+      log_error(LOG_LEVEL_ERROR,"%s","This privoxy hasn't IPv6 support");
-+      return -1;
-+#endif
-+   }
-+   return parse_ip(string, host, port);
-+}
-+
-+/*********************************************************************
-+ *
-+ * Function    :  parse_ip
-+ *
-+ * Description :  Parse an IPv{4,6} litteral or hostname
-+ *                with optional port
-+ *
-+ * Parameters  :
-+ *          0  :  string = the string to parse
-+ *          1  :  host = Is set to point to the hostname or IP literal
-+ *                       part
-+ *          2  :  port = Is set to point to the port part,
-+ *                       or NULL if no port in string
-+ * Returns     :  0 on success
-+ *
-+ *********************************************************************/
-+int parse_ip(char *string, char **host, char **port)
-+{
-+   char *p;
-+   int skip;
-+
-+   /* allow IPv6 address literal: [numbers:with:colons]:port/mask */
-+   if (string[0] == '[' && (p = strchr(string, ']')))
-+   {
-+      *p++ = '\0';
-+      skip = 1;
-+   }
-+   else
-+   {
-+      p = string;
-+      skip = 0;
-+   }
-+
-+   if (host != NULL)
-+      *host = string + skip;
-+
-+   for(;*p != '\0'; ++p)
-+   {
-+      if (*p == ':')
-+      {
-+         *p++ = '\0';
-+         break;
-+      }
-+   }
-+   if (port != NULL)
-+      *port = p;
-+   return 0;
-+}
-+
- 
- /*********************************************************************
-  *
-diff -urNad privoxy~/parsers.h privoxy/parsers.h
---- privoxy~/parsers.h
-+++ privoxy/parsers.h
-@@ -19,6 +19,9 @@
-  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
-  *                Privoxy team. http://www.privoxy.org/
-  *
-+ *                Modified by Lionel Elie Mamane <lionel@mamane.lu>
-+ *                for IPv6 support on 24 January 2003.
-+ *
-  *                Based on the Internet Junkbuster originally written
-  *                by and Copyright (C) 1997 Anonymous Coders and 
-  *                Junkbusters Corporation.  http://www.junkbusters.com
-@@ -270,6 +273,10 @@
- extern jb_err server_last_modified   (struct client_state *csp, char **header);
- extern jb_err server_content_disposition(struct client_state *csp, char **header);
- 
-+extern int parse_pf_ip_netmask(char *string, char **host, char **port, int *pf, int *masklength);
-+extern int parse_pf_ip(char *string, char ** host, char ** port, int *pf);
-+extern int parse_ip(char *string, char ** host, char** port);
-+
- #ifdef FEATURE_FORCE_LOAD
- extern int strclean(const char *string, const char *substring);
- #endif /* def FEATURE_FORCE_LOAD */
++  vim:softtabstop=3 shiftwidth=3
+ */
 diff -urNad privoxy~/project.h privoxy/project.h
 --- privoxy~/project.h
 +++ privoxy/project.h
-@@ -607,6 +607,20 @@
+@@ -710,6 +710,12 @@
+ /* Needed for pcre choice */
+ #include "config.h"
  
- #endif /* ndef _WIN32 */
- 
-+#include "jb_socket_set.h"
-+
-+#ifdef INET6
-+/**
-+ * Get from the operating system structures big enough
-+ * to put a network address in, namely sockaddr_storage
-+ */
-+#include <sys/socket.h> 
-+/**
-+ * If no IPv6 support, just use the old sockaddr
-+ */
-+#else
-+#define sockaddr_storage   sockaddr
++#ifdef HAVE_GETADDRINFO
++/* Need for struct sockaddr_storage */
++#include <sys/socket.h>
 +#endif
- 
- /**
-  * A standard error code.  This should be JB_ERR_OK or one of the JB_ERR_xxx
-@@ -681,19 +695,6 @@
-  */
++
++
+ /*
+  * Include appropriate regular expression libraries.
+  * Note that pcrs and pcre (native) are needed for cgi
+@@ -861,16 +867,10 @@
  #define FOREVER 1
  
--/**
+ /**
 - * Default IP address to listen on, as a string.
 - * Set to "127.0.0.1".
 - */
@@ -3240,314 +1305,144 @@ diff -urNad privoxy~/project.h privoxy/project.h
 -/**
 - * Default port to listen on, as a number.
 - * Set to 8118.
-- */
++ * Default TCP/IP address to listen on, as a string.
++ * Set to "127.0.0.1:8118".
+  */
 -#define HADDR_PORT      8118
--
--
++#define HADDR_DEFAULT   "127.0.0.1:8118"
+ 
+ 
  /* Forward def for struct client_state */
- struct configuration_spec;
- 
-@@ -772,13 +773,16 @@
-    char *ver;      /**< Protocol version */
-    int status;     /**< HTTP Status */
- 
-+   char *host_port_malloc;     /**< malloc used for place wher host and port_str are */
-    char *host;     /**< Host part of URL */
-    int   port;     /**< Port of URL or 80 (default) */
-+   char *port_str; /**< Port of URL, as string */
-    char *path;     /**< Path of URL */
-    char *hostport; /**< host[:port] */
-    int   ssl;      /**< Flag if protocol is https */
- 
--   char *host_ip_addr_str; /**< String with dotted decimal representation
-+   char *host_ip_addr_str; /**< String with dotted decimal representation (IPv4)
-+                                or hexadecimal colon-separated (IPv6)
-                                 of host's IP. NULL before connect_to() */
- 
-    char  *dbuffer; /**< Buffer with '\0'-delimited domain name.           */
-@@ -1158,13 +1162,16 @@
+@@ -1424,9 +1424,15 @@
+    /** Client PC's IP address, as reported by the accept() function.
         As a string. */
     char *ip_addr_str;
++#ifdef HAVE_GETADDRINFO
++   /** Client PC's TCP address, as reported by the accept() function.
++       As a sockaddr. */
++   struct sockaddr_storage tcp_addr;
++#else
     /** Client PC's IP address, as reported by the accept() function.
--       As a number. */
--   long  ip_addr_long;
-+       As an address. */
-+   struct sockaddr_storage ip_addr_addr;
+        As a number. */
+    unsigned long ip_addr_long;
++#endif /* def HAVE_GETADDRINFO */
  
-    /** Our IP address. I.e. the IP address that the client used to reach us,
-        as a string. */
-    char *my_ip_addr_str;
- 
-+   /** Our  port. I.e. the port the client used to reach us */
-+   char *my_port_str;
-+
-    /** Our hostname. I.e. the reverse DNS of the IP address that the client
-        used to reach us, as a string. */
-    char *my_hostname;
-@@ -1339,18 +1346,33 @@
-    /** Connection type.  Must be SOCKS_NONE, SOCKS_4, or SOCKS_4A. */
-    int   type;
- 
-+   /** pointer returned by the malloc used for gateway_host and gateway_port_str */
-+   char *gateway_malloc;
-+
-    /** SOCKS server hostname.  Only valid if "type" is SOCKS_4 or SOCKS_4A. */
-    char *gateway_host;
- 
-    /** SOCKS server port. */
-    int   gateway_port;
- 
-+   /** SOCKS server port, as string. */
-+   char *gateway_port_str;
-+
-+   /** pointer returned by the malloc used for forward_host and forward_port_str */
-+   char *forward_malloc;
-+
-+   /** Parent HTTP proxy address family. */
-+   int forward_family;
-+
-    /** Parent HTTP proxy hostname, or NULL for none. */
-    char *forward_host;
- 
-    /** Parent HTTP proxy port. */
-    int   forward_port;
- 
-+   /** Parent HTTP proxy port as string. */
-+   char *forward_port_str;
-+
-    /** Next entry in the linked list. */
-    struct forward_spec *next;
- };
-@@ -1359,7 +1381,7 @@
- /**
-  * Initializer for a static struct forward_spec.
-  */
--#define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
-+#define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, NULL, 0, NULL, NULL, 0, NULL, 0, NULL, NULL}
- 
- 
- /**
-@@ -1388,7 +1410,8 @@
+    /** The URL that was requested */
+    struct http_request http[1];
+@@ -1660,9 +1666,14 @@
   */
  struct access_control_addr
  {
--   unsigned long addr;  /**< The IP address as an integer. */
-+   struct sockaddr_storage addr; /**< The IP address. */
-+   size_t addrlen;
++#ifdef HAVE_GETADDRINFO
++   struct sockaddr_storage addr; /* <The TCP address in network order. */
++   struct sockaddr_storage mask; /* <The TCP mask in network order. */
++#else
+    unsigned long addr;  /**< The IP address as an integer. */
     unsigned long mask;  /**< The network mask as an integer. */
     unsigned long port;  /**< The port number. */
++#endif /* HAVE_GETADDRINFO */
  };
-@@ -1423,6 +1446,17 @@
- /** configuration_spec::feature_flags: HTTP-header-based toggle. */
- #define RUNTIME_FEATURE_HTTP_TOGGLE       4
  
-+struct bind_spec
-+{
-+   /** IP address to bind to. */
-+   char *haddr;
-+
-+   /** Port to bind to. */
-+   char *hport;
-+
-+   /** Address family */
-+   int pf;
-+};
  /**
-  * Data loaded from the configuration file.
-  *
-@@ -1486,11 +1520,13 @@
+@@ -1674,6 +1685,9 @@
+ {
+    struct access_control_addr src[1];  /**< Client IP address */
+    struct access_control_addr dst[1];  /**< Website or parent proxy IP address */
++#ifdef HAVE_GETADDRINFO
++   int wildcard_dst;                   /** < dst address is wildcard */
++#endif
  
- #endif /* def FEATURE_COOKIE_JAR */
- 
--   /** IP address to bind to.  Defaults to HADDR_DEFAULT == 127.0.0.1. */
--   const char *haddr;
--
--   /** Port to bind to.  Defaults to HADDR_PORT == 8118. */
--   int         hport;
-+   /* IP addresses and ports to bind to.
-+       Defaults to HSPECS_DEFAULT == {ipv4:127.0.0.1:8118, ipv6:[::1]:8118}. */
-+   struct bind_spec *hspecs;
-+   /* size allocated */
-+   unsigned int hspecs_size;
-+   /* number of entries */
-+   unsigned int hspecs_occupied;
- 
-    /** Size limit for IOB */
-    size_t buffer_limit;
+    short action;                       /**< ACL_PERMIT or ACL_DENY */
+    struct access_control_list *next;   /**< The next entry in the ACL. */
+@@ -1882,4 +1896,6 @@
+   Local Variables:
+   tab-width: 3
+   end:
++
++  vim:softtabstop=3 shiftwidth=3
+ */
 diff -urNad privoxy~/urlmatch.c privoxy/urlmatch.c
 --- privoxy~/urlmatch.c
 +++ privoxy/urlmatch.c
-@@ -137,6 +137,7 @@
- #include "ssplit.h"
- #include "miscutil.h"
- #include "errlog.h"
-+#include "parsers.h"
- 
- const char urlmatch_h_rcs[] = URLMATCH_H_VERSION;
- 
-@@ -160,7 +161,7 @@
-    freez(http->cmd);
-    freez(http->ocmd);
-    freez(http->gpc);
--   freez(http->host);
-+   freez(http->host_port_malloc);
-    freez(http->url);
-    freez(http->hostport);
-    freez(http->path);
-@@ -302,8 +303,6 @@
-     */
-    {
-       char *buf;
--      char *host;
--      char *port;
- 
-       buf = strdup(http->hostport);
-       if (buf == NULL)
-@@ -311,38 +310,34 @@
-          return JB_ERR_MEMORY;
+@@ -540,8 +540,40 @@
+          host = buf;
        }
  
-+      http->host_port_malloc = buf;
++      /* Move after hostname before port number */
++      if (*host == '[')
++      {
++         /* Numeric IPv6 address delimited by brackets */
++         host++;
++         port = strchr(host, ']');
 +
-       /* check if url contains username and/or password */
--      host = strchr(buf, '@');
--      if (host != NULL)
-+      buf = strchr(buf, '@');
-+      if (buf != NULL)
-       {
-          /* Contains username/password, skip it and the @ sign. */
--         host++;
-+         buf++;
-       }
-       else
-       {
-          /* No username or password. */
--         host = buf;
-+         buf = http->host_port_malloc;
-       }
- 
--      /* check if url contains port */
--      port = strchr(host, ':');
--      if (port != NULL)
-+      parse_ip(buf,&http->host,&http->port_str);
-+
-+      if (*http->port_str != '\0')
-       {
--         /* Contains port */
--         /* Terminate hostname and point to start of port string */
--         *port++ = '\0';
--         http->port = atoi(port);
-+         http->port = atoi(http->port_str);
-       }
-       else
-       {
-          /* No port specified. */
-+         http->port_str = (http->ssl ? "143" : "80");
-          http->port = (http->ssl ? 443 : 80);
-       }
- 
--      http->host = strdup(host);
--
--      free(buf);
--
-       if (http->host == NULL)
-       {
-          return JB_ERR_MEMORY;
-@@ -666,9 +661,8 @@
-  *                               written to system log)
-  *
-  *********************************************************************/
--jb_err create_url_spec(struct url_spec * url, const char * buf)
-+jb_err create_url_spec(struct url_spec * url, char * buf)
- {
--   char *p;
- 
-    assert(url);
-    assert(buf);
-@@ -685,21 +679,24 @@
-    {
-       return JB_ERR_MEMORY;
-    }
--
--   if ((p = strchr(buf, '/')) != NULL)
-    {
--      if (NULL == (url->path = strdup(p)))
-+      char *p;
-+
-+      if ((p = strchr(buf, '/')) != NULL)
-       {
--         freez(url->spec);
--         return JB_ERR_MEMORY;
-+         if (NULL == (url->path = strdup(p)))
++         if (port == NULL)
 +         {
-+            freez(url->spec);
-+            return JB_ERR_MEMORY;
++            /* Missing closing bracket */
++            freez(buf);
++            return JB_ERR_PARSE;
 +         }
-+         url->pathlen = strlen(url->path);
-+         *p = '\0';
++
++         *port++='\0';
++         
++         if (*port == '\0')
++         {
++            port = NULL;
++         }
++         else if (*port != ':')
++         {
++            /* Garbage after closing bracket */
++            freez(buf);
++            return JB_ERR_PARSE;
++         }
 +      }
 +      else
 +      {
-+         url->path    = NULL;
-+         url->pathlen = 0;
-       }
--      url->pathlen = strlen(url->path);
--      *p = '\0';
--   }
--   else
--   {
--      url->path    = NULL;
--      url->pathlen = 0;
-    }
-    if (url->path)
-    {
-@@ -739,14 +736,11 @@
-          return JB_ERR_PARSE;
-       }
-    }
--   if ((p = strchr(buf, ':')) == NULL)
--   {
--      url->port = 0;
--   }
--   else
++         /* Plain non-escaped hostname */ 
++         port = strchr(host, ':');
++      }
 +
-    {
--      *p++ = '\0';
--      url->port = atoi(p);
-+     char *p;
-+     parse_ip(buf,&buf,&p);
-+     url->port = atoi(p);
+       /* check if url contains port */
+-      port = strchr(host, ':');
+       if (port != NULL)
+       {
+          /* Contains port */
+@@ -844,7 +876,31 @@
+       *p = '\0';
     }
  
-    if (buf[0] != '\0')
-@@ -779,12 +773,13 @@
-          return JB_ERR_MEMORY;
-       }
- 
--      /* 
--       * Map to lower case
--       */
--      for (p = url->dbuffer; *p ; p++)
-       {
--         *p = tolower((int)(unsigned char)*p);
-+         char* p;
-+         /* map to lower case */
-+         for (p = url->dbuffer; *p ; p++)
-+         {
-+            *p = tolower((int)(unsigned char)*p);
-+         }
-       }
- 
-       /* 
-diff -urNad privoxy~/urlmatch.h privoxy/urlmatch.h
---- privoxy~/urlmatch.h
-+++ privoxy/urlmatch.h
-@@ -83,7 +83,7 @@
- extern int url_match(const struct url_spec *pattern,
-                      const struct http_request *url);
- 
--extern jb_err create_url_spec(struct url_spec * url, const char * buf);
-+extern jb_err create_url_spec(struct url_spec * url, char * buf);
- extern void free_url_spec(struct url_spec *url);
- 
- 
+-   p = strchr(buf, ':');
++   /* XXX: IPv6 numeric hostname contains colons, thus we need to delimit the
++    * hostname before real port separator. Because brackets are used in
++    * hostname matching on lower layer, we can't use it. I decided to use
++    * angle brackets '<' '>' instead. */
++   if (buf[0] == '<' && NULL != (p = strchr(buf + 1, '>')))
++   {
++      *p++ = '\0';
++      buf++;
++
++      if (*p == '\0')
++      {
++         /* Only IPv6 address without port number */
++         p = NULL;
++      }
++      else if (*p != ':')
++      {
++         /* Garbage after address delimiter */
++         return JB_ERR_PARSE;
++      }
++   }
++   else
++   {
++      p = strchr(buf, ':');
++   }
++
+    if (NULL != p)
+    {
+       *p++ = '\0';
+@@ -1449,4 +1505,6 @@
+   Local Variables:
+   tab-width: 3
+   end:
++
++  vim:softtabstop=3 shiftwidth=3
+ */

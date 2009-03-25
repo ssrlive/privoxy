@@ -1,0 +1,21 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 28_listen_localhost.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Listen on localhost:8118 instead of 127.0.0.1:8118, because
+## DP: this is independent from localhost IP (127.0.0.1 vs. 127.0.1.1)
+## DP: and also supports IPv6 (Closes: #512888)
+
+@DPATCH@
+diff -urNad privoxy~/config privoxy/config
+--- privoxy~/config
++++ privoxy/config
+@@ -727,7 +727,7 @@
+ #        listen-address  192.168.0.1:8118
+ #
+ #
+-listen-address  127.0.0.1:8118
++listen-address  localhost:8118
+ #
+ #
+ #  4.2. toggle

@@ -72,8 +72,7 @@ install: build-stamp
 
 	install -m 644 config $(DEBDIR)/etc/privoxy/config
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
-	install -m 0644 global.action $(DEBDIR)/etc/privoxy/global.action
-	install -m 0644 standard.action $(DEBDIR)/etc/privoxy/standard.action
+	install -m 0644 match-all.action $(DEBDIR)/etc/privoxy/match-all.action
 	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
 	install -m 0644 default.filter $(DEBDIR)/etc/privoxy/default.filter
 	install -m 0644 trust $(DEBDIR)/etc/privoxy/trust

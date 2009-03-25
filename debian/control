@@ -9,7 +9,8 @@ Homepage: http://www.privoxy.org/
 
 Package: privoxy
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}, logrotate, adduser
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}, logrotate,
+ adduser, lsb-base (>= 3.2-13)
 Recommends: doc-base
 Description: Privacy enhancing HTTP Proxy
  Privoxy is a web proxy with advanced filtering capabilities for

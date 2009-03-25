@@ -23,33 +23,65 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
+CONFDIR=/etc/privoxy
+CONFIG=$CONFDIR/config
+
 case "$1" in
     configure)
-        adduser --quiet --system --home /etc/privoxy --no-create-home \
+        adduser --quiet --system --home $CONFDIR --no-create-home \
 	    --ingroup nogroup --disabled-password privoxy
         chown -R privoxy:adm /var/log/privoxy
         chmod 750 /var/log/privoxy
-	chown privoxy /etc/privoxy/user.action /etc/privoxy/trust
-	[ -f /etc/privoxy/global.action ] \
-	    && chown privoxy /etc/privoxy/global.action
+	chown privoxy $CONFDIR/user.action $CONFDIR/trust
+	[ -f $CONFDIR/matcha-all.action ] \
+	    && chown privoxy $CONFDIR/match-all.action
 
 	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.4"
 	then
 	    # Upgrading from a 3.0.3* version
-	    chown root /etc/privoxy/standard.action \
-		       /etc/privoxy/default.action
+	    chown root $CONFDIR/default.action
 	fi
 
 	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.7" \
-	    && grep -q '^actionsfile [a-z]*[[:space:]]*#.*$' /etc/privoxy/config
+	    && grep -q '^actionsfile [a-z]*[[:space:]]*#.*$' $CONFIG
 	then
 	    # Upgrading from version before 3.0.7 where the user kept his old 
 	    # (modified) config file:
 	    # Try to change   "actionsfile foo"  to  "actionsfile foo.action"
 	    # as needed in 3.0.7:
 	    sed 's/^actionsfile \([a-z]*\)\([ 	]*\#\)/actionsfile \1.action\2/' \
-		-i.bak /etc/privoxy/config
-	fi	
+		-i.bak $CONFIG
+	fi
+
+	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.11"
+	then
+	    # Upgrading from a version before 3.0.11
+	    # Try to work around problems with missing action files
+	    if grep -q '^actionsfile.*global.action' $CONFIG
+	    then
+		if [ -e $CONFDIR/global.action ]
+		then
+		    mv $CONFDIR/global.action $CONFDIR/global.action.dpkg-old
+		fi
+		(cd $CONFDIR; ln -s match-all.action global.action)
+	    fi
+	    if grep -q '^actionsfile.*standard.action' $CONFIG
+	    then
+		if [ -e $CONFDIR/standard.action ]
+		then
+		    if ! grep -q migration $CONFDIR/standard.action
+		    then
+			mv $CONFDIR/standard.action \
+			    $CONFDIR/standard.action.dpkg-old
+			echo "# migration file. Not used in 3.0.11 and newer" \
+			    > $CONFDIR/standard.action
+		    fi
+		else
+		    echo "# migration file. Not used in 3.0.11 and newer" \
+			> $CONFDIR/standard.action
+		fi
+	    fi
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
