@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.234 2009/03/18 20:48:42 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.235 2009/03/18 21:01:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.234 2009/03/18 20:48:42 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.235  2009/03/18 21:01:20  fabiankeil
+ *    Comment fix. Spotted by Roland.
+ *
  *    Revision 1.234  2009/03/18 20:48:42  fabiankeil
  *    If the --no-daemon option is used, enable LOG_LEVEL_INFO
  *    before the config file has been parsed (as we always did).
@@ -3339,7 +3342,8 @@ static void chat(struct client_state *csp)
  * Function    :  serve
  *
  * Description :  This is little more than chat.  We only "serve" to
- *                to close any socket that chat may have opened.
+ *                to close (or remember) any socket that chat may have
+ *                opened.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3354,7 +3358,6 @@ static void serve(struct client_state *csp)
 #endif /* def AMIGA */
 {
    chat(csp);
-   close_socket(csp->cfd);
 
    if (csp->sfd != JB_INVALID_SOCKET)
    {
@@ -3365,6 +3368,8 @@ static void serve(struct client_state *csp)
        && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
       {
          remember_connection(csp->sfd, csp->http, forward_url(csp, csp->http));
+         close_socket(csp->cfd);
+         csp->cfd = JB_INVALID_SOCKET;
          privoxy_mutex_lock(&connection_reuse_mutex);
          if (!monitor_thread_running)
          {
@@ -3384,6 +3389,11 @@ static void serve(struct client_state *csp)
 #else
       close_socket(csp->sfd);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+   }
+
+   if (csp->cfd != JB_INVALID_SOCKET)
+   {
+      close_socket(csp->cfd);
    }
 
    csp->flags &= ~CSP_FLAG_ACTIVE;

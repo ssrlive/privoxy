@@ -1,6 +1,13 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.13 (UNRELEASED) ***
+
+- The client socket is kept open until the server socket has
+  been marked as unused. This should increase the chances that
+  the still-open connection will be reused for the client's next
+  request to the same destination.
+
 *** Version 3.0.12 ***
 
 - The socket-timeout option now also works on platforms whose
