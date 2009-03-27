@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.236 2009/03/25 17:30:24 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.237 2009/03/27 14:32:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.236 2009/03/25 17:30:24 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.237  2009/03/27 14:32:04  fabiankeil
+ *    If spawning a child in listen_loop() fails, send a real
+ *    HTTP response to the client and continue listening for
+ *    new connections without artificial delay.
+ *
  *    Revision 1.236  2009/03/25 17:30:24  fabiankeil
  *    In serve(), keep the client socket open until we marked the
  *    server socket as unused. This should increase the chances
@@ -1483,7 +1488,7 @@ static const char TOO_MANY_CONNECTIONS_RESPONSE[] =
 
 /* XXX: should be a template */
 static const char CONNECTION_TIMEOUT_RESPONSE[] =
-   "HTTP/1.0 502 Connection timeout\r\n"
+   "HTTP/1.0 504 Connection timeout\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
