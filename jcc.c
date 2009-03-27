@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.235 2009/03/18 21:01:20 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.236 2009/03/25 17:30:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,12 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.235 2009/03/18 21:01:20 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.236  2009/03/25 17:30:24  fabiankeil
+ *    In serve(), keep the client socket open until we marked the
+ *    server socket as unused. This should increase the chances
+ *    that we reuse the connection for the client's next request
+ *    to the same destination.
+ *
  *    Revision 1.235  2009/03/18 21:01:20  fabiankeil
  *    Comment fix. Spotted by Roland.
  *
@@ -1467,6 +1473,13 @@ static const char MESSED_UP_REQUEST_RESPONSE[] =
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Messed up with header filters.\r\n";
+
+static const char TOO_MANY_CONNECTIONS_RESPONSE[] =
+   "HTTP/1.0 503 Too many open connections\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "Maximum number of open connections reached.\r\n";
 
 /* XXX: should be a template */
 static const char CONNECTION_TIMEOUT_RESPONSE[] =
@@ -4418,19 +4431,19 @@ static void listen_loop(void)
 #undef SELECTED_ONE_OPTION
 /* end of cpp switch () */
 
-         if (child_id < 0) /* failed */
+         if (child_id < 0)
          {
-            char buf[BUFFER_SIZE];
-
-            log_error(LOG_LEVEL_ERROR, "can't fork: %E");
-
-            snprintf(buf , sizeof(buf), "Privoxy: can't fork: errno = %d", errno);
-
-            write_socket(csp->cfd, buf, strlen(buf));
+            /*
+             * Spawning the child failed, assume it's because
+             * there are too many children running already.
+             * XXX: If you assume ...
+             */
+            log_error(LOG_LEVEL_ERROR,
+               "Unable to take any additional connections: %E");
+            write_socket(csp->cfd, TOO_MANY_CONNECTIONS_RESPONSE,
+               strlen(TOO_MANY_CONNECTIONS_RESPONSE));
             close_socket(csp->cfd);
             csp->flags &= ~CSP_FLAG_ACTIVE;
-            sleep(5);
-            continue;
          }
       }
       else
