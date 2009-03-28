@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.57 2009/03/19 19:07:49 fabiankeil Exp $
+ $Id: faq.sgml,v 2.58 2009/03/21 12:27:44 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.57 2009/03/19 19:07:49 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.58 2009/03/21 12:27:44 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1784,7 +1784,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
 <para>
  <screen>
-#        forward-socks4a             /     127.0.0.1:9050 .
+#        forward-socks5             /     127.0.0.1:9050 .
  </screen>
 </para>
 <para>
@@ -2935,6 +2935,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.58  2009/03/21 12:27:44  fabiankeil
+Turn the donation entry title into a question,
+also rephrase the content a bit.
+
 Revision 2.57  2009/03/19 19:07:49  fabiankeil
 First draft of a "Donating" entry. To be polished tomorrow.
 

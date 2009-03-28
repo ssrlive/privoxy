@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.41 2009/02/19 16:59:41 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.42 2009/03/23 04:17:47 ler762 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.41 2009/02/19 16:59:41 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.42 2009/03/23 04:17:47 ler762 Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -1999,7 +1999,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
    </para>
    <para>
     <screen>
-  forward-socks4a   /               127.0.0.1:9050 .
+  forward-socks5   /               127.0.0.1:9050 .
 </screen>
    </para>
 

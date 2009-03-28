@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.12
 #
-#  $Id: config,v 1.75 2009/03/21 11:35:37 hal9 Exp $
+#  $Id: config,v 1.76 2009/03/21 11:51:51 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -1193,7 +1193,7 @@ buffer-limit 4096
 #      To chain Privoxy and Tor, both running on the same system,
 #      you would use something like:
 #
-#        forward-socks4a   /               127.0.0.1:9050 .
+#        forward-socks5   /               127.0.0.1:9050 .
 #
 #
 #      The public Tor network can't be used to reach your local network,
