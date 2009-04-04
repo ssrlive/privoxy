@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.55 2008/12/04 18:18:56 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.56 2009/03/08 14:19:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -33,6 +33,10 @@ const char actions_rcs[] = "$Id: actions.c,v 1.55 2008/12/04 18:18:56 fabiankeil
  *
  * Revisions   :
  *    $Log: actions.c,v $
+ *    Revision 1.56  2009/03/08 14:19:21  fabiankeil
+ *    Fix justified (but harmless) compiler warnings
+ *    on platforms where sizeof(int) < sizeof(long).
+ *
  *    Revision 1.55  2008/12/04 18:18:56  fabiankeil
  *    Fix some cparser warnings.
  *
@@ -1126,7 +1130,7 @@ int update_action_bits_for_tag(struct client_state *csp, const char *tag)
  * Returns     :  N/A
  *
  *********************************************************************/
-void free_current_action (struct current_action_spec *src)
+void free_current_action(struct current_action_spec *src)
 {
    int i;
 
