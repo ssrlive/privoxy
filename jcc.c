@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.237 2009/03/27 14:32:04 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.238 2009/03/27 14:42:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.237 2009/03/27 14:32:04 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.238  2009/03/27 14:42:30  fabiankeil
+ *    Correct the status code for CONNECTION_TIMEOUT_RESPONSE.
+ *
  *    Revision 1.237  2009/03/27 14:32:04  fabiankeil
  *    If spawning a child in listen_loop() fails, send a real
  *    HTTP response to the client and continue listening for
@@ -2960,14 +2963,11 @@ static void chat(struct client_state *csp)
                mark_server_socket_tainted(csp);
                return;
             }
-
-            rsp = error_response(csp, "connect-failed", errno);
-            if (rsp)
-            {
-               send_crunch_response(csp, rsp);
-            }
-
-            return;
+            /*
+             * XXX: Consider handling the cases above the same.
+             */
+            mark_server_socket_tainted(csp);
+            len = 0;
          }
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
