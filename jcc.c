@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.239 2009/04/07 11:43:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.240 2009/04/09 10:12:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,11 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.239 2009/04/07 11:43:50 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.240  2009/04/09 10:12:54  fabiankeil
+ *    Fix two cases in which an invalid server response would result
+ *    in the client connection being closed without sending an error
+ *    message first.
+ *
  *    Revision 1.239  2009/04/07 11:43:50  fabiankeil
  *    If the server rudely resets the connection directly after sending the
  *    headers, pass the mess to the client instead of sending an incorrect
@@ -4281,6 +4286,7 @@ static void listen_loop(void)
       {
          log_error(LOG_LEVEL_CONNECT, "Connection from %s dropped due to ACL", csp->ip_addr_str);
          close_socket(csp->cfd);
+         freez(csp->ip_addr_str);
          freez(csp);
          continue;
       }
