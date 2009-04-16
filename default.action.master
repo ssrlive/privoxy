@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.172 2009/04/01 22:52:33 hal9 Exp $
+#  $Id: default.action.master,v 1.173 2009/04/16 00:03:24 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1627,6 +1627,7 @@ qa.debian.org/popcon\.php
 .nytimes.com/.*/ads\.css$
 #MASTER# REMARKS: All hosted videos seemingly require this file.
 #MASTER# UNBLOCK-REFERRER: http://www.cnn.com/video/#/video/showbiz/2009/04/14/dcl.boyle.british.talent.show.cnn
+# URL = http://i.cdn.turner.com/cnn/.element/js/2.0/video/xmp/AdServiceAdapter.swf
 .turner.com/cnn/.*/AdServiceAdapter.swf
 
 
