@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.43 2009/03/28 15:33:41 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.44 2009/04/17 11:27:49 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.43 2009/03/28 15:33:41 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.44 2009/04/17 11:27:49 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -1231,7 +1231,7 @@ actionsfile
     will need to override the default.
    </para>
    <para>
-    IPv6 address containing colons has to be quoted by brackets.
+    IPv6 addresses containing colons have to be quoted by brackets.
    </para>
    <para>
     If you leave out the IP address, <application>Privoxy</application> will
@@ -1263,8 +1263,9 @@ actionsfile
 </programlisting>
    </para>
    <para>
-    Suppose you are running <application>Privoxy</application> on IPv6 capable
-    machine and you want to listen on IPv6 loopback device:
+    Suppose you are running <application>Privoxy</application> on an
+    IPv6-capable machine and you want it to listen on the IPv6 address
+    of the loopback device:
    </para>
    <para>
     <programlisting>
@@ -1629,7 +1630,7 @@ ACLs: permit-access and deny-access</title>
    <para>
     Where <replaceable class="parameter">src_addr</replaceable> and 
    <replaceable class="parameter">dst_addr</replaceable> are IPv4 addresses in dotted decimal notation or valid
-    DNS names, <replaceable class="parameter">port</replaceable> is port
+    DNS names, <replaceable class="parameter">port</replaceable> is a port
     number, and <replaceable class="parameter">src_masklen</replaceable> and
     <replaceable class="parameter">dst_masklen</replaceable> are subnet masks in CIDR notation, i.e. integer
     values from 2 to 30 representing the length (in bits) of the network address. The masks and the whole
@@ -1640,10 +1641,10 @@ ACLs: permit-access and deny-access</title>
     <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink>, then
     <replaceable class="parameter">src_addr</replaceable> and <replaceable
     class="parameter">dst_addr</replaceable> can be IPv6 addresses delimeted by
-    brackets, <replaceable class="parameter">port</replaceable> can be number
-    or service name, and
+    brackets, <replaceable class="parameter">port</replaceable> can be a number
+    or a service name, and
     <replaceable class="parameter">src_masklen</replaceable> and
-    <replaceable class="parameter">dst_masklen</replaceable> can be number
+    <replaceable class="parameter">dst_masklen</replaceable> can be a number
     from 0 to 128.
    </para>
   </listitem>
@@ -1653,10 +1654,10 @@ ACLs: permit-access and deny-access</title>
   <listitem>
    <para><emphasis>Unset</emphasis></para>
    <para>
-    No <replaceable class="parameter">port</replaceable> means match any port
-    and no <replaceable class="parameter">src_masklen</replaceable> or
-    no <replaceable class="parameter">src_masklen</replaceable> means exactly
-    given IP address (i.e. 32 for IPv4 and 128 for IPv6).
+    If no <replaceable class="parameter">port</replaceable> is specified,
+    any port will match. If no <replaceable class="parameter">src_masklen</replaceable> or
+    <replaceable class="parameter">src_masklen</replaceable> is given, the complete IP
+    address has to match (i.e. 32 bits for IPv4 and 128 bits for IPv6).
    </para>
   </listitem>
  </varlistentry>
@@ -1755,8 +1756,8 @@ ACLs: permit-access and deny-access</title>
 </screen>
    </para>
    <para>
-     Allow access from IPv4 network 192.0.2.0/24 even if listening on
-     IPv6 wild card address (where supported by operating system):
+     Allow access from the IPv4 network 192.0.2.0/24 even if listening on
+     an IPv6 wild card address (not supported on all platforms):
    </para>
    <para>
     <programlisting>
@@ -1764,8 +1765,8 @@ ACLs: permit-access and deny-access</title>
 </programlisting>
    </para>
    <para>
-     This is equivalent to the following line even if listening on IPv4
-     address (where supported by operating system):
+     This is equivalent to the following line even if listening on an
+     IPv4 address (not supported on all platforms):
    </para>
    <para>
     <programlisting>
@@ -1920,14 +1921,14 @@ ACLs: permit-access and deny-access</title>
     forwarded to another HTTP proxy but are made directly to the web servers.
    </para>
    <para>
-    <replaceable class="parameter">http_parent</replaceable> can be IPv6
-    numerical address (if
+    <replaceable class="parameter">http_parent</replaceable> can be a
+     numerical IPv6 address (if
     <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink> is
-    implemented). However not to clash with port delimiter, quote
-    whole IP address with brackets. On the other hand <replaceable
-    class="parameter">target_pattern</replaceable> containing IPv6 address
-    must be delimited by angle brackets (normal brackets are reserved for
-    regular expression already).
+    implemented). To prevent clashes with the port delimiter, the whole IP
+    address has to be put into brackets. On the other hand a <replaceable
+    class="parameter">target_pattern</replaceable> containing an IPv6 address
+    has to be put into angle brackets (normal brackets are reserved for
+    regular expressions already).
    </para>
    <para>
     Multiple lines are OK, they are checked in sequence, and the last match wins.
@@ -1957,7 +1958,7 @@ ACLs: permit-access and deny-access</title>
 </screen>
    </para>
    <para>
-    Parent proxy specified by IPv6 address:
+    Parent proxy specified by an IPv6 address:
    </para>
    <para>
     <programlisting>
@@ -2047,15 +2048,14 @@ forward-socks4, forward-socks4a and forward-socks5</title>
    </para>
    <para>
     <replaceable class="parameter">socks_proxy</replaceable> and
-    <replaceable clss="parameter">http_parent</replaceable> can be IPv6
-    numerical address (if
+    <replaceable class="parameter">http_parent</replaceable> can be a
+     numerical IPv6 address (if
     <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink> is
-    implemented). However not to clash with port
-    delimiter, quote whole IP address with brackets. On the other
-    hand <replaceable class="parameter">target_pattern</replaceable> containing
-    IPv6 address must be delimited by angle brackets (normal brackets are
-    reserved for regular expression already). The only exception is SOCKS 4
-    version where only IPv4 is suppored. 
+    implemented). To prevent clashes with the port delimiter, the whole IP
+    address has to be put into brackets. On the other hand a <replaceable
+    class="parameter">target_pattern</replaceable> containing an IPv6 address
+    has to be put into angle brackets (normal brackets are reserved for
+    regular expressions already).
    </para>
    <para>
     If <replaceable class="parameter">http_parent</replaceable> is <quote>.</quote>, then requests are not
