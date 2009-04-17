@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.90 2009/03/01 18:43:09 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.91 2009/03/08 14:19:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -36,6 +36,10 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.90 2009/03/01 18:43:09 fabian
  *
  * Revisions   :
  *    $Log: cgisimple.c,v $
+ *    Revision 1.91  2009/03/08 14:19:23  fabiankeil
+ *    Fix justified (but harmless) compiler warnings
+ *    on platforms where sizeof(int) < sizeof(long).
+ *
  *    Revision 1.90  2009/03/01 18:43:09  fabiankeil
  *    Fix cparser warnings.
  *
@@ -1943,6 +1947,12 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
    if (!err) err = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
 #endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
+
+#ifdef HAVE_RFC2553
+   if (!err) err = map_conditional(exports, "FEATURE_IPV6_SUPPORT", 1);
+#else /* ifndef HAVE_RFC2553 */
+   if (!err) err = map_conditional(exports, "FEATURE_IPV6_SUPPORT", 0);
+#endif /* ndef HAVE_RFC2553 */
 
 #ifdef FEATURE_NO_GIFS
    if (!err) err = map_conditional(exports, "FEATURE_NO_GIFS", 1);
