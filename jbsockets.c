@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.51 2009/04/17 11:27:49 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.52 2009/04/17 11:34:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.51 2009/04/17 11:27:49 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.52  2009/04/17 11:34:34  fabiankeil
+ *    Style cosmetics for the IPv6 code.
+ *
  *    Revision 1.51  2009/04/17 11:27:49  fabiankeil
  *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
  *
@@ -328,6 +331,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.51 2009/04/17 11:27:49 fabian
 #include "jbsockets.h"
 #include "filters.h"
 #include "errlog.h"
+#include "miscutil.h"
 
 const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
 
@@ -887,7 +891,20 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    }
 
    memset(&hints, 0, sizeof(struct addrinfo));
-   hints.ai_family = AF_UNSPEC;
+   if ((hostnam == NULL) || !strcmpic(hostnam, "localhost"))
+   {
+      /*
+       * XXX: This is a hack. The right thing to do
+       * would be to bind to both AF_INET and AF_INET6.
+       * This will also fail if there is no AF_INET
+       * version available.
+       */
+      hints.ai_family = AF_INET;
+   }
+   else
+   {
+      hints.ai_family = AF_UNSPEC;
+   }
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
    hints.ai_protocol = 0; /* Realy any stream protocol or TCP only */
