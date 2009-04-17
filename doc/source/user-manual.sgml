@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.103 2009/03/21 10:49:05 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.104 2009/04/17 11:27:49 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.103 2009/03/21 10:49:05 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.104 2009/04/17 11:27:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2147,9 +2147,9 @@ for details.
  
 <para>
  Generally, an URL pattern has the form
- <literal>&lt;domain&gt;&lt;port&gt;/&lt;path&gt;</literal>, where both the
- <literal>&lt;domain&gt;</literal> and <literal>&lt;port&gt;</literal>
- and <literal>&lt;path&gt;</literal> are optional. (This is why the special
+ <literal>&lt;domain&gt;&lt;port&gt;/&lt;path&gt;</literal>, where the
+ <literal>&lt;domain&gt;</literal>, the <literal>&lt;port&gt;</literal>
+ and the <literal>&lt;path&gt;</literal> are optional. (This is why the special
  <literal>/</literal> pattern matches all URLs). Note that the protocol
  portion of the URL pattern (e.g. <literal>http://</literal>) should
  <emphasis>not</emphasis> be included in the pattern. This is assumed already!
@@ -2162,9 +2162,9 @@ for details.
   Expressions</quote></ulink> (POSIX 1003.2).
 </para>
 <para>
- The port part of pattern is decimal port number preceeded by a colon
- (<literal>:</literal>). If domain part contains numeric IPv6 address, you
- will need to quote the domain part by angle brackets
+ The port part of a pattern is a decimal port number preceded by a colon
+ (<literal>:</literal>). If the domain part contains a numerical IPv6 address,
+ it has to be put into angle brackets
  (<literal>&lt;</literal>, <literal>&gt;</literal>).
 </para>
 
@@ -2228,8 +2228,8 @@ for details.
   <term><literal>&lt;2001:db8::1&gt;/</literal></term>
   <listitem>
    <para>
-    Matches any URL having <literal>2001:db8::1</literal> as a domain.
-    (Note that real URL uses plain brackets, not an angle brackets.)
+    Matches any URL with the host address <literal>2001:db8::1</literal>.
+    (Note that the real URL uses plain brackets, not angle brackets.)
    </para>
   </listitem>
  </varlistentry>
@@ -8476,6 +8476,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.104  2009/04/17 11:27:49  fabiankeil
+ Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
+
  Revision 2.103  2009/03/21 10:49:05  fabiankeil
  Merge updated ChangeLog.
 
