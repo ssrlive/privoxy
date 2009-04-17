@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.48 2009/04/17 11:27:49 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.49 2009/04/17 11:34:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.48 2009/04/17 11:27:49 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.49  2009/04/17 11:34:35  fabiankeil
+ *    Style cosmetics for the IPv6 code.
+ *
  *    Revision 1.48  2009/04/17 11:27:49  fabiankeil
  *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
  *
@@ -1502,6 +1505,59 @@ int match_portlist(const char *portlist, int port)
 
    freez(portlist_copy);
    return 0;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  parse_forwarder_address
+ *
+ * Description :  Parse out the host and port from a forwarder address.
+ *
+ * Parameters  :
+ *          1  :  address = The forwarder address to parse.
+ *          2  :  hostname = Used to return the hostname. NULL on error.
+ *          3  :  port = Used to return the port. Untouched if no port
+ *                       is specified.
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out of memory
+ *                JB_ERR_PARSE on malformed address.
+ *
+ *********************************************************************/
+jb_err parse_forwarder_address(char *address, char **hostname, int *port)
+{
+   char *p = address;
+
+   if ((*address == '[') && (NULL == strchr(address, ']')))
+   {
+      /* XXX: Should do some more validity checks here. */
+      return JB_ERR_PARSE;
+   }
+
+   *hostname = strdup(address);
+   if (NULL == *hostname)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   if ((**hostname == '[') && (NULL != (p = strchr(*hostname, ']'))))
+   {
+      *p++ = '\0';
+      memmove(*hostname, (*hostname + 1), (size_t)(p - *hostname));
+      if (*p == ':')
+      {
+         *port = (int)strtol(++p, NULL, 0);
+      }
+   }
+   else if (NULL != (p = strchr(*hostname, ':')))
+   {
+      *p++ = '\0';
+      *port = (int)strtol(p, NULL, 0);
+   }
+
+   return JB_ERR_OK;
 
 }
 

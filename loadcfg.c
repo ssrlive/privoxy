@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.94 2009/04/17 11:27:49 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.95 2009/04/17 11:34:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.94 2009/04/17 11:27:49 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.95  2009/04/17 11:34:34  fabiankeil
+ *    Style cosmetics for the IPv6 code.
+ *
  *    Revision 1.94  2009/04/17 11:27:49  fabiankeil
  *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
  *
@@ -1199,29 +1202,9 @@ struct configuration_spec * load_config(void)
 
             if (strcmp(p, ".") != 0)
             {
-               cur_fwd->forward_host = strdup(p);
-
-               if ((*cur_fwd->forward_host == '[')
-                  && (NULL != (p = strchr(cur_fwd->forward_host, ']'))))
-               {
-                  *p++ = '\0';
-                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
-                     (size_t)(p - cur_fwd->forward_host));
-                  if (*p == ':')
-                  {
-                     cur_fwd->forward_port = atoi(++p);
-                  }
-               }
-               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
-               {
-                  *p++ = '\0';
-                  cur_fwd->forward_port = atoi(p);
-               }
-
-               if (cur_fwd->forward_port <= 0)
-               {
-                  cur_fwd->forward_port = 8000;
-               }
+               cur_fwd->forward_port = 8000;
+               parse_forwarder_address(p, &cur_fwd->forward_host,
+                  &cur_fwd->forward_port);
             }
 
             /* Add to list. */
@@ -1272,31 +1255,12 @@ struct configuration_spec * load_config(void)
             /* Parse the SOCKS proxy host[:port] */
             p = vec[1];
 
+            /* XXX: This check looks like a bug. */
             if (strcmp(p, ".") != 0)
             {
-               cur_fwd->gateway_host = strdup(p);
-
-               if ((*cur_fwd->gateway_host == '[')
-                  && (NULL != (p = strchr(cur_fwd->gateway_host, ']'))))
-               {
-                  *p++ = '\0';
-                  memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
-                     (size_t)(p - cur_fwd->gateway_host));
-                  if (*p == ':')
-                  {
-                     cur_fwd->gateway_port = atoi(++p);
-                  }
-               }
-               else if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
-               {
-                  *p++ = '\0';
-                  cur_fwd->gateway_port = atoi(p);
-               }
-
-               if (cur_fwd->gateway_port <= 0)
-               {
-                  cur_fwd->gateway_port = 1080;
-               }
+               cur_fwd->gateway_port = 1080;
+               parse_forwarder_address(p, &cur_fwd->gateway_host,
+                  &cur_fwd->gateway_port);
             }
 
             /* Parse the parent HTTP proxy host[:port] */
@@ -1304,29 +1268,9 @@ struct configuration_spec * load_config(void)
 
             if (strcmp(p, ".") != 0)
             {
-               cur_fwd->forward_host = strdup(p);
-
-               if ((*cur_fwd->forward_host == '[')
-                  && (NULL != (p = strchr(cur_fwd->forward_host, ']'))))
-               {
-                  *p++ = '\0';
-                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
-                     (size_t)(p - cur_fwd->forward_host));
-                  if (*p == ':')
-                  {
-                     cur_fwd->forward_port = atoi(++p);
-                  }
-               }
-               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
-               {
-                  *p++ = '\0';
-                  cur_fwd->forward_port = atoi(p);
-               }
-
-               if (cur_fwd->forward_port <= 0)
-               {
-                  cur_fwd->forward_port = 8000;
-               }
+               cur_fwd->forward_port = 8000;
+               parse_forwarder_address(p, &cur_fwd->forward_host,
+                  &cur_fwd->forward_port);
             }
 
             /* Add to list. */
@@ -1385,58 +1329,18 @@ struct configuration_spec * load_config(void)
             /* Parse the SOCKS proxy host[:port] */
             p = vec[1];
 
-            cur_fwd->gateway_host = strdup(p);
-
-            if ((*cur_fwd->gateway_host == '[')
-               && (NULL != (p = strchr(cur_fwd->gateway_host, ']'))))
-            {
-               *p++ = '\0';
-               memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
-                  (size_t)(p - cur_fwd->gateway_host));
-               if (*p == ':')
-               {
-                  cur_fwd->gateway_port = atoi(++p);
-               }
-            }
-            else if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
-            {
-               *p++ = '\0';
-               cur_fwd->gateway_port = atoi(p);
-            }
-
-            if (cur_fwd->gateway_port <= 0)
-            {
-               cur_fwd->gateway_port = 1080;
-            }
+            cur_fwd->gateway_port = 1080;
+            parse_forwarder_address(p, &cur_fwd->gateway_host,
+               &cur_fwd->gateway_port);
 
             /* Parse the parent HTTP proxy host[:port] */
             p = vec[2];
 
             if (strcmp(p, ".") != 0)
             {
-               cur_fwd->forward_host = strdup(p);
-
-               if (*cur_fwd->forward_host == '[' && 
-                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
-               {
-                  *p++ = '\0';
-                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
-                        (size_t) (p - cur_fwd->forward_host));
-                  if (*p == ':')
-                  {
-                     cur_fwd->forward_port = atoi(++p);
-                  }
-               }
-               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
-               {
-                  *p++ = '\0';
-                  cur_fwd->forward_port = atoi(p);
-               }
-
-               if (cur_fwd->forward_port <= 0)
-               {
-                  cur_fwd->forward_port = 8000;
-               }
+               cur_fwd->forward_port = 8000;
+               parse_forwarder_address(p, &cur_fwd->forward_host,
+                  &cur_fwd->forward_port);
             }
 
             /* Add to list. */
