@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.45 2009/04/17 11:30:55 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.46 2009/04/17 11:31:48 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.45 2009/04/17 11:30:55 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.46 2009/04/17 11:31:48 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -1235,10 +1235,12 @@ actionsfile
    </para>
    <para>
     If you leave out the IP address, <application>Privoxy</application> will
-    bind to all interfaces (addresses) on your machine and may become reachable
+    bind to all IPv4 interfaces (addresses) on your machine and may become reachable
     from the Internet. In that case, consider using <link
     linkend="acls">access control lists</link> (ACL's, see below), and/or
-    a firewall.
+    a firewall. If the hostname is localhost, <application>Privoxy</application>
+    will explicitly try to bind to an IPv4 address. For other hostnames it depends
+    on the operating system which IP version will be used.
    </para>
    <para>
     If you open <application>Privoxy</application> to untrusted users, you will
