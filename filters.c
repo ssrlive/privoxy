@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.115 2009/04/17 11:29:18 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.116 2009/04/17 11:34:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.115 2009/04/17 11:29:18 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.116  2009/04/17 11:34:34  fabiankeil
+ *    Style cosmetics for the IPv6 code.
+ *
  *    Revision 1.115  2009/04/17 11:29:18  fabiankeil
  *    Compile fix for BSD libc.
  *
@@ -1120,7 +1123,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
           * This should be true for all architectures or solved
           * by the link layer.
           */
-         mask_data[i] = ~((1 << (8 - masklength)) - 1);
+         mask_data[i] = (uint8_t)~((1 << (8 - masklength)) - 1);
          masklength = 0;
       }
    }
