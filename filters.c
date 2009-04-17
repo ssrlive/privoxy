@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.116 2009/04/17 11:34:34 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.117 2009/04/17 11:35:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.116 2009/04/17 11:34:34 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.117  2009/04/17 11:35:28  fabiankeil
+ *    Fix compiler warning.
+ *
  *    Revision 1.116  2009/04/17 11:34:34  fabiankeil
  *    Style cosmetics for the IPv6 code.
  *
@@ -2802,12 +2805,24 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
       if (NULL != socks_proxy)
       {
          /* Parse the SOCKS proxy host[:port] */
+         char *p = socks_proxy;
          fwd->gateway_host = strdup(socks_proxy);
 
-         if (NULL != (socks_proxy = strchr(fwd->gateway_host, ':')))
+         if ((*fwd->gateway_host == '[')
+            && (NULL != (p = strchr(fwd->gateway_host, ']'))))
          {
-            *socks_proxy++ = '\0';
-            fwd->gateway_port = (int)strtol(socks_proxy, NULL, 0);
+            *p++ = '\0';
+            memmove(fwd->gateway_host, fwd->gateway_host + 1,
+               (size_t)(p - fwd->gateway_host));
+            if (*p == ':')
+            {
+               fwd->gateway_port = (int)strtol(++p, NULL, 0);
+            }
+         }
+         else if (NULL != (p = strchr(fwd->gateway_host, ':')))
+         {
+            *p++ = '\0';
+            fwd->gateway_port = (int)strtol(p, NULL, 0);
          }
 
          if (fwd->gateway_port <= 0)
@@ -2829,12 +2844,24 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
    /* Parse http forwarding settings */
    if (strcmp(http_parent, ".") != 0)
    {
+      char *p = http_parent;
       fwd->forward_host = strdup(http_parent);
 
-      if (NULL != (http_parent = strchr(fwd->forward_host, ':')))
+      if ((*fwd->forward_host == '[')
+         && (NULL != (p = strchr(fwd->forward_host, ']'))))
       {
-         *http_parent++ = '\0';
-         fwd->forward_port = (int)strtol(http_parent, NULL, 0);
+         *p++ = '\0';
+         memmove(fwd->forward_host, fwd->forward_host + 1,
+            (size_t)(p - fwd->forward_host));
+         if (*p == ':')
+         {
+            fwd->forward_port = (int)strtol(++p, NULL, 0);
+         }
+      }
+      else if (NULL != (p = strchr(fwd->forward_host, ':')))
+      {
+         *p++ = '\0';
+         fwd->forward_port = (int)strtol(p, NULL, 0);
       }
 
       if (fwd->forward_port <= 0)
