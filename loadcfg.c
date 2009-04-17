@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.92 2009/03/18 20:43:19 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.93 2009/03/18 21:46:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.92 2009/03/18 20:43:19 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.93  2009/03/18 21:46:26  fabiankeil
+ *    Revert the last commit as there's a better way.
+ *
  *    Revision 1.92  2009/03/18 20:43:19  fabiankeil
  *    Don't enable LOG_LEVEL_INFO by default and don't apply the user's
  *    debug settings until the logfile has been opened (if there is one).
@@ -832,7 +835,6 @@ struct configuration_spec * load_config(void)
     * Set to defaults
     */
    config->multi_threaded            = 1;
-   config->hport                     = HADDR_PORT;
    config->buffer_limit              = 4096 * 1024;
    config->usermanual                = strdup(USER_MANUAL_URL);
    config->proxy_args                = strdup("");
@@ -1041,6 +1043,12 @@ struct configuration_spec * load_config(void)
                   break;
                }
             }
+#ifdef HAVE_GETADDRINFO
+            else
+            {
+               cur_acl->wildcard_dst = 1;
+            }
+#endif /* def HAVE_GETADDRINFO */
 
             /*
              * Add it to the list.  Note we reverse the list to get the
@@ -1190,7 +1198,18 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
+               if (*cur_fwd->forward_host == '[' && 
+                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
+               {
+                  *p++ = '\0';
+                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
+                        (size_t) (p - cur_fwd->forward_host));
+                  if (*p == ':')
+                  {
+                     cur_fwd->forward_port = atoi(++p);
+                  }
+               }
+               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->forward_port = atoi(p);
@@ -1254,11 +1273,23 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->gateway_host = strdup(p);
 
-               if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
+               if (*cur_fwd->gateway_host == '[' && 
+                     NULL != (p = strchr(cur_fwd->gateway_host, ']')))
+               {
+                  *p++ = '\0';
+                  memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
+                        (size_t) (p - cur_fwd->gateway_host));
+                  if (*p == ':')
+                  {
+                     cur_fwd->gateway_port = atoi(++p);
+                  }
+               }
+               else if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->gateway_port = atoi(p);
                }
+
                if (cur_fwd->gateway_port <= 0)
                {
                   cur_fwd->gateway_port = 1080;
@@ -1272,7 +1303,18 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
+               if (*cur_fwd->forward_host == '[' && 
+                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
+               {
+                  *p++ = '\0';
+                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
+                        (size_t) (p - cur_fwd->forward_host));
+                  if (*p == ':')
+                  {
+                     cur_fwd->forward_port = atoi(++p);
+                  }
+               }
+               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->forward_port = atoi(p);
@@ -1342,11 +1384,23 @@ struct configuration_spec * load_config(void)
 
             cur_fwd->gateway_host = strdup(p);
 
-            if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
+            if (*cur_fwd->gateway_host == '[' && 
+                  NULL != (p = strchr(cur_fwd->gateway_host, ']')))
+            {
+               *p++ = '\0';
+               memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
+                     (size_t) (p - cur_fwd->gateway_host));
+               if (*p == ':')
+               {
+                  cur_fwd->gateway_port = atoi(++p);
+               }
+            }
+            else if (NULL != (p = strchr(cur_fwd->gateway_host, ':')))
             {
                *p++ = '\0';
                cur_fwd->gateway_port = atoi(p);
             }
+
             if (cur_fwd->gateway_port <= 0)
             {
                cur_fwd->gateway_port = 1080;
@@ -1359,7 +1413,18 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
+               if (*cur_fwd->forward_host == '[' && 
+                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
+               {
+                  *p++ = '\0';
+                  memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
+                        (size_t) (p - cur_fwd->forward_host));
+                  if (*p == ':')
+                  {
+                     cur_fwd->forward_port = atoi(++p);
+                  }
+               }
+               else if (NULL != (p = strchr(cur_fwd->forward_host, ':')))
                {
                   *p++ = '\0';
                   cur_fwd->forward_port = atoi(p);
@@ -1509,6 +1574,12 @@ struct configuration_spec * load_config(void)
                   break;
                }
             }
+#ifdef HAVE_GETADDRINFO
+            else
+            {
+               cur_acl->wildcard_dst = 1;
+            }
+#endif /* def HAVE_GETADDRINFO */
 
             /*
              * Add it to the list.  Note we reverse the list to get the
@@ -1848,18 +1919,20 @@ struct configuration_spec * load_config(void)
 
    if ( NULL != config->haddr )
    {
-      if (NULL != (p = strchr(config->haddr, ':')))
+      if (*config->haddr == '[' && NULL != (p = strchr(config->haddr, ']')) &&
+            p[1] == ':' && 0 < (config->hport = atoi(p + 2)))
       {
-         *p++ = '\0';
-         if (*p)
-         {
-            config->hport = atoi(p);
-         }
+         *p='\0';
+         memmove((void *) config->haddr, config->haddr + 1,
+               (size_t) (p - config->haddr));
       }
-
-      if (config->hport <= 0)
+      else if (NULL != (p = strchr(config->haddr, ':')) &&
+            0 < (config->hport = atoi(p + 1)))
       {
-         *--p = ':';
+         *p = '\0';
+      }
+      else 
+      {
          log_error(LOG_LEVEL_FATAL, "invalid bind port spec %s", config->haddr);
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
@@ -2035,4 +2108,6 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
   Local Variables:
   tab-width: 3
   end:
+
+  vim:softtabstop=3 shiftwidth=3
 */

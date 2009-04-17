@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.112 2009/03/01 18:28:23 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.113 2009/03/08 14:19:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -40,6 +40,10 @@ const char filters_rcs[] = "$Id: filters.c,v 1.112 2009/03/01 18:28:23 fabiankei
  *
  * Revisions   :
  *    $Log: filters.c,v $
+ *    Revision 1.113  2009/03/08 14:19:23  fabiankeil
+ *    Fix justified (but harmless) compiler warnings
+ *    on platforms where sizeof(int) < sizeof(long).
+ *
  *    Revision 1.112  2009/03/01 18:28:23  fabiankeil
  *    Help clang understand that we aren't dereferencing
  *    NULL pointers here.
@@ -661,6 +665,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.112 2009/03/01 18:28:23 fabiankei
 #include <string.h>
 #include <assert.h>
 
+#ifdef HAVE_GETADDRINFO
+#include <netdb.h>
+#include <sys/socket.h>
+#endif /* def HAVE_GETADDRINFO */
+
 #ifndef _WIN32
 #ifndef __OS2__
 #include <unistd.h>
@@ -708,6 +717,151 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
 static jb_err prepare_for_filtering(struct client_state *csp);
 
 #ifdef FEATURE_ACL
+#ifdef HAVE_GETADDRINFO
+/*********************************************************************
+ *
+ * Function    :  sockaddr_storage_to_ip
+ *
+ * Description :  Access internal structure of sockaddr_storage
+ *
+ * Parameters  :
+ *          1  :  addr = socket address
+ *          2  :  ip   = IP address as array of octets in network order
+ *                       (it points into addr)
+ *          3  :  len  = length of IP address in octets
+ *          4  :  port = port number in network order;
+ *
+ * Returns     :  0 = no errror; otherwise 
+ *
+ *********************************************************************/
+int sockaddr_storage_to_ip(const struct sockaddr_storage *addr, uint8_t **ip,
+      unsigned int *len, in_port_t **port)
+{
+   if (!addr)
+   {
+      return(-1);
+   }
+
+   switch (addr->ss_family)
+   {
+      case AF_INET:
+         if (len)
+         {
+            *len = 4;
+         }
+         if (ip)
+         {
+            *ip = (uint8_t *)
+               &(( (struct sockaddr_in *) addr)->sin_addr.s_addr);
+         }
+         if (port)
+         {
+            *port = &((struct sockaddr_in *) addr)->sin_port;
+         }
+         break;
+
+      case AF_INET6:
+         if (len)
+         {
+            *len = 16;
+         }
+         if (ip)
+         {
+            *ip = ( (struct sockaddr_in6 *) addr)->sin6_addr.s6_addr;
+         }
+         if (port)
+         {
+            *port = &((struct sockaddr_in6 *) addr)->sin6_port;
+         }
+         break;
+
+      default:
+         /* Unsupported address family */
+         return(-1);
+   }
+
+   return(0);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  match_sockaddr
+ *
+ * Description :  Check whether address matches network (IP address and port)
+ *
+ * Parameters  :
+ *          1  :  network = socket address of subnework
+ *          3  :  netmask = network mask as socket address 
+ *          2  :  address = checked socket address against given network
+ *
+ * Returns     :  0 = doesn't match; 1 = does match
+ *
+ *********************************************************************/
+int match_sockaddr(const struct sockaddr_storage *network,
+      const struct sockaddr_storage *netmask,
+      const struct sockaddr_storage *address)
+{
+   uint8_t *network_addr, *netmask_addr, *address_addr;
+   unsigned int addr_len;
+   in_port_t *network_port, *netmask_port, *address_port;
+   int i;
+
+   if (network->ss_family != netmask->ss_family) 
+   {
+      /* This should never happen */
+      log_error(LOG_LEVEL_ERROR,
+            "Internal error at %s:%llu: network and netmask differ in family",
+            __FILE__, __LINE__);
+      return 0;
+   }
+
+   sockaddr_storage_to_ip(network, &network_addr, &addr_len, &network_port);
+   sockaddr_storage_to_ip(netmask, &netmask_addr, NULL, &netmask_port);
+   sockaddr_storage_to_ip(address, &address_addr, NULL, &address_port);
+
+   /* Check for family */
+   if (network->ss_family == AF_INET && address->ss_family == AF_INET6 &&
+         IN6_IS_ADDR_V4MAPPED(address_addr))
+   {
+      /* Map AF_INET6 V4MAPPED address into AF_INET */
+      address_addr += 12;
+      addr_len = 4;
+   }
+   else if (network->ss_family == AF_INET6 && address->ss_family == AF_INET &&
+         IN6_IS_ADDR_V4MAPPED(network_addr))
+   {
+      /* Map AF_INET6 V4MAPPED network into AF_INET */
+      network_addr += 12;
+      netmask_addr += 12;
+      addr_len = 4;
+   }
+   else if (network->ss_family != address->ss_family)
+   {
+      return 0;
+   }
+
+   /* XXX: Port check is signaled in netmask */
+   if (*netmask_port && *network_port != *address_port)
+   {
+      return 0;
+   }
+
+   /* TODO: Optimize by checking by words insted of octets */
+   for (i=0; i < addr_len && netmask_addr[i]; i++)
+   {
+      if ( (network_addr[i] & netmask_addr[i]) !=
+           (address_addr[i] & netmask_addr[i]) )
+      {
+         return 0;
+      }
+   }
+   
+   return 1;
+}
+#endif /* def HAVE_GETADDRINFO */
+
+
 /*********************************************************************
  *
  * Function    :  block_acl
@@ -737,7 +891,13 @@ int block_acl(const struct access_control_addr *dst, const struct client_state *
    /* search the list */
    while (acl != NULL)
    {
-      if ((csp->ip_addr_long & acl->src->mask) == acl->src->addr)
+      if (
+#ifdef HAVE_GETADDRINFO
+            match_sockaddr(&acl->src->addr, &acl->src->mask, &csp->tcp_addr) 
+#else
+            (csp->ip_addr_long & acl->src->mask) == acl->src->addr
+#endif
+            )
       {
          if (dst == NULL)
          {
@@ -747,8 +907,23 @@ int block_acl(const struct access_control_addr *dst, const struct client_state *
                return(0);
             }
          }
-         else if ( ((dst->addr & acl->dst->mask) == acl->dst->addr)
-           && ((dst->port == acl->dst->port) || (acl->dst->port == 0)))
+         else if (
+#ifdef HAVE_GETADDRINFO
+               /* XXX: Undefined acl->dst is full of zeros and should be
+                * considered as wildcard address.
+                * sockaddr_storage_to_ip() failes on such dst because of
+                * uknown sa_familly on glibc. However this test is not
+                * portable.
+                *
+                * So, we signal the acl->dst is wildcard in wildcard_dst.
+                */
+               acl->wildcard_dst ||
+                  match_sockaddr(&acl->dst->addr, &acl->dst->mask, &dst->addr)
+#else
+               ((dst->addr & acl->dst->mask) == acl->dst->addr)
+           && ((dst->port == acl->dst->port) || (acl->dst->port == 0))
+#endif
+           )
          {
             if (acl->action == ACL_PERMIT)
             {
@@ -784,12 +959,24 @@ int block_acl(const struct access_control_addr *dst, const struct client_state *
 int acl_addr(const char *aspec, struct access_control_addr *aca)
 {
    int i, masklength;
+#ifdef HAVE_GETADDRINFO
+   struct addrinfo hints, *result;
+   uint8_t *mask_data;
+   in_port_t *mask_port;
+   unsigned int addr_len;
+#else
    long port;
+#endif /* def HAVE_GETADDRINFO */
    char *p;
    char *acl_spec = NULL;
 
+#ifdef HAVE_GETADDRINFO
+   /* FIXME: Depend on ai_family */
+   masklength = 128;
+#else
    masklength = 32;
    port       =  0;
+#endif
 
    /*
     * Use a temporary acl spec copy so we can log
@@ -813,13 +1000,53 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
       masklength = atoi(p);
    }
 
-   if ((masklength < 0) || (masklength > 32))
+   if ((masklength < 0) ||
+#ifdef HAVE_GETADDRINFO
+         (masklength > 128)
+#else
+         (masklength > 32)
+#endif
+         )
    {
       freez(acl_spec);
       return(-1);
    }
 
-   if ((p = strchr(acl_spec, ':')) != NULL)
+   if (*acl_spec == '[' && NULL != (p = strchr(acl_spec, ']')))
+   {
+      *p = '\0';
+      memmove(acl_spec, acl_spec + 1, (size_t) (p - acl_spec));
+
+      if (*++p != ':')
+      {
+         p = NULL;
+      }
+   }
+   else
+   {
+      p = strchr(acl_spec, ':');
+   }
+
+#ifdef HAVE_GETADDRINFO
+   memset(&hints, 0, sizeof(struct addrinfo));
+   hints.ai_family = AF_UNSPEC;
+   hints.ai_socktype = SOCK_STREAM;
+
+   i = getaddrinfo(acl_spec, (p) ? ++p : NULL, &hints, &result);
+   freez(acl_spec);
+
+   if (i != 0)
+   {
+      log_error(LOG_LEVEL_ERROR, "Can not resolve [%s]:%s: %s", acl_spec, p,
+            gai_strerror(i));
+      return(-1);
+   }
+
+   /* TODO: Allow multihomed hostnames */
+   memcpy(&(aca->addr), result->ai_addr, result->ai_addrlen);
+   freeaddrinfo(result);
+#else
+   if (p != NULL)
    {
       char *endptr;
 
@@ -843,8 +1070,49 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
       /* XXX: This will be logged as parse error. */
       return(-1);
    }
+#endif /* def HAVE_GETADDRINFO */
 
    /* build the netmask */
+#ifdef HAVE_GETADDRINFO
+   /* Clip masklength according current family */
+   if (aca->addr.ss_family == AF_INET && masklength > 32)
+   {
+      masklength = 32;
+   }
+
+   aca->mask.ss_family = aca->addr.ss_family;
+   if (sockaddr_storage_to_ip(&aca->mask, &mask_data, &addr_len, &mask_port))
+   {
+      return(-1);
+   }
+
+   if (p)
+   {
+      /* Port number in ACL has been specified, check ports in future */
+      *mask_port = 1;
+   }
+
+   /* XXX: This could be optimized to operate on whole words instead of octets
+    * (128-bit CPU could do it in one iteration). */
+   /* Octets after prefix can be ommitted because of previous initialization
+    * to zeros. */
+   for (i=0; i < addr_len && masklength; i++)
+   {
+      if (masklength >= 8)
+      {
+         mask_data[i] = 0xFF;
+         masklength -= 8;
+      }
+      else
+      {
+         /* XXX: This assumes MSB of octet is on the left site. This should be
+          * true for all architectures or solved on link layer of OSI model. */
+         mask_data[i] = ~((1 << (8 - masklength)) - 1);
+         masklength = 0;
+      }
+   }
+
+#else
    aca->mask = 0;
    for (i=1; i <= masklength ; i++)
    {
@@ -855,6 +1123,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
     * (i.e. save on the network portion of the address).
     */
    aca->addr = aca->addr & aca->mask;
+#endif /* def HAVE_GETADDRINFO */
 
    return(0);
 
@@ -2702,4 +2971,6 @@ int content_filters_enabled(const struct current_action_spec *action)
   Local Variables:
   tab-width: 3
   end:
+
+  vim:softtabstop=3 shiftwidth=3
 */

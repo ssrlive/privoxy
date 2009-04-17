@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.49 2008/11/10 17:03:57 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.50 2008/12/20 14:53:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,11 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.49 2008/11/10 17:03:57 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.50  2008/12/20 14:53:55  fabiankeil
+ *    Add config option socket-timeout to control the time
+ *    Privoxy waits for data to arrive on a socket. Useful
+ *    in case of stale ssh tunnels or when fuzz-testing.
+ *
  *    Revision 1.49  2008/11/10 17:03:57  fabiankeil
  *    Fix a gcc44 warning and remove a now-obsolete cast.
  *
@@ -350,6 +355,177 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  *                file descriptor.
  *
  *********************************************************************/
+#ifdef HAVE_GETADDRINFO
+/* Getaddrinfo implementation */
+jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
+{
+   struct addrinfo hints, *result, *rp;
+   char service[6];
+   int retval;
+   jb_socket fd;
+   fd_set wfds;
+   struct timeval tv[1];
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+   int   flags;
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+   int connect_failed;
+
+#ifdef FEATURE_ACL
+   struct access_control_addr dst[1];
+#endif /* def FEATURE_ACL */
+
+   retval = snprintf(service, sizeof(service), "%d", portnum);
+   if (-1 == retval || sizeof(service) <= retval)
+   {
+      log_error(LOG_LEVEL_ERROR,
+            "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
+            portnum);
+      csp->http->host_ip_addr_str = strdup("unknown");
+      return(JB_INVALID_SOCKET);
+   }
+
+   memset((char *)&hints, 0, sizeof hints);
+   hints.ai_family = AF_UNSPEC;
+   hints.ai_socktype = SOCK_STREAM;
+   hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV; /* avoid service look-up */
+   if ((retval = getaddrinfo(host, service, &hints, &result)))
+   {
+      log_error(LOG_LEVEL_INFO,
+            "Can not resolve %s: %s", host, gai_strerror(retval));
+      csp->http->host_ip_addr_str = strdup("unknown");
+      return(JB_INVALID_SOCKET);
+   }
+
+   for (rp = result; rp != NULL; rp = rp->ai_next)
+   {
+
+#ifdef FEATURE_ACL
+      memcpy(&dst->addr, rp->ai_addr, rp->ai_addrlen);
+
+      if (block_acl(dst, csp))
+      {
+#ifdef __OS2__
+         errno = SOCEPERM;
+#else
+         errno = EPERM;
+#endif
+         continue;
+      }
+#endif /* def FEATURE_ACL */
+
+      csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
+      retval = getnameinfo(rp->ai_addr, rp->ai_addrlen,
+            csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+      if (!csp->http->host_ip_addr_str || retval)
+      {
+         log_error(LOG_LEVEL_ERROR, "Can not save csp->http->host_ip_addr_str: %s",
+               (csp->http->host_ip_addr_str) ? gai_strerror(retval) :
+               "Insufficient memory");
+         freez(csp->http->host_ip_addr_str);
+         continue;
+      }
+
+#ifdef _WIN32
+      if ((fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) ==
+            JB_INVALID_SOCKET)
+#else
+      if ((fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) < 0)
+#endif
+      {
+         continue;
+      }
+
+#ifdef TCP_NODELAY
+      {  /* turn off TCP coalescence */
+         int mi = 1;
+         setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &mi, sizeof (int));
+      }
+#endif /* def TCP_NODELAY */
+
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+      if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
+      {
+         flags |= O_NDELAY;
+         fcntl(fd, F_SETFL, flags);
+      }
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
+
+      connect_failed = 0;
+      while (connect(fd, rp->ai_addr, rp->ai_addrlen) == JB_INVALID_SOCKET)
+      {
+#ifdef _WIN32
+         if (errno == WSAEINPROGRESS)
+#elif __OS2__ 
+         if (sock_errno() == EINPROGRESS)
+#else /* ifndef _WIN32 */
+         if (errno == EINPROGRESS)
+#endif /* ndef _WIN32 || __OS2__ */
+         {
+            break;
+         }
+
+#ifdef __OS2__ 
+         if (sock_errno() != EINTR)
+#else
+         if (errno != EINTR)
+#endif /* __OS2__ */
+         {
+            close_socket(fd);
+            connect_failed = 1;
+            break;
+         }
+      }
+      if (connect_failed)
+      {
+         continue;
+      }
+
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+      if (flags != -1)
+      {
+         flags &= ~O_NDELAY;
+         fcntl(fd, F_SETFL, flags);
+      }
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
+
+      /* wait for connection to complete */
+      FD_ZERO(&wfds);
+      FD_SET(fd, &wfds);
+
+      tv->tv_sec  = 30;
+      tv->tv_usec = 0;
+
+      /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
+      if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
+      {
+         close_socket(fd);
+         continue;
+      }
+      
+      break; /* for; Connection established; don't try other addresses */
+   }
+
+   freeaddrinfo(result);
+   if (!rp)
+   {
+      log_error(LOG_LEVEL_INFO, "Could not connect to TCP/[%s]:%s", host, service);
+      return(JB_INVALID_SOCKET);
+   }
+   /* XXX: Current connection verification (EINPROGRESS && select() for
+    * writing) is not sufficient. E.g. on my Linux-2.6.27 with glibc-2.6
+    * select returns socket ready for writing, however subsequential write(2)
+    * fails with ENOCONNECT. Read Linux connect(2) man page about non-blocking
+    * sockets.
+    * Thus we can not log here the socket is connected. */
+   /*log_error(LOG_LEVEL_INFO, "Connected to TCP/[%s]:%s", host, service);*/
+
+   return(fd);
+
+}
+
+# else /* ndef HAVE_GETADDRINFO */
+/* Pre-getaddrinfo implementation */
+
 jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 {
    struct sockaddr_in inaddr;
@@ -477,6 +653,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
    return(fd);
 
 }
+#endif /* ndef HAVE_GETADDRINFO */
 
 
 /*********************************************************************
@@ -672,7 +849,16 @@ void close_socket(jb_socket fd)
  *********************************************************************/
 int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 {
+#ifdef HAVE_GETADDRINFO
+   struct addrinfo hints;
+   struct addrinfo *result, *rp;
+   /* TODO: portnum shuld be string to allow symbolic service names in
+    * configuration and to avoid following int2string */
+   char servnam[6];
+   int retval;
+#else
    struct sockaddr_in inaddr;
+#endif /* def HAVE_GETADDRINFO */
    jb_socket fd;
 #ifndef _WIN32
    int one = 1;
@@ -680,6 +866,32 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 
    *pfd = JB_INVALID_SOCKET;
 
+#ifdef HAVE_GETADDRINFO
+   retval = snprintf(servnam, sizeof(servnam), "%d", portnum);
+   if (-1 == retval || sizeof(servnam) <= retval)
+   {
+      log_error(LOG_LEVEL_ERROR,
+            "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
+            portnum);
+      return -1;
+   }
+
+   memset(&hints, 0, sizeof(struct addrinfo));
+   hints.ai_family=AF_UNSPEC;
+   hints.ai_socktype=SOCK_STREAM;
+   hints.ai_flags=AI_PASSIVE|AI_ADDRCONFIG;
+   hints.ai_protocol=0; /* Realy any stream protocol or TCP only */
+   hints.ai_canonname=NULL;
+   hints.ai_addr=NULL;
+   hints.ai_next=NULL;
+
+   if ((retval = getaddrinfo(hostnam, servnam, &hints, &result)))
+   {
+      log_error(LOG_LEVEL_ERROR,
+            "Can not resolve %s: %s", hostnam, gai_strerror(retval));
+      return -2;
+   }
+#else
    memset((char *)&inaddr, '\0', sizeof inaddr);
 
    inaddr.sin_family      = AF_INET;
@@ -702,8 +914,15 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       inaddr.sin_port = htonl((unsigned long) portnum);
    }
 #endif /* ndef _WIN32 */
+#endif /* def HAVE_GETADDRINFO */
 
+#ifdef HAVE_GETADDRINFO
+   for (rp = result; rp != NULL; rp = rp->ai_next)
+   {
+      fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+#else
    fd = socket(AF_INET, SOCK_STREAM, 0);
+#endif /* def HAVE_GETADDRINFO */
 
 #ifdef _WIN32
    if (fd == JB_INVALID_SOCKET)
@@ -711,7 +930,11 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    if (fd < 0)
 #endif
    {
+#ifdef HAVE_GETADDRINFO
+      continue;
+#else
       return(-1);
+#endif
    }
 
 #ifndef _WIN32
@@ -730,7 +953,11 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
 
+#ifdef HAVE_GETADDRINFO
+   if (bind(fd, rp->ai_addr, rp->ai_addrlen) < 0)
+#else
    if (bind(fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
+#endif
    {
 #ifdef _WIN32
       errno = WSAGetLastError();
@@ -739,15 +966,36 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       if (errno == EADDRINUSE)
 #endif
       {
+#ifdef HAVE_GETADDRINFO
+         freeaddrinfo(result);
+#endif
          close_socket(fd);
          return(-3);
       }
       else
       {
          close_socket(fd);
+#ifndef HAVE_GETADDRINFO
          return(-1);
       }
    }
+#else
+      }
+   }
+   else
+      /* bind() succeeded, escape from for-loop */
+      /* TODO: Support multiple listening sockets (e.g. localhost resolves to
+       * AF_INET and AF_INET6, but only fist address is used */
+      break;
+   }
+
+   freeaddrinfo(result);
+   if (rp == NULL)
+   {
+      /* All bind()s failed */
+      return(-1);
+   }
+#endif /* ndef HAVE_GETADDRINFO */
 
    while (listen(fd, MAX_LISTEN_BACKLOG) == -1)
    {
@@ -787,14 +1035,20 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
  *********************************************************************/
 void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 {
+#ifdef HAVE_GETNAMEINFO
+   struct sockaddr_storage server;
+   int retval;
+#else
    struct sockaddr_in server;
    struct hostent *host = NULL;
+#endif /* HAVE_GETNAMEINFO */
 #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
    /* according to accept_connection() this fixes a warning. */
-   int s_length;
+   int s_length, s_length_provided;
 #else
-   socklen_t s_length;
+   socklen_t s_length, s_length_provided;
 #endif
+#ifndef HAVE_GETNAMEINFO
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
 #if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
@@ -804,7 +1058,8 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
    int thd_err;
 #endif /* def HAVE_GETHOSTBYADDR_R_5_ARGS */
 #endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
-   s_length = sizeof(server);
+#endif /* ifndef HAVE_GETNAMEINFO */
+   s_length = s_length_provided = sizeof(server);
 
    if (NULL != hostname)
    {
@@ -814,8 +1069,23 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 
    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
    {
+      if (s_length > s_length_provided)
+      {
+         log_error(LOG_LEVEL_ERROR, "getsockname() truncated server address");
+         return;
+      }
+#ifdef HAVE_GETNAMEINFO
+      *ip_address = malloc(NI_MAXHOST);
+      if ((retval = getnameinfo((struct sockaddr *) &server, s_length,
+                  *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST))) {
+         log_error(LOG_LEVEL_ERROR, "Unable to print my own IP address: %s",
+               gai_strerror(retval));
+         freez(*ip_address);
+         return;
+      }
+#else
       *ip_address = strdup(inet_ntoa(server.sin_addr));
-
+#endif /* HAVE_GETNAMEINFO */
       if (NULL == hostname)
       {
          /*
@@ -824,6 +1094,16 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
           */
          return;
       }
+
+#ifdef HAVE_GETNAMEINFO
+      *hostname = malloc(NI_MAXHOST);
+      if ((retval = getnameinfo((struct sockaddr *) &server, s_length,
+                  *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD))) {
+         log_error(LOG_LEVEL_ERROR, "Unable to resolve my own IP address: %s",
+               gai_strerror(retval));
+         freez(*hostname);
+      }
+#else
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS)
       gethostbyaddr_r((const char *)&server.sin_addr,
                       sizeof(server.sin_addr), AF_INET,
@@ -861,6 +1141,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       {
          *hostname = strdup(host->h_name);
       }
+#endif /* else def HAVE_GETNAMEINFO */
    }
 
    return;
@@ -885,7 +1166,13 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
  *********************************************************************/
 int accept_connection(struct client_state * csp, jb_socket fd)
 {
+#ifdef HAVE_GETNAMEINFO
+   /* XXX: client is stored directly into csp->tcp_addr */
+#define client (csp->tcp_addr)
+   int retval;
+#else
    struct sockaddr_in client;
+#endif
    jb_socket afd;
 #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
    /* Wierdness - fix a warning. */
@@ -914,8 +1201,21 @@ int accept_connection(struct client_state * csp, jb_socket fd)
 #endif
 
    csp->cfd = afd;
+#ifdef HAVE_GETNAMEINFO
+   csp->ip_addr_str = malloc(NI_MAXHOST);
+   retval = getnameinfo((struct sockaddr *) &client, c_length,
+         csp->ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+   if (!csp->ip_addr_str || retval)
+   {
+      log_error(LOG_LEVEL_ERROR, "Can not save csp->ip_addr_str: %s",
+            (csp->ip_addr_str) ? gai_strerror(retval) : "Insuffcient memory");
+      freez(csp->ip_addr_str);
+   }
+#undef client
+#else
    csp->ip_addr_str  = strdup(inet_ntoa(client.sin_addr));
    csp->ip_addr_long = ntohl(client.sin_addr.s_addr);
+#endif /* def HAVE_GETNAMEINFO */
 
    return 1;
 
@@ -1046,4 +1346,6 @@ unsigned long resolve_hostname_to_ip(const char *host)
   Local Variables:
   tab-width: 3
   end:
+
+  vim:softtabstop=3 shiftwidth=3
 */

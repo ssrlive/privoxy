@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.128 2009/03/07 13:09:17 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.129 2009/03/08 14:12:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.129  2009/03/08 14:12:51  fabiankeil
+ *    All the CSP_FLAG_FOO bit masks should be unsigned ints.
+ *
  *    Revision 1.128  2009/03/07 13:09:17  fabiankeil
  *    Change csp->expected_content and_csp->expected_content_length from
  *    size_t to unsigned long long to reduce the likelihood of integer
@@ -707,6 +710,12 @@
 /* Needed for pcre choice */
 #include "config.h"
 
+#ifdef HAVE_GETADDRINFO
+/* Need for struct sockaddr_storage */
+#include <sys/socket.h>
+#endif
+
+
 /*
  * Include appropriate regular expression libraries.
  * Note that pcrs and pcre (native) are needed for cgi
@@ -858,16 +867,10 @@ typedef int jb_err;
 #define FOREVER 1
 
 /**
- * Default IP address to listen on, as a string.
- * Set to "127.0.0.1".
+ * Default TCP/IP address to listen on, as a string.
+ * Set to "127.0.0.1:8118".
  */
-#define HADDR_DEFAULT   "127.0.0.1"
-
-/**
- * Default port to listen on, as a number.
- * Set to 8118.
- */
-#define HADDR_PORT      8118
+#define HADDR_DEFAULT   "127.0.0.1:8118"
 
 
 /* Forward def for struct client_state */
@@ -1421,9 +1424,15 @@ struct client_state
    /** Client PC's IP address, as reported by the accept() function.
        As a string. */
    char *ip_addr_str;
+#ifdef HAVE_GETADDRINFO
+   /** Client PC's TCP address, as reported by the accept() function.
+       As a sockaddr. */
+   struct sockaddr_storage tcp_addr;
+#else
    /** Client PC's IP address, as reported by the accept() function.
        As a number. */
    unsigned long ip_addr_long;
+#endif /* def HAVE_GETADDRINFO */
 
    /** The URL that was requested */
    struct http_request http[1];
@@ -1657,9 +1666,14 @@ struct re_filterfile_spec
  */
 struct access_control_addr
 {
+#ifdef HAVE_GETADDRINFO
+   struct sockaddr_storage addr; /* <The TCP address in network order. */
+   struct sockaddr_storage mask; /* <The TCP mask in network order. */
+#else
    unsigned long addr;  /**< The IP address as an integer. */
    unsigned long mask;  /**< The network mask as an integer. */
    unsigned long port;  /**< The port number. */
+#endif /* HAVE_GETADDRINFO */
 };
 
 /**
@@ -1671,6 +1685,9 @@ struct access_control_list
 {
    struct access_control_addr src[1];  /**< Client IP address */
    struct access_control_addr dst[1];  /**< Website or parent proxy IP address */
+#ifdef HAVE_GETADDRINFO
+   int wildcard_dst;                   /** < dst address is wildcard */
+#endif
 
    short action;                       /**< ACL_PERMIT or ACL_DENY */
    struct access_control_list *next;   /**< The next entry in the ACL. */
@@ -1879,4 +1896,6 @@ struct configuration_spec
   Local Variables:
   tab-width: 3
   end:
+
+  vim:softtabstop=3 shiftwidth=3
 */

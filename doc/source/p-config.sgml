@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.42 2009/03/23 04:17:47 ler762 Exp $
+ $Id: p-config.sgml,v 2.43 2009/03/28 15:33:41 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.42 2009/03/23 04:17:47 ler762 Exp $
+ $Id: p-config.sgml,v 2.43 2009/03/28 15:33:41 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -1213,9 +1213,9 @@ actionsfile
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    Bind to 127.0.0.1 (localhost), port 8118. This is suitable and recommended for
-    home users who run <application>Privoxy</application> on the same machine as
-    their browser.
+    Bind to 127.0.0.1 (IPv4 localhost), port 8118. This is suitable and
+    recommended for home users who run <application>Privoxy</application> on
+    the same machine as their browser.
    </para>
   </listitem>
  </varlistentry>
@@ -1229,6 +1229,9 @@ actionsfile
     If you already have another service running on port 8118, or if you want to
     serve requests from other machines (e.g. on your local network) as well, you
     will need to override the default.
+   </para>
+   <para>
+    IPv6 address containing colons has to be quoted by brackets.
    </para>
    <para>
     If you leave out the IP address, <application>Privoxy</application> will
@@ -1257,6 +1260,15 @@ actionsfile
    <para>
     <programlisting>
   listen-address  192.168.0.1:8118
+</programlisting>
+   </para>
+   <para>
+    Suppose you are running <application>Privoxy</application> on IPv6 capable
+    machine and you want to listen on IPv6 loopback device:
+   </para>
+   <para>
+    <programlisting>
+  listen-address [::1]:8118
 </programlisting>
    </para>
   </listitem>
@@ -1611,16 +1623,28 @@ ACLs: permit-access and deny-access</title>
   <term>Type of value:</term>
   <listitem>
    <para>
-    <replaceable class="parameter">src_addr</replaceable>[/<replaceable class="parameter">src_masklen</replaceable>]
-    [<replaceable class="parameter">dst_addr</replaceable>[/<replaceable class="parameter">dst_masklen</replaceable>]]
+    <replaceable class="parameter">src_addr</replaceable>[:<replaceable class="parameter">port</replaceable>][/<replaceable class="parameter">src_masklen</replaceable>]
+    [<replaceable class="parameter">dst_addr</replaceable>[:<replaceable class="parameter">port</replaceable>][/<replaceable class="parameter">dst_masklen</replaceable>]]
    </para>
    <para>
     Where <replaceable class="parameter">src_addr</replaceable> and 
-   <replaceable class="parameter">dst_addr</replaceable> are IP addresses in dotted decimal notation or valid
-    DNS names, and <replaceable class="parameter">src_masklen</replaceable> and
+   <replaceable class="parameter">dst_addr</replaceable> are IPv4 addresses in dotted decimal notation or valid
+    DNS names, <replaceable class="parameter">port</replaceable> is port
+    number, and <replaceable class="parameter">src_masklen</replaceable> and
     <replaceable class="parameter">dst_masklen</replaceable> are subnet masks in CIDR notation, i.e. integer
     values from 2 to 30 representing the length (in bits) of the network address. The masks and the whole
     destination part are optional.
+   </para>
+   <para>
+    If your system implements
+    <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink>, then
+    <replaceable class="parameter">src_addr</replaceable> and <replaceable
+    class="parameter">dst_addr</replaceable> can be IPv6 addresses delimeted by
+    brackets, <replaceable class="parameter">port</replaceable> can be number
+    or service name, and
+    <replaceable class="parameter">src_masklen</replaceable> and
+    <replaceable class="parameter">dst_masklen</replaceable> can be number
+    from 0 to 128.
    </para>
   </listitem>
  </varlistentry>
@@ -1628,6 +1652,12 @@ ACLs: permit-access and deny-access</title>
   <term>Default value:</term>
   <listitem>
    <para><emphasis>Unset</emphasis></para>
+   <para>
+    No <replaceable class="parameter">port</replaceable> means match any port
+    and no <replaceable class="parameter">src_masklen</replaceable> or
+    no <replaceable class="parameter">src_masklen</replaceable> means exactly
+    given IP address (i.e. 32 for IPv4 and 128 for IPv6).
+   </para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -1677,6 +1707,13 @@ ACLs: permit-access and deny-access</title>
     IP addresses, only the first one is used.
    </para>
    <para>
+     Some systems allows IPv4 client to connect to IPv6 server socket.
+     Then the client's IPv4 address will be translated by system into
+     IPv6 address space with special prefix ::ffff/96 (so called IPv4
+     mapped IPv6 address). <application>Privoxy</application> can handle it
+     and maps such ACL addresses automatically.
+   </para>
+   <para>
     Denying access to particular sites by ACL may have undesired side effects
     if the site in question is hosted on a machine which also hosts other sites
     (most sites are).
@@ -1716,6 +1753,24 @@ ACLs: permit-access and deny-access</title>
   permit-access  192.168.45.64/26
   deny-access    192.168.45.73    www.dirty-stuff.example.com
 </screen>
+   </para>
+   <para>
+     Allow access from IPv4 network 192.0.2.0/24 even if listening on
+     IPv6 wild card address (where supported by operating system):
+   </para>
+   <para>
+    <programlisting>
+  permit-access  192.0.2.0/24
+</programlisting>
+   </para>
+   <para>
+     This is equivalent to the following line even if listening on IPv4
+     address (where supported by operating system):
+   </para>
+   <para>
+    <programlisting>
+  permit-access  [::ffff:192.0.2.0]/120
+</programlisting>
    </para>
   </listitem>
  </varlistentry>
@@ -1838,7 +1893,7 @@ ACLs: permit-access and deny-access</title>
     denote <quote>all URLs</quote>.
     <replaceable class="parameter">http_parent</replaceable>[:<replaceable class="parameter">port</replaceable>]
     is the DNS name or IP address of the parent HTTP proxy through which the requests should be forwarded,
-    optionally followed by its listening port (default: 8080).
+    optionally followed by its listening port (default: 8000).
     Use a single dot (<literal>.</literal>) to denote <quote>no forwarding</quote>.
    </para>
   </listitem>
@@ -1863,6 +1918,16 @@ ACLs: permit-access and deny-access</title>
    <para>
     If <replaceable class="parameter">http_parent</replaceable> is <quote>.</quote>, then requests are not
     forwarded to another HTTP proxy but are made directly to the web servers.
+   </para>
+   <para>
+    <replaceable class="parameter">http_parent</replaceable> can be IPv6
+    numerical address (if
+    <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink> is
+    implemented). However not to clash with port delimiter, quote
+    whole IP address with brackets. On the other hand <replaceable
+    class="parameter">target_pattern</replaceable> containing IPv6 address
+    must be delimited by angle brackets (normal brackets are reserved for
+    regular expression already).
    </para>
    <para>
     Multiple lines are OK, they are checked in sequence, and the last match wins.
@@ -1890,6 +1955,24 @@ ACLs: permit-access and deny-access</title>
   forward   /                  caching-proxy.isp.example.net:8000
   forward   .isp.example.net   .
 </screen>
+   </para>
+   <para>
+    Parent proxy specified by IPv6 address:
+   </para>
+   <para>
+    <programlisting>
+  foward   /                   [2001:DB8::1]:8000
+</programlisting>
+   </para>
+   <para>
+    Suppose your parent proxy doesn't support IPv6:
+   </para>
+   <para>
+    <programlisting>
+  forward  /                        parent-proxy.example.org:8000 
+  forward  ipv6-server.example.org  .
+  forward  &lt;[2-3][0-9a-f][0-9a-f][0-9a-f]:*&gt;   .
+</programlisting>
    </para>
   </listitem>
  </varlistentry>
@@ -1961,6 +2044,18 @@ forward-socks4, forward-socks4a and forward-socks5</title>
    </para>
    <para>
     With <literal>forward-socks5</literal> the DNS resolution will happen on the remote server as well.
+   </para>
+   <para>
+    <replaceable class="parameter">socks_proxy</replaceable> and
+    <replaceable clss="parameter">http_parent</replaceable> can be IPv6
+    numerical address (if
+    <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink> is
+    implemented). However not to clash with port
+    delimiter, quote whole IP address with brackets. On the other
+    hand <replaceable class="parameter">target_pattern</replaceable> containing
+    IPv6 address must be delimited by angle brackets (normal brackets are
+    reserved for regular expression already). The only exception is SOCKS 4
+    version where only IPv4 is suppored. 
    </para>
    <para>
     If <replaceable class="parameter">http_parent</replaceable> is <quote>.</quote>, then requests are not
