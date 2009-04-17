@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.95 2009/04/17 11:34:34 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.96 2009/04/17 11:38:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.95 2009/04/17 11:34:34 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.96  2009/04/17 11:38:28  fabiankeil
+ *    Add and use parse_forwarder_address() to reduce code duplication.
+ *
  *    Revision 1.95  2009/04/17 11:34:34  fabiankeil
  *    Style cosmetics for the IPv6 code.
  *
@@ -1049,12 +1052,12 @@ struct configuration_spec * load_config(void)
                   break;
                }
             }
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
             else
             {
                cur_acl->wildcard_dst = 1;
             }
-#endif /* def HAVE_GETADDRINFO */
+#endif /* def HAVE_RFC2553 */
 
             /*
              * Add it to the list.  Note we reverse the list to get the
@@ -1481,12 +1484,12 @@ struct configuration_spec * load_config(void)
                   break;
                }
             }
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
             else
             {
                cur_acl->wildcard_dst = 1;
             }
-#endif /* def HAVE_GETADDRINFO */
+#endif /* def HAVE_RFC2553 */
 
             /*
              * Add it to the list.  Note we reverse the list to get the

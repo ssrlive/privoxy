@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.52 2009/04/17 11:34:34 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.53 2009/04/17 11:39:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.52 2009/04/17 11:34:34 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.53  2009/04/17 11:39:52  fabiankeil
+ *    If the hostname is 'localhost' or not specified, request an AF_INET address.
+ *
  *    Revision 1.52  2009/04/17 11:34:34  fabiankeil
  *    Style cosmetics for the IPv6 code.
  *
@@ -362,7 +365,7 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  *                file descriptor.
  *
  *********************************************************************/
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
 /* Getaddrinfo implementation */
 jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 {
@@ -534,7 +537,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 
 }
 
-# else /* ndef HAVE_GETADDRINFO */
+#else /* ndef HAVE_RFC2553 */
 /* Pre-getaddrinfo implementation */
 
 jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
@@ -664,7 +667,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
    return(fd);
 
 }
-#endif /* ndef HAVE_GETADDRINFO */
+#endif /* ndef HAVE_RFC2553 */
 
 
 /*********************************************************************
@@ -860,7 +863,7 @@ void close_socket(jb_socket fd)
  *********************************************************************/
 int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 {
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
    struct addrinfo hints;
    struct addrinfo *result, *rp;
    /*
@@ -872,7 +875,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    int retval;
 #else
    struct sockaddr_in inaddr;
-#endif /* def HAVE_GETADDRINFO */
+#endif /* def HAVE_RFC2553 */
    jb_socket fd;
 #ifndef _WIN32
    int one = 1;
@@ -880,7 +883,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 
    *pfd = JB_INVALID_SOCKET;
 
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
    retval = snprintf(servnam, sizeof(servnam), "%d", portnum);
    if ((-1 == retval) || (sizeof(servnam) <= retval))
    {
@@ -941,15 +944,15 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       inaddr.sin_port = htonl((unsigned long) portnum);
    }
 #endif /* ndef _WIN32 */
-#endif /* def HAVE_GETADDRINFO */
+#endif /* def HAVE_RFC2553 */
 
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
    for (rp = result; rp != NULL; rp = rp->ai_next)
    {
       fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
 #else
    fd = socket(AF_INET, SOCK_STREAM, 0);
-#endif /* def HAVE_GETADDRINFO */
+#endif /* def HAVE_RFC2553 */
 
 #ifdef _WIN32
    if (fd == JB_INVALID_SOCKET)
@@ -957,7 +960,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    if (fd < 0)
 #endif
    {
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
       continue;
 #else
       return(-1);
@@ -980,7 +983,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
 
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
    if (bind(fd, rp->ai_addr, rp->ai_addrlen) < 0)
 #else
    if (bind(fd, (struct sockaddr *)&inaddr, sizeof(inaddr)) < 0)
@@ -993,7 +996,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       if (errno == EADDRINUSE)
 #endif
       {
-#ifdef HAVE_GETADDRINFO
+#ifdef HAVE_RFC2553
          freeaddrinfo(result);
 #endif
          close_socket(fd);
@@ -1002,7 +1005,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       else
       {
          close_socket(fd);
-#ifndef HAVE_GETADDRINFO
+#ifndef HAVE_RFC2553
          return(-1);
       }
    }
@@ -1027,7 +1030,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       /* All bind()s failed */
       return(-1);
    }
-#endif /* ndef HAVE_GETADDRINFO */
+#endif /* ndef HAVE_RFC2553 */
 
    while (listen(fd, MAX_LISTEN_BACKLOG) == -1)
    {
@@ -1067,20 +1070,20 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
  *********************************************************************/
 void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 {
-#ifdef HAVE_GETNAMEINFO
+#ifdef HAVE_RFC2553
    struct sockaddr_storage server;
    int retval;
 #else
    struct sockaddr_in server;
    struct hostent *host = NULL;
-#endif /* HAVE_GETNAMEINFO */
+#endif /* HAVE_RFC2553 */
 #if defined(_WIN32) || defined(__OS2__) || defined(__APPLE_CC__) || defined(AMIGA)
    /* according to accept_connection() this fixes a warning. */
    int s_length, s_length_provided;
 #else
    socklen_t s_length, s_length_provided;
 #endif
-#ifndef HAVE_GETNAMEINFO
+#ifndef HAVE_RFC2553
 #if defined(HAVE_GETHOSTBYADDR_R_8_ARGS) ||  defined(HAVE_GETHOSTBYADDR_R_7_ARGS) || defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
    struct hostent result;
 #if defined(HAVE_GETHOSTBYADDR_R_5_ARGS)
@@ -1090,7 +1093,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
    int thd_err;
 #endif /* def HAVE_GETHOSTBYADDR_R_5_ARGS */
 #endif /* def HAVE_GETHOSTBYADDR_R_(8|7|5)_ARGS */
-#endif /* ifndef HAVE_GETNAMEINFO */
+#endif /* ifndef HAVE_RFC2553 */
    s_length = s_length_provided = sizeof(server);
 
    if (NULL != hostname)
@@ -1106,7 +1109,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
          log_error(LOG_LEVEL_ERROR, "getsockname() truncated server address");
          return;
       }
-#ifdef HAVE_GETNAMEINFO
+#ifdef HAVE_RFC2553
       *ip_address = malloc(NI_MAXHOST);
       retval = getnameinfo((struct sockaddr *) &server, s_length,
          *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
@@ -1119,7 +1122,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       }
 #else
       *ip_address = strdup(inet_ntoa(server.sin_addr));
-#endif /* HAVE_GETNAMEINFO */
+#endif /* HAVE_RFC2553 */
       if (NULL == hostname)
       {
          /*
@@ -1129,7 +1132,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
          return;
       }
 
-#ifdef HAVE_GETNAMEINFO
+#ifdef HAVE_RFC2553
       *hostname = malloc(NI_MAXHOST);
       retval = getnameinfo((struct sockaddr *) &server, s_length,
          *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD);
@@ -1177,7 +1180,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       {
          *hostname = strdup(host->h_name);
       }
-#endif /* else def HAVE_GETNAMEINFO */
+#endif /* else def HAVE_RFC2553 */
    }
 
    return;
@@ -1202,7 +1205,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
  *********************************************************************/
 int accept_connection(struct client_state * csp, jb_socket fd)
 {
-#ifdef HAVE_GETNAMEINFO
+#ifdef HAVE_RFC2553
    /* XXX: client is stored directly into csp->tcp_addr */
 #define client (csp->tcp_addr)
    int retval;
@@ -1237,7 +1240,7 @@ int accept_connection(struct client_state * csp, jb_socket fd)
 #endif
 
    csp->cfd = afd;
-#ifdef HAVE_GETNAMEINFO
+#ifdef HAVE_RFC2553
    csp->ip_addr_str = malloc(NI_MAXHOST);
    retval = getnameinfo((struct sockaddr *) &client, c_length,
          csp->ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
@@ -1251,7 +1254,7 @@ int accept_connection(struct client_state * csp, jb_socket fd)
 #else
    csp->ip_addr_str  = strdup(inet_ntoa(client.sin_addr));
    csp->ip_addr_long = ntohl(client.sin_addr.s_addr);
-#endif /* def HAVE_GETNAMEINFO */
+#endif /* def HAVE_RFC2553 */
 
    return 1;
 
