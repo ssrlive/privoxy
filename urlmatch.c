@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.47 2009/03/02 19:18:10 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.48 2009/04/17 11:27:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -33,6 +33,9 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.47 2009/03/02 19:18:10 fabianke
  *
  * Revisions   :
  *    $Log: urlmatch.c,v $
+ *    Revision 1.48  2009/04/17 11:27:49  fabiankeil
+ *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
+ *
  *    Revision 1.47  2009/03/02 19:18:10  fabiankeil
  *    Streamline parse_http_request()'s prototype. As
  *    cparser pointed out it doesn't actually use csp.
@@ -554,8 +557,8 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
             return JB_ERR_PARSE;
          }
 
-         *port++='\0';
-         
+         *port++ = '\0';
+
          if (*port == '\0')
          {
             port = NULL;
@@ -569,7 +572,7 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
       }
       else
       {
-         /* Plain non-escaped hostname */ 
+         /* Plain non-escaped hostname */
          port = strchr(host, ':');
       }
 
@@ -876,18 +879,20 @@ static jb_err compile_url_pattern(struct url_spec *url, char *buf)
       *p = '\0';
    }
 
-   /* XXX: IPv6 numeric hostname contains colons, thus we need to delimit the
-    * hostname before real port separator. Because brackets are used in
-    * hostname matching on lower layer, we can't use it. I decided to use
-    * angle brackets '<' '>' instead. */
-   if (buf[0] == '<' && NULL != (p = strchr(buf + 1, '>')))
+   /*
+    * IPv6 numeric hostnames can contain colons, thus we need
+    * to delimit the hostname before the real port separator.
+    * As brackets are already used in the hostname pattern,
+    * we use angle brackets ('<', '>') instead.
+    */
+   if ((buf[0] == '<') && (NULL != (p = strchr(buf + 1, '>'))))
    {
       *p++ = '\0';
       buf++;
 
       if (*p == '\0')
       {
-         /* Only IPv6 address without port number */
+         /* IPv6 address without port number */
          p = NULL;
       }
       else if (*p != ':')
@@ -1505,6 +1510,4 @@ int match_portlist(const char *portlist, int port)
   Local Variables:
   tab-width: 3
   end:
-
-  vim:softtabstop=3 shiftwidth=3
 */

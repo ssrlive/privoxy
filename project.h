@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.129 2009/03/08 14:12:51 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.130 2009/04/17 11:27:49 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.130  2009/04/17 11:27:49  fabiankeil
+ *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
+ *
  *    Revision 1.129  2009/03/08 14:12:51  fabiankeil
  *    All the CSP_FLAG_FOO bit masks should be unsigned ints.
  *
@@ -1896,6 +1899,4 @@ struct configuration_spec
   Local Variables:
   tab-width: 3
   end:
-
-  vim:softtabstop=3 shiftwidth=3
 */

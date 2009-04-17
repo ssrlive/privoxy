@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.93 2009/03/18 21:46:26 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.94 2009/04/17 11:27:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.93 2009/03/18 21:46:26 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.94  2009/04/17 11:27:49  fabiankeil
+ *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
+ *
  *    Revision 1.93  2009/03/18 21:46:26  fabiankeil
  *    Revert the last commit as there's a better way.
  *
@@ -1198,12 +1201,12 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if (*cur_fwd->forward_host == '[' && 
-                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
+               if ((*cur_fwd->forward_host == '[')
+                  && (NULL != (p = strchr(cur_fwd->forward_host, ']'))))
                {
                   *p++ = '\0';
                   memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
-                        (size_t) (p - cur_fwd->forward_host));
+                     (size_t)(p - cur_fwd->forward_host));
                   if (*p == ':')
                   {
                      cur_fwd->forward_port = atoi(++p);
@@ -1273,12 +1276,12 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->gateway_host = strdup(p);
 
-               if (*cur_fwd->gateway_host == '[' && 
-                     NULL != (p = strchr(cur_fwd->gateway_host, ']')))
+               if ((*cur_fwd->gateway_host == '[')
+                  && (NULL != (p = strchr(cur_fwd->gateway_host, ']'))))
                {
                   *p++ = '\0';
                   memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
-                        (size_t) (p - cur_fwd->gateway_host));
+                     (size_t)(p - cur_fwd->gateway_host));
                   if (*p == ':')
                   {
                      cur_fwd->gateway_port = atoi(++p);
@@ -1303,12 +1306,12 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->forward_host = strdup(p);
 
-               if (*cur_fwd->forward_host == '[' && 
-                     NULL != (p = strchr(cur_fwd->forward_host, ']')))
+               if ((*cur_fwd->forward_host == '[')
+                  && (NULL != (p = strchr(cur_fwd->forward_host, ']'))))
                {
                   *p++ = '\0';
                   memmove(cur_fwd->forward_host, cur_fwd->forward_host + 1,
-                        (size_t) (p - cur_fwd->forward_host));
+                     (size_t)(p - cur_fwd->forward_host));
                   if (*p == ':')
                   {
                      cur_fwd->forward_port = atoi(++p);
@@ -1384,12 +1387,12 @@ struct configuration_spec * load_config(void)
 
             cur_fwd->gateway_host = strdup(p);
 
-            if (*cur_fwd->gateway_host == '[' && 
-                  NULL != (p = strchr(cur_fwd->gateway_host, ']')))
+            if ((*cur_fwd->gateway_host == '[')
+               && (NULL != (p = strchr(cur_fwd->gateway_host, ']'))))
             {
                *p++ = '\0';
                memmove(cur_fwd->gateway_host, cur_fwd->gateway_host + 1,
-                     (size_t) (p - cur_fwd->gateway_host));
+                  (size_t)(p - cur_fwd->gateway_host));
                if (*p == ':')
                {
                   cur_fwd->gateway_port = atoi(++p);
@@ -1919,19 +1922,21 @@ struct configuration_spec * load_config(void)
 
    if ( NULL != config->haddr )
    {
-      if (*config->haddr == '[' && NULL != (p = strchr(config->haddr, ']')) &&
-            p[1] == ':' && 0 < (config->hport = atoi(p + 2)))
+      if ((*config->haddr == '[')
+         && (NULL != (p = strchr(config->haddr, ']')))
+         && (p[1] == ':')
+         && (0 < (config->hport = atoi(p + 2))))
       {
-         *p='\0';
-         memmove((void *) config->haddr, config->haddr + 1,
-               (size_t) (p - config->haddr));
+         *p = '\0';
+         memmove((void *)config->haddr, config->haddr + 1,
+            (size_t)(p - config->haddr));
       }
-      else if (NULL != (p = strchr(config->haddr, ':')) &&
-            0 < (config->hport = atoi(p + 1)))
+      else if (NULL != (p = strchr(config->haddr, ':'))
+         && (0 < (config->hport = atoi(p + 1))))
       {
          *p = '\0';
       }
-      else 
+      else
       {
          log_error(LOG_LEVEL_FATAL, "invalid bind port spec %s", config->haddr);
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
@@ -2108,6 +2113,4 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
   Local Variables:
   tab-width: 3
   end:
-
-  vim:softtabstop=3 shiftwidth=3
 */

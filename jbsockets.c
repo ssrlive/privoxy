@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.50 2008/12/20 14:53:55 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.51 2009/04/17 11:27:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -35,6 +35,9 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.50 2008/12/20 14:53:55 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.51  2009/04/17 11:27:49  fabiankeil
+ *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
+ *
  *    Revision 1.50  2008/12/20 14:53:55  fabiankeil
  *    Add config option socket-timeout to control the time
  *    Privoxy waits for data to arrive on a socket. Useful
@@ -375,23 +378,23 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 #endif /* def FEATURE_ACL */
 
    retval = snprintf(service, sizeof(service), "%d", portnum);
-   if (-1 == retval || sizeof(service) <= retval)
+   if ((-1 == retval) || (sizeof(service) <= retval))
    {
       log_error(LOG_LEVEL_ERROR,
-            "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
-            portnum);
+         "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
+         portnum);
       csp->http->host_ip_addr_str = strdup("unknown");
       return(JB_INVALID_SOCKET);
    }
 
-   memset((char *)&hints, 0, sizeof hints);
+   memset((char *)&hints, 0, sizeof(hints));
    hints.ai_family = AF_UNSPEC;
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV; /* avoid service look-up */
    if ((retval = getaddrinfo(host, service, &hints, &result)))
    {
       log_error(LOG_LEVEL_INFO,
-            "Can not resolve %s: %s", host, gai_strerror(retval));
+         "Can not resolve %s: %s", host, gai_strerror(retval));
       csp->http->host_ip_addr_str = strdup("unknown");
       return(JB_INVALID_SOCKET);
    }
@@ -415,12 +418,13 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 
       csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
       retval = getnameinfo(rp->ai_addr, rp->ai_addrlen,
-            csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+         csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
       if (!csp->http->host_ip_addr_str || retval)
       {
-         log_error(LOG_LEVEL_ERROR, "Can not save csp->http->host_ip_addr_str: %s",
-               (csp->http->host_ip_addr_str) ? gai_strerror(retval) :
-               "Insufficient memory");
+         log_error(LOG_LEVEL_ERROR,
+            "Can not save csp->http->host_ip_addr_str: %s",
+            (csp->http->host_ip_addr_str) ?
+            gai_strerror(retval) : "Insufficient memory");
          freez(csp->http->host_ip_addr_str);
          continue;
       }
@@ -455,7 +459,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
       {
 #ifdef _WIN32
          if (errno == WSAEINPROGRESS)
-#elif __OS2__ 
+#elif __OS2__
          if (sock_errno() == EINPROGRESS)
 #else /* ifndef _WIN32 */
          if (errno == EINPROGRESS)
@@ -464,7 +468,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
             break;
          }
 
-#ifdef __OS2__ 
+#ifdef __OS2__
          if (sock_errno() != EINTR)
 #else
          if (errno != EINTR)
@@ -501,23 +505,26 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
          close_socket(fd);
          continue;
       }
-      
+
       break; /* for; Connection established; don't try other addresses */
    }
 
    freeaddrinfo(result);
    if (!rp)
    {
-      log_error(LOG_LEVEL_INFO, "Could not connect to TCP/[%s]:%s", host, service);
+      log_error(LOG_LEVEL_INFO,
+         "Could not connect to TCP/[%s]:%s", host, service);
       return(JB_INVALID_SOCKET);
    }
-   /* XXX: Current connection verification (EINPROGRESS && select() for
-    * writing) is not sufficient. E.g. on my Linux-2.6.27 with glibc-2.6
-    * select returns socket ready for writing, however subsequential write(2)
-    * fails with ENOCONNECT. Read Linux connect(2) man page about non-blocking
-    * sockets.
-    * Thus we can not log here the socket is connected. */
-   /*log_error(LOG_LEVEL_INFO, "Connected to TCP/[%s]:%s", host, service);*/
+   /*
+    * XXX: Current connection verification (EINPROGRESS && select()
+    * for writing) is not sufficient. E.g. on Linux-2.6.27 with glibc-2.6
+    * select returns socket ready for writing, however subsequential
+    * write(2) fails with ENOCONNECT. Read Linux connect(2) man page
+    * about non-blocking sockets.
+    * Thus we can't log here that the socket is connected.
+    */
+   /* log_error(LOG_LEVEL_INFO, "Connected to TCP/[%s]:%s", host, service); */
 
    return(fd);
 
@@ -852,8 +859,11 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 #ifdef HAVE_GETADDRINFO
    struct addrinfo hints;
    struct addrinfo *result, *rp;
-   /* TODO: portnum shuld be string to allow symbolic service names in
-    * configuration and to avoid following int2string */
+   /*
+    * XXX: portnum should be a string to allow symbolic service
+    * names in the configuration file and to avoid the following
+    * int2string.
+    */
    char servnam[6];
    int retval;
 #else
@@ -868,27 +878,27 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 
 #ifdef HAVE_GETADDRINFO
    retval = snprintf(servnam, sizeof(servnam), "%d", portnum);
-   if (-1 == retval || sizeof(servnam) <= retval)
+   if ((-1 == retval) || (sizeof(servnam) <= retval))
    {
       log_error(LOG_LEVEL_ERROR,
-            "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
-            portnum);
+         "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
+         portnum);
       return -1;
    }
 
    memset(&hints, 0, sizeof(struct addrinfo));
-   hints.ai_family=AF_UNSPEC;
-   hints.ai_socktype=SOCK_STREAM;
-   hints.ai_flags=AI_PASSIVE|AI_ADDRCONFIG;
-   hints.ai_protocol=0; /* Realy any stream protocol or TCP only */
-   hints.ai_canonname=NULL;
-   hints.ai_addr=NULL;
-   hints.ai_next=NULL;
+   hints.ai_family = AF_UNSPEC;
+   hints.ai_socktype = SOCK_STREAM;
+   hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
+   hints.ai_protocol = 0; /* Realy any stream protocol or TCP only */
+   hints.ai_canonname = NULL;
+   hints.ai_addr = NULL;
+   hints.ai_next = NULL;
 
    if ((retval = getaddrinfo(hostnam, servnam, &hints, &result)))
    {
       log_error(LOG_LEVEL_ERROR,
-            "Can not resolve %s: %s", hostnam, gai_strerror(retval));
+         "Can not resolve %s: %s", hostnam, gai_strerror(retval));
       return -2;
    }
 #else
@@ -983,10 +993,15 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       }
    }
    else
+   {
       /* bind() succeeded, escape from for-loop */
-      /* TODO: Support multiple listening sockets (e.g. localhost resolves to
-       * AF_INET and AF_INET6, but only fist address is used */
+      /*
+       * XXX: Support multiple listening sockets (e.g. localhost
+       * resolves to AF_INET and AF_INET6, but only the first address
+       * is used
+       */
       break;
+   }
    }
 
    freeaddrinfo(result);
@@ -1076,10 +1091,12 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       }
 #ifdef HAVE_GETNAMEINFO
       *ip_address = malloc(NI_MAXHOST);
-      if ((retval = getnameinfo((struct sockaddr *) &server, s_length,
-                  *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST))) {
-         log_error(LOG_LEVEL_ERROR, "Unable to print my own IP address: %s",
-               gai_strerror(retval));
+      retval = getnameinfo((struct sockaddr *) &server, s_length,
+         *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+      if (retval)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Unable to print my own IP address: %s", gai_strerror(retval));
          freez(*ip_address);
          return;
       }
@@ -1097,10 +1114,12 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 
 #ifdef HAVE_GETNAMEINFO
       *hostname = malloc(NI_MAXHOST);
-      if ((retval = getnameinfo((struct sockaddr *) &server, s_length,
-                  *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD))) {
-         log_error(LOG_LEVEL_ERROR, "Unable to resolve my own IP address: %s",
-               gai_strerror(retval));
+      retval = getnameinfo((struct sockaddr *) &server, s_length,
+         *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD);
+      if (retval)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Unable to resolve my own IP address: %s", gai_strerror(retval));
          freez(*hostname);
       }
 #else
@@ -1346,6 +1365,4 @@ unsigned long resolve_hostname_to_ip(const char *host)
   Local Variables:
   tab-width: 3
   end:
-
-  vim:softtabstop=3 shiftwidth=3
 */
