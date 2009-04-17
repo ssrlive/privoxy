@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.46 2009/04/17 11:31:48 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.47 2009/04/17 11:40:48 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.46 2009/04/17 11:31:48 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.47 2009/04/17 11:40:48 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -1712,7 +1712,7 @@ ACLs: permit-access and deny-access</title>
    <para>
      Some systems allows IPv4 client to connect to IPv6 server socket.
      Then the client's IPv4 address will be translated by system into
-     IPv6 address space with special prefix ::ffff/96 (so called IPv4
+     IPv6 address space with special prefix ::ffff:0:0/96 (so called IPv4
      mapped IPv6 address). <application>Privoxy</application> can handle it
      and maps such ACL addresses automatically.
    </para>
