@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.47 2009/04/17 11:40:48 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.48 2009/04/17 11:42:07 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.47 2009/04/17 11:40:48 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.48 2009/04/17 11:42:07 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -2290,6 +2290,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 </variablelist>
 <![%config-file;[<literallayout>@@forwarded-connect-retries  0</literallayout>]]>
 </sect3>
+
+</sect2>
+
+<sect2 id="misc">
+<title>Miscellaneous</title>
 
 <sect3 renderas="sect4" id="accept-intercepted-requests"><title>accept-intercepted-requests</title>
 <variablelist>
