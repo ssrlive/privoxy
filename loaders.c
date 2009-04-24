@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.70 2009/03/01 18:34:24 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.71 2009/03/04 18:24:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -35,6 +35,9 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.70 2009/03/01 18:34:24 fabiankeil
  *
  * Revisions   :
  *    $Log: loaders.c,v $
+ *    Revision 1.71  2009/03/04 18:24:47  fabiankeil
+ *    No need to create empty strings manually, strdup("") FTW.
+ *
  *    Revision 1.70  2009/03/01 18:34:24  fabiankeil
  *    Help clang understand that we aren't dereferencing
  *    NULL pointers here.
@@ -450,14 +453,15 @@ static struct file_list *current_re_filterfile[MAX_AF_FILES]  = {
  *
  * Parameters  :  None
  *
- * Returns     :  N/A
+ * Returns     :  The number of threads that are still active.
  *
  *********************************************************************/
-void sweep(void)
+unsigned int sweep(void)
 {
    struct file_list *fl, *nfl;
    struct client_state *csp, *last_active;
    int i;
+   unsigned int active_threads = 0;
 
    /* clear all of the file's active flags */
    for ( fl = files->next; NULL != fl; fl = fl->next )
@@ -512,10 +516,11 @@ void sweep(void)
             csp->tlist->active = 1;
          }
 #endif /* def FEATURE_TRUST */
-         
+
+         active_threads++;
+
          last_active = csp;
          csp = csp->next;
-
       }
       else 
       /*
@@ -576,6 +581,8 @@ void sweep(void)
          fl = fl->next;
       }
    }
+
+   return active_threads;
 
 }
 

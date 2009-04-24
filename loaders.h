@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.22 2007/06/01 14:12:38 fabiankeil Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.23 2008/03/30 14:52:10 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -10,7 +10,7 @@
  *                the list of active loaders, and to automatically 
  *                unload files that are no longer in use.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: loaders.h,v $
+ *    Revision 1.23  2008/03/30 14:52:10  fabiankeil
+ *    Rename load_actions_file() and load_re_filterfile()
+ *    as they load multiple files "now".
+ *
  *    Revision 1.22  2007/06/01 14:12:38  fabiankeil
  *    Add unload_forward_spec() in preparation for forward-override{}.
  *
@@ -175,7 +179,7 @@ struct file_list;
 struct configuration_spec;
 struct url_spec;
 
-extern void sweep(void);
+extern unsigned int sweep(void);
 extern char *read_config_line(char *buf, size_t buflen, FILE *fp, unsigned long *linenum);
 extern int check_file_changed(const struct file_list * current,
                               const char * filename,

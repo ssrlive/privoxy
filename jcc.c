@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.243 2009/04/17 11:27:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.244 2009/04/17 11:34:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.243 2009/04/17 11:27:49 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.244  2009/04/17 11:34:34  fabiankeil
+ *    Style cosmetics for the IPv6 code.
+ *
  *    Revision 1.243  2009/04/17 11:27:49  fabiankeil
  *    Petr Pisar's privoxy-3.0.12-ipv6-3.diff.
  *
@@ -4180,7 +4183,8 @@ static void listen_loop(void)
 {
    struct client_state *csp = NULL;
    jb_socket bfd;
-   struct configuration_spec * config;
+   struct configuration_spec *config;
+   unsigned int active_threads = 0;
 
    config = load_config();
 
@@ -4210,7 +4214,7 @@ static void listen_loop(void)
       /*
        * Free data that was used by died threads
        */
-      sweep();
+      active_threads = sweep();
 
 #if defined(unix)
       /*
@@ -4300,6 +4304,20 @@ static void listen_loop(void)
          continue;
       }
 #endif /* def FEATURE_ACL */
+
+      if ((0 != config->max_client_connections)
+         && (active_threads >= config->max_client_connections))
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Rejecting connection from %s. Maximum number of connections reached.",
+            csp->ip_addr_str);
+         write_socket(csp->cfd, TOO_MANY_CONNECTIONS_RESPONSE,
+            strlen(TOO_MANY_CONNECTIONS_RESPONSE));
+         close_socket(csp->cfd);
+         freez(csp->ip_addr_str);
+         freez(csp);
+         continue;
+      }
 
       /* add it to the list of clients */
       csp->next = clients->next;
