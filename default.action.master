@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.173 2009/04/16 00:03:24 hal9 Exp $
+#  $Id: default.action.master,v 1.174 2009/04/16 16:12:44 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1120,7 +1120,7 @@ a.tribalfusion.com/
 #MASTER# REMARKS: Pointdexter
 .ru4.com/
 #MASTER# BLOCK-REFERRER: http://www.boursorama.com/infos/actualites/detail_actu_marches.phtml?news=1510287
-www.smartadserver.com/
+.smartadserver.com/
 #MASTER# BLOCK-REFERRER: http://www.chez.tiscali.fr/ 10/07/06
 admedia.
 #MASTER# REMARKS: Bannerfarm used by Morpheus file sharing software
