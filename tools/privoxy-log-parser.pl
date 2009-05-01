@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.136 2009/03/14 14:50:52 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.23 2009/03/14 15:31:58 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1449,7 +1449,7 @@ sub handle_loglevel_connect ($) {
         $c = highlight_matched_host($c, '(?<=connection to )[^\s]+');
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^^Found reusable socket/) {
+    } elsif ($c =~ m/^Found reusable socket/) {
 
         # Found reusable socket 9 for www.privoxy.org:80 in slot 0.
         $c =~ s@(?<=Found reusable socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
@@ -1871,7 +1871,7 @@ sub parse_loop () {
 
             print_non_clf_message($content);
 
-        } elsif (m/^(\d+\.\d+\.\d+\.\d+) - - \[(.*)\] "(.*)" (\d+) (\d+)/) {
+        } elsif (m/^((?:\d+\.\d+\.\d+\.\d+|[:\d]+)) - - \[(.*)\] "(.*)" (\d+) (\d+)/) {
 
             # LOG_LEVEL_CLF lines look like this
             # 61.152.239.32 - - [04/Mar/2007:18:28:23 +0100] "GET \
