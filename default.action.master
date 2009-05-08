@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.174 2009/04/16 16:12:44 fabiankeil Exp $
+#  $Id: default.action.master,v 1.175 2009/04/26 12:59:59 hal9 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1629,6 +1629,10 @@ qa.debian.org/popcon\.php
 #MASTER# UNBLOCK-REFERRER: http://www.cnn.com/video/#/video/showbiz/2009/04/14/dcl.boyle.british.talent.show.cnn
 # URL = http://i.cdn.turner.com/cnn/.element/js/2.0/video/xmp/AdServiceAdapter.swf
 .turner.com/cnn/.*/AdServiceAdapter.swf
+#MASTER# REMARKS: Tracker 2786745 : MySpace music player doesn't work
+#MASTER# UNBLOCK-REFERRER: www.myspace.com/bandofskulls
+# URL = http://lads.myspacecdn.com/videos/musicPlayerAssets.swf
+lads.myspacecdn.com/
 
 
 #############################################################################
