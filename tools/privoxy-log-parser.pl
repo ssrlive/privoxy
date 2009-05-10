@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.23 2009/03/14 15:31:58 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.24 2009/05/01 11:04:19 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -912,6 +912,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/^Converting tab to space in /
           or $c =~ m/A HTTP\/1\.1 response without/
           or $c =~ m/Disabled filter mode on behalf of the client/
+          or $c =~ m/Keeping the (?:server|client) header /
             )
     {
         # XXX: Some of these may need highlighting
@@ -950,6 +951,9 @@ sub handle_loglevel_header ($) {
         #  this again   is  not'
         # A HTTP/1.1 response without Connection header implies keep-alive.
         # Disabled filter mode on behalf of the client.
+        # Keeping the server header 'Connection: keep-alive' around.
+        # Keeping the client header 'Connection: close' around. The connection will not be kept alive.
+        # Keeping the client header 'Connection: keep-alive' around. The connection will be kept alive if possible.
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
@@ -1490,7 +1494,7 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=Closing socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Timeout is: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Waiting for/) {
+    } elsif ($c =~ m/^Waiting for \d/) {
 
         # Waiting for 1 connections to timeout.
         $c =~ s@(?<=^Waiting for )(\d+)@$h{'Number'}$1$h{'Standard'}@;
@@ -1526,15 +1530,37 @@ sub handle_loglevel_connect ($) {
         # Connection from 81.163.28.218 dropped due to ACL
         $c =~ s@(?<=^Connection from )((?:\d+\.?){4})@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^(?:Reusing|Closing) server socket \d./ or
+             $c =~ m/^No additional client request/) {
+
+        # Reusing server socket 4. Opened for 10.0.0.1.
+        # Closing server socket 2. Opened for 10.0.0.1.
+        # No additional client request received in time. \
+        #  Closing server socket 4, initially opened for 10.0.0.1.
+
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.$)');
+
+    } elsif ($c =~ m/^Waiting for the next client request/ or
+             $c =~ m/^The connection on server socket/ ) {
+
+        # Waiting for the next client request. Keeping the server socket 5 to 10.0.0.1 open.
+        # The connection on server socket 6 to upload.wikimedia.org isn't reusable. Closing.
+
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = highlight_matched_host($c, '(?<=to )[^\s]+');
+
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
-             $c =~ m/^No connections to wait/) {
+             $c =~ m/^No connections to wait/ or
+             $c =~ m/^Client request arrived in time or the client closed the connection/) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
         # Looks like we read the end of the last chunk together with the server \
         #  headers. We better stop reading.
         # Unsetting keep-alive flag.
         # No connections to wait for left.
+        # Client request arrived in time or the client closed the connection.
 
     } else {
 
