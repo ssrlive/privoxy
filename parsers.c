@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.153 2009/03/07 13:09:17 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.154 2009/03/13 14:10:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,9 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.153 2009/03/07 13:09:17 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.154  2009/03/13 14:10:07  fabiankeil
+ *    Fix some more harmless warnings on amd64.
+ *
  *    Revision 1.153  2009/03/07 13:09:17  fabiankeil
  *    Change csp->expected_content and_csp->expected_content_length from
  *    size_t to unsigned long long to reduce the likelihood of integer
@@ -989,7 +992,10 @@ static jb_err client_host_adder       (struct client_state *csp);
 static jb_err client_xtra_adder       (struct client_state *csp);
 static jb_err client_x_forwarded_for_adder(struct client_state *csp);
 static jb_err client_connection_header_adder(struct client_state *csp);
-static jb_err server_connection_close_adder(struct client_state *csp);
+static jb_err server_connection_adder(struct client_state *csp);
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+static jb_err server_proxy_connection_adder(struct client_state *csp);
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 static jb_err create_forged_referrer(char **header, const char *hostport);
 static jb_err create_fake_referrer(char **header, const char *fake_referrer);
@@ -1023,7 +1029,9 @@ static const struct parsers client_patterns[] = {
    { "TE:",                       3,   client_te },
    { "Host:",                     5,   client_host },
    { "if-modified-since:",       18,   client_if_modified_since },
+#ifndef FEATURE_CONNECTION_KEEP_ALIVE
    { "Keep-Alive:",              11,   crumble },
+#endif
    { "connection:",              11,   client_connection },
    { "proxy-connection:",        17,   crumble },
    { "max-forwards:",            13,   client_max_forwards },
@@ -1047,9 +1055,10 @@ static const struct parsers server_patterns[] = {
    { "Content-Encoding:",        17, server_content_encoding },
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Content-Length:",          15, server_save_content_length },
+#else
+   { "Keep-Alive:",              11, crumble },
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
    { "Transfer-Encoding:",       18, server_transfer_coding },
-   { "Keep-Alive:",              11, crumble },
    { "content-disposition:",     20, server_content_disposition },
    { "Last-Modified:",           14, server_last_modified },
    { "*",                         0, crunch_server_header },
@@ -1067,7 +1076,10 @@ static const add_header_func_ptr add_client_headers[] = {
 };
 
 static const add_header_func_ptr add_server_headers[] = {
-   server_connection_close_adder,
+   server_connection_adder,
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   server_proxy_connection_adder,
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
    NULL
 };
 
@@ -2371,9 +2383,9 @@ static jb_err filter_header(struct client_state *csp, char **header)
  *
  * Function    :  server_connection
  *
- * Description :  Makes sure that the value of the Connection: header
- *                is "close" and signals server_connection_close_adder 
- *                to do nothing.
+ * Description :  Makes sure a proper "Connection:" header is
+ *                set and signals connection_header_adder to
+ *                do nothing.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2388,8 +2400,6 @@ static jb_err filter_header(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err server_connection(struct client_state *csp, char **header)
 {
-   char *old_header = *header;
-
    /* Do we have a 'Connection: close' header? */
    if (strcmpic(*header, "Connection: close"))
    {
@@ -2401,7 +2411,10 @@ static jb_err server_connection(struct client_state *csp, char **header)
          /* Remember to keep the connection alive. */
          csp->flags |= CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
       }
-#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
+      log_error(LOG_LEVEL_HEADER,
+         "Keeping the server header '%s' around.", *header);
+#else
+      char *old_header = *header;
 
       *header = strdup("Connection: close");
       if (header == NULL)
@@ -2410,10 +2423,11 @@ static jb_err server_connection(struct client_state *csp, char **header)
       }
       log_error(LOG_LEVEL_HEADER, "Replaced: \'%s\' with \'%s\'", old_header, *header);
       freez(old_header);
+#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
    }
 
-   /* Signal server_connection_close_adder() to return early. */
-   csp->flags |= CSP_FLAG_SERVER_CONNECTION_CLOSE_SET;
+   /* Signal server_connection_adder() to return early. */
+   csp->flags |= CSP_FLAG_SERVER_CONNECTION_HEADER_SET;
 
    return JB_ERR_OK;
 }
@@ -2439,11 +2453,18 @@ static jb_err server_connection(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err client_connection(struct client_state *csp, char **header)
 {
-   char *old_header = *header;
    const char *wanted_header = get_appropiate_connection_header(csp);
 
    if (strcmpic(*header, wanted_header))
    {
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      log_error(LOG_LEVEL_HEADER,
+         "Keeping the client header '%s' around. "
+         "The connection will not be kept alive.",
+         *header);
+#else
+      char *old_header = *header;
+
       *header = strdup(wanted_header);
       if (header == NULL)
       { 
@@ -2452,9 +2473,20 @@ static jb_err client_connection(struct client_state *csp, char **header)
       log_error(LOG_LEVEL_HEADER,
          "Replaced: \'%s\' with \'%s\'", old_header, *header);
       freez(old_header);
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
    }
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   else
+   {
+      log_error(LOG_LEVEL_HEADER,
+         "Keeping the client header '%s' around. "
+         "The server connection will be kept alive if possible.",
+         *header);
+      csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+   }
+#endif  /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-   /* Signal client_connection_close_adder() to return early. */
+   /* Signal client_connection_adder() to return early. */
    csp->flags |= CSP_FLAG_CLIENT_CONNECTION_HEADER_SET;
 
    return JB_ERR_OK;
@@ -4087,13 +4119,10 @@ static jb_err client_x_forwarded_for_adder(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  server_connection_close_adder
+ * Function    :  server_connection_adder
  *
- * Description :  "Temporary" fix for the needed but missing HTTP/1.1
- *                support. Adds a "Connection: close" header to csp->headers
+ * Description :  Adds an appropiate "Connection:" header to csp->headers
  *                unless the header was already present. Called from `sed'.
- *
- *                FIXME: This whole function shouldn't be neccessary!
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -4102,13 +4131,14 @@ static jb_err client_x_forwarded_for_adder(struct client_state *csp)
  *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
-static jb_err server_connection_close_adder(struct client_state *csp)
+static jb_err server_connection_adder(struct client_state *csp)
 {
    const unsigned int flags = csp->flags;
    const char *response_status_line = csp->headers->first->str;
+   const char *wanted_header = get_appropiate_connection_header(csp);
 
    if ((flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
-    && (flags & CSP_FLAG_SERVER_CONNECTION_CLOSE_SET))
+    && (flags & CSP_FLAG_SERVER_CONNECTION_HEADER_SET))
    {
       return JB_ERR_OK;
    }
@@ -4126,10 +4156,34 @@ static jb_err server_connection_close_adder(struct client_state *csp)
       csp->flags |= CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
    }
 
-   log_error(LOG_LEVEL_HEADER, "Adding: Connection: close");
+   log_error(LOG_LEVEL_HEADER, "Adding: %s", wanted_header);
 
-   return enlist(csp->headers, "Connection: close");
+   return enlist(csp->headers, wanted_header);
 }
+
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/*********************************************************************
+ *
+ * Function    :  server_proxy_connection_adder
+ *
+ * Description :  Adds a "Proxy-Connection: keep-alive" header to
+ *                csp->headers. XXX: We should reuse existant ones.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+static jb_err server_proxy_connection_adder(struct client_state *csp)
+{
+   static const char proxy_connection_header[] = "Proxy-Connection: keep-alive";
+   log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
+   return enlist(csp->headers, proxy_connection_header);
+}
+#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************

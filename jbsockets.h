@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.13 2008/03/21 11:13:59 fabiankeil Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.14 2008/12/20 14:53:55 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -10,7 +10,7 @@
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -37,6 +37,11 @@
  *
  * Revisions   :
  *    $Log: jbsockets.h,v $
+ *    Revision 1.14  2008/12/20 14:53:55  fabiankeil
+ *    Add config option socket-timeout to control the time
+ *    Privoxy waits for data to arrive on a socket. Useful
+ *    in case of stale ssh tunnels or when fuzz-testing.
+ *
  *    Revision 1.13  2008/03/21 11:13:59  fabiankeil
  *    Only gather host information if it's actually needed.
  *    Also move the code out of accept_connection() so it's less likely
@@ -126,6 +131,8 @@ extern int accept_connection(struct client_state * csp, jb_socket fd);
 extern void get_host_information(jb_socket afd, char **ip_address, char **hostname);
 
 extern unsigned long resolve_hostname_to_ip(const char *host);
+
+extern int socket_is_still_usable(jb_socket sfd);
 
 /* Revision control strings from this header and associated .c file */
 extern const char jbsockets_rcs[];

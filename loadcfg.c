@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.97 2009/04/17 11:45:19 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.98 2009/04/24 15:29:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,9 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.97 2009/04/17 11:45:19 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.98  2009/04/24 15:29:43  fabiankeil
+ *    Allow to limit the number of of client connections.
+ *
  *    Revision 1.97  2009/04/17 11:45:19  fabiankeil
  *    Replace HAVE_GETADDRINFO and HAVE_GETNAMEINFO macros
  *    with HAVE_RFC2553 macro. Original patch by Petr Pisar.
@@ -799,9 +802,6 @@ struct configuration_spec * load_config(void)
    unsigned long linenum = 0;
    int i;
    char *logfile = NULL;
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
-#endif
 
    if (!check_file_changed(current_configfile, configfile, &fs))
    {
@@ -855,6 +855,10 @@ struct configuration_spec * load_config(void)
    config->forwarded_connect_retries = 0;
    config->max_client_connections    = 0;
    config->socket_timeout            = 300; /* XXX: Should be a macro. */
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   config->keep_alive_timeout        = DEFAULT_KEEP_ALIVE_TIMEOUT;
+   config->feature_flags            &= ~RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
+#endif
    config->feature_flags            &= ~RUNTIME_FEATURE_CGI_TOGGLE;
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
@@ -1388,7 +1392,7 @@ struct configuration_spec * load_config(void)
                if (0 <= timeout)
                {
                   config->feature_flags |= RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
-                  keep_alive_timeout = timeout;
+                  config->keep_alive_timeout = timeout;
                }
                else
                {
@@ -1803,7 +1807,7 @@ struct configuration_spec * load_config(void)
    {
       if (config->multi_threaded)
       {
-         set_keep_alive_timeout(keep_alive_timeout);
+         set_keep_alive_timeout(config->keep_alive_timeout);
       }
       else
       {
@@ -1812,6 +1816,8 @@ struct configuration_spec * load_config(void)
           * if we didn't bother with enforcing the connection timeout,
           * that might make Tor users sad, even though they shouldn't
           * enable the single-threaded option anyway.
+          *
+          * XXX: We could still use Proxy-Connection: keep-alive.
           */
          config->feature_flags &= ~RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
          log_error(LOG_LEVEL_ERROR,

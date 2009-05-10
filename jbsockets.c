@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.53 2009/04/17 11:39:52 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.54 2009/04/17 11:45:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -8,7 +8,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.53 2009/04/17 11:39:52 fabian
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -35,6 +35,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.53 2009/04/17 11:39:52 fabian
  *
  * Revisions   :
  *    $Log: jbsockets.c,v $
+ *    Revision 1.54  2009/04/17 11:45:19  fabiankeil
+ *    Replace HAVE_GETADDRINFO and HAVE_GETNAMEINFO macros
+ *    with HAVE_RFC2553 macro. Original patch by Petr Pisar.
+ *
  *    Revision 1.53  2009/04/17 11:39:52  fabiankeil
  *    If the hostname is 'localhost' or not specified, request an AF_INET address.
  *
@@ -323,6 +327,16 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.53 2009/04/17 11:39:52 fabian
 #endif
 
 #endif
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef HAVE_POLL
+#ifdef __GLIBC__
+#include <sys/poll.h>
+#else
+#include <poll.h>
+#endif /* def __GLIBC__ */
+#endif /* HAVE_POLL */
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #include "project.h"
 
@@ -1379,6 +1393,68 @@ unsigned long resolve_hostname_to_ip(const char *host)
    return(inaddr.sin_addr.s_addr);
 
 }
+
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/*********************************************************************
+ *
+ * Function    :  socket_is_still_usable
+ *
+ * Description :  Decides whether or not an open socket is still usable.
+ *
+ * Parameters  :
+ *          1  :  sfd = The socket to check.
+ *
+ * Returns     :  TRUE for yes, otherwise FALSE.
+ *
+ *********************************************************************/
+int socket_is_still_usable(jb_socket sfd)
+{
+#ifdef HAVE_POLL
+   int poll_result;
+   struct pollfd poll_fd[1];
+
+   memset(poll_fd, 0, sizeof(poll_fd));
+   poll_fd[0].fd = sfd;
+   poll_fd[0].events = POLLIN;
+
+   poll_result = poll(poll_fd, 1, 0);
+
+   if (-1 != poll_result)
+   {
+      return !(poll_fd[0].revents & POLLIN);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_CONNECT, "Polling socket %d failed.", sfd);
+      return FALSE;
+   }
+#else
+   fd_set readable_fds;
+   struct timeval timeout;
+   int ret;
+   int socket_is_alive = 0;
+
+   memset(&timeout, '\0', sizeof(timeout));
+   FD_ZERO(&readable_fds);
+   FD_SET(sfd, &readable_fds);
+
+   ret = select((int)sfd+1, &readable_fds, NULL, NULL, &timeout);
+   if (ret < 0)
+   {
+      log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
+   }
+
+   /*
+    * XXX: I'm not sure why !FD_ISSET() works,
+    * but apparently it does.
+    */
+   socket_is_alive = !FD_ISSET(sfd, &readable_fds);
+
+   return socket_is_alive;
+#endif /* def HAVE_POLL */
+}
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*

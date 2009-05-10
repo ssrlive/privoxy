@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.132 2009/04/17 11:45:19 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.133 2009/04/24 15:29:43 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.133  2009/04/24 15:29:43  fabiankeil
+ *    Allow to limit the number of of client connections.
+ *
  *    Revision 1.132  2009/04/17 11:45:19  fabiankeil
  *    Replace HAVE_GETADDRINFO and HAVE_GETNAMEINFO macros
  *    with HAVE_RFC2553 macro. Original patch by Petr Pisar.
@@ -1302,6 +1305,26 @@ struct url_actions
 
 
 /*
+ * Structure to make sure we only reuse the server socket
+ * if the host and forwarding settings are the same.
+ */
+struct reusable_connection
+{
+   jb_socket sfd;
+   int       in_use;
+   time_t    timestamp;
+
+   char *host;
+   int  port;
+   int  forwarder_type;
+   char *gateway_host;
+   int  gateway_port;
+   char *forward_host;
+   int  forward_port;
+};
+
+
+/*
  * Flags for use in csp->flags
  */
  
@@ -1340,15 +1363,15 @@ struct url_actions
 
 /**
  * Flag for csp->flags: Set if an acceptable Connection header
- * is already set.
+ * has already been set by the client.
  */
 #define CSP_FLAG_CLIENT_CONNECTION_HEADER_SET  0x00000040U
 
 /**
- * Flag for csp->flags: Set if adding the 'Connection: close' header
- * for the server isn't necessary.
+ * Flag for csp->flags: Set if an acceptable Connection header
+ * has already been set by the server.
  */
-#define CSP_FLAG_SERVER_CONNECTION_CLOSE_SET   0x00000080U
+#define CSP_FLAG_SERVER_CONNECTION_HEADER_SET  0x00000080U
 
 /**
  * Flag for csp->flags: Signals header parsers whether they
@@ -1387,6 +1410,12 @@ struct url_actions
  * content length.
  */
 #define CSP_FLAG_CONTENT_LENGTH_SET            0x00002000U
+
+/**
+ * Flag for csp->flags: Set if the client wants to keep
+ * the connection alive.
+ */
+#define CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE  0x00004000U
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 /*
@@ -1427,6 +1456,9 @@ struct client_state
 
    /** socket to talk to server (web server or proxy) */
    jb_socket sfd;
+
+   /** current connection to the server (may go through a proxy) */
+   struct reusable_connection server_connection;
 
    /** Multi-purpose flag container, see CSP_FLAG_* above */
    unsigned int flags;
@@ -1834,6 +1866,11 @@ struct configuration_spec
 
    /* Timeout when waiting on sockets for data to become available. */
    int socket_timeout;
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   /* Number of seconds after which an open connection will no longer be reused. */
+   int keep_alive_timeout;
+#endif
 
    /** All options from the config file, HTML-formatted. */
    char *proxy_args;

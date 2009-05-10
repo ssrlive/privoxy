@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.11 2008/11/13 09:08:42 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.12 2008/12/24 17:06:19 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,10 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.12  2008/12/24 17:06:19  fabiankeil
+ *    Keep a thread around to timeout alive connections
+ *    even if no new requests are coming in.
+ *
  *    Revision 1.11  2008/11/13 09:08:42  fabiankeil
  *    Add new config option: keep-alive-timeout.
  *
@@ -125,6 +129,10 @@ extern void remember_connection(jb_socket sfd,
                                 const struct http_request *http,
                                 const struct forward_spec *fwd);
 extern int close_unusable_connections(void);
+extern void mark_connection_closed(struct reusable_connection *closed_connection);
+extern int connection_destination_matches(const struct reusable_connection *connection,
+                                          const struct http_request *http,
+                                          const struct forward_spec *fwd);
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 

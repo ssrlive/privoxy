@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.47 2008/12/24 17:06:19 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.48 2009/02/13 17:20:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.47 2008/12/24 17:06:19 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.48  2009/02/13 17:20:36  fabiankeil
+ *    Reword keep-alive support warning and only show
+ *    it #if !defined(HAVE_POLL) && !defined(_WIN32).
+ *
  *    Revision 1.47  2008/12/24 17:06:19  fabiankeil
  *    Keep a thread around to timeout alive connections
  *    even if no new requests are coming in.
@@ -335,27 +339,8 @@ static const char socks_userid[] = "anonymous";
 #define MAX_REUSABLE_CONNECTIONS 100
 static int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
 
-struct reusable_connection
-{
-   jb_socket sfd;
-   int       in_use;
-   char      *host;
-   int       port;
-   time_t    timestamp;
-
-   int       forwarder_type;
-   char      *gateway_host;
-   int       gateway_port;
-   char      *forward_host;
-   int       forward_port;
-};
-
 static struct reusable_connection reusable_connection[MAX_REUSABLE_CONNECTIONS];
-
 static int mark_connection_unused(jb_socket sfd);
-static void mark_connection_closed(struct reusable_connection *closed_connection);
-static int socket_is_still_usable(jb_socket sfd);
-
 
 /*********************************************************************
  *
@@ -498,7 +483,6 @@ void remember_connection(jb_socket sfd, const struct http_request *http,
  * Function    :  mark_connection_closed
  *
  * Description : Marks a reused connection closed.
- *               Must be called with connection_reuse_mutex locked.
  *
  * Parameters  :
  *          1  :  closed_connection = The connection to mark as closed.
@@ -506,7 +490,7 @@ void remember_connection(jb_socket sfd, const struct http_request *http,
  * Returns     : void
  *
  *********************************************************************/
-static void mark_connection_closed(struct reusable_connection *closed_connection)
+void mark_connection_closed(struct reusable_connection *closed_connection)
 {
    closed_connection->in_use = FALSE;
    closed_connection->sfd = JB_INVALID_SOCKET;
@@ -582,9 +566,9 @@ void forget_connection(jb_socket sfd)
  * Returns     :  TRUE for yes, FALSE otherwise.
  *
  *********************************************************************/
-static int connection_destination_matches(const struct reusable_connection *connection,
-                                          const struct http_request *http,
-                                          const struct forward_spec *fwd)
+int connection_destination_matches(const struct reusable_connection *connection,
+                                   const struct http_request *http,
+                                   const struct forward_spec *fwd)
 {
    if ((connection->forwarder_type != fwd->type)
     || (connection->gateway_port   != fwd->gateway_port)
@@ -675,66 +659,6 @@ int close_unusable_connections(void)
 
    return connections_alive;
 
-}
-
-
-/*********************************************************************
- *
- * Function    :  socket_is_still_usable
- *
- * Description :  Decides whether or not an open socket is still usable.
- *
- * Parameters  :
- *          1  :  sfd = The socket to check.
- *
- * Returns     :  TRUE for yes, otherwise FALSE.
- *
- *********************************************************************/
-static int socket_is_still_usable(jb_socket sfd)
-{
-#ifdef HAVE_POLL
-   int poll_result;
-   struct pollfd poll_fd[1];
-
-   memset(poll_fd, 0, sizeof(poll_fd));
-   poll_fd[0].fd = sfd;
-   poll_fd[0].events = POLLIN;
-
-   poll_result = poll(poll_fd, 1, 0);
-
-   if (-1 != poll_result)
-   {
-      return !(poll_fd[0].revents & POLLIN);
-   }
-   else
-   {
-      log_error(LOG_LEVEL_CONNECT, "Polling socket %d failed.", sfd);
-      return FALSE;
-   }
-#else
-   fd_set readable_fds;
-   struct timeval timeout;
-   int ret;
-   int socket_is_alive = 0;
-
-   memset(&timeout, '\0', sizeof(timeout));
-   FD_ZERO(&readable_fds);
-   FD_SET(sfd, &readable_fds);
-
-   ret = select((int)sfd+1, &readable_fds, NULL, NULL, &timeout);
-   if (ret < 0)
-   {
-      log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
-   }
-
-   /*
-    * XXX: I'm not sure why !FD_ISSET() works,
-    * but apparently it does.
-    */
-   socket_is_alive = !FD_ISSET(sfd, &readable_fds);
-
-   return socket_is_alive;
-#endif /* def HAVE_POLL */
 }
 
 

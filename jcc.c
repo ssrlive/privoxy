@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.244 2009/04/17 11:34:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.245 2009/04/24 15:29:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.244 2009/04/17 11:34:34 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.245  2009/04/24 15:29:43  fabiankeil
+ *    Allow to limit the number of of client connections.
+ *
  *    Revision 1.244  2009/04/17 11:34:34  fabiankeil
  *    Style cosmetics for the IPv6 code.
  *
@@ -2288,6 +2291,73 @@ static void wait_for_alive_connections()
    log_error(LOG_LEVEL_CONNECT, "No connections to wait for left.");
 
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  save_connection_destination
+ *
+ * Description :  Remembers a connection for reuse later on.
+ *
+ * Parameters  :
+ *          1  :  sfd  = Open socket to remember.
+ *          2  :  http = The destination for the connection.
+ *          3  :  fwd  = The forwarder settings used.
+ *          3  :  server_connection  = storage.
+ *
+ * Returns     : void
+ *
+ *********************************************************************/
+void save_connection_destination(jb_socket sfd,
+                                 const struct http_request *http,
+                                 const struct forward_spec *fwd,
+                                 struct reusable_connection *server_connection)
+{
+   assert(sfd != JB_INVALID_SOCKET);
+   assert(NULL != http->host);
+   server_connection->host = strdup(http->host);
+   if (NULL == server_connection->host)
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory saving socket.");
+   }
+   server_connection->port = http->port;
+
+   assert(NULL != fwd);
+   assert(server_connection->gateway_host == NULL);
+   assert(server_connection->gateway_port == 0);
+   assert(server_connection->forwarder_type == 0);
+   assert(server_connection->forward_host == NULL);
+   assert(server_connection->forward_port == 0);
+
+   server_connection->forwarder_type = fwd->type;
+   if (NULL != fwd->gateway_host)
+   {
+      server_connection->gateway_host = strdup(fwd->gateway_host);
+      if (NULL == server_connection->gateway_host)
+      {
+         log_error(LOG_LEVEL_FATAL, "Out of memory saving gateway_host.");
+      }
+   }
+   else
+   {
+      server_connection->gateway_host = NULL;
+   }
+   server_connection->gateway_port = fwd->gateway_port;
+
+   if (NULL != fwd->forward_host)
+   {
+      server_connection->forward_host = strdup(fwd->forward_host);
+      if (NULL == server_connection->forward_host)
+      {
+         log_error(LOG_LEVEL_FATAL, "Out of memory saving forward_host.");
+      }
+   }
+   else
+   {
+      server_connection->forward_host = NULL;
+   }
+   server_connection->forward_port = fwd->forward_port;
+}
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 
@@ -2763,41 +2833,66 @@ static void chat(struct client_state *csp)
 
    /* here we connect to the server, gateway, or the forwarder */
 
-   while ((csp->sfd = forwarded_connect(fwd, http, csp))
-      && (errno == EINVAL)
-      && (forwarded_connect_retries++ < max_forwarded_connect_retries))
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   if ((csp->sfd != JB_INVALID_SOCKET)
+      && socket_is_still_usable(csp->sfd)
+      && connection_destination_matches(&csp->server_connection, http, fwd))
    {
-      log_error(LOG_LEVEL_ERROR,
-         "failed request #%u to connect to %s. Trying again.",
-         forwarded_connect_retries, http->hostport);
+      log_error(LOG_LEVEL_CONNECT,
+         "Reusing server socket %u. Opened for %s.",
+         csp->sfd, csp->server_connection.host);
    }
-
-   if (csp->sfd == JB_INVALID_SOCKET)
+   else
    {
-      if (fwd->type != SOCKS_NONE)
+      if (csp->sfd != JB_INVALID_SOCKET)
       {
-         /* Socks error. */
-         rsp = error_response(csp, "forwarding-failed", errno);
+         log_error(LOG_LEVEL_CONNECT,
+            "Closing server socket %u. Opened for %s.",
+            csp->sfd, csp->server_connection.host);
+         close_socket(csp->sfd);
+         mark_connection_closed(&csp->server_connection);
       }
-      else if (errno == EINVAL)
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+      while ((csp->sfd = forwarded_connect(fwd, http, csp))
+         && (errno == EINVAL)
+         && (forwarded_connect_retries++ < max_forwarded_connect_retries))
       {
-         rsp = error_response(csp, "no-such-domain", errno);
-      }
-      else
-      {
-         rsp = error_response(csp, "connect-failed", errno);
-         log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
-            http->hostport);
+         log_error(LOG_LEVEL_ERROR,
+            "failed request #%u to connect to %s. Trying again.",
+            forwarded_connect_retries, http->hostport);
       }
 
-      /* Write the answer to the client */
-      if (rsp != NULL)
+      if (csp->sfd == JB_INVALID_SOCKET)
       {
-         send_crunch_response(csp, rsp);
-      }
+         if (fwd->type != SOCKS_NONE)
+         {
+            /* Socks error. */
+            rsp = error_response(csp, "forwarding-failed", errno);
+         }
+         else if (errno == EINVAL)
+         {
+            rsp = error_response(csp, "no-such-domain", errno);
+         }
+         else
+         {
+            rsp = error_response(csp, "connect-failed", errno);
+            log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
+               http->hostport);
+         }
 
-      return;
+         /* Write the answer to the client */
+         if (rsp != NULL)
+         {
+            send_crunch_response(csp, rsp);
+         }
+
+         return;
+      }
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      save_connection_destination(csp->sfd, http, fwd, &csp->server_connection);
    }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    hdr = list_to_text(csp->headers);
    if (hdr == NULL)
@@ -2925,6 +3020,9 @@ static void chat(struct client_state *csp)
       /*
        * This is the body of the browser's request,
        * just read and write it.
+       *
+       * XXX: Make sure the client doesn't use pipelining
+       * behind Privoxy's back.
        */
       if (FD_ISSET(csp->cfd, &rfds))
       {
@@ -3408,38 +3506,80 @@ void serve(struct client_state *csp)
 static void serve(struct client_state *csp)
 #endif /* def AMIGA */
 {
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   int continue_chatting = 0;
+   do
+   {
+      chat(csp);
+
+      continue_chatting = (csp->config->feature_flags
+         & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+         && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
+         && (csp->cfd != JB_INVALID_SOCKET)
+         && (csp->sfd != JB_INVALID_SOCKET)
+         && socket_is_still_usable(csp->sfd);
+
+      /*
+       * Get the csp in a mostly vergin state again.
+       * XXX: Should be done elsewhere.
+       */
+      csp->content_type = 0;
+      csp->content_length = 0;
+      csp->expected_content_length = 0;
+      list_remove_all(csp->headers);
+      freez(csp->iob->buf);
+      memset(csp->iob, 0, sizeof(csp->iob));
+      freez(csp->error_message);
+      free_http_request(csp->http);
+      destroy_list(csp->headers);
+      destroy_list(csp->tags);
+      free_current_action(csp->action);
+      if (NULL != csp->fwd)
+      {
+         unload_forward_spec(csp->fwd);
+         csp->fwd = NULL;
+      }
+
+      /* XXX: Store per-connection flags someplace else. */
+      csp->flags = CSP_FLAG_ACTIVE | (csp->flags & CSP_FLAG_TOGGLED_ON);
+
+      if (continue_chatting)
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Waiting for the next client request. "
+            "Keeping the server socket %d to %s open.",
+            csp->sfd, csp->server_connection.host);
+
+         if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
+            && data_is_available(csp->cfd, csp->config->keep_alive_timeout)
+            && socket_is_still_usable(csp->cfd))
+         {
+            log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
+               "time or the client closed the connection.");
+         }
+         else
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "No additional client request received in time. "
+               "Closing server socket %d, initially opened for %s.",
+               csp->sfd, csp->server_connection.host);
+            break;
+         }
+      }
+      else if (csp->sfd != JB_INVALID_SOCKET)
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "The connection on server socket %d to %s isn't reusable. "
+            "Closing.", csp->sfd, csp->server_connection.host);
+      }
+   } while (continue_chatting);
+#else
    chat(csp);
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    if (csp->sfd != JB_INVALID_SOCKET)
    {
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      static int monitor_thread_running = 0;
-
-      if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-       && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
-      {
-         remember_connection(csp->sfd, csp->http, forward_url(csp, csp->http));
-         close_socket(csp->cfd);
-         csp->cfd = JB_INVALID_SOCKET;
-         privoxy_mutex_lock(&connection_reuse_mutex);
-         if (!monitor_thread_running)
-         {
-            monitor_thread_running = 1;
-            privoxy_mutex_unlock(&connection_reuse_mutex);
-            wait_for_alive_connections();
-            privoxy_mutex_lock(&connection_reuse_mutex);
-            monitor_thread_running = 0;
-         }
-         privoxy_mutex_unlock(&connection_reuse_mutex);
-      }
-      else
-      {
-         forget_connection(csp->sfd);
-         close_socket(csp->sfd);
-      }
-#else
       close_socket(csp->sfd);
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
    }
 
    if (csp->cfd != JB_INVALID_SOCKET)
