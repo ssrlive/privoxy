@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.245 2009/04/24 15:29:43 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.246 2009/05/10 10:12:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,10 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.245 2009/04/24 15:29:43 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.246  2009/05/10 10:12:30  fabiankeil
+ *    Initial keep-alive support for the client socket.
+ *    Temporarily disable the server-side-only keep-alive code.
+ *
  *    Revision 1.245  2009/04/24 15:29:43  fabiankeil
  *    Allow to limit the number of of client connections.
  *
@@ -3507,6 +3511,7 @@ static void serve(struct client_state *csp)
 #endif /* def AMIGA */
 {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   static int monitor_thread_running = 0;
    int continue_chatting = 0;
    do
    {
@@ -3518,30 +3523,6 @@ static void serve(struct client_state *csp)
          && (csp->cfd != JB_INVALID_SOCKET)
          && (csp->sfd != JB_INVALID_SOCKET)
          && socket_is_still_usable(csp->sfd);
-
-      /*
-       * Get the csp in a mostly vergin state again.
-       * XXX: Should be done elsewhere.
-       */
-      csp->content_type = 0;
-      csp->content_length = 0;
-      csp->expected_content_length = 0;
-      list_remove_all(csp->headers);
-      freez(csp->iob->buf);
-      memset(csp->iob, 0, sizeof(csp->iob));
-      freez(csp->error_message);
-      free_http_request(csp->http);
-      destroy_list(csp->headers);
-      destroy_list(csp->tags);
-      free_current_action(csp->action);
-      if (NULL != csp->fwd)
-      {
-         unload_forward_spec(csp->fwd);
-         csp->fwd = NULL;
-      }
-
-      /* XXX: Store per-connection flags someplace else. */
-      csp->flags = CSP_FLAG_ACTIVE | (csp->flags & CSP_FLAG_TOGGLED_ON);
 
       if (continue_chatting)
       {
@@ -3556,13 +3537,52 @@ static void serve(struct client_state *csp)
          {
             log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
                "time or the client closed the connection.");
+            /*
+             * Get the csp in a mostly vergin state again.
+             * XXX: Should be done elsewhere.
+             */
+            csp->content_type = 0;
+            csp->content_length = 0;
+            csp->expected_content_length = 0;
+            list_remove_all(csp->headers);
+            freez(csp->iob->buf);
+            memset(csp->iob, 0, sizeof(csp->iob));
+            freez(csp->error_message);
+            free_http_request(csp->http);
+            destroy_list(csp->headers);
+            destroy_list(csp->tags);
+            free_current_action(csp->action);
+            if (NULL != csp->fwd)
+            {
+               unload_forward_spec(csp->fwd);
+               csp->fwd = NULL;
+            }
+
+            /* XXX: Store per-connection flags someplace else. */
+            csp->flags = CSP_FLAG_ACTIVE | (csp->flags & CSP_FLAG_TOGGLED_ON);
          }
          else
          {
             log_error(LOG_LEVEL_CONNECT,
-               "No additional client request received in time. "
-               "Closing server socket %d, initially opened for %s.",
-               csp->sfd, csp->server_connection.host);
+               "No additional client request received in time.");
+            if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
+            {
+               remember_connection(csp->sfd, csp->http,
+                  forward_url(csp, csp->http));
+               csp->sfd = JB_INVALID_SOCKET;
+               close_socket(csp->cfd);
+               csp->cfd = JB_INVALID_SOCKET;
+               privoxy_mutex_lock(&connection_reuse_mutex);
+               if (!monitor_thread_running)
+               {
+                  monitor_thread_running = 1;
+                  privoxy_mutex_unlock(&connection_reuse_mutex);
+                  wait_for_alive_connections();
+                  privoxy_mutex_lock(&connection_reuse_mutex);
+                  monitor_thread_running = 0;
+               }
+               privoxy_mutex_unlock(&connection_reuse_mutex);
+            }
             break;
          }
       }
@@ -3573,12 +3593,17 @@ static void serve(struct client_state *csp)
             "Closing.", csp->sfd, csp->server_connection.host);
       }
    } while (continue_chatting);
+
+   mark_connection_closed(&csp->server_connection);
 #else
    chat(csp);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    if (csp->sfd != JB_INVALID_SOCKET)
    {
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      forget_connection(csp->sfd);
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
       close_socket(csp->sfd);
    }
 

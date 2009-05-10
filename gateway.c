@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.48 2009/02/13 17:20:36 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.49 2009/05/10 10:12:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.48 2009/02/13 17:20:36 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.49  2009/05/10 10:12:30  fabiankeil
+ *    Initial keep-alive support for the client socket.
+ *    Temporarily disable the server-side-only keep-alive code.
+ *
  *    Revision 1.48  2009/02/13 17:20:36  fabiankeil
  *    Reword keep-alive support warning and only show
  *    it #if !defined(HAVE_POLL) && !defined(_WIN32).
@@ -800,10 +804,13 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
    jb_socket sfd = JB_INVALID_SOCKET;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   sfd = get_reusable_connection(http, fwd);
-   if (JB_INVALID_SOCKET != sfd)
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
    {
-      return sfd;
+      sfd = get_reusable_connection(http, fwd);
+      if (JB_INVALID_SOCKET != sfd)
+      {
+         return sfd;
+      }
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 

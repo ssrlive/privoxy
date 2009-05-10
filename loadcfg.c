@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.98 2009/04/24 15:29:43 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.99 2009/05/10 10:12:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.98 2009/04/24 15:29:43 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.99  2009/05/10 10:12:30  fabiankeil
+ *    Initial keep-alive support for the client socket.
+ *    Temporarily disable the server-side-only keep-alive code.
+ *
  *    Revision 1.98  2009/04/24 15:29:43  fabiankeil
  *    Allow to limit the number of of client connections.
  *
@@ -633,6 +637,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_allow_cgi_request_crunching  258915987ul /* "allow-cgi-request-crunching" */
 #define hash_buffer_limit                1881726070ul /* "buffer-limit */
 #define hash_confdir                        1978389ul /* "confdir" */
+#define hash_connection_sharing          1348841265ul /* "connection-sharing" */
 #define hash_debug                            78263ul /* "debug" */
 #define hash_deny_access                 1227333715ul /* "deny-access" */
 #define hash_enable_edit_actions         2517097536ul /* "enable-edit-actions" */
@@ -858,6 +863,7 @@ struct configuration_spec * load_config(void)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    config->keep_alive_timeout        = DEFAULT_KEEP_ALIVE_TIMEOUT;
    config->feature_flags            &= ~RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
+   config->feature_flags            &= ~RUNTIME_FEATURE_CONNECTION_SHARING;
 #endif
    config->feature_flags            &= ~RUNTIME_FEATURE_CGI_TOGGLE;
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
@@ -993,6 +999,22 @@ struct configuration_spec * load_config(void)
             freez(config->confdir);
             config->confdir = make_path( NULL, arg);
             break;
+
+/* *************************************************************************
+ * connection-sharing (0|1)
+ * *************************************************************************/
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         case hash_connection_sharing :
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_CONNECTION_SHARING;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_CONNECTION_SHARING;
+            }
+            break;
+#endif
 
 /* *************************************************************************
  * debug n

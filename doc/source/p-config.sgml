@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.49 2009/04/19 17:39:55 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.50 2009/04/24 15:29:43 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -95,7 +95,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.49 2009/04/19 17:39:55 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.50 2009/04/24 15:29:43 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -2512,34 +2512,29 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    Connections are not reused.
+    Connections are not kept alive.
    </para>
   </listitem>
  </varlistentry>
  <varlistentry>
   <term>Notes:</term>
   <listitem>
+   <para>
+    This option allows clients to keep the connection to &my-app;
+    alive. If the server supports it, &my-app; will keep
+    the connection to the server alive as well. Under certain
+    circumstances this may result in speed-ups.
+   </para>
+   <para>
+    By default, &my-app; will close the connection to the server if
+    the client connection gets closed, or if the specified timeout
+    has been reached without a new request coming in. This behaviour
+    can be changed with the <ulink
+     url="#CONNECTION-SHARING">connection-sharing</ulink> option.
+   </para>
    <para>
     This option has no effect if <application>Privoxy</application>
     has been compiled without keep-alive support.
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    Note that reusing connections doesn't necessary cause speedups.
-    There are also a few privacy implications you should be aware of.
-   </para>
-   <para>
-    Outgoing connections are shared between clients (if there are more
-    than one) and closing the client that initiated the outgoing connection
-    does not affect the connection between &my-app; and the server unless
-    the client's request hasn't been completed yet. If the outgoing connection
-    is idle, it will not be closed until either <application>Privoxy's</application>
-    or the server's timeout is reached. While it's open, the server knows
-    that the system running &my-app; is still there.
    </para>
   </listitem>
  </varlistentry>
@@ -2553,6 +2548,100 @@ forward-socks4, forward-socks4a and forward-socks5</title>
  </varlistentry>
 </variablelist>
 <![%config-file;[<literallayout>@@keep-alive-timeout 300</literallayout>]]>
+</sect3>
+
+
+<sect3 renderas="sect4" id="connection-sharing"><title>connection-sharing</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Whether or not outgoing connections that have been kept alive
+    should be shared between different incoming connections.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>0 or 1</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Connections are not shared.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This option has no effect if <application>Privoxy</application>
+    has been compiled without keep-alive support, or if it's disabled.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Note that reusing connections doesn't necessary cause speedups.
+    There are also a few privacy implications you should be aware of.
+   </para>
+   <para>
+    If this option is effective, outgoing connections are shared between
+    clients (if there are more than one) and closing the client that initiated
+    the outgoing connection does no longer affect the connection between &my-app;
+    and the server unless the client's request hasn't been completed yet.
+   </para>
+   <para>
+    If the outgoing connection  is idle, it will not be closed until either
+    <application>Privoxy's</application> or the server's timeout is reached.
+    While it's open, the server knows that the system running &my-app; is still
+    there.
+   </para>
+   <para>
+    If there are more than one client (maybe even belonging to multiple users),
+    they will be able to reuse each others connections. This is potentially
+    dangerous in case of authentication schemes like NTLM where only the
+    connection is authenticated, instead of requiring authentication for
+    each request.
+   </para>
+   <para>
+    If there is only a single client, and if said client can keep connections
+    alive on its own, enabling this option has next to no effect. If the client
+    doesn't support connection keep-alive, enabling this option may make sense
+    as it allows &my-app; to keep outgoing connections alive even if the client
+    itself doesn't support it.
+   </para>
+   <para>
+    This option should only be used by experienced users who
+    understand the risks and can weight them against the benefits.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    connection-sharing 1
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#connection-sharing 1</literallayout>]]>
 </sect3>
 
 
@@ -2689,7 +2778,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   </listitem>
  </varlistentry>
 </variablelist>
-<![%config-file;[<literallayout>@@max-client-connections 256</literallayout>]]>
+<![%config-file;[<literallayout>@@#max-client-connections 256</literallayout>]]>
 </sect3>
 
 

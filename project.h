@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.133 2009/04/24 15:29:43 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.134 2009/05/10 10:12:30 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,10 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.134  2009/05/10 10:12:30  fabiankeil
+ *    Initial keep-alive support for the client socket.
+ *    Temporarily disable the server-side-only keep-alive code.
+ *
  *    Revision 1.133  2009/04/24 15:29:43  fabiankeil
  *    Allow to limit the number of of client connections.
  *
@@ -1765,6 +1769,9 @@ struct access_control_list
 
 /** configuration_spec::feature_flags: Try to keep the connection to the server alive. */
 #define RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE      128U
+
+/** configuration_spec::feature_flags: Share outgoing connections between different client connections. */
+#define RUNTIME_FEATURE_CONNECTION_SHARING         256U
 
 /**
  * Data loaded from the configuration file.
