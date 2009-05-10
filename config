@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.13
 #
-#  $Id: p-config.sgml,v 2.48 2009/04/17 11:42:07 fabiankeil Exp $
+#  $Id: config,v 1.78 2009/04/17 13:27:06 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -1328,7 +1328,10 @@ buffer-limit 4096
 forwarded-connect-retries  0
 #
 #
-#  5.4. accept-intercepted-requests
+#  6. MISCELLANEOUS
+#  =================
+#
+#  6.1. accept-intercepted-requests
 #  =================================
 #
 #  Specifies:
@@ -1367,7 +1370,7 @@ forwarded-connect-retries  0
 accept-intercepted-requests 0
 #
 #
-#  5.5. allow-cgi-request-crunching
+#  6.2. allow-cgi-request-crunching
 #  =================================
 #
 #  Specifies:
@@ -1405,7 +1408,7 @@ accept-intercepted-requests 0
 allow-cgi-request-crunching 0
 #
 #
-#  5.6. split-large-forms
+#  6.3. split-large-forms
 #  =======================
 #
 #  Specifies:
@@ -1447,7 +1450,7 @@ allow-cgi-request-crunching 0
 split-large-forms 0
 #
 #
-#  5.7. keep-alive-timeout
+#  6.4. keep-alive-timeout
 #  ========================
 #
 #  Specifies:
@@ -1465,27 +1468,22 @@ split-large-forms 0
 #
 #  Effect if unset:
 #
-#      Connections are not reused.
+#      Connections are not kept alive.
 #
 #  Notes:
+#
+#      This option allows clients to keep the connection to Privoxy
+#      alive. If the server supports it, Privoxy will keep the
+#      connection to the server alive as well. Under certain
+#      circumstances this may result in speed-ups.
+#
+#      By default, Privoxy will close the connection to the server if
+#      the client connection gets closed, or if the specified timeout
+#      has been reached without a new request coming in. This behaviour
+#      can be changed with the connection-sharing option.
 #
 #      This option has no effect if Privoxy has been compiled without
 #      keep-alive support.
-#
-#  Notes:
-#
-#      Note that reusing connections doesn't necessary cause
-#      speedups. There are also a few privacy implications you should
-#      be aware of.
-#
-#      Outgoing connections are shared between clients (if there are
-#      more than one) and closing the client that initiated the outgoing
-#      connection does not affect the connection between Privoxy and
-#      the server unless the client's request hasn't been completed
-#      yet. If the outgoing connection is idle, it will not be closed
-#      until either Privoxy's or the server's timeout is reached. While
-#      it's open, the server knows that the system running Privoxy is
-#      still there.
 #
 #  Examples:
 #
@@ -1494,7 +1492,73 @@ split-large-forms 0
 keep-alive-timeout 300
 #
 #
-#  5.8. socket-timeout
+#  6.5. connection-sharing
+#  ========================
+#
+#  Specifies:
+#
+#      Whether or not outgoing connections that have been kept alive
+#      should be shared between different incoming connections.
+#
+#  Type of value:
+#
+#      0 or 1
+#
+#  Default value:
+#
+#      None
+#
+#  Effect if unset:
+#
+#      Connections are not shared.
+#
+#  Notes:
+#
+#      This option has no effect if Privoxy has been compiled without
+#      keep-alive support, or if it's disabled.
+#
+#  Notes:
+#
+#      Note that reusing connections doesn't necessary cause
+#      speedups. There are also a few privacy implications you should
+#      be aware of.
+#
+#      If this option is effective, outgoing connections are shared
+#      between clients (if there are more than one) and closing the
+#      client that initiated the outgoing connection does no longer
+#      affect the connection between Privoxy and the server unless
+#      the client's request hasn't been completed yet.
+#
+#      If the outgoing connection is idle, it will not be closed until
+#      either Privoxy's or the server's timeout is reached. While
+#      it's open, the server knows that the system running Privoxy is
+#      still there.
+#
+#      If there are more than one client (maybe even belonging to
+#      multiple users), they will be able to reuse each others
+#      connections. This is potentially dangerous in case of
+#      authentication schemes like NTLM where only the connection
+#      is authenticated, instead of requiring authentication for
+#      each request.
+#
+#      If there is only a single client, and if said client can keep
+#      connections alive on its own, enabling this option has next to
+#      no effect. If the client doesn't support connection keep-alive,
+#      enabling this option may make sense as it allows Privoxy to keep
+#      outgoing connections alive even if the client itself doesn't
+#      support it.
+#
+#      This option should only be used by experienced users who
+#      understand the risks and can weight them against the benefits.
+#
+#  Examples:
+#
+#      connection-sharing 1
+#
+#connection-sharing 1
+#
+#
+#  6.6. socket-timeout
 #  ====================
 #
 #  Specifies:
@@ -1527,7 +1591,63 @@ keep-alive-timeout 300
 socket-timeout 300
 #
 #
-#  6. WINDOWS GUI OPTIONS
+#  6.7. max-client-connections
+#  ============================
+#
+#  Specifies:
+#
+#      Maximum number of client connections that will be served.
+#
+#  Type of value:
+#
+#      Positive number.
+#
+#  Default value:
+#
+#      None
+#
+#  Effect if unset:
+#
+#      Connections are served until a resource limit is reached.
+#
+#  Notes:
+#
+#      Privoxy creates one thread (or process) for every incoming
+#      client connection that isn't rejected based on the access
+#      control settings.
+#
+#      If the system is powerful enough, Privoxy can theoretically deal
+#      with several hundred (or thousand) connections at the same time,
+#      but some operating systems enforce resource limits by shutting
+#      down offending processes and their default limits may be below
+#      the ones Privoxy would require under heavy load.
+#
+#      Configuring Privoxy to enforce a connection limit below the
+#      thread or process limit used by the operating system makes
+#      sure this doesn't happen.  Simply increasing the operating
+#      system's limit would work too, but if Privoxy isn't the only
+#      application running on the system, you may actually want to
+#      limit the resources used by Privoxy.
+#
+#      If Privoxy is only used by a single trusted user, limiting the
+#      number of client connections is probably unnecessary. If there
+#      are multiple possibly untrusted users you probably still want
+#      to additionally use a packet filter to limit the maximal number
+#      of incoming connections per client. Otherwise a malicious user
+#      could intentionally create a high number of connections to
+#      prevent other users from using Privoxy.
+#
+#      Obviously using this option only makes sense if you choose a
+#      limit below the one enforced by the operating system.
+#
+#  Examples:
+#
+#      max-client-connections 256
+#
+#max-client-connections 256
+#
+#
+#  7. WINDOWS GUI OPTIONS
 #  =======================
 #
 #  Privoxy has a number of options specific to the Windows GUI

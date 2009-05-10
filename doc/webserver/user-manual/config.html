@@ -3581,13 +3581,22 @@ CLASS="QUOTE"
 ></DL
 ></DIV
 ></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="MISC"
+>7.6. Miscellaneous</A
+></H2
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
 NAME="ACCEPT-INTERCEPTED-REQUESTS"
->7.5.5. accept-intercepted-requests</A
+>7.6.1. accept-intercepted-requests</A
 ></H4
 ><P
 ></P
@@ -3681,7 +3690,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="ALLOW-CGI-REQUEST-CRUNCHING"
->7.5.6. allow-cgi-request-crunching</A
+>7.6.2. allow-cgi-request-crunching</A
 ></H4
 ><P
 ></P
@@ -3764,7 +3773,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SPLIT-LARGE-FORMS"
->7.5.7. split-large-forms</A
+>7.6.3. split-large-forms</A
 ></H4
 ><P
 ></P
@@ -3853,7 +3862,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="KEEP-ALIVE-TIMEOUT"
->7.5.8. keep-alive-timeout</A
+>7.6.4. keep-alive-timeout</A
 ></H4
 ><P
 ></P
@@ -3889,44 +3898,43 @@ CLASS="REPLACEABLE"
 >Effect if unset:</DT
 ><DD
 ><P
->    Connections are not reused.
+>    Connections are not kept alive.
    </P
 ></DD
 ><DT
 >Notes:</DT
 ><DD
+><P
+>    This option allows clients to keep the connection to <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    alive. If the server supports it, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will keep
+    the connection to the server alive as well. Under certain
+    circumstances this may result in speed-ups.
+   </P
+><P
+>    By default, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will close the connection to the server if
+    the client connection gets closed, or if the specified timeout
+    has been reached without a new request coming in. This behaviour
+    can be changed with the <A
+HREF="#CONNECTION-SHARING"
+TARGET="_top"
+>connection-sharing</A
+> option.
+   </P
 ><P
 >    This option has no effect if <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
     has been compiled without keep-alive support.
-   </P
-></DD
-><DT
->Notes:</DT
-><DD
-><P
->    Note that reusing connections doesn't necessary cause speedups.
-    There are also a few privacy implications you should be aware of.
-   </P
-><P
->    Outgoing connections are shared between clients (if there are more
-    than one) and closing the client that initiated the outgoing connection
-    does not affect the connection between <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> and the server unless
-    the client's request hasn't been completed yet. If the outgoing connection
-    is idle, it will not be closed until either <SPAN
-CLASS="APPLICATION"
->Privoxy's</SPAN
->
-    or the server's timeout is reached. While it's open, the server knows
-    that the system running <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> is still there.
    </P
 ></DD
 ><DT
@@ -3944,8 +3952,125 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="CONNECTION-SHARING"
+>7.6.5. connection-sharing</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether or not outgoing connections that have been kept alive
+    should be shared between different incoming connections.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>0 or 1</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>None</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Connections are not shared.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This option has no effect if <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    has been compiled without keep-alive support, or if it's disabled.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Note that reusing connections doesn't necessary cause speedups.
+    There are also a few privacy implications you should be aware of.
+   </P
+><P
+>    If this option is effective, outgoing connections are shared between
+    clients (if there are more than one) and closing the client that initiated
+    the outgoing connection does no longer affect the connection between <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    and the server unless the client's request hasn't been completed yet.
+   </P
+><P
+>    If the outgoing connection  is idle, it will not be closed until either
+    <SPAN
+CLASS="APPLICATION"
+>Privoxy's</SPAN
+> or the server's timeout is reached.
+    While it's open, the server knows that the system running <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is still
+    there.
+   </P
+><P
+>    If there are more than one client (maybe even belonging to multiple users),
+    they will be able to reuse each others connections. This is potentially
+    dangerous in case of authentication schemes like NTLM where only the
+    connection is authenticated, instead of requiring authentication for
+    each request.
+   </P
+><P
+>    If there is only a single client, and if said client can keep connections
+    alive on its own, enabling this option has next to no effect. If the client
+    doesn't support connection keep-alive, enabling this option may make sense
+    as it allows <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to keep outgoing connections alive even if the client
+    itself doesn't support it.
+   </P
+><P
+>    This option should only be used by experienced users who
+    understand the risks and can weight them against the benefits.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    connection-sharing 1
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="SOCKET-TIMEOUT"
->7.5.9. socket-timeout</A
+>7.6.6. socket-timeout</A
 ></H4
 ><P
 ></P
@@ -4004,6 +4129,120 @@ CLASS="REPLACEABLE"
 ></DL
 ></DIV
 ></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="MAX-CLIENT-CONNECTIONS"
+>7.6.7. max-client-connections</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Maximum number of client connections that will be served.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>Positive number.</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>None</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Connections are served until a resource limit is reached.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> creates one thread (or process) for every incoming client
+    connection that isn't rejected based on the access control settings.
+   </P
+><P
+>    If the system is powerful enough, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> can theoretically deal with
+    several hundred (or thousand) connections at the same time, but some
+    operating systems enforce resource limits by shutting down offending
+    processes and their default limits may be below the ones <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> would
+    require under heavy load.
+   </P
+><P
+>    Configuring <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> to enforce a connection limit below the thread
+    or process limit used by the operating system makes sure this doesn't
+    happen. Simply increasing the operating system's limit would work too,
+    but if <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> isn't the only application running on the system,
+    you may actually want to limit the resources used by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+   </P
+><P
+>    If <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> is only used by a single trusted user, limiting the
+    number of client connections is probably unnecessary. If there
+    are multiple possibly untrusted users you probably still want to
+    additionally use a packet filter to limit the maximal number of
+    incoming connections per client. Otherwise a malicious user could
+    intentionally create a high number of connections to prevent other
+    users from using <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+   </P
+><P
+>    Obviously using this option only makes sense if you choose a limit
+    below the one enforced by the operating system.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    max-client-connections 256
+   </P
+></DD
+></DL
+></DIV
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -4011,7 +4250,7 @@ CLASS="SECT2"
 CLASS="SECT2"
 ><A
 NAME="WINDOWS-GUI"
->7.6. Windows GUI Options</A
+>7.7. Windows GUI Options</A
 ></H2
 ><P
 > <SPAN
