@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.21 2009/02/15 14:49:10 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.22 2009/02/22 15:07:58 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -27,7 +27,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.11
+for-privoxy-version=3.0.13
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
@@ -476,9 +476,15 @@ TAG:^No Host header$
 {}
 TAG:^Host header other than the target host$
 
-# XXX: check the RFC to use a real value
-# Set Header = Keep-Alive: Yes
+# Set Header = Keep-Alive: 20
+# Expect Header = NO CHANGE
+# Level = 13
+{}
+TAG:^Pass Keep-Alive header$
+
+# Set Header = Keep-Alive: 20
 # Expect Header = REMOVAL
+# Level = 14
 {}
 TAG:^Keep-Alive header removal$
 
