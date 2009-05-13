@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.24 2009/05/01 11:04:19 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.25 2009/05/10 10:20:09 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -991,6 +991,20 @@ sub handle_loglevel_header ($) {
         # XXX: Could highlight more here.
         $content =~ s@(?<=^Content-Type: )(.*)(?= not replaced)@$h{'content-type'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Server keep-alive timeout is/) {
+
+       # Server keep-alive timeout is 5. Sticking with 10.
+
+       $content =~ s@(?<=timeout is )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+       $content =~ s@(?<=Sticking with )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Reducing keep-alive timeout/) {
+
+       # Reducing keep-alive timeout from 60 to 10.
+
+       $content =~ s@(?<= from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+       $content =~ s@(?<= to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } else {
 
         found_unknown_content($content);
@@ -1476,6 +1490,7 @@ sub handle_loglevel_connect ($) {
 
         # Remembering socket 13 for www.privoxy.org:80 in slot 0.
         # Forgetting socket 38 for www.privoxy.org:80 in slot 5.
+
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
