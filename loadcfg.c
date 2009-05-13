@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.99 2009/05/10 10:12:30 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.100 2009/05/10 10:19:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -35,6 +35,10 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.99 2009/05/10 10:12:30 fabiankeil
  *
  * Revisions   :
  *    $Log: loadcfg.c,v $
+ *    Revision 1.100  2009/05/10 10:19:23  fabiankeil
+ *    Reenable server-side-only keep-alive support, but only share
+ *    outgoing connections if the connection-sharing option is set.
+ *
  *    Revision 1.99  2009/05/10 10:12:30  fabiankeil
  *    Initial keep-alive support for the client socket.
  *    Temporarily disable the server-side-only keep-alive code.
@@ -1414,7 +1418,7 @@ struct configuration_spec * load_config(void)
                if (0 <= timeout)
                {
                   config->feature_flags |= RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
-                  config->keep_alive_timeout = timeout;
+                  config->keep_alive_timeout = (unsigned int)timeout;
                }
                else
                {

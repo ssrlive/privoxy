@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.49 2009/05/10 10:12:30 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.50 2009/05/10 10:19:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,10 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.49 2009/05/10 10:12:30 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.50  2009/05/10 10:19:23  fabiankeil
+ *    Reenable server-side-only keep-alive support, but only share
+ *    outgoing connections if the connection-sharing option is set.
+ *
  *    Revision 1.49  2009/05/10 10:12:30  fabiankeil
  *    Initial keep-alive support for the client socket.
  *    Temporarily disable the server-side-only keep-alive code.
@@ -341,7 +345,7 @@ static const char socks_userid[] = "anonymous";
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 
 #define MAX_REUSABLE_CONNECTIONS 100
-static int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
+static unsigned int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
 
 static struct reusable_connection reusable_connection[MAX_REUSABLE_CONNECTIONS];
 static int mark_connection_unused(jb_socket sfd);
@@ -773,7 +777,7 @@ static int mark_connection_unused(jb_socket sfd)
  * Returns     :  void
  *
  *********************************************************************/
-void set_keep_alive_timeout(int timeout)
+void set_keep_alive_timeout(unsigned int timeout)
 {
    keep_alive_timeout = timeout;
 }
