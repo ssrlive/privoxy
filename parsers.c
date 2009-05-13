@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.154 2009/03/13 14:10:07 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.155 2009/05/10 10:12:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -44,6 +44,10 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.154 2009/03/13 14:10:07 fabiankei
  *
  * Revisions   :
  *    $Log: parsers.c,v $
+ *    Revision 1.155  2009/05/10 10:12:30  fabiankeil
+ *    Initial keep-alive support for the client socket.
+ *    Temporarily disable the server-side-only keep-alive code.
+ *
  *    Revision 1.154  2009/03/13 14:10:07  fabiankeil
  *    Fix some more harmless warnings on amd64.
  *
@@ -986,6 +990,7 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 static jb_err server_save_content_length(struct client_state *csp, char **header);
+static jb_err server_keep_alive(struct client_state *csp, char **header);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 static jb_err client_host_adder       (struct client_state *csp);
@@ -1055,6 +1060,7 @@ static const struct parsers server_patterns[] = {
    { "Content-Encoding:",        17, server_content_encoding },
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Content-Length:",          15, server_save_content_length },
+   { "Keep-Alive:",              11, server_keep_alive },
 #else
    { "Keep-Alive:",              11, crumble },
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
@@ -2431,6 +2437,58 @@ static jb_err server_connection(struct client_state *csp, char **header)
 
    return JB_ERR_OK;
 }
+
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/*********************************************************************
+ *
+ * Function    :  server_keep_alive
+ *
+ * Description :  Stores the servers keep alive timeout.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK.
+ *
+ *********************************************************************/
+static jb_err server_keep_alive(struct client_state *csp, char **header)
+{
+   unsigned int keep_alive_timeout;
+   const char *timeout_position = strstr(*header, "timeout=");
+
+   if ((NULL != timeout_position)
+    && (1 != sscanf(timeout_position, "timeout=%u", &keep_alive_timeout)))
+   {
+      log_error(LOG_LEVEL_ERROR, "Couldn't parse: %s", *header);
+   }
+   else
+   {
+      if (keep_alive_timeout < csp->server_connection.keep_alive_timeout)
+      {
+         log_error(LOG_LEVEL_HEADER,
+            "Reducing keep-alive timeout from %u to %u.",
+            csp->server_connection.keep_alive_timeout, keep_alive_timeout);
+         csp->server_connection.keep_alive_timeout = keep_alive_timeout;
+      }
+      else
+      {
+         /* XXX: Is this log worthy? */
+         log_error(LOG_LEVEL_HEADER,
+            "Server keep-alive timeout is %u. Sticking with %u.",
+            keep_alive_timeout, csp->server_connection.keep_alive_timeout);
+      }
+   }
+
+   return JB_ERR_OK;
+}
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+
 
 /*********************************************************************
  *

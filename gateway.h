@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.13 2009/05/10 10:12:30 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.14 2009/05/13 18:20:54 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -36,6 +36,9 @@
  *
  * Revisions   :
  *    $Log: gateway.h,v $
+ *    Revision 1.14  2009/05/13 18:20:54  fabiankeil
+ *    There's no reason for keep_alive_timeout to be signed.
+ *
  *    Revision 1.13  2009/05/10 10:12:30  fabiankeil
  *    Initial keep-alive support for the client socket.
  *    Temporarily disable the server-side-only keep-alive code.
@@ -131,7 +134,8 @@ extern void initialize_reusable_connections(void);
 extern void forget_connection(jb_socket sfd);
 extern void remember_connection(jb_socket sfd,
                                 const struct http_request *http,
-                                const struct forward_spec *fwd);
+                                const struct forward_spec *fwd,
+                                unsigned int timeout);
 extern int close_unusable_connections(void);
 extern void mark_connection_closed(struct reusable_connection *closed_connection);
 extern int connection_destination_matches(const struct reusable_connection *connection,

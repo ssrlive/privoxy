@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.135 2009/05/10 10:19:23 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.136 2009/05/13 18:20:54 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -37,6 +37,9 @@
  *
  * Revisions   :
  *    $Log: project.h,v $
+ *    Revision 1.136  2009/05/13 18:20:54  fabiankeil
+ *    There's no reason for keep_alive_timeout to be signed.
+ *
  *    Revision 1.135  2009/05/10 10:19:23  fabiankeil
  *    Reenable server-side-only keep-alive support, but only share
  *    outgoing connections if the connection-sharing option is set.
@@ -1321,6 +1324,11 @@ struct reusable_connection
    jb_socket sfd;
    int       in_use;
    time_t    timestamp;
+   /*
+    * Number of seconds after which this
+    * connection will no longer be reused.
+    */
+   unsigned int keep_alive_timeout;
 
    char *host;
    int  port;
@@ -1879,7 +1887,7 @@ struct configuration_spec
    int socket_timeout;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   /* Number of seconds after which an open connection will no longer be reused. */
+   /* Maximum number of seconds after which an open connection will no longer be reused. */
    unsigned int keep_alive_timeout;
 #endif
 

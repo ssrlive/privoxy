@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.247 2009/05/10 10:19:23 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.248 2009/05/10 10:25:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -33,6 +33,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.247 2009/05/10 10:19:23 fabiankeil Exp $"
  *
  * Revisions   :
  *    $Log: jcc.c,v $
+ *    Revision 1.248  2009/05/10 10:25:19  fabiankeil
+ *    Change wait_for_alive_connection() prototype to use (void).
+ *
  *    Revision 1.247  2009/05/10 10:19:23  fabiankeil
  *    Reenable server-side-only keep-alive support, but only share
  *    outgoing connections if the connection-sharing option is set.
@@ -2899,6 +2902,7 @@ static void chat(struct client_state *csp)
       }
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       save_connection_destination(csp->sfd, http, fwd, &csp->server_connection);
+      csp->server_connection.keep_alive_timeout = (unsigned)csp->config->keep_alive_timeout;
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
@@ -3536,7 +3540,7 @@ static void serve(struct client_state *csp)
             csp->sfd, csp->server_connection.host);
 
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
-            && data_is_available(csp->cfd, csp->config->keep_alive_timeout)
+            && data_is_available(csp->cfd, (int)csp->server_connection.keep_alive_timeout)
             && socket_is_still_usable(csp->cfd))
          {
             log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
@@ -3572,7 +3576,8 @@ static void serve(struct client_state *csp)
             if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
             {
                remember_connection(csp->sfd, csp->http,
-                  forward_url(csp, csp->http));
+                  forward_url(csp, csp->http),
+                  csp->server_connection.keep_alive_timeout);
                csp->sfd = JB_INVALID_SOCKET;
                close_socket(csp->cfd);
                csp->cfd = JB_INVALID_SOCKET;

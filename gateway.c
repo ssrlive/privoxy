@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.50 2009/05/10 10:19:23 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.51 2009/05/13 18:20:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -34,6 +34,9 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.50 2009/05/10 10:19:23 fabiankeil
  *
  * Revisions   :
  *    $Log: gateway.c,v $
+ *    Revision 1.51  2009/05/13 18:20:54  fabiankeil
+ *    There's no reason for keep_alive_timeout to be signed.
+ *
  *    Revision 1.50  2009/05/10 10:19:23  fabiankeil
  *    Reenable server-side-only keep-alive support, but only share
  *    outgoing connections if the connection-sharing option is set.
@@ -392,12 +395,16 @@ extern void initialize_reusable_connections(void)
  *          1  :  sfd  = Open socket to remember.
  *          2  :  http = The destination for the connection.
  *          3  :  fwd  = The forwarder settings used.
+ *          4  :  timeout = Number of seconds after which the
+ *                          connection shouldn't be reused.
  *
  * Returns     : void
  *
  *********************************************************************/
-void remember_connection(jb_socket sfd, const struct http_request *http,
-                                        const struct forward_spec *fwd)
+void remember_connection(jb_socket sfd,
+                         const struct http_request *http,
+                         const struct forward_spec *fwd,
+                         unsigned int timeout)
 {
    unsigned int slot = 0;
    int free_slot_found = FALSE;
@@ -445,6 +452,7 @@ void remember_connection(jb_socket sfd, const struct http_request *http,
    reusable_connection[slot].port = http->port;
    reusable_connection[slot].in_use = 0;
    reusable_connection[slot].timestamp = time(NULL);
+   reusable_connection[slot].keep_alive_timeout = timeout;
 
    assert(NULL != fwd);
    assert(reusable_connection[slot].gateway_host == NULL);
@@ -505,6 +513,7 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    freez(closed_connection->host);
    closed_connection->port = 0;
    closed_connection->timestamp = 0;
+   closed_connection->keep_alive_timeout = 0;
    closed_connection->forwarder_type = SOCKS_NONE;
    freez(closed_connection->gateway_host);
    closed_connection->gateway_port = 0;
@@ -635,14 +644,15 @@ int close_unusable_connections(void)
       {
          time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
 
-         if (keep_alive_timeout < time_open)
+         if (reusable_connection[slot].keep_alive_timeout < time_open)
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d timed out. "
                "Closing socket %d. Timeout is: %d.",
                reusable_connection[slot].host,
                reusable_connection[slot].port, slot,
-               reusable_connection[slot].sfd, keep_alive_timeout);
+               reusable_connection[slot].sfd,
+               reusable_connection[slot].keep_alive_timeout);
             close_socket(reusable_connection[slot].sfd);
             mark_connection_closed(&reusable_connection[slot]);
          }
