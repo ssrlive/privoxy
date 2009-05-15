@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.25 2009/05/10 10:20:09 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.26 2009/05/13 18:24:11 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2035,7 +2035,7 @@ just don't highlight them.
 [B<--html-output>] Use HTML and CSS for the syntax highlighting. If this option is
 omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is active.
 This option is only intended to make embedding log excerpts in web pages easier.
-It does not excape any input!
+It does not escape any input!
 
 [B<--no-msecs>] Don't expect milisecond resolution
 
