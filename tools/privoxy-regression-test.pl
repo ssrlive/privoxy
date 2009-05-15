@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.169 2009/05/01 09:26:56 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.170 2009/05/15 20:25:51 fk Exp $
 #
 # Wish list:
 #
@@ -510,8 +510,7 @@ sub execute_regression_tests () {
                 if (defined $skip_reason) {
 
                     my $message = "Skipping test " . $number . ": " . $skip_reason . ".";
-                    log_message($message) if (cli_option_is_set('verbose') or
-                                              cli_option_is_set('show-skipped-tests'));
+                    log_message($message) if (cli_option_is_set('show-skipped-tests'));
                     $skipped++;
 
                 } else {
@@ -535,7 +534,6 @@ sub execute_regression_tests () {
         $all_tests     += $tests;
         $all_failures  += $failures;
         $all_successes += $successes;
-
     }
 
     if (get_cli_option('loops') > 1) {
@@ -622,7 +620,6 @@ sub register_dependency ($$) {
     } elsif ($dependency =~ /feature status\s+(.*)/) {
 
         $dependencies{$level}{'feature status'} = $1;
-
     }
 }
 
@@ -905,7 +902,6 @@ sub check_header_result ($$) {
               "Ooops. Got: '" . $header . "' while expecting: SOME CHANGE");
         }
 
-
     } else {
 
         if (defined($header) and $header eq $expect_header) {
@@ -957,7 +953,6 @@ sub get_header ($$) {
      or  $expect_header eq 'SOME CHANGE') {
 
         $expect_header = $test{'data'};
-
     }
 
     $header_to_get = get_header_name($expect_header);
@@ -1497,7 +1492,6 @@ sub init_proxy_settings($) {
         if (cli_option_is_set('privoxy-address')) {
             $proxy .=  get_cli_option('privoxy-address');
         }
-
     }
 }
 
@@ -1691,7 +1685,8 @@ number.
 
 B<--show-skipped-tests> Log skipped tests even if verbose mode is off.
 
-B<--verbose> Log succesful and skipped tests.
+B<--verbose> Log succesful tests as well. By default only
+the failures are logged.
 
 B<--version> Print version and exit.
 
