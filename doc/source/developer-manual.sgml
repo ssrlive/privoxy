@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: developer-manual.sgml,v 2.26 2009/02/12 16:08:26 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.27 2009/02/19 02:20:22 hal9 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.26 2009/02/12 16:08:26 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.27 2009/02/19 02:20:22 hal9 Exp $</pubdate>
 
 <!--
 
@@ -1854,9 +1854,6 @@ const char FILENAME_rcs[] = "$I<!-- Break CVS Substitution -->d$";
  *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 ,
  *                USA
  *
- * Revisions   :
- *    $L<!-- Break CVS Substitution -->og$
- *
  *********************************************************************/
 
 
@@ -1910,9 +1907,6 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  *                or write to the Free Software Foundation, Inc., 
  *                51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 ,
  *                USA
- *
- * Revisions   :
- *    $L<!-- Break CVS Substitution -->og$
  *
  *********************************************************************/
 
@@ -3011,6 +3005,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.27  2009/02/19 02:20:22  hal9
+  Make some links in seealso conditional. Man page is now privoxy only links.
+
   Revision 2.26  2009/02/12 16:08:26  fabiankeil
   Declare the code stable.
 

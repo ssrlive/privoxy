@@ -15,14 +15,6 @@
 #                Foundation; either version 2 of the License, or (at
 #                your option) any later version.
 #
-# Revisions   :
-#    $Log: mod-support-and-service,v $
-#    Revision 1.10  2007/03/17 11:31:36  fabiankeil
-#    - Add revision log and copyright header.
-#    - Reword instructions and link to the FAQ
-#      in an attempt to reduce the number of
-#      incomplete reports.
-#
 ##############################################################################
        <h2>Support and Service:</h2>
         <p>

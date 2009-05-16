@@ -1,9 +1,9 @@
 #ifndef W32_SVRAPI_H_INCLUDED
 #define W32_SVRAPI_H_INCLUDED
-#define W32_SVRAPI_H_VERSION "$Id$"
+#define W32_SVRAPI_H_VERSION "$Id: w32svrapi.h,v 1.1 2006/08/12 03:54:37 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $Source: /cvsroot/ijbswa/current/w32svrapi.h,v $
  *
  * Purpose     :  Win32 Services API for Privoxy.
  *                Provides the implementation of an Win32 service to
@@ -47,12 +47,8 @@
  *                or write to the Free Software Foundation, Inc., 59
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Revisions   :
- *    $Log$
- *
- *
  *********************************************************************/
-
+
 
 #ifdef __cplusplus
 extern "C" {

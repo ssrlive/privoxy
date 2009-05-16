@@ -1,9 +1,9 @@
 #ifndef WIN32_H_INCLUDED
 #define WIN32_H_INCLUDED
-#define WIN32_H_VERSION "$Id: win32.h,v 1.5 2002/03/26 22:57:10 jongfoster Exp $"
+#define WIN32_H_VERSION "$Id: win32.h,v 1.7 2006/07/18 14:48:48 david__schmidt Exp $"
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/Attic/win32.h,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/win32.h,v $
  *
  * Purpose     :  Win32 User Interface initialization and message loop
  *
@@ -31,30 +31,8 @@
  *                or write to the Free Software Foundation, Inc., 59
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * Revisions   :
- *    $Log: win32.h,v $
- *    Revision 1.5  2002/03/26 22:57:10  jongfoster
- *    Web server name should begin www.
- *
- *    Revision 1.4  2002/03/24 12:03:47  jongfoster
- *    Name change
- *
- *    Revision 1.3  2001/07/30 22:08:36  jongfoster
- *    Tidying up #defines:
- *    - All feature #defines are now of the form FEATURE_xxx
- *    - Permanently turned off WIN_GUI_EDIT
- *    - Permanently turned on WEBDAV and SPLIT_PROXY_ARGS
- *
- *    Revision 1.2  2001/07/29 18:43:08  jongfoster
- *    Changing #ifdef _FILENAME_H to FILENAME_H_INCLUDED, to conform to
- *    ANSI C rules.
- *
- *    Revision 1.1.1.1  2001/05/15 13:59:08  oes
- *    Initial import of version 2.9.3 source tree
- *
- *
  *********************************************************************/
-
+
 
 #ifdef __cplusplus
 extern "C" {
