@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.30 2009/05/16 13:27:20 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.31 2009/05/19 17:42:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -682,7 +682,7 @@ int pcrs_execute_list(pcrs_job *joblist, char *subject, size_t subject_length, c
  
    old = subject;
    *result_length = subject_length;
-   hits = total_hits = 0;
+   total_hits = 0;
 
    for (job = joblist; job != NULL; job = job->next)
    {
