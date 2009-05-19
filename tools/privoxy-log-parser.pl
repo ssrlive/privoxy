@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.26 2009/05/13 18:24:11 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.145 2009/05/19 17:21:35 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1555,6 +1555,14 @@ sub handle_loglevel_connect ($) {
 
         $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.$)');
+
+    } elsif ($c =~ m/^Connected to /) {
+
+        # Connected to tor-jail[10.0.0.2]:9050.
+
+        $c = highlight_matched_host($c, '(?<=\[)[^\]]+');
+        $c = highlight_matched_host($c, '(?<=Connected to )[^\[\s]+');
+        $c =~ s@(?<=\]:)(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Waiting for the next client request/ or
              $c =~ m/^The connection on server socket/ ) {
