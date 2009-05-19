@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.158 2009/05/19 17:27:05 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.159 2009/05/19 17:48:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1617,8 +1617,8 @@ static jb_err server_keep_alive(struct client_state *csp, char **header)
    unsigned int keep_alive_timeout;
    const char *timeout_position = strstr(*header, "timeout=");
 
-   if ((NULL != timeout_position)
-    && (1 != sscanf(timeout_position, "timeout=%u", &keep_alive_timeout)))
+   if ((NULL == timeout_position)
+    || (1 != sscanf(timeout_position, "timeout=%u", &keep_alive_timeout)))
    {
       log_error(LOG_LEVEL_ERROR, "Couldn't parse: %s", *header);
    }
