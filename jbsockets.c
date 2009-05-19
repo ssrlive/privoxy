@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.56 2009/05/16 13:27:20 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.57 2009/05/19 17:18:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -222,7 +222,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
       }
 #endif /* def TCP_NODELAY */
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) 
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
       if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
       {
          flags |= O_NDELAY;
@@ -276,29 +276,30 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
       tv->tv_usec = 0;
 
       /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
-      if (select((int)fd + 1, NULL, &wfds, NULL, tv) > 0 &&
-            FD_ISSET(fd, &wfds))
+      if ((select((int)fd + 1, NULL, &wfds, NULL, tv) > 0)
+         && FD_ISSET(fd, &wfds))
       {
-         /* See Linux connect(2) man page for more info about connecting on
-          * non-blocking socket. */
+         /*
+          * See Linux connect(2) man page for more info
+          * about connecting on non-blocking socket.
+          */
          int socket_in_error;
          socklen_t optlen = sizeof(socket_in_error);
          if (!getsockopt(fd, SOL_SOCKET, SO_ERROR, &socket_in_error, &optlen))
          {
             if (!socket_in_error)
             {
-               break; /* for; Connection established; don't try other addresses */
+               /* Connection established, no need to try other addresses. */
+               break;
             }
-            log_error(LOG_LEVEL_INFO, "Could not connect to TCP/[%s]:%s: %s",
-                  csp->http->host_ip_addr_str, service,
-                  strerror(socket_in_error));
+            log_error(LOG_LEVEL_CONNECT, "Could not connect to [%s]:%s: %s.",
+               csp->http->host_ip_addr_str, service, strerror(socket_in_error));
          }
          else
          {
-            log_error(LOG_LEVEL_ERROR,
-                  "Could not get state of TCP connection to [%s]:%s: %s;"
-                  " dropping connection",
-                  csp->http->host_ip_addr_str, service, strerror(errno));
+            log_error(LOG_LEVEL_ERROR, "Could not get the state of "
+               "the connection to [%s]:%s: %s; dropping connection.",
+               csp->http->host_ip_addr_str, service, strerror(errno));
          }
       }
 
@@ -309,12 +310,12 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
    freeaddrinfo(result);
    if (!rp)
    {
-      log_error(LOG_LEVEL_INFO,
-         "Could not connect to TCP/[%s]:%s", host, service);
+      log_error(LOG_LEVEL_INFO, "Could not connect to [%s]:%s.",
+         host, service);
       return(JB_INVALID_SOCKET);
    }
-   log_error(LOG_LEVEL_INFO, "Connected to TCP/%s[%s]:%s", host,
-         csp->http->host_ip_addr_str, service);
+   log_error(LOG_LEVEL_CONNECT, "Connected to %s[%s]:%s.",
+      host, csp->http->host_ip_addr_str, service);
 
    return(fd);
 
