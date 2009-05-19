@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.31 2009/05/19 17:42:32 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.32 2009/05/19 17:44:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -481,7 +481,7 @@ pcrs_job *pcrs_compile_command(const char *command, int *errptr)
    char *tokens[4];   
    pcrs_job *newjob;
    
-   i = k = l = 0;
+   k = l = 0;
    
    /*
     * Tokenize the perl command
