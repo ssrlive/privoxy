@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.51 2009/05/16 13:27:20 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.52 2009/05/19 17:39:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1235,7 +1235,7 @@ int match_portlist(const char *portlist, int port)
    /*
     * Loop through all items, checking for match
     */
-   while(min)
+   while (NULL != min)
    {
       if (NULL == (max = strchr(min, (int) '-')))
       {
