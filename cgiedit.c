@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.65 2009/03/08 14:19:22 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.66 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1588,7 +1588,7 @@ jb_err edit_read_file(struct client_state *csp,
        * Probably an old-school URL like
        * http://config.privoxy.org/edit-actions-list?f=default
        */
-      err = get_file_name_param(csp, parameters, "f", &filename);
+      get_file_name_param(csp, parameters, "f", &filename);
    }
 
    if (NULL == filename || stat(filename, statbuf) < 0)
