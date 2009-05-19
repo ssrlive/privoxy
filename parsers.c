@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.156 2009/05/13 18:22:45 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.157 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1672,22 +1672,27 @@ static jb_err client_connection(struct client_state *csp, char **header)
    if (strcmpic(*header, wanted_header))
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      log_error(LOG_LEVEL_HEADER,
-         "Keeping the client header '%s' around. "
-         "The connection will not be kept alive.",
-         *header);
-#else
-      char *old_header = *header;
-
-      *header = strdup(wanted_header);
-      if (header == NULL)
-      { 
-         return JB_ERR_MEMORY;
+      if (!(csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
+      {
+         log_error(LOG_LEVEL_HEADER,
+            "Keeping the client header '%s' around. "
+            "The connection will not be kept alive.",
+            *header);
       }
-      log_error(LOG_LEVEL_HEADER,
-         "Replaced: \'%s\' with \'%s\'", old_header, *header);
-      freez(old_header);
+      else
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+      {
+         char *old_header = *header;
+
+         *header = strdup(wanted_header);
+         if (header == NULL)
+         {
+            return JB_ERR_MEMORY;
+         }
+         log_error(LOG_LEVEL_HEADER,
+            "Replaced: \'%s\' with \'%s\'", old_header, *header);
+         freez(old_header);
+      }
    }
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    else
