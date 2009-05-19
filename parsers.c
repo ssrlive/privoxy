@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.159 2009/05/19 17:48:58 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.160 2009/05/19 17:52:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -471,7 +471,7 @@ jb_err decompress_iob(struct client_state *csp)
              */
             int skip_bytes;
             skip_bytes = *cur++;
-            skip_bytes = *cur++ << 8;
+            skip_bytes += *cur++ << 8;
 
             assert(skip_bytes == *csp->iob->cur - 2 + ((*csp->iob->cur - 1) << 8));
 
