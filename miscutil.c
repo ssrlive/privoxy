@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.62 2008/12/04 18:16:41 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.63 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -655,6 +655,7 @@ char * make_path(const char * dir, const char * file)
          strlcpy(path, dir, path_size);
       }
 
+      assert(NULL != path);
 #if defined(_WIN32) || defined(__OS2__)
       if(path[strlen(path)-1] != '\\')
       {
