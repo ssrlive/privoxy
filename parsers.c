@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.161 2009/05/19 18:02:03 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.162 2009/05/25 15:40:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3430,6 +3430,12 @@ static jb_err client_connection_header_adder(struct client_state *csp)
      && (flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
    {
       return JB_ERR_OK;
+   }
+
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+      && (csp->http->ssl == 0))
+   {
+      csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
    }
 
    log_error(LOG_LEVEL_HEADER, "Adding: %s", wanted_header);
