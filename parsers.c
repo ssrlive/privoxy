@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.160 2009/05/19 17:52:03 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.161 2009/05/19 18:02:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1562,30 +1562,32 @@ static jb_err filter_header(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err server_connection(struct client_state *csp, char **header)
 {
-   /* Do we have a 'Connection: close' header? */
-   if (strcmpic(*header, "Connection: close"))
+   if (!strcmpic(*header, "Connection: keep-alive"))
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if ((csp->config->feature_flags &
-           RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-         && !strcmpic(*header, "Connection: keep-alive"))
+      if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
       {
-         /* Remember to keep the connection alive. */
          csp->flags |= CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
       }
-      log_error(LOG_LEVEL_HEADER,
-         "Keeping the server header '%s' around.", *header);
-#else
-      char *old_header = *header;
 
-      *header = strdup("Connection: close");
-      if (header == NULL)
-      { 
-         return JB_ERR_MEMORY;
+      if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+      {
+         log_error(LOG_LEVEL_HEADER,
+            "Keeping the server header '%s' around.", *header);
       }
-      log_error(LOG_LEVEL_HEADER, "Replaced: \'%s\' with \'%s\'", old_header, *header);
-      freez(old_header);
+      else
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
+      {
+         char *old_header = *header;
+
+         *header = strdup("Connection: close");
+         if (header == NULL)
+         {
+            return JB_ERR_MEMORY;
+         }
+         log_error(LOG_LEVEL_HEADER, "Replaced: \'%s\' with \'%s\'", old_header, *header);
+         freez(old_header);
+      }
    }
 
    /* Signal server_connection_adder() to return early. */
