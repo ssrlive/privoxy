@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.172 2009/05/25 19:31:42 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.172 2009/05/25 19:31:42 fk Exp fk $
 #
 # Wish list:
 #
@@ -735,7 +735,7 @@ sub execute_sticky_actions_test ($) {
             # Exact match
             $verified_actions++;
 
-        } elsif ($sticky_action =~ /-.*\{/ {
+        } elsif ($sticky_action =~ /-.*\{/) {
 
             # Disabled multi actions aren't explicitly listed as
             # disabled and thus have to be checked by verifying
