@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.145 2009/05/19 17:21:35 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.146 2009/05/25 19:10:20 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1562,6 +1562,13 @@ sub handle_loglevel_connect ($) {
 
         $c = highlight_matched_host($c, '(?<=\[)[^\]]+');
         $c = highlight_matched_host($c, '(?<=Connected to )[^\[\s]+');
+        $c =~ s@(?<=\]:)(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Could not connect to /) {
+
+        # Could not connect to [10.0.0.1]:80.
+
+        $c = highlight_matched_host($c, '(?<=\[)[^\]]+');
         $c =~ s@(?<=\]:)(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Waiting for the next client request/ or
