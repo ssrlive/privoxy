@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.176 2009/05/08 06:59:18 ler762 Exp $
+#  $Id: default.action.master,v 1.177 2009/05/10 17:53:07 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1637,6 +1637,9 @@ qa.debian.org/popcon\.php
 #MASTER# UNBLOCK-REFERRER: www.myspace.com/bandofskulls
 # URL = http://lads.myspacecdn.com/videos/musicPlayerAssets.swf
 lads.myspacecdn.com/
+#MASTER# REMARKS: AF#2789653 iTunes download blocked
+# URL = http://a957.phobos.apple.com/us/r1000/000/Music/ad/47/56/mzi.gnjsyarh.aac.a.m4p
+.phobos.apple.com/
 
 
 #############################################################################
