@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.162 2009/05/25 15:40:52 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.163 2009/05/25 15:41:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3423,11 +3423,10 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
  *********************************************************************/
 static jb_err client_connection_header_adder(struct client_state *csp)
 {
-   const unsigned int flags = csp->flags;
    const char *wanted_header = get_appropiate_connection_header(csp);
 
-   if (!(flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
-     && (flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
+   if (!(csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
+     && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
    {
       return JB_ERR_OK;
    }
