@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.22 2009/02/22 15:07:58 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.23 2009/05/13 19:26:22 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -35,6 +35,8 @@ for-privoxy-version=3.0.13
 # Level 12 needs = config line enable-edit-actions\s+1
 # Level 13 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE Yes
 # Level 14 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE No
+# Level 15 needs = config line connection-sharing\s+0
+# Level 16 needs = config line connection-sharing\s+1
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -441,9 +443,6 @@ TAG:^filter\{banners-by-size\}$
 }
 TAG:^no-content-filter$
 
-# Set Header    = Connection: close
-# Expect Header = Connection: keep-alive
-# Level = 13
 # Set Header    = Connection: keep-alive
 # Expect Header = NO CHANGE
 # Level = 13
@@ -461,6 +460,21 @@ TAG:^Connection: keep-alive$
 # Level = 14
 {}
 TAG:^Connection: close$
+
+# Set Header    = Connection: close
+# Expect Header = NO CHANGE
+# Level = 15
+{}
+TAG:^connection-sharing disabled$
+
+# Set Header    = Connection: close
+# Expect Header = Connection: keep-alive
+# Level = 16
+# Set Header    = Connection: keep-alive
+# Expect Header = NO CHANGE
+# Level = 16
+{}
+TAG:^connection-sharing enabled$
 
 # XXX: Removing a header by not specifying a value is
 # an inherited curl feature and could be viewed as a
