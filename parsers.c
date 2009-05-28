@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.163 2009/05/25 15:41:52 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.164 2009/05/25 15:42:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2280,7 +2280,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
       now = time(NULL);
 #ifdef HAVE_GMTIME_R
       gmtime_r(&now, &gmt);
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
       privoxy_mutex_lock(&gmtime_mutex);
       gmtime(&now);
       privoxy_mutex_unlock(&gmtime_mutex);
@@ -2310,7 +2310,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
             last_modified += rtime;
 #ifdef HAVE_GMTIME_R
             timeptr = gmtime_r(&last_modified, &gmt);
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
             privoxy_mutex_lock(&gmtime_mutex);
             timeptr = gmtime(&last_modified);
             privoxy_mutex_unlock(&gmtime_mutex);
@@ -3030,7 +3030,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
             tm += rtime * (negative ? -1 : 1);
 #ifdef HAVE_GMTIME_R
             timeptr = gmtime_r(&tm, &gmt);
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
             privoxy_mutex_lock(&gmtime_mutex);
             timeptr = gmtime(&tm);
             privoxy_mutex_unlock(&gmtime_mutex);

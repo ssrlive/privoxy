@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.58 2009/05/19 17:20:35 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.59 2009/05/25 15:43:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -95,10 +95,8 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.58 2009/05/19 17:20:35 fabian
 
 #include "project.h"
 
-#ifdef FEATURE_PTHREAD
+/* For mutex semaphores only */
 #include "jcc.h"
-/* jcc.h is for mutex semaphores only */
-#endif /* def FEATURE_PTHREAD */
 
 #include "jbsockets.h"
 #include "filters.h"
@@ -947,7 +945,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       {
          host = NULL;
       }
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
       privoxy_mutex_lock(&resolver_mutex);
       host = gethostbyaddr((const char *)&server.sin_addr, 
                            sizeof(server.sin_addr), AF_INET);
@@ -1113,7 +1111,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
       {
          hostp = NULL;
       }
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
       privoxy_mutex_lock(&resolver_mutex);
       while (NULL == (hostp = gethostbyname(host))
              && (h_errno == TRY_AGAIN) && (dns_retries++ < MAX_DNS_RETRIES))

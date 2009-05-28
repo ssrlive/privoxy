@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.116 2009/03/15 14:59:34 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.117 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -62,12 +62,12 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.116 2009/03/15 14:59:34 fabiankeil Exp $"
 #if defined(FEATURE_CGI_EDIT_ACTIONS) || defined(FEATURE_TOGGLE)
 #include "cgiedit.h"
 #endif /* defined(FEATURE_CGI_EDIT_ACTIONS) || defined (FEATURE_TOGGLE) */
-#include "loadcfg.h"
+
 /* loadcfg.h is for global_toggle_state only */
-#ifdef FEATURE_PTHREAD
-#include "jcc.h"
+#include "loadcfg.h"
 /* jcc.h is for mutex semaphore globals only */
-#endif /* def FEATURE_PTHREAD */
+#include "jcc.h"
+
 const char cgi_h_rcs[] = CGI_H_VERSION;
 
 /*
@@ -1409,7 +1409,7 @@ void get_http_time(int time_offset, char *buf, size_t buffer_size)
    /* get and save the gmt */
 #if HAVE_GMTIME_R
    t = gmtime_r(&current_time, &dummy);
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
    privoxy_mutex_lock(&gmtime_mutex);
    t = gmtime(&current_time);
    privoxy_mutex_unlock(&gmtime_mutex);
@@ -1465,7 +1465,7 @@ static void get_locale_time(char *buf, size_t buffer_size)
 
 #if HAVE_LOCALTIME_R
    timeptr = localtime_r(&current_time, &dummy);
-#elif FEATURE_PTHREAD
+#elif def MUTEX_LOCKS_AVAILABLE
    privoxy_mutex_lock(&localtime_mutex);
    timeptr = localtime(&current_time);
    privoxy_mutex_unlock(&localtime_mutex);
