@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.23 2009/05/13 19:26:22 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.24 2009/05/27 20:37:15 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -252,6 +252,8 @@ TAG:^hide-if-modified-since\{block\}$
 # Expect Header = REMOVAL
 # Set Header    = If-Modified-Since: Thu, 04 Oct 2007 09:56:35 GMT
 # Expect Header = SOME CHANGE
+# Set Header    = If-Modified-Since: Thu, 1 Jan 1970 00:00:00 GMT
+# Expect Header = SOME CHANGE
 
 {+hide-if-modified-since{-60} -crunch-if-none-match}
 TAG:^hide-if-modified-since\{-60\}$
@@ -259,6 +261,8 @@ TAG:^hide-if-modified-since\{-60\}$
 # Set Header    = If-Modified-Since: Gee, this date is invalid
 # Expect Header = REMOVAL
 # Set Header    = If-Modified-Since: Thu, 04 Oct 2007 09:56:35 GMT
+# Expect Header = SOME CHANGE
+# Set Header    = If-Modified-Since: Wed, 31 Dec 1969 23:59:59 GMT
 # Expect Header = SOME CHANGE
 
 {+hide-if-modified-since{+60} -crunch-if-none-match}
