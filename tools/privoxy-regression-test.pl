@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.176 2009/05/27 20:26:59 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.179 2009/05/28 17:24:53 fk Exp $
 #
 # Wish list:
 #
@@ -69,13 +69,12 @@ use constant {
 
     # Internal use, don't modify
     # Available debug bits:
-    LL_ERROR            =>  1,
+    LL_SOFT_ERROR       =>  1,
     LL_VERBOSE_FAILURE  =>  2,
     LL_PAGE_FETCHING    =>  4,
     LL_FILE_LOADING     =>  8,
     LL_VERBOSE_SUCCESS  => 16,
     LL_STATUS           => 32,
-    LL_SOFT_ERROR       => 64,
 
     CLIENT_HEADER_TEST  =>  1,
     SERVER_HEADER_TEST  =>  2,
@@ -109,9 +108,8 @@ sub get_default_log_level () {
     $log_level |= LL_VERBOSE_SUCCESS if DEBUG_LEVEL_VERBOSE_SUCCESS;
     $log_level |= LL_STATUS          if DEBUG_LEVEL_STATUS;
 
-    # These are intended to be always on.
+    # This one is supposed to be always on.
     $log_level |= LL_SOFT_ERROR;
-    $log_level |= LL_ERROR;
 
     return $log_level;
 }
@@ -147,7 +145,7 @@ sub check_for_forbidden_characters ($) {
         my $forbidden = $string;
         $forbidden =~ s@^$allowed*(.).*@$1@;
 
-        l(LL_ERROR, "'" . $string . "' contains character '" . $forbidden. "' which is unacceptable.");
+        log_and_die("'" . $string . "' contains character '" . $forbidden. "' which is unacceptable.");
     }
 }
 
@@ -366,9 +364,8 @@ sub load_action_files ($) {
                 # Will be used by each following Sticky URL.
                 $sticky_actions = $value;
                 if ($sticky_actions =~ /{[^}]*\s/) {
-                    l(LL_ERROR,
-                      "'Sticky Actions' with whitespace inside the " .
-                      "action parameters are currently unsupported.");
+                    log_and_die("'Sticky Actions' with whitespace inside the " .
+                                "action parameters are currently unsupported.");
                 }
             }
             
@@ -434,7 +431,7 @@ sub load_action_files ($) {
                     l(LL_FILE_LOADING, "Sticky actions: " . $sticky_actions);
                     $regression_tests[$si][$ri]{'sticky-actions'} = $sticky_actions;
                 } else {
-                    l(LL_ERROR, "Sticky URL without Sticky Actions: $value");
+                    log_and_die("Sticky URL without Sticky Actions: $value");
                 }
 
             } else {
@@ -624,8 +621,8 @@ sub register_dependency ($$) {
         $dependencies{$level}{'feature status'} = $1;
 
     } else {
-        
-        l(LL_ERROR, "Didn't recognize dependency: $dependency.");
+
+        log_and_die("Didn't recognize dependency: $dependency.");
     }
 }
 
@@ -1010,7 +1007,7 @@ sub get_server_header ($$) {
     my $header_to_get;
 
     # XXX: Should be caught before starting to test.
-    l(LL_ERROR, "No expect header for test " . $test{'number'})
+    log_and_die("No expect header for test " . $test{'number'})
         unless defined $expect_header;
 
     if ($expect_header eq 'REMOVAL'
@@ -1051,7 +1048,7 @@ sub get_status_code ($) {
 
             return '123' if cli_option_is_set('fuzzer-feeding');
             chomp;
-            l(LL_ERROR, 'Unexpected buffer line: "' . $_ . '"');
+            log_and_die('Unexpected buffer line: "' . $_ . '"');
         }
     }
 }
@@ -1105,7 +1102,7 @@ sub fuzz_header($) {
 
 sub check_for_curl () {
     my $curl = CURL;
-    l(LL_ERROR, "No curl found.") unless (`which $curl`);
+    log_and_die("No curl found.") unless (`which $curl`);
 }
 
 sub get_cgi_page_or_else ($) {
@@ -1127,7 +1124,7 @@ sub get_cgi_page_or_else ($) {
 
         } else {
 
-            l(LL_ERROR, $log_message);
+            log_and_die($log_message);
         }
     }
     
@@ -1223,9 +1220,8 @@ sub get_page_with_curl ($) {
     } while ($? && --$retries_left);
 
     unless ($retries_left) {
-        l(LL_ERROR,
-          "Running curl failed " . get_cli_option('retries') .
-          " times in a row. Last error: '" . $failure_reason . "'.");
+        log_and_die("Running curl failed " . get_cli_option('retries') .
+                    " times in a row. Last error: '" . $failure_reason . "'.");
     }
 
     return \@buffer;
@@ -1260,17 +1256,14 @@ sub l ($$) {
     my $this_level = shift;
     my $message = shift;
 
-    return unless ($log_level & $this_level);
+    log_message($message) if ($log_level & $this_level);
+}
 
-    if (LL_ERROR & $this_level) {
-        $message = 'Oh noes. ' . $message . ' Fatal error. Exiting.';
-    }
+sub log_and_die ($) {
+    my $message = shift;
 
-    log_message($message);
-
-    if (LL_ERROR & $this_level) {
-        exit;
-    }
+    log_message('Oh noes. ' . $message . ' Fatal error. Exiting.');
+    exit;
 }
 
 sub log_message ($) {
@@ -1507,7 +1500,7 @@ sub init_proxy_settings($) {
 sub start_forks($) {
     my $forks = shift;
 
-    l(LL_ERROR, "Invalid --fork value: " . $forks . ".") if ($forks < 0); 
+    log_and_die("Invalid --fork value: " . $forks . ".") if ($forks < 0);
 
     foreach my $fork (1 .. $forks) {
         log_message("Starting fork $fork");
