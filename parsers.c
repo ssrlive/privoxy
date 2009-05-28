@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.164 2009/05/25 15:42:40 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.165 2009/05/28 17:07:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3389,7 +3389,8 @@ static jb_err server_connection_adder(struct client_state *csp)
  * Function    :  server_proxy_connection_adder
  *
  * Description :  Adds a "Proxy-Connection: keep-alive" header to
- *                csp->headers. XXX: We should reuse existant ones.
+ *                csp->headers if the client asked for keep-alive.
+ *                XXX: We should reuse existant ones.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3401,8 +3402,15 @@ static jb_err server_connection_adder(struct client_state *csp)
 static jb_err server_proxy_connection_adder(struct client_state *csp)
 {
    static const char proxy_connection_header[] = "Proxy-Connection: keep-alive";
-   log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
-   return enlist(csp->headers, proxy_connection_header);
+   jb_err err = JB_ERR_OK;
+
+   if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+   {
+      log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
+      err = enlist(csp->headers, proxy_connection_header);
+   }
+
+   return err;
 }
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
