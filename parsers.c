@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.170 2009/06/01 15:14:40 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.171 2009/06/01 15:33:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -582,14 +582,15 @@ jb_err decompress_iob(struct client_state *csp)
       char *tmpbuf;                /* used for realloc'ing the buffer */
       size_t oldbufsize = bufsize; /* keep track of the old bufsize */
 
-      /*
-       * If zlib wants more data then there's a problem, because
-       * the complete compressed file should have been buffered.
-       */
       if (0 == zstr.avail_in)
       {
-         log_error(LOG_LEVEL_ERROR, "Unexpected end of compressed iob");
-         return JB_ERR_COMPRESS;
+         /*
+          * If zlib wants more data then there's a problem, because
+          * the complete compressed file should have been buffered.
+          */
+         log_error(LOG_LEVEL_ERROR,
+            "Unexpected end of compressed iob. Using what we got so far.");
+         break;
       }
 
       /*
@@ -659,11 +660,15 @@ jb_err decompress_iob(struct client_state *csp)
        */
    }
 
-   if (status != Z_STREAM_END)
+   if ((status != Z_STREAM_END) && (0 != zstr.avail_in))
    {
-      /* We failed to decompress the stream. */
+      /*
+       * We failed to decompress the stream and it's
+       * not simply because of missing data.
+       */
       log_error(LOG_LEVEL_ERROR,
-         "Error in decompressing to the buffer (iob): %s", zstr.msg);
+         "Unexpected error while decompressing to the buffer (iob): %s",
+         zstr.msg);
       return JB_ERR_COMPRESS;
    }
 
