@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.180 2009/06/01 10:48:24 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.44 2009/06/01 10:49:07 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -139,7 +139,7 @@ sub parse_tag ($) {
 sub check_for_forbidden_characters ($) {
 
     my $string = shift;
-    my $allowed = '[-=\dA-Za-z~{}:./();\s,+@"_%?&*^]';
+    my $allowed = '[-=\dA-Za-z~{}:./();\t ,+@"_%?&*^]';
 
     unless ($string =~ m/^$allowed*$/o) {
         my $forbidden = $string;
