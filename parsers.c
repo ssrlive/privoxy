@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.169 2009/06/01 14:18:49 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.170 2009/06/01 15:14:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -451,29 +451,12 @@ jb_err decompress_iob(struct client_state *csp)
             /*
              * Skip a given number of bytes, specified
              * as a 16-bit little-endian value.
-             */
-            /*
-             * XXX: This code used to be:
-             * 
-             * csp->iob->cur += *csp->iob->cur++ + (*csp->iob->cur++ << 8);
              *
-             * which I had to change into:
-             *
-             * cur += *cur++ + (*cur++ << 8);
-             *
-             * at which point gcc43 finally noticed that the value
-             * of cur is undefined (it depends on which of the
-             * summands is evaluated first).
-             *
-             * I haven't come across a site where this
-             * code is actually executed yet, but I hope
-             * it works anyway.
+             * XXX: this code is untested and should probably be removed.
              */
             int skip_bytes;
             skip_bytes = *cur++;
             skip_bytes += *cur++ << 8;
-
-            assert(skip_bytes == *csp->iob->cur - 2 + ((*csp->iob->cur - 1) << 8));
 
             /*
              * The number of bytes to skip should be positive
