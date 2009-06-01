@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.44 2009/06/01 10:49:07 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.182 2009/06/01 13:21:48 fk Exp $
 #
 # Wish list:
 #
@@ -492,21 +492,7 @@ sub execute_regression_tests () {
                 die "Regression test id mismatch" if ($r != $regression_tests[$s][$r]{'regression-test-id'});
 
                 my $number = $regression_tests[$s][$r]{'number'};
-                my $skip_reason = undef;
-
-                if ($regression_tests[$s][$r]{'ignore'}) {
-
-                    $skip_reason = "Ignore flag is set";
-
-                } elsif (cli_option_is_set('test-number')
-                         and get_cli_option('test-number') != $number) {
-
-                    $skip_reason = "Only executing test " . get_cli_option('test-number');
-
-                } else {
-
-                    $skip_reason = level_is_unacceptable($regression_tests[$s][$r]{'level'});
-                }
+                my $skip_reason = get_skip_reason($regression_tests[$s][$r]);
 
                 if (defined $skip_reason) {
 
@@ -541,6 +527,27 @@ sub execute_regression_tests () {
         log_message("Total: Executed " . $all_tests . " regression tests. " .
             $all_successes . " successes, " . $all_failures . " failures.");
     }
+}
+
+sub get_skip_reason ($) {
+    my $test = shift;
+    my $skip_reason = undef;
+
+    if ($test->{'ignore'}) {
+
+        $skip_reason = "Ignore flag is set";
+
+    } elsif (cli_option_is_set('test-number') and
+             get_cli_option('test-number') != $test->{'number'}) {
+
+        $skip_reason = "Only executing test " . get_cli_option('test-number');
+
+    } else {
+
+        $skip_reason = level_is_unacceptable($test->{'level'});
+    }
+
+    return $skip_reason;
 }
 
 sub level_is_unacceptable ($) {
