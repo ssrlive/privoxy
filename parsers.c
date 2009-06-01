@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.167 2009/05/28 21:13:34 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.168 2009/06/01 14:18:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2973,9 +2973,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
    struct tm *timeptr = NULL;
    time_t tm = 0;                  
    const char *newval;
-   long int rtime;
    long int hours, minutes, seconds;
-   int negative = 0;
    char * endptr;
    
    if ( 0 == strcmpic(*header, "If-Modified-Since: Wed, 08 Jun 1955 12:00:00 GMT"))
@@ -3010,15 +3008,16 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
          }
          else
          {
-            rtime = strtol(newval, &endptr, 0);
+            long int rtime = strtol(newval, &endptr, 0);
+            const int negative_range = (rtime < 0);
+
             if (rtime)
             {
                log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %d minut%s)",
                   *header, rtime, (rtime == 1 || rtime == -1) ? "e": "es");
-               if (rtime < 0)
+               if (negative_range)
                {
                   rtime *= -1; 
-                  negative = 1;
                }
                rtime *= 60;
                rtime = pick_from_range(rtime);
@@ -3028,7 +3027,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                log_error(LOG_LEVEL_ERROR, "Random range is 0. Assuming time transformation test.",
                   *header);
             }
-            tm += rtime * (negative ? -1 : 1);
+            tm += rtime * (negative_range ? -1 : 1);
 #ifdef HAVE_GMTIME_R
             timeptr = gmtime_r(&tm, &gmt);
 #elif defined(MUTEX_LOCKS_AVAILABLE)
@@ -3056,7 +3055,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
 
             log_error(LOG_LEVEL_HEADER,
                "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
-               *header, (negative) ? "subtracted" : "added", hours,
+               *header, (negative_range) ? "subtracted" : "added", hours,
                (hours == 1) ? "r" : "rs", minutes, (minutes == 1) ? "e" : "es",
                seconds, (seconds == 1) ? ")" : "s)");
          }
