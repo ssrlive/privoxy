@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.168 2009/06/01 14:18:04 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.169 2009/06/01 14:18:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -568,7 +568,7 @@ jb_err decompress_iob(struct client_state *csp)
     * Passing -MAX_WBITS to inflateInit2 tells the library
     * that there is no zlib header.
     */
-   if (inflateInit2 (&zstr, -MAX_WBITS) != Z_OK)
+   if (inflateInit2(&zstr, -MAX_WBITS) != Z_OK)
    {
       log_error(LOG_LEVEL_ERROR, "Error initializing decompression");
       return JB_ERR_COMPRESS;
