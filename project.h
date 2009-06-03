@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.137 2009/05/13 18:22:45 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.138 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -296,9 +296,11 @@ struct http_request
    char *host_ip_addr_str; /**< String with dotted decimal representation
                                 of host's IP. NULL before connect_to() */
 
+#ifndef FEATURE_EXTENDED_HOST_PATTERNS
    char  *dbuffer; /**< Buffer with '\0'-delimited domain name.           */
    char **dvec;    /**< List of pointers to the strings in dbuffer.       */
    int    dcount;  /**< How many parts to this domain? (length of dvec)   */
+#endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
 };
 
 /**

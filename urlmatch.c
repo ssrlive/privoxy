@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.52 2009/05/19 17:39:59 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.53 2009/05/19 17:40:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -86,12 +86,15 @@ void free_http_request(struct http_request *http)
    freez(http->path);
    freez(http->ver);
    freez(http->host_ip_addr_str);
+#ifndef FEATURE_EXTENDED_HOST_PATTERNS
    freez(http->dbuffer);
    freez(http->dvec);
    http->dcount = 0;
+#endif
 }
 
 
+#ifndef FEATURE_EXTENDED_HOST_PATTERNS
 /*********************************************************************
  *
  * Function    :  init_domain_components
@@ -155,6 +158,7 @@ jb_err init_domain_components(struct http_request *http)
 
    return JB_ERR_OK;
 }
+#endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
 
 
 /*********************************************************************
@@ -377,10 +381,12 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
       }
    }
 
-   /*
-    * Split domain name so we can compare it against wildcards
-    */
+#ifdef FEATURE_EXTENDED_HOST_PATTERNS
+   return JB_ERR_OK;
+#else
+   /* Split domain name so we can compare it against wildcards */
    return init_domain_components(http);
+#endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
 
 }
 
