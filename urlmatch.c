@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.55 2009/06/03 16:43:16 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.56 2009/06/03 16:43:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1194,6 +1194,31 @@ static int port_matches(const int port, const char *port_list)
 
 /*********************************************************************
  *
+ * Function    :  host_matches
+ *
+ * Description :  Compares a host against a host pattern.
+ *
+ * Parameters  :
+ *          1  :  url = The URL to match
+ *          2  :  pattern = The URL pattern
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+static int host_matches(const struct http_request *http,
+                        const struct url_spec *pattern)
+{
+#ifdef FEATURE_EXTENDED_HOST_PATTERNS
+   return ((NULL == pattern->host_regex)
+      || (0 == regexec(pattern->host_regex, http->host, 0, NULL, 0)));
+#else
+   return ((NULL == pattern->dbuffer) || (0 == domain_match(pattern, http)));
+#endif
+}
+
+
+/*********************************************************************
+ *
  * Function    :  url_match
  *
  * Description :  Compare a URL against a URL pattern.
@@ -1209,11 +1234,6 @@ int url_match(const struct url_spec *pattern,
               const struct http_request *http)
 {
    /* XXX: these should probably be functions. */
-#ifdef FEATURE_EXTENDED_HOST_PATTERNS
-#define DOMAIN_MATCHES ((NULL == pattern->host_regex) || (0 == regexec(pattern->host_regex, http->host, 0, NULL, 0)))
-#else
-#define DOMAIN_MATCHES ((NULL == pattern->dbuffer) || (0 == domain_match(pattern, http)))
-#endif
 #define PATH_MATCHES ((NULL == pattern->preg) || (0 == regexec(pattern->preg, http->path, 0, NULL, 0)))
 
    if (pattern->tag_regex != NULL)
@@ -1222,7 +1242,8 @@ int url_match(const struct url_spec *pattern,
       return 0;
    } 
 
-   return (port_matches(http->port, pattern->port_list) && DOMAIN_MATCHES && PATH_MATCHES);
+   return (port_matches(http->port, pattern->port_list)
+      && host_matches(http, pattern) && PATH_MATCHES);
 
 }
 
