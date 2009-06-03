@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.54 2009/06/03 16:42:49 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.55 2009/06/03 16:43:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1175,6 +1175,25 @@ void free_url_spec(struct url_spec *url)
 
 /*********************************************************************
  *
+ * Function    :  port_matches
+ *
+ * Description :  Compares a port against a port list.
+ *
+ * Parameters  :
+ *          1  :  port      = The port to check.
+ *          2  :  port_list = The list of port to compare with.
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+static int port_matches(const int port, const char *port_list)
+{
+   return ((NULL == port_list) || match_portlist(port_list, port));
+}
+
+
+/*********************************************************************
+ *
  * Function    :  url_match
  *
  * Description :  Compare a URL against a URL pattern.
@@ -1190,7 +1209,6 @@ int url_match(const struct url_spec *pattern,
               const struct http_request *http)
 {
    /* XXX: these should probably be functions. */
-#define PORT_MATCHES ((NULL == pattern->port_list) || match_portlist(pattern->port_list, http->port))
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
 #define DOMAIN_MATCHES ((NULL == pattern->host_regex) || (0 == regexec(pattern->host_regex, http->host, 0, NULL, 0)))
 #else
@@ -1204,7 +1222,7 @@ int url_match(const struct url_spec *pattern,
       return 0;
    } 
 
-   return (PORT_MATCHES && DOMAIN_MATCHES && PATH_MATCHES);
+   return (port_matches(http->port, pattern->port_list) && DOMAIN_MATCHES && PATH_MATCHES);
 
 }
 
