@@ -1,4 +1,4 @@
-$Id: privoxy-to-do-list.txt,v 1.40 2009/05/16 11:25:06 fk Exp $
+$Id: TODO,v 1.1 2009/05/16 11:28:08 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -84,8 +84,6 @@ Some Privoxy related task, not ordered in any way.
 
 32) In case of forwarding failures with socks port == 9050,
     show extra info about Tor (the whole FAQ entry?).
-
-33) Remove the CVS Log message junk from the C files.
 
 35) Do less work in the accept_connection() thread.
     Partly done. Good enough?
