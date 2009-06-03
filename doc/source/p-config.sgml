@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.50 2009/04/24 15:29:43 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.51 2009/05/10 10:19:23 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -81,7 +81,9 @@
 <para>
  The main config file controls all aspects of <application>Privoxy</application>'s
  operation that are not location dependent (i.e. they apply universally, no matter
- where you may be surfing).
+ where you may be surfing). Like the filter and action files, the config file is
+ a plain text file and can be modified with a text editor like emacs, vim or
+ notepad.exe.
 </para>
 
 ]]>
@@ -95,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.50 2009/04/24 15:29:43 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.51 2009/05/10 10:19:23 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
