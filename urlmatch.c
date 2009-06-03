@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.56 2009/06/03 16:43:50 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.57 2009/06/03 16:44:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1219,6 +1219,26 @@ static int host_matches(const struct http_request *http,
 
 /*********************************************************************
  *
+ * Function    :  path_matches
+ *
+ * Description :  Compares a path against a path pattern.
+ *
+ * Parameters  :
+ *          1  :  path = The path to match
+ *          2  :  pattern = The URL pattern
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+static int path_matches(const char *path, const struct url_spec *pattern)
+{
+   return ((NULL == pattern->preg)
+      || (0 == regexec(pattern->preg, path, 0, NULL, 0)));
+}
+
+
+/*********************************************************************
+ *
  * Function    :  url_match
  *
  * Description :  Compare a URL against a URL pattern.
@@ -1233,9 +1253,6 @@ static int host_matches(const struct http_request *http,
 int url_match(const struct url_spec *pattern,
               const struct http_request *http)
 {
-   /* XXX: these should probably be functions. */
-#define PATH_MATCHES ((NULL == pattern->preg) || (0 == regexec(pattern->preg, http->path, 0, NULL, 0)))
-
    if (pattern->tag_regex != NULL)
    {
       /* It's a tag pattern and shouldn't be matched against URLs */
@@ -1243,7 +1260,7 @@ int url_match(const struct url_spec *pattern,
    } 
 
    return (port_matches(http->port, pattern->port_list)
-      && host_matches(http, pattern) && PATH_MATCHES);
+      && host_matches(http, pattern) && path_matches(http->path, pattern));
 
 }
 
