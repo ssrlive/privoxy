@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.171 2009/06/01 15:33:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.172 2009/06/01 16:34:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -67,6 +67,15 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.171 2009/06/01 15:33:33 fabiankei
 
 #ifdef FEATURE_ZLIB
 #include <zlib.h>
+
+#define GZIP_IDENTIFIER_1       0x1f
+#define GZIP_IDENTIFIER_2       0x8b
+
+#define GZIP_FLAG_CHECKSUM      0x02
+#define GZIP_FLAG_EXTRA_FIELDS  0x04
+#define GZIP_FLAG_FILE_NAME     0x08
+#define GZIP_FLAG_COMMENT       0x10
+#define GZIP_FLAG_RESERVED_BITS 0xe0
 #endif
 
 #if !defined(_WIN32) && !defined(__OS2__)
@@ -423,8 +432,8 @@ jb_err decompress_iob(struct client_state *csp)
        * Strip off the gzip header. Please see RFC 1952 for more
        * explanation of the appropriate fields.
        */
-      if ((*cur++ != (char)0x1f)
-       || (*cur++ != (char)0x8b)
+      if (((*cur++ & 0xff) != GZIP_IDENTIFIER_1)
+       || ((*cur++ & 0xff) != GZIP_IDENTIFIER_2)
        || (*cur++ != Z_DEFLATED))
       {
          log_error(LOG_LEVEL_ERROR, "Invalid gzip header when decompressing");
@@ -433,11 +442,7 @@ jb_err decompress_iob(struct client_state *csp)
       else
       {
          int flags = *cur++;
-         /*
-          * XXX: These magic numbers should be replaced
-          * with macros to give a better idea what they do.
-          */
-         if (flags & 0xe0)
+         if (flags & GZIP_FLAG_RESERVED_BITS)
          {
             /* The gzip header has reserved bits set; bail out. */
             log_error(LOG_LEVEL_ERROR, "Invalid gzip header flags when decompressing");
@@ -446,7 +451,7 @@ jb_err decompress_iob(struct client_state *csp)
          cur += 6;
 
          /* Skip extra fields if necessary. */
-         if (flags & 0x04)
+         if (flags & GZIP_FLAG_EXTRA_FIELDS)
          {
             /*
              * Skip a given number of bytes, specified
@@ -476,7 +481,7 @@ jb_err decompress_iob(struct client_state *csp)
          }
 
          /* Skip the filename if necessary. */
-         if (flags & 0x08)
+         if (flags & GZIP_FLAG_FILE_NAME)
          {
             /* A null-terminated string is supposed to follow. */
             while (*cur++ && (cur < csp->iob->eod));
@@ -484,14 +489,14 @@ jb_err decompress_iob(struct client_state *csp)
          }
 
          /* Skip the comment if necessary. */
-         if (flags & 0x10)
+         if (flags & GZIP_FLAG_COMMENT)
          {
             /* A null-terminated string is supposed to follow. */
             while (*cur++ && (cur < csp->iob->eod));
          }
 
          /* Skip the CRC if necessary. */
-         if (flags & 0x02)
+         if (flags & GZIP_FLAG_CHECKSUM)
          {
             cur += 2;
          }
