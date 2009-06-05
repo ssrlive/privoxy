@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.172 2009/06/01 16:34:48 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.173 2009/06/05 16:53:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -485,7 +485,6 @@ jb_err decompress_iob(struct client_state *csp)
          {
             /* A null-terminated string is supposed to follow. */
             while (*cur++ && (cur < csp->iob->eod));
-
          }
 
          /* Skip the comment if necessary. */
