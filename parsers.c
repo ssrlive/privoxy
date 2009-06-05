@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.173 2009/06/05 16:53:55 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.174 2009/06/05 16:54:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -448,6 +448,11 @@ jb_err decompress_iob(struct client_state *csp)
             log_error(LOG_LEVEL_ERROR, "Invalid gzip header flags when decompressing");
             return JB_ERR_COMPRESS;
          }
+
+         /*
+          * Skip mtime (4 bytes), extra flags (1 byte)
+          * and OS type (1 byte).
+          */
          cur += 6;
 
          /* Skip extra fields if necessary. */
