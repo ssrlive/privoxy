@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.138 2009/05/16 13:27:20 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.139 2009/06/03 16:42:49 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -739,13 +739,20 @@ struct reusable_connection
  * Flag for csp->flags: Set if the server specified the
  * content length.
  */
-#define CSP_FLAG_CONTENT_LENGTH_SET            0x00002000U
+#define CSP_FLAG_SERVER_CONTENT_LENGTH_SET     0x00002000U
+
+/**
+ * Flag for csp->flags: Set if we know the content lenght,
+ * either because the server set it, or we figured it out
+ * on our own.
+ */
+#define CSP_FLAG_CONTENT_LENGTH_SET            0x00004000U
 
 /**
  * Flag for csp->flags: Set if the client wants to keep
  * the connection alive.
  */
-#define CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE  0x00004000U
+#define CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE  0x00008000U
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 /*
