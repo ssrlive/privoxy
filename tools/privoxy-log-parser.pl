@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.146 2009/05/25 19:10:20 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.147 2009/06/08 17:22:24 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -913,6 +913,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/A HTTP\/1\.1 response without/
           or $c =~ m/Disabled filter mode on behalf of the client/
           or $c =~ m/Keeping the (?:server|client) header /
+          or $c =~ m/Content modified with no Content-Length header set/
             )
     {
         # XXX: Some of these may need highlighting
@@ -954,6 +955,7 @@ sub handle_loglevel_header ($) {
         # Keeping the server header 'Connection: keep-alive' around.
         # Keeping the client header 'Connection: close' around. The connection will not be kept alive.
         # Keeping the client header 'Connection: keep-alive' around. The connection will be kept alive if possible.
+        # Content modified with no Content-Length header set. Creating a fake one for adjustment later on.
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
