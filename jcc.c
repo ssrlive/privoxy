@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.251 2009/06/03 16:42:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.252 2009/06/08 16:48:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1819,7 +1819,7 @@ static void chat(struct client_state *csp)
        */
       if (FD_ISSET(csp->sfd, &rfds))
       {
-         fflush(0);
+         fflush(NULL);
          len = read_socket(csp->sfd, buf, sizeof(buf) - 1);
 
          if (len < 0)
