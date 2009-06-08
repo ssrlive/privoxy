@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.120 2009/04/17 11:45:19 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.121 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1768,6 +1768,12 @@ static char *gif_deanimate_response(struct client_state *csp)
 filter_function_ptr get_filter_function(struct client_state *csp)
 {
    filter_function_ptr filter_function = NULL;
+
+   if ((csp->content_type & CT_TABOO)
+      && !(csp->action->flags & ACTION_FORCE_TEXT_MODE))
+   {
+      return NULL;
+   }
 
    /*
     * Are we enabling text mode by force?
