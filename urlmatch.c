@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.57 2009/06/03 16:44:15 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.58 2009/06/03 16:44:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -58,7 +58,13 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.57 2009/06/03 16:44:15 fabianke
 
 const char urlmatch_h_rcs[] = URLMATCH_H_VERSION;
 
-enum regex_anchoring {NO_ANCHORING, LEFT_ANCHORED, RIGHT_ANCHORED};
+enum regex_anchoring
+{
+   NO_ANCHORING,
+   LEFT_ANCHORED,
+   RIGHT_ANCHORED,
+   RIGHT_ANCHORED_HOST
+};
 static jb_err compile_host_pattern(struct url_spec *url, const char *host_pattern);
 
 /*********************************************************************
@@ -546,9 +552,10 @@ jb_err parse_http_request(const char *req, struct http_request *http)
  *
  * Parameters  :
  *          1  :  pattern = The pattern to compile.
- *          2  :  anchoring = How the regex should be anchored.
- *                            Can be either one of NO_ANCHORING,
- *                            LEFT_ANCHORED or RIGHT_ANCHORED.
+ *          2  :  anchoring = How the regex should be modified
+ *                            before compilation. Can be either
+ *                            one of NO_ANCHORING, LEFT_ANCHORED,
+ *                            RIGHT_ANCHORED or RIGHT_ANCHORED_HOST.
  *          3  :  url     = In case of failures, the spec member is
  *                          logged and the structure freed.
  *          4  :  regex   = Where the compiled regex should be stored.
@@ -581,6 +588,9 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
          break;
       case RIGHT_ANCHORED:
          fmt = "%s$";
+         break;
+      case RIGHT_ANCHORED_HOST:
+         fmt = "%s\\.?$";
          break;
       case LEFT_ANCHORED:
          fmt = "^%s";
@@ -731,7 +741,7 @@ static jb_err compile_url_pattern(struct url_spec *url, char *buf)
  *********************************************************************/
 static jb_err compile_host_pattern(struct url_spec *url, const char *host_pattern)
 {
-   return compile_pattern(host_pattern, RIGHT_ANCHORED, url, &url->host_regex);
+   return compile_pattern(host_pattern, RIGHT_ANCHORED_HOST, url, &url->host_regex);
 }
 
 #else
