@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.175 2009/06/05 16:55:16 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.176 2009/06/08 16:47:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -172,6 +172,8 @@ static jb_err create_fake_referrer(char **header, const char *fake_referrer);
 static jb_err handle_conditional_hide_referrer_parameter(char **header,
    const char *host, const int parameter_conditional_block);
 static const char *get_appropiate_connection_header(const struct client_state *csp);
+static void create_content_length_header(unsigned long long content_length,
+                                         char *header, size_t buffer_length);
 
 /*
  * List of functions to run on a list of headers.
@@ -1157,17 +1159,15 @@ jb_err update_server_headers(struct client_state *csp)
     && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
     && !(csp->flags & CSP_FLAG_SERVER_CONTENT_LENGTH_SET))
    {
-      /*
-       * XXX: lame. should factor the regeneration code out
-       * of server_adjust_content_length instead.
-       */
-      log_error(LOG_LEVEL_HEADER,
-         "Content modified with no Content-Length header set. "
-         "Creating a fake one for adjustment later on.");
-      err = enlist(csp->headers, "Content-Length: 0");
+      char header[50];
+
+      create_content_length_header(csp->content_length, header, sizeof(header));
+      err = enlist(csp->headers, header);
       if (JB_ERR_OK == err)
       {
-         err = server_adjust_content_length(csp, &(csp->headers->last->str));
+         log_error(LOG_LEVEL_HEADER,
+            "Content modified with no Content-Length header set. "
+            "Created: %s.", header);
       }
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
@@ -2065,22 +2065,19 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err server_adjust_content_length(struct client_state *csp, char **header)
 {
-   const size_t max_header_length = 80;
-
    /* Regenerate header if the content was modified. */
    if (csp->flags & CSP_FLAG_MODIFIED)
    {
+      const size_t header_length = 50;
       freez(*header);
-      *header = (char *) zalloc(max_header_length);
+      *header = malloc(header_length);
       if (*header == NULL)
       {
          return JB_ERR_MEMORY;
       }
-
-      snprintf(*header, max_header_length, "Content-Length: %d",
-         (int)csp->content_length);
-      log_error(LOG_LEVEL_HEADER, "Adjusted Content-Length to %d",
-         (int)csp->content_length);
+      create_content_length_header(csp->content_length, *header, header_length);
+      log_error(LOG_LEVEL_HEADER,
+         "Adjusted Content-Length to %llu", csp->content_length);
    }
 
    return JB_ERR_OK;
@@ -4037,6 +4034,29 @@ static const char *get_appropiate_connection_header(const struct client_state *c
    }
    return connection_close;
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  create_content_length_header
+ *
+ * Description :  Creates a Content-Length header.
+ *
+ * Parameters  :
+ *          1  :  content_length = The content length to be used in the header.
+ *          2  :  header = Allocated space to safe the header.
+ *          3  :  buffer_length = The length of the allocated space.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void create_content_length_header(unsigned long long content_length,
+                                         char *header, size_t buffer_length)
+{
+   snprintf(header, buffer_length, "Content-Length: %llu", content_length);
+}
+
+
 /*
   Local Variables:
   tab-width: 3
