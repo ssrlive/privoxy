@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.183 2009/06/05 18:55:21 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.185 2009/06/10 16:36:42 fk Exp $
 #
 # Wish list:
 #
@@ -1104,11 +1104,6 @@ sub fuzz_header($) {
 #
 ############################################################################
 
-sub check_for_curl () {
-    my $curl = CURL;
-    log_and_die("No curl found.") unless (`which $curl`);
-}
-
 sub get_cgi_page_or_else ($) {
 
     my $cgi_url = shift;
@@ -1215,6 +1210,7 @@ sub get_page_with_curl ($) {
         @buffer = `$curl_line`;
 
         if ($?) {
+            log_and_die("Executing '$curl_line' failed.") unless @buffer;
             $failure_reason = array_as_string(\@buffer);
             chomp $failure_reason;
             l(LL_SOFT_ERROR, "Fetch failure: '" . $failure_reason . $! ."'");
@@ -1516,7 +1512,6 @@ sub main () {
 
     init_our_variables();
     parse_cli_options();
-    check_for_curl();
     init_proxy_settings('vanilla-proxy');
     load_regressions_tests();
     init_proxy_settings('fuzz-proxy');
