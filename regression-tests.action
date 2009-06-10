@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.24 2009/05/27 20:37:15 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.25 2009/05/28 21:38:13 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -775,6 +775,11 @@ www.blocked-request.example/blocked-request-with-no-reason-specified
 # Blocked URL = http://domain-pattern-test.example/
 # Blocked URL = http://domain-pattern-test.example.org/
 domain-pattern-test.example.
+
+{+block{Hostname patterns without trailing dots cover hostnames with trailing dots as well.}}
+# Blocked URL = http://trailing-dot.example.org./
+# Blocked URL = http://trailing-dot.example.org./foo
+trailing-dot.example.org
 
 # Just in case there is no white-space fuzzer in the house ...
 #
