@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: newfeatures.sgml,v 2.9 2008/01/22 17:34:54 fabiankeil Exp $
+ $Id: newfeatures.sgml,v 2.10 2009/02/14 17:37:13 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -34,7 +34,14 @@
 -->
  <listitem>
   <para>
-     Can keep outgoing connections alive and reuse them later on.
+     Supports "Connection: keep-alive". Outgoing connections can
+     be kept alive independently from the client.
+  </para>
+ </listitem>
+
+ <listitem>
+  <para>
+     Supports IPv6.
   </para>
  </listitem> 
 
@@ -67,7 +74,7 @@
 
  <listitem>
   <para>
-   Integrated browser based configuration and control utility at <ulink
+   Integrated browser-based configuration and control utility at <ulink
    url="http://config.privoxy.org/">http://config.privoxy.org/</ulink>
    (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>). Browser-based
    tracing of rule and filter effects. Remote toggling.
@@ -96,12 +103,6 @@
    a more sophisticated and flexible configuration syntax.
   </para>
  </listitem> 
-
- <listitem>
-  <para>
-   Improved cookie management features (e.g. session based cookies).
-  </para>
-</listitem> 
 
  <listitem>
   <para>
