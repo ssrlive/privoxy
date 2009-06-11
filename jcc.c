@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.254 2009/06/11 11:44:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.255 2009/06/11 11:46:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -235,15 +235,6 @@ static const char MISSING_DESTINATION_RESPONSE[] =
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Privoxy was unable to extract the destination.\r\n";
-
-/* XXX: should be a template */
-static const char NO_SERVER_DATA_RESPONSE[] =
-   "HTTP/1.0 502 Server or forwarder response empty\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
-   "Content-Type: text/plain\r\n"
-   "Connection: close\r\n\r\n"
-   "Empty server or forwarder response.\r\n"
-   "The connection has been closed but Privoxy didn't receive any data.\r\n";
 
 /* XXX: should be a template */
 static const char INVALID_SERVER_HEADERS_RESPONSE[] =
@@ -2099,7 +2090,7 @@ static void chat(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "Empty server or forwarder response.");
                log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-               write_socket(csp->cfd, NO_SERVER_DATA_RESPONSE, strlen(NO_SERVER_DATA_RESPONSE));
+               send_crunch_response(csp, error_response(csp, "no-server-data"));
                free_http_request(http);
                mark_server_socket_tainted(csp);
                return;

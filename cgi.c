@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.121 2009/06/11 11:46:22 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.122 2009/06/11 11:47:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -949,6 +949,11 @@ struct http_response *error_response(struct client_state *csp,
    {
       rsp->status = strdup("504 Connection timeout");
       rsp->reason = RSP_REASON_CONNECTION_TIMEOUT;
+   }
+   else if (!strcmp(templatename, "no-server-data"))
+   {
+      rsp->status = strdup("502 No data received from server or forwarder");
+      rsp->reason = RSP_REASON_NO_SERVER_DATA;
    }
 
    if (rsp->status == NULL)
