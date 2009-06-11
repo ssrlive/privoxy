@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.33 2009/02/07 11:12:02 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.34 2009/02/08 18:13:26 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -39,7 +39,6 @@ Current Privoxy Team:
  Gerry Murphy
  Lee Rian
  Roland Rosenfeld
- Jörg Strohmayer
 <![%p-authors-formal;[
 </literallayout>
 
@@ -65,6 +64,7 @@ Current Privoxy Team:
  Haroon Rafique
  Georg Sauthoff
  Thomas Steudten
+ Jörg Strohmayer
  Rodney Stromlund
  Sviatoslav Sviridov
  Sarantis Paskalis
