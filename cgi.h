@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.35 2008/05/21 15:24:37 fabiankeil Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.36 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -11,7 +11,7 @@
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -51,9 +51,8 @@ extern "C" {
 extern struct http_response *dispatch_cgi(struct client_state *csp);
 
 /* Not exactly a CGI */
-extern struct http_response * error_response(struct client_state *csp,
-                                             const char *templatename,
-                                             int err);
+extern struct http_response *error_response(struct client_state *csp,
+                                            const char *templatename);
 
 /*
  * CGI support functions

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.252 2009/06/08 16:48:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.253 2009/06/08 16:50:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1635,15 +1635,15 @@ static void chat(struct client_state *csp)
          if (fwd->type != SOCKS_NONE)
          {
             /* Socks error. */
-            rsp = error_response(csp, "forwarding-failed", errno);
+            rsp = error_response(csp, "forwarding-failed");
          }
          else if (errno == EINVAL)
          {
-            rsp = error_response(csp, "no-such-domain", errno);
+            rsp = error_response(csp, "no-such-domain");
          }
          else
          {
-            rsp = error_response(csp, "connect-failed", errno);
+            rsp = error_response(csp, "connect-failed");
             log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
                http->hostport);
          }
@@ -1682,7 +1682,7 @@ static void chat(struct client_state *csp)
          log_error(LOG_LEVEL_CONNECT,
             "write header to: %s failed: %E", http->hostport);
 
-         rsp = error_response(csp, "connect-failed", errno);
+         rsp = error_response(csp, "connect-failed");
          if (rsp)
          {
             send_crunch_response(csp, rsp);
