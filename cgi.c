@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.120 2009/06/11 11:44:25 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.121 2009/06/11 11:46:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -876,12 +876,6 @@ struct http_response *error_response(struct client_state *csp,
    if (!strcmp(templatename, "no-such-domain"))
    {
       rsp->status = strdup("404 No such domain");
-      if (rsp->status == NULL)
-      {
-         free_map(exports);
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
       rsp->reason = RSP_REASON_NO_SUCH_DOMAIN;
    }
    else if (!strcmp(templatename, "forwarding-failed"))
@@ -937,37 +931,31 @@ struct http_response *error_response(struct client_state *csp,
       if (!err) err = map(exports, "forwarding-type", 1, socks_type, 1);
       if (!err) err = map(exports, "error-message", 1, html_encode(csp->error_message), 0);
 
-      if (!err) rsp->status = strdup("503 Forwarding failure");
-      if ((rsp->status == NULL) || (NULL == csp->error_message) || err)
+      if ((NULL == csp->error_message) || err)
       {
          free_map(exports);
          free_http_response(rsp);
          return cgi_error_memory();
       }
+      if (!err) rsp->status = strdup("503 Forwarding failure");
       rsp->reason = RSP_REASON_FORWARDING_FAILED;
    }
    else if (!strcmp(templatename, "connect-failed"))
    {
       rsp->status = strdup("503 Connect failed");
-      if (rsp->status == NULL)
-      {
-         free_map(exports);
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
       rsp->reason = RSP_REASON_CONNECT_FAILED;
    }
    else if (!strcmp(templatename, "connection-timeout"))
    {
       rsp->status = strdup("504 Connection timeout");
-      /* XXX: This check should be factored out of this block */
-      if (rsp->status == NULL)
-      {
-         free_map(exports);
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
       rsp->reason = RSP_REASON_CONNECTION_TIMEOUT;
+   }
+
+   if (rsp->status == NULL)
+   {
+      free_map(exports);
+      free_http_response(rsp);
+      return cgi_error_memory();
    }
 
    err = template_fill_for_cgi(csp, templatename, exports, rsp);
