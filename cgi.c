@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.119 2009/05/28 21:13:34 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.120 2009/06/11 11:44:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -956,6 +956,18 @@ struct http_response *error_response(struct client_state *csp,
          return cgi_error_memory();
       }
       rsp->reason = RSP_REASON_CONNECT_FAILED;
+   }
+   else if (!strcmp(templatename, "connection-timeout"))
+   {
+      rsp->status = strdup("504 Connection timeout");
+      /* XXX: This check should be factored out of this block */
+      if (rsp->status == NULL)
+      {
+         free_map(exports);
+         free_http_response(rsp);
+         return cgi_error_memory();
+      }
+      rsp->reason = RSP_REASON_CONNECTION_TIMEOUT;
    }
 
    err = template_fill_for_cgi(csp, templatename, exports, rsp);

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.253 2009/06/08 16:50:35 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.254 2009/06/11 11:44:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -278,13 +278,12 @@ static const char TOO_MANY_CONNECTIONS_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Maximum number of open connections reached.\r\n";
 
-/* XXX: should be a template */
-static const char CONNECTION_TIMEOUT_RESPONSE[] =
+static const char CLIENT_CONNECTION_TIMEOUT_RESPONSE[] =
    "HTTP/1.0 504 Connection timeout\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "The connection timed out.\r\n";
+   "The connection timed out because the client request didn't arrive in time.\r\n";
 
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
@@ -663,6 +662,9 @@ static const char *crunch_reason(const struct http_response *rsp)
          break;
       case RSP_REASON_OUT_OF_MEMORY:
          reason = "Out of memory (may mask other reasons)";
+         break;
+      case RSP_REASON_CONNECTION_TIMEOUT:
+         reason = "Connection timeout";
          break;
       default:
          reason = "No reason recorded";
@@ -1176,8 +1178,8 @@ static char *get_request_line(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR,
             "Stopped waiting for the request line.");
-         write_socket(csp->cfd, CONNECTION_TIMEOUT_RESPONSE,
-            strlen(CONNECTION_TIMEOUT_RESPONSE));
+         write_socket(csp->cfd, CLIENT_CONNECTION_TIMEOUT_RESPONSE,
+            strlen(CLIENT_CONNECTION_TIMEOUT_RESPONSE));
          return NULL;
       }
 
@@ -1772,8 +1774,7 @@ static void chat(struct client_state *csp)
             "Didn't receive data in time: %s", http->url);
          if ((byte_count == 0) && (http->ssl == 0))
          {
-            write_socket(csp->cfd, CONNECTION_TIMEOUT_RESPONSE,
-               strlen(CONNECTION_TIMEOUT_RESPONSE));
+            send_crunch_response(csp, error_response(csp, "connection-timeout"));
          }
          mark_server_socket_tainted(csp);
          return;
