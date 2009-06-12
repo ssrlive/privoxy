@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.122 2009/06/11 11:47:16 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.123 2009/06/11 11:49:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -930,14 +930,14 @@ struct http_response *error_response(struct client_state *csp,
 
       if (!err) err = map(exports, "forwarding-type", 1, socks_type, 1);
       if (!err) err = map(exports, "error-message", 1, html_encode(csp->error_message), 0);
-
       if ((NULL == csp->error_message) || err)
       {
          free_map(exports);
          free_http_response(rsp);
          return cgi_error_memory();
       }
-      if (!err) rsp->status = strdup("503 Forwarding failure");
+
+      rsp->status = strdup("503 Forwarding failure");
       rsp->reason = RSP_REASON_FORWARDING_FAILED;
    }
    else if (!strcmp(templatename, "connect-failed"))
