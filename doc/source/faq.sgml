@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.59 2009/03/28 15:33:41 fabiankeil Exp $
+ $Id: faq.sgml,v 2.60 2009/04/07 12:25:05 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.59 2009/03/28 15:33:41 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.60 2009/04/07 12:25:05 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -494,6 +494,11 @@ warranty? Registration?</title>
    We also have a <ulink
    url="../developer-manual/index.html">Developer's Manual</ulink>.
    While it is partly out of date, it's still worth reading.
+</para>
+<para>
+   Our <ulink url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO?view=markup">TODO list</ulink>
+   may be of interest to you as well.
+   Please let us know if you want to work on one of the items listed.
 </para>
 </sect3>
 
@@ -2940,6 +2945,13 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.60  2009/04/07 12:25:05  fabiankeil
+In the "I would like to help ..." entry:
+- Change the ids to more general ones as helping out doesn't require
+  joining the team (and joining the team requires significantly helping
+  out first, anyway).
+- Add links to the subscription pages for the main mailing lists.
+
 Revision 2.59  2009/03/28 15:33:41  fabiankeil
 Recommend the use of forward-socks5 when forwarding to Tor.
 The error messages are more detailed than with forward-socks4a.
