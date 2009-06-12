@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.255 2009/06/11 11:46:22 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.256 2009/06/11 11:49:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -656,6 +656,9 @@ static const char *crunch_reason(const struct http_response *rsp)
          break;
       case RSP_REASON_CONNECTION_TIMEOUT:
          reason = "Connection timeout";
+         break;
+      case RSP_REASON_NO_SERVER_DATA:
+         reason = "No server data received";
          break;
       default:
          reason = "No reason recorded";
