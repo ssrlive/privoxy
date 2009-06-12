@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.13
 #
-#  $Id: config,v 1.78 2009/04/17 13:27:06 fabiankeil Exp $
+#  $Id: config,v 1.79 2009/05/10 10:21:13 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -1525,7 +1525,7 @@ keep-alive-timeout 300
 #
 #      If this option is effective, outgoing connections are shared
 #      between clients (if there are more than one) and closing the
-#      client that initiated the outgoing connection does no longer
+#      browser that initiated the outgoing connection does no longer
 #      affect the connection between Privoxy and the server unless
 #      the client's request hasn't been completed yet.
 #
@@ -1547,6 +1547,11 @@ keep-alive-timeout 300
 #      enabling this option may make sense as it allows Privoxy to keep
 #      outgoing connections alive even if the client itself doesn't
 #      support it.
+#
+#      You should also be aware that enabling this option increases
+#      the likelihood of getting the "No server or forwarder data"
+#      error message, especially if you are using a slow connection
+#      to the Internet.
 #
 #      This option should only be used by experienced users who
 #      understand the risks and can weight them against the benefits.
