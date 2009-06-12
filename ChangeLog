@@ -1,7 +1,7 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Version 3.0.13 (UNRELEASED) ***
+*** Version 3.0.13 Beta ***
 
 - Added IPv6 support. Thanks to Petr Pisar who not only provided
   the initial patch but also helped a lot with the integration.
