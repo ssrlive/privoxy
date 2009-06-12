@@ -137,7 +137,9 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 >'s
  operation that are not location dependent (i.e. they apply universally, no matter
- where you may be surfing).</P
+ where you may be surfing). Like the filter and action files, the config file is
+ a plain text file and can be modified with a text editor like emacs, vim or
+ notepad.exe.</P
 ><DIV
 CLASS="SECT2"
 ><H2
@@ -4013,7 +4015,7 @@ CLASS="APPLICATION"
    </P
 ><P
 >    If this option is effective, outgoing connections are shared between
-    clients (if there are more than one) and closing the client that initiated
+    clients (if there are more than one) and closing the browser that initiated
     the outgoing connection does no longer affect the connection between <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
@@ -4048,6 +4050,11 @@ CLASS="APPLICATION"
 >Privoxy</SPAN
 > to keep outgoing connections alive even if the client
     itself doesn't support it.
+   </P
+><P
+>    You should also be aware that enabling this option increases the likelihood
+    of getting the "No server or forwarder data" error message, especially if you
+    are using a slow connection to the Internet.
    </P
 ><P
 >    This option should only be used by experienced users who
