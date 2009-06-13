@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.61 2009/05/28 21:13:34 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.62 2009/06/10 22:36:01 david__schmidt Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -196,6 +196,12 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 #endif /* def FEATURE_ACL */
 
       csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
+      if (NULL == csp->http->host_ip_addr_str)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Out of memory while getting the server IP address.");
+         return;
+      }
       retval = getnameinfo(rp->ai_addr, rp->ai_addrlen,
          csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
       if (!csp->http->host_ip_addr_str || retval)
@@ -898,6 +904,12 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       }
 #ifdef HAVE_RFC2553
       *ip_address = malloc(NI_MAXHOST);
+      if (NULL == *ip_address)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Out of memory while getting the client's IP address.");
+         return;
+      }
       retval = getnameinfo((struct sockaddr *) &server, s_length,
          *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
       if (retval)
@@ -921,6 +933,12 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
 
 #ifdef HAVE_RFC2553
       *hostname = malloc(NI_MAXHOST);
+      if (NULL == *hostname)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Out of memory while getting the client's hostname.");
+         return;
+      }
       retval = getnameinfo((struct sockaddr *) &server, s_length,
          *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD);
       if (retval)
@@ -1029,6 +1047,12 @@ int accept_connection(struct client_state * csp, jb_socket fd)
    csp->cfd = afd;
 #ifdef HAVE_RFC2553
    csp->ip_addr_str = malloc(NI_MAXHOST);
+   if (NULL == csp->ip_addr_str)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Out of memory while getting the client's IP address.");
+      return 0;
+   }
    retval = getnameinfo((struct sockaddr *) &client, c_length,
          csp->ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
    if (!csp->ip_addr_str || retval)
