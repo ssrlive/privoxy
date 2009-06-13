@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.62 2009/06/10 22:36:01 david__schmidt Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.63 2009/06/13 11:32:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -200,7 +200,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR,
             "Out of memory while getting the server IP address.");
-         return;
+         return JB_INVALID_SOCKET;
       }
       retval = getnameinfo(rp->ai_addr, rp->ai_addrlen,
          csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
