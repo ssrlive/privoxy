@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.123 2009/06/11 11:49:11 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.124 2009/06/12 11:03:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1622,7 +1622,9 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       if (!err) err = enlist_unique_header(rsp->headers, "Date", buf);
       if (!strncmpic(rsp->status, "403", 3)
        || !strncmpic(rsp->status, "404", 3)
-       || !strncmpic(rsp->status, "503", 3))
+       || !strncmpic(rsp->status, "502", 3)
+       || !strncmpic(rsp->status, "503", 3)
+       || !strncmpic(rsp->status, "504", 3))
       {
          if (!err) err = enlist_unique_header(rsp->headers, "Last-Modified", "Wed, 08 Jun 1955 12:00:00 GMT");
       }
