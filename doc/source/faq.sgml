@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.61 2009/06/12 11:52:33 fabiankeil Exp $
+ $Id: faq.sgml,v 2.62 2009/06/12 14:30:58 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.61 2009/06/12 11:52:33 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.62 2009/06/12 14:30:58 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -537,7 +537,7 @@ warranty? Registration?</title>
  please have a look at
  <ulink url="http://www.spi-inc.org/donations">SPI's donation page</ulink>
  to see what the options are.
-<para>
+</para>
 </sect3>
 
 </sect2>
@@ -2945,6 +2945,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.62  2009/06/12 14:30:58  fabiankeil
+Update entities for 3.0.13 beta.
+
 Revision 2.61  2009/06/12 11:52:33  fabiankeil
 Mention the TODO list in the participate entry.
 
