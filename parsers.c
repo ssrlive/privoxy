@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.179 2009/06/16 15:42:28 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.180 2009/06/17 14:50:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2334,7 +2334,15 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 #else
             timeptr = gmtime(&last_modified);
 #endif
-            strftime(newheader, sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr);
+            if (!strftime(newheader, sizeof(newheader),
+                    "%a, %d %b %Y %H:%M:%S GMT", timeptr))
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "Randomizing %s failed. Keeping the header unmodified.",
+                  *header);
+               return JB_ERR_OK;
+            }
+
             freez(*header);
             *header = strdup("Last-Modified: ");
             string_append(header, newheader);
