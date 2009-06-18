@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.182 2009/06/17 14:51:51 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.183 2009/06/17 18:23:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2338,8 +2338,9 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
                log_error(LOG_LEVEL_ERROR,
-                  "Randomizing '%s' failed. Keeping the header unmodified.",
+                  "Randomizing '%s' failed. Crunching the header without replacement.",
                   *header);
+               freez(*header);
                return JB_ERR_OK;
             }
 
@@ -3065,8 +3066,9 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
                log_error(LOG_LEVEL_ERROR,
-                  "Randomizing '%s' failed. Keeping the header unmodified.",
+                  "Randomizing '%s' failed. Crunching the header without replacement.",
                   *header);
+               freez(*header);
                return JB_ERR_OK;
             }
 
