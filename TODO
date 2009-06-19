@@ -1,4 +1,4 @@
-$Id: TODO,v 1.1 2009/05/16 11:28:08 fabiankeil Exp $
+$Id: TODO,v 1.2 2009/06/03 18:49:18 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -162,3 +162,6 @@ Some Privoxy related task, not ordered in any way.
 70) If the server connection is reset but the headers are
     received, consider passing the mess to the client instead
     of showing the connect-failed template. Relates to #2698674.
+
+71) Allow to listen on multiple addresses without having to
+    bind to all.
