@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.131 2009/06/14 14:35:42 fabiankeil Exp $
+dnl $Id: configure.in,v 1.132 2009/06/14 14:36:13 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2009 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.131 $)
+AC_REVISION($Revision: 1.132 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -118,8 +118,8 @@ AC_PROG_MAKE_SET
 AC_PROG_AWK
 
 AC_CHECK_PROG(GDB,gdb,yes,no)
-AC_PATH_PROG(BGROUPS,groups,no,/bin:/usr/bin:/usr/local/bin)
-AC_PATH_PROG(ID,id,no,/bin:/usr/bin:/usr/local/bin)
+AC_PATH_PROG(BGROUPS,groups,no,$PATH:/bin:/usr/bin:/usr/local/bin)
+AC_PATH_PROG(ID,id,no,$PATH:/bin:/usr/bin:/usr/local/bin)
 AC_SUBST(ID)
 AC_SUBST(BGROUPS)
 
