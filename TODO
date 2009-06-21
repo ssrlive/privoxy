@@ -1,4 +1,4 @@
-$Id: TODO,v 1.3 2009/06/19 13:24:14 fabiankeil Exp $
+$Id: TODO,v 1.4 2009/06/19 13:25:38 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -167,3 +167,7 @@ Some Privoxy related task, not ordered in any way.
     bind to all.
 
 72) Use less ugly Privoxy (fav)icons.
+
+73) Factor FEATURE_CONNECTION_SHARING out of
+    FEATURE_CONNECTION_KEEP_ALIVE so the later can be enabled
+    on platforms without mutex support as well.
