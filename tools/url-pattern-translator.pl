@@ -18,7 +18,7 @@
 # Only convert your files once, or, as RoboCop used to say,
 # there will be... trouble.
 #
-# $Id: url-pattern-translator.pl,v 1.2 2008/08/10 16:35:47 fabiankeil Exp $
+# $Id: url-pattern-translator.pl,v 1.3 2009/01/13 17:01:04 fabiankeil Exp $
 #
 # Copyright (c) 2008 Fabian Keil <fk@fabiankeil.de>
 #
@@ -63,7 +63,7 @@ sub convert_host_pattern ($) {
     }
 
     # Match-all syntax has changed ...
-    $hp =~ s@\*@.*@g;
+    $hp =~ s@\*@[^.]*@g;
 
     # Extended host patterns are right-anchored by default
     $hp =~ s@\.$@(\..*)?@;
