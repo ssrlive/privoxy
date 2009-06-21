@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.177 2009/05/10 17:53:07 ler762 Exp $
+#  $Id: default.action.master,v 1.178 2009/05/25 21:27:19 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1028,6 +1028,9 @@ bwp.
 .yahoo.com/mc/stampNonJs
 # Blocked URL = http://richmedia.yimg.com/js/123/personnals_banners/PER_happy_sara1_4_425x600/ad.js?q=123
 /.*/ad\.js\?
+# Blocked URL = http://i.cmpnet.com/shared/omniture/s_code_remote.js
+#MASTER# BLOCK-REFERRER: http://www.informationweek.de/
+/.*omniture.*\.js
 
 
 #############################################################################
