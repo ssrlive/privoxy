@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.256 2009/06/11 11:49:11 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.257 2009/06/12 13:39:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3068,7 +3068,7 @@ static jb_socket bind_port_helper(struct configuration_spec * config)
                (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
 
          default :
-            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: because %E",
+            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: %E",
                (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
       }
 
