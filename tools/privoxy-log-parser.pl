@@ -1007,6 +1007,11 @@ sub handle_loglevel_header ($) {
        $content =~ s@(?<= from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
        $content =~ s@(?<= to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Appended client IP address to/) {
+
+       # Appended client IP address to X-Forwarded-For: 10.0.0.2, 10.0.0.1
+       $content =~ s@(?<=X-Forwarded-For )(\d+)@$h{'Host'}$1$h{'Standard'}@;
+
     } else {
 
         found_unknown_content($content);
