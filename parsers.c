@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.183 2009/06/17 18:23:06 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.184 2009/06/18 17:10:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3474,7 +3474,8 @@ static jb_err client_connection_header_adder(struct client_state *csp)
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-      && (csp->http->ssl == 0))
+      && (csp->http->ssl == 0)
+      && !strcmpic(csp->http->ver, "HTTP/1.1"))
    {
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
    }
