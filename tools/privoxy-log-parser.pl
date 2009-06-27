@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.150 2009/06/27 15:06:43 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.151 2009/06/27 15:28:06 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -914,6 +914,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/Disabled filter mode on behalf of the client/
           or $c =~ m/Keeping the (?:server|client) header /
           or $c =~ m/Content modified with no Content-Length header set/
+          or $c =~ m/^Appended client IP address to/
             )
     {
         # XXX: Some of these may need highlighting
@@ -956,6 +957,7 @@ sub handle_loglevel_header ($) {
         # Keeping the client header 'Connection: close' around. The connection will not be kept alive.
         # Keeping the client header 'Connection: keep-alive' around. The connection will be kept alive if possible.
         # Content modified with no Content-Length header set. Creating a fake one for adjustment later on.
+        # Appended client IP address to X-Forwarded-For: 10.0.0.2, 10.0.0.1
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
@@ -1006,11 +1008,6 @@ sub handle_loglevel_header ($) {
 
        $content =~ s@(?<= from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
        $content =~ s@(?<= to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-
-    } elsif ($c =~ m/^Appended client IP address to/) {
-
-       # Appended client IP address to X-Forwarded-For: 10.0.0.2, 10.0.0.1
-       $content =~ s@(?<=X-Forwarded-For )(\d+)@$h{'Host'}$1$h{'Standard'}@;
 
     } else {
 
