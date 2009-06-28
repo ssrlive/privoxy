@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.257 2009/06/12 13:39:02 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.258 2009/06/27 11:22:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1143,6 +1143,7 @@ static void mark_server_socket_tainted(struct client_state *csp)
    {
       log_error(LOG_LEVEL_CONNECT, "Unsetting keep-alive flag.");
       csp->flags &= ~CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
+      csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
    }
 }
 
@@ -1442,6 +1443,39 @@ static jb_err parse_client_request(struct client_state *csp)
       return JB_ERR_PARSE;
    }
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+   {
+      if (csp->iob->cur[0] != '\0')
+      {
+         csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+         if (!strcmpic(csp->http->gpc, "POST"))
+         {
+            /* XXX: this is an incomplete hack */
+            csp->flags &= ~CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+            log_error(LOG_LEVEL_CONNECT,
+               "POST request detected. The connection will not be kept alive.");
+         }
+         else
+         {
+            /* XXX: and so is this */
+            csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+            log_error(LOG_LEVEL_CONNECT,
+               "Possible pipeline attempt detected. The connection will not "
+               "be kept alive and we will only serve the first request.");
+            /* Nuke the pipelined requests from orbit, just to be sure. */
+            csp->iob->buf[0] = '\0';
+            csp->iob->eod = csp->iob->cur = csp->iob->buf;
+         }
+      }
+      else
+      {
+         csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+         log_error(LOG_LEVEL_CONNECT, "Complete client request received.");
+      }
+   }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
    return JB_ERR_OK;
 
 }
@@ -1727,7 +1761,17 @@ static void chat(struct client_state *csp)
 #else
       FD_ZERO(&rfds);
 #endif
-      FD_SET(csp->cfd, &rfds);
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      if ((csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ))
+      {
+         maxfd = csp->sfd;
+      }
+      else
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+      {
+         FD_SET(csp->cfd, &rfds);
+      }
+
       FD_SET(csp->sfd, &rfds);
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
@@ -2279,6 +2323,7 @@ static void serve(struct client_state *csp)
       continue_chatting = (csp->config->feature_flags
          & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
          && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
+         && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
          && (csp->cfd != JB_INVALID_SOCKET)
          && (csp->sfd != JB_INVALID_SOCKET)
          && socket_is_still_usable(csp->sfd);

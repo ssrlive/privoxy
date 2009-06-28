@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.184 2009/06/18 17:10:16 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.185 2009/06/27 11:25:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1580,7 +1580,11 @@ static jb_err filter_header(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err server_connection(struct client_state *csp, char **header)
 {
-   if (!strcmpic(*header, "Connection: keep-alive"))
+   if (!strcmpic(*header, "Connection: keep-alive")
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+#endif
+      )
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
@@ -3403,7 +3407,11 @@ static jb_err server_connection_adder(struct client_state *csp)
    if ((csp->config->feature_flags &
         RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
     && (NULL != response_status_line)
-    && !strncmpic(response_status_line, "HTTP/1.1", 8))
+    && !strncmpic(response_status_line, "HTTP/1.1", 8)
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+#endif
+       )
    {
       log_error(LOG_LEVEL_HEADER, "A HTTP/1.1 response "
          "without Connection header implies keep-alive.");
@@ -3437,7 +3445,8 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
    static const char proxy_connection_header[] = "Proxy-Connection: keep-alive";
    jb_err err = JB_ERR_OK;
 
-   if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+   if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
+    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
    {
       log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
       err = enlist(csp->headers, proxy_connection_header);
@@ -4048,6 +4057,9 @@ static const char *get_appropiate_connection_header(const struct client_state *c
    static const char connection_close[] = "Connection: close";
 
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+#endif
     && (csp->http->ssl == 0))
    {
       return connection_keep_alive;
