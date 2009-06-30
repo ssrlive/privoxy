@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.151 2009/06/27 15:28:06 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.153 2009/06/30 19:05:08 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1587,7 +1587,10 @@ sub handle_loglevel_connect ($) {
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
-             $c =~ m/^Client request arrived in time or the client closed the connection/) {
+             $c =~ m/^Client request arrived in time or the client closed the connection/ or
+             $c =~ m/^Complete client request received/ or
+             $c =~ m/^Possible pipeline attempt detected./ or
+             $c =~ m/^POST request detected. The connection will not be kept alive./) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
         # Looks like we read the end of the last chunk together with the server \
@@ -1595,6 +1598,10 @@ sub handle_loglevel_connect ($) {
         # Unsetting keep-alive flag.
         # No connections to wait for left.
         # Client request arrived in time or the client closed the connection.
+        # Complete client request received
+        # Possible pipeline attempt detected. The connection will not be \
+        #  kept alive and we will only serve the first request.
+        # POST request detected. The connection will not be kept alive.
 
     } else {
 
