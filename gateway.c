@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.53 2009/05/16 13:27:20 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.54 2009/05/19 17:43:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -598,7 +598,8 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
    jb_socket sfd = JB_INVALID_SOCKET;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
+      && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
    {
       sfd = get_reusable_connection(http, fwd);
       if (JB_INVALID_SOCKET != sfd)
