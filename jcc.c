@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.261 2009/07/05 12:00:53 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.262 2009/07/05 12:02:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1142,7 +1142,7 @@ static void mark_server_socket_tainted(struct client_state *csp)
    if ((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE))
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Marking the connection to the server tainted.");
+         "Marking the server socket %d tainted.", csp->sfd);
       csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
    }
 }
