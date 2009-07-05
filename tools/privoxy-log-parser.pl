@@ -1584,6 +1584,12 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=to )[^\s]+');
 
+    } elsif ($c =~ m/^Marking the server socket/) {
+
+        # Marking the server socket 7 tainted.
+
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
