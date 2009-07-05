@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.186 2009/06/28 14:31:43 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.187 2009/06/30 18:32:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1624,7 +1624,7 @@ static jb_err server_connection(struct client_state *csp, char **header)
  *
  * Function    :  server_keep_alive
  *
- * Description :  Stores the servers keep alive timeout.
+ * Description :  Stores the server's keep alive timeout.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
