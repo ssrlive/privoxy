@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.180 2009/06/27 11:23:51 fabiankeil Exp $
+#  $Id: default.action.master,v 1.181 2009/06/28 12:41:29 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -748,6 +748,10 @@ support./(.*/)?track
 landing.trafficz.com/
 # Blocked URL = http://www.searchnut.com/?domain=www.inetcat.org
 .searchnut.com/\?domain
+#MASTER# REMARKS: Verizon should know better
+#MASTER# BLOCK-REFERRER: http://www.qwetyhjkl.com
+# Blocked URL = http://wwwz.websearch.verizon.net/search?qo=www.qwetyhjkl.com
+wwwz.websearch.verizon.net/search\?qo=
 
 {+block{Site-specific block pattern matches.}}
 #MASTER# BLOCK-REFERRER: http://www.brooksbrothers.com/ 10/18/06
