@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.96 2009/05/28 21:13:34 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.97 2009/06/14 15:59:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -422,8 +422,7 @@ static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
 
    gettimeofday(&tv_now, NULL);
    msecs = tv_now.tv_usec / 1000;
-
-   time(&now);
+   now = tv_now.tv_sec;
 
 #ifdef HAVE_LOCALTIME_R
    tm_now = *localtime_r(&now, &tm_now);
