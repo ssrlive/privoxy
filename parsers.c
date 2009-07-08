@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.189 2009/07/05 12:04:46 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.190 2009/07/05 20:43:14 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1711,7 +1711,7 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
          /* XXX: Is this log worthy? */
          log_error(LOG_LEVEL_HEADER,
             "Client keep-alive timeout is %u. Sticking with %u.",
-            keep_alive_timeout, csp->server_connection.keep_alive_timeout);
+            keep_alive_timeout, csp->config->keep_alive_timeout);
       }
    }
 
