@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.264 2009/07/07 16:42:26 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.265 2009/07/11 11:17:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1867,6 +1867,16 @@ static void chat(struct client_state *csp)
        */
       if (FD_ISSET(csp->sfd, &rfds))
       {
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         if (!socket_is_still_usable(csp->cfd))
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "The server still wants to talk, but the client hung up on us.");
+            mark_server_socket_tainted(csp);
+            return;
+         }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
          fflush(NULL);
          len = read_socket(csp->sfd, buf, sizeof(buf) - 1);
 
