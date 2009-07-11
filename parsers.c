@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.194 2009/07/11 11:16:19 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.195 2009/07/11 11:17:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3487,17 +3487,8 @@ static jb_err server_connection_adder(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
 #endif
-    && (csp->http->status == 200)
        )
    {
-      /*
-       * XXX: not doing this for status codes other than 200 works
-       * around problems with broken servers that will keep the
-       * connection open, but terminate the connection when the
-       * next request arrives. Once we are able to figure out which
-       * requests are safe to send again, this will probably no
-       * longer be necessary.
-       */
       log_error(LOG_LEVEL_HEADER, "A HTTP/1.1 response "
          "without Connection header implies keep-alive.");
       csp->flags |= CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE;
