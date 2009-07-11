@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.190 2009/07/05 20:43:14 ler762 Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.191 2009/07/08 17:25:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3537,7 +3537,7 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
  *********************************************************************/
 static jb_err client_connection_header_adder(struct client_state *csp)
 {
-   const char *wanted_header = get_appropiate_connection_header(csp);
+   static const char connection_close[] = "Connection: close";
 
    if (!(csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
      && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
@@ -3551,12 +3551,13 @@ static jb_err client_connection_header_adder(struct client_state *csp)
       && !strcmpic(csp->http->ver, "HTTP/1.1"))
    {
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+      return JB_ERR_OK;
    }
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-   log_error(LOG_LEVEL_HEADER, "Adding: %s", wanted_header);
+   log_error(LOG_LEVEL_HEADER, "Adding: %s", connection_close);
 
-   return enlist(csp->headers, wanted_header);
+   return enlist(csp->headers, connection_close);
 }
 
 
