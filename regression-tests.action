@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.28 2009/06/18 17:14:16 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.29 2009/06/19 13:26:18 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -27,7 +27,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.13
+for-privoxy-version=3.0.14
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
@@ -460,7 +460,7 @@ TAG:^no-content-filter$
 # Expect Header = NO CHANGE
 # Level = 13
 # Set Header    = Connection:
-# Expect Header = Connection: keep-alive
+# Expect Header = REMOVAL
 # Level = 13
 {}
 TAG:^Connection: keep-alive$
@@ -481,7 +481,7 @@ TAG:^Connection: close$
 TAG:^connection-sharing disabled$
 
 # Set Header    = Connection: close
-# Expect Header = Connection: keep-alive
+# Expect Header = REMOVAL
 # Level = 16
 # Set Header    = Connection: keep-alive
 # Expect Header = NO CHANGE
