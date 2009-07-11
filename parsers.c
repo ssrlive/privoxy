@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.192 2009/07/11 11:15:14 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.193 2009/07/11 11:15:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -172,7 +172,6 @@ static jb_err create_forged_referrer(char **header, const char *hostport);
 static jb_err create_fake_referrer(char **header, const char *fake_referrer);
 static jb_err handle_conditional_hide_referrer_parameter(char **header,
    const char *host, const int parameter_conditional_block);
-static const char *get_appropiate_connection_header(const struct client_state *csp);
 static void create_content_length_header(unsigned long long content_length,
                                          char *header, size_t buffer_length);
 
@@ -4100,37 +4099,6 @@ static jb_err handle_conditional_hide_referrer_parameter(char **header,
 
    return JB_ERR_OK;
 
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_appropiate_connection_header
- *
- * Description :  Returns an appropiate Connection header
- *                depending on whether or not we try to keep
- *                the connection to the server alive.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  Pointer to statically allocated header buffer.
- *
- *********************************************************************/
-static const char *get_appropiate_connection_header(const struct client_state *csp)
-{
-   static const char connection_keep_alive[] = "Connection: keep-alive";
-   static const char connection_close[] = "Connection: close";
-
-   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
-#endif
-    && (csp->http->ssl == 0))
-   {
-      return connection_keep_alive;
-   }
-   return connection_close;
 }
 
 
