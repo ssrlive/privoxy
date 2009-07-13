@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.268 2009/07/13 17:05:36 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.269 2009/07/13 17:08:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1750,6 +1750,8 @@ static void chat(struct client_state *csp)
 
    log_error(LOG_LEVEL_CONNECT, "to %s successful", http->hostport);
 
+   csp->server_connection.request_sent = time(NULL);
+
    /* we're finished with the client's header */
    freez(hdr);
 
@@ -2205,6 +2207,8 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
             }
 
+            csp->server_connection.response_received = time(NULL);
+
             if (crunch_response_triggered(csp, crunchers_light))
             {
                /*
@@ -2340,6 +2344,8 @@ static void serve(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    static int monitor_thread_running = 0;
    int continue_chatting = 0;
+   unsigned int latency = 0;
+
    do
    {
       chat(csp);
@@ -2350,17 +2356,19 @@ static void serve(struct client_state *csp)
          && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
          && (csp->cfd != JB_INVALID_SOCKET)
          && (csp->sfd != JB_INVALID_SOCKET)
-         && socket_is_still_usable(csp->sfd);
+         && socket_is_still_usable(csp->sfd)
+         && (latency < csp->server_connection.keep_alive_timeout);
 
       if (continue_chatting)
       {
+         unsigned int client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
          log_error(LOG_LEVEL_CONNECT,
             "Waiting for the next client request. "
             "Keeping the server socket %d to %s open.",
             csp->sfd, csp->server_connection.host);
 
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
-            && data_is_available(csp->cfd, (int)csp->server_connection.keep_alive_timeout)
+            && data_is_available(csp->cfd, (int)client_timeout)
             && socket_is_still_usable(csp->cfd))
          {
             log_error(LOG_LEVEL_CONNECT, "Client request arrived in "

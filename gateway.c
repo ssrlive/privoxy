@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.55 2009/07/05 12:01:45 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.56 2009/07/11 14:49:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -228,6 +228,8 @@ void remember_connection(const struct client_state *csp, const struct forward_sp
    reusable_connection[slot].port = http->port;
    reusable_connection[slot].in_use = 0;
    reusable_connection[slot].timestamp = connection->timestamp;
+   reusable_connection->request_sent = connection->request_sent;
+   reusable_connection->response_received = connection->response_received;
    reusable_connection[slot].keep_alive_timeout = connection->keep_alive_timeout;
 
    assert(NULL != fwd);
@@ -289,6 +291,8 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    freez(closed_connection->host);
    closed_connection->port = 0;
    closed_connection->timestamp = 0;
+   closed_connection->request_sent = 0;
+   closed_connection->response_received = 0;
    closed_connection->keep_alive_timeout = 0;
    closed_connection->forwarder_type = SOCKS_NONE;
    freez(closed_connection->gateway_host);
@@ -419,16 +423,19 @@ int close_unusable_connections(void)
          && (JB_INVALID_SOCKET != reusable_connection[slot].sfd))
       {
          time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
+         time_t latency = reusable_connection[slot].response_received -
+            reusable_connection[slot].request_sent;
 
-         if (reusable_connection[slot].keep_alive_timeout < time_open)
+         if (reusable_connection[slot].keep_alive_timeout < time_open + latency)
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d timed out. "
-               "Closing socket %d. Timeout is: %d.",
+               "Closing socket %d. Timeout is: %d. Assumed latency: %d",
                reusable_connection[slot].host,
                reusable_connection[slot].port, slot,
                reusable_connection[slot].sfd,
-               reusable_connection[slot].keep_alive_timeout);
+               reusable_connection[slot].keep_alive_timeout,
+               latency);
             close_socket(reusable_connection[slot].sfd);
             mark_connection_closed(&reusable_connection[slot]);
          }
