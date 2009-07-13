@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.267 2009/07/11 14:49:09 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.268 2009/07/13 17:05:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2190,8 +2190,6 @@ static void chat(struct client_state *csp)
                return;
             }
 
-            csp->server_connection.timestamp = time(NULL);
-
             /*
              * We have now received the entire server header,
              * filter it and send the result to the client
@@ -2314,6 +2312,8 @@ static void chat(struct client_state *csp)
 
    log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %llu",
       csp->ip_addr_str, http->ocmd, csp->content_length);
+
+   csp->server_connection.timestamp = time(NULL);
 }
 
 
