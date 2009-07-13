@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.266 2009/07/11 14:39:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.267 2009/07/11 14:49:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2393,7 +2393,8 @@ static void serve(struct client_state *csp)
          {
             log_error(LOG_LEVEL_CONNECT,
                "No additional client request received in time.");
-            if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
+            if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
+               && (socket_is_still_usable(csp->sfd)))
             {
                remember_connection(csp, forward_url(csp, csp->http));
                csp->sfd = JB_INVALID_SOCKET;
