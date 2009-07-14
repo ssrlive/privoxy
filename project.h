@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.145 2009/07/13 19:16:15 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.146 2009/07/14 17:45:05 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -768,13 +768,19 @@ struct reusable_connection
  */
 #define CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ 0x00010000U
 
+/**
+ * Flag for csp->flags: Set if the server promised us to
+ * keep the connection open for a known number of seconds.
+ */
+#define CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET  0x00020000U
+
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 /**
  * Flag for csp->flags: Set if we think we can't reuse
  * the server socket.
  */
-#define CSP_FLAG_SERVER_SOCKET_TAINTED          0x00020000U
+#define CSP_FLAG_SERVER_SOCKET_TAINTED          0x00040000U
 
 /*
  * Flags for use in return codes of child processes
