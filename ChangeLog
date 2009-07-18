@@ -40,9 +40,7 @@ ChangeLog for Privoxy
 
 - Added IPv6 support. Thanks to Petr Pisar who not only provided
   the initial patch but also helped a lot with the integration.
-- Added client-side keep-alive support. This should also allow
-  NTLM authentication through Privoxy, but this hasn't been
-  confirmed yet.
+- Added client-side keep-alive support.
 - The connection sharing code is only used if the connection-sharing
   option is enabled.
 - The max-client-connections option has been added to restrict
