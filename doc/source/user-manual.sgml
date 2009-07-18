@@ -11,8 +11,8 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.13">
-<!entity p-status "beta">
+<!entity p-version "3.0.14">
+<!entity p-status "BETA">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.107 2009/06/12 14:30:58 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.108 2009/07/18 15:49:23 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.107 2009/06/12 14:30:58 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.108 2009/07/18 15:49:23 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8568,6 +8568,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.108  2009/07/18 15:49:23  fabiankeil
+ Add most of the changes in 3.0.14 to the "What's New" section.
+
  Revision 2.107  2009/06/12 14:30:58  fabiankeil
  Update entities for 3.0.13 beta.
 
