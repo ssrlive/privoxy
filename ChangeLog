@@ -3,40 +3,38 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Version 3.0.14 Beta ***
 
-- The error pages for connection timeouts or missing server data
-  use a Last-Modified date in the past. Retry attempts are detected
-  and Privoxy removes the If-Modified-Since header to prevent the
-  server from responding with status code 304 in which case the client
-  would reuse the error message..
-- Setting keep-alive-timeout to 0 disables keep-alive support.
-  Previously Privoxy would claim to allow persistence but not reuse
-  the connection.
-- Fixed a crash on some Windows versions when header randomization
-  is enabled and the date can't be parsed.
-- The configure script respects the $PATH variable when searching
-  for groups and id.
-- Pipelined requests are less likely to be mistaken for the request
-  body of the previous request. Note that Privoxy still has no real
-  Pipelining support and will either serialize pipelined requests or
-  drop them in which case the client has to resent them.
-- Takes the latency into account when evaluating whether or not to
+- The latency is taken into account when evaluating whether or not to
   reuse a connection. This should significantly reduce the number of
   connections problems several users reported.
-- If the client's Keep-Alive header specifies a timeout below
-  Privoxy's, it will be used instead.
+- If the server doesn't specify how long the connection stays alive,
+  Privoxy errs on the safe side of caution and assumes it's only a second.
+- The error pages for connection timeouts or missing server data use a
+  Last-Modified date in the past. Retry attempts are detected and Privoxy
+  removes the If-Modified-Since header to prevent the server from responding
+  with status code 304 in which case the client would reuse the error message.
+- Setting keep-alive-timeout to 0 disables keep-alive support. Previously
+  Privoxy would claim to allow persistence but not reuse the connection.
+- Pipelined requests are less likely to be mistaken for the request
+  body of the previous request. Note that Privoxy still has no real
+  pipeline support and will either serialize pipelined requests or
+  drop them in which case the client has to resent them.
+- Fixed a crash on some Windows versions when header randomization
+  is enabled and the date couldn't be parsed.
+- Privoxy's keep-alive timeout for the current connection is reduced
+  to the one specified in the client's Keep-Alive header.
 - For HTTP/1.1 requests, Privoxy implies keep-alive support by not
   setting any Connection header instead of using 'Connection: keep-alive'.
 - If the socket isn't reusable, Privoxy doesn't temporarily waste
   a socket slot to remember the connection.
 - If keep-alive support is disabled but compiled in, the client's
   Keep-Alive header is removed.
-- If the server doesn't specify how long the connection stays alive,
-  Privoxy errs on the safe side of caution and assumes it's only a second.
 - Fixed a bug on mingw32 where downloading large files failed if
   keep-alive support was enabled.
-- Fixed a bug that (at least theoretically) could cause log timestamps
-  to be occasionally off by about a second.
-- Don't add another Proxy-Connection header if there already is one.
+- Fixed a bug that (at least theoretically) could cause log
+  timestamps to be occasionally off by about a second.
+- No Proxy-Connection header if added if there already is one.
+- The configure script respects the $PATH variable when searching
+  for groups and id.
 
 *** Version 3.0.13 Beta ***
 
