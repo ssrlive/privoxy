@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.197 2009/07/13 17:10:57 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.198 2009/07/14 17:50:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -156,6 +156,7 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 static jb_err server_save_content_length(struct client_state *csp, char **header);
 static jb_err server_keep_alive(struct client_state *csp, char **header);
+static jb_err server_proxy_connection(struct client_state *csp, char **header);
 static jb_err client_keep_alive(struct client_state *csp, char **header);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
@@ -230,6 +231,7 @@ static const struct parsers server_patterns[] = {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Content-Length:",          15, server_save_content_length },
    { "Keep-Alive:",              11, server_keep_alive },
+   { "Proxy-Connection:",        17, server_proxy_connection },
 #else
    { "Keep-Alive:",              11, crumble },
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
@@ -1667,6 +1669,30 @@ static jb_err server_keep_alive(struct client_state *csp, char **header)
       csp->flags |= CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET;
    }
 
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  server_proxy_connection
+ *
+ * Description :  Figures out whether or not we should add a
+ *                Proxy-Connection header.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK.
+ *
+ *********************************************************************/
+static jb_err server_proxy_connection(struct client_state *csp, char **header)
+{
+   csp->flags |= CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET;
    return JB_ERR_OK;
 }
 
@@ -3532,7 +3558,8 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
    jb_err err = JB_ERR_OK;
 
    if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
-    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
+    && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+    && !(csp->flags & CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET))
    {
       log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
       err = enlist(csp->headers, proxy_connection_header);

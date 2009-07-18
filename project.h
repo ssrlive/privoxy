@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.146 2009/07/14 17:45:05 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.147 2009/07/14 17:50:34 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -781,6 +781,12 @@ struct reusable_connection
  * the server socket.
  */
 #define CSP_FLAG_SERVER_SOCKET_TAINTED          0x00040000U
+
+/**
+ * Flag for csp->flags: Set if the Proxy-Connection header
+ * is among the server headers.
+ */
+#define CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET 0x00080000U
 
 /*
  * Flags for use in return codes of child processes
