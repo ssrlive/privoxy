@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.199 2009/07/18 12:20:05 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.200 2009/07/19 09:24:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1802,7 +1802,6 @@ static jb_err client_connection(struct client_state *csp, char **header)
                 "Replaced: \'%s\' with \'%s\'", old_header, *header);
              freez(old_header);
           }
-          csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       }
       else
       {
