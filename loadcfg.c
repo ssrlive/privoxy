@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.102 2009/05/16 13:27:20 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.103 2009/06/15 20:50:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1342,6 +1342,12 @@ struct configuration_spec * load_config(void)
          log_error(LOG_LEVEL_ERROR,
             "Config option single-threaded disables connection keep-alive.");
       }
+   }
+   else if ((config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
+   {
+      log_error(LOG_LEVEL_ERROR, "Config option connection-sharing "
+         "has no effect if keep-alive-timeout isn't set.");
+      config->feature_flags &= ~RUNTIME_FEATURE_CONNECTION_SHARING;
    }
 #endif
 
