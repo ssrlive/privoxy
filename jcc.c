@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.272 2009/07/14 18:02:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.273 2009/07/19 10:04:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1418,7 +1418,7 @@ static jb_err parse_client_request(struct client_state *csp)
    jb_err err;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   if ((csp->flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
     && (!strcmpic(csp->http->ver, "HTTP/1.1"))
     && (csp->http->ssl == 0))
    {
