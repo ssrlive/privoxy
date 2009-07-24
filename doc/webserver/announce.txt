@@ -1,4 +1,4 @@
-              Announcing Privoxy v.3.0.13 beta
+              Announcing Privoxy v.3.0.14 beta
 -----------------------------------------------------------------
 
 Privoxy 3.0.14 beta is a bugfix-release for the previous beta
@@ -10,7 +10,7 @@ See http://www.privoxy.org/3.0.14/user-manual/whatsnew.html for details.
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Version 3.0.14 Beta ***
+*** Version 3.0.14 beta ***
 
 - The latency is taken into account when evaluating whether or not to
   reuse a connection. This should significantly reduce the number of
