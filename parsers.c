@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.201 2009/07/19 10:06:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.202 2009/07/19 11:48:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3666,8 +3666,7 @@ static jb_err server_http(struct client_state *csp, char **header)
  * Function    :  server_set_cookie
  *
  * Description :  Handle the server "cookie" header properly.
- *                Log cookie to the jar file.  Then "crunch",
- *                accept or rewrite it to a session cookie.
+ *                Crunch, accept or rewrite it to a session cookie.
  *                Called from `sed'.
  *
  *                TODO: Allow the user to specify a new expiration
