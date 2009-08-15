@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.183 2009/07/11 11:13:26 fabiankeil Exp $
+#  $Id: default.action.master,v 1.184 2009/07/21 14:19:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1680,7 +1680,7 @@ images.apple.com
 #MASTER# REMARKS: Actions Tracker 1293057 09/02/06
 .update.microsoft.com
 #MASTER# REMARKS: Various reports 09/16/06. This site also requires pop-ups.
-mail.google.
+mail.google.*
 
 #----------------------------------------------------------------------------
 # Semi-fragile, allow for blocks.
@@ -1703,7 +1703,7 @@ mail.google.
 .dabs.com
 .overclockers.co.uk
 .db24.de
-.ebay.
+.ebay.*
 .mobile.de
 www.fondationlejeu.com
 www.techtv.com
@@ -1752,7 +1752,8 @@ i.cnn.net/cnn/.*/clickability/button
 # Sticky Actions = -fast-redirects
 www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 #MASTER# PROBLEM-URL: http://www.google.com/search?q=foo
-.google.
+# URL = http://www.google.com/search?q=foo
+.google.*
 #MASTER# PROBLEM-URL: http://de.altavista.com/q?pg=q&q=foo&kl=XX&search.x=28&search.y=8&what=web
 .altavista.com/(.*(like|url|link):|trans.*urltext=)http
 #MASTER# PROBLEM-URL: http://www.speedfind.de/cgi-bin/search?q=foo&t=STANDARD
