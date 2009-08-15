@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.184 2009/07/21 14:19:57 fabiankeil Exp $
+#  $Id: default.action.master,v 1.185 2009/08/15 16:12:16 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1659,6 +1659,8 @@ lads.myspacecdn.com/
 #MASTER# REMARKS: AF#2789653 iTunes download blocked
 # URL = http://a957.phobos.apple.com/us/r1000/000/Music/ad/47/56/mzi.gnjsyarh.aac.a.m4p
 .phobos.apple.com/
+# URL = http://eas8.emediate.eu/eas?camp=114;ty=ct;EASLink=http://www.jp.dk
+.emediate.eu/.*EASLink=
 
 
 #############################################################################
@@ -1836,6 +1838,13 @@ view.samurajdata.se/ps\.php\?url=
 .youtube.com/swf/.*swf=
 # URL = http://redbot.org/?uri=http%3A//apache.org/
 .redbot.org/
+
+{+redirect{s@.*url=@http://@} -block}
+# Sticky Actions = +redirect -block
+# URL = http://go.eniro.dk/lg/ni/http:/eas8.emediate.eu/eas?camp=79;ty=ct;EASLink=http://www.bt.dk?http://redirect.metropol.dk/cgi-bin/redir.pl?url=www.bt.dk
+# URL = http://eas8.emediate.eu/eas?camp=79;ty=ct;EASLink=http://www.bt.dk?http://redirect.metropol.dk/cgi-bin/redir.pl?url=www.bt.dk
+go.eniro.dk/.*EASLink=http://.*url=(?!<=http:)
+.emediate.eu/.*EASLink=http://.*url=(?!<=http:)
 
 #----------------------------------------------------------------------------
 # No filtering for sourcecode or other automatically parsed content
