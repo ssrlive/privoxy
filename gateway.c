@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.56 2009/07/11 14:49:09 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.57 2009/07/13 17:12:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -685,7 +685,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
                                 int target_port,
                                 struct client_state *csp)
 {
-   unsigned int web_server_addr;
+   unsigned long web_server_addr;
    char buf[BUFFER_SIZE];
    struct socks_op    *c = (struct socks_op    *)buf;
    struct socks_reply *s = (struct socks_reply *)buf;
