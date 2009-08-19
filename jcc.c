@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.277 2009/08/19 15:59:02 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.278 2009/08/19 16:00:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1925,6 +1925,12 @@ static void chat(struct client_state *csp)
                "Expected client content length set to %llu "
                "after reading %d bytes.",
                csp->expected_client_content_length, len);
+            if (csp->expected_client_content_length == 0)
+            {
+               log_error(LOG_LEVEL_CONNECT,
+                  "Done reading from the client.");
+               csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+            }
          }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
