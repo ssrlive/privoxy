@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.275 2009/07/22 22:31:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.276 2009/08/19 15:57:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1458,7 +1458,8 @@ static jb_err parse_client_request(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
    {
-      if (csp->iob->cur[0] != '\0')
+      if ((csp->iob->cur[0] != '\0')
+       || (csp->expected_client_content_length != 0))
       {
          csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
          if (strcmpic(csp->http->gpc, "GET")
@@ -1787,6 +1788,14 @@ static void chat(struct client_state *csp)
       else
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
       {
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         if (http->ssl == 0)
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Allowing the client to continue talking. "
+               "Expecting %llu bytes.", csp->expected_client_content_length);
+         }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
          FD_SET(csp->cfd, &rfds);
       }
 
@@ -1851,7 +1860,23 @@ static void chat(struct client_state *csp)
        */
       if (FD_ISSET(csp->cfd, &rfds))
       {
-         len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
+         unsigned max_bytes_to_read = sizeof(buf) - 1;
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         if (csp->expected_client_content_length != 0)
+         {
+            if (csp->expected_client_content_length < (sizeof(buf) - 1))
+            {
+               max_bytes_to_read = csp->expected_client_content_length;
+            }
+            log_error(LOG_LEVEL_CONNECT,
+               "Waiting for up to %d bytes from the client.",
+               max_bytes_to_read);
+         }
+         assert(max_bytes_to_read < sizeof(buf));
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+         len = read_socket(csp->cfd, buf, max_bytes_to_read);
 
          if (len <= 0)
          {
@@ -1859,6 +1884,18 @@ static void chat(struct client_state *csp)
             mark_server_socket_tainted(csp);
             break; /* "game over, man" */
          }
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         if (csp->expected_client_content_length != 0)
+         {
+            assert(len <= max_bytes_to_read);
+            csp->expected_client_content_length -= len;
+            log_error(LOG_LEVEL_CONNECT,
+               "Expected client content length set to %llu "
+               "after reading %d bytes.",
+               csp->expected_client_content_length, len);
+         }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
          if (write_socket(csp->sfd, buf, (size_t)len))
          {
