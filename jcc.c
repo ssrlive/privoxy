@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.276 2009/08/19 15:57:13 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.277 2009/08/19 15:59:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1458,8 +1458,39 @@ static jb_err parse_client_request(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
    {
-      if ((csp->iob->cur[0] != '\0')
-       || (csp->expected_client_content_length != 0))
+      unsigned long long buffered_request_bytes =
+         (unsigned long long)(csp->iob->eod - csp->iob->cur);
+
+      if ((csp->expected_client_content_length != 0)
+       && (buffered_request_bytes != 0))
+      {
+         if (csp->expected_client_content_length >= buffered_request_bytes)
+         {
+            csp->expected_client_content_length -= buffered_request_bytes;
+            log_error(LOG_LEVEL_CONNECT, "Reduced expected bytes to %llu "
+               "to account for the %llu ones we already got.",
+               csp->expected_client_content_length, buffered_request_bytes);
+         }
+         else
+         {
+            assert(csp->iob->eod > csp->iob->cur + csp->expected_client_content_length);
+            csp->iob->eod = csp->iob->cur + csp->expected_client_content_length;
+            log_error(LOG_LEVEL_CONNECT, "Reducing expected bytes to 0. "
+               "Marking the server socket tainted after throwing %llu bytes away.",
+               buffered_request_bytes - csp->expected_client_content_length);
+            csp->expected_client_content_length = 0;
+            csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+         }
+
+         if (csp->expected_client_content_length == 0)
+         {
+            csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+         }
+      }
+
+      if (!(csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ)
+       && ((csp->iob->cur[0] != '\0')
+        || (csp->expected_client_content_length != 0)))
       {
          csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
          if (strcmpic(csp->http->gpc, "GET")
