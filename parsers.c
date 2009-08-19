@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.204 2009/08/19 15:25:31 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.205 2009/08/19 15:26:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -158,6 +158,7 @@ static jb_err server_save_content_length(struct client_state *csp, char **header
 static jb_err server_keep_alive(struct client_state *csp, char **header);
 static jb_err server_proxy_connection(struct client_state *csp, char **header);
 static jb_err client_keep_alive(struct client_state *csp, char **header);
+static jb_err client_save_content_length(struct client_state *csp, char **header);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 static jb_err client_host_adder       (struct client_state *csp);
@@ -204,6 +205,7 @@ static const struct parsers client_patterns[] = {
    { "if-modified-since:",       18,   client_if_modified_since },
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Keep-Alive:",              11,   client_keep_alive },
+   { "Content-Length:",          15,   client_save_content_length },
 #else
    { "Keep-Alive:",              11,   crumble },
 #endif
@@ -1746,6 +1748,52 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
             "Client keep-alive timeout is %u. Sticking with %u.",
             keep_alive_timeout, csp->config->keep_alive_timeout);
       }
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_save_content_length
+ *
+ * Description :  Save the Content-Length sent by the client.
+ *
+ *                XXX: Shares code with the server version
+ *                     that should be factored out.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+static jb_err client_save_content_length(struct client_state *csp, char **header)
+{
+   unsigned long long content_length = 0;
+
+   assert(*(*header+14) == ':');
+
+#ifdef _WIN32
+   if (1 != sscanf(*header+14, ": %I64u", &content_length))
+#else
+   if (1 != sscanf(*header+14, ": %llu", &content_length))
+#endif
+   {
+      log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
+      freez(*header);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_CONNECT,
+         "Setting client content lenght %llu", content_length);
+      csp->expected_client_content_length = content_length;
    }
 
    return JB_ERR_OK;

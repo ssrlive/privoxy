@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.147 2009/07/14 17:50:34 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.148 2009/07/18 12:20:05 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -878,11 +878,17 @@ struct client_state
    unsigned long long content_length;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   /* XXX: is this the right location? */
+
    /** Expected length of content after which we
     * should stop reading from the server socket.
     */
-   /* XXX: is this the right location? */
    unsigned long long expected_content_length;
+
+   /** Expected length of content after which we
+    *  should stop reading from the client socket.
+    */
+   unsigned long long expected_client_content_length;
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #ifdef FEATURE_TRUST
