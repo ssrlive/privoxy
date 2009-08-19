@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.33 2009/05/19 17:44:54 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.34 2009/06/19 15:34:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -348,7 +348,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
                }
                else /* $' or $` */
                {
-                  r->backref[l] = PCRS_MAX_SUBMATCHES + 1 - (symbol - symbols);
+                  r->backref[l] = (int)(PCRS_MAX_SUBMATCHES + 1 - (symbol - symbols));
                }
                i += 2;
             }
