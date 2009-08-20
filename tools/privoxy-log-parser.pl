@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.161 2009/07/21 13:58:53 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.42 2009/07/21 14:04:25 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1602,7 +1602,8 @@ sub handle_loglevel_connect ($) {
              $c =~ m/^Possible pipeline attempt detected./ or
              $c =~ m/^POST request detected. The connection will not be kept alive./ or
              $c =~ m/^The server still wants to talk, but the client hung up on us./ or
-             $c =~ m/^The server didn't specify how long the connection will stay open/) {
+             $c =~ m/^The server didn't specify how long the connection will stay open/ or
+             $c =~ m/^There might be a request body. The connection will not be kept alive/) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
         # Looks like we read the end of the last chunk together with the server \
@@ -1616,6 +1617,7 @@ sub handle_loglevel_connect ($) {
         # POST request detected. The connection will not be kept alive.
         # The server still wants to talk, but the client hung up on us.
         # The server didn't specify how long the connection will stay open. Assume it's only a second.
+        # There might be a request body. The connection will not be kept alive.
 
     } else {
 
