@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.43 2009/08/20 14:18:27 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.167 2009/08/20 15:42:57 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1593,6 +1593,12 @@ sub handle_loglevel_connect ($) {
         # Marking the server socket 7 tainted.
 
         $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Reduced expected bytes to /) {
+
+        # Reduced expected bytes to 0 to account for the 1542 ones we already got.
+        $c =~ s@(?<=bytes to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=for the )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
