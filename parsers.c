@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.205 2009/08/19 15:26:36 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.206 2009/08/19 15:57:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1791,8 +1791,6 @@ static jb_err client_save_content_length(struct client_state *csp, char **header
    }
    else
    {
-      log_error(LOG_LEVEL_CONNECT,
-         "Setting client content lenght %llu", content_length);
       csp->expected_client_content_length = content_length;
    }
 
