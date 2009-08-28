@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.278 2009/08/19 16:00:07 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.279 2009/08/19 16:02:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1122,6 +1122,94 @@ void save_connection_destination(jb_socket sfd,
    }
    server_connection->forward_port = fwd->forward_port;
 }
+
+
+/*********************************************************************
+ *
+ * Function    : verify_request_length
+ *
+ * Description : Checks if we already got the whole client requests
+ *               and sets CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ if
+ *               we do.
+ *
+ *               Data that doesn't belong to the current request is
+ *               thrown away to let the client retry on a clean socket.
+ *
+ *               XXX: This is a hack until we can deal with multiple
+ *                    pipelined requests at the same time.
+ *
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void verify_request_length(struct client_state *csp)
+{
+   unsigned long long buffered_request_bytes =
+      (unsigned long long)(csp->iob->eod - csp->iob->cur);
+
+   if ((csp->expected_client_content_length != 0)
+      && (buffered_request_bytes != 0))
+   {
+      if (csp->expected_client_content_length >= buffered_request_bytes)
+      {
+         csp->expected_client_content_length -= buffered_request_bytes;
+         log_error(LOG_LEVEL_CONNECT, "Reduced expected bytes to %llu "
+            "to account for the %llu ones we already got.",
+            csp->expected_client_content_length, buffered_request_bytes);
+      }
+      else
+      {
+         assert(csp->iob->eod > csp->iob->cur + csp->expected_client_content_length);
+         csp->iob->eod = csp->iob->cur + csp->expected_client_content_length;
+         log_error(LOG_LEVEL_CONNECT, "Reducing expected bytes to 0. "
+            "Marking the server socket tainted after throwing %llu bytes away.",
+            buffered_request_bytes - csp->expected_client_content_length);
+         csp->expected_client_content_length = 0;
+         csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+      }
+
+      if (csp->expected_client_content_length == 0)
+      {
+         csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+      }
+   }
+
+   if (!(csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ)
+    && ((csp->iob->cur[0] != '\0') || (csp->expected_client_content_length != 0)))
+   {
+      csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+      if (strcmpic(csp->http->gpc, "GET")
+         && strcmpic(csp->http->gpc, "HEAD")
+         && strcmpic(csp->http->gpc, "TRACE")
+         && strcmpic(csp->http->gpc, "OPTIONS")
+         && strcmpic(csp->http->gpc, "DELETE"))
+      {
+         /* XXX: this is an incomplete hack */
+         csp->flags &= ~CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+         log_error(LOG_LEVEL_CONNECT,
+            "There might be a request body. The connection will not be kept alive.");
+      }
+      else
+      {
+         /* XXX: and so is this */
+         csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+         log_error(LOG_LEVEL_CONNECT,
+            "Possible pipeline attempt detected. The connection will not "
+            "be kept alive and we will only serve the first request.");
+         /* Nuke the pipelined requests from orbit, just to be sure. */
+         csp->iob->buf[0] = '\0';
+         csp->iob->eod = csp->iob->cur = csp->iob->buf;
+      }
+   }
+   else
+   {
+      csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+      log_error(LOG_LEVEL_CONNECT, "Complete client request received.");
+   }
+}
 #endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 
@@ -1456,71 +1544,9 @@ static jb_err parse_client_request(struct client_state *csp)
    }
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+   if (csp->http->ssl == 0)
    {
-      unsigned long long buffered_request_bytes =
-         (unsigned long long)(csp->iob->eod - csp->iob->cur);
-
-      if ((csp->expected_client_content_length != 0)
-       && (buffered_request_bytes != 0))
-      {
-         if (csp->expected_client_content_length >= buffered_request_bytes)
-         {
-            csp->expected_client_content_length -= buffered_request_bytes;
-            log_error(LOG_LEVEL_CONNECT, "Reduced expected bytes to %llu "
-               "to account for the %llu ones we already got.",
-               csp->expected_client_content_length, buffered_request_bytes);
-         }
-         else
-         {
-            assert(csp->iob->eod > csp->iob->cur + csp->expected_client_content_length);
-            csp->iob->eod = csp->iob->cur + csp->expected_client_content_length;
-            log_error(LOG_LEVEL_CONNECT, "Reducing expected bytes to 0. "
-               "Marking the server socket tainted after throwing %llu bytes away.",
-               buffered_request_bytes - csp->expected_client_content_length);
-            csp->expected_client_content_length = 0;
-            csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
-         }
-
-         if (csp->expected_client_content_length == 0)
-         {
-            csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
-         }
-      }
-
-      if (!(csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ)
-       && ((csp->iob->cur[0] != '\0')
-        || (csp->expected_client_content_length != 0)))
-      {
-         csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
-         if (strcmpic(csp->http->gpc, "GET")
-          && strcmpic(csp->http->gpc, "HEAD")
-          && strcmpic(csp->http->gpc, "TRACE")
-          && strcmpic(csp->http->gpc, "OPTIONS")
-          && strcmpic(csp->http->gpc, "DELETE"))
-         {
-            /* XXX: this is an incomplete hack */
-            csp->flags &= ~CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
-            log_error(LOG_LEVEL_CONNECT,
-               "There might be a request body. The connection will not be kept alive.");
-         }
-         else
-         {
-            /* XXX: and so is this */
-            csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
-            log_error(LOG_LEVEL_CONNECT,
-               "Possible pipeline attempt detected. The connection will not "
-               "be kept alive and we will only serve the first request.");
-            /* Nuke the pipelined requests from orbit, just to be sure. */
-            csp->iob->buf[0] = '\0';
-            csp->iob->eod = csp->iob->cur = csp->iob->buf;
-         }
-      }
-      else
-      {
-         csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
-         log_error(LOG_LEVEL_CONNECT, "Complete client request received.");
-      }
+      verify_request_length(csp);
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
