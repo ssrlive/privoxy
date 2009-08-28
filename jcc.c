@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.279 2009/08/19 16:02:53 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.280 2009/08/28 14:42:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2257,7 +2257,14 @@ static void chat(struct client_state *csp)
                    */
                   long header_offset = csp->iob->cur - header_start;
                   assert(csp->iob->cur >= header_start);
-                  byte_count += (unsigned long long)(len - header_offset);
+                  if (header_offset)
+                  {
+                     /*
+                      * If there's a header offset, we got content
+                      * as well and have to account for it.
+                      */
+                     byte_count += (unsigned long long)(len - header_offset);
+                  }
                   log_error(LOG_LEVEL_CONNECT, "Continuing buffering headers. "
                      "byte_count: %llu. header_offset: %d. len: %d.",
                      byte_count, header_offset, len);
