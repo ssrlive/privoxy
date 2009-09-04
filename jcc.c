@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.280 2009/08/28 14:42:06 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.281 2009/08/28 15:45:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2229,6 +2229,17 @@ static void chat(struct client_state *csp)
             }
 
             header_start = csp->iob->cur;
+            /*
+             * Reset the byte_count in case we needed more than
+             * two reads to get the whole head, in which case the
+             * current byte_count would be wrong.
+             *
+             * XXX: While this is safe, it's only a workaround and
+             * the real solution is to not get the byte_count wrong
+             * in the first place. Should be fixed after the next
+             * stable release.
+             */
+            byte_count = 0;
 
             /* Convert iob into something sed() can digest */
             if (JB_ERR_PARSE == get_server_headers(csp))
