@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.281 2009/08/28 15:45:18 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.282 2009/09/04 18:28:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2213,7 +2213,6 @@ static void chat(struct client_state *csp)
          }
          else
          {
-            const char *header_start;
             /*
              * We're still looking for the end of the server's header.
              * Buffer up the data we just read.  If that fails, there's
@@ -2227,19 +2226,6 @@ static void chat(struct client_state *csp)
                mark_server_socket_tainted(csp);
                return;
             }
-
-            header_start = csp->iob->cur;
-            /*
-             * Reset the byte_count in case we needed more than
-             * two reads to get the whole head, in which case the
-             * current byte_count would be wrong.
-             *
-             * XXX: While this is safe, it's only a workaround and
-             * the real solution is to not get the byte_count wrong
-             * in the first place. Should be fixed after the next
-             * stable release.
-             */
-            byte_count = 0;
 
             /* Convert iob into something sed() can digest */
             if (JB_ERR_PARSE == get_server_headers(csp))
@@ -2266,21 +2252,20 @@ static void chat(struct client_state *csp)
                    * Since we have to wait for more from the server before
                    * we can parse the headers we just continue here.
                    */
-                  long header_offset = csp->iob->cur - header_start;
-                  assert(csp->iob->cur >= header_start);
-                  if (header_offset)
-                  {
-                     /*
-                      * If there's a header offset, we got content
-                      * as well and have to account for it.
-                      */
-                     byte_count += (unsigned long long)(len - header_offset);
-                  }
-                  log_error(LOG_LEVEL_CONNECT, "Continuing buffering headers. "
-                     "byte_count: %llu. header_offset: %d. len: %d.",
-                     byte_count, header_offset, len);
+                  log_error(LOG_LEVEL_CONNECT,
+                     "Continuing buffering headers. Most recently received: %d",
+                     len);
                   continue;
                }
+            }
+            else
+            {
+               /*
+                * Account for the content bytes we
+                * might have gotten with the headers.
+                */
+               assert(csp->iob->eod >= csp->iob->cur);
+               byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
             }
 
             /* Did we actually get anything? */
@@ -2379,18 +2364,6 @@ static void chat(struct client_state *csp)
                   mark_server_socket_tainted(csp);
                   return;
                }
-
-               byte_count += (unsigned long long)len;
-            }
-            else
-            {
-               /*
-                * XXX: the header lenght should probably
-                * be calculated by get_server_headers().
-                */
-               long header_length = csp->iob->cur - header_start;
-               assert(csp->iob->cur > header_start);
-               byte_count += (unsigned long long)(len - header_length);
             }
 
             /* we're finished with the server's header */
