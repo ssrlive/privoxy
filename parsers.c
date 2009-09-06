@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.207 2009/08/20 15:27:03 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.208 2009/09/06 14:10:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1774,6 +1774,7 @@ static jb_err get_content_length(const char *header, unsigned long long *length)
    assert(header[14] == ':');
 
 #ifdef _WIN32
+   assert(sizeof(unsigned long long) > 4);
    if (1 != sscanf(header+14, ": %I64u", length))
 #else
    if (1 != sscanf(header+14, ": %llu", length))
