@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.103 2009/06/15 20:50:56 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.104 2009/07/19 10:07:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -500,7 +500,7 @@ struct configuration_spec * load_config(void)
 /* *************************************************************************
  * connection-sharing (0|1)
  * *************************************************************************/
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
          case hash_connection_sharing :
             if ((*arg != '\0') && (0 != atoi(arg)))
             {
@@ -1321,7 +1321,7 @@ struct configuration_spec * load_config(void)
       }
    }
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
    if (config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
    {
       if (config->multi_threaded)
@@ -1349,7 +1349,7 @@ struct configuration_spec * load_config(void)
          "has no effect if keep-alive-timeout isn't set.");
       config->feature_flags &= ~RUNTIME_FEATURE_CONNECTION_SHARING;
    }
-#endif
+#endif /* def FEATURE_CONNECTION_SHARING */
 
    if (NULL == config->proxy_args)
    {

@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.58 2009/08/19 15:22:18 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.59 2009/09/06 14:09:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -125,7 +125,7 @@ struct socks_reply {
 
 static const char socks_userid[] = "anonymous";
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
 
 #define MAX_REUSABLE_CONNECTIONS 100
 static unsigned int keep_alive_timeout = DEFAULT_KEEP_ALIVE_TIMEOUT;
@@ -270,8 +270,10 @@ void remember_connection(const struct client_state *csp, const struct forward_sp
 
    privoxy_mutex_unlock(&connection_reuse_mutex);
 }
+#endif /* def FEATURE_CONNECTION_SHARING */
 
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  mark_connection_closed
@@ -300,8 +302,10 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    freez(closed_connection->forward_host);
    closed_connection->forward_port = 0;
 }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
+#ifdef FEATURE_CONNECTION_SHARING
 /*********************************************************************
  *
  * Function    :  forget_connection
@@ -345,8 +349,10 @@ void forget_connection(jb_socket sfd)
 
    privoxy_mutex_unlock(&connection_reuse_mutex);
 }
+#endif /* def FEATURE_CONNECTION_SHARING */
 
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  connection_destination_matches
@@ -396,8 +402,10 @@ int connection_destination_matches(const struct reusable_connection *connection,
    return (!strcmpic(connection->host, http->host));
 
 }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
+#ifdef FEATURE_CONNECTION_SHARING
 /*********************************************************************
  *
  * Function    :  close_unusable_connections
@@ -579,7 +587,7 @@ void set_keep_alive_timeout(unsigned int timeout)
 {
    keep_alive_timeout = timeout;
 }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+#endif /* def FEATURE_CONNECTION_SHARING */
 
 
 /*********************************************************************
@@ -605,7 +613,7 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
    int dest_port;
    jb_socket sfd = JB_INVALID_SOCKET;
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
       && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
    {
@@ -615,7 +623,7 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
          return sfd;
       }
    }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+#endif /* def FEATURE_CONNECTION_SHARING */
 
    /* Figure out if we need to connect to the web server or a HTTP proxy. */
    if (fwd->forward_host)

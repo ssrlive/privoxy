@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.283 2009/09/05 18:04:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.284 2009/09/06 14:07:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1026,6 +1026,7 @@ static int server_response_is_complete(struct client_state *csp,
 }
 
 
+#ifdef FEATURE_CONNECTION_SHARING
 /*********************************************************************
  *
  * Function    :  wait_for_alive_connections
@@ -1053,6 +1054,7 @@ static void wait_for_alive_connections(void)
    log_error(LOG_LEVEL_CONNECT, "No connections to wait for left.");
 
 }
+#endif /* def FEATURE_CONNECTION_SHARING */
 
 
 /*********************************************************************
@@ -2443,7 +2445,9 @@ static void serve(struct client_state *csp)
 #endif /* def AMIGA */
 {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
    static int monitor_thread_running = 0;
+#endif /* def FEATURE_CONNECTION_SHARING */
    int continue_chatting = 0;
    unsigned int latency = 0;
 
@@ -2513,6 +2517,7 @@ static void serve(struct client_state *csp)
          {
             log_error(LOG_LEVEL_CONNECT,
                "No additional client request received in time.");
+#ifdef FEATURE_CONNECTION_SHARING
             if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
                && (socket_is_still_usable(csp->sfd)))
             {
@@ -2531,6 +2536,7 @@ static void serve(struct client_state *csp)
                }
                privoxy_mutex_unlock(&connection_reuse_mutex);
             }
+#endif /* def FEATURE_CONNECTION_SHARING */
             break;
          }
       }
@@ -2549,9 +2555,9 @@ static void serve(struct client_state *csp)
 
    if (csp->sfd != JB_INVALID_SOCKET)
    {
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
       forget_connection(csp->sfd);
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+#endif /* def FEATURE_CONNECTION_SHARING */
       close_socket(csp->sfd);
    }
 
@@ -3301,13 +3307,13 @@ static void listen_loop(void)
 
    config = load_config();
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+#ifdef FEATURE_CONNECTION_SHARING
    /*
     * XXX: Should be relocated once it no
     * longer needs to emit log messages.
     */
    initialize_reusable_connections();
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+#endif /* def FEATURE_CONNECTION_SHARING */
 
    bfd = bind_port_helper(config);
 

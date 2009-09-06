@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.16 2009/05/16 13:27:20 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.17 2009/07/11 14:49:09 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -48,7 +48,6 @@ struct client_state;
 extern jb_socket forwarded_connect(const struct forward_spec * fwd, 
                                    struct http_request *http, 
                                    struct client_state *csp);
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 
 /*
  * Default number of seconds after which an
@@ -56,18 +55,21 @@ extern jb_socket forwarded_connect(const struct forward_spec * fwd,
  */
 #define DEFAULT_KEEP_ALIVE_TIMEOUT 180
 
+#ifdef FEATURE_CONNECTION_SHARING
 extern void set_keep_alive_timeout(unsigned int timeout);
 extern void initialize_reusable_connections(void);
 extern void forget_connection(jb_socket sfd);
 extern void remember_connection(const struct client_state *csp,
                                 const struct forward_spec *fwd);
 extern int close_unusable_connections(void);
+#endif /* FEATURE_CONNECTION_SHARING */
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 extern void mark_connection_closed(struct reusable_connection *closed_connection);
 extern int connection_destination_matches(const struct reusable_connection *connection,
                                           const struct http_request *http,
                                           const struct forward_spec *fwd);
-#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
-
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 /*
  * Solaris fix
