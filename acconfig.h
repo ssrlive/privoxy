@@ -167,9 +167,14 @@
 #undef FEATURE_EXTENDED_HOST_PATTERNS
 
 /*
- * Keep outgoing connections alive if possible.
+ * Keep connections alive if possible.
  */
 #undef FEATURE_CONNECTION_KEEP_ALIVE
+
+/*
+ * Allow to share outgoing connections between incoming connections.
+ */
+#undef FEATURE_CONNECTION_SHARING
 
 /*
  * Use POSIX threads instead of native threads.
