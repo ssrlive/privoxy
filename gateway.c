@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.57 2009/07/13 17:12:28 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.58 2009/08/19 15:22:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -498,8 +498,13 @@ static jb_socket get_reusable_connection(const struct http_request *http,
             reusable_connection[slot].in_use = TRUE;
             sfd = reusable_connection[slot].sfd;
             log_error(LOG_LEVEL_CONNECT,
-               "Found reusable socket %d for %s:%d in slot %d.",
-               sfd, reusable_connection[slot].host, reusable_connection[slot].port, slot);
+               "Found reusable socket %d for %s:%d in slot %d."
+               "Timestamp made %d seconds ago. Timeout: %d. Latency: %d.",
+               sfd, reusable_connection[slot].host, reusable_connection[slot].port,
+               slot, time(NULL) - reusable_connection[slot].timestamp,
+               reusable_connection[slot].keep_alive_timeout,
+               (int)(reusable_connection[slot].response_received -
+               reusable_connection[slot].request_sent));
             break;
          }
       }
