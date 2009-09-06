@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.64 2009/06/13 11:37:07 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.65 2009/07/22 22:27:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -565,7 +565,7 @@ int read_socket(jb_socket fd, char *buf, int len)
 #elif defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
    return(recv(fd, buf, (size_t)len, 0));
 #else
-   return(read(fd, buf, (size_t)len));
+   return((int)read(fd, buf, (size_t)len));
 #endif
 }
 
