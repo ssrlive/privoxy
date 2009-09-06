@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.206 2009/08/19 15:57:13 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.207 2009/08/20 15:27:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1756,12 +1756,41 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
 
 /*********************************************************************
  *
+ * Function    :  get_content_length
+ *
+ * Description :  Gets the content length specified in a
+ *                Content-Length header.
+ *
+ * Parameters  :
+ *          1  :  header = The Content-Length header.
+ *          2  :  length = Storage to return the value.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_PARSE if no value is recognized.
+ *
+ *********************************************************************/
+static jb_err get_content_length(const char *header, unsigned long long *length)
+{
+   assert(header[14] == ':');
+
+#ifdef _WIN32
+   if (1 != sscanf(header+14, ": %I64u", length))
+#else
+   if (1 != sscanf(header+14, ": %llu", length))
+#endif
+   {
+      return JB_ERR_PARSE;
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  client_save_content_length
  *
  * Description :  Save the Content-Length sent by the client.
- *
- *                XXX: Shares code with the server version
- *                     that should be factored out.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1780,11 +1809,7 @@ static jb_err client_save_content_length(struct client_state *csp, char **header
 
    assert(*(*header+14) == ':');
 
-#ifdef _WIN32
-   if (1 != sscanf(*header+14, ": %I64u", &content_length))
-#else
-   if (1 != sscanf(*header+14, ": %llu", &content_length))
-#endif
+   if (JB_ERR_OK != get_content_length(*header, &content_length))
    {
       log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
       freez(*header);
@@ -2263,11 +2288,7 @@ static jb_err server_save_content_length(struct client_state *csp, char **header
 
    assert(*(*header+14) == ':');
 
-#ifdef _WIN32
-   if (1 != sscanf(*header+14, ": %I64u", &content_length))
-#else
-   if (1 != sscanf(*header+14, ": %llu", &content_length))
-#endif
+   if (JB_ERR_OK != get_content_length(*header, &content_length))
    {
       log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
       freez(*header);
