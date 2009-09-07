@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.185 2009/08/15 16:12:16 fabiankeil Exp $
+#  $Id: default.action.master,v 1.186 2009/08/15 16:24:39 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -915,6 +915,10 @@ static.lycos-europe.net
 #MASTER# BLOCK-REFERRER: http://crooksandliars.com/
 # Blocked URL = http://rotator.adjuggler.com/servlet/ajrotator/616245/0/vh?z=csm&dim=616028
 .adjuggler.com/servlet/ajrotator/
+#MASTER# Remark: nothing but "sponsored listings"
+# Blocked URL = http://bcc.co.ck/
+bcc.co.uk/
+
 
 
 #----------------------------------------------------------------------------
@@ -1609,6 +1613,14 @@ tags.gawker.com/.*css$
 #MASTER# UNBLOCK-REFERRER: http://idonthateyouall.imeem.com/video/8zH0_f9i/kiley_rilo_pull_me_in_tighter_art_video/
 # URL = http://ad.doubleclick.net/crossdomain.xml
 ad.doubleclick.net/crossdomain\.xml
+#MASTER# REMARKS: Support request 2838390: 2009-08-16: nfl.com videos not working
+#MASTER# REMARKS: bbc.co.uk videos references ad.uk.doubleclick.net
+# URL = http://ad.doubleclick.net/879366/DartShell9_8.swf?adServerHost=http://ad.doubleclick.net
+# URL = http://ad.doubleclick.net/pfadx/DARTSHELLCONFIGXML;dcmt=text/xml;
+# URL = http://ad.doubleclick.net/879366/DartShellPlayer9_8_01_00.swf
+# URL = http://ad.uk.doubleclick.net/879366/DartShell7_7.swf?adServerHost=http://ad.uk.doubleclick.net
+.doubleclick.net/.*/DartShell.*\.swf
+.doubleclick.net/.*/DARTSHELLCONFIGXML
 #MASTER# REMARKS: Actionsfile feedback item #2021509  2008-07-18
 #MASTER# REMARKS: Allow realplayer site help popup windows
 #MASTER# UNBLOCK-REFERRER: http://real.custhelp.com/cgi-bin/real.cfg/php/enduser/std_adp.php?p_faqid=4512
@@ -1661,6 +1673,7 @@ lads.myspacecdn.com/
 .phobos.apple.com/
 # URL = http://eas8.emediate.eu/eas?camp=114;ty=ct;EASLink=http://www.jp.dk
 .emediate.eu/.*EASLink=
+
 
 
 #############################################################################
