@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.285 2009/09/06 14:15:46 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.286 2009/09/06 17:11:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1911,14 +1911,14 @@ static void chat(struct client_state *csp)
        */
       if (FD_ISSET(csp->cfd, &rfds))
       {
-         unsigned max_bytes_to_read = sizeof(buf) - 1;
+         int max_bytes_to_read = sizeof(buf) - 1;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          if (csp->expected_client_content_length != 0)
          {
             if (csp->expected_client_content_length < (sizeof(buf) - 1))
             {
-               max_bytes_to_read = csp->expected_client_content_length;
+               max_bytes_to_read = (int)csp->expected_client_content_length;
             }
             log_error(LOG_LEVEL_CONNECT,
                "Waiting for up to %d bytes from the client.",
@@ -1940,7 +1940,7 @@ static void chat(struct client_state *csp)
          if (csp->expected_client_content_length != 0)
          {
             assert(len <= max_bytes_to_read);
-            csp->expected_client_content_length -= len;
+            csp->expected_client_content_length -= (unsigned)len;
             log_error(LOG_LEVEL_CONNECT,
                "Expected client content length set to %llu "
                "after reading %d bytes.",
