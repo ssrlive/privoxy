@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.167 2009/08/20 15:42:57 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.45 2009/08/20 15:43:56 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1531,9 +1531,13 @@ sub handle_loglevel_connect ($) {
 
         # Done reading from server. Expected content length: 24892. \
         #  Actual content length: 24892. Most recently received: 4412.
+        # 3.0.15 and later:
+        # Done reading from server. Expected content length: 24892. \
+        #  Actual content length: 24892. Bytes most recently read: 4412.
         $c =~ s@(?<=Expected content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Actual content length: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=received: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=read: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Continuing buffering headers/) {
 
@@ -1541,6 +1545,9 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=byte_count: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=header_offset: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=len: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        # 3.0.15 and later:
+        # Continuing buffering headers. Bytes most recently read: %d.
+        $c =~ s@(?<=read: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Received \d+ bytes while/) {
 
