@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.65 2009/07/22 22:27:16 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.66 2009/09/06 15:22:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -586,6 +586,7 @@ int read_socket(jb_socket fd, char *buf, int len)
  *********************************************************************/
 int data_is_available(jb_socket fd, int seconds_to_wait)
 {
+   char buf[10];
    fd_set rfds;
    struct timeval timeout;
    int n;
@@ -606,7 +607,7 @@ int data_is_available(jb_socket fd, int seconds_to_wait)
    /*
     * XXX: Do we care about the different error conditions?
     */
-   return (n == 1);
+   return ((n == 1) && (1 == recv(fd, buf, 1, MSG_PEEK)));
 }
 
 
