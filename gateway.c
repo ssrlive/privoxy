@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.59 2009/09/06 14:09:19 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.60 2009/09/06 14:15:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -438,7 +438,7 @@ int close_unusable_connections(void)
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d timed out. "
-               "Closing socket %d. Timeout is: %d. Assumed latency: %d",
+               "Closing socket %d. Timeout is: %d. Assumed latency: %d.",
                reusable_connection[slot].host,
                reusable_connection[slot].port, slot,
                reusable_connection[slot].sfd,
