@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.286 2009/09/06 17:11:45 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.287 2009/09/09 17:12:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2783,9 +2783,9 @@ static void initialize_mutexes(void)
  *
  *********************************************************************/
 #ifdef __MINGW32__
-int real_main(int argc, const char *argv[])
+int real_main(int argc, char **argv)
 #else
-int main(int argc, const char *argv[])
+int main(int argc, char **argv)
 #endif
 {
    int argc_pos = 0;
