@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.287 2009/09/09 17:12:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.288 2009/09/10 14:42:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1869,7 +1869,7 @@ static void chat(struct client_state *csp)
       {
          log_error(LOG_LEVEL_CONNECT,
             "Done reading from server. Expected content length: %llu. "
-            "Actual content length: %llu. Most recently received: %d.",
+            "Actual content length: %llu. Bytes most recently read: %d.",
             csp->expected_content_length, byte_count, len);
          len = 0;
          /*
@@ -2247,7 +2247,7 @@ static void chat(struct client_state *csp)
                    * we can parse the headers we just continue here.
                    */
                   log_error(LOG_LEVEL_CONNECT,
-                     "Continuing buffering headers. Most recently received: %d",
+                     "Continuing buffering headers. Bytes most recently read: %d.",
                      len);
                   continue;
                }
