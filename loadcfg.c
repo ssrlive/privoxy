@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.104 2009/07/19 10:07:46 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.105 2009/09/06 14:15:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -111,7 +111,7 @@ const char *configfile  = NULL;
  * so we will make argc and argv global.
  */
 int Argc = 0;
-const char **Argv = NULL;
+char * const * Argv = NULL;
 
 static struct file_list *current_configfile = NULL;
 
