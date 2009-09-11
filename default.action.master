@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.187 2009/09/07 18:35:04 ler762 Exp $
+#  $Id: default.action.master,v 1.188 2009/09/07 19:13:58 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -916,7 +916,7 @@ static.lycos-europe.net
 # Blocked URL = http://rotator.adjuggler.com/servlet/ajrotator/616245/0/vh?z=csm&dim=616028
 .adjuggler.com/servlet/ajrotator/
 #MASTER# Remark: nothing but "sponsored listings"
-# Blocked URL = http://bcc.co.ck/
+# Blocked URL = http://bcc.co.uk/
 bcc.co.uk/
 
 
