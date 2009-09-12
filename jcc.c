@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.288 2009/09/10 14:42:00 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.289 2009/09/10 14:58:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1599,6 +1599,7 @@ static void chat(struct client_state *csp)
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
    struct timeval timeout;
+   int watch_client_socket = 1;
 
    memset(buf, 0, sizeof(buf));
 
@@ -1840,7 +1841,7 @@ static void chat(struct client_state *csp)
       FD_ZERO(&rfds);
 #endif
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if ((csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ))
+      if (!watch_client_socket)
       {
          maxfd = csp->sfd;
       }
@@ -1914,6 +1915,32 @@ static void chat(struct client_state *csp)
          int max_bytes_to_read = sizeof(buf) - 1;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         if ((csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ))
+         {
+            if (data_is_available(csp->cfd, 0))
+            {
+               /*
+                * If the next request is already waiting, we have
+                * to stop select()ing the client socket. Otherwise
+                * we would always return right away and get nothing
+                * else done.
+                */
+               watch_client_socket = 0;
+               log_error(LOG_LEVEL_CONNECT,
+                  "Stopping to watch the client socket. "
+                  "There's already another request waiting.");
+               continue;
+            }
+            /*
+             * If the client socket is set, but there's no data
+             * available on the socket, the client went fishing
+             * and continuing talking to the server makes no sense.
+             */
+            log_error(LOG_LEVEL_CONNECT, "The client closed socket %d while "
+               "the server socket %d is still open.", csp->cfd, csp->sfd);
+            mark_server_socket_tainted(csp);
+            break;
+         }
          if (csp->expected_client_content_length != 0)
          {
             if (csp->expected_client_content_length < (sizeof(buf) - 1))
