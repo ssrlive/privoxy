@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.290 2009/09/12 12:32:26 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.291 2009/09/12 12:35:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1869,10 +1869,20 @@ static void chat(struct client_state *csp)
       }
       if (server_body && server_response_is_complete(csp, byte_count))
       {
-         log_error(LOG_LEVEL_CONNECT,
-            "Done reading from server. Expected content length: %llu. "
-            "Actual content length: %llu. Bytes most recently read: %d.",
-            csp->expected_content_length, byte_count, len);
+         if (csp->expected_content_length == byte_count)
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Done reading from server. Content length: %llu as expected. "
+               "Bytes most recently read: %d.",
+               byte_count, len);
+         }
+         else
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Done reading from server. Expected content length: %llu. "
+               "Actual content length: %llu. Bytes most recently read: %d.",
+               csp->expected_content_length, byte_count, len);
+         }
          len = 0;
          /*
           * XXX: should not jump around,
