@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.46 2009/09/10 15:02:25 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.47 2009/09/10 15:03:20 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1610,6 +1610,12 @@ sub handle_loglevel_connect ($) {
         # Reduced expected bytes to 0 to account for the 1542 ones we already got.
         $c =~ s@(?<=bytes to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=for the )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^The client closed socket /) {
+
+        # The client closed socket 2 while the server socket 4 is still open.
+        $c =~ s@(?<=closed socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
