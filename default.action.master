@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.188 2009/09/07 19:13:58 ler762 Exp $
+#  $Id: default.action.master,v 1.189 2009/09/11 18:15:19 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1859,6 +1859,10 @@ view.samurajdata.se/ps\.php\?url=
 # Sticky Actions = +redirect -block
 # URL = http://go.eniro.dk/lg/ni/http:/eas8.emediate.eu/eas?camp=79;ty=ct;EASLink=http://www.bt.dk?http://redirect.metropol.dk/cgi-bin/redir.pl?url=www.bt.dk
 # URL = http://eas8.emediate.eu/eas?camp=79;ty=ct;EASLink=http://www.bt.dk?http://redirect.metropol.dk/cgi-bin/redir.pl?url=www.bt.dk
+# Redirected URL = http://go.eniro.dk/lg/ni/http:/eas8.emediate.eu/eas?camp=79;ty=ct;EASLink=http://www.bt.dk?http://redirect.metropol.dk/cgi-bin/redir.pl?url=www.bt.dk
+# Redirect Destination = http://www.bt.dk
+# Redirected URL = http://eas8.emediate.eu/eas?camp=79;ty=ct;EASLink=http://www.bt.dk?http://redirect.metropol.dk/cgi-bin/redir.pl?url=www.bt.dk
+# Redirect Destination = http://www.bt.dk
 go.eniro.dk/.*EASLink=http://.*url=(?!<=http:)
 .emediate.eu/.*EASLink=http://.*url=(?!<=http:)
 
@@ -2143,15 +2147,22 @@ blogs.msdn.com
 #MASTER# REDIRECT-REFERRER: http://search.yahoo.com/search?p=privoxy
 # URL = http://rds.yahoo.com/_ylt=A0geuryczbBF._YAEmxXNyoA;_ylu=X3oDMTB2b2gzdDdtBGNvbG8DZQRsA1dTMQRwb3MDMQRzZWMDc3IEdnRpZAM-/SIG=11b3qg40n/EXP=1169301276/**http%3a//www.privoxy.org/
 rds.yahoo.com/
-#MASTER# COMMENTS: Verified 2007-01-19 fk
+# Redirected URL = http://rds.yahoo.com/_ylt=A0geuryczbBF._YAEmxXNyoA;_ylu=X3oDMTB2b2gzdDdtBGNvbG8DZQRsA1dTMQRwb3MDMQRzZWMDc3IEdnRpZAM-/SIG=11b3qg40n/EXP=1169301276/**http%3a//www.privoxy.org/
+# Redirect Destination = http://www.privoxy.org/
 #MASTER# REDIRECT-REFERRER: http://www.gamefaqs.com/computer/doswin/game/914819.html
 # URL = http://dw.com.com/redir?asid=0&astid=8&siteid=19&edid=107&destCat=33862&destURL=http%3A%2F%2Fdb.gamefaqs.com%2Fcomputer%2Fdoswin%2Ffile%2Fvampire_tmb_b.txt
 dw.com.com/redir\?
+# Redirected URL = http://dw.com.com/redir?asid=0&astid=8&siteid=19&edid=107&destCat=33862&destURL=http%3A%2F%2Fdb.gamefaqs.com%2Fcomputer%2Fdoswin%2Ffile%2Fvampire_tmb_b.txt
+# Redirect Destination = http://db.gamefaqs.com/computer/doswin/file/vampire_tmb_b.txt
 #MASTER# REMARKS: Action tracker 1593393. Added 2007-01-20.
 # URL = http://wzus.bloglines.com/r?t=a&d=us&s=bl&c=blen&ti=1&ai=51060&l=dir&o=0&sv=z6f537f5b&ip=971AC44B&u=http%3A%2F%2Fwww.skweezer.net%2Fbloglines%2Fskweeze.aspx%3F%26i%3Dd%26l%3Den%26r%3Dhttp%253A%252F%252Fwww.bloglines.com%252Fmyblogs_display%253Fsub%253D29302699%2526site%253D5382440%26url%3Dhttp%253A%252F%252Fpermalink.gmane.org%252Fgmane.linux.debian.devel.changes.unstable%252F97340
+# Redirected URL = http://wzus.bloglines.com/r?t=a&d=us&s=bl&c=blen&ti=1&ai=51060&l=dir&o=0&sv=z6f537f5b&ip=971AC44B&u=http%3A%2F%2Fwww.skweezer.net%2Fbloglines%2Fskweeze.aspx%3F%26i%3Dd%26l%3Den%26r%3Dhttp%253A%252F%252Fwww.bloglines.com%252Fmyblogs_display%253Fsub%253D29302699%2526site%253D5382440%26url%3Dhttp%253A%252F%252Fpermalink.gmane.org%252Fgmane.linux.debian.devel.changes.unstable%252F97340
+# Redirect Destination = http://www.skweezer.net/bloglines/skweeze.aspx?&i=d&l=en&r=http%3A%2F%2Fwww.bloglines.com%2Fmyblogs_display%3Fsub%3D29302699%26site%3D5382440&url=http%3A%2F%2Fpermalink.gmane.org%2Fgmane.linux.debian.devel.changes.unstable%2F97340
 .bloglines.com/r\?
 www.skweezer.net/bloglines
 # URL = http://media.fastclick.net/w/get.media?sid=4681&m=5&tp=6&url=http%3A//www.sciam.com/article.cfm%3FchanID%3Dsa003%26articleID%3DC7C87ECC-E7F2-99DF-39AEFF3D7D1A8CFB%26ref%3Drss
+# Redirected URL = http://media.fastclick.net/w/get.media?sid=4681&m=5&tp=6&url=http%3A//www.sciam.com/article.cfm%3FchanID%3Dsa003%26articleID%3DC7C87ECC-E7F2-99DF-39AEFF3D7D1A8CFB%26ref%3Drss
+# Redirect Destination = http://www.sciam.com/article.cfm?chanID=sa003&articleID=C7C87ECC-E7F2-99DF-39AEFF3D7D1A8CFB&ref=rss
 .fastclick.net/w/get\.media\?
 
 {+block{Looks like an anti-leech trigger URL.}}
@@ -2180,6 +2191,8 @@ www.skweezer.net/bloglines
 {+redirect{http://config.privoxy.org/}}
 # Sticky Actions = +redirect{http://config.privoxy.org/}
 # URL = http://www.privoxy.org/config
+# Redirected URL = http://www.privoxy.org/config
+# Redirect Destination = http://config.privoxy.org/
 .privoxy.org/config
 
 #MASTER# REMARKS: Privoxy's "unsafe" CGI pages check the referrer
@@ -2201,6 +2214,8 @@ config.privoxy.org/
 # XXX: Privoxy-Regression-Test currently doesn't allow backslashes.
 # Sticky Actions = -fast-redirects +redirect
 # URL = http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
+# Redirected URL = http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
+# Redirect Destination = http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 .yahoo./.*http://login.yahoo.com/config/login.*http://
 
 #----------------------------------------------------------------------------
