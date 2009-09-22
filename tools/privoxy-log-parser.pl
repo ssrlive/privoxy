@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.49 2009/09/12 12:36:53 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.50 2009/09/12 12:38:14 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -59,7 +59,6 @@ use constant {
     CLI_OPTION_ERROR_LOG_FILE => '/var/log/privoxy-log.log',
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
-    CLI_OPTION_STATISTIC => 0,
 
     SUPPRESS_SUCCEEDED_FILTER_ADDITIONS => 1,
     SHOW_SCAN_INTRO => 0,
@@ -1919,7 +1918,6 @@ sub parse_loop () {
     my $time_colour;
     our $no_special_header_highlighting;
     $time_colour = paint_it('white');
-    my %log_level_count;
 
     my %log_level_handlers = (
         'Re-Filter'         => \&handle_loglevel_re_filter,
@@ -1958,8 +1956,6 @@ sub parse_loop () {
             $req{$t}{'content'} = $content;
             $req{$t}{'log-message'} = $_;
             $no_special_header_highlighting = 0;
-
-            $log_level_count{$log_level}++;
 
             if (defined($log_level_handlers{$log_level})) {
 
@@ -2018,12 +2014,6 @@ sub parse_loop () {
             }
         }
     }
-
-    if (cli_option_is_set('statistic')) {
-        foreach (keys %log_level_count) {
-            print $_ . ": " . $log_level_count{$_} . " ";
-        }
-    }
 }
 
 sub VersionMessage {
@@ -2046,7 +2036,6 @@ sub get_cli_options () {
         'no-msecs'                 => CLI_OPTION_NO_MSECS,
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
-        'statistic'                => CLI_OPTION_STATISTIC,
     ); 
 
     GetOptions (
@@ -2057,7 +2046,6 @@ sub get_cli_options () {
         'no-msecs'                 => \$cli_options{'no-msecs'},
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
-        'statistic'                => \$cli_options{'statistic'},
         'version'                  => sub { VersionMessage && exit(0) }
    );
 }
