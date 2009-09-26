@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.181 2009/04/04 20:24:29 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.182 2009/09/26 17:12:19 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -383,69 +383,6 @@ gen-upload:
 # use with care
 gen-clean:
 	$(RM) privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar*
-
-#############################################################################
-# solaris distribution. verified on SF machines by swa.
-#############################################################################
-solaris-dist: gen-dist
-	@$(ECHO) Done.
-# anonymously ncftps the package to sourceforge
-solaris-upload: gen-upload
-	@$(ECHO) Done.
-# use with care
-solaris-clean: gen-clean
-	@$(ECHO) Done.
-
-#############################################################################
-# hpux distribution
-#############################################################################
-hpux-dist:
-	@$(ECHO) coming soon. 
-hpux-upload:
-	@$(ECHO) coming soon. 
-
-#############################################################################
-# debian distribution
-#############################################################################
-debian-dist:
-	@$(ECHO) coming soon. 
-debian-upload:
-	@$(ECHO) coming soon. 
-
-#############################################################################
-# macosx distribution
-#############################################################################
-macosx-dist:
-	@$(ECHO) coming soon. 
-macosx-upload:
-	@$(ECHO) coming soon. 
-
-#############################################################################
-# amiga distribution
-#############################################################################
-amiga-dist:
-	@$(ECHO) coming soon. 
-amiga-upload:
-	@$(ECHO) coming soon. 
-
-#############################################################################
-# freebsd distribution. verified on SF machines by swa.
-#############################################################################
-freebsd-dist: gen-dist
-	@$(ECHO) Done.
-# anonymously ncftps the package to sourceforge
-freebsd-upload: gen-upload
-	@$(ECHO) Done.
-# use with care
-freebsd-clean: gen-clean
-	@$(ECHO) Done.
-
-#############################################################################
-# Windows distribution
-#############################################################################
-win-dist:
-	$(ECHO) Not implemented.
-
 
 #############################################################################
 # Tarball distribution: No CVS dirs, dotfiles, debian build dir,
@@ -1122,6 +1059,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.182  2009/09/26 17:12:19  fabiankeil
+# Remove obsolete redhat, suse and connectiva targets.
+#
 # Revision 1.181  2009/04/04 20:24:29  fabiankeil
 # Let the clean target play nice with git.
 #
