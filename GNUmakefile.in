@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.180 2009/02/28 08:28:14 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.181 2009/04/04 20:24:29 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001 - 2008 the SourceForge
 # Privoxy team. http://www.privoxy.org/
@@ -42,9 +42,7 @@ VERSION_MINOR = @VERSION_MINOR@
 VERSION_POINT = @VERSION_POINT@
 CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
-RPM_VERSION   = $(VERSION)
-RPM_PACKAGEV  = ""
-SNAPVERSION   = $(RPM_VERSION)-$(shell date "+%Y%m%d")
+SNAPVERSION   = $(VERSION)-$(shell date "+%Y%m%d")
 
 
 #############################################################################
@@ -122,8 +120,6 @@ STRIP_PROG = strip
 SED        = sed
 GREP       = grep
 CAT        = cat
-RPM        = rpm
-RPMBUILD   = rpmbuild
 MV         = mv
 TAR        = tar
 LN         = ln
@@ -158,11 +154,10 @@ CVSROOT    = :pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa
 #TMPDIR     := $(shell mktemp -d /tmp/$(PROGRAM).XXXXXX)
 
 #############################################################################
-# Setup for make distribution rh and suse for now 
+# Setup for make distribution for now.
 #############################################################################
 
-TAR_ARCH = /tmp/privoxy-$(RPM_VERSION).tar.gz
-RPM_BASE = @RPM_BASE@
+TAR_ARCH = /tmp/privoxy-$(VERSION).tar.gz
 
 #############################################################################
 # We include these files in our distributions
@@ -259,9 +254,9 @@ all: $(PROGRAM) default.action
 #############################################################################
 # Phony targets
 #############################################################################
-.PHONY: all inifiles redhat-dist redhat-upload solaris-dist suse-dist \
-suse-upload win-dist tarball-dist dok redhat-dok webserver clean clobber tags \
-install conectiva-spec conectiva-dist conectiva-upload CONF_DEST LOG_DEST \
+.PHONY: all inifiles solaris-dist \
+win-dist tarball-dist dok webserver clean clobber tags \
+install CONF_DEST LOG_DEST \
 PID_DEST check_doc install-strip uninstall GROUP_T
 
 #############################################################################
@@ -328,7 +323,7 @@ dist-check:
 # tar.gz with the current date in the name and as a releasenumber in the 
 # spec-file. But the main usage is to run it as follows (Red Hat example):
 # make SNAPVERSION=1.6x create-snapshot
-# This creates a tar.gz and spec-file for a Red Hat 6.x version.
+# This creates a tar.gz.
 #############################################################################
 create-snapshot:
 	@tag=`cvs -d $(CVSROOT) status Makefile | awk ' /Sticky Tag/ { print $$3 } '` 2> /dev/null; \
@@ -336,25 +331,6 @@ create-snapshot:
 	echo "*** Creating package from $$tag!"; \
 	TMPDIR=$(shell mktemp -d /tmp/$(PROGRAM).XXXXXX); \
 	cd $$TMPDIR ; cvs -Q -d $(CVSROOT) export -r $$tag current || echo "Um... export aborted."; \
-	cd $$TMPDIR/current; \
-	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
-	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
-		-e 's/^\(Release:\).*/\1 $(SNAPVERSION)/g' \
-		privoxy-rh.spec > $$TMPFILE ; then \
-			$(MV) -f $$TMPFILE privoxy-rh.spec; \
-	else \
-		$(ECHO) "Could not set version info in specfile."; \
-		exit 1;\
-	fi;\
-	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
-             -e 's/^\(Release:\).*/\1 $(SNAPVERSION)/g' \
-              privoxy-suse.spec > $$TMPFILE ; then \
-			$(MV) -f $$TMPFILE privoxy-suse.spec; \
-	else \
-		$(ECHO) "Could not set version info in specfile."; \
-		exit 1;\
-	fi; \
-	$(RM) $$TMPFILE; \
 	cd $$TMPDIR/current; \
 	$(TAR) --exclude ".cvsignore" --exclude "CVS" \
 		-czf /tmp/$(PROGRAM)-$(VERSION).tar.gz .; \
@@ -365,155 +341,10 @@ create-snapshot:
 #############################################################################
 # looks at the version of Makefile and exports a corresponding source-tree
 # example: if the Makefile has the sticky tag v_2_9_13, you'll get 
-# privoxy-*-2.4.13.tar.gz. Two different tar files will be written, one for
-# Red Hat and one for SuSe (different spec-files)
+# privoxy-*-2.4.13.tar.gz.
 #############################################################################
 create-archive:
 	make SNAPVERSION=$(SNAPVERSION) create-snapshot
-
-#############################################################################
-# RPM specifice stuff (SuSE or Redhat, ..)
-#############################################################################
-rpm-stuff: dist-check clean clobber 
-	for dir in RPMS SRPMS BUILD SOURCES SPECS; do \
-		if [ ! -w $(RPM_BASE)/$$dir ]; then \
-			$(ECHO) "$(RPM_BASE)/$$dir is not writable for you. Maybe try as root."; \
-			$(ECHO) "Or add a suitable path to .rpmmacros like."; \
-			$(ECHO) "%_topdir /home/foo/rpm-build"; \
-			exit 1; \
-		fi; \
-	done; \
-
-check-release:
-	@if [ "$(RPM_PACKAGEV)" = "" ]; then \
-		echo ; \
-		echo "	ERROR: NO RPM_PACKAGEV VALUE"; \
-		echo "	No value given for RPM_PACKAGEV. Please use:"; \
-		echo "	make dist-upload RPM_PACKAGEV=release"; \
-		echo "	where \"release\" is the release number you want to and"; \
-		echo "	where \"dist\" is the name of the distro (redhat or suse)"; \
-		echo ; \
-		echo "	Ex: make redhat-upload RPM_PACKAGEV=1"; \
-		echo ""; \
-		echo "ATTENTION: If your distribution use a specific tag on the"; \
-		echo "           release field (like \"cl\" for Conectiva, and"; \
-		echo "           \"mdk\" for Mandrake), DO NOT put it on the value"; \
-		echo "           given to RPM_PACKAGEV. It will be added automaticaly."; \
-		echo "           Do it like you would do for a redhat package,"; \
-		echo "           (i.e. just the number)."; \
-		echo ; \
-		exit 1; \
-	fi
-
-
-#############################################################################
-# Create Conectiva specfile from RedHat specfile
-#############################################################################
-conectiva-spec:
-	$(RM) privoxy-cl.spec
-	chmod a+x genclspec.sh
-	./genclspec.sh
-
-#############################################################################
-# Conectiva distribution for x86
-#############################################################################
-conectiva-dist: rpm-stuff conectiva-spec
-
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-rh.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
-	$(RPMBUILD) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
-conectiva-upload: check-release
-	make redhat-upload RPM_PACKAGEV=$(RPM_PACKAGEV)cl
-
-#############################################################################
-# redhat distribution alpha and x86
-#############################################################################
-redhat-dist: rpm-stuff
-	echo $(CONFIG_FILES)
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
-	$(RPMBUILD) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
-# For testing build issues only! Use redhat-dist for official releases.
-redhat-test: 
-	echo $(CONFIG_FILES)
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-suse.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
-	$(RPMBUILD) --clean -tb  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-	@echo "WARNING: This target is only for testing. Use redhat-dist for releases!!!"
-
-# anonymously ncftps the rpms to sourceforge
-redhat-upload: check-release
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-# better should use `arch` here instead of ix86 to support other platforms too
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) Now goto
-	@$(ECHO) https://sourceforge.net/project/admin/editpackages.php?group_id=11118
-	@$(ECHO) ... and release the files.
-	@$(ECHO) -------------------------------------------------------
-     # w3m http://sourceforge.net/project/admin/editpackages.php?group_id=11118
-
-
-#############################################################################
-# Creates a Red Hat sourcepackage from CVS (not from the current sources
-# on disk)
-#############################################################################
-redhat-srpm: 
-	make create-archive
-	$(RPMBUILD) -ts --nodeps $(PROGRAM)-$(VERSION).tar.gz
-
-
-#############################################################################
-# suse distribution. works fine. no need to be root. 
-#############################################################################
-suse-dist: rpm-stuff
-# 	TMPFILE=$$(mktemp -q /tmp/$(PROGRAM).XXXXXX); \
-# 	if $(SED) -e 's/^\(Version:\).*/\1 $(RPM_VERSION)/g' \
-#              -e 's/^\(Release:\).*/\1 $(RPM_PACKAGEV)/g' \
-#               privoxy-suse.spec > $$TMPFILE ; then \
-# 	$(MV) -f $$TMPFILE privoxy-suse.spec; \
-# 	else \
-# 		$(ECHO) "Could not set version info in specfile."; \
-# 	exit 1;\
-# 	fi
-
-	$(TAR) --exclude ".cvsignore" --exclude "CVS" --exclude "privoxy-rh.spec" --exclude "privoxy-cl.spec" --exclude "PACKAGERS" -czf $(TAR_ARCH) .
-	$(RPMBUILD) --clean -ta  $(TAR_ARCH)
-	if [ -f $(TAR_ARCH) ]; then  $(RM) $(TAR_ARCH); fi
-
-# anonymously ncftps the rpms to sourceforge
-suse-upload: check-release
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/SRPMS/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).src.rpm
-# better should use `arch` here instead of ix86 to support other platforms too
-	ncftpput -u anonymous -p ijbswa-developers@lists.sourceforge.net upload.sourceforge.net /incoming $(RPM_BASE)/RPMS/*/privoxy-suse-$(RPM_VERSION)-$(RPM_PACKAGEV).*.rpm
-	@$(ECHO) -------------------------------------------------------
-	@$(ECHO) Now goto
-	@$(ECHO) https://sourceforge.net/project/admin/editpackages.php?group_id=11118
-	@$(ECHO) ... and release the files.
-	@$(ECHO) -------------------------------------------------------
-
-# handle with care. use with root.
-suse-clean:
-	$(RPM) -e junkbuster-suse || true
-	$(RM) -r /etc/junkbuster
-	$(RM) -r /etc/rc.d/junkbuster*
-	$(RM) -r /var/run/junkbuster.pid 
-	$(RM) -r /var/log/junkbuster
-	$(RM) /etc/init.d/junkbuster
-	$(RM) /usr/sbin/junkbuster
-	$(RM) /usr/sbin/rcjunkbuster
-	$(RM) /usr/share/man/man1/junkbuster.1.gz
-	$(RPM) -e privoxy-suse || true
-	$(RM) -r /etc/privoxy
-	$(RM) -r /etc/rc.d/privoxy*
-	$(RM) -r /var/run/privoxy.pid 
-	$(RM) -r /var/log/privoxy
-	$(RM) /etc/init.d/privoxy
-	$(RM) /usr/sbin/privoxy
-	$(RM) /usr/sbin/rcprivoxy
-	$(RM) /usr/share/man/man1/privoxy.1.gz
 
 #############################################################################
 # generic distribution
@@ -763,17 +594,6 @@ dok-index:
 # Main documentation target.
 dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors dok-index
 	@$(ECHO) Documentation created.
-
-#
-# an alternative to the above dok. disabled man page creation for the moment
-#
-redhat-dok: dok-release dok-devel dok-user dok-faq redhat-readme dok-webserver dok-authors
-	@$(ECHO) Documentation created.
-
-## Make README
-redhat-readme: 
-	cd doc/source && $(DB)-notoc -V nochunks readme.sgml > tmp.html && $(WDUMP) \
-	  tmp.html > ../../README && $(RM) -r tmp.html
 
 ## Make AUTHORS file
 dok-authors: 
@@ -1182,15 +1002,6 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 			$(INSTALL) $(INSTALL_P) slackware/rc.privoxy $(DESTDIR)/etc/rc.d/ ;\
                $(ECHO) "Installing for Slackware." ;\
                $(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
-		elif [ -f /etc/redhat-release ] && [ -d /etc/rc.d/init.d/ ] && [ -w /etc/rc.d/init.d/ ] ; then \
-               $(ECHO) "Installing init script to /etc/rc.d/init.d/privoxy" ;\
-			$(SED) 's,^PRIVOXY_BIN=.*,PRIVOXY_BIN="/usr/local/sbin/$(PROGRAM)",' privoxy.init |\
-			$(SED) 's,^PRIVOXY_CONF=.*,PRIVOXY_CONF="$(CONF_DEST)/config",' |\
-			$(SED) "s,^PRIVOXY_USER=.*,PRIVOXY_USER=$$USER," > init.tmp ;\
-			$(INSTALL) $(INSTALL_P) init.tmp $(DESTDIR)/etc/rc.d/init.d/privoxy && $(RM) init.tmp;\
-			$(MKDIR) $(DESTDIR)/etc/logrotate.d/ ;\
-			$(ECHO) "Installing logrotate script to $(DESTDIR)/etc/logrotate.d/" ;\
-			$(INSTALL) -m 0644 privoxy.logrotate $(DESTDIR)/etc/logrotate.d/privoxy ;\
 		elif [ -d $(DESTDIR)/etc/init.d ] && [ -w $(DESTDIR)/etc/init.d ] ; then \
 			$(ECHO) "Installing generic init script to $(DESTDIR)/etc/init.d/privoxy" ;\
 			$(ECHO) "Please check that the PATHs are correct, and edit if needed." ;\
@@ -1210,10 +1021,6 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	@$(ECHO) Starting Privoxy uninstallation
 	@# KILL privoxy if running
 	@# XXX: the chkconfig line may need a DESTDIR prefix.
-	-@if [ -f $(DESTDIR)/etc/redhat-release ] && [ -x $(DESTDIR)/etc/rc.d/init.d/privoxy ]; then \
-		$(DESTDIR)/etc/rc.d/init.d/privoxy stop >/dev/null 2>/dev/null ;\
-		chkconfig --del $(PROGRAM) 2>/dev/null;\
-	fi
 	-@test -f $(DESTDIR)$(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
          $(KILL) `$(CAT) $(DESTDIR)$(PID_DEST)/privoxy.pid` || :
 	-@test -f $(DESTDIR)/var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
@@ -1285,15 +1092,12 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 		fi;\
 	fi
 
-	@# init scripts and logrotate
+	@# init scripts
 	@if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		$(ECHO) Removing $(PROGRAM) init script ;\
 		if [ -f $(DESTDIR)/etc/slackware-version ] && \
 	                [ -d $(DESTDIR)/etc/rc.d/ ]  && [ -w $(DESTDIR)/etc/rc.d/ ] ; then \
 			$(RM) $(DESTDIR)/etc/rc.d/rc.privoxy ;\
-		elif [ -f $(DESTDIR)/etc/redhat-release ] && [ -d $(DESTDIR)/etc/rc.d/init.d/ ] \
-                       && [ -w $(DESTDIR)/etc/rc.d/init.d/ ] ; then \
-			$(RM) $(DESTDIR)/etc/rc.d/init.d/privoxy $(DESTDIR)/etc/logrotate.d/privoxy;\
 		elif [ -d $(DESTDIR)/etc/init.d ] && [ -w $(DESTDIR)/etc/init.d ] ; then \
 			$(RM) $(DESTDIR)/etc/init.d/privoxy ;\
 		else \
@@ -1318,6 +1122,9 @@ coffee:
 ## end:
 
 # $Log: GNUmakefile.in,v $
+# Revision 1.181  2009/04/04 20:24:29  fabiankeil
+# Let the clean target play nice with git.
+#
 # Revision 1.180  2009/02/28 08:28:14  fabiankeil
 # pcrs.o doesn't depend on pcre/pcre.h if we are linking
 # dynamically. Patch provided by drauh in #2056286.
