@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.293 2009/09/18 18:52:33 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.294 2009/09/18 18:57:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1330,6 +1330,7 @@ static jb_err receive_client_request(struct client_state *csp)
    req = get_request_line(csp);
    if (req == NULL)
    {
+      mark_server_socket_tainted(csp);
       return JB_ERR_PARSE;
    }
    assert(*req != '\0');
