@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.53 2009/09/18 18:25:46 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.54 2009/10/01 15:05:26 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -655,43 +655,21 @@ sub register_dependency ($$) {
 sub execute_regression_test ($) {
 
     my $test = shift;
-    my $result = 0;
+    my $type = $test->{'type'};
+    my %test_subs = (
+        (CLIENT_HEADER_TEST) => \&execute_client_header_regression_test,
+        (SERVER_HEADER_TEST) => \&execute_server_header_regression_test,
+        (DUMB_FETCH_TEST) => \&execute_dumb_fetch_test,
+        (TRUSTED_CGI_REQUEST) => \&execute_dumb_fetch_test,
+        (METHOD_TEST) => \&execute_method_test,
+        (BLOCK_TEST) => \&execute_block_test,
+        (STICKY_ACTIONS_TEST) => \&execute_sticky_actions_test,
+        (REDIRECT_TEST) => \&execute_redirect_test);
 
-    if ($test->{'type'} == CLIENT_HEADER_TEST) {
+    die "Unsupported test type detected: " . $type
+        unless defined ($test_subs{$type});
 
-        $result = execute_client_header_regression_test($test);
-
-    } elsif ($test->{'type'} == SERVER_HEADER_TEST) {
-
-        $result = execute_server_header_regression_test($test);
-
-    } elsif ($test->{'type'} == DUMB_FETCH_TEST
-          or $test->{'type'} == TRUSTED_CGI_REQUEST) {
-
-        $result = execute_dumb_fetch_test($test);
-
-    } elsif ($test->{'type'} == METHOD_TEST) {
-
-        $result = execute_method_test($test);
-
-    } elsif ($test->{'type'} == BLOCK_TEST) {
-
-        $result = execute_block_test($test);
-
-    } elsif ($test->{'type'} == STICKY_ACTIONS_TEST) {
-
-        $result = execute_sticky_actions_test($test);
-
-    } elsif ($test->{'type'} == REDIRECT_TEST) {
-
-        $result = execute_redirect_test($test);
-
-    } else {
-
-        die "Unsupported test type detected: " . $test->{'type'};
-    }
-
-    return $result;
+    return $test_subs{$type}($test);
 }
 
 sub execute_method_test ($) {
