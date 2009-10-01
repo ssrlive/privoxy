@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.61 2009/09/10 14:59:34 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.62 2009/09/22 11:35:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -7,7 +7,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.61 2009/09/10 14:59:34 fabiankeil
  *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
  *                or SOCKS5 proxy).
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -431,8 +431,8 @@ int close_unusable_connections(void)
          && (JB_INVALID_SOCKET != reusable_connection[slot].sfd))
       {
          time_t time_open = time(NULL) - reusable_connection[slot].timestamp;
-         time_t latency = reusable_connection[slot].response_received -
-            reusable_connection[slot].request_sent;
+         time_t latency = (reusable_connection[slot].response_received -
+            reusable_connection[slot].request_sent) / 2;
 
          if (reusable_connection[slot].keep_alive_timeout < time_open + latency)
          {

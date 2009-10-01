@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.294 2009/09/18 18:57:20 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.295 2009/09/26 13:32:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2488,7 +2488,7 @@ static void serve(struct client_state *csp)
       chat(csp);
 
       latency = (unsigned)(csp->server_connection.response_received -
-         csp->server_connection.request_sent);
+         csp->server_connection.request_sent) / 2;
 
       continue_chatting = (csp->config->feature_flags
          & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
