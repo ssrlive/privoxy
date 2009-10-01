@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.52 2009/09/18 17:30:59 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.53 2009/09/18 18:25:46 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -721,16 +721,17 @@ sub execute_redirect_test ($) {
     my $test = shift;
     my $buffer_ref;
     my $status_code;
-    my $curl_parameters;
 
-    my $redirect_destination = 'NONE';
+    my $curl_parameters = '';
     my $url = $test->{'data'};
+    my $redirect_destination;
     my $expected_redirect_destination = $test->{'redirect destination'};
 
-    # XXX: Verify that a redirect applies before actually doing the request.
-    #      Otherwise the test may hit a real server in failure cases.
+    # XXX: Check if a redirect actualy applies before doing the request.
+    #      otherwise the test may hit a real server in failure cases.
 
-    $curl_parameters = '--head ';
+    $curl_parameters .= '--head ';
+
     $curl_parameters .= quote($url);
 
     $buffer_ref = get_page_with_curl($curl_parameters);
@@ -742,7 +743,6 @@ sub execute_redirect_test ($) {
           . "' but got a response with status code: " . $status_code);
         return 0;
     }
-
     foreach (@{$buffer_ref}) {
         if (/^Location: (.*)\r\n/) {
             $redirect_destination = $1;
@@ -1674,7 +1674,7 @@ header to a trusted value.
 
 If no explicit status code expectation is set, B<200> is used.
 
-To verify that an URL is blocked, use:
+To verify that a URL is blocked, use:
 
     # Blocked URL = http://www.example.com/blocked
 
