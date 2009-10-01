@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.71 2009/03/01 18:33:17 ler762 Exp $
+#  $Id: default.filter,v 1.72 2009/05/16 13:27:20 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -600,7 +600,7 @@ s@</head>@\n<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's yahoo filter. */\n\
  \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
  \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
- \#nwad, \#MWA2, \#MSCM, \#yregad, \
+ \#nwad, \#MWA2, \#MSCM, \#yregad, \#sponsored-links,\
  \#ks-ypn-ads, .ad, \#east, \#ygrp-vital {display: none !important;}\n\
  \#yschpri, \#yschweb, \#pri, \#web, \#main {width: 100% !important; max-width: 100% !important;}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
