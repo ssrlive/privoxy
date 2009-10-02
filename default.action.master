@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.189 2009/09/11 18:15:19 fabiankeil Exp $
+#  $Id: default.action.master,v 1.190 2009/09/18 17:33:02 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2140,6 +2140,11 @@ blogs.msdn.com
 #MASTER# REMARKS: Exclude per Debian bug report #377843 09/17/06
 # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
 blogs.msdn.com
+
+{-filter{jumping-windows}}
+# Sticky Actions = -filter{jumping-windows}
+# URL = http://www.openstreetmap.org
+.openstreetmap.org
 
 {+fast-redirects{check-decoded-url} -block}
 # Sticky Actions = +fast-redirects{check-decoded-url} -block
