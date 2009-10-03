@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.73 2009/10/01 15:04:52 fabiankeil Exp $
+#  $Id: default.filter,v 1.74 2009/10/03 10:38:58 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -602,7 +602,10 @@ s@</head>@\n<style type="text/css">\n\
  \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
  \#nwad, \#MWA2, \#MSCM, \#yregad, \#sponsored-links,\
  \#ks-ypn-ads, .ad, \#east, \#ygrp-vital {display: none !important;}\n\
- \#yschpri, \#yschweb, \#pri, \#web, \#main {width: 100% !important; max-width: 100% !important;}\n\
+ \#yschpri, \#yschweb, \#pri, \#web, \#main, .yschttl, .abstr, .res \n\
+ {width: 99% !important; max-width: 100% !important;}\n\
+ .yschttl, .res, .res.indent, \#web {padding: 0px; margin: 0px !important;}\n\
+ \#web {padding-left: 0.5em}\n\
  \#yschqcon, \#yschtg {width: auto !important; /* No useless horizontal scrollbar please */}\n\
  \#composebox \#compose_editorArea {width: 70% !important; /* reasonably sized reply textarea please */\n\
  </style>\n$0\n@
