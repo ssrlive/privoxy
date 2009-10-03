@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.74 2009/10/03 10:38:58 fabiankeil Exp $
+#  $Id: default.filter,v 1.75 2009/10/03 10:39:33 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -580,7 +580,9 @@ s@</head>@<style type="text/css">\n\
  \#fbc, \#fbl, \#ra, .rhh {visibility: hidden !important;}\n\
  \#tpa1,\#tpa2,\#tpa3,\#tpa4,\#tpa5,\#tpa5, \#spl, .ch, \#ads,\
  \#toolbar, \#google_ads_frame, \#mbEnd {display: none !important;}\n\
- .main_body, .j {width: 100%}\n</style>\n$0@
+ .main_body, .j, \#res, .med, .hd, .g, .s\n\
+ {width: 99%; max-width: 100%; margin-left: 0; margin-right: 0;}\n\
+ </style>\n$0@
 s@<div style=\"padding-top:11px;min-width:500px\">@<div id="main_body">@
 s@(<table cellspacing=0 cellpadding=0 width=25% align=right bgcolor=\#ffffff border=0\
 |</font></td></tr></tbody></table><table align=\"right\" bgcolor=\"\#ffffff\"\
