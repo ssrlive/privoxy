@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.72 2009/05/16 13:27:20 fabiankeil Exp $
+#  $Id: default.filter,v 1.73 2009/10/01 15:04:52 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -621,7 +621,7 @@ s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
  .msn_ads, \#at, \#ar, .mktmsg {display: none !important;}\n\
  \#results, .flank, .results_area_flank, .results_area_stroke,\n\
- \#results_area, .SearchSection, .not, .sc_rslth1\n\
+ \#results_area, \#content, .sb_tlst, .sa_cc, .sb_ph, \#sw_main,\n\
 .content, \#sw_foot, \#bf, \#sw_content, \#sidebar, \#pag\n\
  {width: 99% !important; min-width: 99% !important;\n\
  max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
