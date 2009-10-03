@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.62 2009/09/22 11:35:52 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.63 2009/10/01 16:07:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -169,22 +169,20 @@ extern void initialize_reusable_connections(void)
  *
  * Function    :  remember_connection
  *
- * Description :  Remembers a connection for reuse later on.
+ * Description :  Remembers a server connection for reuse later on.
  *
  * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  fwd = The forwarder settings used.
+ *          1  :  connection = The server connection to remember.
  *
  * Returns     : void
  *
  *********************************************************************/
-void remember_connection(const struct client_state *csp, const struct forward_spec *fwd)
+void remember_connection(const struct reusable_connection *connection)
 {
    unsigned int slot = 0;
    int free_slot_found = FALSE;
-   const struct reusable_connection *connection = &csp->server_connection;
-   const struct http_request *http = csp->http;
 
+   assert(NULL != connection);
    assert(connection->sfd != JB_INVALID_SOCKET);
 
    if (mark_connection_unused(connection))
@@ -202,7 +200,7 @@ void remember_connection(const struct client_state *csp, const struct forward_sp
          assert(reusable_connection[slot].in_use == 0);
          log_error(LOG_LEVEL_CONNECT,
             "Remembering socket %d for %s:%d in slot %d.",
-            connection->sfd, http->host, http->port, slot);
+            connection->sfd, connection->host, connection->port, slot);
          free_slot_found = TRUE;
          break;
       }
@@ -212,37 +210,36 @@ void remember_connection(const struct client_state *csp, const struct forward_sp
    {
       log_error(LOG_LEVEL_CONNECT,
         "No free slots found to remembering socket for %s:%d. Last slot %d.",
-        http->host, http->port, slot);
+        connection->host, connection->port, slot);
       privoxy_mutex_unlock(&connection_reuse_mutex);
       close_socket(connection->sfd);
       return;
    }
 
-   assert(NULL != http->host);
-   reusable_connection[slot].host = strdup(http->host);
+   assert(NULL != connection->host);
+   reusable_connection[slot].host = strdup(connection->host);
    if (NULL == reusable_connection[slot].host)
    {
       log_error(LOG_LEVEL_FATAL, "Out of memory saving socket.");
    }
    reusable_connection[slot].sfd = connection->sfd;
-   reusable_connection[slot].port = http->port;
+   reusable_connection[slot].port = connection->port;
    reusable_connection[slot].in_use = 0;
    reusable_connection[slot].timestamp = connection->timestamp;
    reusable_connection->request_sent = connection->request_sent;
    reusable_connection->response_received = connection->response_received;
    reusable_connection[slot].keep_alive_timeout = connection->keep_alive_timeout;
 
-   assert(NULL != fwd);
    assert(reusable_connection[slot].gateway_host == NULL);
    assert(reusable_connection[slot].gateway_port == 0);
    assert(reusable_connection[slot].forwarder_type == SOCKS_NONE);
    assert(reusable_connection[slot].forward_host == NULL);
    assert(reusable_connection[slot].forward_port == 0);
 
-   reusable_connection[slot].forwarder_type = fwd->type;
-   if (NULL != fwd->gateway_host)
+   reusable_connection[slot].forwarder_type = connection->forwarder_type;
+   if (NULL != connection->gateway_host)
    {
-      reusable_connection[slot].gateway_host = strdup(fwd->gateway_host);
+      reusable_connection[slot].gateway_host = strdup(connection->gateway_host);
       if (NULL == reusable_connection[slot].gateway_host)
       {
          log_error(LOG_LEVEL_FATAL, "Out of memory saving gateway_host.");
@@ -252,11 +249,11 @@ void remember_connection(const struct client_state *csp, const struct forward_sp
    {
       reusable_connection[slot].gateway_host = NULL;
    }
-   reusable_connection[slot].gateway_port = fwd->gateway_port;
+   reusable_connection[slot].gateway_port = connection->gateway_port;
 
-   if (NULL != fwd->forward_host)
+   if (NULL != connection->forward_host)
    {
-      reusable_connection[slot].forward_host = strdup(fwd->forward_host);
+      reusable_connection[slot].forward_host = strdup(connection->forward_host);
       if (NULL == reusable_connection[slot].forward_host)
       {
          log_error(LOG_LEVEL_FATAL, "Out of memory saving forward_host.");
@@ -266,7 +263,7 @@ void remember_connection(const struct client_state *csp, const struct forward_sp
    {
       reusable_connection[slot].forward_host = NULL;
    }
-   reusable_connection[slot].forward_port = fwd->forward_port;
+   reusable_connection[slot].forward_port = connection->forward_port;
 
    privoxy_mutex_unlock(&connection_reuse_mutex);
 }

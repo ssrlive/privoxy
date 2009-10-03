@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.17 2009/07/11 14:49:09 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.18 2009/09/06 14:15:46 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -9,7 +9,7 @@
  *                using a "gateway" (i.e. HTTP proxy and/or SOCKS4
  *                proxy).  Also contains the list of gateway types.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -59,8 +59,7 @@ extern jb_socket forwarded_connect(const struct forward_spec * fwd,
 extern void set_keep_alive_timeout(unsigned int timeout);
 extern void initialize_reusable_connections(void);
 extern void forget_connection(jb_socket sfd);
-extern void remember_connection(const struct client_state *csp,
-                                const struct forward_spec *fwd);
+extern void remember_connection(const struct reusable_connection *connection);
 extern int close_unusable_connections(void);
 #endif /* FEATURE_CONNECTION_SHARING */
 
