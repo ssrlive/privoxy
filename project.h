@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.148 2009/07/18 12:20:05 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.149 2009/08/19 15:57:13 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -787,6 +787,11 @@ struct reusable_connection
  * is among the server headers.
  */
 #define CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET 0x00080000U
+
+/**
+ * Flag for csp->flags: Set if the client reused its connection.
+ */
+#define CSP_FLAG_REUSED_CLIENT_CONNECTION           0x00100000U
 
 /*
  * Flags for use in return codes of child processes

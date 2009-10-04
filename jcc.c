@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.296 2009/10/01 16:07:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.297 2009/10/03 10:37:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2304,10 +2304,21 @@ static void chat(struct client_state *csp)
             /* Did we actually get anything? */
             if (NULL == csp->headers->first)
             {
-               log_error(LOG_LEVEL_ERROR,
-                  "Empty server or forwarder response received on socket %d.", csp->sfd);
+               if ((csp->flags & CSP_FLAG_REUSED_CLIENT_CONNECTION))
+               {
+                  log_error(LOG_LEVEL_ERROR,
+                     "Empty server or forwarder response received on socket %d. "
+                     "Closing client connection %d without sending data.",
+                     csp->sfd, csp->cfd);
+               }
+               else
+               {
+                  log_error(LOG_LEVEL_ERROR,
+                     "Empty server or forwarder response received on socket %d.",
+                     csp->sfd);
+                  send_crunch_response(csp, error_response(csp, "no-server-data"));
+               }
                log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-               send_crunch_response(csp, error_response(csp, "no-server-data"));
                free_http_request(http);
                mark_server_socket_tainted(csp);
                return;
@@ -2546,7 +2557,8 @@ static void serve(struct client_state *csp)
             }
 
             /* XXX: Store per-connection flags someplace else. */
-            csp->flags = CSP_FLAG_ACTIVE | (csp->flags & CSP_FLAG_TOGGLED_ON);
+            csp->flags = CSP_FLAG_ACTIVE |
+               (csp->flags & CSP_FLAG_TOGGLED_ON) | CSP_FLAG_REUSED_CLIENT_CONNECTION;
          }
          else
          {
