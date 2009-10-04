@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.149 2009/08/19 15:57:13 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.150 2009/10/04 15:34:18 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -632,8 +632,9 @@ struct url_actions
 
 
 /*
- * Structure to make sure we only reuse the server socket
- * if the host and forwarding settings are the same.
+ * Structure to hold the server socket and the information
+ * required to make sure we only reuse the connection if
+ * the host and forwarding settings are the same.
  */
 struct reusable_connection
 {
@@ -828,9 +829,6 @@ struct client_state
 
    /** socket to talk to client (web browser) */
    jb_socket cfd;
-
-   /** socket to talk to server (web server or proxy) */
-   jb_socket sfd;
 
    /** current connection to the server (may go through a proxy) */
    struct reusable_connection server_connection;
