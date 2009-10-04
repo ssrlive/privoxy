@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.66 2009/09/06 15:22:31 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.67 2009/09/10 14:53:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -169,7 +169,10 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
    memset((char *)&hints, 0, sizeof(hints));
    hints.ai_family = AF_UNSPEC;
    hints.ai_socktype = SOCK_STREAM;
-   hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV; /* avoid service look-up */
+   hints.ai_flags = AI_NUMERICSERV; /* avoid service look-up */
+#ifdef AI_ADDRCONFIG
+   hints.ai_flags |= AI_ADDRCONFIG;
+#endif
    if ((retval = getaddrinfo(host, service, &hints, &result)))
    {
       log_error(LOG_LEVEL_INFO,
@@ -703,7 +706,10 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
       hints.ai_family = AF_UNSPEC;
    }
    hints.ai_socktype = SOCK_STREAM;
-   hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
+   hints.ai_flags = AI_PASSIVE;
+#ifdef AI_ADDRCONFIG
+   hints.ai_flags |= AI_ADDRCONFIG;
+#endif
    hints.ai_protocol = 0; /* Realy any stream protocol or TCP only */
    hints.ai_canonname = NULL;
    hints.ai_addr = NULL;
