@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: p-authors.sgml,v 2.37 2009/10/04 16:44:33 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.38 2009/10/07 16:11:18 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -111,9 +111,9 @@ Current Privoxy Team:
  Don Libes
  Paul Lieverse
  Toby Lyward
- Francois Marier
  Wil Mahan
  Jindrich Makovicka
+ Francois Marier
  David Mediavilla
  Raphael Moll
  Amuro Namie
