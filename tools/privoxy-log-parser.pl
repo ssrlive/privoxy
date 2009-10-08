@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.51 2009/09/22 11:33:23 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.52 2009/10/04 15:47:12 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -59,6 +59,7 @@ use constant {
     CLI_OPTION_ERROR_LOG_FILE => '/var/log/privoxy-log.log',
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
+    CLI_OPTION_STATISTICS => 0,
 
     SUPPRESS_SUCCEEDED_FILTER_ADDITIONS => 1,
     SHOW_SCAN_INTRO => 0,
@@ -186,6 +187,8 @@ sub prepare_our_stuff () {
     prepare_colour_array(\@all_colours);
     prepare_colour_array(\@time_colours);
     init_css_colours();
+
+    init_stats();
 }
 
 sub paint_it ($) {
@@ -1839,6 +1842,147 @@ sub handle_loglevel_ignore ($) {
     return shift;
 }
 
+sub gather_loglevel_request_stats ($$) {
+    my $c = shift;
+    my $thread = shift;
+    our %stats;
+
+    $stats{requests}++;
+}
+
+sub gather_loglevel_crunch_stats ($$) {
+    my $c = shift;
+    my $thread = shift;
+    our %stats;
+
+    $stats{requests}++;
+    $stats{crunches}++;
+}
+
+
+sub gather_loglevel_error_stats ($$) {
+
+    my $c = shift;
+    my $thread = shift;
+    our %stats;
+    our %thread_data;
+
+    if ($c =~ m/^Empty server or forwarder response received on socket \d+./) {
+
+        # Empty server or forwarder response received on socket 4.
+        $stats{'empty-responses'}++;
+        if ($thread_data{$thread}{'new_connection'}) {
+            $stats{'empty-responses-on-new-connections'}++;
+        } else {
+            $stats{'empty-responses-on-reused-connections'}++;
+        }
+    }
+}
+
+sub gather_loglevel_connect_stats ($$) {
+
+    my $c = shift;
+    my $thread = shift;
+    our %thread_data;
+    our %stats;
+
+    if ($c =~ m/^via ([^\s]+) to: [^\s]+/) {
+
+        # Connect: via 10.0.0.1:8123 to: www.example.org.noconnect
+        $thread_data{$thread}{'forwarder'} = $1; # XXX: is this missue?
+
+    } elsif ($c =~ m/^to ([^\s]*)$/) {
+
+        # Connect: to lists.sourceforge.net:443
+
+        $thread_data{$thread}{'forwarder'} = 'direct connection';
+
+    } elsif ($c =~ m/^Created new connection to/) {
+
+        # Created new connection to www.privoxy.org:80 on socket 11.
+
+        $thread_data{$thread}{'new_connection'} = 1;
+
+    } elsif ($c =~ m/^Reusing server socket \d./ or
+             $c =~ m/^Found reusable socket/) {
+
+        # Reusing server socket 4. Opened for 10.0.0.1.
+        # Found reusable socket 9 for www.privoxy.org:80 in slot 0.
+
+        $thread_data{$thread}{'new_connection'} = 0;
+        $stats{'reused-connections'}++;
+    }
+}
+
+sub gather_loglevel_header_stats ($) {
+
+    my $c = shift;
+    my $thread = shift;
+    our %stats;
+
+    if ($c =~ m/^A HTTP\/1\.1 response without/ or
+        $c =~ m/^Keeping the server header 'Connection: keep-alive' around./)
+    {
+        # A HTTP/1.1 response without Connection header implies keep-alive.
+        # Keeping the server header 'Connection: keep-alive' around.
+        $stats{'server-keep-alive'}++;
+    }
+}
+
+sub init_stats () {
+    our %stats = (
+        requests => 0,
+        crunches => 0,
+        'server-keep-alive' => 0,
+        'reused-connections' => 0,
+        'empty-responses' => 0,
+        'empty-responses-on-new-connections' => 0,
+        'empty-responses-on-reused-connections' => 0,
+        );
+}
+
+sub get_percentage ($$) {
+    my $big = shift;
+    my $small = shift;
+    return "NaN" if ($big eq 0);
+    return sprintf("%.2f%%", $small / $big * 100);
+}
+
+sub print_stats () {
+
+    our %stats;
+    my $new_connections = $stats{requests} - $stats{crunches} - $stats{'reused-connections'};
+    my $outgoing_requests = $stats{requests} - $stats{crunches};
+
+    if ($stats{requests} eq 0) {
+        print "No requests yet.\n";
+        return;
+    }
+
+    print "Client requests total: " . $stats{requests} . "\n";
+    print "Crunches: " . $stats{crunches} . " (" .
+        get_percentage($stats{requests}, $stats{crunches}) . ")\n";
+    print "Outgoing requests: " . $outgoing_requests . " (" .
+        get_percentage($stats{requests}, $outgoing_requests) . ")\n";
+    print "Server keep-alive offers: " . $stats{'server-keep-alive'} . " (" .
+        get_percentage($stats{requests}, $stats{'server-keep-alive'}) . ")\n";
+    print "New outgoing connections: " . $new_connections . " (" .
+        get_percentage($stats{requests}, $new_connections) . ")\n";
+    print "Reused connections: " . $stats{'reused-connections'} . " (" .
+        get_percentage($stats{requests}, $stats{'reused-connections'}) . ")\n";
+    print "Empty responses: " . $stats{'empty-responses'} . " (" .
+        get_percentage($stats{requests}, $stats{'empty-responses'}) . ")\n";
+    print "Empty responses on new connections: "
+         . $stats{'empty-responses-on-new-connections'} . " (" .
+        get_percentage($stats{requests}, $stats{'empty-responses-on-new-connections'})
+        . ")\n";
+    print "Empty responses on reused connections: " .
+        $stats{'empty-responses-on-reused-connections'} . " (" .
+        get_percentage($stats{requests}, $stats{'empty-responses-on-reused-connections'}) .
+        ")\n";
+}
+
+
 ################################################################################
 # Functions that actually print stuff
 ################################################################################
@@ -2021,6 +2165,51 @@ sub parse_loop () {
     }
 }
 
+sub stats_loop () {
+
+    my ($day, $time_stamp, $thread, $log_level, $content, $c, $msecs);
+    my %log_level_handlers = (
+         'Re-Filter'         => \&handle_loglevel_ignore,
+         'Header'            => \&gather_loglevel_header_stats,
+         'Connect'           => \&gather_loglevel_connect_stats,
+         'Redirect'          => \&handle_loglevel_ignore,
+         'Request'           => \&gather_loglevel_request_stats,
+         'Crunch'            => \&gather_loglevel_crunch_stats,
+         'Gif-Deanimate'     => \&handle_loglevel_ignore,
+         'Info'              => \&handle_loglevel_ignore,
+         'CGI'               => \&handle_loglevel_ignore,
+         'Force'             => \&handle_loglevel_ignore,
+         'Error'             => \&gather_loglevel_error_stats,
+         'Fatal error'       => \&handle_loglevel_ignore,
+         'Writing'           => \&handle_loglevel_ignore,
+         'Unknown log level' => \&handle_loglevel_ignore
+    );
+
+    while (<>) {
+        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
+            $day = $1;
+            $time_stamp = $2;
+            $msecs = $3 ? $3 : 0;
+            $log_level = $5;
+            $content = $c = $6;
+            $thread = $4;
+
+            if (defined($log_level_handlers{$log_level})) {
+
+                $content = $log_level_handlers{$log_level}($content, $thread);
+
+            } else {
+
+                die "No handler found for log level \"$log_level\"\n";
+
+            }
+        }
+    }
+
+    print_stats();
+
+}
+
 sub VersionMessage {
     my $version_message;
 
@@ -2041,6 +2230,7 @@ sub get_cli_options () {
         'no-msecs'                 => CLI_OPTION_NO_MSECS,
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
+        'statistics'               => CLI_OPTION_STATISTICS,
     ); 
 
     GetOptions (
@@ -2051,6 +2241,7 @@ sub get_cli_options () {
         'no-msecs'                 => \$cli_options{'no-msecs'},
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
+        'statistics'               => \$cli_options{'statistics'},
         'version'                  => sub { VersionMessage && exit(0) }
    );
 }
@@ -2068,7 +2259,11 @@ sub main () {
 
     print_intro();
 
-    parse_loop();
+    if (cli_option_is_set('statistics')) {
+        stats_loop();
+    } else {
+        parse_loop();
+    }
 
     print_outro();
 }
