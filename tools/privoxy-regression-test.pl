@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.55 2009/10/01 15:05:54 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.56 2009/10/08 11:47:37 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -83,7 +83,7 @@ use constant {
     STICKY_ACTIONS_TEST =>  5,
     TRUSTED_CGI_REQUEST =>  6,
     BLOCK_TEST          =>  7,
-    REDIRECT_TEST       =>  8,
+    REDIRECT_TEST       =>108,
 };
 
 sub init_our_variables () {
@@ -1676,10 +1676,15 @@ control which ones to execute (see I<OPTIONS> below).
 Test levels are either set with the B<Level> directive,
 or implicitly through the test type.
 
-Redirect tests default to level 8, block tests to level 7,
+Redirect tests default to level 108, block tests to level 7,
 fetch tests to level 6, "Sticky Actions" tests default to
 level 5, tests for trusted CGI requests to level 3 and
 client-header-action tests to level 1.
+
+The current redirect test level is above the default
+max-level value as failed tests will result in outgoing
+connections. Use the B<--max-level> option to run them
+as well.
 
 =head1 OPTIONS
 
