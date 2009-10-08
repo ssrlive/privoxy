@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.299 2009/10/04 15:45:11 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.300 2009/10/04 15:46:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2609,7 +2609,6 @@ static void serve(struct client_state *csp)
       }
    } while (continue_chatting);
 
-   mark_connection_closed(&csp->server_connection);
 #else
    chat(csp);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
@@ -2621,6 +2620,10 @@ static void serve(struct client_state *csp)
 #endif /* def FEATURE_CONNECTION_SHARING */
       close_socket(csp->server_connection.sfd);
    }
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   mark_connection_closed(&csp->server_connection);
+#endif
 
    if (csp->cfd != JB_INVALID_SOCKET)
    {
