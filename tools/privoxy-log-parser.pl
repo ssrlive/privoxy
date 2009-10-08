@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.52 2009/10/04 15:47:12 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.53 2009/10/08 11:45:56 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2319,6 +2319,11 @@ codes.
 
 [B<--show-ineffective-filters>] Don't suppress log lines for filters
 that didn't modify the content.
+
+[B<--statistics>] Gather various statistics instead of syntax highlighting
+log messages. This is an experimental feature, if the results look wrong
+they very well might be. Also note that the results a pretty much guaranteed
+to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
 
 [B<--version>] Print version and exit.
 
