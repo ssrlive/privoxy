@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.300 2009/10/04 15:46:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.301 2009/10/08 07:36:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1603,7 +1603,9 @@ static void chat(struct client_state *csp)
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
    struct timeval timeout;
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
    int watch_client_socket = 1;
+#endif
 
    memset(buf, 0, sizeof(buf));
 
