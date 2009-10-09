@@ -10,7 +10,7 @@
  *                introduced because the compile command line started
  *                getting ludicrously long with feature defines.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -145,11 +145,6 @@
  * about which "Accept:" header to send.
  */
 #undef FEATURE_IMAGE_DETECT_MSIE
-
-/*
- * Kills JavaScript popups - window.open, onunload, etc.
- */
-#undef FEATURE_KILL_POPUPS
 
 /*
  * Use PNG instead of GIF for built-in images
