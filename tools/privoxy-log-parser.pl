@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.55 2009/10/08 11:47:12 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.190 2009/10/10 05:29:26 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1631,6 +1631,17 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=closed socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Expected client content length set /) {
+
+        # Expected client content length set to 667325411 after reading 4999 bytes.
+        $c =~ s@(?<=set to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=reading )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Waiting for up to /) {
+
+        # Waiting for up to 4999 bytes from the client.
+        $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
@@ -1641,7 +1652,8 @@ sub handle_loglevel_connect ($) {
              $c =~ m/^The server still wants to talk, but the client hung up on us./ or
              $c =~ m/^The server didn't specify how long the connection will stay open/ or
              $c =~ m/^There might be a request body. The connection will not be kept alive/ or
-             $c =~ m/^Stopping to watch the client socket. There's already another request waiting./) {
+             $c =~ m/^Stopping to watch the client socket. There's already another request waiting./ or
+             $c =~ m/^Done reading from the client\.$/) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
         # Looks like we read the end of the last chunk together with the server \
@@ -1657,6 +1669,7 @@ sub handle_loglevel_connect ($) {
         # The server didn't specify how long the connection will stay open. Assume it's only a second.
         # There might be a request body. The connection will not be kept alive.
         # Stopping to watch the client socket. There's already another request waiting.
+        # Done reading from the client\.
 
     } else {
 
