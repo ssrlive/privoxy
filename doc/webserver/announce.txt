@@ -5,7 +5,7 @@ Privoxy 3.0.15 beta is a bugfix-release for the previous betas
 which introduced IPv6 support, improved keep-alive support and
 a bunch of minor improvements.
 
-See http://www.privoxy.org/3.0.14/user-manual/whatsnew.html for details.
+See http://www.privoxy.org/3.0.15/user-manual/whatsnew.html for details.
 
 --------------------------------------------------------------------
 ChangeLog for Privoxy
