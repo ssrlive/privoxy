@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.137 2009/09/06 14:17:00 fabiankeil Exp $
+dnl $Id: configure.in,v 1.138 2009/10/10 05:47:52 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2009 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.137 $)
+AC_REVISION($Revision: 1.138 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -78,8 +78,8 @@ dnl =================================================================
 
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=15
-CODE_STATUS="beta"
+VERSION_POINT=16
+CODE_STATUS="UNRELEASED"
 
 dnl CODE_STATUS can be "alpha", "beta", or "stable", and will be
 dnl used for CGI output. Set version to 0.0.0 and status to "UNRELEASED"
