@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.190 2009/09/18 17:33:02 fabiankeil Exp $
+#  $Id: default.action.master,v 1.191 2009/10/02 18:07:22 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1676,6 +1676,12 @@ lads.myspacecdn.com/
 #MASTER# REMARKS: Actionfile tracker ID: 2838501:  2009-08-16
 # URL = http://new.meteo.pl/advajax.js
 .meteo.pl/advajax\.js
+# URL = http://www.adressa.no/
+# URL = http://adressa.no/
+adressa.no/
+# URL = http://www.adresseavisen.no/
+# URL = http://adresseavisen.no/
+adresseavisen.no/
 
 
 
