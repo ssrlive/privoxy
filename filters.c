@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.123 2009/06/19 15:50:53 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.124 2009/08/19 15:24:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -689,7 +689,9 @@ struct http_response *block_url(struct client_state *csp)
       }
 #endif /* Preceeding code is disabled for now */
    }
-   else if(csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
+   else
+#endif /* def FEATURE_IMAGE_BLOCKING */
+   if(csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
    {
      /*
       *  Send empty document.               
@@ -717,7 +719,6 @@ struct http_response *block_url(struct client_state *csp)
       }
    }
    else
-#endif /* def FEATURE_IMAGE_BLOCKING */
 
    /*
     * Else, generate an HTML "blocked" message:
