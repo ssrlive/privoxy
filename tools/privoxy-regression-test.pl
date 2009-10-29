@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.57 2009/10/08 11:48:20 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.58 2009/10/29 16:46:42 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -818,7 +818,10 @@ sub get_final_results ($) {
         next unless ($final_results_reached);
         last if (m@</td>@);
 
-        if (m@<br>([-+])<a.*>([^>]*)</a>(?: (\{.*\}))?@) {
+        # Privoxy versions before 3.0.16 add a space
+        # between action name and parameters, therefore
+        # the " ?".
+        if (m@<br>([-+])<a.*>([^>]*)</a>(?: ?(\{.*\}))?@) {
             my $action = $1.$2;
             my $parameter = $3;
             
