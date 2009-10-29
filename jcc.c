@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.301 2009/10/08 07:36:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.302 2009/10/09 16:50:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -724,18 +724,20 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
       status_code[2] = rsp->head[11];
       status_code[3] = '\0';
 
+      /* Log that the request was crunched and why. */
+      log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
+         csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
+
       /* Write the answer to the client */
       if (write_socket(csp->cfd, rsp->head, rsp->head_length)
        || write_socket(csp->cfd, rsp->body, rsp->content_length))
       {
          /* There is nothing we can do about it. */
-         log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", csp->http->host);
+         log_error(LOG_LEVEL_ERROR,
+            "Couldn't deliver the error message through client socket %d: %E",
+            csp->cfd);
       }
-
-      /* Log that the request was crunched and why. */
-      log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
-         csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
 
       /* Clean up and return */
       if (cgi_error_memory() != rsp)
