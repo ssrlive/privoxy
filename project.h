@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.150 2009/10/04 15:34:18 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.151 2009/10/04 15:45:11 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1169,6 +1169,11 @@ struct configuration_spec
     * - RUNTIME_FEATURE_CGI_TOGGLE
     * - RUNTIME_FEATURE_HTTP_TOGGLE
     * - RUNTIME_FEATURE_SPLIT_LARGE_FORMS
+    * - RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS
+    * - RUNTIME_FEATURE_ENFORCE_BLOCKS
+    * - RUNTIME_FEATURE_CGI_CRUNCHING
+    * - RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE
+    * - RUNTIME_FEATURE_CONNECTION_SHARING
     */
    unsigned feature_flags;
 
