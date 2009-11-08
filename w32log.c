@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.34 2009/05/16 13:27:20 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.35 2009/07/21 16:29:57 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -168,7 +168,10 @@ static struct _Pattern
    { "Crunch: Connection failure",  STYLE_HIGHLIGHT },
    { "Crunch: Out of memory",       STYLE_HIGHLIGHT },
    { "Connect: Found reusable socket",     STYLE_HIGHLIGHT },
+   { "Connect: Reusing server socket",     STYLE_HIGHLIGHT },
    { "Connect: Created new connection to", STYLE_HIGHLIGHT },
+   { "hung up on us",               STYLE_HIGHLIGHT },
+   { "Crunching Referer:",          STYLE_HIGHLIGHT },
    /* what are all the possible error strings?? */
    { "Error:",                      STYLE_HIGHLIGHT },
    /* http headers */
