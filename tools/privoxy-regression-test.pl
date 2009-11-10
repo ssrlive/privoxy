@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.58 2009/10/29 16:46:42 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.59 2009/10/29 16:50:32 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -1497,7 +1497,7 @@ sub parse_cli_options () {
         'test-number=s'      => \$cli_options{'test-number'},
         'verbose'            => \$cli_options{'verbose'},
         'version'            => sub {print_version && exit(0)}
-    );
+    ) or exit(1);
     $log_level |= $cli_options{'debug'};
 }
 

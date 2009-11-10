@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.58 2009/10/31 10:14:07 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.59 2009/11/10 16:19:38 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2268,7 +2268,7 @@ sub get_cli_options () {
         'statistics'               => \$cli_options{'statistics'},
         'version'                  => sub { VersionMessage && exit(0) },
         'help'                     => \&help,
-   );
+   ) or exit(1);
 }
 
 sub help () {
