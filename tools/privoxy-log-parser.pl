@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.57 2009/10/10 05:50:02 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.58 2009/10/31 10:14:07 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1851,7 +1851,10 @@ sub handle_loglevel_error ($) {
     if ($c =~ m/^Empty server or forwarder response received on socket \d+./) {
 
         # Empty server or forwarder response received on socket 4.
+        # Empty server or forwarder response received on socket 3. \
+        #  Closing client socket 15 without sending data.
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
     }
     # XXX: There are probably more messages that deserve highlighting.
 
