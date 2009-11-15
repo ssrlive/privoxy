@@ -11,8 +11,8 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.15">
-<!entity p-status "beta">
+<!entity p-version "3.0.16">
+<!entity p-status "UNRELEASED">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.114 2009/10/10 05:51:48 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.115 2009/10/10 06:19:34 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.114 2009/10/10 05:51:48 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.115 2009/10/10 06:19:34 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8687,6 +8687,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.115  2009/10/10 06:19:34  fabiankeil
+ Ditch a duplicated 'since'.
+
  Revision 2.114  2009/10/10 05:51:48  fabiankeil
  Update "What's new" section.
 
