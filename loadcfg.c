@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.105 2009/09/06 14:15:46 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.106 2009/09/10 14:45:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -136,6 +136,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_confdir                        1978389ul /* "confdir" */
 #define hash_connection_sharing          1348841265ul /* "connection-sharing" */
 #define hash_debug                            78263ul /* "debug" */
+#define hash_default_server_timeout      2530089913ul /* "default-server-timeout" */
 #define hash_deny_access                 1227333715ul /* "deny-access" */
 #define hash_enable_edit_actions         2517097536ul /* "enable-edit-actions" */
 #define hash_enable_remote_toggle        2979744683ul /* "enable-remote-toggle" */
@@ -358,6 +359,7 @@ struct configuration_spec * load_config(void)
    config->max_client_connections    = 0;
    config->socket_timeout            = 300; /* XXX: Should be a macro. */
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   config->default_server_timeout    = 0;
    config->keep_alive_timeout        = DEFAULT_KEEP_ALIVE_TIMEOUT;
    config->feature_flags            &= ~RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
    config->feature_flags            &= ~RUNTIME_FEATURE_CONNECTION_SHARING;
@@ -520,6 +522,27 @@ struct configuration_spec * load_config(void)
          case hash_debug :
             config->debug |= atoi(arg);
             break;
+
+/* *************************************************************************
+ * default-server-timeout timeout
+ * *************************************************************************/
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+         case hash_default_server_timeout :
+            if (*arg != '\0')
+            {
+               int timeout = atoi(arg);
+               if (0 < timeout)
+               {
+                  config->default_server_timeout = (unsigned int)timeout;
+               }
+               else
+               {
+                  log_error(LOG_LEVEL_FATAL,
+                     "Invalid default-server-timeout value: %s", arg);
+               }
+            }
+            break;
+#endif
 
 /* *************************************************************************
  * deny-access source-ip[/significant-bits] [dest-ip[/significant-bits]]
@@ -1320,6 +1343,16 @@ struct configuration_spec * load_config(void)
          disable_logging();
       }
    }
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   if (config->default_server_timeout > config->keep_alive_timeout)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Reducing the default-server-timeout from %d to the keep-alive-timeout %d.",
+         config->default_server_timeout, config->keep_alive_timeout);
+      config->default_server_timeout = config->keep_alive_timeout;
+   }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #ifdef FEATURE_CONNECTION_SHARING
    if (config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)

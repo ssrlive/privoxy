@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.151 2009/10/04 15:45:11 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.152 2009/11/08 17:54:09 ler762 Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1257,6 +1257,9 @@ struct configuration_spec
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    /* Maximum number of seconds after which an open connection will no longer be reused. */
    unsigned int keep_alive_timeout;
+
+   /* Assumed server-side keep alive timeout if none is specified. */
+   unsigned int default_server_timeout;
 #endif
 
    /** All options from the config file, HTML-formatted. */

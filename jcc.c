@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.302 2009/10/09 16:50:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.303 2009/10/29 16:55:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2518,19 +2518,23 @@ static void serve(struct client_state *csp)
          && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
          && (csp->cfd != JB_INVALID_SOCKET)
          && (csp->server_connection.sfd != JB_INVALID_SOCKET)
-         && socket_is_still_usable(csp->server_connection.sfd)
-         && (latency < csp->server_connection.keep_alive_timeout);
+         && socket_is_still_usable(csp->server_connection.sfd);
+
+      if (continue_chatting)
+      {
+         if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
+         {
+            csp->server_connection.keep_alive_timeout = csp->config->default_server_timeout;
+            log_error(LOG_LEVEL_CONNECT,
+               "The server didn't specify how long the connection will stay open. "
+               "Assumed timeout is: %u.", csp->server_connection.keep_alive_timeout);
+         }
+         continue_chatting = (latency < csp->server_connection.keep_alive_timeout);
+      }
 
       if (continue_chatting)
       {
          unsigned int client_timeout;
-
-         if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
-         {
-            log_error(LOG_LEVEL_CONNECT, "The server didn't specify how long "
-               "the connection will stay open. Assume it's only a second.");
-            csp->server_connection.keep_alive_timeout = 1;
-         }
 
          client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
 
