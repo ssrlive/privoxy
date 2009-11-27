@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.52 2009/06/03 18:30:18 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.53 2009/06/12 11:53:33 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.52 2009/06/03 18:30:18 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.53 2009/06/12 11:53:33 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -2550,6 +2550,87 @@ forward-socks4, forward-socks4a and forward-socks5</title>
  </varlistentry>
 </variablelist>
 <![%config-file;[<literallayout>@@keep-alive-timeout 300</literallayout>]]>
+</sect3>
+
+
+<sect3 renderas="sect4" id="default-server-timeout"><title>default-server-timeout</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Assumed server-side keep-alive timeout if not specified by the server.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>Time in seconds.</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Connections for which the server didn't specify the keep-alive
+    timeout are not reused.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Enabling this option significantly increases the number of connections
+    that are reused, provided the <ulink
+     url="#KEEP-ALIVE-TIMEOUT">keep-alive-timeout</ulink> option
+    is also enabled.
+   </para>
+   <para>
+    While it also increases the number of connections problems
+    when &my-app; tries to reuse a connection that already has
+    been closed on the server side, or is closed while &my-app;
+    is trying to reuse it, this should only be a problem if it
+    happens for the first request sent by the client. If it happens
+    for requests on reused client connections, &my-app; will simply
+    close the connection and the client is supposed to retry the
+    request without bothering the user.
+   </para>
+   <para>
+    Enabling this option is therefore only recommended if the
+    <ulink
+     url="#CONNECTION-SHARING">connection-sharing</ulink> option
+    is disabled.
+   </para>
+   <para>
+    It is an error to specify a value larger than the <ulink
+     url="#KEEP-ALIVE-TIMEOUT">keep-alive-timeout</ulink> value.
+   </para>
+   <para>
+    This option has no effect if <application>Privoxy</application>
+    has been compiled without keep-alive support.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    default-server-timeout 60
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#default-server-timeout 60</literallayout>]]>
 </sect3>
 
 
