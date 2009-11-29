@@ -3954,8 +3954,119 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
+NAME="DEFAULT-SERVER-TIMEOUT"
+>7.6.5. default-server-timeout</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Assumed server-side keep-alive timeout if not specified by the server.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>Time in seconds.</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>None</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Connections for which the server didn't specify the keep-alive
+    timeout are not reused.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    Enabling this option significantly increases the number of connections
+    that are reused, provided the <A
+HREF="#KEEP-ALIVE-TIMEOUT"
+TARGET="_top"
+>keep-alive-timeout</A
+> option
+    is also enabled.
+   </P
+><P
+>    While it also increases the number of connections problems
+    when <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> tries to reuse a connection that already has
+    been closed on the server side, or is closed while <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    is trying to reuse it, this should only be a problem if it
+    happens for the first request sent by the client. If it happens
+    for requests on reused client connections, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will simply
+    close the connection and the client is supposed to retry the
+    request without bothering the user.
+   </P
+><P
+>    Enabling this option is therefore only recommended if the
+    <A
+HREF="#CONNECTION-SHARING"
+TARGET="_top"
+>connection-sharing</A
+> option
+    is disabled.
+   </P
+><P
+>    It is an error to specify a value larger than the <A
+HREF="#KEEP-ALIVE-TIMEOUT"
+TARGET="_top"
+>keep-alive-timeout</A
+> value.
+   </P
+><P
+>    This option has no effect if <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    has been compiled without keep-alive support.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    default-server-timeout 60
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
 NAME="CONNECTION-SHARING"
->7.6.5. connection-sharing</A
+>7.6.6. connection-sharing</A
 ></H4
 ><P
 ></P
@@ -4077,7 +4188,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="SOCKET-TIMEOUT"
->7.6.6. socket-timeout</A
+>7.6.7. socket-timeout</A
 ></H4
 ><P
 ></P
@@ -4142,7 +4253,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="MAX-CLIENT-CONNECTIONS"
->7.6.7. max-client-connections</A
+>7.6.8. max-client-connections</A
 ></H4
 ><P
 ></P
