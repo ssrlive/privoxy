@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.59 2009/11/10 16:19:38 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.60 2009/11/10 16:20:18 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1233,19 +1233,24 @@ sub handle_loglevel_redirect ($) {
          $c = highlight_matched_path($c, '(?<=Checking ")[^"]*');
          $c =~ s@\"@@g;
 
-    } elsif ($c =~ m/^pcrs command "([^""]*)" changed "([^""]*)" to "([^""]*)" \((\d+) hits?\)/) {
+    } elsif ($c =~ m/^pcrs command "([^""]*)" changed /) {
 
-        # pcrs command "s@&from=rss@@" changed "http://it.slashdot.org/article.pl?sid=07/03/02/1657247&from=rss"\
+        # pcrs command "s@&from=rss@@" changed \
+        #  "http://it.slashdot.org/article.pl?sid=07/03/02/1657247&from=rss"\
         #  to "http://it.slashdot.org/article.pl?sid=07/03/02/1657247" (1 hit).
-
-        my ($pcrs_command, $url_before, $url_after, $hits) = ($1, $2, $3, $4); # XXX: save these?
-
         $c =~ s@(?<=pcrs command )"([^""]*)"@$h{'filter'}$1$h{'Standard'}@;
         $c = highlight_matched_url($c, '(?<=changed ")[^""]*');
         $c =~ s@(?<=changed )"([^""]*)"@$1@; # Remove quotes
         $c = highlight_matched_url($c, '(?<=to ")[^""]*');
         $c =~ s@(?<=to )"([^""]*)"@$1@; # Remove quotes
         $c =~ s@(\d+)(?= hits?)@$h{'hits'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^pcrs command "([^""]*)" didn\'t change/) {
+
+        # pcrs command "s@^http://([^.]+?)/?$@http://www.bing.com/search?q=$1@" didn't \
+        #  change "http://www.example.org/".
+        $c =~ s@(?<=pcrs command )"([^""]*)"@$h{'filter'}$1$h{'Standard'}@;
+        $c = highlight_matched_url($c, '(?<=change ")[^""]*');
 
     } elsif ($c =~ m/(^New URL is: )(.*)/) {
 
