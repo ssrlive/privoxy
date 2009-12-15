@@ -1,6 +1,6 @@
-#    Sample Configuration File for Privoxy v3.0.15 beta
+#    Sample Configuration File for Privoxy v3.0.16
 #
-#  $Id: config,v 1.82 2009/10/10 05:56:41 fabiankeil Exp $
+#  $Id: config,v 1.83 2009/11/29 15:04:51 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -713,10 +713,7 @@ logfile logfile
 #      If you leave out the IP address, Privoxy will bind to all IPv4
 #      interfaces (addresses) on your machine and may become reachable
 #      from the Internet. In that case, consider using access control
-#      lists (ACL's, see below), and/or a firewall. If the hostname
-#      is localhost, Privoxy will explicitly try to bind to an IPv4
-#      address. For other hostnames it depends on the operating system
-#      which IP version will be used.
+#      lists (ACL's, see below), and/or a firewall.
 #
 #      If you open Privoxy to untrusted users, you will also
 #      want to make sure that the following actions are disabled:
