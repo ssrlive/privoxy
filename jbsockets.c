@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.67 2009/09/10 14:53:34 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.68 2009/10/04 16:38:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -691,7 +691,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    }
 
    memset(&hints, 0, sizeof(struct addrinfo));
-   if ((hostnam == NULL) || !strcmpic(hostnam, "localhost"))
+   if (hostnam == NULL)
    {
       /*
        * XXX: This is a hack. The right thing to do
