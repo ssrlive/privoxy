@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.139 2009/10/24 11:11:33 fabiankeil Exp $
+dnl $Id: configure.in,v 1.140 2009/11/07 13:44:43 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2009 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.139 $)
+AC_REVISION($Revision: 1.140 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -846,6 +846,12 @@ AC_ARG_ENABLE(extended-host-patterns,
                                   packages for others that may not be expecting it.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_EXTENDED_HOST_PATTERNS)
+fi])
+
+AC_ARG_ENABLE(accept-filter,
+[  --enable-accept-filter          Try to use accf_http(9) if supported.],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_ACCEPT_FILTER)
 fi])
 
 dnl pcre/pcrs is needed for CGI anyway, so
