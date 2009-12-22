@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.60 2009/11/10 16:20:18 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.61 2009/12/12 11:31:17 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1592,8 +1592,9 @@ sub handle_loglevel_connect ($) {
         # Closing server socket 2. Opened for 10.0.0.1.
         # No additional client request received in time. \
         #  Closing server socket 4, initially opened for 10.0.0.1.
+        # No additional client request received in time on socket 29.
 
-        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<= socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.$)');
 
     } elsif ($c =~ m/^Connected to /) {
@@ -1612,11 +1613,15 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=\]:)(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Waiting for the next client request/ or
-             $c =~ m/^The connection on server socket/ ) {
+             $c =~ m/^The connection on server socket/ or
+             $c =~ m/^Client request arrived in time or the client closed the connection/) {
 
-        # Waiting for the next client request. Keeping the server socket 5 to 10.0.0.1 open.
+        # Waiting for the next client request on socket 3. Keeping the server \
+        #  socket 12 to a.fsdn.com open.
         # The connection on server socket 6 to upload.wikimedia.org isn't reusable. Closing.
+        # Client request arrived in time or the client closed the connection on socket 12.
 
+        $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=to )[^\s]+');
 
@@ -1652,7 +1657,6 @@ sub handle_loglevel_connect ($) {
     } elsif ($c =~ m/^Looks like we rea/ or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
-             $c =~ m/^Client request arrived in time or the client closed the connection/ or
              $c =~ m/^Complete client request received/ or
              $c =~ m/^Possible pipeline attempt detected./ or
              $c =~ m/^POST request detected. The connection will not be kept alive./ or
