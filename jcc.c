@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.303 2009/10/29 16:55:29 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.304 2009/11/27 13:46:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2624,7 +2624,10 @@ static void serve(struct client_state *csp)
    if (csp->server_connection.sfd != JB_INVALID_SOCKET)
    {
 #ifdef FEATURE_CONNECTION_SHARING
-      forget_connection(csp->server_connection.sfd);
+      if (csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
+      {
+         forget_connection(csp->server_connection.sfd);
+      }
 #endif /* def FEATURE_CONNECTION_SHARING */
       close_socket(csp->server_connection.sfd);
    }
