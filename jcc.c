@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.304 2009/11/27 13:46:47 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.305 2009/12/22 13:03:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2539,16 +2539,16 @@ static void serve(struct client_state *csp)
          client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
 
          log_error(LOG_LEVEL_CONNECT,
-            "Waiting for the next client request. "
+            "Waiting for the next client request on socket %d. "
             "Keeping the server socket %d to %s open.",
-            csp->server_connection.sfd, csp->server_connection.host);
-
+            csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
             && data_is_available(csp->cfd, (int)client_timeout)
             && socket_is_still_usable(csp->cfd))
          {
             log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
-               "time or the client closed the connection.");
+               "time or the client closed the connection on socket %d.",
+                csp->cfd);
             /*
              * Get the csp in a mostly vergin state again.
              * XXX: Should be done elsewhere.
@@ -2578,7 +2578,8 @@ static void serve(struct client_state *csp)
          else
          {
             log_error(LOG_LEVEL_CONNECT,
-               "No additional client request received in time.");
+               "No additional client request received in time on socket %d.",
+                csp->cfd);
 #ifdef FEATURE_CONNECTION_SHARING
             if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
                && (socket_is_still_usable(csp->server_connection.sfd)))
