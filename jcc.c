@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.305 2009/12/22 13:03:30 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.306 2009/12/22 13:04:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3118,9 +3118,6 @@ int main(int argc, char **argv)
 #if defined(unix)
 {
    pid_t pid = 0;
-#if 0
-   int   fd;
-#endif
 
    if (!no_daemon)
    {
@@ -3148,23 +3145,9 @@ int main(int argc, char **argv)
          exit( 0 );
       }
       /* child */
-#if 1
-      /* Should be more portable, but not as well tested */
+
       setsid();
-#else /* !1 */
-#ifdef __FreeBSD__
-      setpgrp(0,0);
-#else /* ndef __FreeBSD__ */
-      setpgrp();
-#endif /* ndef __FreeBSD__ */
-      fd = open("/dev/tty", O_RDONLY);
-      if ( fd )
-      {
-         /* no error check here */
-         ioctl( fd, TIOCNOTTY,0 );
-         close ( fd );
-      }
-#endif /* 1 */
+
       /*
        * stderr (fd 2) will be closed later on,
        * when the config file has been parsed.
