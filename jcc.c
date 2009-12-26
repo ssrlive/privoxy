@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.306 2009/12/22 13:04:10 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.307 2009/12/26 11:32:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3121,6 +3121,8 @@ int main(int argc, char **argv)
 
    if (!no_daemon)
    {
+      int fd;
+
       pid  = fork();
 
       if ( pid < 0 ) /* error */
@@ -3152,9 +3154,36 @@ int main(int argc, char **argv)
        * stderr (fd 2) will be closed later on,
        * when the config file has been parsed.
        */
+      close(0);
+      close(1);
 
-      close( 0 );
-      close( 1 );
+      /*
+       * Reserve fd 0 and 1 to prevent abort() and friends
+       * from sending stuff to the clients or servers.
+       */
+      fd = open("/dev/null", O_RDONLY);
+      if (fd > 0)
+      {
+         if (dup2(fd, 0) == -1)
+         {
+            log_error(LOG_LEVEL_FATAL, "Failed to reserve fd 0: %E");
+         }
+         close(fd);
+         fd = open("/dev/null", O_WRONLY);
+         if ((fd >= 0) && (fd != 1))
+         {
+            if (dup2(fd, 1) == -1)
+            {
+               log_error(LOG_LEVEL_FATAL, "Failed to reserve fd 1: %E");
+            }
+            close(fd);
+         }
+      }
+      if (fd == -1)
+      {
+         log_error(LOG_LEVEL_FATAL, "Failed to open /dev/null: %E");
+      }
+
       chdir("/");
 
    } /* -END- if (!no_daemon) */
