@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.62 2009/12/23 17:20:19 fk Exp fk $
+# $Id: uagen.pl,v 1.1 2009/12/24 12:57:34 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -94,12 +94,12 @@ sub generate_creation_time($) {
     die "release day in the future"
       if (  ( $year == $rel_year )
         and ( $mon  == $rel_mon )
-        and ( $mday  < $rel_day ) );    
+        and ( $mday  < $rel_day ) );
 
     my @c_time = (0, 0, 0, $rel_day, $rel_mon - 1, $rel_year - 1900, 0, 0, 0);
     my $c_seconds = &timelocal( @c_time );
 
-    $c_seconds = $now - (int rand ($now - $c_seconds)); 
+    $c_seconds = $now - (int rand ($now - $c_seconds));
     @c_time = localtime $c_seconds;
     ($sec, $min, $hour, $c_day, $c_mon, $c_year, $wday, $yday, $isdst) = @c_time;
     $c_mon  += 1;
@@ -526,7 +526,7 @@ B<--sleeping-time> I<minutes> Time to sleep. Only effective if used with B<--loo
 
 B<--silent> Don't print the generated User-Agent to the console.
 
-B<--version> Print version and exit.  
+B<--version> Print version and exit.
 
 The second dash is optional, options can be shortened, as long as there are
 no ambiguities.
