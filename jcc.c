@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.307 2009/12/26 11:32:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.308 2009/12/26 11:34:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3162,26 +3162,30 @@ int main(int argc, char **argv)
        * from sending stuff to the clients or servers.
        */
       fd = open("/dev/null", O_RDONLY);
-      if (fd > 0)
+      if (fd == -1)
+      {
+         log_error(LOG_LEVEL_FATAL, "Failed to open /dev/null: %E");
+      }
+      else if (fd != 0)
       {
          if (dup2(fd, 0) == -1)
          {
             log_error(LOG_LEVEL_FATAL, "Failed to reserve fd 0: %E");
          }
          close(fd);
-         fd = open("/dev/null", O_WRONLY);
-         if ((fd >= 0) && (fd != 1))
-         {
-            if (dup2(fd, 1) == -1)
-            {
-               log_error(LOG_LEVEL_FATAL, "Failed to reserve fd 1: %E");
-            }
-            close(fd);
-         }
       }
+      fd = open("/dev/null", O_WRONLY);
       if (fd == -1)
       {
          log_error(LOG_LEVEL_FATAL, "Failed to open /dev/null: %E");
+      }
+      else if (fd != 1)
+      {
+         if (dup2(fd, 1) == -1)
+         {
+            log_error(LOG_LEVEL_FATAL, "Failed to reserve fd 1: %E");
+         }
+         close(fd);
       }
 
       chdir("/");
