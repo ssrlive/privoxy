@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.308 2009/12/26 11:34:01 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.309 2009/12/29 13:15:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
