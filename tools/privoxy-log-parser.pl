@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.211 2009/12/30 10:17:28 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.63 2009/12/30 11:14:30 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -457,12 +457,7 @@ sub print_outro () {
 }
 
 sub get_line_end () {
-
-    my $line_end = "\n";
-
-    $line_end = '<br>' . $line_end if $html_output_mode;
-
-    return $line_end;
+    return cli_option_is_set('html-output') ? "<br>\n" : "\n";
 }
 
 sub get_colour_html_markup ($) {
