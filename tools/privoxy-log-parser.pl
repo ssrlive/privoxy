@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.64 2009/12/30 11:44:14 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.214 2009/12/30 14:08:09 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2021,10 +2021,7 @@ sub print_clf_message () {
 sub print_non_clf_message ($) {
 
     my $content = shift;
-    my $log_level = $req{$t}{'log-level'};
     my $msec_string = "." . $req{$t}{'msecs'} unless $no_msecs_mode;
-    my $thread_color_string =  $thread_colours{$t} if defined($thread_colours{$t});
-    my $log_level_string = $h{$log_level} if defined($h{$log_level});
     my $line_start = $html_output_mode ? '' : $h{"Standard"};
 
     return if DEBUG_SUPPRESS_LOG_MESSAGES;
@@ -2034,12 +2031,12 @@ sub print_non_clf_message ($) {
         . $req{$t}{'time-stamp'}
         . $msec_string
         . $h{Standard} . " "
-        . $thread_color_string
+        . $thread_colours{$t}
         . $t
         . $h{Standard}
         . " "
-        . $log_level_string
-        . $log_level
+        . $h{$req{$t}{'log-level'}}
+        . $req{$t}{'log-level'}
         . $h{Standard}
         . ": "
         . $content
