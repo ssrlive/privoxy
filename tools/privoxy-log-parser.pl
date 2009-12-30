@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.214 2009/12/30 14:08:09 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.215 2009/12/30 14:23:44 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -523,36 +523,20 @@ sub get_background (){
 sub prepare_highlight_hash ($) {
     my $ref = shift;
 
-    if (!$html_output_mode) {
-
-        foreach my $key (keys %$ref) {
-            $$ref{$key} = paint_it($$ref{$key}); 
-        }
-
-    } else {
-
-        foreach my $key (keys %$ref) {
-            $$ref{$key} = get_semantic_html_markup($key); 
-        }
-
+    foreach my $key (keys %$ref) {
+        $$ref{$key} = $html_output_mode ?
+            get_semantic_html_markup($key) :
+            paint_it($$ref{$key});
     } 
 }
 
 sub prepare_colour_array ($) {
     my $ref = shift;
 
-    if (!$html_output_mode) {
-
-        foreach my $i (0 ... @$ref - 1) {
-            $$ref[$i] = paint_it($$ref[$i]); 
-        } 
-
-    } else {
-
-        foreach my $i (0 ... @$ref - 1) {
-            $$ref[$i] = get_colour_html_markup($$ref[$i]);
-        } 
-
+    foreach my $i (0 ... @$ref - 1) {
+        $$ref[$i] = $html_output_mode ?
+            get_colour_html_markup($$ref[$i]) :
+            paint_it($$ref[$i]);
     }
 }
 
