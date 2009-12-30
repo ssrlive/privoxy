@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.215 2009/12/30 14:23:44 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.216 2009/12/30 15:15:08 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2074,12 +2074,11 @@ sub parse_loop () {
             } else {
 
                 die "No handler found for log level \"$log_level\"\n";
-
             }
 
-            # Highlight Truncations    
-            if (m/\.\.\. \[(too long, truncated)/) {
-                $content =~ s@($1)@$h{'Truncation'}$1$h{'Standard'}@g;
+            # Highlight Truncations
+            if (length($_) > 4000) {
+                $content =~ s@(too long, truncated)]$@$h{'Truncation'}$1$h{'Standard'}]@g;
             }
 
             next unless $content;
