@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.68 2009/12/30 15:15:56 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.69 2009/12/31 11:54:55 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -780,8 +780,7 @@ sub update_header_highlight_regex ($) {
 
 sub handle_loglevel_header ($) {
 
-    my $content = shift;
-    my $c = $content;
+    my $c = shift;
 
     if ($c =~ /^scan:/) {
 
@@ -793,7 +792,7 @@ sub handle_loglevel_header ($) {
             $req{$t}{'destination'} = $3;
             $req{$t}{'http-version'} = $4;
 
-            $content = highlight_request_line($1);
+            $c = highlight_request_line($1);
 
         } elsif ($c =~ m/^(scan: )((?:HTTP\/\d\.\d|ICY) (\d+) (.*))/) {
 
@@ -801,7 +800,7 @@ sub handle_loglevel_header ($) {
             $req{$t}{'response_line'} = $2;
             $req{$t}{'status_code'} = $3;
             $req{$t}{'status_message'} = $4;
-            $content = $1 . highlight_response_line($req{$t}{'response_line'});
+            $c = $1 . highlight_response_line($req{$t}{'response_line'});
 
         } elsif ($c =~ m/^scan: ((?>[^:]+)):/) {
 
@@ -825,43 +824,43 @@ sub handle_loglevel_header ($) {
     } elsif ($c =~ m/^Crunching (?:server|client) header: .* \(contains: ([^\)]*)\)/) {
 
         # Crunching server header: Set-Cookie: trac_form_token=d5308c34e16d15e9e301a456; (contains: Cookie:)
-        $content =~ s@(?<=contains: )($1)@$h{'crunch-pattern'}$1$h{'Standard'}@;
-        $content =~ s@(Crunching)@$h{$1}$1$h{'Standard'}@;    
+        $c =~ s@(?<=contains: )($1)@$h{'crunch-pattern'}$1$h{'Standard'}@;
+        $c =~ s@(Crunching)@$h{$1}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^New host is: ([^\s]*)\./) {
 
         # New host is: trac.vidalia-project.net. Crunching Referer: http://www.vidalia-project.net/
         $c = highlight_matched_host($c, '(?<=New host is: )[^\s]+');
-        $content = highlight_matched_url($c, '(?<=Crunching Referer: )[^\s]+');
+        $c = highlight_matched_url($c, '(?<=Crunching Referer: )[^\s]+');
 
     } elsif ($c =~ m/^Text mode enabled by force. (Take cover)!/) {
 
         # Text mode enabled by force. Take cover!
-        $content =~ s@($1)@$h{'warning'}$1$h{'Standard'}@;
+        $c =~ s@($1)@$h{'warning'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^(New HTTP Request-Line: )(.*)/) {
 
         # New HTTP Request-Line: GET http://www.privoxy.org/ HTTP/1.1
-        $content = $1 . highlight_request_line($2);
+        $c = $1 . highlight_request_line($2);
 
     } elsif ($c =~ m/^Adjust(ed)? Content-Length to \d+/) {
 
         # Adjusted Content-Length to 2132
         # Adjust Content-Length to 33533
-        $content =~ s@(?<=Content-Length to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $content = highlight_known_headers($content);
+        $c =~ s@(?<=Content-Length to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = highlight_known_headers($c);
 
     } elsif ($c =~ m/^Destination extracted from "Host:" header. New request URL:/) {
 
         # Destination extracted from "Host:" header. New request URL: http://www.cccmz.de/~ridcully/blog/
-        $content = highlight_matched_url($content, '(?<=New request URL: ).*');
+        $c = highlight_matched_url($c, '(?<=New request URL: ).*');
 
     } elsif ($c =~ m/^Couldn\'t parse:/) {
 
         # XXX: These should probable be logged with LOG_LEVEL_ERROR
         # Couldn't parse: If-Modified-Since: Wed, 21 Mar 2007 16:34:50 GMT (crunching!)
         # Couldn't parse: at, 24 Mar 2007 13:46:21 GMT in If-Modified-Since: Sat, 24 Mar 2007 13:46:21 GMT (crunching!)
-        $content =~ s@^(Couldn\'t parse)@$h{'error'}$1$h{'Standard'}@;
+        $c =~ s@^(Couldn\'t parse)@$h{'error'}$1$h{'Standard'}@;
 
     } elsif ($c =~ /^Tagger \'([^\']*)\' added tag \'([^\']*)\'/ or
              $c =~ m/^Adding tag \'([^\']*)\' created by header tagger \'([^\']*)\'/) {
@@ -872,9 +871,9 @@ sub handle_loglevel_header ($) {
 
         # XXX: Save tag and tagger
 
-        $content =~ s@(?<=^Tagger \')([^\']*)@$h{'tagger'}$1$h{'Standard'}@;
-        $content =~ s@(?<=added tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
-        $content =~ s@(?<=Action bits )(updated)@$h{'action-bits-update'}$1$h{'Standard'}@;
+        $c =~ s@(?<=^Tagger \')([^\']*)@$h{'tagger'}$1$h{'Standard'}@;
+        $c =~ s@(?<=added tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
+        $c =~ s@(?<=Action bits )(updated)@$h{'action-bits-update'}$1$h{'Standard'}@;
         $no_special_header_highlighting = 1;
 
     } elsif ($c =~ /^Tagger \'([^\']*)\' didn['']t add tag \'([^\']*)\'/) {
@@ -882,8 +881,8 @@ sub handle_loglevel_header ($) {
         # Tagger 'revalidation' didn't add tag 'REVALIDATION-REQUEST'. Tag already present
         # XXX: Save tag and tagger
 
-        $content =~ s@(?<=^Tagger \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
-        $content =~ s@(?<=didn['']t add tag \')([^\']*)@$h{'tagger'}$1$h{'Standard'}@;
+        $c =~ s@(?<=^Tagger \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
+        $c =~ s@(?<=didn['']t add tag \')([^\']*)@$h{'tagger'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^(?:scan:|Randomiz|addh:|Adding:|Removing:|Referer:|Modified:|Accept-Language header|[Cc]ookie)/
           or $c =~ m/^(Text mode is already enabled|Denied request with NULL byte|Replaced:|add-unique:)/
@@ -964,21 +963,21 @@ sub handle_loglevel_header ($) {
         # crunched User-Agent!
         # Crunching: Content-Encoding: gzip
 
-        $content =~ s@(Crunching|crunched)@$h{$1}$1$h{'Standard'}@;
+        $c =~ s@(Crunching|crunched)@$h{$1}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Offending request data with NULL bytes turned into \'°\' characters:/) {
 
         # Offending request data with NULL bytes turned into '°' characters: °°n°°(°°°
 
-        $content = h('warning') . $content . h('Standard');
+        $c = h('warning') . $c . h('Standard');
 
     } elsif ($c =~ m/^(Transforming \")(.*?)(\" to \")(.*?)(\")/) {
 
         # Transforming "Proxy-Authenticate: Basic realm="Correos Proxy Server"" to\
         #  "Proxy-Authenticate: Basic realm="Correos Proxy Server""
 
-       $content =~ s@(?<=^Transforming \")(.*)(?=\" to)@$h{'Header'}$1$h{'Standard'}@;
-       $content =~ s@(?<=to \")(.*)(?=\")@$h{'Header'}$1$h{'Standard'}@;
+       $c =~ s@(?<=^Transforming \")(.*)(?=\" to)@$h{'Header'}$1$h{'Standard'}@;
+       $c =~ s@(?<=to \")(.*)(?=\")@$h{'Header'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Removing empty header/) {
 
@@ -990,34 +989,34 @@ sub handle_loglevel_header ($) {
         # Content-Type: application/octet-stream not replaced. It doesn't look like text.\
         #  Enable force-text-mode if you know what you're doing.
         # XXX: Could highlight more here.
-        $content =~ s@(?<=^Content-Type: )(.*)(?= not replaced)@$h{'content-type'}$1$h{'Standard'}@;
+        $c =~ s@(?<=^Content-Type: )(.*)(?= not replaced)@$h{'content-type'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^(Server|Client) keep-alive timeout is/) {
 
        # Server keep-alive timeout is 5. Sticking with 10.
        # Client keep-alive timeout is 20. Sticking with 10.
 
-       $content =~ s@(?<=timeout is )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-       $content =~ s@(?<=Sticking with )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+       $c =~ s@(?<=timeout is )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+       $c =~ s@(?<=Sticking with )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Reducing keep-alive timeout/) {
 
        # Reducing keep-alive timeout from 60 to 10.
 
-       $content =~ s@(?<= from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-       $content =~ s@(?<= to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+       $c =~ s@(?<= from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+       $c =~ s@(?<= to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } else {
 
-        found_unknown_content($content);
+        found_unknown_content($c);
     }
 
     # Highlight headers
     unless ($c =~ m/^Transforming/) {
-        $content = highlight_known_headers($content) unless $no_special_header_highlighting;
+        $c = highlight_known_headers($c) unless $no_special_header_highlighting;
     }
 
-    return $content;
+    return $c;
 }
 
 sub handle_loglevel_re_filter ($) {
