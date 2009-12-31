@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.216 2009/12/30 15:15:08 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.68 2009/12/30 15:15:56 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -190,7 +190,7 @@ sub prepare_our_stuff () {
         'Unsupported HTTP feature'               => 'light_red',
         Blocked                                  => 'light_red',
         Untrusted                                => 'light_red',
-        Redirected                               => 'green', 
+        Redirected                               => 'green',
         'CGI Call'                               => 'white',
         'DNS failure'                            => 'red',
         'Forwarding failed'                      => 'light_red',
@@ -224,13 +224,13 @@ sub paint_it ($) {
     return "" if cli_option_is_set('no-syntax-highlighting');
 
     my %light = (
-        black       => 0,    
-        red         => 0,   
-        green       => 0,  
-        brown       => 0, 
-        blue        => 0,   
-        purple      => 0, 
-        cyan        => 0,  
+        black       => 0,
+        red         => 0,
+        green       => 0,
+        brown       => 0,
+        blue        => 0,
+        purple      => 0,
+        cyan        => 0,
         light_gray  => 0,
         gray        => 0,
         dark_gray   => 1,
@@ -244,13 +244,13 @@ sub paint_it ($) {
     );
 
     my %text = (
-        black       => 30,    
-        red         => 31,   
-        green       => 32,  
-        brown       => 33, 
-        blue        => 34,   
-        purple      => 35, 
-        cyan        => 36,  
+        black       => 30,
+        red         => 31,
+        green       => 32,
+        brown       => 33,
+        blue        => 34,
+        purple      => 35,
+        cyan        => 36,
         gray        => 37,
         light_gray  => 37,
         dark_gray   => 30,
@@ -273,9 +273,9 @@ sub paint_it ($) {
         $colour_code .= ";";
         $colour_code .= $light{$colour} ? "1" : "2";
         $colour_code .= ";";
-        $colour_code .= $bg_code; 
+        $colour_code .= $bg_code;
         $colour_code .= "m";
-        debug_message $colour . " is \'" . $colour_code . $colour . $default . "\'" if DEBUG_PAINT_IT; 
+        debug_message $colour . " is \'" . $colour_code . $colour . $default . "\'" if DEBUG_PAINT_IT;
 
     } elsif ($colour =~ /reset/) {
 
@@ -283,7 +283,7 @@ sub paint_it ($) {
 
     } else {
 
-        die "What's $colour supposed to mean?\n"; 
+        die "What's $colour supposed to mean?\n";
     }
 
     return $colour_code;
@@ -327,13 +327,13 @@ sub get_html_title () {
 sub init_css_colours() {
 
     our %css_colours = (
-        black       => "000",    
-        red         => "F00",   
-        green       => "0F0",  
-        brown       => "C90", 
-        blue        => "0F0",   
-        purple      => "F06", # XXX: wrong  
-        cyan        => "F09", # XXX: wrong  
+        black       => "000",
+        red         => "F00",
+        green       => "0F0",
+        brown       => "C90",
+        blue        => "0F0",
+        purple      => "F06", # XXX: wrong
+        cyan        => "F09", # XXX: wrong
         light_gray  => "999",
         gray        => "333",
         dark_gray   => "222",
@@ -352,7 +352,7 @@ sub get_css_colour ($) {
    our %css_colours;
    my $colour = shift;
 
-   die "What's $colour supposed to mean?\n" unless defined($css_colours{$colour}); 
+   die "What's $colour supposed to mean?\n" unless defined($css_colours{$colour});
 
    return '#' . $css_colours{$colour};
 }
@@ -363,10 +363,10 @@ sub get_css_line ($) {
     my $css_line;
 
     $css_line .= '.' . lc($class) . ' {'; # XXX: lc() shouldn't be necessary
-    die "What's $class supposed to mean?\n" unless defined($h_colours{$class}); 
+    die "What's $class supposed to mean?\n" unless defined($h_colours{$class});
     $css_line .= 'color:' . get_css_colour($h_colours{$class}) . ';';
     $css_line .= 'background-color:' . get_css_colour(DEFAULT_BACKGROUND) . ';';
-    $css_line .= '}' . "\n"; 
+    $css_line .= '}' . "\n";
 
     return $css_line;
 }
@@ -379,7 +379,7 @@ sub get_css_line_for_colour ($) {
     $css_line .= '.' . lc($colour) . ' {'; # XXX: lc() shouldn't be necessary
     $css_line .= 'color:' . get_css_colour($colour) . ';';
     $css_line .= 'background-color:' . get_css_colour(DEFAULT_BACKGROUND) . ';';
-    $css_line .= '}' . "\n"; 
+    $css_line .= '}' . "\n";
 
     return $css_line;
 }
@@ -392,7 +392,7 @@ sub get_missing_css_lines () {
     $css_line .= '.' . 'default' . ' {';
     $css_line .= 'color:' . HEADER_DEFAULT_COLOUR . ';';
     $css_line .= 'background-color:' . get_css_colour(DEFAULT_BACKGROUND) . ';';
-    $css_line .= '}' . "\n"; 
+    $css_line .= '}' . "\n";
 
     return $css_line;
 }
@@ -406,8 +406,8 @@ sub get_css () {
     $css .= '.privoxy-log {';
     $css .= 'color:' . get_css_colour(DEFAULT_TEXT_COLOUR) . ';';
     $css .= 'background-color:' . get_css_colour(DEFAULT_BACKGROUND) . ';';
-    $css .= '}' . "\n"; 
- 
+    $css .= '}' . "\n";
+
     foreach my $key (keys %h_colours) {
 
         next if ($h_colours{$key} =~ m/reset/); #XXX: Wrong solution.
@@ -498,17 +498,17 @@ sub set_background ($){
     my $colour = shift;
     our $bg_code;
     my %backgrounds = (
-              black       => "40",    
-              red         => "41",   
-              green       => "42",  
-              brown       => "43", 
-              blue        => "44",   
-              magenta     => "45",  
+              black       => "40",
+              red         => "41",
+              green       => "42",
+              brown       => "43",
+              blue        => "44",
+              magenta     => "45",
               cyan        => "46",
-              white       => "47",  
-              default     => "49",  
+              white       => "47",
+              default     => "49",
     );
-    
+
     if (defined($backgrounds{$colour})) {
         $bg_code = $backgrounds{$colour};
     } else {
@@ -527,7 +527,7 @@ sub prepare_highlight_hash ($) {
         $$ref{$key} = $html_output_mode ?
             get_semantic_html_markup($key) :
             paint_it($$ref{$key});
-    } 
+    }
 }
 
 sub prepare_colour_array ($) {
@@ -577,7 +577,7 @@ sub debug_message (@) {
 }
 
 ################################################################################
-# highlighter functions that aren't loglevel-specific 
+# highlighter functions that aren't loglevel-specific
 ################################################################################
 
 sub h ($) {
@@ -598,7 +598,7 @@ sub h ($) {
         log_parser_error($message);
         die "Unworthy highlighter function" if PUNISH_MISSING_HIGHLIGHT_KNOWLEDGE_WITH_DEATH;
     }
-   
+
     return $result;
 }
 
@@ -967,11 +967,11 @@ sub handle_loglevel_header ($) {
         $content =~ s@(Crunching|crunched)@$h{$1}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Offending request data with NULL bytes turned into \'°\' characters:/) {
-        
+
         # Offending request data with NULL bytes turned into '°' characters: °°n°°(°°°
 
         $content = h('warning') . $content . h('Standard');
- 
+
     } elsif ($c =~ m/^(Transforming \")(.*?)(\" to \")(.*?)(\")/) {
 
         # Transforming "Proxy-Authenticate: Basic realm="Correos Proxy Server"" to\
@@ -1012,7 +1012,7 @@ sub handle_loglevel_header ($) {
         found_unknown_content($content);
     }
 
-    # Highlight headers   
+    # Highlight headers
     unless ($c =~ m/^Transforming/) {
         $content = highlight_known_headers($content) unless $no_special_header_highlighting;
     }
@@ -1073,7 +1073,7 @@ sub handle_loglevel_re_filter ($) {
                 $req{$t}{'header_filter_name'} =~ m/^privoxy-filter-test$/) {
             return '';
         }
-        $content =~ s@(?<=\(size )(\d+)@$h{'Number'}$1$h{'Standard'}@;   
+        $content =~ s@(?<=\(size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $content =~ s@($req{$t}{'header_filter_name'})@$h{'filter'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^ ?\.\.\. ?produced (\d*) hits \(new size (\d*)\)\./) {
@@ -1091,7 +1091,7 @@ sub handle_loglevel_re_filter ($) {
             if ($req{$t}{'header_filter_hits'} == 0 and
                 not (defined($req{$t}{'header_filter_name'}) and
                  $req{$t}{'header_filter_name'} =~ m/^privoxy-filter-test$/)) {
-                return ''; 
+                return '';
             }
             # Reformat including information from the intro
             $c = "'" . h('filter') . $req{$t}{'header_filter_name'} . h('Standard') . "'";
@@ -1116,7 +1116,7 @@ sub handle_loglevel_re_filter ($) {
             }
 
             # Highlight from last line (XXX: What?)
-            # $c =~ s@(?<=produced )(\d+)@$h{'Number'}$1$h{'Standard'}@;   
+            # $c =~ s@(?<=produced )(\d+)@$h{'Number'}$1$h{'Standard'}@;
             # $c =~ s@($req{$t}{'header_filter_name'})@$h{'filter'}$1$h{'Standard'}@;
 
         } else {
@@ -1278,7 +1278,7 @@ sub handle_loglevel_gif_deanimate ($) {
     } elsif ($content =~ m/^failed! \(gif parsing\)/) {
 
         # failed! (gif parsing)
-        # XXX: Replace this error message with something less stupid 
+        # XXX: Replace this error message with something less stupid
         $content =~ s@(failed!)@$h{'error'}$1$h{'Standard'}@;
 
     } elsif ($content =~ m/^Need to de-chunk first/) {
@@ -1333,7 +1333,7 @@ sub handle_loglevel_request ($) {
         found_unknown_content($content);
 
     }
-            
+
     return $content;
 }
 
@@ -1445,7 +1445,7 @@ sub handle_loglevel_connect ($) {
         $c = highlight_matched_host($c, '(?<=from )[^\s]+'); # XXX: not an URL
 
     } elsif ($c =~ m/^socks5_connect:/) {
-    
+
         $c =~ s@(?<=socks5_connect: )(.*)@$h{'error'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Created new connection to/) {
@@ -1657,7 +1657,7 @@ sub handle_loglevel_connect ($) {
         found_unknown_content($c);
 
     }
-            
+
     return $c;
 }
 
@@ -1665,7 +1665,7 @@ sub handle_loglevel_connect ($) {
 sub handle_loglevel_info ($) {
 
     my $c = shift;
- 
+
     if ($c =~ m/^Rewrite detected:/) {
 
         # Rewrite detected: GET http://10.0.0.2:88/blah.txt HTTP/1.1
@@ -1690,12 +1690,12 @@ sub handle_loglevel_info ($) {
         $c =~ s@(?<=loading configuration file \')([^\']*)@$h{'file'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^exiting by signal/) {
-        
+
         # exiting by signal 15 .. bye
         $c =~ s@(?<=exiting by signal )(\d+)@$h{'signal'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Privoxy version/) {
-        
+
         # Privoxy version 3.0.7
         $c =~ s@(?<=^Privoxy version )(\d+\.\d+\.\d+)$@$h{'version'}$1$h{'Standard'}@;
 
@@ -1772,11 +1772,11 @@ sub handle_loglevel_cgi ($) {
     my $c = shift;
 
     if ($c =~ m/^Granting access to/) {
-      
+
         #Granting access to http://config.privoxy.org/send-stylesheet, referrer http://p.p/ is trustworthy.
 
     } elsif ($c =~ m/^Substituting: s(.)/) {
-      
+
         # Substituting: s/@else-not-FEATURE_ZLIB@.*@endif-FEATURE_ZLIB@//sigTU
         # XXX: prone to span several lines
 
@@ -1794,13 +1794,13 @@ sub handle_loglevel_force ($) {
     my $c = shift;
 
     if ($c =~ m/^Ignored force prefix in request:/) {
-      
+
         # Ignored force prefix in request: "GET http://10.0.0.1/PRIVOXY-FORCE/block HTTP/1.1"
         $c =~ s@^(Ignored)@$h{'ignored'}$1$h{'Standard'}@;
         $c = highlight_matched_request_line($c, '(?<=request: ")[^"]*');
 
     } elsif ($c =~ m/^Enforcing request:/) {
-      
+
         # Enforcing request: "GET http://10.0.0.1/block HTTP/1.1".
         $c = highlight_matched_request_line($c, '(?<=request: ")[^"]*');
 
@@ -2056,7 +2056,7 @@ sub parse_loop () {
     );
 
     while (<>) {
- 
+
         if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
             $thread = $t = $4;
             $req{$t}{'day'} = $day = $1;
@@ -2092,7 +2092,7 @@ sub parse_loop () {
             # Switch timestamp colour if timestamps differ
             if (($msecs ne $last_msecs) || ($time_stamp ne $last_timestamp)) {
                debug_message("Tick tack!") if DEBUG_TICKS;
-               $time_colour = $time_colours[$time_colour_index % 2]; 
+               $time_colour = $time_colours[$time_colour_index % 2];
                $time_colour_index++;
                $last_msecs = $msecs;
                $last_timestamp = $time_stamp;
@@ -2111,7 +2111,7 @@ sub parse_loop () {
             our ($ip, $timestamp, $request_line, $status_code, $size) = ($1, $2, $3, $4, $5);
 
             print_clf_message();
-    
+
         } else {
 
             # Some Privoxy log messages span more than one line,
@@ -2191,7 +2191,7 @@ sub get_cli_options () {
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
-    ); 
+    );
 
     GetOptions (
         'html-output'              => \$cli_options{'html-output'},
@@ -2280,7 +2280,7 @@ B<privoxy-log-parser> reads Privoxy log messages and
 - (in some cases) calculates additional information,
   like the compression ratio or how a filter affected
   the content size.
- 
+
 With B<privoxy-log-parser> you should be able to increase Privoxy's log level
 without getting confused by the resulting amount of output. For example for
 "debug 64" B<privoxy-log-parser> will (by default) only show messages that
