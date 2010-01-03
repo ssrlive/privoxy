@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.98 2009/07/08 23:18:05 ler762 Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.99 2009/12/26 11:34:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -343,7 +343,7 @@ void init_error_log(const char *prog_name, const char *logfname)
       fclose(logfp);
    }
 #ifdef unix
-   if (!no_daemon && (logfp == stderr))
+   if (daemon_mode && (logfp == stderr))
    {
       if (dup2(1, 2) == -1)
       {

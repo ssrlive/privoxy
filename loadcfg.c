@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.106 2009/09/10 14:45:17 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.107 2009/11/27 13:46:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -965,7 +965,7 @@ struct configuration_spec * load_config(void)
  * In logdir by default
  * *************************************************************************/
          case hash_logfile :
-            if (!no_daemon)
+            if (daemon_mode)
             {
                logfile = make_path(config->logdir, arg);
                if (NULL == logfile)
@@ -1331,7 +1331,7 @@ struct configuration_spec * load_config(void)
 
    freez(config->logfile);
 
-   if (!no_daemon)
+   if (daemon_mode)
    {
       if (NULL != logfile)
       {

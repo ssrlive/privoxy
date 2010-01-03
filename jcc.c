@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.309 2009/12/29 13:15:24 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.310 2009/12/29 13:17:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -119,7 +119,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.309 2009/12/29 13:15:24 fabiankeil Exp $"
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
 
-int no_daemon = 0;
+int daemon_mode = 1;
 struct client_state  clients[1];
 struct file_list     files[1];
 
@@ -2951,7 +2951,7 @@ int main(int argc, char **argv)
       else if (strcmp(argv[argc_pos], "--no-daemon" ) == 0)
       {
          set_debug_level(LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
-         no_daemon = 1;
+         daemon_mode = 0;
       }
 
       else if (strcmp(argv[argc_pos], "--pidfile" ) == 0)
@@ -3119,7 +3119,7 @@ int main(int argc, char **argv)
 {
    pid_t pid = 0;
 
-   if (!no_daemon)
+   if (daemon_mode)
    {
       int fd;
 
@@ -3190,7 +3190,7 @@ int main(int argc, char **argv)
 
       chdir("/");
 
-   } /* -END- if (!no_daemon) */
+   } /* -END- if (daemon_mode) */
 
    /*
     * As soon as we have written the PID file, we can switch
