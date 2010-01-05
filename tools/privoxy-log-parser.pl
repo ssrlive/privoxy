@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.222 2010/01/03 13:47:02 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.72 2010/01/03 13:48:44 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -828,9 +828,9 @@ sub handle_loglevel_header ($) {
 
     } elsif ($c =~ m/^New host is: ([^\s]*)\./) {
 
-        # New host is: trac.vidalia-project.net. Crunching Referer: http://www.vidalia-project.net/
-        $c = highlight_matched_host($c, '(?<=New host is: )[^\s]+');
-        $c = highlight_matched_url($c, '(?<=Crunching Referer: )[^\s]+');
+        # New host is: trac.vidalia-project.net. Crunching Referer: http://www.vidalia-project.net/!
+        $c = highlight_matched_host($c, '(?<=New host is: )[^\s]+(?=\.)');
+        $c = highlight_matched_url($c, '(?<=Crunching Referer: )[^\s!]+');
 
     } elsif ($c =~ m/^Text mode enabled by force. (Take cover)!/) {
 
