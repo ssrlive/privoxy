@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.124 2009/08/19 15:24:30 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.125 2009/10/25 15:23:40 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -702,7 +702,21 @@ struct http_response *block_url(struct client_state *csp)
       rsp->body = strdup(" ");
       rsp->content_length = 1;
 
-      rsp->status = strdup("403 Request blocked by Privoxy");
+      if (csp->config->feature_flags & RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK)
+      {
+         /*
+          * Workaround for firefox bug 492459
+          *   https://bugzilla.mozilla.org/show_bug.cgi?id=492459
+          * Return a 200 OK status for pages blocked with +handle-as-empty-document
+          * if the "handle-as-empty-doc-returns-ok" runtime config option is set.
+          */
+         rsp->status = strdup("200 Request blocked by Privoxy");
+      }
+      else
+      {
+         rsp->status = strdup("403 Request blocked by Privoxy");
+      }
+
       if (rsp->status == NULL)
       {
          free_http_response(rsp);

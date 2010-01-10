@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.107 2009/11/27 13:46:47 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.108 2010/01/03 12:37:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -148,6 +148,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_forward_socks4a             2639958518ul /* "forward-socks4a" */
 #define hash_forward_socks5              3963965522ul /* "forward-socks5" */
 #define hash_forwarded_connect_retries    101465292ul /* "forwarded-connect-retries" */
+#define hash_handle_as_empty_returns_ok  1444873247ul /* "handle-as-empty-doc-returns-ok" */
 #define hash_hostname                      10308071ul /* "hostname" */
 #define hash_keep_alive_timeout          3878599515ul /* "keep-alive-timeout" */
 #define hash_listen_address              1255650842ul /* "listen-address" */
@@ -367,6 +368,7 @@ struct configuration_spec * load_config(void)
    config->feature_flags            &= ~RUNTIME_FEATURE_CGI_TOGGLE;
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
+   config->feature_flags            &= ~RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
 
    configfp = fopen(configfile, "r");
    if (NULL == configfp)
@@ -909,6 +911,26 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_forwarded_connect_retries :
             config->forwarded_connect_retries = atoi(arg);
+            break;
+
+/* *************************************************************************
+ * handle-as-empty-doc-returns-ok 0|1
+ *
+ * Workaround for firefox hanging on blocked javascript pages.
+ *   Block with the "+handle-as-empty-document" flag and set the
+ *   "handle-as-empty-doc-returns-ok" run-time config flag so that
+ *   Privoxy returns a 200/OK status instead of a 403/Forbidden status
+ *   to the browser for blocked pages.
+ ***************************************************************************/
+         case hash_handle_as_empty_returns_ok:
+            if ((*arg != '\0') && (0 != atoi(arg)))
+            {
+               config->feature_flags |= RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
+            }
             break;
 
 /* *************************************************************************
