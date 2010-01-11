@@ -4356,6 +4356,86 @@ CLASS="APPLICATION"
 ></DL
 ></DIV
 ></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="HANDLE-AS-EMPTY-DOC-RETURNS-OK"
+>7.6.9. handle-as-empty-doc-returns-ok</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Note:</DT
+><DD
+><P
+>    This is a work-around for Firefox bug 492459:
+    <SPAN
+CLASS="QUOTE"
+>"    Websites are no longer rendered if SSL requests for JavaScripts are blocked by a proxy.
+    "</SPAN
+>
+    (<A
+HREF="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
+TARGET="_top"
+>https://bugzilla.mozilla.org/show_bug.cgi?id=492459</A
+>)
+   </P
+></DD
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The status code Privoxy returns for pages blocked with
+    <TT
+CLASS="LITERAL"
+><A
+HREF="actions-file.html#HANDLE-AS-EMPTY-DOCUMENT"
+>+handle-as-empty-document</A
+></TT
+>.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>0 or 1</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>0</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Privoxy returns a status 403(forbidden) for all blocked pages.
+   </P
+></DD
+><DT
+>Effect if set:</DT
+><DD
+><P
+>    Privoxy returns a status 200(OK) for pages blocked with +handle-as-empty-document
+    and a status 403(Forbidden) for all other blocked pages.
+   </P
+></DD
+></DL
+></DIV
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT2"
