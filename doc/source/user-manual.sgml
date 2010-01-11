@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.115 2009/10/10 06:19:34 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.116 2009/11/15 14:24:12 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -55,12 +55,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2009 by 
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2010 by
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.115 2009/10/10 06:19:34 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.116 2009/11/15 14:24:12 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8687,6 +8687,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.116  2009/11/15 14:24:12  fabiankeil
+ Prepare to generate docs for 3.0.16 UNRELEASED.
+
  Revision 2.115  2009/10/10 06:19:34  fabiankeil
  Ditch a duplicated 'since'.
 
