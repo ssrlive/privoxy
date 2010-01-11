@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.72 2010/01/03 13:48:44 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.73 2010/01/05 23:36:43 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -56,7 +56,6 @@ use constant {
     CLI_OPTION_NO_EMBEDDED_CSS => 0,
     CLI_OPTION_NO_MSECS => 0,
     CLI_OPTION_NO_SYNTAX_HIGHLIGHTING => 0,
-    CLI_OPTION_ERROR_LOG_FILE => '/var/log/privoxy-log.log',
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
@@ -80,6 +79,7 @@ use constant {
     PUNISH_MISSING_HIGHLIGHT_KNOWLEDGE_WITH_DEATH => 1,
 
     LOG_UNPARSED_LINES_TO_EXTRA_FILE => 0,
+    ERROR_LOG_FILE => '/var/log/privoxy-log-parser',
 
     # You better leave these alone unless you know what you're doing.
     COLOUR_RESET      => "\033[0;0m",
