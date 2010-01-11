@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.74 2010/01/11 11:46:46 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.75 2010/01/11 11:47:59 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1872,8 +1872,7 @@ sub gather_loglevel_error_stats ($$) {
 
 sub gather_loglevel_connect_stats ($$) {
 
-    my $c = shift;
-    my $thread = shift;
+    my ($c, $thread) = @_;
     our %thread_data;
     our %stats;
 
@@ -1905,10 +1904,9 @@ sub gather_loglevel_connect_stats ($$) {
     }
 }
 
-sub gather_loglevel_header_stats ($) {
+sub gather_loglevel_header_stats ($$) {
 
-    my $c = shift;
-    my $thread = shift;
+    my ($c, $thread) = @_;
     our %stats;
 
     if ($c =~ m/^A HTTP\/1\.1 response without/ or
