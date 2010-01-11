@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.75 2010/01/11 11:47:59 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.76 2010/01/11 11:48:23 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2305,7 +2305,7 @@ that didn't modify the content.
 
 [B<--statistics>] Gather various statistics instead of syntax highlighting
 log messages. This is an experimental feature, if the results look wrong
-they very well might be. Also note that the results a pretty much guaranteed
+they very well might be. Also note that the results are pretty much guaranteed
 to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
 
 [B<--version>] Print version and exit.
