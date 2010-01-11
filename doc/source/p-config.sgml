@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.55 2009/12/15 17:43:40 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.56 2010/01/10 13:53:49 ler762 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.55 2009/12/15 17:43:40 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.56 2010/01/10 13:53:49 ler762 Exp $
 </para>
 <para>
 Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
@@ -2878,8 +2878,8 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     <quote>
     Websites are no longer rendered if SSL requests for JavaScripts are blocked by a proxy.
     </quote>
-    (<link linkend="https://bugzilla.mozilla.org/show_bug.cgi?id=492459">
-                    https://bugzilla.mozilla.org/show_bug.cgi?id=492459</link>)
+    (<ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
+	>https://bugzilla.mozilla.org/show_bug.cgi?id=492459</ulink>)
    </para>
   </listitem>
  </varlistentry>
@@ -2913,6 +2913,8 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     Privoxy returns a status 403(forbidden) for all blocked pages.
    </para>
   </listitem>
+ </varlistentry>
+ <varlistentry>
   <term>Effect if set:</term>
   <listitem>
    <para>
