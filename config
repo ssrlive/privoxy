@@ -1,6 +1,6 @@
 #    Sample Configuration File for Privoxy v3.0.16
 #
-#  $Id: config,v 1.83 2009/11/29 15:04:51 fabiankeil Exp $
+#  $Id: config,v 1.84 2009/12/15 17:43:37 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -1698,7 +1698,42 @@ socket-timeout 300
 #      max-client-connections 256
 #
 #max-client-connections 256
+
 #
+#  6.9. handle-as-empty-doc-returns-ok
+#  ====================================
+#
+#  Note:
+#
+#      This is a work-around for Firefox bug 492459: " Websites are no
+#      longer rendered if SSL requests for JavaScripts are blocked by
+#      a proxy. " (https:/ /bugzilla.mozilla.org/show_bug.cgi?id=492459)
+#
+#  Specifies:
+#
+#      The status code Privoxy returns for pages blocked with
+#      +handle-as-empty-document.
+#
+#  Type of value:
+#
+#      0 or 1
+#
+#  Default value:
+#
+#      0
+#
+#  Effect if unset:
+#
+#      Privoxy returns a status 403(forbidden) for all blocked pages.
+#
+#  Effect if set:
+#
+#      Privoxy returns a status 200(OK) for pages blocked with
+#      +handle-as-empty-document and a status 403(Forbidden) for all
+#      other blocked pages.
+#
+#handle-as-empty-doc-returns-ok 0
+
 #
 #  7. WINDOWS GUI OPTIONS
 #  =======================
