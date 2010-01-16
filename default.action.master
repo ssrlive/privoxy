@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.193 2009/10/31 14:46:59 fabiankeil Exp $
+#  $Id: default.action.master,v 1.194 2010/01/14 16:14:27 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2021,6 +2021,8 @@ javabog.dk/ijk/
 .fsfe.org/
 # URL = http://www.couchsurfing.com/mapsurf.html
 .couchsurfing.com/
+# URL = http://www.couchsurfing.org/mapsurf.html
+.couchsurfing.org/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
