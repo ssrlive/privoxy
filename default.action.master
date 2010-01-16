@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.194 2010/01/14 16:14:27 fabiankeil Exp $
+#  $Id: default.action.master,v 1.195 2010/01/16 18:49:07 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -918,7 +918,9 @@ static.lycos-europe.net
 #MASTER# Remark: nothing but "sponsored listings"
 # Blocked URL = http://bcc.co.uk/
 bcc.co.uk/
-
+# Blocked URL = http://fusion.adtoma.com:80/125AFFE801/1DC59C7801.swf
+# Blocked URL = http://fusion.adtoma.com/1254D5CC01/1E43C76801.jpg
+fusion.adtoma.com/
 
 
 #----------------------------------------------------------------------------
@@ -1237,6 +1239,10 @@ img.directtrack.com
 .pclick.yahoo.com/images/
 # Blocked URL = http://rover.ebay.com/ar/1/2/3?mpt=123&adtype=1&size=728x90
 /.*\&adtype=
+# Blocked URL = http://resources.parfym.se/tradedoubler/250x360.swf
+/tradedoubler/.*\.swf
+# Blocked URL = http://hstse.tradedoubler.com/file/142609/440x220.swf
+hstse.tradedoubler.com/.*\.swf
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1689,6 +1695,8 @@ at=weeds&key=a789a971dc687bee4c20c044834fabdd&next=index.php%3Fref%3Dnotif%
 # URL = http://www.ifdb.tads.org/
 # URL = http://www.tads.org/
 .tads.org/
+# URL = http://adtoma.com/
+adtoma.com/
 
 
 #############################################################################
