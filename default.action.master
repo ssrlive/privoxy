@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.196 2010/01/16 20:23:28 fabiankeil Exp $
+#  $Id: default.action.master,v 1.197 2010/01/17 18:23:12 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1708,6 +1708,9 @@ at=weeds&key=a789a971dc687bee4c20c044834fabdd&next=index.php%3Fref%3Dnotif%
 .tads.org/
 # URL = http://adtoma.com/
 adtoma.com/
+#MASTER# REMARKS: Actionsfile feedback 2859872  2009-09-16 09:58
+# URL = http://adactio.com/
+adactio.com/
 
 
 #############################################################################
