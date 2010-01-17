@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.195 2010/01/16 18:49:07 fabiankeil Exp $
+#  $Id: default.action.master,v 1.196 2010/01/16 20:23:28 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -748,6 +748,17 @@ support./(.*/)?track
 #MASTER# REMARKS: Action tracker 1637648 and a bit of imagination. Added 2007-01-20.
 #MASTER# REMARKS: Added "text" 20070730 as per http://www.pcworld.com/textad?Keywords=System Resources Tune-Up.&type=pcworld_downloads_search&count=3&ord=906010128&serveUrl=http%3A%2F%2Fwww.pcworld.com%2Fdownloads%2Ffile%2Ffid%2C7661-order%2C1-page%2C1-c%2Csystemresourcestuneup%2Fdescription.html Adam Piggott
 /.*(top|bottom|left|right|text)_?ad
+
+#############################################################################
+# Catch-all exceptions
+#############################################################################
+{-block}
+# Sticky Actions = -block
+
+#MASTER# REMARKS: Actionsfile feedback item #2933856  2010-01-17 16:59
+#MASTER# REMARKS: Allow URLs containing DektopAdmin (matches .*top_?ad)
+# URL = http://support.apple.com/downloads/DL985/en_US/RemoteDesktopAdmin332.dmg
+/.*desktopadmin
 
 #############################################################################
 # Site-specific block patterns;
