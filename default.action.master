@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.198 2010/01/17 18:48:06 ler762 Exp $
+#  $Id: default.action.master,v 1.199 2010/01/19 21:33:22 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1713,6 +1713,8 @@ adtoma.com/
 adactio.com/
 # URL = http://www.peereboom.us/adsuck/
 www.peereboom.us/adsuck/
+# URL = http://www.svd.se/template/ver1-0/css/ads.css?v=194
+svd.se/.*\.css($|\?)
 
 
 #############################################################################
