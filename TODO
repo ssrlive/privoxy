@@ -1,4 +1,4 @@
-$Id: TODO,v 1.5 2009/06/21 12:02:30 fabiankeil Exp $
+$Id: TODO,v 1.6 2009/09/06 17:20:31 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -166,8 +166,6 @@ Some Privoxy related task, not ordered in any way.
 
 71) Allow to listen on multiple addresses without having to
     bind to all.
-
-72) Use less ugly Privoxy (fav)icons.
 
 73) Factor FEATURE_CONNECTION_SHARING out of
     FEATURE_CONNECTION_KEEP_ALIVE so the later can be enabled
