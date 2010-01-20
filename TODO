@@ -1,4 +1,4 @@
-$Id: TODO,v 1.6 2009/09/06 17:20:31 fabiankeil Exp $
+$Id: TODO,v 1.8 2010/01/20 20:13:02 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -171,6 +171,6 @@ Some Privoxy related task, not ordered in any way.
     FEATURE_CONNECTION_KEEP_ALIVE so the later can be enabled
     on platforms without mutex support as well.
 
-74) Let Privoxy-Regression-Test optional check action sections
-    which disable actions actually are preceded by sections that
-    enable said actions.
+74) Let Privoxy-Regression-Test optionally check that action
+    sections which disable actions actually are preceded by
+    sections that enable said actions.
