@@ -170,3 +170,7 @@ Some Privoxy related task, not ordered in any way.
 73) Factor FEATURE_CONNECTION_SHARING out of
     FEATURE_CONNECTION_KEEP_ALIVE so the later can be enabled
     on platforms without mutex support as well.
+
+74) Let Privoxy-Regression-Test optional check action sections
+    which disable actions actually are preceded by sections that
+    enable said actions.
