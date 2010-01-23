@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.201 2010/01/20 18:56:40 fabiankeil Exp $
+#  $Id: default.action.master,v 1.202 2010/01/22 22:35:24 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2218,9 +2218,6 @@ www.skweezer.net/bloglines
 #MASTER# PROBLEM-URL: http://www.anti-leech.com/theft_example.html
 #MASTER# REMARKS: Lame attempt at banning ad-blockers. Used by other websites as well.
 /antitheft\.php
-
-{ +prevent-compression }
-.compusa.com/
 
 {+filter{tiny-textforms}}
 .sourceforge.net/tracker
