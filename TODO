@@ -1,4 +1,4 @@
-$Id: TODO,v 1.10 2010/01/24 15:36:50 fabiankeil Exp $
+$Id: TODO,v 1.11 2010/01/24 15:37:39 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -120,7 +120,10 @@ Some Privoxy related task, not ordered in any way.
     the FAQ and other stuff, too. Consider changing the port
     for "same origin policy" issues.
 
-53) Find a more reliable hoster.
+53) Find a more reliable hoster. Involves finding out what our
+    requirements are and which SF alternatives fulfil them.
+    It would probably also make sense to look into what other
+    projects did when migrating away from SF.
 
 54) Move away from CVS to a more modern revision control system.
 
