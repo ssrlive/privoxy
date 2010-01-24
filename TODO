@@ -1,4 +1,4 @@
-$Id: TODO,v 1.12 2010/01/24 15:38:18 fabiankeil Exp $
+$Id: TODO,v 1.13 2010/01/24 15:38:50 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -155,7 +155,9 @@ Some Privoxy related task, not ordered in any way.
 64) Use proper copyright attribution. "Privoxy Developers"
     is no legal entity.
 
-65) Polish Website.
+65) Polish Website. Probably involves ditching the Docbook
+    mess in favour of wml. There should be already some threads
+    in the mailinglists archives about this.
 
 66) Increase maximum number of action and filter files.
 
