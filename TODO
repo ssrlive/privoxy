@@ -1,4 +1,4 @@
-$Id: TODO,v 1.9 2010/01/20 21:17:30 fabiankeil Exp $
+$Id: TODO,v 1.10 2010/01/24 15:36:50 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -174,3 +174,7 @@ Some Privoxy related task, not ordered in any way.
 74) Let Privoxy-Regression-Test optionally check that action
     sections which disable actions actually are preceded by
     sections that enable said actions.
+
+75) Create a tool that creates Privoxy action (and filter?) files
+    out of adblock files. Could be implemented as option for
+    url-pattern-translator.pl.
