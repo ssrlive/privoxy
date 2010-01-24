@@ -1,4 +1,4 @@
-$Id: TODO,v 1.11 2010/01/24 15:37:39 fabiankeil Exp $
+$Id: TODO,v 1.12 2010/01/24 15:38:18 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -126,6 +126,9 @@ Some Privoxy related task, not ordered in any way.
     projects did when migrating away from SF.
 
 54) Move away from CVS to a more modern revision control system.
+    Find out if there are any objection against going with Git.
+    Using Git would also have the advantage that SF now pretents
+    to support it, so we could do it independently from 53).
 
 55) Apply for Coverity scans: http://scan.coverity.com/
 
