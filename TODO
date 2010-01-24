@@ -1,4 +1,4 @@
-$Id: TODO,v 1.13 2010/01/24 15:38:50 fabiankeil Exp $
+$Id: TODO,v 1.14 2010/01/24 15:39:32 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -174,10 +174,6 @@ Some Privoxy related task, not ordered in any way.
 
 71) Allow to listen on multiple addresses without having to
     bind to all.
-
-73) Factor FEATURE_CONNECTION_SHARING out of
-    FEATURE_CONNECTION_KEEP_ALIVE so the later can be enabled
-    on platforms without mutex support as well.
 
 74) Let Privoxy-Regression-Test optionally check that action
     sections which disable actions actually are preceded by
