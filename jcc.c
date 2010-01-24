@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.310 2009/12/29 13:17:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.311 2010/01/03 12:37:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2319,7 +2319,7 @@ static void chat(struct client_state *csp)
                {
                   log_error(LOG_LEVEL_ERROR,
                      "Empty server or forwarder response received on socket %d. "
-                     "Closing client connection %d without sending data.",
+                     "Closing client socket %d without sending data.",
                      csp->server_connection.sfd, csp->cfd);
                }
                else
