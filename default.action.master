@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.202 2010/01/22 22:35:24 fabiankeil Exp $
+#  $Id: default.action.master,v 1.203 2010/01/23 14:53:02 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1702,9 +1702,7 @@ adressa.no/
 # URL = http://www.adresseavisen.no/
 # URL = http://adresseavisen.no/
 adresseavisen.no/
-# URL = http://apps.facebook.com/onthefarm/track.php?creative=&cat=friendvisit&subc
-at=weeds&key=a789a971dc687bee4c20c044834fabdd&next=index.php%3Fref%3Dnotif%
-26visitId%3D898835505
+# URL = http://apps.facebook.com/onthefarm/track.php?creative=&cat=friendvisit&subcat=weeds&key=a789a971dc687bee4c20c044834fabdd&next=index.php%3Fref%3Dnotif%26visitId%3D898835505
 .facebook.com/.*/track.php
 # URL = http://www.ifdb.tads.org/
 # URL = http://www.tads.org/
