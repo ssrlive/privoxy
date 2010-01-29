@@ -3,9 +3,9 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.58 2010/01/11 12:52:39 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.59 2010/01/11 13:45:04 fabiankeil Exp $
 
- Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.58 2010/01/11 12:52:39 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.59 2010/01/11 13:45:04 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -2925,7 +2925,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   </listitem>
  </varlistentry>
 </variablelist>
-<![%config-file;[<literallayout>@@#handle-as-empty-doc-returns-ok 0</literallayout>]]>
+<![%config-file;[<literallayout>@@handle-as-empty-doc-returns-ok 1</literallayout>]]>
 </sect3>
 
 
