@@ -1,6 +1,6 @@
 #    Sample Configuration File for Privoxy v3.0.16
 #
-#  $Id: config,v 1.84 2009/12/15 17:43:37 fabiankeil Exp $
+#  $Id: config,v 1.85 2010/01/11 13:46:38 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
 #
@@ -1732,7 +1732,7 @@ socket-timeout 300
 #      +handle-as-empty-document and a status 403(Forbidden) for all
 #      other blocked pages.
 #
-#handle-as-empty-doc-returns-ok 0
+handle-as-empty-doc-returns-ok 1
 
 #
 #  7. WINDOWS GUI OPTIONS
