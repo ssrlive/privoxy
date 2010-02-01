@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.203 2010/01/23 14:53:02 fabiankeil Exp $
+#  $Id: default.action.master,v 1.204 2010/01/29 15:36:10 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1716,6 +1716,11 @@ adactio.com/
 www.peereboom.us/adsuck/
 # URL = http://www.svd.se/template/ver1-0/css/ads.css?v=194
 .svd.se/.*\.css($|\?)
+#MASTER# REMARKS: [privoxy-users] Privoxy blocking Ebay item pictures Jan 31, 2010
+#MASTER# REMARKS: Ebay enlarge picture function doesn't work.
+# URL = http://include.ebaystatic.com/v4js/en_GB/e637i/SYS-LIGER_Omniture_e637i10177164_5_en_GB.js
+include.ebaystatic.com/.*omniture.*\.js
+
 
 
 #############################################################################
