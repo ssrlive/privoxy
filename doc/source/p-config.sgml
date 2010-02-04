@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.59 2010/01/11 13:45:04 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.60 2010/01/29 17:02:59 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.59 2010/01/11 13:45:04 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.60 2010/01/29 17:02:59 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -2536,6 +2536,23 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     This option has no effect if <application>Privoxy</application>
     has been compiled without keep-alive support.
    </para>
+   <para>
+    Note that a timeout of five seconds as used in the default
+    configuration file significantly decreases the number of
+    connections that will be reused. The value is used because
+    some browsers limit the number of connections they open to
+    a single host and apply the same limit to proxies. This can
+    result in a single website <quote>grabbing</quote> all the
+    connections the browser allows, which means connections to
+    other websites can't be opened until the connections currently
+    in use time out.
+   </para>
+   <para>
+    Several users have reported this as a Privoxy bug, so the
+    default value has been reduced. Consider increasing it to
+    300 seconds or even more if you think your browser can handle
+    it. If your browser appears to be hanging it can't.
+   </para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -2547,7 +2564,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   </listitem>
  </varlistentry>
 </variablelist>
-<![%config-file;[<literallayout>@@keep-alive-timeout 300</literallayout>]]>
+<![%config-file;[<literallayout>@@keep-alive-timeout 5</literallayout>]]>
 </sect3>
 
 
