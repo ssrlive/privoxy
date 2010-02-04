@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.204 2010/01/29 15:36:10 ler762 Exp $
+#  $Id: default.action.master,v 1.205 2010/02/01 00:38:57 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1747,8 +1747,9 @@ mail.google.*
 #----------------------------------------------------------------------------
 # Semi-fragile, allow for blocks.
 #----------------------------------------------------------------------------
-{ -crunch-all-cookies -filter -fast-redirects -hide-referer -prevent-compression }
-#MASTER# REMARKS: Problem URL: adserver.yahoo.com 10/01/06
+{-crunch-all-cookies -filter -fast-redirects -hide-referer}
+# Sticky Actions = -crunch-incoming-cookies -crunch-outgoing-cookies -filter -fast-redirects -hide-referer
+# URL = http://adserver.yahoo.com/
 #MASTER# REMARKS: This is much too broad for my taste. It forces me to add
 #MASTER# REMARKS: a special yahoo section in my user.action file, just to
 #MASTER# REMARKS: confirm my defaults in default.action. fk 2007-01-19
