@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.205 2010/02/01 00:38:57 ler762 Exp $
+#  $Id: default.action.master,v 1.206 2010/02/04 09:45:31 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -948,8 +948,6 @@ fusion.adtoma.com/
 #MASTER# REMARKS: See <http://www.google.com/analytics/> for user tracking.
 #MASTER# REMARKS: There is a ssl.google-analytics as well.
 .google-analytics./
-#MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
-/(.*/)?__utm.gif\?
 #MASTER# REMARKS: Below Moved here from -handle-as-image 10/16/06 ##########
 #MASTER# BLOCK-REFERRER: http://forums2.gardenweb.com/forums/orchids/ 09/25/06
 #MASTER# REMARKS: Mostly JS and plain text stuff
@@ -966,34 +964,10 @@ view.atdmt.com/(.*/)?iview/
 tracking.
 #MASTER# BLOCK-REFERRER: http://netcraft.com and many others 10/22/06
 /(.*/)?adjs\.php\?
-#MASTER# BLOCK-REFERRER: http://washingpost.com and others 10/25/06
-/.*\.gif\?D=DM
-#MASTER# BLOCK-REFERRER: http://www.washingtonpost.com/
-#stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
-#MASTER# BLOCK-REFERRER: http://www.ibm.com 10/09/06
-#MASTER# REMARKS: Similar hostname and paths appear in multiple locations.
-# Blocked URL = http://stats.surfaid.ihost.com/crc/images/bounce/uc.GIF
-# Blocked URL = http://stats.surfaid.ihost.com/rc/images/bounce/uc.GIF
-stats./c?rc/.*/uc.gif
-#MASTER# BLOCK-REFERRER: http://priceline.com 10/20/06
-#MASTER# REMARKS: User tracking, webbug stuff
-/(.*/)?dcs.gif\?&?dcs
-#MASTER# BLOCK-REFERRER: http://www.msnbc.com 10/07/06
-#MASTER# REMARKS: And MANY others. Webbug stuff.
-/(.*/)?c(lear)?\.gif\?.
-#MASTER# BLOCK-REFERRER: http://www.investorguide.com 10/08/06
-#MASTER# BLOCK-REFERRER: http://foodnetwork.com, http://gardenweb.com 10/20/06
-#MASTER# REMARK: webbug type gif used in MANY places.
-#MASTER# REMARK: Too many false positives
-#/(.*/)?(clear|(trans_?1x|blank)?1).gif
-#MASTER# REMARK: Let's try this way.
-/(.*/)?(clear|blank|(trans_?|1x)?1).gif\?.
 #MASTER# BLOCK-REFERRER: http://groups.yahoo.com/group/epdf/ 10/08/06
 .bc.yahoo.com/b\?P=
 #MASTER# BLOCK-REFERRER: http://www.motherboard.cz 10/30/06
 x*.alexa.com
-#MASTER# BLOCK-REFERRER: http://actorstheatre.org 11/02/06
-stats./.*\.gif\?
 #MASTER# BLOCK-REFERRER: http://mplayernetwork.com 11/07/06
 #MASTER# BLOCK-REFERRER: http://eetimes.com 09/26/06
 /event.ng/
@@ -1023,6 +997,34 @@ stats.reinvigorate.net/
 .quantserve.com
 # Blocked URL = http://media.adrevolver.com/adrevolver/trace?sip=123&cpy=123
 media.adrevolver.com/
+
+{+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
+#MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
+/(.*/)?__utm.gif\?
+#MASTER# BLOCK-REFERRER: http://washingpost.com and others 10/25/06
+/.*\.gif\?D=DM
+#MASTER# BLOCK-REFERRER: http://www.washingtonpost.com/
+#stats.surfaid.ihost.com/(crc/)?images/(bounce/)?uc.GIF
+#MASTER# BLOCK-REFERRER: http://www.ibm.com 10/09/06
+#MASTER# REMARKS: Similar hostname and paths appear in multiple locations.
+# Blocked URL = http://stats.surfaid.ihost.com/crc/images/bounce/uc.GIF
+# Blocked URL = http://stats.surfaid.ihost.com/rc/images/bounce/uc.GIF
+stats./c?rc/.*/uc.gif
+#MASTER# BLOCK-REFERRER: http://priceline.com 10/20/06
+#MASTER# REMARKS: User tracking, webbug stuff
+/(.*/)?dcs.gif\?&?dcs
+#MASTER# BLOCK-REFERRER: http://www.msnbc.com 10/07/06
+#MASTER# REMARKS: And MANY others. Webbug stuff.
+/(.*/)?c(lear)?\.gif\?.
+#MASTER# BLOCK-REFERRER: http://www.investorguide.com 10/08/06
+#MASTER# BLOCK-REFERRER: http://foodnetwork.com, http://gardenweb.com 10/20/06
+#MASTER# REMARK: webbug type gif used in MANY places.
+#MASTER# REMARK: Too many false positives
+#/(.*/)?(clear|(trans_?1x|blank)?1).gif
+#MASTER# REMARK: Let's try this way.
+/(.*/)?(clear|blank|(trans_?|1x)?1).gif\?.
+#MASTER# BLOCK-REFERRER: http://actorstheatre.org 11/02/06
+stats./.*\.gif\?
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
