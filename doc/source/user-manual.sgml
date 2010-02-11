@@ -34,9 +34,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.116 2009/11/15 14:24:12 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.117 2010/01/11 12:56:04 fabiankeil Exp $
 
- Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.116 2009/11/15 14:24:12 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.117 2010/01/11 12:56:04 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2908,6 +2908,9 @@ for details.
     headers. This is rarely needed for the typical user. If you don't know what 
     <quote>HTTP headers</quote> are, you definitely don't need to worry about this 
     one.
+   </para>
+   <para>
+    Headers added by this action are not modified by other actions.
    </para>
   </listitem>
  </varlistentry>
@@ -8687,6 +8690,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.117  2010/01/11 12:56:04  fabiankeil
+ Bump copyright range as p-config.sgml's copyright line is only used in the config file.
+
  Revision 2.116  2009/11/15 14:24:12  fabiankeil
  Prepare to generate docs for 3.0.16 UNRELEASED.
 
