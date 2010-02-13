@@ -45,6 +45,14 @@ ChangeLog for Privoxy
   the action files works.
 - handle-as-empty-document no longer depends on the image blocking
   code being enabled.
+- The default keep-alive timeout has been reduced to 5 seconds
+  to work around hangs in clients that treat the proxy like any
+  other host and stop allowing any new connections if the
+  "maximum number of connections per host" is reached.
+- Some webbug URLs that look like they are leading to images
+  are blocked as image instead of empty documents. Doing the latter
+  causes WebKit-based clients to show a "missing image" graphic
+  which may mess up the layout.
 
 *** Version 3.0.15 Beta ***
 
