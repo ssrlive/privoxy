@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.16
 #
-#  $Id: p-config.sgml,v 2.61 2010/02/04 09:35:04 fabiankeil Exp $
+#  $Id: config,v 1.87 2010/02/13 16:36:14 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
 #
@@ -1501,7 +1501,7 @@ split-large-forms 0
 #      keep-alive-timeout 300
 #
 keep-alive-timeout 5
-
+#
 #
 #  6.5. default-server-timeout
 #  ============================
@@ -1712,7 +1712,7 @@ socket-timeout 300
 #      max-client-connections 256
 #
 #max-client-connections 256
-
+#
 #
 #  6.9. handle-as-empty-doc-returns-ok
 #  ====================================
@@ -1747,7 +1747,7 @@ socket-timeout 300
 #      other blocked pages.
 #
 handle-as-empty-doc-returns-ok 1
-
+#
 #
 #  7. WINDOWS GUI OPTIONS
 #  =======================
