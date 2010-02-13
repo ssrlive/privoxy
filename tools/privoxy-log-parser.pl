@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.76 2010/01/11 11:48:23 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.228 2010/02/13 15:25:10 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1744,7 +1744,8 @@ sub handle_loglevel_info ($) {
              $c =~ m/^Malformerd HTTP headers detected and MS IIS5 hack enabled/ or
              $c =~ m/^Invalid \"chunked\" transfer/ or
              $c =~ m/^Support for/ or
-             $c =~ m/^Flushing header and buffers/
+             $c =~ m/^Flushing header and buffers/ or
+             $c =~ m/^Can not resolve/
              ) {
 
         # No logfile configured. Please enable it before reporting any problems.
@@ -1755,6 +1756,7 @@ sub handle_loglevel_info ($) {
         # Support for 'Connection: keep-alive' is experimental, incomplete and\
         #  known not to work properly in some situations.
         # Flushing header and buffers. Stepping back from filtering.
+        # Can not resolve doesnotexist: hostname nor servname provided, or not known
 
     } else {
 
