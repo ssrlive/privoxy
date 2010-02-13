@@ -12,10 +12,10 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.16">
-<!entity p-status "UNRELEASED">
+<!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.118 2010/02/11 13:59:48 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.119 2010/02/13 16:37:37 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.118 2010/02/11 13:59:48 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.119 2010/02/13 16:37:37 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8817,6 +8817,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.119  2010/02/13 16:37:37  fabiankeil
+ Update 'What's new?' section.
+
  Revision 2.118  2010/02/11 13:59:48  fabiankeil
  Mention that the headers added by the add-header action aren't modified by other actions.
 

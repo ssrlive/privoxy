@@ -2,9 +2,9 @@
 <!entity % dummy "IGNORE"> 
 <!entity buildsource SYSTEM "buildsource.sgml">
 <!entity p-version "3.0.16">
-<!entity p-status "UNRELEASED">
-<!entity % p-stable "IGNORE">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-status "stable">
+<!entity % p-stable "INCLUDE">
+<!entity % p-not-stable "IGNORE">
 <!entity % p-alpha "IGNORE">
 <!entity % p-beta "IGNORE">
 <!entity % p-text "INCLUDE">       <!-- define we are a text only doc    -->
@@ -16,7 +16,7 @@
 
  Purpose     :  INSTALL file for Privoxy
                 
- $Id: install.sgml,v 2.14 2009/10/10 05:48:55 fabiankeil Exp $
+ $Id: install.sgml,v 2.15 2009/11/15 14:24:12 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.

@@ -9,9 +9,9 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.16">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-supp-userman "INCLUDE"> <!-- Include all from supported.sgml -->
@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.67 2009/11/15 14:24:12 fabiankeil Exp $
+ $Id: faq.sgml,v 2.68 2010/01/30 19:51:28 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.67 2009/11/15 14:24:12 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.68 2010/01/30 19:51:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2966,6 +2966,11 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.68  2010/01/30 19:51:28  fabiankeil
+New FAQ entry: How did you manage to get Privoxy on my computer without my consent?
+
+Also bump copyright.
+
 Revision 2.67  2009/11/15 14:24:12  fabiankeil
 Prepare to generate docs for 3.0.16 UNRELEASED.
 
