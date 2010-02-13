@@ -3,56 +3,56 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Version 3.0.16 Stable ***
 
-- The config file option handle-as-empty-doc-returns-ok has
-  been added to work around Firefox bug #492459, which causes
-  Firefox to hang if JavaScripts are blocked in certain situations.
-- Privoxy-Log-Parser is roughly 40% faster in highlighting mode.
-- In daemon mode, fd 0, 1 and 2 are bound to /dev/null.
-- Accepts quoted expiration dates even though RFC 2109 10.1.2
-  doesn't seem to allow them. Reported anonymously.
-- uagen, a Firefox User-Agent generator for Privoxy and Mozilla
-  browsers has been imported and is available in the tarballs
-  tools directory.
+- Added the config file option handle-as-empty-doc-returns-ok to
+  work around Firefox bug #492459, which causes Firefox to hang
+  if JavaScripts are blocked in certain situations. The option is
+  enabled in the default config file.
+- Added the config option default-server-timeout to control the
+  assumed default server timeout. Since Privoxy no longer returns
+  an error message for connection resets on reused client connections,
+  assuming larger server timeout values appears to actually work
+  pretty well as long as connections aren't shared.
 - Added optional support for FreeBSD's accf_http(9). Use the
   configure option --enable-accept-filter to enable it.
 - Added fancier Privoxy icons for win32. Contributed by Jeff H.
+- In daemon mode, fd 0, 1 and 2 are bound to /dev/null.
 - Resolve localhost using whatever address family the operating
   system feels like. Previous betas would try to use IPv4 as this
   is what most users expect, but this didn't work reliable on
   GNU/Linux systems.
-- Added the config option default-server-timeout to control
-  the assumed default server timeout. Since Privoxy no longer
-  returns an error message for connection resets on reused client
-  connections, assuming larger server timeout values appears to
-  actually work pretty well as long as connections aren't shared.
-- Several log messages about client connections also mention
-  the socket number.
-- Don't try to forget connections if connection sharing is disabled.
-  This wasn't a real problem but caused an unnecessary log message.
-- The scripts in the tools directory treat unknown parameters
-  as fatal errors.
-- The still undocumented --enable-extended-host-patterns configure
-  option has a better description.
-- Fixed an error message that would claim a write to the
-  server failed when actually writing to the client failed.
-- Log the crunch reason before trying to write to the client.
-  The log is easier to read that way.
 - In the action lists on CGI pages, actions and their parameters are
   no longer separated with a space. The action file parser doesn't
-  actually allow this and will throw an invalid syntax error if
-  actions and parameters in the action files are separated.
-  Not adding the spaces means copy and pasting CGI output into
-  the action files works.
+  actually allow this and will throw an invalid syntax error if actions
+  and parameters in the action files are separated. Not adding the
+  spaces means copy and pasting CGI output into the action files works.
+- The default keep-alive timeout has been reduced to 5 seconds to work
+  around hangs in clients that treat the proxy like any other host and
+  stop allowing any new connections if the "maximum number of
+  connections per host" is reached.
+- Several webbug URLs that look like they are leading to images are now
+  blocked as image instead of empty documents. Doing the latter causes
+  WebKit-based clients to show a "missing image" icon which may mess up
+  the layout.
+- Accepts quoted expiration dates even though RFC 2109 10.1.2
+  doesn't seem to allow them. Reported anonymously.
+- Don't try to forget connections if connection sharing is disabled.
+  This wasn't a real problem but caused an unnecessary log message.
+- The still undocumented --enable-extended-host-patterns configure
+  option has a better description.
+- Fixed an error message that would claim a write to the server
+  failed when actually writing to the client failed.
+- Log the crunch reason before trying to write to the client.
+  The log is easier to read that way.
+- Several log messages about client connections also mention
+  the socket number.
 - handle-as-empty-document no longer depends on the image blocking
   code being enabled.
-- The default keep-alive timeout has been reduced to 5 seconds
-  to work around hangs in clients that treat the proxy like any
-  other host and stop allowing any new connections if the
-  "maximum number of connections per host" is reached.
-- Some webbug URLs that look like they are leading to images
-  are blocked as image instead of empty documents. Doing the latter
-  causes WebKit-based clients to show a "missing image" graphic
-  which may mess up the layout.
+- Privoxy-Log-Parser is roughly 40% faster in highlighting mode.
+- uagen, a Firefox User-Agent generator for Privoxy and Mozilla
+  browsers has been imported and is available in the tarballs
+  tools directory.
+- The scripts in the tools directory treat unknown parameters
+  as fatal errors.
 
 *** Version 3.0.15 Beta ***
 
