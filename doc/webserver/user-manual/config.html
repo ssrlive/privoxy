@@ -3933,6 +3933,26 @@ CLASS="APPLICATION"
 >
     has been compiled without keep-alive support.
    </P
+><P
+>    Note that a timeout of five seconds as used in the default
+    configuration file significantly decreases the number of
+    connections that will be reused. The value is used because
+    some browsers limit the number of connections they open to
+    a single host and apply the same limit to proxies. This can
+    result in a single website <SPAN
+CLASS="QUOTE"
+>"grabbing"</SPAN
+> all the
+    connections the browser allows, which means connections to
+    other websites can't be opened until the connections currently
+    in use time out.
+   </P
+><P
+>    Several users have reported this as a Privoxy bug, so the
+    default value has been reduced. Consider increasing it to
+    300 seconds or even more if you think your browser can handle
+    it. If your browser appears to be hanging it can't.
+   </P
 ></DD
 ><DT
 >Examples:</DT
@@ -4391,10 +4411,12 @@ TARGET="_top"
 ><DD
 ><P
 >    The status code Privoxy returns for pages blocked with
+    
     <TT
 CLASS="LITERAL"
 ><A
 HREF="actions-file.html#HANDLE-AS-EMPTY-DOCUMENT"
+TARGET="_top"
 >+handle-as-empty-document</A
 ></TT
 >.
