@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.14 2008/04/26 11:38:51 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.15 2009/11/15 14:22:41 fabiankeil Exp $
 
- Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
@@ -241,8 +241,8 @@ debug  8192 # Non-fatal errors</literallayout>
 
 <para>
  You don't have to tell us your actual name when filing a problem
- report, but please use a nickname so we can differentiate between
- your messages and the ones entered by other "anonymous" users that
+ report, but if you don't, please use a nickname so we can differentiate
+ between your messages and the ones entered by other "anonymous" users that
  may respond to your request if they have the same problem or already
  found a solution.
 </para>
