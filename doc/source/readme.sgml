@@ -17,9 +17,9 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.33 2009/11/15 14:24:12 fabiankeil Exp $
+ $Id: readme.sgml,v 2.34 2010/02/13 17:38:32 fabiankeil Exp $
 
- Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -80,7 +80,7 @@
  *
  * Purpose     :  README file to give a short intro.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -128,19 +128,16 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
 <para>
- October 2009, Privoxy 3.0.15 beta is released.
+ February 2010, Privoxy 3.0.16 stable is released.
 </para>
 <para>
- This is a bugfix-release for the previous betas which introduced IPv6
- support, improved keep-alive support and a bunch of minor improvements.
+ This is the first stable release since 3.0.12. It mainly contains
+ bugfixes for the previous betas which introduced IPv6 support,
+ improved keep-alive support and a bunch of minor improvements.
  See the "ChangeLog", and the "What's New" section and the
  "Upgrader's Notes" in <citetitle>the User Manual</citetitle> for details.
 </para>
 
-<para>
- Depending on the feedback it will be either followed by yet another
- beta release, or by a stable release with the same feature set.
-</para>
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -243,7 +240,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.33 2009/11/15 14:24:12 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.34 2010/02/13 17:38:32 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
