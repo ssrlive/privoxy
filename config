@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.16
 #
-#  $Id: config,v 1.87 2010/02/13 16:36:14 fabiankeil Exp $
+#  $Id: config,v 1.88 2010/02/13 16:43:35 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
 #
@@ -1317,6 +1317,9 @@ buffer-limit 4096
 #      forwarding-related error messages that go away when you try again
 #      manually. Start with a small value and check Privoxy's logfile
 #      from time to time, to see how many retries are usually needed.
+#
+#      Due to a bug, this option currently also causes Privoxy to
+#      retry in case of certain problems with direct connections.
 #
 #  Examples:
 #
