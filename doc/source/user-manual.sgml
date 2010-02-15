@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.119 2010/02/13 16:37:37 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.120 2010/02/13 17:38:39 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.119 2010/02/13 16:37:37 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.120 2010/02/13 17:38:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -507,6 +507,13 @@ How to install the binary packages depends on your operating system:
     blocked as image instead of empty documents. Doing the latter causes
     WebKit-based clients to show a "missing image" icon which may mess up
     the layout.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    The no-such-domain template if used if for DNS resolution
+    problems with FEATURE_IPV6_SUPPORT enabled. Previously the
+    connect-failed template was used. Reported by 'zebul666'.
    </para>
   </listitem>
   <listitem>
@@ -8817,6 +8824,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.120  2010/02/13 17:38:39  fabiankeil
+ Update entities for 3.0.16 stable.
+
  Revision 2.119  2010/02/13 16:37:37  fabiankeil
  Update 'What's new?' section.
 

@@ -33,6 +33,9 @@ ChangeLog for Privoxy
   blocked as image instead of empty documents. Doing the latter causes
   WebKit-based clients to show a "missing image" icon which may mess up
   the layout.
+- The no-such-domain template if used if for DNS resolution
+  problems with FEATURE_IPV6_SUPPORT enabled. Previously the
+  connect-failed template was used. Reported by 'zebul666'.
 - Accepts quoted expiration dates even though RFC 2109 10.1.2
   doesn't seem to allow them. Reported anonymously.
 - Don't try to forget connections if connection sharing is disabled.
