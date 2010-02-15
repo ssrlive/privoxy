@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.60 2010/01/29 17:02:59 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.61 2010/02/04 09:35:04 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.60 2010/01/29 17:02:59 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.61 2010/02/04 09:35:04 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -2276,6 +2276,10 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     Only use this option, if you are getting lots of forwarding-related error messages
     that go away when you try again manually. Start with a small value and check Privoxy's
     logfile from time to time, to see how many retries are usually needed.
+   </para>
+   <para>
+    Due to a bug, this option currently also causes Privoxy to
+    retry in case of certain problems with direct connections.
    </para>
   </listitem>
  </varlistentry>
