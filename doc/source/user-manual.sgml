@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.121 2010/02/15 15:30:13 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.122 2010/02/19 15:22:47 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.121 2010/02/15 15:30:13 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.122 2010/02/19 15:22:47 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -480,7 +480,7 @@ How to install the binary packages depends on your operating system:
    <para>
     Resolve localhost using whatever address family the operating
     system feels like. Previous betas would try to use IPv4 as this
-    is what most users expect, but this didn't work reliable on
+    is what most users expect, but this didn't work reliably on
     GNU/Linux systems.
    </para>
   </listitem>
@@ -511,7 +511,7 @@ How to install the binary packages depends on your operating system:
   </listitem>
   <listitem>
    <para>
-    The no-such-domain template if used if for DNS resolution
+    The no-such-domain template is used for DNS resolution
     problems with FEATURE_IPV6_SUPPORT enabled. Previously the
     connect-failed template was used. Reported by 'zebul666'.
    </para>
@@ -566,7 +566,7 @@ How to install the binary packages depends on your operating system:
   <listitem>
    <para>
     uagen, a Firefox User-Agent generator for Privoxy and Mozilla
-    browsers has been imported and is available in the tarballs
+    browsers has been imported and is available in the tarball's
     tools directory.
    </para>
   </listitem>
@@ -580,7 +580,7 @@ How to install the binary packages depends on your operating system:
 </para>
 
 <para>
- If you missed the previous two beta versions, you may also be
+ If you missed the previous three beta versions, you may also be
  interested in the additional changes since 3.0.12, the
  last stable release:
 </para>
@@ -749,7 +749,7 @@ How to install the binary packages depends on your operating system:
   </listitem>
   <listitem>
    <para>
-    A TODO list has been added to the source tarballs to give potential
+    A TODO list has been added to the source tarball to give potential
     volunteers a better idea of what the current goals are. Donations
     are still welcome too: http://www.privoxy.org/faq/general.html#DONATE
    </para>
@@ -8824,6 +8824,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.122  2010/02/19 15:22:47  fabiankeil
+ Add missing word.
+
  Revision 2.121  2010/02/15 15:30:13  fabiankeil
  Mention the use of the no-such-domain template for DNS problems with FEATURE_IPV6_SUPPORT enabled.
 
