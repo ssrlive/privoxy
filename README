@@ -49,8 +49,10 @@ Privoxy is Free Software and licensed under the GNU GPLv2.
 Privoxy is an associated project of Software in the Public Interest (SPI).
 
 Helping hands and donations are welcome:
-http://www.privoxy.org/faq/general.html#PARTICIPATE
-http://www.privoxy.org/faq/general.html#DONATE
+
+  * http://www.privoxy.org/faq/general.html#PARTICIPATE
+
+  * http://www.privoxy.org/faq/general.html#DONATE
 
 -------------------------------------------------------------------------------
 
@@ -100,7 +102,7 @@ www.privoxy.org/user-manual/.
 
 Be sure to set your browser(s) for HTTP/HTTPS Proxy at <IP>:<Port>, or whatever
 you specify in the config file under 'listen-address'. DEFAULT is
-localhost:8118. Note that Privoxy ONLY proxies HTTP (and HTTPS) traffic. Do not
+127.0.0.1:8118. Note that Privoxy ONLY proxies HTTP (and HTTPS) traffic. Do not
 try it with FTP or other protocols for the simple reason it does not work.
 
 The actions list can be configured via the web interface accessed via http://
@@ -281,3 +283,4 @@ interested users and people who wish to contribute to the project are also
 welcome on the developers list! You can find an overview of all Privoxy-related
 mailing lists, including list archives, at: http://sourceforge.net/mail/?
 group_id=11118.
+
