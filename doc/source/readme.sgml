@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.34 2010/02/13 17:38:32 fabiankeil Exp $
+ $Id: readme.sgml,v 2.35 2010/02/15 14:47:38 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -165,9 +165,6 @@
  file named 'config' in the current directory (except Win32 which will look
  for 'config.txt'). If no config_file is found, Privoxy will fail to start.
 </para>
-<para>
- Or Debian and Ubuntu: /etc/init.d/privoxy start
-</para>
 </sect1>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -240,7 +237,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.34 2010/02/13 17:38:32 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.35 2010/02/15 14:47:38 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
