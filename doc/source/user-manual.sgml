@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.120 2010/02/13 17:38:39 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.121 2010/02/15 15:30:13 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.120 2010/02/13 17:38:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.121 2010/02/15 15:30:13 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -453,7 +453,7 @@ How to install the binary packages depends on your operating system:
   </listitem>
   <listitem>
    <para>
-    Added the config option default-server-timeout to control the
+    Added the config file option default-server-timeout to control the
     assumed default server timeout. Since Privoxy no longer returns
     an error message for connection resets on reused client connections,
     assuming larger server timeout values appears to actually work
@@ -8824,6 +8824,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.121  2010/02/15 15:30:13  fabiankeil
+ Mention the use of the no-such-domain template for DNS problems with FEATURE_IPV6_SUPPORT enabled.
+
  Revision 2.120  2010/02/13 17:38:39  fabiankeil
  Update entities for 3.0.16 stable.
 
