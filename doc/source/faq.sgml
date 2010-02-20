@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.68 2010/01/30 19:51:28 fabiankeil Exp $
+ $Id: faq.sgml,v 2.69 2010/02/13 17:38:27 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.68 2010/01/30 19:51:28 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.69 2010/02/13 17:38:27 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -978,7 +978,7 @@ with a browser? Does that not raise security issues?</title>
  <ulink
  url="../user-manual/actions-file.html#FILTER"><literal>filter</literal>
  action</ulink> in one of the actions files. Content filtering is automatically
- disabled for inappropriate MIME types, but if you now better than Privoxy
+ disabled for inappropriate MIME types, but if you know better than Privoxy
  what should or should not be filtered you can filter any content you like.
 </para>
 <para>
@@ -2966,6 +2966,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.69  2010/02/13 17:38:27  fabiankeil
+Update entities for 3.0.16 stable.
+
 Revision 2.68  2010/01/30 19:51:28  fabiankeil
 New FAQ entry: How did you manage to get Privoxy on my computer without my consent?
 
