@@ -1,8 +1,8 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.184 2009/09/26 17:21:01 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.185 2009/12/16 08:15:42 fabiankeil Exp $
 #
-# Written by and Copyright (C) 2001-2009 members of the
+# Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -619,7 +619,7 @@ webserver: tidy
 	@$(ECHO) Uploading html
 	@cd doc/webserver; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) c $$upload | ssh shell.sf.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
+          $(TAR) cf - $$upload | ssh shell.sf.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
 
 	@$(ECHO) Fixing permissions
 	@ssh shell.sf.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
@@ -631,7 +631,7 @@ web-actions: tidy
 	@$(ECHO) Uploading 
 	@cd doc/webserver/actions; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) c $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xvm'
+          $(TAR) cf - $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xvm'
 
 	@$(ECHO) Fixing permissions
 	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
