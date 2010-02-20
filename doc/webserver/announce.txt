@@ -5,7 +5,7 @@ This is the first stable release since 3.0.12. It mainly contains
 bugfixes for the previous betas which introduced IPv6 support,
 improved keep-alive support and a bunch of minor improvements.
 
-See http://www.privoxy.org/3.0.15/user-manual/whatsnew.html for details.
+See http://www.privoxy.org/3.0.16/user-manual/whatsnew.html for details.
 
 --------------------------------------------------------------------
 ChangeLog for Privoxy
