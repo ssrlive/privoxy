@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.187 2010/02/20 12:50:44 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.188 2010/02/20 12:51:38 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -152,6 +152,9 @@ DOC_STATUS = @DOC_STATUS@
 DOSFILTER  = $(PERL) -p -e 's/\n/\r\n/'
 CVSROOT    = :pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa
 #TMPDIR     := $(shell mktemp -d /tmp/$(PROGRAM).XXXXXX)
+# If your SF user name differs from your local one,
+# change this to "ssh -l sf-username"
+SSH	= ssh
 
 #############################################################################
 # Setup for make distribution for now.
@@ -622,8 +625,8 @@ webserver: tidy
           $(TAR) cf - $$upload | ssh shell.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
 
 	@$(ECHO) Fixing permissions
-	@ssh shell.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
-	@ssh shell.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/ -type f | xargs chmod 664 2>/dev/null; true'
+	@$(SSH) shell.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
+	@$(SSH) shell.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/ -type f | xargs chmod 664 2>/dev/null; true'
 
 web-actions: tidy
 	@$(ECHO) Uploading 
@@ -632,8 +635,8 @@ web-actions: tidy
           $(TAR) cf - $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xvm'
 
 	@$(ECHO) Fixing permissions
-	@ssh ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
-	@ssh ijbswa.sourceforge.net 'chmod 666 /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
+	@$(SSH) ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
+	@$(SSH) ijbswa.sourceforge.net 'chmod 666 /home/groups/i/ij/ijbswa/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
 
 ## 
 dok-put:
@@ -643,7 +646,7 @@ dok-put:
 		-czf $(DOC_FILE) ;\
 		$(ECHO) "Uploading doc package ..." ;\
 		scp $(DOC_FILE) ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/docs/
-		@ssh ijbswa.sourceforge.net 'chmod 775 /home/groups/i/ij/ijbswa/htdocs/docs/*gz 2>/dev/null; true'
+		@$(SSH) ijbswa.sourceforge.net 'chmod 775 /home/groups/i/ij/ijbswa/htdocs/docs/*gz 2>/dev/null; true'
 		$(RM) $(DOC_FILE)
 
 dok-get:
