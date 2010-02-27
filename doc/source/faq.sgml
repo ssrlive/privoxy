@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.69 2010/02/13 17:38:27 fabiankeil Exp $
+ $Id: faq.sgml,v 2.70 2010/02/20 18:08:31 ler762 Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.69 2010/02/13 17:38:27 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.70 2010/02/20 18:08:31 ler762 Exp $</pubdate>
 
 <!--
 
@@ -1763,8 +1763,10 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  are working, it is time to connect them. As far as <application>Privoxy</application>
  is concerned, <application>Tor</application> is just another proxy that can be reached
  by socks4 or socks4a. Most likely you are interested in <application>Tor</application>
- to increase your anonymity level, therefore you should use socks4a, to make sure DNS requests are
- done through <application>Tor</application> and thus invisible to your local network.
+ to increase your anonymity level, therefore you should use socks5, to make sure DNS
+ requests are done through <application>Tor</application> and thus invisible to your
+ local network. Using socks4a would work to, but with socks5 you get more precise error
+ messages.
 </para>
 
 <![%p-newstuff;[
@@ -2966,6 +2968,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.70  2010/02/20 18:08:31  ler762
+fix typo
+
 Revision 2.69  2010/02/13 17:38:27  fabiankeil
 Update entities for 3.0.16 stable.
 
