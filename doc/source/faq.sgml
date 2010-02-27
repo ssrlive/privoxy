@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.70 2010/02/20 18:08:31 ler762 Exp $
+ $Id: faq.sgml,v 2.71 2010/02/27 12:12:13 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.70 2010/02/20 18:08:31 ler762 Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.71 2010/02/27 12:12:13 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1765,7 +1765,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  by socks4 or socks4a. Most likely you are interested in <application>Tor</application>
  to increase your anonymity level, therefore you should use socks5, to make sure DNS
  requests are done through <application>Tor</application> and thus invisible to your
- local network. Using socks4a would work to, but with socks5 you get more precise error
+ local network. Using socks4a would work too, but with socks5 you get more precise error
  messages.
 </para>
 
@@ -2968,6 +2968,10 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.71  2010/02/27 12:12:13  fabiankeil
+Consistently recommending socks5 in the Tor entry and mention its advantage compared to socks4a.
+Reported by David in #2960129.
+
 Revision 2.70  2010/02/20 18:08:31  ler762
 fix typo
 
