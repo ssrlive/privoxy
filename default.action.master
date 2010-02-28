@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.207 2010/02/09 16:18:53 fabiankeil Exp $
+#  $Id: default.action.master,v 1.208 2010/02/20 15:31:19 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1025,6 +1025,8 @@ stats./c?rc/.*/uc.gif
 /(.*/)?(clear|blank|(trans_?|1x)?1).gif\?.
 #MASTER# BLOCK-REFERRER: http://actorstheatre.org 11/02/06
 stats./.*\.gif\?
+# Blocked URL = http://ad.yieldmanager.com/pixel?id=123456&t=2
+.yieldmanager.com/pixel\?
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
@@ -1127,6 +1129,11 @@ bwp.
 #.yimg.com/a/.*/flash/
 #MASTER# REMARKS: The above replaced with below. Actions file tracker #1645616 2007-01-27
 .yimg.com/.*\.yimg\.com/a/
+#MASTER# REMARKS: Yahoo doesn't always have ".yimg.com/a/" in the URL for ads now 2010-02-28
+#MASTER# BLOCK-REFERRER: various yahoo pages
+# Blocked URL = http://l.yimg.com/a/a/1-/flash/promotions/l3/intl/100214/300x250mfeyap.jpg
+# Blocked URL = http://l.yimg.com/a/a/1-/flash/promotions/l3/intl/100219/300x250mfeya.gif
+.yimg.com/.*/flash/promotions/.*\.(gif|jpg)$
 bs*.gsanet.com
 bs*.einets.com
 .qkimg.net
@@ -1256,6 +1263,9 @@ img.directtrack.com
 /tradedoubler/.*\.swf
 # Blocked URL = http://hstse.tradedoubler.com/file/142609/440x220.swf
 hstse.tradedoubler.com/.*\.swf
+# Blocked URL = http://www.zdnetasia.com/2007/techguide/network/sponsor/i/logmein_mpu_whitepaper.gif
+# Blocked URL = http://www.zdnetasia.com/2007/techguide/network/sponsor/sidebar.gif
+www.zdnetasia.com/.*/sponsor/.*\.gif$
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
@@ -1722,6 +1732,15 @@ www.peereboom.us/adsuck/
 #MASTER# REMARKS: Ebay enlarge picture function doesn't work.
 # URL = http://include.ebaystatic.com/v4js/en_GB/e637i/SYS-LIGER_Omniture_e637i10177164_5_en_GB.js
 include.ebaystatic.com/.*omniture.*\.js
+#MASTER# REMARKS: Allow Yahoo news and mail javascipt pages
+# URL = http://l.yimg.com/d/combo?news/p/common/generic/news/p/common/generic/popular-searches-min-12622.js&news/p/common/generic/ads-min-11050.js&news/p/common/generic/foundation/popup-min-12622.js
+.yimg.com/d/combo\?
+#MASTER# REMARKS: Page formatting problems when .css files are blocked
+# URL = http://www.networkworld.com/includes/styles/adstyles.css
+# URL = http://www.sj.se/common/css/pop.css
+# URL = http://l.yimg.com/d/combo?news/p/common/generic/ads-min-24248.css&news/p/common/generic/widgets-min-10270.css
+# URL = http://news.zdnet.com/css/z/ads/hs.css
+/.*\.css$
 
 
 
