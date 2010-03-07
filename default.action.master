@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.208 2010/02/20 15:31:19 fabiankeil Exp $
+#  $Id: default.action.master,v 1.209 2010/02/28 16:49:05 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1766,17 +1766,6 @@ images.apple.com
 mail.google.*
 
 #----------------------------------------------------------------------------
-# Semi-fragile, allow for blocks.
-#----------------------------------------------------------------------------
-{-crunch-all-cookies -filter -fast-redirects -hide-referrer}
-# Sticky Actions = -crunch-incoming-cookies -crunch-outgoing-cookies -filter -fast-redirects -hide-referrer
-# URL = http://adserver.yahoo.com/
-#MASTER# REMARKS: This is much too broad for my taste. It forces me to add
-#MASTER# REMARKS: a special yahoo section in my user.action file, just to
-#MASTER# REMARKS: confirm my defaults in default.action. fk 2007-01-19
-.yahoo.com
-
-#----------------------------------------------------------------------------
 # Shopping and banking sites - allow cookies and pop-ups
 #----------------------------------------------------------------------------
 #MASTER# REMARKS: This section not checked 10/11/06 HB
@@ -1844,14 +1833,13 @@ www.ukc.ac.uk/cgi-bin/wac\.cgi\?
 .speedfind.de
 #MASTER# PROBLEM-URL: http://www.nytimes.com/
 .nytimes.com
-#MASTER# REMARKS: Yahoo logout URL after first redirect. fk 2007-01-19
-#MASTER# REMARKS: Logout fails if we fast-redirect to the URL after "done=".
-#MASTER# REMARKS: Reported in support request #1635354.
+#MASTER# REMARKS: Disable fast-redirects for all of yahoo.com/.
+#MASTER# REMARKS: Apparently we can't keep up with maintaining more precise exceptions.
 # URL = http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
-.yahoo.com/.*done=http
+#MASTER# REMARKS: Reported in support request #1635354.
+# URL = http://us.rd.yahoo.com/reg/login1/lisu/login/uk/ym/*http://edit.europe.yahoo.com/c onfig/login?.tries=1&.src=ym&.md5=&.hash=&.js=1&.last=&...kP=Y&.done=http://mail .yahoo.com&.pd=ym_ver=0&c=&login=XXX&passwd=XXX&.persistent =&.hash=1&.md5=1.yahoo.com/
 #MASTER# REMARKS: Reported in support request #1802365.
-# URL = http://us.rd.yahoo.com/reg/login1/lisu/login/uk/ym/*http://edit.europe.yahoo.com/c onfig/login?.tries=1&.src=ym&.md5=&.hash=&.js=1&.last=&...kP=Y&.done=http://mail .yahoo.com&.pd=ym_ver=0&c=&login=XXX&passwd=XXX&.persistent =&.hash=1&.md5=1
-.rd.yahoo.com/reg/login1/
+.yahoo.com/
 # URL = http://validator.w3.org/check
 .w3.org
 #MASTER# PROBLEM-URL: http://www.ask.com/
