@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.96 2009/12/16 08:36:39 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.97 2010/03/07 12:07:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1078,7 +1078,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
     * 1) "http://" or "https://" prefix present and followed by URL - OK
     * 2) Only the "http://" or "https://" part is present, no URL - change
     *    to empty string so it will be detected later as "no URL".
-    * 3) Parameter specified but doesn't contain "http(s?)://" - add a
+    * 3) Parameter specified but doesn't start with "http(s?)://" - add a
     *    "http://" prefix.
     * 4) Parameter not specified or is empty string - let this fall through
     *    for now, next block of code will handle it.
@@ -1105,9 +1105,13 @@ jb_err cgi_show_url_info(struct client_state *csp,
          url_param[0] = '\0';
       }
    }
-   else if ((url_param[0] != '\0') && (NULL == strstr(url_param, "://")))
+   else if ((NULL == strstr(url_param, "://")
+         || (strstr(url_param, "://") > strstr(url_param, "/"))))
    {
-      /* No prefix - assume http:// */
+      /*
+       * No prefix or at least no prefix before
+       * the first slash - assume http://
+       */
       char *url_param_prefixed = strdup("http://");
 
       if (JB_ERR_OK != string_join(&url_param_prefixed, url_param))
