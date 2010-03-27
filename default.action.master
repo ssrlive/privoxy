@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.212 2010/03/27 16:13:28 ler762 Exp $
+#  $Id: default.action.master,v 1.213 2010/03/27 18:48:38 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -918,10 +918,11 @@ static.lycos-europe.net
 #MASTER# BLOCK-REFERRER: http://hitta.se
 # Blocked URL = http://82.99.18.195/media.1/112/9460/146016/150x175_Hitta_FV_Feb08.gif
 82.99.18.195
-#MASTER# REMARKS: Actionsfile feedback item #1888197  2008-02-06
-#MASTER# REMARKS: Have a "go there anyway" link for clk.atdmt.com
+#MASTER# REMARKS: Actionsfile feedback item #1888197 and #2975927.
+#MASTER# REMARKS: Have a "go there anyway" link for clk.atdmt.com and view.atdmt.com.
 #MASTER# BLOCK-REFERRER: http://www.networkworld.com/resourcelibrary/?tid=4&type=special%20report
 # Blocked URL = http://clk.atdmt.com/
+# Blocked URL = http://view.atdmt.com/action/mrtiwy_FY10Office2010BetaHomeandBiz1_1
 .atdmt.com/
 #MASTER# REMARKS: Actionsfile feedback item #2723873 2009-04-01
 #MASTER# BLOCK-REFERRER: http://www.news.software.coop/paralysed-perl-package-problem/602/
@@ -1150,9 +1151,9 @@ bs*.einets.com
 #MASTER# BLOCK-REFERRER: http://salon.com/ 10/19/06
 #MASTER# BLOCK-REFERRER: http://maps.yahoo.com/
 #MASTER# REMARKS: Banner farms; just exclude their corp. info
-#MASTER# REMARKS: and have a "go there anyway" link for clk.atdmt.com
-#MASTER# REMARKS:   (Actionsfile feedback item #1888197)
-[abd-vx-z]*.atdmt.com/
+#MASTER# REMARKS: and have a "go there anyway" link for clk.atdmt.com and view.atdmt.com
+#MASTER# REMARKS:   (Actionsfile feedback item #1888197 and #2975927)
+[abd-ux-z]*.atdmt.com/
 #MASTER# BLOCK-REFERRER: http://www.exactaudiocopy.de/ 09/11/06
 #MASTER# BLOCK-REFERRER: http://stanford.facebook.com/home.php
 # URL = http://www.fastclick.net/
