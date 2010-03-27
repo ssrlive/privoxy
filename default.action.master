@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.210 2010/03/07 12:25:56 fabiankeil Exp $
+#  $Id: default.action.master,v 1.211 2010/03/27 15:44:57 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1747,7 +1747,9 @@ include.ebaystatic.com/.*omniture.*\.js
 # URL = http://l.yimg.com/d/combo?news/p/common/generic/ads-min-24248.css&news/p/common/generic/widgets-min-10270.css
 # URL = http://news.zdnet.com/css/z/ads/hs.css
 /.*\.css$
-
+#MASTER# REMARKS:Actionsfile feedback item #2974204 2010-03-21
+# URL = http://adesklets.sourceforge.net/
+adesklets.sourceforge.net/
 
 
 #############################################################################
