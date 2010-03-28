@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.97 2010/03/07 12:07:51 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.98 2010/03/27 18:29:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1105,8 +1105,9 @@ jb_err cgi_show_url_info(struct client_state *csp,
          url_param[0] = '\0';
       }
    }
-   else if ((NULL == strstr(url_param, "://")
-         || (strstr(url_param, "://") > strstr(url_param, "/"))))
+   else if ((url_param[0] != '\0')
+      && ((NULL == strstr(url_param, "://")
+            || (strstr(url_param, "://") > strstr(url_param, "/")))))
    {
       /*
        * No prefix or at least no prefix before
