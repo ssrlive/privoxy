@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.311 2010/01/03 12:37:14 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.312 2010/01/24 15:36:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1567,11 +1567,16 @@ static jb_err parse_client_request(struct client_state *csp)
  *
  * Function    :  chat
  *
- * Description :  Once a connection to the client has been accepted,
+ * Description :  Once a connection from the client has been accepted,
  *                this function is called (via serve()) to handle the
- *                main business of the communication.  When this
- *                function returns, the caller must close the client
- *                socket handle.
+ *                main business of the communication.  This function
+ *                returns after dealing with a single request. It can
+ *                be called multiple times witht the same client socket
+ *                if the client is keeping the connection alive.
+ *
+ *                The decision whether or not a client connection will
+ *                be kept alive is up to the caller which also must
+ *                close the client socket when done.
  *
  *                FIXME: chat is nearly thousand lines long.
  *                Ridiculous.
