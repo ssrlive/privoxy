@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.125 2009/10/25 15:23:40 ler762 Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.126 2010/01/10 13:53:43 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -599,7 +599,6 @@ struct http_response *block_url(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR, "handle-as-empty-document overruled by handle-as-image.");
       }
-#if 1 /* Two alternative strategies, use this one for now: */
 
       /* and handle accordingly: */
       if ((p == NULL) || (0 == strcmpic(p, "pattern")))
@@ -664,30 +663,6 @@ struct http_response *block_url(struct client_state *csp)
          }
       }
 
-#else /* Following code is disabled for now */
-
-      /* and handle accordingly: */
-      if ((p == NULL) || (0 == strcmpic(p, "pattern")))
-      {
-         p = CGI_PREFIX "send-banner?type=pattern";
-      }
-      else if (0 == strcmpic(p, "blank"))
-      {
-         p = CGI_PREFIX "send-banner?type=blank";
-      }
-      rsp->status = strdup("302 Local Redirect from Privoxy");
-      if (rsp->status == NULL)
-      {
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
-
-      if (enlist_unique_header(rsp->headers, "Location", p))
-      {
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
-#endif /* Preceeding code is disabled for now */
    }
    else
 #endif /* def FEATURE_IMAGE_BLOCKING */
