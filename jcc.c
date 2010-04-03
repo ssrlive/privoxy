@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.312 2010/01/24 15:36:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.313 2010/04/03 13:21:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -711,7 +711,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
 
       /*
        * Extract the status code from the actual head
-       * that was send to the client. It is the only
+       * that will be send to the client. It is the only
        * way to get it right for all requests, including
        * the fixed ones for out-of-memory problems.
        *
