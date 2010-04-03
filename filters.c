@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.126 2010/01/10 13:53:43 ler762 Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.127 2010/04/03 13:22:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -623,7 +623,6 @@ struct http_response *block_url(struct client_state *csp)
             return cgi_error_memory();
          }
       }
-
       else if (0 == strcmpic(p, "blank"))
       {
          rsp->status = strdup("403 Request blocked by Privoxy");
@@ -646,7 +645,6 @@ struct http_response *block_url(struct client_state *csp)
             return cgi_error_memory();
          }
       }
-
       else
       {
          rsp->status = strdup("302 Local Redirect from Privoxy");
