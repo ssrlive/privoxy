@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.213 2010/03/27 18:48:38 fabiankeil Exp $
+#  $Id: default.action.master,v 1.214 2010/03/27 18:58:38 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -697,6 +697,9 @@ adventure*.
 .*[epu]ad*.
 county*.
 countr*.
+#MASTER# REMARKS: We still like tor
+# URL = http://metrics.torproject.org/consensus-graphs.html
+metrics.torproject.org/
 
 #############################################################################
 # Generic block patterns by path:
