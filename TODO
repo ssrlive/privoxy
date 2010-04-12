@@ -1,4 +1,4 @@
-$Id: TODO,v 1.17 2010/02/09 16:21:46 fabiankeil Exp $
+$Id: TODO,v 1.18 2010/04/12 16:42:54 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -190,3 +190,5 @@ Some Privoxy related task, not ordered in any way.
 77) Allow to configure the IP address used in outgoing connections.
 
 78) Allow to optionally use pcre's DFA algorithm.
+
+79) Evaluate pcre alternatives.
