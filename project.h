@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.153 2009/11/27 13:46:47 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.154 2010/01/10 13:53:48 ler762 Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -10,7 +10,7 @@
  *                project.  Does not define any variables or functions
  *                (though it does declare some macros).
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -697,6 +697,11 @@ struct reusable_connection
  * Flag for csp->flags: Set if we are toggled on (FEATURE_TOGGLE).
  */
 #define CSP_FLAG_TOGGLED_ON 0x20U
+
+/**
+ * Flag for csp->flags: Set if we answered the request ourselve.
+ */
+#define CSP_FLAG_CRUNCHED   0x40U
 
 /**
  * Flag for csp->flags: Set if an acceptable Connection header

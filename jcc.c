@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.313 2010/04/03 13:21:30 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.314 2010/04/03 13:21:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -6,7 +6,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.313 2010/04/03 13:21:30 fabiankeil Exp $"
  * Purpose     :  Main file.  Contains main() method, main loop, and
  *                the main connection-handling function.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -840,6 +840,7 @@ static int crunch_response_triggered(struct client_state *csp, const struct crun
    {
       /* Deliver, log and free the interception response. */
       send_crunch_response(csp, rsp);
+      csp->flags |= CSP_FLAG_CRUNCHED;
       return TRUE;
    }
 
@@ -859,6 +860,7 @@ static int crunch_response_triggered(struct client_state *csp, const struct crun
          {
             /* Deliver, log and free the interception response. */
             send_crunch_response(csp, rsp);
+            csp->flags |= CSP_FLAG_CRUNCHED;
 #ifdef FEATURE_STATISTICS
             if (c->flags & CF_COUNT_AS_REJECT)
             {
@@ -2514,39 +2516,56 @@ static void serve(struct client_state *csp)
 
       chat(csp);
 
+      /*
+       * If the request has been crunched,
+       * the calculated latency is zero.
+       */
       latency = (unsigned)(csp->server_connection.response_received -
          csp->server_connection.request_sent) / 2;
 
       continue_chatting = (csp->config->feature_flags
          & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-         && (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
-         && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
-         && (csp->cfd != JB_INVALID_SOCKET)
-         && (csp->server_connection.sfd != JB_INVALID_SOCKET)
-         && socket_is_still_usable(csp->server_connection.sfd);
+         && (((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
+               && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
+            || (csp->flags & CSP_FLAG_CRUNCHED))
+         && (csp->cfd != JB_INVALID_SOCKET);
 
-      if (continue_chatting)
+      if (continue_chatting && !(csp->flags & CSP_FLAG_CRUNCHED))
       {
-         if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
+         continue_chatting = (csp->server_connection.sfd != JB_INVALID_SOCKET)
+            && socket_is_still_usable(csp->server_connection.sfd);
+         if (continue_chatting)
          {
-            csp->server_connection.keep_alive_timeout = csp->config->default_server_timeout;
-            log_error(LOG_LEVEL_CONNECT,
-               "The server didn't specify how long the connection will stay open. "
-               "Assumed timeout is: %u.", csp->server_connection.keep_alive_timeout);
+            if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
+            {
+               csp->server_connection.keep_alive_timeout = csp->config->default_server_timeout;
+               log_error(LOG_LEVEL_CONNECT,
+                  "The server didn't specify how long the connection will stay open. "
+                  "Assumed timeout is: %u.", csp->server_connection.keep_alive_timeout);
+            }
+            continue_chatting = (latency < csp->server_connection.keep_alive_timeout);
          }
-         continue_chatting = (latency < csp->server_connection.keep_alive_timeout);
       }
 
       if (continue_chatting)
       {
          unsigned int client_timeout;
 
-         client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
-
-         log_error(LOG_LEVEL_CONNECT,
-            "Waiting for the next client request on socket %d. "
-            "Keeping the server socket %d to %s open.",
-            csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
+         if (csp->server_connection.sfd != JB_INVALID_SOCKET)
+         {
+            client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
+            log_error(LOG_LEVEL_CONNECT,
+               "Waiting for the next client request on socket %d. "
+               "Keeping the server socket %d to %s open.",
+               csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
+         }
+         else
+         {
+            client_timeout = 1; /* XXX: Use something else here? */
+            log_error(LOG_LEVEL_CONNECT,
+               "Waiting for the next client request on socket %d. "
+               "No server socket to keep open.", csp->cfd);
+         }
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
             && data_is_available(csp->cfd, (int)client_timeout)
             && socket_is_still_usable(csp->cfd))
