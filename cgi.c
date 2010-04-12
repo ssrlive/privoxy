@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.125 2009/06/14 14:37:08 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.126 2009/10/29 16:53:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1635,14 +1635,6 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       if (!err) err = enlist_unique_header(rsp->headers, "Expires", "Sat, 17 Jun 2000 12:00:00 GMT");
       if (!err) err = enlist_unique_header(rsp->headers, "Pragma", "no-cache");
    }
-
-   /*
-    * Quoting RFC 2616:
-    *
-    * HTTP/1.1 applications that do not support persistent connections MUST
-    * include the "close" connection option in every message.
-    */
-   if (!err) err = enlist_unique_header(rsp->headers, "Connection", "close");
 
    /* 
     * Write the head
