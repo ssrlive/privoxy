@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.76 2009/10/03 10:40:05 fabiankeil Exp $
+#  $Id: default.filter,v 1.77 2010/02/05 21:41:31 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -177,15 +177,15 @@ s|<meta\s+http-equiv=['"]?set-cookie.*>|<!-- ZappedCookie -->|igU
 
 #################################################################################
 #
-# refresh-tags: Kill automatic refresh tags (for dial-on-demand setups).
+# refresh-tags: Kill automatic refresh tags if refresh time is larger than 9 seconds.
 #
 #################################################################################
-FILTER: refresh-tags Kill automatic refresh tags (for dial-on-demand setups).
+FILTER: refresh-tags Kill automatic refresh tags if refresh time is larger than 9 seconds.
 
 # Note: Only deactivates refreshes with more than 9 seconds delay to
 #       preserve monster-stupid but common redirections via meta tags.
 #
-s/<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;\s*url\s*=\s*([^>\2]*))?\2/<link rev="x-refresh" href="$4"/iU
+s@<meta\s+http-equiv\s*=\s*(['"]?)refresh\1\s+content\s*=\s*(['"]?)\d{2,}\s*(;(?:\s*url\s*=\s*)?([^>\2]*))?\2@<link rev="x-refresh" href="$4"@ig
 
 
 #################################################################################
