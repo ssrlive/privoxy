@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.126 2009/10/29 16:53:56 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.127 2010/04/12 16:48:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1634,6 +1634,11 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       }
       if (!err) err = enlist_unique_header(rsp->headers, "Expires", "Sat, 17 Jun 2000 12:00:00 GMT");
       if (!err) err = enlist_unique_header(rsp->headers, "Pragma", "no-cache");
+   }
+
+   if (!err && !(csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+   {
+      err = enlist_unique_header(rsp->headers, "Connection", "close");
    }
 
    /* 
