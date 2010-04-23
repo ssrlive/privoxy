@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.314 2010/04/03 13:21:53 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.315 2010/04/12 16:51:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1724,7 +1724,7 @@ static void chat(struct client_state *csp)
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->server_connection.sfd != JB_INVALID_SOCKET)
-      && socket_is_still_usable(csp->server_connection.sfd)
+      && socket_is_still_alive(csp->server_connection.sfd)
       && connection_destination_matches(&csp->server_connection, http, fwd))
    {
       log_error(LOG_LEVEL_CONNECT,
@@ -2028,7 +2028,7 @@ static void chat(struct client_state *csp)
       if (FD_ISSET(csp->server_connection.sfd, &rfds))
       {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-         if (!socket_is_still_usable(csp->cfd))
+         if (!socket_is_still_alive(csp->cfd))
          {
 #ifdef _WIN32
             log_error(LOG_LEVEL_CONNECT,
@@ -2533,7 +2533,7 @@ static void serve(struct client_state *csp)
       if (continue_chatting && !(csp->flags & CSP_FLAG_CRUNCHED))
       {
          continue_chatting = (csp->server_connection.sfd != JB_INVALID_SOCKET)
-            && socket_is_still_usable(csp->server_connection.sfd);
+            && socket_is_still_alive(csp->server_connection.sfd);
          if (continue_chatting)
          {
             if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
@@ -2568,7 +2568,7 @@ static void serve(struct client_state *csp)
          }
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
             && data_is_available(csp->cfd, (int)client_timeout)
-            && socket_is_still_usable(csp->cfd))
+            && socket_is_still_alive(csp->cfd))
          {
             log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
                "time or the client closed the connection on socket %d.",
@@ -2606,7 +2606,7 @@ static void serve(struct client_state *csp)
                 csp->cfd);
 #ifdef FEATURE_CONNECTION_SHARING
             if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
-               && (socket_is_still_usable(csp->server_connection.sfd)))
+               && (socket_is_still_alive(csp->server_connection.sfd)))
             {
                time_t time_open = time(NULL) - csp->server_connection.timestamp;
 

@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.71 2009/12/16 08:35:47 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.72 2010/02/15 15:14:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1209,9 +1209,9 @@ unsigned long resolve_hostname_to_ip(const char *host)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
- * Function    :  socket_is_still_usable
+ * Function    :  socket_is_still_alive
  *
- * Description :  Decides whether or not an open socket is still usable.
+ * Description :  Figures out whether or not a socket is still alive.
  *
  * Parameters  :
  *          1  :  sfd = The socket to check.
@@ -1219,7 +1219,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
  * Returns     :  TRUE for yes, otherwise FALSE.
  *
  *********************************************************************/
-int socket_is_still_usable(jb_socket sfd)
+int socket_is_still_alive(jb_socket sfd)
 {
    char buf[10];
    int no_data_waiting;
