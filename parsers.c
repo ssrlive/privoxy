@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.209 2009/09/06 14:11:06 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.210 2009/12/25 11:39:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1209,7 +1209,6 @@ static jb_err header_tagger(struct client_state *csp, char *header)
    struct re_filterfile_spec *b;
    struct list_entry *tag_name;
 
-   int found_filters = 0;
    const size_t header_length = strlen(header);
 
    if (csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
@@ -1223,21 +1222,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
       multi_action_index = ACTION_MULTI_CLIENT_HEADER_TAGGER;
    }
 
-   /* Check if there are any filters */
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-      fl = csp->rlist[i];
-      if (NULL != fl)
-      {
-         if (NULL != fl->f)
-         {
-           found_filters = 1;
-           break;
-         }
-      }
-   }
-
-   if (0 == found_filters)
+   if (filters_available(csp) == FALSE)
    {
       log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
          "tagging enabled, but no taggers available.");
@@ -1420,7 +1405,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
    struct re_filterfile_spec *b;
    struct list_entry *filtername;
 
-   int i, found_filters = 0;
+   int i;
    int wanted_filter_type;
    int multi_action_index;
 
@@ -1440,23 +1425,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
       multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
    }
 
-   /*
-    * Need to check the set of re_filterfiles...
-    */
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-      fl = csp->rlist[i];
-      if (NULL != fl)
-      {
-         if (NULL != fl->f)
-         {
-           found_filters = 1;
-           break;
-         }
-      }
-   }
-
-   if (0 == found_filters)
+   if (filters_available(csp) == FALSE)
    {
       log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
          "header filtering enabled, but no matching filters available.");

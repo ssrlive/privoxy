@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.127 2010/04/03 13:22:56 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.128 2010/04/03 13:23:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -13,7 +13,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.127 2010/04/03 13:22:56 fabiankei
  *                   `execute_single_pcrs_command', `rewrite_url',
  *                   `get_last_url'
  *
- * Copyright   :  Written by and Copyright (C) 2001, 2004-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1510,7 +1510,8 @@ int is_untrusted_url(const struct client_state *csp)
  *********************************************************************/
 static char *pcrs_filter_response(struct client_state *csp)
 {
-   int hits=0;
+   int hits = 0;
+   int i;
    size_t size, prev_size;
 
    char *old = NULL;
@@ -1521,8 +1522,6 @@ static char *pcrs_filter_response(struct client_state *csp)
    struct re_filterfile_spec *b;
    struct list_entry *filtername;
 
-   int i, found_filters = 0;
-
    /* 
     * Sanity first
     */
@@ -1531,23 +1530,7 @@ static char *pcrs_filter_response(struct client_state *csp)
       return(NULL);
    }
 
-   /*
-    * Need to check the set of re_filterfiles...
-    */
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-      fl = csp->rlist[i];
-      if (NULL != fl)
-      {
-         if (NULL != fl->f)
-         {
-           found_filters = 1;
-           break;
-         }
-      }
-   }
-
-   if (0 == found_filters)
+   if (filters_available(csp) == FALSE)
    {
       log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
          "content filtering enabled, but no content filters available.");
@@ -2336,6 +2319,34 @@ int content_filters_enabled(const struct current_action_spec *action)
    return ((action->flags & ACTION_DEANIMATE) ||
       !list_is_empty(action->multi[ACTION_MULTI_FILTER]));
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  filters_available
+ *
+ * Description :  Checks whether there are any filters available.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+int filters_available(const struct client_state *csp)
+{
+   int i;
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      const struct file_list *fl = csp->rlist[i];
+      if ((NULL != fl) && (NULL != fl->f))
+      {
+         return TRUE;
+      }
+   }
+   return FALSE;
+}
+
 
 /*
   Local Variables:
