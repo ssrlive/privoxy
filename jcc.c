@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.315 2010/04/12 16:51:31 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.316 2010/04/23 11:53:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2484,6 +2484,46 @@ static void chat(struct client_state *csp)
 }
 
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/*********************************************************************
+ *
+ * Function    :  prepare_csp_for_next_request
+ *
+ * Description :  Put the csp in a mostly vergin state.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void prepare_csp_for_next_request(struct client_state *csp)
+{
+   csp->content_type = 0;
+   csp->content_length = 0;
+   csp->expected_content_length = 0;
+   csp->expected_client_content_length = 0;
+   list_remove_all(csp->headers);
+   freez(csp->iob->buf);
+   memset(csp->iob, 0, sizeof(csp->iob));
+   freez(csp->error_message);
+   free_http_request(csp->http);
+   destroy_list(csp->headers);
+   destroy_list(csp->tags);
+   free_current_action(csp->action);
+   if (NULL != csp->fwd)
+   {
+      unload_forward_spec(csp->fwd);
+      csp->fwd = NULL;
+   }
+   /* XXX: Store per-connection flags someplace else. */
+   csp->flags &= CSP_FLAG_TOGGLED_ON;
+   csp->flags |= CSP_FLAG_ACTIVE;
+   csp->flags |= CSP_FLAG_REUSED_CLIENT_CONNECTION;
+}
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+
 /*********************************************************************
  *
  * Function    :  serve
@@ -2573,31 +2613,7 @@ static void serve(struct client_state *csp)
             log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
                "time or the client closed the connection on socket %d.",
                 csp->cfd);
-            /*
-             * Get the csp in a mostly vergin state again.
-             * XXX: Should be done elsewhere.
-             */
-            csp->content_type = 0;
-            csp->content_length = 0;
-            csp->expected_content_length = 0;
-            csp->expected_client_content_length = 0;
-            list_remove_all(csp->headers);
-            freez(csp->iob->buf);
-            memset(csp->iob, 0, sizeof(csp->iob));
-            freez(csp->error_message);
-            free_http_request(csp->http);
-            destroy_list(csp->headers);
-            destroy_list(csp->tags);
-            free_current_action(csp->action);
-            if (NULL != csp->fwd)
-            {
-               unload_forward_spec(csp->fwd);
-               csp->fwd = NULL;
-            }
-
-            /* XXX: Store per-connection flags someplace else. */
-            csp->flags = CSP_FLAG_ACTIVE |
-               (csp->flags & CSP_FLAG_TOGGLED_ON) | CSP_FLAG_REUSED_CLIENT_CONNECTION;
+            prepare_csp_for_next_request(csp);
          }
          else
          {
