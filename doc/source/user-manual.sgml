@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.122 2010/02/19 15:22:47 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.123 2010/02/19 16:00:38 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.122 2010/02/19 15:22:47 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.123 2010/02/19 16:00:38 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2558,6 +2558,15 @@ for details.
    <para>
     matches the document <literal>/index.html</literal>, regardless of the domain,
     i.e. on <emphasis>any</emphasis> web server anywhere.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>/</literal></term>
+  <listitem>
+   <para>
+    Matches any URL because there's no requirement for either the
+    domain or the path to match anything.
    </para>
   </listitem>
  </varlistentry>
@@ -8824,6 +8833,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.123  2010/02/19 16:00:38  fabiankeil
+ Even more fixes.
+
  Revision 2.122  2010/02/19 15:22:47  fabiankeil
  Add missing word.
 
