@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.218 2010/05/23 11:20:48 fabiankeil Exp $
+#  $Id: default.action.master,v 1.219 2010/05/23 11:53:35 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1011,6 +1011,9 @@ media.adrevolver.com/
 #MASTER# REMARKS: Actionsfile feedback item #2975895 2010-03-24
 # Blocked URL = http://static.chartbeat.com/js/chartbeat.js
 .chartbeat.com/(.*/)?chartbeat\.js$
+# Blocked URL = http://js.adlink.net/js?lang=de&s=duesseldorf-international.de&z=home&d=1274103403564
+#MASTER# BLOCK-REFERRER: http://www.duesseldorf-international.de/
+js.adlink.net/
 
 
 {+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
