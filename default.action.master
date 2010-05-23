@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.220 2010/05/23 11:53:57 fabiankeil Exp $
+#  $Id: default.action.master,v 1.221 2010/05/23 11:54:31 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1018,6 +1018,9 @@ media.adrevolver.com/
 # Blocked URL = http://js.adlink.net/js?lang=de&s=duesseldorf-international.de&z=home&d=1274103403564
 #MASTER# BLOCK-REFERRER: http://www.duesseldorf-international.de/
 js.adlink.net/
+#Blocked URL = nl.sitestat.com/rdw/rdw/s?www.nl.voertuigeigenaar.voertuigeigenaar&ns__t=1274099350343
+#MASTER# BLOCK-REFERRER: http://www.rdw.nl/nl/voertuigeigenaar/
+.sitestat.com/
 
 
 {+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
