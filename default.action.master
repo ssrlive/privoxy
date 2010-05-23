@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.219 2010/05/23 11:53:35 fabiankeil Exp $
+#  $Id: default.action.master,v 1.220 2010/05/23 11:53:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -944,6 +944,10 @@ fusion.adtoma.com/
 #MASTER# Remark: Actionsfile feedback item #2975895 2010-03-24
 # Blocked URL = http://ping.chartbeat.net/ping?h=uservoice.com&p=%2Fsuggestions%2Fping-chartbeat-net-sucks&u=3
 .chartbeat.net/(.*/)?ping\?
+# Blocked URL = http://s.atemda.com/Admeta.js
+# Blocked URL = http://atemda.com/ClickThrough.ashx?pId=9616&mId=14484&tId=634102151426089505&opS=1&admetac=mR3sJ3%2b9yleq%2bHowITh0hw%3d%3d
+#MASTER# BLOCK-REFERRER: http://www.startpagina.nl
+.atemda.com/
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
