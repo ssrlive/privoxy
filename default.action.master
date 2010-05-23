@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.216 2010/05/01 18:22:13 fabiankeil Exp $
+#  $Id: default.action.master,v 1.217 2010/05/01 18:23:00 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1042,6 +1042,9 @@ stats./c?rc/.*/uc.gif
 stats./.*\.gif\?
 # Blocked URL = http://ad.yieldmanager.com/pixel?id=123456&t=2
 .yieldmanager.com/pixel\?
+# Blocked URL = http://a.analytics.yahoo.com/p.pl?a=1000226660965&js=no
+# Blocked URL = s.analytics.yahoo.com/fpc.pl?a=1000461640983&v=4.43&enc=utf-8&f=http%3A//www.zoover.nl/nederland/limburg/maasbracht/weer%23tabs&b=Het%20Weer%20in%20Maasbracht.%20Bekijk%20Weersverwachting%20van%20Maasbracht%20%7C%20Zoover%23tabs&flv=WIN%2010%2C0%2C45%2C2&d=Mon%2C%2017%20May%202010%2014%3A09%3A26%20UTC&n=-2&g=nl&h=Y&j=1440x900&k=32&l=true&ittidx=0&fpc=uP04C7j4%7ClaDQjglKaa%7Cfses1000461640983%3D%7CkbSSgv6Jaa%7CuP04C7j4%7Cfvis1000461640983%3DZj1odHRwJTNBLy93d3cuem9vdmVyLm5sLyZiPVpvb3ZlciUyMCU3QyUyMFZha2FudGllYmVvb3JkZWxpbmdlbiUyMHZvb3IlMjBlbiUyMGRvb3IlMjByZWl6aWdlcnM%3D%7C8sHTYo10oM%7C8sHTYo10oM%7C8sHTYo10oM%7CT%7C8sHTYo10oM%7C8sHTYo10oM
+.analytics.yahoo.com/
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
