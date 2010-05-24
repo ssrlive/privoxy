@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.316 2010/04/23 11:53:48 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.317 2010/05/01 18:19:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -625,39 +625,39 @@ static const char *crunch_reason(const struct http_response *rsp)
       return "Internal error while searching for crunch reason";
    }
 
-   switch (rsp->reason)
+   switch (rsp->crunch_reason)
    {
-      case RSP_REASON_UNSUPPORTED:
+      case UNSUPPORTED:
          reason = "Unsupported HTTP feature";
          break;
-      case RSP_REASON_BLOCKED:
+      case BLOCKED:
          reason = "Blocked";
          break;
-      case RSP_REASON_UNTRUSTED:
+      case UNTRUSTED:
          reason = "Untrusted";
          break;
-      case RSP_REASON_REDIRECTED:
+      case REDIRECTED:
          reason = "Redirected";
          break;
-      case RSP_REASON_CGI_CALL:
+      case CGI_CALL:
          reason = "CGI Call";
          break;
-      case RSP_REASON_NO_SUCH_DOMAIN:
+      case NO_SUCH_DOMAIN:
          reason = "DNS failure";
          break;
-      case RSP_REASON_FORWARDING_FAILED:
+      case FORWARDING_FAILED:
          reason = "Forwarding failed";
          break;
-      case RSP_REASON_CONNECT_FAILED:
+      case CONNECT_FAILED:
          reason = "Connection failure";
          break;
-      case RSP_REASON_OUT_OF_MEMORY:
+      case OUT_OF_MEMORY:
          reason = "Out of memory (may mask other reasons)";
          break;
-      case RSP_REASON_CONNECTION_TIMEOUT:
+      case CONNECTION_TIMEOUT:
          reason = "Connection timeout";
          break;
-      case RSP_REASON_NO_SERVER_DATA:
+      case NO_SERVER_DATA:
          reason = "No server data received";
          break;
       default:
@@ -698,7 +698,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
           * Not supposed to happen. If it does
           * anyway, treat it as an unknown error.
           */
-         cgi_error_unknown(csp, rsp, RSP_REASON_INTERNAL_ERROR);
+         cgi_error_unknown(csp, rsp, INTERNAL_ERROR);
          /* return code doesn't matter */
       }
 

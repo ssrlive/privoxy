@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.128 2010/04/03 13:23:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.129 2010/05/01 18:20:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -795,7 +795,7 @@ struct http_response *block_url(struct client_state *csp)
          return cgi_error_memory();
       }
    }
-   rsp->reason = RSP_REASON_BLOCKED;
+   rsp->crunch_reason = BLOCKED;
 
    return finish_http_response(csp, rsp);
 
@@ -955,7 +955,7 @@ struct http_response *trust_url(struct client_state *csp)
       free_http_response(rsp);
       return cgi_error_memory();
    }
-   rsp->reason = RSP_REASON_UNTRUSTED;
+   rsp->crunch_reason = UNTRUSTED;
 
    return finish_http_response(csp, rsp);
 }
@@ -1295,7 +1295,7 @@ struct http_response *redirect_url(struct client_state *csp)
             free_http_response(rsp);
             return cgi_error_memory();
          }
-         rsp->reason = RSP_REASON_REDIRECTED;
+         rsp->crunch_reason = REDIRECTED;
          freez(new_url);
 
          return finish_http_response(csp, rsp);
@@ -2290,7 +2290,7 @@ struct http_response *direct_response(struct client_state *csp)
                }
 
                rsp->is_static = 1;
-               rsp->reason = RSP_REASON_UNSUPPORTED;
+               rsp->crunch_reason = UNSUPPORTED;
 
                return(finish_http_response(csp, rsp));
             }
