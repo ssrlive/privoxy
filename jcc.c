@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.317 2010/05/01 18:19:56 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.318 2010/05/24 11:38:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -694,19 +694,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
 
       if (rsp == NULL)
       {
-         /*
-          * Not supposed to happen. If it does
-          * anyway, treat it as an unknown error.
-          */
-         cgi_error_unknown(csp, rsp, INTERNAL_ERROR);
-         /* return code doesn't matter */
-      }
-
-      if (rsp == NULL)
-      {
-         /* If rsp is still NULL, we have serious internal problems. */
-         log_error(LOG_LEVEL_FATAL,
-            "NULL response in send_crunch_response and cgi_error_unknown failed as well.");
+         log_error(LOG_LEVEL_FATAL, "NULL response in send_crunch_response.");
       }
 
       /*
