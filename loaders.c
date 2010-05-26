@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.73 2009/05/16 13:27:20 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.74 2009/09/26 13:29:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -877,6 +877,7 @@ int load_trustfile(struct client_state *csp)
    {
       goto load_trustfile_error;
    }
+   log_error(LOG_LEVEL_INFO, "Loading trust file: %s", csp->config->trustfile);
 
    tl = csp->config->trust_list;
 
@@ -1159,6 +1160,8 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
    {
       goto load_re_filterfile_error;
    }
+
+   log_error(LOG_LEVEL_INFO, "Loading filter file: %s", csp->config->re_filterfile[fileid]);
 
    /* 
     * Read line by line
