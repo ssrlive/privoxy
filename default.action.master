@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.221 2010/05/23 11:54:31 fabiankeil Exp $
+#  $Id: default.action.master,v 1.222 2010/05/23 11:54:54 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1294,6 +1294,8 @@ hstse.tradedoubler.com/.*\.swf
 # Blocked URL = http://www.zdnetasia.com/2007/techguide/network/sponsor/i/logmein_mpu_whitepaper.gif
 # Blocked URL = http://www.zdnetasia.com/2007/techguide/network/sponsor/sidebar.gif
 www.zdnetasia.com/.*/sponsor/.*\.gif$
+# Blocked URL = http://pagead2.googlesyndication.com/pagead/imgad?id=CPjtipDs9taquQEQoAEYwgQyCIvo2PNnQywb
+.googlesyndication.com/.*/imgad\?
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
