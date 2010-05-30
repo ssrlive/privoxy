@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.228 2010/02/13 15:25:10 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.229 2010/05/30 16:43:25 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1686,6 +1686,12 @@ sub handle_loglevel_info ($) {
         # loading configuration file '/usr/local/etc/privoxy/config':
         # Reloading configuration file '/usr/local/etc/privoxy/config'
         $c =~ s@(?<=loading configuration file \')([^\']*)@$h{'file'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Loading (actions|filter) file: /) {
+
+        # Loading actions file: /usr/local/etc/privoxy/default.action
+        # Loading filter file: /usr/local/etc/privoxy/default.filter
+        $c =~ s@(?<= file: )(.*)$@$h{'file'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^exiting by signal/) {
 
