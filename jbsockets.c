@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.72 2010/02/15 15:14:10 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.73 2010/04/23 11:53:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -146,9 +146,9 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
    jb_socket fd;
    fd_set wfds;
    struct timeval tv[1];
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
    int   flags;
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+#endif
    int connect_failed;
 
 #ifdef FEATURE_ACL
@@ -344,9 +344,9 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
    unsigned int addr;
    fd_set wfds;
    struct timeval tv[1];
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
    int   flags;
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+#endif
 
 #ifdef FEATURE_ACL
    struct access_control_addr dst[1];
