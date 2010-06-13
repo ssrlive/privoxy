@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.35 2009/07/21 16:29:57 ler762 Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.36 2009/11/08 18:09:52 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -346,67 +346,6 @@ void LogDestroyPatternMatchingBuffers(void)
    {
       regfree(&patterns_to_highlight[i].buffer);
    }
-}
-
-
-/*********************************************************************
- *
- * Function    :  LogGetURLUnderCursor
- *
- * Description :  Returns the URL from under the cursor (remember to free it!).
- *
- * Parameters  :  None
- *
- * Returns     :  NULL or a pointer to an URL string.
- *
- *********************************************************************/
-char *LogGetURLUnderCursor(void)
-{
-   char *szResult = NULL;
-   regex_t re;
-   POINT ptCursor;
-   POINTL ptl;
-   DWORD nPos;
-   DWORD nWordStart = 0;
-   DWORD nWordEnd = 0;
-
-   regcomp(&re, RE_URL, REG_ICASE);
-
-   /* Get the position of the cursor over the text window */
-   GetCursorPos(&ptCursor);
-   ScreenToClient(g_hwndLogBox, &ptCursor);
-   ptl.x = ptCursor.x;
-   ptl.y = ptCursor.y;
-
-   /* Search backwards and fowards to obtain the word that is highlighted */
-   nPos = LOWORD(SendMessage(g_hwndLogBox, EM_CHARFROMPOS, 0, (LPARAM) &ptl));
-   nWordStart = SendMessage(g_hwndLogBox, EM_FINDWORDBREAK, WB_LEFT, nPos);
-   nWordEnd = SendMessage(g_hwndLogBox, EM_FINDWORDBREAK, WB_RIGHTBREAK, nPos);
-
-   /* Compare the string to the pattern */
-   if (nWordEnd > nWordStart)
-   {
-      TEXTRANGE range;
-      regmatch_t match;
-
-      range.chrg.cpMin = nWordStart;
-      range.chrg.cpMax = nWordEnd;
-      range.lpstrText = (LPSTR)zalloc(nWordEnd - nWordStart + 1);
-      SendMessage(g_hwndLogBox, EM_GETTEXTRANGE, 0, (LPARAM) &range);
-
-      if (regexec(&re, range.lpstrText, 1, &match, 0) == 0)
-      {
-         szResult = range.lpstrText;
-      }
-      else
-      {
-         free(range.lpstrText);
-      }
-
-      regfree(&re);
-   }
-   return szResult;
-
 }
 
 
