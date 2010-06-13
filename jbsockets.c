@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.73 2010/04/23 11:53:48 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.74 2010/06/13 12:28:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1103,7 +1103,6 @@ unsigned long resolve_hostname_to_ip(const char *host)
 {
    struct sockaddr_in inaddr;
    struct hostent *hostp;
-   unsigned int dns_retries = 0;
 #if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS) || defined(HAVE_GETHOSTBYNAME_R_3_ARGS)
    struct hostent result;
 #if defined(HAVE_GETHOSTBYNAME_R_6_ARGS) || defined(HAVE_GETHOSTBYNAME_R_5_ARGS)
@@ -1123,6 +1122,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
 
    if ((inaddr.sin_addr.s_addr = inet_addr(host)) == -1)
    {
+      unsigned int dns_retries = 0;
 #if defined(HAVE_GETHOSTBYNAME_R_6_ARGS)
       while (gethostbyname_r(host, &result, hbuf,
                 HOSTENT_BUFFER_SIZE, &hostp, &thd_err)
