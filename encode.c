@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.14 2008/05/21 15:38:13 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.15 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -305,12 +305,12 @@ static int xdtoi(const int d)
  *********************************************************************/
 int xtoi(const char *s)
 {
-   int d1, d2;
+   int d1;
 
    d1 = xdtoi(*s);
    if(d1 >= 0)
    {
-      d2 = xdtoi(*(s+1));
+      int d2 = xdtoi(*(s+1));
       if(d2 >= 0)
       {
          return (d1 << 4) + d2;
