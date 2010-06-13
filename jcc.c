@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.318 2010/05/24 11:38:22 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.319 2010/05/24 11:40:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3145,13 +3145,10 @@ int main(int argc, char **argv)
     */
 #if defined(unix)
 {
-   pid_t pid = 0;
-
    if (daemon_mode)
    {
       int fd;
-
-      pid  = fork();
+      pid_t pid = fork();
 
       if ( pid < 0 ) /* error */
       {
