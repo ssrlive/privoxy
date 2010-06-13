@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.99 2009/12/26 11:34:01 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.100 2010/01/03 12:37:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -316,7 +316,7 @@ void init_error_log(const char *prog_name, const char *logfname)
        * Currently we reopen it every time the config file
        * has been reloaded, but actually we only have to
        * reopen it if the file name changed or if the
-       * configuration reloas was caused by a SIGHUP.
+       * configuration reload was caused by a SIGHUP.
        */
       log_error(LOG_LEVEL_INFO, "Failed to reopen logfile: \'%s\'. "
          "Retrying after closing the old file descriptor first. If that "
