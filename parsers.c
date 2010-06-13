@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.212 2010/06/13 12:25:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.213 2010/06/13 12:26:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3153,7 +3153,6 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
    struct tm *timeptr = NULL;
    time_t tm = 0;                  
    const char *newval;
-   long int hours, minutes, seconds;
    char * endptr;
    
    if ( 0 == strcmpic(*header, "If-Modified-Since: Wed, 08 Jun 1955 12:00:00 GMT"))
@@ -3188,6 +3187,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
          }
          else
          {
+            long int hours, minutes, seconds;
             long int rtime = strtol(newval, &endptr, 0);
             const int negative_range = (rtime < 0);
 
