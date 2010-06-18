@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.224 2010/05/30 12:13:05 ler762 Exp $
+#  $Id: default.action.master,v 1.225 2010/05/30 12:17:54 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -948,6 +948,9 @@ fusion.adtoma.com/
 # Blocked URL = http://atemda.com/ClickThrough.ashx?pId=9616&mId=14484&tId=634102151426089505&opS=1&admetac=mR3sJ3%2b9yleq%2bHowITh0hw%3d%3d
 #MASTER# BLOCK-REFERRER: http://www.startpagina.nl
 .atemda.com/
+#MASTER# Remark: 2o7.net and omtrdc.net are domains used by Omniture
+# Blocked URL = http://ciscosystemsinc.tt.omtrdc.net/m2/ciscosystemsinc/mbox/standard?mboxHost=www.cisco.com&mboxSession=12
+.omtrdc.net/
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
