@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.319 2010/05/24 11:40:27 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.320 2010/06/13 12:27:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1004,7 +1004,7 @@ static int server_response_is_complete(struct client_state *csp,
       content_length_known = TRUE;
    }
 
-   if (csp->http->status == 304)
+   if (csp->http->status == 204 || csp->http->status == 304)
    {
       /*
        * Expect no body. XXX: incomplete "list" of status codes?
