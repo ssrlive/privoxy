@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.79 2010/05/30 16:44:25 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.80 2010/07/21 14:40:09 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1624,7 +1624,7 @@ sub handle_loglevel_connect ($) {
         # Waiting for up to 4999 bytes from the client.
         $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Looks like we rea/ or
+    } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
              $c =~ m/^Complete client request received/ or
@@ -1639,6 +1639,8 @@ sub handle_loglevel_connect ($) {
         # Looks like we reached the end of the last chunk. We better stop reading.
         # Looks like we read the end of the last chunk together with the server \
         #  headers. We better stop reading.
+        # Looks like we got the last chunk together with the server headers. \
+        #  We better stop reading.
         # Unsetting keep-alive flag.
         # No connections to wait for left.
         # Client request arrived in time or the client closed the connection.
