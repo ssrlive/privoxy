@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.22 2009/02/09 21:21:15 fabiankeil Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.23 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -69,7 +69,7 @@ extern void disable_logging(void);
 extern void init_log_module(void);
 extern void show_version(const char *prog_name);
 extern void log_error(int loglevel, const char *fmt, ...);
-extern const char *jb_err_to_string(int error);
+extern const char *jb_err_to_string(int jb_error);
 
 /* Revision control strings from this header and associated .c file */
 extern const char errlog_rcs[];

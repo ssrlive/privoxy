@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.100 2010/01/03 12:37:14 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.101 2010/06/13 12:24:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -950,14 +950,14 @@ void log_error(int loglevel, const char *fmt, ...)
  *                visible to all files that include errlog.h.
  *
  * Parameters  :
- *          1  :  error = a valid jb_err code
+ *          1  :  jb_error = a valid jb_err code
  *
  * Returns     :  A string with the jb_err translation
  *
  *********************************************************************/
-const char *jb_err_to_string(int error)
+const char *jb_err_to_string(int jb_error)
 {
-   switch (error)
+   switch (jb_error)
    {
       case JB_ERR_OK:
          return "Success, no error";
