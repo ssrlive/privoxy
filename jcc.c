@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.320 2010/06/13 12:27:03 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.321 2010/07/12 16:01:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -243,16 +243,6 @@ static const char INVALID_SERVER_HEADERS_RESPONSE[] =
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad response. The server or forwarder response doesn't look like HTTP.\r\n";
-
-#if 0
-/* XXX: should be a template */
-static const char NULL_BYTE_RESPONSE[] =
-   "HTTP/1.0 400 Bad request received from client\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
-   "Content-Type: text/plain\r\n"
-   "Connection: close\r\n\r\n"
-   "Bad request. Null byte(s) before end of request.\r\n";
-#endif
 
 /* XXX: should be a template */
 static const char MESSED_UP_REQUEST_RESPONSE[] =
@@ -734,68 +724,6 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
       } 
       return;
 }
-
-
-#if 0
-/*********************************************************************
- *
- * Function    :  request_contains_null_bytes
- *
- * Description :  Checks for NULL bytes in the request and sends
- *                an error message to the client if any were found.
- *
- *                XXX: currently not used, see comment in chat().
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  buf = Data from the client's request to check.
- *          3  :  len = The data length.
- *
- * Returns     :  TRUE if the request contained one or more NULL bytes, or
- *                FALSE otherwise.
- *
- *********************************************************************/
-static int request_contains_null_bytes(const struct client_state *csp, char *buf, int len)
-{
-   size_t c_len; /* Request lenght when treated as C string */
-
-   c_len = strlen(buf);
-
-   if (c_len < len)
-   {
-      /*
-       * Null byte(s) found. Log the request,
-       * return an error response and hang up.
-       */
-      size_t tmp_len = c_len;
-
-      do
-      {
-        /*
-         * Replace NULL byte(s) with '°' characters
-         * so the request can be logged as string.
-         * XXX: Is there a better replacement character?
-         */
-         buf[tmp_len]='°';
-         tmp_len += strlen(buf+tmp_len);
-      } while (tmp_len < len);
-
-      log_error(LOG_LEVEL_ERROR, "%s\'s request contains at least one NULL byte "
-         "(length=%d, strlen=%u).", csp->ip_addr_str, len, c_len);
-      log_error(LOG_LEVEL_HEADER, 
-         "Offending request data with NULL bytes turned into \'°\' characters: %s", buf);
-
-      write_socket(csp->cfd, NULL_BYTE_RESPONSE, strlen(NULL_BYTE_RESPONSE));
-
-      /* XXX: Log correct size */
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
-
-      return TRUE;
-   }
-
-   return FALSE;
-}
-#endif
 
 
 /*********************************************************************
