@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.323 2010/07/21 14:32:00 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.324 2010/07/21 14:35:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1789,9 +1789,14 @@ static void chat(struct client_state *csp)
          && ((csp->iob->eod - csp->iob->cur) >= 5)
          && !memcmp(csp->iob->eod-5, "0\r\n\r\n", 5))
       {
+         /*
+          * XXX: This check should be obsolete now,
+          *      but let's wait a while to be sure.
+          */
          log_error(LOG_LEVEL_CONNECT,
-            "Looks like we read the last chunk together with "
-            "the server headers. We better stop reading.");
+            "Looks like we got the last chunk together with "
+            "the server headers but didn't detect it earlier. "
+            "We better stop reading.");
          byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
          csp->expected_content_length = byte_count;
          csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
@@ -2292,6 +2297,19 @@ static void chat(struct client_state *csp)
             {
                /* FIXME Should handle error properly */
                log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
+            }
+
+            if ((csp->flags & CSP_FLAG_CHUNKED)
+               && !(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET)
+               && ((csp->iob->eod - csp->iob->cur) >= 5)
+               && !memcmp(csp->iob->eod-5, "0\r\n\r\n", 5))
+            {
+               log_error(LOG_LEVEL_CONNECT,
+                  "Looks like we got the last chunk together with "
+                  "the server headers. We better stop reading.");
+               byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
+               csp->expected_content_length = byte_count;
+               csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
             }
 
             csp->server_connection.response_received = time(NULL);
