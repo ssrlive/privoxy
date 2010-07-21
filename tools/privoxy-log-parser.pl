@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.229 2010/05/30 16:43:25 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.79 2010/05/30 16:44:25 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -908,6 +908,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/^Appended client IP address to/
           or $c =~ m/^Removing 'Connection: close' to imply keep-alive./
           or $c =~ m/^keep-alive support is disabled/
+          or $c =~ m/^Continue hack in da house/
             )
     {
         # XXX: Some of these may need highlighting
@@ -953,6 +954,7 @@ sub handle_loglevel_header ($) {
         # Appended client IP address to X-Forwarded-For: 10.0.0.2, 10.0.0.1
         # Removing 'Connection: close' to imply keep-alive.
         # keep-alive support is disabled. Crunching: Keep-Alive: 300.
+        # Continue hack in da house.
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
