@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.321 2010/07/12 16:01:23 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.322 2010/07/21 14:30:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1615,12 +1615,8 @@ static void chat(struct client_state *csp)
    if (crunch_response_triggered(csp, crunchers_all))
    {
       /*
-       * Yes. The client got the crunch response
-       * and we are done here after cleaning up.
+       * Yes. The client got the crunch response and we're done here.
        */
-      /* XXX: why list_remove_all()? */
-      list_remove_all(csp->headers);
-
       return;
    }
 
