@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.108 2010/01/03 12:37:14 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.109 2010/01/10 13:53:48 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -247,11 +247,6 @@ static void unload_configfile (void * data)
    freez(config->trustfile);
    list_remove_all(config->trust_info);
 #endif /* def FEATURE_TRUST */
-
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-      freez(config->re_filterfile[i]);
-   }
 
    freez(config);
 }
