@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.74 2009/09/26 13:29:57 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.75 2010/05/26 23:01:47 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -114,7 +114,8 @@ static struct file_list *current_re_filterfile[MAX_AF_FILES]  = {
 unsigned int sweep(void)
 {
    struct file_list *fl, *nfl;
-   struct client_state *csp, *last_active;
+   struct client_state *csp;
+   struct client_states *last_active, *client_list;
    int i;
    unsigned int active_threads = 0;
 
@@ -125,10 +126,11 @@ unsigned int sweep(void)
    }
 
    last_active = clients;
-   csp = clients->next;
+   client_list = clients->next;
 
-   while (NULL != csp)
+   while (NULL != client_list)
    {
+      csp = &client_list->csp;
       if (csp->flags & CSP_FLAG_ACTIVE)
       {
          /* Mark this client's files as active */
@@ -174,15 +176,15 @@ unsigned int sweep(void)
 
          active_threads++;
 
-         last_active = csp;
-         csp = csp->next;
+         last_active = client_list;
+         client_list = client_list->next;
       }
       else 
       /*
        * This client is not active. Free its resources.
        */
       {
-         last_active->next = csp->next;
+         last_active->next = client_list->next;
 
          freez(csp->ip_addr_str);
          freez(csp->iob->buf);
@@ -208,9 +210,9 @@ unsigned int sweep(void)
          }
 #endif /* def FEATURE_STATISTICS */
 
-         freez(csp);
+         freez(client_list);
          
-         csp = last_active->next;
+         client_list = last_active->next;
       }
    }
 

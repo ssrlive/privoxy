@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.322 2010/07/21 14:30:40 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.323 2010/07/21 14:32:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -120,7 +120,7 @@ const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
 
 int daemon_mode = 1;
-struct client_state  clients[1];
+struct client_states clients[1];
 struct file_list     files[1];
 
 #ifdef FEATURE_STATISTICS
@@ -3341,6 +3341,7 @@ void w32_service_listen_loop(void *p)
  *********************************************************************/
 static void listen_loop(void)
 {
+   struct client_states *csp_list = NULL;
    struct client_state *csp = NULL;
    jb_socket bfd;
    struct configuration_spec *config;
@@ -3390,11 +3391,14 @@ static void listen_loop(void)
       }
 #endif
 
-      if ( NULL == (csp = (struct client_state *) zalloc(sizeof(*csp))) )
+      csp_list = (struct client_states *)zalloc(sizeof(*csp_list));
+      if (NULL == csp_list)
       {
-         log_error(LOG_LEVEL_FATAL, "malloc(%d) for csp failed: %E", sizeof(*csp));
+         log_error(LOG_LEVEL_FATAL,
+            "malloc(%d) for csp_list failed: %E", sizeof(*csp_list));
          continue;
       }
+      csp = &csp_list->csp;
 
       csp->flags |= CSP_FLAG_ACTIVE;
       csp->server_connection.sfd = JB_INVALID_SOCKET;
@@ -3480,8 +3484,8 @@ static void listen_loop(void)
       }
 
       /* add it to the list of clients */
-      csp->next = clients->next;
-      clients->next = csp;
+      csp_list->next = clients->next;
+      clients->next = csp_list;
 
       if (config->multi_threaded)
       {
