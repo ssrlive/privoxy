@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.83 2010/07/22 14:51:59 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.84 2010/07/22 14:52:30 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2333,8 +2333,8 @@ codes don't work, or if the terminal itself doesn't support the control
 codes.
 
 [B<--shorten-thread-ids>] Shorten the thread ids to a three-digit decimal number.
-Note that the mapping from thread ids to shortended ids is created at
-run-time and thus varies with the input.
+Note that the mapping from thread ids to shortened ids is created at run-time
+and thus varies with the input.
 
 [B<--show-ineffective-filters>] Don't suppress log lines for filters
 that didn't modify the content.
