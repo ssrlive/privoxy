@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.234 2010/07/21 16:05:44 fk Exp $
+# $Id: privoxy-log-parser.pl,v 1.82 2010/07/22 14:51:19 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2292,8 +2292,8 @@ B<privoxy-log-parser> - A parser and syntax-highlighter for Privoxy log messages
 =head1 SYNOPSIS
 
 B<privoxy-log-parser> [B<--accept-unknown-messages>] [B<--html-output>]
-[B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--shorten-thread-ids>]
-[B<--show-ineffective-filters>] [B<--version>]
+[B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--statistics>]
+[B<--shorten-thread-ids>] [B<--show-ineffective-filters>] [B<--version>]
 
 =head1 DESCRIPTION
 
