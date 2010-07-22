@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.82 2010/07/22 14:51:19 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.83 2010/07/22 14:51:59 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -24,7 +24,7 @@
 #       - Use generic highlighting function that takes a regex and the
 #         hash key as input.
 #
-# Copyright (c) 2007-2009 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2010 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -2198,7 +2198,7 @@ sub VersionMessage {
     my $version_message;
 
     $version_message .= 'Privoxy-Log-Parser ' . PRIVOXY_LOG_PARSER_VERSION  . "\n";
-    $version_message .= 'Copyright (C) 2007-2009 Fabian Keil <fk@fabiankeil.de>' . "\n";
+    $version_message .= 'Copyright (C) 2007-2010 Fabian Keil <fk@fabiankeil.de>' . "\n";
     $version_message .= 'http://www.fabiankeil.de/sourcecode/privoxy-log-parser/' . "\n";
 
     print $version_message;
