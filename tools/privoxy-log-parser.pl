@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.80 2010/07/21 14:40:09 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.234 2010/07/21 16:05:44 fk Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -56,6 +56,7 @@ use constant {
     CLI_OPTION_NO_EMBEDDED_CSS => 0,
     CLI_OPTION_NO_MSECS => 0,
     CLI_OPTION_NO_SYNTAX_HIGHLIGHTING => 0,
+    CLI_OPTION_SHORTEN_THREAD_IDS => 0,
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
@@ -105,6 +106,7 @@ my $header_highlight_regex = '';
 
 my $html_output_mode;
 my $no_msecs_mode; # XXX: should probably be removed
+my $shorten_thread_ids;
 my $line_end;
 
 sub prepare_our_stuff () {
@@ -2035,6 +2037,20 @@ sub print_non_clf_message ($) {
         . $line_end;
 }
 
+sub shorten_thread_id ($) {
+
+    my $thread_id = shift;
+
+    our %short_thread_ids;
+    our $max_threadid;
+
+    unless (defined $short_thread_ids{$thread_id}) {
+        $short_thread_ids{$thread_id} = sprintf "%.3d", $max_threadid++;
+    }
+
+    return $short_thread_ids{$thread_id}
+}
+
 sub parse_loop () {
 
     my ($day, $time_stamp, $thread, $log_level, $content, $c, $msecs);
@@ -2066,7 +2082,7 @@ sub parse_loop () {
     while (<>) {
 
         if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
-            $thread = $t = $4;
+            $thread = $t = ($shorten_thread_ids) ? shorten_thread_id($4) : $4;
             $req{$t}{'day'} = $day = $1;
             $req{$t}{'time-stamp'} = $time_stamp = $2;
             $req{$t}{'msecs'} = $msecs = $3 ? $3 : 0; # Only the cool kids have micro second resolution;
@@ -2196,6 +2212,7 @@ sub get_cli_options () {
         'no-syntax-highlighting'   => CLI_OPTION_NO_SYNTAX_HIGHLIGHTING,
         'no-embedded-css'          => CLI_OPTION_NO_EMBEDDED_CSS,
         'no-msecs'                 => CLI_OPTION_NO_MSECS,
+        'shorten-thread-ids'       => CLI_OPTION_SHORTEN_THREAD_IDS,
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
@@ -2207,6 +2224,7 @@ sub get_cli_options () {
         'no-syntax-highlighting'   => \$cli_options{'no-syntax-highlighting'},
         'no-embedded-css'          => \$cli_options{'no-embedded-css'},
         'no-msecs'                 => \$cli_options{'no-msecs'},
+        'shorten-thread-ids'       => \$cli_options{'shorten-thread-ids'},
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
         'statistics'               => \$cli_options{'statistics'},
@@ -2216,6 +2234,7 @@ sub get_cli_options () {
 
    $html_output_mode = cli_option_is_set('html-output');
    $no_msecs_mode = cli_option_is_set('no-msecs');
+   $shorten_thread_ids = cli_option_is_set('shorten-thread-ids');
    $line_end = get_line_end();
 }
 
@@ -2233,6 +2252,7 @@ Options and their default values if they have any:
     [--no-embedded-css]
     [--no-msecs]
     [--no-syntax-highlighting]
+    [--shorten-thread-ids]
     [--show-ineffective-filters]
     [--statistics]
     [--title $cli_options{'title'}]
@@ -2272,8 +2292,8 @@ B<privoxy-log-parser> - A parser and syntax-highlighter for Privoxy log messages
 =head1 SYNOPSIS
 
 B<privoxy-log-parser> [B<--accept-unknown-messages>] [B<--html-output>]
-[B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--show-ineffective-filters>]
-[B<--version>]
+[B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--shorten-thread-ids>]
+[B<--show-ineffective-filters>] [B<--version>]
 
 =head1 DESCRIPTION
 
@@ -2311,6 +2331,10 @@ It does not escape any input!
 the filtered output is piped into less in which case the ANSI control
 codes don't work, or if the terminal itself doesn't support the control
 codes.
+
+[B<--shorten-thread-ids>] Shorten the thread ids to a three-digit decimal number.
+Note that the mapping from thread ids to shortended ids is created at
+run-time and thus varies with the input.
 
 [B<--show-ineffective-filters>] Don't suppress log lines for filters
 that didn't modify the content.
