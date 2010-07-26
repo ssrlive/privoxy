@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.84 2010/07/22 14:52:30 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.85 2010/07/22 14:56:33 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -134,6 +134,7 @@ sub prepare_our_stuff () {
         'Gif-Deanimate' => 'blue',
         Force           => 'red',
         Writing         => 'light_green',
+        Received        => 'yellow',
         # ----------------------
         URL                  => 'yellow',
         path                 => 'brown',
@@ -2076,6 +2077,7 @@ sub parse_loop () {
         'Error'             => \&handle_loglevel_error,
         'Fatal error'       => \&handle_loglevel_ignore,
         'Writing'           => \&handle_loglevel_ignore,
+        'Received'          => \&handle_loglevel_ignore,
         'Unknown log level' => \&handle_loglevel_ignore,
     );
 
