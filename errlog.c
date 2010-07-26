@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.102 2010/07/21 14:43:03 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.103 2010/07/26 11:19:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -880,7 +880,7 @@ void log_error(int loglevel, const char *fmt, ...)
 
       if (length >= log_buffer_size-2)
       {
-         static char warning[] = "... [too long, truncated]";
+         static const char warning[] = "... [too long, truncated]";
 
          length = log_buffer_size - sizeof(warning) - 1;
          length += strlcpy(outbuf + length, warning, log_buffer_size - length);
