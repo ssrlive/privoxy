@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.106 2010/07/26 11:21:47 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.107 2010/07/26 11:24:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -574,6 +574,9 @@ static inline const char *get_log_level_string(int loglevel)
          break;
       case LOG_LEVEL_LOG:
          log_level_string = "Writing";
+         break;
+      case LOG_LEVEL_RECEIVED:
+         log_level_string = "Received";
          break;
       case LOG_LEVEL_HEADER:
          log_level_string = "Header";

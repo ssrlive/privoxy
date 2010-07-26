@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.76 2010/06/13 12:30:10 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.77 2010/07/26 11:26:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -559,18 +559,27 @@ int write_socket(jb_socket fd, const char *buf, size_t len)
  *********************************************************************/
 int read_socket(jb_socket fd, char *buf, int len)
 {
+   int ret;
+
    if (len <= 0)
    {
       return(0);
    }
 
 #if defined(_WIN32)
-   return(recv(fd, buf, len, 0));
+   ret = recv(fd, buf, len, 0);
 #elif defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
-   return(recv(fd, buf, (size_t)len, 0));
+   ret = recv(fd, buf, (size_t)len, 0);
 #else
-   return((int)read(fd, buf, (size_t)len));
+   ret = (int)read(fd, buf, (size_t)len);
 #endif
+
+   if (ret > 0)
+   {
+      log_error(LOG_LEVEL_RECEIVED, "from socket %d: %N", fd, ret, buf);
+   }
+
+   return ret;
 }
 
 
