@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.101 2010/06/13 12:24:49 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.102 2010/07/21 14:43:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -6,7 +6,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.101 2010/06/13 12:24:49 fabiankeil 
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -38,6 +38,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.101 2010/06/13 12:24:49 fabiankeil 
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "config.h"
 #include "miscutil.h"
@@ -788,7 +789,8 @@ void log_error(int loglevel, const char *fmt, ...)
             break;
          case 'N':
             /*
-             * Non-standard: Print a counted unterminated string.
+             * Non-standard: Print a counted unterminated string,
+             * replacing unprintable bytes with their hex value.
              * Takes 2 parameters: int length, const char * string.
              */
             ival = va_arg(ap, int);
@@ -813,20 +815,26 @@ void log_error(int loglevel, const char *fmt, ...)
                   format_string = "[counted string lenght < 0]";
                }
             }
-            else if ((size_t)ival >= sizeof(tempbuf))
+            while ((ival-- > 0) && (length < log_buffer_size - 6))
             {
-               /*
-                * String is too long, copy as much as possible.
-                * It will be further truncated later.
-                */
-               memcpy(tempbuf, sval, sizeof(tempbuf)-1);
-               tempbuf[sizeof(tempbuf)-1] = '\0';
+               if (isprint((int)*sval) && (*sval != '\\'))
+               {
+                  outbuf[length++] = *sval;
+                  outbuf[length] = '\0';
+               }
+               else
+               {
+                  snprintf(outbuf + length, log_buffer_size - length - 2,
+                     "\\x%.2x", (int)*sval);
+                  length += 4;
+               }
+               sval++;
             }
-            else
-            {
-               memcpy(tempbuf, sval, (size_t) ival);
-               tempbuf[ival] = '\0';
-            }
+            /*
+             * XXX: In case of printable characters at the end of
+             *      the %N string, we're not using the whole buffer.
+             */
+            format_string = (length < log_buffer_size - 6) ? "" : "[too long]";
             break;
          case 'E':
             /* Non-standard: Print error code from errno */
