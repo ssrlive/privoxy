@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.103 2010/07/26 11:19:31 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.104 2010/07/26 11:20:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -873,7 +873,7 @@ void log_error(int loglevel, const char *fmt, ...)
             snprintf(tempbuf, sizeof(tempbuf), "Bad format string: \"%s\"", fmt);
             loglevel = LOG_LEVEL_FATAL;
             break;
-      } /* switch( p ) */
+      }
 
       assert(length < log_buffer_size);
       length += strlcpy(outbuf + length, format_string, log_buffer_size - length);
@@ -888,7 +888,7 @@ void log_error(int loglevel, const char *fmt, ...)
 
          break;
       }
-   } /* for( p ... ) */
+   }
 
    /* done with var. args */
    va_end(ap);
