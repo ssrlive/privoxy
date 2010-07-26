@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.24 2010/07/21 14:43:03 fabiankeil Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.25 2010/07/26 11:28:11 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -47,7 +47,7 @@ extern "C" {
 #define LOG_LEVEL_CONNECT    0x0002
 #define LOG_LEVEL_IO         0x0004
 #define LOG_LEVEL_HEADER     0x0008
-#define LOG_LEVEL_LOG        0x0010
+#define LOG_LEVEL_WRITING    0x0010
 #ifdef FEATURE_FORCE_LOAD
 #define LOG_LEVEL_FORCE      0x0020
 #endif /* def FEATURE_FORCE_LOAD */

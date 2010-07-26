@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.77 2010/07/26 11:26:26 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.78 2010/07/26 11:28:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -498,7 +498,7 @@ int write_socket(jb_socket fd, const char *buf, size_t len)
       return 1;
    }
 
-   log_error(LOG_LEVEL_LOG, "to socket %d: %N", fd, len, buf);
+   log_error(LOG_LEVEL_WRITING, "to socket %d: %N", fd, len, buf);
 
 #if defined(_WIN32)
    return (send(fd, buf, (int)len, 0) != (int)len);
