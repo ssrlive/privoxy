@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.108 2010/07/26 11:28:11 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.109 2010/07/26 11:30:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -811,7 +811,7 @@ void log_error(int loglevel, const char *fmt, ...)
                else
                {
                   int ret = snprintf(outbuf + length,
-                     log_buffer_size - length - 2, "\\x%.2x", (int)*sval);
+                     log_buffer_size - length - 2, "\\x%.2x", (unsigned char)*sval);
                   assert(ret == 4);
                   length += 4;
                }
