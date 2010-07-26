@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.104 2010/07/26 11:20:17 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.105 2010/07/26 11:20:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -794,27 +794,10 @@ void log_error(int loglevel, const char *fmt, ...)
              * Takes 2 parameters: int length, const char * string.
              */
             ival = va_arg(ap, int);
+            assert(ival >= 0);
             sval = va_arg(ap, char *);
-            if (sval == NULL)
-            {
-               format_string = "[null]";
-            }
-            else if (ival <= 0)
-            {
-               if (0 == ival)
-               {
-                  /* That's ok (but stupid) */
-                  tempbuf[0] = '\0';
-               }
-               else
-               {
-                  /*
-                   * That's not ok (and even more stupid)
-                   */
-                  assert(ival >= 0);
-                  format_string = "[counted string lenght < 0]";
-               }
-            }
+            assert(sval != NULL);
+
             while ((ival-- > 0) && (length < log_buffer_size - 6))
             {
                if (isprint((int)*sval) && (*sval != '\\'))
