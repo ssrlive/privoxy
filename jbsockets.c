@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.75 2010/06/13 12:29:05 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.76 2010/06/13 12:30:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -8,7 +8,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.75 2010/06/13 12:29:05 fabian
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -498,7 +498,7 @@ int write_socket(jb_socket fd, const char *buf, size_t len)
       return 1;
    }
 
-   log_error(LOG_LEVEL_LOG, "%N", len, buf);
+   log_error(LOG_LEVEL_LOG, "to socket %d: %N", fd, len, buf);
 
 #if defined(_WIN32)
    return (send(fd, buf, (int)len, 0) != (int)len);
