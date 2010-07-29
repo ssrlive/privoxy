@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.85 2010/07/22 14:56:33 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.86 2010/07/26 11:28:52 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1553,10 +1553,11 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=Received )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=expecting )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Connection from/) {
+    } elsif ($c =~ m/^(Rejecting c|C)onnection from/) {
 
         # Connection from 81.163.28.218 dropped due to ACL
-        $c =~ s@(?<=^Connection from )((?:\d+\.?){4})@$h{'Number'}$1$h{'Standard'}@;
+        # Rejecting connection from 178.63.152.227. Maximum number of connections reached.
+        $c =~ s@(?<=onnection from )((?:\d+\.?){3}\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^(?:Reusing|Closing) server socket \d./ or
              $c =~ m/^No additional client request/) {
