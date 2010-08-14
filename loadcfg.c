@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.109 2010/01/10 13:53:48 ler762 Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.110 2010/07/21 14:29:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1479,8 +1479,9 @@ struct configuration_spec * load_config(void)
 #if defined(_WIN32) && !defined (_WIN_CONSOLE)
 
    g_default_actions_file = config->actions_file[1]; /* FIXME Hope this is default.action */
-   g_user_actions_file = config->actions_file[2]; /* FIXME Hope this is user.action */
-   g_re_filterfile    = config->re_filterfile[0]; /* FIXME Hope this is default.filter */
+   g_user_actions_file  = config->actions_file[2];  /* FIXME Hope this is user.action */
+   g_default_filterfile = config->re_filterfile[0]; /* FIXME Hope this is default.filter */
+   g_user_filterfile    = config->re_filterfile[1]; /* FIXME Hope this is user.filter */
 
 #ifdef FEATURE_TRUST
    g_trustfile        = config->trustfile;
