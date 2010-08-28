@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.87 2010/07/29 14:27:43 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.88 2010/08/28 12:55:47 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -23,6 +23,7 @@
 #       - Handle incomplete input without Perl warning about undefined variables.
 #       - Use generic highlighting function that takes a regex and the
 #         hash key as input.
+#       - Add --compress and --decompress options.
 #
 # Copyright (c) 2007-2010 Fabian Keil <fk@fabiankeil.de>
 #
