@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.89 2010/08/28 13:20:23 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.90 2010/08/28 13:20:52 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -61,6 +61,7 @@ use constant {
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
+    CLI_OPTION_URL_STATISTICS_THRESHOLD => 5,
 
     SUPPRESS_SUCCEEDED_FILTER_ADDITIONS => 1,
     SHOW_SCAN_INTRO => 0,
@@ -1959,6 +1960,7 @@ sub get_percentage ($$) {
 sub print_stats () {
 
     our %stats;
+    our %cli_options;
     my $new_connections = $stats{requests} - $stats{crunches} - $stats{'reused-connections'};
     my $outgoing_requests = $stats{requests} - $stats{crunches};
 
@@ -2003,6 +2005,7 @@ sub print_stats () {
     }
     print "Requested ressources:\n";
     foreach my $ressource (sort {$stats{'ressource'}{$b} <=> $stats{'ressource'}{$a}} keys %{$stats{'ressource'}}) {
+        last if $stats{'ressource'}{$ressource} < $cli_options{'url-statistics-threshold'};
         printf "%d : %s\n", $stats{'ressource'}{$ressource}, $ressource;
     }
 }
@@ -2239,6 +2242,7 @@ sub get_cli_options () {
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
+        'url-statistics-threshold'  => CLI_OPTION_URL_STATISTICS_THRESHOLD,
     );
 
     GetOptions (
@@ -2251,6 +2255,7 @@ sub get_cli_options () {
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
         'statistics'               => \$cli_options{'statistics'},
+        'url-statistics-threshold=s'=> \$cli_options{'url-statistics-threshold'},
         'version'                  => sub { VersionMessage && exit(0) },
         'help'                     => \&help,
    ) or exit(1);
@@ -2278,6 +2283,7 @@ Options and their default values if they have any:
     [--shorten-thread-ids]
     [--show-ineffective-filters]
     [--statistics]
+    [--url-statistics-threshold $cli_options{'url-statistics-threshold'}]
     [--title $cli_options{'title'}]
     [--version]
 see "perldoc $0" for more information
@@ -2316,7 +2322,8 @@ B<privoxy-log-parser> - A parser and syntax-highlighter for Privoxy log messages
 
 B<privoxy-log-parser> [B<--accept-unknown-messages>] [B<--html-output>]
 [B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--statistics>]
-[B<--shorten-thread-ids>] [B<--show-ineffective-filters>] [B<--version>]
+[B<--shorten-thread-ids>] [B<--show-ineffective-filters>]
+[B<--url-statistics-threshold>] [B<--version>]
 
 =head1 DESCRIPTION
 
@@ -2366,6 +2373,9 @@ that didn't modify the content.
 log messages. This is an experimental feature, if the results look wrong
 they very well might be. Also note that the results are pretty much guaranteed
 to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
+
+[B<--url-statistics-threshold>] Only show the request count for a ressource
+if it's above the given threshold.
 
 [B<--version>] Print version and exit.
 
