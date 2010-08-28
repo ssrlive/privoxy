@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.88 2010/08/28 12:55:47 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.89 2010/08/28 13:20:23 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1927,6 +1927,13 @@ sub gather_loglevel_header_stats ($$) {
         # A HTTP/1.1 response without Connection header implies keep-alive.
         # Keeping the server header 'Connection: keep-alive' around.
         $stats{'server-keep-alive'}++;
+
+    } elsif ($c =~ m/^scan: ((\w+) (.+) (HTTP\/\d\.\d))/) {
+
+        # scan: HTTP/1.1 200 OK
+        $stats{'method'}{$2}++;
+        $stats{'ressource'}{$3}++;
+        $stats{'http-version'}{$4}++;
     }
 }
 
@@ -1981,6 +1988,23 @@ sub print_stats () {
         $stats{'empty-responses-on-reused-connections'} . " (" .
         get_percentage($stats{requests}, $stats{'empty-responses-on-reused-connections'}) .
         ")\n";
+
+    if ($stats{method} eq 0) {
+        print "No response lines parsed yet yet.\n";
+        return;
+    }
+    print "Method distribution:\n";
+    foreach my $method (sort {$stats{'method'}{$b} <=> $stats{'method'}{$a}} keys %{$stats{'method'}}) {
+        printf "%8d : %-8s\n", $stats{'method'}{$method}, $method;
+    }
+    print "Client HTTP versions:\n";
+    foreach my $http_version (sort {$stats{'http-version'}{$b} <=> $stats{'http-version'}{$a}} keys %{$stats{'http-version'}}) {
+        printf "%d : %s\n",  $stats{'http-version'}{$http_version}, $http_version;
+    }
+    print "Requested ressources:\n";
+    foreach my $ressource (sort {$stats{'ressource'}{$b} <=> $stats{'ressource'}{$a}} keys %{$stats{'ressource'}}) {
+        printf "%d : %s\n", $stats{'ressource'}{$ressource}, $ressource;
+    }
 }
 
 
