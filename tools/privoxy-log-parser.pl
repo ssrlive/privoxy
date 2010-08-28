@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.86 2010/07/26 11:28:52 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.87 2010/07/29 14:27:43 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -804,15 +804,10 @@ sub handle_loglevel_header ($) {
                 update_header_highlight_regex($header);
             }
 
-        } elsif ($c =~ m/^scan: ((\w+) (.+) (HTTP\/\d\.\d))/) {
+        } elsif ($c =~ m/^(scan: )(\w+ .+ HTTP\/\d\.\d)/) {
 
-            # Client request line
-            # Save for statistics (XXX: Not implemented yet)
-            $req{$t}{'method'} = $2;
-            $req{$t}{'destination'} = $3;
-            $req{$t}{'http-version'} = $4;
-
-            $c = highlight_request_line($1);
+            # scan: HTTP/1.1 200 OK
+            $c = $1 . highlight_request_line($2);
 
         } elsif ($c =~ m/^(scan: )((?:HTTP\/\d\.\d|ICY) (\d+) (.*))/) {
 
