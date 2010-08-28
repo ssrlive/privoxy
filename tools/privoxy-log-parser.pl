@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.91 2010/08/28 13:21:24 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.92 2010/08/28 13:22:00 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -61,7 +61,7 @@ use constant {
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
-    CLI_OPTION_URL_STATISTICS_THRESHOLD => 5,
+    CLI_OPTION_URL_STATISTICS_THRESHOLD => 0,
 
     SUPPRESS_SUCCEEDED_FILTER_ADDITIONS => 1,
     SHOW_SCAN_INTRO => 0,
@@ -2383,7 +2383,8 @@ they very well might be. Also note that the results are pretty much guaranteed
 to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
 
 [B<--url-statistics-threshold>] Only show the request count for a ressource
-if it's above the given threshold.
+if it's above or equal to the given threshold. If the threshold is 0, URL
+statistics are disabled.
 
 [B<--version>] Print version and exit.
 
