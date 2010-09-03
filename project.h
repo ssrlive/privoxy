@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.157 2010/05/24 11:39:36 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.158 2010/07/21 14:35:09 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1064,12 +1064,14 @@ struct forward_spec
 #define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
 
 /* Supported filter types */
-#define FT_CONTENT_FILTER       0
-#define FT_CLIENT_HEADER_FILTER 1
-#define FT_SERVER_HEADER_FILTER 2
-#define FT_CLIENT_HEADER_TAGGER 3
-#define FT_SERVER_HEADER_TAGGER 4
-
+enum filter_type
+{
+   FT_CONTENT_FILTER       = 0,
+   FT_CLIENT_HEADER_FILTER = 1,
+   FT_SERVER_HEADER_FILTER = 2,
+   FT_CLIENT_HEADER_TAGGER = 3,
+   FT_SERVER_HEADER_TAGGER = 4,
+};
 #define MAX_FILTER_TYPES        5
 
 /**
@@ -1084,7 +1086,7 @@ struct re_filterfile_spec
    char *description;               /**< Description from FILTER: statement in re_filterfile. */
    struct list patterns[1];         /**< The patterns from the re_filterfile. */
    pcrs_job *joblist;               /**< The resulting compiled pcrs_jobs. */
-   int type;                        /**< Filter type (content, client-header, server-header). */
+   enum filter_type type;           /**< Filter type (content, client-header, server-header). */
    int dynamic;                     /**< Set to one if the pattern might contain variables
                                          and has to be recompiled for every request. */
    struct re_filterfile_spec *next; /**< The pointer for chaining. */
