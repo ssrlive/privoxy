@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.325 2010/07/21 14:39:20 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.326 2010/07/29 14:32:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3460,7 +3460,9 @@ static void listen_loop(void)
       }
       else
       {
-         log_error(LOG_LEVEL_CONNECT, "accepted connection from %s", csp->ip_addr_str);
+         log_error(LOG_LEVEL_CONNECT,
+            "accepted connection from %s on socket %d",
+            csp->ip_addr_str, csp->cfd);
       }
 
 #ifdef FEATURE_TOGGLE
