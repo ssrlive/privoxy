@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.123 2010/02/19 16:00:38 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.124 2010/05/01 18:21:30 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.123 2010/02/19 16:00:38 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.124 2010/05/01 18:21:30 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4242,9 +4242,10 @@ problem-host.example.com</screen>
    <para>
     Filtering requires buffering the page content, which may appear to
     slow down page rendering since nothing is displayed until all content has
-    passed the filters. (It does not really take longer, but seems that way
-    since the page is not incrementally displayed.) This effect will be more
-    noticeable on slower connections.
+    passed the filters. (The total time until the page is completely rendered
+    doesn't change much, but it may be perceived as slower since the page is
+    not incrementally displayed.)
+    This effect will be more noticeable on slower connections.
    </para>
    <para>
    <quote>Rolling your own</quote>
@@ -8833,6 +8834,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.124  2010/05/01 18:21:30  fabiankeil
+ Explicitly mention how to match any URL.
+
  Revision 2.123  2010/02/19 16:00:38  fabiankeil
  Even more fixes.
 
