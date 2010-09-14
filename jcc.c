@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.326 2010/07/29 14:32:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.327 2010/09/03 17:40:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2051,9 +2051,9 @@ static void chat(struct client_state *csp)
                 */
                if (content_filter)
                {
-                  p = execute_content_filter(csp, content_filter);
+                  p = execute_content_filters(csp);
                   /*
-                   * If the content filter fails, use the original
+                   * If content filtering fails, use the original
                    * buffer and length.
                    * (see p != NULL ? p : csp->iob->cur below)
                    */

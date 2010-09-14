@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.129 2010/05/01 18:20:50 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.130 2010/05/24 11:38:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1947,20 +1947,23 @@ static jb_err prepare_for_filtering(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  execute_content_filter
+ * Function    :  execute_content_filters
  *
  * Description :  Executes a given content filter.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  content_filter = The filter function to execute
  *
  * Returns     :  Pointer to the modified buffer, or
  *                NULL if filtering failed or wasn't necessary.
  *
  *********************************************************************/
-char *execute_content_filter(struct client_state *csp, filter_function_ptr content_filter)
+char *execute_content_filters(struct client_state *csp)
 {
+   filter_function_ptr content_filter;
+
+   assert(content_filters_enabled(csp->action));
+
    if (0 == csp->iob->eod - csp->iob->cur)
    {
       /*
@@ -1985,6 +1988,8 @@ char *execute_content_filter(struct client_state *csp, filter_function_ptr conte
        */
       return NULL;
    }
+
+   content_filter = get_filter_function(csp);
 
    return ((*content_filter)(csp));
 }
