@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.38 2010/05/01 18:20:50 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.39 2010/09/14 07:13:10 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -101,11 +101,7 @@ extern const struct forward_spec *forward_url(struct client_state *csp,
 /*
  * Content modification
  */
-
-typedef char *(*filter_function_ptr)();
 extern char *execute_content_filters(struct client_state *csp);
-
-extern filter_function_ptr get_filter_function(struct client_state *csp);
 extern char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits);
 extern char *rewrite_url(char *old_url, const char *pcrs_command);
 extern char *get_last_url(char *subject, const char *redirect_mode);

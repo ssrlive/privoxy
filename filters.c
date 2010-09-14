@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.130 2010/05/24 11:38:22 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.131 2010/09/14 07:13:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -98,6 +98,8 @@ const char filters_h_rcs[] = FILTERS_H_VERSION;
  */
 #define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
 
+typedef char *(*filter_function_ptr)();
+static filter_function_ptr get_filter_function(struct client_state *csp);
 static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
 static jb_err prepare_for_filtering(struct client_state *csp);
 
@@ -1738,7 +1740,7 @@ static char *gif_deanimate_response(struct client_state *csp)
  *                NULL if no content filter is active
  *
  *********************************************************************/
-filter_function_ptr get_filter_function(struct client_state *csp)
+static filter_function_ptr get_filter_function(struct client_state *csp)
 {
    filter_function_ptr filter_function = NULL;
 
