@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.327 2010/09/03 17:40:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.328 2010/09/14 07:13:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1521,9 +1521,7 @@ static void chat(struct client_state *csp)
    const struct forward_spec *fwd;
    struct http_request *http;
    long len = 0; /* for buffer sizes (and negative error codes) */
-
-   /* Function that does the content filtering for the current request */
-   filter_function_ptr content_filter = NULL;
+   int content_filtering_is_enabled = 0;
 
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
@@ -2049,7 +2047,7 @@ static void chat(struct client_state *csp)
                 * now is the time to apply content modification
                 * and send the result to the client.
                 */
-               if (content_filter)
+               if (content_filtering_is_enabled)
                {
                   p = execute_content_filters(csp);
                   /*
@@ -2115,7 +2113,7 @@ static void chat(struct client_state *csp)
           */
          if (server_body || http->ssl)
          {
-            if (content_filter)
+            if (content_filtering_is_enabled)
             {
                /*
                 * If there is no memory left for buffering the content, or the buffer limit
@@ -2163,7 +2161,7 @@ static void chat(struct client_state *csp)
                    */
                   byte_count = (unsigned long long)flushed;
                   freez(hdr);
-                  content_filter = NULL;
+                  content_filtering_is_enabled = 0;
                   server_body = 1;
                }
             }
@@ -2330,12 +2328,12 @@ static void chat(struct client_state *csp)
 
             if (!http->ssl) /* We talk plaintext */
             {
-               content_filter = get_filter_function(csp);
+               content_filtering_is_enabled = content_filters_enabled(csp->action);
             }
             /*
              * Only write if we're not buffering for content modification
              */
-            if (!content_filter)
+            if (!content_filtering_is_enabled)
             {
                /*
                 * Write the server's (modified) header to
