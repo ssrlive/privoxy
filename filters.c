@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.132 2010/09/14 07:14:56 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.133 2010/09/14 07:16:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -99,7 +99,7 @@ const char filters_h_rcs[] = FILTERS_H_VERSION;
 #define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
 
 typedef char *(*filter_function_ptr)();
-static filter_function_ptr get_filter_function(struct client_state *csp);
+static filter_function_ptr get_filter_function(const struct client_state *csp);
 static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
 static jb_err prepare_for_filtering(struct client_state *csp);
 
@@ -1740,47 +1740,9 @@ static char *gif_deanimate_response(struct client_state *csp)
  *                NULL if no content filter is active
  *
  *********************************************************************/
-static filter_function_ptr get_filter_function(struct client_state *csp)
+static filter_function_ptr get_filter_function(const struct client_state *csp)
 {
    filter_function_ptr filter_function = NULL;
-
-   if ((csp->content_type & CT_TABOO)
-      && !(csp->action->flags & ACTION_FORCE_TEXT_MODE))
-   {
-      return NULL;
-   }
-
-   /*
-    * Are we enabling text mode by force?
-    */
-   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
-   {
-      /*
-       * Do we really have to?
-       */
-      if (csp->content_type & CT_TEXT)
-      {
-         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");   
-      }
-      else
-      {
-         csp->content_type |= CT_TEXT;
-         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");   
-      }
-   }
-
-   if (!(csp->content_type & CT_DECLARED))
-   {
-      /*
-       * The server didn't bother to declare a MIME-Type.
-       * Assume it's text that can be filtered.
-       *
-       * This also regulary happens with 304 responses,
-       * therefore logging anything here would cause
-       * too much noise.
-       */
-      csp->content_type |= CT_TEXT;
-   }
 
    /*
     * Choose the applying filter function based on
