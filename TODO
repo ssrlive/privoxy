@@ -1,4 +1,4 @@
-$Id: TODO,v 1.18 2010/04/12 16:42:54 fabiankeil Exp $
+$Id: TODO,v 1.19 2010/04/12 16:43:21 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -192,3 +192,6 @@ Some Privoxy related task, not ordered in any way.
 78) Allow to optionally use pcre's DFA algorithm.
 
 79) Evaluate pcre alternatives.
+
+80) Change FEATURE_EXTENDED_HOST_PATTERNS to support both
+    extended and vanilla host patterns at the same time.
