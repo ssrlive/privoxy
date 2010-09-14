@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.39 2010/09/14 07:13:10 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.40 2010/09/14 07:14:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -108,6 +108,7 @@ extern char *get_last_url(char *subject, const char *redirect_mode);
 
 extern pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const struct re_filterfile_spec *b);
 
+extern int content_requires_filtering(struct client_state *csp);
 extern int content_filters_enabled(const struct current_action_spec *action);
 extern int filters_available(const struct client_state *csp);
 

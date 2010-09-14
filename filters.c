@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.131 2010/09/14 07:13:10 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.132 2010/09/14 07:14:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2305,6 +2305,81 @@ struct http_response *direct_response(struct client_state *csp)
       }
    }
    return NULL;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  content_requires_filtering
+ *
+ * Description :  Checks whether there are any content filters
+ *                enabled for the current request and if they
+ *                can actually be applied..
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise
+ *
+ *********************************************************************/
+int content_requires_filtering(struct client_state *csp)
+{
+   if ((csp->content_type & CT_TABOO)
+      && !(csp->action->flags & ACTION_FORCE_TEXT_MODE))
+   {
+      return FALSE;
+   }
+
+   /*
+    * Are we enabling text mode by force?
+    */
+   if (csp->action->flags & ACTION_FORCE_TEXT_MODE)
+   {
+      /*
+       * Do we really have to?
+       */
+      if (csp->content_type & CT_TEXT)
+      {
+         log_error(LOG_LEVEL_HEADER, "Text mode is already enabled.");
+      }
+      else
+      {
+         csp->content_type |= CT_TEXT;
+         log_error(LOG_LEVEL_HEADER, "Text mode enabled by force. Take cover!");
+      }
+   }
+
+   if (!(csp->content_type & CT_DECLARED))
+   {
+      /*
+       * The server didn't bother to declare a MIME-Type.
+       * Assume it's text that can be filtered.
+       *
+       * This also regulary happens with 304 responses,
+       * therefore logging anything here would cause
+       * too much noise.
+       */
+      csp->content_type |= CT_TEXT;
+   }
+
+   /*
+    * Choose the applying filter function based on
+    * the content type and action settings.
+    */
+   if ((csp->content_type & CT_TEXT) &&
+       (csp->rlist != NULL) &&
+       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
+   {
+      return TRUE;
+   }
+   else if ((csp->content_type & CT_GIF)  &&
+            (csp->action->flags & ACTION_DEANIMATE))
+   {
+      return TRUE;
+   }
+
+   return FALSE;
+
 }
 
 
