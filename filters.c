@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.133 2010/09/14 07:16:07 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.134 2010/09/14 07:17:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -49,11 +49,6 @@ const char filters_rcs[] = "$Id: filters.c,v 1.133 2010/09/14 07:16:07 fabiankei
 #include <ctype.h>
 #include <string.h>
 #include <assert.h>
-
-#ifdef HAVE_RFC2553
-#include <netdb.h>
-#include <sys/socket.h>
-#endif /* def HAVE_RFC2553 */
 
 #ifndef _WIN32
 #ifndef __OS2__

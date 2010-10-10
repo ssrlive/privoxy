@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.158 2010/07/21 14:35:09 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.159 2010/09/03 17:38:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -46,9 +46,17 @@
 /* Needed for pcre choice */
 #include "config.h"
 
-#ifdef HAVE_RFC2553
 /* Need for struct sockaddr_storage */
-#include <sys/socket.h>
+#ifdef HAVE_RFC2553
+#  ifndef _WIN32
+#    include <netdb.h>
+#    include <sys/socket.h>
+#  else
+#    include <stdint.h>
+#    include <winsock2.h>
+#    include <ws2tcpip.h>
+     typedef unsigned short in_port_t;
+#  endif
 #endif
 
 
