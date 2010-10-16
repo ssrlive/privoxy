@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.92 2010/08/28 13:22:00 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.93 2010/08/28 13:22:19 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1979,7 +1979,9 @@ sub print_stats () {
     print "New outgoing connections: " . $new_connections . " (" .
         get_percentage($stats{requests}, $new_connections) . ")\n";
     print "Reused connections: " . $stats{'reused-connections'} . " (" .
-        get_percentage($stats{requests}, $stats{'reused-connections'}) . ")\n";
+        get_percentage($stats{requests}, $stats{'reused-connections'}) .
+        "; server offers accepted: " .
+        get_percentage($stats{'server-keep-alive'}, $stats{'reused-connections'}) . ")\n";
     print "Empty responses: " . $stats{'empty-responses'} . " (" .
         get_percentage($stats{requests}, $stats{'empty-responses'}) . ")\n";
     print "Empty responses on new connections: "
