@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.93 2010/08/28 13:22:19 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.94 2010/10/16 13:32:32 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1861,6 +1861,11 @@ sub gather_loglevel_crunch_stats ($$) {
 
     $stats{requests}++;
     $stats{crunches}++;
+
+    if ($c =~ m/^Redirected:/) {
+        # Redirected: http://www.example.org/http://p.p/
+        $stats{'fast-redirections'}++;
+    }
 }
 
 
@@ -1972,6 +1977,8 @@ sub print_stats () {
     print "Client requests total: " . $stats{requests} . "\n";
     print "Crunches: " . $stats{crunches} . " (" .
         get_percentage($stats{requests}, $stats{crunches}) . ")\n";
+    print "Fast redirections: " . $stats{'fast-redirections'} . " (" .
+        get_percentage($stats{requests}, $stats{'fast-redirections'}) . ")\n";
     print "Outgoing requests: " . $outgoing_requests . " (" .
         get_percentage($stats{requests}, $outgoing_requests) . ")\n";
     print "Server keep-alive offers: " . $stats{'server-keep-alive'} . " (" .
