@@ -1,6 +1,151 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.17 Stable ***
+
+- In chat(), add another last-chunk-check right after parsing the server headers.
+  Should fix #3028326 reported by "Karsten".
+- In server_response_is_complete(), expect no body if the status code is 204.
+  Should fix #3022042 and #3025553, reported by a user with no visible name.
+  Most likely also fixes a bunch of other AJAX-related problem
+  reports we closed in the past due to insufficient information.
+- Added LOG_LEVEL_WRITING to log the not-yet-parsed data received.
+  This should make debugging various parsing issues a lot easier.
+- Enable the IPv6 code on Windows versions that support it.
+  Patch submitted by oCameLo in #2942729.
+  Time will tell if this causes problems for earlier Windows
+  versions, but if it does, it should be easy enough to fix.
+- Feature Requests 3040263 :: Add "user.filter" to "Edit" menu
+  - add an "Edit User Filters" menu item to the Privoxy Windows systray icon and
+  change the "Edit Filters" menu item to "Edit Default Filters"
+- Add configure option --enable-large-file-support. It sets a few defines
+  that are required by platforms like GNU/Linux to support files larger
+  then 2GB.
+- In log_error(), log as much of %N "strings" as the buffer allows.
+  Previously we'd stop at the first nul byte which is pretty useless.
+  While at it, replace non-printable characters in %N "strings" with
+  their hex value so the result can't span multiple lines and \r's
+  don't cause a mess.
+- create a log record when reading an action, filter or trust file.
+- Fixed incorrect regression test markup which caused a test in
+  3.0.16 to fail while Privoxy itself was working correctly.
+  While Privoxy accepts hide-referer, too, the action name is actually
+  hide-referrer which is also the name used one the final results page,
+  where the test expected the alias.
+
+- CGI interface improvements:
+    - In finish_http_response(), continue to add the 'Connection: close'
+      header if the client connection will not be kept alive.
+      Anonymously pointed out in #2987454.
+    - Apostrophes in block messages no longer cause parse errors
+      when the blocked page is viewed with JavaScript enabled.
+      Reported by dg1727 in #3062296.
+    - Fix a bunch of anchors that used underscores instead of dashes.
+    - Allow to keep the client connection alive after crunching the previous request.
+      Already opened server connections can be kept alive, too.
+    - In cgi_show_url_info(), don't forget to prefix URLs that only contain http:// or https:// in the path.
+      Fixes #2975765 reported by Adam Piggott.
+    - Show the 404 CGI page if cgi_send_user_manual() is called while
+      local user manual delivery is disabled.
+
+- Action file improvements:
+    - Enable user.filter by default. Suggested by David White in #3001830.
+    - Block .sitestat.com/. Reported by johnd16 in #3002725.
+    - Block .atemda.com/. Reported by johnd16 in #3002723.
+    - Block js.adlink.net/. Reported by johnd16 in #3002720.
+    - Block .analytics.yahoo.com/. Reported by johnd16 in #3002713.
+    - fix for ijbswa-Support Requests-3001830: Activate user.filter by default
+    - Block sb.scorecardresearch.com, too.
+      Reported by dg1727 in #2992652.
+    - Fix problems noticed on Yahoo mail and news pages.
+    - Remove the too broad yahoo section, only keeping the
+      fast-redirects exception as discussed on ijbswa-devel@.
+    - Actionsfile feedback item #2974204 2010-03-21
+      don't block adesklets.sourceforge.net
+    - Actionsfile feedback item #2975895 2010-03-24
+      block chartbeat ping tracking
+    - Tag CSS and image requests with cautious and medium settings, too.
+    - Don't handle view.atdmt.com as image. It's used for click-throughs
+      so users should be able to "go there anyway".
+      Reported by Adam Piggott in #2975927.
+    - Also let refresh-tags filter invalid refresh tags where the 'url='
+      part is missing. Anonymously reported in #2986382.
+      While at it, update the description to mention the fact that only
+      refresh tags with refresh times above 9 seconds are covered.
+    - javascript needs to be blocked with +handle-as-empty-document to
+      work around Firefox bug 492459.  So move .js blockers from
+      +block{Might be a web-bug.} -handle-as-empty-document
+      to
+      +block{Might be a web-bug.} +handle-as-empty-document
+    - ijbswa-Feature Requests-3006719 - Block 160x578 Banners
+      I'm not sure about blocking 160x578 images, but
+      pagead2.googlesyndication.com/pagead/imagad?xxx
+      could use blocking.
+    - Block another omniture tracking domain
+    - Added a range-requests tagger.
+
+- Documentation improvements:
+    - Explicitly mention how to match any URL.
+    - Consistently recommending socks5 in the Tor FAQ entry and mention
+      its advantage compared to socks4a. Reported by David in #2960129.
+    - Slightly improve the explanation of why filtering may appear
+      slower than it is.
+
+- Privoxy-Log-Parser improvements:
+     - Also gather statistics for blocked requests.
+     - Also gather statistics for fast redirections.
+     - In print_stats(), also provide the percentage of keep-alive offers the client accepted.
+     - Add a --url-statistics-threshold option.
+     - Also gather statistics for ressources, methods, and HTTP versions
+       used by the client.
+     - Fix a bug in handle_loglevel_header() where a 'scan: ' got lost.
+     - Add a --shorten-thread-ids option to replace the thread id with a decimal number.
+     - Accept and ignore: Looks like we got the last chunk together with the server headers. We better stop reading.
+     - Accept and ignore: Continue hack in da house.
+     - Accept and higlight: Rejecting connection from 10.0.0.2.
+       Maximum number of connections reached.
+     - Accept and highlight actions and filter filte loading:
+       Loading actions file: /usr/local/etc/privoxy/default.action
+       Loading filter file: /usr/local/etc/privoxy/default.filter
+
+- GNUmakefile improvements:
+    - Use $(SSH) instead of ssh, so one only needs to specify a username once.
+    - Removed references to the action feedback thingy that hasn't been
+      working for years.
+    - Consistently use shell.sourceforge.net instead of shell.sf.net so
+      one doesn't need to check server fingerprints twice.
+    - Removed GNUisms in the webserver and webactions targets so they
+      work with standard tar.
+
+- Code cleanups:
+    - Remove the next member from the client_state struct.
+      Only the main thread needs access to all client
+      states so give it its own struct.
+    - Garbage-collect request_contains_null_bytes().
+    - Ditch redundant code in unload_configfile().
+    - Ditch LogGetURLUnderCursor() which doesn't seem to be used anywhere.
+      Spotted by cppcheck.
+    - In write_socket(), remove the write-only variable write_len in an ifdef __OS2__ block.
+      Spotted by cppcheck.
+    - In resolve_hostname_to_ip(), limit the scope of the variable 'dns_retries'.
+    - In connect_to(), don't declare the variable 'flags' on OS/2 where it isn't used.
+      Spotted by cppcheck.
+    - In xtoi(), limit the scope of the variable d2.
+    - In main(), limit the scope of the variable pid.
+    - In client_if_modified_since(), limit the scope of the variables hours, minutes and seconds.
+    - In server_last_modified(), limit the scope of the variables days, hours, minutes and seconds.
+    - In add_to_iob(), limit the scope of the variable 'want' and turn an interestingly looking for loop into a boring while loop.
+    - Code cleanup in preparation for external filters.
+    - In listen_loop(), mention the socket on which we accepted the
+      connection, not just the source IP address.
+    - In write_socket(), also log the socket we're writing to.
+    - In log_error(), assert that escaped characters get logged completely or not at all.
+    - In log_error(), assert that ival and sval have reasonable values. There's no
+      reason not to abort() if they don't.
+    - Remove an incorrect cgi_error_unknown() call in a cannnot-happen-situation in send_crunch_response().
+    - Clean up white-space in http_response definition and move the crunch_reason to the beginning.
+    - Turn http_response.reason into an enum and rename it to http_response.crunch_reason.
+
 *** Version 3.0.16 Stable ***
 
 - Added the config file option handle-as-empty-doc-returns-ok to
