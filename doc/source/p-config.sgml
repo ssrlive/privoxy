@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.62 2010/02/15 15:07:56 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.63 2010/05/23 12:11:18 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.62 2010/02/15 15:07:56 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.63 2010/05/23 12:11:18 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -1019,6 +1019,7 @@ actionsfile
   debug  2048 # CGI user interface
   debug  4096 # Startup banner and warnings.
   debug  8192 # Non-fatal errors
+  debug 32768 # log all data read from the network into the logfile
 </programlisting>
    </para>
    <para>
