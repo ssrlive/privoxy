@@ -15,8 +15,8 @@ ChangeLog for Privoxy
   Patch submitted by oCameLo in #2942729.
   Time will tell if this causes problems for earlier Windows
   versions, but if it does, it should be easy enough to fix.
-- Feature Requests 3040263 :: Add "user.filter" to "Edit" menu
-  - add an "Edit User Filters" menu item to the Privoxy Windows systray icon and
+- Feature Requests 3040263 :: Add "user.filter" to "Edit" menu - add an
+  "Edit User Filters" menu item to the Privoxy Windows systray icon and
   change the "Edit Filters" menu item to "Edit Default Filters"
 - Add configure option --enable-large-file-support. It sets a few defines
   that are required by platforms like GNU/Linux to support files larger
