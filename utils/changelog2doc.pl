@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: changelog2doc.pl,v 1.4 2010/10/31 13:26:07 fabiankeil Exp $
+# $Id: changelog2doc.pl,v 1.5 2010/10/31 13:27:03 fabiankeil Exp $
 # $Source: /cvsroot/ijbswa/current/utils/changelog2doc.pl,v $
 
 # Filter to parse the ChangeLog and translate the changes for
@@ -25,13 +25,25 @@ sub read_entries() {
         next unless $section_reached;
         next if /^\s*$/;
 
-        if (/^-/) {
+        if (/^(\s*)-/) {
+            my $indentation = length($1);
+            if ($i > 1 and $entries[$i]{indentation} > $indentation) {
+                $entries[$i]{last_list_item} = 1;
+            }
             $i++; 
             $entries[$i]{description} = '';
+            $entries[$i]{indentation} = $indentation;
         }
-        s@^-?\s*@@;
+        if (/:\s*$/) {
+            $entries[$i]{list_header} = 1;
+        }
+
+        s@^\s*-?\s*@@;
 
         $entries[$i]{description} .= $_;
+    }
+    if ($entries[$i]{indentation} != 0) {
+        $entries[$i]{last_list_item} = 1;
     }
     print "Parsed " . @entries . " entries.\n";
 }
@@ -39,15 +51,33 @@ sub read_entries() {
 sub create_listitem_markup($) {
     my $entry = shift;
     my $description = $entry->{description};
+    my $markup = '';
+    my $default_lws = '  ';
+    my $lws = $default_lws x ($entry->{indentation} ? 2 : 1);
 
     chomp $description;
 
-    $description =~ s@\n@\n    @g;
-    return "  <listitem>\n" .
-           "   <para>\n" .
-           "    " . $description . "\n" .
-           "   </para>\n" .
-           "  </listitem>\n";
+    $description =~ s@\n@\n  ${lws}@g;
+
+    $markup .= $lws . "<listitem>\n" .
+               $lws . " <para>\n";
+
+    $markup .= $lws . "  " . $description . "\n";
+
+    if (defined $entry->{list_header}) {
+        $markup .= $lws . "  <itemizedlist>\n";
+
+    } else {
+        if (defined $entry->{last_list_item}) {
+            $markup .= $lws . " </para>\n";
+            $markup .= $lws . "</itemizedlist>\n";
+            $lws = $default_lws;
+        }
+        $markup .= $lws . " </para>\n" .
+                   $lws . "</listitem>\n";
+    }
+
+    return $markup;
 }
 
 sub wrap_in_para_itemlist_markup($) {
