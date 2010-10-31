@@ -92,21 +92,21 @@ ChangeLog for Privoxy
       slower than it is.
 
 - Privoxy-Log-Parser improvements:
-     - Also gather statistics for blocked requests.
-     - Also gather statistics for fast redirections.
-     - In print_stats(), also provide the percentage of keep-alive offers the client accepted.
-     - Add a --url-statistics-threshold option.
-     - Also gather statistics for ressources, methods, and HTTP versions
-       used by the client.
-     - Fix a bug in handle_loglevel_header() where a 'scan: ' got lost.
-     - Add a --shorten-thread-ids option to replace the thread id with a decimal number.
-     - Accept and ignore: Looks like we got the last chunk together with the server headers. We better stop reading.
-     - Accept and ignore: Continue hack in da house.
-     - Accept and higlight: Rejecting connection from 10.0.0.2.
-       Maximum number of connections reached.
-     - Accept and highlight actions and filter filte loading:
-       Loading actions file: /usr/local/etc/privoxy/default.action
-       Loading filter file: /usr/local/etc/privoxy/default.filter
+    - Also gather statistics for blocked requests.
+    - Also gather statistics for fast redirections.
+    - In print_stats(), also provide the percentage of keep-alive offers the client accepted.
+    - Add a --url-statistics-threshold option.
+    - Also gather statistics for ressources, methods, and HTTP versions
+      used by the client.
+    - Fix a bug in handle_loglevel_header() where a 'scan: ' got lost.
+    - Add a --shorten-thread-ids option to replace the thread id with a decimal number.
+    - Accept and ignore: Looks like we got the last chunk together with the server headers. We better stop reading.
+    - Accept and ignore: Continue hack in da house.
+    - Accept and higlight: Rejecting connection from 10.0.0.2.
+      Maximum number of connections reached.
+    - Accept and highlight actions and filter filte loading:
+      Loading actions file: /usr/local/etc/privoxy/default.action
+      Loading filter file: /usr/local/etc/privoxy/default.filter
 
 - GNUmakefile improvements:
     - Use $(SSH) instead of ssh, so one only needs to specify a username once.
