@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: changelog2doc.pl,v 1.3 2010/10/31 13:25:47 fabiankeil Exp $
+# $Id: changelog2doc.pl,v 1.4 2010/10/31 13:26:07 fabiankeil Exp $
 # $Source: /cvsroot/ijbswa/current/utils/changelog2doc.pl,v $
 
 # Filter to parse the ChangeLog and translate the changes for
@@ -50,20 +50,24 @@ sub create_listitem_markup($) {
            "  </listitem>\n";
 }
 
+sub wrap_in_para_itemlist_markup($) {
+    my $content = shift;
+    my $markup = "<para>\n" .
+                 " <itemizedlist>\n" .
+                 "  $content" .
+                 " </itemizedlist>\n" .
+                 "</para>\n";
+    return $markup;
+}
+
 sub generate_markup() {
     my $markup = '';
-
-    $markup .= "<para>\n" .
-               " <itemizedlist>\n";
 
     foreach my $entry (@entries) {
         $markup .= create_listitem_markup(\%{$entry});
     }
 
-    $markup .= " </itemizedlist>\n" .
-               "</para>\n";
-
-    print $markup;
+    print wrap_in_para_itemlist_markup($markup);
 }
 
 sub main () {
