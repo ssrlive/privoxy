@@ -81,7 +81,7 @@ ChangeLog for Privoxy
 
 - Documentation improvements:
   - Explicitly mention how to match all URLs.
-  - Consistently recommending socks5 in the Tor FAQ entry and mention
+  - Consistently recommend socks5 in the Tor FAQ entry and mention
     its advantage compared to socks4a. Reported by David in #2960129.
   - Slightly improve the explanation of why filtering may appear
     slower than it is.
