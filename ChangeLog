@@ -56,7 +56,6 @@ ChangeLog for Privoxy
   - Block .atemda.com/. Reported by johnd16 in #3002723.
   - Block js.adlink.net/. Reported by johnd16 in #3002720.
   - Block .analytics.yahoo.com/. Reported by johnd16 in #3002713.
-  - fix for ijbswa-Support Requests-3001830: Activate user.filter by default
   - Block sb.scorecardresearch.com, too.
     Reported by dg1727 in #2992652.
   - Fix problems noticed on Yahoo mail and news pages.
