@@ -3,30 +3,32 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Version 3.0.17 Stable ***
 
-- In chat(), add another last-chunk-check right after parsing the server headers.
-  Should fix #3028326 reported by "Karsten".
-- In server_response_is_complete(), expect no body if the status code is 204.
-  Should fix #3022042 and #3025553, reported by a user with no visible name.
-  Most likely also fixes a bunch of other AJAX-related problem
-  reports we closed in the past due to insufficient information.
-- Added LOG_LEVEL_WRITING to log the not-yet-parsed data received.
-  This should make debugging various parsing issues a lot easier.
-- Enable the IPv6 code on Windows versions that support it.
+- Fixed last-chunk-detection for responses where the content was small
+  enough to be read with the body, causing Privoxy to wait for the
+  end of the content until the server closed the connection.
+  Reported by "Karsten" in #3028326.
+- Responses with status code 204 weren't properly detected as body-less
+  like RFC2616 mandates. Like the previous bug, this caused Privoxy
+  to wait for the end of the content until the server closed the connection.
+  Fixes #3022042 and #3025553, reported by a user with no visible name.
+  Most likely also fixes a bunch of other AJAX-related problem reports
+  that got closed in the past due to insufficient information and lack
+  of feedback.
+- Added LOG_LEVEL_RECEIVED to log the not-yet-parsed data read from the
+  network. This should make debugging various parsing issues a lot easier.
+- The IPv6 code is enabled by default on Windows versions that support it.
   Patch submitted by oCameLo in #2942729.
-  Time will tell if this causes problems for earlier Windows
-  versions, but if it does, it should be easy enough to fix.
-- Feature Requests 3040263 :: Add "user.filter" to "Edit" menu - add an
-  "Edit User Filters" menu item to the Privoxy Windows systray icon and
-  change the "Edit Filters" menu item to "Edit Default Filters"
-- Add configure option --enable-large-file-support. It sets a few defines
-  that are required by platforms like GNU/Linux to support files larger
-  then 2GB.
-- In log_error(), log as much of %N "strings" as the buffer allows.
-  Previously we'd stop at the first nul byte which is pretty useless.
-  While at it, replace non-printable characters in %N "strings" with
-  their hex value so the result can't span multiple lines and \r's
-  don't cause a mess.
-- create a log record when reading an action, filter or trust file.
+- In mingw32 versions, the user.filter file is reachable through the
+  GUI, just like default.filter is. Feature request 3040263.
+- Added the configure option --enable-large-file-support to set a few
+  defines that are required by platforms like GNU/Linux to support files
+  larger then 2GB. Mainly interesting for users without proper logfile
+  management.
+- Logging with "debug 16" no longer stops at the first nul byte which is
+  pretty useless. Non-printable characters are replaced with their hex value
+  so the result can't span multiple lines making parsing them harder then
+  necessary.
+- Privoxy logs when reading an action, filter or trust file.
 - Fixed incorrect regression test markup which caused a test in
   3.0.16 to fail while Privoxy itself was working correctly.
   While Privoxy accepts hide-referer, too, the action name is actually
