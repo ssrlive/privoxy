@@ -56,21 +56,18 @@ ChangeLog for Privoxy
   - Block .atemda.com/. Reported by johnd16 in #3002723.
   - Block js.adlink.net/. Reported by johnd16 in #3002720.
   - Block .analytics.yahoo.com/. Reported by johnd16 in #3002713.
-  - Block sb.scorecardresearch.com, too.
-    Reported by dg1727 in #2992652.
+  - Block sb.scorecardresearch.com, too. Reported by dg1727 in #2992652.
   - Fix problems noticed on Yahoo mail and news pages.
   - Remove the too broad yahoo section, only keeping the
     fast-redirects exception as discussed on ijbswa-devel@.
-  - Actionsfile feedback item #2974204 2010-03-21
-    don't block adesklets.sourceforge.net
-  - Actionsfile feedback item #2975895 2010-03-24
-    block chartbeat ping tracking
+  - Don't block adesklets.sourceforge.net. Reported in #2974204.
+  - Block chartbeat ping tracking. Reported in #2975895.
   - Tag CSS and image requests with cautious and medium settings, too.
   - Don't handle view.atdmt.com as image. It's used for click-throughs
     so users should be able to "go there anyway".
     Reported by Adam Piggott in #2975927.
-  - Also let refresh-tags filter invalid refresh tags where the 'url='
-    part is missing. Anonymously reported in #2986382.
+  - Also let the refresh-tags filter remove invalid refresh tags where
+    the 'url=' part is missing. Anonymously reported in #2986382.
     While at it, update the description to mention the fact that only
     refresh tags with refresh times above 9 seconds are covered.
   - javascript needs to be blocked with +handle-as-empty-document to
@@ -78,10 +75,7 @@ ChangeLog for Privoxy
     +block{Might be a web-bug.} -handle-as-empty-document
     to
     +block{Might be a web-bug.} +handle-as-empty-document
-  - ijbswa-Feature Requests-3006719 - Block 160x578 Banners
-    I'm not sure about blocking 160x578 images, but
-    pagead2.googlesyndication.com/pagead/imagad?xxx
-    could use blocking.
+  - ijbswa-Feature Requests-3006719 - Block 160x578 Banners.
   - Block another omniture tracking domain
   - Added a range-requests tagger.
 
