@@ -87,15 +87,16 @@ ChangeLog for Privoxy
     slower than it is.
 
 - Privoxy-Log-Parser improvements:
-  - Also gather statistics for blocked requests.
-  - Also gather statistics for fast redirections.
-  - In print_stats(), also provide the percentage of keep-alive offers the client accepted.
+  - Also gather statistics for blocked and redirected requests.
+  - Provide the percentage of keep-alive offers the client accepted.
   - Add a --url-statistics-threshold option.
   - Also gather statistics for ressources, methods, and HTTP versions
     used by the client.
   - Fix a bug in handle_loglevel_header() where a 'scan: ' got lost.
-  - Add a --shorten-thread-ids option to replace the thread id with a decimal number.
-  - Accept and ignore: Looks like we got the last chunk together with the server headers. We better stop reading.
+  - Add a --shorten-thread-ids option to replace the thread id with
+    a decimal number.
+  - Accept and ignore: Looks like we got the last chunk together
+    with the server headers. We better stop reading.
   - Accept and ignore: Continue hack in da house.
   - Accept and higlight: Rejecting connection from 10.0.0.2.
     Maximum number of connections reached.
@@ -104,33 +105,32 @@ ChangeLog for Privoxy
     Loading filter file: /usr/local/etc/privoxy/default.filter
 
 - Code cleanups:
-  - Remove the next member from the client_state struct.
-    Only the main thread needs access to all client
-    states so give it its own struct.
+  - Remove the next member from the client_state struct. Only the main
+    thread needs access to all client states so give it its own struct.
   - Garbage-collect request_contains_null_bytes().
   - Ditch redundant code in unload_configfile().
   - Ditch LogGetURLUnderCursor() which doesn't seem to be used anywhere.
-    Spotted by cppcheck.
-  - In write_socket(), remove the write-only variable write_len in an ifdef __OS2__ block.
-    Spotted by cppcheck.
-  - In resolve_hostname_to_ip(), limit the scope of the variable 'dns_retries'.
-  - In connect_to(), don't declare the variable 'flags' on OS/2 where it isn't used.
-    Spotted by cppcheck.
-  - In xtoi(), limit the scope of the variable d2.
-  - In main(), limit the scope of the variable pid.
-  - In client_if_modified_since(), limit the scope of the variables hours, minutes and seconds.
-  - In server_last_modified(), limit the scope of the variables days, hours, minutes and seconds.
-  - In add_to_iob(), limit the scope of the variable 'want' and turn an interestingly looking for loop into a boring while loop.
+  - In write_socket(), remove the write-only variable write_len in
+    an ifdef __OS2__ block. Spotted by cppcheck.
+  - In connect_to(), don't declare the variable 'flags' on OS/2 where
+    it isn't used. Spotted by cppcheck.
+  - Limit the scope of various variables. Spotted by cppcheck.
+  - In add_to_iob(), turn an interestingly looking for loop into a
+    boring while loop.
   - Code cleanup in preparation for external filters.
   - In listen_loop(), mention the socket on which we accepted the
     connection, not just the source IP address.
   - In write_socket(), also log the socket we're writing to.
-  - In log_error(), assert that escaped characters get logged completely or not at all.
-  - In log_error(), assert that ival and sval have reasonable values. There's no
-    reason not to abort() if they don't.
-  - Remove an incorrect cgi_error_unknown() call in a cannnot-happen-situation in send_crunch_response().
-  - Clean up white-space in http_response definition and move the crunch_reason to the beginning.
-  - Turn http_response.reason into an enum and rename it to http_response.crunch_reason.
+  - In log_error(), assert that escaped characters get logged
+    completely or not at all.
+  - In log_error(), assert that ival and sval have reasonable values.
+    There's no reason not to abort() if they don't.
+  - Remove an incorrect cgi_error_unknown() call in a
+    cannnot-happen-situation in send_crunch_response().
+  - Clean up white-space in http_response definition and
+    move the crunch_reason to the beginning.
+  - Turn http_response.reason into an enum and rename it
+    to http_response.crunch_reason.
 
 - GNUmakefile improvements:
   - Use $(SSH) instead of ssh, so one only needs to specify a username once.
