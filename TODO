@@ -1,4 +1,4 @@
-$Id: TODO,v 1.23 2010/11/06 11:57:31 fabiankeil Exp $
+$Id: TODO,v 1.24 2010/11/06 11:57:46 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -198,3 +198,5 @@ Some Privoxy related task, not ordered in any way.
 
 80) Change FEATURE_EXTENDED_HOST_PATTERNS to support both
     extended and vanilla host patterns at the same time.
+
+81) Merge Fabian's unlimited-config-lines branch.
