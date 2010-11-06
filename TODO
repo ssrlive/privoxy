@@ -1,4 +1,4 @@
-$Id: TODO,v 1.19 2010/04/12 16:43:21 fabiankeil Exp $
+$Id: TODO,v 1.20 2010/09/14 07:12:20 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -44,7 +44,8 @@ Some Privoxy related task, not ordered in any way.
 13) Use zlib to compress content before sending it to
     the client. Measure if it makes a difference.
 
-14) Log and filter POST parameters.
+14) Log and filter POST parameters. They can now be logged with
+    the noisy debug 32768, but are still not filtered.
 
 15) If trusted CGI pages are requested without trusted referrer,
     set the status code to 403 instead of 200.
