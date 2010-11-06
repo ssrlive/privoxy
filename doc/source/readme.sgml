@@ -4,7 +4,7 @@
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity buildsource SYSTEM "buildsource.sgml">
-<!entity p-version "3.0.16">
+<!entity p-version "3.0.17">
 <!entity p-status "stable">
 <!entity % p-not-stable "IGNORE">
 <!entity % p-stable "INCLUDE">
@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.37 2010/02/19 16:50:05 fabiankeil Exp $
+ $Id: readme.sgml,v 2.38 2010/11/06 10:47:12 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -239,7 +239,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.37 2010/02/19 16:50:05 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.38 2010/11/06 10:47:12 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>

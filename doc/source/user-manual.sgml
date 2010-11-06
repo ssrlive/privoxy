@@ -11,7 +11,7 @@
 <!entity license SYSTEM "license.sgml">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
-<!entity p-version "3.0.16">
+<!entity p-version "3.0.17">
 <!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "IGNORE">
@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.124 2010/05/01 18:21:30 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.125 2010/09/03 17:39:37 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.124 2010/05/01 18:21:30 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.125 2010/09/03 17:39:37 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8834,6 +8834,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.125  2010/09/03 17:39:37  fabiankeil
+ Slightly improve the explanation of why filtering may appear slower than it is.
+
  Revision 2.124  2010/05/01 18:21:30  fabiankeil
  Explicitly mention how to match any URL.
 
