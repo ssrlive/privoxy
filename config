@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.17
 #
-#  $Id: p-config.sgml,v 2.65 2010/10/30 16:09:31 fabiankeil Exp $
+#  $Id: config,v 1.91 2010/11/06 12:56:15 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
 #
@@ -560,7 +560,7 @@ logfile logfile
 #        debug         2 # show each connection status
 #        debug         4 # show I/O status
 #        debug         8 # show header parsing
-#        debug        16 # log all data written to the network into the logfile
+#        debug        16 # log all data written to the network
 #        debug        32 # debug force feature
 #        debug        64 # debug regular expression filters
 #        debug       128 # debug redirects
