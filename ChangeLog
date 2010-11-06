@@ -78,6 +78,10 @@ ChangeLog for Privoxy
   - ijbswa-Feature Requests-3006719 - Block 160x578 Banners.
   - Block another omniture tracking domain
   - Added a range-requests tagger.
+  - Added two sections to get Flickr's Ajax interface working with
+    default pre-settings. If you change the configuration to block
+    cookies by default, you'll need additional exceptions.
+    Reported by Mathias Homann in #3101419 and by Patrick on ijbswa-users@
 
 - Documentation improvements:
   - Explicitly mention how to match all URLs.

@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.225 2010/05/30 12:17:54 ler762 Exp $
+#  $Id: default.action.master,v 1.226 2010/06/18 14:49:33 ler762 Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2315,6 +2315,24 @@ config.privoxy.org/
 # Redirected URL = http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 # Redirect Destination = http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 .yahoo./.*http://login.yahoo.com/config/login.*http://
+
+#MASTER# REMARKS: The next two sections are to get flickr's Ajax interface working
+#MASTER# REMARKS: with default pre-settings. For more aggressive defaults they additionally
+#MASTER# REMARKS: need -crunch-incoming-cookies and -crunch-outgoing-cookies.
+#MASTER# REMARKS: They work with +session-cookies-only, though.
+{-block -filter}
+#MASTER# PROBLEM-URL: http://www.flickr.com/
+# Sticky Actions = -block -filter
+# URL = http://l.yimg.com/g/combo/1?event-custom/event-custom-min.js&event/event-min.js&j/.H-.K.A.vNKEa&j/.CP-.U-.DE.A.vKEJz&j/.J_.BR_.CA.A.vKYkg&j/.J_.DB.A.vPpBT&j/popup-login.A.vR53Z&dump/dump-min.js&datatype/datatype-xml-min.js&substitute/substitute-min.js&json/json-min.js&queue-promote/queue-promote-min.js&io/io-min.js&j/.J_.DS.A.vQa28&j/.FW-.FX-.GH.A.vP3XB&j/grease.A.vRktP&j/.CC.A.vNiA6&j/.C-.BL.A.vPPj2&j/.CE-.K.A.vNy32&attribute/attribute-base-min.js&base/base-min.js&anim/anim-min.js&cookie/cookie-min.js&j/.B-.C-.F.A.vQ7SZ&j/urls.A.vQtXp&j/.B-.BY.A.vQCXP&j/.H-.BY.A.vQXXx&j/.DS-value-conversions.A.vQpRt&j/.G-.BD.A.vNHSH&event/event-synthetic-min.js&j/.G-.BO.A.vNwR4&j/.CV-.CH.A.vPFSZ&j/.X-.W-.C-.F.A.vKPQa&j/.X-.W-.D.A.vQXXx&j/.Q-.BX-.K.A.vR1kt&j/.DL.A.vLPjD&j/.CF.A.vNC24&j/.CX-.CY.A.vP8ND&event-simulate/event-simulate-min.js&node/node-event-simulate-min.js&j/.B-.T-.CI-.C-.F.A.vPJPF&j/.CM/.BA_2.5.1-.D.A.vPzui&j/bo-.S-.C-.F.A.vNwWe&j/bo-.S-.D.A.vR6Hx&j/.BZ-.D.A.vNstB&j/.B-.L-.C-.F.A.vNxPX&j/.B-.L-.BH.A.vMdVB&j/.CN-.DD.A.vLjJ2&j/.B-.O-.C-.F.A.vPpcK&j/.BM.A.vKPmz&j/.B-.O.A.vQyHg&j/.B-.H-.BB-.C-.F.A.vQvrB&j/.CW-.CU.A.vQ7Rg&j/.Y-.C-.F.A.vNqGa&j/.Y.A.vLKiT&j/.B-.M-.C-.F.A.vQxDc&j/.U-.CG.A.vQ5Tt&j/.B-.M.A.vQXXx&j/.B-.Q-.BQ.A.vQvTt&j/.B-.N-.C-.F.A.vQaRp&j/.CL.A.vN4N6&j/.B-.CL-.BW.A.vPwkx&j/.DR-.DG.A.vMLJr&j/.B-.BE-.C-.F.A.vPHP4&j/.B-.BE-.D.A.vQLQH&j/.BV.A.vm3Uz&j/.Z-.DK-.D.A.vLQEe&j/.Z-.DJ-.BJ.A.vLQEe&j/.B-.I-.C-.F.A.vPKTK&stylesheet/stylesheet-min.js&j/.B-.I.A.vQvDF&j/.CM-.DO.A.vPboD&j/.B-.D.A.vRbv8&j/.B-.H-.BB.A.vQuhn&j/.B-.N.A.vR6Cn&j/.B-.L-.CZ.A.vQmzP&j/.B-.T-.CI.A.vQXXx&j/.B-.I-.CQ-.BK-.C-.F.A.vNwZF&j/.B-.I-.CQ-.BK.A.vLWQR&j/.B-.R-.C-.F.A.vPfwi&j/.B-.R.A.vRhND&j/.DN-.BB-.D-.C-.F.A.vQXZg&j/.DN-.BB-.D.A.vRcXB&j/.BF_.D-.C-.F.A.vPGYM&j/.BF_.D.A.vQxJn&plugin/plugin-min.js&cache/cache-min.js&j/.CB-.C-.F.A.vNwWe&j/.CB-.D.A.vQS6T
+.yimg.com/g/combo/1\?event-custom/
+
+{-block -filter{content-cookies}}
+#MASTER# PROBLEM-URL: http://www.flickr.com/
+{-filter{content-cookies}}
+# Sticky Actions = -block
+# URL = http://www.flickr.com/
+.flickr.com/
+
 
 #----------------------------------------------------------------------------
 # Sections that modify the action settings based on tags.
