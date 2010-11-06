@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.36 2010/02/19 16:46:03 fabiankeil Exp $
+ $Id: readme.sgml,v 2.37 2010/02/19 16:50:05 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -128,14 +128,16 @@
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect1 id="importantchanges" ><title>IMPORTANT CHANGES</title>
 <para>
- February 2010, Privoxy 3.0.16 stable is released.
+ November 2010, Privoxy 3.0.17 stable is released.
 </para>
 <para>
- This is the first stable release since 3.0.12. It mainly contains
- bugfixes for the previous betas which introduced IPv6 support,
- improved keep-alive support and a bunch of minor improvements.
- See the "ChangeLog", and the "What's New" section and the
- "Upgrader's Notes" in <citetitle>the User Manual</citetitle> for details.
+ This is mainly a bug-fix release for the previously released
+ Privoxy 3.0.17 stable.
+ It contains fixes for two bugs that could cause connections to appear
+ to hang under certain circumstances when keep-alive support was enabled.
+ Of course there are also a bunch of minor improvements.
+ For details please see the "ChangeLog", the "What's New" section or
+ the "Upgrader's Notes" in <citetitle>the User Manual</citetitle> for details.
 </para>
 
 </sect1>
@@ -237,7 +239,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.36 2010/02/19 16:46:03 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.37 2010/02/19 16:50:05 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
