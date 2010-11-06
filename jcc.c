@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.329 2010/09/14 07:14:15 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.330 2010/09/14 07:16:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2554,7 +2554,7 @@ static void serve(struct client_state *csp)
             {
                time_t time_open = time(NULL) - csp->server_connection.timestamp;
 
-               if (csp->server_connection.keep_alive_timeout < time_open + latency)
+               if (csp->server_connection.keep_alive_timeout < time_open - (time_t)latency)
                {
                   break;
                }
