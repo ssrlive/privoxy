@@ -1,4 +1,4 @@
-$Id: TODO,v 1.20 2010/09/14 07:12:20 fabiankeil Exp $
+$Id: TODO,v 1.21 2010/11/06 11:55:49 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -98,7 +98,7 @@ Some Privoxy related task, not ordered in any way.
 39) Verify loadcfg.c jarfile reloading and friends.
     /* XXX: Does disabling this actually work? */
 
-40) Fix core dumping in daemon mode.
+40) Fix core dumping in daemon mode. Introduce a cwd config option?
 
 41) Change documentation framework to one that works cross-platform.
     Evaluate WML.
