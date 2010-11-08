@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.100 2010/11/08 17:52:36 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.101 2010/11/08 17:52:55 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -178,6 +178,7 @@ sub prepare_our_stuff () {
         'action-bits-update' => 'light_red',
         'configuration-line' => 'red',
         'content-type'       => 'yellow',
+        'HOST'               => HEADER_DEFAULT_COLOUR,
     );
 
     %h_colours = %h;
@@ -1007,6 +1008,12 @@ sub handle_loglevel_header ($) {
 
        $c =~ s@(?<= from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
        $c =~ s@(?<= to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Killed all-caps Host header line: HOST:/) {
+
+       # Killed all-caps Host header line: HOST: bestproxydb.com
+       $c = highlight_matched_host($c, '(?<=HOST: )[^\s]+');
+       $c = highlight_matched_pattern($c, 'HOST', 'HOST');
 
     } else {
 
