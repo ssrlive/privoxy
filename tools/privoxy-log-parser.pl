@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.97 2010/11/06 12:10:29 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.98 2010/11/06 13:27:45 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1956,6 +1956,10 @@ sub init_stats () {
         'empty-responses' => 0,
         'empty-responses-on-new-connections' => 0,
         'empty-responses-on-reused-connections' => 0,
+        'fast-redirections' => 0,
+        'blocked' => 0,
+        'reused-connections' => 0,
+        'server-keep-alive' => 0,
         );
 }
 
@@ -1964,19 +1968,6 @@ sub get_percentage ($$) {
     my $small = shift;
     return "NaN" if ($big eq 0);
     return sprintf("%.2f%%", $small / $big * 100);
-}
-
-sub set_undefined_stats_keys_to_zero () {
-    our %stats;
-    my @known_stats_keys = (
-        'requests', 'crunches', 'fast-redirections', 'blocked',
-        'empty-responses', 'empty-responses-on-new-connections',
-        'empty-responses-on-reused-connections', 'reused-connections',
-        'server-keep-alive');
-
-    foreach my $known_key (@known_stats_keys) {
-        $stats{$known_key} = 0 unless defined $stats{$known_key};
-    }
 }
 
 sub print_stats () {
@@ -2253,7 +2244,6 @@ sub stats_loop () {
         }
     }
 
-    set_undefined_stats_keys_to_zero();
     print_stats();
 
 }
