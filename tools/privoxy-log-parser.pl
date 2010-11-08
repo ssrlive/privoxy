@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.102 2010/11/08 17:53:14 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.103 2010/11/08 17:53:29 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1629,6 +1629,12 @@ sub handle_loglevel_connect ($) {
         # Expected client content length set to 667325411 after reading 4999 bytes.
         $c =~ s@(?<=set to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=reading )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Reducing expected bytes to /) {
+
+        # Reducing expected bytes to 0. Marking the server socket tainted after throwing 4 bytes away.
+        $c =~ s@(?<=bytes to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=after throwing )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Waiting for up to /) {
 
