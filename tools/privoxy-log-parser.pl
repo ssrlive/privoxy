@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.98 2010/11/06 13:27:45 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.99 2010/11/08 17:51:54 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -62,6 +62,7 @@ use constant {
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
     CLI_OPTION_URL_STATISTICS_THRESHOLD => 0,
+    CLI_OPTION_HOST_STATISTICS_THRESHOLD => 0,
 
     SUPPRESS_SUCCEEDED_FILTER_ADDITIONS => 1,
     SHOW_SCAN_INTRO => 0,
@@ -1944,6 +1945,11 @@ sub gather_loglevel_header_stats ($$) {
         $stats{'method'}{$2}++;
         $stats{'ressource'}{$3}++;
         $stats{'http-version'}{$4}++;
+
+    } elsif ($c =~ m/^scan: Host: ([^\s]+)/) {
+
+        # scan: Host: p.p
+        $stats{'hosts'}{$1}++;
     }
 }
 
@@ -2033,6 +2039,19 @@ sub print_stats () {
                 last;
             }
             printf "%d : %s\n", $stats{'ressource'}{$ressource}, $ressource;
+        }
+    }
+
+    if ($cli_options{'host-statistics-threshold'} == 0) {
+        print "Host statistics are disabled. Increase --host-statistics-threshold to enable them.\n";
+    } else {
+        print "Requested Hosts:\n";
+        foreach my $host (sort {$stats{'hosts'}{$b} <=> $stats{'hosts'}{$a}} keys %{$stats{'hosts'}}) {
+            if ($stats{'hosts'}{$host} < $cli_options{'host-statistics-threshold'}) {
+                print "Skipped statistics for Hosts below the treshold.\n";
+                last;
+            }
+            printf "%d : %s\n", $stats{'hosts'}{$host}, $host;
         }
     }
 }
@@ -2270,7 +2289,8 @@ sub get_cli_options () {
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
-        'url-statistics-threshold'  => CLI_OPTION_URL_STATISTICS_THRESHOLD,
+        'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
+        'host-statistics-threshold'=> CLI_OPTION_HOST_STATISTICS_THRESHOLD,
     );
 
     GetOptions (
@@ -2284,6 +2304,7 @@ sub get_cli_options () {
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
         'statistics'               => \$cli_options{'statistics'},
         'url-statistics-threshold=s'=> \$cli_options{'url-statistics-threshold'},
+        'host-statistics-threshold=s'=> \$cli_options{'host-statistics-threshold'},
         'version'                  => sub { VersionMessage && exit(0) },
         'help'                     => \&help,
    ) or exit(1);
@@ -2304,6 +2325,7 @@ sub help () {
 
 Options and their default values if they have any:
     [--accept-unknown-messages]
+    [--host-statistics-threshold $cli_options{'host-statistics-threshold'}]
     [--html-output]
     [--no-embedded-css]
     [--no-msecs]
@@ -2377,6 +2399,10 @@ will hide the "filter foo caused 0 hits" message.
 
 [B<--accept-unknown-messages>] Don't print warnings in case of unknown messages,
 just don't highlight them.
+
+[B<--host-statistics-threshold>] Only show the request count for a host
+if it's above or equal to the given threshold. If the threshold is 0, host
+statistics are disabled.
 
 [B<--html-output>] Use HTML and CSS for the syntax highlighting. If this option is
 omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is active.
