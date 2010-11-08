@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.134 2010/09/14 07:17:01 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.135 2010/10/10 09:58:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -288,6 +288,10 @@ int block_acl(const struct access_control_addr *dst, const struct client_state *
             if (acl->action == ACL_PERMIT)
             {
                return(0);
+            }
+            else
+            {
+               return(1);
             }
          }
          else if (
