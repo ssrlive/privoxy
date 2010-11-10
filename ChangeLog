@@ -111,14 +111,12 @@ ChangeLog for Privoxy
   - Accept and ignore: Continue hack in da house.
   - Accept and higlight: Rejecting connection from 10.0.0.2.
     Maximum number of connections reached.
-  - Accept and highlight actions and filter filte loading:
-    Loading actions file: /usr/local/etc/privoxy/default.action
-    Loading filter file: /usr/local/etc/privoxy/default.filter
+  - Accept and highlight: Loading actions file: /usr/local/etc/privoxy/default.action
+  - Accept and highlight: Loading filter file: /usr/local/etc/privoxy/default.filter
   - Accept and highlight: Killed all-caps Host header line: HOST: bestproxydb.com
   - Accept and highlight: Reducing expected bytes to 0. Marking
     the server socket tainted after throwing 4 bytes away.
-  - Accept: Merged multiple header lines to:
-    'X-FORWARDED-PROTO: http X-HOST: 127.0.0.1'
+  - Accept: Merged multiple header lines to: 'X-FORWARDED-PROTO: http X-HOST: 127.0.0.1'
 
 - Code cleanups:
   - Remove the next member from the client_state struct. Only the main
