@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.126 2010/11/06 12:55:48 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.127 2010/11/10 21:48:54 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.126 2010/11/06 12:55:48 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.127 2010/11/10 21:48:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -437,8 +437,8 @@ How to install the binary packages depends on your operating system:
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- <application>Privoxy 3.0.16</application> is a stable release.
- The changes since 3.0.15 beta are:
+ <application>Privoxy 3.0.17</application> is a stable release.
+ The changes since 3.0.16 stable are:
 </para>
 
 <para>
@@ -8883,6 +8883,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.127  2010/11/10 21:48:54  fabiankeil
+ Update the "What's New" section.
+
  Revision 2.126  2010/11/06 12:55:48  fabiankeil
  Set p-version to 3.0.17
 
