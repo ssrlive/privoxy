@@ -14,6 +14,10 @@ ChangeLog for Privoxy
   Most likely also fixes a bunch of other AJAX-related problem reports
   that got closed in the past due to insufficient information and lack
   of feedback.
+- Fixed an ACL bug that made it impossible to build a blacklist.
+  Usually the ACL directives are used in a whitelist, which worked
+  as expected, but blacklisting is still useful for public proxies
+  where one only needs to deny known abusers access.
 - Added LOG_LEVEL_RECEIVED to log the not-yet-parsed data read from the
   network. This should make debugging various parsing issues a lot easier.
 - The IPv6 code is enabled by default on Windows versions that support it.
@@ -89,6 +93,7 @@ ChangeLog for Privoxy
     its advantage compared to socks4a. Reported by David in #2960129.
   - Slightly improve the explanation of why filtering may appear
     slower than it is.
+  - Grammar fixes for the ACL section.
 
 - Privoxy-Log-Parser improvements:
   - Also gather statistics for blocked and redirected requests.
@@ -96,6 +101,8 @@ ChangeLog for Privoxy
   - Add a --url-statistics-threshold option.
   - Also gather statistics for ressources, methods, and HTTP versions
     used by the client.
+  - Add a --host-statistics-threshold option to also gather
+    statistics about how many request where made per host.
   - Fix a bug in handle_loglevel_header() where a 'scan: ' got lost.
   - Add a --shorten-thread-ids option to replace the thread id with
     a decimal number.
@@ -107,6 +114,11 @@ ChangeLog for Privoxy
   - Accept and highlight actions and filter filte loading:
     Loading actions file: /usr/local/etc/privoxy/default.action
     Loading filter file: /usr/local/etc/privoxy/default.filter
+  - Accept and highlight: Killed all-caps Host header line: HOST: bestproxydb.com
+  - Accept and highlight: Reducing expected bytes to 0. Marking
+    the server socket tainted after throwing 4 bytes away.
+  - Accept: Merged multiple header lines to:
+    'X-FORWARDED-PROTO: http X-HOST: 127.0.0.1'
 
 - Code cleanups:
   - Remove the next member from the client_state struct. Only the main
@@ -135,6 +147,7 @@ ChangeLog for Privoxy
     move the crunch_reason to the beginning.
   - Turn http_response.reason into an enum and rename it
     to http_response.crunch_reason.
+  - Silence a 'gcc (Debian 4.3.2-1.1) 4.3.2' warning on i686 GNU/Linux.
 
 - GNUmakefile improvements:
   - Use $(SSH) instead of ssh, so one only needs to specify a username once.
