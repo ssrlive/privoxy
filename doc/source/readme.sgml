@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.39 2010/11/06 12:55:48 fabiankeil Exp $
+ $Id: readme.sgml,v 2.40 2010/11/10 21:49:12 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -137,7 +137,7 @@
  to hang under certain circumstances when keep-alive support was enabled.
  Of course there are also a bunch of minor improvements.
  For details please see the "ChangeLog", the "What's New" section or
- the "Upgrader's Notes" in <citetitle>the User Manual</citetitle> for details.
+ the "Upgrader's Notes" in <citetitle>the User Manual</citetitle>.
 </para>
 
 </sect1>
@@ -239,7 +239,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.39 2010/11/06 12:55:48 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.40 2010/11/10 21:49:12 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
