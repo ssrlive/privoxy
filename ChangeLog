@@ -93,6 +93,12 @@ ChangeLog for Privoxy
   - Slightly improve the explanation of why filtering may appear
     slower than it is.
   - Grammar fixes for the ACL section.
+  - Fixed a link to the 'intercepting' entry and add another one.
+  - Rename the 'Other' section to 'Mailing Lists' and reword it
+    to make it clear that nobody is forced to use the trackers
+  - Note that 'anonymously' posting on the trackers may not always
+    be possible.
+  - Suggest to enable debug 32768 when suspecting parsing problems.
 
 - Privoxy-Log-Parser improvements:
   - Gather statistics for ressources, methods, and HTTP versions
@@ -145,6 +151,9 @@ ChangeLog for Privoxy
   - Turn http_response.reason into an enum and rename it
     to http_response.crunch_reason.
   - Silence a 'gcc (Debian 4.3.2-1.1) 4.3.2' warning on i686 GNU/Linux.
+  - Fix white-space in a log message in remove_chunked_transfer_coding().
+    While at it, add a note that the message doesn't seem to
+    be entirely correct and should be improved later on.
 
 - GNUmakefile improvements:
   - Use $(SSH) instead of ssh, so one only needs to specify a username once.
