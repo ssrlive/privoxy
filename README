@@ -60,10 +60,10 @@ Helping hands and donations are welcome:
 
 November 2010, Privoxy 3.0.17 stable is released.
 
-This is mainly a bug-fix release for the previously released Privoxy 3.0.16
-stable. It contains fixes for two bugs that could cause connections to appear
-to hang under certain circumstances when keep-alive support was enabled. Of
-course there are also a bunch of minor improvements. For details please see the
+This is mainly a bug-fix release for the previously released Privoxy 3.0.16. It
+contains fixes for two bugs that could cause connections to appear to hang
+under certain circumstances when keep-alive support was enabled. As usual,
+there are also a bunch of minor improvements. For details please see the
 "ChangeLog", the "What's New" section or the "Upgrader's Notes" in the User
 Manual.
 
@@ -252,7 +252,7 @@ Please be sure to provide the following information:
 
     debug    64 # debug regular expression filters
 
-    If you using Privoxy 3.0.17 or later and suspect that it interprets the
+    If you are using Privoxy 3.0.17 or later and suspect that it interprets the
     request or the response incorrectly, please enable
 
     debug 32768 # log all data read from the network
@@ -266,13 +266,13 @@ you don't, please use a nickname so we can differentiate between your messages
 and the ones entered by other "anonymous" users that may respond to your
 request if they have the same problem or already found a solution. Note that
 due to spam the trackers may not always allow to post without being logged into
-SourceForge. If that's the case you are still free to create a login that isn't
-directly linked to your name, though.
+SourceForge. If that's the case, you are still free to create a login that
+isn't directly linked to your name, though.
 
 Please also check the status of your request a few days after submitting it, as
 we may request additional information. If you use a SF id, you should
 automatically get a mail when someone responds to your request. Please don't
-bother to add an email address when using the tracker, if you prefer to
+bother to add an email address when using the tracker. If you prefer to
 communicate through email, just use one of the mailing lists directly.
 
 The appendix of the Privoxy User Manual also has helpful information on
@@ -292,9 +292,9 @@ tracker/?atid=361118&group_id=11118.
 
 If you prefer to communicate through email, instead of using a web interface,
 feel free to use one of the mailing lists. To discuss issues that haven't been
-completely diagnosed, please use the Privoxy users list. Technically interested
-users and people who wish to contribute to the project are always welcome on
-the developers list. You can find an overview of all Privoxy-related mailing
-lists, including list archives, at: http://sourceforge.net/mail/?group_id=11118
-.
+completely diagnosed yet, please use the Privoxy users list. Technically
+interested users and people who wish to contribute to the project are always
+welcome on the developers list. You can find an overview of all Privoxy-related
+mailing lists, including list archives, at: http://sourceforge.net/mail/?
+group_id=11118.
 
