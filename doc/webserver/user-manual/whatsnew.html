@@ -95,19 +95,19 @@ CLASS="APPLICATION"
 ><P
 >    Fixed last-chunk-detection for responses where the content was small
     enough to be read with the body, causing Privoxy to wait for the
-    end of the content until the server closed the connection.
-    Reported by "Karsten" in #3028326.
+    end of the content until the server closed the connection or the
+    request timed out. Reported by "Karsten" in #3028326.
    </P
 ></LI
 ><LI
 ><P
 >    Responses with status code 204 weren't properly detected as body-less
-    like RFC2616 mandates. Like the previous bug, this caused Privoxy
-    to wait for the end of the content until the server closed the connection.
-    Fixes #3022042 and #3025553, reported by a user with no visible name.
-    Most likely also fixes a bunch of other AJAX-related problem reports
-    that got closed in the past due to insufficient information and lack
-    of feedback.
+    like RFC2616 mandates. Like the previous bug, this caused Privoxy to
+    wait for the end of the content until the server closed the connection
+    or the request timed out. Fixes #3022042 and #3025553, reported by a
+    user with no visible name. Most likely also fixes a bunch of other
+    AJAX-related problem reports that got closed in the past due to
+    insufficient information and lack of feedback.
    </P
 ></LI
 ><LI
@@ -199,8 +199,8 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->      In cgi_show_url_info(), don't forget to prefix URLs that only contain http:// or https:// in the path.
-      Fixes #2975765 reported by Adam Piggott.
+>      In cgi_show_url_info(), don't forget to prefix URLs that only contain
+      http:// or https:// in the path. Fixes #2975765 reported by Adam Piggott.
      </P
 ></LI
 ><LI
@@ -294,9 +294,8 @@ CLASS="APPLICATION"
 ><P
 >      javascript needs to be blocked with +handle-as-empty-document to
       work around Firefox bug 492459.  So move .js blockers from
-      +block{Might be a web-bug.} -handle-as-empty-document
-      to
-      +block{Might be a web-bug.} +handle-as-empty-document
+      +block{Might be a web-bug.} -handle-as-empty-document to
+      +block{Might be a web-bug.} +handle-as-empty-document.
      </P
 ></LI
 ><LI
@@ -306,7 +305,7 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->      Block another omniture tracking domain
+>      Block another omniture tracking domain.
      </P
 ></LI
 ><LI
@@ -319,7 +318,7 @@ CLASS="APPLICATION"
 >      Added two sections to get Flickr's Ajax interface working with
       default pre-settings. If you change the configuration to block
       cookies by default, you'll need additional exceptions.
-      Reported by Mathias Homann in #3101419 and by Patrick on ijbswa-users@
+      Reported by Mathias Homann in #3101419 and by Patrick on ijbswa-users@.
      </P
 ></LI
 ></UL
@@ -354,6 +353,28 @@ CLASS="APPLICATION"
 >      Grammar fixes for the ACL section.
      </P
 ></LI
+><LI
+><P
+>      Fixed a link to the 'intercepting' entry and add another one.
+     </P
+></LI
+><LI
+><P
+>      Rename the 'Other' section to 'Mailing Lists' and reword it
+      to make it clear that nobody is forced to use the trackers
+     </P
+></LI
+><LI
+><P
+>      Note that 'anonymously' posting on the trackers may not always
+      be possible.
+     </P
+></LI
+><LI
+><P
+>      Suggest to enable debug 32768 when suspecting parsing problems.
+     </P
+></LI
 ></UL
 >
    </P
@@ -364,6 +385,12 @@ CLASS="APPLICATION"
     <P
 ></P
 ><UL
+><LI
+><P
+>      Gather statistics for ressources, methods, and HTTP versions
+      used by the client.
+     </P
+></LI
 ><LI
 ><P
 >      Also gather statistics for blocked and redirected requests.
@@ -377,12 +404,6 @@ CLASS="APPLICATION"
 ><LI
 ><P
 >      Add a --url-statistics-threshold option.
-     </P
-></LI
-><LI
-><P
->      Also gather statistics for ressources, methods, and HTTP versions
-      used by the client.
      </P
 ></LI
 ><LI
@@ -548,6 +569,13 @@ CLASS="APPLICATION"
 ><LI
 ><P
 >      Silence a 'gcc (Debian 4.3.2-1.1) 4.3.2' warning on i686 GNU/Linux.
+     </P
+></LI
+><LI
+><P
+>      Fix white-space in a log message in remove_chunked_transfer_coding().
+      While at it, add a note that the message doesn't seem to
+      be entirely correct and should be improved later on.
      </P
 ></LI
 ></UL
