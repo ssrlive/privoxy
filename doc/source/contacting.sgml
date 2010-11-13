@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.20 2010/11/13 10:06:58 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.21 2010/11/13 10:09:39 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -230,7 +230,7 @@ debug  4096 # Startup banner and warnings.
 debug  8192 # Non-fatal errors</literallayout>
     If you are having trouble with a filter, please additionally enable
     <literallayout>debug    64 # debug regular expression filters</literallayout>
-    If you using Privoxy 3.0.17 or later and suspect that it interprets the
+    If you are using Privoxy 3.0.17 or later and suspect that it interprets the
     request or the response incorrectly, please enable
     <literallayout>debug 32768 # log all data read from the network</literallayout>
     Note that Privoxy log files may contain sensitive information so please don't
@@ -249,7 +249,7 @@ debug  8192 # Non-fatal errors</literallayout>
  may respond to your request if they have the same problem or already
  found a solution. Note that due to spam the trackers may not always
  allow to post without being logged into SourceForge. If that's the
- case you are still free to create a login that isn't directly linked
+ case, you are still free to create a login that isn't directly linked
  to your name, though.
 </para>
 
@@ -282,7 +282,7 @@ debug  8192 # Non-fatal errors</literallayout>
 <para>
 If you prefer to communicate through email, instead of using a web interface,
 feel free to use one of the mailing lists.
-To discuss issues that haven't been completely diagnosed, please use the Privoxy
+To discuss issues that haven't been completely diagnosed yet, please use the Privoxy
 users list. Technically interested users and people who wish to contribute to
 the project are always welcome on the developers list.
 You can find an overview of all <application>Privoxy</application>-related mailing lists,
