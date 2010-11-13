@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.17
 #
-#  $Id: config,v 1.91 2010/11/06 12:56:15 fabiankeil Exp $
+#  $Id: config,v 1.92 2010/11/06 12:58:42 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
 #
@@ -113,7 +113,6 @@
 #
 #        user-manual  /usr/share/doc/privoxy/user-manual
 #
-#
 #      The User Manual is then available to anyone with
 #      access to Privoxy, by following the built-in URL:
 #      http://config.privoxy.org/user-manual/ (or the shortcut:
@@ -123,7 +122,6 @@
 #      accessed from a remote server, as:
 #
 #        user-manual  http://example.com/privoxy/user-manual/
-#
 #
 #      WARNING!!!
 #
@@ -729,12 +727,10 @@ logfile logfile
 #
 #        listen-address  192.168.0.1:8118
 #
-#
 #      Suppose you are running Privoxy on an IPv6-capable machine and
 #      you want it to listen on the IPv6 address of the loopback device:
 #
 #        listen-address [::1]:8118
-#
 #
 listen-address  127.0.0.1:8118
 #
@@ -1008,10 +1004,10 @@ enforce-blocks 0
 #      names. If a DNS name resolves to multiple IP addresses, only
 #      the first one is used.
 #
-#      Some systems allows IPv4 client to connect to IPv6 server
-#      socket. Then the client's IPv4 address will be translated by
+#      Some systems allow IPv4 clients to connect to IPv6 server
+#      sockets. Then the client's IPv4 address will be translated by the
 #      system into IPv6 address space with special prefix ::ffff:0:0/96
-#      (so called IPv4 mapped IPv6 address).  Privoxy can handle it
+#      (so called IPv4 mapped IPv6 address). Privoxy can handle it
 #      and maps such ACL addresses automatically.
 #
 #      Denying access to particular sites by ACL may have undesired
@@ -1275,7 +1271,6 @@ buffer-limit 4096
 #      that look like this:
 #
 #       forward           localhost/     .
-#
 #
 #
 #
@@ -1557,6 +1552,7 @@ keep-alive-timeout 5
 #      default-server-timeout 60
 #
 #default-server-timeout 60
+#
 #
 #  6.6. connection-sharing
 #  ========================
