@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.17 2010/11/13 10:05:06 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.18 2010/11/13 10:06:19 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -257,6 +257,9 @@ debug  8192 # Non-fatal errors</literallayout>
  Please also check the status of your request a few days after submitting
  it, as we may request additional information. If you use a SF id,
  you should automatically get a mail when someone responds to your request.
+ Please don't bother to add an email address when using the tracker,
+ if you prefer to communicate through email, just use one of the mailing
+ lists directly.
 </para>
 
 <para>
