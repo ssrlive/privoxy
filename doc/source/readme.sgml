@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.41 2010/11/10 22:01:42 fabiankeil Exp $
+ $Id: readme.sgml,v 2.42 2010/11/13 13:04:39 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -133,8 +133,13 @@
 <para>
  This is mainly a bug-fix release for the previously released
  Privoxy 3.0.16.
- It contains fixes for two bugs that could cause connections to appear
- to hang under certain circumstances when keep-alive support was enabled.
+</para>
+<para>
+ It contains fixes for two bugs that could cause connections to hang
+ under certain circumstances when keep-alive support was enabled,
+ until they timed out or where closed by the server.
+</para>
+<para>
  As usual, there are also a bunch of minor improvements.
  For details please see the "ChangeLog", the "What's New" section or
  the "Upgrader's Notes" in <citetitle>the User Manual</citetitle>.
@@ -239,7 +244,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.41 2010/11/10 22:01:42 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.42 2010/11/13 13:04:39 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>
