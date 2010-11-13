@@ -76,16 +76,15 @@ ChangeLog for Privoxy
     refresh tags with refresh times above 9 seconds are covered.
   - javascript needs to be blocked with +handle-as-empty-document to
     work around Firefox bug 492459.  So move .js blockers from
-    +block{Might be a web-bug.} -handle-as-empty-document
-    to
-    +block{Might be a web-bug.} +handle-as-empty-document
+    +block{Might be a web-bug.} -handle-as-empty-document to
+    +block{Might be a web-bug.} +handle-as-empty-document.
   - ijbswa-Feature Requests-3006719 - Block 160x578 Banners.
-  - Block another omniture tracking domain
+  - Block another omniture tracking domain.
   - Added a range-requests tagger.
   - Added two sections to get Flickr's Ajax interface working with
     default pre-settings. If you change the configuration to block
     cookies by default, you'll need additional exceptions.
-    Reported by Mathias Homann in #3101419 and by Patrick on ijbswa-users@
+    Reported by Mathias Homann in #3101419 and by Patrick on ijbswa-users@.
 
 - Documentation improvements:
   - Explicitly mention how to match all URLs.
@@ -96,11 +95,11 @@ ChangeLog for Privoxy
   - Grammar fixes for the ACL section.
 
 - Privoxy-Log-Parser improvements:
+  - Gather statistics for ressources, methods, and HTTP versions
+    used by the client.
   - Also gather statistics for blocked and redirected requests.
   - Provide the percentage of keep-alive offers the client accepted.
   - Add a --url-statistics-threshold option.
-  - Also gather statistics for ressources, methods, and HTTP versions
-    used by the client.
   - Add a --host-statistics-threshold option to also gather
     statistics about how many request where made per host.
   - Fix a bug in handle_loglevel_header() where a 'scan: ' got lost.
