@@ -49,8 +49,8 @@ ChangeLog for Privoxy
   - Fix a bunch of anchors that used underscores instead of dashes.
   - Allow to keep the client connection alive after crunching the previous request.
     Already opened server connections can be kept alive, too.
-  - In cgi_show_url_info(), don't forget to prefix URLs that only contain http:// or https:// in the path.
-    Fixes #2975765 reported by Adam Piggott.
+  - In cgi_show_url_info(), don't forget to prefix URLs that only contain
+    http:// or https:// in the path. Fixes #2975765 reported by Adam Piggott.
   - Show the 404 CGI page if cgi_send_user_manual() is called while
     local user manual delivery is disabled.
 
