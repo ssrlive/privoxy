@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.16 2010/02/14 17:59:31 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.17 2010/11/13 10:05:06 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -247,7 +247,10 @@ debug  8192 # Non-fatal errors</literallayout>
  report, but if you don't, please use a nickname so we can differentiate
  between your messages and the ones entered by other "anonymous" users that
  may respond to your request if they have the same problem or already
- found a solution.
+ found a solution. Note that due to spam the trackers may not always
+ allow to post without being logged into SourceForge, if that's the
+ case you are still free to create a login that isn't directly linked
+ to your name, though.
 </para>
 
 <para>
