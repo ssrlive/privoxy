@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.72 2010/02/27 12:13:17 fabiankeil Exp $
+ $Id: faq.sgml,v 2.73 2010/11/06 12:55:48 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.72 2010/02/27 12:13:17 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.73 2010/11/06 12:55:48 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1165,17 +1165,17 @@ on Win2K/NT/XP?</title>
 
 
 <sect2 renderas="sect3" id="otherproxy">
-<title>How can I make Privoxy work with other 
-proxies like Squid or Tor?</title>
+<title>How can I make Privoxy work with other proxies?</title>
 <para>
  This can be done and is often useful to combine the benefits of
- <application>Privoxy</application> with those of a another proxy.
+ <application>Privoxy</application> with those of a another proxy,
+ for example to cache content.
  See the <ulink
  url="../user-manual/config.html#FORWARDING">forwarding chapter</ulink>
  in the <ulink url="../user-manual/index.html">User Manual</ulink> which
- describes how to do this, and the <link linkend="TOR">
- How do I use Privoxy together with 
- Tor</link> section below.
+ describes how to do this. If you intend to use Privoxy with Tor,
+ please also have a look at
+ <link linkend="TOR">How do I use Privoxy together with Tor</link>.
 </para>
 </sect2>
 
@@ -2968,6 +2968,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.73  2010/11/06 12:55:48  fabiankeil
+Set p-version to 3.0.17
+
 Revision 2.72  2010/02/27 12:13:17  fabiankeil
 Fix spelling.
 
