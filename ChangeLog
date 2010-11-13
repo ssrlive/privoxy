@@ -5,15 +5,15 @@ ChangeLog for Privoxy
 
 - Fixed last-chunk-detection for responses where the content was small
   enough to be read with the body, causing Privoxy to wait for the
-  end of the content until the server closed the connection.
-  Reported by "Karsten" in #3028326.
+  end of the content until the server closed the connection or the
+  request timed out. Reported by "Karsten" in #3028326.
 - Responses with status code 204 weren't properly detected as body-less
-  like RFC2616 mandates. Like the previous bug, this caused Privoxy
-  to wait for the end of the content until the server closed the connection.
-  Fixes #3022042 and #3025553, reported by a user with no visible name.
-  Most likely also fixes a bunch of other AJAX-related problem reports
-  that got closed in the past due to insufficient information and lack
-  of feedback.
+  like RFC2616 mandates. Like the previous bug, this caused Privoxy to
+  wait for the end of the content until the server closed the connection
+  or the request timed out. Fixes #3022042 and #3025553, reported by a
+  user with no visible name. Most likely also fixes a bunch of other
+  AJAX-related problem reports that got closed in the past due to
+  insufficient information and lack of feedback.
 - Fixed an ACL bug that made it impossible to build a blacklist.
   Usually the ACL directives are used in a whitelist, which worked
   as expected, but blacklisting is still useful for public proxies
