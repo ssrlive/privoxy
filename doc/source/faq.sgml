@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.73 2010/11/06 12:55:48 fabiankeil Exp $
+ $Id: faq.sgml,v 2.74 2010/11/13 10:07:46 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.73 2010/11/06 12:55:48 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.74 2010/11/13 10:07:46 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1185,7 +1185,8 @@ and thus avoid individual browser configuration?</title>
 
 <para>
  No, its more complicated than that. This only works with special kinds 
- of proxies known as <quote>intercepting</quote> proxies (see below).
+ of proxies known as <quote>intercepting</quote> proxies
+ (<link linkend="INTERCEPTING">see below</link>).
 </para>
 
 </sect2>
@@ -1202,7 +1203,7 @@ and thus avoid individual browser configuration?</title>
 <para>
  However, some people say <quote>transparent proxy</quote> when they
  mean <quote>intercepting proxy</quote>. If you are one of them,
- please read the <ulink url="#intercepting">next entry</ulink>.
+ please read the <link linkend="INTERCEPTING">next entry</link>.
 </para>
 
 </sect2>
@@ -2968,6 +2969,12 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.74  2010/11/13 10:07:46  fabiankeil
+Remove the product names in the 'otherproxy' entry's title.
+
+I'm tired of getting the 'otherproxy' entry as first hit
+when searching the index for the Tor FAQ.
+
 Revision 2.73  2010/11/06 12:55:48  fabiankeil
 Set p-version to 3.0.17
 
