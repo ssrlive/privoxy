@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.188 2010/02/20 12:51:38 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.189 2010/02/20 12:53:30 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -622,7 +622,7 @@ webserver: tidy
 	@$(ECHO) Uploading html
 	@cd doc/webserver; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) cf - $$upload | ssh shell.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
+          $(TAR) cf - $$upload | $(SSH) shell.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/; tar xvm 2>&1 | grep -v timestamp'
 
 	@$(ECHO) Fixing permissions
 	@$(SSH) shell.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
@@ -632,7 +632,7 @@ web-actions: tidy
 	@$(ECHO) Uploading 
 	@cd doc/webserver/actions; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
-          $(TAR) cf - $$upload | ssh ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xvm'
+          $(TAR) cf - $$upload | $(SSH) ijbswa.sourceforge.net 'cd /home/groups/i/ij/ijbswa/htdocs/actions; tar xvm'
 
 	@$(ECHO) Fixing permissions
 	@$(SSH) ijbswa.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
