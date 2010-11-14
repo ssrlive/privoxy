@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.192 2010/11/14 14:48:45 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.193 2010/11/14 14:59:33 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -614,7 +614,7 @@ webserver: tidy
 	@$(ECHO) You will need to "create" a SF shell first:
 	@$(ECHO)    ssh -t SF-USER-ID,ijbswa@shell.sourceforge.net create
 	@$(ECHO) Please make sure your documentation files are up to date.
-	@$(ECHO) Note that this command updates the home page and scps 
+	@$(ECHO) Note that this command updates the home page and copys 
 	@$(ECHO) all stuff to the webserver, it will not remove obsolete documents.
 	@$(ECHO) Note that a botched upload can result in the documentation
 	@$(ECHO) on the website becoming unreachable! Also the CSS files
