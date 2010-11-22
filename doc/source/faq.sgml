@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.74 2010/11/13 10:07:46 fabiankeil Exp $
+ $Id: faq.sgml,v 2.75 2010/11/13 10:08:00 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.74 2010/11/13 10:07:46 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.75 2010/11/13 10:08:00 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1763,7 +1763,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  If you verified that <application>Privoxy</application> and <application>Tor</application>
  are working, it is time to connect them. As far as <application>Privoxy</application>
  is concerned, <application>Tor</application> is just another proxy that can be reached
- by socks4 or socks4a. Most likely you are interested in <application>Tor</application>
+ by socks4, socks4a and socks5. Most likely you are interested in <application>Tor</application>
  to increase your anonymity level, therefore you should use socks5, to make sure DNS
  requests are done through <application>Tor</application> and thus invisible to your
  local network. Using socks4a would work too, but with socks5 you get more precise error
@@ -2969,6 +2969,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.75  2010/11/13 10:08:00  fabiankeil
+Fix a link to the 'intercepting' entry and add another one
+
 Revision 2.74  2010/11/13 10:07:46  fabiankeil
 Remove the product names in the 'otherproxy' entry's title.
 
