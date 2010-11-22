@@ -112,7 +112,7 @@ ChangeLog for Privoxy
   - Suggest to enable debug 32768 when suspecting parsing problems.
 
 - Privoxy-Log-Parser improvements:
-  - Gather statistics for ressources, methods, and HTTP versions
+  - Gather statistics for resources, methods, and HTTP versions
     used by the client.
   - Also gather statistics for blocked and redirected requests.
   - Provide the percentage of keep-alive offers the client accepted.
@@ -125,7 +125,7 @@ ChangeLog for Privoxy
   - Accept and ignore: Looks like we got the last chunk together
     with the server headers. We better stop reading.
   - Accept and ignore: Continue hack in da house.
-  - Accept and higlight: Rejecting connection from 10.0.0.2.
+  - Accept and highlight: Rejecting connection from 10.0.0.2.
     Maximum number of connections reached.
   - Accept and highlight: Loading actions file: /usr/local/etc/privoxy/default.action
   - Accept and highlight: Loading filter file: /usr/local/etc/privoxy/default.filter
@@ -197,7 +197,7 @@ Helping hands and donations are welcome:
   * http://www.privoxy.org/faq/general.html#DONATE
 
 At present, Privoxy is known to run on Windows(95, 98, ME, 2000,
-XP, Vista), Linux (Ubuntu, RedHat, SuSE, Debian, Fedora, Gentoo and
+XP, Vista), GNU/Linux (Ubuntu, RedHat, SuSE, Debian, Fedora, Gentoo and
 others), Mac OSX, OS/2, AmigaOS, FreeBSD, NetBSD, OpenBSD, Solaris, and
 various other flavors of Unix.
 
