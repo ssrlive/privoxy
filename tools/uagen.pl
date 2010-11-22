@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.6 2010/10/27 19:58:45 fabiankeil Exp $
+# $Id: uagen.pl,v 1.7 2010/10/30 15:57:26 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -232,10 +232,9 @@ sub log_to_file($) {
 
     return if $no_logging;
 
-    open( LOGFILE, ">>" . $logfile ) || die "Writing " . $logfile . " failed";
-    printf LOGFILE UAGEN_VERSION . " ($logtime) $message\n";
-    close(LOGFILE);
-
+    open(my $log_fd, ">>" . $logfile) || die "Writing " . $logfile . " failed";
+    printf $log_fd UAGEN_VERSION . " ($logtime) $message\n";
+    close($log_fd);
 }
 
 sub log_error($) {
@@ -258,16 +257,17 @@ sub write_action_file() {
     our $action_injection;
 
     my $action_file_content = '';
+    my $actionfile_fd;
 
     if ($action_injection){
-        open( ACTIONFILE, $action_file )
+        open($actionfile_fd, $action_file)
             or log_error "Reading action file $action_file failed!";
-        while (<ACTIONFILE>) {
+        while (<$actionfile_fd>) {
             s@(hide-accept-language\{).*?(\})@$1$accept_language$2@;
             s@(hide-user-agent\{).*?(\})@$1$user_agent$2@;
 	    $action_file_content .= $_;
         }
-        close (ACTIONFILE);
+        close($actionfile_fd);
     } else {
 	$action_file_content = "{";
 	$action_file_content .= sprintf "+hide-accept-language{%s} \\\n",
@@ -275,10 +275,10 @@ sub write_action_file() {
         $action_file_content .= sprintf " +hide-user-agent{%s} \\\n}\n/\n",
             $user_agent;
     }
-    open( ACTIONFILE, ">" . $action_file )
+    open($actionfile_fd, ">" . $action_file)
       or log_error "Writing action file $action_file failed!";
-    print ACTIONFILE $action_file_content;
-    close(ACTIONFILE);
+    print $actionfile_fd $action_file_content;
+    close($actionfile_fd);
 
     return 0;
 }
@@ -289,16 +289,18 @@ sub write_prefs_file() {
     our $user_agent;
     our $accept_language;
     our $clean_prefs;
+
     my $prefs_file_content = '';
+    my $prefsfile_fd;
 
-    if (open( PREFSFILE, $mozilla_prefs_file )) {
+    if (open($prefsfile_fd, $mozilla_prefs_file)) {
 
-        while (<PREFSFILE>) {
+        while (<$prefsfile_fd>) {
             s@user_pref\(\"general.useragent.override\",.*\);\n?@@;
             s@user_pref\(\"intl.accept_languages\",.*\);\n?@@;
 	    $prefs_file_content .= $_;
         }
-        close (PREFSFILE);
+        close($prefsfile_fd);
     } else {
         log_error "Reading prefs file $mozilla_prefs_file failed. Creating a new file!";
     }
@@ -308,10 +310,10 @@ sub write_prefs_file() {
         sprintf("user_pref(\"intl.accept_languages\", \"%s\");\n", $accept_language)
         unless $clean_prefs;
 
-    open( PREFSFILE, ">" . $mozilla_prefs_file )
+    open($prefsfile_fd, ">" . $mozilla_prefs_file)
       or log_error "Writing prefs file $mozilla_prefs_file failed!";
-    print PREFSFILE $prefs_file_content;
-    close(PREFSFILE);
+    print $prefsfile_fd $prefs_file_content;
+    close($prefsfile_fd);
 
 }
 
