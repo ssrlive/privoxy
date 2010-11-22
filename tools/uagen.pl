@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.7 2010/10/30 15:57:26 fabiankeil Exp $
+# $Id: uagen.pl,v 1.8 2010/11/22 10:34:28 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -257,10 +257,9 @@ sub write_action_file() {
     our $action_injection;
 
     my $action_file_content = '';
-    my $actionfile_fd;
 
     if ($action_injection){
-        open($actionfile_fd, $action_file)
+        open(my $actionfile_fd, "<", $action_file)
             or log_error "Reading action file $action_file failed!";
         while (<$actionfile_fd>) {
             s@(hide-accept-language\{).*?(\})@$1$accept_language$2@;
@@ -275,7 +274,7 @@ sub write_action_file() {
         $action_file_content .= sprintf " +hide-user-agent{%s} \\\n}\n/\n",
             $user_agent;
     }
-    open($actionfile_fd, ">" . $action_file)
+    open(my $actionfile_fd, ">" . $action_file)
       or log_error "Writing action file $action_file failed!";
     print $actionfile_fd $action_file_content;
     close($actionfile_fd);
