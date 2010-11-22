@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.20 2007/05/14 16:56:07 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.21 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
