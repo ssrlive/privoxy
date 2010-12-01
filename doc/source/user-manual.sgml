@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.128 2010/11/10 22:00:13 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.129 2010/11/13 20:17:11 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.128 2010/11/10 22:00:13 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.129 2010/11/13 20:17:11 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -443,7 +443,7 @@ How to install the binary packages depends on your operating system:
 
 <para>
  <itemizedlist>
-    <listitem>
+  <listitem>
    <para>
     Fixed last-chunk-detection for responses where the content was small
     enough to be read with the body, causing Privoxy to wait for the
@@ -558,7 +558,8 @@ How to install the binary packages depends on your operating system:
       Show the 404 CGI page if cgi_send_user_manual() is called while
       local user manual delivery is disabled.
      </para>
-    </itemizedlist>
+    </listitem>
+   </itemizedlist>
    </para>
   </listitem>
   <listitem>
@@ -666,6 +667,7 @@ How to install the binary packages depends on your operating system:
       cookies by default, you'll need additional exceptions.
       Reported by Mathias Homann in #3101419 and by Patrick on ijbswa-users@.
      </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
@@ -716,6 +718,7 @@ How to install the binary packages depends on your operating system:
      <para>
       Suggest to enable debug 32768 when suspecting parsing problems.
      </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
@@ -803,6 +806,7 @@ How to install the binary packages depends on your operating system:
      <para>
       Accept: Merged multiple header lines to: 'X-FORWARDED-PROTO: http X-HOST: 127.0.0.1'
      </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
@@ -911,6 +915,7 @@ How to install the binary packages depends on your operating system:
       While at it, add a note that the message doesn't seem to
       be entirely correct and should be improved later on.
      </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
@@ -940,6 +945,7 @@ How to install the binary packages depends on your operating system:
       Removed GNUisms in the webserver and webactions targets so they
       work with standard tar.
      </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
@@ -8911,6 +8917,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.129  2010/11/13 20:17:11  fabiankeil
+ Merge ChangeLog updates
+
  Revision 2.128  2010/11/10 22:00:13  fabiankeil
  Update the first paragraph of the 'What's New' section.
 
