@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.105 2010/11/13 20:37:39 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.106 2010/12/11 15:36:47 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -61,6 +61,7 @@ use constant {
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
+    CLI_OPTION_UNBREAK_LINES_ONLY => 0,
     CLI_OPTION_URL_STATISTICS_THRESHOLD => 0,
     CLI_OPTION_HOST_STATISTICS_THRESHOLD => 0,
 
@@ -2282,6 +2283,27 @@ sub stats_loop () {
 
 }
 
+sub unbreak_lines_only_loop() {
+    my $log_messages_reached = 0;
+    while (<>) {
+        chomp;
+
+            # Log level other than LOG_LEVEL_CLF?
+        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/ or
+            # LOG_LEVEL_CLF?
+            m/^((?:\d+\.\d+\.\d+\.\d+|[:\d]+)) - - \[(.*)\] "(.*)" (\d+) (\d+)/) {
+            $log_messages_reached = 1;
+            print "\n";
+
+        } else {
+            # Wrapped message
+        }
+        s@<BR>$@@;
+        print;
+        print "\n" unless $log_messages_reached;
+    }
+}
+
 sub VersionMessage {
     my $version_message;
 
@@ -2305,6 +2327,7 @@ sub get_cli_options () {
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
         'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
+        'unbreak-lines-only'        => CLI_OPTION_UNBREAK_LINES_ONLY,
         'host-statistics-threshold'=> CLI_OPTION_HOST_STATISTICS_THRESHOLD,
     );
 
@@ -2318,6 +2341,7 @@ sub get_cli_options () {
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
         'statistics'               => \$cli_options{'statistics'},
+        'unbreak-lines-only'       => \$cli_options{'unbreak-lines-only'},
         'url-statistics-threshold=s'=> \$cli_options{'url-statistics-threshold'},
         'host-statistics-threshold=s'=> \$cli_options{'host-statistics-threshold'},
         'version'                  => sub { VersionMessage && exit(0) },
@@ -2348,6 +2372,7 @@ Options and their default values if they have any:
     [--shorten-thread-ids]
     [--show-ineffective-filters]
     [--statistics]
+    [--unbreak-lines-only]
     [--url-statistics-threshold $cli_options{'url-statistics-threshold'}]
     [--title $cli_options{'title'}]
     [--version]
@@ -2368,7 +2393,10 @@ sub main () {
 
     print_intro();
 
-    if (cli_option_is_set('statistics')) {
+    # XXX: should explicitly reject incompatible argument combinations
+    if (cli_option_is_set('unbreak-lines-only')) {
+        unbreak_lines_only_loop();
+    } elsif (cli_option_is_set('statistics')) {
         stats_loop();
     } else {
         parse_loop();
@@ -2442,6 +2470,12 @@ that didn't modify the content.
 log messages. This is an experimental feature, if the results look wrong
 they very well might be. Also note that the results are pretty much guaranteed
 to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
+
+[B<--unbreak-lines-only] Tries to fix lines that got messed up by a broken or
+interestingly configured mail client and thus are no longer recognized properly.
+Only fixes some breakage, but may be good enough or at least better than nothing.
+Doesn't do anything else, so you probably want to pipe the output into
+B<privoxy-log-parser> again.
 
 [B<--url-statistics-threshold>] Only show the request count for a ressource
 if it's above or equal to the given threshold. If the threshold is 0, URL
