@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.106 2010/12/11 15:36:47 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.107 2010/12/11 15:40:29 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2327,7 +2327,7 @@ sub get_cli_options () {
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
         'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
-        'unbreak-lines-only'        => CLI_OPTION_UNBREAK_LINES_ONLY,
+        'unbreak-lines-only'       => CLI_OPTION_UNBREAK_LINES_ONLY,
         'host-statistics-threshold'=> CLI_OPTION_HOST_STATISTICS_THRESHOLD,
     );
 
