@@ -1,4 +1,4 @@
-$Id: TODO,v 1.26 2010/11/06 11:58:16 fabiankeil Exp $
+$Id: TODO,v 1.27 2010/11/22 10:34:06 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -198,6 +198,22 @@ Some Privoxy related task, not ordered in any way.
 
 80) Change FEATURE_EXTENDED_HOST_PATTERNS to support both
     extended and vanilla host patterns at the same time.
+
+    Note that the requirement is to allow the user to decide
+    if the domain pattern should be interpreted as regex or
+    traditional host pattern and if it's not obvious that the
+    user made any decision, default to the latter.
+
+    Possible solutions would be:
+
+    1. An always-use-regex-domain-patterns config option
+    2. An enable-regex-domain-patterns-for-this-action-file option
+    3. An enable-regex-domain-patterns-for-this-action-file-until-the-user-says-otherwise option
+    4. A treat-the-domain-pattern-in-this-line-as-regex(-or-not) option
+    5. Combinations of the options above
+
+    With 2+4, 3+4 or 2+3+4 being the preferences until
+    further discussion.
 
 81) Merge Fabian's unlimited-config-lines branch.
 
