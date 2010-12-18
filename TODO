@@ -1,4 +1,4 @@
-$Id: TODO,v 1.27 2010/11/22 10:34:06 fabiankeil Exp $
+$Id: TODO,v 1.28 2010/12/14 18:56:11 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -229,3 +229,10 @@ Some Privoxy related task, not ordered in any way.
 85) Once #84 is done, write a script that populates a directory with
     various common third-party icons (stumbleupon.png, facebook.png ...)
     and redirect requests for them to Privoxy.
+
+86) Add a server-body-tagger action. This is trivial as as all the
+    functionallity required to do it already exists.
+
+87) Add a client-body-tagger action. This is less trivial as we currently
+    don't buffer client bodies. After 14) is implemented it would be
+    trivial, though.
