@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.58 2009/05/16 13:27:20 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.59 2010/05/26 23:01:47 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1409,7 +1409,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
       }
       else if (mode == MODE_ACTIONS)
       {
-         /* it's a URL pattern */
+         /* it's an URL pattern */
 
          /* allocate a new node */
          if ((perm = zalloc(sizeof(*perm))) == NULL)
