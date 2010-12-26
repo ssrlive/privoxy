@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.333 2010/12/26 16:13:47 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.334 2010/12/26 16:18:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2487,6 +2487,7 @@ static void serve(struct client_state *csp)
    do
    {
       unsigned int latency;
+      int config_file_change_detected = 0; /* Only used for debugging */
 
       chat(csp);
 
@@ -2524,6 +2525,7 @@ static void serve(struct client_state *csp)
       if (continue_chatting && any_loaded_file_changed(csp->config->config_file_list))
       {
          continue_chatting = 0;
+         config_file_change_detected = 1;
       }
 
       if (continue_chatting)
@@ -2595,14 +2597,16 @@ static void serve(struct client_state *csp)
             "The connection on server socket %d to %s isn't reusable. "
             "Closing. Server connection: keep-alive %u, tainted: %u, "
             "socket alive %u. Client connection: crunched: %u, "
-            "socket alive: %u. Server timeout: %u",
+            "socket alive: %u. Server timeout: %u. "
+            "Configuration file change detected: %u",
             csp->server_connection.sfd, csp->server_connection.host,
             0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
             0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
             socket_is_still_alive(csp->server_connection.sfd),
             0 != (csp->flags & CSP_FLAG_CRUNCHED),
             socket_is_still_alive(csp->cfd),
-            csp->server_connection.keep_alive_timeout);
+            csp->server_connection.keep_alive_timeout,
+            config_file_change_detected);
       }
    } while (continue_chatting);
 
