@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.331 2010/11/06 11:48:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.332 2010/12/26 15:30:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2587,7 +2587,16 @@ static void serve(struct client_state *csp)
       {
          log_error(LOG_LEVEL_CONNECT,
             "The connection on server socket %d to %s isn't reusable. "
-            "Closing.", csp->server_connection.sfd, csp->server_connection.host);
+            "Closing. Server connection: keep-alive %u, tainted: %u, "
+            "socket alive %u. Client connection: crunched: %u, "
+            "socket alive: %u. Server timeout: %u",
+            csp->server_connection.sfd, csp->server_connection.host,
+            0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
+            0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
+            socket_is_still_alive(csp->server_connection.sfd),
+            0 != (csp->flags & CSP_FLAG_CRUNCHED),
+            socket_is_still_alive(csp->cfd),
+            csp->server_connection.keep_alive_timeout);
       }
    } while (continue_chatting);
 
