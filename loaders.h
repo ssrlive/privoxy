@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.24 2009/04/24 15:29:43 fabiankeil Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.25 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -10,7 +10,7 @@
  *                the list of active loaders, and to automatically 
  *                unload files that are no longer in use.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -101,6 +101,8 @@ void unload_forward_spec(struct forward_spec *fwd);
 extern void add_loader(int (*loader)(struct client_state *), 
                        struct configuration_spec * config);
 extern int run_loader(struct client_state *csp);
+
+extern int any_loaded_file_changed(const struct file_list *files_to_check);
 
 /* Revision control strings from this header and associated .c file */
 extern const char loaders_rcs[];

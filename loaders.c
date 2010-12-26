@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.75 2010/05/26 23:01:47 ler762 Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.76 2010/07/21 14:35:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -8,7 +8,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.75 2010/05/26 23:01:47 ler762 Exp
  *                the list of active loaders, and to automatically
  *                unload files that are no longer in use.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1420,6 +1420,67 @@ int run_loader(struct client_state *csp)
    }
    return(ret);
 
+}
+
+/*********************************************************************
+ *
+ * Function    :  file_has_been_modified
+ *
+ * Description :  Helper function to check if a file has been changed
+ *
+ * Parameters  :
+ *          1  : filename = The name of the file to check
+ *          2  : last_known_modification = The time of the last known
+ *                                         modification
+ *
+ * Returns     :  TRUE if the file has been changed,
+ *                FALSE otherwise.
+ *
+ *********************************************************************/
+static int file_has_been_modified(const char *filename, time_t last_know_modification)
+{
+   struct stat statbuf[1];
+
+   if (stat(filename, statbuf) < 0)
+   {
+      /* Error, probably file not found which counts as change. */
+      return 1;
+   }
+
+   return (last_know_modification != statbuf->st_mtime);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  any_loaded_file_changed
+ *
+ * Description :  Helper function to check if any loaded file has been
+ *                changed since the time it has been loaded.
+ *
+ *                XXX: Should we cache the return value for x seconds?
+ *
+ * Parameters  :
+ *          1  : files_to_check = List of files to check
+ *
+ * Returns     : TRUE if any file has been changed,
+ *               FALSE otherwise.
+ *
+ *********************************************************************/
+int any_loaded_file_changed(const struct file_list *files_to_check)
+{
+   const struct file_list *file_to_check = files_to_check;
+
+   while (file_to_check != NULL)
+   {
+      if (file_has_been_modified(file_to_check->filename, file_to_check->lastmodified))
+      {
+         log_error(LOG_LEVEL_INFO, "%s has been changed", file_to_check->filename);
+         return TRUE;
+      }
+      file_to_check = file_to_check->next;
+   }
+   return FALSE;
 }
 
 
