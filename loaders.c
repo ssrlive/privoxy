@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.76 2010/07/21 14:35:09 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.77 2010/12/26 15:30:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -858,10 +858,7 @@ int load_trustfile(struct client_state *csp)
    if (!check_file_changed(current_trustfile, csp->config->trustfile, &fs))
    {
       /* No need to load */
-      if (csp)
-      {
-         csp->tlist = current_trustfile;
-      }
+      csp->tlist = current_trustfile;
       return(0);
    }
    if (!fs)
