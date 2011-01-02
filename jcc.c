@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.336 2010/12/31 14:57:00 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.337 2011/01/02 11:57:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3445,6 +3445,28 @@ static void listen_loop(void)
       }
       csp = &csp_list->csp;
 
+      log_error(LOG_LEVEL_CONNECT, "Listening for new connections ... ");
+
+      if (!accept_connection(csp, bfd))
+      {
+         log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
+
+#ifdef AMIGA
+         if(!childs)
+         {
+            exit(1);
+         }
+#endif
+         freez(csp_list);
+         continue;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "accepted connection from %s on socket %d",
+            csp->ip_addr_str, csp->cfd);
+      }
+
       csp->flags |= CSP_FLAG_ACTIVE;
       csp->server_connection.sfd = JB_INVALID_SOCKET;
 
@@ -3468,28 +3490,6 @@ static void listen_loop(void)
          close_socket(bfd);
 
          bfd = bind_port_helper(config);
-      }
-
-      log_error(LOG_LEVEL_CONNECT, "Listening for new connections ... ");
-
-      if (!accept_connection(csp, bfd))
-      {
-         log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
-
-#ifdef AMIGA
-         if(!childs)
-         {
-            exit(1);
-         }
-#endif
-         freez(csp_list);
-         continue;
-      }
-      else
-      {
-         log_error(LOG_LEVEL_CONNECT,
-            "accepted connection from %s on socket %d",
-            csp->ip_addr_str, csp->cfd);
       }
 
 #ifdef FEATURE_TOGGLE
