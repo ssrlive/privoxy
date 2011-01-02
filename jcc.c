@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.335 2010/12/26 16:20:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.336 2010/12/31 14:57:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1949,7 +1949,14 @@ static void chat(struct client_state *csp)
       if (FD_ISSET(csp->server_connection.sfd, &rfds))
       {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-         if (!socket_is_still_alive(csp->cfd))
+         /*
+          * If we are buffering content, we don't want to eat up to
+          * buffer-limit bytes if the client no longer cares about them.
+          * If we aren't buffering, however, a dead client socket will be
+          * noticed pretty much right away anyway, so we can reduce the
+          * overhead by skipping the check.
+          */
+         if (buffer_and_filter_content && !socket_is_still_alive(csp->cfd))
          {
 #ifdef _WIN32
             log_error(LOG_LEVEL_CONNECT,
