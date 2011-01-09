@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.59 2010/05/26 23:01:47 ler762 Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.60 2010/12/26 16:18:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -522,7 +522,7 @@ jb_err get_actions(char *line,
 
                   if ((value == NULL) || (*value == '\0'))
                   {
-                     if (0 != strcmpic(action->name, "block"))
+                     if (0 == strcmpic(action->name, "+block"))
                      {
                         /*
                          * XXX: Temporary backwards compatibility hack.
