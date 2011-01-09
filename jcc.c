@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.337 2011/01/02 11:57:45 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.338 2011/01/02 12:17:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2558,9 +2558,8 @@ static void serve(struct client_state *csp)
             && data_is_available(csp->cfd, (int)client_timeout)
             && socket_is_still_alive(csp->cfd))
          {
-            log_error(LOG_LEVEL_CONNECT, "Client request arrived in "
-               "time or the client closed the connection on socket %d.",
-                csp->cfd);
+            log_error(LOG_LEVEL_CONNECT,
+               "Client request arrived in time on socket %d.", csp->cfd);
             prepare_csp_for_next_request(csp);
          }
          else
