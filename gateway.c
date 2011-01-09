@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.64 2009/10/03 10:37:49 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.65 2010/04/23 11:53:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1004,7 +1004,20 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       return(JB_INVALID_SOCKET);
    }
 
-   if (read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
+   if (!data_is_available(sfd, csp->config->socket_timeout))
+   {
+      if (socket_is_still_alive(sfd))
+      {
+         errstr = "SOCKS5 negotiation timed out";
+      }
+      else
+      {
+         errstr = "SOCKS5 negotiation got aborted by the server";
+      }
+      err = 1;
+   }
+
+   if (!err && read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
    {
       errstr = "SOCKS5 negotiation read failed";
       err = 1;
