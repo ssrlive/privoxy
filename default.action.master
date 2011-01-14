@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.226 2010/06/18 14:49:33 ler762 Exp $
+#  $Id: default.action.master,v 1.227 2010/11/06 10:47:59 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1045,6 +1045,9 @@ scripts.chitika.net/.*\.js
 # Blocked URL = http://i.cmpnet.com/shared/omniture/s_code_remote.js
 #MASTER# BLOCK-REFERRER: http://www.informationweek.de/
 /.*omniture.*\.js
+# Blocked URL = http://gadk.hit.gemius.pl/*/_1274097577014/rexdot.gif?l=30&id=..DlR.vCLZGB56RmfkYNSWZVLSqB3ueYOP.Oec5WWiv.h7&fr=1&fv=WIN%2010%2C0%2C45%2C2&tz=-120&href=http%3A//www.baadgalleri.dk/&ref=&screen=1440x900&col=32
+#MASTER# BLOCK-REFERRER: http://www.baadgalleri.dk/
+.gemius.pl/
 
 
 {+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
