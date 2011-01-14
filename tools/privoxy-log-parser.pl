@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.108 2010/12/11 15:44:55 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.109 2011/01/09 12:09:21 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1770,6 +1770,11 @@ sub handle_loglevel_info ($) {
         # Buffer limit reached while extending the buffer (iob). Needed: 4197470. Limit: 4194304
         $c =~ s@(?<=Needed: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Limit: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^File modification detected: /) {
+
+        # File modification detected: /usr/local/etc/privoxy/user-agent.action
+        $c =~ s@(?<= detected: )(.*)$@$h{'file'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^No logfile configured/ or
              $c =~ m/^Malformerd HTTP headers detected and MS IIS5 hack enabled/ or
