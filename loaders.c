@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.77 2010/12/26 15:30:28 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.78 2010/12/31 14:53:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -1472,7 +1472,8 @@ int any_loaded_file_changed(const struct file_list *files_to_check)
    {
       if (file_has_been_modified(file_to_check->filename, file_to_check->lastmodified))
       {
-         log_error(LOG_LEVEL_INFO, "%s has been changed", file_to_check->filename);
+         log_error(LOG_LEVEL_INFO,
+            "File modification detected: %s", file_to_check->filename);
          return TRUE;
       }
       file_to_check = file_to_check->next;
