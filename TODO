@@ -1,4 +1,4 @@
-$Id: TODO,v 1.28 2010/12/14 18:56:11 fabiankeil Exp $
+$Id: TODO,v 1.29 2010/12/18 12:09:43 fabiankeil Exp $
 
 Some Privoxy related task, not ordered in any way.
 
@@ -236,3 +236,6 @@ Some Privoxy related task, not ordered in any way.
 87) Add a client-body-tagger action. This is less trivial as we currently
     don't buffer client bodies. After 14) is implemented it would be
     trivial, though.
+
+88) Investigate if there's a Perl module that Privoxy-Regression-Test
+    could optionally use to keep connections alive.
