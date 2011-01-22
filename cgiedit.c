@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.66 2009/05/16 13:27:20 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.67 2009/05/19 17:46:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1734,7 +1734,7 @@ jb_err edit_read_actions_file(struct client_state *csp,
          {
             log_error(LOG_LEVEL_INFO,
                "Timestamp mismatch limit reached, turning CGI editor off. "
-               "Reload the configuration file to reenable it.");
+               "Reload the configuration file to re-enable it.");
             csp->config->feature_flags &= ~RUNTIME_FEATURE_CGI_EDIT_ACTIONS;
          }
       }
@@ -2882,7 +2882,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
     * browsers (BR #1570678).
     *
     * The config option split-large-forms works around this browser
-    * bug (HTTP has no URL lenght limitation) by deviding the action
+    * bug (HTTP has no URL length limitation) by deviding the action
     * list form into multiple smaller ones. It means the URLs are shorter
     * and work in broken browsers as well, but the user can no longer change
     * all actions with one submit.

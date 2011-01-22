@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.159 2010/09/03 17:38:20 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.160 2010/10/10 09:58:12 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -765,7 +765,7 @@ struct reusable_connection
 #define CSP_FLAG_SERVER_CONTENT_LENGTH_SET     0x00002000U
 
 /**
- * Flag for csp->flags: Set if we know the content lenght,
+ * Flag for csp->flags: Set if we know the content length,
  * either because the server set it, or we figured it out
  * on our own.
  */

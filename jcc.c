@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.338 2011/01/02 12:17:03 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.339 2011/01/09 12:08:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2401,7 +2401,7 @@ static void chat(struct client_state *csp)
    if (csp->content_length == 0)
    {
       /*
-       * If Privoxy didn't recalculate the Content-Lenght,
+       * If Privoxy didn't recalculate the Content-Length,
        * byte_count is still correct.
        */
       csp->content_length = byte_count;

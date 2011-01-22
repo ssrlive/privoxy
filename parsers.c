@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.215 2010/12/18 12:56:33 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.216 2011/01/14 21:35:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4144,7 +4144,7 @@ static jb_err handle_conditional_hide_referrer_parameter(char **header,
    const char *host, const int parameter_conditional_block)
 {
    char *referer = strdup(*header);
-   const size_t hostlenght = strlen(host);
+   const size_t hostlength = strlen(host);
    const char *referer_url = NULL;
 
    if (NULL == referer)
@@ -4154,14 +4154,14 @@ static jb_err handle_conditional_hide_referrer_parameter(char **header,
    }
 
    /* referer begins with 'Referer: http[s]://' */
-   if ((hostlenght+17) < strlen(referer))
+   if ((hostlength+17) < strlen(referer))
    {
       /*
        * Shorten referer to make sure the referer is blocked
        * if www.example.org/www.example.com-shall-see-the-referer/
        * links to www.example.com/
        */
-      referer[hostlenght+17] = '\0';
+      referer[hostlength+17] = '\0';
    }
    referer_url = strstr(referer, "http://");
    if ((NULL == referer_url) || (NULL == strstr(referer_url, host)))

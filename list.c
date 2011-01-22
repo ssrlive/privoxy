@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.21 2009/05/16 13:27:20 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.22 2010/11/22 10:32:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -496,7 +496,7 @@ char *list_to_text(const struct list *the_list)
    assert(list_is_valid(the_list));
 
    /*
-    * Calculate the lenght of the final text.
+    * Calculate the length of the final text.
     * '2' because of the '\r\n' at the end of
     * each string and at the end of the text.
     */
