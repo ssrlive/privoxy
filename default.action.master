@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.227 2010/11/06 10:47:59 fabiankeil Exp $
+#  $Id: default.action.master,v 1.228 2011/01/14 19:34:04 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1707,7 +1707,8 @@ fritz.box/
 # URL = http://kb.adobe.com/selfservice/viewContent.do?externalId=kb402747&sliceId=1
 .adobe.com
 # URL = http://qa.debian.org/popcon.php
-qa.debian.org/popcon\.php
+# URL = http://qa.debian.org/popcon-png.php?packages=privoxy&show_installed=on&want_legend=on&want_ticks=on&date_fmt=%25Y-%25m&beenhere=1
+qa.debian.org/popcon
 #MASTER# REMARKS: Support Requests item #2432535 2008-12-16
 # URL = http://www.mta.info/bandt/traffic/advmain.htm
 .mta.info/.*advmain.htm$
