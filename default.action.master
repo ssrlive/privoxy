@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.228 2011/01/14 19:34:04 fabiankeil Exp $
+#  $Id: default.action.master,v 1.229 2011/01/22 12:36:52 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1402,6 +1402,9 @@ track.webtrekk.de/
 b.scorecardresearch.com/
 # URL = https://sb.scorecardresearch.com/
 sb.scorecardresearch.com/
+#MASTER# BLOCK-REFERRER: http://sourceforge.net/projects/ijbswa/
+# Blocked URL = http://b.collective-media.net/seg/cm/cm_aa_gn1
+b.collective-media.net/
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
