@@ -1,4 +1,4 @@
-$Id: TODO,v 1.31 2011/01/15 13:12:45 fabiankeil Exp $
+$Id: TODO,v 1.32 2011/01/24 18:12:44 fabiankeil Exp $
 
 Some Privoxy related tasks, not ordered in any way.
 
@@ -247,3 +247,7 @@ Some Privoxy related tasks, not ordered in any way.
 
 88) Investigate if there's a Perl module that Privoxy-Regression-Test
     could optionally use to keep connections alive.
+
+89) When multiple block actions apply, consider showing all the block
+    reasons on the blocked page that haven't been overruled, not just
+    the last one.
