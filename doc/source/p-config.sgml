@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.66 2010/11/08 17:54:21 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.67 2011/01/09 12:10:34 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.66 2010/11/08 17:54:21 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.67 2011/01/09 12:10:34 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -2893,19 +2893,6 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <sect3 renderas="sect4" id="handle-as-empty-doc-returns-ok"><title>handle-as-empty-doc-returns-ok</title>
 <variablelist>
  <varlistentry>
-  <term>Note:</term>
-  <listitem>
-   <para>
-    This is a work-around for Firefox bug 492459:
-    <quote>
-    Websites are no longer rendered if SSL requests for JavaScripts are blocked by a proxy.
-    </quote>
-    (<ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
-	>https://bugzilla.mozilla.org/show_bug.cgi?id=492459</ulink>)
-   </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
   <term>Specifies:</term>
   <listitem>
    <para>
@@ -2946,8 +2933,24 @@ forward-socks4, forward-socks4a and forward-socks5</title>
    </para>
   </listitem>
  </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This is a work-around for Firefox bug 492459:
+    <quote>
+    Websites are no longer rendered if SSL requests for JavaScripts are blocked by a proxy.
+    </quote>
+    (<ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
+	>https://bugzilla.mozilla.org/show_bug.cgi?id=492459</ulink>)
+    As the bug has been fixed for quite some time this option should no longer
+    be needed and will be removed in a future release. Please speak up if you
+    have a reason why the option should be kept around.
+   </para>
+  </listitem>
+ </varlistentry>
 </variablelist>
-<![%config-file;[<literallayout>@@handle-as-empty-doc-returns-ok 1</literallayout>]]>
+<![%config-file;[<literallayout>@@#handle-as-empty-doc-returns-ok 1</literallayout>]]>
 </sect3>
 
 
