@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.229 2011/01/22 12:36:52 fabiankeil Exp $
+#  $Id: default.action.master,v 1.230 2011/01/24 18:16:33 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2272,6 +2272,9 @@ www.skweezer.net/bloglines
 # Redirected URL = http://media.fastclick.net/w/get.media?sid=4681&m=5&tp=6&url=http%3A//www.sciam.com/article.cfm%3FchanID%3Dsa003%26articleID%3DC7C87ECC-E7F2-99DF-39AEFF3D7D1A8CFB%26ref%3Drss
 # Redirect Destination = http://www.sciam.com/article.cfm?chanID=sa003&articleID=C7C87ECC-E7F2-99DF-39AEFF3D7D1A8CFB&ref=rss
 .fastclick.net/w/get\.media\?
+# Redirected URL = http://www.awin1.com/cread.php?awinmid=2891&awinaffid=43305&clickref=&p=http://www.groupon.co.uk/
+# Redirect Destination = http://www.groupon.co.uk/
+.awin1.com/.*=http://
 
 {+block{Looks like an anti-leech trigger URL.}}
 #MASTER# COMMENTS: This section not checked 10/17/06 HB. Still out there?
