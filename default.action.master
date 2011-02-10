@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.230 2011/01/24 18:16:33 fabiankeil Exp $
+#  $Id: default.action.master,v 1.231 2011/02/10 22:20:38 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1405,6 +1405,11 @@ sb.scorecardresearch.com/
 #MASTER# BLOCK-REFERRER: http://sourceforge.net/projects/ijbswa/
 # Blocked URL = http://b.collective-media.net/seg/cm/cm_aa_gn1
 b.collective-media.net/
+#MASTER# BLOCK-REFERRER: http://www.spiegel.de/
+# Blocked URL = http://spiegel.ivwbox.de/cgi-bin/ivw/CP/1001;/home/c-18/be-PB64-aG9tZXBhZ2UvY2VudGVy/szwprofil-1001
+#MASTER# BLOCK-REFERRER: http://www.heise.de/
+# Blocked URL = http://heise.ivwbox.de/2004/01/survey.js
+ .ivwbox.de/
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
