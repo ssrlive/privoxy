@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.231 2011/02/10 22:20:38 fabiankeil Exp $
+#  $Id: default.action.master,v 1.232 2011/02/10 22:21:16 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -948,9 +948,11 @@ fusion.adtoma.com/
 # Blocked URL = http://atemda.com/ClickThrough.ashx?pId=9616&mId=14484&tId=634102151426089505&opS=1&admetac=mR3sJ3%2b9yleq%2bHowITh0hw%3d%3d
 #MASTER# BLOCK-REFERRER: http://www.startpagina.nl
 .atemda.com/
-#MASTER# Remark: 2o7.net and omtrdc.net are domains used by Omniture
+#MASTER# Remark: 2o7.net, omtrdc.net and www91.intel.com are domains used by Omniture
 # Blocked URL = http://ciscosystemsinc.tt.omtrdc.net/m2/ciscosystemsinc/mbox/standard?mboxHost=www.cisco.com&mboxSession=12
 .omtrdc.net/
+# Blocked URL = http://www91.intel.com/b/ss/intelcorp,intelcorpdc/...ONDataProvider.aspx%3FDownloadType%3DDrivers&ot=A&AQE=1
+www91.intel.com/
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
