@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.60 2010/12/26 16:18:52 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.61 2011/01/09 12:00:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -6,7 +6,7 @@ const char actions_rcs[] = "$Id: actions.c,v 1.60 2010/12/26 16:18:52 fabiankeil
  * Purpose     :  Declares functions to work with actions files
  *                Functions declared include: FIXME
  *
- * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2011 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1055,13 +1055,13 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
     * Note: Keep these in the order they occur in the file, they are
     * sometimes tested with <=
     */
-#define MODE_START_OF_FILE 1
-#define MODE_SETTINGS      2
-#define MODE_DESCRIPTION   3
-#define MODE_ALIAS         4
-#define MODE_ACTIONS       5
-
-   int mode = MODE_START_OF_FILE;
+   enum {
+      MODE_START_OF_FILE = 1,
+      MODE_SETTINGS      = 2,
+      MODE_DESCRIPTION   = 3,
+      MODE_ALIAS         = 4,
+      MODE_ACTIONS       = 5
+   } mode;
 
    FILE *fp;
    struct url_actions *last_perm;
@@ -1072,6 +1072,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
    int cur_action_used = 0;
    struct action_alias * alias_list = NULL;
    unsigned long linenum = 0;
+   mode = MODE_START_OF_FILE;
 
    if (!check_file_changed(current_actions_file[fileid], csp->config->actions_file[fileid], &fs))
    {
@@ -1225,7 +1226,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             char * end;
 
             /* set mode */
-            mode    = MODE_ACTIONS;
+            mode = MODE_ACTIONS;
 
             /* free old action */
             if (cur_action)
