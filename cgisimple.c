@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.104 2011/02/14 16:07:11 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.105 2011/02/14 16:07:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -684,6 +684,7 @@ static const char *get_content_type(const char *filename)
    {
       {".css",  "text/css"},
       {".jpg",  "image/jpeg"},
+      {".jpeg", "image/jpeg"},
       {".png",  "image/png"},
    };
 
