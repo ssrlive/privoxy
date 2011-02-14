@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.100 2011/02/14 16:03:53 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.101 2011/02/14 16:04:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -711,7 +711,13 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    }
    else if (NULL != strchr(filename, '/') || NULL != strstr(filename, ".."))
    {
-      /* Check parameter for hack attempts */
+      /*
+       * We currently only support a flat file
+       * hierachy for the documentation.
+       */
+      log_error(LOG_LEVEL_ERROR,
+         "Rejecting the request to serve '%s' as it contains '/' or '..'",
+         filename);
       return JB_ERR_CGI_PARAMS;
    }
 
