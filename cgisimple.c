@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.98 2010/03/27 18:29:59 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.99 2010/03/28 18:02:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1861,6 +1861,7 @@ static jb_err load_file(const char *filename, char **buffer, size_t *length)
    fp = fopen(filename, "rb");
    if (NULL == fp)
    {
+      log_error(LOG_LEVEL_ERROR, "Failed to open %s: %E", filename);
       return JB_ERR_FILE;
    }
 
