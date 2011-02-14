@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.101 2011/02/14 16:04:55 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.102 2011/02/14 16:05:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -9,7 +9,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.101 2011/02/14 16:04:55 fabia
  *                Functions declared include:
  * 
  *
- * Copyright   :  Written by and Copyright (C) 2001-2010 the
+ * Copyright   :  Written by and Copyright (C) 2001-2011 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -660,6 +660,46 @@ jb_err cgi_send_url_info_osd(struct client_state *csp,
 
 /*********************************************************************
  *
+ * Function    :  get_content_type
+ *
+ * Description :  Use the file extension to guess the content type
+ *                header we should use to serve the file.
+ *
+ * Parameters  :
+ *          1  :  filename = Name of the file whose content type
+ *                           we care about
+ *
+ * Returns     :  The guessed content type.
+ *
+ *********************************************************************/
+static const char *get_content_type(const char *filename)
+{
+   int i;
+   struct content_type
+   {
+      const char *extension;
+      const char *content_type;
+   };
+   static const struct content_type content_types[] =
+   {
+      {".css",  "text/css"},
+      {".jpg",  "image/jpeg"},
+   };
+
+   for (i = 0; i < SZ(content_types); i++)
+   {
+      if (strstr(filename, content_types[i].extension))
+      {
+         return content_types[i].content_type;
+      }
+   }
+
+   /* No match by extension, default to html */
+   return "text/html";
+}
+
+/*********************************************************************
+ *
  * Function    :  cgi_send_user_manual
  *
  * Description :  CGI function that sends a file in the user
@@ -684,7 +724,6 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    const char * filename;
    char *full_path;
    jb_err err = JB_ERR_OK;
-   size_t length;
 
    assert(csp);
    assert(rsp);
@@ -743,24 +782,15 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    /* Guess correct Content-Type based on the filename's ending */
    if (filename)
    {
-      length = strlen(filename);
+      const char *content_type = get_content_type(filename);
+      log_error(LOG_LEVEL_CGI,
+         "Content-Type guessed for %s: %s", filename, content_type);
+      err = enlist_unique_header(rsp->headers, "Content-Type", content_type);
    }
    else
    {
-      length = 0;
+      /* XXX: why should this happen */
    } 
-   if((length>=4) && !strcmp(&filename[length-4], ".css"))
-   {
-      err = enlist(rsp->headers, "Content-Type: text/css");
-   }
-   else if((length>=4) && !strcmp(&filename[length-4], ".jpg"))
-   {
-      err = enlist(rsp->headers, "Content-Type: image/jpeg");
-   }
-   else
-   {
-      err = enlist(rsp->headers, "Content-Type: text/html");
-   }
 
    return err;
 }
