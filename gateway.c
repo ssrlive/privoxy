@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.66 2011/01/09 12:08:35 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.67 2011/01/09 12:08:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -383,7 +383,9 @@ int connection_destination_matches(const struct reusable_connection *connection,
          && strcmpic(connection->gateway_host, fwd->gateway_host))
        && (connection->gateway_host != fwd->gateway_host))
    {
-      log_error(LOG_LEVEL_CONNECT, "Gateway mismatch.");
+      log_error(LOG_LEVEL_CONNECT,
+         "Gateway mismatch. Previous gateway: %s. Current gateway: %s",
+         connection->gateway_host, fwd->gateway_host);
       return FALSE;
    }
 
@@ -392,7 +394,9 @@ int connection_destination_matches(const struct reusable_connection *connection,
          && strcmpic(connection->forward_host, fwd->forward_host))
       && (connection->forward_host != fwd->forward_host))
    {
-      log_error(LOG_LEVEL_CONNECT, "Forwarding proxy mismatch.");
+      log_error(LOG_LEVEL_CONNECT,
+         "Forwarding proxy mismatch. Previous proxy: %s. Current proxy: %s",
+         connection->forward_host, fwd->forward_host);
       return FALSE;
    }
 
