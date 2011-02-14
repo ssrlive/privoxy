@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.102 2011/02/14 16:05:37 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.103 2011/02/14 16:06:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -721,9 +721,10 @@ jb_err cgi_send_user_manual(struct client_state *csp,
                             struct http_response *rsp,
                             const struct map *parameters)
 {
-   const char * filename;
+   const char *filename;
    char *full_path;
    jb_err err = JB_ERR_OK;
+   const char *content_type;
 
    assert(csp);
    assert(rsp);
@@ -779,20 +780,12 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    }
    freez(full_path);
 
-   /* Guess correct Content-Type based on the filename's ending */
-   if (filename)
-   {
-      const char *content_type = get_content_type(filename);
-      log_error(LOG_LEVEL_CGI,
-         "Content-Type guessed for %s: %s", filename, content_type);
-      err = enlist_unique_header(rsp->headers, "Content-Type", content_type);
-   }
-   else
-   {
-      /* XXX: why should this happen */
-   } 
+   content_type = get_content_type(filename);
+   log_error(LOG_LEVEL_CGI,
+      "Content-Type guessed for %s: %s", filename, content_type);
 
-   return err;
+   return enlist_unique_header(rsp->headers, "Content-Type", content_type);
+
 }
 
 
