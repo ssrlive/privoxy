@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.99 2010/03/28 18:02:22 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.100 2011/02/14 16:03:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -704,17 +704,18 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    }
 
    get_string_param(parameters, "file", &filename);
-   /* Check paramter for hack attempts */
-   if (filename && strchr(filename, '/'))
+   if (filename == NULL)
    {
-      return JB_ERR_CGI_PARAMS;
+      /* It's '/' so serve the index.html if there is one.  */
+      filename = "index.html";
    }
-   if (filename && strstr(filename, ".."))
+   else if (NULL != strchr(filename, '/') || NULL != strstr(filename, ".."))
    {
+      /* Check parameter for hack attempts */
       return JB_ERR_CGI_PARAMS;
    }
 
-   full_path = make_path(csp->config->usermanual, filename ? filename : "index.html");
+   full_path = make_path(csp->config->usermanual, filename);
    if (full_path == NULL)
    {
       return JB_ERR_MEMORY;
