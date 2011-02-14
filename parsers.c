@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.216 2011/01/14 21:35:44 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.217 2011/01/22 12:30:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2394,14 +2394,9 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 {
    const char *newval;
    char buf[BUFFER_SIZE];
-
+   time_t last_modified;
    char newheader[50];
-#ifdef HAVE_GMTIME_R
-   struct tm gmt;
-#endif
-   struct tm *timeptr = NULL;
-   time_t now, last_modified;                  
-   
+
    /*
     * Are we messing with the Last-Modified header?
     */
@@ -2446,16 +2441,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
       const char *header_time = *header + sizeof("Last-Modified:");
 
       log_error(LOG_LEVEL_HEADER, "Randomizing: %s", *header);
-      now = time(NULL);
-#ifdef HAVE_GMTIME_R
-      gmtime_r(&now, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-      privoxy_mutex_lock(&gmtime_mutex);
-      gmtime(&now);
-      privoxy_mutex_unlock(&gmtime_mutex);
-#else
-      gmtime(&now);
-#endif
+
       if (JB_ERR_OK != parse_header_time(header_time, &last_modified))
       {
          log_error(LOG_LEVEL_HEADER, "Couldn't parse: %s in %s (crunching!)", header_time, *header);
@@ -2463,7 +2449,14 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
       }
       else
       {
-         long int rtime = (long int)difftime(now, last_modified);
+         time_t now;
+         struct tm *timeptr = NULL;
+         long int rtime;
+#ifdef HAVE_GMTIME_R
+         struct tm gmt;
+#endif
+         now = time(NULL);
+         rtime = (long int)difftime(now, last_modified);
          if (rtime)
          {
             long int days, hours, minutes, seconds;
