@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.160 2010/10/10 09:58:12 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.161 2011/01/22 12:30:22 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1031,12 +1031,12 @@ struct block_spec
 
 #endif /* def FEATURE_TRUST */
 
-
-#define SOCKS_NONE    0    /**< Don't use a SOCKS server               */
-#define SOCKS_4      40    /**< original SOCKS 4 protocol              */
-#define SOCKS_4A     41    /**< as modified for hosts w/o external DNS */
-#define SOCKS_5      50    /**< as modified for hosts w/o external DNS */
-
+enum forwarder_type {
+   SOCKS_NONE =  0,    /**< Don't use a SOCKS server               */
+   SOCKS_4    = 40,    /**< original SOCKS 4 protocol              */
+   SOCKS_4A   = 41,    /**< as modified for hosts w/o external DNS */
+   SOCKS_5    = 50,    /**< as modified for hosts w/o external DNS */
+};
 
 /**
  * How to forward a connection to a parent proxy.
@@ -1047,7 +1047,7 @@ struct forward_spec
    struct url_spec url[1];
 
    /** Connection type.  Must be SOCKS_NONE, SOCKS_4, SOCKS_4A or SOCKS_5. */
-   int   type;
+   enum forwarder_type type;
 
    /** SOCKS server hostname.  Only valid if "type" is SOCKS_4 or SOCKS_4A. */
    char *gateway_host;
