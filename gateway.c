@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.67 2011/01/09 12:08:52 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.68 2011/02/14 16:03:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -94,15 +94,17 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 #define SOCKS_REQUEST_IDENT_FAILED     92
 #define SOCKS_REQUEST_IDENT_CONFLICT   93
 
-#define SOCKS5_REQUEST_GRANTED             0
-#define SOCKS5_REQUEST_FAILED              1
-#define SOCKS5_REQUEST_DENIED              2
-#define SOCKS5_REQUEST_NETWORK_UNREACHABLE 3
-#define SOCKS5_REQUEST_HOST_UNREACHABLE    4
-#define SOCKS5_REQUEST_CONNECTION_REFUSED  5
-#define SOCKS5_REQUEST_TTL_EXPIRED         6
-#define SOCKS5_REQUEST_PROTOCOL_ERROR      7
-#define SOCKS5_REQUEST_BAD_ADDRESS_TYPE    8
+enum {
+   SOCKS5_REQUEST_GRANTED             = 0,
+   SOCKS5_REQUEST_FAILED              = 1,
+   SOCKS5_REQUEST_DENIED              = 2,
+   SOCKS5_REQUEST_NETWORK_UNREACHABLE = 3,
+   SOCKS5_REQUEST_HOST_UNREACHABLE    = 4,
+   SOCKS5_REQUEST_CONNECTION_REFUSED  = 5,
+   SOCKS5_REQUEST_TTL_EXPIRED         = 6,
+   SOCKS5_REQUEST_PROTOCOL_ERROR      = 7,
+   SOCKS5_REQUEST_BAD_ADDRESS_TYPE    = 8
+};
 
 /* structure of a socks client operation */
 struct socks_op {
