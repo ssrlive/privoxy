@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.61 2010/01/03 13:49:01 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.62 2011/02/19 13:59:20 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -371,6 +371,7 @@ sub load_action_files ($) {
                 $ri++;
                 $count++;
                 enlist_new_test(\@regression_tests, $token, $value, $si, $ri, $count);
+                $no_checks = 1; # Already validated by enlist_new_test().
             }
 
             if ($token =~ /level\s+(\d+)/i) {
@@ -463,10 +464,14 @@ sub load_action_files ($) {
 
                 # We don't use it, so we don't need
                 $no_checks = 1;
+                l(LL_STATUS, "Enabling no_checks for $token") unless $no_checks;
             }
+
             # XXX: Neccessary?
-            check_for_forbidden_characters($value) unless $no_checks;
-            check_for_forbidden_characters($token);
+            unless ($no_checks)  {
+                check_for_forbidden_characters($value);
+                check_for_forbidden_characters($token);
+            }
         }
     }
 
