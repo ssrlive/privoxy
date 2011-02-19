@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.68 2011/02/14 16:03:03 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.69 2011/02/19 13:54:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -89,10 +89,10 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
                                 struct client_state *csp);
 
 
-#define SOCKS_REQUEST_GRANTED          90
-#define SOCKS_REQUEST_REJECT           91
-#define SOCKS_REQUEST_IDENT_FAILED     92
-#define SOCKS_REQUEST_IDENT_CONFLICT   93
+#define SOCKS4_REQUEST_GRANTED          90
+#define SOCKS4_REQUEST_REJECT           91
+#define SOCKS4_REQUEST_IDENT_FAILED     92
+#define SOCKS4_REQUEST_IDENT_CONFLICT   93
 
 enum {
    SOCKS5_REQUEST_GRANTED             = 0,
@@ -852,18 +852,18 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    switch (s->cd)
    {
-      case SOCKS_REQUEST_GRANTED:
+      case SOCKS4_REQUEST_GRANTED:
          return(sfd);
-      case SOCKS_REQUEST_REJECT:
+      case SOCKS4_REQUEST_REJECT:
          errstr = "SOCKS request rejected or failed.";
          errno = EINVAL;
          break;
-      case SOCKS_REQUEST_IDENT_FAILED:
+      case SOCKS4_REQUEST_IDENT_FAILED:
          errstr = "SOCKS request rejected because "
             "SOCKS server cannot connect to identd on the client.";
          errno = EACCES;
          break;
-      case SOCKS_REQUEST_IDENT_CONFLICT:
+      case SOCKS4_REQUEST_IDENT_CONFLICT:
          errstr = "SOCKS request rejected because "
             "the client program and identd report "
             "different user-ids.";
