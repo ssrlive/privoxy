@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.69 2011/02/19 13:54:00 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.70 2011/02/19 13:55:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -88,11 +88,12 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
                                 int target_port,
                                 struct client_state *csp);
 
-
-#define SOCKS4_REQUEST_GRANTED          90
-#define SOCKS4_REQUEST_REJECT           91
-#define SOCKS4_REQUEST_IDENT_FAILED     92
-#define SOCKS4_REQUEST_IDENT_CONFLICT   93
+enum {
+   SOCKS4_REQUEST_GRANTED        =  90,
+   SOCKS4_REQUEST_REJECT         =  91,
+   SOCKS4_REQUEST_IDENT_FAILED   =  92,
+   SOCKS4_REQUEST_IDENT_CONFLICT =  93
+};
 
 enum {
    SOCKS5_REQUEST_GRANTED             = 0,
