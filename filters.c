@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.136 2010/11/08 17:51:11 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.137 2010/11/13 11:09:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -728,11 +728,11 @@ struct http_response *block_url(struct client_state *csp)
            && !strstr(p, "compatible")    /* MSIE */
            && !strstr(p, "Opera"))        /* and Opera. */
       {
-         rsp->status = strdup("200 Request for blocked URL");
+         rsp->status = strdup("200 Request blocked by Privoxy");
       }
       else
       {
-         rsp->status = strdup("403 Request for blocked URL");
+         rsp->status = strdup("403 Request blocked by Privoxy");
       }
 
       if (rsp->status == NULL)
