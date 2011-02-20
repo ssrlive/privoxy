@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.109 2011/01/09 12:09:21 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.110 2011/01/14 19:47:53 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2177,7 +2177,7 @@ sub parse_loop () {
 
     while (<>) {
 
-        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
+        if (m/^(\d{4}-\d{2}-\d{2}|\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
             $thread = $t = ($shorten_thread_ids) ? shorten_thread_id($4) : $4;
             $req{$t}{'day'} = $day = $1;
             $req{$t}{'time-stamp'} = $time_stamp = $2;
@@ -2267,7 +2267,7 @@ sub stats_loop () {
     );
 
     while (<>) {
-        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
+        if (m/^(\d{4}-\d{2}-\d{2}|\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
             $day = $1;
             $time_stamp = $2;
             $msecs = $3 ? $3 : 0;
@@ -2297,7 +2297,7 @@ sub unbreak_lines_only_loop() {
         chomp;
 
             # Log level other than LOG_LEVEL_CLF?
-        if (m/^(\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/ or
+        if (m/^(\d{4}-\d{2}-\d{2}|\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/ or
             # LOG_LEVEL_CLF?
             m/^((?:\d+\.\d+\.\d+\.\d+|[:\d]+)) - - \[(.*)\] "(.*)" (\d+) (\d+)/) {
             $log_messages_reached = 1;
