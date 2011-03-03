@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.110 2010/07/21 14:29:59 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.111 2010/08/14 23:28:52 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -292,7 +292,7 @@ void unload_current_config_file(void)
  *********************************************************************/
 struct configuration_spec * load_config(void)
 {
-   char buf[BUFFER_SIZE];
+   char *buf = NULL;
    char *p, *q;
    FILE *configfp = NULL;
    struct configuration_spec * config = NULL;
@@ -373,7 +373,7 @@ struct configuration_spec * load_config(void)
       /* Never get here - LOG_LEVEL_FATAL causes program exit */
    }
 
-   while (read_config_line(buf, sizeof(buf), configfp, &linenum) != NULL)
+   while (read_config_line(configfp, &linenum, &buf) != NULL)
    {
       char cmd[BUFFER_SIZE];
       char arg[BUFFER_SIZE];
@@ -404,11 +404,15 @@ struct configuration_spec * load_config(void)
       }
 
       /* Copy the argument into arg */
-      strlcpy(arg, p, sizeof(arg));
+      if (strlcpy(arg, p, sizeof(arg)) >= sizeof(arg))
+      {
+         log_error(LOG_LEVEL_FATAL, "Config line too long: %s", buf);
+      }
 
       /* Should never happen, but check this anyway */
       if (*cmd == '\0')
       {
+         freez(buf);
          continue;
       }
 
@@ -1339,7 +1343,7 @@ struct configuration_spec * load_config(void)
 
       /* Save the argument for the show-status page. */
       savearg(cmd, arg, config);
-
+      freez(buf);
    } /* end while ( read_config_line(...) ) */
 
    fclose(configfp);

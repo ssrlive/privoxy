@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.61 2011/01/09 12:00:19 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.62 2011/02/14 16:01:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1066,7 +1066,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
    FILE *fp;
    struct url_actions *last_perm;
    struct url_actions *perm;
-   char  buf[BUFFER_SIZE];
+   char  *buf;
    struct file_list *fs;
    struct action_spec * cur_action = NULL;
    int cur_action_used = 0;
@@ -1105,7 +1105,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
 
    log_error(LOG_LEVEL_INFO, "Loading actions file: %s", csp->config->actions_file[fileid]);
 
-   while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
+   while (read_config_line(fp, &linenum, &buf) != NULL)
    {
       if (*buf == '{')
       {
@@ -1457,6 +1457,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             csp->config->actions_file[fileid], mode);
          return 1; /* never get here */
       }
+      freez(buf);
    }
 
    fclose(fp);

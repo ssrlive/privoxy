@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.79 2011/01/14 19:47:16 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.80 2011/01/22 12:30:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -737,41 +737,27 @@ jb_err edit_read_line(FILE *fp,
  *                and respects escaping of newline and comment char.
  *
  * Parameters  :
- *          1  :  buf = Buffer to use.
- *          2  :  buflen = Size of buffer in bytes.
- *          3  :  fp = File to read from
- *          4  :  linenum = linenumber in file
+ *          1  :  fp = File to read from
+ *          2  :  linenum = linenumber in file
+ *          3  :  buf = Pointer to a pointer to set to the data buffer.
  *
  * Returns     :  NULL on EOF or error
  *                Otherwise, returns buf.
  *
  *********************************************************************/
-char *read_config_line(char *buf, size_t buflen, FILE *fp, unsigned long *linenum)
+char *read_config_line(FILE *fp, unsigned long *linenum, char **buf)
 {
    jb_err err;
-   char *buf2 = NULL;
-   err = edit_read_line(fp, NULL, NULL, &buf2, NULL, linenum);
+   err = edit_read_line(fp, NULL, NULL, buf, NULL, linenum);
    if (err)
    {
       if (err == JB_ERR_MEMORY)
       {
          log_error(LOG_LEVEL_FATAL, "Out of memory loading a config file");
       }
-      return NULL;
+      *buf = NULL;
    }
-   else
-   {
-      assert(buf2);
-      if (strlen(buf2) + 1U > buflen)
-      {
-         log_error(LOG_LEVEL_FATAL,
-            "Max line limit reached. Linenumber: %u. Length: %u. Max length: %u.",
-            *linenum, strlen(buf2), buflen-1);
-      }
-      strlcpy(buf, buf2, buflen);
-      free(buf2);
-      return buf;
-   }
+   return *buf;
 }
 
 
@@ -849,7 +835,7 @@ int load_trustfile(struct client_state *csp)
    struct block_spec *b, *bl;
    struct url_spec **tl;
 
-   char  buf[BUFFER_SIZE], *p, *q;
+   char *buf = NULL;
    int reject, trusted;
    struct file_list *fs;
    unsigned long linenum = 0;
@@ -880,7 +866,7 @@ int load_trustfile(struct client_state *csp)
 
    tl = csp->config->trust_list;
 
-   while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
+   while (read_config_line(fp, &linenum, &buf) != NULL)
    {
       trusted = 0;
       reject  = 1;
@@ -893,6 +879,9 @@ int load_trustfile(struct client_state *csp)
 
       if (*buf == '~')
       {
+         char *p;
+         char *q;
+
          reject = 0;
          p = buf;
          q = p+1;
@@ -905,6 +894,7 @@ int load_trustfile(struct client_state *csp)
       /* skip blank lines */
       if (*buf == '\0')
       {
+         freez(buf);
          continue;
       }
 
@@ -938,6 +928,7 @@ int load_trustfile(struct client_state *csp)
             *tl++ = b->url;
          }
       }
+      freez(buf);
    }
 
    if(trusted_referrers >= MAX_TRUSTED_REFERRERS) 
@@ -969,12 +960,12 @@ int load_trustfile(struct client_state *csp)
    {
       csp->tlist = fs;
    }
-
    return(0);
 
 load_trustfile_error:
    log_error(LOG_LEVEL_FATAL, "can't load trustfile '%s': %E",
-             csp->config->trustfile);
+      csp->config->trustfile);
+   freez(buf);
    return(-1);
 
 }
@@ -1131,7 +1122,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
    struct re_filterfile_spec *new_bl, *bl = NULL;
    struct file_list *fs;
 
-   char  buf[BUFFER_SIZE];
+   char *buf = NULL;
    int error;
    unsigned long linenum = 0;
    pcrs_job *dummy, *lastjob = NULL;
@@ -1165,7 +1156,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
    /* 
     * Read line by line
     */
-   while (read_config_line(buf, sizeof(buf), fp, &linenum) != NULL)
+   while (read_config_line(fp, &linenum, &buf) != NULL)
    {
       int new_filter = NO_NEW_FILTER;
 
@@ -1249,6 +1240,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
 
          log_error(LOG_LEVEL_RE_FILTER, "Reading in filter \"%s\" (\"%s\")", bl->name, bl->description);
 
+         freez(buf);
          continue;
       }
 
@@ -1280,6 +1272,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
             bl->dynamic = 1;
             log_error(LOG_LEVEL_RE_FILTER,
                "Adding dynamic re_filter job \'%s\' to filter %s succeeded.", buf, bl->name);
+            freez(buf);
             continue;             
          }
          else if (bl->dynamic)
@@ -1291,6 +1284,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
              */
             log_error(LOG_LEVEL_RE_FILTER,
                "Adding static re_filter job \'%s\' to dynamic filter %s succeeded.", buf, bl->name);
+            freez(buf);
             continue;
          }
 
@@ -1298,6 +1292,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          {
             log_error(LOG_LEVEL_ERROR,
                "Adding re_filter job \'%s\' to filter %s failed with error %d.", buf, bl->name, error);
+            freez(buf);
             continue;
          }
          else
@@ -1319,6 +1314,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          log_error(LOG_LEVEL_ERROR, "Ignoring job %s outside filter block in %s, line %d",
             buf, csp->config->re_filterfile[fileid], linenum);
       }
+      freez(buf);
    }
 
    fclose(fp);
