@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.62 2011/02/14 16:01:20 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.63 2011/03/03 14:38:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1222,7 +1222,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
          {
             /* It's an actions block */
 
-            char  actions_buf[BUFFER_SIZE];
+            char *actions_buf;
             char * end;
 
             /* set mode */
@@ -1250,7 +1250,15 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             init_action(cur_action);
 
             /* trim { */
-            strlcpy(actions_buf, buf + 1, sizeof(actions_buf));
+            actions_buf = strdup(buf + 1);
+            if (actions_buf == NULL)
+            {
+               fclose(fp);
+               log_error(LOG_LEVEL_FATAL,
+                  "can't load actions file '%s': out of memory",
+                  csp->config->actions_file[fileid]);
+               return 1; /* never get here */
+            }
 
             /* check we have a trailing } and then trim it */
             end = actions_buf + strlen(actions_buf) - 1;
@@ -1258,6 +1266,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             {
                /* No closing } */
                fclose(fp);
+               freez(actions_buf);
                log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line (%lu): %s",
                   csp->config->actions_file[fileid], linenum, buf);
@@ -1272,11 +1281,13 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             {
                /* error */
                fclose(fp);
+               freez(actions_buf);
                log_error(LOG_LEVEL_FATAL,
                   "can't load actions file '%s': invalid line (%lu): %s",
                   csp->config->actions_file[fileid], linenum, buf);
                return 1; /* never get here */
             }
+            freez(actions_buf);
          }
       }
       else if (mode == MODE_SETTINGS)
