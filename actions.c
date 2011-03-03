@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.63 2011/03/03 14:38:36 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.64 2011/03/03 14:39:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1267,8 +1267,8 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                /* No closing } */
                fclose(fp);
                freez(actions_buf);
-               log_error(LOG_LEVEL_FATAL,
-                  "can't load actions file '%s': invalid line (%lu): %s",
+               log_error(LOG_LEVEL_FATAL, "can't load actions file '%s': "
+                  "Missing trailing '}' in action section starting at line (%lu): %s",
                   csp->config->actions_file[fileid], linenum, buf);
                return 1; /* never get here */
             }
@@ -1282,8 +1282,8 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                /* error */
                fclose(fp);
                freez(actions_buf);
-               log_error(LOG_LEVEL_FATAL,
-                  "can't load actions file '%s': invalid line (%lu): %s",
+               log_error(LOG_LEVEL_FATAL, "can't load actions file '%s': "
+                  "can't completely parse the action section starting at line (%lu): %s",
                   csp->config->actions_file[fileid], linenum, buf);
                return 1; /* never get here */
             }
