@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.106 2011/02/14 16:07:52 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.107 2011/03/03 14:42:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -201,6 +201,8 @@ jb_err cgi_die (struct client_state *csp,
 
    /* quit */
    g_terminate = 1;
+
+   csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
 
    rsp->content_length = 0;
    rsp->head_length = 0;
