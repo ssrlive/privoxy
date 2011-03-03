@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.105 2011/02/14 16:07:32 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.106 2011/02/14 16:07:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -181,6 +181,20 @@ jb_err cgi_die (struct client_state *csp,
                 struct http_response *rsp,
                 const struct map *parameters)
 {
+   static const char status[] = "200 OK Privoxy shutdown request received";
+   static const char body[] =
+      "<html>\n"
+      "<head>\n"
+      " <title>Privoxy shutdown request received</title>\n"
+      " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">\n"
+      " <link rel=\"stylesheet\" type=\"text/css\" href=\"http://config.privoxy.org/send-stylesheet\">\n"
+      "</head>\n"
+      "<body>\n"
+      "<h1>Privoxy shutdown request received</h1>\n"
+      "<p>Privoxy is going to shut down after the next request.</p>\n"
+      "</body>\n"
+      "</html>\n";
+
    assert(csp);
    assert(rsp);
    assert(parameters);
@@ -188,12 +202,19 @@ jb_err cgi_die (struct client_state *csp,
    /* quit */
    g_terminate = 1;
 
-   /*
-    * I don't really care what gets sent back to the browser.
-    * Take the easy option - "out of memory" page.
-    */
+   rsp->content_length = 0;
+   rsp->head_length = 0;
+   rsp->is_static = 0;
 
-   return JB_ERR_MEMORY;
+   rsp->body = strdup(body);
+   rsp->status = strdup(status);
+
+   if ((rsp->body == NULL) || (rsp->status == NULL))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return JB_ERR_OK;
 }
 #endif /* def FEATURE_GRACEFUL_TERMINATION */
 
