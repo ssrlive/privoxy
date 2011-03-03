@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.340 2011/01/22 12:30:22 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.341 2011/03/03 14:41:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2510,7 +2510,8 @@ static void serve(struct client_state *csp)
          && (((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
                && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
             || (csp->flags & CSP_FLAG_CRUNCHED))
-         && (csp->cfd != JB_INVALID_SOCKET);
+         && (csp->cfd != JB_INVALID_SOCKET)
+         && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE);
 
       if (continue_chatting && !(csp->flags & CSP_FLAG_CRUNCHED))
       {
