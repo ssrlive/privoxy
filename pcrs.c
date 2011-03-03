@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.34 2009/06/19 15:34:32 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.35 2009/08/19 15:28:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -80,7 +80,7 @@ static int              is_hex_sequence(const char *sequence);
  *********************************************************************/
 const char *pcrs_strerror(const int error)
 {
-   if (error < 0)
+   if (error != 0)
    {
       switch (error)
       {
