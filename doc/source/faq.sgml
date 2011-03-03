@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.75 2010/11/13 10:08:00 fabiankeil Exp $
+ $Id: faq.sgml,v 2.76 2010/11/22 10:35:02 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.75 2010/11/13 10:08:00 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.76 2010/11/22 10:35:02 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -948,7 +948,7 @@ with a browser? Does that not raise security issues?</title>
  <para>
   If you run <application>Privoxy</application> for multiple untrusted users (e.g. in
   a LAN) or aren't entirely in control of your own browser, you will probably want
-  to make sure that the the web-based editor and remote toggle features are
+  to make sure that the web-based editor and remote toggle features are
   <quote>off</quote> by setting <quote><literal><ulink
   url="../user-manual/config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</ulink>
   0</literal></quote> and <quote><literal><ulink
@@ -2969,6 +2969,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.76  2010/11/22 10:35:02  fabiankeil
+Mention socks5 in another part of the Tor section.
+
 Revision 2.75  2010/11/13 10:08:00  fabiankeil
 Fix a link to the 'intercepting' entry and add another one
 
