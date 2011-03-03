@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.339 2011/01/09 12:08:04 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.340 2011/01/22 12:30:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3750,7 +3750,6 @@ static void listen_loop(void)
 #if defined(unix)
    freez(basedir);
 #endif
-   freez(configfile);
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /* Cleanup - remove taskbar icon etc. */
