@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.137 2010/11/13 11:09:54 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.138 2011/02/19 13:53:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1002,7 +1002,6 @@ pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const st
       dummy = pcrs_compile_dynamic_command(pattern->str, variables, &error);
       if (NULL == dummy)
       {
-         assert(error < 0);
          log_error(LOG_LEVEL_ERROR,
             "Adding filter job \'%s\' to dynamic filter %s failed: %s",
             pattern->str, b->name, pcrs_strerror(error));
