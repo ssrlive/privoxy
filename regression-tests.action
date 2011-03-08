@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.32 2009/07/19 09:21:19 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.33 2009/10/10 14:28:40 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -10,7 +10,7 @@
 #
 #############################################################################
 #
-# Copyright (c) 2007-2009 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2011 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -40,6 +40,8 @@ for-privoxy-version=3.0.14
 # Level 16 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE Yes
 # Level 16 needs = config line connection-sharing\s+1
 # Level 17 needs = feature status FEATURE_PTHREAD Yes
+# Level 18 needs = feature status FEATURE_GRACEFUL_TERMINATION No
+# Level 19 needs = feature status FEATURE_GRACEFUL_TERMINATION Yes
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -556,9 +558,12 @@ TAG:^Max-Forwards header without TRACE method$
 ################################################################
 
 # Fetch Test = http://p.p/
-# Will fail if compiled with FEATURE_GRACEFUL_TERMINATION
 # Fetch Test = http://p.p/die
 # Expect Status Code = 404
+# Level = 18
+# Fetch Test = http://p.p/die
+# Expect Status Code = 200
+# Level = 19
 # Fetch Test = http://p.p/show-status
 # Fetch Test = http://config.privoxy.org/show-status?file=actions&index=0
 # Fetch Test = http://config.privoxy.org/show-status?file=filter&index=0
