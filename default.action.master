@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.233 2011/02/10 22:26:17 fabiankeil Exp $
+#  $Id: default.action.master,v 1.234 2011/02/10 22:30:41 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1798,6 +1798,11 @@ include.ebaystatic.com/.*omniture.*\.js
 #MASTER# REMARKS:Actionsfile feedback item #2974204 2010-03-21
 # URL = http://adesklets.sourceforge.net/
 adesklets.sourceforge.net/
+#MASTER# REMARKS: Mostly-french political blog
+# URL = http://adassier.wordpress.com/
+adassier.wordpress.com/
+# URL = http://adassier.files.wordpress.com/2010/05/road-to-economic-recovery2.jpg?w=630&h=451
+adassier.files.wordpress.com
 
 
 #############################################################################
