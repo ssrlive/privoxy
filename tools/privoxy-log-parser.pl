@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.110 2011/01/14 19:47:53 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.111 2011/02/20 13:17:16 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1696,12 +1696,15 @@ sub handle_loglevel_info ($) {
 
     } elsif ($c =~ m/^Decompress(ing deflated|ion didn)/ or
              $c =~ m/^Compressed content detected/ or
+             $c =~ m/^SDCH-compressed content detected/ or
              $c =~ m/^Tagger/
             ) {
         # Decompressing deflated iob: 117
         # Decompression didn't result in any content.
         # Compressed content detected, content filtering disabled. Consider recompiling Privoxy\
         #  with zlib support or enable the prevent-compression action.
+        # SDCH-compressed content detected, content filtering disabled.\
+        #  Consider suppressing SDCH offers made by the client.
         # Tagger 'complete-url' created empty tag. Ignored.
 
         # Ignored for now
