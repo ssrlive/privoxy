@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.217 2011/01/22 12:30:22 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.218 2011/02/14 16:11:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2127,6 +2127,12 @@ static jb_err server_transfer_coding(struct client_state *csp, char **header)
  *                The second run is used to remove the Content-Encoding
  *                header if the decompression was successful.
  *
+ *                XXX: Doesn't properly deal with multiple or with
+ *                     unsupported but unknown encodings.
+ *                     Is case-sensitive but shouldn't be.
+ *                     The second run should be factored out into
+ *                     a different function.
+ *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  header = On input, pointer to header to modify.
@@ -2155,6 +2161,26 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
       log_error(LOG_LEVEL_HEADER, "Crunching: %s", *header);
       freez(*header);
    }
+   else if (strstr(*header, "sdch"))
+   {
+      /*
+       * Shared Dictionary Compression over HTTP isn't supported,
+       * filtering it anyway is pretty much guaranteed to mess up
+       * the encoding.
+       */
+      csp->content_type |= CT_TABOO;
+
+      /*
+       * Log a warning if the user expects the content to be filtered.
+       */
+      if ((csp->rlist != NULL) &&
+         (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
+      {
+         log_error(LOG_LEVEL_INFO,
+            "SDCH-compressed content detected, content filtering disabled. "
+            "Consider suppressing SDCH offers made by the client.");
+      }
+   }
    else if (strstr(*header, "gzip"))
    {
       /* Mark for gzip decompression */
@@ -2174,7 +2200,16 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
       csp->content_type |= CT_TABOO;
    }
 #else /* !defined(FEATURE_ZLIB) */
-   if (strstr(*header, "gzip") || strstr(*header, "compress") || strstr(*header, "deflate"))
+   /*
+    * XXX: Using a black list here isn't the right approach.
+    *
+    *      In case of SDCH, building with zlib support isn't
+    *      going to help.
+    */
+   if (strstr(*header, "gzip") ||
+       strstr(*header, "compress") ||
+       strstr(*header, "deflate") ||
+       strstr(*header, "sdch"))
    {
       /*
        * Body is compressed, turn off pcrs and gif filtering.
