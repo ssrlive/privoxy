@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.96 2011/03/27 14:03:43 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.97 2011/03/27 14:04:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -157,7 +157,8 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 #else
       fd = no_rfc2553_connect_to(host, portnum, csp);
 #endif
-      if ((fd != JB_INVALID_SOCKET) || (errno != EINVAL))
+      if ((fd != JB_INVALID_SOCKET) || (errno == EINVAL)
+         || ((csp->fwd->forward_host == NULL) && (csp->fwd->type == SOCKS_NONE)))
       {
          break;
       }
