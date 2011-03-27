@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.70 2011/02/19 13:55:57 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.71 2011/02/19 13:56:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -809,12 +809,8 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    if (sfd == JB_INVALID_SOCKET)
    {
-      /*
-       * XXX: connect_to should fill in the exact reason.
-       * Most likely resolving the IP of the forwarder failed.
-       */
-      errstr = "connect_to failed: see logfile for details";
-      err = 1;
+      /* The error an its reason have already been logged by connect_to()  */
+      return(JB_INVALID_SOCKET);
    }
    else if (!data_is_available(sfd, csp->config->socket_timeout))
    {
