@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.86 2011/03/27 13:55:09 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.87 2011/03/27 13:55:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -383,6 +383,9 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
 #ifdef FEATURE_ACL
    struct access_control_addr dst[1];
 #endif /* def FEATURE_ACL */
+
+   /* Don't leak memory when retrying. */
+   freez(csp->http->host_ip_addr_str);
 
    memset((char *)&inaddr, 0, sizeof inaddr);
 
