@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.89 2011/03/27 13:56:48 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.90 2011/03/27 13:57:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -254,11 +254,11 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          continue;
       }
 
+      fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
 #ifdef _WIN32
-      if ((fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) ==
-            JB_INVALID_SOCKET)
+      if (fd == JB_INVALID_SOCKET)
 #else
-      if ((fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) < 0)
+      if (fd < 0)
 #endif
       {
          continue;
@@ -426,10 +426,11 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    }
 #endif /* ndef _WIN32 */
 
+   fd = socket(inaddr.sin_family, SOCK_STREAM, 0);
 #ifdef _WIN32
-   if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) == JB_INVALID_SOCKET)
+   if (fd == JB_INVALID_SOCKET)
 #else
-   if ((fd = socket(inaddr.sin_family, SOCK_STREAM, 0)) < 0)
+   if (fd < 0)
 #endif
    {
       return(JB_INVALID_SOCKET);
