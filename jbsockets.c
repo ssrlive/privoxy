@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.79 2010/07/26 11:30:09 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.80 2011/03/27 13:51:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -118,6 +118,11 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
 
 #define MAX_LISTEN_BACKLOG 128
 
+#ifdef HAVE_RFC2553
+static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client_state *csp);
+#else
+static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct client_state *csp);
+#endif
 
 /*********************************************************************
  *
@@ -135,9 +140,35 @@ const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
  *                file descriptor.
  *
  *********************************************************************/
+jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
+{
+   jb_socket fd;
+   int forwarded_connect_retries = 0;
+
+   do
+   {
+#ifdef HAVE_RFC2553
+      fd = rfc2553_connect_to(host, portnum, csp);
+#else
+      fd = no_rfc2553_connect_to(host, portnum, csp);
+#endif
+      if ((fd != JB_INVALID_SOCKET) || (errno != EINVAL))
+      {
+         break;
+      }
+      forwarded_connect_retries++;
+      log_error(LOG_LEVEL_ERROR,
+         "Attempt %d to connect to %s failed. Trying again.",
+         forwarded_connect_retries, host);
+
+   } while (forwarded_connect_retries < csp->config->forwarded_connect_retries);
+
+   return fd;
+}
+
 #ifdef HAVE_RFC2553
 /* Getaddrinfo implementation */
-jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
+static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client_state *csp)
 {
    struct addrinfo hints, *result, *rp;
    char service[6];
@@ -336,7 +367,7 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 #else /* ndef HAVE_RFC2553 */
 /* Pre-getaddrinfo implementation */
 
-jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
+static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct client_state *csp)
 {
    struct sockaddr_in inaddr;
    jb_socket fd;

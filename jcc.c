@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.341 2011/03/03 14:41:29 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.342 2011/03/03 14:44:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1522,8 +1522,6 @@ static void chat(struct client_state *csp)
    int server_body;
    int ms_iis5_hack = 0;
    unsigned long long byte_count = 0;
-   int forwarded_connect_retries = 0;
-   int max_forwarded_connect_retries = csp->config->forwarded_connect_retries;
    const struct forward_spec *fwd;
    struct http_request *http;
    long len = 0; /* for buffer sizes (and negative error codes) */
@@ -1659,14 +1657,7 @@ static void chat(struct client_state *csp)
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-      while ((csp->server_connection.sfd = forwarded_connect(fwd, http, csp))
-         && (errno == EINVAL)
-         && (forwarded_connect_retries++ < max_forwarded_connect_retries))
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "failed request #%u to connect to %s. Trying again.",
-            forwarded_connect_retries, http->hostport);
-      }
+      csp->server_connection.sfd = forwarded_connect(fwd, http, csp);
 
       if (csp->server_connection.sfd == JB_INVALID_SOCKET)
       {
