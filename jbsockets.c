@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.91 2011/03/27 13:57:28 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.92 2011/03/27 13:57:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -249,7 +249,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       if (retval)
       {
          log_error(LOG_LEVEL_ERROR,
-            "Can not save csp->http->host_ip_addr_str: %s",
+            "Failed to get the host name from the socket structure: %s",
             gai_strerror(retval));
          continue;
       }
