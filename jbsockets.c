@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.85 2011/03/27 13:54:52 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.86 2011/03/27 13:55:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -180,10 +180,14 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    int   flags;
 #endif
    int connect_failed;
+   int socket_error;
 
 #ifdef FEATURE_ACL
    struct access_control_addr dst[1];
 #endif /* def FEATURE_ACL */
+
+   /* Don't leak memory when retrying. */
+   freez(csp->error_message);
 
    retval = snprintf(service, sizeof(service), "%d", portnum);
    if ((-1 == retval) || (sizeof(service) <= retval))
@@ -191,6 +195,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       log_error(LOG_LEVEL_ERROR,
          "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
          portnum);
+      csp->error_message = strdup("Invalid port number");
       csp->http->host_ip_addr_str = strdup("unknown");
       return(JB_INVALID_SOCKET);
    }
@@ -208,6 +213,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          "Can not resolve %s: %s", host, gai_strerror(retval));
       /* XXX: Should find a better way to propagate this error. */
       errno = EINVAL;
+      csp->error_message = strdup(gai_strerror(retval));
       csp->http->host_ip_addr_str = strdup("unknown");
       return(JB_INVALID_SOCKET);
    }
@@ -229,9 +235,9 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       if (block_acl(dst, csp))
       {
 #ifdef __OS2__
-         errno = SOCEPERM;
+         socket_error = errno = SOCEPERM;
 #else
-         errno = EPERM;
+         socket_error = errno = EPERM;
 #endif
          continue;
       }
@@ -334,6 +340,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          }
          else
          {
+            socket_error = errno;
             log_error(LOG_LEVEL_ERROR, "Could not get the state of "
                "the connection to [%s]:%s: %s; dropping connection.",
                csp->http->host_ip_addr_str, service, strerror(errno));
@@ -347,8 +354,9 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    freeaddrinfo(result);
    if (!rp)
    {
-      log_error(LOG_LEVEL_CONNECT, "Could not connect to [%s]:%s.",
-         host, service);
+      log_error(LOG_LEVEL_CONNECT, "Could not connect to [%s]:%s: %s.",
+         host, service, strerror(socket_error));
+      csp->error_message = strdup(strerror(socket_error));
       return(JB_INVALID_SOCKET);
    }
    log_error(LOG_LEVEL_CONNECT, "Connected to %s[%s]:%s.",
