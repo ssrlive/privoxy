@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.92 2011/03/27 13:57:41 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.93 2011/03/27 13:58:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -175,7 +175,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    int retval;
    jb_socket fd;
    fd_set wfds;
-   struct timeval tv[1];
+   struct timeval timeout;
 #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
    int   flags;
 #endif
@@ -319,11 +319,11 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       FD_ZERO(&wfds);
       FD_SET(fd, &wfds);
 
-      tv->tv_sec  = 30;
-      tv->tv_usec = 0;
+      memset(&timeout, 0, sizeof(timeout));
+      timeout.tv_sec  = 30;
 
       /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
-      if ((select((int)fd + 1, NULL, &wfds, NULL, tv) > 0)
+      if ((select((int)fd + 1, NULL, &wfds, NULL, &timeout) > 0)
          && FD_ISSET(fd, &wfds))
       {
          socklen_t optlen = sizeof(socket_error);
