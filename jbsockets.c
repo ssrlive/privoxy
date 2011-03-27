@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.87 2011/03/27 13:55:55 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.88 2011/03/27 13:56:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -188,6 +188,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
 
    /* Don't leak memory when retrying. */
    freez(csp->error_message);
+   freez(csp->http->host_ip_addr_str);
 
    retval = snprintf(service, sizeof(service), "%d", portnum);
    if ((-1 == retval) || (sizeof(service) <= retval))
