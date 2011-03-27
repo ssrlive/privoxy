@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.218 2011/02/14 16:11:34 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.219 2011/03/20 11:50:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -152,6 +152,9 @@ static jb_err server_http               (struct client_state *csp, char **header
 static jb_err crunch_server_header      (struct client_state *csp, char **header);
 static jb_err server_last_modified      (struct client_state *csp, char **header);
 static jb_err server_content_disposition(struct client_state *csp, char **header);
+#ifdef FEATURE_ZLIB
+static jb_err server_adjust_content_encoding(struct client_state *csp, char **header);
+#endif
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 static jb_err server_save_content_length(struct client_state *csp, char **header);
@@ -1137,7 +1140,7 @@ jb_err update_server_headers(struct client_state *csp)
       { "Content-Length:",    15, server_adjust_content_length },
       { "Transfer-Encoding:", 18, server_transfer_coding },
 #ifdef FEATURE_ZLIB
-      { "Content-Encoding:",  17, server_content_encoding },
+      { "Content-Encoding:",  17, server_adjust_content_encoding },
 #endif /* def FEATURE_ZLIB */
       { NULL,                  0, NULL }
    };
@@ -2116,22 +2119,16 @@ static jb_err server_transfer_coding(struct client_state *csp, char **header)
  *
  * Function    :  server_content_encoding
  *
- * Description :  This function is run twice for each request,
- *                unless FEATURE_ZLIB and filtering are disabled.
+ * Description :  Used to check if the content is compressed, and if
+ *                FEATURE_ZLIB is disabled, filtering is disabled as
+ *                well.
  *
- *                The first run is used to check if the content
- *                is compressed, if FEATURE_ZLIB is disabled
- *                filtering is then disabled as well, if FEATURE_ZLIB
- *                is enabled the content is marked for decompression.
+ *                If FEATURE_ZLIB is enabled and the compression type
+ *                supported, the content is marked for decompression.
  *                
- *                The second run is used to remove the Content-Encoding
- *                header if the decompression was successful.
- *
  *                XXX: Doesn't properly deal with multiple or with
  *                     unsupported but unknown encodings.
  *                     Is case-sensitive but shouldn't be.
- *                     The second run should be factored out into
- *                     a different function.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2147,21 +2144,7 @@ static jb_err server_transfer_coding(struct client_state *csp, char **header)
 static jb_err server_content_encoding(struct client_state *csp, char **header)
 {
 #ifdef FEATURE_ZLIB
-   if ((csp->flags & CSP_FLAG_MODIFIED)
-    && (csp->content_type & (CT_GZIP | CT_DEFLATE)))
-   {
-      /*
-       * We successfully decompressed the content,
-       * and have to clean the header now, so the
-       * client no longer expects compressed data..
-       *
-       * XXX: There is a difference between cleaning
-       * and removing it completely.
-       */
-      log_error(LOG_LEVEL_HEADER, "Crunching: %s", *header);
-      freez(*header);
-   }
-   else if (strstr(*header, "sdch"))
+   if (strstr(*header, "sdch"))
    {
       /*
        * Shared Dictionary Compression over HTTP isn't supported,
@@ -2233,6 +2216,49 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
    return JB_ERR_OK;
 
 }
+
+
+#ifdef FEATURE_ZLIB
+/*********************************************************************
+ *
+ * Function    :  server_adjust_content_encoding
+ *
+ * Description :  Remove the Content-Encoding header if the
+ *                decompression was successful and the content
+ *                has been modifed.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+static jb_err server_adjust_content_encoding(struct client_state *csp, char **header)
+{
+   if ((csp->flags & CSP_FLAG_MODIFIED)
+    && (csp->content_type & (CT_GZIP | CT_DEFLATE)))
+   {
+      /*
+       * We successfully decompressed the content,
+       * and have to clean the header now, so the
+       * client no longer expects compressed data..
+       *
+       * XXX: There is a difference between cleaning
+       * and removing it completely.
+       */
+      log_error(LOG_LEVEL_HEADER, "Crunching: %s", *header);
+      freez(*header);
+   }
+
+   return JB_ERR_OK;
+
+}
+#endif /* defined(FEATURE_ZLIB) */
 
 
 /*********************************************************************
