@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.342 2011/03/03 14:44:00 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.343 2011/03/27 13:52:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1673,8 +1673,6 @@ static void chat(struct client_state *csp)
          else
          {
             rsp = error_response(csp, "connect-failed");
-            log_error(LOG_LEVEL_CONNECT, "connect to: %s failed: %E",
-               http->hostport);
          }
 
          /* Write the answer to the client */
