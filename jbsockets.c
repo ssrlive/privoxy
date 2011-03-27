@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.94 2011/03/27 14:02:53 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.95 2011/03/27 14:03:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -185,7 +185,12 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    int   flags;
 #endif
    int connect_failed;
-   int socket_error;
+   /*
+    * XXX: Initializeing it here is only necessary
+    *      because not all situations are properly
+    *      covered yet.
+    */
+   int socket_error = 0;
 
 #ifdef FEATURE_ACL
    struct access_control_addr dst[1];
