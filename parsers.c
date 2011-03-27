@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.219 2011/03/20 11:50:28 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.220 2011/03/27 14:01:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4054,7 +4054,8 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
       return JB_ERR_PARSE;
    }
 
-   if (NULL == (p = strdup((host))))
+   p = strdup(host);
+   if (NULL == p)
    {
       log_error(LOG_LEVEL_ERROR, "Out of memory while parsing \"Host:\" header");
       return JB_ERR_MEMORY;
