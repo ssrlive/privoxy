@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.93 2011/03/27 13:58:33 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.94 2011/03/27 14:02:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -147,6 +147,11 @@ jb_socket connect_to(const char *host, int portnum, struct client_state *csp)
 
    do
    {
+      /*
+       * XXX: The whole errno overloading is ridiculous and should
+       *      be replaced with something sane and thread safe
+       */
+      /* errno = 0;*/
 #ifdef HAVE_RFC2553
       fd = rfc2553_connect_to(host, portnum, csp);
 #else
