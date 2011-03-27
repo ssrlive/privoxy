@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.84 2011/03/27 13:53:49 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.85 2011/03/27 13:54:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -321,17 +321,16 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       if ((select((int)fd + 1, NULL, &wfds, NULL, tv) > 0)
          && FD_ISSET(fd, &wfds))
       {
-         int socket_in_error;
-         socklen_t optlen = sizeof(socket_in_error);
-         if (!getsockopt(fd, SOL_SOCKET, SO_ERROR, &socket_in_error, &optlen))
+         socklen_t optlen = sizeof(socket_error);
+         if (!getsockopt(fd, SOL_SOCKET, SO_ERROR, &socket_error, &optlen))
          {
-            if (!socket_in_error)
+            if (!socket_error)
             {
                /* Connection established, no need to try other addresses. */
                break;
             }
             log_error(LOG_LEVEL_CONNECT, "Could not connect to [%s]:%s: %s.",
-               csp->http->host_ip_addr_str, service, strerror(socket_in_error));
+               csp->http->host_ip_addr_str, service, strerror(socket_error));
          }
          else
          {
