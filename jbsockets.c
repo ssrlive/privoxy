@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.83 2011/03/27 13:53:25 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.84 2011/03/27 13:53:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -212,6 +212,14 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       return(JB_INVALID_SOCKET);
    }
 
+   csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
+   if (NULL == csp->http->host_ip_addr_str)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Out of memory while getting the server IP address.");
+      return JB_INVALID_SOCKET;
+   }
+
    for (rp = result; rp != NULL; rp = rp->ai_next)
    {
 
@@ -229,13 +237,6 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       }
 #endif /* def FEATURE_ACL */
 
-      csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
-      if (NULL == csp->http->host_ip_addr_str)
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "Out of memory while getting the server IP address.");
-         return JB_INVALID_SOCKET;
-      }
       retval = getnameinfo(rp->ai_addr, rp->ai_addrlen,
          csp->http->host_ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
       if (retval)
@@ -243,7 +244,6 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          log_error(LOG_LEVEL_ERROR,
             "Can not save csp->http->host_ip_addr_str: %s",
             gai_strerror(retval));
-         freez(csp->http->host_ip_addr_str);
          continue;
       }
 
