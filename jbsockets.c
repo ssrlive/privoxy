@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.95 2011/03/27 14:03:25 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.96 2011/03/27 14:03:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -232,6 +232,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
    if (NULL == csp->http->host_ip_addr_str)
    {
+      freeaddrinfo(result);
       log_error(LOG_LEVEL_ERROR,
          "Out of memory while getting the server IP address.");
       return JB_INVALID_SOCKET;
