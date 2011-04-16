@@ -1,4 +1,4 @@
-$Id: TODO,v 1.42 2011/04/16 17:31:11 fabiankeil Exp $
+$Id: TODO,v 1.43 2011/04/16 17:31:24 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -169,8 +169,8 @@ have been added, not by priority.
 
 66) Increase maximum number of action and filter files.
 
-67) Clean up directory layout. Depends on 54 so we don't
-    lose the revision history.
+67) Clean up source code directory layout. Depends on 54 so
+    we don't lose the revision history.
 
 68) Use standard make syntax so we don't depend on GNU make.
 
