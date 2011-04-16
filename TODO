@@ -1,4 +1,4 @@
-$Id: TODO,v 1.41 2011/04/16 17:30:36 fabiankeil Exp $
+$Id: TODO,v 1.42 2011/04/16 17:31:11 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -165,7 +165,7 @@ have been added, not by priority.
 
 65) Polish Website. Probably involves ditching the Docbook
     mess in favour of wml. There should be already some threads
-    in the mailinglists archives about this.
+    in the mailinglists archives about this. See also #41.
 
 66) Increase maximum number of action and filter files.
 
