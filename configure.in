@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.148 2010/12/11 15:35:41 fabiankeil Exp $
+dnl $Id: configure.in,v 1.149 2011/04/16 17:27:40 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.148 $)
+AC_REVISION($Revision: 1.149 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -944,7 +944,7 @@ if test $have_pcre = "yes"; then
   STATIC_PCRE_ONLY=#
   LIBS="$LIBS -lpcre -lpcreposix"
 else
-  AC_MSG_WARN([You are using the static PCRE code which is scheduled for removal, for details see: 
+  AC_MSG_WARN([You are using the static PCRE code which is out of date and scheduled for removal, for details see:
     http://sourceforge.net/mailarchive/forum.php?thread_name=20080511195555.2dc6cfdc%40fabiankeil.de&forum_name=ijbswa-developers])
   pcre_dyn=no
   AC_DEFINE(STATIC_PCRE)
