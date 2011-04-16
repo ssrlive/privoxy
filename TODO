@@ -1,4 +1,4 @@
-$Id: TODO,v 1.38 2011/04/16 17:29:24 fabiankeil Exp $
+$Id: TODO,v 1.39 2011/04/16 17:29:38 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -99,9 +99,6 @@ have been added, not by priority.
 
 38) In the final results, explicitly list disabled multi actions
     with their parameters. Not as trivial as it sounds.
-
-39) Verify loadcfg.c jarfile reloading and friends.
-    /* XXX: Does disabling this actually work? */
 
 40) Fix core dumping in daemon mode. Introduce a cwd config option?
 
