@@ -1,4 +1,4 @@
-$Id: TODO,v 1.39 2011/04/16 17:29:38 fabiankeil Exp $
+$Id: TODO,v 1.40 2011/04/16 17:30:23 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -100,7 +100,9 @@ have been added, not by priority.
 38) In the final results, explicitly list disabled multi actions
     with their parameters. Not as trivial as it sounds.
 
-40) Fix core dumping in daemon mode. Introduce a cwd config option?
+40) When running in daemon mode, Privoxy's working directory is '/'
+    which means it may not have permissions to dump core when necessary.
+    Figure out a way to solve this. Introduce a cwd config option?
 
 41) Change documentation framework to one that works cross-platform.
     Evaluate WML.
