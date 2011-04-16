@@ -1,4 +1,4 @@
-$Id: TODO,v 1.36 2011/04/16 17:28:58 fabiankeil Exp $
+$Id: TODO,v 1.37 2011/04/16 17:29:12 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -53,8 +53,7 @@ have been added, not by priority.
     down if the client and Privoxy are running on the same system,
     so for most users enabling it will make no sense.
 
-14) Log and filter POST parameters. They can now be logged with
-    the noisy debug 32768, but are still not filtered.
+14) Allow to filter POST parameters.
 
 15) If trusted CGI pages are requested without trusted referrer,
     set the status code to 403 instead of 200.
