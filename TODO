@@ -1,4 +1,4 @@
-$Id: TODO,v 1.37 2011/04/16 17:29:12 fabiankeil Exp $
+$Id: TODO,v 1.38 2011/04/16 17:29:24 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -93,9 +93,6 @@ have been added, not by priority.
 
 32) In case of forwarding failures with socks port == 9050,
     show extra info about Tor (the whole FAQ entry?).
-
-35) Do less work in the accept_connection() thread.
-    Partly done. Good enough?
 
 36) Unload unused action files directly, even if they are
     disabled without replacement.
