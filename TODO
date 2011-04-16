@@ -1,4 +1,4 @@
-$Id: TODO,v 1.35 2011/03/27 13:49:16 fabiankeil Exp $
+$Id: TODO,v 1.36 2011/04/16 17:28:58 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -223,8 +223,6 @@ have been added, not by priority.
 
     With 2+4, 3+4 or 2+3+4 being the preferences until
     further discussion.
-
-81) Merge Fabian's unlimited-config-lines branch.
 
 82) Detect if the system time goes back in time let the user
     know if it caused any connections to get closed.
