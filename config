@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.17
 #
-#  $Id: config,v 1.92 2010/11/06 12:58:42 fabiankeil Exp $
+#  $Id: config,v 1.93 2010/11/13 12:48:18 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
 #
@@ -1167,7 +1167,7 @@ buffer-limit 4096
 #
 #      Parent proxy specified by an IPv6 address:
 #
-#        foward   /                   [2001:DB8::1]:8000
+#        forward   /                   [2001:DB8::1]:8000
 #
 #
 #      Suppose your parent proxy doesn't support IPv6:
