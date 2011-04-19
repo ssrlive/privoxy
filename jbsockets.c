@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.97 2011/03/27 14:04:10 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.98 2011/03/27 14:08:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -334,7 +334,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       memset(&timeout, 0, sizeof(timeout));
       timeout.tv_sec  = 30;
 
-      /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
+      /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Weird! */
       if ((select((int)fd + 1, NULL, &wfds, NULL, &timeout) > 0)
          && FD_ISSET(fd, &wfds))
       {
@@ -502,7 +502,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    tv->tv_sec  = 30;
    tv->tv_usec = 0;
 
-   /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Wierd! */
+   /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Weird! */
    if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
    {
       close_socket(fd);
@@ -767,7 +767,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
 #ifdef AI_ADDRCONFIG
    hints.ai_flags |= AI_ADDRCONFIG;
 #endif
-   hints.ai_protocol = 0; /* Realy any stream protocol or TCP only */
+   hints.ai_protocol = 0; /* Really any stream protocol or TCP only */
    hints.ai_canonname = NULL;
    hints.ai_addr = NULL;
    hints.ai_next = NULL;
@@ -1152,7 +1152,7 @@ int accept_connection(struct client_state * csp, jb_socket fd)
  * Parameters  :
  *          1  :  host = hostname to resolve
  *
- * Returns     :  INADDR_NONE => failure, INADDR_ANY or tcp/ip address if succesful.
+ * Returns     :  INADDR_NONE => failure, INADDR_ANY or tcp/ip address if successful.
  *
  *********************************************************************/
 unsigned long resolve_hostname_to_ip(const char *host)

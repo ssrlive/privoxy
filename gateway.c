@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.71 2011/02/19 13:56:22 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.72 2011/03/27 14:00:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1099,7 +1099,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    }
    else if (server_size > 20)
    {
-      /* This is somewhat unexpected but doesn't realy matter. */
+      /* This is somewhat unexpected but doesn't really matter. */
       log_error(LOG_LEVEL_CONNECT, "socks5_connect: read %d bytes "
          "from socks server. Would have accepted up to %d.",
          server_size, sizeof(sbuf));

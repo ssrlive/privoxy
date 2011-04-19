@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.35 2009/08/19 15:28:08 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.36 2011/03/03 14:49:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -397,7 +397,7 @@ plainchar:
  * Function    :  pcrs_free_job
  *
  * Description :  Frees the memory used by a pcrs_job struct and its
- *                dependant structures.
+ *                dependent structures.
  *
  * Parameters  :
  *          1  :  job = pointer to the pcrs_job structure to be freed

@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.67 2009/05/19 17:46:24 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.68 2011/01/22 12:30:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1483,7 +1483,7 @@ jb_err edit_read_file_lines(FILE *fp, struct file_line ** pfile, int *newline)
    if (rval)
    {
       /* Out of memory or empty file. */
-      /* Note that empty file is not an error we propogate up */
+      /* Note that empty file is not an error we propagate up */
       free(cur_line);
       return ((rval == JB_ERR_FILE) ? JB_ERR_OK : rval);
    }
@@ -2873,7 +2873,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
    if (!err) err = actions_to_radio(exports, cur_line->data.action);
 
    /*
-    * XXX: Some browsers (at least IE6 and IE7) have an artifical URL
+    * XXX: Some browsers (at least IE6 and IE7) have an artificial URL
     * length limitation and ignore clicks on the Submit buttons if
     * the resulting GET URL would be longer than their limit.
     *

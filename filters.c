@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.140 2011/03/03 14:47:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.141 2011/03/08 18:32:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -485,7 +485,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
     * of octets (128-bit CPU could do it in one iteration).
     */
    /*
-    * Octets after prefix can be ommitted because of
+    * Octets after prefix can be omitted because of
     * previous initialization to zeros.
     */
    for (i = 0; (i < addr_len) && masklength; i++)

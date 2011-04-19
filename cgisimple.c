@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.107 2011/03/03 14:42:18 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.108 2011/03/03 14:42:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -778,7 +778,7 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    {
       /*
        * We currently only support a flat file
-       * hierachy for the documentation.
+       * hierarchy for the documentation.
        */
       log_error(LOG_LEVEL_ERROR,
          "Rejecting the request to serve '%s' as it contains '/' or '..'",

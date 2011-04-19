@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.63 2009/05/16 13:27:20 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.64 2009/05/19 17:45:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -264,7 +264,7 @@ int strcmpic(const char *s1, const char *s2)
  *
  * Function    :  strncmpic
  *
- * Description :  Case insensitive string comparison (upto n characters)
+ * Description :  Case insensitive string comparison (up to n characters)
  *
  * Parameters  :
  *          1  :  s1 = string 1 to compare
@@ -1518,7 +1518,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
 #if defined(PERL_COMPATIBLE) || defined(LINUX_COMPATIBLE)
      /* keep the entire format string unchanged */
         str_arg = starting_p; str_arg_l = p - starting_p;
-     /* well, not exactly so for Linux, which does something inbetween,
+     /* well, not exactly so for Linux, which does something between,
       * and I don't feel an urge to imitate it: "%+++++hy" -> "%+y"  */
 #else
      /* discard the unrecognized conversion, just keep *

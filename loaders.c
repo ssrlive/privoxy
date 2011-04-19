@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.80 2011/01/22 12:30:22 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.81 2011/03/03 14:38:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -359,7 +359,7 @@ jb_err simple_read_line(FILE *fp, char **dest, int *newline)
    p = buf;
 
 /*
- * Character codes.  If you have a wierd compiler and the following are
+ * Character codes.  If you have a weird compiler and the following are
  * incorrect, you also need to fix NEWLINE() in loaders.h
  */
 #define CHAR_CR '\r' /* ASCII 13 */

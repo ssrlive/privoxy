@@ -136,7 +136,7 @@
  * User-Agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
  * Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, * / *
  *
- * And no, I haven't got that backwards - IE is being wierd.
+ * And no, I haven't got that backwards - IE is being weird.
  *
  * Known limitations: 
  * 1) If you press shift-reload on a blocked HTML page, you get
@@ -287,7 +287,7 @@
 
 /*
  * It's too easy to accidentally use a Cygwin or MinGW32 version of config.h
- * under VC++, and it usually gives many wierd error messages.  Let's make
+ * under VC++, and it usually gives many weird error messages.  Let's make
  * the error messages understandable, by bailing out now.
  */
 #ifdef _MSC_VER

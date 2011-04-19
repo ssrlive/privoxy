@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.128 2010/04/21 20:48:06 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.129 2010/05/24 11:38:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1862,7 +1862,7 @@ jb_err template_load(const struct client_state *csp, char **template_ptr,
  *                HTML template by replacing @name@ with value using
  *                pcrs, for each item in the output map.
  *
- *                Note that a leading '$' charachter in the export map's
+ *                Note that a leading '$' character in the export map's
  *                values will be stripped and toggle on backreference
  *                interpretation.
  *

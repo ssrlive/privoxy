@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.162 2011/02/19 13:56:55 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.163 2011/02/19 13:58:48 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -191,7 +191,7 @@ typedef int jb_err;
  * Buffer size for capturing struct hostent data in the
  * gethostby(name|addr)_r library calls. Since we don't
  * loop over gethostbyname_r, the buffer must be sufficient
- * to accomodate multiple IN A RRs, as used in DNS round robin
+ * to accommodate multiple IN A RRs, as used in DNS round robin
  * load balancing. W3C's wwwlib uses 1K, so that should be
  * good enough for us, too.
  */
@@ -503,7 +503,7 @@ struct iob
 #define ACTION_FORCE_TEXT_MODE                       0x00400000UL
 /** Action bitmap: Enable text mode by force */
 #define ACTION_CRUNCH_IF_NONE_MATCH                  0x00800000UL
-/** Action bitmap: Enable content-dispostion crunching */
+/** Action bitmap: Enable content-disposition crunching */
 #define ACTION_HIDE_CONTENT_DISPOSITION              0x01000000UL
 /** Action bitmap: Replace or block Last-Modified header */
 #define ACTION_OVERWRITE_LAST_MODIFIED               0x02000000UL
@@ -531,7 +531,7 @@ struct iob
 #define ACTION_STRING_LANGUAGE              8
 /** Action string index: Replacement for the "Content-Type:" header*/
 #define ACTION_STRING_CONTENT_TYPE          9
-/** Action string index: Replacement for the "content-dispostion:" header*/
+/** Action string index: Replacement for the "content-disposition:" header*/
 #define ACTION_STRING_CONTENT_DISPOSITION  10
 /** Action string index: Replacement for the "If-Modified-Since:" header*/
 #define ACTION_STRING_IF_MODIFIED_SINCE    11

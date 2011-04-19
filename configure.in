@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.151 2011/04/19 11:42:12 fabiankeil Exp $
+dnl $Id: configure.in,v 1.152 2011/04/19 11:42:51 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.151 $)
+AC_REVISION($Revision: 1.152 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -315,7 +315,7 @@ else
 fi
 AC_SUBST(WIN_ONLY)
 
-dnl Checking which text html browser we have avaliable
+dnl Checking which text html browser we have available
 if test $dodk != no; then
 	AC_CHECK_PROGS(WDUMP,w3m lynx links,false)
 	if test "$WDUMP" = false; then
@@ -992,7 +992,7 @@ dnl =================================================================
 dnl Final cleanup and output
 dnl =================================================================
 
-dnl Remove the SPECIAL_CFLAGS stuff from CFLAGS, and add it seperately
+dnl Remove the SPECIAL_CFLAGS stuff from CFLAGS, and add it separately
 dnl in the Makefile
 CFLAGS=$old_CFLAGS_nospecial
 AC_SUBST(SPECIAL_CFLAGS)

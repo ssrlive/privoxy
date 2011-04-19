@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.22 2010/11/22 10:32:40 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.23 2011/01/22 12:30:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -921,7 +921,7 @@ void free_map(struct map *the_map)
  *
  *                Note: Since all strings will be free()d in free_map()
  *                      later, set the copy flags for constants or
- *                      strings that will be independantly free()d.
+ *                      strings that will be independently free()d.
  *
  *                Note2: This function allows NULL parameters - it
  *                       returns JB_ERR_MEMORY in that case.

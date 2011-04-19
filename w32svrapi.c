@@ -1,4 +1,4 @@
-const char w32_svrapi_rcs[] = "$Id: w32svrapi.c,v 1.2 2006/09/20 03:15:43 david__schmidt Exp $";
+const char w32_svrapi_rcs[] = "$Id: w32svrapi.c,v 1.3 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32svrapi.c,v $
@@ -915,7 +915,7 @@ static void WINAPI privoxy_w32_service_handler(DWORD dwOpcode)
           * even after the process had disappeared.
           *
           * It seems that if we call exit in the ServiceMain thread, it causes
-          * the SCM to not recieve the status we sent in the line above. The
+          * the SCM to not receive the status we sent in the line above. The
           * simple fix was to create a new thread to actually call exit for us
           * whilst this thread continues and returns to its caller.
           */

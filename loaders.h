@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.26 2010/12/26 15:30:28 fabiankeil Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.27 2011/03/03 14:38:36 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -73,7 +73,7 @@ extern jb_err simple_read_line(FILE *fp, char **dest, int *newline);
 
 /*
  * Types of newlines that a file may contain, as strings.  If you have an
- * extremely wierd compiler that does not have '\r' == CR == ASCII 13 and
+ * extremely weird compiler that does not have '\r' == CR == ASCII 13 and
  * '\n' == LF == ASCII 10), then fix CHAR_CR and CHAR_LF in loaders.c as
  * well as these definitions.
  */

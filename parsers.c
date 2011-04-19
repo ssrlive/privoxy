@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.220 2011/03/27 14:01:18 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.221 2011/03/27 14:01:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2025,7 +2025,7 @@ static jb_err server_content_type(struct client_state *csp, char **header)
    if (csp->action->flags & ACTION_CONTENT_TYPE_OVERWRITE)
    {
       /*
-       * Make sure the user doesn't accidently
+       * Make sure the user doesn't accidentally
        * change the content type of binary documents. 
        */
       if ((csp->content_type & CT_TEXT) || (csp->action->flags & ACTION_FORCE_TEXT_MODE))
@@ -3569,7 +3569,7 @@ static jb_err client_x_forwarded_for_adder(struct client_state *csp)
  *
  * Function    :  server_connection_adder
  *
- * Description :  Adds an appropiate "Connection:" header to csp->headers
+ * Description :  Adds an appropriate "Connection:" header to csp->headers
  *                unless the header was already present. Called from `sed'.
  *
  * Parameters  :
@@ -3622,7 +3622,7 @@ static jb_err server_connection_adder(struct client_state *csp)
  *
  * Description :  Adds a "Proxy-Connection: keep-alive" header to
  *                csp->headers if the client asked for keep-alive.
- *                XXX: We should reuse existant ones.
+ *                XXX: We should reuse existent ones.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3934,7 +3934,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
  *
  * Function    :  strclean
  *
- * Description :  In-Situ-Eliminate all occurances of substring in
+ * Description :  In-Situ-Eliminate all occurrences of substring in
  *                string
  *
  * Parameters  :

@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.66 2011/03/03 14:39:57 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.67 2011/03/08 18:30:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1594,7 +1594,7 @@ char * actions_to_text(const struct action_spec *action)
  * Function    :  actions_to_html
  *
  * Description :  Converts a actionsfile entry from numeric form
- *                ("mask" and "add") to a <br>-seperated HTML string
+ *                ("mask" and "add") to a <br>-separated HTML string
  *                in which each action is linked to its chapter in
  *                the user manual.
  *
@@ -1700,7 +1700,7 @@ char * actions_to_html(const struct client_state *csp,
  *
  * Function    :  current_actions_to_html
  *
- * Description :  Converts a curren action spec to a <br> seperated HTML
+ * Description :  Converts a curren action spec to a <br> separated HTML
  *                text in which each action is linked to its chapter in
  *                the user manual.
  *
