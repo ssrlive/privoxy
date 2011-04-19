@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.111 2011/02/20 13:17:16 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.112 2011/03/20 11:51:12 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2482,7 +2482,7 @@ log messages. This is an experimental feature, if the results look wrong
 they very well might be. Also note that the results are pretty much guaranteed
 to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
 
-[B<--unbreak-lines-only] Tries to fix lines that got messed up by a broken or
+[B<--unbreak-lines-only>] Tries to fix lines that got messed up by a broken or
 interestingly configured mail client and thus are no longer recognized properly.
 Only fixes some breakage, but may be good enough or at least better than nothing.
 Doesn't do anything else, so you probably want to pipe the output into
