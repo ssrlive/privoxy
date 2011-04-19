@@ -145,7 +145,7 @@ ChangeLog for Privoxy
   - In log_error(), assert that ival and sval have reasonable values.
     There's no reason not to abort() if they don't.
   - Remove an incorrect cgi_error_unknown() call in a
-    cannnot-happen-situation in send_crunch_response().
+    cannot-happen-situation in send_crunch_response().
   - Clean up white-space in http_response definition and
     move the crunch_reason to the beginning.
   - Turn http_response.reason into an enum and rename it

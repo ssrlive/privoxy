@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.129 2010/11/13 20:17:11 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.130 2010/12/01 19:28:28 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.129 2010/11/13 20:17:11 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.130 2010/12/01 19:28:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -889,7 +889,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       Remove an incorrect cgi_error_unknown() call in a
-      cannnot-happen-situation in send_crunch_response().
+      cannot-happen-situation in send_crunch_response().
      </para>
     </listitem>
     <listitem>
@@ -8917,6 +8917,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.130  2010/12/01 19:28:28  fabiankeil
+ Hopefully unbreak the dok target when using some kind of jade.
+
+ Reported by Lee.
+
  Revision 2.129  2010/11/13 20:17:11  fabiankeil
  Merge ChangeLog updates
 

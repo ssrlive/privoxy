@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.68 2011/02/10 22:25:32 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.69 2011/03/27 14:14:13 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.68 2011/02/10 22:25:32 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.69 2011/03/27 14:14:13 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -1965,7 +1965,7 @@ ACLs: permit-access and deny-access</title>
    </para>
    <para>
     <programlisting>
-  foward   /                   [2001:DB8::1]:8000
+  forward   /                   [2001:DB8::1]:8000
 </programlisting>
    </para>
    <para>

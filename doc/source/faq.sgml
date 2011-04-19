@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.76 2010/11/22 10:35:02 fabiankeil Exp $
+ $Id: faq.sgml,v 2.77 2011/03/03 14:22:12 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.76 2010/11/22 10:35:02 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.77 2011/03/03 14:22:12 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -518,7 +518,7 @@ warranty? Registration?</title>
 </para>
 
 <para>
- We intend to use the donations to pay for our domain after transfering
+ We intend to use the donations to pay for our domain after transferring
  it to SPI. Our goal is to make sure there's no single point of failure
  and the bill gets paid and the site keeps running even if a some of
  the currently active developers were to suddenly disappear for a while.
@@ -2969,6 +2969,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.77  2011/03/03 14:22:12  fabiankeil
+Remove duplicated 'the'
+
 Revision 2.76  2010/11/22 10:35:02  fabiankeil
 Mention socks5 in another part of the Tor section.
 
