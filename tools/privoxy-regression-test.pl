@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.63 2011/02/19 13:59:40 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.64 2011/02/19 13:59:59 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -221,7 +221,7 @@ sub tokenize ($) {
     s@\s*$@@;
 
     # Reverse HTML-encoding
-    # XXX: Seriously imcomplete. 
+    # XXX: Seriously incomplete.
     s@&quot;@"@g;
     s@&amp;@&@g;
 
@@ -467,7 +467,7 @@ sub load_action_files ($) {
                 l(LL_STATUS, "Enabling no_checks for $token") unless $no_checks;
             }
 
-            # XXX: Neccessary?
+            # XXX: Necessary?
             unless ($no_checks)  {
                 check_for_forbidden_characters($value);
                 check_for_forbidden_characters($token);
@@ -701,7 +701,7 @@ sub execute_redirect_test ($) {
     my $redirect_destination;
     my $expected_redirect_destination = $test->{'redirect destination'};
 
-    # XXX: Check if a redirect actualy applies before doing the request.
+    # XXX: Check if a redirect actually applies before doing the request.
     #      otherwise the test may hit a real server in failure cases.
 
     $curl_parameters .= '--head ';
@@ -1767,7 +1767,7 @@ number.
 
 B<--show-skipped-tests> Log skipped tests even if verbose mode is off.
 
-B<--verbose> Log succesful tests as well. By default only
+B<--verbose> Log successful tests as well. By default only
 the failures are logged.
 
 B<--version> Print version and exit.

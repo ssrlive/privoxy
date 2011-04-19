@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.112 2011/03/20 11:51:12 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.113 2011/04/19 13:08:51 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1300,7 +1300,7 @@ sub handle_loglevel_gif_deanimate ($) {
     } elsif ($content =~ m/^(?:No GIF header found|failed while parsing)/) {
 
         # No GIF header found (XXX: Did I ever commit this?)
-        # failed while parsing 195 134747048 (XXX: never commited)
+        # failed while parsing 195 134747048 (XXX: never committed)
 
         # Ignore these for now
 
