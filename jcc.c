@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.346 2011/04/26 16:48:04 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.347 2011/04/26 16:48:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2963,8 +2963,6 @@ int main(int argc, char **argv)
          {
             log_error(LOG_LEVEL_FATAL, "User '%s' not found.", argv[argc_pos]);
          }
-
-         if (p != NULL) *--p = '\0';
       }
 
       else if (strcmp(argv[argc_pos], "--pre-chroot-nslookup" ) == 0)
