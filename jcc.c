@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.345 2011/04/19 13:00:47 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.346 2011/04/26 16:48:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2955,13 +2955,13 @@ int main(int argc, char **argv)
             *p++ = '\0';
             if (NULL == (grp = getgrnam(p)))
             {
-               log_error(LOG_LEVEL_FATAL, "Group %s not found.", p);
+               log_error(LOG_LEVEL_FATAL, "Group '%s' not found.", p);
             }
          }
 
          if (NULL == (pw = getpwnam(argv[argc_pos])))
          {
-            log_error(LOG_LEVEL_FATAL, "User %s not found.", argv[argc_pos]);
+            log_error(LOG_LEVEL_FATAL, "User '%s' not found.", argv[argc_pos]);
          }
 
          if (p != NULL) *--p = '\0';
