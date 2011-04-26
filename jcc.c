@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.347 2011/04/26 16:48:56 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.348 2011/04/26 16:50:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2863,7 +2863,6 @@ int main(int argc, char **argv)
 #ifdef unix
    struct passwd *pw = NULL;
    struct group *grp = NULL;
-   char *p;
    int do_chroot = 0;
    char *pre_chroot_nslookup_to_load_resolver = NULL;
 #endif
@@ -2948,21 +2947,34 @@ int main(int argc, char **argv)
 
       else if (strcmp(argv[argc_pos], "--user" ) == 0)
       {
+         char *user_arg;
+         char *group_name;
+
          if (++argc_pos == argc) usage(argv[argc_pos]);
 
-         if (NULL != (p = strchr(argv[argc_pos], '.')))
+         user_arg = strdup(argv[argc_pos]);
+         if (NULL == user_arg)
          {
-            *p++ = '\0';
-            if (NULL == (grp = getgrnam(p)))
+            log_error(LOG_LEVEL_FATAL,
+               "Out of memory splitting --user argument '%s'.", argv[argc_pos]);
+         }
+         group_name = strchr(user_arg, '.');
+         if (NULL != group_name)
+         {
+            *group_name++ = '\0';
+            grp = getgrnam(group_name);
+            if (NULL == grp)
             {
-               log_error(LOG_LEVEL_FATAL, "Group '%s' not found.", p);
+               log_error(LOG_LEVEL_FATAL, "Group '%s' not found.", group_name);
             }
          }
-
-         if (NULL == (pw = getpwnam(argv[argc_pos])))
+         pw = getpwnam(user_arg);
+         if (NULL == pw)
          {
-            log_error(LOG_LEVEL_FATAL, "User '%s' not found.", argv[argc_pos]);
+            log_error(LOG_LEVEL_FATAL, "User '%s' not found.", user_arg);
          }
+
+         freez(user_arg);
       }
 
       else if (strcmp(argv[argc_pos], "--pre-chroot-nslookup" ) == 0)
