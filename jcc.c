@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.344 2011/03/27 13:58:09 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.345 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2950,7 +2950,7 @@ int main(int argc, char **argv)
       {
          if (++argc_pos == argc) usage(argv[argc_pos]);
 
-         if ((NULL != (p = strchr(argv[argc_pos], '.'))) && *(p + 1) != '0')
+         if (NULL != (p = strchr(argv[argc_pos], '.')))
          {
             *p++ = '\0';
             if (NULL == (grp = getgrnam(p)))
