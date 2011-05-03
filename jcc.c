@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.349 2011/04/26 16:53:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.350 2011/04/26 16:55:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1599,8 +1599,8 @@ static void chat(struct client_state *csp)
          csp->action->string[ACTION_STRING_LIMIT_CONNECT];
       assert(NULL != acceptable_connect_ports);
       log_error(LOG_LEVEL_INFO, "Request from %s marked for blocking. "
-         "limit-connect{%s} doesn't allow CONNECT requests to port %d.",
-         csp->ip_addr_str, acceptable_connect_ports, csp->http->port);
+         "limit-connect{%s} doesn't allow CONNECT requests to %s",
+         csp->ip_addr_str, acceptable_connect_ports, csp->http->hostport);
       csp->action->flags |= ACTION_BLOCK;
       http->ssl = 0;
    }
