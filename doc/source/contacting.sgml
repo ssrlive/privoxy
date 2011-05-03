@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: contacting.sgml,v 2.22 2010/11/13 13:04:24 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.23 2010/11/13 13:04:56 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,6 +50,15 @@
 <para>
  Please don't sent private support requests to individual Privoxy
  developers, either use the mailing lists or the support trackers.
+</para>
+
+<para>
+ If you have to contact a Privoxy developer directly for other reasons,
+ please send a real mail and do not bother with SourceForge's messaging
+ system. Answers to SourceForge messages are usually bounced by SourceForge's
+ mail server in which case the developer wasted time writing a response you
+ don't get. From your point of view it will look like your message has
+ been completely ignored, so this is frustrating for all parties involved.
 </para>
 
 <para>
