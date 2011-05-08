@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.65 2011/04/19 13:10:11 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.66 2011/05/08 13:27:10 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -917,12 +917,9 @@ sub check_header_result ($$) {
 
     if ($expect_header eq 'NO CHANGE') {
 
-        if (defined($header) and $header eq $test->{'data'}) {
+        $success = (defined($header) and $header eq $test->{'data'});
 
-            $success = 1;
-
-        } else {
-
+        unless ($success) {
             $header = "REMOVAL" unless defined $header;
             l(LL_VERBOSE_FAILURE,
               "Ooops. Got: '" . $header . "' while expecting: '" . $expect_header . "'");
@@ -930,26 +927,20 @@ sub check_header_result ($$) {
 
     } elsif ($expect_header eq 'REMOVAL') {
 
-        if (defined($header) and $header eq $test->{'data'}) {
+        # XXX: Use more reliable check here and make sure
+        # the header has a different name.
+        $success = not (defined($header) and $header eq $test->{'data'});
 
+        unless ($success) {
             l(LL_VERBOSE_FAILURE,
               "Ooops. Expected removal but: '" . $header . "' is still there.");
-
-        } else {
-
-            # XXX: Use more reliable check here and make sure
-            # the header has a different name.
-            $success = 1;
         }
 
     } elsif ($expect_header eq 'SOME CHANGE') {
 
-        if (defined($header) and not $header eq $test->{'data'}) {
+        $success = (defined($header) and $header ne $test->{'data'});
 
-            $success = 1;
-
-        } else {
-
+        unless  ($success) {
             $header = "REMOVAL" unless defined $header;
             l(LL_VERBOSE_FAILURE,
               "Ooops. Got: '" . $header . "' while expecting: SOME CHANGE");
@@ -957,12 +948,9 @@ sub check_header_result ($$) {
 
     } else {
 
-        if (defined($header) and $header eq $expect_header) {
+        $success = (defined($header) and $header eq $expect_header);
 
-            $success = 1;
-
-        } else {
-
+        unless ($success) {
             $header = "No matching header" unless defined $header; # XXX: No header detected to be precise
             l(LL_VERBOSE_FAILURE,
               "Ooops. Got: '" . $header . "' while expecting: '" . $expect_header . "'");
