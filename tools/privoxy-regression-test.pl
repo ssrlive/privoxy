@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.68 2011/05/08 13:28:13 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.69 2011/05/08 13:29:59 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -986,7 +986,7 @@ sub get_header ($$) {
 
     if ($expect_header eq 'REMOVAL'
      or $expect_header eq 'NO CHANGE'
-     or  $expect_header eq 'SOME CHANGE') {
+     or $expect_header eq 'SOME CHANGE') {
 
         $expect_header = $test->{'data'};
     }
