@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.67 2011/05/08 13:27:53 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.68 2011/05/08 13:28:13 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -504,7 +504,7 @@ sub execute_regression_tests () {
         my $failures;
         my $skipped = 0;
 
-        for my $s (0 .. @regression_tests - 1) {
+        for (my $s = 0;  $s < @regression_tests; $s++) {
 
             my $r = 0;
 
