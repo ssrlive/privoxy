@@ -1,4 +1,4 @@
-$Id: TODO,v 1.43 2011/04/16 17:31:24 fabiankeil Exp $
+$Id: TODO,v 1.44 2011/04/16 17:31:35 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -255,3 +255,8 @@ have been added, not by priority.
     be reasonable to default to a limit of one and showing an error
     message if the request for the redirect URL would be redirected
     again.
+
+92) The statistics currently aren't calculated correctly by Privoxy
+    as each thread is only counted as one request which is no longer
+    correct. This should be fixed, or the statistic code removed.
+    Privoxy-Log-Parser's provides more detailed statistics, anyway.
