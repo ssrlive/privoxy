@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.70 2011/04/19 13:14:10 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.71 2011/05/15 10:48:58 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.70 2011/04/19 13:14:10 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.71 2011/05/15 10:48:58 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -1255,6 +1255,16 @@ actionsfile
     been compiled with IPv6 support. If you aren't sure if your version
     supports it, have a look at
     <literal>http://config.privoxy.org/show-status</literal>.
+   </para>
+   <para>
+    Some operating systems will prefer IPv6 to IPv4 addresses even if the
+    system has no IPv6 connectivity which is usually not expected by the user.
+    Some even rely on DNS to resolve localhost which mean the "localhost" address
+    used may not actually be local.
+   </para>
+   <para>
+    It is therefore recommended to explicitly configure the intended IP address
+    instead of relying on the operating system, unless there's a strong reason not to.
    </para>
    <para>
     If you leave out the address, <application>Privoxy</application> will bind to all
