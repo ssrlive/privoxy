@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.65 2011/04/19 13:00:47 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.66 2011/05/22 10:26:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -157,37 +157,6 @@ unsigned int hash_string( const char* s )
    return (h);
 
 }
-
-
-#ifdef __MINGW32__
-/*********************************************************************
- *
- * Function    :  strdup
- *
- * Description :  For some reason (which is beyond me), gcc and WIN32
- *                don't like strdup.  When a "free" is executed on a
- *                strdup'd ptr, it can at times freez up!  So I just
- *                replaced it and problem was solved.
- *
- * Parameters  :
- *          1  :  s = string to duplicate
- *
- * Returns     :  Pointer to newly malloc'ed copy of the string.
- *
- *********************************************************************/
-char *strdup( const char *s )
-{
-   char * result = (char *)malloc( strlen(s)+1 );
-
-   if (result != NULL)
-   {
-      strcpy( result, s );
-   }
-
-   return( result );
-}
-
-#endif /* def __MINGW32__ */
 
 
 /*********************************************************************

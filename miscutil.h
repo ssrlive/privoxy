@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.31 2009/05/16 13:27:20 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.32 2011/05/22 10:26:45 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -66,10 +66,6 @@ extern char *bindup(const char *string, size_t len);
 extern char *make_path(const char * dir, const char * file);
 
 long int pick_from_range(long int range);
-
-#ifdef __MINGW32__
-extern char *strdup(const char *s);
-#endif /* def __MINGW32__ */
 
 #ifndef HAVE_SNPRINTF
 extern int snprintf(char *, size_t, const char *, /*args*/ ...);
