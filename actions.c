@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.67 2011/03/08 18:30:46 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.68 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1319,7 +1319,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                return 1; /* never get here */
             }
             
-            num_fields = ssplit(version_string, ".", fields, 3, TRUE, FALSE);
+            num_fields = ssplit(version_string, ".", fields, SZ(fields), TRUE, FALSE);
 
             if (num_fields < 1 || atoi(fields[0]) == 0)
             {
