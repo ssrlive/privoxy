@@ -1,16 +1,15 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.64 2009/05/19 17:45:31 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.65 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
  *
- * Purpose     :  zalloc, hash_string, safe_strerror, strcmpic,
- *                strncmpic, chomp, and MinGW32 strdup
- *                functions. 
- *                These are each too small to deserve their own file
- *                but don't really fit in any other file.
+ * Purpose     :  zalloc, hash_string, strcmpic, strncmpic, and
+ *                MinGW32 strdup functions.  These are each too small
+ *                to deserve their own file but don't really fit in
+ *                any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007
- *                the SourceForge Privoxy team. http://www.privoxy.org/
+ * Copyright   :  Written by and Copyright (C) 2001-2011 the
+ *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and 
@@ -189,44 +188,6 @@ char *strdup( const char *s )
 }
 
 #endif /* def __MINGW32__ */
-
-
-
-/*********************************************************************
- *
- * Function    :  safe_strerror
- *
- * Description :  Variant of the library routine strerror() which will
- *                work on systems without the library routine, and
- *                which should never return NULL.
- *
- * Parameters  :
- *          1  :  err = the `errno' of the last operation.
- *
- * Returns     :  An "English" string of the last `errno'.  Allocated
- *                with strdup(), so caller frees.  May be NULL if the
- *                system is out of memory.
- *
- *********************************************************************/
-char *safe_strerror(int err)
-{
-   char *s = NULL;
-   char buf[BUFFER_SIZE];
-
-
-#ifdef HAVE_STRERROR
-   s = strerror(err);
-#endif /* HAVE_STRERROR */
-
-   if (s == NULL)
-   {
-      snprintf(buf, sizeof(buf), "(errno = %d)", err);
-      s = buf;
-   }
-
-   return(strdup(s));
-
-}
 
 
 /*********************************************************************
