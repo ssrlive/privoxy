@@ -1,6 +1,6 @@
 #ifndef SSPLIT_H_INCLUDED
 #define SSPLIT_H_INCLUDED
-#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.7 2006/07/18 14:48:47 david__schmidt Exp $"
+#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.8 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.h,v $
@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-extern int ssplit(char *str, const char *delim, char *vec[], int vec_len, 
+extern int ssplit(char *str, const char *delim, char *vec[], size_t vec_len,
                   int dont_save_empty_fields, int ignore_leading);
 
 /* Revision control strings from this header and associated .c file */

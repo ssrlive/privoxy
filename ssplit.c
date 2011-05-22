@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.9 2007/11/03 14:35:45 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.10 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -74,7 +74,7 @@ const char ssplit_h_rcs[] = SSPLIT_H_VERSION;
  *                On error, vec and str may still have been overwritten.
  *
  *********************************************************************/
-int ssplit(char *str, const char *delim, char *vec[], int vec_len, 
+int ssplit(char *str, const char *delim, char *vec[], size_t vec_len,
            int dont_save_empty_fields, int ignore_leading)
 {
    unsigned char is_delim[256];
