@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.141 2011/03/08 18:32:11 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.142 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2231,7 +2231,7 @@ struct http_response *direct_response(struct client_state *csp)
    {
       for (p = csp->headers->first; (p != NULL) ; p = p->next)
       {
-         if (!strncmpic("Max-Forwards:", p->str, 13))
+         if (!strncmpic(p->str, "Max-Forwards:", 13))
          {
             unsigned int max_forwards;
 

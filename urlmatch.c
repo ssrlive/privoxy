@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.59 2009/06/10 13:17:17 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.60 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1128,7 +1128,7 @@ jb_err create_url_spec(struct url_spec *url, char *buf)
    }
 
    /* Is it a tag pattern? */
-   if (0 == strncmpic("TAG:", url->spec, 4))
+   if (0 == strncmpic(url->spec, "TAG:", 4))
    {
       /* The pattern starts with the first character after "TAG:" */
       const char *tag_pattern = buf + 4;
