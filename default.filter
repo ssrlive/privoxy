@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.78 2010/04/18 11:20:48 fabiankeil Exp $
+#  $Id: default.filter,v 1.79 2010/09/03 17:40:07 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -632,6 +632,8 @@ s@</head>@<style type="text/css">\n\
  max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
  /* Remove "suggestions". They are next to worthless but partly overlap with the search results */\n\
  .suggestion, \#nys_right, \#nys {clear: both; display:none;}\n\
+ /* Overlay ads to enable Facebook 'likes' in search results. */\n\
+ .sn_container {display:none !important;}\n\
  \#content {padding-right: 0;}\n\
  </style>\n$0@
 # Are these ids still in use?
