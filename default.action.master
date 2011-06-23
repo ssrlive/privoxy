@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.236 2011/05/08 13:31:05 fabiankeil Exp $
+#  $Id: default.action.master,v 1.237 2011/05/22 10:31:29 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1971,6 +1971,8 @@ view.samurajdata.se/ps\.php\?url=
 .redbot.org/
 # URL = http://webcache.googleusercontent.com/custom?hl=en&domains=library.gnome.org&sitesearch=library.gnome.org&q=cache:8yGDJ1YpefcJ:http://library.gnome.org/devel//gtk/2.20/GtkLabel.html+gtk_label_set_text+escape&ct=clnk
 webcache.googleusercontent.com/
+# URL = http://webcache.googleusercontent.com/search?q=cache:kZYcDFibjHcJ:https://grepular.com/Abusing_HTTP_Status_Codes_to_Expose_Private_Information+inurl:https://grepular.com/Abusing_HTTP_Status_Codes_to_Expose_Private_Information&hl=en&strip=1
+.googleusercontent.com/.*=cache:
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
