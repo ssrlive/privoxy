@@ -242,6 +242,13 @@
                  editor@if-FEATURE_CGI_EDIT_ACTIONS-then@</a>@else-not-FEATURE_CGI_EDIT_ACTIONS@@endif-FEATURE_CGI_EDIT_ACTIONS@.</td>
             </tr>
             <tr>
+              <td><code>FEATURE_COMPRESSION</code></td>
+              <td>@if-FEATURE_COMPRESSION-then@ Yes @else-not-FEATURE_COMPRESSION@ No @endif-FEATURE_COMPRESSION@</td>
+              <td>
+               Allows compress buffered content before sending it to the client, assuming the client supports it.
+              </td>
+            </tr>
+            <tr>
               <td><code>FEATURE_CONNECTION_KEEP_ALIVE</code></td>
               <td>@if-FEATURE_CONNECTION_KEEP_ALIVE-then@ Yes @else-not-FEATURE_CONNECTION_KEEP_ALIVE@ No @endif-FEATURE_CONNECTION_KEEP_ALIVE@</td>
               <td>

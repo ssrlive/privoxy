@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.108 2011/03/03 14:42:55 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.109 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1575,6 +1575,12 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef FEATURE_CGI_EDIT_ACTIONS */
    if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 0);
 #endif /* ndef FEATURE_CGI_EDIT_ACTIONS */
+
+#ifdef FEATURE_COMPRESSION
+   if (!err) err = map_conditional(exports, "FEATURE_COMPRESSION", 1);
+#else /* ifndef FEATURE_COMPRESSION */
+   if (!err) err = map_conditional(exports, "FEATURE_COMPRESSION", 0);
+#endif /* ndef FEATURE_COMPRESSION */
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if (!err) err = map_conditional(exports, "FEATURE_CONNECTION_KEEP_ALIVE", 1);
