@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.117 2011/05/03 10:33:53 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.118 2011/06/23 14:02:02 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -913,6 +913,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/^keep-alive support is disabled/
           or $c =~ m/^Continue hack in da house/
           or $c =~ m/^Merged multiple header lines to:/
+          or $c =~ m/^Added header: /
             )
     {
         # XXX: Some of these may need highlighting
@@ -960,6 +961,7 @@ sub handle_loglevel_header ($) {
         # keep-alive support is disabled. Crunching: Keep-Alive: 300.
         # Continue hack in da house.
         # Merged multiple header lines to: 'X-FORWARDED-PROTO: http X-HOST: 127.0.0.1'
+        # Added header: Content-Encoding: deflate
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
