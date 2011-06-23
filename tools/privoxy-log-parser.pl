@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.116 2011/05/03 10:19:20 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.117 2011/05/03 10:33:53 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1192,6 +1192,12 @@ sub handle_loglevel_re_filter ($) {
         # Adding re_filter job ...
         # Adding dynamic re_filter job s@^(?:\w*)\s+.*\s+HTTP/\d\.\d\s*@IP-ADDRESS: $origin@D\
         #  to filter client-ip-address succeeded.
+
+    } elsif ($c =~ m/^Compressed content from /) {
+
+        # Compressed content from 29258 to 8630 bytes.
+        $content =~ s@(?<=from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $content =~ s@(?<=to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Reading in filter/) {
 
