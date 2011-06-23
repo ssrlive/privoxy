@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.221 2011/03/27 14:01:46 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.222 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -619,10 +619,12 @@ jb_err decompress_iob(struct client_state *csp)
       }
 
       /*
-       * If we tried the limit and still didn't have enough
-       * memory, just give up.
+       * If we reached the buffer limit and still didn't have enough
+       * memory, just give up. Due to the ceiling enforced by the next
+       * if block we could actually check for equality here, but as it
+       * can be easily mistaken for a bug we don't.
        */
-      if (bufsize == csp->config->buffer_limit)
+      if (bufsize >= csp->config->buffer_limit)
       {
          log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
          return JB_ERR_MEMORY;
