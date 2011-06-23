@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl 
-dnl $Id: configure.in,v 1.156 2011/05/27 11:37:45 fabiankeil Exp $
+dnl $Id: configure.in,v 1.157 2011/05/27 11:37:57 fabiankeil Exp $
 dnl 
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.156 $)
+AC_REVISION($Revision: 1.157 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -933,6 +933,19 @@ if test $enableval2 = yes; then
    Privoxy will not be able to filter compressed content.
    This may become a fatal error in the future.])
   fi  
+fi
+
+AC_ARG_ENABLE(compression,
+[  --enable-compression            Allow Privoxy to compress buffered content if the client supports it. Requires zlib support.],
+[enableval2=$enableval],
+[enableval2=no])
+if test $enableval2 = yes; then
+  if test $have_zlib = "yes"; then
+    echo Enabling compression support.
+    AC_DEFINE(FEATURE_COMPRESSION,1,[Define to 1 to use compression through the zlib library.])
+  else
+   AC_MSG_WARN([No zlib found. Privoxy will not be able to (re-)compressed buffered content.])
+  fi
 fi
 
 

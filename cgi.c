@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.129 2010/05/24 11:38:22 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.130 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -48,6 +48,10 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.129 2010/05/24 11:38:22 fabiankeil Exp $"
 #include <string.h>
 #include <limits.h>
 #include <assert.h>
+
+#ifdef FEATURE_COMPRESSION
+#include <zlib.h>
+#endif
 
 #include "project.h"
 #include "cgi.h"
@@ -1479,6 +1483,59 @@ static void get_locale_time(char *buf, size_t buffer_size)
 
 }
 
+
+#ifdef FEATURE_COMPRESSION
+/*********************************************************************
+ *
+ * Function    :  compress_buffer
+ *
+ * Description :  Compresses the content of a buffer with zlib's deflate
+ *                Allocates a new buffer for the result, free'ing it is
+ *                up to the caller.
+ *
+ *                XXX: We should add a config option for the
+ *                     compression level.
+ *
+ *
+ * Parameters  :
+ *          1  :  buffer = buffer whose content should be compressed
+ *          2  :  buffer_length = length of the buffer
+ *
+ * Returns     :  NULL on error, otherwise a pointer to the compressed
+ *                content of the input buffer.
+ *
+ *********************************************************************/
+char *compress_buffer(char *buffer, size_t *buffer_length)
+{
+   char *compressed_buffer;
+   size_t new_length = *buffer_length;
+
+   compressed_buffer = malloc(new_length);
+   if (NULL == compressed_buffer)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Out of memory allocation compression buffer.");
+   }
+
+   if (Z_OK != compress2((Bytef *)compressed_buffer, &new_length,
+         (Bytef *)buffer, *buffer_length, Z_DEFAULT_COMPRESSION))
+   {
+      log_error(LOG_LEVEL_ERROR, "Error in compress2()");
+      freez(compressed_buffer);
+      return NULL;
+   }
+
+   log_error(LOG_LEVEL_RE_FILTER,
+      "Compressed content from %d to %d bytes.", *buffer_length, new_length);
+
+   *buffer_length = new_length;
+
+   return compressed_buffer;
+
+}
+#endif
+
+
 /*********************************************************************
  *
  * Function    :  finish_http_response
@@ -1524,6 +1581,23 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
    {
       rsp->content_length = rsp->body ? strlen(rsp->body) : 0;
    }
+
+#ifdef FEATURE_COMPRESSION
+   if (!err && (csp->flags & CSP_FLAG_CLIENT_SUPPORTS_DEFLATE)
+      && (rsp->content_length > LOWER_LENGTH_LIMIT_FOR_COMRPESSION))
+   {
+      char *compressed_content;
+
+      compressed_content = compress_buffer(rsp->body, &rsp->content_length);
+      if (NULL != compressed_content)
+      {
+         freez(rsp->body);
+         rsp->body = compressed_content;
+      }
+      err = enlist_unique_header(rsp->headers, "Content-Encoding", "deflate");
+   }
+#endif
+
    if (!err)
    {
       snprintf(buf, sizeof(buf), "Content-Length: %d", (int)rsp->content_length);

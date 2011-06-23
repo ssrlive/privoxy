@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.163 2011/02/19 13:58:48 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.164 2011/04/19 13:00:47 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -186,6 +186,12 @@ typedef int jb_err;
  * Max length of CGI parameters (arbitrary limit).
  */
 #define CGI_PARAM_LEN_MAX 500U
+
+/**
+ * Minimum length which a buffer has to reach before
+ * Privoxy bothers to (re-)compress it. Completely arbitrary.
+ */
+#define LOWER_LENGTH_LIMIT_FOR_COMRPESSION 1024U
 
 /**
  * Buffer size for capturing struct hostent data in the
@@ -809,6 +815,17 @@ struct reusable_connection
  * Flag for csp->flags: Set if the client reused its connection.
  */
 #define CSP_FLAG_REUSED_CLIENT_CONNECTION           0x00100000U
+
+/**
+ * Flag for csp->flags: Set if the supports deflate compression.
+ */
+#define CSP_FLAG_CLIENT_SUPPORTS_DEFLATE            0x00200000U
+
+/**
+ * Flag for csp->flags: Set if the content has been deflated by Privoxy
+ */
+#define CSP_FLAG_BUFFERED_CONTENT_DEFLATED          0x00400000U
+
 
 /*
  * Flags for use in return codes of child processes

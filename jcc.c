@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.351 2011/05/03 10:15:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.352 2011/05/27 11:34:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2061,6 +2061,19 @@ static void chat(struct client_state *csp)
                   {
                      csp->content_length = (size_t)(csp->iob->eod - csp->iob->cur);
                   }
+#ifdef FEATURE_COMPRESSION
+                  else if ((csp->flags & CSP_FLAG_CLIENT_SUPPORTS_DEFLATE)
+                     && (csp->content_length > LOWER_LENGTH_LIMIT_FOR_COMRPESSION))
+                  {
+                     char *compressed_content = compress_buffer(p, (size_t *)&csp->content_length);
+                     if (compressed_content != NULL)
+                     {
+                        freez(p);
+                        p = compressed_content;
+                        csp->flags |= CSP_FLAG_BUFFERED_CONTENT_DEFLATED;
+                     }
+                  }
+#endif
 
                   if (JB_ERR_OK != update_server_headers(csp))
                   {

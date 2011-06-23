@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.36 2009/05/16 13:27:20 fabiankeil Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.37 2009/06/11 11:44:25 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -101,6 +101,9 @@ extern jb_err get_string_param(const struct map *parameters,
                                const char **pparam);
 extern char   get_char_param(const struct map *parameters,
                              const char *param_name);
+#ifdef FEATURE_COMPRESSION
+extern char *compress_buffer(char *buffer, size_t *buffer_length);
+#endif
 
 /*
  * Text generators
