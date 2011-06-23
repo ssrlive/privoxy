@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.79 2010/09/03 17:40:07 fabiankeil Exp $
+#  $Id: default.filter,v 1.80 2011/06/19 12:17:56 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -603,7 +603,7 @@ s@</head>@\n<style type="text/css">\n\
  \#symadbn, \#ymadbn, .yschbox, .yschhd, .bbox, \#yschsec, \#sec,\
  \#yschanswr, .yschftad, .yschspn, .yschspns, \#ygrp-sponsored-links,\
  \#nwad, \#MWA2, \#MSCM, \#yregad, \#sponsored-links,\
- \#ks-ypn-ads, .ad, \#east, \#ygrp-vital {display: none !important;}\n\
+ \#ks-ypn-ads, .ad, \#east, \#ygrp-vital, .ads {display: none !important;}\n\
  \#yschpri, \#yschweb, \#pri, \#web, \#main, .yschttl, .abstr, .res \n\
  {width: 99% !important; max-width: 100% !important;}\n\
  .yschttl, .res, .res.indent, \#web {padding: 0px; margin: 0px !important;}\n\
