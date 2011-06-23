@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.69 2011/05/08 13:29:59 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.70 2011/05/08 13:30:17 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -1305,7 +1305,7 @@ sub log_message ($) {
         if ($leading_log_date) {
             $year += 1900;
             $mon  += 1;
-            $time_stamp = sprintf("%i/%.2i/%.2i", $year, $mon, $mday);
+            $time_stamp = sprintf("%i-%.2i-%.2i", $year, $mon, $mday);
         }
 
         if ($leading_log_time) {
