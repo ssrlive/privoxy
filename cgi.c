@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.132 2011/06/25 12:39:41 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.133 2011/06/25 12:40:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -551,7 +551,9 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
          if (err && (err != JB_ERR_MEMORY))
          {
             /* Unexpected error! Shouldn't get here */
-            log_error(LOG_LEVEL_ERROR, "Unexpected CGI error %d in top-level handler.  Please file a bug report!", err);
+            log_error(LOG_LEVEL_ERROR,
+               "Unexpected CGI error %d in top-level handler. "
+               "Please file a bug report!", err);
             err = cgi_error_unknown(csp, rsp, err);
          }
          if (!err)
