@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.109 2010/07/26 11:30:09 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.110 2010/07/26 12:11:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -450,7 +450,7 @@ static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
    tm_now = *localtime(&now); 
 #endif
 
-   length = strftime(buffer, buffer_size, "%b %d %H:%M:%S", &tm_now);
+   length = strftime(buffer, buffer_size, "%Y-%m-%d %H:%M:%S", &tm_now);
    if (length > (size_t)0)
    {
       msecs_length = snprintf(buffer+length, buffer_size - length, ".%.3ld", msecs);               
