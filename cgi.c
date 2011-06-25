@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.130 2011/04/19 13:00:47 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.131 2011/06/23 14:01:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1212,12 +1212,8 @@ jb_err cgi_error_unknown(const struct client_state *csp,
       "file a bug report</a>.</p>\r\n"
       "</body>\r\n"
       "</html>\r\n";
-   char errnumbuf[30];
-   /*
-    * Due to sizeof(errnumbuf), body_size will be slightly
-    * bigger than necessary but it doesn't really matter.
-    */
-   const size_t body_size = strlen(body_prefix) + sizeof(errnumbuf) + strlen(body_suffix) + 1;
+   /* Includes room for larger error numbers in the future. */
+   const size_t body_size = sizeof(body_prefix) + sizeof(body_suffix) + 5;
    assert(csp);
    assert(rsp);
 
@@ -1230,16 +1226,13 @@ jb_err cgi_error_unknown(const struct client_state *csp,
    rsp->is_static = 0;
    rsp->crunch_reason = INTERNAL_ERROR;
 
-   snprintf(errnumbuf, sizeof(errnumbuf), "%d", error_to_report);
-
    rsp->body = malloc(body_size);
    if (rsp->body == NULL)
    {
       return JB_ERR_MEMORY;
    }
-   strlcpy(rsp->body, body_prefix, body_size);
-   strlcat(rsp->body, errnumbuf,   body_size);
-   strlcat(rsp->body, body_suffix, body_size);
+
+   snprintf(rsp->body, body_size, "%s%d%s", body_prefix, error_to_report, body_suffix);
 
    rsp->status = strdup(status);
    if (rsp->status == NULL)
