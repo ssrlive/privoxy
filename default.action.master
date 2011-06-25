@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.237 2011/05/22 10:31:29 fabiankeil Exp $
+#  $Id: default.action.master,v 1.238 2011/06/23 13:59:56 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1803,6 +1803,8 @@ adesklets.sourceforge.net/
 adassier.wordpress.com/
 # URL = http://adassier.files.wordpress.com/2010/05/road-to-economic-recovery2.jpg?w=630&h=451
 adassier.files.wordpress.com
+# URL = http://adainitiative.org/about-us/
+adainitiative.org/
 
 
 #############################################################################
