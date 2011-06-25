@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.71 2011/05/15 10:48:58 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.72 2011/05/15 10:49:33 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -50,8 +50,8 @@
 <title>The Main Configuration File</title>
 
 <para>
- Again, the main configuration file is named <filename>config</filename> on
- Linux/Unix/BSD and OS/2, and <filename>config.txt</filename> on Windows.
+ By default, the main configuration file is named <filename>config</filename>,
+ with the exception of Windows, where it is named <filename>config.txt</filename>.
  Configuration lines consist of an initial keyword followed by a list of
  values, all separated by whitespace (any number of spaces or tabs). For
  example:
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.71 2011/05/15 10:48:58 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.72 2011/05/15 10:49:33 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
