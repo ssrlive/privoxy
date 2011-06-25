@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.131 2011/06/23 14:01:01 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.132 2011/06/25 12:39:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1041,17 +1041,17 @@ void cgi_init_error_messages(void)
       "Content-Type: text/html\r\n"
       "\r\n";
    cgi_error_memory_response->body =
-      "<html>\r\n"
-      "<head>\r\n"
-      " <title>500 Internal Privoxy Error</title>\r\n"
+      "<html>\n"
+      "<head>\n"
+      " <title>500 Internal Privoxy Error</title>\n"
       " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">"
-      "</head>\r\n"
-      "<body>\r\n"
-      "<h1>500 Internal Privoxy Error</h1>\r\n"
-      "<p>Privoxy <b>ran out of memory</b> while processing your request.</p>\r\n"
-      "<p>Please contact your proxy administrator, or try again later</p>\r\n"
-      "</body>\r\n"
-      "</html>\r\n";
+      "</head>\n"
+      "<body>\n"
+      "<h1>500 Internal Privoxy Error</h1>\n"
+      "<p>Privoxy <b>ran out of memory</b> while processing your request.</p>\n"
+      "<p>Please contact your proxy administrator, or try again later</p>\n"
+      "</body>\n"
+      "</html>\n";
 
    cgi_error_memory_response->head_length =
       strlen(cgi_error_memory_response->head);
@@ -1109,18 +1109,18 @@ jb_err cgi_error_no_template(const struct client_state *csp,
    static const char status[] =
       "500 Internal Privoxy Error";
    static const char body_prefix[] =
-      "<html>\r\n"
-      "<head>\r\n"
-      " <title>500 Internal Privoxy Error</title>\r\n"
+      "<html>\n"
+      "<head>\n"
+      " <title>500 Internal Privoxy Error</title>\n"
       " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">"
-      "</head>\r\n"
-      "<body>\r\n"
-      "<h1>500 Internal Privoxy Error</h1>\r\n"
-      "<p>Privoxy encountered an error while processing your request:</p>\r\n"
+      "</head>\n"
+      "<body>\n"
+      "<h1>500 Internal Privoxy Error</h1>\n"
+      "<p>Privoxy encountered an error while processing your request:</p>\n"
       "<p><b>Could not load template file <code>";
    static const char body_suffix[] =
-      "</code> or one of its included components.</b></p>\r\n"
-      "<p>Please contact your proxy administrator.</p>\r\n"
+      "</code> or one of its included components.</b></p>\n"
+      "<p>Please contact your proxy administrator.</p>\n"
       "<p>If you are the proxy administrator, please put the required file(s)"
       "in the <code><i>(confdir)</i>/templates</code> directory.  The "
       "location of the <code><i>(confdir)</i></code> directory "
@@ -1129,9 +1129,9 @@ jb_err cgi_error_no_template(const struct client_state *csp,
 #ifndef _WIN32
       ", or <code>/etc/privoxy/</code>"
 #endif /* ndef _WIN32 */
-      ").</p>\r\n"
-      "</body>\r\n"
-      "</html>\r\n";
+      ").</p>\n"
+      "</body>\n"
+      "</html>\n";
    const size_t body_size = strlen(body_prefix) + strlen(template_name) + strlen(body_suffix) + 1;
 
    assert(csp);
@@ -1196,22 +1196,22 @@ jb_err cgi_error_unknown(const struct client_state *csp,
    static const char status[] =
       "500 Internal Privoxy Error";
    static const char body_prefix[] =
-      "<html>\r\n"
-      "<head>\r\n"
-      " <title>500 Internal Privoxy Error</title>\r\n"
+      "<html>\n"
+      "<head>\n"
+      " <title>500 Internal Privoxy Error</title>\n"
       " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">"
-      "</head>\r\n"
-      "<body>\r\n"
-      "<h1>500 Internal Privoxy Error</h1>\r\n"
-      "<p>Privoxy encountered an error while processing your request:</p>\r\n"
+      "</head>\n"
+      "<body>\n"
+      "<h1>500 Internal Privoxy Error</h1>\n"
+      "<p>Privoxy encountered an error while processing your request:</p>\n"
       "<p><b>Unexpected internal error: ";
    static const char body_suffix[] =
-      "</b></p>\r\n"
+      "</b></p>\n"
       "<p>Please "
       "<a href=\"http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118\">"
-      "file a bug report</a>.</p>\r\n"
-      "</body>\r\n"
-      "</html>\r\n";
+      "file a bug report</a>.</p>\n"
+      "</body>\n"
+      "</html>\n";
    /* Includes room for larger error numbers in the future. */
    const size_t body_size = sizeof(body_prefix) + sizeof(body_suffix) + 5;
    assert(csp);
