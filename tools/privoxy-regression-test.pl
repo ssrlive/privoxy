@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.72 2011/06/29 18:34:23 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.73 2011/06/29 18:34:38 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -52,6 +52,7 @@ use constant {
     # XXX: why limit at all?
     CLI_MAX_LEVEL => 100,
     CLI_FORKS     => 0,
+    CLI_SLEEP_TIME => 0,
 
     PRIVOXY_CGI_URL  => 'http://p.p/',
     FELLATIO_URL     => 'http://127.0.0.1:8080/',
@@ -532,6 +533,7 @@ sub execute_regression_tests () {
 
                     $successes += $result;
                     $tests++;
+                    sleep(get_cli_option('sleep-time')) if (cli_option_is_set('sleep-time'));
                 }
                 $r++;
             }
@@ -1456,6 +1458,7 @@ Options and their default values if they have any:
     [--privoxy-address]
     [--retries $cli_options{'retries'}]
     [--show-skipped-tests]
+    [--sleep-time $cli_options{'sleep-time'}]
     [--test-number]
     [--verbose]
     [--version]
@@ -1484,6 +1487,7 @@ sub init_cli_options () {
     $cli_options{'max-level'} = CLI_MAX_LEVEL;
     $cli_options{'max-time'}  = CLI_MAX_TIME;
     $cli_options{'min-level'} = CLI_MIN_LEVEL;
+    $cli_options{'sleep-time'}= CLI_SLEEP_TIME;
     $cli_options{'retries'}   = CLI_RETRIES;
 }
 
@@ -1509,6 +1513,7 @@ sub parse_cli_options () {
         'privoxy-address=s'  => \$cli_options{'privoxy-address'},
         'retries=s'          => \$cli_options{'retries'},
         'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
+        'sleep-time=s'       => \$cli_options{'sleep-time'},
         'test-number=s'      => \$cli_options{'test-number'},
         'verbose'            => \$cli_options{'verbose'},
         'version'            => sub {print_version && exit(0)}
@@ -1589,7 +1594,7 @@ B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
 [B<--loops count>] [B<--max-level max-level>] [B<--max-time max-time>]
 [B<--min-level min-level>] B<--privoxy-address proxy-address>
 [B<--retries retries>] [B<--test-number test-number>]
-[B<--show-skipped-tests>] [B<--verbose>]
+[B<--show-skipped-tests>] [B<--sleep-time> seconds] [B<--verbose>]
 [B<--version>]
 
 =head1 DESCRIPTION
@@ -1750,6 +1755,9 @@ B<--test-number test-number> Only run the test with the specified
 number.
 
 B<--show-skipped-tests> Log skipped tests even if verbose mode is off.
+
+B<--sleep-time seconds> Wait B<seconds> between tests. Useful when
+debugging issues with systems that don't log with millisecond precision.
 
 B<--verbose> Log successful tests as well. By default only
 the failures are logged.
