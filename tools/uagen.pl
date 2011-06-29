@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.12 2011/06/29 18:35:23 fabiankeil Exp $
+# $Id: uagen.pl,v 1.13 2011/06/29 18:35:38 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -18,7 +18,7 @@
 # Mozilla/5.0 (X11; U; OpenBSD sparc64; pl-PL; rv:1.8.0.2) Gecko/20060429 Firefox/1.5.0.2
 # Mozilla/5.0 (X11; U; Linux i686; en-CA; rv:1.8.0.2) Gecko/20060413 Firefox/1.5.0.2
 #
-# Copyright (c) 2006-2009 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2006-2011 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -40,7 +40,7 @@ use Getopt::Long;
 
 use constant {
 
-   UAGEN_VERSION       => 'uagen 1.0.10',
+   UAGEN_VERSION       => 'uagen 1.1',
 
    UAGEN_LOGFILE       => '/var/log/uagen.log',
    ACTION_FILE         => '/etc/privoxy/user-agent.action',
@@ -323,7 +323,7 @@ sub write_prefs_file() {
 }
 
 sub VersionMessage() {
-    printf UAGEN_VERSION . "\n" . 'Copyright (C) 2006-2009 Fabian Keil <fk@fabiankeil.de> ' .
+    printf UAGEN_VERSION . "\n" . 'Copyright (C) 2006-2011 Fabian Keil <fk@fabiankeil.de> ' .
         "\nhttp://www.fabiankeil.de/sourcecode/uagen/\n";
 }
 
