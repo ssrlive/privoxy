@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.74 2011/06/29 18:35:01 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.75 2011/06/29 18:36:24 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -743,10 +743,10 @@ sub execute_dumb_fetch_test ($) {
     my $expected_status_code = $test->{'expected-status-code'};
 
     if (defined $test->{method}) {
-        $curl_parameters .= quote('--request') . quote($test->{method}) . ' ';
+        $curl_parameters .= '--request ' . quote($test->{method}) . ' ';
     }
     if ($test->{type} == TRUSTED_CGI_REQUEST) {
-        $curl_parameters .= quote('--referer ') . quote(PRIVOXY_CGI_URL) . ' ';
+        $curl_parameters .= '--referer ' . quote(PRIVOXY_CGI_URL) . ' ';
     }
 
     $curl_parameters .= quote($test->{'data'});
