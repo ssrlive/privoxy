@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.133 2011/06/25 12:40:27 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.134 2011/06/25 12:40:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1588,8 +1588,8 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       {
          freez(rsp->body);
          rsp->body = compressed_content;
+         err = enlist_unique_header(rsp->headers, "Content-Encoding", "deflate");
       }
-      err = enlist_unique_header(rsp->headers, "Content-Encoding", "deflate");
    }
 #endif
 
