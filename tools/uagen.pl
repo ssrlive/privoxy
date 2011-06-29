@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.10 2010/12/11 15:54:30 fabiankeil Exp $
+# $Id: uagen.pl,v 1.11 2011/03/08 18:43:46 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -50,6 +50,10 @@ use constant {
    NO_ACTION_FILE      =>  0,
    LOOP                =>  0,
    SLEEPING_TIME       =>  5,
+
+   # As of Firefox 4, the "Gecko token" has been frozen
+   # http://hacks.mozilla.org/2010/09/final-user-agent-string-for-firefox-4/
+   RANDOMIZE_RELEASE_DATE => 0,
 
    # These variables belong together. If you only change one of them, the generated
    # User-Agent might be invalid. If you're not sure which values make sense,
@@ -200,11 +204,13 @@ sub generate_firefox_user_agent() {
     our $browser_version;
     our $browser_revision;
     our $browser_release_date;
+    our $randomize_release_date;
 
     my $mozillaversion  = '5.0';
     my $security        = "U";
 
-    my $creation_time = generate_creation_time($browser_release_date);
+    my $creation_time = $randomize_release_date ?
+        generate_creation_time($browser_release_date) : $browser_release_date;
     my ( $locale,   $accept_language ) = generate_language_settings();
     my ( $platform, $os_or_cpu )       = generate_platform_and_os;
 
@@ -360,6 +366,7 @@ Options and their default values if there are any:
     [--no-hide-accept-language]
     [--no-logfile]
     [--prefs-file$mozilla_prefs_file]
+    [--randomize-release-date]
     [--quiet]
     [--silent]
     [--sleeping-time $sleeping_time]
@@ -379,6 +386,7 @@ sub main() {
     our $no_logging              = NO_LOGGING;
     our $logfile                 = UAGEN_LOGFILE;
     our $action_file             = ACTION_FILE;
+    our $randomize_release_date  = RANDOMIZE_RELEASE_DATE;
     our $browser_version         = BROWSER_VERSION;
     our $browser_revision        = BROWSER_REVISION;
     our $browser_release_date    = BROWSER_RELEASE_DATE;
@@ -399,6 +407,7 @@ sub main() {
                'no-hide-accept-language' => \$no_hide_accept_language,
                'no-logfile' => \$no_logging,
                'no-action-file' => \$no_action_file,
+               'randomize-release-date' => \$randomize_release_date,
                'browser-version=s' => \$browser_version,
                'browser-revision=s' => \$browser_revision,
                'browser-release-date=s' => \$browser_release_date,
@@ -449,14 +458,14 @@ B<uagen> [B<--action-file> I<action_file>] [B<--action-injection>]
 [B<--clean-prefs-file>]
 [B<--help>] [B<--language-overwrite> I<language(s)>]
 [B<--logfile> I<logfile>] [B<--loop>] [B<--no-action-file>] [B<--no-logfile>]
-[B<--prefs-file> I<prefs_file>]
+[B<--prefs-file> I<prefs_file>] [B<--randomize-release-date>]
 [B<--quiet>] [B<--sleeping-time> I<minutes>] [B<--silent>] [B<--version>]
 
 =head1 DESCRIPTION
 
 B<uagen> generates a fake Firefox User-Agent and writes it into a Privoxy action file
 as parameter for Privoxy's B<hide-user-agent> action. Operating system, architecture,
-platform, language and build date are randomized.
+platform, language and, optionally, the build date are randomized.
 
 The generated language is also used as parameter for the
 B<hide-accept-language> action which is understood by Privoxy since
@@ -476,10 +485,9 @@ to keep custom URL patterns. For this to work, the action file
 has to be already present. B<uagen> neither checks the syntax
 nor cares if all actions are present. Garbage in, garbage out.
 
-B<--browser-release-date> I<browser_release_date> Date when the faked
-browser version was first released, format is YYYYMMDD. B<uagen> will
-pick a date between the release date and the actual date to use it as
-build time. Some sanity checks are done, but you shouldn't rely on them.
+B<--browser-release-date> I<browser_release_date> Date to use.
+The format is YYYYMMDD. Some sanity checks are done, but you
+shouldn't rely on them.
 
 B<--browser-revision> I<browser_revision> Use a custom revision.
 B<uagen> will use it without any sanity checks.
@@ -520,6 +528,12 @@ I<prefs_file>, The B<intl.accept_languages> variable will be set as well.
 Firefox's preference file is usually located in
 ~/.mozilla/firefox/*.default/prefs.js. Note that Firefox doesn't reread
 the file once it is running.
+
+B<--randomize-release-date> Randomly pick a date between the configured
+release date and the actual date. Note that Firefox versions after 4.0
+no longer provide the build date in the User-Agent header, so if you
+randomize the date anyway, it will be obvious that the generated User-Agent
+is fake.
 
 B<--quiet> Don't print the generated User-Agent to the console.
 
