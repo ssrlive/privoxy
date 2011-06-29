@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.13 2011/06/29 18:35:38 fabiankeil Exp $
+# $Id: uagen.pl,v 1.14 2011/06/29 18:35:53 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -77,8 +77,7 @@ sub generate_creation_time($) {
     my ($rel_year, $rel_mon, $rel_day);
     my ($c_day, $c_mon, $c_year);
     my $now = time;
-    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
-       localtime $now;
+    my (undef, undef, undef, $mday, $mon, $year, undef, undef, undef) = localtime($now);
     $mon  += 1;
     $year += 1900;
 
@@ -105,7 +104,7 @@ sub generate_creation_time($) {
 
     $c_seconds = $now - (int rand ($now - $c_seconds));
     @c_time = localtime $c_seconds;
-    ($sec, $min, $hour, $c_day, $c_mon, $c_year, $wday, $yday, $isdst) = @c_time;
+    (undef, undef, undef, $c_day, $c_mon, $c_year, undef, undef, undef) = @c_time;
     $c_mon  += 1;
     $c_year += 1900;
 
