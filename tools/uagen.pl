@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.14 2011/06/29 18:35:53 fabiankeil Exp $
+# $Id: uagen.pl,v 1.15 2011/06/29 20:29:29 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -72,7 +72,7 @@ use constant LANGUAGES => qw(
 #######################################################################################
 
 sub generate_creation_time($) {
-    my $release_date = $_ = shift;
+    my $release_date = shift;
 
     my ($rel_year, $rel_mon, $rel_day);
     my ($c_day, $c_mon, $c_year);
@@ -81,41 +81,39 @@ sub generate_creation_time($) {
     $mon  += 1;
     $year += 1900;
 
-    unless ( m/\d{6}/ ) {
+    unless ($release_date =~ m/\d{6}/) {
         log_error("Invalid release date format: $release_date. Using "
                   . BROWSER_RELEASE_DATE . " instead.");
         $release_date = BROWSER_RELEASE_DATE;
     }
-    $rel_year = substr $release_date, 0, 4;
-    $rel_mon  = substr $release_date, 4, 2;
-    $rel_day  = substr $release_date, 6, 2;
+    $rel_year = substr($release_date, 0, 4);
+    $rel_mon  = substr($release_date, 4, 2);
+    $rel_day  = substr($release_date, 6, 2);
 
     #1, 2, 3, Check.
-    die "release year in the future" if ( $year < $rel_year );
+    die "release year in the future" if ($year < $rel_year);
     die "release month in the future"
-      if ( ( $year == $rel_year ) and ( $mon < $rel_mon ) );
+      if (($year == $rel_year) and ($mon < $rel_mon));
     die "release day in the future"
-      if (  ( $year == $rel_year )
-        and ( $mon  == $rel_mon )
-        and ( $mday  < $rel_day ) );
+      if (($year == $rel_year) and ($mon == $rel_mon) and ($mday < $rel_day));
 
     my @c_time = (0, 0, 0, $rel_day, $rel_mon - 1, $rel_year - 1900, 0, 0, 0);
-    my $c_seconds = &timelocal( @c_time );
+    my $c_seconds = timelocal(@c_time);
 
     $c_seconds = $now - (int rand ($now - $c_seconds));
-    @c_time = localtime $c_seconds;
+    @c_time = localtime($c_seconds);
     (undef, undef, undef, $c_day, $c_mon, $c_year, undef, undef, undef) = @c_time;
     $c_mon  += 1;
     $c_year += 1900;
 
     #3, 2, 1, Test.
-    die "Compilation year in the future" if ( $year < $c_year );
+    die "Compilation year in the future" if ($year < $c_year);
     die "Compilation month in the future"
-      if ( ( $year == $c_year ) and ( $mon < $c_mon ) );
+      if (($year == $c_year) and ($mon < $c_mon));
     die "Compilation day in the future"
-      if ( ( $year == $c_year ) and ( $mon == $c_mon ) and ( $mday < $c_day ) );
+      if (($year == $c_year) and ($mon == $c_mon) and ($mday < $c_day));
 
-    return sprintf "%.2i%.2i%.2i", $c_year, $c_mon, $c_day;
+    return sprintf("%.2i%.2i%.2i", $c_year, $c_mon, $c_day);
 }
 
 sub generate_language_settings() {
