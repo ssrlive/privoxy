@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.70 2011/05/08 13:30:17 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.71 2011/06/23 14:02:53 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -338,7 +338,7 @@ sub load_action_files ($) {
 
     for my $file_number (0 .. @actionfiles - 1) {
 
-        my $curl_url = ' "' . $actionfiles[$file_number] . '"';
+        my $curl_url = quote($actionfiles[$file_number]);
         my $actionfile = undef;
         my $sticky_actions = undef;
 
