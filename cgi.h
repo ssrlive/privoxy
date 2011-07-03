@@ -1,6 +1,6 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.37 2009/06/11 11:44:25 fabiankeil Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.38 2011/06/23 14:01:01 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
@@ -102,6 +102,11 @@ extern jb_err get_string_param(const struct map *parameters,
 extern char   get_char_param(const struct map *parameters,
                              const char *param_name);
 #ifdef FEATURE_COMPRESSION
+/*
+ * Minimum length which a buffer has to reach before
+ * we bother to (re-)compress it. Completely arbitrary.
+ */
+extern const size_t LOWER_LENGTH_LIMIT_FOR_COMPRESSION;
 extern char *compress_buffer(char *buffer, size_t *buffer_length);
 #endif
 

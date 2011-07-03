@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.135 2011/06/29 18:36:49 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.136 2011/07/03 17:54:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -271,6 +271,13 @@ const char image_blank_data[] =
 const size_t image_pattern_length = sizeof(image_pattern_data) - 1;
 const size_t image_blank_length   = sizeof(image_blank_data) - 1;
 
+#ifdef FEATURE_COMPRESSION
+/*
+ * Minimum length which a buffer has to reach before
+ * we bother to (re-)compress it. Completely arbitrary.
+ */
+const size_t LOWER_LENGTH_LIMIT_FOR_COMPRESSION = 1024U;
+#endif
 
 static struct http_response cgi_error_memory_response[1];
 
