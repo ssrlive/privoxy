@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.352 2011/05/27 11:34:39 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.353 2011/06/23 14:01:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2063,7 +2063,7 @@ static void chat(struct client_state *csp)
                   }
 #ifdef FEATURE_COMPRESSION
                   else if ((csp->flags & CSP_FLAG_CLIENT_SUPPORTS_DEFLATE)
-                     && (csp->content_length > LOWER_LENGTH_LIMIT_FOR_COMRPESSION))
+                     && (csp->content_length > LOWER_LENGTH_LIMIT_FOR_COMPRESSION))
                   {
                      char *compressed_content = compress_buffer(p, (size_t *)&csp->content_length);
                      if (compressed_content != NULL)

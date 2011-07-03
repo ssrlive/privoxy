@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.164 2011/04/19 13:00:47 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.165 2011/06/23 14:01:01 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -191,7 +191,7 @@ typedef int jb_err;
  * Minimum length which a buffer has to reach before
  * Privoxy bothers to (re-)compress it. Completely arbitrary.
  */
-#define LOWER_LENGTH_LIMIT_FOR_COMRPESSION 1024U
+#define LOWER_LENGTH_LIMIT_FOR_COMPRESSION 1024U
 
 /**
  * Buffer size for capturing struct hostent data in the

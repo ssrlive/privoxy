@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.134 2011/06/25 12:40:55 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.135 2011/06/29 18:36:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1579,7 +1579,7 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
 
 #ifdef FEATURE_COMPRESSION
    if (!err && (csp->flags & CSP_FLAG_CLIENT_SUPPORTS_DEFLATE)
-      && (rsp->content_length > LOWER_LENGTH_LIMIT_FOR_COMRPESSION))
+      && (rsp->content_length > LOWER_LENGTH_LIMIT_FOR_COMPRESSION))
    {
       char *compressed_content;
 
