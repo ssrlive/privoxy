@@ -1,4 +1,4 @@
-$Id: TODO,v 1.44 2011/04/16 17:31:35 fabiankeil Exp $
+$Id: TODO,v 1.45 2011/05/08 13:25:14 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -260,3 +260,8 @@ have been added, not by priority.
     as each thread is only counted as one request which is no longer
     correct. This should be fixed, or the statistic code removed.
     Privoxy-Log-Parser's provides more detailed statistics, anyway.
+
+93) Add a config directive to let Privoxy explicitly request either
+    IPv4 (or IPv6) addresses, even if the system supports both.
+    Could be useful as a workaround for misconfigured setups where the
+    libc returns IPv6 addresses even if there's no IPv6 connectivity.
