@@ -1,4 +1,4 @@
-$Id: TODO,v 1.45 2011/05/08 13:25:14 fabiankeil Exp $
+$Id: TODO,v 1.46 2011/07/04 17:47:50 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -265,3 +265,8 @@ have been added, not by priority.
     IPv4 (or IPv6) addresses, even if the system supports both.
     Could be useful as a workaround for misconfigured setups where the
     libc returns IPv6 addresses even if there's no IPv6 connectivity.
+
+94) Add a config directive to let Privoxy prefer either IPv4 (or IPv6)
+    addresses, instead of trusting the libc to return them in an order
+    that makes sense. Like #93, this could be useful as a workaround
+    for misconfigured setups.
