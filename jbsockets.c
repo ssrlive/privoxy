@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.102 2011/05/03 10:11:24 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.103 2011/06/23 13:58:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -772,9 +772,6 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    }
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_flags = AI_PASSIVE;
-#ifdef AI_ADDRCONFIG
-   hints.ai_flags |= AI_ADDRCONFIG;
-#endif
    hints.ai_protocol = 0; /* Really any stream protocol or TCP only */
    hints.ai_canonname = NULL;
    hints.ai_addr = NULL;
