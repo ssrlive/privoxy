@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.223 2011/06/23 13:57:47 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.224 2011/06/23 14:01:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2620,7 +2620,8 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 static jb_err client_accept_encoding(struct client_state *csp, char **header)
 {
 #ifdef FEATURE_COMPRESSION
-   if (strstr(*header, "deflate"))
+   if ((csp->config->feature_flags & RUNTIME_FEATURE_COMPRESSION)
+      && strstr(*header, "deflate"))
    {
       csp->flags |= CSP_FLAG_CLIENT_SUPPORTS_DEFLATE;
    }

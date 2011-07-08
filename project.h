@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.167 2011/07/03 17:55:23 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.168 2011/07/08 13:27:31 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1189,6 +1189,9 @@ struct access_control_list
 
 /** configuration_spec::feature_flags: Pages blocked with +handle-as-empty-doc get a return status of 200 OK. */
 #define RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK       512U
+
+/** configuration_spec::feature_flags: Buffered content is sent compressed if the client supports it. */
+#define RUNTIME_FEATURE_COMPRESSION               1024U
 
 /**
  * Data loaded from the configuration file.

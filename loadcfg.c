@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.115 2011/07/08 13:29:22 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.116 2011/07/08 13:29:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -140,6 +140,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_default_server_timeout      2530089913ul /* "default-server-timeout" */
 #define hash_deny_access                 1227333715ul /* "deny-access" */
 #define hash_enable_edit_actions         2517097536ul /* "enable-edit-actions" */
+#define hash_enable_compression          3943696946ul /* "enable-compression" */
 #define hash_enable_remote_toggle        2979744683ul /* "enable-remote-toggle" */
 #define hash_enable_remote_http_toggle    110543988ul /* "enable-remote-http-toggle" */
 #define hash_enforce_blocks              1862427469ul /* "enforce-blocks" */
@@ -411,6 +412,7 @@ struct configuration_spec * load_config(void)
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
    config->feature_flags            &= ~RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
 #ifdef FEATURE_COMPRESSION
+   config->feature_flags            &= ~RUNTIME_FEATURE_COMPRESSION;
    /*
     * XXX: Run some benchmarks to see if there are better default values.
     */
@@ -720,6 +722,23 @@ struct configuration_spec * load_config(void)
             }
             break;
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
+
+/* *************************************************************************
+ * enable-compression 0|1
+ * *************************************************************************/
+#ifdef FEATURE_COMPRESSION
+         case hash_enable_compression:
+            if (parse_toggle_state(cmd, arg) == 1)
+            {
+               config->feature_flags |= RUNTIME_FEATURE_COMPRESSION;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_COMPRESSION;
+            }
+            break;
+#endif /* def FEATURE_COMPRESSION */
+
 
 /* *************************************************************************
  * enable-remote-toggle 0|1
