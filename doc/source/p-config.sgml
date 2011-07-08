@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.72 2011/05/15 10:49:33 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.73 2011/06/25 12:45:47 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.72 2011/05/15 10:49:33 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.73 2011/06/25 12:45:47 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -2988,6 +2988,71 @@ forward-socks4, forward-socks4a and forward-socks5</title>
  </varlistentry>
 </variablelist>
 <![%config-file;[<literallayout>@@#handle-as-empty-doc-returns-ok 1</literallayout>]]>
+</sect3>
+
+
+<sect3 renderas="sect4" id="enable-compression"><title>enable-compression</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Whether or not buffered content is compressed before delivery.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>0 or 1</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>0</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Privoxy does not compress buffered content.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if set:</term>
+  <listitem>
+   <para>
+    Privoxy compresses buffered content before delivering it to the client,
+    provided the client supports it.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive is only supported if Privoxy has been compiled with
+    FEATURE_COMPRESSION, which should not to be confused with FEATURE_ZLIB.
+   </para>
+   <para>
+    Compressing buffered content is mainly useful if Privoxy and the
+    client are running on different systems. If they are running on the
+    same system, enabling compression is likely to slow things down.
+    If you didn't measure otherwise, you should assume that it does
+    and keep this option disabled.
+   </para>
+   <para>
+    Privoxy will not compress buffered content below a certain length.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#enable-compression 1</literallayout>]]>
 </sect3>
 
 
