@@ -245,7 +245,7 @@
               <td><code>FEATURE_COMPRESSION</code></td>
               <td>@if-FEATURE_COMPRESSION-then@ Yes @else-not-FEATURE_COMPRESSION@ No @endif-FEATURE_COMPRESSION@</td>
               <td>
-               Allows compress buffered content before sending it to the client, assuming the client supports it.
+               Allows to compress buffered content before sending it to the client, assuming the client supports it.
               </td>
             </tr>
             <tr>
