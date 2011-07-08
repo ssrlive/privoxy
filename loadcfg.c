@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.114 2011/07/08 13:29:06 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.115 2011/07/08 13:29:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -505,7 +505,7 @@ struct configuration_spec * load_config(void)
  * accept-intercepted-requests
  * *************************************************************************/
          case hash_accept_intercepted_requests:
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
             }
@@ -527,7 +527,7 @@ struct configuration_spec * load_config(void)
  * allow-cgi-request-crunching
  * *************************************************************************/
          case hash_allow_cgi_request_crunching:
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_CGI_CRUNCHING;
             }
@@ -583,7 +583,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_CONNECTION_SHARING
          case hash_connection_sharing :
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_CONNECTION_SHARING;
             }
@@ -710,7 +710,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_CGI_EDIT_ACTIONS
          case hash_enable_edit_actions:
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_CGI_EDIT_ACTIONS;
             }
@@ -726,7 +726,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_TOGGLE
          case hash_enable_remote_toggle:
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_CGI_TOGGLE;
             }
@@ -741,7 +741,7 @@ struct configuration_spec * load_config(void)
  * enable-remote-http-toggle 0|1
  * *************************************************************************/
          case hash_enable_remote_http_toggle:
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_HTTP_TOGGLE;
             }
@@ -756,7 +756,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_enforce_blocks:
 #ifdef FEATURE_FORCE_LOAD
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_ENFORCE_BLOCKS;
             }
@@ -1000,7 +1000,7 @@ struct configuration_spec * load_config(void)
  *   to the browser for blocked pages.
  ***************************************************************************/
          case hash_handle_as_empty_returns_ok:
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
             }
@@ -1209,7 +1209,7 @@ struct configuration_spec * load_config(void)
  * split-large-cgi-forms
  * *************************************************************************/
          case hash_split_large_cgi_forms :
-            if (0 != parse_toggle_state(cmd, arg))
+            if (parse_toggle_state(cmd, arg) == 1)
             {
                config->feature_flags |= RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
             }
