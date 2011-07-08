@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.113 2011/07/08 13:27:31 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.114 2011/07/08 13:29:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -297,6 +297,7 @@ static int parse_toggle_state(const char *name, const char *value)
 {
    int toggle_state;
    assert(name != NULL);
+   assert(value != NULL);
 
    if ((value == NULL) || (*value == '\0'))
    {
@@ -305,7 +306,11 @@ static int parse_toggle_state(const char *name, const char *value)
 
    toggle_state = atoi(value);
 
-   if ((toggle_state != 0) && (toggle_state != 1))
+   /*
+    * Also check the length as atoi() doesn't mind
+    * garbage after a valid integer, but we do.
+    */
+   if (((toggle_state != 0) && (toggle_state != 1)) || (strlen(value) != 1))
    {
       log_error(LOG_LEVEL_FATAL,
          "Directive %s used with invalid argument '%s'. Use either '0' or '1'.",
