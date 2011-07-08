@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.112 2011/03/03 14:38:36 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.113 2011/07/08 13:27:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -279,6 +279,46 @@ void unload_current_config_file(void)
 
 /*********************************************************************
  *
+ * Function    :  parse_toggle_value
+ *
+ * Description :  Parse the value of a directive that can only be
+ *                enabled or disabled. Terminates with a fatal error
+ *                if the value is NULL or something other than 0 or 1.
+ *
+ * Parameters  :
+ *          1  :  name:  The name of the directive. Used for log messages.
+ *          2  :  value: The value to parse
+ *
+ *
+ * Returns     :  The numerical toggle state
+ *
+ *********************************************************************/
+static int parse_toggle_state(const char *name, const char *value)
+{
+   int toggle_state;
+   assert(name != NULL);
+
+   if ((value == NULL) || (*value == '\0'))
+   {
+      log_error(LOG_LEVEL_FATAL, "Directive %s used without argument", name);
+   }
+
+   toggle_state = atoi(value);
+
+   if ((toggle_state != 0) && (toggle_state != 1))
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Directive %s used with invalid argument '%s'. Use either '0' or '1'.",
+         name, value);
+   }
+
+   return toggle_state;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  load_config
  *
  * Description :  Load the config file and all parameters.
@@ -460,7 +500,7 @@ struct configuration_spec * load_config(void)
  * accept-intercepted-requests
  * *************************************************************************/
          case hash_accept_intercepted_requests:
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
             }
@@ -482,7 +522,7 @@ struct configuration_spec * load_config(void)
  * allow-cgi-request-crunching
  * *************************************************************************/
          case hash_allow_cgi_request_crunching:
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_CGI_CRUNCHING;
             }
@@ -538,7 +578,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_CONNECTION_SHARING
          case hash_connection_sharing :
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_CONNECTION_SHARING;
             }
@@ -665,7 +705,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_CGI_EDIT_ACTIONS
          case hash_enable_edit_actions:
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_CGI_EDIT_ACTIONS;
             }
@@ -681,7 +721,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_TOGGLE
          case hash_enable_remote_toggle:
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_CGI_TOGGLE;
             }
@@ -696,7 +736,7 @@ struct configuration_spec * load_config(void)
  * enable-remote-http-toggle 0|1
  * *************************************************************************/
          case hash_enable_remote_http_toggle:
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_HTTP_TOGGLE;
             }
@@ -711,7 +751,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_enforce_blocks:
 #ifdef FEATURE_FORCE_LOAD
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_ENFORCE_BLOCKS;
             }
@@ -955,7 +995,7 @@ struct configuration_spec * load_config(void)
  *   to the browser for blocked pages.
  ***************************************************************************/
          case hash_handle_as_empty_returns_ok:
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
             }
@@ -1164,7 +1204,7 @@ struct configuration_spec * load_config(void)
  * split-large-cgi-forms
  * *************************************************************************/
          case hash_split_large_cgi_forms :
-            if ((*arg != '\0') && (0 != atoi(arg)))
+            if (0 != parse_toggle_state(cmd, arg))
             {
                config->feature_flags |= RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
             }
