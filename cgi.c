@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.138 2011/07/08 13:27:31 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.139 2011/07/08 13:27:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1531,7 +1531,9 @@ char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level
    if (Z_OK != compress2((Bytef *)compressed_buffer, &new_length,
          (Bytef *)buffer, *buffer_length, compression_level))
    {
-      log_error(LOG_LEVEL_ERROR, "Error in compress2()");
+      log_error(LOG_LEVEL_ERROR,
+         "compress2() failed. Buffer size: %d, compression level: %d.",
+         new_length, compression_level);
       freez(compressed_buffer);
       return NULL;
    }
