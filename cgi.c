@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.137 2011/07/03 17:55:23 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.138 2011/07/08 13:27:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1507,8 +1507,19 @@ static void get_locale_time(char *buf, size_t buffer_size)
 char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level)
 {
    char *compressed_buffer;
-   size_t new_length = *buffer_length;
+   size_t new_length;
    assert(-1 <= compression_level && compression_level <= 9);
+
+   /*
+    * If the compression level is 0 or if the entropy
+    * is high, the "compressing" data will take more
+    * room then the uncompressed data due to the zlib
+    * overhead.
+    *
+    * XXX: The overhead isn't constant and 30 bytes
+    *      may not be enough for everybody
+    */
+   new_length = *buffer_length + 30;
 
    compressed_buffer = malloc(new_length);
    if (NULL == compressed_buffer)
