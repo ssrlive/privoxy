@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.136 2011/07/03 17:54:29 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.137 2011/07/03 17:55:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1495,22 +1495,20 @@ static void get_locale_time(char *buf, size_t buffer_size)
  *                Allocates a new buffer for the result, free'ing it is
  *                up to the caller.
  *
- *                XXX: We should add a config option for the
- *                     compression level.
- *
- *
  * Parameters  :
  *          1  :  buffer = buffer whose content should be compressed
  *          2  :  buffer_length = length of the buffer
+ *          3  :  compression_level = compression level for compress2()
  *
  * Returns     :  NULL on error, otherwise a pointer to the compressed
  *                content of the input buffer.
  *
  *********************************************************************/
-char *compress_buffer(char *buffer, size_t *buffer_length)
+char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level)
 {
    char *compressed_buffer;
    size_t new_length = *buffer_length;
+   assert(-1 <= compression_level && compression_level <= 9);
 
    compressed_buffer = malloc(new_length);
    if (NULL == compressed_buffer)
@@ -1520,7 +1518,7 @@ char *compress_buffer(char *buffer, size_t *buffer_length)
    }
 
    if (Z_OK != compress2((Bytef *)compressed_buffer, &new_length,
-         (Bytef *)buffer, *buffer_length, Z_DEFAULT_COMPRESSION))
+         (Bytef *)buffer, *buffer_length, compression_level))
    {
       log_error(LOG_LEVEL_ERROR, "Error in compress2()");
       freez(compressed_buffer);
@@ -1528,7 +1526,8 @@ char *compress_buffer(char *buffer, size_t *buffer_length)
    }
 
    log_error(LOG_LEVEL_RE_FILTER,
-      "Compressed content from %d to %d bytes.", *buffer_length, new_length);
+      "Compressed content from %d to %d bytes. Compression level: %d",
+      *buffer_length, new_length, compression_level);
 
    *buffer_length = new_length;
 
@@ -1590,7 +1589,8 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
    {
       char *compressed_content;
 
-      compressed_content = compress_buffer(rsp->body, &rsp->content_length);
+      compressed_content = compress_buffer(rsp->body, &rsp->content_length,
+         csp->config->compression_level);
       if (NULL != compressed_content)
       {
          freez(rsp->body);

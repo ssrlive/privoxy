@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.111 2010/08/14 23:28:52 ler762 Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.112 2011/03/03 14:38:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -133,6 +133,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_admin_address               4112573064ul /* "admin-address" */
 #define hash_allow_cgi_request_crunching  258915987ul /* "allow-cgi-request-crunching" */
 #define hash_buffer_limit                1881726070ul /* "buffer-limit */
+#define hash_compression_level           2464423563ul /* "compression-level" */
 #define hash_confdir                        1978389ul /* "confdir" */
 #define hash_connection_sharing          1348841265ul /* "connection-sharing" */
 #define hash_debug                            78263ul /* "debug" */
@@ -364,6 +365,12 @@ struct configuration_spec * load_config(void)
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
    config->feature_flags            &= ~RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
+#ifdef FEATURE_COMPRESSION
+   /*
+    * XXX: Run some benchmarks to see if there are better default values.
+    */
+   config->compression_level         = 1;
+#endif
 
    configfp = fopen(configfile, "r");
    if (NULL == configfp)
@@ -499,6 +506,32 @@ struct configuration_spec * load_config(void)
             freez(config->confdir);
             config->confdir = make_path( NULL, arg);
             break;
+
+/* *************************************************************************
+ * compression-level 0-9
+ * *************************************************************************/
+#ifdef FEATURE_COMPRESSION
+         case hash_compression_level :
+            if (*arg != '\0')
+            {
+               int compression_level = atoi(arg);
+               if (-1 <= compression_level && compression_level <= 9)
+               {
+                  config->compression_level = compression_level;;
+               }
+               else
+               {
+                  log_error(LOG_LEVEL_FATAL,
+                     "Invalid compression-level value: %s", arg);
+               }
+            }
+            else
+            {
+               log_error(LOG_LEVEL_FATAL,
+                  "Invalid compression-level directive. Compression value missing");
+            }
+            break;
+#endif
 
 /* *************************************************************************
  * connection-sharing (0|1)

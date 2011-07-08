@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.165 2011/06/23 14:01:01 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.167 2011/07/03 17:55:23 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1303,6 +1303,10 @@ struct configuration_spec
 
    /* Assumed server-side keep alive timeout if none is specified. */
    unsigned int default_server_timeout;
+#endif
+
+#ifdef FEATURE_COMPRESSION
+   int compression_level;
 #endif
 
    /** All options from the config file, HTML-formatted. */
