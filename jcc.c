@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.359 2011/07/17 13:35:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.360 2011/07/17 13:36:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3343,22 +3343,23 @@ static jb_socket bind_port_helper(const char *haddr, int hport)
 
    if (result < 0)
    {
+      const char *bind_address = (NULL != haddr) ? haddr : "INADDR_ANY";
       switch(result)
       {
          case -3 :
-            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: "
-               "There may be another Privoxy or some other "
-               "proxy running on port %d",
-               (NULL != haddr) ? haddr : "INADDR_ANY", hport, hport);
+            log_error(LOG_LEVEL_FATAL,
+               "can't bind to %s:%d: There may be another Privoxy "
+               "or some other proxy running on port %d",
+               bind_address, hport, hport);
 
          case -2 :
-            log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: " 
-               "The hostname is not resolvable",
-               (NULL != haddr) ? haddr : "INADDR_ANY", hport);
+            log_error(LOG_LEVEL_FATAL,
+               "can't bind to %s:%d: The hostname is not resolvable",
+               bind_address, hport);
 
          default :
             log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: %E",
-               (NULL != haddr) ? haddr : "INADDR_ANY", hport);
+               bind_address, hport);
       }
 
       /* shouldn't get here */
