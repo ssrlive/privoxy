@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.72 2011/03/27 14:00:36 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.73 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1003,6 +1003,8 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    {
       errstr = "socks5 server unreachable";
       log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
+      /* Free the generic error message provided by connect_to() */
+      freez(csp->error_message);
       csp->error_message = strdup(errstr);
       return(JB_INVALID_SOCKET);
    }
