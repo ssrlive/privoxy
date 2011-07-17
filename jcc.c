@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.355 2011/07/08 13:27:31 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.356 2011/07/17 13:30:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3490,7 +3490,7 @@ static void listen_loop(void)
 
       csp->config = config = load_config();
 
-      if ( config->need_bind )
+      if (config->need_bind)
       {
          /*
           * Since we were listening to the "old port", we will not see
