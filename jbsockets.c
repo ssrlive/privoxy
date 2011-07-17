@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.104 2011/07/04 17:47:29 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.105 2011/07/17 13:34:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1081,12 +1081,13 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
  *
  * Function    :  accept_connection
  *
- * Description :  Accepts a connection on one of more socket.  Sockets
- *                must have been created using bind_port().
+ * Description :  Accepts a connection on one of possibly multiple
+ *                sockets. The socket(s) to check must have been
+ *                created using bind_port().
  *
  * Parameters  :
  *          1  :  csp = Client state, cfd, ip_addr_str, and 
- *                ip_addr_long will be set by this routine.
+ *                      ip_addr_long will be set by this routine.
  *          2  :  fds = File descriptors returned from bind_port
  *
  * Returns     :  when a connection is accepted, it returns 1 (TRUE).
@@ -1116,8 +1117,10 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
 
    c_length = sizeof(client);
 
-   /* Wait for a connection on any socket. Return immediately if no socket is
-    * listening. */
+   /*
+    * Wait for a connection on any socket.
+    * Return immediately if no socket is listening.
+    */
    FD_ZERO(&selected_fds);
    max_selected_socket = 0;
    for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
@@ -1160,9 +1163,9 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    if (i >= MAX_LISTENING_SOCKETS)
    {
       log_error(LOG_LEVEL_ERROR,
-            "select(2) reported connected clients (number = %u, "
-            "descriptor boundary = %u), but none found.",
-            retval, max_selected_socket);
+         "select(2) reported connected clients (number = %u, "
+         "descriptor boundary = %u), but none found.",
+         retval, max_selected_socket);
       return 0;
    }
    fd = fds[i];
@@ -1205,7 +1208,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    if (!csp->ip_addr_str || retval)
    {
       log_error(LOG_LEVEL_ERROR, "Can not save csp->ip_addr_str: %s",
-            (csp->ip_addr_str) ? gai_strerror(retval) : "Insuffcient memory");
+         (csp->ip_addr_str) ? gai_strerror(retval) : "Insuffcient memory");
       freez(csp->ip_addr_str);
    }
 #undef client
