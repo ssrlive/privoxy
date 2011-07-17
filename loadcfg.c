@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.117 2011/07/08 13:30:08 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.118 2011/07/17 13:34:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -231,7 +231,7 @@ static void unload_configfile (void * data)
 
    for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
    {
-       freez(config->haddr[i]);
+      freez(config->haddr[i]);
    }
    freez(config->logfile);
 
