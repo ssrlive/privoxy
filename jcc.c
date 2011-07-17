@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.354 2011/07/03 17:54:29 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.355 2011/07/08 13:27:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3526,7 +3526,8 @@ static void listen_loop(void)
 #ifdef FEATURE_ACL
       if (block_acl(NULL,csp))
       {
-         log_error(LOG_LEVEL_CONNECT, "Connection from %s dropped due to ACL", csp->ip_addr_str);
+         log_error(LOG_LEVEL_CONNECT,
+            "Connection from %s on socket %d dropped due to ACL", csp->ip_addr_str, csp->cfd);
          close_socket(csp->cfd);
          freez(csp->ip_addr_str);
          freez(csp_list);
