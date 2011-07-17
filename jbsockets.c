@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.105 2011/07/17 13:34:36 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.106 2011/07/17 13:36:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1120,6 +1120,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    /*
     * Wait for a connection on any socket.
     * Return immediately if no socket is listening.
+    * XXX: Why not treat this as fatal error?
     */
    FD_ZERO(&selected_fds);
    max_selected_socket = 0;
