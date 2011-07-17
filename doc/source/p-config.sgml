@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.74 2011/07/08 13:31:17 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.75 2011/07/08 13:31:40 fabiankeil Exp $
 
  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.74 2011/07/08 13:31:17 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.75 2011/07/08 13:31:40 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
@@ -1233,6 +1233,13 @@ actionsfile
     If you already have another service running on port 8118, or if you want to
     serve requests from other machines (e.g. on your local network) as well, you
     will need to override the default.
+   </para>
+   <para>
+    You can use this statement multiple times to make
+    <application>Privoxy</application> listen on more ports or more
+    <abbrev>IP</abbrev> addresses. Suitable if your operating system does not
+    support sharing <abbrev>IPv6</abbrev> and <abbrev>IPv4</abbrev> protocols
+    on the same socket.
    </para>
    <para>
     If a hostname is used instead of an IP address, <application>Privoxy</application>

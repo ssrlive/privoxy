@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.356 2011/07/17 13:30:24 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.357 2011/07/17 13:31:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -151,7 +151,9 @@ static void serve(struct client_state *csp);
 static void usage(const char *myname);
 #endif
 static void initialize_mutexes(void);
-static jb_socket bind_port_helper(struct configuration_spec *config);
+static jb_socket bind_port_helper(const char *haddr, int hport);
+static void bind_ports_helper(struct configuration_spec *config, jb_socket sockets[]);
+static void close_ports_helper(jb_socket sockets[]);
 static void listen_loop(void);
 
 #ifdef AMIGA
@@ -3325,29 +3327,30 @@ int main(int argc, char **argv)
  *                on failure.
  *
  * Parameters  :
- *          1  :  config = Privoxy configuration.  Specifies port
- *                         to bind to.
+ *          1  :  haddr = Host addres to bind to. Use NULL to bind to
+ *                        INADDR_ANY.
+ *          2  :  hport = Specifies port to bind to.
  *
  * Returns     :  Port that was opened.
  *
  *********************************************************************/
-static jb_socket bind_port_helper(struct configuration_spec * config)
+static jb_socket bind_port_helper(const char *haddr, int hport)
 {
    int result;
    jb_socket bfd;
 
-   if (config->haddr == NULL)
+   if (haddr == NULL)
    {
       log_error(LOG_LEVEL_INFO, "Listening on port %d on all IP addresses",
-                config->hport);
+                hport);
    }
    else
    {
       log_error(LOG_LEVEL_INFO, "Listening on port %d on IP address %s",
-                config->hport, config->haddr);
+                hport, haddr);
    }
 
-   result = bind_port(config->haddr, config->hport, &bfd);
+   result = bind_port(haddr, hport, &bfd);
 
    if (result < 0)
    {
@@ -3357,26 +3360,93 @@ static jb_socket bind_port_helper(struct configuration_spec * config)
             log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: "
                "There may be another Privoxy or some other "
                "proxy running on port %d",
-               (NULL != config->haddr) ? config->haddr : "INADDR_ANY",
-                      config->hport, config->hport);
+               (NULL != haddr) ? haddr : "INADDR_ANY", hport, hport);
 
          case -2 :
             log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: " 
                "The hostname is not resolvable",
-               (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
+               (NULL != haddr) ? haddr : "INADDR_ANY", hport);
 
          default :
             log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: %E",
-               (NULL != config->haddr) ? config->haddr : "INADDR_ANY", config->hport);
+               (NULL != haddr) ? haddr : "INADDR_ANY", hport);
       }
 
       /* shouldn't get here */
       return JB_INVALID_SOCKET;
    }
 
-   config->need_bind = 0;
-
    return bfd;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  bind_ports_helper
+ *
+ * Description :  Bind the listen ports.  Handles logging, and aborts
+ *                on failure.
+ *
+ * Parameters  :
+ *          1  :  config = Privoxy configuration.  Specifies ports
+ *                         to bind to.
+ *          2  :  sockets = Preallocated array of opened sockets
+ *                          corresponding to specification in config.
+ *                          All non-opened sockets will be set to
+ *                          JB_INVALID_SOCKET.
+ *
+ * Returns     :  Nothing. Inspect sockets argument.
+ *
+ *********************************************************************/
+static void bind_ports_helper(struct configuration_spec * config,
+                              jb_socket sockets[])
+{
+   int i;
+
+   config->need_bind = 1;
+
+   for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
+   {
+      sockets[i] = JB_INVALID_SOCKET;
+
+      if (config->hport[i])
+      {
+         sockets[i] = bind_port_helper(config->haddr[i], config->hport[i]);
+         if (JB_INVALID_SOCKET != sockets[i])
+         {
+            config->need_bind = 0;
+         }
+      }
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  close_ports_helper
+ *
+ * Description :  Close listenings ports.
+ *
+ * Parameters  :
+ *          1  :  sockets = Array of opened and non-opened sockets to
+ *                          close. All sockets will be set to
+ *                          JB_INVALID_SOCKET.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+static void close_ports_helper(jb_socket sockets[])
+{
+   int i;
+
+   for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
+   {
+      if (JB_INVALID_SOCKET != sockets[i])
+      {
+         close_socket(sockets[i]);
+      }
+      sockets[i] = JB_INVALID_SOCKET;
+   }
 }
 
 
@@ -3406,7 +3476,7 @@ static void listen_loop(void)
 {
    struct client_states *csp_list = NULL;
    struct client_state *csp = NULL;
-   jb_socket bfd;
+   jb_socket bfds[MAX_LISTENING_SOCKETS];
    struct configuration_spec *config;
    unsigned int active_threads = 0;
 
@@ -3420,7 +3490,7 @@ static void listen_loop(void)
    initialize_reusable_connections();
 #endif /* def FEATURE_CONNECTION_SHARING */
 
-   bfd = bind_port_helper(config);
+   bind_ports_helper(config, bfds);
 
 #ifdef FEATURE_GRACEFUL_TERMINATION
    while (!g_terminate)
@@ -3465,7 +3535,7 @@ static void listen_loop(void)
 
       log_error(LOG_LEVEL_CONNECT, "Listening for new connections ... ");
 
-      if (!accept_connection(csp, bfd))
+      if (!accept_connection(csp, bfds))
       {
          log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
 
@@ -3505,9 +3575,9 @@ static void listen_loop(void)
           * that this will hurt people's feelings.
           */
 
-         close_socket(bfd);
+         close_ports_helper(bfds);
 
-         bfd = bind_port_helper(config);
+         bind_ports_helper(config, bfds);
       }
 
 #ifdef FEATURE_TOGGLE

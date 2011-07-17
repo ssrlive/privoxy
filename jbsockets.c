@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.103 2011/06/23 13:58:22 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.104 2011/07/04 17:47:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -923,14 +923,17 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
  *          1  :  afd = File descriptor returned from accept().
  *          2  :  ip_address = Pointer to return the pointer to
  *                             the ip address string.
- *          3  :  hostname =   Pointer to return the pointer to
+ *          3  :  port =       Pointer to return the pointer to
+ *                             the TCP port string.
+ *          4  :  hostname =   Pointer to return the pointer to
  *                             the hostname or NULL if the caller
  *                             isn't interested in it.
  *
  * Returns     :  void.
  *
  *********************************************************************/
-void get_host_information(jb_socket afd, char **ip_address, char **hostname)
+void get_host_information(jb_socket afd, char **ip_address, char **port,
+                          char **hostname)
 {
 #ifdef HAVE_RFC2553
    struct sockaddr_storage server;
@@ -963,6 +966,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
       *hostname = NULL;
    }
    *ip_address = NULL;
+   *port = NULL;
 
    if (!getsockname(afd, (struct sockaddr *) &server, &s_length))
    {
@@ -971,25 +975,37 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
          log_error(LOG_LEVEL_ERROR, "getsockname() truncated server address");
          return;
       }
+      *port = malloc(NI_MAXSERV);
+      if (NULL == *port)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Out of memory while getting the client's port.");
+         return;
+      }
 #ifdef HAVE_RFC2553
       *ip_address = malloc(NI_MAXHOST);
       if (NULL == *ip_address)
       {
          log_error(LOG_LEVEL_ERROR,
             "Out of memory while getting the client's IP address.");
+         freez(*port);
          return;
       }
       retval = getnameinfo((struct sockaddr *) &server, s_length,
-         *ip_address, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+         *ip_address, NI_MAXHOST, *port, NI_MAXSERV,
+         NI_NUMERICHOST|NI_NUMERICSERV);
       if (retval)
       {
          log_error(LOG_LEVEL_ERROR,
             "Unable to print my own IP address: %s", gai_strerror(retval));
          freez(*ip_address);
+         freez(*port);
          return;
       }
 #else
       *ip_address = strdup(inet_ntoa(server.sin_addr));
+      snprintf(*port, NI_MAXSERV, "%hu", ntohs(server.sin_port));
+      *port[NI_MAXSERV - 1] = '\0';
 #endif /* HAVE_RFC2553 */
       if (NULL == hostname)
       {
@@ -1065,24 +1081,23 @@ void get_host_information(jb_socket afd, char **ip_address, char **hostname)
  *
  * Function    :  accept_connection
  *
- * Description :  Accepts a connection on a socket.  Socket must have
- *                been created using bind_port().
+ * Description :  Accepts a connection on one of more socket.  Sockets
+ *                must have been created using bind_port().
  *
  * Parameters  :
  *          1  :  csp = Client state, cfd, ip_addr_str, and 
  *                ip_addr_long will be set by this routine.
- *          2  :  fd  = file descriptor returned from bind_port
+ *          2  :  fds = File descriptors returned from bind_port
  *
  * Returns     :  when a connection is accepted, it returns 1 (TRUE).
  *                On an error it returns 0 (FALSE).
  *
  *********************************************************************/
-int accept_connection(struct client_state * csp, jb_socket fd)
+int accept_connection(struct client_state * csp, jb_socket fds[])
 {
 #ifdef HAVE_RFC2553
    /* XXX: client is stored directly into csp->tcp_addr */
 #define client (csp->tcp_addr)
-   int retval;
 #else
    struct sockaddr_in client;
 #endif
@@ -1093,9 +1108,66 @@ int accept_connection(struct client_state * csp, jb_socket fd)
 #else
    socklen_t c_length;
 #endif
+   int retval;
+   int i;
+   int max_selected_socket;
+   fd_set selected_fds;
+   jb_socket fd;
 
    c_length = sizeof(client);
 
+   /* Wait for a connection on any socket. Return immediately if no socket is
+    * listening. */
+   FD_ZERO(&selected_fds);
+   max_selected_socket = 0;
+   for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
+   {
+      if (JB_INVALID_SOCKET != fds[i])
+      {
+         FD_SET(fds[i], &selected_fds);
+         if (max_selected_socket < fds[i] + 1)
+         {
+            max_selected_socket = fds[i] + 1;
+         }
+      }
+   }
+   if (0 == max_selected_socket)
+   {
+      return 0;
+   }
+   do
+   {
+      retval = select(max_selected_socket, &selected_fds, NULL, NULL, NULL);
+   } while (retval < 0 && errno == EINTR);
+   if (retval <= 0)
+   {
+      if (0 == retval)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Waiting on new client failed because select(2) returned 0."
+            " This should not happen.");
+      }
+      else
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Waiting on new client failed because of problems in select(2): "
+            "%s.", strerror(errno));
+      }
+      return 0;
+   }
+   for (i = 0; i < MAX_LISTENING_SOCKETS && !FD_ISSET(fds[i], &selected_fds);
+         i++);
+   if (i >= MAX_LISTENING_SOCKETS)
+   {
+      log_error(LOG_LEVEL_ERROR,
+            "select(2) reported connected clients (number = %u, "
+            "descriptor boundary = %u), but none found.",
+            retval, max_selected_socket);
+      return 0;
+   }
+   fd = fds[i];
+
+   /* Accept selected connection */
 #ifdef _WIN32
    afd = accept (fd, (struct sockaddr *) &client, &c_length);
    if (afd == JB_INVALID_SOCKET)

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.116 2011/07/08 13:29:39 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.117 2011/07/08 13:30:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -229,7 +229,10 @@ static void unload_configfile (void * data)
    freez(config->templdir);
    freez(config->hostname);
 
-   freez(config->haddr);
+   for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
+   {
+       freez(config->haddr[i]);
+   }
    freez(config->logfile);
 
    for (i = 0; i < MAX_AF_FILES; i++)
@@ -1066,8 +1069,23 @@ struct configuration_spec * load_config(void)
  * listen-address [ip][:port]
  * *************************************************************************/
          case hash_listen_address :
-            freez(config->haddr);
-            config->haddr = strdup(arg);
+            i = 0;
+            while ((i < MAX_LISTENING_SOCKETS) && (NULL != config->haddr[i]))
+            {
+               i++;
+            }
+
+            if (i >= MAX_LISTENING_SOCKETS)
+            {
+               log_error(LOG_LEVEL_FATAL, "Too many 'listen-address' directives in config file - limit is %d.\n"
+                  "(You can increase this limit by changing MAX_LISTENING_SOCKETS in project.h and recompiling).",
+                  MAX_LISTENING_SOCKETS);
+            }
+            config->haddr[i] = strdup(arg);
+            if (NULL == config->haddr[i])
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memory while copying listening address");
+            }
             break;
 
 /* *************************************************************************
@@ -1524,39 +1542,45 @@ struct configuration_spec * load_config(void)
    }
 #endif /* def FEATURE_TRUST */
 
-   if ( NULL == config->haddr )
+   if ( NULL == config->haddr[0] )
    {
-      config->haddr = strdup( HADDR_DEFAULT );
+      config->haddr[0] = strdup( HADDR_DEFAULT );
+      if (NULL == config->haddr[0])
+      {
+         log_error(LOG_LEVEL_FATAL, "Out of memory while copying default listening address");
+      }
    }
 
-   if ( NULL != config->haddr )
+   for (i = 0; i < MAX_LISTENING_SOCKETS && NULL != config->haddr[i]; i++ )
    {
-      if ((*config->haddr == '[')
-         && (NULL != (p = strchr(config->haddr, ']')))
+      if ((*config->haddr[i] == '[')
+         && (NULL != (p = strchr(config->haddr[i], ']')))
          && (p[1] == ':')
-         && (0 < (config->hport = atoi(p + 2))))
+         && (0 < (config->hport[i] = atoi(p + 2))))
       {
          *p = '\0';
-         memmove((void *)config->haddr, config->haddr + 1,
-            (size_t)(p - config->haddr));
+         memmove((void *)config->haddr[i], config->haddr[i] + 1,
+            (size_t)(p - config->haddr[i]));
       }
-      else if (NULL != (p = strchr(config->haddr, ':'))
-         && (0 < (config->hport = atoi(p + 1))))
+      else if (NULL != (p = strchr(config->haddr[i], ':'))
+         && (0 < (config->hport[i] = atoi(p + 1))))
       {
          *p = '\0';
       }
       else
       {
-         log_error(LOG_LEVEL_FATAL, "invalid bind port spec %s", config->haddr);
+         log_error(LOG_LEVEL_FATAL, "invalid bind port spec %s", config->haddr[i]);
          /* Never get here - LOG_LEVEL_FATAL causes program exit */
       }
-      if (*config->haddr == '\0')
+      if (*config->haddr[i] == '\0')
       {
          /*
-          * Only the port specified. We stored it in config->hport
+          * Only the port specified. We stored it in config->hport[i]
           * and don't need its text representation anymore.
+          * Use config->hport[i] == 0 to iterate listening addresses since
+          * now.
           */
-         freez(config->haddr);
+         freez(config->haddr[i]);
       }
    }
 
@@ -1600,30 +1624,34 @@ struct configuration_spec * load_config(void)
       struct configuration_spec * oldcfg = (struct configuration_spec *)
                                            current_configfile->f;
       /*
-       * Check if config->haddr,hport == oldcfg->haddr,hport
+       * Check if config->haddr[i],hport[i] == oldcfg->haddr[i],hport[i]
        *
        * The following could be written more compactly as a single,
        * (unreadably long) if statement.
        */
       config->need_bind = 0;
-      if (config->hport != oldcfg->hport)
+
+      for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
       {
-         config->need_bind = 1;
-      }
-      else if (config->haddr == NULL)
-      {
-         if (oldcfg->haddr != NULL)
+         if (config->hport[i] != oldcfg->hport[i])
          {
             config->need_bind = 1;
          }
-      }
-      else if (oldcfg->haddr == NULL)
-      {
-         config->need_bind = 1;
-      }
-      else if (0 != strcmp(config->haddr, oldcfg->haddr))
-      {
-         config->need_bind = 1;
+         else if (config->haddr[i] == NULL)
+         {
+            if (oldcfg->haddr[i] != NULL)
+            {
+               config->need_bind = 1;
+            }
+         }
+         else if (oldcfg->haddr[i] == NULL)
+         {
+            config->need_bind = 1;
+         }
+         else if (0 != strcmp(config->haddr[i], oldcfg->haddr[i]))
+         {
+            config->need_bind = 1;
+         }
       }
 
       current_configfile->unloader = unload_configfile;

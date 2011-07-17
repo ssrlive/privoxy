@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.139 2011/07/08 13:27:56 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.140 2011/07/08 13:28:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -2143,6 +2143,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    struct map * exports;
    int local_help_exists = 0;
    char *ip_address = NULL;
+   char *port = NULL;
    char *hostname = NULL;
 
    assert(csp);
@@ -2155,12 +2156,12 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
 
    if (csp->config->hostname)
    {
-      get_host_information(csp->cfd, &ip_address, NULL);
+      get_host_information(csp->cfd, &ip_address, &port, NULL);
       hostname = strdup(csp->config->hostname);
    }
    else
    {
-      get_host_information(csp->cfd, &ip_address, &hostname);
+      get_host_information(csp->cfd, &ip_address, &port, &hostname);
    }
 
    err = map(exports, "version", 1, html_encode(VERSION), 0);
@@ -2168,6 +2169,8 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "time",          1, html_encode(buf), 0);
    if (!err) err = map(exports, "my-ip-address", 1, html_encode(ip_address ? ip_address : "unknown"), 0);
    freez(ip_address);
+   if (!err) err = map(exports, "my-port",       1, html_encode(port ? port : "unkown"), 0);
+   freez(port);
    if (!err) err = map(exports, "my-hostname",   1, html_encode(hostname ? hostname : "unknown"), 0);
    freez(hostname);
    if (!err) err = map(exports, "homepage",      1, html_encode(HOME_PAGE_URL), 0);
@@ -2191,9 +2194,6 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
 #else
    if (!err) err = map_block_killer(exports, "can-toggle");
 #endif
-
-   snprintf(buf, sizeof(buf), "%d", csp->config->hport);
-   if (!err) err = map(exports, "my-port", 1, buf, 1);
 
    if(!strcmp(CODE_STATUS, "stable"))
    {
