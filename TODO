@@ -1,4 +1,4 @@
-$Id: TODO,v 1.46 2011/07/04 17:47:50 fabiankeil Exp $
+$Id: TODO,v 1.47 2011/07/04 17:48:11 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -41,17 +41,6 @@ have been added, not by priority.
     and scale properly.
 
 12) Add pipelining support.
-
-13) Use zlib to deflate content before sending it to
-    the client. Measure if it makes a difference.
-
-    Update:
-    Note that this is already being worked on and mostly done
-    for buffered content and internal CGI responses.
-
-    The difference it does make, seems to be that it slows things
-    down if the client and Privoxy are running on the same system,
-    so for most users enabling it will make no sense.
 
 14) Allow to filter POST parameters.
 
