@@ -1,4 +1,4 @@
-$Id: TODO,v 1.47 2011/07/04 17:48:11 fabiankeil Exp $
+$Id: TODO,v 1.48 2011/07/17 13:30:43 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -168,9 +168,6 @@ have been added, not by priority.
 70) If the server connection is reset but the headers are
     received, consider passing the mess to the client instead
     of showing the connect-failed template. Relates to #2698674.
-
-71) Allow to listen on multiple addresses without having to
-    bind to all.
 
 74) Let Privoxy-Regression-Test optionally check that action
     sections which disable actions actually are preceded by
