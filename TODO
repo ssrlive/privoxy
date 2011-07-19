@@ -1,4 +1,4 @@
-$Id: TODO,v 1.48 2011/07/17 13:30:43 fabiankeil Exp $
+$Id: TODO,v 1.49 2011/07/19 11:00:38 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -256,3 +256,13 @@ have been added, not by priority.
     addresses, instead of trusting the libc to return them in an order
     that makes sense. Like #93, this could be useful as a workaround
     for misconfigured setups.
+
+95) Support a non-standard client header in CONNECT requests that
+    contains the URL of the requested ressource, which is then treated
+    like the request URL.
+
+    This way the client could opt-in for path-based blocking of https
+    requests. Given that the headers from the CONNECT request aren't
+    forwarded to the destination server, an unencrypted URL should be
+    acceptable if the client and Privoxy are running on the same system
+    or in a trusted environment.
