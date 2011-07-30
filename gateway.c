@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.73 2011/04/19 13:00:47 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.74 2011/07/17 13:31:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1107,25 +1107,24 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
          server_size, sizeof(sbuf));
    }
 
-   if (!err && (sbuf[0] != '\x05'))
-   {
-      errstr = "SOCKS5 negotiation protocol version error";
-      err = 1;
-   }
-
-   if (!err && (sbuf[2] != '\x00'))
-   {
-      errstr = "SOCKS5 negotiation protocol error";
-      err = 1;
-   }
-
    if (!err)
    {
-      if (sbuf[1] == SOCKS5_REQUEST_GRANTED)
+      if (sbuf[0] != '\x05')
+      {
+         errstr = "SOCKS5 negotiation protocol version error";
+      }
+      else if (sbuf[2] != '\x00')
+      {
+         errstr = "SOCKS5 negotiation protocol error";
+      }
+      else if (sbuf[1] != SOCKS5_REQUEST_GRANTED)
+      {
+         errstr = translate_socks5_error(sbuf[1]);
+      }
+      else
       {
          return(sfd);
       }
-      errstr = translate_socks5_error(sbuf[1]);
    }
 
    assert(errstr != NULL);
