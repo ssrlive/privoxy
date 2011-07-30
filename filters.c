@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.142 2011/04/19 13:00:47 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.143 2011/05/22 10:25:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -714,27 +714,8 @@ struct http_response *block_url(struct client_state *csp)
    {
       jb_err err;
       struct map * exports;
-      char *p;
 
-      /*
-       * Workaround for stupid Netscape bug which prevents
-       * pages from being displayed if loading a referenced
-       * JavaScript or style sheet fails. So make it appear
-       * as if it succeeded.
-       */
-      if ( NULL != (p = get_header_value(csp->headers, "User-Agent:"))
-           && !strncmpic(p, "mozilla", 7) /* Catch Netscape but */
-           && !strstr(p, "Gecko")         /* save Mozilla, */
-           && !strstr(p, "compatible")    /* MSIE */
-           && !strstr(p, "Opera"))        /* and Opera. */
-      {
-         rsp->status = strdup("200 Request blocked by Privoxy");
-      }
-      else
-      {
-         rsp->status = strdup("403 Request blocked by Privoxy");
-      }
-
+      rsp->status = strdup("403 Request blocked by Privoxy");
       if (rsp->status == NULL)
       {
          free_http_response(rsp);
