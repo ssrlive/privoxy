@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.239 2011/06/25 12:41:17 fabiankeil Exp $
+#  $Id: default.action.master,v 1.240 2011/07/30 15:00:20 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2135,6 +2135,8 @@ javabog.dk/ijk/
 .couchsurfing.com/
 # URL = http://www.couchsurfing.org/mapsurf.html
 .couchsurfing.org/
+# URL = http://www.thinkgeek.com/tshirts-apparel/unisex/generic/
+.thinkgeek.com/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
