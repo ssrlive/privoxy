@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.117 2011/07/08 13:30:08 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.120 2011/07/19 11:00:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1525,14 +1525,14 @@ struct configuration_spec * load_config(void)
       log_error(LOG_LEVEL_FATAL, "Out of memory loading config - insufficient memory for config->proxy_args");
    }
 
-   if (config->actions_file[0])
-   {
-      add_loader(load_action_files, config);
-   }
-
    if (config->re_filterfile[0])
    {
       add_loader(load_re_filterfiles, config);
+   }
+
+   if (config->actions_file[0])
+   {
+      add_loader(load_action_files, config);
    }
 
 #ifdef FEATURE_TRUST
