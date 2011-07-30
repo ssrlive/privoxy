@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.40 2010/09/14 07:14:56 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.41 2010/09/14 07:16:07 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -116,14 +116,6 @@ extern int filters_available(const struct client_state *csp);
  * Handling Max-Forwards:
  */
 extern struct http_response *direct_response(struct client_state *csp);
-
-
-/*
- * Solaris fix:
- */
-#ifndef INADDR_NONE
-#define INADDR_NONE -1
-#endif     
 
 /* 
  * Revision control strings from this header and associated .c file

@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.17 2010/04/23 11:53:48 fabiankeil Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.18 2011/07/17 13:34:36 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -67,6 +67,15 @@ extern int socket_is_still_alive(jb_socket sfd);
 /* Revision control strings from this header and associated .c file */
 extern const char jbsockets_rcs[];
 extern const char jbsockets_h_rcs[];
+
+/*
+ * Solaris workaround
+ * XXX: still necessary?
+ */
+#ifndef INADDR_NONE
+#define INADDR_NONE -1
+#endif
+
 
 #ifdef __cplusplus
 } /* extern "C" */

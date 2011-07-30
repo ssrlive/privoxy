@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.18 2009/09/06 14:15:46 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.19 2009/10/03 10:37:49 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -69,13 +69,6 @@ extern int connection_destination_matches(const struct reusable_connection *conn
                                           const struct http_request *http,
                                           const struct forward_spec *fwd);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
-
-/*
- * Solaris fix
- */
-#ifndef INADDR_NONE
-#define INADDR_NONE -1
-#endif
 
 /*
  * Revision control strings from this header and associated .c file
