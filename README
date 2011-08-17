@@ -32,8 +32,9 @@
  *
  *********************************************************************/
 
-This README is included with Privoxy 3.0.17. See http://www.privoxy.org/ for
-more information. The current code maturity level is "stable".
+This README is included with the development version of Privoxy 3.0.18. See
+http://www.privoxy.org/ for more information. The current code maturity level
+is "UNRELEASED", but seems stable to us :).
 
 -------------------------------------------------------------------------------
 
@@ -63,12 +64,12 @@ November 2010, Privoxy 3.0.17 stable is released.
 This is mainly a bug-fix release for the previously released Privoxy 3.0.16.
 
 It contains fixes for two bugs that could cause connections to hang under
-certain circumstances when keep-alive support was enabled, until they timed
-out or where closed by the server.
+certain circumstances when keep-alive support was enabled, until they timed out
+or where closed by the server.
 
-As usual, there are also a bunch of minor improvements. For details please
-see the "ChangeLog", the "What's New" section or the "Upgrader's Notes" in
-the User Manual.
+As usual, there are also a bunch of minor improvements. For details please see
+the "ChangeLog", the "What's New" section or the "Upgrader's Notes" in the User
+Manual.
 
 -------------------------------------------------------------------------------
 
@@ -113,16 +114,22 @@ try it with FTP or other protocols for the simple reason it does not work.
 The actions list can be configured via the web interface accessed via http://
 p.p/, as well other options.
 
+All configuration files are subject to unannounced changes during the
+development process.
+
 -------------------------------------------------------------------------------
 
 5. DOCUMENTATION
 
-There should be documentation in the 'doc' subdirectory. In particular, see the
-User Manual there, the FAQ, and those interested in Privoxy development, should
-look at developer-manual.
+There should be documentation in the 'doc' subdirectory, but it may not be
+completed at this point. In particular, see the User Manual there, the FAQ, and
+those interested in Privoxy development, should look at developer-manual.
 
-The source and configuration files are all well commented. The main
-configuration files are: 'config', 'default.action', and 'default.filter'.
+The most up to date source of information on the current development version,
+may still be either comments in the source code, or the included configuration
+files. The source and configuration files are all well commented. The main
+configuration files are: 'config', 'default.action', and 'default.filter' in
+the top-level source directory.
 
 Included documentation may vary according to platform and packager. All
 documentation is posted on http://www.privoxy.org, in case you don't have it,
@@ -148,6 +155,13 @@ list, where the developers also hang around.
 
 Please don't sent private support requests to individual Privoxy developers,
 either use the mailing lists or the support trackers.
+
+If you have to contact a Privoxy developer directly for other reasons, please
+send a real mail and do not bother with SourceForge's messaging system. Answers
+to SourceForge messages are usually bounced by SourceForge's mail server in
+which case the developer wasted time writing a response you don't get. From
+your point of view it will look like your message has been completely ignored,
+so this is frustrating for all parties involved.
 
 Note that the Privoxy mailing lists are moderated. Posts from unsubscribed
 addresses have to be accepted manually by a moderator. This may cause a delay
