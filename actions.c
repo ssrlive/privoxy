@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.68 2011/04/19 13:00:47 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.69 2011/05/22 10:21:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1033,6 +1033,108 @@ int load_action_files(struct client_state *csp)
    return 0;
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  referenced_filters_are_missing
+ *
+ * Description :  Checks if any filters of a certain type referenced
+ *                in an action spec are missing.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  cur_action = The action spec to check.
+ *          3  :  multi_index = The index where to look for the filter.
+ *          4  :  filter_type = The filter type the caller is interested in.
+ *
+ * Returns     :  0 => All referenced filters exists, everything else is an error.
+ *
+ *********************************************************************/
+static int referenced_filters_are_missing(const struct client_state *csp,
+   const struct action_spec *cur_action, int multi_index, enum filter_type filter_type)
+{
+   int i;
+   struct file_list *fl;
+   struct re_filterfile_spec *b;
+   struct list_entry *filtername;
+
+   for (filtername = cur_action->multi_add[multi_index]->first;
+        filtername; filtername = filtername->next)
+   {
+      int filter_found = 0;
+      for (i = 0; i < MAX_AF_FILES; i++)
+      {
+         fl = csp->rlist[i];
+         if ((NULL == fl) || (NULL == fl->f))
+         {
+            continue;
+         }
+
+         for (b = fl->f; b; b = b->next)
+         {
+            if (b->type != filter_type)
+            {
+               continue;
+            }
+            if (strcmp(b->name, filtername->str) == 0)
+            {
+               filter_found = 1;
+            }
+         }
+      }
+      if (!filter_found)
+      {
+         log_error(LOG_LEVEL_ERROR, "Missing filter '%s'", filtername->str);
+         return 1;
+      }
+   }
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  action_spec_is_valid
+ *
+ * Description :  Should eventually figure out if an action spec
+ *                is valid, but currently only checks that the
+ *                referenced filters are accounted for.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  cur_action = The action spec to check.
+ *
+ * Returns     :  0 => No problems detected, everything else is an error.
+ *
+ *********************************************************************/
+static int action_spec_is_valid(struct client_state *csp, const struct action_spec *cur_action)
+{
+   struct {
+      int multi_index;
+      enum filter_type filter_type;
+   } filter_map[] = {
+      {ACTION_MULTI_FILTER, FT_CONTENT_FILTER},
+      {ACTION_MULTI_CLIENT_HEADER_FILTER, FT_CLIENT_HEADER_FILTER},
+      {ACTION_MULTI_SERVER_HEADER_FILTER, FT_SERVER_HEADER_FILTER},
+      {ACTION_MULTI_CLIENT_HEADER_TAGGER, FT_CLIENT_HEADER_TAGGER},
+      {ACTION_MULTI_SERVER_HEADER_TAGGER, FT_SERVER_HEADER_TAGGER}
+   };
+   int errors = 0;
+   int i;
+
+   for (i = 0; i < SZ(filter_map); i++)
+   {
+      errors += referenced_filters_are_missing(csp, cur_action,
+         filter_map[i].multi_index, filter_map[i].filter_type);
+   }
+
+   return errors;
+
+}
+
+
 /*********************************************************************
  *
  * Function    :  load_one_actions_file
@@ -1294,6 +1396,14 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                   csp->config->actions_file[fileid], linenum, buf);
                return 1; /* never get here */
             }
+
+            if (action_spec_is_valid(csp, cur_action))
+            {
+               log_error(LOG_LEVEL_ERROR, "Invalid action section in file '%s', "
+                  "starting at line %lu: %s",
+                  csp->config->actions_file[fileid], linenum, buf);
+            }
+
             freez(actions_buf);
          }
       }
