@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="Privoxy 3.0.17 User Manual"
+TITLE="Privoxy 3.0.18 User Manual"
 HREF="index.html"><LINK
 REL="PREVIOUS"
 TITLE="Privoxy Configuration"
@@ -42,7 +42,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Privoxy 3.0.17 User Manual</TH
+>Privoxy 3.0.18 User Manual</TH
 ></TR
 ><TR
 ><TD
@@ -82,14 +82,14 @@ NAME="CONFIG"
 >7. The Main Configuration File</A
 ></H1
 ><P
-> Again, the main configuration file is named <TT
+> By default, the main configuration file is named <TT
 CLASS="FILENAME"
 >config</TT
-> on
- Linux/Unix/BSD and OS/2, and <TT
+>,
+ with the exception of Windows, where it is named <TT
 CLASS="FILENAME"
 >config.txt</TT
-> on Windows.
+>.
  Configuration lines consist of an initial keyword followed by a list of
  values, all separated by whitespace (any number of spaces or tabs). For
  example:</P
@@ -1633,7 +1633,7 @@ CLASS="VARIABLELIST"
 >Specifies:</DT
 ><DD
 ><P
->    The IP address and TCP port on which <SPAN
+>    The address and TCP port on which <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > will
@@ -1648,6 +1648,18 @@ CLASS="APPLICATION"
 CLASS="REPLACEABLE"
 ><I
 >IP-Address</I
+></TT
+>]:<TT
+CLASS="REPLACEABLE"
+><I
+>Port</I
+></TT
+></P
+><P
+>[<TT
+CLASS="REPLACEABLE"
+><I
+>Hostname</I
 ></TT
 >]:<TT
 CLASS="REPLACEABLE"
@@ -1686,19 +1698,91 @@ CLASS="APPLICATION"
     will need to override the default.
    </P
 ><P
->    IPv6 addresses containing colons have to be quoted by brackets.
-   </P
-><P
->    If you leave out the IP address, <SPAN
+>    You can use this statement multiple times to make
+    <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> will
-    bind to all IPv4 interfaces (addresses) on your machine and may become reachable
-    from the Internet. In that case, consider using <A
+> listen on more ports or more
+    <ABBR
+CLASS="ABBREV"
+>IP</ABBR
+> addresses. Suitable if your operating system does not
+    support sharing <ABBR
+CLASS="ABBREV"
+>IPv6</ABBR
+> and <ABBR
+CLASS="ABBREV"
+>IPv4</ABBR
+> protocols
+    on the same socket.
+   </P
+><P
+>    If a hostname is used instead of an IP address, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    will try to resolve it to an IP address and if there are multiple, use the first
+    one returned.
+   </P
+><P
+>    If the address for the hostname isn't already known on the system
+    (for example because it's in /etc/hostname), this may result in DNS
+    traffic.
+   </P
+><P
+>    If the specified address isn't available on the system, or if the
+    hostname can't be resolved, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>
+    will fail to start.
+   </P
+><P
+>    IPv6 addresses containing colons have to be quoted by brackets.
+    They can only be used if <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> has
+    been compiled with IPv6 support. If you aren't sure if your version
+    supports it, have a look at
+    <TT
+CLASS="LITERAL"
+>http://config.privoxy.org/show-status</TT
+>.
+   </P
+><P
+>    Some operating systems will prefer IPv6 to IPv4 addresses even if the
+    system has no IPv6 connectivity which is usually not expected by the user.
+    Some even rely on DNS to resolve localhost which mean the "localhost" address
+    used may not actually be local.
+   </P
+><P
+>    It is therefore recommended to explicitly configure the intended IP address
+    instead of relying on the operating system, unless there's a strong reason not to.
+   </P
+><P
+>    If you leave out the address, <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> will bind to all
+    IPv4 interfaces (addresses) on your machine and may become reachable from the
+    Internet and/or the local network. Be aware that some GNU/Linux distributions
+    modify that behaviour without updating the documentation. Check for non-standard
+    patches if your <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>version behaves differently.
+   </P
+><P
+>    If you configure <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>to be reachable from the
+    network, consider using <A
 HREF="config.html#ACLS"
 >access control lists</A
-> (ACL's, see below), and/or
-    a firewall.
+>
+    (ACL's, see below), and/or a firewall.
    </P
 ><P
 >    If you open <SPAN
@@ -1719,6 +1803,15 @@ HREF="config.html#ENABLE-REMOTE-TOGGLE"
 >enable-remote-toggle</A
 ></TT
 >
+   </P
+><P
+>    With the exception noted above, listening on multiple addresses is currently
+    not supported by <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> directly.
+    It can be done on most operating systems by letting a packet filter
+    redirect request for certain addresses to Privoxy, though.
    </P
 ></DD
 ><DT
@@ -2985,7 +3078,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  foward   /                   [2001:DB8::1]:8000</PRE
+>  forward   /                   [2001:DB8::1]:8000</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3567,10 +3660,6 @@ CLASS="QUOTE"
 >    Only use this option, if you are getting lots of forwarding-related error messages
     that go away when you try again manually. Start with a small value and check Privoxy's
     logfile from time to time, to see how many retries are usually needed.
-   </P
-><P
->    Due to a bug, this option currently also causes Privoxy to
-    retry in case of certain problems with direct connections.
    </P
 ></DD
 ><DT
@@ -4252,9 +4341,9 @@ CLASS="REPLACEABLE"
 >Notes:</DT
 ><DD
 ><P
->    For SOCKS requests the timeout currently doesn't start until
-    the SOCKS server accepted the request. This will be fixed in
-    the next release.
+>    The default is quite high and you probably want to reduce it.
+    If you aren't using an occasionally slow proxy like Tor, reducing
+    it to a few seconds should be fine.
    </P
 ></DD
 ><DT
@@ -4395,23 +4484,6 @@ NAME="HANDLE-AS-EMPTY-DOC-RETURNS-OK"
 CLASS="VARIABLELIST"
 ><DL
 ><DT
->Note:</DT
-><DD
-><P
->    This is a work-around for Firefox bug 492459:
-    <SPAN
-CLASS="QUOTE"
->"    Websites are no longer rendered if SSL requests for JavaScripts are blocked by a proxy.
-    "</SPAN
->
-    (<A
-HREF="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
-TARGET="_top"
->https://bugzilla.mozilla.org/show_bug.cgi?id=492459</A
->)
-   </P
-></DD
-><DT
 >Specifies:</DT
 ><DD
 ><P
@@ -4458,6 +4530,184 @@ CLASS="REPLACEABLE"
 ><P
 >    Privoxy returns a status 200(OK) for pages blocked with +handle-as-empty-document
     and a status 403(Forbidden) for all other blocked pages.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This is a work-around for Firefox bug 492459:
+    <SPAN
+CLASS="QUOTE"
+>"    Websites are no longer rendered if SSL requests for JavaScripts are blocked by a proxy.
+    "</SPAN
+>
+    (<A
+HREF="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
+TARGET="_top"
+>https://bugzilla.mozilla.org/show_bug.cgi?id=492459</A
+>)
+    As the bug has been fixed for quite some time this option should no longer
+    be needed and will be removed in a future release. Please speak up if you
+    have a reason why the option should be kept around.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="ENABLE-COMPRESSION"
+>7.6.10. enable-compression</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    Whether or not buffered content is compressed before delivery.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>0 or 1</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>0</P
+></DD
+><DT
+>Effect if unset:</DT
+><DD
+><P
+>    Privoxy does not compress buffered content.
+   </P
+></DD
+><DT
+>Effect if set:</DT
+><DD
+><P
+>    Privoxy compresses buffered content before delivering it to the client,
+    provided the client supports it.
+   </P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>    This directive is only supported if Privoxy has been compiled with
+    FEATURE_COMPRESSION, which should not to be confused with FEATURE_ZLIB.
+   </P
+><P
+>    Compressing buffered content is mainly useful if Privoxy and the
+    client are running on different systems. If they are running on the
+    same system, enabling compression is likely to slow things down.
+    If you didn't measure otherwise, you should assume that it does
+    and keep this option disabled.
+   </P
+><P
+>    Privoxy will not compress buffered content below a certain length.
+   </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="COMPRESSION-LEVEL"
+>7.6.11. compression-level</A
+></H4
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Specifies:</DT
+><DD
+><P
+>    The compression level that is passed to the zlib library when compressing buffered content.
+   </P
+></DD
+><DT
+>Type of value:</DT
+><DD
+><P
+>    <TT
+CLASS="REPLACEABLE"
+><I
+>Positive number ranging from 0 to 9.</I
+></TT
+>
+   </P
+></DD
+><DT
+>Default value:</DT
+><DD
+><P
+>1</P
+></DD
+><DT
+>Notes:</DT
+><DD
+><P
+>     Compressing the data more takes usually longer than compressing
+     it less or not compressing it at all. Which level is best depends
+     on the connection between Privoxy and the client. If you can't
+     be bothered to benchmark it for yourself, you should stick with
+     the default and keep compression disabled.
+   </P
+><P
+>     If compression is disabled, the compression level is irrelevant.
+   </P
+></DD
+><DT
+>Examples:</DT
+><DD
+><P
+>    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>    # Best speed (compared to the other levels)
+    compression-level 1
+    # Best compression
+    compression-level 9
+    # No compression. Only useful for testing as the added header
+    # slightly increases the amount of data that has to be sent.
+    # If your benchmark shows that using this compression level
+    # is superior to using no compression at all, the benchmark
+    # is likely to be flawed.
+    compression-level 0
+    </PRE
+></TD
+></TR
+></TABLE
+>
    </P
 ></DD
 ></DL
