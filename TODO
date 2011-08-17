@@ -1,4 +1,4 @@
-$Id: TODO,v 1.49 2011/07/19 11:00:38 fabiankeil Exp $
+$Id: TODO,v 1.50 2011/07/19 11:01:14 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -96,9 +96,8 @@ have been added, not by priority.
 41) Change documentation framework to one that works cross-platform.
     Evaluate WML.
 
-42) Add DTrace hooks. Now that FreeBSD has userland DTrace
+42) Add a DTrace USDT provider. Now that FreeBSD has userland DTrace
     support there's no longer any reason not to.
-    DTrace bible preorderd.
 
 43) Write a tool to check URL patterns against URLs in the log file.
     This could be included in Privoxy-Regression-Test.
