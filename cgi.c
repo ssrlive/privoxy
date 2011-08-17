@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.140 2011/07/08 13:28:11 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.141 2011/07/17 13:34:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1507,7 +1507,7 @@ static void get_locale_time(char *buf, size_t buffer_size)
 char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level)
 {
    char *compressed_buffer;
-   size_t new_length;
+   uLongf new_length;
    assert(-1 <= compression_level && compression_level <= 9);
 
    /*
@@ -1519,7 +1519,7 @@ char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level
     * XXX: The overhead isn't constant and 30 bytes
     *      may not be enough for everybody
     */
-   new_length = *buffer_length + 30;
+   new_length = (uLongf)*buffer_length + 30;
 
    compressed_buffer = malloc(new_length);
    if (NULL == compressed_buffer)
@@ -1542,7 +1542,7 @@ char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level
       "Compressed content from %d to %d bytes. Compression level: %d",
       *buffer_length, new_length, compression_level);
 
-   *buffer_length = new_length;
+   *buffer_length = (size_t)new_length;
 
    return compressed_buffer;
 
