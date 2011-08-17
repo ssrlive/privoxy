@@ -1,8 +1,8 @@
 #        Sample Configuration File for Privoxy v3.0.17
 #
-#  $Id: config,v 1.94 2011/04/19 13:18:46 fabiankeil Exp $
+#  $Id: config,v 1.95 2011/08/17 10:31:40 fabiankeil Exp $
 #
-#  Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
+#  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
 #
 ####################################################################
 #                                                                  #
@@ -1863,12 +1863,17 @@ socket-timeout 300
 #  Examples:
 #
 #          # Best speed (compared to the other levels)
-#          compression-level 1 # Best compression compression-level 9 #
-#          No compression. Only useful for testing as the added header #
-#          slightly increases the amount of data that has to be sent.
-#          # If your benchmark shows that using this compression level #
-#          is superior to using no compression at all, the benchmark #
-#          is likely to be flawed.  compression-level 0
+#          compression-level 1
+#
+#          # Best compression
+#	   compression-level 9
+#
+#          # No compression. Only useful for testing as the added header
+#          # slightly increases the amount of data that has to be sent.
+#          # If your benchmark shows that using this compression level
+#          # is superior to using no compression at all, the benchmark
+#          # is likely to be flawed.
+#          compression-level 0
 #
 #
 #compression-level 1
