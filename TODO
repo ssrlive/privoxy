@@ -1,4 +1,4 @@
-$Id: TODO,v 1.50 2011/07/19 11:01:14 fabiankeil Exp $
+$Id: TODO,v 1.51 2011/08/17 10:23:23 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -265,3 +265,9 @@ have been added, not by priority.
     forwarded to the destination server, an unencrypted URL should be
     acceptable if the client and Privoxy are running on the same system
     or in a trusted environment.
+
+96) Enabled filters should be easier to look up. Currently most functions
+    that work with filters spent more (duplicated) code on finding
+    filters than on actually doing something useful with them. Dividing
+    filters by type instead of filter file would reduce the lookup-code
+    quite a bit.
