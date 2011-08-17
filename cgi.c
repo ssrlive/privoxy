@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.141 2011/07/17 13:34:36 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.142 2011/08/17 10:25:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1510,16 +1510,8 @@ char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level
    uLongf new_length;
    assert(-1 <= compression_level && compression_level <= 9);
 
-   /*
-    * If the compression level is 0 or if the entropy
-    * is high, the "compressing" data will take more
-    * room then the uncompressed data due to the zlib
-    * overhead.
-    *
-    * XXX: The overhead isn't constant and 30 bytes
-    *      may not be enough for everybody
-    */
-   new_length = (uLongf)*buffer_length + 30;
+   /* Let zlib figure out the maximum length of the compressed data */
+   new_length = compressBound((uLongf)*buffer_length);
 
    compressed_buffer = malloc(new_length);
    if (NULL == compressed_buffer)
