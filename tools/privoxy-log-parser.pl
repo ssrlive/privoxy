@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.119 2011/06/23 14:02:28 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.120 2011/06/29 20:29:12 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1197,9 +1197,10 @@ sub handle_loglevel_re_filter ($) {
 
     } elsif ($c =~ m/^Compressed content from /) {
 
-        # Compressed content from 29258 to 8630 bytes.
+        # Compressed content from 29258 to 8630 bytes. Compression level: 3
         $content =~ s@(?<=from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $content =~ s@(?<=to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $content =~ s@(?<=level: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Reading in filter/) {
 
