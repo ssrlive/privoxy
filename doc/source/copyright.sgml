@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
                 
- $Id: copyright.sgml,v 2.11 2010/02/13 16:36:54 fabiankeil Exp $
+ $Id: copyright.sgml,v 2.12 2011/03/27 13:50:38 fabiankeil Exp $
 
- Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ======================================================================

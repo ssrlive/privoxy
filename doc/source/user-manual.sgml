@@ -34,9 +34,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.131 2011/04/19 13:14:10 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.132 2011/08/17 10:40:07 fabiankeil Exp $
 
- Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -55,12 +55,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2010 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2011 by
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.131 2011/04/19 13:14:10 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.132 2011/08/17 10:40:07 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -8917,6 +8917,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.132  2011/08/17 10:40:07  fabiankeil
+ Update the entities.
+
+ This commit is chronological out of order.
+
  Revision 2.131  2011/04/19 13:14:10  fabiankeil
  Fix spelling errors in the documentation. Found with codespell.
 

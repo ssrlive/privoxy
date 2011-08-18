@@ -17,9 +17,9 @@
 
  Purpose     :  README for Privoxy
                 
- $Id: readme.sgml,v 2.43 2010/11/13 13:23:12 fabiankeil Exp $
+ $Id: readme.sgml,v 2.44 2011/08/17 10:40:07 fabiankeil Exp $
 
- Copyright (C) 2001-2010 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -80,7 +80,7 @@
  *
  * Purpose     :  README file to give a short intro.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2010 the
+ * Copyright   :  Written by and Copyright (C) 2001-2011 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -244,7 +244,7 @@
 <!-- </LiteralLayout> -->
 <!-- </para> -->
 <!-- <para> -->
-<!--  $Id: readme.sgml,v 2.43 2010/11/13 13:23:12 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.44 2011/08/17 10:40:07 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>

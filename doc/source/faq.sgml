@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: faq.sgml,v 2.78 2011/04/19 13:14:10 fabiankeil Exp $
+ $Id: faq.sgml,v 2.79 2011/08/17 10:40:07 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -73,12 +73,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2010 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2011 by
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.78 2011/04/19 13:14:10 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.79 2011/08/17 10:40:07 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2969,6 +2969,11 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.79  2011/08/17 10:40:07  fabiankeil
+Update the entities.
+
+This commit is chronological out of order.
+
 Revision 2.78  2011/04/19 13:14:10  fabiankeil
 Fix spelling errors in the documentation. Found with codespell.
 
