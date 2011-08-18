@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.132 2011/08/17 10:40:07 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.133 2011/08/18 11:42:50 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.132 2011/08/17 10:40:07 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.133 2011/08/18 11:42:50 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5359,10 +5359,7 @@ new action
     the headers, because it is an invitation to exploit known bugs for your
     OS. It is also occasionally useful to forge this in order to access 
     sites that won't let you in otherwise (though there may be a good 
-    reason in some cases). Example of this: some MSN sites will not 
-    let <application>Mozilla</application> enter, yet forging to a 
-    <application>Netscape 6.1</application> user-agent works just fine.
-    (Must be just a silly MS goof, I'm sure :-).
+    reason in some cases).
    </para>
    <para>
      More information on known user-agent strings can be found at 
@@ -8917,6 +8914,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.133  2011/08/18 11:42:50  fabiankeil
+ Bump some more documentation copyright ranges.
+
  Revision 2.132  2011/08/17 10:40:07  fabiankeil
  Update the entities.
 
