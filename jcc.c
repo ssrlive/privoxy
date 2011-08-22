@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.361 2011/07/17 13:37:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.362 2011/07/17 13:38:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2261,6 +2261,8 @@ static void chat(struct client_state *csp)
                      "Empty server or forwarder response received on socket %d. "
                      "Closing client socket %d without sending data.",
                      csp->server_connection.sfd, csp->cfd);
+                  log_error(LOG_LEVEL_CLF,
+                     "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
                }
                else
                {
@@ -2269,7 +2271,6 @@ static void chat(struct client_state *csp)
                      csp->server_connection.sfd);
                   send_crunch_response(csp, error_response(csp, "no-server-data"));
                }
-               log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
                free_http_request(http);
                mark_server_socket_tainted(csp);
                return;
