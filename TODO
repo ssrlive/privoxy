@@ -1,4 +1,4 @@
-$Id: TODO,v 1.51 2011/08/17 10:23:23 fabiankeil Exp $
+$Id: TODO,v 1.52 2011/08/17 10:23:42 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -271,3 +271,5 @@ have been added, not by priority.
     filters than on actually doing something useful with them. Dividing
     filters by type instead of filter file would reduce the lookup-code
     quite a bit.
+
+97) Add support for Tor's 'optimistic data' socks extension.
