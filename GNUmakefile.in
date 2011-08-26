@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.195 2011/01/22 12:33:11 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.197 2011/08/17 10:30:11 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -274,8 +274,7 @@ PID_DEST check_doc install-strip uninstall GROUP_T
 # Strip master copy comments from default.action:
 #############################################################################
 default.action: default.action.master
-	$(GREP) -v '^#MASTER#' $< > $@
-
+	$(GREP) -v '^#MASTER#' default.action.master > $@
 #############################################################################
 # Win32 config files
 #############################################################################
@@ -456,13 +455,14 @@ dok-faq:
 # man page, one variation. Try to use the next target, just 'make man'. 
 dok-man: 
 	$(RM) doc/man/* doc/webserver/man-page/*.html
-ifneq ($(MAN2HTML),false)
-	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
-	man ./$(MAN_PAGE) | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html
-	$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html
-else
-	$(MAKE) groff2html
-endif
+	echo MAN2HTML is $(MAN2HTML)
+	@if [ $(MAN2HTML) != "false" ]; then \
+		$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html; \
+		man ./$(MAN_PAGE) | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html; \
+		$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html; \
+	else \
+		$(MAKE) groff2html; \
+	fi;
 
 # Build man page from sgml. This requires the SGMLSpm perl module.
 # See CPAN, or your favorite perl repository. This is the preferred 
@@ -481,20 +481,17 @@ man: dok-release
 # For those with man2html ala RH7s.
 man2html:
 	mkdir -p doc/webserver/man-page
-ifneq ($(MAN2HTML),false)
-	$(MAN2HTML) $(MAN_PAGE) |grep -v "^Content-type" > tmp.html
-	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
-	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
-# Twice because my version of man2html is pulling in commas and periods in URLs.
-	$(PERL) -pi.bak -e 's/(<A.*),(">)/$$1$$2/g' tmp.html
-	$(PERL) -pi.bak -e 's,\.">,">,g' tmp.html
-	$(PERL) -pi.bak -e "s/\['a\]/\&aacute;/g;s/\['e\]/\&eacute;/g" tmp.html
-# Get rid of spurious  from conversion. (How to do this with perl?)
-	$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && $(RM) tmp.*
-else
-	$(MAKE) groff2html
-endif
-
+	@if [ $(MAN2HTML) != "false" ]; then \
+		$(MAN2HTML) $(MAN_PAGE) |grep -v "^Content-type" > tmp.html; \
+		$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html; \
+		$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html; \
+		$(PERL) -pi.bak -e 's/(<A.*),(">)/$$1$$2/g' tmp.html; \
+		$(PERL) -pi.bak -e 's,\.">,">,g' tmp.html; \
+		$(PERL) -pi.bak -e "s/\['a\]/\&aacute;/g;s/\['e\]/\&eacute;/g" tmp.html; \
+		$(SED) -e 's///g' tmp.html > doc/webserver/man-page/privoxy-man-page.html && $(RM) tmp.*; \
+	else \
+		$(MAKE) groff2html; \
+	fi;
 
 # Otherwise we get plain groff conversion.
 groff2html:
@@ -549,19 +546,19 @@ dok-release:
      s/<!entity +p-status.*>/<!entity p-status "$(CODE_STATUS)">/' \
      doc/source/*sgml doc/source/*/*sgml
 	$(RM) -r doc/source/*bak doc/source/*/*bak
-ifeq ($(CODE_STATUS),stable)
-	@$(ECHO) Setting docs to stable $(VERSION)
-	@$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
-     s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
-     doc/source/*sgml doc/source/*/*sgml
-	$(RM) -r doc/source/*bak doc/source/*/*bak
-else
-	@$(ECHO) Setting docs to not stable $(VERSION)
-	@$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/;\
-     s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
-     doc/source/*sgml doc/source/*/*sgml
-	$(RM) -r doc/source/*bak doc/source/*/*bak
-endif
+	@if [ $(CODE_STATUS) = "stable" ]; then \
+		$(ECHO) Setting docs to stable $(VERSION); \
+		$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
+			s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
+		doc/source/*sgml doc/source/*/*sgml; \
+		$(RM) -r doc/source/*bak doc/source/*/*bak; \
+	else \
+		$(ECHO) Setting docs to not stable $(VERSION); \
+		$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/; \
+			s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
+		doc/source/*sgml doc/source/*/*sgml; \
+		$(RM) -r doc/source/*bak doc/source/*/*bak; \
+	fi;
 
 # Create release announcement in text and html, with short and long versions.
 # This is a standalone target, and must be invoked directly.
