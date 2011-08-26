@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.197 2011/08/17 10:30:11 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.198 2011/08/26 16:11:59 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -551,14 +551,13 @@ dok-release:
 		$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "INCLUDE">/;\
 			s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "IGNORE">/' \
 		doc/source/*sgml doc/source/*/*sgml; \
-		$(RM) -r doc/source/*bak doc/source/*/*bak; \
 	else \
 		$(ECHO) Setting docs to not stable $(VERSION); \
 		$(PERL) -pi.bak -e 's/<!entity +% +p-stable.*>/<!entity % p-stable "IGNORE">/; \
 			s/<!entity +% +p-not-stable.*>/<!entity % p-not-stable "INCLUDE">/' \
 		doc/source/*sgml doc/source/*/*sgml; \
-		$(RM) -r doc/source/*bak doc/source/*/*bak; \
 	fi;
+	$(RM) -r doc/source/*bak doc/source/*/*bak;
 
 # Create release announcement in text and html, with short and long versions.
 # This is a standalone target, and must be invoked directly.
