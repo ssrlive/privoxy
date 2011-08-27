@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.362 2011/07/17 13:38:05 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.363 2011/08/22 18:58:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -208,31 +208,31 @@ static int received_hup_signal = 0;
 
 /* HTTP snipplets. */
 static const char CSUCCEED[] =
-   "HTTP/1.0 200 Connection established\r\n"
+   "HTTP/1.1 200 Connection established\r\n"
    "Proxy-Agent: Privoxy/" VERSION "\r\n\r\n";
 
 static const char CHEADER[] =
-   "HTTP/1.0 400 Invalid header received from client\r\n"
+   "HTTP/1.1 400 Invalid header received from client\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid header received from client.\r\n";
 
 static const char FTP_RESPONSE[] =
-   "HTTP/1.0 400 Invalid request received from client\r\n"
+   "HTTP/1.1 400 Invalid request received from client\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid request. Privoxy doesn't support FTP.\r\n";
 
 static const char GOPHER_RESPONSE[] =
-   "HTTP/1.0 400 Invalid request received from client\r\n"
+   "HTTP/1.1 400 Invalid request received from client\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid request. Privoxy doesn't support gopher.\r\n";
 
 /* XXX: should be a template */
 static const char MISSING_DESTINATION_RESPONSE[] =
-   "HTTP/1.0 400 Bad request received from client\r\n"
+   "HTTP/1.1 400 Bad request received from client\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
@@ -240,7 +240,7 @@ static const char MISSING_DESTINATION_RESPONSE[] =
 
 /* XXX: should be a template */
 static const char INVALID_SERVER_HEADERS_RESPONSE[] =
-   "HTTP/1.0 502 Server or forwarder response invalid\r\n"
+   "HTTP/1.1 502 Server or forwarder response invalid\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
@@ -248,21 +248,21 @@ static const char INVALID_SERVER_HEADERS_RESPONSE[] =
 
 /* XXX: should be a template */
 static const char MESSED_UP_REQUEST_RESPONSE[] =
-   "HTTP/1.0 400 Malformed request after rewriting\r\n"
+   "HTTP/1.1 400 Malformed request after rewriting\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Messed up with header filters.\r\n";
 
 static const char TOO_MANY_CONNECTIONS_RESPONSE[] =
-   "HTTP/1.0 503 Too many open connections\r\n"
+   "HTTP/1.1 503 Too many open connections\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Maximum number of open connections reached.\r\n";
 
 static const char CLIENT_CONNECTION_TIMEOUT_RESPONSE[] =
-   "HTTP/1.0 504 Connection timeout\r\n"
+   "HTTP/1.1 504 Connection timeout\r\n"
    "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
