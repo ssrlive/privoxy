@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.198 2011/08/26 16:11:59 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.199 2011/08/26 16:12:34 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2010 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -142,6 +142,7 @@ PERL       = perl
 DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
+TIDY       = tidy -modify -indent -clean -wrap 78
 
 # Program to do LF->CRLF
 #
@@ -656,6 +657,22 @@ dok-get:
 	cd /tmp ;\
 	$(WGET) http://www.privoxy.org/docs/$(DOC_FILE) ;\
 	$(TAR) -zxvf $(DOC_FILE)
+
+#############################################################################
+#
+# Try to clean up the generated HTML files.
+#
+# The files are a such a mess that some of them require two tidy runs
+# in row as the first abort prematurely. The vanilla tidy output renders
+# poorly as it contains a bit too much white-space, so we additionally run
+# the files through perl to fix this again.
+#
+#############################################################################
+dok-tidy:
+	for html_file in `find doc/webserver -name "*.html"`; do \
+		$(TIDY) $$html_file || $(TIDY) $$html_file; \
+		$(PERL) -i\'\' -e 's@^\s*<br>\s*$$@@; s@ +$$@@;' -n -p $$html_file; \
+	done
 
 
 #############################################################################
