@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.224 2011/06/23 14:01:01 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.225 2011/07/08 13:30:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2260,7 +2260,7 @@ static jb_err server_adjust_content_encoding(struct client_state *csp, char **he
       /*
        * We successfully decompressed the content,
        * and have to clean the header now, so the
-       * client no longer expects compressed data..
+       * client no longer expects compressed data.
        *
        * XXX: There is a difference between cleaning
        * and removing it completely.
