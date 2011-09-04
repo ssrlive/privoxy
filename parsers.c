@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.229 2011/09/04 11:31:45 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.230 2011/09/04 11:32:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4008,13 +4008,18 @@ int strclean(char *string, const char *substring)
 static jb_err parse_header_time(const char *header_time, time_t *result)
 {
    struct tm gmt;
+   /*
+    * Checking for two-digit years first in an
+    * attempt to work around GNU libc's strptime()
+    * reporting negative year values when using %Y.
+    */
    static const char *time_formats[] = {
+      /* Tue, 02-Jun-37 20:00:00 */
+      "%a, %d-%b-%y %H:%M:%S",
       /* Tue, 02 Jun 2037 20:00:00 */
       "%a, %d %b %Y %H:%M:%S",
       /* Tue, 02-Jun-2037 20:00:00 */
       "%a, %d-%b-%Y %H:%M:%S",
-      /* Tue, 02-Jun-37 20:00:00 */
-      "%a, %d-%b-%y %H:%M:%S",
       /* Tuesday, 02-Jun-2037 20:00:00 */
       "%A, %d-%b-%Y %H:%M:%S",
       /* Tuesday Jun 02 20:00:00 2037 */
