@@ -12,7 +12,7 @@
 #                Original Author: Copyright (C) 2001 Jonathan Foster
 #                http://www.jon-foster.co.uk/
 #
-#                This program is free software; you can redistribute it 
+#                This program is free software; you can redistribute it
 #                and/or modify it under the terms of the GNU General
 #                Public License as published by the Free Software
 #                Foundation; either version 2 of the License, or (at
@@ -32,33 +32,6 @@
 #
 ##############################################################################
 #
-# Browser support for the JavaScript on this page:
-#   MS Internet Explorer 5.5 - Tested,   Yes
-#   Netscape 6.0             - Tested,   Yes
-#   Netscape 4.75            - Tested,   NO
-#   Opera 5.12               - Tested,   NO
-#   MS Internet Explorer 4+  - Untested, Yes
-#   MS IE 3.x, NS3.x         - Untested, NO
-#   Mozilla >=0.6            - Untested, Yes
-#
-# All browsers should work, you just might not get the pretty DHTML effects.
-#
-# The effects that only work under the browsers marked "Yes" above are:
-#  - Text edit boxes that won't have any effect are disabled.
-#  - Table rows containing additional settings are hidden if the feature in
-#    question is disabled.
-#
-# There are major kludges to get around these problems with NS4, but they
-# screw up the HTML too much for other browsers.  If anyone wants to try,
-# here's some descriptions of the kludges:
-#    http://www.webreference.com/js/tips/991114.html
-#    http://www.webreference.com/dhtml/column12/outDisplay.html
-#
-# If you're favorite browser isn't listed, please test and add it.
-#
-#
-#############################################################################
-#
 # Standard support:
 #
 # This file currently produces valid HTML 4.01 Strict.
@@ -66,7 +39,7 @@
 # If you change it, please save the generated page from your web browser
 # and then upload it to http://validator.w3.org/ for checking.
 #
-#############################################################################
+##############################################################################
 #
 # Available variables include:
 #
@@ -89,7 +62,7 @@
 # image-blocker-param-custom
 #
 #
-#############################################################################
+##############################################################################
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
