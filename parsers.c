@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.231 2011/09/04 11:33:06 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.232 2011/09/04 11:33:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4013,7 +4013,7 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
     * attempt to work around GNU libc's strptime()
     * reporting negative year values when using %Y.
     */
-   static const char *time_formats[] = {
+   static const char * const time_formats[] = {
       /* Tue, 02-Jun-37 20:00:00 */
       "%a, %d-%b-%y %H:%M:%S",
       /* Tue, 02 Jun 2037 20:00:00 */
