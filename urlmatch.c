@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.61 2011/05/22 10:25:26 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.62 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -411,7 +411,7 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
  *********************************************************************/
 static int unknown_method(const char *method)
 {
-   static const char *known_http_methods[] = {
+   static const char * const known_http_methods[] = {
       /* Basic HTTP request type */
       "GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT",
       /* webDAV extensions (RFC2518) */
