@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.226 2011/08/31 13:35:21 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.227 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4011,11 +4011,7 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
 
    /*
     * Zero out gmt to prevent time zone offsets.
-    *
-    * While this is only necessary on some platforms
-    * (mingw32 for example), I don't know how to
-    * detect these automatically and doing it everywhere
-    * shouldn't hurt.
+    * Documented to be required for GNU libc.
     */
    memset(&gmt, 0, sizeof(gmt));
 
