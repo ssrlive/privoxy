@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.227 2011/09/04 11:10:56 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.228 2011/09/04 11:31:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4008,6 +4008,19 @@ int strclean(char *string, const char *substring)
 static jb_err parse_header_time(const char *header_time, time_t *result)
 {
    struct tm gmt;
+   static const char *time_formats[] = {
+      /* Tue, 02 Jun 2037 20:00:00 */
+      "%a, %d %b %Y %H:%M:%S",
+      /* Tue, 02-Jun-2037 20:00:00 */
+      "%a, %d-%b-%Y %H:%M:%S",
+      /* Tue, 02-Jun-37 20:00:00 */
+      "%a, %d-%b-%y %H:%M:%S",
+      /* Tuesday, 02-Jun-2037 20:00:00 */
+      "%A, %d-%b-%Y %H:%M:%S",
+      /* Tuesday Jun 02 20:00:00 2037 */
+      "%A %b %d %H:%M:%S %Y"
+   };
+   unsigned int i;
 
    /*
     * Zero out gmt to prevent time zone offsets.
@@ -4015,23 +4028,16 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
     */
    memset(&gmt, 0, sizeof(gmt));
 
-                            /* Tue, 02 Jun 2037 20:00:00 */
-   if ((NULL == strptime(header_time, "%a, %d %b %Y %H:%M:%S", &gmt))
-                            /* Tue, 02-Jun-2037 20:00:00 */
-    && (NULL == strptime(header_time, "%a, %d-%b-%Y %H:%M:%S", &gmt))
-                            /* Tue, 02-Jun-37 20:00:00 */
-    && (NULL == strptime(header_time, "%a, %d-%b-%y %H:%M:%S", &gmt))
-                        /* Tuesday, 02-Jun-2037 20:00:00 */
-    && (NULL == strptime(header_time, "%A, %d-%b-%Y %H:%M:%S", &gmt))
-                        /* Tuesday Jun 02 20:00:00 2037 */
-    && (NULL == strptime(header_time, "%A %b %d %H:%M:%S %Y", &gmt)))
+   for (i = 0; i < SZ(time_formats); i++)
    {
-      return JB_ERR_PARSE;
+      if (NULL != strptime(header_time, time_formats[i], &gmt))
+      {
+         *result = timegm(&gmt);
+         return JB_ERR_OK;
+      }
    }
 
-   *result = timegm(&gmt);
-
-   return JB_ERR_OK;
+   return JB_ERR_PARSE;
 
 }
 
