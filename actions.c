@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.70 2011/08/17 10:24:55 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.71 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -434,7 +434,7 @@ jb_err get_action_token(char **line, char **name, char **value)
  *********************************************************************/
 static int action_used_to_be_valid(const char *action)
 {
-   static const char *formerly_valid_actions[] = {
+   static const char * const formerly_valid_actions[] = {
       "inspect-jpegs",
       "kill-popups",
       "send-vanilla-wafer",
