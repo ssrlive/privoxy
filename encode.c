@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.18 2011/09/04 11:10:56 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.19 2011/09/04 11:35:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -76,7 +76,7 @@ static const char * const url_code_map[256] = {
    "%FA", "%FB", "%FC", "%FD", "%FE", "%FF"
 };
 
-/* Maps special characters in HTML to their equivalent entites. */
+/* Maps special characters in HTML to their equivalent entities. */
 static const char * const html_code_map[256] = {
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
