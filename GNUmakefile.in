@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.200 2011/08/31 13:36:15 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.201 2011/08/31 13:36:35 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2011 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -607,7 +607,7 @@ config-file-alt:
 # moves dokumentation to webserver
 #
 #############################################################################
-webserver: tidy
+webserver: clean-editor-files
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) You will need to "create" a SF shell first:
 	@$(ECHO)    ssh -t SF-USER-ID,ijbswa@shell.sourceforge.net create
@@ -632,7 +632,7 @@ webserver: tidy
 	@$(SSH) shell.sourceforge.net 'chmod -R 775 /home/groups/i/ij/ijbswa/htdocs 2>/dev/null; true'
 	@$(SSH) shell.sourceforge.net 'find /home/groups/i/ij/ijbswa/htdocs/ -type f | xargs chmod 664 2>/dev/null; true'
 
-web-actions: tidy
+web-actions: clean-editor-files
 	@$(ECHO) Uploading 
 	@cd doc/webserver/actions; \
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
@@ -746,12 +746,12 @@ clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action \
 		`find . -name TAGS -o -name tags | $(GREP) -v .git` config.base config.tmp
 
-tidy:
+clean-editor-files:
 	$(RM) `find . -name "*~"`
 	$(RM) `find . -name "#*#"` # Emacs backup files
 	$(RM) `find . -name ".\#*"`
 
-clobber: tidy
+clobber: clean-editor-files
 	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile \
               privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl config.new
 	$(RM) -r autom4te.cache
