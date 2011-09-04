@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.84 2011/07/30 15:12:55 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.85 2011/07/30 15:13:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -142,12 +142,12 @@ unsigned int sweep(void)
           */
          csp->config->config_file_list->active = 1;
 
-         /* 
+         /*
           * Actions files
           */
          for (i = 0; i < MAX_AF_FILES; i++)
          {
-            if (csp->actions_list[i])     
+            if (csp->actions_list[i])
             {
                csp->actions_list[i]->active = 1;
             }
@@ -158,7 +158,7 @@ unsigned int sweep(void)
           */
          for (i = 0; i < MAX_AF_FILES; i++)
          {
-            if (csp->rlist[i])     
+            if (csp->rlist[i])
             {
                csp->rlist[i]->active = 1;
             }
@@ -179,7 +179,7 @@ unsigned int sweep(void)
          last_active = client_list;
          client_list = client_list->next;
       }
-      else 
+      else
       /*
        * This client is not active. Free its resources.
        */
@@ -211,7 +211,7 @@ unsigned int sweep(void)
 #endif /* def FEATURE_STATISTICS */
 
          freez(client_list);
-         
+
          client_list = last_active->next;
       }
    }
@@ -931,7 +931,7 @@ int load_trustfile(struct client_state *csp)
       freez(buf);
    }
 
-   if(trusted_referrers >= MAX_TRUSTED_REFERRERS) 
+   if(trusted_referrers >= MAX_TRUSTED_REFERRERS)
    {
       /*
        * FIXME: ... after Privoxy 3.0.4 is out.
@@ -1006,7 +1006,7 @@ static void unload_re_filterfile(void *f)
  *
  * Function    :  unload_forward_spec
  *
- * Description :  Unload the forward spec settings by freeing all 
+ * Description :  Unload the forward spec settings by freeing all
  *                memory referenced by members and the memory for
  *                the spec itself.
  *
@@ -1060,7 +1060,7 @@ void unload_current_re_filterfile(void)
  *
  * Function    :  load_re_filterfiles
  *
- * Description :  Loads all the filterfiles. 
+ * Description :  Loads all the filterfiles.
  *                Generate a chained list of re_filterfile_spec's from
  *                the "FILTER: " blocks, compiling all their substitutions
  *                into chained lists of pcrs_job structs.
@@ -1101,7 +1101,7 @@ int load_re_filterfiles(struct client_state *csp)
  *
  * Function    :  load_one_re_filterfile
  *
- * Description :  Load a re_filterfile. 
+ * Description :  Load a re_filterfile.
  *                Generate a chained list of re_filterfile_spec's from
  *                the "FILTER: " blocks, compiling all their substitutions
  *                into chained lists of pcrs_job structs.
@@ -1137,7 +1137,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
       goto load_re_filterfile_error;
    }
 
-   /* 
+   /*
     * Open the file or fail
     */
    if ((fp = fopen(csp->config->re_filterfile[fileid], "r")) == NULL)
@@ -1147,7 +1147,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
 
    log_error(LOG_LEVEL_INFO, "Loading filter file: %s", csp->config->re_filterfile[fileid]);
 
-   /* 
+   /*
     * Read line by line
     */
    while (read_config_line(fp, &linenum, &buf) != NULL)
@@ -1215,7 +1215,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          }
 
          new_bl->name = strdup(chomp(new_bl->name));
-         
+
          /*
           * If this is the first filter block, chain it
           * to the file_list rather than its (nonexistant)
@@ -1238,9 +1238,9 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          continue;
       }
 
-      /* 
+      /*
        * Else, save the expression, make it a pcrs_job
-       * and chain it into the current filter's joblist 
+       * and chain it into the current filter's joblist
        */
       if (bl != NULL)
       {
@@ -1267,7 +1267,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
             log_error(LOG_LEVEL_RE_FILTER,
                "Adding dynamic re_filter job \'%s\' to filter %s succeeded.", buf, bl->name);
             freez(buf);
-            continue;             
+            continue;
          }
          else if (bl->dynamic)
          {
@@ -1313,7 +1313,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
 
    fclose(fp);
 
-   /* 
+   /*
     * Schedule the now-obsolete old data for unloading
     */
    if ( NULL != current_re_filterfile[fileid] )

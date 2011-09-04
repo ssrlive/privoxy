@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.142 2011/08/17 10:25:43 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.143 2011/08/17 10:26:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -7,18 +7,18 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.142 2011/08/17 10:25:43 fabiankeil Exp $"
  *                html or gif answers, and to compose HTTP resonses.
  *                This only contains the framework functions, the
  *                actual handler functions are declared elsewhere.
- *                
+ *
  *                Functions declared include:
- * 
+ *
  *
  * Copyright   :  Written by and Copyright (C) 2001-2004, 2006-2008
  *                the SourceForge Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -85,126 +85,126 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          "Privoxy main page",
          TRUE },
 #ifdef FEATURE_GRACEFUL_TERMINATION
-   { "die", 
-         cgi_die,  
+   { "die",
+         cgi_die,
          "<b>Shut down</b> - <em class=\"warning\">Do not deploy this build in a production environment, "
         "this is a one click Denial Of Service attack!!!</em>",
-         FALSE }, 
+         FALSE },
 #endif
-   { "show-status", 
-         cgi_show_status,  
+   { "show-status",
+         cgi_show_status,
 #ifdef FEATURE_CGI_EDIT_ACTIONS
         "View &amp; change the current configuration",
 #else
         "View the current configuration",
 #endif
-         TRUE }, 
-   { "show-version", 
-         cgi_show_version,  
+         TRUE },
+   { "show-version",
+         cgi_show_version,
          "View the source code version numbers",
-          TRUE }, 
-   { "show-request", 
-         cgi_show_request,  
+          TRUE },
+   { "show-request",
+         cgi_show_request,
          "View the request headers",
-         TRUE }, 
+         TRUE },
    { "show-url-info",
-         cgi_show_url_info, 
+         cgi_show_url_info,
          "Look up which actions apply to a URL and why",
          TRUE },
 #ifdef FEATURE_TOGGLE
    { "toggle",
-         cgi_toggle, 
+         cgi_toggle,
          "Toggle Privoxy on or off",
          FALSE },
 #endif /* def FEATURE_TOGGLE */
 #ifdef FEATURE_CGI_EDIT_ACTIONS
    { "edit-actions", /* Edit the actions list */
-         cgi_edit_actions, 
+         cgi_edit_actions,
          NULL, FALSE },
    { "eaa", /* Shortcut for edit-actions-add-url-form */
-         cgi_edit_actions_add_url_form, 
+         cgi_edit_actions_add_url_form,
          NULL, FALSE },
    { "eau", /* Shortcut for edit-actions-url-form */
-         cgi_edit_actions_url_form, 
+         cgi_edit_actions_url_form,
          NULL, FALSE },
    { "ear", /* Shortcut for edit-actions-remove-url-form */
-         cgi_edit_actions_remove_url_form, 
+         cgi_edit_actions_remove_url_form,
          NULL, FALSE },
    { "eal", /* Shortcut for edit-actions-list */
-         cgi_edit_actions_list, 
+         cgi_edit_actions_list,
          NULL, FALSE },
    { "eafu", /* Shortcut for edit-actions-for-url */
-         cgi_edit_actions_for_url, 
+         cgi_edit_actions_for_url,
          NULL, FALSE },
    { "eas", /* Shortcut for edit-actions-submit */
-         cgi_edit_actions_submit, 
+         cgi_edit_actions_submit,
          NULL, FALSE },
    { "easa", /* Shortcut for edit-actions-section-add */
-         cgi_edit_actions_section_add, 
+         cgi_edit_actions_section_add,
          NULL, FALSE  },
    { "easr", /* Shortcut for edit-actions-section-remove */
-         cgi_edit_actions_section_remove, 
+         cgi_edit_actions_section_remove,
          NULL, FALSE  },
    { "eass", /* Shortcut for edit-actions-section-swap */
-         cgi_edit_actions_section_swap, 
+         cgi_edit_actions_section_swap,
          NULL, FALSE  },
    { "edit-actions-for-url",
-         cgi_edit_actions_for_url, 
+         cgi_edit_actions_for_url,
          NULL, FALSE  /* Edit the actions for (a) specified URL(s) */ },
    { "edit-actions-list",
-         cgi_edit_actions_list, 
+         cgi_edit_actions_list,
          NULL, TRUE /* Edit the actions list */ },
    { "edit-actions-submit",
-         cgi_edit_actions_submit, 
+         cgi_edit_actions_submit,
          NULL, FALSE /* Change the actions for (a) specified URL(s) */ },
    { "edit-actions-url",
-         cgi_edit_actions_url, 
+         cgi_edit_actions_url,
          NULL, FALSE /* Change a URL pattern in the actionsfile */ },
    { "edit-actions-url-form",
-         cgi_edit_actions_url_form, 
+         cgi_edit_actions_url_form,
          NULL, FALSE /* Form to change a URL pattern in the actionsfile */ },
    { "edit-actions-add-url",
-         cgi_edit_actions_add_url, 
+         cgi_edit_actions_add_url,
          NULL, FALSE /* Add a URL pattern to the actionsfile */ },
    { "edit-actions-add-url-form",
-         cgi_edit_actions_add_url_form, 
+         cgi_edit_actions_add_url_form,
          NULL, FALSE /* Form to add a URL pattern to the actionsfile */ },
    { "edit-actions-remove-url",
-         cgi_edit_actions_remove_url, 
+         cgi_edit_actions_remove_url,
          NULL, FALSE /* Remove a URL pattern from the actionsfile */ },
    { "edit-actions-remove-url-form",
-         cgi_edit_actions_remove_url_form, 
+         cgi_edit_actions_remove_url_form,
          NULL, FALSE /* Form to remove a URL pattern from the actionsfile */ },
    { "edit-actions-section-add",
-         cgi_edit_actions_section_add, 
+         cgi_edit_actions_section_add,
          NULL, FALSE /* Remove a section from the actionsfile */ },
    { "edit-actions-section-remove",
-         cgi_edit_actions_section_remove, 
+         cgi_edit_actions_section_remove,
          NULL, FALSE /* Remove a section from the actionsfile */ },
    { "edit-actions-section-swap",
-         cgi_edit_actions_section_swap, 
+         cgi_edit_actions_section_swap,
          NULL, FALSE /* Swap two sections in the actionsfile */ },
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
-   { "error-favicon.ico", 
-         cgi_send_error_favicon,  
+   { "error-favicon.ico",
+         cgi_send_error_favicon,
          NULL, TRUE /* Sends the favicon image for error pages. */ },
-   { "favicon.ico", 
-         cgi_send_default_favicon,  
+   { "favicon.ico",
+         cgi_send_default_favicon,
          NULL, TRUE /* Sends the default favicon image. */ },
-   { "robots.txt", 
-         cgi_robots_txt,  
-         NULL, TRUE /* Sends a robots.txt file to tell robots to go away. */ }, 
+   { "robots.txt",
+         cgi_robots_txt,
+         NULL, TRUE /* Sends a robots.txt file to tell robots to go away. */ },
    { "send-banner",
-         cgi_send_banner, 
+         cgi_send_banner,
          NULL, TRUE /* Send a built-in image */ },
    { "send-stylesheet",
-         cgi_send_stylesheet, 
+         cgi_send_stylesheet,
          NULL, FALSE /* Send templates/cgi-style.css */ },
    { "t",
-         cgi_transparent_image, 
+         cgi_transparent_image,
          NULL, TRUE /* Send a transparent image (short name) */ },
    { "url-info-osd.xml",
-         cgi_send_url_info_osd, 
+         cgi_send_url_info_osd,
          NULL, TRUE /* Send templates/url-info-osd.xml */ },
    { "user-manual",
           cgi_send_user_manual,
@@ -287,7 +287,7 @@ static struct map *parse_cgi_parameters(char *argstring);
 
 
 /*********************************************************************
- * 
+ *
  * Function    :  dispatch_cgi
  *
  * Description :  Checks if a request URL has either the magical
@@ -349,7 +349,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
       return NULL;
    }
 
-   /* 
+   /*
     * This is a CGI call.
     */
 
@@ -394,7 +394,7 @@ static char *grep_cgi_referrer(const struct client_state *csp)
 
 
 /*********************************************************************
- * 
+ *
  * Function    :  referrer_is_safe
  *
  * Description :  Decides whether we trust the Referer for
@@ -442,7 +442,7 @@ static int referrer_is_safe(const struct client_state *csp)
 }
 
 /*********************************************************************
- * 
+ *
  * Function    :  dispatch_known_cgi
  *
  * Description :  Processes a CGI once dispatch_cgi has determined that
@@ -480,7 +480,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
    {
       query_args_start++;
    }
-   if (*query_args_start == '/') 
+   if (*query_args_start == '/')
    {
       *query_args_start++ = '\0';
       if ((param_list = new_map()))
@@ -515,7 +515,7 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
       return cgi_error_memory();
    }
 
-   /* 
+   /*
     * Find and start the right CGI function
     */
    d = cgi_dispatchers;
@@ -579,8 +579,8 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
       d++;
    }
 }
-   
-        
+
+
 /*********************************************************************
  *
  * Function    :  parse_cgi_parameters
@@ -606,7 +606,7 @@ static struct map *parse_cgi_parameters(char *argstring)
       return NULL;
    }
 
-   /* 
+   /*
     * IE 5 does, of course, violate RFC 2316 Sect 4.1 and sends
     * the fragment identifier along with the request, so we must
     * cut it off here, so it won't pollute the CGI params:
@@ -775,7 +775,7 @@ jb_err get_number_param(struct client_state *csp,
    assert(name);
    assert(pvalue);
 
-   *pvalue = 0; 
+   *pvalue = 0;
 
    param = lookup(parameters, name);
    if (!*param)
@@ -867,7 +867,7 @@ struct http_response *error_response(struct client_state *csp,
    if (!err) err = map(exports, "host", 1, html_encode(csp->http->host), 0);
    if (!err) err = map(exports, "hostport", 1, html_encode(csp->http->hostport), 0);
    if (!err) err = map(exports, "path", 1, html_encode_and_free_original(path), 0);
-   if (!err) err = map(exports, "protocol", 1, csp->http->ssl ? "https://" : "http://", 1); 
+   if (!err) err = map(exports, "protocol", 1, csp->http->ssl ? "https://" : "http://", 1);
    if (!err)
    {
      err = map(exports, "host-ip", 1, html_encode(csp->http->host_ip_addr_str), 0);
@@ -1098,7 +1098,7 @@ struct http_response *cgi_error_memory(void)
  *
  * Description :  Almost-CGI function that is called if a template
  *                cannot be loaded.  Note this is not a true CGI,
- *                it takes a template name rather than a map of 
+ *                it takes a template name rather than a map of
  *                parameters.
  *
  * Parameters  :
@@ -1108,7 +1108,7 @@ struct http_response *cgi_error_memory(void)
  *                                be loaded.
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err cgi_error_no_template(const struct client_state *csp,
@@ -1195,7 +1195,7 @@ jb_err cgi_error_no_template(const struct client_state *csp,
  *          3  :  error_to_report = Error code to report.
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err cgi_error_unknown(const struct client_state *csp,
@@ -1259,7 +1259,7 @@ jb_err cgi_error_unknown(const struct client_state *csp,
  *
  * Description :  CGI function that is called if the parameters
  *                (query string) for a CGI were wrong.
- *               
+ *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  rsp = http_response data structure for output
@@ -1267,7 +1267,7 @@ jb_err cgi_error_unknown(const struct client_state *csp,
  * CGI Parameters : none
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err cgi_error_bad_param(const struct client_state *csp,
@@ -1289,7 +1289,7 @@ jb_err cgi_error_bad_param(const struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_redirect 
+ * Function    :  cgi_redirect
  *
  * Description :  CGI support function to generate a HTTP redirect
  *                message
@@ -1301,7 +1301,7 @@ jb_err cgi_error_bad_param(const struct client_state *csp,
  * CGI Parameters : None
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err cgi_redirect (struct http_response * rsp, const char *target)
@@ -1336,8 +1336,8 @@ jb_err cgi_redirect (struct http_response * rsp, const char *target)
  *                FIXME: I currently only work for actions, and would
  *                       like to be generalized for other topics.
  *
- * Parameters  :  
- *          1  :  item = item (will NOT be free()d.) 
+ * Parameters  :
+ *          1  :  item = item (will NOT be free()d.)
  *                       It is assumed to be HTML-safe.
  *          2  :  config = The current configuration.
  *
@@ -1382,7 +1382,7 @@ char *add_help_link(const char *item,
  *                HTTP header - e.g.:
  *                "Sun, 06 Nov 1994 08:49:37 GMT"
  *
- * Parameters  :  
+ * Parameters  :
  *          1  :  time_offset = Time returned will be current time
  *                              plus this number of seconds.
  *          2  :  buf = Destination for result.
@@ -1571,7 +1571,7 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       return rsp;
    }
 
-   /* 
+   /*
     * Fill in the HTTP Status, using HTTP/1.1
     * unless the client asked for HTTP/1.0.
     */
@@ -1580,7 +1580,7 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       rsp->status ? rsp->status : "200 OK");
    err = enlist_first(rsp->headers, buf);
 
-   /* 
+   /*
     * Set the Content-Length
     */
    if (rsp->content_length == 0)
@@ -1646,7 +1646,7 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
     * Last-Modified: set to date/time the page was last changed.
     * Expires: set to date/time page next needs reloading.
     * Cache-Control: set to "no-cache" if applicable.
-    * 
+    *
     * See http://www.w3.org/Protocols/rfc2068/rfc2068
     */
    if (rsp->is_static)
@@ -1722,7 +1722,7 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       err = enlist_unique_header(rsp->headers, "Connection", "close");
    }
 
-   /* 
+   /*
     * Write the head
     */
    if (err || (NULL == (rsp->head = list_to_text(rsp->headers))))
@@ -1802,11 +1802,11 @@ void free_http_response(struct http_response *rsp)
  *                            following an #include statament
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *                JB_ERR_FILE if the template file cannot be read
  *
  *********************************************************************/
-jb_err template_load(const struct client_state *csp, char **template_ptr, 
+jb_err template_load(const struct client_state *csp, char **template_ptr,
                      const char *templatename, int recursive)
 {
    jb_err err;
@@ -1888,7 +1888,7 @@ jb_err template_load(const struct client_state *csp, char **template_ptr,
    }
    free(full_path);
 
-   /* 
+   /*
     * Read the file, ignoring comments, and honoring #include
     * statements, unless we're already called recursively.
     *
@@ -1976,7 +1976,7 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
    file_buffer = *template_ptr;
    size = strlen(file_buffer) + 1;
 
-   /* 
+   /*
     * Assemble pcrs joblist from exports map
     */
    for (m = exports->first; m != NULL; m = m->next)
@@ -1994,7 +1994,7 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
       else
       {
          /*
-          * Treat the "replace with" text as a literal string - 
+          * Treat the "replace with" text as a literal string -
           * no quoting needed, no backreferences allowed.
           * ("Trivial" ['T'] flag).
           */
@@ -2008,7 +2008,7 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
 
       /* Make and run job. */
       job = pcrs_compile(buf, m->value, flags,  &error);
-      if (job == NULL) 
+      if (job == NULL)
       {
          if (error == PCRS_ERR_NOMEM)
          {
@@ -2035,10 +2035,10 @@ jb_err template_fill(char **template_ptr, const struct map *exports)
 
          if (error < 0)
          {
-            /* 
+            /*
              * Substitution failed, keep the original buffer,
              * log the problem and ignore it.
-             * 
+             *
              * The user might see some unresolved @CGI_VARIABLES@,
              * but returning a special CGI error page seems unreasonable
              * and could mask more important error messages.
@@ -2090,7 +2090,7 @@ jb_err template_fill_for_cgi(const struct client_state *csp,
                              struct http_response *rsp)
 {
    jb_err err;
-   
+
    assert(csp);
    assert(templatename);
    assert(exports);
@@ -2237,12 +2237,12 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
  *                "if-<name>-start.*if-<name>-end" to the given
  *                export list.
  *
- * Parameters  :  
+ * Parameters  :
  *          1  :  exports = map to extend
  *          2  :  name = name of conditional block
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err map_block_killer(struct map *exports, const char *name)
@@ -2266,12 +2266,12 @@ jb_err map_block_killer(struct map *exports, const char *name)
  *                by map-block-killer, to save a few bytes.
  *                i.e. removes "@if-<name>-start@" and "@if-<name>-end@"
  *
- * Parameters  :  
+ * Parameters  :
  *          1  :  exports = map to extend
  *          2  :  name = name of conditional block
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err map_block_keep(struct map *exports, const char *name)
@@ -2312,13 +2312,13 @@ jb_err map_block_keep(struct map *exports, const char *name)
  *                The control structure and one of the alternatives
  *                will be hidden.
  *
- * Parameters  :  
+ * Parameters  :
  *          1  :  exports = map to extend
  *          2  :  name = name of conditional block
  *          3  :  choose_first = nonzero for first, zero for second.
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.  
+ *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err map_conditional(struct map *exports, const char *name, int choose_first)
@@ -2350,7 +2350,7 @@ jb_err map_conditional(struct map *exports, const char *name, int choose_first)
  *
  * Function    :  make_menu
  *
- * Description :  Returns an HTML-formatted menu of the available 
+ * Description :  Returns an HTML-formatted menu of the available
  *                unhidden CGIs, excluding the one given in <self>
  *                and the toggle CGI if toggling is disabled.
  *
@@ -2358,7 +2358,7 @@ jb_err map_conditional(struct map *exports, const char *name, int choose_first)
  *          1  :  self = name of CGI to leave out, can be NULL for
  *                complete listing.
  *          2  :  feature_flags = feature bitmap from csp->config
- *                
+ *
  *
  * Returns     :  menu string, or NULL on out-of-memory error.
  *
@@ -2399,7 +2399,7 @@ char *make_menu(const char *self, const unsigned feature_flags)
          html_encoded_prefix = html_encode(CGI_PREFIX);
          if (html_encoded_prefix == NULL)
          {
-            return NULL;  
+            return NULL;
          }
          else
          {

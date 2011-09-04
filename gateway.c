@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.74 2011/07/17 13:31:35 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.75 2011/07/30 15:05:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -68,7 +68,7 @@ const char gateway_rcs[] = "$Id: gateway.c,v 1.74 2011/07/17 13:31:35 fabiankeil
 #include "miscutil.h"
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 #ifdef HAVE_POLL
-#ifdef __GLIBC__ 
+#ifdef __GLIBC__
 #include <sys/poll.h>
 #else
 #include <poll.h>
@@ -728,7 +728,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    if (err)
    {
       log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
-      csp->error_message = strdup(errstr); 
+      csp->error_message = strdup(errstr);
       errno = EINVAL;
       return(JB_INVALID_SOCKET);
    }
@@ -843,7 +843,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    if (err)
    {
-      csp->error_message = strdup(errstr);      
+      csp->error_message = strdup(errstr);
       return(JB_INVALID_SOCKET);
    }
 

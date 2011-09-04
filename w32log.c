@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.38 2010/08/14 23:28:52 ler762 Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.39 2011/05/27 11:34:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -12,7 +12,7 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.38 2010/08/14 23:28:52 ler762 Exp $
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -598,13 +598,13 @@ void LogClipBuffer(void)
       range.cpMin = SendMessage (g_hwndLogBox, WM_GETTEXTLENGTH, 0, 0);
       range.cpMax = -1;
       SendMessage(g_hwndLogBox, EM_EXSETSEL, 0, (LPARAM) &range);
- 
+
       /* restore vertical ScrollBar stuff (messed up by AUTOVSCROLL) */
       SendMessage (g_hwndLogBox, EM_SCROLL, SB_LINEDOWN, 0);
- 
+
    }
 
-}                                        
+}
 
 
 /*********************************************************************
@@ -806,7 +806,7 @@ void ShowLogWindow(BOOL bShow)
    {
       SetForegroundWindow(g_hwndLogFrame);
       SetWindowPos(g_hwndLogFrame, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE);
-      
+
    }
    else if (g_bShowOnTaskBar)
    {

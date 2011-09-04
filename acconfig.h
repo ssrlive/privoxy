@@ -5,7 +5,7 @@
  * File        :  $Source: /cvsroot/ijbswa/current/acconfig.h,v $
  *
  * Purpose     :  This file should be the first thing included in every
- *                .c file.  (Before even system headers).  It contains 
+ *                .c file.  (Before even system headers).  It contains
  *                #define statements for various features.  It was
  *                introduced because the compile command line started
  *                getting ludicrously long with feature defines.
@@ -14,10 +14,10 @@
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -64,7 +64,7 @@
  */
 #undef CODE_STATUS
 
-/* 
+/*
  * Should pcre be statically built in instead of linkling with libpcre?
  * (This is determined by configure depending on the availiability of
  * libpcre and user preferences). The name is ugly, but pcre needs it.
@@ -72,7 +72,7 @@
  */
 #undef STATIC_PCRE
 
-/* 
+/*
  * Should pcrs be statically built in instead of linkling with libpcrs?
  * (This is determined by configure depending on the availiability of
  * libpcrs and user preferences).
@@ -138,12 +138,12 @@
  *
  * And no, I haven't got that backwards - IE is being weird.
  *
- * Known limitations: 
+ * Known limitations:
  * 1) If you press shift-reload on a blocked HTML page, you get
  *    the image "blocked" page, not the HTML "blocked" page.
- * 2) Once an image "blocked" page has been sent, viewing it 
+ * 2) Once an image "blocked" page has been sent, viewing it
  *    in it's own browser window *should* bring up the HTML
- *    "blocked" page, but it doesn't.  You need to clear the 
+ *    "blocked" page, but it doesn't.  You need to clear the
  *    browser cache to get the HTML version again.
  *
  * These limitations are due to IE making inconsistent choices
@@ -237,7 +237,7 @@
 #undef HAVE_GMTIME_R
 #undef HAVE_LOCALTIME_R
 
-/* Define to 'int' if <sys/socket.h> doesn't have it. 
+/* Define to 'int' if <sys/socket.h> doesn't have it.
  */
 #undef socklen_t
 

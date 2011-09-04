@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.19 2009/10/03 10:37:49 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.20 2011/07/30 15:17:35 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -13,10 +13,10 @@
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -45,8 +45,8 @@ struct forward_spec;
 struct http_request;
 struct client_state;
 
-extern jb_socket forwarded_connect(const struct forward_spec * fwd, 
-                                   struct http_request *http, 
+extern jb_socket forwarded_connect(const struct forward_spec * fwd,
+                                   struct http_request *http,
                                    struct client_state *csp);
 
 /*

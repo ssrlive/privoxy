@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.69 2011/05/22 10:21:54 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.70 2011/08/17 10:24:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1223,7 +1223,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                /* too short */
                fclose(fp);
                log_error(LOG_LEVEL_FATAL,
-                  "can't load actions file '%s': invalid line (%lu): %s", 
+                  "can't load actions file '%s': invalid line (%lu): %s",
                   csp->config->actions_file[fileid], linenum, buf);
                return 1; /* never get here */
             }
@@ -1428,7 +1428,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                          csp->config->actions_file[fileid]);
                return 1; /* never get here */
             }
-            
+
             num_fields = ssplit(version_string, ".", fields, SZ(fields), TRUE, FALSE);
 
             if (num_fields < 1 || atoi(fields[0]) == 0)
@@ -1619,7 +1619,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
  *
  * Description :  Converts a actionsfile entry from the internal
  *                structure into a text line.  The output is split
- *                into one line for each action with line continuation. 
+ *                into one line for each action with line continuation.
  *
  * Parameters  :
  *          1  :  action = The action to format.
@@ -1815,7 +1815,7 @@ char * actions_to_html(const struct client_state *csp,
  *                the user manual.
  *
  * Parameters  :
- *          1  :  csp    = Client state (for config) 
+ *          1  :  csp    = Client state (for config)
  *          2  :  action = Current action spec to be converted
  *
  * Returns     :  A string.  Caller must free it.

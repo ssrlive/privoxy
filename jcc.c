@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.363 2011/08/22 18:58:29 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.364 2011/08/27 10:36:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -317,7 +317,7 @@ static const struct cruncher crunchers_light[] = {
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 /*********************************************************************
  *
- * Function    :  sig_handler 
+ * Function    :  sig_handler
  *
  * Description :  Signal handler for different signals.
  *                Exit gracefully on TERM and INT
@@ -327,7 +327,7 @@ static const struct cruncher crunchers_light[] = {
  * Parameters  :
  *          1  :  the_signal = the signal cause this function to call
  *
- * Returns     :  - 
+ * Returns     :  -
  *
  *********************************************************************/
 static void sig_handler(int the_signal)
@@ -350,10 +350,10 @@ static void sig_handler(int the_signal)
 #if defined(unix)
          received_hup_signal = 1;
 #endif
-         break;         
+         break;
 
       default:
-         /* 
+         /*
           * We shouldn't be here, unless we catch signals
           * in main() that we can't handle here!
           */
@@ -565,7 +565,7 @@ static jb_err get_server_headers(struct client_state *csp)
          log_error(LOG_LEVEL_HEADER, "Continue hack in da house.");
          continue_hack_in_da_house = 1;
       }
-      else if (*header == '\0') 
+      else if (*header == '\0')
       {
          /*
           * If the header is empty, but the Continue hack
@@ -723,7 +723,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
       if (cgi_error_memory() != rsp)
       {
          free_http_response(rsp);
-      } 
+      }
       return;
 }
 
@@ -751,7 +751,7 @@ static int crunch_response_triggered(struct client_state *csp, const struct crun
    /*
     * If CGI request crunching is disabled,
     * check the CGI dispatcher out of order to
-    * prevent unintentional blocks or redirects. 
+    * prevent unintentional blocks or redirects.
     */
    if (!(csp->config->feature_flags & RUNTIME_FEATURE_CGI_CRUNCHING)
        && (NULL != (rsp = dispatch_cgi(csp))))
@@ -1339,7 +1339,7 @@ static jb_err receive_client_request(struct client_state *csp)
             destroy_list(headers);
             return JB_ERR_PARSE;
          }
-         
+
          if (add_to_iob(csp, buf, len))
          {
             /*
@@ -1397,7 +1397,7 @@ static jb_err receive_client_request(struct client_state *csp)
       get_url_actions(csp, http);
    }
 
-   /* 
+   /*
     * Save a copy of the original request for logging
     */
    http->ocmd = strdup(http->cmd);
@@ -2149,7 +2149,7 @@ static void chat(struct client_state *csp)
                   hdr = list_to_text(csp->headers);
                   if (hdr == NULL)
                   {
-                     /* 
+                     /*
                       * Memory is too tight to even generate the header.
                       * Send our static "Out-of-memory" page.
                       */
@@ -2206,7 +2206,7 @@ static void chat(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
                rsp = cgi_error_memory();
-               send_crunch_response(csp, rsp);               
+               send_crunch_response(csp, rsp);
                mark_server_socket_tainted(csp);
                return;
             }
@@ -3036,7 +3036,7 @@ int main(int argc, char **argv)
    {
       char cwd[BUFFER_SIZE];
       char *abs_file;
-      size_t abs_file_size; 
+      size_t abs_file_size;
 
       /* make config-filename absolute here */
       if (NULL == getcwd(cwd, sizeof(cwd)))
@@ -3095,7 +3095,7 @@ int main(int argc, char **argv)
 
    for (idx = 0; catched_signals[idx] != 0; idx++)
    {
-#ifdef sun /* FIXME: Is it safe to check for HAVE_SIGSET instead? */ 
+#ifdef sun /* FIXME: Is it safe to check for HAVE_SIGSET instead? */
       if (sigset(catched_signals[idx], sig_handler) == SIG_ERR)
 #else
       if (signal(catched_signals[idx], sig_handler) == SIG_ERR)
@@ -3265,7 +3265,7 @@ int main(int argc, char **argv)
          if (putenv(putenv_dummy) != 0)
          {
             log_error(LOG_LEVEL_FATAL, "Cannot putenv(): HOME");
-         }                
+         }
 
          snprintf(putenv_dummy, sizeof(putenv_dummy), "USER=%s", pw->pw_name);
          if (putenv(putenv_dummy) != 0)
@@ -3286,7 +3286,7 @@ int main(int argc, char **argv)
     */
    if (bRunAsService)
    {
-      /* Yup, so now we must attempt to establish a connection 
+      /* Yup, so now we must attempt to establish a connection
        * with the service dispatcher. This will only work if this
        * process was launched by the service control manager to
        * actually run as a service. If this isn't the case, i've
@@ -3682,7 +3682,7 @@ static void listen_loop(void)
 #if defined(AMIGA) && !defined(SELECTED_ONE_OPTION)
 #define SELECTED_ONE_OPTION
          csp->cfd = ReleaseSocket(csp->cfd, -1);
-         
+
 #ifdef __amigaos4__
          child_id = (int)CreateNewProcTags(NP_Entry, (ULONG)server_thread,
                                            NP_Output, Output(),
@@ -3723,7 +3723,7 @@ static void listen_loop(void)
 
             serve(csp);
 
-            /* 
+            /*
              * If we've been toggled or we've blocked the request, tell Mom
              */
 
@@ -3734,7 +3734,7 @@ static void listen_loop(void)
             }
 #endif /* def FEATURE_TOGGLE */
 
-#ifdef FEATURE_STATISTICS  
+#ifdef FEATURE_STATISTICS
             if (csp->flags & CSP_FLAG_REJECTED)
             {
                rc |= RC_FLAG_BLOCKED;
@@ -3754,7 +3754,7 @@ static void listen_loop(void)
 
             wait( &child_status );
 
-            /* 
+            /*
              * Evaluate child's return code: If the child has
              *  - been toggled, toggle ourselves
              *  - blocked its request, bump up the stats counter
@@ -3773,7 +3773,7 @@ static void listen_loop(void)
             {
                urls_rejected++;
             }
-#endif /* def FEATURE_STATISTICS */ 
+#endif /* def FEATURE_STATISTICS */
 
 #endif /* !defined(_WIN32) && defined(__CYGWIN__) */
             close_socket(csp->cfd);

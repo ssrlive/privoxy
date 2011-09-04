@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.107 2011/07/17 13:36:48 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.108 2011/07/30 15:12:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -12,10 +12,10 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.107 2011/07/17 13:36:48 fabia
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -481,7 +481,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    {
 #ifdef _WIN32
       if (errno == WSAEINPROGRESS)
-#elif __OS2__ 
+#elif __OS2__
       if (sock_errno() == EINPROGRESS)
 #else /* ifndef _WIN32 */
       if (errno == EINPROGRESS)
@@ -490,7 +490,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
          break;
       }
 
-#ifdef __OS2__ 
+#ifdef __OS2__
       if (sock_errno() != EINTR)
 #else
       if (errno != EINTR)
@@ -697,7 +697,7 @@ void close_socket(jb_socket fd)
 #if defined(_WIN32) || defined(__BEOS__)
    closesocket(fd);
 #elif defined(AMIGA)
-   CloseSocket(fd); 
+   CloseSocket(fd);
 #elif defined(__OS2__)
    soclose(fd);
 #else
@@ -1056,11 +1056,11 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
       }
 #elif defined(MUTEX_LOCKS_AVAILABLE)
       privoxy_mutex_lock(&resolver_mutex);
-      host = gethostbyaddr((const char *)&server.sin_addr, 
+      host = gethostbyaddr((const char *)&server.sin_addr,
                            sizeof(server.sin_addr), AF_INET);
       privoxy_mutex_unlock(&resolver_mutex);
 #else
-      host = gethostbyaddr((const char *)&server.sin_addr, 
+      host = gethostbyaddr((const char *)&server.sin_addr,
                            sizeof(server.sin_addr), AF_INET);
 #endif
       if (host == NULL)
@@ -1087,7 +1087,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
  *                created using bind_port().
  *
  * Parameters  :
- *          1  :  csp = Client state, cfd, ip_addr_str, and 
+ *          1  :  csp = Client state, cfd, ip_addr_str, and
  *                      ip_addr_long will be set by this routine.
  *          2  :  fds = File descriptors returned from bind_port
  *
@@ -1265,7 +1265,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
       while (gethostbyname_r(host, &result, hbuf,
                 HOSTENT_BUFFER_SIZE, &hostp, &thd_err)
              && (thd_err == TRY_AGAIN) && (dns_retries++ < MAX_DNS_RETRIES))
-      {   
+      {
          log_error(LOG_LEVEL_ERROR,
             "Timeout #%u while trying to resolve %s. Trying again.",
             dns_retries, host);
@@ -1274,7 +1274,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
       while (NULL == (hostp = gethostbyname_r(host, &result,
                                  hbuf, HOSTENT_BUFFER_SIZE, &thd_err))
              && (thd_err == TRY_AGAIN) && (dns_retries++ < MAX_DNS_RETRIES))
-      {   
+      {
          log_error(LOG_LEVEL_ERROR,
             "Timeout #%u while trying to resolve %s. Trying again.",
             dns_retries, host);
@@ -1296,7 +1296,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
       privoxy_mutex_lock(&resolver_mutex);
       while (NULL == (hostp = gethostbyname(host))
              && (h_errno == TRY_AGAIN) && (dns_retries++ < MAX_DNS_RETRIES))
-      {   
+      {
          log_error(LOG_LEVEL_ERROR,
             "Timeout #%u while trying to resolve %s. Trying again.",
             dns_retries, host);
@@ -1329,7 +1329,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
          errno = WSAEPROTOTYPE;
 #else
          errno = EPROTOTYPE;
-#endif 
+#endif
          log_error(LOG_LEVEL_ERROR, "hostname %s resolves to unknown address type.", host);
          return(INADDR_NONE);
       }

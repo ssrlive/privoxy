@@ -2,8 +2,8 @@
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/privoxy.sgml,v $
 
  Purpose     :  Entity included in other project documents.
-                
- $Id: privoxy.sgml,v 2.10 2010/02/19 16:44:42 fabiankeil Exp $
+
+ $Id: privoxy.sgml,v 2.11 2011/08/18 11:42:50 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -12,7 +12,7 @@
   This file used for inclusion with other documents only.
  ======================================================================
 
- If you make changes to this file, please verify the finished 
+ If you make changes to this file, please verify the finished
  docs all display as intended.
 
  This file is included into:

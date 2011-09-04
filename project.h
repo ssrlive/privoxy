@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.169 2011/07/08 13:30:08 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.170 2011/07/17 13:34:36 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -148,7 +148,7 @@ typedef int jb_err;
 #define JB_ERR_CGI_PARAMS 2 /**< Missing or corrupt CGI parameters        */
 #define JB_ERR_FILE       3 /**< Error opening, reading or writing a file */
 #define JB_ERR_PARSE      4 /**< Error parsing file                       */
-#define JB_ERR_MODIFIED   5 /**< File has been modified outside of the  
+#define JB_ERR_MODIFIED   5 /**< File has been modified outside of the
                                  CGI actions editor.                      */
 #define JB_ERR_COMPRESS   6 /**< Error on decompression                   */
 
@@ -173,7 +173,7 @@ typedef int jb_err;
  */
 #define ijb_toupper(__X) toupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
-#define ijb_isspace(__X) isspace((int)(unsigned char)(__X))  
+#define ijb_isspace(__X) isspace((int)(unsigned char)(__X))
 
 /**
  * Use for statically allocated buffers if you have no other choice.
@@ -233,7 +233,7 @@ struct list_entry
     * your own code.
     */
    char *str;
-   
+
    /** Next entry in the linked list, or NULL if no more. */
    struct list_entry *next;
 };
@@ -675,7 +675,7 @@ struct reusable_connection
 /*
  * Flags for use in csp->flags
  */
- 
+
 /**
  * Flag for csp->flags: Set if this client is processing data.
  * Cleared when the thread associated with this structure dies.
@@ -1012,7 +1012,7 @@ struct file_list
     * Read-only once the structure has been created.
     */
    time_t lastmodified;
-   
+
    /**
     * The full filename.
     */
@@ -1208,7 +1208,7 @@ struct configuration_spec
 {
    /** What to log */
    int debug;
-   
+
    /** Nonzero to enable multithreading. */
    int multi_threaded;
 
@@ -1347,7 +1347,7 @@ struct configuration_spec
 #endif /* def FEATURE_NO_GIFS */
 
 
-/* 
+/*
  * Hardwired URLs
  */
 

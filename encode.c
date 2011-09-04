@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.16 2010/06/13 12:27:39 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.17 2010/09/09 21:00:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -10,10 +10,10 @@ const char encode_rcs[] = "$Id: encode.c,v 1.16 2010/06/13 12:27:39 fabiankeil E
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -119,7 +119,7 @@ static const char * const html_code_map[256] = {
  * Parameters  :
  *          1  :  s = String to encode.  Null-terminated.
  *
- * Returns     :  Encoded string, newly allocated on the heap. 
+ * Returns     :  Encoded string, newly allocated on the heap.
  *                Caller is responsible for freeing it with free().
  *                If s is NULL, or on out-of memory, returns NULL.
  *
@@ -128,7 +128,7 @@ char * html_encode(const char *s)
 {
    char * buf;
    size_t buf_size;
-   
+
    if (s == NULL)
    {
       return NULL;
@@ -178,7 +178,7 @@ char * html_encode(const char *s)
  * Parameters  :
  *          1  :  s = String to encode.  Null-terminated.
  *
- * Returns     :  Encoded string, newly allocated on the heap. 
+ * Returns     :  Encoded string, newly allocated on the heap.
  *                Caller is responsible for freeing it with free().
  *                If s is NULL, or on out-of memory, returns NULL.
  *
@@ -186,7 +186,7 @@ char * html_encode(const char *s)
 char * html_encode_and_free_original(char *s)
 {
    char * result;
-   
+
    if (s == NULL)
    {
       return NULL;
@@ -210,7 +210,7 @@ char * html_encode_and_free_original(char *s)
  * Parameters  :
  *          1  :  s = String to encode.  Null-terminated.
  *
- * Returns     :  Encoded string, newly allocated on the heap. 
+ * Returns     :  Encoded string, newly allocated on the heap.
  *                Caller is responsible for freeing it with free().
  *                If s is NULL, or on out-of memory, returns NULL.
  *
@@ -275,7 +275,7 @@ static int xdtoi(const int d)
    {
       return(d - '0');
    }
-   else if ((d >= 'a') && (d <= 'f')) 
+   else if ((d >= 'a') && (d <= 'f'))
    {
       return(d - 'a' + 10);
    }
@@ -331,7 +331,7 @@ int xtoi(const char *s)
  * Parameters  :
  *          1  :  s = String to decode.  Null-terminated.
  *
- * Returns     :  Decoded string, newly allocated on the heap. 
+ * Returns     :  Decoded string, newly allocated on the heap.
  *                Caller is responsible for freeing it with free().
  *
  *********************************************************************/

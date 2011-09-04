@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.143 2011/05/22 10:25:26 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.144 2011/07/30 15:15:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -574,7 +574,7 @@ struct http_response *block_url(struct client_state *csp)
    }
    if (csp->action->flags & ACTION_REDIRECT)
    {
-      log_error(LOG_LEVEL_ERROR, "redirect{} overruled by block.");     
+      log_error(LOG_LEVEL_ERROR, "redirect{} overruled by block.");
    }
    /*
     * Else, prepare a response
@@ -668,7 +668,7 @@ struct http_response *block_url(struct client_state *csp)
    if(csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
    {
      /*
-      *  Send empty document.               
+      *  Send empty document.
       */
       new_content_type = csp->action->string[ACTION_STRING_CONTENT_TYPE];
 
@@ -836,7 +836,7 @@ struct http_response *trust_url(struct client_state *csp)
     * Export the protocol, host, port, and referrer information
     */
    err = map(exports, "hostport", 1, csp->http->hostport, 1);
-   if (!err) err = map(exports, "protocol", 1, csp->http->ssl ? "https://" : "http://", 1); 
+   if (!err) err = map(exports, "protocol", 1, csp->http->ssl ? "https://" : "http://", 1);
    if (!err) err = map(exports, "path", 1, csp->http->path, 1);
 
    if (NULL != (p = get_header_value(csp->headers, "Referer:")))
@@ -956,7 +956,7 @@ struct http_response *trust_url(struct client_state *csp)
  *          2  :  b = The filter list to compile
  *
  * Returns     :  NULL in case of errors, otherwise the
- *                pcrs job list.  
+ *                pcrs job list.
  *
  *********************************************************************/
 pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const struct re_filterfile_spec *b)
@@ -1025,7 +1025,7 @@ pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, const st
  *          2  :  pcrs_command = pcrs command formatted as string (s@foo@bar@)
  *
  *
- * Returns     :  NULL if the pcrs_command didn't change the url, or 
+ * Returns     :  NULL if the pcrs_command didn't change the url, or
  *                the result of the modification.
  *
  *********************************************************************/
@@ -1084,7 +1084,7 @@ char *rewrite_url(char *old_url, const char *pcrs_command)
  *
  * Parameters  :
  *          1  :  subject = the string to check
- *          2  :  redirect_mode = +fast-redirect{} mode 
+ *          2  :  redirect_mode = +fast-redirect{} mode
  *
  * Returns     :  NULL if no URL was found, or
  *                the last URL found.
@@ -1106,7 +1106,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
    }
 
    if (0 == strcmpic(redirect_mode, "check-decoded-url"))
-   {  
+   {
       log_error(LOG_LEVEL_REDIRECTS, "Decoding \"%s\" if necessary.", subject);
       new_url = url_decode(subject);
       if (new_url != NULL)
@@ -1143,7 +1143,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
          ))
    {
       /*
-       * Return new URL if we found a redirect 
+       * Return new URL if we found a redirect
        * or if the subject already was a URL.
        *
        * The second case makes sure that we can
@@ -1249,7 +1249,7 @@ struct http_response *redirect_url(struct client_state *csp)
 #endif /* def FEATURE_FAST_REDIRECTS */
    csp->action->flags &= ~ACTION_REDIRECT;
 
-   /* Did any redirect action trigger? */   
+   /* Did any redirect action trigger? */
    if (new_url)
    {
       if (0 == strcmpic(new_url, csp->http->url))
@@ -1503,7 +1503,7 @@ static char *pcrs_filter_response(struct client_state *csp)
    struct re_filterfile_spec *b;
    struct list_entry *filtername;
 
-   /* 
+   /*
     * Sanity first
     */
    if (csp->iob->cur >= csp->iob->eod)
@@ -1808,7 +1808,7 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
          break;
       }
    }
-   
+
    /* XXX: Should get its own loglevel. */
    log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", *size, newsize);
 
@@ -2187,7 +2187,7 @@ const struct forward_spec *forward_url(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  direct_response 
+ * Function    :  direct_response
  *
  * Description :  Check if Max-Forwards == 0 for an OPTIONS or TRACE
  *                request and if so, return a HTTP 501 to the client.
@@ -2196,7 +2196,7 @@ const struct forward_spec *forward_url(struct client_state *csp,
  *                requests properly. Still, what we do here is rfc-
  *                compliant, whereas ignoring or forwarding are not.
  *
- * Parameters  :  
+ * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  http_response if , NULL if nonmatch or handler fail
@@ -2236,7 +2236,7 @@ struct http_response *direct_response(struct client_state *csp)
                {
                   return cgi_error_memory();
                }
-            
+
                if (NULL == (rsp->status = strdup("501 Not Implemented")))
                {
                   free_http_response(rsp);
@@ -2337,7 +2337,7 @@ int content_requires_filtering(struct client_state *csp)
  * Description :  Checks whether there are any content filters
  *                enabled for the current request.
  *
- * Parameters  :  
+ * Parameters  :
  *          1  :  action = Action spec to check.
  *
  * Returns     :  TRUE for yes, FALSE otherwise

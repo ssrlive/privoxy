@@ -1,6 +1,6 @@
 #ifndef ENCODE_H_INCLUDED
 #define ENCODE_H_INCLUDED
-#define ENCODE_H_VERSION "$Id: encode.h,v 1.9 2008/05/21 15:38:13 fabiankeil Exp $"
+#define ENCODE_H_VERSION "$Id: encode.h,v 1.10 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.h,v $
@@ -12,10 +12,10 @@
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at

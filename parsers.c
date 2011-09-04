@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.225 2011/07/08 13:30:08 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.226 2011/08/31 13:35:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -187,10 +187,10 @@ struct parsers
 {
    /** The header prefix to match */
    const char *str;
-   
+
    /** The length of the prefix to match */
    const size_t len;
-   
+
    /** The function to apply to this line */
    const parser_func_ptr parser;
 };
@@ -350,7 +350,7 @@ jb_err add_to_iob(struct client_state *csp, char *buf, long n)
       {
          want *= 2;
       }
-      
+
       if (want <= csp->config->buffer_limit && NULL != (p = (char *)realloc(iob->buf, want)))
       {
          iob->size = want;
@@ -406,7 +406,7 @@ jb_err add_to_iob(struct client_state *csp, char *buf, long n)
 jb_err decompress_iob(struct client_state *csp)
 {
    char  *buf;       /* new, uncompressed buffer */
-   char  *cur;       /* Current iob position (to keep the original 
+   char  *cur;       /* Current iob position (to keep the original
                       * iob->cur unmodified if we return early) */
    size_t bufsize;   /* allocated size of the new buffer */
    size_t old_size;  /* Content size before decompression */
@@ -554,7 +554,7 @@ jb_err decompress_iob(struct client_state *csp)
        *
        * Fortunately, add_to_iob() has thoughtfully null-terminated
        * the buffer; we can just increment the end pointer to include
-       * the dummy byte.  
+       * the dummy byte.
        */
       csp->iob->eod++;
    }
@@ -638,7 +638,7 @@ jb_err decompress_iob(struct client_state *csp)
       {
          bufsize = csp->config->buffer_limit;
       }
-    
+
       /* Try to allocate the new buffer. */
       tmpbuf = realloc(buf, bufsize);
       if (NULL == tmpbuf)
@@ -710,7 +710,7 @@ jb_err decompress_iob(struct client_state *csp)
    csp->iob->cur  = csp->iob->buf + skip_size;
    csp->iob->eod  = (char *)zstr.next_out;
    csp->iob->size = bufsize;
-  
+
    /*
     * Make sure the new uncompressed iob obeys some minimal
     * consistency conditions.
@@ -882,7 +882,7 @@ char *get_header(struct iob *iob)
        * Header spans multiple lines, append the next one.
        */
       char *continued_header;
-      
+
       continued_header = get_header_line(iob);
       if ((continued_header == NULL) || (*continued_header == '\0'))
       {
@@ -1014,7 +1014,7 @@ char *get_header_value(const struct list *header_list, const char *header_name)
       }
    }
 
-   /* 
+   /*
     * Not found
     */
    return NULL;
@@ -1026,7 +1026,7 @@ char *get_header_value(const struct list *header_list, const char *header_name)
  *
  * Function    :  scan_headers
  *
- * Description :  Scans headers, applies tags and updates action bits. 
+ * Description :  Scans headers, applies tags and updates action bits.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1344,7 +1344,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                         b->name);
                      continue;
                   }
- 
+
                   if (!list_contains_item(csp->tags, tag))
                   {
                      if (JB_ERR_OK != enlist(csp->tags, tag))
@@ -1508,7 +1508,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
                   matches = pcrs_execute(job, *header, size, &newheader, &size);
                   if ( 0 < matches )
                   {
-                     current_hits += matches; 
+                     current_hits += matches;
                      log_error(LOG_LEVEL_HEADER, "Transforming \"%s\" to \"%s\"", *header, newheader);
                      freez(*header);
                      *header = newheader;
@@ -1822,7 +1822,7 @@ static jb_err client_save_content_length(struct client_state *csp, char **header
  * Function    :  client_connection
  *
  * Description :  Makes sure a proper "Connection:" header is
- *                set and signals connection_header_adder 
+ *                set and signals connection_header_adder
  *                to do nothing.
  *
  * Parameters  :
@@ -1959,7 +1959,7 @@ static jb_err crunch_server_header(struct client_state *csp, char **header)
       /* Is the current header the lucky one? */
       if (strstr(*header, crunch_pattern))
       {
-         log_error(LOG_LEVEL_HEADER, "Crunching server header: %s (contains: %s)", *header, crunch_pattern);  
+         log_error(LOG_LEVEL_HEADER, "Crunching server header: %s (contains: %s)", *header, crunch_pattern);
          freez(*header);
       }
    }
@@ -2040,7 +2040,7 @@ static jb_err server_content_type(struct client_state *csp, char **header)
    {
       /*
        * Make sure the user doesn't accidentally
-       * change the content type of binary documents. 
+       * change the content type of binary documents.
        */
       if ((csp->content_type & CT_TEXT) || (csp->action->flags & ACTION_FORCE_TEXT_MODE))
       {
@@ -2139,7 +2139,7 @@ static jb_err server_transfer_coding(struct client_state *csp, char **header)
  *
  *                If FEATURE_ZLIB is enabled and the compression type
  *                supported, the content is marked for decompression.
- *                
+ *
  *                XXX: Doesn't properly deal with multiple or with
  *                     unsupported but unknown encodings.
  *                     Is case-sensitive but shouldn't be.
@@ -2428,7 +2428,7 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
       return JB_ERR_OK;
    }
    else
-   {  
+   {
       /*
        * Replacing Content-Disposition header
        */
@@ -2493,18 +2493,18 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
    else if (0 == strcmpic(newval, "reset-to-request-time"))
-   {  
+   {
       /*
        * Setting Last-Modified Header to now.
        */
       get_http_time(0, buf, sizeof(buf));
       freez(*header);
       *header = strdup("Last-Modified: ");
-      string_append(header, buf);   
+      string_append(header, buf);
 
       if (*header == NULL)
       {
-         log_error(LOG_LEVEL_HEADER, "Insufficient memory. Last-Modified header got lost, boohoo.");  
+         log_error(LOG_LEVEL_HEADER, "Insufficient memory. Last-Modified header got lost, boohoo.");
       }
       else
       {
@@ -2539,7 +2539,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 
             if (negative_delta)
             {
-               rtime *= -1; 
+               rtime *= -1;
                log_error(LOG_LEVEL_HEADER, "Server time in the future.");
             }
             rtime = pick_from_range(rtime);
@@ -2574,7 +2574,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
             if (*header == NULL)
             {
                log_error(LOG_LEVEL_ERROR, "Insufficient memory, header crunched without replacement.");
-               return JB_ERR_MEMORY;  
+               return JB_ERR_MEMORY;
             }
 
             days    = rtime / (3600 * 24);
@@ -2690,7 +2690,7 @@ static jb_err client_referrer(struct client_state *csp, char **header)
    /* booleans for parameters we have to check multiple times */
    int parameter_conditional_block;
    int parameter_conditional_forge;
- 
+
 #ifdef FEATURE_FORCE_LOAD
    /*
     * Since the referrer can include the prefix even
@@ -2788,18 +2788,18 @@ static jb_err client_accept_language(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
    else
-   {  
+   {
       /*
        * Replacing Accept-Language header
        */
       freez(*header);
       *header = strdup("Accept-Language: ");
-      string_append(header, newval);   
+      string_append(header, newval);
 
       if (*header == NULL)
       {
          log_error(LOG_LEVEL_ERROR,
-            "Insufficient memory. Accept-Language header crunched without replacement.");  
+            "Insufficient memory. Accept-Language header crunched without replacement.");
       }
       else
       {
@@ -2840,7 +2840,7 @@ static jb_err crunch_client_header(struct client_state *csp, char **header)
       /* Is the current header the lucky one? */
       if (strstr(*header, crunch_pattern))
       {
-         log_error(LOG_LEVEL_HEADER, "Crunching client header: %s (contains: %s)", *header, crunch_pattern);  
+         log_error(LOG_LEVEL_HEADER, "Crunching client header: %s (contains: %s)", *header, crunch_pattern);
          freez(*header);
       }
    }
@@ -3145,10 +3145,10 @@ static jb_err client_host(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
-   if (!csp->http->hostport || (*csp->http->hostport == '*') ||  
+   if (!csp->http->hostport || (*csp->http->hostport == '*') ||
        *csp->http->hostport == ' ' || *csp->http->hostport == '\0')
    {
-      
+
       if (NULL == (p = strdup((*header)+6)))
       {
          return JB_ERR_MEMORY;
@@ -3211,13 +3211,13 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
    struct tm gmt;
 #endif
    struct tm *timeptr = NULL;
-   time_t tm = 0;                  
+   time_t tm = 0;
    const char *newval;
    char * endptr;
-   
+
    if ( 0 == strcmpic(*header, "If-Modified-Since: Wed, 08 Jun 1955 12:00:00 GMT"))
    {
-      /* 
+      /*
        * The client got an error message because of a temporary problem,
        * the problem is gone and the client now tries to revalidate our
        * error message on the real server. The revalidation would always
@@ -3257,7 +3257,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                   *header, rtime, (rtime == 1 || rtime == -1) ? "e": "es");
                if (negative_range)
                {
-                  rtime *= -1; 
+                  rtime *= -1;
                }
                rtime *= 60;
                rtime = pick_from_range(rtime);
@@ -3294,7 +3294,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
             if (*header == NULL)
             {
                log_error(LOG_LEVEL_HEADER, "Insufficient memory, header crunched without replacement.");
-               return JB_ERR_MEMORY;  
+               return JB_ERR_MEMORY;
             }
 
             hours   = rtime / 3600;
@@ -3334,7 +3334,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
 static jb_err client_if_none_match(struct client_state *csp, char **header)
 {
    if (csp->action->flags & ACTION_CRUNCH_IF_NONE_MATCH)
-   {  
+   {
       log_error(LOG_LEVEL_HEADER, "Crunching %s", *header);
       freez(*header);
    }
@@ -3376,7 +3376,7 @@ jb_err client_x_filter(struct client_state *csp, char **header)
                "force-text-mode overruled the client's request to fetch without filtering!");
          }
          else
-         {  
+         {
             csp->content_type = CT_TABOO; /* XXX: This hack shouldn't be necessary */
             csp->flags |= CSP_FLAG_NO_FILTERING;
             log_error(LOG_LEVEL_HEADER, "Accepted the client's request to fetch without filtering.");
@@ -3385,7 +3385,7 @@ jb_err client_x_filter(struct client_state *csp, char **header)
          freez(*header);
       }
    }
-   return JB_ERR_OK; 
+   return JB_ERR_OK;
 }
 
 
@@ -3419,7 +3419,7 @@ static jb_err client_range(struct client_state *csp, char **header)
       freez(*header);
    }
 
-   return JB_ERR_OK; 
+   return JB_ERR_OK;
 }
 
 /* the following functions add headers directly to the header list */
@@ -3788,7 +3788,7 @@ static jb_err server_http(struct client_state *csp, char **header)
 static jb_err server_set_cookie(struct client_state *csp, char **header)
 {
    time_t now;
-   time_t cookie_time; 
+   time_t cookie_time;
 
    time(&now);
 
@@ -3998,7 +3998,7 @@ int strclean(char *string, const char *substring)
  *                to get the numerical respresentation.
  *
  * Parameters  :
- *          1  :  header_time = HTTP header time as string. 
+ *          1  :  header_time = HTTP header time as string.
  *          2  :  result = storage for header_time in seconds
  *
  * Returns     :  JB_ERR_OK if the time format was recognized, or
@@ -4054,7 +4054,7 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
  * Parameters  :
  *          1  :  headers = List of headers (one of them hopefully being
  *                the "Host:" header)
- *          2  :  http = storage for the result (host, port and hostport). 
+ *          2  :  http = storage for the result (host, port and hostport).
  *
  * Returns     :  JB_ERR_MEMORY in case of memory problems,
  *                JB_ERR_PARSE if the host header couldn't be found,
@@ -4129,7 +4129,7 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
  *
  * Description :  Helper for client_referrer to forge a referer as
  *                'http://[hostname:port/' to fool stupid
- *                checks for in-site links 
+ *                checks for in-site links
  *
  * Parameters  :
  *          1  :  header   = Pointer to header pointer

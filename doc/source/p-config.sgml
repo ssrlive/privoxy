@@ -3,39 +3,39 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.77 2011/08/17 10:30:36 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.78 2011/08/18 11:42:50 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
- NOTE: Please read developer-manual/documentation.html before touching 
+ NOTE: Please read developer-manual/documentation.html before touching
  anything in this, or other Privoxy documentation.
  ========================================================================
 
- 
- This file contains all the config file comments and options. It used to 
+
+ This file contains all the config file comments and options. It used to
  build both the user-manual config sections, and all of config (yes, the main
  config file) itself.
 
- Rationale: This is broken up into two files since a file with a prolog 
+ Rationale: This is broken up into two files since a file with a prolog
  (DTD, etc) cannot be sourced as a secondary file. config.sgml is basically
  a wrapper for this file.
 
  IMPORTANT:
 
- OPTIONS: The actual options are included in this file and prefixed with 
- '@@', and processed by the Makefile to strip the '@@'. Default options 
- that should appear commented out should be listed as: '@@#OPTION'. 
+ OPTIONS: The actual options are included in this file and prefixed with
+ '@@', and processed by the Makefile to strip the '@@'. Default options
+ that should appear commented out should be listed as: '@@#OPTION'.
  Otherwise, as '@@OPTION'. Example:
 
   @@listen-address  127.0.0.1:8118
 
- The Makefile does significant other processing too. The final results 
- should be checked to make sure that the perl processing does not 
+ The Makefile does significant other processing too. The final results
+ should be checked to make sure that the perl processing does not
  fubar something!!! Makefile processing requires w3m, fmt (shell line
  formatter), and perl.
- 
+
 
  This file is included into:
 
@@ -59,11 +59,11 @@
 
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>confdir /etc/privoxy</emphasis></literallayout>
   </msgtext>
- </literal> 
+ </literal>
 </para>
 
 <para>
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.77 2011/08/17 10:30:36 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.78 2011/08/18 11:42:50 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -167,7 +167,7 @@ II. FORMAT OF THE CONFIGURATION FILE
 </para>
 <para>
  Thus, by placing a # at the start of an existing configuration line,
- you can make it a comment and it will be treated as if it weren't there. 
+ you can make it a comment and it will be treated as if it weren't there.
  This is called "commenting out" an option and can be useful. Removing
  the # again is called "uncommenting".
 </para>
@@ -237,11 +237,11 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Notes:</term>
   <listitem>
     <para>
-    The User Manual URI is the single best source of information on 
+    The User Manual URI is the single best source of information on
     <application>Privoxy</application>, and is used for help links from some
     of the internal CGI pages. The manual itself is normally packaged with the
     binary distributions, so you probably want to set this to a locally
-    installed copy. 
+    installed copy.
    </para>
    <para>
     Examples:
@@ -265,7 +265,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <para>
    <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file://///some-server/some-path/privoxy-&p-version;/user-manual/</screen>
   </para>
- --> 
+ -->
   <para>
    The best all purpose solution is simply to put the full local
    <literal>PATH</literal> to where the <citetitle>User Manual</citetitle> is
@@ -281,7 +281,7 @@ II. FORMAT OF THE CONFIGURATION FILE
    (or the shortcut: <literal>http://p.p/user-manual/</literal>).
   </para>
   <para>
-   If the documentation is not on the local system, it can be accessed 
+   If the documentation is not on the local system, it can be accessed
    from a remote server, as:
   </para>
   <para>
@@ -295,7 +295,7 @@ II. FORMAT OF THE CONFIGURATION FILE
      file</emphasis>, because it is used while the config file is being read
      on start-up.
    </para>
-  </warning>     
+  </warning>
   ]]>
 
   <![%config-file;[
@@ -304,7 +304,7 @@ II. FORMAT OF THE CONFIGURATION FILE
     WARNING!!!
    </para>
    <blockquote>
-    <para> 
+    <para>
      If set, this option should be the first option in the config
      file, because it is used while the config file is being read.
     </para>
@@ -327,7 +327,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Specifies:</term>
   <listitem>
    <para>
-    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.    
+    A URL to be displayed in the error page that users will see if access to an untrusted page is denied.
    </para>
   </listitem>
  </varlistentry>
@@ -415,7 +415,7 @@ II. FORMAT OF THE CONFIGURATION FILE
     If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
     are unset, the whole "Local Privoxy Support" box on all generated pages will
     not be shown.
-   </para>  
+   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -464,10 +464,10 @@ II. FORMAT OF THE CONFIGURATION FILE
     If both <literal>admin-address</literal> and <literal>proxy-info-url</literal>
     are unset, the whole "Local Privoxy Support" box on all generated pages will
     not be shown.
-   </para>  
+   </para>
    <para>
     This URL shouldn't be blocked ;-)
-   </para> 
+   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -489,7 +489,7 @@ II. FORMAT OF THE CONFIGURATION FILE
  <application>Privoxy</application> can (and normally does) use a number of
  other files for additional configuration, help and logging.
  This section of the configuration file tells <application>Privoxy</application>
- where to find those other files. 
+ where to find those other files.
 </para>
 
 <para>
@@ -533,16 +533,16 @@ II. FORMAT OF THE CONFIGURATION FILE
    <para>
     No trailing <quote><literal>/</literal></quote>, please.
    </para>
-  <!-- 
+  <!--
    This is really outdated and not likely to happen. HB 09/20/06
    <para>
     When development goes modular and multi-user, the blocker, filter, and
     per-user config will be stored in subdirectories of <quote>confdir</quote>.
-    For now, the configuration directory structure is flat, except for 
-    <filename>confdir/templates</filename>, where the HTML templates for CGI 
-    output reside (e.g. <application>Privoxy's</application> 404 error page). 
+    For now, the configuration directory structure is flat, except for
+    <filename>confdir/templates</filename>, where the HTML templates for CGI
+    output reside (e.g. <application>Privoxy's</application> 404 error page).
    </para>
-  --> 
+  -->
   </listitem>
  </varlistentry>
 </variablelist>
@@ -685,7 +685,7 @@ actionsfile
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    No actions are taken at all. More or less neutral proxying. 
+    No actions are taken at all. More or less neutral proxying.
    </para>
   </listitem>
  </varlistentry>
@@ -695,15 +695,15 @@ actionsfile
    <para>
     Multiple <literal>actionsfile</literal> lines are permitted, and are in fact recommended!
    </para>
-   <para> 
+   <para>
     The default values are <filename>default.action</filename>, which is the
     <quote>main</quote> actions file maintained by the developers, and
     <filename>user.action</filename>, where you can make your personal additions.
    </para>
-   <para> 
-    Actions files contain all the per site and per URL configuration for 
+   <para>
+    Actions files contain all the per site and per URL configuration for
     ad blocking, cookie management, privacy considerations, etc.
-    There is no point in using <application>Privoxy</application> without at 
+    There is no point in using <application>Privoxy</application> without at
     least one actions file.
    </para>
    <para>
@@ -772,7 +772,7 @@ actionsfile
     rules that use <link linkend="regex">regular expressions</link>. These rules permit
     powerful changes on the content of Web pages, and optionally the headers
     as well, e.g., you could try to disable your favorite JavaScript annoyances,
-    re-write the actual displayed text, or just have some fun 
+    re-write the actual displayed text, or just have some fun
     playing buzzword bingo with web pages.
    </para>
    <para>
@@ -858,7 +858,7 @@ actionsfile
     periodically remove it.  On Unix systems, you can do this with a cron job
     (see <quote>man cron</quote>). For Red Hat based Linux distributions, a
     <command>logrotate</command> script has been included.
-   </para> 
+   </para>
    <para>
     Any log files must be writable by whatever user <application>Privoxy</application>
     is being run as (on Unix, default user id is <quote>privoxy</quote>).
@@ -911,14 +911,14 @@ actionsfile
    </para>
    <para>
     If you specify a trust file, <application>Privoxy</application> will only allow
-    access to sites that are specified in the trustfile. Sites can be listed 
+    access to sites that are specified in the trustfile. Sites can be listed
     in one of two ways:
    </para>
    <para>
-    Prepending a <literal>~</literal> character limits access to this site 
-    only (and any sub-paths within this site), e.g. 
+    Prepending a <literal>~</literal> character limits access to this site
+    only (and any sub-paths within this site), e.g.
     <literal>~www.example.com</literal> allows access to
-    <literal>~www.example.com/features/news.html</literal>, etc. 
+    <literal>~www.example.com/features/news.html</literal>, etc.
    </para>
    <para>
     Or, you can designate sites as <emphasis>trusted referrers</emphasis>, by
@@ -932,7 +932,7 @@ actionsfile
     made.
    </para>
    <para>
-    If you use the <literal>+</literal> operator in the trust file, it may grow 
+    If you use the <literal>+</literal> operator in the trust file, it may grow
     considerably over time.
    </para>
    <para>
@@ -944,7 +944,7 @@ actionsfile
    <para>
     Possible applications include limiting Internet access for children.
    </para>
-   
+
   </listitem>
  </varlistentry>
 </variablelist>
@@ -1449,7 +1449,7 @@ actionsfile
    </para>
    <para>
     Note that you must have compiled <application>Privoxy</application> with
-    support for this feature, otherwise this option has no effect. 
+    support for this feature, otherwise this option has no effect.
    </para>
   </listitem>
  </varlistentry>
@@ -1572,7 +1572,7 @@ actionsfile
    </para>
    <para>
     Note that you must have compiled <application>Privoxy</application> with
-    support for this feature, otherwise this option has no effect. 
+    support for this feature, otherwise this option has no effect.
    </para>
   </listitem>
  </varlistentry>
@@ -1679,7 +1679,7 @@ ACLs: permit-access and deny-access</title>
     [<replaceable class="parameter">dst_addr</replaceable>[:<replaceable class="parameter">port</replaceable>][/<replaceable class="parameter">dst_masklen</replaceable>]]
    </para>
    <para>
-    Where <replaceable class="parameter">src_addr</replaceable> and 
+    Where <replaceable class="parameter">src_addr</replaceable> and
    <replaceable class="parameter">dst_addr</replaceable> are IPv4 addresses in dotted decimal notation or valid
     DNS names, <replaceable class="parameter">port</replaceable> is a port
     number, and <replaceable class="parameter">src_masklen</replaceable> and
@@ -1726,11 +1726,11 @@ ACLs: permit-access and deny-access</title>
    <para>
     Access controls are included at the request of ISPs and systems
     administrators, and <emphasis>are not usually needed by individual users</emphasis>.
-    For a typical home user, it will normally suffice to ensure that 
+    For a typical home user, it will normally suffice to ensure that
     <application>Privoxy</application> only listens on the localhost
     (127.0.0.1) or internal (home) network address by means of the
     <link linkend="listen-address"><emphasis>listen-address</emphasis></link>
-    option. 
+    option.
    </para>
    <para>
     Please see the warnings in the FAQ that <application>Privoxy</application>
@@ -1867,7 +1867,7 @@ ACLs: permit-access and deny-access</title>
   <listitem>
    <para>
     For content filtering, i.e. the <literal>+filter</literal> and
-    <literal>+deanimate-gif</literal> actions, it is necessary that 
+    <literal>+deanimate-gif</literal> actions, it is necessary that
     <application>Privoxy</application> buffers the entire document body.
     This can be potentially dangerous, since a server could just keep sending
     data indefinitely and wait for your RAM to exhaust -- with nasty consequences.
@@ -1940,7 +1940,7 @@ ACLs: permit-access and deny-access</title>
     <replaceable class="parameter">http_parent</replaceable>[:<replaceable class="parameter">port</replaceable>]
    </para>
    <para>
-    where <replaceable class="parameter">target_pattern</replaceable> is a <link linkend="af-patterns">URL pattern</link> 
+    where <replaceable class="parameter">target_pattern</replaceable> is a <link linkend="af-patterns">URL pattern</link>
     that specifies to which requests (i.e. URLs) this forward rule shall apply. Use <literal>/</literal> to
     denote <quote>all URLs</quote>.
     <replaceable class="parameter">http_parent</replaceable>[:<replaceable class="parameter">port</replaceable>]
@@ -2063,7 +2063,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     and <replaceable class="parameter">socks_proxy</replaceable>
     are IP addresses in dotted decimal notation or valid DNS names
     (<replaceable class="parameter">http_parent</replaceable>
-    may be <quote>.</quote> to denote <quote>no HTTP forwarding</quote>), and the optional 
+    may be <quote>.</quote> to denote <quote>no HTTP forwarding</quote>), and the optional
     <replaceable class="parameter">port</replaceable> parameters are TCP ports,
     i.e. integer values from 1 to 65535
    </para>
@@ -2138,9 +2138,9 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   forward-socks4   /               socks-gw.example.com:1080  .
 </screen>
    </para>
-  
+
     <para>
-    To chain Privoxy and Tor, both running on the same system, you would use 
+    To chain Privoxy and Tor, both running on the same system, you would use
     something like:
    </para>
    <para>
@@ -2189,7 +2189,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <sect3 renderas="sect4" id="advanced-forwarding-examples"><title>Advanced Forwarding Examples</title>
 
 <para>
- If you have links to multiple ISPs that provide various special content 
+ If you have links to multiple ISPs that provide various special content
  only to their subscribers, you can configure multiple <application>Privoxies</application>
  which have connections to the respective ISPs to act as forwarders to each other, so that
  <emphasis>your</emphasis> users can see the internal content of all ISPs.
@@ -2230,9 +2230,9 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 </para>
 
 <para>
- If you intend to chain <application>Privoxy</application> and 
- <application>squid</application> locally, then chaining as 
- <literal>browser -> squid -> privoxy</literal> is the recommended way. 
+ If you intend to chain <application>Privoxy</application> and
+ <application>squid</application> locally, then chaining as
+ <literal>browser -> squid -> privoxy</literal> is the recommended way.
 </para>
 
 <para>
@@ -2242,14 +2242,14 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 
 <para>
  <screen>
-  # Define Privoxy as parent proxy (without ICP) 
-  cache_peer 127.0.0.1 parent 8118 7 no-query 
+  # Define Privoxy as parent proxy (without ICP)
+  cache_peer 127.0.0.1 parent 8118 7 no-query
 
-  # Define ACL for protocol FTP 
-  acl ftp proto FTP 
+  # Define ACL for protocol FTP
+  acl ftp proto FTP
 
   # Do not forward FTP requests to Privoxy
-  always_direct allow ftp 
+  always_direct allow ftp
 
   # Forward all the rest to Privoxy
   never_direct allow all</screen>
@@ -2269,7 +2269,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <para>
  <screen>
   forward   /                          .
-  forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010</screen> 
+  forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010</screen>
 </para>
 
 </sect3>
@@ -2281,7 +2281,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
   <term>Specifies:</term>
   <listitem>
    <para>
-    How often Privoxy retries if a forwarded connection request fails. 
+    How often Privoxy retries if a forwarded connection request fails.
    </para>
   </listitem>
  </varlistentry>
@@ -2384,7 +2384,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     If you don't trust your clients and want to force them
     to use <application>Privoxy</application>, enable this
     option and configure your packet filter to redirect outgoing
-    HTTP connections into <application>Privoxy</application>. 
+    HTTP connections into <application>Privoxy</application>.
    </para>
    <para>
     Make sure that <application>Privoxy's</application> own requests
@@ -3152,11 +3152,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>activity-animation   1</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3173,18 +3173,18 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>log-messages       1</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
 
 <anchor id="log-buffer-size">
 <![%config-file;[<para>@@</para>]]> <!-- for spacing -->
-<para> 
+<para>
  If <quote>log-buffer-size</quote> is set to 1, the size of the log buffer,
  i.e. the amount of memory used for the log messages displayed in the
  console window, will be limited to <quote>log-max-lines</quote> (see below).
@@ -3199,11 +3199,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>log-buffer-size      1</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3219,11 +3219,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>log-max-lines      200</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3240,11 +3240,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>log-highlight-messages   1</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3259,11 +3259,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>log-font-name        Comic Sans MS</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3278,18 +3278,18 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>log-font-size        8</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
 
 <anchor id="show-on-task-bar">
 <![%config-file;[<para>@@</para>]]> <!-- for spacing -->
-<para>  
+<para>
  <quote>show-on-task-bar</quote> controls whether or not
  <application>Privoxy</application> will appear as a button on the Task bar
  when minimized:
@@ -3299,11 +3299,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>show-on-task-bar     0</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3320,11 +3320,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   <emphasis>close-button-minimizes  1</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>
@@ -3342,11 +3342,11 @@ forward-socks4, forward-socks4a and forward-socks5</title>
 <![%user-man;[
 <para>
  <literal>
-  <msgtext> 
+  <msgtext>
    <literallayout>
   #<emphasis>hide-console</emphasis>
    </literallayout>
-  </msgtext> 
+  </msgtext>
  </literal>
 </para>
 ]]>

@@ -1,4 +1,4 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.12 2007/01/07 07:40:52 joergs Exp $";
+const char amiga_rcs[] = "$Id: amiga.c,v 1.13 2009/05/16 13:27:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -8,7 +8,7 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.12 2007/01/07 07:40:52 joergs Exp $";
  * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
  *                Privoxy team. http://www.privoxy.org/
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at

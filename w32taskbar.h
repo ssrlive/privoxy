@@ -1,6 +1,6 @@
 #ifndef W32TASKBAR_H_INCLUDED
 #define W32TASKBAR_H_INCLUDED
-#define W32TASKBAR_H_VERSION "$Id: w32taskbar.h,v 1.6 2006/07/18 14:48:48 david__schmidt Exp $"
+#define W32TASKBAR_H_VERSION "$Id: w32taskbar.h,v 1.7 2009/05/16 13:27:20 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.h,v $
@@ -14,7 +14,7 @@
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at

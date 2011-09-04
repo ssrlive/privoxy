@@ -2,8 +2,8 @@
  File        :  $Source: /cvsroot/ijbswa/current/doc/source/copyright.sgml,v $
 
  Purpose     :  Entity included in other project documents.
-                
- $Id: copyright.sgml,v 2.12 2011/03/27 13:50:38 fabiankeil Exp $
+
+ $Id: copyright.sgml,v 2.13 2011/08/18 11:42:50 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -12,7 +12,7 @@
   This file used for inclusion with other documents only.
  ======================================================================
 
- If you make changes to this file, please verify the finished 
+ If you make changes to this file, please verify the finished
  docs all display as intended.
 
  This file is included into:
@@ -23,8 +23,8 @@
   faq
 
  **************************************************************
- NOTE: the &my-copy entity must be defined in any file that will 
- include this file. (This is a workaround for docbook2man not 
+ NOTE: the &my-copy entity must be defined in any file that will
+ include this file. (This is a workaround for docbook2man not
  handling the standard &copy entity in the man page processing.)
  **************************************************************
 

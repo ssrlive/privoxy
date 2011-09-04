@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.60 2011/04/19 13:00:47 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.61 2011/05/22 10:25:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -203,11 +203,11 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
 
    /*
     * Check for * URI. If found, we're done.
-    */  
+    */
    if (*http->url == '*')
    {
       if  ( NULL == (http->path = strdup("*"))
-         || NULL == (http->hostport = strdup("")) ) 
+         || NULL == (http->hostport = strdup("")) )
       {
          return JB_ERR_MEMORY;
       }
@@ -420,14 +420,14 @@ static int unknown_method(const char *method)
        * Microsoft webDAV extension for Exchange 2000.  See:
        * http://lists.w3.org/Archives/Public/w3c-dist-auth/2002JanMar/0001.html
        * http://msdn.microsoft.com/library/en-us/wss/wss/_webdav_methods.asp
-       */ 
+       */
       "BCOPY", "BMOVE", "BDELETE", "BPROPFIND", "BPROPPATCH",
       /*
        * Another Microsoft webDAV extension for Exchange 2000.  See:
        * http://systems.cs.colorado.edu/grunwald/MobileComputing/Papers/draft-cohen-gena-p-base-00.txt
        * http://lists.w3.org/Archives/Public/w3c-dist-auth/2002JanMar/0001.html
        * http://msdn.microsoft.com/library/en-us/wss/wss/_webdav_methods.asp
-       */ 
+       */
       "SUBSCRIBE", "UNSUBSCRIBE", "NOTIFY", "POLL",
       /*
        * Yet another WebDAV extension, this time for
@@ -779,7 +779,7 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
       url->unanchored |= ANCHOR_LEFT;
    }
 
-   /* 
+   /*
     * Split domain into components
     */
    url->dbuffer = strdup(host_pattern);
@@ -789,7 +789,7 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
       return JB_ERR_MEMORY;
    }
 
-   /* 
+   /*
     * Map to lower case
     */
    for (p = url->dbuffer; *p ; p++)
@@ -797,7 +797,7 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
       *p = (char)tolower((int)(unsigned char)*p);
    }
 
-   /* 
+   /*
     * Split the domain name into components
     */
    url->dcount = ssplit(url->dbuffer, ".", v, SZ(v), 1, 1);
@@ -809,11 +809,11 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
    }
    else if (url->dcount != 0)
    {
-      /* 
+      /*
        * Save a copy of the pointers in dvec
        */
       size = (size_t)url->dcount * sizeof(*url->dvec);
-      
+
       url->dvec = (char **)malloc(size);
       if (NULL == url->dvec)
       {
@@ -852,13 +852,13 @@ static int simplematch(const char *pattern, const char *text)
 {
    const unsigned char *pat = (const unsigned char *)pattern;
    const unsigned char *txt = (const unsigned char *)text;
-   const unsigned char *fallback = pat; 
+   const unsigned char *fallback = pat;
    int wildcard = 0;
-  
+
    unsigned char lastchar = 'a';
    unsigned i;
    unsigned char charmap[32];
-  
+
    while (*txt)
    {
 
@@ -876,15 +876,15 @@ static int simplematch(const char *pattern, const char *text)
       }
 
       /* '*' in the pattern?  */
-      if (*pat == '*') 
+      if (*pat == '*')
       {
-     
+
          /* The pattern ends afterwards? Speed up the return. */
          if (*++pat == '\0')
          {
             return 0;
          }
-     
+
          /* Else, set wildcard mode and remember position after '*' */
          wildcard = 1;
          fallback = pat;
@@ -898,7 +898,7 @@ static int simplematch(const char *pattern, const char *text)
          while (*++pat != ']')
          {
             if (!*pat)
-            { 
+            {
                return 1;
             }
             else if (*pat == '-')
@@ -910,7 +910,7 @@ static int simplematch(const char *pattern, const char *text)
                for (i = lastchar; i <= *pat; i++)
                {
                   charmap[i / 8] |= (unsigned char)(1 << (i % 8));
-               } 
+               }
             }
             else
             {
@@ -921,21 +921,21 @@ static int simplematch(const char *pattern, const char *text)
       } /* -END- if Character range specification */
 
 
-      /* 
-       * Char match, or char range match? 
+      /*
+       * Char match, or char range match?
        */
       if ( (*pat == *txt)
       ||   (*pat == '?')
       ||   ((*pat == ']') && (charmap[*txt / 8] & (1 << (*txt % 8)))) )
       {
-         /* 
+         /*
           * Success: Go ahead
           */
          pat++;
       }
       else if (!wildcard)
       {
-         /* 
+         /*
           * No match && no wildcard: No luck
           */
          return 1;
@@ -1267,7 +1267,7 @@ int url_match(const struct url_spec *pattern,
    {
       /* It's a tag pattern and shouldn't be matched against URLs */
       return 0;
-   } 
+   }
 
    return (port_matches(http->port, pattern->port_list)
       && host_matches(http, pattern) && path_matches(http->path, pattern));

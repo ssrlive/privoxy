@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.68 2011/01/22 12:30:22 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.69 2011/04/19 13:00:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -85,10 +85,10 @@ struct file_line
 {
    /** Next entry in the linked list */
    struct file_line * next;
-   
+
    /** The raw data, to write out if this line is unmodified. */
    char * raw;
-   
+
    /** Comments and/or whitespace to put before this line if it's modified
        and then written out. */
    char * prefix;
@@ -97,7 +97,7 @@ struct file_line
        are performed on the data read from file before it's stored here, so
        it will be a single line of data.  */
    char * unprocessed;
-   
+
    /** The type of data on this line.  One of the FILE_LINE_xxx constants. */
    int type;
 
@@ -327,9 +327,9 @@ static jb_err map_copy_parameter_url(struct map *out,
                                      const char *name);
 #endif /* unused function */
 
-static jb_err get_file_name_param(struct client_state *csp, 	 
-	                                   const struct map *parameters, 	 
-	                                   const char *param_name, 	 
+static jb_err get_file_name_param(struct client_state *csp,
+	                                   const struct map *parameters,
+	                                   const char *param_name,
 	                                   const char **pfilename);
 
 /* Internal convenience functions */
@@ -707,7 +707,7 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
       if (cur_line->type == FILE_LINE_ACTION)
       {
          section_start_line_number = line_number;
-      }      
+      }
       cur_line = cur_line->next;
    }
 
@@ -3415,7 +3415,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
       if (cur_line->type == FILE_LINE_ACTION)
       {
          section_start_line_number = line_number;
-      }      
+      }
       cur_line = cur_line->next;
       line_number++;
    }
@@ -4183,7 +4183,7 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
  *
  * Description :  Converts a string into a form JavaScript will like.
  *
- *                Netscape 4's JavaScript sucks - it doesn't use 
+ *                Netscape 4's JavaScript sucks - it doesn't use
  *                "id" parameters, so you have to set the "name"
  *                used to submit a form element to something JavaScript
  *                will like.  (Or access the elements by index in an

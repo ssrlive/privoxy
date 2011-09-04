@@ -1,24 +1,24 @@
 #ifndef CGI_H_INCLUDED
 #define CGI_H_INCLUDED
-#define CGI_H_VERSION "$Id: cgi.h,v 1.39 2011/07/03 17:55:23 fabiankeil Exp $"
+#define CGI_H_VERSION "$Id: cgi.h,v 1.40 2011/07/08 13:27:31 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
  *                html or gif answers, and to compose HTTP resonses.
- *                
+ *
  *                Functions declared include:
- * 
+ *
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -69,7 +69,7 @@ extern jb_err map_block_killer (struct map *exports, const char *name);
 extern jb_err map_block_keep   (struct map *exports, const char *name);
 extern jb_err map_conditional  (struct map *exports, const char *name, int choose_first);
 
-extern jb_err template_load(const struct client_state *csp, char ** template_ptr, 
+extern jb_err template_load(const struct client_state *csp, char ** template_ptr,
                             const char *templatename, int recursive);
 extern jb_err template_fill(char ** template_ptr, const struct map *exports);
 extern jb_err template_fill_for_cgi(const struct client_state *csp,

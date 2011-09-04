@@ -1,23 +1,23 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.27 2011/03/03 14:38:36 fabiankeil Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.28 2011/04/19 13:00:47 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
  *
  * Purpose     :  Functions to load and unload the various
  *                configuration files.  Also contains code to manage
- *                the list of active loaders, and to automatically 
+ *                the list of active loaders, and to automatically
  *                unload files that are no longer in use.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2010 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
- *                by and Copyright (C) 1997 Anonymous Coders and 
+ *                by and Copyright (C) 1997 Anonymous Coders and
  *                Junkbusters Corporation.  http://www.junkbusters.com
  *
- *                This program is free software; you can redistribute it 
+ *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
  *                Public License as published by the Free Software
  *                Foundation; either version 2 of the License, or (at
@@ -98,7 +98,7 @@ void unload_current_re_filterfile(void);
 
 void unload_forward_spec(struct forward_spec *fwd);
 
-extern void add_loader(int (*loader)(struct client_state *), 
+extern void add_loader(int (*loader)(struct client_state *),
                        struct configuration_spec * config);
 extern int run_loader(struct client_state *csp);
 

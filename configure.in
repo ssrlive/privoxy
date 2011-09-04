@@ -1,38 +1,38 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl 
-dnl $Id: configure.in,v 1.158 2011/06/23 14:01:01 fabiankeil Exp $
-dnl 
+dnl
+dnl $Id: configure.in,v 1.159 2011/07/03 17:53:00 fabiankeil Exp $
+dnl
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
 dnl
 dnl Based on the Internet Junkbuster originally written
-dnl by and Copyright (C) 1997 Anonymous Coders and 
+dnl by and Copyright (C) 1997 Anonymous Coders and
 dnl Junkbusters Corporation.  http://www.junkbusters.com
 dnl
-dnl This program is free software; you can redistribute it 
+dnl This program is free software; you can redistribute it
 dnl and/or modify it under the terms of the GNU General
 dnl Public License as published by the Free Software
 dnl Foundation; either version 2 of the License, or (at
 dnl your option) any later version.
-dnl 
+dnl
 dnl This program is distributed in the hope that it will
 dnl be useful, but WITHOUT ANY WARRANTY; without even the
 dnl implied warranty of MERCHANTABILITY or FITNESS FOR A
 dnl PARTICULAR PURPOSE.  See the GNU General Public
 dnl License for more details.
-dnl 
+dnl
 dnl The GNU General Public License should be included with
 dnl this file.  If not, you can view it at
 dnl http://www.gnu.org/copyleft/gpl.html
 dnl or write to the Free Software Foundation, Inc., 59
 dnl Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-dnl 
+dnl
 
 dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.158 $)
+AC_REVISION($Revision: 1.159 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -44,7 +44,7 @@ if test ! -f config.h.in; then
    else
       autoheader
   fi
-fi  
+fi
 
 AC_CONFIG_HEADER([config.h])
 AC_CANONICAL_HOST
@@ -52,13 +52,13 @@ AC_CANONICAL_HOST
 dodk=auto
 DKPREFIX=none
 AC_ARG_WITH(docbook, dnl
-  --with-docbook=[[yes|no|directory]]	
-                           Enable docbook documentation creation 
+  --with-docbook=[[yes|no|directory]]
+                           Enable docbook documentation creation
 			   (default = yes, for gnu and linux),[dnl
 case "$with_docbook" in
 yes) dodk=yes;;
 no) dodk=no;;
-*) 
+*)
 	dodk=yes
 	DKPREFIX=$withval
 	;;
@@ -124,7 +124,7 @@ AC_SUBST(ID)
 AC_SUBST(BGROUPS)
 
 dnl =================================================================
-dnl debug, gcc and gdb support 
+dnl debug, gcc and gdb support
 dnl =================================================================
 
 AC_ARG_WITH(debug,
@@ -202,7 +202,7 @@ else
   AC_MSG_CHECKING([for group])
   AC_ARG_WITH(group,
         [  --with-group=privoxy         Set group for privoxy],
-        [ 
+        [
                 if test "x$withval" != "xyes"; then
                   if test $BGROUPS = no ; then
                     AC_MSG_ERROR(There is no 'groups' program on this system)
@@ -241,7 +241,7 @@ fi
 dnl =================================================================
 dnl additional gcc flags
 dnl =================================================================
-dnl 
+dnl
 if test "$GCC"; then
   if test "$host" != "powerpc-unknown-amigaos"; then
     CFLAGS="-pipe $CFLAGS"
@@ -259,7 +259,7 @@ dnl Reason: This sets CFLAGS in order to switch the Cygwin compiler
 dnl into Cygwin or MinGW32 modes.  Depending on the mode selected,
 dnl the compiler will use completely different sets of library
 dnl and include files.
-dnl 
+dnl
 dnl =================================================================
 
 AC_MINGW32
@@ -323,7 +323,7 @@ if test $dodk != no; then
 	fi
 	if test $DB2HTML = false; then
 		dnl We need to clean the variable, otherwise AC_CHECK_PROGS
-		dnl will fail	
+		dnl will fail
 		DB2HTML=""
 		AC_CHECK_PROGS(DB2HTML,db2html docbook2html,false)
 	fi
@@ -429,7 +429,7 @@ AC_ARG_ENABLE(pthread,
 [if test $enableval = no; then
   # Disable pthreads
   if test $have_pthread = yes; then
-     AC_MSG_WARN([pthreads seem to be available but you are using --disable-pthread.]) 
+     AC_MSG_WARN([pthreads seem to be available but you are using --disable-pthread.])
      AC_MSG_WARN([This is almost always a mistake and can render Privoxy unacceptable slow.])
   fi
   have_pthread=no
@@ -647,10 +647,10 @@ AC_SUBST(SOCKET_LIB)
 dnl =================================================================
 dnl Mac OSX specific
 dnl =================================================================
-    
+
 case "$host" in
 *-apple-darwin*) SPECIAL_CFLAGS="-Dunix"
-;;  
+;;
 esac
 
 dnl =================================================================
@@ -773,7 +773,7 @@ AC_CHECK_LIB(pcre, pcre_compile, [
       ], [have_pcre=no])
    ])
 ], [have_pcre=no])
- 
+
 AC_CHECK_LIB(pcreposix, regcomp, [
    AC_CHECK_HEADER(pcreposix.h, [
       AC_EGREP_HEADER(pcreposix_regerror, pcreposix.h, [AC_MSG_WARN([[pcreposix old version installed]]); have_pcreposix=no], [have_pcreposix=yes])
@@ -782,7 +782,7 @@ AC_CHECK_LIB(pcreposix, regcomp, [
          AC_EGREP_HEADER(pcreposix_regerror, pcre/pcreposix.h, [AC_MSG_WARN([[pcreposix old version installed]]); have_pcreposix=no], [have_pcreposix=yes]; [AC_DEFINE(PCREPOSIX_H_IN_SUBDIR)])
       ], [have_pcreposix=no])
    ])
-], [have_pcreposix=no], -lpcre) 
+], [have_pcreposix=no], -lpcre)
 
 dnl ================================================================
 dnl libpcrs is temporarily disabled.
@@ -837,7 +837,7 @@ AC_ARG_ENABLE(ie-images,
 fi],)
 
 AC_ARG_ENABLE(image-blocking,
-[  --disable-image-blocking        Don't try to figure out whether a request is 
+[  --disable-image-blocking        Don't try to figure out whether a request is
                                   for an image or HTML - assume HTML.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_IMAGE_BLOCKING)
@@ -932,7 +932,7 @@ if test $enableval2 = yes; then
    AC_MSG_WARN([No zlib found.
    Privoxy will not be able to filter compressed content.
    This may become a fatal error in the future.])
-  fi  
+  fi
 fi
 
 AC_ARG_ENABLE(compression,
