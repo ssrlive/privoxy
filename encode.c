@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.17 2010/09/09 21:00:25 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.18 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -81,7 +81,7 @@ static const char * const html_code_map[256] = {
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-   NULL, NULL, NULL, NULL,"&quot;",NULL,NULL,NULL,"&amp;","&apos;",
+   NULL, NULL, NULL, NULL,"&quot;",NULL,NULL,NULL,"&amp;","&#39;",
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
    "&lt;",NULL,"&gt;",NULL,NULL, NULL, NULL, NULL, NULL, NULL,
