@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.228 2011/09/04 11:31:17 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.229 2011/09/04 11:31:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4032,6 +4032,14 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
    {
       if (NULL != strptime(header_time, time_formats[i], &gmt))
       {
+         /* Sanity check for GNU libc. */
+         if (gmt.tm_year < 0)
+         {
+            log_error(LOG_LEVEL_HEADER,
+               "Failed to parse '%s' using '%s'. Moving on.",
+               header_time, time_formats[i]);
+            continue;
+         }
          *result = timegm(&gmt);
          return JB_ERR_OK;
       }
