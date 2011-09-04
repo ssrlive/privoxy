@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.230 2011/09/04 11:32:20 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.231 2011/09/04 11:33:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4027,14 +4027,14 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
    };
    unsigned int i;
 
-   /*
-    * Zero out gmt to prevent time zone offsets.
-    * Documented to be required for GNU libc.
-    */
-   memset(&gmt, 0, sizeof(gmt));
-
    for (i = 0; i < SZ(time_formats); i++)
    {
+      /*
+       * Zero out gmt to prevent time zone offsets.
+       * Documented to be required for GNU libc.
+       */
+      memset(&gmt, 0, sizeof(gmt));
+
       if (NULL != strptime(header_time, time_formats[i], &gmt))
       {
          /* Sanity check for GNU libc. */
