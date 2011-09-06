@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.75 2011/07/30 15:05:49 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.76 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1085,7 +1085,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    if (write_socket(sfd, cbuf, client_pos))
    {
-      errstr = "SOCKS5 negotiation read failed";
+      errstr = "SOCKS5 negotiation write failed";
       csp->error_message = strdup(errstr);
       log_error(LOG_LEVEL_CONNECT, "%s", errstr);
       close_socket(sfd);
