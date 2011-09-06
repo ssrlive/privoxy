@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.35 2011/06/23 14:03:38 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.36 2011/07/30 15:22:39 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -81,11 +81,11 @@ TAG:^hide-accept-language\{block\}$
 # 2) conditional-forge
 # 3) forge
 # 4) block
-# 5) a parameter that looks like a valid fake referrer 
+# 5) a parameter that looks like a valid fake referrer
 # 6) a parameter that looks like an invalid fake referrer
 #######################################################
 
-# Set Header    = Referer: http://www.example.org/foo 
+# Set Header    = Referer: http://www.example.org/foo
 # Expect Header = REMOVAL
 #
 # Set Header    = Referer: http://p.p/foo
@@ -105,7 +105,7 @@ TAG:^hide-accept-language\{block\}$
 {+hide-referrer{conditional-block}}
 TAG:^hide-referrer\{conditional-block\}$
 
-# Set Header    = Referer: http://www.example.org/foo 
+# Set Header    = Referer: http://www.example.org/foo
 # Expect Header = Referer: http://p.p/
 #
 # Set Header    = Referer: http://p.p/foo
@@ -125,17 +125,17 @@ TAG:^hide-referrer\{conditional-block\}$
 {+hide-referrer{conditional-forge}}
 TAG:^hide-referrer\{conditional-forge\}$
 
-# Set Header    = Referer: http://www.example.org/foo 
+# Set Header    = Referer: http://www.example.org/foo
 # Expect Header = Referer: http://p.p/
 {+hide-referrer{forge}}
 TAG:^hide-referrer\{forge\}$
 
-# Set Header    = Referer: http://www.example.org/foo 
+# Set Header    = Referer: http://www.example.org/foo
 # Expect Header = REMOVAL
 {+hide-referrer{block}}
 TAG:^hide-referrer\{block\}$
 
-# Set Header    = Referer: http://www.example.org/foo 
+# Set Header    = Referer: http://www.example.org/foo
 # Expect Header = Referer: invalid
 {+hide-referrer{invalid}}
 TAG:^hide-referrer\{invalid\}$
