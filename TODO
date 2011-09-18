@@ -1,4 +1,4 @@
-$Id: TODO,v 1.52 2011/08/17 10:23:42 fabiankeil Exp $
+$Id: TODO,v 1.53 2011/08/26 16:12:14 fabiankeil Exp $
 
 Some Privoxy related tasks, sorted by the time they
 have been added, not by priority.
@@ -273,3 +273,4 @@ have been added, not by priority.
     quite a bit.
 
 97) Add support for Tor's 'optimistic data' socks extension.
+    Mostly done, not yet pushed to CVS.
