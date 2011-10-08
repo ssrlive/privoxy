@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.143 2011/08/17 10:26:47 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.144 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1395,12 +1395,6 @@ char *add_help_link(const char *item,
  *********************************************************************/
 void get_http_time(int time_offset, char *buf, size_t buffer_size)
 {
-   static const char day_names[7][4] =
-      { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-   static const char month_names[12][4] =
-      { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
    struct tm *t;
    time_t current_time;
 #if defined(HAVE_GMTIME_R)
@@ -1425,17 +1419,7 @@ void get_http_time(int time_offset, char *buf, size_t buffer_size)
    t = gmtime(&current_time);
 #endif
 
-   /* Format: "Sun, 06 Nov 1994 08:49:37 GMT" */
-   snprintf(buf, buffer_size,
-      "%s, %02d %s %4d %02d:%02d:%02d GMT",
-      day_names[t->tm_wday],
-      t->tm_mday,
-      month_names[t->tm_mon],
-      t->tm_year + 1900,
-      t->tm_hour,
-      t->tm_min,
-      t->tm_sec
-      );
+   strftime(buf, buffer_size, "%a, %d %b %Y %H:%M:%S GMT", t);
 
 }
 
