@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.232 2011/09/04 11:33:50 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.233 2011/09/04 11:36:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2468,7 +2468,6 @@ static jb_err server_content_disposition(struct client_state *csp, char **header
 static jb_err server_last_modified(struct client_state *csp, char **header)
 {
    const char *newval;
-   char buf[BUFFER_SIZE];
    time_t last_modified;
    char newheader[50];
 
@@ -2497,6 +2496,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
       /*
        * Setting Last-Modified Header to now.
        */
+      char buf[30];
       get_http_time(0, buf, sizeof(buf));
       freez(*header);
       *header = strdup("Last-Modified: ");
