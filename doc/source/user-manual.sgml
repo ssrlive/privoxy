@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.134 2011/08/18 11:45:02 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.135 2011/09/04 11:10:12 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.134 2011/08/18 11:45:02 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.135 2011/09/04 11:10:12 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4356,10 +4356,10 @@ problem-host.example.com</screen>
     by defining appropriate <literal>-filter</literal> exceptions.
    </para>
    <para>
-    Compressed content can't be filtered either, unless &my-app;
-    is compiled with zlib support (requires at least &my-app; 3.0.7),
-    in which case &my-app; will decompress the content before filtering
-    it.
+    Compressed content can't be filtered either, but if &my-app;
+    is compiled with zlib support and a supported compression algorithm
+    is used (gzip or deflate), &my-app; can first decompress the content
+    and then filter it.
    </para>
    <para>
     If you use a &my-app; version without zlib support, but want filtering to work on
@@ -8914,6 +8914,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.135  2011/09/04 11:10:12  fabiankeil
+ Ditch trailing whitespace
+
  Revision 2.134  2011/08/18 11:45:02  fabiankeil
  Don't use unspecified MSN sites as examples for User-Agent-based descrimination
 
