@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.81 2011/06/23 13:58:53 fabiankeil Exp $
+#  $Id: default.filter,v 1.82 2011/06/23 14:04:29 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -128,15 +128,15 @@ s/(open\s*\([^\)]+always(?:raised|lowered)=)(["']?)(?:yes|1)\2/$1$2no$2/sigU
 
 #################################################################################
 #
-# js-events: Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
+# js-events: Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).
 #
 #################################################################################
-FILTER: js-events Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
+FILTER: js-events Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).
 
 s/(on|event\.)((mouse(over|out|down|up|move))|(un)?load|contextmenu|selectstart)/never/ig
 # Not events, but abused on the same type of sites:
 s/(alert|confirm)\s*\(/concat(/ig
-s/settimeout\(/concat(/ig
+s/set(timeout|interval)\(/concat(/ig
 
 #################################################################################
 #
