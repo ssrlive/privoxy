@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.240 2011/07/30 15:00:20 fabiankeil Exp $
+#  $Id: default.action.master,v 1.241 2011/07/30 15:02:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -701,6 +701,8 @@ countr*.
 #MASTER# REMARKS: We still like tor
 # URL = http://metrics.torproject.org/consensus-graphs.html
 metrics.torproject.org/
+# URL = http://linuxcounter.net/
+linuxcounter.net/
 
 #############################################################################
 # Generic block patterns by path:
