@@ -1,4 +1,4 @@
-$Id: TODO,v 1.56 2011/09/18 14:41:03 fabiankeil Exp $
+$Id: TODO,v 1.57 2011/10/16 12:40:59 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -281,3 +281,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 98) When showing action section on the CGI pages, properly escape
     line breaks so they can be copy&pasted into action files without
     adjustments.
+
+99) Figure out a mechanism through which a user can easily enable
+    site-specific action sections that are too aggressive to be
+    enalbled by default. This could be similiar to the presettings
+    in default.action, but could also be just another action file
+    that isn't used by default.
