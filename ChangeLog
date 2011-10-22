@@ -3,8 +3,8 @@ ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Version 3.0.17 Stable ***
 
-- Fixed last-chunk-detection for responses where the content was small
-  enough to be read with the body, causing Privoxy to wait for the
+- Fixed last-chunk-detection for responses where the body was small
+  enough to be read with the headers, causing Privoxy to wait for the
   end of the content until the server closed the connection or the
   request timed out. Reported by "Karsten" in #3028326.
 - Responses with status code 204 weren't properly detected as body-less
