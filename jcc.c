@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.367 2011/10/16 12:40:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.368 2011/10/23 11:18:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3088,10 +3088,9 @@ int main(int argc, char **argv)
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 {
    int idx;
-   const int catched_signals[] = { SIGTERM, SIGINT, SIGHUP, 0 };
-   const int ignored_signals[] = { SIGPIPE, 0 };
+   const int catched_signals[] = { SIGTERM, SIGINT, SIGHUP };
 
-   for (idx = 0; catched_signals[idx] != 0; idx++)
+   for (idx = 0; idx < SZ(catched_signals); idx++)
    {
 #ifdef sun /* FIXME: Is it safe to check for HAVE_SIGSET instead? */
       if (sigset(catched_signals[idx], sig_handler) == SIG_ERR)
@@ -3103,12 +3102,9 @@ int main(int argc, char **argv)
       }
    }
 
-   for (idx = 0; ignored_signals[idx] != 0; idx++)
+   if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
    {
-      if (signal(ignored_signals[idx], SIG_IGN) == SIG_ERR)
-      {
-         log_error(LOG_LEVEL_FATAL, "Can't set ignore-handler for signal %d: %E", ignored_signals[idx]);
-      }
+      log_error(LOG_LEVEL_FATAL, "Can't set ignore-handler for SIGPIPE: %E");
    }
 
 }
