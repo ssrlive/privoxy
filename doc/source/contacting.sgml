@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.25 2011/08/18 11:42:50 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.26 2011/09/04 11:10:12 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -159,7 +159,7 @@
   that your bug still exists.
 </para>
 <para>
-Please be sure to provide the following information:
+  Please be sure to provide the following information:
 </para>
 <para>
  <itemizedlist>
