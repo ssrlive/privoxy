@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.78 2011/09/18 14:42:43 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.79 2011/10/16 12:37:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -943,7 +943,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 {
    int err = 0;
    char cbuf[300];
-   char sbuf[30];
+   char sbuf[10];
    size_t client_pos = 0;
    int server_size = 0;
    size_t hostlen = 0;
@@ -1090,17 +1090,10 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    }
 
    server_size = read_socket(sfd, sbuf, sizeof(sbuf));
-   if (server_size < 3)
+   if (server_size != sizeof(sbuf))
    {
       errstr = "SOCKS5 negotiation read failed";
       err = 1;
-   }
-   else if (server_size > 20)
-   {
-      /* This is somewhat unexpected but doesn't really matter. */
-      log_error(LOG_LEVEL_CONNECT, "socks5_connect: read %d bytes "
-         "from socks server. Would have accepted up to %d.",
-         server_size, sizeof(sbuf));
    }
 
    if (!err)
