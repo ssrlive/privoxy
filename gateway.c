@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.79 2011/10/16 12:37:12 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.80 2011/10/23 11:20:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1118,7 +1118,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    assert(errstr != NULL);
    csp->error_message = strdup(errstr);
-   log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s", errstr);
+   log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s: %N", errstr, server_size, sbuf);
    close_socket(sfd);
    errno = EINVAL;
 
