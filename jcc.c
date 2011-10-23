@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.369 2011/10/23 11:22:16 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.370 2011/10/23 11:23:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2544,22 +2544,24 @@ static void serve(struct client_state *csp)
 
       if (continue_chatting)
       {
-         unsigned int client_timeout;
+         unsigned int client_timeout = 1; /* XXX: Use something else here? */
 
-         if (csp->server_connection.sfd != JB_INVALID_SOCKET)
+         if (0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
          {
-            client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
-            log_error(LOG_LEVEL_CONNECT,
-               "Waiting for the next client request on socket %d. "
-               "Keeping the server socket %d to %s open.",
-               csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
-         }
-         else
-         {
-            client_timeout = 1; /* XXX: Use something else here? */
-            log_error(LOG_LEVEL_CONNECT,
-               "Waiting for the next client request on socket %d. "
-               "No server socket to keep open.", csp->cfd);
+            if (csp->server_connection.sfd != JB_INVALID_SOCKET)
+            {
+               client_timeout = (unsigned)csp->server_connection.keep_alive_timeout - latency;
+               log_error(LOG_LEVEL_CONNECT,
+                  "Waiting for the next client request on socket %d. "
+                  "Keeping the server socket %d to %s open.",
+                  csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
+            }
+            else
+            {
+               log_error(LOG_LEVEL_CONNECT,
+                  "Waiting for the next client request on socket %d. "
+                  "No server socket to keep open.", csp->cfd);
+            }
          }
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
             && data_is_available(csp->cfd, (int)client_timeout)
@@ -2571,9 +2573,12 @@ static void serve(struct client_state *csp)
          }
          else
          {
-            log_error(LOG_LEVEL_CONNECT,
-               "No additional client request received in time on socket %d.",
-                csp->cfd);
+            if (0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+            {
+               log_error(LOG_LEVEL_CONNECT,
+                  "No additional client request received in time on socket %d.",
+                  csp->cfd);
+            }
 #ifdef FEATURE_CONNECTION_SHARING
             if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
                && (socket_is_still_alive(csp->server_connection.sfd)))
