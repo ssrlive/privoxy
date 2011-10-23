@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.366 2011/10/08 17:30:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.367 2011/10/16 12:40:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1693,16 +1693,16 @@ static void chat(struct client_state *csp)
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-   hdr = list_to_text(csp->headers);
-   if (hdr == NULL)
-   {
-      /* FIXME Should handle error properly */
-      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
-   }
-   list_remove_all(csp->headers);
-
    if (fwd->forward_host || (http->ssl == 0))
    {
+      hdr = list_to_text(csp->headers);
+      if (hdr == NULL)
+      {
+         /* FIXME Should handle error properly */
+         log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
+      }
+      list_remove_all(csp->headers);
+
       /*
        * Write the client's (modified) header to the server
        * (along with anything else that may be in the buffer)
@@ -1722,17 +1722,18 @@ static void chat(struct client_state *csp)
          freez(hdr);
          return;
       }
+      freez(hdr);
    }
    else
    {
       /*
        * We're running an SSL tunnel and we're not forwarding,
-       * so just send the "connect succeeded" message to the
-       * client, flush the rest, and get out of the way.
+       * so just ditch the client headers, send the "connect succeeded"
+       * message to the client, flush the rest, and get out of the way.
        */
+      list_remove_all(csp->headers);
       if (write_socket(csp->cfd, CSUCCEED, strlen(CSUCCEED)))
       {
-         freez(hdr);
          return;
       }
       IOB_RESET(csp);
@@ -1741,9 +1742,6 @@ static void chat(struct client_state *csp)
    log_error(LOG_LEVEL_CONNECT, "to %s successful", http->hostport);
 
    csp->server_connection.request_sent = time(NULL);
-
-   /* we're finished with the client's header */
-   freez(hdr);
 
    maxfd = (csp->cfd > csp->server_connection.sfd) ?
       csp->cfd : csp->server_connection.sfd;
