@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/user.action,v $
 # 
-#  $Id: user.action,v 1.9 2008/03/27 18:27:37 fabiankeil Exp $
+#  $Id: user.action,v 1.10 2011/10/26 18:58:37 fabiankeil Exp $
 #
 #  Purpose     :  User-maintained actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -166,3 +166,13 @@ www.example.com/nasty-ads/sponsor.gif
 { +set-image-blocker{blank} }
 #/
 
+# Enable the following section (not the regression-test directives)
+# to rewrite and redirect click-tracking URLs on news.google.com.
+# Disabling JavaScript should work as well and probably works more reliably.
+#
+# Redirected URL = http://news.google.com/news/url?ct2=us%2F0_0_s_1_1_a&sa=t&usg=AFQjCNHJWPc7ffoSXPSqBRz55jDA0KgxOQ&cid=8797762374160&url=http%3A%2F%2Fonline.wsj.com%2Farticle%2FSB10001424052970204485304576640791304008536.html&ei=YcqeTsymCIjxggf8uQE&rt=HOMEPAGE&vm=STANDARD&bvm=section&did=-6537064229385238098
+# Redirect Destination = http://online.wsj.com/article/SB10001424052970204485304576640791304008536.html
+# Ignore = Yes
+#
+#{+redirect{s@(&url=http[^&]*)&.*$@$1@} +fast-redirects{check-decoded-url}}
+#news.google.com/news/url.*&url=http.*&
