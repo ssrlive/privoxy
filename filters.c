@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.146 2011/10/30 16:15:29 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.147 2011/10/30 16:15:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1117,8 +1117,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
        * Keep the last one we spot.
        */
       char *found = NULL;
-      char *s = strdup(subject);
-      char *token = strtok(s, "?&");
+      char *token = strtok(subject, "?&");
       while (token)
       {
          char *dtoken = url_decode(token);
@@ -1135,7 +1134,6 @@ char *get_last_url(char *subject, const char *redirect_mode)
          }
          token = strtok(NULL, "?&");
       }
-      freez(s);
 
       if (found)
       {
