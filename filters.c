@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.144 2011/07/30 15:15:25 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.145 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1106,21 +1106,52 @@ char *get_last_url(char *subject, const char *redirect_mode)
    }
 
    if (0 == strcmpic(redirect_mode, "check-decoded-url"))
-   {
-      log_error(LOG_LEVEL_REDIRECTS, "Decoding \"%s\" if necessary.", subject);
-      new_url = url_decode(subject);
-      if (new_url != NULL)
+   {  
+     log_error(LOG_LEVEL_REDIRECTS, "Checking \"%s\" for encoded redirects.",
+               subject);
+
+      /* jwz: Check each parameter in the URL separately.
+              Sectionize the URL at "?" and "&",
+              then URL-decode each component,
+              and look for a URL in the decoded result.
+              Keep the last one we spot.
+       */
+      char *found = 0;
+      char *s = strdup (subject);
+      char *token = strtok (s, "?&");
+      while (token)
       {
-         freez(subject);
-         subject = new_url;
+        char *dtoken = url_decode (token);
+        if (!dtoken) continue;
+        char *h1 = strstr (dtoken, "http://");
+        char *h2 = strstr (dtoken, "https://");
+        char *h = (h1 && h2
+                   ? (h1 < h2 ? h1 : h2)
+                   : (h1 ? h1 : h2));
+        if (h)
+        {
+          freez(found);
+          found = strdup (h);
+        }
+        token = strtok (0, "?&");
       }
-      else
+      freez(s);
+
+      if (found)
       {
-         log_error(LOG_LEVEL_ERROR, "Unable to decode \"%s\".", subject);
+        freez(subject);
+        return found;
       }
+
+      freez (subject);
+      return NULL;
    }
 
-   log_error(LOG_LEVEL_REDIRECTS, "Checking \"%s\" for redirects.", subject);
+
+   /* Else, just look for a URL inside this one, without decoding anything. */
+
+   log_error(LOG_LEVEL_REDIRECTS, "Checking \"%s\" for unencoded redirects.", 
+             subject);
 
    /*
     * Find the last URL encoded in the request
