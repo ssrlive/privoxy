@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.78 2011/10/30 16:20:35 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.79 2011/10/30 16:21:01 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -639,6 +639,16 @@ sub load_action_files ($) {
 #
 ############################################################################
 
+# Fisher Yates shuffle from Perl's "How do I shuffle an array randomly?" FAQ
+sub fisher_yates_shuffle ($) {
+    my $deck = shift;
+    my $i = @$deck;
+    while ($i--) {
+        my $j = int rand($i+1);
+        @$deck[$i,$j] = @$deck[$j,$i];
+    }
+}
+
 sub execute_regression_tests () {
 
     our @regression_tests;
@@ -662,14 +672,30 @@ sub execute_regression_tests () {
         my $failures;
         my $skipped = 0;
 
+        if (cli_option_is_set('shuffle-tests')) {
+
+            # Shuffle both the test sections and
+            # the tests they contain.
+            #
+            # XXX: With the current data layout, shuffling tests
+            #      from different sections isn't possible.
+            #      Is this worth changing the layout?
+            fisher_yates_shuffle(\@regression_tests);
+            for (my $s = 0;  $s < @regression_tests; $s++) {
+                fisher_yates_shuffle($regression_tests[$s]);
+            }
+        }
+
         for (my $s = 0;  $s < @regression_tests; $s++) {
 
             my $r = 0;
 
             while (defined $regression_tests[$s][$r]) {
 
-                die "Section id mismatch" if ($s != $regression_tests[$s][$r]{'section-id'});
-                die "Regression test id mismatch" if ($r != $regression_tests[$s][$r]{'regression-test-id'});
+                unless (cli_option_is_set('shuffle-tests')) {
+                    die "Section id mismatch" if ($s != $regression_tests[$s][$r]{'section-id'});
+                    die "Regression test id mismatch" if ($r != $regression_tests[$s][$r]{'regression-test-id'});
+                }
                 die "Internal error. Test executor missing."
                     unless defined $regression_tests[$s][$r]{executor};
 
@@ -1617,6 +1643,7 @@ Options and their default values if they have any:
     [--privoxy-address]
     [--retries $cli_options{'retries'}]
     [--show-skipped-tests]
+    [--shuffle-tests]
     [--sleep-time $cli_options{'sleep-time'}]
     [--test-number]
     [--verbose]
@@ -1672,6 +1699,7 @@ sub parse_cli_options () {
         'min-level=i'        => \$cli_options{'min-level'},
         'privoxy-address=s'  => \$cli_options{'privoxy-address'},
         'retries=i'          => \$cli_options{'retries'},
+        'shuffle-tests'      => \$cli_options{'shuffle-tests'},
         'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
         'sleep-time=i'       => \$cli_options{'sleep-time'},
         'test-number=i'      => \$cli_options{'test-number'},
@@ -1921,6 +1949,11 @@ B<--test-number test-number> Only run the test with the specified
 number.
 
 B<--show-skipped-tests> Log skipped tests even if verbose mode is off.
+
+B<--shuffle-tests> Shuffle test sections and their tests before
+executing them. When combined with B<--forks>, this can increase
+the chances of detecting race conditions. Of course some problems
+are easier to detect without this option.
 
 B<--sleep-time seconds> Wait B<seconds> between tests. Useful when
 debugging issues with systems that don't log with millisecond precision.
