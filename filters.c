@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.150 2011/10/30 16:17:21 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.151 2011/10/30 16:17:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1121,7 +1121,11 @@ char *get_last_url(char *subject, const char *redirect_mode)
       while (token)
       {
          char *dtoken = url_decode(token);
-         if (!dtoken) continue;
+         if (NULL == dtoken)
+         {
+            log_error(LOG_LEVEL_ERROR, "Unable to decode \"%s\".", token);
+            continue;
+         }
          char *h1 = strstr(dtoken, "http://");
          char *h2 = strstr(dtoken, "https://");
          char *h = (h1 && h2
