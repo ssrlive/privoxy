@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.29 2010/07/21 14:35:09 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.30 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -98,6 +98,10 @@ extern privoxy_mutex_t resolver_mutex;
 #ifndef HAVE_RANDOM
 extern privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
+
+#ifdef HAVE_STRTOK
+extern privoxy_mutex_t strtok_mutex;
+#endif /* ndef HAVE_STRTOK */
 
 #endif /* FEATURE_PTHREAD */
 

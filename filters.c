@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.151 2011/10/30 16:17:57 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.152 2011/10/30 16:18:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -77,6 +77,11 @@ const char filters_rcs[] = "$Id: filters.c,v 1.151 2011/10/30 16:17:57 fabiankei
 #include "deanimate.h"
 #include "urlmatch.h"
 #include "loaders.h"
+
+#ifdef HAVE_STRTOK
+/* Only used for locks */
+#include "jcc.h"
+#endif /* def HAVE_STRTOK */
 
 #ifdef _WIN32
 #include "win32.h"
@@ -1109,6 +1114,8 @@ char *get_last_url(char *subject, const char *redirect_mode)
    {  
       log_error(LOG_LEVEL_REDIRECTS,
          "Checking \"%s\" for encoded redirects.", subject);
+
+#if defined(MUTEX_LOCKS_AVAILABLE) && defined(HAVE_STRTOK)
       /*
        * Check each parameter in the URL separately.
        * Sectionize the URL at "?" and "&",
@@ -1117,6 +1124,8 @@ char *get_last_url(char *subject, const char *redirect_mode)
        * Keep the last one we spot.
        */
       char *found = NULL;
+
+      privoxy_mutex_lock(&strtok_mutex);
       char *token = strtok(subject, "?&");
       while (token)
       {
@@ -1139,15 +1148,29 @@ char *get_last_url(char *subject, const char *redirect_mode)
             {
                log_error(LOG_LEVEL_ERROR,
                   "Out of memory while searching for redirects.");
+               privoxy_mutex_unlock(&strtok_mutex);
                return NULL;
             }
          }
          freez(dtoken);
          token = strtok(NULL, "?&");
       }
+      privoxy_mutex_unlock(&strtok_mutex);
       freez(subject);
 
       return found;
+#else
+      new_url = url_decode(subject);
+      if (new_url != NULL)
+      {
+         freez(subject);
+         subject = new_url;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_ERROR, "Unable to decode \"%s\".", subject);
+      }
+#endif /* defined(MUTEX_LOCKS_AVAILABLE) && defined(HAVE_STRTOK) */
    }
 
    /* Else, just look for a URL inside this one, without decoding anything. */
