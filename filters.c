@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.145 2011/09/04 11:10:56 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.146 2011/10/30 16:15:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1107,51 +1107,50 @@ char *get_last_url(char *subject, const char *redirect_mode)
 
    if (0 == strcmpic(redirect_mode, "check-decoded-url"))
    {  
-     log_error(LOG_LEVEL_REDIRECTS, "Checking \"%s\" for encoded redirects.",
-               subject);
-
-      /* jwz: Check each parameter in the URL separately.
-              Sectionize the URL at "?" and "&",
-              then URL-decode each component,
-              and look for a URL in the decoded result.
-              Keep the last one we spot.
+      log_error(LOG_LEVEL_REDIRECTS,
+         "Checking \"%s\" for encoded redirects.", subject);
+      /*
+       * Check each parameter in the URL separately.
+       * Sectionize the URL at "?" and "&",
+       * then URL-decode each component,
+       * and look for a URL in the decoded result.
+       * Keep the last one we spot.
        */
-      char *found = 0;
-      char *s = strdup (subject);
-      char *token = strtok (s, "?&");
+      char *found = NULL;
+      char *s = strdup(subject);
+      char *token = strtok(s, "?&");
       while (token)
       {
-        char *dtoken = url_decode (token);
-        if (!dtoken) continue;
-        char *h1 = strstr (dtoken, "http://");
-        char *h2 = strstr (dtoken, "https://");
-        char *h = (h1 && h2
-                   ? (h1 < h2 ? h1 : h2)
-                   : (h1 ? h1 : h2));
-        if (h)
-        {
-          freez(found);
-          found = strdup (h);
-        }
-        token = strtok (0, "?&");
+         char *dtoken = url_decode(token);
+         if (!dtoken) continue;
+         char *h1 = strstr(dtoken, "http://");
+         char *h2 = strstr(dtoken, "https://");
+         char *h = (h1 && h2
+                    ? (h1 < h2 ? h1 : h2)
+                    : (h1 ? h1 : h2));
+         if (h)
+         {
+            freez(found);
+            found = strdup(h);
+         }
+         token = strtok(NULL, "?&");
       }
       freez(s);
 
       if (found)
       {
-        freez(subject);
-        return found;
+         freez(subject);
+         return found;
       }
 
-      freez (subject);
+      freez(subject);
       return NULL;
    }
 
-
    /* Else, just look for a URL inside this one, without decoding anything. */
 
-   log_error(LOG_LEVEL_REDIRECTS, "Checking \"%s\" for unencoded redirects.", 
-             subject);
+   log_error(LOG_LEVEL_REDIRECTS,
+      "Checking \"%s\" for unencoded redirects.", subject);
 
    /*
     * Find the last URL encoded in the request
