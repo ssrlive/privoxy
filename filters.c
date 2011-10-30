@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.148 2011/10/30 16:16:07 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.149 2011/10/30 16:17:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1140,15 +1140,9 @@ char *get_last_url(char *subject, const char *redirect_mode)
          }
          token = strtok(NULL, "?&");
       }
-
-      if (found)
-      {
-         freez(subject);
-         return found;
-      }
-
       freez(subject);
-      return NULL;
+
+      return found;
    }
 
    /* Else, just look for a URL inside this one, without decoding anything. */
