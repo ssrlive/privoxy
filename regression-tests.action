@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.37 2011/09/06 18:45:46 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.38 2011/10/30 16:21:19 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -26,8 +26,10 @@
 #
 #############################################################################
 
+# While the syntax used is understood by Privoxy 3.0.14 and later,
+# some of the +fast-redirects{} tests require at least 3.0.18 to work.
 {{settings}}
-for-privoxy-version=3.0.14
+for-privoxy-version=3.0.18
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
