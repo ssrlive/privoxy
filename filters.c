@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.149 2011/10/30 16:17:07 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.150 2011/10/30 16:17:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1138,6 +1138,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
                return NULL;
             }
          }
+         freez(dtoken);
          token = strtok(NULL, "?&");
       }
       freez(subject);
