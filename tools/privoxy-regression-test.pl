@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.212 2011/07/17 13:49:52 fk Exp $
+# $Id: privoxy-regression-test.pl,v 1.77 2011/07/17 13:52:11 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -147,7 +147,7 @@ sub check_for_forbidden_characters ($) {
     }
 }
 
-sub load_regressions_tests () {
+sub load_regression_tests () {
 
     our $privoxy_cgi_url;
     our @privoxy_config;
@@ -1576,7 +1576,7 @@ sub main () {
     init_our_variables();
     parse_cli_options();
     init_proxy_settings('vanilla-proxy');
-    load_regressions_tests();
+    load_regression_tests();
     init_proxy_settings('fuzz-proxy');
     start_forks(get_cli_option('forks')) if cli_option_is_set('forks');
     execute_regression_tests();
