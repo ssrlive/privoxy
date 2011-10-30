@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.77 2011/07/17 13:52:11 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.78 2011/10/30 16:20:35 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -147,7 +147,162 @@ sub check_for_forbidden_characters ($) {
     }
 }
 
-sub load_regression_tests () {
+sub load_regression_tests() {
+    if (cli_option_is_set('local-test-file')) {
+        load_regression_tests_from_file(get_cli_option('local-test-file'));
+    } else {
+        load_regression_tests_through_privoxy();
+    }
+}
+
+# XXX: Contains a lot of code duplicated from load_action_files()
+#      that should be factored out.
+sub load_regression_tests_from_file ($) {
+    my $action_file = shift;
+
+    # initialized here
+    our %actions;
+    our @regression_tests;
+
+    my $si = 0;  # Section index
+    my $ri = -1; # Regression test index
+    my $count = 0;
+
+    my $ignored = 0;
+
+    my $sticky_actions = undef;
+
+    l(LL_STATUS, "Gathering regression tests from local file " . $action_file);
+
+    open(my $ACTION_FILE, "<", $action_file)
+        or log_and_die("Failed to open $action_file: $!");
+
+    while (<$ACTION_FILE>) {
+
+        my $no_checks = 0;
+        chomp;
+        my ($token, $value) = tokenize($_);
+
+        next unless defined $token;
+
+        # Load regression tests
+
+        if (token_starts_new_test($token)) {
+
+            # Beginning of new regression test.
+            $ri++;
+            $count++;
+            enlist_new_test(\@regression_tests, $token, $value, $si, $ri, $count);
+            $no_checks = 1; # Already validated by enlist_new_test().
+        }
+
+        if ($token =~ /level\s+(\d+)/i) {
+
+            my $level = $1;
+            register_dependency($level, $value);
+        }
+
+        if ($token eq 'sticky actions') {
+
+            # Will be used by each following Sticky URL.
+            $sticky_actions = $value;
+            if ($sticky_actions =~ /{[^}]*\s/) {
+                log_and_die("'Sticky Actions' with whitespace inside the " .
+                            "action parameters are currently unsupported.");
+            }
+        }
+
+        if ($si == -1 || $ri == -1) {
+            # No beginning of a test detected yet,
+            # so we don't care about any other test
+            # attributes.
+            next;
+        }
+
+        if ($token eq 'expect header') {
+
+            l(LL_FILE_LOADING, "Detected expectation: " . $value);
+            $regression_tests[$si][$ri]{'expect-header'} = $value;
+
+        } elsif ($token eq 'tag') {
+
+            next if ($ri == -1);
+
+            my $tag = parse_tag($value);
+
+            # We already checked in parse_tag() after filtering
+            $no_checks = 1;
+
+            l(LL_FILE_LOADING, "Detected TAG: " . $tag);
+
+            # Save tag for all tests in this section
+            do {
+                $regression_tests[$si][$ri]{'tag'} = $tag;
+            } while ($ri-- > 0);
+
+            $si++;
+            $ri = -1;
+
+        } elsif ($token eq 'ignore' && $value =~ /Yes/i) {
+
+            l(LL_FILE_LOADING, "Ignoring section: " . test_content_as_string($regression_tests[$si][$ri]));
+            $regression_tests[$si][$ri]{'ignore'} = 1;
+            $ignored++;
+
+        } elsif ($token eq 'expect status code') {
+
+            l(LL_FILE_LOADING, "Expecting status code: " . $value);
+            $regression_tests[$si][$ri]{'expected-status-code'} = $value;
+
+        } elsif ($token eq 'level') { # XXX: stupid name
+
+            $value =~ s@(\d+).*@$1@;
+            l(LL_FILE_LOADING, "Level: " . $value);
+            $regression_tests[$si][$ri]{'level'} = $value;
+
+        } elsif ($token eq 'method') {
+
+            l(LL_FILE_LOADING, "Method: " . $value);
+            $regression_tests[$si][$ri]{'method'} = $value;
+
+        } elsif ($token eq 'redirect destination') {
+
+            l(LL_FILE_LOADING, "Redirect destination: " . $value);
+            $regression_tests[$si][$ri]{'redirect destination'} = $value;
+
+        } elsif ($token eq 'url') {
+
+            if (defined $sticky_actions) {
+                die "WTF? Attempted to overwrite Sticky Actions"
+                    if defined ($regression_tests[$si][$ri]{'sticky-actions'});
+
+                l(LL_FILE_LOADING, "Sticky actions: " . $sticky_actions);
+                $regression_tests[$si][$ri]{'sticky-actions'} = $sticky_actions;
+            } else {
+                log_and_die("Sticky URL without Sticky Actions: $value");
+            }
+
+        } else {
+
+            # We don't use it, so we don't need
+            $no_checks = 1;
+            l(LL_STATUS, "Enabling no_checks for $token") unless $no_checks;
+        }
+
+        # XXX: Necessary?
+        unless ($no_checks)  {
+            check_for_forbidden_characters($value);
+            check_for_forbidden_characters($token);
+        }
+    }
+
+    l(LL_FILE_LOADING, "Done loading " . $count . " regression tests."
+      . " Of which " . $ignored. " will be ignored)\n");
+
+}
+
+
+sub load_regression_tests_through_privoxy () {
 
     our $privoxy_cgi_url;
     our @privoxy_config;
@@ -319,6 +474,8 @@ sub enlist_new_test ($$$$$$) {
       "Regression test " . $number . " (section:" . $si . "):");
 }
 
+# XXX: Shares a lot of code with load_regression_tests_from_file()
+#      that should be factored out.
 sub load_action_files ($) {
 
     # initialized here
@@ -1452,6 +1609,7 @@ Options and their default values if they have any:
     [--help]
     [--header-fuzzing]
     [--level]
+    [--local-test-file]
     [--loops $cli_options{'loops'}]
     [--max-level $cli_options{'max-level'}]
     [--max-time $cli_options{'max-time'}]
@@ -1507,6 +1665,7 @@ sub parse_cli_options () {
         'header-fuzzing'     => \$cli_options{'header-fuzzing'},
         'help'               => \&help,
         'level=i'            => \$cli_options{'level'},
+        'local-test-file=s'  => \$cli_options{'local-test-file'},
         'loops=i'            => \$cli_options{'loops'},
         'max-level=i'        => \$cli_options{'max-level'},
         'max-time=i'         => \$cli_options{'max-time'},
@@ -1592,8 +1751,8 @@ B<privoxy-regression-test> - A regression test "framework" for Privoxy.
 
 B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
 [B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
-[B<--loops count>] [B<--max-level max-level>] [B<--max-time max-time>]
-[B<--min-level min-level>] B<--privoxy-address proxy-address>
+[B<--local-test-file testfile>] [B<--loops count>] [B<--max-level max-level>]
+[B<--max-time max-time>] [B<--min-level min-level>] B<--privoxy-address proxy-address>
 [B<--retries retries>] [B<--test-number test-number>]
 [B<--show-skipped-tests>] [B<--sleep-time> seconds] [B<--verbose>]
 [B<--version>]
@@ -1727,6 +1886,12 @@ B<--header-fuzzing> Modifies linear white space in
 headers in a way that should not affect the test result.
 
 B<--level level> Only execute tests with the specified B<level>. 
+
+B<--local-test-file test-file> Do not get the tests
+through Privoxy's web interface, but use a single local
+file. Not recommended for testing Privoxy, but can be useful
+to "misappropriate" Privoxy-Regression-Test to test other
+stuff, like webserver configurations.
 
 B<--loop count> Loop through the regression tests B<count> times. 
 Useful to feed a fuzzer, or when doing stress tests with
