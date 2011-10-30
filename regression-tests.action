@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.36 2011/07/30 15:22:39 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.37 2011/09/06 18:45:46 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -836,3 +836,28 @@ trailing-dot.example.org
 # Expect Header = X-LWS-Test: "This  is  quoted" this is not "this  is  " but " this again is not
 {}
 TAG:^LWS Tests$
+
+{+fast-redirects{check-decoded-url}}
+# Redirected URL = http://redirect.example.net/blafasel&url=http://redirected1.example.net/
+# Redirect Destination = http://redirected1.example.net/
+# Redirected URL = http://redirect.example.net/blafasel&url=http%3A%2F%2Fredirected2.example.net%2F&parameter=not-part-of-the-redirected-url
+# Redirect Destination = http://redirected2.example.net/
+# Redirected URL = http://redirect.example.net/blafasel&url=http%3A%2F%2Fredirected3.example.net%2F&parameter=not-part-of-the-redirected-url
+# Redirect Destination = http://redirected3.example.net/
+# Redirected URL = http://redirect.example.net/blafasel&url=http%3A%2F%2Fredirected4.example.net%2F%26parameter=part-of-the-redirected-url
+# Redirect Destination = http://redirected4.example.net/&parameter=part-of-the-redirected-url
+# Redirected URL = http://redirect.example.net/blafasel&url1=http%3A%2F%2Fredirected5.example.net%2F%26parameter1=part-of-the-redirected-url&url2=http%3A%2F%2Fredirected5.example.net%2F%26parameter2=part-of-the-redirected-url2
+# Redirect Destination = http://redirected5.example.net/&parameter2=part-of-the-redirected-url2
+# Redirected URL = http://redirect.example.net/blafasel&url1=http%3A%2F%2Fredirected6.example.net%2F%26parameter1=part-of-the-redirected-url&url2=http%3A%2F%2Fredirected6.example.net%2F%26parameter2=part-of-the-redirected-url2&parameter3=not-part-of-the-redirected-url2
+# Redirect Destination = http://redirected6.example.net/&parameter2=part-of-the-redirected-url2
+# Redirected URL = http://redirect.example.net/blafasel?x=http%3A%2F%2Fredirected7.example.net%2F%26parameter1=part-of-the-redirected-url1&parameter2=not-part-of-the-redirected-url1
+# Redirect Destination = http://redirected7.example.net/&parameter1=part-of-the-redirected-url1
+# Redirected URL = http://redirect.example.net/blafasel?x=http%3A%2F%2Fredirected8.example.net%2F%26parameter1=part-of-the-redirected-url1&parameter2=not-part-of-the-redirected-url1&parameter3=not-part-of-the-redirected-url1
+# Redirect Destination = http://redirected8.example.net/&parameter1=part-of-the-redirected-url1
+redirect.example.net/
+
+{+fast-redirects{simple-check}}
+# Redirected URL = http://redirect2.example.net/blafasel?x=http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
+# Redirect Destination = http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
+redirect2.example.net/
+
