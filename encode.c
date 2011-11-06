@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.19 2011/09/04 11:35:38 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.20 2011/09/04 11:35:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -206,6 +206,9 @@ char * html_encode_and_free_original(char *s)
  * Description :  Encodes a string so it can be used in a URL
  *                query string.  Replaces special characters with
  *                the appropriate %xx codes.
+ *
+ *                XXX: url_query_encode() would be a more fitting
+ *                     name.
  *
  * Parameters  :
  *          1  :  s = String to encode.  Null-terminated.
