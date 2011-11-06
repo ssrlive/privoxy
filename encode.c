@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.22 2011/11/06 11:44:32 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.23 2011/11/06 11:44:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -47,20 +47,20 @@ const char encode_rcs[] = "$Id: encode.c,v 1.22 2011/11/06 11:44:32 fabiankeil E
 const char encode_h_rcs[] = ENCODE_H_VERSION;
 
 /* Maps special characters in a URL to their equivalent % codes. */
-static const char * const url_code_map[256] = {
-   NULL, "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09",
+static const char const url_code_map[256][4] = {
+   "",    "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09",
    "%0A", "%0B", "%0C", "%0D", "%0E", "%0F", "%10", "%11", "%12", "%13",
    "%14", "%15", "%16", "%17", "%18", "%19", "%1A", "%1B", "%1C", "%1D",
    "%1E", "%1F", "%20", "%21", "%22", "%23", "%24", "%25", "%26", "%27",
-   "%28", "%29", NULL,  "%2B", "%2C", NULL,  NULL,  "%2F", NULL,  NULL,
-   NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  "%3A", "%3B",
-   "%3C", "%3D", "%3E", "%3F", NULL,  NULL,  NULL,  NULL,  NULL,  NULL,
-   NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,
-   NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,
-   NULL,  "%5B", "%5C", "%5D", "%5E", NULL,  "%60", NULL,  NULL,  NULL,
-   NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,
-   NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,
-   NULL,  NULL,  NULL,  "%7B", "%7C", "%7D", "%7E", "%7F", "%80", "%81",
+   "%28", "%29", "",    "%2B", "%2C", "",    "",    "%2F", "",    "",
+   "",    "",    "",    "",    "",    "",    "",    "",    "%3A", "%3B",
+   "%3C", "%3D", "%3E", "%3F", "",    "",    "",    "",    "",    "",
+   "",    "",    "",    "",    "",    "",    "",    "",    "",    "",
+   "",    "",    "",    "",    "",    "",    "",    "",    "",    "",
+   "",    "%5B", "%5C", "%5D", "%5E", "",    "%60", "",    "",    "",
+   "",    "",    "",    "",    "",    "",    "",    "",    "",    "",
+   "",    "",    "",    "",    "",    "",    "",    "",    "",    "",
+   "",    "",    "",    "%7B", "%7C", "%7D", "%7E", "%7F", "%80", "%81",
    "%82", "%83", "%84", "%85", "%86", "%87", "%88", "%89", "%8A", "%8B",
    "%8C", "%8D", "%8E", "%8F", "%90", "%91", "%92", "%93", "%94", "%95",
    "%96", "%97", "%98", "%99", "%9A", "%9B", "%9C", "%9D", "%9E", "%9F",
@@ -238,8 +238,8 @@ char * url_encode(const char *s)
       char * p = buf;
       while( (c = *s++) != '\0')
       {
-         const char * replace_with = url_code_map[(unsigned char) c];
-         if (replace_with != NULL)
+         const char *replace_with = url_code_map[(unsigned char) c];
+         if (*replace_with != '\0')
          {
             const size_t bytes_written = (size_t)(p - buf);
             assert(bytes_written < buf_size);
@@ -434,8 +434,8 @@ char *percent_encode_url(const char *s)
          if (i >= sizeof(allowed_characters) || '\0' == allowed_characters[i])
          {
             const char *replace_with = url_code_map[i];
-            assert(replace_with != NULL);
-            if (replace_with != NULL)
+            assert(*replace_with != '\0');
+            if (*replace_with != '\0')
             {
                const size_t bytes_written = (size_t)(p - buf);
                assert(bytes_written < buf_size);
