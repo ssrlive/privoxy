@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.20 2011/09/04 11:35:49 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.21 2011/11/06 11:42:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -51,7 +51,7 @@ static const char * const url_code_map[256] = {
    NULL, "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09",
    "%0A", "%0B", "%0C", "%0D", "%0E", "%0F", "%10", "%11", "%12", "%13",
    "%14", "%15", "%16", "%17", "%18", "%19", "%1A", "%1B", "%1C", "%1D",
-   "%1E", "%1F", "+",   "%21", "%22", "%23", "%24", "%25", "%26", "%27",
+   "%1E", "%1F", "%20", "%21", "%22", "%23", "%24", "%25", "%26", "%27",
    "%28", "%29", NULL,  "%2B", "%2C", NULL,  NULL,  "%2F", NULL,  NULL,
    NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  "%3A", "%3B",
    "%3C", "%3D", "%3E", "%3F", NULL,  NULL,  NULL,  NULL,  NULL,  NULL,
