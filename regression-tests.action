@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.39 2011/10/30 16:23:22 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.40 2011/11/06 11:45:51 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -863,7 +863,19 @@ TAG:^LWS Tests$
 # Redirect Destination = http://redirected7.example.net/&parameter1=part-of-the-redirected-url1
 # Redirected URL = http://redirect.example.net/blafasel?x=http%3A%2F%2Fredirected8.example.net%2F%26parameter1=part-of-the-redirected-url1&parameter2=not-part-of-the-redirected-url1&parameter3=not-part-of-the-redirected-url1
 # Redirect Destination = http://redirected8.example.net/&parameter1=part-of-the-redirected-url1
+# Redirected URL = http://redirect.example.net/blafasel?a?b?c?d?e?f?g?h?i?j?k?l?m?n?o?p?q?r?s&t&u&v&w&x&y&z&1&2&3&4&5&6&7&8&9&10&11&12&13&14&15&16x=http%3A%2F%2Fredirected8.example.net%2F%26parameter1=part-of-the-redirected-url1&parameter2=not-part-of-the-redirected-url1&parameter3=not-part-of-the-redirected-url1
+# Redirect Destination = http://redirected8.example.net/&parameter1=part-of-the-redirected-url1
+# Redirected URL = http://redirect.example.net/blafasel???????????????????????????????=http%3A%2F%2Fredirected8.example.net%2F%26parameter1=part-of-the-redirected-url1&parameter2=not-part-of-the-redirected-url1&parameter3=not-part-of-the-redirected-url1
+# Redirect Destination = http://redirected8.example.net/&parameter1=part-of-the-redirected-url1
+# Redirected URL = http://redirect.example.net/blafasel&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&=http%3A%2F%2Fredirected8.example.net%2F%26parameter1=part-of-the-redirected-url1&parameter2=not-part-of-the-redirected-url1&parameter3=not-part-of-the-redirected-url1
+# Redirect Destination = http://redirected8.example.net/&parameter1=part-of-the-redirected-url1
 redirect.example.net/
+# Redirected URL = http://redirect.example.net/blafaselhttp://redirect1.example.net/http://redirect2.example.net/
+# Redirect Destination = http://redirect2.example.net/
+# Redirected URL = http://redirect.example.net/blafasel%3A%2F%2Fredirect1.example.net/http://redirect2.example.net/
+# Redirect Destination = http://redirect2.example.net/
+# Redirected URL = http://redirect.example.net/blafaselhttp://redirect1.example.net/http%3A%2F%2Fredirect2.example.net/
+# Redirect Destination = http://redirect2.example.net/
 
 {+fast-redirects{simple-check}}
 # Redirected URL = http://redirect2.example.net/blafasel?x=http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
