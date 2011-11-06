@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.235 2011/10/16 12:39:14 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.236 2011/10/23 11:23:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -252,7 +252,6 @@ static const add_header_func_ptr add_client_headers[] = {
    client_host_adder,
    client_x_forwarded_for_adder,
    client_xtra_adder,
-   /* Temporarily disabled:    client_accept_encoding_adder, */
    client_connection_header_adder,
    NULL
 };
@@ -3479,36 +3478,6 @@ static jb_err client_host_adder(struct client_state *csp)
    return err;
 
 }
-
-
-#if 0
-/*********************************************************************
- *
- * Function    :  client_accept_encoding_adder
- *
- * Description :  Add an Accept-Encoding header to the client's request
- *                that disables compression if the action applies, and
- *                the header is not already there. Called from `sed'.
- *                Note: For HTTP/1.0, the absence of the header is enough.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  JB_ERR_OK on success, or
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-static jb_err client_accept_encoding_adder(struct client_state *csp)
-{
-   if (   ((csp->action->flags & ACTION_NO_COMPRESSION) != 0)
-       && (!strcmpic(csp->http->ver, "HTTP/1.1")) )
-   {
-      return enlist_unique(csp->headers, "Accept-Encoding: identity;q=1.0, *;q=0", 16);
-   }
-
-   return JB_ERR_OK;
-}
-#endif
 
 
 /*********************************************************************
