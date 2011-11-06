@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.153 2011/10/30 16:20:12 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.154 2011/10/30 16:22:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1325,8 +1325,8 @@ struct http_response *redirect_url(struct client_state *csp)
             return cgi_error_memory();
          }
 
-         if ( enlist_unique_header(rsp->headers, "Location", new_url)
-           || (NULL == (rsp->status = strdup("302 Local Redirect from Privoxy"))) )
+         if (enlist_unique_header(rsp->headers, "Location", new_url)
+           || (NULL == (rsp->status = strdup("302 Local Redirect from Privoxy"))))
          {
             freez(new_url);
             free_http_response(rsp);
