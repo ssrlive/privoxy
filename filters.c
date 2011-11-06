@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.155 2011/11/06 11:36:42 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.156 2011/11/06 11:45:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -77,11 +77,6 @@ const char filters_rcs[] = "$Id: filters.c,v 1.155 2011/11/06 11:36:42 fabiankei
 #include "deanimate.h"
 #include "urlmatch.h"
 #include "loaders.h"
-
-#ifdef HAVE_STRTOK
-/* Only used for locks */
-#include "jcc.h"
-#endif /* def HAVE_STRTOK */
 
 #ifdef _WIN32
 #include "win32.h"
@@ -1115,62 +1110,66 @@ char *get_last_url(char *subject, const char *redirect_mode)
       log_error(LOG_LEVEL_REDIRECTS,
          "Checking \"%s\" for encoded redirects.", subject);
 
-#if defined(MUTEX_LOCKS_AVAILABLE) && defined(HAVE_STRTOK)
       /*
        * Check each parameter in the URL separately.
        * Sectionize the URL at "?" and "&",
-       * then URL-decode each component,
+       * go backwards through the segments, URL-decode them
        * and look for a URL in the decoded result.
-       * Keep the last one we spot.
+       * Stop the search after the first match.
        */
-      char *found = NULL;
+      char *url_segment = NULL;
+      /*
+       * XXX: This estimate is guaranteed to be high enough as we
+       *      let ssplit() ignore empty fields, but also a bit wasteful.
+       */
+      size_t max_segments = strlen(subject) / 2;
+      char **url_segments = malloc(max_segments * sizeof(char *));
+      int segments;
 
-      privoxy_mutex_lock(&strtok_mutex);
-      char *token = strtok(subject, "?&");
-      while (token)
+      if (NULL == url_segments)
       {
-         char *dtoken = url_decode(token);
+         log_error(LOG_LEVEL_ERROR, "Out of memory while decoding URL: %s", new_url);
+         freez(subject);
+         return NULL;
+      }
+
+      segments = ssplit(subject, "?&", url_segments, max_segments, 1, 1);
+
+      while (segments-- > 0)
+      {
+         char *dtoken = url_decode(url_segments[segments]);
          if (NULL == dtoken)
          {
-            log_error(LOG_LEVEL_ERROR, "Unable to decode \"%s\".", token);
+            log_error(LOG_LEVEL_ERROR, "Unable to decode \"%s\".", url_segments[segments]);
             continue;
          }
-         char *http_url = strstr(dtoken, "http://");
-         char *https_url = strstr(dtoken, "https://");
-         char *last_url = (http_url && https_url
-                          ? (http_url < https_url ? http_url : https_url)
-                          : (http_url ? http_url : https_url));
-         if (last_url)
+         url_segment = strstr(dtoken, "http://");
+         if (NULL == url_segment)
          {
-            freez(found);
-            found = strdup(last_url);
-            if (found == NULL)
+            url_segment = strstr(dtoken, "https://");
+         }
+         if (NULL != url_segment)
+         {
+            url_segment = strdup(url_segment);
+            freez(dtoken);
+            if (url_segment == NULL)
             {
                log_error(LOG_LEVEL_ERROR,
                   "Out of memory while searching for redirects.");
-               privoxy_mutex_unlock(&strtok_mutex);
                return NULL;
             }
+            break;
          }
          freez(dtoken);
-         token = strtok(NULL, "?&");
       }
-      privoxy_mutex_unlock(&strtok_mutex);
       freez(subject);
+      freez(url_segments);
 
-      return found;
-#else
-      new_url = url_decode(subject);
-      if (new_url != NULL)
+      if (url_segment == NULL)
       {
-         freez(subject);
-         subject = new_url;
+         return NULL;
       }
-      else
-      {
-         log_error(LOG_LEVEL_ERROR, "Unable to decode \"%s\".", subject);
-      }
-#endif /* defined(MUTEX_LOCKS_AVAILABLE) && defined(HAVE_STRTOK) */
+      subject = url_segment;
    }
 
    /* Else, just look for a URL inside this one, without decoding anything. */

@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.371 2011/10/23 11:24:33 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.372 2011/10/30 16:20:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -197,10 +197,6 @@ privoxy_mutex_t localtime_mutex;
 #ifndef HAVE_RANDOM
 privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
-
-#ifdef HAVE_STRTOK
-privoxy_mutex_t strtok_mutex;
-#endif /* def HAVE_STRTOK */
 
 #endif /* def MUTEX_LOCKS_AVAILABLE */
 
@@ -2852,9 +2848,6 @@ static void initialize_mutexes(void)
    privoxy_mutex_init(&rand_mutex);
 #endif /* ndef HAVE_RANDOM */
 
-#ifdef HAVE_STRTOK
-   privoxy_mutex_init(&strtok_mutex);
-#endif /* def HAVE_STRTOK */
 #endif /* def MUTEX_LOCKS_AVAILABLE */
 }
 
