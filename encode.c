@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.21 2011/11/06 11:42:14 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.22 2011/11/06 11:44:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -374,6 +374,83 @@ char *url_decode(const char * s)
       }
       *q = '\0';
    }
+
+   return(buf);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  percent_encode_url
+ *
+ * Description :  Percent-encodes a string so it no longer contains
+ *                any characters that aren't valid in an URL according
+ *                to RFC 3986.
+ *
+ *                XXX: Do not confuse with encode_url()
+ *
+ * Parameters  :
+ *          1  :  s = String to encode.  Null-terminated.
+ *
+ * Returns     :  Encoded string, newly allocated on the heap.
+ *                Caller is responsible for freeing it with free().
+ *                If s is NULL, or on out-of memory, returns NULL.
+ *
+ *********************************************************************/
+char *percent_encode_url(const char *s)
+{
+   static const char allowed_characters[128] = {
+      '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+      '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+      '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0',
+      '\0', '\0', '\0', '!',  '\0', '#',  '$',  '%',  '&',  '\'',
+      '(',  ')',  '*',  '+',  ',',  '-',  '.',  '/',  '0',  '1',
+      '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  ':',  ';',
+      '\0', '=',  '\0', '?',  '@',  'A',  'B',  'C',  'D',  'E',
+      'F',  'G',  'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',
+      'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  'X',  'Y',
+      'Z',  '[',  '\0', ']',  '\0', '_',  '\0', 'a',  'b',  'c',
+      'd',  'e',  'f',  'g',  'h',  'i',  'j',  'k',  'l',  'm',
+      'n',  'o',  'p',  'q',  'r',  's',  't',  'u',  'v',  'w',
+      'x',  'y',  'z',  '\0', '\0', '\0', '~',  '\0'
+   };
+   char *buf;
+   size_t buf_size;
+
+   assert(s != NULL);
+
+   /* Each input char can expand to at most 3 chars. */
+   buf_size = (strlen(s) * 3) + 1;
+   buf = (char *)malloc(buf_size);
+
+   if (buf != NULL)
+   {
+      char c;
+      char *p = buf;
+      while((c = *s++) != '\0')
+      {
+         const unsigned int i = (unsigned char)c;
+         if (i >= sizeof(allowed_characters) || '\0' == allowed_characters[i])
+         {
+            const char *replace_with = url_code_map[i];
+            assert(replace_with != NULL);
+            if (replace_with != NULL)
+            {
+               const size_t bytes_written = (size_t)(p - buf);
+               assert(bytes_written < buf_size);
+               p += strlcpy(p, replace_with, buf_size - bytes_written);
+            }
+         }
+         else
+         {
+            *p++ = c;
+         }
+      }
+      *p = '\0';
+   }
+
+   assert(strlen(buf) < buf_size);
 
    return(buf);
 
