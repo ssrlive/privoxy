@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/user.action,v $
 # 
-#  $Id: user.action,v 1.11 2011/10/26 19:00:11 fabiankeil Exp $
+#  $Id: user.action,v 1.12 2011/10/26 19:00:21 fabiankeil Exp $
 #
 #  Purpose     :  User-maintained actions file, see
 #                 http://www.privoxy.org/user-manual/actions-file.html
@@ -174,7 +174,7 @@ www.example.com/nasty-ads/sponsor.gif
 # Redirect Destination = http://online.wsj.com/article/SB10001424052970204485304576640791304008536.html
 # Ignore = Yes
 #
-#{+redirect{s@(&url=http[^&]*)&.*$@$1@} +fast-redirects{check-decoded-url}}
+#{+fast-redirects{check-decoded-url}}
 #news.google.com/news/url.*&url=http.*&
 
 # Enable the following section (not the regression-test directives)
