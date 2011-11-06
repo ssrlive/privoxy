@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.156 2011/11/06 11:45:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.157 2011/11/06 11:48:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1105,7 +1105,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
       return NULL;
    }
 
-   if (0 == strcmpic(redirect_mode, "check-decoded-url"))
+   if (0 == strcmpic(redirect_mode, "check-decoded-url") && strchr(subject, '%'))
    {  
       log_error(LOG_LEVEL_REDIRECTS,
          "Checking \"%s\" for encoded redirects.", subject);
