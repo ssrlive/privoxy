@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.40 2011/11/06 11:45:51 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.41 2011/11/06 11:46:36 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -876,6 +876,13 @@ redirect.example.net/
 # Redirect Destination = http://redirect2.example.net/
 # Redirected URL = http://redirect.example.net/blafaselhttp://redirect1.example.net/http%3A%2F%2Fredirect2.example.net/
 # Redirect Destination = http://redirect2.example.net/
+# These tests verify that Privoxy behaves as intended,
+# given that the encoded redirect URLs are invalid,
+# there are no correct redirect URLs.
+# Redirected URL = http://redirect.example.net/%%%%%%%%%%%%%%%%%%%%%%blafaselhttp://redirect1.example.net/http%3A%2F%2Fredirect2.example.net/%%%%%%%%%%%%%%
+# Redirect Destination = http://redirect2.example.net/%%%%%%%%%%%%%%
+# Redirected URL = http://redirect.example.net/%%%%%%%%%%%%%%%%%%%%%%blafaselhttp://redirect1.example.net/http%3A%2F%2Fredirect2.example.net/%1%2%%3%4%5%6%7%8%9%0%0%%
+# Redirect Destination = http://redirect2.example.net/%1%2%%3%4%5%6%7%8%9%0%0%%
 
 {+fast-redirects{simple-check}}
 # Redirected URL = http://redirect2.example.net/blafasel?x=http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
