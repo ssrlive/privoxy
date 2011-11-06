@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.157 2011/11/06 11:48:23 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.158 2011/11/06 11:50:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1319,6 +1319,7 @@ struct http_response *redirect_url(struct client_state *csp)
             return cgi_error_memory();
          }
          new_url = encoded_url;
+         assert(FALSE == url_requires_percent_encoding(new_url));
       }
 
       if (0 == strcmpic(new_url, csp->http->url))
