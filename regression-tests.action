@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.38 2011/10/30 16:21:19 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.39 2011/10/30 16:23:22 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -44,6 +44,8 @@ for-privoxy-version=3.0.18
 # Level 17 needs = feature status FEATURE_PTHREAD Yes
 # Level 18 needs = feature status FEATURE_GRACEFUL_TERMINATION No
 # Level 19 needs = feature status FEATURE_GRACEFUL_TERMINATION Yes
+# Level 20 needs = feature status FEATURE_TOGGLE Yes
+# Level 21 needs = feature status FEATURE_TOGGLE No
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -593,7 +595,12 @@ TAG:^Max-Forwards header without TRACE method$
 # Fetch Test = http://p.p/show-url-info?url=FTp:%2F%2Fwww.privoxy.org%2F
 # Fetch Test = http://p.p/show-url-info?url=
 # Fetch Test = http://p.p/show-url-info?url=%2F
+# Depends on FEATURE_TOGGLE
 # Fetch Test = http://p.p/toggle
+# Level = 20
+# Fetch Test = http://p.p/toggle
+# Expect Status Code = 404
+# Level = 21
 # Fetch Test = http://p.p/edit-actions
 # Fetch Test = http://p.p/eaa
 # Fetch Test = http://p.p/eau
