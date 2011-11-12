@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.158 2011/11/06 11:50:15 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.159 2011/11/06 11:52:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1171,11 +1171,12 @@ char *get_last_url(char *subject, const char *redirect_mode)
       }
       subject = url_segment;
    }
-
-   /* Else, just look for a URL inside this one, without decoding anything. */
-
-   log_error(LOG_LEVEL_REDIRECTS,
-      "Checking \"%s\" for unencoded redirects.", subject);
+   else
+   {
+      /* Look for a URL inside this one, without decoding anything. */
+      log_error(LOG_LEVEL_REDIRECTS,
+         "Checking \"%s\" for unencoded redirects.", subject);
+   }
 
    /*
     * Find the last URL encoded in the request
