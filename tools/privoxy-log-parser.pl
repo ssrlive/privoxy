@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.121 2011/08/18 11:41:18 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.122 2011/11/12 12:55:46 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1266,6 +1266,11 @@ sub handle_loglevel_redirect ($) {
         #  is already properly formatted.
         # XXX: assume the same?
         $c = highlight_matched_url($c, '(?<=assuming that \")[^"]*');
+
+    } elsif ($c =~ m/^Percent-encoding redirect/) {
+
+        # Percent-encoding redirect URL: http://www.example.org/\x02
+        $c = highlight_matched_url($c, '(?<=redirect URL: ).*');
 
     } else {
 
