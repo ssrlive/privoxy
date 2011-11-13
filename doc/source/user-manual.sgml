@@ -12,10 +12,10 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.18">
-<!entity p-status "UNRELEASED">
+<!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.136 2011/10/14 16:53:10 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.137 2011/11/13 17:02:59 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.136 2011/10/14 16:53:10 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.137 2011/11/13 17:02:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -9374,6 +9374,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.137  2011/11/13 17:02:59  fabiankeil
+ Import the first ChangeLog draft for 3.0.18 stable
+
  Revision 2.136  2011/10/14 16:53:10  fabiankeil
  Clarify the effect of compiling Privoxy with zlib support
 
