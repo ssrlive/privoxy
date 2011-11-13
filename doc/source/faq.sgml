@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.81 2011/09/04 11:10:12 fabiankeil Exp $
+ $Id: faq.sgml,v 2.82 2011/11/13 16:50:34 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.81 2011/09/04 11:10:12 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.82 2011/11/13 16:50:34 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -506,8 +506,36 @@ warranty? Registration?</title>
 <para>
  <application>Privoxy</application> is developed by unpaid volunteers
  and thus our current running costs are pretty low. Nevertheless, we
- have plans that will cost money in the future. We would like to get
- this money through donations made by our users.
+ have plans that will cost money in the future. They include,
+ but aren't limited to spending money on:
+
+</para>
+
+<para>
+<itemizedlist>
+ <listitem>
+   <para>
+     Hardware to help make sure <application>Privoxy</application>
+     keeps running on platforms the developers currently can't test
+     on and can be ported to others.
+   </para>
+ </listitem>
+ <listitem>
+   <para>
+     Technical books to educate our developers about said platforms
+     or to improve their knowledge in general.
+   </para>
+ </listitem>
+ <listitem>
+   <para>
+     More reliable hosting,
+   </para>
+ </listitem>
+</itemizedlist>
+</para>
+
+<para>
+ We would like to get this money through donations made by our users.
 </para>
 
 <para>
@@ -519,25 +547,19 @@ warranty? Registration?</title>
 </para>
 
 <para>
- We intend to use the donations to pay for our domain after transferring
- it to SPI. Our goal is to make sure there's no single point of failure
- and the bill gets paid and the site keeps running even if a some of
- the currently active developers were to suddenly disappear for a while.
-</para>
-
-<para>
- We would also like to spend some money on more reliable hosting,
- on hardware to help make sure <application>Privoxy</application>
- keeps running on platforms the developers currently can't test on,
- and on technical books to educate our developers about said platforms
- or to improve their knowledge in general.
+ If you read this section before you may notice that paying for the
+ project domain privoxy.org is no longer on the list. It has been
+ transferred to SPI is sponsored by Mythic Beasts Ltd.
 </para>
 
 <para>
  If you enjoy our software and feel like helping out with a donation,
  please have a look at
  <ulink url="http://www.spi-inc.org/donations">SPI's donation page</ulink>
- to see what the options are.
+ to see what the options are. If you have any questions regarding donations
+ please mail to either the public user mailing list or, if it's a private
+ matter, to <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink>
+ (Privoxy's SPI liason) directly.
 </para>
 </sect3>
 
@@ -2970,6 +2992,13 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.82  2011/11/13 16:50:34  fabiankeil
+Note that donations for Privoxy are currently only tax-deductible in the US
+
+As it turns out tax-deductible donations in a few other western
+countries are theoretically possible through partner organizations
+but aren't available out of the box.
+
 Revision 2.81  2011/09/04 11:10:12  fabiankeil
 Ditch trailing whitespace
 
