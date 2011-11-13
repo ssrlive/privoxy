@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.16 2011/06/29 20:29:58 fabiankeil Exp $
+# $Id: uagen.pl,v 1.17 2011/06/29 20:30:18 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -60,8 +60,8 @@ use constant {
    # are too lazy to check, but want to change them anyway, take the values you
    # see in the "Help/About Mozilla Firefox" menu.
 
-   BROWSER_VERSION                   => "5.0",
-   BROWSER_REVISION                  => '5.0',
+   BROWSER_VERSION                   => "8.0",
+   BROWSER_REVISION                  => '8.0',
    BROWSER_RELEASE_DATE              => '20100101',
 };
 
@@ -204,7 +204,6 @@ sub generate_firefox_user_agent() {
     our $randomize_release_date;
 
     my $mozillaversion  = '5.0';
-    my $security        = "U";
 
     my $creation_time = $randomize_release_date ?
         generate_creation_time($browser_release_date) : $browser_release_date;
@@ -212,8 +211,8 @@ sub generate_firefox_user_agent() {
     my ( $platform, $os_or_cpu )       = generate_platform_and_os;
 
     my $firefox_user_agent =
-      sprintf "Mozilla/%s (%s; %s; %s; %s; rv:%s) Gecko/%s Firefox/%s",
-      $mozillaversion, $platform, $security, $os_or_cpu, $locale, $browser_revision,
+      sprintf "Mozilla/%s (%s; %s; rv:%s) Gecko/%s Firefox/%s",
+      $mozillaversion, $platform, $os_or_cpu, $browser_revision,
       $creation_time, $browser_version;
 
     return $accept_language, $firefox_user_agent;
