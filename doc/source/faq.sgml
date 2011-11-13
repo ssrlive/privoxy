@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.80 2011/08/18 11:42:50 fabiankeil Exp $
+ $Id: faq.sgml,v 2.81 2011/09/04 11:10:12 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.80 2011/08/18 11:42:50 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.81 2011/09/04 11:10:12 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -513,8 +513,9 @@ warranty? Registration?</title>
 <para>
  <application>Privoxy</application> has therefore become an associated
  project of <ulink url="http://www.spi-inc.org/about-spi/about-spi">Software
- in the Public Interest (SPI)</ulink>, which allows us to receive tax-deductible
- donations in most western countries.
+ in the Public Interest (SPI)</ulink>, which allows us to receive donations.
+ In the United States they are tax-deductible, in a few other western countries
+ they might be tax-deductible in the future.
 </para>
 
 <para>
@@ -2969,6 +2970,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.81  2011/09/04 11:10:12  fabiankeil
+Ditch trailing whitespace
+
 Revision 2.80  2011/08/18 11:42:50  fabiankeil
 Bump some more documentation copyright ranges.
 
