@@ -345,7 +345,7 @@ ChangeLog for Privoxy
 
 
 - uagen:
-  - Bump generated Firefox version to 9.0
+  - Bump generated Firefox version to 8.0
   - Only randomize the release date if the new --randomize-release-date option is enabled.
     Firefox versions after 4 use a fixed date string without meaning.
 
