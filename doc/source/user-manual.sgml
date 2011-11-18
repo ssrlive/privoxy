@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.137 2011/11/13 17:02:59 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.138 2011/11/13 17:03:54 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.137 2011/11/13 17:02:59 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.138 2011/11/13 17:03:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -449,15 +449,12 @@ How to install the binary packages depends on your operating system:
     <itemizedlist>
     <listitem>
      <para>
-      Fix a logic bug that could cause Privoxy to reuse a tainted
-      server socket.
-      It could happen for server sockets that got tainted by a
-      server-header-tagger-induced block, in which case Privoxy
-      doesn't necessarily read the whole server response.
-      If keep-alive was enabled and the request following the
-      blocked one was to the same host and using the same
-      forwarding settings, Privoxy would send it on the tainted
-      server socket.
+      Fix a logic bug that could cause Privoxy to reuse a server
+      socket after it got tainted by a server-header-tagger-induced
+      block that was triggered before the whole server response had
+      been read. If keep-alive was enabled and the request following
+      the blocked one was to the same host and using the same forwarding
+      settings, Privoxy would send it on the tainted server socket.
       While the server would simply treat it as a pipelined request,
       Privoxy would later on fail to properly parse the server's
       response as it would try to parse the unread data from the
@@ -467,27 +464,27 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      When implying keep-alive in client_connection(), remember that the client didn't
-      Fixes a regression introduced in 3.0.13 that would cause
-      Privoxy to wait for additional client requests after
+      When implying keep-alive in client_connection(), remember that
+      the client didn't. Fixes a regression introduced in 3.0.13 that
+      would cause Privoxy to wait for additional client requests after
       receiving a HTTP/1.1 request with "Connection: close" set
       and connection sharing enabled.
-      With clients like curl which terminates the client connection
-      after detecting that the whole body has been received it doesn't
-      really matter, but with clients like FreeBSD's fetch the client
-      connection would be kept open until it timed out.
+      With clients which terminates the client connection after detecting
+      that the whole body has been received it doesn't really matter,
+      but with clients that don't the connection would be kept open until
+      it timed out.
      </para>
     </listitem>
     <listitem>
      <para>
-      Fix a subtle race condition between prepare_csp_for_next_request() and sweep()
-      A thread preparing itself for the next client request
+      Fix a subtle race condition between prepare_csp_for_next_request()
+      and sweep() A thread preparing itself for the next client request
       could briefly appear to be inactive.
       If all other threads were already using more recent files,
       the thread could get its files swept away under its feet.
-      I've only seen it while stress testing in valgrind while
-      touching action files in a loop. It's unlikely to have
-      caused any actual problems in the real world.
+      So far this has only been reproduced while stress testing in
+      valgrind while touching action files in a loop. It's unlikely
+      to have caused any actual problems in the real world.
      </para>
      </listitem>
     </itemizedlist>
@@ -507,11 +504,40 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       The +fast-redirects{check-decoded-url} action checks URL
-      segments separately.
-      If there are other parameters behind the redirect URL,
-      this makes it unnecessary to cut them of by additionally
-      using a +redirect{} pcrs command.
+      segments separately. If there are other parameters behind
+      the redirect URL, this makes it unnecessary to cut them off
+      by additionally using a +redirect{} pcrs command.
       Initial patch submitted by Jamie Zawinski in #3429848.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      When loading action sections, verify that the referenced filters
+      exist. Currently missing filters only result in an error message,
+      but eventually the severity will be upgraded to fatal.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Allow to bind to multiple separate addresses.
+      Patch set submitted by Petr Pisar in #3354485.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Set socket_error to errno if connecting fails in rfc2553_connect_to()
+      Previously rejected direct connections could be incorrectly reported
+      as DNS issues.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable filters if SDCH compression is used unless filtering is forced.
+      If SDCH was combined with a supported compression algorithm,
+      we'd previously try to decompress it, when successful apply
+      the enabled filters and ditch the Content-Encoding header
+      even though the SDCH compression wasn't removed.
+      Reported by zebul666 in #3225863.
      </para>
     </listitem>
     <listitem>
@@ -524,7 +550,7 @@ How to install the binary packages depends on your operating system:
       Adjust url_code_map[] so spaces are replaced with %20 instead of '+'
       While '+' can be used by client's submitting form data, this is not
       actually what Privoxy is using the lookups for. This is more of a
-      cosmetic issue and doesn't fix any actual problems I'm aware of.
+      cosmetic issue and doesn't fix any actual problems.
      </para>
     </listitem>
     <listitem>
@@ -544,41 +570,12 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      When loading action sections, verify that the referenced filters exist
-      Currently missing filters only result in an error message,
-      but eventually the severity will be upgraded to fatal.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Allow to bind to multiple separate addresses.
-      Patch set submitted by Petr Pisar in #3354485.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Set socket_error to errno if connecting fails in rfc2553_connect_to()
-      Previously rejected direct connections could be incorrectly reported as DNS issues.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
       Fixed bind failures with certain GNU libc versions if no non-loopback
       IP address has been configured on the system. This is mainly an issue
       if the system is using DHCP and Privoxy is started before the network
       is completely configured.
       Reported by Raphael Marichez in #3349356.
       Additional insight from Petr Pisar.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Disable filters if SDCH compression is used unless filtering is forced.
-      If SDCH was combined with a supported compression algorithm,
-      we'd previously try to decompress it, when successful apply
-      the enabled filters and ditch the Content-Encoding header
-      even though the SDCH compression wasn't removed.
-      Reported by zebul666 in #3225863.
      </para>
     </listitem>
     <listitem>
@@ -591,10 +588,9 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Make a copy of the --user value and only mess with that when splitting user and group.
-      On some operating systems modifying the value directly
-      is reflected in the output of ps and friends and can
-      be misleading.
+      Make a copy of the --user value and only mess with that when splitting
+      user and group. On some operating systems modifying the value directly
+      is reflected in the output of ps and friends and can be misleading.
       Reported by zepard in #3292710.
      </para>
     </listitem>
@@ -616,357 +612,7 @@ How to install the binary packages depends on your operating system:
       It could be triggered by a pcrs job with an invalid pcre
       pattern (for example one that contains a lone quantifier).
      </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Action file improvements:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Moved the site-specific block pattern section below the one for the
-      generic patterns so for requests that are matched in both, the block
-      reason for the domain is shown which is usually more useful than showing
-      the one for the generic pattern.
-     </para>
     </listitem>
-    <listitem>
-     <para>
-      Add a (disabled) section to block various Facebook tracking URLs
-      Reported by Dan Stahlke in #3421764.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add a (disabled) section to rewrite and redirect click-tracking URLs used on news.google.com
-      Reported by Dan Stahlke in #3421755.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Unblock linuxcounter.net/
-      Reported by Dan Stahlke in #3422612.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Block 'www91.intel.com/' which is used by Omniture.
-      Reported by Adam Piggott in #3167370.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Disable the handle-as-empty-doc-returns-ok option and mark it as deprecated.
-      Reminded by tceverling in #2790091.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add ".ivwbox.de/" to the "Cross-site user tracking" section.
-      Reported by Nettozahler in #3172525.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Unblock and fast-redirect ".awin1.com/.*=http://"
-      Reported by Adam Piggott in #3170921.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Block "b.collective-media.net/".
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Widen the Debian popcon exception to "qa.debian.org/popcon".
-      Seen in Debian's 05_default_action.dpatch by Roland Rosenfeld.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Block ".gemius.pl/" which only seems to be used for user tracking.
-      Reported by johnd16 in #3002731. Additional input from Lee and movax.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Disable banners-by-size filters for '.thinkgeek.com/'
-      The filter only seems to catch pictures of the inventory.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Block requests for 'go.idmnet.bbelements.com/please/showit/'
-      Reported by kacperdominik in #3372959.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Unblock adainitiative.org/
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add a fast-redirects exception for '.googleusercontent.com/.*=cache'
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add a fast-redirects exception for webcache.googleusercontent.com/
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove -prevent-compression from the fragile alias
-      It's no longer used anywhere by default and isn't
-      known to break stuff anyway.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Unblock http://adassier.wordpress.com/ and http://adassier.files.wordpress.com/
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Filter file improvements:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Let the yahoo filter hide '.ads'
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Let the msn filter hide overlay ads for Facebook 'likes' in search results.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Let the msn filter hide elements with the id 's_notf_div'.
-      They only seem to be used to advertise site 'enhancements'.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Let the js-events filter additionally disarm setInterval()
-      Suggested by dg1727 in #3423775.
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Documentation improvements:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Clarify the effect of compiling Privoxy with zlib support
-      Suggested by dg1727 in #3423782.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Point out that the SourceForge messaging system works
-      like a blackhole and should thus not be used
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Mention some of the problems one can experience when not
-      explicitly configuring an IP addresses as listen address.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Explicitly mention that hostnames can be used instead of
-      IP addresses for the listen-address, that only the first
-      address returned will be used and what happens if the
-      address is invalid.
-      Requested by Calestyo in #3302213.
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Log message improvements:
-    <itemizedlist>
-    <listitem>
-     <para>
-      If only the server connection is kept alive, do not pretent to wait for a new client request.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove a superfluos log message in forget_connection()
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In chat(), properly report missing server responses as such instead of calling them empty
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In forwarded_connect(), fix a log message nobody should ever see
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Fix a log message in socks5_connect(), a failed write operation was logged as failed read operation
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Let load_one_actions_file() properly complain about a missing '{' at the beginning of the file
-      Simply stating that a line is invalid isn't particularly helpful.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Do not claim to listen on a socket until we actually do.
-      Patch submitted by Petr Pisar #3354485
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Prevent a duplicated LOG_LEVEL_CLF message when sending out the "no-server-data" response
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Also log the client socket when dropping a connection.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Include the destination host in the
-      'Request ... marked for blocking. limit-connect{...} doesn't allow CONNECT ...' message
-      Patch submitted by Saperski in #3296250.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Prevent a duplicated log message if none of the resolved IP
-      addresses were reachable
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In connect_to(), do not pretend to retry if forwarded-connect-retries is zero or unset.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      When a specified user or group can't be found, put the name in single-quotes when logging it.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In rfc2553_connect_to(), explain getnameinfo() errors differently.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove a useless log message in chat()
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      When retrying to connect, also log the maximum number of connection attempts
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Rephrase a log message in compile_dynamic_pcrs_job_list()
-      Divide the error code and its meaning with a colon.
-      Call the pcrs job dynamic and not the filter. Filters may
-      contain dynamic and non-dynamic pcrs jobs at the same time.
-      Only mention the name of the filter or tagger, but don't
-      claim it's a filter when it could be a tagger.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In a fatal error message in load_one_actions_file(), cover both URL and TAG patterns
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In pcrs_strerror(), properly report unknown positive error code values as unknown.
-      Previously they were handled like 0 (no error).
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In compile_dynamic_pcrs_job_list(), also log the actual error code as
-      pcrs_strerror() doesn't handle all errors reported by pcre
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Don't bother trying to continue chatting if the client didn't ask for it.
-      Reduces log noise a bit.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Make two fatal error message in load_one_actions_file() more descriptive
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In cgi_send_user_manual(), log when rejecting a file name due to '/' or '..'
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In load_file(), log a message if opening a file failed
-      The CGI error message alone isn't too helpful.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In connection_destination_matches(), improve two log messages to
-      help understand why the destinations don't match
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Rephrase a log message in serve(). Client request arrival
-      should be differentiated from closed client connections now.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      In serve(), log if a client connection isn't reused due to a
-      configuration file change.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Let mark_server_socket_tainted() always mark the server socket tainted,
-      just don't talk about it in cases where it has no effect.
-      It doesn't change Privoxy's behaviour, but makes understanding
-      the log file easier.
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Miscellaneous Privoxy improvements:
-    <itemizedlist>
     <listitem>
      <para>
       In get_last_url(), do not bother trying to decode URLs that do
@@ -1013,7 +659,8 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      In chat(), do not bother to generate a client request in case of direct CONNECT requests
+      In chat(), do not bother to generate a client request in case of
+      direct CONNECT requests
      </para>
     </listitem>
     <listitem>
@@ -1049,8 +696,9 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Introduce a MAN_PAGE variable that defaults to privoxy.1.
-      The Debian package uses section 8 for the man page and this should simplify the patch.
+      Introduce a GNUMakefile MAN_PAGE variable that defaults to privoxy.1.
+      The Debian package uses section 8 for the man page and this
+      should simplify the patch.
      </para>
     </listitem>
     <listitem>
@@ -1129,7 +777,8 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      In LogPutString(), don't bother looking at pszText when not actually logging anything
+      In LogPutString(), don't bother looking at pszText when not
+      actually logging anything
      </para>
     </listitem>
     <listitem>
@@ -1245,6 +894,361 @@ How to install the binary packages depends on your operating system:
      <para>
       Treat all Content-Type header values containing the pattern
       'script' as a sign of text. Reported by pribog in #3134970.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Action file improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Moved the site-specific block pattern section below the one for the
+      generic patterns so for requests that are matched in both, the block
+      reason for the domain is shown which is usually more useful than showing
+      the one for the generic pattern.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove -prevent-compression from the fragile alias
+      It's no longer used anywhere by default and isn't
+      known to break stuff anyway.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add a (disabled) section to block various Facebook tracking URLs
+      Reported by Dan Stahlke in #3421764.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add a (disabled) section to rewrite and redirect click-tracking
+      URLs used on news.google.com
+      Reported by Dan Stahlke in #3421755.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock linuxcounter.net/
+      Reported by Dan Stahlke in #3422612.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Block 'www91.intel.com/' which is used by Omniture.
+      Reported by Adam Piggott in #3167370.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable the handle-as-empty-doc-returns-ok option and mark it as deprecated.
+      Reminded by tceverling in #2790091.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add ".ivwbox.de/" to the "Cross-site user tracking" section.
+      Reported by Nettozahler in #3172525.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock and fast-redirect ".awin1.com/.*=http://"
+      Reported by Adam Piggott in #3170921.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Block "b.collective-media.net/".
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Widen the Debian popcon exception to "qa.debian.org/popcon".
+      Seen in Debian's 05_default_action.dpatch by Roland Rosenfeld.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Block ".gemius.pl/" which only seems to be used for user tracking.
+      Reported by johnd16 in #3002731. Additional input from Lee and movax.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable banners-by-size filters for '.thinkgeek.com/'
+      The filter only seems to catch pictures of the inventory.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Block requests for 'go.idmnet.bbelements.com/please/showit/'
+      Reported by kacperdominik in #3372959.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock adainitiative.org/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add a fast-redirects exception for '.googleusercontent.com/.*=cache'
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add a fast-redirects exception for webcache.googleusercontent.com/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock http://adassier.wordpress.com/ and http://adassier.files.wordpress.com/
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Filter file improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Let the yahoo filter hide '.ads'
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Let the msn filter hide overlay ads for Facebook 'likes' in search results.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Let the msn filter hide elements with the id 's_notf_div'.
+      They only seem to be used to advertise site 'enhancements'.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Let the js-events filter additionally disarm setInterval()
+      Suggested by dg1727 in #3423775.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Documentation improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Clarify the effect of compiling Privoxy with zlib support
+      Suggested by dg1727 in #3423782.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Point out that the SourceForge messaging system works
+      like a blackhole and should thus not be used to contact
+      individual developers.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Mention some of the problems one can experience when not
+      explicitly configuring an IP addresses as listen address.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Explicitly mention that hostnames can be used instead of
+      IP addresses for the listen-address, that only the first
+      address returned will be used and what happens if the
+      address is invalid.
+      Requested by Calestyo in #3302213.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Log message improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      If only the server connection is kept alive, do not pretent to
+      wait for a new client request.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove a superfluos log message in forget_connection()
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In chat(), properly report missing server responses as such
+      instead of calling them empty
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In forwarded_connect(), fix a log message nobody should ever see
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fix a log message in socks5_connect(), a failed write operation
+      was logged as failed read operation
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Let load_one_actions_file() properly complain about a missing
+      '{' at the beginning of the file
+      Simply stating that a line is invalid isn't particularly helpful.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Do not claim to listen on a socket until we actually do.
+      Patch submitted by Petr Pisar #3354485
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Prevent a duplicated LOG_LEVEL_CLF message when sending out
+      the "no-server-data" response
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Also log the client socket when dropping a connection.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Include the destination host in the 'Request ... marked for
+      blocking. limit-connect{...} doesn't allow CONNECT ...' message
+      Patch submitted by Saperski in #3296250.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Prevent a duplicated log message if none of the resolved IP
+      addresses were reachable
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In connect_to(), do not pretend to retry if forwarded-connect-retries
+      is zero or unset.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      When a specified user or group can't be found, put the name in
+      single-quotes when logging it.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In rfc2553_connect_to(), explain getnameinfo() errors differently.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove a useless log message in chat()
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      When retrying to connect, also log the maximum number of connection
+      attempts
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Rephrase a log message in compile_dynamic_pcrs_job_list()
+      Divide the error code and its meaning with a colon.
+      Call the pcrs job dynamic and not the filter. Filters may
+      contain dynamic and non-dynamic pcrs jobs at the same time.
+      Only mention the name of the filter or tagger, but don't
+      claim it's a filter when it could be a tagger.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In a fatal error message in load_one_actions_file(), cover both
+      URL and TAG patterns
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In pcrs_strerror(), properly report unknown positive error code
+      values as unknown.
+      Previously they were handled like 0 (no error).
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In compile_dynamic_pcrs_job_list(), also log the actual error code as
+      pcrs_strerror() doesn't handle all errors reported by pcre
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Don't bother trying to continue chatting if the client didn't ask for it.
+      Reduces log noise a bit.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Make two fatal error message in load_one_actions_file() more descriptive
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In cgi_send_user_manual(), log when rejecting a file name due to '/' or '..'
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In load_file(), log a message if opening a file failed
+      The CGI error message alone isn't too helpful.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In connection_destination_matches(), improve two log messages to
+      help understand why the destinations don't match
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Rephrase a log message in serve(). Client request arrival
+      should be differentiated from closed client connections now.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      In serve(), log if a client connection isn't reused due to a
+      configuration file change.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Let mark_server_socket_tainted() always mark the server socket tainted,
+      just don't talk about it in cases where it has no effect.
+      It doesn't change Privoxy's behaviour, but makes understanding
+      the log file easier.
      </para>
      </listitem>
     </itemizedlist>
@@ -1397,7 +1401,7 @@ How to install the binary packages depends on your operating system:
     <itemizedlist>
     <listitem>
      <para>
-      Bump generated Firefox version to 9.0
+      Bump generated Firefox version to 8.0
      </para>
     </listitem>
     <listitem>
@@ -9374,6 +9378,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.138  2011/11/13 17:03:54  fabiankeil
+ Bump entities for 3.0.18 stable
+
  Revision 2.137  2011/11/13 17:02:59  fabiankeil
  Import the first ChangeLog draft for 3.0.18 stable
 
