@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.108 2011/07/30 15:12:02 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.109 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1006,7 +1006,6 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
 #else
       *ip_address = strdup(inet_ntoa(server.sin_addr));
       snprintf(*port, NI_MAXSERV, "%hu", ntohs(server.sin_port));
-      *port[NI_MAXSERV - 1] = '\0';
 #endif /* HAVE_RFC2553 */
       if (NULL == hostname)
       {
