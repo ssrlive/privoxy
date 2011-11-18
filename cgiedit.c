@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.69 2011/04/19 13:00:47 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.70 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -321,11 +321,6 @@ static jb_err actions_from_radio(const struct map * parameters,
 static jb_err map_copy_parameter_html(struct map *out,
                                       const struct map *in,
                                       const char *name);
-#if 0 /* unused function */
-static jb_err map_copy_parameter_url(struct map *out,
-                                     const struct map *in,
-                                     const char *name);
-#endif /* unused function */
 
 static jb_err get_file_name_param(struct client_state *csp,
 	                                   const struct map *parameters,
@@ -431,56 +426,6 @@ static jb_err map_copy_parameter_html(struct map *out,
       return JB_ERR_OK;
    }
 }
-
-
-#if 0 /* unused function */
-/*********************************************************************
- *
- * Function    :  map_copy_parameter_url
- *
- * Description :  Copy a CGI parameter from one map to another, URL
- *                encoding it.
- *
- * Parameters  :
- *          1  :  out = target map
- *          2  :  in = source map
- *          3  :  name = name of cgi parameter to copy
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory
- *                JB_ERR_CGI_PARAMS if the parameter doesn't exist
- *                                  in the source map
- *
- *********************************************************************/
-static jb_err map_copy_parameter_url(struct map *out,
-                                     const struct map *in,
-                                     const char *name)
-{
-   const char * value;
-   jb_err err;
-
-   assert(out);
-   assert(in);
-   assert(name);
-
-   value = lookup(in, name);
-   err = map(out, name, 1, url_encode(value), 0);
-
-   if (err)
-   {
-      /* Out of memory */
-      return err;
-   }
-   else if (*value == '\0')
-   {
-      return JB_ERR_CGI_PARAMS;
-   }
-   else
-   {
-      return JB_ERR_OK;
-   }
-}
-#endif /* 0 - unused function */
 
 
 /*********************************************************************
