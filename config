@@ -1,6 +1,6 @@
-#        Sample Configuration File for Privoxy v3.0.17
+#        Sample Configuration File for Privoxy v3.0.18
 #
-#  $Id: config,v 1.95 2011/08/17 10:31:40 fabiankeil Exp $
+#  $Id: p-config.sgml,v 2.79 2011/09/04 11:10:12 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
 #
