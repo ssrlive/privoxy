@@ -62,30 +62,28 @@ body {
 
         <ul>
           <li>
-            <p>Fix a logic bug that could cause Privoxy to reuse a tainted
-            server socket. It could happen for server sockets that got
-            tainted by a server-header-tagger-induced block, in which case
-            Privoxy doesn't necessarily read the whole server response. If
-            keep-alive was enabled and the request following the blocked one
-            was to the same host and using the same forwarding settings,
-            Privoxy would send it on the tainted server socket. While the
-            server would simply treat it as a pipelined request, Privoxy
-            would later on fail to properly parse the server's response as it
-            would try to parse the unread data from the first response as
-            server headers for the second one. Regression introduced in
-            3.0.17.</p>
+            <p>Fix a logic bug that could cause Privoxy to reuse a server
+            socket after it got tainted by a server-header-tagger-induced
+            block that was triggered before the whole server response had
+            been read. If keep-alive was enabled and the request following
+            the blocked one was to the same host and using the same
+            forwarding settings, Privoxy would send it on the tainted server
+            socket. While the server would simply treat it as a pipelined
+            request, Privoxy would later on fail to properly parse the
+            server's response as it would try to parse the unread data from
+            the first response as server headers for the second one.
+            Regression introduced in 3.0.17.</p>
           </li>
 
           <li>
             <p>When implying keep-alive in client_connection(), remember that
-            the client didn't Fixes a regression introduced in 3.0.13 that
+            the client didn't. Fixes a regression introduced in 3.0.13 that
             would cause Privoxy to wait for additional client requests after
             receiving a HTTP/1.1 request with "Connection: close" set and
-            connection sharing enabled. With clients like curl which
-            terminates the client connection after detecting that the whole
-            body has been received it doesn't really matter, but with clients
-            like FreeBSD's fetch the client connection would be kept open
-            until it timed out.</p>
+            connection sharing enabled. With clients which terminates the
+            client connection after detecting that the whole body has been
+            received it doesn't really matter, but with clients that don't
+            the connection would be kept open until it timed out.</p>
           </li>
 
           <li>
@@ -94,9 +92,70 @@ body {
             itself for the next client request could briefly appear to be
             inactive. If all other threads were already using more recent
             files, the thread could get its files swept away under its feet.
-            I've only seen it while stress testing in valgrind while touching
-            action files in a loop. It's unlikely to have caused any actual
-            problems in the real world.</p>
+            So far this has only been reproduced while stress testing in
+            valgrind while touching action files in a loop. It's unlikely to
+            have caused any actual problems in the real world.</p>
+          </li>
+
+          <li>
+            <p>Disable filters if SDCH compression is used unless filtering
+            is forced. If SDCH was combined with a supported compression
+            algorithm, Privoxy previously could try to decompress it and
+            ditch the Content-Encoding header even though the SDCH
+            compression wasn't dealt with. Reported by zebul666 in
+            #3225863.</p>
+          </li>
+
+          <li>
+            <p>Make a copy of the --user value and only mess with that when
+            splitting user and group. On some operating systems modifying the
+            value directly is reflected in the output of ps and friends and
+            can be misleading. Reported by zepard in #3292710.</p>
+          </li>
+
+          <li>
+            <p>If forwarded-connect-retries is set, only retry if Privoxy is
+            actually forwarding the request. Previously direct connections
+            would be retried as well.</p>
+          </li>
+
+          <li>
+            <p>Fixed a small memory leak when retrying connections with IPv6
+            support enabled.</p>
+          </li>
+
+          <li>
+            <p>Remove an incorrect assertion in
+            compile_dynamic_pcrs_job_list() It could be triggered by a pcrs
+            job with an invalid pcre pattern (for example one that contains a
+            lone quantifier).</p>
+          </li>
+
+          <li>
+            <p>If the --user argument user[.group] contains a dot, always
+            bail out if no group has been specified. Previously the intended,
+            but undocumented (and apparently untested), behaviour was to try
+            interpreting the whole argument as user name, but the detection
+            was flawed and checked for '0' instead of '\0', thus merely
+            preventing group names beginning with a zero.</p>
+          </li>
+
+          <li>
+            <p>In html_code_map[], use a numeric character reference instead
+            of ' which wasn't standardized before XHTML 1.0.</p>
+          </li>
+
+          <li>
+            <p>Fix an invalid free when compiled with
+            FEATURE_GRACEFUL_TERMINATION and shut down through
+            http://config.privoxy.org/die</p>
+          </li>
+
+          <li>
+            <p>In get_actions(), fix the "temporary" backwards compatibility
+            hack to accept block actions without reason. It also covered
+            other actions that should be rejected as invalid. Reported by
+            Billy Crook.</p>
           </li>
         </ul>
       </li>
@@ -114,21 +173,36 @@ body {
           <li>
             <p>The +fast-redirects{check-decoded-url} action checks URL
             segments separately. If there are other parameters behind the
-            redirect URL, this makes it unnecessary to cut them of by
+            redirect URL, this makes it unnecessary to cut them off by
             additionally using a +redirect{} pcrs command. Initial patch
             submitted by Jamie Zawinski in #3429848.</p>
           </li>
 
           <li>
-            <p>Properly deal with FEATURE_TOGGLE being disabled</p>
+            <p>When loading action sections, verify that the referenced
+            filters exist. Currently missing filters only result in an error
+            message, but eventually the severity will be upgraded to
+            fatal.</p>
+          </li>
+
+          <li>
+            <p>Allow to bind to multiple separate addresses. Patch set
+            submitted by Petr Pisar in #3354485.</p>
+          </li>
+
+          <li>
+            <p>Set socket_error to errno if connecting fails in
+            rfc2553_connect_to() Previously rejected direct connections could
+            be incorrectly reported as DNS issues if Privoxy was compiled
+            with IPv6 support.</p>
           </li>
 
           <li>
             <p>Adjust url_code_map[] so spaces are replaced with %20 instead
             of '+' While '+' can be used by client's submitting form data,
             this is not actually what Privoxy is using the lookups for. This
-            is more of a cosmetic issue and doesn't fix any actual problems
-            I'm aware of.</p>
+            is more of a cosmetic issue and doesn't fix any known
+            problems.</p>
           </li>
 
           <li>
@@ -145,39 +219,12 @@ body {
           </li>
 
           <li>
-            <p>When loading action sections, verify that the referenced
-            filters exist Currently missing filters only result in an error
-            message, but eventually the severity will be upgraded to
-            fatal.</p>
-          </li>
-
-          <li>
-            <p>Allow to bind to multiple separate addresses. Patch set
-            submitted by Petr Pisar in #3354485.</p>
-          </li>
-
-          <li>
-            <p>Set socket_error to errno if connecting fails in
-            rfc2553_connect_to() Previously rejected direct connections could
-            be incorrectly reported as DNS issues.</p>
-          </li>
-
-          <li>
             <p>Fixed bind failures with certain GNU libc versions if no
             non-loopback IP address has been configured on the system. This
             is mainly an issue if the system is using DHCP and Privoxy is
             started before the network is completely configured. Reported by
             Raphael Marichez in #3349356. Additional insight from Petr
             Pisar.</p>
-          </li>
-
-          <li>
-            <p>Disable filters if SDCH compression is used unless filtering
-            is forced. If SDCH was combined with a supported compression
-            algorithm, we'd previously try to decompress it, when successful
-            apply the enabled filters and ditch the Content-Encoding header
-            even though the SDCH compression wasn't removed. Reported by
-            zebul666 in #3225863.</p>
           </li>
 
           <li>
@@ -188,27 +235,226 @@ body {
           </li>
 
           <li>
-            <p>Make a copy of the --user value and only mess with that when
-            splitting user and group. On some operating systems modifying the
-            value directly is reflected in the output of ps and friends and
-            can be misleading. Reported by zepard in #3292710.</p>
+            <p>In get_last_url(), do not bother trying to decode URLs that do
+            not contain at least one '%' sign. It reduces the log noise and a
+            number of unnecessary memory allocations.</p>
           </li>
 
           <li>
-            <p>If forwarded-connect-retries is set, only retry if the we are
-            actually forwarding the request. Previously direct connections
-            would be retried as well.</p>
+            <p>In case of SOCKS5 failures, dump the socks response in the log
+            message.</p>
           </li>
 
           <li>
-            <p>Fixed a small memory leak when retrying connection</p>
+            <p>Simplify the signal setup in main()</p>
           </li>
 
           <li>
-            <p>Remove an incorrect assertion in
-            compile_dynamic_pcrs_job_list() It could be triggered by a pcrs
-            job with an invalid pcre pattern (for example one that contains a
-            lone quantifier).</p>
+            <p>Streamline socks5_connect() slightly</p>
+          </li>
+
+          <li>
+            <p>In socks5_connect(), require a complete socks response from
+            the server Previously Privoxy didn't care how much data the
+            server response contained as long as the first two bytes
+            contained the expected values. While at it, shrink the buffer
+            size so Privoxy can't read more than a whole socks response.</p>
+          </li>
+
+          <li>
+            <p>In chat(), do not bother to generate a client request in case
+            of direct CONNECT requests. It will not be used anyway.</p>
+          </li>
+
+          <li>
+            <p>Reduce server_last_modified()'s stack size.</p>
+          </li>
+
+          <li>
+            <p>Shorten get_http_time() by using strftime().</p>
+          </li>
+
+          <li>
+            <p>Constify the known_http_methods pointers in
+            unknown_method().</p>
+          </li>
+
+          <li>
+            <p>Constify the time_formats pointers in parse_header_time().</p>
+          </li>
+
+          <li>
+            <p>Constify the formerly_valid_actions pointers in
+            action_used_to_be_valid().</p>
+          </li>
+
+          <li>
+            <p>Introduce a GNUMakefile MAN_PAGE variable that defaults to
+            privoxy.1. The Debian package uses section 8 for the man page and
+            this should simplify the patch.</p>
+          </li>
+
+          <li>
+            <p>Deduplicate the INADDR_NONE definition for Solaris by moving
+            it to jbsockets.h</p>
+          </li>
+
+          <li>
+            <p>In block_url(), ditch the obsolete workaround for ancient
+            Netscape versions that supposedly couldn't properly deal with
+            status code 403.</p>
+          </li>
+
+          <li>
+            <p>Remove a useless NULL pointer check in load_trustfile().</p>
+          </li>
+
+          <li>
+            <p>Remove two useless NULL pointer checks in
+            load_one_re_filterfile().</p>
+          </li>
+
+          <li>
+            <p>Change url_code_map[] from an array of pointers to an array of
+            arrays It removes an unnecessary layer of indirection and on
+            64bit system reduces the size of the binary a bit.</p>
+          </li>
+
+          <li>
+            <p>Fix various typos. Fixes taken from Debian's 29_typos.dpatch
+            by Roland Rosenfeld.</p>
+          </li>
+
+          <li>
+            <p>Add a dok-tidy GNUMakefile target to clean up the messy HTML
+            generated by the other dok targets.</p>
+          </li>
+
+          <li>
+            <p>GNUisms in the GNUMakefile have been removed.</p>
+          </li>
+
+          <li>
+            <p>Change the HTTP version in static responses to 1.1</p>
+          </li>
+
+          <li>
+            <p>Synced config.sub and config.guess with upstream
+            2011-11-11/386c7218162c145f5f9e1ff7f558a3fbb66c37c5.</p>
+          </li>
+
+          <li>
+            <p>Add a dedicated function to parse the values of toggles.
+            Reduces duplicated code in load_config() and provides better
+            error handling. Invalid or missing toggle values are now a fatal
+            error instead of being silently ignored.</p>
+          </li>
+
+          <li>
+            <p>Terminate HTML lines in static error messages with \n instead
+            of \r\n.</p>
+          </li>
+
+          <li>
+            <p>Simplify cgi_error_unknown() a bit.</p>
+          </li>
+
+          <li>
+            <p>In LogPutString(), don't bother looking at pszText when not
+            actually logging anything.</p>
+          </li>
+
+          <li>
+            <p>Change ssplit()'s fourth parameter from int to size_t. Fixes a
+            clang complaint.</p>
+          </li>
+
+          <li>
+            <p>Add a warning that the statistics currently can't be trusted.
+            Mention Privoxy-Log-Parser's --statistics option as an
+            alternative for the time being.</p>
+          </li>
+
+          <li>
+            <p>In rfc2553_connect_to(), start setting cgi-&gt;error_message
+            on error</p>
+          </li>
+
+          <li>
+            <p>Change the expected status code returned for http://p.p/die
+            depending on whether or not FEATURE_GRACEFUL_TERMINATION is
+            available.</p>
+          </li>
+
+          <li>
+            <p>In cgi_die(), mark the client connection for closing. If the
+            client will fetch the style sheet through another connection it
+            gets the main thread out of the accept() state and should thus
+            trigger the actual shutdown.</p>
+          </li>
+
+          <li>
+            <p>Add a proper CGI message for cgi_die().</p>
+          </li>
+
+          <li>
+            <p>Don't enforce a logical line length limit in
+            read_config_line()</p>
+          </li>
+
+          <li>
+            <p>Slightly refactor server_last_modified() to remove useless
+            gmtime*() calls</p>
+          </li>
+
+          <li>
+            <p>In get_content_type(), also recognize '.jpeg' as JPEG
+            extension</p>
+          </li>
+
+          <li>
+            <p>Add '.png' to the list of recognized file extenstions in
+            get_content_type()</p>
+          </li>
+
+          <li>
+            <p>In block_url(), consistently use the block reason "Request
+            blocked by Privoxy" In two places the reason was "Request for
+            blocked URL" which hides the fact that the request got blocked by
+            Privoxy and isn't necessarily correct as the block may be due to
+            tags.</p>
+          </li>
+
+          <li>
+            <p>In listen_loop(), reload the configuration files after
+            accepting a new connection instead of before. Previously the
+            first connection that arrived after a configuration change would
+            still be handled with the old configuration.</p>
+          </li>
+
+          <li>
+            <p>In chat()'s receive-data loop, skip a client socket check if
+            the socket will be written to right away anyway. This can
+            increase the transfer speed for unfiltered content on fast
+            network connections.</p>
+          </li>
+
+          <li>
+            <p>The socket timeout is used for SOCKS negotiations as well
+            which previously couldn't timeout.</p>
+          </li>
+
+          <li>
+            <p>Don't keep the client connection alive if any configuration
+            file changed since the time the connection came in. This is
+            closer to Privoxy's behaviour before keep-alive support for
+            client connection has been added and also less confusing in
+            general.</p>
+          </li>
+
+          <li>
+            <p>Treat all Content-Type header values containing the pattern
+            'script' as a sign of text. Reported by pribog in #3134970.</p>
           </li>
         </ul>
       </li>
@@ -222,6 +468,12 @@ body {
             for the generic patterns so for requests that are matched in
             both, the block reason for the domain is shown which is usually
             more useful than showing the one for the generic pattern.</p>
+          </li>
+
+          <li>
+            <p>Remove -prevent-compression from the fragile alias It's no
+            longer used anywhere by default and isn't known to break stuff
+            anyway.</p>
           </li>
 
           <li>
@@ -301,12 +553,6 @@ body {
           </li>
 
           <li>
-            <p>Remove -prevent-compression from the fragile alias It's no
-            longer used anywhere by default and isn't known to break stuff
-            anyway.</p>
-          </li>
-
-          <li>
             <p>Unblock http://adassier.wordpress.com/ and
             http://adassier.files.wordpress.com/</p>
           </li>
@@ -323,12 +569,8 @@ body {
 
           <li>
             <p>Let the msn filter hide overlay ads for Facebook 'likes' in
-            search results.</p>
-          </li>
-
-          <li>
-            <p>Let the msn filter hide elements with the id 's_notf_div'.
-            They only seem to be used to advertise site 'enhancements'.</p>
+            search results and elements with the id 's_notf_div'. They only
+            seem to be used to advertise site 'enhancements'.</p>
           </li>
 
           <li>
@@ -349,7 +591,8 @@ body {
 
           <li>
             <p>Point out that the SourceForge messaging system works like a
-            blackhole and should thus not be used</p>
+            black hole and should thus not be used to contact individual
+            developers.</p>
           </li>
 
           <li>
@@ -401,8 +644,8 @@ body {
           </li>
 
           <li>
-            <p>Do not claim to listen on a socket until we actually do. Patch
-            submitted by Petr Pisar #3354485</p>
+            <p>Do not claim to listen on a socket until Privoxy actually
+            does. Patch submitted by Petr Pisar #3354485</p>
           </li>
 
           <li>
@@ -437,7 +680,7 @@ body {
 
           <li>
             <p>In rfc2553_connect_to(), explain getnameinfo() errors
-            differently.</p>
+            better.</p>
           </li>
 
           <li>
@@ -450,7 +693,7 @@ body {
           </li>
 
           <li>
-            <p>Rephrase a log message in compile_dynamic_pcrs_job_list()
+            <p>Rephrase a log message in compile_dynamic_pcrs_job_list().
             Divide the error code and its meaning with a colon. Call the pcrs
             job dynamic and not the filter. Filters may contain dynamic and
             non-dynamic pcrs jobs at the same time. Only mention the name of
@@ -460,12 +703,12 @@ body {
 
           <li>
             <p>In a fatal error message in load_one_actions_file(), cover
-            both URL and TAG patterns</p>
+            both URL and TAG patterns.</p>
           </li>
 
           <li>
             <p>In pcrs_strerror(), properly report unknown positive error
-            code values as unknown. Previously they were handled like 0 (no
+            code values as such. Previously they were handled like 0 (no
             error).</p>
           </li>
 
@@ -497,7 +740,7 @@ body {
 
           <li>
             <p>In connection_destination_matches(), improve two log messages
-            to help understand why the destinations don't match</p>
+            to help understand why the destinations don't match.</p>
           </li>
 
           <li>
@@ -520,261 +763,6 @@ body {
       </li>
 
       <li>
-        <p>Miscellaneous Privoxy improvements:</p>
-
-        <ul>
-          <li>
-            <p>In get_last_url(), do not bother trying to decode URLs that do
-            not contain at least one '%' sign. It reduces the log noise and a
-            number of unnecessary memory allocations.</p>
-          </li>
-
-          <li>
-            <p>If the --user argument user[.group] contains a dot, always
-            bail out if no group has been specified. Previously the intended,
-            but undocumented (and apparently untested), behaviour was to try
-            interpreting the whole argument as user name, but the detection
-            was flawed and checked for '0' isntead of '\0', thus merely
-            preventing group names beginning with a zero.</p>
-          </li>
-
-          <li>
-            <p>Simplify the signal setup in main()</p>
-          </li>
-
-          <li>
-            <p>Streamline socks5_connect() slightly</p>
-          </li>
-
-          <li>
-            <p>In case of SOCKS5 failures, dump the socks response</p>
-          </li>
-
-          <li>
-            <p>In socks5_connect(), require a complete socks response from
-            the server Previously we didn't care how much data the server
-            response contained as long as the first two bytes contained the
-            expected values. While at it, shrink the buffer size so we can't
-            read more than a whole socks response. This is required to
-            support Tor's optimistic data extension.</p>
-          </li>
-
-          <li>
-            <p>In chat(), do not bother to generate a client request in case
-            of direct CONNECT requests</p>
-          </li>
-
-          <li>
-            <p>Reduce server_last_modified()'s stack size</p>
-          </li>
-
-          <li>
-            <p>Shorten get_http_time() by using strftime()</p>
-          </li>
-
-          <li>
-            <p>Constify the known_http_methods pointers in
-            unknown_method()</p>
-          </li>
-
-          <li>
-            <p>Constify the time_formats pointers in parse_header_time()</p>
-          </li>
-
-          <li>
-            <p>Constify the formerly_valid_actions pointers in
-            action_used_to_be_valid()</p>
-          </li>
-
-          <li>
-            <p>In html_code_map[], use a numeric character reference instead
-            of ' which wasn't standardized before XHTML 1.0</p>
-          </li>
-
-          <li>
-            <p>Introduce a MAN_PAGE variable that defaults to privoxy.1. The
-            Debian package uses section 8 for the man page and this should
-            simplify the patch.</p>
-          </li>
-
-          <li>
-            <p>Deduplicate the INADDR_NONE definition for Solaris by moving
-            it to jbsockets.h</p>
-          </li>
-
-          <li>
-            <p>In block_url(), ditch the obsolete workaround for ancient
-            Netscape versions that supposedly couldn't properly deal with
-            status code 403.</p>
-          </li>
-
-          <li>
-            <p>Remove a useless NULL pointer check in load_trustfile()</p>
-          </li>
-
-          <li>
-            <p>Remove two useless NULL pointer checks in
-            load_one_re_filterfile().</p>
-          </li>
-
-          <li>
-            <p>Change url_code_map[] from an array of pointers to an array of
-            arrays It removes an unnecessary layer of indirection and on
-            64bit system reduces the size of the binary a bit.</p>
-          </li>
-
-          <li>
-            <p>Fix various typos. Fixes taken from Debian's 29_typos.dpatch
-            by Roland Rosenfeld.</p>
-          </li>
-
-          <li>
-            <p>Add a dok-tidy GNUMakefile target to clean up the messy HTML
-            generated by the other dok targets.</p>
-          </li>
-
-          <li>
-            <p>GNUisms in the GNUMakefile have been removed.</p>
-          </li>
-
-          <li>
-            <p>Change the HTTP version in static responses to 1.1</p>
-          </li>
-
-          <li>
-            <p>Synced config.sub and config.guess with upstream
-            2011-11-11/386c7218162c145f5f9e1ff7f558a3fbb66c37c5.</p>
-          </li>
-
-          <li>
-            <p>Add a dedicated function to parse the values of toggles
-            Reduces duplicated code in load_config() and provides better
-            error handling. Invalid or missing toggle values are now a fatal
-            error instead of being silently ignored.</p>
-          </li>
-
-          <li>
-            <p>Terminate HTML lines in static error messages with \n instead
-            of \r\n.</p>
-          </li>
-
-          <li>
-            <p>Simplify cgi_error_unknown() a bit.</p>
-          </li>
-
-          <li>
-            <p>In LogPutString(), don't bother looking at pszText when not
-            actually logging anything</p>
-          </li>
-
-          <li>
-            <p>Change ssplit()'s fourth parameter from int to size_t. Fixes a
-            clang complaint.</p>
-          </li>
-
-          <li>
-            <p>Add a warning that the statistics currently can't be trusted.
-            Mention Privoxy-Log-Parser's --statistics option as an
-            alternative for the time being.</p>
-          </li>
-
-          <li>
-            <p>In rfc2553_connect_to(), start setting cgi-&gt;error_message
-            on error</p>
-          </li>
-
-          <li>
-            <p>Change the expected status code returned for http://p.p/die
-            depending on whether or not FEATURE_GRACEFUL_TERMINATION is
-            available.</p>
-          </li>
-
-          <li>
-            <p>In cgi_die(), mark the client connection for closing. If the
-            client will fetch the style sheet through another connection it
-            gets the main thread out of the accept() state and should thus
-            trigger the actual shutdown.</p>
-          </li>
-
-          <li>
-            <p>Add a proper CGI message for cgi_die().</p>
-          </li>
-
-          <li>
-            <p>Fix an invalid free when compiled with
-            FEATURE_GRACEFUL_TERMINATION and shut down through
-            http://config.privoxy.org/die</p>
-          </li>
-
-          <li>
-            <p>Don't enforce a logical line length limit in
-            read_config_line()</p>
-          </li>
-
-          <li>
-            <p>Slightly refactor server_last_modified() to remove useless
-            gmtime*() calls</p>
-          </li>
-
-          <li>
-            <p>In get_content_type(), also recognize '.jpeg' as JPEG
-            extension</p>
-          </li>
-
-          <li>
-            <p>Add '.png' to the list of recognized file extenstions in
-            get_content_type()</p>
-          </li>
-
-          <li>
-            <p>In block_url(), consistently use the block reason "Request
-            blocked by Privoxy" In two places the reason was "Request for
-            blocked URL" which hides the fact that the request got blocked by
-            Privoxy and isn't necessarly correct as the block may be due to
-            tags.</p>
-          </li>
-
-          <li>
-            <p>In get_actions(), fix the "temporary" backwards compatibility
-            hack to accept block actions without reason. It also covered
-            other actions that should be rejected as invalid. Reported by
-            Billy Crook.</p>
-          </li>
-
-          <li>
-            <p>In listen_loop(), reload the configuration files after
-            accepting a new connection instead of before. Previously the
-            first connection that arrived after a configuration change would
-            still be handled with the old configuration.</p>
-          </li>
-
-          <li>
-            <p>In chat()'s receive-data loop, skip a client socket check if
-            the socket will be written to right away anyway. This can
-            increase the transfer speed for unfiltered content on fast
-            network connections.</p>
-          </li>
-
-          <li>
-            <p>The socket timeout is used for SOCKS negotiation as well.</p>
-          </li>
-
-          <li>
-            <p>Don't keep the client connection alive if any configuration
-            file changed since the time the connection came in. This is
-            closer to Privoxy's behaviour before keep-alive support for
-            client connection has been added and also less confusing in
-            general.</p>
-          </li>
-
-          <li>
-            <p>Treat all Content-Type header values containing the pattern
-            'script' as a sign of text. Reported by pribog in #3134970.</p>
-          </li>
-        </ul>
-      </li>
-
-      <li>
         <p>configure:</p>
 
         <ul>
@@ -790,19 +778,19 @@ body {
 
           <li>
             <p>Remove a useless test for setpgrp(2). Privoxy doesn't need it
-            and it can cause problems when cross-compiling</p>
+            and it can cause problems when cross-compiling.</p>
           </li>
 
           <li>
-            <p>Rename the --disable-acl-files switch to --disable-acl-support
-            Since about 2001, ACL directives are specified in the standard
-            config file.</p>
+            <p>Rename the --disable-acl-files switch to
+            --disable-acl-support. Since about 2001, ACL directives are
+            specified in the standard config file.</p>
           </li>
 
           <li>
             <p>Update the URL of the 'Removing outdated PCRE version after
             the next stable release' posting. The old URL stopped working
-            after one of SF's recent layout pessimizations. Reported by Han
+            after one of SF's recent site "optimizations". Reported by Han
             Liu.</p>
           </li>
         </ul>
@@ -814,7 +802,7 @@ body {
         <ul>
           <li>
             <p>Added --shuffle-tests option to increase the chances of
-            detection race conditions</p>
+            detection race conditions.</p>
           </li>
 
           <li>
@@ -858,6 +846,11 @@ body {
             <p>In the --help output, include a list of supported tests and
             their default levels.</p>
           </li>
+
+          <li>
+            <p>Adjust the tests to properly deal with FEATURE_TOGGLE being
+            disabled.</p>
+          </li>
         </ul>
       </li>
 
@@ -866,8 +859,8 @@ body {
 
         <ul>
           <li>
-            <p>Perform limited sanity checks for parameters that are supposed
-            to have numerical values.</p>
+            <p>Perform limited sanity checks for command line parameters that
+            are supposed to have numerical values.</p>
           </li>
 
           <li>
@@ -905,7 +898,7 @@ body {
 
         <ul>
           <li>
-            <p>Bump generated Firefox version to 9.0</p>
+            <p>Bump generated Firefox version to 8.0</p>
           </li>
 
           <li>
