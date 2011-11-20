@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.141 2011/11/20 12:41:22 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.142 2011/11/20 12:43:38 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.141 2011/11/20 12:41:22 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.142 2011/11/20 12:43:38 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -449,9 +449,9 @@ How to install the binary packages depends on your operating system:
     <itemizedlist>
     <listitem>
      <para>
-      If the redirect URL contains characters RFC 3986 doesn't permit,
-      they are (re)encoded. Not doing this makes Privoxy versions from
-      3.0.5 to 3.0.17 susceptible to HTTP response splitting (CWE-113)
+      If a generated redirect URL contains characters RFC 3986 doesn't
+      permit, they are (re)encoded. Not doing this makes Privoxy versions
+      from 3.0.5 to 3.0.17 susceptible to HTTP response splitting (CWE-113)
       attacks if the +fast-redirects{check-decoded-url} action is used.
      </para>
     </listitem>
@@ -486,7 +486,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       Fix a subtle race condition between prepare_csp_for_next_request()
-      and sweep() A thread preparing itself for the next client request
+      and sweep(). A thread preparing itself for the next client request
       could briefly appear to be inactive.
       If all other threads were already using more recent files,
       the thread could get its files swept away under its feet.
@@ -521,8 +521,8 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Fixed a small memory leak when retrying connections with IPv6 support
-      enabled.
+      Fixed a small memory leak when retrying connections with IPv6
+      support enabled.
      </para>
     </listitem>
     <listitem>
@@ -599,7 +599,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Set socket_error to errno if connecting fails in rfc2553_connect_to()
+      Set socket_error to errno if connecting fails in rfc2553_connect_to().
       Previously rejected direct connections could be incorrectly reported
       as DNS issues if Privoxy was compiled with IPv6 support.
      </para>
@@ -659,17 +659,17 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Simplify the signal setup in main()
+      Simplify the signal setup in main().
      </para>
     </listitem>
     <listitem>
      <para>
-      Streamline socks5_connect() slightly
+      Streamline socks5_connect() slightly.
      </para>
     </listitem>
     <listitem>
      <para>
-      In socks5_connect(), require a complete socks response from the server
+      In socks5_connect(), require a complete socks response from the server.
       Previously Privoxy didn't care how much data the server response
       contained as long as the first two bytes contained the expected
       values. While at it, shrink the buffer size so Privoxy can't read
@@ -807,7 +807,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      In rfc2553_connect_to(), start setting cgi->error_message on error
+      In rfc2553_connect_to(), start setting cgi->error_message on error.
      </para>
     </listitem>
     <listitem>
@@ -831,22 +831,22 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Don't enforce a logical line length limit in read_config_line()
+      Don't enforce a logical line length limit in read_config_line().
      </para>
     </listitem>
     <listitem>
      <para>
-      Slightly refactor server_last_modified() to remove useless gmtime*() calls
+      Slightly refactor server_last_modified() to remove useless gmtime*() calls.
      </para>
     </listitem>
     <listitem>
      <para>
-      In get_content_type(), also recognize '.jpeg' as JPEG extension
+      In get_content_type(), also recognize '.jpeg' as JPEG extension.
      </para>
     </listitem>
     <listitem>
      <para>
-      Add '.png' to the list of recognized file extensions in get_content_type()
+      Add '.png' to the list of recognized file extensions in get_content_type().
      </para>
     </listitem>
     <listitem>
@@ -910,26 +910,26 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Remove -prevent-compression from the fragile alias It's no longer
+      Remove -prevent-compression from the fragile alias. It's no longer
       used anywhere by default and isn't known to break stuff anyway.
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a (disabled) section to block various Facebook tracking URLs
+      Add a (disabled) section to block various Facebook tracking URLs.
       Reported by Dan Stahlke in #3421764.
      </para>
     </listitem>
     <listitem>
      <para>
       Add a (disabled) section to rewrite and redirect click-tracking
-      URLs used on news.google.com
+      URLs used on news.google.com.
       Reported by Dan Stahlke in #3421755.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock linuxcounter.net/
+      Unblock linuxcounter.net/.
       Reported by Dan Stahlke in #3422612.
      </para>
     </listitem>
@@ -953,7 +953,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Unblock and fast-redirect ".awin1.com/.*=http://"
+      Unblock and fast-redirect ".awin1.com/.*=http://".
       Reported by Adam Piggott in #3170921.
      </para>
     </listitem>
@@ -976,34 +976,34 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Disable banners-by-size filters for '.thinkgeek.com/'
+      Disable banners-by-size filters for '.thinkgeek.com/'.
       The filter only seems to catch pictures of the inventory.
      </para>
     </listitem>
     <listitem>
      <para>
-      Block requests for 'go.idmnet.bbelements.com/please/showit/'
+      Block requests for 'go.idmnet.bbelements.com/please/showit/'.
       Reported by kacperdominik in #3372959.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock adainitiative.org/
+      Unblock adainitiative.org/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a fast-redirects exception for '.googleusercontent.com/.*=cache'
+      Add a fast-redirects exception for '.googleusercontent.com/.*=cache'.
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a fast-redirects exception for webcache.googleusercontent.com/
+      Add a fast-redirects exception for webcache.googleusercontent.com/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock http://adassier.wordpress.com/ and http://adassier.files.wordpress.com/
+      Unblock http://adassier.wordpress.com/ and http://adassier.files.wordpress.com/.
      </para>
      </listitem>
     </itemizedlist>
@@ -1015,7 +1015,7 @@ How to install the binary packages depends on your operating system:
     <itemizedlist>
     <listitem>
      <para>
-      Let the yahoo filter hide '.ads'
+      Let the yahoo filter hide '.ads'.
      </para>
     </listitem>
     <listitem>
@@ -1027,7 +1027,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Let the js-events filter additionally disarm setInterval()
+      Let the js-events filter additionally disarm setInterval().
       Suggested by dg1727 in #3423775.
      </para>
      </listitem>
@@ -1040,7 +1040,7 @@ How to install the binary packages depends on your operating system:
     <itemizedlist>
     <listitem>
      <para>
-      Clarify the effect of compiling Privoxy with zlib support
+      Clarify the effect of compiling Privoxy with zlib support.
       Suggested by dg1727 in #3423782.
      </para>
     </listitem>
@@ -1079,30 +1079,30 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Remove a superfluous log message in forget_connection()
+      Remove a superfluous log message in forget_connection().
      </para>
     </listitem>
     <listitem>
      <para>
       In chat(), properly report missing server responses as such
-      instead of calling them empty
+      instead of calling them empty.
      </para>
     </listitem>
     <listitem>
      <para>
-      In forwarded_connect(), fix a log message nobody should ever see
+      In forwarded_connect(), fix a log message nobody should ever see.
      </para>
     </listitem>
     <listitem>
      <para>
       Fix a log message in socks5_connect(), a failed write operation
-      was logged as failed read operation
+      was logged as failed read operation.
      </para>
     </listitem>
     <listitem>
      <para>
       Let load_one_actions_file() properly complain about a missing
-      '{' at the beginning of the file
+      '{' at the beginning of the file.
       Simply stating that a line is invalid isn't particularly helpful.
      </para>
     </listitem>
@@ -1115,7 +1115,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       Prevent a duplicated LOG_LEVEL_CLF message when sending out
-      the "no-server-data" response
+      the "no-server-data" response.
      </para>
     </listitem>
     <listitem>
@@ -1133,7 +1133,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       Prevent a duplicated log message if none of the resolved IP
-      addresses were reachable
+      addresses were reachable.
      </para>
     </listitem>
     <listitem>
@@ -1155,13 +1155,13 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Remove a useless log message in chat()
+      Remove a useless log message in chat().
      </para>
     </listitem>
     <listitem>
      <para>
       When retrying to connect, also log the maximum number of connection
-      attempts
+      attempts.
      </para>
     </listitem>
     <listitem>
@@ -1189,7 +1189,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       In compile_dynamic_pcrs_job_list(), also log the actual error code as
-      pcrs_strerror() doesn't handle all errors reported by pcre
+      pcrs_strerror() doesn't handle all errors reported by pcre.
      </para>
     </listitem>
     <listitem>
@@ -1200,17 +1200,17 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Make two fatal error message in load_one_actions_file() more descriptive
+      Make two fatal error message in load_one_actions_file() more descriptive.
      </para>
     </listitem>
     <listitem>
      <para>
-      In cgi_send_user_manual(), log when rejecting a file name due to '/' or '..'
+      In cgi_send_user_manual(), log when rejecting a file name due to '/' or '..'.
      </para>
     </listitem>
     <listitem>
      <para>
-      In load_file(), log a message if opening a file failed
+      In load_file(), log a message if opening a file failed.
       The CGI error message alone isn't too helpful.
      </para>
     </listitem>
@@ -1291,17 +1291,17 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Added a --local-test-file option that allows to use Privoxy-Regression-Test without Privoxy
+      Added a --local-test-file option that allows to use Privoxy-Regression-Test without Privoxy.
      </para>
     </listitem>
     <listitem>
      <para>
-      Added tests for missing socks4 and socks4a forwarders
+      Added tests for missing socks4 and socks4a forwarders.
      </para>
     </listitem>
     <listitem>
      <para>
-      The --privoxy-address option now works with IPv6 addresses containing brackets, too
+      The --privoxy-address option now works with IPv6 addresses containing brackets, too.
      </para>
     </listitem>
     <listitem>
@@ -1317,7 +1317,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Disable the range-requests tagger for tests that break if it's enabled
+      Disable the range-requests tagger for tests that break if it's enabled.
      </para>
     </listitem>
     <listitem>
@@ -1380,7 +1380,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Accept log messages with ISO 8601 time stamps, too
+      Accept log messages with ISO 8601 time stamps, too.
      </para>
      </listitem>
     </itemizedlist>
@@ -1392,7 +1392,7 @@ How to install the binary packages depends on your operating system:
     <itemizedlist>
     <listitem>
      <para>
-      Bump generated Firefox version to 8.0
+      Bump generated Firefox version to 8.0.
      </para>
     </listitem>
     <listitem>
@@ -9370,6 +9370,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.142  2011/11/20 12:43:38  fabiankeil
+ Update ChangeLog. Once more, with feeling.
+
  Revision 2.141  2011/11/20 12:41:22  fabiankeil
  Document the +fast-redirects{} HTTP response splitting fix
 
