@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.139 2011/11/18 16:49:29 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.140 2011/11/19 15:18:02 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.139 2011/11/18 16:49:29 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.140 2011/11/19 15:18:02 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -447,6 +447,14 @@ How to install the binary packages depends on your operating system:
    <para>
     Bug fixes:
     <itemizedlist>
+    <listitem>
+     <para>
+      If the redirect URL contains characters RFC 3986 doesn't permit,
+      they are (re)encoded. Not doing this makes Privoxy versions from
+      3.0.5 to 3.0.17 susceptible to HTTP response splitting (CWE-113)
+      attacks if the +fast-redirects{check-decoded-url} action is used.
+     </para>
+    </listitem>
     <listitem>
      <para>
       Fix a logic bug that could cause Privoxy to reuse a server
@@ -9362,6 +9370,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.140  2011/11/19 15:18:02  fabiankeil
+ Update ChangeLog
+
  Revision 2.139  2011/11/18 16:49:29  fabiankeil
  Update ChangeLog
 

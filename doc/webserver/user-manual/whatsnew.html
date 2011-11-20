@@ -62,6 +62,14 @@ body {
 
         <ul>
           <li>
+            <p>If the redirect URL contains characters RFC 3986 doesn't
+            permit, they are (re)encoded. Not doing this makes Privoxy
+            versions from 3.0.5 to 3.0.17 susceptible to HTTP response
+            splitting (CWE-113) attacks if the
+            +fast-redirects{check-decoded-url} action is used.</p>
+          </li>
+
+          <li>
             <p>Fix a logic bug that could cause Privoxy to reuse a server
             socket after it got tainted by a server-header-tagger-induced
             block that was triggered before the whole server response had
