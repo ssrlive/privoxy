@@ -164,7 +164,7 @@ ChangeLog for Privoxy
   - Don't enforce a logical line length limit in read_config_line()
   - Slightly refactor server_last_modified() to remove useless gmtime*() calls
   - In get_content_type(), also recognize '.jpeg' as JPEG extension
-  - Add '.png' to the list of recognized file extenstions in get_content_type()
+  - Add '.png' to the list of recognized file extensions in get_content_type()
   - In block_url(), consistently use the block reason "Request blocked by Privoxy"
     In two places the reason was "Request for blocked URL" which hides the
     fact that the request got blocked by Privoxy and isn't necessarily
@@ -185,7 +185,6 @@ ChangeLog for Privoxy
     has been added and also less confusing in general.
   - Treat all Content-Type header values containing the pattern
     'script' as a sign of text. Reported by pribog in #3134970.
-
 
 - Action file improvements:
   - Moved the site-specific block pattern section below the one for the
@@ -244,9 +243,9 @@ ChangeLog for Privoxy
     Requested by Calestyo in #3302213.
 
 - Log message improvements:
-  - If only the server connection is kept alive, do not pretent to
+  - If only the server connection is kept alive, do not pretend to
     wait for a new client request.
-  - Remove a superfluos log message in forget_connection()
+  - Remove a superfluous log message in forget_connection()
   - In chat(), properly report missing server responses as such
     instead of calling them empty
   - In forwarded_connect(), fix a log message nobody should ever see
@@ -343,7 +342,6 @@ ChangeLog for Privoxy
   - Only randomize the release date if the new --randomize-release-date
     option is enabled. Firefox versions after 4 use a fixed date string
     without meaning.
-
 
 *** Version 3.0.17 Stable ***
 
