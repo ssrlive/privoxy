@@ -9,7 +9,7 @@
   <title>What's New in this Release</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.18 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.19 User Manual" href="index.html">
   <link rel="PREVIOUS" title="Installation" href="installation.html">
   <link rel="NEXT" title="Quickstart to Using Privoxy" href=
   "quickstart.html">
@@ -33,7 +33,7 @@ body {
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.18 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.19 User Manual</th>
       </tr>
 
       <tr>
@@ -53,8 +53,57 @@ body {
     <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this
     Release</a></h1>
 
-    <p><span class="APPLICATION">Privoxy 3.0.18</span> is a stable release.
-    The changes since 3.0.17 stable are:</p>
+    <p><span class="APPLICATION">Privoxy 3.0.19</span> is a stable release.
+    The changes since 3.0.18 stable are:</p>
+
+    <ul>
+      <li>
+        <p>Bug fixes:</p>
+
+        <ul>
+          <li>
+            <p>Prevent a segmentation fault when de-chunking buffered
+            content. It could be triggered by malicious web servers if
+            Privoxy was configured to filter the content and running on a
+            platform where SIZE_T_MAX isn't larger than UINT_MAX, which
+            probably includes most 32-bit systems. On those platforms, all
+            Privoxy versions before 3.0.19 appear to be affected. To be on
+            the safe side, this bug should be presumed to allow code
+            execution as proving that it doesn't seems unrealistic.</p>
+          </li>
+
+          <li>
+            <p>Do not expect a response from the SOCKS4/4A server until it
+            got something to respond to. This regression was introduced in
+            3.0.18 and prevented the SOCKS4/4A negotiation from working.
+            Reported by qqqqqw in #3459781.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>General improvements:</p>
+
+        <ul>
+          <li>
+            <p>Fix an off-by-one in an error message about connect
+            failures.</p>
+          </li>
+
+          <li>
+            <p>Use a GNUMakefile variable for the webserver root directory
+            and update the path. Sourceforge changed it which broke various
+            web-related targets.</p>
+          </li>
+
+          <li>
+            <p>Update the CODE_STATUS description.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>The following changes were made between 3.0.17 and 3.0.18:</p>
 
     <ul>
       <li>
