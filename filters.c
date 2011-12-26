@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.161 2011/12/26 17:02:24 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.162 2011/12/26 17:02:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -13,7 +13,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.161 2011/12/26 17:02:24 fabiankei
  *                   `execute_single_pcrs_command', `rewrite_url',
  *                   `get_last_url'
  *
- * Copyright   :  Written by and Copyright (C) 2001-2010 the
+ * Copyright   :  Written by and Copyright (C) 2001-2011 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
