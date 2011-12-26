@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.160 2011/11/12 12:56:21 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.161 2011/12/26 17:02:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1856,15 +1856,10 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
 
       if (chunksize >= *size - newsize)
       {
-         /*
-          * XXX: The message is a bit confusing. Isn't the real problem that
-          *      the specified chunk size is greater than the number of bytes
-          *      left in the buffer? This probably means the connection got
-          *      closed prematurely. To be investigated after 3.0.17 is out.
-          */
          log_error(LOG_LEVEL_ERROR,
-            "Chunk size %d exceeds buffer size %d in \"chunked\" transfer coding",
-            chunksize, *size);
+            "Chunk size %u exceeds buffered data left. "
+            "Already digested %u of %u buffered bytes.",
+            chunksize, (unsigned int)newsize, (unsigned int)*size);
          return JB_ERR_PARSE;
       }
       newsize += chunksize;
