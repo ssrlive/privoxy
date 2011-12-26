@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.143 2011/11/20 17:16:36 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.144 2011/12/26 17:01:29 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.143 2011/11/20 17:16:36 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.144 2011/12/26 17:01:29 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -437,13 +437,73 @@ How to install the binary packages depends on your operating system:
 <sect1 id="whatsnew">
 <title>What's New in this Release</title>
 <para>
- <application>Privoxy 3.0.18</application> is a stable release.
- The changes since 3.0.17 stable are:
+ <application>Privoxy 3.0.19</application> is a stable release.
+ The changes since 3.0.18 stable are:
 </para>
 
 <para>
  <itemizedlist>
     <listitem>
+   <para>
+    Bug fixes:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Prevent a segmentation fault when de-chunking buffered content.
+      It could be triggered by malicious web servers if Privoxy was
+      configured to filter the content and running on a platform
+      where SIZE_T_MAX isn't larger than UINT_MAX, which probably
+      includes most 32-bit systems. On those platforms, all Privoxy
+      versions before 3.0.19 appear to be affected.
+      To be on the safe side, this bug should be presumed to allow
+      code execution as proving that it doesn't seems unrealistic.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Do not expect a response from the SOCKS4/4A server until it
+      got something to respond to. This regression was introduced
+      in 3.0.18 and prevented the SOCKS4/4A negotiation from working.
+      Reported by qqqqqw in #3459781.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    General improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Fix an off-by-one in an error message about connect failures.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Use a GNUMakefile variable for the webserver root directory and
+      update the path. Sourceforge changed it which broke various
+      web-related targets.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Update the CODE_STATUS description.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+ </itemizedlist>
+</para>
+
+<para>
+ The following changes were made between 3.0.17 and 3.0.18:
+</para>
+
+<para>
+ <itemizedlist>
+  <listitem>
    <para>
     Bug fixes:
     <itemizedlist>
@@ -9380,6 +9440,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.144  2011/12/26 17:01:29  fabiankeil
+ Try to be less misleading in the downgrade-http-version description
+
  Revision 2.143  2011/11/20 17:16:36  fabiankeil
  Last minute ChangeLog changes that didn't make it into the tarball
 
