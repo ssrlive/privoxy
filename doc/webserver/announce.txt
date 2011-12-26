@@ -1,12 +1,35 @@
-              Announcing Privoxy v.3.0.18 stable
+              Announcing Privoxy v.3.0.19 stable
 --------------------------------------------------------------------
 
-This is mainly a bug-fix release for the previously released
-Privoxy 3.0.17. One of the fixes addresses a security issue.
+This is a bug-fix release for the previously released
+Privoxy 3.0.18. One of the fixes addresses a security issue.
 
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.19 Stable ***
+
+- Bug fixes:
+  - Prevent a segmentation fault when de-chunking buffered content.
+    It could be triggered by malicious web servers if Privoxy was
+    configured to filter the content and running on a platform
+    where SIZE_T_MAX isn't larger than UINT_MAX, which probably
+    includes most 32-bit systems. On those platforms, all Privoxy
+    versions before 3.0.19 appear to be affected.
+    To be on the safe side, this bug should be presumed to allow
+    code execution as proving that it doesn't seems unrealistic.
+  - Do not expect a response from the SOCKS4/4A server until it
+    got something to respond to. This regression was introduced
+    in 3.0.18 and prevented the SOCKS4/4A negotiation from working.
+    Reported by qqqqqw in #3459781.
+
+- General improvements:
+  - Fix an off-by-one in an error message about connect failures.
+  - Use a GNUMakefile variable for the webserver root directory and
+    update the path. Sourceforge changed it which broke various
+    web-related targets.
+  - Update the CODE_STATUS description.
+
 *** Version 3.0.18 stable ***
 
 - Bug fixes:
