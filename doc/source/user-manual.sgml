@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.142 2011/11/20 12:43:38 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.143 2011/11/20 17:16:36 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.142 2011/11/20 12:43:38 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.143 2011/11/20 17:16:36 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4573,9 +4573,19 @@ new action
    <para>
     This is a left-over from the time when <application>Privoxy</application>
     didn't support important HTTP/1.1 features well. It is left here for the
-    unlikely case that you experience HTTP/1.1 related problems with some server
-    out there. Not all HTTP/1.1 features and requirements are supported yet,
-    so there is a chance you might need this action.
+    unlikely case that you experience HTTP/1.1-related problems with some server
+    out there.
+   </para>
+   <para>
+    Note that enabling this action is only a workaround. It should not
+    be enabled for sites that work without it. While it shouldn't break
+    any pages, it has an (usually negative) performance impact.
+  </para>
+  <para>
+    If you come across a site where enabling this action helps, please report it,
+    so the cause of the problem can be analyzed. If the problem turns out to be
+    caused by a bug in  <application>Privoxy</application> it should be
+    fixed so the following release works without the work around.
    </para>
   </listitem>
  </varlistentry>
@@ -9370,6 +9380,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.143  2011/11/20 17:16:36  fabiankeil
+ Last minute ChangeLog changes that didn't make it into the tarball
+
  Revision 2.142  2011/11/20 12:43:38  fabiankeil
  Update ChangeLog. Once more, with feeling.
 
