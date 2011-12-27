@@ -33,7 +33,7 @@ case "$1" in
         chown -R privoxy:adm /var/log/privoxy
         chmod 750 /var/log/privoxy
 	chown privoxy $CONFDIR/user.action $CONFDIR/trust
-	[ -f $CONFDIR/matcha-all.action ] \
+	[ -f $CONFDIR/match-all.action ] \
 	    && chown privoxy $CONFDIR/match-all.action
 
 	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.4"

@@ -1,0 +1,31 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 29_typos.dpatch by Roland Rosenfeld <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: fix some common typos: lenght -> length, reenable -> re-enable
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/cgi.c privoxy/cgi.c
+--- privoxy~/cgi.c
++++ privoxy/cgi.c
+@@ -2145,7 +2145,7 @@
+    if (!err) err = map(exports, "time",          1, html_encode(buf), 0);
+    if (!err) err = map(exports, "my-ip-address", 1, html_encode(ip_address ? ip_address : "unknown"), 0);
+    freez(ip_address);
+-   if (!err) err = map(exports, "my-port",       1, html_encode(port ? port : "unkown"), 0);
++   if (!err) err = map(exports, "my-port",       1, html_encode(port ? port : "unknown"), 0);
+    freez(port);
+    if (!err) err = map(exports, "my-hostname",   1, html_encode(hostname ? hostname : "unknown"), 0);
+    freez(hostname);
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/tools/privoxy-log-parser.pl privoxy/tools/privoxy-log-parser.pl
+--- privoxy~/tools/privoxy-log-parser.pl
++++ privoxy/tools/privoxy-log-parser.pl
+@@ -2518,7 +2518,7 @@
+ Doesn't do anything else, so you probably want to pipe the output into
+ B<privoxy-log-parser> again.
+ 
+-[B<--url-statistics-threshold>] Only show the request count for a ressource
++[B<--url-statistics-threshold>] Only show the request count for a resource
+ if it's above or equal to the given threshold. If the threshold is 0, URL
+ statistics are disabled.
+ 

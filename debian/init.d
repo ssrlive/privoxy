@@ -1,8 +1,8 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          privoxy
-# Required-Start:    $local_fs $remote_fs $network $time
-# Required-Stop:     $local_fs $remote_fs $network $time
+# Required-Start:    $local_fs $remote_fs $named $network $time
+# Required-Stop:     $local_fs $remote_fs $named $network $time
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Privacy enhancing HTTP Proxy

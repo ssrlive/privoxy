@@ -5,10 +5,10 @@
 ## DP: Remove unnecessary linking against libnsl.
 
 @DPATCH@
-diff -urNad privoxy~/configure.in privoxy/configure.in
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/configure.in privoxy/configure.in
 --- privoxy~/configure.in
 +++ privoxy/configure.in
-@@ -994,7 +994,7 @@
+@@ -469,7 +469,7 @@
  dnl =================================================================
  
  dnl Next line needed to find the gethost*_r functions on Solaris

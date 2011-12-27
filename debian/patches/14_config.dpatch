@@ -5,19 +5,19 @@
 ## DP: Several Debian specific changes to config file
 
 @DPATCH@
-diff -urNad privoxy~/config privoxy/config
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/config privoxy/config
 --- privoxy~/config
 +++ privoxy/config
 @@ -1,6 +1,6 @@
--#        Sample Configuration File for Privoxy v3.0.12
+-#        Sample Configuration File for Privoxy v3.0.19
 +#        Sample Configuration File for Privoxy
  #
--#  $Id: config,v 1.76 2009/03/21 11:51:51 fabiankeil Exp $
+-#  $Id: config,v 1.98 2011/12/26 17:04:50 fabiankeil Exp $
 +#  Id: config,v
  #
- #  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ #  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  #
-@@ -130,7 +130,7 @@
+@@ -128,7 +128,7 @@
  #          If set, this option should be the first option in the config
  #          file, because it is used while the config file is being read.
  #
@@ -26,7 +26,7 @@ diff -urNad privoxy~/config privoxy/config
  #
  #
  #  1.2. trust-info-url
-@@ -267,7 +267,7 @@
+@@ -265,7 +265,7 @@
  #
  #      No trailing "/", please.
  #
@@ -35,7 +35,7 @@ diff -urNad privoxy~/config privoxy/config
  #
  #
  #  2.2. templdir
-@@ -324,7 +324,7 @@
+@@ -322,7 +322,7 @@
  #
  #      No trailing "/", please.
  #

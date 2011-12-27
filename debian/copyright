@@ -1,4 +1,3 @@
-
 This package was debianized by Roland Rosenfeld <roland@debian.org> on
 Fri, 29 Mar 2002 11:52:03 +0100.
 
@@ -19,7 +18,7 @@ Originally developed by:
  Junkbusters Corp.
  Anonymous Coders
 
-Copyright:     Written by and Copyright (C) 2001-2009 the SourceForge
+Copyright:     Written by and Copyright (C) 2001-2010 the
                Privoxy team.  http://www.privoxy.org/
 
                Based on the Internet Junkbuster originally written

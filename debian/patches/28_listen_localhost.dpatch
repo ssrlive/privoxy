@@ -7,12 +7,12 @@
 ## DP: and also supports IPv6 (Closes: #512888)
 
 @DPATCH@
-diff -urNad privoxy~/config privoxy/config
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/config privoxy/config
 --- privoxy~/config
 +++ privoxy/config
-@@ -727,7 +727,7 @@
- #        listen-address  192.168.0.1:8118
+@@ -773,7 +773,7 @@
  #
+ #        listen-address [::1]:8118
  #
 -listen-address  127.0.0.1:8118
 +listen-address  localhost:8118

@@ -1,0 +1,32 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 32_bind_fixup.dpatch by  <roland@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Work around bind problems on startup (Closes: #534735)
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/jbsockets.c privoxy/jbsockets.c
+--- privoxy~/jbsockets.c
++++ privoxy/jbsockets.c
+@@ -757,20 +757,7 @@
+    }
+ 
+    memset(&hints, 0, sizeof(struct addrinfo));
+-   if (hostnam == NULL)
+-   {
+-      /*
+-       * XXX: This is a hack. The right thing to do
+-       * would be to bind to both AF_INET and AF_INET6.
+-       * This will also fail if there is no AF_INET
+-       * version available.
+-       */
+-      hints.ai_family = AF_INET;
+-   }
+-   else
+-   {
+-      hints.ai_family = AF_UNSPEC;
+-   }
++   hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+    hints.ai_protocol = 0; /* Really any stream protocol or TCP only */

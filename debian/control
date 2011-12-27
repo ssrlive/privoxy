@@ -3,8 +3,9 @@ Section: web
 Priority: optional
 Maintainer: Roland Rosenfeld <roland@debian.org>
 Build-Depends: debhelper (>= 5.0.0), autoconf, autotools-dev, libpcre3-dev,
- jade, docbook-dsssl, w3m, sp, sgmlspl, groff, man2html, dpatch, zlib1g-dev
-Standards-Version: 3.8.0
+ jade, docbook-dsssl, docbook, w3m, sp, sgmlspl, groff, man2html, dpatch,
+ zlib1g-dev
+Standards-Version: 3.9.2
 Homepage: http://www.privoxy.org/
 
 Package: privoxy

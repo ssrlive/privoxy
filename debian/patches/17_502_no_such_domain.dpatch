@@ -7,7 +7,7 @@
 ## DP: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 
 @DPATCH@
-diff -urNad privoxy~/templates/no-such-domain privoxy/templates/no-such-domain
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/templates/no-such-domain privoxy/templates/no-such-domain
 --- privoxy~/templates/no-such-domain
 +++ privoxy/templates/no-such-domain
 @@ -79,7 +79,7 @@
@@ -25,6 +25,6 @@ diff -urNad privoxy~/templates/no-such-domain privoxy/templates/no-such-domain
        <td class="status">
 -        404
 +        502
-       </td>     
+       </td>
        <td class="title" style="width: 100%">
  

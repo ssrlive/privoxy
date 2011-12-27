@@ -5,100 +5,25 @@
 ## DP: Move man page from man section 1 to man section 8.
 
 @DPATCH@
-diff -urNad privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/GNUmakefile.in privoxy/GNUmakefile.in
 --- privoxy~/GNUmakefile.in
 +++ privoxy/GNUmakefile.in
-@@ -177,7 +177,7 @@
- DOC_FILES = AUTHORS LICENSE README ChangeLog INSTALL \
- 		`find doc/webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html"` \
- 		`find doc/webserver/ -name "*.css"` \
--                privoxy.1
-+                privoxy.8
- 
- #############################################################################
- # Filenames and libraries
-@@ -513,7 +513,7 @@
- 	$(RM) /etc/init.d/privoxy
- 	$(RM) /usr/sbin/privoxy
- 	$(RM) /usr/sbin/rcprivoxy
--	$(RM) /usr/share/man/man1/privoxy.1.gz
-+	$(RM) /usr/share/man/man1/privoxy.8.gz
- 
- #############################################################################
- # generic distribution
-@@ -686,7 +686,7 @@
- 	$(RM) doc/man/* doc/webserver/man-page/*.html
- ifneq ($(MAN2HTML),false)
- 	$(ECHO) "<html><head><title>Privoxy Man page</title><link rel=\"stylesheet\" type=\"text/css\" href=\"../p_web.css\"></head><body><H2>NAME</H2>" > doc/webserver/man-page/privoxy-man-page.html
--	man ./privoxy.1 | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html
-+	man ./privoxy.8 | $(MAN2HTML) -bare >> doc/webserver/man-page/privoxy-man-page.html
- 	$(ECHO) "</body></html>" >> doc/webserver/man-page/privoxy-man-page.html
- else
- 	$(MAKE) groff2html
-@@ -698,19 +698,19 @@
- man: dok-release
- 	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
- 	nsgmls ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
--	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.1 ;\
--	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" privoxy.1; \
--	perl -pi.bak -e "s/ö/\\\\[:o]/g" privoxy.1; \
--	perl -pi.bak -e 's/([ {])-([a-z])/$$1\\-$$2/g' privoxy.1; \
--	perl -pi.bak -e 's/ --([a-z])/ \\-\\-$$1/g' privoxy.1; \
--	perl -pi.bak -e 's/\\fB--/\\fB\\-\\-/g' privoxy.1; \
--	$(DB) ../privoxy-man-page.sgml && $(MV) -f privoxy.1 ../../../privoxy.1
-+	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' privoxy.8 ;\
-+	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" privoxy.8; \
-+	perl -pi.bak -e "s/ö/\\\\[:o]/g" privoxy.8; \
-+	perl -pi.bak -e 's/([ {])-([a-z])/$$1\\-$$2/g' privoxy.8; \
-+	perl -pi.bak -e 's/ --([a-z])/ \\-\\-$$1/g' privoxy.8; \
-+	perl -pi.bak -e 's/\\fB--/\\fB\\-\\-/g' privoxy.8; \
-+	$(DB) ../privoxy-man-page.sgml && $(MV) -f privoxy.8 ../../../privoxy.8
- 
- # For those with man2html ala RH7s.
- man2html:
- 	mkdir -p doc/webserver/man-page
- ifneq ($(MAN2HTML),false)
--	$(MAN2HTML) privoxy.1 |grep -v "^Content-type" > tmp.html
-+	$(MAN2HTML) privoxy.8 |grep -v "^Content-type" > tmp.html
- 	$(PERL) -pi.bak -e 's/<A .*Contents<\/A>//; s/<A .*man2html<\/A>/man2html/' tmp.html
- 	$(PERL) -pi.bak -e 's/(<\/HEAD>)/<LINK REL=\"STYLESHEET\" TYPE=\"text\/css\" HREF=\"..\/p_doc.css\"><\/HEAD>/' tmp.html
- # Twice because my version of man2html is pulling in commas and periods in URLs.
-@@ -726,7 +726,7 @@
- 
- # Otherwise we get plain groff conversion.
- groff2html:
--	$(G2H_CMD) ./privoxy.1 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' > doc/webserver/man-page/privoxy-man-page.html
-+	$(G2H_CMD) ./privoxy.8 | $(SED) -e 's@</head>@<link REL="STYLESHEET" TYPE="text/css" HREF="../p_doc.css"></head>@' > doc/webserver/man-page/privoxy-man-page.html
- 
- 
- # readme page and INSTALL file
-@@ -1079,8 +1079,8 @@
- 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $(DESTDIR)$$DOC/user-manual;\
- 	fi
- 	@# Not all platforms support gzipped man pages.
--	@$(ECHO) Installing man page to $(DESTDIR)$(MAN_DEST)/privoxy.1
--	-$(INSTALL) $(INSTALL_T) privoxy.1  $(DESTDIR)$(MAN_DEST)/privoxy.1
-+	@$(ECHO) Installing man page to $(DESTDIR)$(MAN_DEST)/privoxy.8
-+	-$(INSTALL) $(INSTALL_T) privoxy.8  $(DESTDIR)$(MAN_DEST)/privoxy.8
- 
- 	@# Change the config file default directories according to the configured ones
- 	@$(ECHO) Rewriting config for this installation
-@@ -1241,7 +1241,7 @@
- 
- 	@# man page and docs
- 	@$(ECHO) Removing $(PROGRAM) docs
--	-$(RM) $(DESTDIR)$(MAN_DEST)/privoxy.1*
-+	-$(RM) $(DESTDIR)$(MAN_DEST)/privoxy.8*
- 	-$(RM) -r $(DESTDIR)$(DOC_DEST) || $(RM) -r $(DESTDIR)$(prefix)/doc/privoxy
- 
- 	@# Log and pidfile
-diff -urNad privoxy~/doc/source/privoxy-man-page.sgml privoxy/doc/source/privoxy-man-page.sgml
+@@ -60,7 +60,7 @@
+ SBIN_DEST    = @sbindir@
+ MAN_DIR      = @mandir@
+ MAN_DEST     = $(MAN_DIR)/man1
+-MAN_PAGE     = privoxy.1
++MAN_PAGE     = privoxy.8
+ SHARE_DEST   = @datadir@
+ DOC_DEST     = $(SHARE_DEST)/doc/privoxy
+ VAR_DEST     = @localstatedir@
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/doc/source/privoxy-man-page.sgml privoxy/doc/source/privoxy-man-page.sgml
 --- privoxy~/doc/source/privoxy-man-page.sgml
 +++ privoxy/doc/source/privoxy-man-page.sgml
 @@ -58,7 +58,7 @@
  </refentryinfo>
  <refmeta>
-  <refentrytitle>privoxy</refentrytitle> 
+  <refentrytitle>privoxy</refentrytitle>
 - <manvolnum>1</manvolnum>
 + <manvolnum>8</manvolnum>
   <refmiscinfo>

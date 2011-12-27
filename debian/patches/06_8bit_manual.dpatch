@@ -5,7 +5,7 @@
 ## DP: Stop converting 8bit chars in the documentation (#203697)
 
 @DPATCH@
-diff -urNad privoxy~/doc/source/ldp.dsl.in privoxy/doc/source/ldp.dsl.in
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/doc/source/ldp.dsl.in privoxy/doc/source/ldp.dsl.in
 --- privoxy~/doc/source/ldp.dsl.in
 +++ privoxy/doc/source/ldp.dsl.in
 @@ -47,9 +47,9 @@

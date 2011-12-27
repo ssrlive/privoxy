@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (C) 2002-2008 Roland Rosenfeld <roland@debian.org>, based on
+# (C) 2002-2011 Roland Rosenfeld <roland@debian.org>, based on
 # Sample debian/rules that uses debhelper.
 # This file is public domain software, originally written by Joey Hess. 
 
@@ -24,7 +24,9 @@ else
         OPTIMIZE=-O2
 endif
 
-build: build-stamp
+build: build-arch build-indep
+build-arch: build-stamp
+build-indep: build-stamp
 build-stamp: patch-stamp
 	dh_testdir
 
@@ -33,7 +35,7 @@ build-stamp: patch-stamp
 	env CFLAGS="$(OPTIMIZE) -g" \
 		./configure --prefix=/usr --sysconfdir=/etc \
 		--mandir=/usr/share/man	$(WITHDEBUG) \
-		--enable-zlib \
+		--enable-zlib --enable-no-gifs \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 	$(MAKE)
 	$(MAKE) dok
@@ -75,6 +77,7 @@ install: build-stamp
 	install -m 0644 match-all.action $(DEBDIR)/etc/privoxy/match-all.action
 	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
 	install -m 0644 default.filter $(DEBDIR)/etc/privoxy/default.filter
+	install -m 0644 user.filter $(DEBDIR)/etc/privoxy/user.filter
 	install -m 0644 trust $(DEBDIR)/etc/privoxy/trust
 
 	install -m 0755 tools/privoxy-log-parser.pl \

@@ -5,19 +5,10 @@
 ## DP: Serveral changes/additons to default.action.
 
 @DPATCH@
-diff -urNad privoxy~/default.action.master privoxy/default.action.master
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/default.action.master privoxy/default.action.master
 --- privoxy~/default.action.master
 +++ privoxy/default.action.master
-@@ -1594,7 +1594,7 @@
- # URL = http://kb.adobe.com/selfservice/viewContent.do?externalId=kb402747&sliceId=1
- .adobe.com
- # URL = http://qa.debian.org/popcon.php
--qa.debian.org/popcon\.php
-+qa.debian.org/popcon
- #MASTER# REMARKS: Support Requests item #2432535 2008-12-16
- # URL = http://www.mta.info/bandt/traffic/advmain.htm
- .mta.info/.*advmain.htm$
-@@ -2061,6 +2061,9 @@
+@@ -2259,6 +2259,9 @@
  #MASTER# REMARKS: Exclude per Debian bug report #377843
  # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
  blogs.msdn.com
@@ -27,7 +18,7 @@ diff -urNad privoxy~/default.action.master privoxy/default.action.master
  
  {-filter{unsolicited-popups}}
  # Sticky Actions = -filter{unsolicited-popups}
-@@ -2102,6 +2105,11 @@
+@@ -2312,6 +2315,11 @@
  {+filter{tiny-textforms}}
  .sourceforge.net/tracker
  

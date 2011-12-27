@@ -7,13 +7,13 @@
 ## DP: doesn't change too much.
 
 @DPATCH@
-diff -urNad privoxy~/match-all.action privoxy/match-all.action
+diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/match-all.action privoxy/match-all.action
 --- privoxy~/match-all.action
 +++ privoxy/match-all.action
-@@ -8,7 +8,16 @@
- #############################################################################
- { \
+@@ -10,7 +10,16 @@
  +change-x-forwarded-for{block} \
+ +client-header-tagger{css-requests} \
+ +client-header-tagger{image-requests} \
 ++deanimate-gifs{last} \
 ++filter{refresh-tags} \
 ++filter{img-reorder} \

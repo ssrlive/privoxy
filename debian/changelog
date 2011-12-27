@@ -1,3 +1,92 @@
+privoxy (3.0.19-1) unstable; urgency=low
+
+  * New upstream version 3.0.19-stable.
+  * Adapt all patches to new version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 27 Dec 2011 11:19:53 +0100
+
+privoxy (3.0.18-1) unstable; urgency=low
+
+  * New upstream version 3.0.18-stable.
+  * Adapt all patches to new version.
+  * Add build-targets build-arch and build-indep.
+  * Upgrade to Standards-Version 3.9.2 (no changes).
+  * 29_typo: most old typos are fixed now, but lintian found new ones.
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 21 Nov 2011 19:29:06 +0100
+
+privoxy (3.0.17-1) unstable; urgency=low
+
+  * New upstream version 3.0.17-stable (Closes: #611016).
+  * Adapt all patches to the new version.
+  * Add debian/source/format (1.0).
+  * 29_typos: fix spelling of resource in privoxy-log-parser(1) man page.
+  * Upgrade to Standards-Version 3.9.1 (no changes).
+  * Add $named to Required-Start/Stop in init script. Thanks to Nikolaus
+    Schulz <microschulz@web.de> (Closes: #539405, #582710)
+  * Install /etc/privoxy/user.filter
+
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 01 Mar 2011 21:10:26 +0100
+
+privoxy (3.0.16-1) unstable; urgency=low
+
+  * New upstream version 3.0.16-stable.
+  * Adapt all patches to the new version.
+  * 30_localhost_fixup: removed, since this should no longer be necessary.
+  * 31_handle-as-empty-doc-returns-ok: now included upstream.
+  * 32_bind_fixup: Work around bind problems on startup (Closes: #534735).
+
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 18 May 2010 10:14:18 +0200
+
+privoxy (3.0.15-3) unstable; urgency=low
+
+  * Add Build-Dependency on docbook because docbook-xml which may be
+    chained via docbook-dsssl as an alternative to docbook may not be
+    enough on a unclean build environment. This should now also build on
+    the mips buildd.
+  * 31_handle-as-empty-doc-returns-ok: Patch from SourceForge that work2
+    around Firefox bug to wait forever if proxy returns a failure status
+    code in response to the CONNECT (Closes: #561126).
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 25 Dec 2009 11:30:29 +0100
+
+privoxy (3.0.15-2) unstable; urgency=low
+
+  * 30_localhost_fixup: Remove workaround for "localhost" listen-address,
+    which should solve all problems with privoxy not starting. 
+    (Closes: #534735).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 13 Dec 2009 10:09:11 +0100
+
+privoxy (3.0.15-1) unstable; urgency=low
+
+  * New upstream version 3.0.15-beta.
+  * Adapted all patches to the new upstream version.
+  * Added debian/README.source (from dpatch package) to explain how dpatch
+    works.
+  * Upgrade to Standards-Version 3.8.3 (no changes).
+  * 29_typos: fix some common typos.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 14 Nov 2009 14:22:31 +0100
+
+privoxy (3.0.14-1) unstable; urgency=low
+
+  * New upstream version 3.0.14-beta.
+  * Adapted all patches to the new upstream version.
+  * --enable-no-gifs (uses PNG instead of GIF in replacement files).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 26 Jul 2009 12:06:00 +0200
+
+privoxy (3.0.13-1) unstable; urgency=low
+
+  * New upstream version 3.0.13-beta.
+  * Adapted all patches to the new upstream version.
+  * Removed 03_ipv6, because IPv6 is now supported upstream.
+  * Upgrade to Standards-Version 3.8.1 (no changes)
+  * Fix matcha-all.action typo in debian/postinst (Closes: #534270).
+
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 23 Jun 2009 15:09:08 +0200
+
 privoxy (3.0.12-2) unstable; urgency=low
 
   * 03_ipv6: Use s6_addr instead of in6_u, which is not portable.
@@ -16,7 +105,7 @@ privoxy (3.0.11-1) unstable; urgency=low
 
   * New upstream version 3.0.11-stable.
   * 19_manpage_fixup incorporated upstream now.
-  * 24_global_action is incorporated upstream in a simlar way.
+  * 24_global_action is incorporated upstream in a similar way.
   * postinst: try to make removal of standards.action and global.action
     and new file match-all.action smooth to a user who does not want to
     modify his config file.
@@ -130,7 +219,7 @@ privoxy (3.0.6-3) unstable; urgency=low
     removing system users in postrm isn't a good idea. So the removal of
     user privoxy in postrm was disabled and deluser/adduser of existing
     user in postinst was also removed. This should avoid problems with
-    purging privoxy if passwd package isn't intalled (Closes: #417015).
+    purging privoxy if passwd package isn't installed (Closes: #417015).
 
  -- Roland Rosenfeld <roland@debian.org>  Sat, 19 May 2007 21:22:42 +0200
 
@@ -231,8 +320,8 @@ privoxy (3.0.3-2-2) unstable; urgency=low
   * 18_dns_retry.dpatch by Fabian Keil <fk@fabiankeil.de>: 10 retries
     before giving up DNS lookup. This hopefully Closes: #335660.
   * 19_manpage_fixup.dpatch:
-    - Convert Latin-1 char á to groff eqivalent in man page.
-    - Quote minus signs to differenciate them from hyphens.
+    - Convert Latin-1 char á to groff equivalent in man page.
+    - Quote minus signs to differentiate them from hyphens.
   * Do not filter{banners-by-size} on .w3.org pages, because these often
     contain validator icons (Closes: #319025).
 
