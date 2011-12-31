@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.124 2011/11/13 16:54:10 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.125 2011/12/31 14:53:47 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1997,7 +1997,7 @@ sub gather_loglevel_header_stats ($$) {
 
         # scan: HTTP/1.1 200 OK
         $stats{'method'}{$2}++;
-        $stats{'ressource'}{$3}++;
+        $stats{'resource'}{$3}++;
         $stats{'http-version'}{$4}++;
 
     } elsif ($c =~ m/^scan: Host: ([^\s]+)/) {
@@ -2087,12 +2087,12 @@ sub print_stats () {
         print "URL statistics are disabled. Increase --url-statistics-threshold to enable them.\n";
     } else {
         print "Requested URLs:\n";
-        foreach my $ressource (sort {$stats{'ressource'}{$b} <=> $stats{'ressource'}{$a}} keys %{$stats{'ressource'}}) {
-            if ($stats{'ressource'}{$ressource} < $cli_options{'url-statistics-threshold'}) {
+        foreach my $resource (sort {$stats{'resource'}{$b} <=> $stats{'resource'}{$a}} keys %{$stats{'resource'}}) {
+            if ($stats{'resource'}{$resource} < $cli_options{'url-statistics-threshold'}) {
                 print "Skipped statistics for URLs below the treshold.\n";
                 last;
             }
-            printf "%d : %s\n", $stats{'ressource'}{$ressource}, $ressource;
+            printf "%d : %s\n", $stats{'resource'}{$resource}, $resource;
         }
     }
 
