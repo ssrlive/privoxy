@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.238 2011/12/31 14:47:45 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.239 2011/12/31 14:49:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4105,7 +4105,7 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
  * Function    :  create_forged_referrer
  *
  * Description :  Helper for client_referrer to forge a referer as
- *                'http://[hostname:port/' to fool stupid
+ *                'http://hostname[:port]/' to fool stupid
  *                checks for in-site links
  *
  * Parameters  :
