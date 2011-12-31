@@ -1,6 +1,6 @@
-# http://privoxy.org/.htaccess
+# http://www.privoxy.org/.htaccess
 #
-# By Jon Foster
+# Initial version written by Jon Foster
 #
 # Intercepts requests for these servers:
 #    http://ijbswa.sourceforge.net/
