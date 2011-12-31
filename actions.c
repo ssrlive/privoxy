@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.73 2011/09/18 14:43:07 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.74 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -318,7 +318,7 @@ void free_action (struct action_spec *src)
  * Function    :  get_action_token
  *
  * Description :  Parses a line for the first action.
- *                Modifies it's input array, doesn't allocate memory.
+ *                Modifies its input array, doesn't allocate memory.
  *                e.g. given:
  *                *line="  +abc{def}  -ghi "
  *                Returns:
