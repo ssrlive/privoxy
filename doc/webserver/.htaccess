@@ -11,6 +11,8 @@
 # And redirects all requests to the canonical web server:
 #    http://www.privoxy.org/
 #
+# Requests for: http://config.privoxy.org/.*
+# are redirected to: http://www.privoxy.org/config/
 #
 # Uses Apache's mod_rewrite
 # See http://httpd.apache.org/docs/mod/mod_rewrite.html
@@ -19,6 +21,10 @@
 # Enable mod_rewrite
 RewriteEngine on
 
+# Note that the parentheses seem to be mandatory
+# even if we aren't interested in what they match.
+RewriteCond %{HTTP_HOST}   ^config\.privoxy\.org [NC]
+RewriteRule ^(.*)$         http://www.privoxy.org/config/ [R,L]
 
 RewriteCond %{HTTP_HOST}   !^www\.privoxy\.org\.?$ [NC]
 RewriteCond %{HTTP_HOST}   !^$
