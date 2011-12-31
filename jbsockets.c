@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.110 2011/11/18 23:53:26 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.111 2011/12/10 17:26:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -976,6 +976,16 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
          log_error(LOG_LEVEL_ERROR, "getsockname() truncated server address");
          return;
       }
+/*
+ * XXX: Workaround for missing header on Windows when
+ *      configured with --disable-ipv6-support.
+ *      The proper fix is to not use NI_MAXSERV in
+ *      that case. It works by accident on other platforms
+ *      as <netdb.h> in included unconditionally there.
+ */
+#ifndef NI_MAXSERV
+#define NI_MAXSERV 32
+#endif
       *port = malloc(NI_MAXSERV);
       if (NULL == *port)
       {
