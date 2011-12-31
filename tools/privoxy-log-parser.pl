@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.123 2011/11/12 12:56:42 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.124 2011/11/13 16:54:10 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2518,7 +2518,7 @@ Only fixes some breakage, but may be good enough or at least better than nothing
 Doesn't do anything else, so you probably want to pipe the output into
 B<privoxy-log-parser> again.
 
-[B<--url-statistics-threshold>] Only show the request count for a ressource
+[B<--url-statistics-threshold>] Only show the request count for a resource
 if it's above or equal to the given threshold. If the threshold is 0, URL
 statistics are disabled.
 
