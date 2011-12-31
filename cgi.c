@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.144 2011/09/04 11:10:56 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.145 2011/10/08 17:31:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -7,9 +7,6 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.144 2011/09/04 11:10:56 fabiankeil Exp $"
  *                html or gif answers, and to compose HTTP resonses.
  *                This only contains the framework functions, the
  *                actual handler functions are declared elsewhere.
- *
- *                Functions declared include:
- *
  *
  * Copyright   :  Written by and Copyright (C) 2001-2004, 2006-2008
  *                the SourceForge Privoxy team. http://www.privoxy.org/

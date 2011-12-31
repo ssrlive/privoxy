@@ -1,21 +1,9 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.236 2011/10/23 11:23:55 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.237 2011/11/06 11:36:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
- *                Functions declared include:
- *                   `add_to_iob', `client_cookie_adder', `client_from',
- *                   `client_referrer', `client_send_cookie', `client_ua',
- *                   `client_uagent', `client_x_forwarded',
- *                   `client_x_forwarded_adder', `client_xtra_adder',
- *                   `content_type', `crumble', `destroy_list', `enlist',
- *                   `flush_socket', ``get_header', `sed', `filter_header'
- *                   `server_content_encoding', `server_content_disposition',
- *                   `server_last_modified', `client_accept_language',
- *                   `crunch_client_header', `client_if_modified_since',
- *                   `client_if_none_match', `get_destination_from_headers',
- *                   `parse_header_time', `decompress_iob' and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009 the
  *                Privoxy team. http://www.privoxy.org/

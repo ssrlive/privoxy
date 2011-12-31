@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.20 2009/05/16 13:27:20 fabiankeil Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.21 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -6,10 +6,6 @@ const char deanimate_rcs[] = "$Id: deanimate.c,v 1.20 2009/05/16 13:27:20 fabian
  * Purpose     :  Declares functions to manipulate binary images on the
  *                fly.  High-level functions include:
  *                  - Deanimation of GIF images
- *
- *                Functions declared include: gif_deanimate, buf_free,
- *                buf_copy,  buf_getbyte, gif_skip_data_block
- *                and gif_extract_image
  *
  * Copyright   :  Written by and Copyright (C) 2001 - 2004, 2006 by the
  *                SourceForge Privoxy team. http://www.privoxy.org/
