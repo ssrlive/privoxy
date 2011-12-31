@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.145 2011/10/08 17:31:05 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.146 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -2142,7 +2142,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "time",          1, html_encode(buf), 0);
    if (!err) err = map(exports, "my-ip-address", 1, html_encode(ip_address ? ip_address : "unknown"), 0);
    freez(ip_address);
-   if (!err) err = map(exports, "my-port",       1, html_encode(port ? port : "unkown"), 0);
+   if (!err) err = map(exports, "my-port",       1, html_encode(port ? port : "unknown"), 0);
    freez(port);
    if (!err) err = map(exports, "my-hostname",   1, html_encode(hostname ? hostname : "unknown"), 0);
    freez(hostname);
