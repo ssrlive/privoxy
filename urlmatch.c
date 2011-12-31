@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.64 2011/11/06 11:41:05 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.65 2011/11/06 11:41:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -775,7 +775,7 @@ static jb_err compile_url_pattern(struct url_spec *url, char *buf)
  *
  * Function    :  compile_host_pattern
  *
- * Description :  Parses and compiles a host pattern..
+ * Description :  Parses and compiles a host pattern.
  *
  * Parameters  :
  *          1  :  url = Target url_spec to be filled in.
