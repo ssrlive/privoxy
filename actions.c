@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.74 2011/12/31 14:47:44 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.75 2011/12/31 14:49:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -771,36 +771,6 @@ jb_err merge_current_action (struct current_action_spec *dest,
    return err;
 }
 
-#if 0
-/*********************************************************************
- *
- * Function    :  update_action_bits_for_all_tags
- *
- * Description :  Updates the action bits based on all matching tags.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  0 if no tag matched, or
- *                1 otherwise
- *
- *********************************************************************/
-int update_action_bits_for_all_tags(struct client_state *csp)
-{
-   struct list_entry *tag;
-   int updated = 0;
-
-   for (tag = csp->tags->first; tag != NULL; tag = tag->next)
-   {
-      if (update_action_bits_for_tag(csp, tag->str))
-      {
-         updated = 1;
-      }
-   }
-
-   return updated;
-}
-#endif
 
 /*********************************************************************
  *
