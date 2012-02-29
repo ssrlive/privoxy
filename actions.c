@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.75 2011/12/31 14:49:58 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.76 2011/12/31 14:50:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -69,11 +69,13 @@ const char actions_h_rcs[] = ACTIONS_H_VERSION;
  * an enumerated type (well, the preprocessor equivalent).  Here are
  * the values:
  */
-#define AV_NONE       0 /* +opt -opt */
-#define AV_ADD_STRING 1 /* +stropt{string} */
-#define AV_REM_STRING 2 /* -stropt */
-#define AV_ADD_MULTI  3 /* +multiopt{string} +multiopt{string2} */
-#define AV_REM_MULTI  4 /* -multiopt{string} -multiopt          */
+enum action_value_type {
+   AV_NONE       = 0, /* +opt -opt */
+   AV_ADD_STRING = 1, /* +stropt{string} */
+   AV_REM_STRING = 2, /* -stropt */
+   AV_ADD_MULTI  = 3, /* +multiopt{string} +multiopt{string2} */
+   AV_REM_MULTI  = 4  /* -multiopt{string} -multiopt          */
+};
 
 /*
  * We need a structure to hold the name, flag changes,
@@ -84,7 +86,7 @@ struct action_name
    const char * name;
    unsigned long mask;   /* a bit set to "0" = remove action */
    unsigned long add;    /* a bit set to "1" = add action */
-   int takes_value;      /* an AV_... constant */
+   enum action_value_type takes_value;      /* an AV_... constant */
    int index;            /* index into strings[] or multi[] */
 };
 
