@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.163 2011/12/26 17:03:08 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.164 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -185,10 +185,8 @@ static int match_sockaddr(const struct sockaddr_storage *network,
    if (network->ss_family != netmask->ss_family)
    {
       /* This should never happen */
-      log_error(LOG_LEVEL_ERROR,
-         "Internal error at %s:%llu: network and netmask differ in family",
-         __FILE__, __LINE__);
-      return 0;
+      assert(network->ss_family == netmask->ss_family);
+      log_error(LOG_LEVEL_FATAL, "Network and netmask differ in family.");
    }
 
    sockaddr_storage_to_ip(network, &network_addr, &addr_len, &network_port);
