@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.82 2011/10/23 11:21:28 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.83 2011/12/24 15:28:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1116,6 +1116,15 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    assert(errstr != NULL);
    csp->error_message = strdup(errstr);
+   if (server_size == -1)
+   {
+      /*
+       * We didn't read() anything from the server at all.
+       * Don't try to log a negative number of characters
+       * which could trigger an assert().
+       */
+      server_size = 0;
+   }
    log_error(LOG_LEVEL_CONNECT, "socks5_connect: %s: %N", errstr, server_size, sbuf);
    close_socket(sfd);
    errno = EINVAL;
