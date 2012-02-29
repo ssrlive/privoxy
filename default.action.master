@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.241 2011/07/30 15:02:57 fabiankeil Exp $
+#  $Id: default.action.master,v 1.242 2011/10/16 13:13:50 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1314,6 +1314,12 @@ hstse.tradedoubler.com/.*\.swf
 www.zdnetasia.com/.*/sponsor/.*\.gif$
 # Blocked URL = http://pagead2.googlesyndication.com/pagead/imgad?id=CPjtipDs9taquQEQoAEYwgQyCIvo2PNnQywb
 .googlesyndication.com/.*/imgad\?
+#MASTER# BLOCK-REFERRER: http://textsfromlastnight.com/texts/page:19
+# Blocked URL = http://optimize.indieclick.com/www/delivery/avw.php?zoneid=337501&cb=4147152&n=a530d6f1
+#MASTER# BLOCK-REFERRER: http://textsfromlastnight.com/texts/page:19
+optimize.indieclick.com/
+# Blocked URL = http://optimized-by.rubiconproject.com/a/8327/13451/26301-2.img
+optimized-by.rubiconproject.com/
 
 #----------------------------------------------------------------------------
 # Cross-site user tracking
