@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.33 2011/05/22 10:30:55 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.34 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -46,6 +46,7 @@ extern "C" {
 
 extern const char *basedir;
 extern void *zalloc(size_t size);
+extern char *strdup_or_die(const char *str);
 
 #if defined(unix)
 extern void write_pid_file(void);
