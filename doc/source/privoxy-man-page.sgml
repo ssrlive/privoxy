@@ -5,9 +5,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: privoxy-man-page.sgml,v 2.40 2011/12/26 17:05:40 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.41 2012/03/04 11:54:00 fabiankeil Exp $
 
- Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
