@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.68 2011/09/04 11:10:56 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.69 2012/03/04 11:41:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -135,13 +135,12 @@ void write_pid_file(void)
  * Function    :  hash_string
  *
  * Description :  Take a string and compute a (hopefuly) unique numeric
- *                integer value.  This has several uses, but being able
- *                to "switch" a string the one of my favorites.
+ *                integer value. This is useful to "switch" a string.
  *
  * Parameters  :
  *          1  :  s : string to be hashed.
  *
- * Returns     :  an unsigned long variable with the hashed value.
+ * Returns     :  The string's hash
  *
  *********************************************************************/
 unsigned int hash_string( const char* s )
