@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.171 2011/09/04 11:10:56 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.172 2012/03/04 11:49:24 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -161,14 +161,10 @@ typedef int jb_err;
 
 
 /**
- * Fix a problem with Solaris.  There should be no effect on other
- * platforms.
- *
- * Solaris's isspace() is a macro which uses it's argument directly
- * as an array index.  Therefore we need to make sure that high-bit
- * characters generate +ve values, and ideally we also want to make
- * the argument match the declared parameter type of "int".
- *
+ * Macro definitions for platforms where isspace() and friends
+ * are macros that use their argument directly as an array index
+ * and thus better be positive. Supposedly that's the case on
+ * some unspecified Solaris versions.
  * Note: Remember to #include <ctype.h> if you use these macros.
  */
 #define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
