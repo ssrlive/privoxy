@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.69 2012/03/04 11:41:57 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.70 2012/03/04 11:48:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -470,13 +470,10 @@ char *bindup(const char *string, size_t len)
 {
    char *duplicate;
 
-   if (NULL == (duplicate = (char *)malloc(len)))
+   duplicate = (char *)malloc(len);
+   if (NULL != duplicate)
    {
-      return NULL;
-   }
-   else
-   {
-     memcpy(duplicate, string, len);
+      memcpy(duplicate, string, len);
    }
 
    return duplicate;
