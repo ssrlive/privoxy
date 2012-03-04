@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.241 2012/03/04 11:47:54 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.242 2012/03/04 11:51:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1544,8 +1544,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
  *                to remove the header.  This function frees the
  *                original string if necessary.
  *
- * Returns     :  JB_ERR_OK on success, or
- *                JB_ERR_MEMORY on out-of-memory error.
+ * Returns     :  JB_ERR_OK on success.
  *
  *********************************************************************/
 static jb_err server_connection(struct client_state *csp, char **header)
@@ -1572,11 +1571,7 @@ static jb_err server_connection(struct client_state *csp, char **header)
       {
          char *old_header = *header;
 
-         *header = strdup("Connection: close");
-         if (header == NULL)
-         {
-            return JB_ERR_MEMORY;
-         }
+         *header = strdup_or_die("Connection: close");
          log_error(LOG_LEVEL_HEADER, "Replaced: \'%s\' with \'%s\'", old_header, *header);
          freez(old_header);
       }
@@ -1806,8 +1801,7 @@ static jb_err client_save_content_length(struct client_state *csp, char **header
  *                to remove the header.  This function frees the
  *                original string if necessary.
  *
- * Returns     :  JB_ERR_OK on success, or
- *                JB_ERR_MEMORY on out-of-memory error.
+ * Returns     :  JB_ERR_OK on success.
  *
  *********************************************************************/
 static jb_err client_connection(struct client_state *csp, char **header)
@@ -1834,11 +1828,7 @@ static jb_err client_connection(struct client_state *csp, char **header)
           {
              char *old_header = *header;
 
-             *header = strdup("Connection: keep-alive");
-             if (header == NULL)
-             {
-                return JB_ERR_MEMORY;
-             }
+             *header = strdup_or_die("Connection: keep-alive");
              log_error(LOG_LEVEL_HEADER,
                 "Replaced: \'%s\' with \'%s\'", old_header, *header);
              freez(old_header);
@@ -1866,11 +1856,7 @@ static jb_err client_connection(struct client_state *csp, char **header)
    {
       char *old_header = *header;
 
-      *header = strdup(connection_close);
-      if (header == NULL)
-      {
-         return JB_ERR_MEMORY;
-      }
+      *header = strdup_or_die(connection_close);
       log_error(LOG_LEVEL_HEADER,
          "Replaced: \'%s\' with \'%s\'", old_header, *header);
       freez(old_header);
@@ -2024,7 +2010,7 @@ static jb_err server_content_type(struct client_state *csp, char **header)
       if ((csp->content_type & CT_TEXT) || (csp->action->flags & ACTION_FORCE_TEXT_MODE))
       {
          freez(*header);
-         *header = strdup("Content-Type: ");
+         *header = strdup_or_die("Content-Type: ");
          string_append(header, csp->action->string[ACTION_STRING_CONTENT_TYPE]);
 
          if (header == NULL)
@@ -3128,16 +3114,9 @@ static jb_err client_host(struct client_state *csp, char **header)
        *csp->http->hostport == ' ' || *csp->http->hostport == '\0')
    {
 
-      if (NULL == (p = strdup((*header)+6)))
-      {
-         return JB_ERR_MEMORY;
-      }
+      p = strdup_or_die((*header)+6);
       chomp(p);
-      if (NULL == (q = strdup(p)))
-      {
-         freez(p);
-         return JB_ERR_MEMORY;
-      }
+      q = strdup_or_die(p);
 
       freez(csp->http->hostport);
       csp->http->hostport = p;
@@ -4020,7 +3999,7 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
  *                the "Host:" header)
  *          2  :  http = storage for the result (host, port and hostport).
  *
- * Returns     :  JB_ERR_MEMORY in case of memory problems,
+ * Returns     :  JB_ERR_MEMORY (or terminates) in case of memory problems,
  *                JB_ERR_PARSE if the host header couldn't be found,
  *                JB_ERR_OK otherwise.
  *
@@ -4039,19 +4018,9 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
       return JB_ERR_PARSE;
    }
 
-   p = strdup(host);
-   if (NULL == p)
-   {
-      log_error(LOG_LEVEL_ERROR, "Out of memory while parsing \"Host:\" header");
-      return JB_ERR_MEMORY;
-   }
+   p = strdup_or_die(host);
    chomp(p);
-   if (NULL == (q = strdup(p)))
-   {
-      freez(p);
-      log_error(LOG_LEVEL_ERROR, "Out of memory while parsing \"Host:\" header");
-      return JB_ERR_MEMORY;
-   }
+   q = strdup_or_die(p);
 
    freez(http->hostport);
    http->hostport = p;
@@ -4183,15 +4152,9 @@ static jb_err create_fake_referrer(char **header, const char *fake_referrer)
 static jb_err handle_conditional_hide_referrer_parameter(char **header,
    const char *host, const int parameter_conditional_block)
 {
-   char *referer = strdup(*header);
+   char *referer = strdup_or_die(*header);
    const size_t hostlength = strlen(host);
    const char *referer_url = NULL;
-
-   if (NULL == referer)
-   {
-      freez(*header);
-      return JB_ERR_MEMORY;
-   }
 
    /* referer begins with 'Referer: http[s]://' */
    if ((hostlength+17) < strlen(referer))
