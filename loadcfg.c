@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.120 2011/07/19 11:00:20 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.121 2011/07/30 15:05:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -128,56 +128,56 @@ static struct file_list *current_configfile = NULL;
  * console and GUI specific options last).
  */
 
-#define hash_actions_file                1196306641ul /* "actionsfile" */
-#define hash_accept_intercepted_requests 1513024973ul /* "accept-intercepted-requests" */
-#define hash_admin_address               4112573064ul /* "admin-address" */
-#define hash_allow_cgi_request_crunching  258915987ul /* "allow-cgi-request-crunching" */
-#define hash_buffer_limit                1881726070ul /* "buffer-limit */
-#define hash_compression_level           2464423563ul /* "compression-level" */
-#define hash_confdir                        1978389ul /* "confdir" */
-#define hash_connection_sharing          1348841265ul /* "connection-sharing" */
-#define hash_debug                            78263ul /* "debug" */
-#define hash_default_server_timeout      2530089913ul /* "default-server-timeout" */
-#define hash_deny_access                 1227333715ul /* "deny-access" */
-#define hash_enable_edit_actions         2517097536ul /* "enable-edit-actions" */
-#define hash_enable_compression          3943696946ul /* "enable-compression" */
-#define hash_enable_remote_toggle        2979744683ul /* "enable-remote-toggle" */
-#define hash_enable_remote_http_toggle    110543988ul /* "enable-remote-http-toggle" */
-#define hash_enforce_blocks              1862427469ul /* "enforce-blocks" */
-#define hash_filterfile                   250887266ul /* "filterfile" */
-#define hash_forward                        2029845ul /* "forward" */
-#define hash_forward_socks4              3963965521ul /* "forward-socks4" */
-#define hash_forward_socks4a             2639958518ul /* "forward-socks4a" */
-#define hash_forward_socks5              3963965522ul /* "forward-socks5" */
-#define hash_forwarded_connect_retries    101465292ul /* "forwarded-connect-retries" */
-#define hash_handle_as_empty_returns_ok  1444873247ul /* "handle-as-empty-doc-returns-ok" */
-#define hash_hostname                      10308071ul /* "hostname" */
-#define hash_keep_alive_timeout          3878599515ul /* "keep-alive-timeout" */
-#define hash_listen_address              1255650842ul /* "listen-address" */
-#define hash_logdir                          422889ul /* "logdir" */
-#define hash_logfile                        2114766ul /* "logfile" */
-#define hash_max_client_connections      3595884446ul /* "max-client-connections" */
-#define hash_permit_access               3587953268ul /* "permit-access" */
-#define hash_proxy_info_url              3903079059ul /* "proxy-info-url" */
-#define hash_single_threaded             4250084780ul /* "single-threaded" */
-#define hash_socket_timeout              1809001761ul /* "socket-timeout" */
-#define hash_split_large_cgi_forms        671658948ul /* "split-large-cgi-forms" */
-#define hash_suppress_blocklists         1948693308ul /* "suppress-blocklists" */
-#define hash_templdir                      11067889ul /* "templdir" */
-#define hash_toggle                          447966ul /* "toggle" */
-#define hash_trust_info_url               430331967ul /* "trust-info-url" */
-#define hash_trustfile                     56494766ul /* "trustfile" */
-#define hash_usermanual                  1416668518ul /* "user-manual" */
-#define hash_activity_animation          1817904738ul /* "activity-animation" */
-#define hash_close_button_minimizes      3651284693ul /* "close-button-minimizes" */
-#define hash_hide_console                2048809870ul /* "hide-console" */
-#define hash_log_buffer_size             2918070425ul /* "log-buffer-size" */
-#define hash_log_font_name               2866730124ul /* "log-font-name" */
-#define hash_log_font_size               2866731014ul /* "log-font-size" */
-#define hash_log_highlight_messages      4032101240ul /* "log-highlight-messages" */
-#define hash_log_max_lines               2868344173ul /* "log-max-lines" */
-#define hash_log_messages                2291744899ul /* "log-messages" */
-#define hash_show_on_task_bar             215410365ul /* "show-on-task-bar" */
+#define hash_actions_file                1196306641U /* "actionsfile" */
+#define hash_accept_intercepted_requests 1513024973U /* "accept-intercepted-requests" */
+#define hash_admin_address               4112573064U /* "admin-address" */
+#define hash_allow_cgi_request_crunching  258915987U /* "allow-cgi-request-crunching" */
+#define hash_buffer_limit                1881726070U /* "buffer-limit */
+#define hash_compression_level           2464423563U /* "compression-level" */
+#define hash_confdir                        1978389U /* "confdir" */
+#define hash_connection_sharing          1348841265U /* "connection-sharing" */
+#define hash_debug                            78263U /* "debug" */
+#define hash_default_server_timeout      2530089913U /* "default-server-timeout" */
+#define hash_deny_access                 1227333715U /* "deny-access" */
+#define hash_enable_edit_actions         2517097536U /* "enable-edit-actions" */
+#define hash_enable_compression          3943696946U /* "enable-compression" */
+#define hash_enable_remote_toggle        2979744683U /* "enable-remote-toggle" */
+#define hash_enable_remote_http_toggle    110543988U /* "enable-remote-http-toggle" */
+#define hash_enforce_blocks              1862427469U /* "enforce-blocks" */
+#define hash_filterfile                   250887266U /* "filterfile" */
+#define hash_forward                        2029845U /* "forward" */
+#define hash_forward_socks4              3963965521U /* "forward-socks4" */
+#define hash_forward_socks4a             2639958518U /* "forward-socks4a" */
+#define hash_forward_socks5              3963965522U /* "forward-socks5" */
+#define hash_forwarded_connect_retries    101465292U /* "forwarded-connect-retries" */
+#define hash_handle_as_empty_returns_ok  1444873247U /* "handle-as-empty-doc-returns-ok" */
+#define hash_hostname                      10308071U /* "hostname" */
+#define hash_keep_alive_timeout          3878599515U /* "keep-alive-timeout" */
+#define hash_listen_address              1255650842U /* "listen-address" */
+#define hash_logdir                          422889U /* "logdir" */
+#define hash_logfile                        2114766U /* "logfile" */
+#define hash_max_client_connections      3595884446U /* "max-client-connections" */
+#define hash_permit_access               3587953268U /* "permit-access" */
+#define hash_proxy_info_url              3903079059U /* "proxy-info-url" */
+#define hash_single_threaded             4250084780U /* "single-threaded" */
+#define hash_socket_timeout              1809001761U /* "socket-timeout" */
+#define hash_split_large_cgi_forms        671658948U /* "split-large-cgi-forms" */
+#define hash_suppress_blocklists         1948693308U /* "suppress-blocklists" */
+#define hash_templdir                      11067889U /* "templdir" */
+#define hash_toggle                          447966U /* "toggle" */
+#define hash_trust_info_url               430331967U /* "trust-info-url" */
+#define hash_trustfile                     56494766U /* "trustfile" */
+#define hash_usermanual                  1416668518U /* "user-manual" */
+#define hash_activity_animation          1817904738U /* "activity-animation" */
+#define hash_close_button_minimizes      3651284693U /* "close-button-minimizes" */
+#define hash_hide_console                2048809870U /* "hide-console" */
+#define hash_log_buffer_size             2918070425U /* "log-buffer-size" */
+#define hash_log_font_name               2866730124U /* "log-font-name" */
+#define hash_log_font_size               2866731014U /* "log-font-size" */
+#define hash_log_highlight_messages      4032101240U /* "log-highlight-messages" */
+#define hash_log_max_lines               2868344173U /* "log-max-lines" */
+#define hash_log_messages                2291744899U /* "log-messages" */
+#define hash_show_on_task_bar             215410365U /* "show-on-task-bar" */
 
 
 static void savearg(char *command, char *argument, struct configuration_spec * config);
@@ -441,7 +441,7 @@ struct configuration_spec * load_config(void)
       struct forward_spec *cur_fwd;
       int vec_count;
       char *vec[3];
-      unsigned long directive_hash;
+      unsigned int directive_hash;
 
       strlcpy(tmp, buf, sizeof(tmp));
 
