@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.164 2011/12/31 14:47:44 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.165 2012/02/29 19:34:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -75,15 +75,6 @@ const char filters_rcs[] = "$Id: filters.c,v 1.164 2011/12/31 14:47:44 fabiankei
 #endif
 
 const char filters_h_rcs[] = FILTERS_H_VERSION;
-
-/* Fix a problem with Solaris.  There should be no effect on other
- * platforms.
- * Solaris's isspace() is a macro which uses it's argument directly
- * as an array index.  Therefore we need to make sure that high-bit
- * characters generate +ve values, and ideally we also want to make
- * the argument match the declared parameter type of "int".
- */
-#define ijb_isdigit(__X) isdigit((int)(unsigned char)(__X))
 
 typedef char *(*filter_function_ptr)();
 static filter_function_ptr get_filter_function(const struct client_state *csp);
