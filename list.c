@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.25 2011/09/04 11:10:56 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.26 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -415,8 +415,24 @@ jb_err enlist_unique_header(struct list *the_list, const char *name,
    if (NULL != header)
    {
       const size_t bytes_to_compare = strlen(name) + 2;
+      char *p = header;
 
       snprintf(header, header_size, "%s: %s", name, value);
+      /*
+       * The trailing "\r\n" is added by list_to_text(),
+       * if the caller passed them anyway, cut the header
+       * at the first one or dump core if this is a debug
+       * build.
+       */
+      do
+      {
+         if ((*p == '\r') || (*p == '\n'))
+         {
+            assert(*p != '\r');
+            assert(*p != '\n');
+            *p = '\0';
+         }
+      } while (*p++);
       result = enlist_unique(the_list, header, bytes_to_compare);
       free(header);
       assert(list_is_valid(the_list));
