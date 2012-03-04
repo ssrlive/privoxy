@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.121 2011/07/30 15:05:23 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.122 2012/03/04 11:47:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -72,6 +72,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.121 2011/07/30 15:05:23 fabiankei
 
 #endif
 
+#include "project.h"
 #include "loadcfg.h"
 #include "list.h"
 #include "jcc.h"
@@ -86,17 +87,6 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.121 2011/07/30 15:05:23 fabiankei
 #include "gateway.h"
 
 const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
-
-/*
- * Fix a problem with Solaris.  There should be no effect on other
- * platforms.
- * Solaris's isspace() is a macro which uses it's argument directly
- * as an array index.  Therefore we need to make sure that high-bit
- * characters generate +ve values, and ideally we also want to make
- * the argument match the declared parameter type of "int".
- */
-#define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
-#define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
 #ifdef FEATURE_TOGGLE
 /* Privoxy is enabled by default. */

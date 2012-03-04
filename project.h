@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.170 2011/07/17 13:34:36 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.171 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -171,6 +171,7 @@ typedef int jb_err;
  *
  * Note: Remember to #include <ctype.h> if you use these macros.
  */
+#define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
 #define ijb_toupper(__X) toupper((int)(unsigned char)(__X))
 #define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 #define ijb_isspace(__X) isspace((int)(unsigned char)(__X))
