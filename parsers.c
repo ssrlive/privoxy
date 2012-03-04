@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.239 2011/12/31 14:49:07 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.240 2011/12/31 14:49:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -91,19 +91,6 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.239 2011/12/31 14:49:07 fabiankei
 #endif
 
 const char parsers_h_rcs[] = PARSERS_H_VERSION;
-
-/* Fix a problem with Solaris.  There should be no effect on other
- * platforms.
- * Solaris's isspace() is a macro which uses its argument directly
- * as an array index.  Therefore we need to make sure that high-bit
- * characters generate +ve values, and ideally we also want to make
- * the argument match the declared parameter type of "int".
- *
- * Why did they write a character function that can't take a simple
- * "char" argument?  Doh!
- */
-#define ijb_isupper(__X) isupper((int)(unsigned char)(__X))
-#define ijb_tolower(__X) tolower((int)(unsigned char)(__X))
 
 static char *get_header_line(struct iob *iob);
 static jb_err scan_headers(struct client_state *csp);
