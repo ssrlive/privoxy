@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.240 2011/12/31 14:49:39 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.241 2012/03/04 11:47:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -770,11 +770,11 @@ static void normalize_lws(char *header)
 
    while (*p != '\0')
    {
-      if (ijb_isspace(*p) && ijb_isspace(*(p+1)))
+      if (privoxy_isspace(*p) && privoxy_isspace(*(p+1)))
       {
          char *q = p+1;
 
-         while (ijb_isspace(*q))
+         while (privoxy_isspace(*q))
          {
             q++;
          }
@@ -807,7 +807,7 @@ static void normalize_lws(char *header)
    }
 
    p = strchr(header, ':');
-   if ((p != NULL) && (p != header) && ijb_isspace(*(p-1)))
+   if ((p != NULL) && (p != header) && privoxy_isspace(*(p-1)))
    {
       /*
        * There's still space before the colon.
@@ -982,7 +982,7 @@ char *get_header_value(const struct list *header_list, const char *header_name)
              * Found: return pointer to start of value
              */
             ret = cur_entry->str + length;
-            while (*ret && ijb_isspace(*ret)) ret++;
+            while (*ret && privoxy_isspace(*ret)) ret++;
             return ret;
          }
       }
@@ -3758,7 +3758,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
       cur_tag = *header + 11;
 
       /* skip whitespace between "Set-Cookie:" and value */
-      while (*cur_tag && ijb_isspace(*cur_tag))
+      while (*cur_tag && privoxy_isspace(*cur_tag))
       {
          cur_tag++;
       }
@@ -3774,7 +3774,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
             next_tag++;
 
             /* skip whitespace ";" and start of tag */
-            while (*next_tag && ijb_isspace(*next_tag))
+            while (*next_tag && privoxy_isspace(*next_tag))
             {
                next_tag++;
             }

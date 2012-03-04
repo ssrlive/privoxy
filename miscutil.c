@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.70 2012/03/04 11:48:34 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.71 2012/03/04 11:48:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -177,13 +177,13 @@ int strcmpic(const char *s1, const char *s2)
 
    while (*s1 && *s2)
    {
-      if ( ( *s1 != *s2 ) && ( ijb_tolower(*s1) != ijb_tolower(*s2) ) )
+      if ( ( *s1 != *s2 ) && ( privoxy_tolower(*s1) != privoxy_tolower(*s2) ) )
       {
          break;
       }
       s1++, s2++;
    }
-   return(ijb_tolower(*s1) - ijb_tolower(*s2));
+   return(privoxy_tolower(*s1) - privoxy_tolower(*s2));
 
 }
 
@@ -210,7 +210,7 @@ int strncmpic(const char *s1, const char *s2, size_t n)
 
    while (*s1 && *s2)
    {
-      if ( ( *s1 != *s2 ) && ( ijb_tolower(*s1) != ijb_tolower(*s2) ) )
+      if ( ( *s1 != *s2 ) && ( privoxy_tolower(*s1) != privoxy_tolower(*s2) ) )
       {
          break;
       }
@@ -219,7 +219,7 @@ int strncmpic(const char *s1, const char *s2, size_t n)
 
       s1++, s2++;
    }
-   return(ijb_tolower(*s1) - ijb_tolower(*s2));
+   return(privoxy_tolower(*s1) - privoxy_tolower(*s2));
 
 }
 
@@ -245,7 +245,7 @@ char *chomp(char *string)
     * strip trailing whitespace
     */
    p = string + strlen(string);
-   while (p > string && ijb_isspace(*(p-1)))
+   while (p > string && privoxy_isspace(*(p-1)))
    {
       p--;
    }
@@ -255,7 +255,7 @@ char *chomp(char *string)
     * find end of leading whitespace
     */
    q = r = string;
-   while (*q && ijb_isspace(*q))
+   while (*q && privoxy_isspace(*q))
    {
       q++;
    }

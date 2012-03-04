@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.165 2012/02/29 19:34:04 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.166 2012/03/04 11:50:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -360,7 +360,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    if ((p = strchr(acl_spec, '/')) != NULL)
    {
       *p++ = '\0';
-      if (ijb_isdigit(*p) == 0)
+      if (privoxy_isdigit(*p) == 0)
       {
          freez(acl_spec);
          return(-1);
