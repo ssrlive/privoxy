@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.242 2011/10/16 13:13:50 fabiankeil Exp $
+#  $Id: default.action.master,v 1.243 2012/02/29 19:28:14 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1816,6 +1816,10 @@ adassier.wordpress.com/
 adassier.files.wordpress.com
 # URL = http://adainitiative.org/about-us/
 adainitiative.org/
+# URL = http://adjamblog.wordpress.com/
+adjamblog.wordpress.com/
+# URL = http://adjamblog.files.wordpress.com/2011/12/cropped-terra.jpg
+adjamblog.files.wordpress.com/
 
 
 #############################################################################
