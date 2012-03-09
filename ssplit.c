@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.11 2011/05/22 10:20:05 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.12 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -118,8 +118,8 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len,
 
    /* first pointer is the beginning of string */
    /* Check if we want to save this field */
-   if ( (!dont_save_empty_fields)
-     || (is_delim[(unsigned)(unsigned char)*str] == 0) )
+   if ((!dont_save_empty_fields)
+     || (is_delim[(unsigned)(unsigned char)*str] == 0))
       {
       /*
        * We want empty fields, or the first character in this
@@ -143,8 +143,8 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len,
          *str++ = '\0';
 
          /* Check if we want to save this field */
-         if ( (!dont_save_empty_fields)
-           || (is_delim[(unsigned)(unsigned char)*str] == 0) )
+         if ((!dont_save_empty_fields)
+           || (is_delim[(unsigned)(unsigned char)*str] == 0))
             {
             /*
              * We want empty fields, or the first character in this

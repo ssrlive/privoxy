@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.71 2011/11/18 16:47:08 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.72 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -494,7 +494,7 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
       cur_line = cur_line->next;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (line_number != patternid)
      || (patternid < 1U)
      || (cur_line->type != FILE_LINE_URL))
@@ -654,7 +654,7 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
       cur_line = cur_line->next;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (line_number != patternid)
      || (patternid < 1U)
      || (cur_line->type != FILE_LINE_URL))
@@ -978,7 +978,7 @@ static int match_actions_file_header_line(const char * line, const char * name)
    line += 2;
 
    /* Look for optional whitespace */
-   while ( (*line == ' ') || (*line == '\t') )
+   while ((*line == ' ') || (*line == '\t'))
    {
       line++;
    }
@@ -992,7 +992,7 @@ static int match_actions_file_header_line(const char * line, const char * name)
    line += len;
 
    /* Look for optional whitespace */
-   while ( (*line == ' ') || (*line == '\t') )
+   while ((*line == ' ') || (*line == '\t'))
    {
       line++;
    }
@@ -1134,16 +1134,16 @@ jb_err edit_parse_actions_file(struct editable_file * file)
    /* Skip leading blanks.  Should only happen if file is
     * empty (which is valid, but pointless).
     */
-   while ( (cur_line != NULL)
-        && (cur_line->unprocessed[0] == '\0') )
+   while ((cur_line != NULL)
+        && (cur_line->unprocessed[0] == '\0'))
    {
       /* Blank line */
       cur_line->type = FILE_LINE_BLANK;
       cur_line = cur_line->next;
    }
 
-   if ( (cur_line != NULL)
-     && (cur_line->unprocessed[0] != '{') )
+   if ((cur_line != NULL)
+     && (cur_line->unprocessed[0] != '{'))
    {
       /* File doesn't start with a header */
       file->parse_error = cur_line;
@@ -1151,8 +1151,8 @@ jb_err edit_parse_actions_file(struct editable_file * file)
       return JB_ERR_PARSE;
    }
 
-   if ( (cur_line != NULL) && (0 ==
-      match_actions_file_header_line(cur_line->unprocessed, "settings") ) )
+   if ((cur_line != NULL) && (0 ==
+      match_actions_file_header_line(cur_line->unprocessed, "settings")) )
    {
       cur_line->type = FILE_LINE_SETTINGS_HEADER;
 
@@ -1186,8 +1186,8 @@ jb_err edit_parse_actions_file(struct editable_file * file)
       }
    }
 
-   if ( (cur_line != NULL) && (0 ==
-      match_actions_file_header_line(cur_line->unprocessed, "description") ) )
+   if ((cur_line != NULL) && (0 ==
+      match_actions_file_header_line(cur_line->unprocessed, "description")) )
    {
       cur_line->type = FILE_LINE_DESCRIPTION_HEADER;
 
@@ -1206,8 +1206,8 @@ jb_err edit_parse_actions_file(struct editable_file * file)
       }
    }
 
-   if ( (cur_line != NULL) && (0 ==
-      match_actions_file_header_line(cur_line->unprocessed, "alias") ) )
+   if ((cur_line != NULL) && (0 ==
+      match_actions_file_header_line(cur_line->unprocessed, "alias")) )
    {
       cur_line->type = FILE_LINE_ALIAS_HEADER;
 
@@ -1311,14 +1311,14 @@ jb_err edit_parse_actions_file(struct editable_file * file)
          return JB_ERR_PARSE;
       }
 
-      while ( (*text == ' ') || (*text == '\t') )
+      while ((*text == ' ') || (*text == '\t'))
       {
          text++;
          len--;
       }
-      while ( (len > (size_t)0)
-           && ( (text[len - 1] == ' ')
-             || (text[len - 1] == '\t') ) )
+      while ((len > (size_t)0)
+           && ((text[len - 1] == ' ')
+             || (text[len - 1] == '\t')) )
       {
          len--;
       }
@@ -1779,11 +1779,11 @@ static jb_err get_file_name_param(struct client_state *csp,
    s = param;
    while ((ch = *s++) != '\0')
    {
-      if ( ((ch < 'A') || (ch > 'Z'))
+      if (((ch < 'A') || (ch > 'Z'))
         && ((ch < 'a') || (ch > 'z'))
         && ((ch < '0') || (ch > '9'))
         && (ch != '-')
-        && (ch != '_') )
+        && (ch != '_'))
       {
          /* Probable hack attempt. */
          return JB_ERR_CGI_PARAMS;
@@ -2331,14 +2331,14 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
     * cur_line->next       = /
     * cur_line->next->next = {...actions...} or EOF
     */
-   if ( (cur_line != NULL)
+   if ((cur_line != NULL)
      && (cur_line->type == FILE_LINE_ACTION)
      && (cur_line->next != NULL)
      && (cur_line->next->type == FILE_LINE_URL)
      && (0 == strcmp(cur_line->next->unprocessed, "/"))
-     && ( (cur_line->next->next == NULL)
+     && ((cur_line->next->next == NULL)
        || (cur_line->next->next->type != FILE_LINE_URL)
-      ) )
+     ) )
    {
       /*
        * Generate string with buttons to set actions for "/" to
@@ -2530,7 +2530,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       if (!err) err = map(section_exports, "actions", 1,
                           actions_to_html(csp, cur_line->data.action), 0);
 
-      if ( (!err)
+      if ((!err)
         && (cur_line->next != NULL)
         && (cur_line->next->type == FILE_LINE_URL))
       {
@@ -2668,7 +2668,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       snprintf(buf, sizeof(buf), "%d", line_number);
       if (!err) err = map(section_exports, "s-next", 1, buf, 1);
 
-      if ( (cur_line != NULL)
+      if ((cur_line != NULL)
         && (cur_line->type == FILE_LINE_ACTION))
       {
          /* Not last section */
@@ -2793,7 +2793,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       cur_line = cur_line->next;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (line_number != sectionid)
      || (sectionid < 1)
      || (cur_line->type != FILE_LINE_ACTION))
@@ -3072,7 +3072,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       cur_line = cur_line->next;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (line_number != sectionid)
      || (sectionid < 1)
      || (cur_line->type != FILE_LINE_ACTION))
@@ -3363,7 +3363,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
       line_number++;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (cur_line->type != FILE_LINE_URL))
    {
       /* Invalid "patternid" parameter */
@@ -3475,7 +3475,7 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
       line_number++;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (cur_line->type != FILE_LINE_ACTION))
    {
       /* Invalid "sectionid" parameter */
@@ -3598,7 +3598,7 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
       line_number++;
    }
 
-   if ( (cur_line == NULL)
+   if ((cur_line == NULL)
      || (prev_line == NULL)
      || (cur_line->type != FILE_LINE_URL))
    {
@@ -3705,16 +3705,16 @@ jb_err cgi_edit_actions_section_remove(struct client_state *csp,
       line_number++;
    }
 
-   if ( (cur_line == NULL)
-     || (cur_line->type != FILE_LINE_ACTION) )
+   if ((cur_line == NULL)
+     || (cur_line->type != FILE_LINE_ACTION))
    {
       /* Invalid "sectionid" parameter */
       edit_free_file(file);
       return JB_ERR_CGI_PARAMS;
    }
 
-   if ( (cur_line->next != NULL)
-     && (cur_line->next->type == FILE_LINE_URL) )
+   if ((cur_line->next != NULL)
+     && (cur_line->next->type == FILE_LINE_URL))
    {
       /* Section not empty. */
       edit_free_file(file);
@@ -3828,8 +3828,8 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
          /* There's something in the file, find the line before the first
           * action.
           */
-         while ( (cur_line->next != NULL)
-              && (cur_line->next->type != FILE_LINE_ACTION) )
+         while ((cur_line->next != NULL)
+              && (cur_line->next->type != FILE_LINE_ACTION))
          {
             cur_line = cur_line->next;
             line_number++;
@@ -3850,7 +3850,7 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
          line_number++;
       }
 
-      if ( (cur_line == NULL)
+      if ((cur_line == NULL)
         || (cur_line->type != FILE_LINE_ACTION))
       {
          /* Invalid "sectionid" parameter */
@@ -3859,8 +3859,8 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
       }
 
       /* Skip through the section to find the last line in it. */
-      while ( (cur_line->next != NULL)
-           && (cur_line->next->type != FILE_LINE_ACTION) )
+      while ((cur_line->next != NULL)
+           && (cur_line->next->type != FILE_LINE_ACTION))
       {
          cur_line = cur_line->next;
          line_number++;
@@ -4018,8 +4018,8 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
       line_number++;
    }
 
-   if ( (cur_line == NULL)
-     || (cur_line->type != FILE_LINE_ACTION) )
+   if ((cur_line == NULL)
+     || (cur_line->type != FILE_LINE_ACTION))
    {
       /* Invalid "section1" parameter */
       edit_free_file(file);
@@ -4050,8 +4050,8 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
          line_number++;
       }
 
-      if ( (cur_line == NULL)
-        || (cur_line->type != FILE_LINE_ACTION) )
+      if ((cur_line == NULL)
+        || (cur_line->type != FILE_LINE_ACTION))
       {
          /* Invalid "section2" parameter */
          edit_free_file(file);

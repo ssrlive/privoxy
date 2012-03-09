@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.111 2011/09/04 11:10:56 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.112 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1183,7 +1183,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
        (global_toggle_state == 1) &&
 #endif /* def FEATURE_TOGGLE */
        map_block_killer(exports, "privoxy-is-toggled-off")
-      )
+     )
    {
       free_map(exports);
       return JB_ERR_MEMORY;
@@ -1855,8 +1855,8 @@ static jb_err cgi_show_file(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      if ( map(exports, "file-description", 1, file_description, 1)
-        || map(exports, "filepath", 1, html_encode(filename), 0) )
+      if (map(exports, "file-description", 1, file_description, 1)
+        || map(exports, "filepath", 1, html_encode(filename), 0))
       {
          free_map(exports);
          return JB_ERR_MEMORY;

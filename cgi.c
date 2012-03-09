@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.146 2011/12/31 14:47:44 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.147 2011/12/31 14:54:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -312,17 +312,17 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    /* Note: "example.com" and "example.com." are equivalent hostnames. */
 
    /* Either the host matches CGI_SITE_1_HOST ..*/
-   if (   ( (0 == strcmpic(host, CGI_SITE_1_HOST))
+   if (  ( (0 == strcmpic(host, CGI_SITE_1_HOST))
          || (0 == strcmpic(host, CGI_SITE_1_HOST ".")))
-       && (path[0] == '/') )
+       && (path[0] == '/'))
    {
       /* ..then the path will all be for us.  Remove leading '/' */
       path++;
    }
    /* Or it's the host part CGI_SITE_2_HOST, and the path CGI_SITE_2_PATH */
-   else if ( ( (0 == strcmpic(host, CGI_SITE_2_HOST ))
-            || (0 == strcmpic(host, CGI_SITE_2_HOST ".")) )
-          && (0 == strncmpic(path, CGI_SITE_2_PATH, strlen(CGI_SITE_2_PATH))) )
+   else if (( (0 == strcmpic(host, CGI_SITE_2_HOST))
+            || (0 == strcmpic(host, CGI_SITE_2_HOST ".")))
+          && (0 == strncmpic(path, CGI_SITE_2_PATH, strlen(CGI_SITE_2_PATH))))
    {
       /* take everything following CGI_SITE_2_PATH */
       path += strlen(CGI_SITE_2_PATH);
@@ -723,8 +723,8 @@ jb_err get_string_param(const struct map *parameters,
    s = param;
    while ((ch = *s++) != '\0')
    {
-      if ( ((unsigned char)ch < (unsigned char)' ')
-        || (ch == '}') )
+      if (((unsigned char)ch < (unsigned char)' ')
+        || (ch == '}'))
       {
          /* Probable hack attempt, or user accidentally used '}'. */
          return JB_ERR_CGI_PARAMS;
@@ -1808,7 +1808,7 @@ jb_err template_load(const struct client_state *csp, char **template_ptr,
    /* Validate template name.  Paranoia. */
    for (p = templatename; *p != 0; p++)
    {
-      if ( ((*p < 'a') || (*p > 'z'))
+      if (((*p < 'a') || (*p > 'z'))
         && ((*p < 'A') || (*p > 'Z'))
         && ((*p < '0') || (*p > '9'))
         && (*p != '-')

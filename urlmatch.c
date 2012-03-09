@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.66 2011/12/31 14:53:18 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.67 2012/03/04 11:51:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -253,8 +253,8 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
     */
    if (*http->url == '*')
    {
-      if  ( NULL == (http->path = strdup("*"))
-         || NULL == (http->hostport = strdup("")) )
+      if  (NULL == (http->path = strdup("*"))
+         || NULL == (http->hostport = strdup("")))
       {
          return JB_ERR_MEMORY;
       }
@@ -337,7 +337,7 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
 
       freez(buf);
 
-      if ( (http->path == NULL)
+      if ((http->path == NULL)
         || (http->hostport == NULL))
       {
          return JB_ERR_MEMORY;
@@ -579,9 +579,9 @@ jb_err parse_http_request(const char *req, struct http_request *http)
 
    freez(buf);
 
-   if ( (http->cmd == NULL)
+   if ((http->cmd == NULL)
      || (http->gpc == NULL)
-     || (http->ver == NULL) )
+     || (http->ver == NULL))
    {
       return JB_ERR_MEMORY;
    }
@@ -971,9 +971,9 @@ static int simplematch(const char *pattern, const char *text)
       /*
        * Char match, or char range match?
        */
-      if ( (*pat == *txt)
+      if ((*pat == *txt)
       ||   (*pat == '?')
-      ||   ((*pat == ']') && (charmap[*txt / 8] & (1 << (*txt % 8)))) )
+      ||   ((*pat == ']') && (charmap[*txt / 8] & (1 << (*txt % 8)))))
       {
          /*
           * Success: Go ahead

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.111 2011/06/25 12:39:18 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.112 2011/09/04 11:10:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -666,7 +666,7 @@ void log_error(int loglevel, const char *fmt, ...)
 #ifndef _WIN32
       || (logfp == NULL)
 #endif
-      )
+     )
    {
       if (loglevel == LOG_LEVEL_FATAL)
       {
@@ -743,11 +743,11 @@ void log_error(int loglevel, const char *fmt, ...)
             tempbuf[1] = '\0';
             break;
          case 'd':
-            ival = va_arg( ap, int );
+            ival = va_arg(ap, int);
             snprintf(tempbuf, sizeof(tempbuf), "%d", ival);
             break;
          case 'u':
-            uval = va_arg( ap, unsigned );
+            uval = va_arg(ap, unsigned);
             snprintf(tempbuf, sizeof(tempbuf), "%u", uval);
             break;
          case 'l':
@@ -755,12 +755,12 @@ void log_error(int loglevel, const char *fmt, ...)
             ch = *src++;
             if (ch == 'd')
             {
-               lval = va_arg( ap, long );
+               lval = va_arg(ap, long);
                snprintf(tempbuf, sizeof(tempbuf), "%ld", lval);
             }
             else if (ch == 'u')
             {
-               ulval = va_arg( ap, unsigned long );
+               ulval = va_arg(ap, unsigned long);
                snprintf(tempbuf, sizeof(tempbuf), "%lu", ulval);
             }
             else if ((ch == 'l') && (*src == 'u'))
@@ -887,7 +887,7 @@ void log_error(int loglevel, const char *fmt, ...)
    if ((length >= log_buffer_size)
     || (outbuf[log_buffer_size-1] != '\0')
     || (outbuf[log_buffer_size] != '\0')
-      )
+     )
    {
       /* Repeat as assertions */
       assert(length < log_buffer_size);

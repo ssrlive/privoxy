@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.77 2012/02/29 19:31:12 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.78 2012/02/29 19:33:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -501,7 +501,7 @@ jb_err get_actions(char *line,
          /* Check for standard action name */
          const struct action_name * action = action_names;
 
-         while ( (action->name != NULL) && (0 != strcmpic(action->name, option)) )
+         while ((action->name != NULL) && (0 != strcmpic(action->name, option)))
          {
             action++;
          }
@@ -582,8 +582,8 @@ jb_err get_actions(char *line,
                   struct list * remove_p = cur_action->multi_remove[action->index];
                   struct list * add_p    = cur_action->multi_add[action->index];
 
-                  if ( (value == NULL) || (*value == '\0')
-                     || ((*value == '*') && (value[1] == '\0')) )
+                  if ((value == NULL) || (*value == '\0')
+                     || ((*value == '*') && (value[1] == '\0')))
                   {
                      /*
                       * no option, or option == "*".
@@ -598,7 +598,7 @@ jb_err get_actions(char *line,
                   {
                      /* Valid option - remove only 1 option */
 
-                     if ( !cur_action->multi_remove_all[action->index] )
+                     if (!cur_action->multi_remove_all[action->index])
                      {
                         /* there isn't a catch-all in the remove list already */
                         err = enlist_unique(remove_p, value, 0);
@@ -622,7 +622,7 @@ jb_err get_actions(char *line,
             /* try user aliases. */
             const struct action_alias * alias = alias_list;
 
-            while ( (alias != NULL) && (0 != strcmpic(alias->name, option)) )
+            while ((alias != NULL) && (0 != strcmpic(alias->name, option)))
             {
                alias = alias->next;
             }
@@ -1408,14 +1408,14 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                  "While loading actions file '%s': invalid line (%lu): %s",
                   csp->config->actions_file[fileid], linenum, buf);
             }
-            else if (                      atoi(fields[0]) > VERSION_MAJOR
+            else if (                     atoi(fields[0]) > VERSION_MAJOR
                      || (num_fields > 1 && atoi(fields[1]) > VERSION_MINOR)
                      || (num_fields > 2 && atoi(fields[2]) > VERSION_POINT))
             {
                fclose(fp);
                log_error(LOG_LEVEL_FATAL,
                          "Actions file '%s', line %lu requires newer Privoxy version: %s",
-                         csp->config->actions_file[fileid], linenum, buf );
+                         csp->config->actions_file[fileid], linenum, buf);
                return 1; /* never get here */
             }
             free(version_string);

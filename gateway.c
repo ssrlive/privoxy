@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.83 2011/12/24 15:28:45 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.84 2012/02/29 19:35:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -377,7 +377,7 @@ int connection_destination_matches(const struct reusable_connection *connection,
       return FALSE;
    }
 
-   if ((    (NULL != connection->gateway_host)
+   if ((   (NULL != connection->gateway_host)
          && (NULL != fwd->gateway_host)
          && strcmpic(connection->gateway_host, fwd->gateway_host))
        && (connection->gateway_host != fwd->gateway_host))
@@ -388,7 +388,7 @@ int connection_destination_matches(const struct reusable_connection *connection,
       return FALSE;
    }
 
-   if ((    (NULL != connection->forward_host)
+   if ((   (NULL != connection->forward_host)
          && (NULL != fwd->forward_host)
          && strcmpic(connection->forward_host, fwd->forward_host))
       && (connection->forward_host != fwd->forward_host))
@@ -793,12 +793,12 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
 
    c->vn          = 4;
    c->cd          = 1;
-   c->dstport[0]  = (unsigned char)((target_port       >> 8  ) & 0xff);
-   c->dstport[1]  = (unsigned char)((target_port             ) & 0xff);
-   c->dstip[0]    = (unsigned char)((web_server_addr   >> 24 ) & 0xff);
-   c->dstip[1]    = (unsigned char)((web_server_addr   >> 16 ) & 0xff);
-   c->dstip[2]    = (unsigned char)((web_server_addr   >>  8 ) & 0xff);
-   c->dstip[3]    = (unsigned char)((web_server_addr         ) & 0xff);
+   c->dstport[0]  = (unsigned char)((target_port       >> 8 ) & 0xff);
+   c->dstport[1]  = (unsigned char)((target_port            ) & 0xff);
+   c->dstip[0]    = (unsigned char)((web_server_addr   >> 24) & 0xff);
+   c->dstip[1]    = (unsigned char)((web_server_addr   >> 16) & 0xff);
+   c->dstip[2]    = (unsigned char)((web_server_addr   >>  8) & 0xff);
+   c->dstip[3]    = (unsigned char)((web_server_addr        ) & 0xff);
 
    /* pass the request to the socks server */
    sfd = connect_to(fwd->gateway_host, fwd->gateway_port, csp);
@@ -1077,7 +1077,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    strncpy(cbuf + client_pos, target_host, sizeof(cbuf) - client_pos);
    client_pos += (hostlen & 0xffu);
    cbuf[client_pos++] = (char)((target_port >> 8) & 0xff);
-   cbuf[client_pos++] = (char)((target_port     ) & 0xff);
+   cbuf[client_pos++] = (char)((target_port    ) & 0xff);
 
    if (write_socket(sfd, cbuf, client_pos))
    {

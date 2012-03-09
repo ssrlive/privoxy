@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.23 2011/11/06 11:44:56 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.24 2011/11/06 11:51:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -142,7 +142,7 @@ char * html_encode(const char *s)
    {
       char c;
       char * p = buf;
-      while ( (c = *s++) != '\0')
+      while ((c = *s++) != '\0')
       {
          const char * replace_with = html_code_map[(unsigned char) c];
          if(replace_with != NULL)
@@ -236,7 +236,7 @@ char * url_encode(const char *s)
    {
       char c;
       char * p = buf;
-      while( (c = *s++) != '\0')
+      while((c = *s++) != '\0')
       {
          const char *replace_with = url_code_map[(unsigned char) c];
          if (*replace_with != '\0')

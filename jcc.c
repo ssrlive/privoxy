@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.374 2011/11/06 11:58:51 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.375 2011/12/10 17:26:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -823,7 +823,7 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
     * Downgrade http version from 1.1 to 1.0
     * if +downgrade action applies.
     */
-   if ( (csp->action->flags & ACTION_DOWNGRADE)
+   if ((csp->action->flags & ACTION_DOWNGRADE)
      && (!strcmpic(http->ver, "HTTP/1.1")))
    {
       freez(http->ver);
@@ -2922,7 +2922,7 @@ int main(int argc, char **argv)
          const char *pName = argv[argc_pos] + 9;
          if (*pName == ':')
             pName++;
-         exit( (install_service(pName)) ? 0 : 1 );
+         exit((install_service(pName)) ? 0 : 1);
       }
       else if (strncmp(argv[argc_pos], "--uninstall", 11) == 0)
       {
@@ -2931,7 +2931,7 @@ int main(int argc, char **argv)
             pName++;
          exit((uninstall_service(pName)) ? 0 : 1);
       }
-      else if (strcmp(argv[argc_pos], "--service" ) == 0)
+      else if (strcmp(argv[argc_pos], "--service") == 0)
       {
          bRunAsService = TRUE;
          w32_set_service_cwd();
@@ -2956,19 +2956,19 @@ int main(int argc, char **argv)
 
 #if defined(unix)
 
-      else if (strcmp(argv[argc_pos], "--no-daemon" ) == 0)
+      else if (strcmp(argv[argc_pos], "--no-daemon") == 0)
       {
          set_debug_level(LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
          daemon_mode = 0;
       }
 
-      else if (strcmp(argv[argc_pos], "--pidfile" ) == 0)
+      else if (strcmp(argv[argc_pos], "--pidfile") == 0)
       {
          if (++argc_pos == argc) usage(argv[0]);
          pidfile = strdup(argv[argc_pos]);
       }
 
-      else if (strcmp(argv[argc_pos], "--user" ) == 0)
+      else if (strcmp(argv[argc_pos], "--user") == 0)
       {
          char *user_arg;
          char *group_name;
@@ -3005,13 +3005,13 @@ int main(int argc, char **argv)
          freez(user_arg);
       }
 
-      else if (strcmp(argv[argc_pos], "--pre-chroot-nslookup" ) == 0)
+      else if (strcmp(argv[argc_pos], "--pre-chroot-nslookup") == 0)
       {
          if (++argc_pos == argc) usage(argv[0]);
          pre_chroot_nslookup_to_load_resolver = strdup(argv[argc_pos]);
       }
 
-      else if (strcmp(argv[argc_pos], "--chroot" ) == 0)
+      else if (strcmp(argv[argc_pos], "--chroot") == 0)
       {
          do_chroot = 1;
       }
@@ -3038,7 +3038,7 @@ int main(int argc, char **argv)
    show_version(Argv[0]);
 
 #if defined(unix)
-   if ( *configfile != '/' )
+   if (*configfile != '/')
    {
       char cwd[BUFFER_SIZE];
       char *abs_file;
@@ -3048,7 +3048,7 @@ int main(int argc, char **argv)
       if (NULL == getcwd(cwd, sizeof(cwd)))
       {
          perror("failed to get current working directory");
-         exit( 1 );
+         exit(1);
       }
 
       /* XXX: why + 5? */
@@ -3059,10 +3059,10 @@ int main(int argc, char **argv)
           NULL == (abs_file = malloc(abs_file_size)))
       {
          perror("malloc failed");
-         exit( 1 );
+         exit(1);
       }
       strlcpy(abs_file, basedir, abs_file_size);
-      strlcat(abs_file, "/", abs_file_size );
+      strlcat(abs_file, "/", abs_file_size);
       strlcat(abs_file, configfile, abs_file_size);
       configfile = abs_file;
    }
@@ -3142,12 +3142,12 @@ int main(int argc, char **argv)
       int fd;
       pid_t pid = fork();
 
-      if ( pid < 0 ) /* error */
+      if (pid < 0) /* error */
       {
          perror("fork");
-         exit( 3 );
+         exit(3);
       }
-      else if ( pid != 0 ) /* parent */
+      else if (pid != 0) /* parent */
       {
          int status;
          pid_t wpid;
@@ -3155,13 +3155,13 @@ int main(int argc, char **argv)
           * must check for errors
           * child died due to missing files aso
           */
-         sleep( 1 );
-         wpid = waitpid( pid, &status, WNOHANG );
-         if ( wpid != 0 )
+         sleep(1);
+         wpid = waitpid(pid, &status, WNOHANG);
+         if (wpid != 0)
          {
-            exit( 1 );
+            exit(1);
          }
-         exit( 0 );
+         exit(0);
       }
       /* child */
 
@@ -3754,7 +3754,7 @@ static void listen_loop(void)
             int child_status;
 #if !defined(_WIN32) && !defined(__CYGWIN__)
 
-            wait( &child_status );
+            wait(&child_status);
 
             /*
              * Evaluate child's return code: If the child has

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.123 2012/03/04 11:49:24 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.124 2012/03/04 11:51:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -544,7 +544,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_confdir :
             freez(config->confdir);
-            config->confdir = make_path( NULL, arg);
+            config->confdir = make_path(NULL, arg);
             break;
 
 /* *************************************************************************
@@ -1444,12 +1444,12 @@ struct configuration_spec * load_config(void)
             break;
 
 /* *************************************************************************/
-      } /* end switch( hash_string(cmd) ) */
+      } /* end switch(hash_string(cmd)) */
 
       /* Save the argument for the show-status page. */
       savearg(cmd, arg, config);
       freez(buf);
-   } /* end while ( read_config_line(...) ) */
+   } /* end while (read_config_line(...)) */
 
    fclose(configfp);
 
@@ -1532,9 +1532,9 @@ struct configuration_spec * load_config(void)
    }
 #endif /* def FEATURE_TRUST */
 
-   if ( NULL == config->haddr[0] )
+   if (NULL == config->haddr[0])
    {
-      config->haddr[0] = strdup( HADDR_DEFAULT );
+      config->haddr[0] = strdup(HADDR_DEFAULT);
       if (NULL == config->haddr[0])
       {
          log_error(LOG_LEVEL_FATAL, "Out of memory while copying default listening address");
@@ -1708,7 +1708,7 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
       return;
    }
 
-   if ( (NULL != argument) && ('\0' != *argument) )
+   if ((NULL != argument) && ('\0' != *argument))
    {
       s = html_encode(argument);
       if (NULL == s)

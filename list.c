@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.26 2011/12/31 14:47:44 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.27 2012/03/04 11:41:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -351,7 +351,7 @@ jb_err enlist_unique(struct list *the_list, const char *str,
    {
       for (cur_entry = the_list->first; cur_entry != NULL; cur_entry = cur_entry->next)
       {
-         if ( (cur_entry->str != NULL)
+         if ((cur_entry->str != NULL)
            && (0 == strncmp(str, cur_entry->str, num_significant_chars)))
          {
             /* Already there */
@@ -364,7 +364,7 @@ jb_err enlist_unique(struct list *the_list, const char *str,
       /* Test whole string */
       for (cur_entry = the_list->first; cur_entry != NULL; cur_entry = cur_entry->next)
       {
-         if ( (cur_entry->str != NULL) && (0 == strcmp(str, cur_entry->str)))
+         if ((cur_entry->str != NULL) && (0 == strcmp(str, cur_entry->str)))
          {
             /* Already there */
             return JB_ERR_OK;
@@ -977,9 +977,9 @@ jb_err map(struct map *the_map,
 
    assert(the_map);
 
-   if ( (NULL == value)
+   if ((NULL == value)
      || (NULL == name)
-     || (NULL == (new_entry = zalloc(sizeof(*new_entry)))) )
+     || (NULL == (new_entry = zalloc(sizeof(*new_entry)))))
    {
       if ((name != NULL) && (!name_needs_copying))
       {

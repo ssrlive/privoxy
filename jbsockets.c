@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.111 2011/12/10 17:26:30 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.112 2011/12/31 14:43:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1346,7 +1346,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
          (char *) &inaddr.sin_addr,
          (char *) hostp->h_addr,
          sizeof(inaddr.sin_addr)
-      );
+     );
    }
    return(inaddr.sin_addr.s_addr);
 

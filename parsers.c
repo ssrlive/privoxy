@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.242 2012/03/04 11:51:25 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.243 2012/03/04 11:53:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1480,14 +1480,14 @@ static jb_err filter_header(struct client_state *csp, char **header)
                for (job = joblist; NULL != job; job = job->next)
                {
                   matches = pcrs_execute(job, *header, size, &newheader, &size);
-                  if ( 0 < matches )
+                  if (0 < matches)
                   {
                      current_hits += matches;
                      log_error(LOG_LEVEL_HEADER, "Transforming \"%s\" to \"%s\"", *header, newheader);
                      freez(*header);
                      *header = newheader;
                   }
-                  else if ( 0 == matches )
+                  else if (0 == matches)
                   {
                      /* Filter doesn't change header */
                      freez(newheader);
@@ -1553,7 +1553,7 @@ static jb_err server_connection(struct client_state *csp, char **header)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
 #endif
-      )
+     )
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
@@ -2447,7 +2447,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 
    newval = csp->action->string[ACTION_STRING_LAST_MODIFIED];
 
-   if (0 == strcmpic(newval, "block") )
+   if (0 == strcmpic(newval, "block"))
    {
       /*
        * Blocking Last-Modified header. Useless but why not.
@@ -2743,7 +2743,7 @@ static jb_err client_accept_language(struct client_state *csp, char **header)
 
    newval = csp->action->string[ACTION_STRING_LANGUAGE];
 
-   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")))
    {
       /*
        * Blocking Accept-Language header
@@ -2920,7 +2920,7 @@ static jb_err client_from(struct client_state *csp, char **header)
    /*
     * Are we blocking the e-mail address?
     */
-   if ((newval == NULL) || (0 == strcmpic(newval, "block")) )
+   if ((newval == NULL) || (0 == strcmpic(newval, "block")))
    {
       log_error(LOG_LEVEL_HEADER, "crunched From!");
       return JB_ERR_OK;
@@ -3173,7 +3173,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
    const char *newval;
    char * endptr;
 
-   if ( 0 == strcmpic(*header, "If-Modified-Since: Wed, 08 Jun 1955 12:00:00 GMT"))
+   if (0 == strcmpic(*header, "If-Modified-Since: Wed, 08 Jun 1955 12:00:00 GMT"))
    {
       /*
        * The client got an error message because of a temporary problem,
@@ -3320,7 +3320,7 @@ static jb_err client_if_none_match(struct client_state *csp, char **header)
  *********************************************************************/
 jb_err client_x_filter(struct client_state *csp, char **header)
 {
-   if ( 0 == strcmpic(*header, "X-Filter: No"))
+   if (0 == strcmpic(*header, "X-Filter: No"))
    {
       if (!(csp->config->feature_flags & RUNTIME_FEATURE_HTTP_TOGGLE))
       {
@@ -3407,7 +3407,7 @@ static jb_err client_host_adder(struct client_state *csp)
       return JB_ERR_OK;
    }
 
-   if ( !csp->http->hostport || !*(csp->http->hostport))
+   if (!csp->http->hostport || !*(csp->http->hostport))
    {
       /* XXX: When does this happen and why is it OK? */
       log_error(LOG_LEVEL_INFO, "Weirdness in client_host_adder detected and ignored.");
@@ -3417,7 +3417,7 @@ static jb_err client_host_adder(struct client_state *csp)
    /*
     * remove 'user:pass@' from 'proto://user:pass@host'
     */
-   if ( (p = strchr( csp->http->hostport, '@')) != NULL )
+   if ((p = strchr( csp->http->hostport, '@')) != NULL)
    {
       p++;
    }
@@ -3550,7 +3550,7 @@ static jb_err server_connection_adder(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
 #endif
-       )
+      )
    {
       log_error(LOG_LEVEL_HEADER, "A HTTP/1.1 response "
          "without Connection header implies keep-alive.");
