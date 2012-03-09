@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.27 2012/03/04 11:41:32 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.28 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -977,7 +977,7 @@ jb_err map(struct map *the_map,
 
    assert(the_map);
 
-   if ((NULL == value)
+   if ( (NULL == value)
      || (NULL == name)
      || (NULL == (new_entry = zalloc(sizeof(*new_entry)))))
    {

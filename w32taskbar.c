@@ -1,4 +1,4 @@
-const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.12 2011/09/04 11:10:56 fabiankeil Exp $";
+const char w32taskbar_rcs[] = "$Id: w32taskbar.c,v 1.13 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.c,v $
@@ -243,7 +243,7 @@ LRESULT CALLBACK TrayProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             GetCursorPos(&pt);
             SetForegroundWindow(g_hwndLogFrame);
             TrackPopupMenu(hmenu, TPM_LEFTALIGN | TPM_TOPALIGN, pt.x, pt.y, 0, g_hwndLogFrame, NULL);
-            PostMessage(g_hwndLogFrame, WM_NULL, 0, 0) ;
+            PostMessage(g_hwndLogFrame, WM_NULL, 0, 0);
          }
          else if (uMouseMsg == WM_LBUTTONDBLCLK)
          {

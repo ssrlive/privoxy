@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.168 2012/03/09 16:23:50 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.169 2012/03/09 16:24:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -261,7 +261,7 @@ int block_acl(const struct access_control_addr *dst, const struct client_state *
 #else
             (csp->ip_addr_long & acl->src->mask) == acl->src->addr
 #endif
-           )
+            )
       {
          if (dst == NULL)
          {
@@ -291,7 +291,7 @@ int block_acl(const struct access_control_addr *dst, const struct client_state *
                ((dst->addr & acl->dst->mask) == acl->dst->addr)
            && ((dst->port == acl->dst->port) || (acl->dst->port == 0))
 #endif
-          )
+           )
          {
             if (acl->action == ACL_PERMIT)
             {
@@ -374,7 +374,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
 #else
          (masklength > 32)
 #endif
-        )
+         )
    {
       freez(acl_spec);
       return(-1);
@@ -1174,10 +1174,10 @@ char *get_last_url(char *subject, const char *redirect_mode)
    }
 
    if ((new_url != NULL)
-      && ( (new_url != subject)
+      && (  (new_url != subject)
          || (0 == strncmpic(subject, "http://", 7))
          || (0 == strncmpic(subject, "https://", 8))
-        ))
+         ))
    {
       /*
        * Return new URL if we found a redirect
@@ -1472,7 +1472,7 @@ int is_untrusted_url(const struct client_state *csp)
             string_append(&new_entry, csp->http->hostport);
 
             path = csp->http->path;
-            if ((path[0] == '/')
+            if ( (path[0] == '/')
               && (path[1] == '~')
               && ((path_end = strchr(path + 2, '/')) != NULL))
             {
@@ -1719,8 +1719,8 @@ static char *gif_deanimate_response(struct client_state *csp)
 
    size = (size_t)(csp->iob->eod - csp->iob->cur);
 
-   if ( (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in)))
-      || (NULL == (out = (struct binbuffer *)zalloc(sizeof *out))))
+   if (  (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
+      || (NULL == (out = (struct binbuffer *)zalloc(sizeof *out))) )
    {
       log_error(LOG_LEVEL_DEANIMATE, "failed! (no mem)");
       return NULL;

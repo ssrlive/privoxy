@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.148 2012/03/09 16:23:50 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.149 2012/03/09 16:24:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -312,7 +312,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    /* Note: "example.com" and "example.com." are equivalent hostnames. */
 
    /* Either the host matches CGI_SITE_1_HOST ..*/
-   if (  ( (0 == strcmpic(host, CGI_SITE_1_HOST))
+   if (   ( (0 == strcmpic(host, CGI_SITE_1_HOST))
          || (0 == strcmpic(host, CGI_SITE_1_HOST ".")))
        && (path[0] == '/'))
    {
@@ -320,7 +320,7 @@ struct http_response *dispatch_cgi(struct client_state *csp)
       path++;
    }
    /* Or it's the host part CGI_SITE_2_HOST, and the path CGI_SITE_2_PATH */
-   else if (( (0 == strcmpic(host, CGI_SITE_2_HOST))
+   else if ((  (0 == strcmpic(host, CGI_SITE_2_HOST))
             || (0 == strcmpic(host, CGI_SITE_2_HOST ".")))
           && (0 == strncmpic(path, CGI_SITE_2_PATH, strlen(CGI_SITE_2_PATH))))
    {
@@ -1808,7 +1808,7 @@ jb_err template_load(const struct client_state *csp, char **template_ptr,
    /* Validate template name.  Paranoia. */
    for (p = templatename; *p != 0; p++)
    {
-      if (((*p < 'a') || (*p > 'z'))
+      if ( ((*p < 'a') || (*p > 'z'))
         && ((*p < 'A') || (*p > 'Z'))
         && ((*p < '0') || (*p > '9'))
         && (*p != '-')

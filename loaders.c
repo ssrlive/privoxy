@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.88 2012/03/09 16:23:50 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.89 2012/03/09 16:24:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -221,7 +221,7 @@ unsigned int sweep(void)
 
    while (fl != NULL)
    {
-      if (( 0 == fl->active) && ( NULL != fl->unloader ) )
+      if ((0 == fl->active) && (NULL != fl->unloader))
       {
          nfl->next = fl->next;
 
@@ -570,7 +570,7 @@ jb_err edit_read_line(FILE *fp,
    /* Main loop.  Loop while we need more data & it's not EOF. */
 
    while ((contflag || is_empty)
-        && (JB_ERR_OK == (rval = simple_read_line(fp, &linebuf, newline))))
+       && (JB_ERR_OK == (rval = simple_read_line(fp, &linebuf, newline))))
    {
       if (line_number)
       {

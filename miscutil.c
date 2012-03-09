@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.74 2012/03/09 16:23:50 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.75 2012/03/09 16:24:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -213,7 +213,7 @@ int strcmpic(const char *s1, const char *s2)
 
    while (*s1 && *s2)
    {
-      if (( *s1 != *s2) && ( privoxy_tolower(*s1) != privoxy_tolower(*s2) ) )
+      if ((*s1 != *s2) && (privoxy_tolower(*s1) != privoxy_tolower(*s2)))
       {
          break;
       }
@@ -246,7 +246,7 @@ int strncmpic(const char *s1, const char *s2, size_t n)
 
    while (*s1 && *s2)
    {
-      if (( *s1 != *s2) && ( privoxy_tolower(*s1) != privoxy_tolower(*s2) ) )
+      if ((*s1 != *s2) && (privoxy_tolower(*s1) != privoxy_tolower(*s2)))
       {
          break;
       }
@@ -586,7 +586,7 @@ char * make_path(const char * dir, const char * file)
 #else /* ifndef _WIN32 || __OS2__ */
       || (*file == '/') /* Absolute path (U*ix) */
 #endif /* ifndef _WIN32 || __OS2__  */
-     )
+      )
    {
       return strdup(file);
    }
@@ -1374,7 +1374,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
           tmp[str_arg_l++] = space_for_positive ? ' ' : '+';
 #endif
         } else if (alternate_form) {
-          if (arg_sign != 0 && (fmt_spec == 'x' || fmt_spec == 'X'))
+          if (arg_sign != 0 && (fmt_spec == 'x' || fmt_spec == 'X') )
             { tmp[str_arg_l++] = '0'; tmp[str_arg_l++] = fmt_spec; }
          /* alternate form should have no effect for p conversion, but ... */
 #ifdef HPUX_COMPATIBLE
@@ -1385,7 +1385,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
          /* Actually it uses 0x prefix even for a zero value. */
                    && arg_sign != 0
 #endif
-                 ) { tmp[str_arg_l++] = '0'; tmp[str_arg_l++] = 'x'; }
+                  ) { tmp[str_arg_l++] = '0'; tmp[str_arg_l++] = 'x'; }
 #endif
         }
         zero_padding_insertion_ind = str_arg_l;
@@ -1397,7 +1397,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
           * converting a zero value with a precision of zero is a null string.
           * Actually HP returns all zeroes, and Linux returns "(nil)". */
 #endif
-       ) {
+        ) {
          /* converted to null string */
          /* When zero value is formatted with an explicit precision 0,
             the resulting formatted string is empty (d, i, u, o, x, X, p).   */
@@ -1437,7 +1437,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
           if (zero_padding_insertion_ind+1 < str_arg_l &&
               tmp[zero_padding_insertion_ind]   == '0' &&
              (tmp[zero_padding_insertion_ind+1] == 'x' ||
-              tmp[zero_padding_insertion_ind+1] == 'X')) {
+              tmp[zero_padding_insertion_ind+1] == 'X') ) {
             zero_padding_insertion_ind += 2;
           }
         }
@@ -1452,7 +1452,7 @@ int portable_vsnprintf(char *str, size_t str_m, const char *fmt, va_list ap) {
               && !(zero_padding_insertion_ind < str_arg_l
                    && tmp[zero_padding_insertion_ind] == '0')
 #endif
-         ) {        /* assure leading zero for alternate-form octal numbers */
+          ) {        /* assure leading zero for alternate-form octal numbers */
             if (!precision_specified || precision < num_of_digits+1) {
              /* precision is increased to force the first character to be zero,
                 except if a zero value is formatted with an explicit precision

@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.112 2011/09/04 11:10:56 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.113 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -666,7 +666,7 @@ void log_error(int loglevel, const char *fmt, ...)
 #ifndef _WIN32
       || (logfp == NULL)
 #endif
-     )
+      )
    {
       if (loglevel == LOG_LEVEL_FATAL)
       {
@@ -887,7 +887,7 @@ void log_error(int loglevel, const char *fmt, ...)
    if ((length >= log_buffer_size)
     || (outbuf[log_buffer_size-1] != '\0')
     || (outbuf[log_buffer_size] != '\0')
-     )
+      )
    {
       /* Repeat as assertions */
       assert(length < log_buffer_size);

@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.84 2012/02/29 19:35:11 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.85 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -377,7 +377,7 @@ int connection_destination_matches(const struct reusable_connection *connection,
       return FALSE;
    }
 
-   if ((   (NULL != connection->gateway_host)
+   if ((    (NULL != connection->gateway_host)
          && (NULL != fwd->gateway_host)
          && strcmpic(connection->gateway_host, fwd->gateway_host))
        && (connection->gateway_host != fwd->gateway_host))
@@ -388,7 +388,7 @@ int connection_destination_matches(const struct reusable_connection *connection,
       return FALSE;
    }
 
-   if ((   (NULL != connection->forward_host)
+   if ((    (NULL != connection->forward_host)
          && (NULL != fwd->forward_host)
          && strcmpic(connection->forward_host, fwd->forward_host))
       && (connection->forward_host != fwd->forward_host))
@@ -1077,7 +1077,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    strncpy(cbuf + client_pos, target_host, sizeof(cbuf) - client_pos);
    client_pos += (hostlen & 0xffu);
    cbuf[client_pos++] = (char)((target_port >> 8) & 0xff);
-   cbuf[client_pos++] = (char)((target_port    ) & 0xff);
+   cbuf[client_pos++] = (char)((target_port     ) & 0xff);
 
    if (write_socket(sfd, cbuf, client_pos))
    {

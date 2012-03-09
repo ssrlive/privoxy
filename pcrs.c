@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.38 2011/09/04 11:10:56 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.39 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -882,7 +882,7 @@ int pcrs_execute(pcrs_job *job, const char *subject, size_t subject_length, char
                result_offset,
                subject + matches[i].submatch_offset[job->substitute->backref[k]],
                matches[i].submatch_length[job->substitute->backref[k]]
-           );
+            );
             result_offset += matches[i].submatch_length[job->substitute->backref[k]];
          }
       }
