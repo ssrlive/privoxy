@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.112 2011/12/31 14:43:20 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.113 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1342,11 +1342,7 @@ unsigned long resolve_hostname_to_ip(const char *host)
          log_error(LOG_LEVEL_ERROR, "hostname %s resolves to unknown address type.", host);
          return(INADDR_NONE);
       }
-      memcpy(
-         (char *) &inaddr.sin_addr,
-         (char *) hostp->h_addr,
-         sizeof(inaddr.sin_addr)
-     );
+      memcpy((char *)&inaddr.sin_addr, (char *)hostp->h_addr, sizeof(inaddr.sin_addr));
    }
    return(inaddr.sin_addr.s_addr);
 
