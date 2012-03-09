@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.72 2011/12/31 14:47:44 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.73 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -2833,7 +2833,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
     * A better solution would be to switch to POST requests,
     * but this will do for now.
     */
-   if(!err && (csp->config->feature_flags & RUNTIME_FEATURE_SPLIT_LARGE_FORMS))
+   if (!err && (csp->config->feature_flags & RUNTIME_FEATURE_SPLIT_LARGE_FORMS))
    {
       /* Generate multiple smaller form by killing the big one. */
       err = map_block_killer(exports, "one-form-only");
@@ -3215,7 +3215,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       }
    }
 
-   if(err)
+   if (err)
    {
       /* Out of memory */
       edit_free_file(file);

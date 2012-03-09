@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.147 2011/12/31 14:54:28 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.148 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -2168,7 +2168,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map_block_killer(exports, "can-toggle");
 #endif
 
-   if(!strcmp(CODE_STATUS, "stable"))
+   if (!strcmp(CODE_STATUS, "stable"))
    {
       if (!err) err = map_block_killer(exports, "unstable");
    }

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.167 2012/03/04 11:51:25 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.168 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -577,7 +577,7 @@ struct http_response *block_url(struct client_state *csp)
       /* determine HOW images should be blocked */
       p = csp->action->string[ACTION_STRING_IMAGE_BLOCKER];
 
-      if(csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
+      if (csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
       {
          log_error(LOG_LEVEL_ERROR, "handle-as-empty-document overruled by handle-as-image.");
       }
@@ -646,7 +646,7 @@ struct http_response *block_url(struct client_state *csp)
    }
    else
 #endif /* def FEATURE_IMAGE_BLOCKING */
-   if(csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
+   if (csp->action->flags & ACTION_HANDLE_AS_EMPTY_DOCUMENT)
    {
      /*
       *  Send empty document.

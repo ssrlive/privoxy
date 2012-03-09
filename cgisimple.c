@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.112 2011/12/31 14:47:44 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.113 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1141,7 +1141,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
       {
          /*
           * Empty URL (just prefix).
-          * Make it totally empty so it's caught by the next if()
+          * Make it totally empty so it's caught by the next if ()
           */
          url_param[0] = '\0';
       }
@@ -1152,7 +1152,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
       {
          /*
           * Empty URL (just prefix).
-          * Make it totally empty so it's caught by the next if()
+          * Make it totally empty so it's caught by the next if ()
           */
          url_param[0] = '\0';
       }

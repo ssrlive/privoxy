@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.87 2011/11/06 11:53:15 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.88 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -923,7 +923,7 @@ int load_trustfile(struct client_state *csp)
        */
       if (trusted)
       {
-         if(++trusted_referrers < MAX_TRUSTED_REFERRERS)
+         if (++trusted_referrers < MAX_TRUSTED_REFERRERS)
          {
             *tl++ = b->url;
          }
@@ -931,7 +931,7 @@ int load_trustfile(struct client_state *csp)
       freez(buf);
    }
 
-   if(trusted_referrers >= MAX_TRUSTED_REFERRERS)
+   if (trusted_referrers >= MAX_TRUSTED_REFERRERS)
    {
       /*
        * FIXME: ... after Privoxy 3.0.4 is out.

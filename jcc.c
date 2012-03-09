@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.375 2011/12/10 17:26:11 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.376 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -338,7 +338,7 @@ static void sig_handler(int the_signal)
       case SIGINT:
          log_error(LOG_LEVEL_INFO, "exiting by signal %d .. bye", the_signal);
 #if defined(unix)
-         if(pidfile)
+         if (pidfile)
          {
             unlink(pidfile);
          }
@@ -2948,7 +2948,7 @@ int main(int argc, char **argv)
          usage(argv[0]);
       }
 
-      else if(strcmp(argv[argc_pos], "--version") == 0)
+      else if (strcmp(argv[argc_pos], "--version") == 0)
       {
          printf("Privoxy version " VERSION " (" HOME_PAGE_URL ")\n");
          exit(0);
@@ -3541,7 +3541,7 @@ static void listen_loop(void)
          log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
 
 #ifdef AMIGA
-         if(!childs)
+         if (!childs)
          {
             exit(1);
          }
@@ -3700,7 +3700,7 @@ static void listen_loop(void)
                                            NP_StackSize, 200*1024,
                                            TAG_DONE);
 #endif
-         if(0 != child_id)
+         if (0 != child_id)
          {
             childs++;
             ((struct Task *)child_id)->tc_UserData = csp;

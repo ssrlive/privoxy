@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.73 2012/03/04 11:52:45 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.74 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -542,11 +542,11 @@ char * make_path(const char * dir, const char * file)
 #ifdef AMIGA
    char path[512];
 
-   if(dir)
+   if (dir)
    {
-      if(dir[0] == '.')
+      if (dir[0] == '.')
       {
-         if(dir[1] == '/')
+         if (dir[1] == '/')
          {
             strncpy(path,dir+2,512);
          }
@@ -565,7 +565,7 @@ char * make_path(const char * dir, const char * file)
    {
       path[0]=0;
    }
-   if(AddPart(path,file,512))
+   if (AddPart(path,file,512))
    {
       return strdup(path);
    }
@@ -618,12 +618,12 @@ char * make_path(const char * dir, const char * file)
 
       assert(NULL != path);
 #if defined(_WIN32) || defined(__OS2__)
-      if(path[strlen(path)-1] != '\\')
+      if (path[strlen(path)-1] != '\\')
       {
          strlcat(path, "\\", path_size);
       }
 #else /* ifndef _WIN32 || __OS2__ */
-      if(path[strlen(path)-1] != '/')
+      if (path[strlen(path)-1] != '/')
       {
          strlcat(path, "/", path_size);
       }

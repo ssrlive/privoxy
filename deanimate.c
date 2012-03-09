@@ -1,4 +1,4 @@
-const char deanimate_rcs[] = "$Id: deanimate.c,v 1.21 2011/09/04 11:10:56 fabiankeil Exp $";
+const char deanimate_rcs[] = "$Id: deanimate.c,v 1.22 2011/12/31 14:47:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/deanimate.c,v $
@@ -349,7 +349,7 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_im
    /*
     * Look for global colormap and  copy if found.
     */
-   if(c & 0x80)
+   if (c & 0x80)
    {
       int map_length = 3 * (1 << ((c & 0x07) + 1));
       if (map_length <= 0)
