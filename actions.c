@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.79 2012/03/09 16:23:50 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.80 2012/03/09 17:56:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1409,8 +1409,8 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                   csp->config->actions_file[fileid], linenum, buf);
             }
             else if (                  (atoi(fields[0]) > VERSION_MAJOR)
-               || ((num_fields) > 1 && (atoi(fields[1]) > VERSION_MINOR))
-               || ((num_fields) > 2 && (atoi(fields[2]) > VERSION_POINT)))
+               || ((num_fields > 1) && (atoi(fields[1]) > VERSION_MINOR))
+               || ((num_fields > 2) && (atoi(fields[2]) > VERSION_POINT)))
             {
                fclose(fp);
                log_error(LOG_LEVEL_FATAL,
