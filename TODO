@@ -1,4 +1,4 @@
-$Id: TODO,v 1.59 2011/10/16 17:33:41 fabiankeil Exp $
+$Id: TODO,v 1.60 2011/10/16 17:34:26 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -288,3 +288,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 100) Create a cross-platform Privoxy control program and retire
      the win32 GUI. Integrate support for Privoxy-Regression-Test,
      Privoxy-Log-Parser, Privoxy-Filter-Test, uagen and similar tools.
+
+101) Forward known client headers in a predefined order that can
+     be changed in the config file. Optionally use a random order.
+     Tools like p0f v3 use the header order for User-Agent detection
+     and thus changing the User-Agent doesn't fool them.
