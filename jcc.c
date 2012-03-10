@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.376 2012/03/09 16:23:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.377 2012/03/09 16:24:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1861,8 +1861,9 @@ static void chat(struct client_state *csp)
                 */
                watch_client_socket = 0;
                log_error(LOG_LEVEL_CONNECT,
-                  "Stopping to watch the client socket. "
-                  "There's already another request waiting.");
+                  "Stopping to watch the client socket %d. "
+                  "There's already another request waiting.",
+                  csp->cfd);
                continue;
             }
             /*
