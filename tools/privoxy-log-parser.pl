@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.125 2011/12/31 14:53:47 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.126 2011/12/31 14:54:05 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1659,6 +1659,13 @@ sub handle_loglevel_connect ($) {
         # Waiting for up to 4999 bytes from the client.
         $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Stopping to watch the client socket /) {
+
+        # Stopping to watch the client socket. There's already another request waiting.
+        # Privoxy 3.0.20 and later:
+        # Stopping to watch the client socket 5. There's already another request waiting.
+        $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
@@ -1668,7 +1675,6 @@ sub handle_loglevel_connect ($) {
              $c =~ m/^The server still wants to talk, but the client hung up on us./ or
              $c =~ m/^The server didn't specify how long the connection will stay open/ or
              $c =~ m/^There might be a request body. The connection will not be kept alive/ or
-             $c =~ m/^Stopping to watch the client socket. There's already another request waiting./ or
              $c =~ m/^Done reading from the client\.$/) {
 
         # Looks like we reached the end of the last chunk. We better stop reading.
@@ -1686,7 +1692,6 @@ sub handle_loglevel_connect ($) {
         # The server still wants to talk, but the client hung up on us.
         # The server didn't specify how long the connection will stay open. Assume it's only a second.
         # There might be a request body. The connection will not be kept alive.
-        # Stopping to watch the client socket. There's already another request waiting.
         # Done reading from the client\.
 
     } else {
