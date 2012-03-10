@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.126 2011/12/31 14:54:05 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.127 2012/03/10 11:08:44 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1659,7 +1659,7 @@ sub handle_loglevel_connect ($) {
         # Waiting for up to 4999 bytes from the client.
         $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Stopping to watch the client socket /) {
+    } elsif ($c =~ m/^Stopping to watch the client socket/) {
 
         # Stopping to watch the client socket. There's already another request waiting.
         # Privoxy 3.0.20 and later:
