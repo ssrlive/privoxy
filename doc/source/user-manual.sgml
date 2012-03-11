@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.145 2011/12/26 17:04:19 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.146 2011/12/26 17:05:40 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.145 2011/12/26 17:04:19 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.146 2011/12/26 17:05:40 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -301,22 +301,72 @@ How to install the binary packages depends on your operating system:
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-mac"><title>Mac OS X</title>
 <para>
- Unzip the downloaded file (you can either double-click on the zip file
- icon from the Finder, or from the desktop if you downloaded it there).
- Then, double-click on the package installer icon and follow the
- installation process.
+ Installation instructions for the OS X platform depend upon whether
+ you downloaded a ready-built installation package (.pkg or .mpkg) or have
+ downloaded the source code.
+</para>
+<sect3 renderas="sect4" id="OS-X-install-from-package">
+<title>Installation from ready-built package</title>
+<para>
+ The downloaded file will either be a .pkg (for OS X 10.5 upwards) or a bzipped
+ .mpkg file (for OS X 10.4). The former can be double-clicked as is and the
+ installation will start; double-clicking the latter will unzip the .mpkg file
+ which can then be double-clicked to commence the installation.
 </para>
 <para>
- The privoxy service will automatically start after a successful
- installation (in addition to every time your computer starts up).  To
- prevent the privoxy service from automatically starting when your
- computer starts up, remove or rename the folder named
- <literal>/Library/StartupItems/Privoxy</literal>.
+ The privoxy service will automatically start after a successful installation
+ (and thereafter every time your computer starts up) however you will need to
+ configure your web browser(s) to use it. To do so, configure them to use a
+ proxy for HTTP and HTTPS at the address 127.0.0.1:8118.
+</para>
+<para>
+ To prevent the privoxy service from automatically starting when your computer
+ starts up, remove or rename the file <literal>/Library/LaunchDaemons/org.ijbswa.privoxy.plist</literal>
+ (on OS X 10.5 and higher) or the folder named
+ <literal>/Library/StartupItems/Privoxy</literal> (on OS X 10.4 'Tiger').
+</para>
+<para>
+ To manually start or stop the privoxy service, use the scripts startPrivoxy.sh
+ and stopPrivoxy.sh supplied in /Applications/Privoxy. They must be run from an
+ administrator account, using sudo.
+</para>
+<para>
+ To uninstall, run /Applications/Privoxy/uninstall.command as sudo from an
+ administrator account.
+</para>
+<sect3 renderas="sect4" id="OS-X-install-from-source">
+<title>Installation from source</title>
+<para>
+ To build and install the Privoxy source code on OS X you will need to obtain
+ the macsetup module from the Privoxy Sourceforge CVS repository (refer to
+ Sourceforge help for details of how to set up a CVS client to have read-only
+ access to the repository). This module contains scripts that leverage the usual
+ open-source tools (available as part of Apple's free of charge Xcode
+ distribution or via the usual open-source software package managers for OS X
+ (MacPorts, Homebrew, Fink etc.) to build and then install the privoxy binary
+ and associated files. The macsetup module's README file contains complete
+ instructions for its use.
+</para>
+<para>
+ The privoxy service will automatically start after a successful installation
+ (and thereafter every time your computer starts up) however you will need to
+ configure your web browser(s) to use it. To do so, configure them to use a
+ proxy for HTTP and HTTPS at the address 127.0.0.1:8118.
+</para>
+<para>
+ To prevent the privoxy service from automatically starting when your computer
+ starts up, remove or rename the file <literal>/Library/LaunchDaemons/org.ijbswa.privoxy.plist</literal>
+ (on OS X 10.5 and higher) or the folder named
+ <literal>/Library/StartupItems/Privoxy</literal> (on OS X 10.4 'Tiger').
 </para>
 <para>
  To manually start or stop the privoxy service, use the Privoxy Utility
- for Mac OS X.  This application controls the privoxy service (e.g.
- starting and stopping the service as well as uninstalling the software).
+ for Mac OS X (also part of the macsetup module).  This application can start
+ and stop the privoxy service and display its log and configuration files.
+</para>
+<para>
+ To uninstall, run the macsetup module's uninstall.sh as sudo from an
+ administrator account.
 </para>
 </sect3>
 
@@ -9440,6 +9490,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.146  2011/12/26 17:05:40  fabiankeil
+ Bump entities for 3.0.19
+
  Revision 2.145  2011/12/26 17:04:19  fabiankeil
  Import ChangeLog entries for 3.0.19, keeping the ones for 3.0.18 for now
 
