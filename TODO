@@ -1,4 +1,4 @@
-$Id: TODO,v 1.60 2011/10/16 17:34:26 fabiankeil Exp $
+$Id: TODO,v 1.61 2012/03/09 16:22:24 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -293,3 +293,5 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      be changed in the config file. Optionally use a random order.
      Tools like p0f v3 use the header order for User-Agent detection
      and thus changing the User-Agent doesn't fool them.
+
+102) Add an include directive to split the config file into several parts.
