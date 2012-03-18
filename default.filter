@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.82 2011/06/23 14:04:29 fabiankeil Exp $
+#  $Id: default.filter,v 1.83 2011/10/16 14:01:05 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -839,6 +839,15 @@ s@^\w*\s+(.*)\s+HTTP/\d\.\d\s*$@$1@i
 CLIENT-HEADER-TAGGER: user-agent Tags the request with the complete User-Agent header.
 
 s@^User-Agent:.*@$0@i
+
+#################################################################################
+#
+# referer: Tags the request with the complete Referer header.
+#
+#################################################################################
+CLIENT-HEADER-TAGGER: referer Tags the request with the complete Referer header.
+
+s@^Referer:.*@$0@i
 
 #################################################################################
 #
