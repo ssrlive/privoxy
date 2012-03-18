@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.205 2011/11/20 17:17:56 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.206 2012/03/18 15:42:44 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2011 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -86,7 +86,7 @@ INSTALL    = @INSTALL@
 # Binaries
 BIN_MODE	 = 0755
 # Support files, docs, etc.
-RA_MODE   = 0664
+RA_MODE   = 0644
 # Directory
 DIR_MODE   = 0755
 # Files daemon writes to.
