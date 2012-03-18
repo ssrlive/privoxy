@@ -3,9 +3,6 @@
 
 <html>
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 7 December 2008), see www.w3.org">
-
   <title>Releasing a New Version</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
@@ -749,7 +746,7 @@ body {
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-  debchange -v 3.0.19-stable-1 "New upstream version"
+  debchange -v 3.0.20-UNRELEASED-1 "New upstream version"
 </pre>
             </td>
           </tr>
@@ -768,7 +765,7 @@ body {
         </table>
 
         <p>This will create <tt class=
-        "FILENAME">../privoxy_3.0.19-stable-1_i386.deb</tt> which can be
+        "FILENAME">../privoxy_3.0.20-UNRELEASED-1_i386.deb</tt> which can be
         uploaded. To upload the package to Sourceforge, simply issue</p>
 
         <table class="c3" border="0" width="100%">
@@ -788,59 +785,133 @@ body {
 
         <p>First, <span class="emphasis EMPHASIS c2">make sure that you have
         freshly exported the right version into an empty directory</span>.
-        (See "Building and releasing packages" above). Then get the Mac OS X
-        setup module:</p>
+        (See "Building and releasing packages" above).</p>
 
-        <table class="c3" border="0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">
+        <p>There are three modules available in the CVS repository for use on
+        Mac OS X, though technically only two of them generate a release (the
+        other can be used to install from source).</p>
+
+        <div class="SECT4">
+          <h4 class="SECT4"><a name="OS-X-OSXPACKAGEBUILDER-MODULE" id=
+          "OS-X-OSXPACKAGEBUILDER-MODULE">6.3.8.1. OSXPackageBuilder
+          module</a></h4>
+
+          <p>The OSXPackageBuilder module generates OS X installer packages
+          supporting all Macs running OS X 10.4 and above. Obtain it from CVS
+          as follows into a folder parallel to the exported privoxy
+          source:</p>
+
+          <table class="c3" border="0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">
+  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co OSXPackageBuilder
+</pre>
+              </td>
+            </tr>
+          </table>
+
+          <p>The module contains complete instructions on its usage in the
+          file <tt class="FILENAME">OS X Package Builder HOWTO.txt</tt>.</p>
+
+          <p>Once the package(s) have been generated, you can then upload
+          them directly to the Files section of the Sourceforge project in
+          the Macintosh (OS X) folder. Each new version release of Privoxy
+          should have a new subfolder created in which to store its files.
+          Please ensure that the folder contains a readme file that makes it
+          clear which package is for whichversion of OS X.</p>
+        </div>
+
+        <div class="SECT4">
+          <h4 class="SECT4"><a name="OS-X-OSXSETUP-MODULE" id=
+          "OS-X-OSXSETUP-MODULE">6.3.8.2. osxsetup module
+          (DEPRECATED)</a></h4>
+
+          <p><span class="emphasis EMPHASIS c2">This module is deprecated
+          since the installer it generates places all Privoxy files in one
+          folder in a non-standard location, and supports only Intel Macs
+          running OS X 10.6 or higher.</span></p>
+
+          <p>Check out the module from CVS as follows into a folder parallel
+          to the exported privoxy source:</p>
+
+          <table class="c3" border="0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co osxsetup
 </pre>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
 
-        <p>Then run:</p>
+          <p>Then run:</p>
 
-        <table class="c3" border="0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">
+          <table class="c3" border="0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">
   cd osxsetup
   build
 </pre>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
 
-        <p>This will run <tt class="FILENAME">autoheader</tt>, <tt class=
-        "FILENAME">autoconf</tt> and <tt class="FILENAME">configure</tt> as
-        well as <tt class="FILENAME">make</tt>. Finally, it will copy over
-        the necessary files to the ./osxsetup/files directory for further
-        processing by <tt class="FILENAME">PackageMaker</tt>.</p>
+          <p>This will run <tt class="FILENAME">autoheader</tt>, <tt class=
+          "FILENAME">autoconf</tt> and <tt class="FILENAME">configure</tt> as
+          well as <tt class="FILENAME">make</tt>. Finally, it will copy over
+          the necessary files to the ./osxsetup/files directory for further
+          processing by <tt class="FILENAME">PackageMaker</tt>.</p>
 
-        <p>Bring up PackageMaker with the PrivoxyPackage.pmsp definition
-        file, modify the package name to match the release, and hit the
-        "Create package" button. If you specify ./Privoxy.pkg as the output
-        package name, you can then create the distributable zip file with the
-        command:</p>
+          <p>Bring up PackageMaker with the PrivoxyPackage.pmsp definition
+          file, modify the package name to match the release, and hit the
+          "Create package" button. If you specify ./Privoxy.pkg as the output
+          package name, you can then create the distributable zip file with
+          the command:</p>
 
-        <table class="c3" border="0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">
+          <table class="c3" border="0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">
   zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 </pre>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
 
-        <p>You can then upload <tt class=
-        "FILENAME">privoxyosx_setup_x.y.z.zip</tt> anonymously to <tt class=
-        "FILENAME">uploads.sourceforge.net/incoming</tt>, create a release
-        for it, and you're done. Use the release notes and Change Log from
-        the source tarball package.</p>
+          <p>You can then upload this file directly to the Files section of
+          the Sourceforge project in the Macintosh (OS X) folder. Each new
+          version release of Privoxy should have a new subfolder created in
+          which to store its files. Please ensure that the folder contains a
+          readme file that makes it clear which version(s) of OS X the
+          package supports.</p>
+        </div>
+
+        <div class="SECT4">
+          <h4 class="SECT4"><a name="OS-X-MACSETUP-MODULE" id=
+          "OS-X-MACSETUP-MODULE">6.3.8.3. macsetup module</a></h4>
+
+          <p>The macsetup module is ideal if you wish to build and install
+          Privoxy from source on a single machine.</p>
+
+          <p>Check out the module from CVS as follows into a folder parallel
+          to the exported privoxy source:</p>
+
+          <table class="c3" border="0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">
+  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co macsetup
+</pre>
+              </td>
+            </tr>
+          </table>
+
+          <p>The module contains complete instructions on its usage in its
+          <tt class="FILENAME">README</tt> file. The end result will be the
+          the exported version of Privoxy installed on the build machine.</p>
+        </div>
       </div>
 
       <div class="SECT3">
@@ -1024,7 +1095,7 @@ body {
       column, and click <tt class="LITERAL">Add Release</tt>. You will then
       need to create a new release for your package, using the format of
       <tt class="LITERAL">$VERSION ($CODE_STATUS)</tt>, e.g. <span class=
-      "emphasis EMPHASIS c2">3.0.19 (beta)</span>.</p>
+      "emphasis EMPHASIS c2">3.0.20 (beta)</span>.</p>
 
       <p>Now just follow the prompts. Be sure to add any appropriate Release
       notes. You should see your freshly uploaded packages in <span class=
