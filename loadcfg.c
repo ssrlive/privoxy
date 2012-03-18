@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.124 2012/03/04 11:51:25 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.125 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1437,8 +1437,9 @@ struct configuration_spec * load_config(void)
              * error.  To change back to an error, just change log level
              * to LOG_LEVEL_FATAL.
              */
-            log_error(LOG_LEVEL_ERROR, "Ignoring unrecognized directive '%s' (%luul) in line %lu "
-                  "in configuration file (%s).",  buf, directive_hash, linenum, configfile);
+            log_error(LOG_LEVEL_ERROR, "Ignoring unrecognized directive "
+               "'%s' (%uU) in line %lu in configuration file (%s).",
+               buf, directive_hash, linenum, configfile);
             string_append(&config->proxy_args,
                " <strong class='warning'>Warning: Ignoring unrecognized directive:</strong>");
             break;
