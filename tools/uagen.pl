@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.18 2011/11/13 16:55:32 fabiankeil Exp $
+# $Id: uagen.pl,v 1.19 2012/03/18 13:46:54 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -40,7 +40,7 @@ use Getopt::Long;
 
 use constant {
 
-   UAGEN_VERSION       => 'uagen 1.1',
+   UAGEN_VERSION       => 'uagen 1.2.1',
 
    UAGEN_LOGFILE       => '/var/log/uagen.log',
    ACTION_FILE         => '/etc/privoxy/user-agent.action',
