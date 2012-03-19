@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.39 2012/03/18 01:16:35 diem Exp $
+ $Id: developer-manual.sgml,v 2.40 2012/03/18 15:41:49 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.39 2012/03/18 01:16:35 diem Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.40 2012/03/18 15:41:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2040,8 +2040,8 @@ at sourceforge. Three simple steps:
     </para>
 
     <para>
-	The following programs are required to follow this process:
-	<filename>ncftpput</filename> (ncftp), <filename>scp, ssh</filename> (ssh),
+        The following programs are required to follow this process:
+        <filename>ncftpput</filename> (ncftp), <filename>scp, ssh</filename> (ssh),
         <filename>gmake</filename> (GNU's version of make), autoconf, cvs.
     </para>
 
@@ -2402,51 +2402,51 @@ at sourceforge. Three simple steps:
     </sect3>
 
     <sect3 id="newrelease-tarball"><title>Source Tarball</title>
-        <para>
-	First, <emphasis>make sure that you have freshly exported the right
+      <para>
+        First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then do:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        Then do:
+      </para>
+      <para>
+        <programlisting>
   make tarball-dist
 </programlisting>
-	</para>
-	<para>
-	To upload the package to Sourceforge, simply issue
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        To upload the package to Sourceforge, simply issue
+      </para>
+      <para>
+        <programlisting>
   make tarball-upload
 </programlisting>
-	</para>
-	<para>
-	Go to the displayed URL and release the file publicly on Sourceforge.
+      </para>
+      <para>
+        Go to the displayed URL and release the file publicly on Sourceforge.
         For the change log field, use the relevant section of the
         <filename>ChangeLog</filename> file.
       </para>
     </sect3>
 
     <sect3 id="newrelease-rpm"><title>SuSE, Conectiva or Red Hat RPM</title>
-        <para>
+      <para>
         In following text, replace <replaceable class="parameter">dist</replaceable>
         with either <quote>rh</quote> for Red Hat or <quote>suse</quote> for SuSE.
-        </para>
-        <para>
-	First, <emphasis>make sure that you have freshly exported the right
+      </para>
+      <para>
+        First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above).
-	</para>
-	<para>
+      </para>
+      <para>
         As the only exception to not changing anything after export from CVS,
         now examine the file <filename>privoxy-</filename><replaceable class="parameter">dist</replaceable><filename>.spec</filename>
         and make sure that the version information and the RPM release number are
@@ -2457,133 +2457,133 @@ at sourceforge. Three simple steps:
         <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118">file
         list</ulink> if unsure. Else, it must be set to the highest already available RPM
         release number for that version plus one.
-	</para>
-	<para>
+      </para>
+      <para>
         Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then do
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        Then do
+      </para>
+      <para>
+        <programlisting>
   make <replaceable class="parameter">dist</replaceable>-dist
 </programlisting>
-	</para>
-	<para>
-	To upload the package to Sourceforge, simply issue
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        To upload the package to Sourceforge, simply issue
+      </para>
+      <para>
+        <programlisting>
   make <replaceable class="parameter">dist</replaceable>-upload <replaceable class="parameter">rpm_packagerev</replaceable>
 </programlisting>
-	</para>
-	<para>
+      </para>
+      <para>
         where <replaceable class="parameter">rpm_packagerev</replaceable> is the
         RPM release number as determined above.
-	Go to the displayed URL and release the file publicly on Sourceforge.
+        Go to the displayed URL and release the file publicly on Sourceforge.
         Use the release notes and change log from the source tarball package.
       </para>
     </sect3>
 
     <sect3 id="newrelease-os2"><title>OS/2</title>
       <para>
-	First, <emphasis>make sure that you have freshly exported the right
+        First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then get the OS/2 Setup module:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co os2setup
 </programlisting>
-	</para>
-	<para>
-	You will need a mix of development tools.
-	The main compilation takes place with IBM Visual Age C++.
-	Some ancillary work takes place with GNU tools, available from
-	various sources like hobbes.nmsu.edu.
-	Specificially, you will need <filename>autoheader</filename>,
-	<filename>autoconf</filename> and <filename>sh</filename> tools.
-	The packaging takes place with WarpIN, available from various sources, including
-	its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.
-	</para>
-	<para>
-	Change directory to the <filename>os2setup</filename> directory.
-	Edit the os2build.cmd file to set the final executable filename.
-	For example,
-	</para>
-	<para>
- 	<programlisting>
+      </para>
+      <para>
+        You will need a mix of development tools.
+        The main compilation takes place with IBM Visual Age C++.
+        Some ancillary work takes place with GNU tools, available from
+        various sources like hobbes.nmsu.edu.
+        Specificially, you will need <filename>autoheader</filename>,
+        <filename>autoconf</filename> and <filename>sh</filename> tools.
+        The packaging takes place with WarpIN, available from various sources, including
+        its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.
+      </para>
+      <para>
+        Change directory to the <filename>os2setup</filename> directory.
+        Edit the os2build.cmd file to set the final executable filename.
+        For example,
+      </para>
+      <para>
+        <programlisting>
   installExeName='privoxyos2_setup_X.Y.Z.exe'
 </programlisting>
-	</para>
-	<para>
- 	Next, edit the <filename>IJB.wis</filename> file so the release number matches
- 	in the <filename>PACKAGEID</filename> section:
- 	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        Next, edit the <filename>IJB.wis</filename> file so the release number matches
+        in the <filename>PACKAGEID</filename> section:
+      </para>
+      <para>
+        <programlisting>
   PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
 </programlisting>
-	</para>
-	<para>
-	You're now ready to build.  Run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        You're now ready to build.  Run:
+      </para>
+      <para>
+        <programlisting>
   os2build
 </programlisting>
-	</para>
-	<para>
+      </para>
+      <para>
          You will find the  WarpIN-installable executable in the
         <filename>./files</filename> directory. Upload this anonymously to
          <filename>uploads.sourceforge.net/incoming</filename>, create a release
          for it, and you're done. Use the release notes and Change Log from the
          source tarball package.
-	</para>
+      </para>
     </sect3>
 
     <sect3 id="newrelease-solaris"><title>Solaris</title>
       <para>
-	Login to Sourceforge's compilefarm via ssh:
-	</para>
-	<para>
-	<programlisting>
+        Login to Sourceforge's compilefarm via ssh:
+      </para>
+      <para>
+        <programlisting>
   ssh cf.sourceforge.net
 </programlisting>
-	</para>
-	<para>
-	Choose the right operating system (not the Debian one).
+      </para>
+      <para>
+        Choose the right operating system (not the Debian one).
         When logged in, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then run
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        Then run
+      </para>
+      <para>
+        <programlisting>
   gmake solaris-dist
 </programlisting>
-	</para>
-	<para>
-	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-	solaris-upload</command> on the Sourceforge machine (no ncftpput). You now have
-	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly. Use the release notes and Change Log from the
+      </para>
+      <para>
+        which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
+        solaris-upload</command> on the Sourceforge machine (no ncftpput). You now have
+        to manually upload the archive to Sourceforge's ftp server and release
+        the file publicly. Use the release notes and Change Log from the
         source tarball package.
-	</para>
+      </para>
     </sect3>
 
     <sect3 id="newrelease-windows"><title>Windows</title>
@@ -2593,7 +2593,7 @@ at sourceforge. Three simple steps:
         Run the following commands from within a Cygwin bash shell.
       </para>
       <para>
-	First, <emphasis>make sure that you have freshly exported the right
+        First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then get the Windows setup module:
       </para>
@@ -2646,7 +2646,7 @@ at sourceforge. Three simple steps:
         This will create
         <filename>../privoxy_&p-version;-&p-status;-1_i386.deb</filename>
         which can be uploaded.  To upload the package to Sourceforge, simply
-	issue
+        issue
       </para>
       <para>
         <programlisting>
@@ -2761,112 +2761,112 @@ at sourceforge. Three simple steps:
 
     <sect3 id="newrelease-freebsd"><title>FreeBSD</title>
       <para>
-	Login to Sourceforge's compile-farm via ssh:
-	</para>
-	<para>
-	<programlisting>
+        Login to Sourceforge's compile-farm via ssh:
+      </para>
+      <para>
+        <programlisting>
   ssh cf.sourceforge.net
 </programlisting>
-	</para>
-	<para>
-	Choose the right operating system.
+      </para>
+      <para>
+        Choose the right operating system.
         When logged in, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        Then run:
+      </para>
+      <para>
+        <programlisting>
   gmake freebsd-dist
 </programlisting>
-	</para>
-	<para>
-	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-	freebsd-upload</command> on the Sourceforge machine (no ncftpput). You now have
-	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly. Use the release notes and Change Log from the
+      </para>
+      <para>
+        which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
+        freebsd-upload</command> on the Sourceforge machine (no ncftpput). You now have
+        to manually upload the archive to Sourceforge's ftp server and release
+        the file publicly. Use the release notes and Change Log from the
         source tarball package.
-	</para>
+      </para>
     </sect3>
 
     <sect3 id="newrelease-hpux"><title>HP-UX 11</title>
       <para>
-	First, <emphasis>make sure that you have freshly exported the right
+        First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then do FIXME.
-	</para>
+      </para>
+      <para>
+        Then do FIXME.
+      </para>
     </sect3>
 
     <sect3 id="newrelease-amiga"><title>Amiga OS</title>
       <para>
-	First, <emphasis>make sure that you have freshly exported the right
+        First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then do FIXME.
-	</para>
+      </para>
+      <para>
+        Then do FIXME.
+      </para>
     </sect3>
 
     <sect3 id="newrelease-aix"><title>AIX</title>
       <para>
-	Login to Sourceforge's compilefarm via ssh:
-	</para>
-	<para>
-	<programlisting>
+        Login to Sourceforge's compilefarm via ssh:
+      </para>
+      <para>
+        <programlisting>
   ssh cf.sourceforge.net
 </programlisting>
-	</para>
-	<para>
-	Choose the right operating system.
+      </para>
+      <para>
+        Choose the right operating system.
         When logged in, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-	</para>
-	<para>
-	Then run:
-	</para>
-	<para>
-	<programlisting>
+      </para>
+      <para>
+        Then run:
+      </para>
+      <para>
+        <programlisting>
   make aix-dist
 </programlisting>
-	</para>
-	<para>
-	which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-	aix-upload</command> on the Sourceforge machine (no ncftpput). You now have
-	to manually upload the archive to Sourceforge's ftp server and release
-	the file publicly. Use the release notes and Change Log from the
+      </para>
+      <para>
+        which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
+        aix-upload</command> on the Sourceforge machine (no ncftpput). You now have
+        to manually upload the archive to Sourceforge's ftp server and release
+        the file publicly. Use the release notes and Change Log from the
         source tarball package.
-	</para>
+      </para>
     </sect3>
    </sect2>
 
@@ -3064,6 +3064,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.40  2012/03/18 15:41:49  fabiankeil
+  Bump entities to 3.0.20 UNRELEASED
+
   Revision 2.39  2012/03/18 01:16:35  diem
   Brought OS X section up to date, deprecating the osxsetup module and adding a section referring to the OSXPackageBuilder module
 
