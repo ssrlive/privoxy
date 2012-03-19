@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.79 2011/09/04 11:10:12 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.80 2012/03/19 12:56:26 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.79 2011/09/04 11:10:12 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.80 2012/03/19 12:56:26 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -1290,12 +1290,6 @@ actionsfile
     also want to make sure that the following actions are disabled:  <literal><link
     linkend="enable-edit-actions">enable-edit-actions</link></literal> and
     <literal><link linkend="enable-remote-toggle">enable-remote-toggle</link></literal>
-   </para>
-   <para>
-    With the exception noted above, listening on multiple addresses is currently
-    not supported by <application>Privoxy</application> directly.
-    It can be done on most operating systems by letting a packet filter
-    redirect request for certain addresses to Privoxy, though.
    </para>
   </listitem>
  </varlistentry>
