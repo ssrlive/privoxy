@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.78 2011/08/18 11:42:50 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.79 2011/09/04 11:10:12 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.78 2011/08/18 11:42:50 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.79 2011/09/04 11:10:12 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -1278,10 +1278,10 @@ actionsfile
     IPv4 interfaces (addresses) on your machine and may become reachable from the
     Internet and/or the local network. Be aware that some GNU/Linux distributions
     modify that behaviour without updating the documentation. Check for non-standard
-    patches if your <application>Privoxy</application>version behaves differently.
+    patches if your <application>Privoxy</application> version behaves differently.
    </para>
    <para>
-    If you configure <application>Privoxy</application>to be reachable from the
+    If you configure <application>Privoxy</application> to be reachable from the
     network, consider using <link linkend="acls">access control lists</link>
     (ACL's, see below), and/or a firewall.
    </para>
