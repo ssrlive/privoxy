@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.42 2012/03/20 13:03:05 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.43 2012/03/20 13:04:03 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.42 2012/03/20 13:03:05 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.43 2012/03/20 13:04:03 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -365,8 +365,7 @@ Hal.
      Packagers are encouraged to include this documentation. For those without
      the ability to build the docs locally, text versions of each are kept in
      CVS. HTML versions are also being kept in CVS under
-     <filename>doc/webserver/*</filename>. And PDF version are kept in
-     <filename>doc/pdf/*</filename>.
+     <filename>doc/webserver/*</filename>.
     </para>
     <para>
      Formal documents are built with the Makefile targets of
@@ -587,7 +586,7 @@ Hal.
   <listitem>
    <para>
     Our documents are available in differing formats. Right now, they
-    are just plain text, HTML, and PDF, but others are always a
+    are just plain text and/or HTML, but others are always a
     future possibility. Be careful with URLs (&lt;ulink&gt;), and avoid
     this mistake:
    </para>
@@ -3066,6 +3065,11 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.43  2012/03/20 13:04:03  fabiankeil
+  Comment out references to multiple branches
+
+  We currently don't use any.
+
   Revision 2.42  2012/03/20 13:03:05  fabiankeil
   Bump copyright date
 
