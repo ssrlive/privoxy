@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.44 2012/03/20 13:04:19 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.45 2012/03/20 13:04:41 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.44 2012/03/20 13:04:19 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.45 2012/03/20 13:04:41 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -729,7 +729,7 @@ Hal.
     understand why or what is being done. A reader may spend a lot
     more time figuring out what is going on when a simple comment
     or explanation would have prevented the extra research. Please
-    help your brother IJB'ers out!</para>
+    help your fellow Privoxy developers out!</para>
 
     <para>The comments will also help justify the intent of the code.
     If the comment describes something different than what the code
@@ -3062,6 +3062,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.45  2012/03/20 13:04:41  fabiankeil
+  The redhat-dok target no longer exists so there's no point documenting it
+
   Revision 2.44  2012/03/20 13:04:19  fabiankeil
   We no longer build PDFs so stop pretending
 
