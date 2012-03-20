@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.46 2012/03/20 13:04:54 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.47 2012/03/20 13:05:14 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.46 2012/03/20 13:04:54 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.47 2012/03/20 13:05:14 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1646,24 +1646,6 @@ switch (hash_string(cmd))
   </sect3>
 
 
-    <sect3 id="s39"><title>Use 'long' or 'short' Instead of
-    'int'</title>
-
-    <para><emphasis>Explanation:</emphasis></para>
-
-    <para>On 32-bit platforms, int usually has the range of long. On
-    16-bit platforms, int has the range of short.</para>
-
-    <para><emphasis>Status:</emphasis> open-to-debate. In the case of most FSF
-    projects (including X/GNU-Emacs), there are typedefs to int4,
-    int8, int16, (or equivalence ... I forget the exact typedefs
-    now). Should we add these to IJB now that we have a "configure"
-    script?</para>
-
-
-  </sect3>
-
-
     <sect3 id="s40"><title>Don't mix size_t and other types</title>
 
     <para><emphasis>Explanation:</emphasis></para>
@@ -3058,6 +3040,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.47  2012/03/20 13:05:14  fabiankeil
+  Adjust whitespace in examples to be closer to our style
+
   Revision 2.46  2012/03/20 13:04:54  fabiankeil
   IJB is dead, long live Privoxy
 
