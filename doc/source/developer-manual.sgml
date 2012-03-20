@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.43 2012/03/20 13:04:03 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.44 2012/03/20 13:04:19 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.43 2012/03/20 13:04:03 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.44 2012/03/20 13:04:19 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -369,9 +369,8 @@ Hal.
     </para>
     <para>
      Formal documents are built with the Makefile targets of
-     <computeroutput>make dok</computeroutput>, or alternately
-     <computeroutput>make redhat-dok</computeroutput>. If you have problems,
-     try both. The build process uses the document SGML sources in
+     <computeroutput>make dok</computeroutput>.
+     The build process uses the document SGML sources in
      <computeroutput>doc/source/*/*</computeroutput> to update all text files in
      <computeroutput>doc/text/</computeroutput> and to update all HTML
      documents in <computeroutput>doc/webserver/</computeroutput>.
@@ -386,9 +385,7 @@ Hal.
      <orderedlist numeration="arabic">
       <listitem><para>
         First, build the docs by running <computeroutput>make
-        dok</computeroutput> (or alternately <computeroutput>make
-        redhat-dok</computeroutput>). For PDF docs, do <computeroutput>make
-        dok-pdf</computeroutput>.
+        dok</computeroutput>.
       </para></listitem>
       <listitem><para>
         Run <computeroutput>make webserver</computeroutput> which copies all
@@ -3065,6 +3062,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.44  2012/03/20 13:04:19  fabiankeil
+  We no longer build PDFs so stop pretending
+
   Revision 2.43  2012/03/20 13:04:03  fabiankeil
   Comment out references to multiple branches
 
