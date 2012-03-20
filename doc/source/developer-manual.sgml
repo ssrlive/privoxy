@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.47 2012/03/20 13:05:14 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.48 2012/03/20 13:05:39 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.47 2012/03/20 13:05:14 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.48 2012/03/20 13:05:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1764,7 +1764,7 @@ static void unload_re_filterfile(void *f) { ... }</programlisting>
 
 
     <sect3 id="s45"><title>"Uncertain" new code and/or changes to
-    existing code, use FIXME or XXX</title>
+    existing code, use XXX</title>
 
     <para><emphasis>Explanation:</emphasis></para>
 
@@ -1772,18 +1772,18 @@ static void unload_re_filterfile(void *f) { ... }</programlisting>
     your changes, but are not *quite* sure of the repercussions,
     add this:</para>
 
-    <para>/* FIXME: this code has a logic error on platform XYZ, *
+    <para>/* XXX: this code has a logic error on platform XYZ, *
     attempting to fix */ #ifdef PLATFORM ...changed code here...
     #endif</para>
 
     <para>or:</para>
 
-    <para>/* FIXME: I think the original author really meant this...
+    <para>/* XXX: I think the original author really meant this...
     */ ...changed code here...</para>
 
     <para>or:</para>
 
-    <para>/* FIXME: new code that *may* break something else... */
+    <para>/* XXX: new code that *may* break something else... */
     ...new code here...</para>
 
     <para><emphasis>Note:</emphasis> If you make it clear that this may or may not
@@ -3040,6 +3040,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.48  2012/03/20 13:05:39  fabiankeil
+  Remove bogus section about long and short being preferable to int
+
   Revision 2.47  2012/03/20 13:05:14  fabiankeil
   Adjust whitespace in examples to be closer to our style
 
