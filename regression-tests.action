@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.41 2011/11/06 11:46:36 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.42 2011/11/06 11:46:58 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -430,10 +430,24 @@ TAG:^prevent-compression$
 
 # Set Header    = Range: bytes=1234-5678
 # Expect Header = REMOVAL
+# Set Header    = Range: bytes=1-5
+# Expect Header = REMOVAL
 # Set Header    = If-Range: bytes=1234-5678
 # Expect Header = REMOVAL
 # Set Header    = Request-Range: bytes=1234-5678
 # Expect Header = REMOVAL
+# Set Header    = Range: bytes=0-5678
+# Expect Header = NO CHANGE
+# Set Header    = Range: bytes=0-
+# Expect Header = NO CHANGE
+# Set Header    = If-Range: bytes=0-5678
+# Expect Header = NO CHANGE
+# Set Header    = If-Range: bytes=0-
+# Expect Header = NO CHANGE
+# Set Header    = Request-Range: bytes=0-5678
+# Expect Header = NO CHANGE
+# Set Header    = Request-Range: bytes=0-
+# Expect Header = NO CHANGE
 {\
  -client-header-tagger{range-requests} \
  +deanimate-gifs{last} \
@@ -443,10 +457,24 @@ TAG:^deanimate-gifs\{last\}$
 
 # Set Header    = Range: bytes=1234-5678
 # Expect Header = REMOVAL
+# Set Header    = Range: bytes=1-5
+# Expect Header = REMOVAL
 # Set Header    = If-Range: bytes=1234-5678
 # Expect Header = REMOVAL
 # Set Header    = Request-Range: bytes=1234-5678
 # Expect Header = REMOVAL
+# Set Header    = Range: bytes=0-5678
+# Expect Header = NO CHANGE
+# Set Header    = Range: bytes=0-
+# Expect Header = NO CHANGE
+# Set Header    = If-Range: bytes=0-5678
+# Expect Header = NO CHANGE
+# Set Header    = If-Range: bytes=0-
+# Expect Header = NO CHANGE
+# Set Header    = Request-Range: bytes=0-5678
+# Expect Header = NO CHANGE
+# Set Header    = Request-Range: bytes=0-
+# Expect Header = NO CHANGE
 {\
  -client-header-tagger{range-requests} \
  -deanimate-gifs \
