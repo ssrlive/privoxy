@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.243 2012/03/04 11:53:26 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.244 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3352,11 +3352,25 @@ jb_err client_x_filter(struct client_state *csp, char **header)
  * Function    :  client_range
  *
  * Description :  Removes Range, Request-Range and If-Range headers if
- *                content filtering is enabled. If the client's version
- *                of the document has been altered by Privoxy, the server
- *                could interpret the range differently than the client
- *                intended in which case the user could end up with
- *                corrupted content.
+ *                content filtering is enabled and the range doesn't
+ *                start at byte 0.
+ *
+ *                If the client's version of the document has been
+ *                altered by Privoxy, the server could interpret the
+ *                range differently than the client intended in which
+ *                case the user could end up with corrupted content.
+ *
+ *                If the range starts at byte 0 this isn't an issue
+ *                so the header can pass. Partial requests like this
+ *                are used to render preview images for videos without
+ *                downloading the whole video.
+ *
+ *                While HTTP doesn't require that range requests are
+ *                honoured and the client could simply abort the download
+ *                after receiving a sufficient amount of data, various
+ *                clients don't handle complete responses to range
+ *                requests gracefully and emit misleading error messages
+ *                instead.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3370,7 +3384,8 @@ jb_err client_x_filter(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err client_range(struct client_state *csp, char **header)
 {
-   if (content_filters_enabled(csp->action))
+   if (content_filters_enabled(csp->action)
+      && (0 != strncmpic(strstr(*header, ":"), ": bytes=0-", 10)))
    {
       log_error(LOG_LEVEL_HEADER, "Content filtering is enabled."
          " Crunching: \'%s\' to prevent range-mismatch problems.", *header);
