@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.147 2012/03/11 19:03:42 diem Exp $
+ $Id: user-manual.sgml,v 2.148 2012/03/18 15:41:49 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.147 2012/03/11 19:03:42 diem Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.148 2012/03/18 15:41:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3971,7 +3971,7 @@ for details.
 {+client-header-filter{hide-tor-exit-notation}}
 /
     </screen>
-    </para>
+   </para>
   </listitem>
  </varlistentry>
 
@@ -4064,6 +4064,22 @@ TAG:^User-Agent: RPM APT-HTTP/
 TAG:^User-Agent: fetch libfetch/
 TAG:^User-Agent: Ubuntu APT-HTTP/
 TAG:^User-Agent: MPlayer/
+    </screen>
+   </para>
+   <para>
+     <screen>
+# Tag all requests with the Range header set
+{+client-header-tagger{range-requests}}
+/
+
+# Disable filtering for the tagged requests.
+#
+# With filtering enabled Privoxy would remove the Range headers
+# to be able to filter the whole response. The downside is that
+# it prevents clients from resuming downloads or skipping over
+# parts of multimedia files.
+{-filter -deanimate-gifs}
+TAG:^RANGE-REQUEST$
     </screen>
     </para>
   </listitem>
@@ -9490,6 +9506,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.148  2012/03/18 15:41:49  fabiankeil
+ Bump entities to 3.0.20 UNRELEASED
+
  Revision 2.147  2012/03/11 19:03:42  diem
  Updated user manual to refer to both packaged and source install options for OS X
 
