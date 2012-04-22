@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.86 2012/03/18 15:41:49 fabiankeil Exp $
+ $Id: faq.sgml,v 2.87 2012/04/22 12:16:09 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.86 2012/03/18 15:41:49 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.87 2012/04/22 12:16:09 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1793,7 +1793,6 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  messages.
 </para>
 
-<![%p-newstuff;[
 <para>
  Since <application>Privoxy</application> 3.0.5, its
  <ulink url="../user-manual/config.html">main configuration file</ulink>
@@ -1853,7 +1852,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  what <application>Tor</application> does, why it is no replacement for
  application level security, and why you probably don't want to
  use it for unencrypted logins.
-</para> ]]>
+</para>
 </sect2>
 
 <sect2 renderas="sect3">
@@ -2992,6 +2991,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.87  2012/04/22 12:16:09  fabiankeil
+Fix an URL in the "Privoxy with Tor" FAQ
+
 Revision 2.86  2012/03/18 15:41:49  fabiankeil
 Bump entities to 3.0.20 UNRELEASED
 
