@@ -1,4 +1,4 @@
-$Id: TODO,v 1.61 2012/03/09 16:22:24 fabiankeil Exp $
+$Id: TODO,v 1.62 2012/03/18 15:44:57 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -295,3 +295,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      and thus changing the User-Agent doesn't fool them.
 
 102) Add an include directive to split the config file into several parts.
+
+103) Potential performance improvement for large action files:
+     when figuring out which actions apply, check the action bitmask
+     before pattern matching and skip section that wouldn't modify the
+     actions already set. To increase the impact the sections would have
+     to be applied in reverse.
