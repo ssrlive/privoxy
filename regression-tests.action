@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.43 2012/04/06 15:17:41 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.44 2012/04/06 15:18:12 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -436,6 +436,12 @@ TAG:^prevent-compression$
 # Expect Header = REMOVAL
 # Set Header    = Request-Range: bytes=1234-5678
 # Expect Header = REMOVAL
+# Set Header    = Range: foo
+# Expect Header = REMOVAL
+# Set Header    = If-Range: foo
+# Expect Header = REMOVAL
+# Set Header    = Request-Range: foo
+# Expect Header = REMOVAL
 # Set Header    = Range: bytes=0-5678
 # Expect Header = NO CHANGE
 # Set Header    = Range: bytes=0-
@@ -462,6 +468,18 @@ TAG:^deanimate-gifs\{last\}$
 # Set Header    = If-Range: bytes=1234-5678
 # Expect Header = REMOVAL
 # Set Header    = Request-Range: bytes=1234-5678
+# Expect Header = REMOVAL
+# Set Header    = Range: bytes=1-5
+# Expect Header = REMOVAL
+# Set Header    = If-Range: bytes=1234-5678
+# Expect Header = REMOVAL
+# Set Header    = Request-Range: bytes=1234-5678
+# Expect Header = REMOVAL
+# Set Header    = Range: foo
+# Expect Header = REMOVAL
+# Set Header    = If-Range: foo
+# Expect Header = REMOVAL
+# Set Header    = Request-Range: foo
 # Expect Header = REMOVAL
 # Set Header    = Range: bytes=0-5678
 # Expect Header = NO CHANGE
