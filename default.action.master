@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.243 2012/02/29 19:28:14 fabiankeil Exp $
+#  $Id: default.action.master,v 1.244 2012/03/06 18:36:02 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -730,6 +730,8 @@ linuxcounter.net/
 support./(.*/)?track
 # URL = http://repo.or.cz/r/vlc.git/objects/ad/1d316efd83157217fdf9b5d417dddca54bbf41
 /.*\.git/objects/
+# URL = http://code.google.com/p/sm-ssc/wiki/Bugtracker?tm=3
+/.*Bugtracker
 
 #############################################################################
 # Exceptions for academia and non-profits
