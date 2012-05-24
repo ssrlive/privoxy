@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.43 2012/05/24 14:59:41 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.44 2012/05/24 14:59:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -1176,7 +1176,7 @@ LRESULT CALLBACK LogWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
          return 0;
 
       case WM_CLOSE:
-         /* This is the end - beautiful friend - the end */
+         /* This is the end - my only friend - the end */
          DestroyWindow(g_hwndLogBox);
          DestroyWindow(g_hwndLogFrame);
          return 0;
