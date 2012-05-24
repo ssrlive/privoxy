@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.128 2012/03/10 11:15:15 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.129 2012/05/24 15:00:46 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -227,7 +227,7 @@ sub paint_it ($) {
 # XXX: The Rolling Stones reference has to go.
 ###############################################################
 
-    my $colour = shift @_;
+    my $colour = shift;
 
     return "" if cli_option_is_set('no-syntax-highlighting');
 
@@ -302,7 +302,7 @@ sub get_semantic_html_markup ($) {
 # Takes a string and returns a span element
 ###############################################################
 
-    my $type = shift @_;
+    my $type = shift;
     my $code;
 
     if ($type =~ /Standard/) {
@@ -475,7 +475,7 @@ sub get_colour_html_markup ($) {
 # markup should always be semantically correct.
 ###############################################################
 
-    my $type = shift @_;
+    my $type = shift;
     my $code;
 
     if ($type =~ /Standard/) {
