@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.41 2012/03/09 16:23:50 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.42 2012/05/24 14:59:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -947,14 +947,8 @@ void OnLogCommand(int nCommand)
       /* by haroon - change toggle to its opposite value */
       case ID_TOGGLE_ENABLED:
          global_toggle_state = !global_toggle_state;
-         if (global_toggle_state)
-         {
-            log_error(LOG_LEVEL_INFO, "Now toggled ON.");
-         }
-         else
-         {
-            log_error(LOG_LEVEL_INFO, "Now toggled OFF.");
-         }
+         log_error(LOG_LEVEL_INFO,
+            "Now toggled %s", global_toggle_state ? "ON" : "OFF");
          SetIdleIcon();
          break;
 #endif /* def FEATURE_TOGGLE */
