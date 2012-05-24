@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.42 2012/05/24 14:59:25 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.43 2012/05/24 14:59:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -944,7 +944,6 @@ void OnLogCommand(int nCommand)
          break;
 
 #ifdef FEATURE_TOGGLE
-      /* by haroon - change toggle to its opposite value */
       case ID_TOGGLE_ENABLED:
          global_toggle_state = !global_toggle_state;
          log_error(LOG_LEVEL_INFO,
