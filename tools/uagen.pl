@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.19 2012/03/18 13:46:54 fabiankeil Exp $
+# $Id: uagen.pl,v 1.86 2012/05/21 11:39:53 fk Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -234,7 +234,7 @@ sub log_to_file($) {
 
     return if $no_logging;
 
-    open(my $log_fd, ">>" . $logfile) || die "Writing " . $logfile . " failed";
+    open(my $log_fd, ">>", $logfile) || die "Writing " . $logfile . " failed";
     printf $log_fd UAGEN_VERSION . " ($logtime) $message\n";
     close($log_fd);
 }
@@ -276,7 +276,7 @@ sub write_action_file() {
         $action_file_content .= sprintf " +hide-user-agent{%s} \\\n}\n/\n",
             $user_agent;
     }
-    open(my $actionfile_fd, ">" . $action_file)
+    open(my $actionfile_fd, ">", $action_file)
       or log_error "Writing action file $action_file failed!";
     print $actionfile_fd $action_file_content;
     close($actionfile_fd);
@@ -294,7 +294,7 @@ sub write_prefs_file() {
     my $prefs_file_content = '';
     my $prefsfile_fd;
 
-    if (open($prefsfile_fd, $mozilla_prefs_file)) {
+    if (open($prefsfile_fd, "<", $mozilla_prefs_file)) {
 
         while (<$prefsfile_fd>) {
             s@user_pref\(\"general.useragent.override\",.*\);\n?@@;
@@ -311,7 +311,7 @@ sub write_prefs_file() {
         sprintf("user_pref(\"intl.accept_languages\", \"%s\");\n", $accept_language)
         unless $clean_prefs;
 
-    open($prefsfile_fd, ">" . $mozilla_prefs_file)
+    open($prefsfile_fd, ">", $mozilla_prefs_file)
       or log_error "Writing prefs file $mozilla_prefs_file failed!";
     print $prefsfile_fd $prefs_file_content;
     close($prefsfile_fd);
