@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.40 2011/09/04 11:10:56 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.41 2012/03/09 16:23:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -1111,7 +1111,6 @@ void SetIdleIcon()
          if (!global_toggle_state)
          {
             TraySetIcon(g_hwndTray, 1, g_hiconOff);
-            /* log_error(LOG_LEVEL_INFO, "Privoxy OFF icon selected."); */
          }
          else
 #endif /* def FEATURE_TOGGLE */
