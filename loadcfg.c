@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.126 2012/03/18 15:48:59 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.127 2012/05/24 14:57:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1220,7 +1220,7 @@ struct configuration_spec * load_config(void)
             if (*arg != '\0')
             {
                int socket_timeout = atoi(arg);
-               if (0 < socket_timeout)
+               if (0 <= socket_timeout)
                {
                   config->socket_timeout = socket_timeout;
                }
