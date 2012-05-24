@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.129 2012/05/24 15:00:46 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.130 2012/05/24 15:01:05 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2145,7 +2145,7 @@ sub print_clf_message () {
 sub print_non_clf_message ($) {
 
     my $content = shift;
-    my $msec_string = "." . $req{$t}{'msecs'} unless $no_msecs_mode;
+    my $msec_string = $no_msecs_mode ? '' : '.' . $req{$t}{'msecs'};
     my $line_start = $html_output_mode ? '' : $h{"Standard"};
 
     return if DEBUG_SUPPRESS_LOG_MESSAGES;
