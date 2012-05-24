@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.127 2012/03/10 11:08:44 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.128 2012/03/10 11:15:15 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -572,7 +572,7 @@ sub log_parse_error ($) {
     my $message = shift;
 
     if (LOG_UNPARSED_LINES_TO_EXTRA_FILE) {
-        open(my $errorlog_fd, ">>" . ERROR_LOG_FILE) || die "Writing " . ERROR_LOG_FILE . " failed";
+        open(my $errorlog_fd, ">>", ERROR_LOG_FILE) || die "Writing " . ERROR_LOG_FILE . " failed";
         print $errorlog_fd $message;
         close($errorlog_fd);
     }
