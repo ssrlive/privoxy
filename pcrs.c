@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.40 2012/03/09 17:55:50 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.41 2012/05/24 15:02:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -997,8 +997,8 @@ char pcrs_get_delimiter(const char *string)
     * Some characters that are unlikely to
     * be part of pcrs replacement strings.
     */
-   char delimiters[] = "><#+*~%^-:;!@";
-   char *d = delimiters;
+   static const char delimiters[] = "><#+*~%^-:;!@";
+   const char *d = delimiters;
 
    /* Take the first delimiter that isn't part of the string */
    while (*d && NULL != strchr(string, *d))
