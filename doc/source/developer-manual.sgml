@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.48 2012/03/20 13:05:39 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.49 2012/03/20 13:05:55 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.48 2012/03/20 13:05:39 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.49 2012/03/20 13:05:55 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2729,7 +2729,7 @@ at sourceforge. Three simple steps:
         </para>
         <para>
           The module contains complete instructions on its usage in its
-          <filename>README</filename> file. The end result will be the the
+          <filename>README</filename> file. The end result will be the
           exported version of Privoxy installed on the build machine.
         </para>
       </sect4>
@@ -3040,6 +3040,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.49  2012/03/20 13:05:55  fabiankeil
+  We use XXX not FIXME
+
   Revision 2.48  2012/03/20 13:05:39  fabiankeil
   Remove bogus section about long and short being preferable to int
 
