@@ -1,4 +1,4 @@
-$Id: TODO,v 1.62 2012/03/18 15:44:57 fabiankeil Exp $
+$Id: TODO,v 1.63 2012/04/22 12:15:33 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -301,3 +301,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      before pattern matching and skip section that wouldn't modify the
      actions already set. To increase the impact the sections would have
      to be applied in reverse.
+
+104) The code to modify global_toggle_state should be factored out into
+     a separate function. Currently we mess with it in three different
+     files, but only in w32log.c the tray icon is explicitly set.
+     The logging is inconsistent as well. For details see #3525694.
