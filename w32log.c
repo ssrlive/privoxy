@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.44 2012/05/24 14:59:59 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.45 2012/05/24 15:05:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -948,7 +948,13 @@ void OnLogCommand(int nCommand)
          global_toggle_state = !global_toggle_state;
          log_error(LOG_LEVEL_INFO,
             "Now toggled %s", global_toggle_state ? "ON" : "OFF");
-         SetIdleIcon();
+         /*
+          * Overload TIMER_ANIMSTOP_ID to set the idle icon through the
+          * "application queue". According to MSDN, 10 milliseconds are
+          * the lowest value possible and seem to be close enough to
+          * "instantly".
+          */
+         SetTimer(g_hwndLogFrame, TIMER_ANIMSTOP_ID, 10, NULL);
          break;
 #endif /* def FEATURE_TOGGLE */
 
