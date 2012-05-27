@@ -550,14 +550,6 @@ int LogPutStringNoMatch(const char *pszText, int style)
  *********************************************************************/
 void LogShowActivity(void)
 {
-   int i;
-
-   /* Try to figure out if SetIdleIcon() is thread-safe */
-   for (i = 0; i < 1000; i++)
-   {
-      SetIdleIcon();
-   }
-
    /* Start some activity timers */
    if (g_bShowActivityAnimation)
    {
