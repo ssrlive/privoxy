@@ -550,6 +550,14 @@ int LogPutStringNoMatch(const char *pszText, int style)
  *********************************************************************/
 void LogShowActivity(void)
 {
+   int i;
+
+   /* Try to figure out if SetIdleIcon() is thread-safe */
+   for (i = 0; i < 1000; i++)
+   {
+      SetIdleIcon();
+   }
+
    /* Start some activity timers */
    if (g_bShowActivityAnimation)
    {
@@ -949,7 +957,7 @@ void OnLogCommand(int nCommand)
          log_error(LOG_LEVEL_INFO,
             "Now toggled %s", global_toggle_state ? "ON" : "OFF");
          /*
-          * Overload TIMER_ANIMSTOP_ID to set the idle icon through the
+          * Leverage TIMER_ANIMSTOP_ID to set the idle icon through the
           * "application queue". According to MSDN, 10 milliseconds are
           * the lowest value possible and seem to be close enough to
           * "instantly".
