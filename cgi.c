@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.150 2012/03/09 17:55:49 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.151 2012/06/08 15:07:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -594,12 +594,36 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
 static struct map *parse_cgi_parameters(char *argstring)
 {
    char *p;
-   char *vector[BUFFER_SIZE];
+   char **vector;
    int pairs, i;
    struct map *cgi_params;
 
+   /*
+    * XXX: This estimate is guaranteed to be high enough as we
+    *      let ssplit() ignore empty fields, but also a bit wasteful.
+    *      The same hack is used in get_last_url() so it looks like
+    *      a real solution is needed.
+    */
+   size_t max_segments = strlen(argstring) / 2;
+   if (max_segments == 0)
+   {
+      /*
+       * XXX: If the argstring is empty, there's really
+       *      no point in creating a param list, but currently
+       *      other parts of Privoxy depend on the list's existence.
+       */
+      max_segments = 1;
+   }
+   vector = malloc(max_segments * sizeof(char *));
+
+   if (NULL == vector)
+   {
+      return NULL;
+   }
+
    if (NULL == (cgi_params = new_map()))
    {
+      freez(vector);
       return NULL;
    }
 
@@ -613,9 +637,11 @@ static struct map *parse_cgi_parameters(char *argstring)
       *p = '\0';
    }
 
-   pairs = ssplit(argstring, "&", vector, SZ(vector), 1, 1);
+   pairs = ssplit(argstring, "&", vector, max_segments, 1, 1);
+   assert(pairs != -1);
    if (pairs == -1)
    {
+      freez(vector);
       free_map(cgi_params);
       return NULL;
    }
@@ -627,11 +653,14 @@ static struct map *parse_cgi_parameters(char *argstring)
          *p = '\0';
          if (map(cgi_params, url_decode(vector[i]), 0, url_decode(++p), 0))
          {
+            freez(vector);
             free_map(cgi_params);
             return NULL;
          }
       }
    }
+
+   freez(vector);
 
    return cgi_params;
 
