@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.13 2012/03/09 16:23:50 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.14 2012/06/08 15:15:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -42,10 +42,6 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.13 2012/03/09 16:23:50 fabiankeil E
 #include "miscutil.h"
 
 const char ssplit_h_rcs[] = SSPLIT_H_VERSION;
-
-/* Define this for lots of debugging information to stdout */
-#undef SSPLIT_VERBOSE
-/* #define SSPLIT_VERBOSE 1 */
 
 
 /*********************************************************************
@@ -150,17 +146,6 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
       }
    }
    *str = '\0';     /* null terminate the substring */
-
-#ifdef SSPLIT_VERBOSE
-   {
-      int i;
-      printf("dump %d strings\n", vec_count);
-      for (i = 0; i < vec_count; i++)
-      {
-         printf("%d '%s'\n", i, vec[i]);
-      }
-   }
-#endif /* def SSPLIT_VERBOSE */
 
    return(vec_count);
 }
