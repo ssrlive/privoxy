@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.127 2012/05/24 14:57:49 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.128 2012/05/24 14:58:16 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -624,7 +624,7 @@ struct configuration_spec * load_config(void)
 #ifdef FEATURE_ACL
          case hash_deny_access:
             strlcpy(tmp, arg, sizeof(tmp));
-            vec_count = ssplit(tmp, " \t", vec, SZ(vec), 1, 1);
+            vec_count = ssplit(tmp, " \t", vec, SZ(vec));
 
             if ((vec_count != 1) && (vec_count != 2))
             {
@@ -809,7 +809,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_forward:
             strlcpy(tmp, arg, sizeof(tmp));
-            vec_count = ssplit(tmp, " \t", vec, SZ(vec), 1, 1);
+            vec_count = ssplit(tmp, " \t", vec, SZ(vec));
 
             if (vec_count != 2)
             {
@@ -864,7 +864,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_forward_socks4:
             strlcpy(tmp, arg, sizeof(tmp));
-            vec_count = ssplit(tmp, " \t", vec, SZ(vec), 1, 1);
+            vec_count = ssplit(tmp, " \t", vec, SZ(vec));
 
             if (vec_count != 3)
             {
@@ -931,7 +931,7 @@ struct configuration_spec * load_config(void)
          case hash_forward_socks4a:
          case hash_forward_socks5:
             strlcpy(tmp, arg, sizeof(tmp));
-            vec_count = ssplit(tmp, " \t", vec, SZ(vec), 1, 1);
+            vec_count = ssplit(tmp, " \t", vec, SZ(vec));
 
             if (vec_count != 3)
             {
@@ -1121,7 +1121,7 @@ struct configuration_spec * load_config(void)
 #ifdef FEATURE_ACL
          case hash_permit_access:
             strlcpy(tmp, arg, sizeof(tmp));
-            vec_count = ssplit(tmp, " \t", vec, SZ(vec), 1, 1);
+            vec_count = ssplit(tmp, " \t", vec, SZ(vec));
 
             if ((vec_count != 1) && (vec_count != 2))
             {

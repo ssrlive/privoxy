@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.69 2012/03/09 16:24:36 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.70 2012/03/09 17:55:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -139,7 +139,7 @@ jb_err init_domain_components(struct http_request *http)
    }
 
    /* split the domain name into components */
-   http->dcount = ssplit(http->dbuffer, ".", vec, SZ(vec), 1, 1);
+   http->dcount = ssplit(http->dbuffer, ".", vec, SZ(vec));
 
    if (http->dcount <= 0)
    {
@@ -530,7 +530,7 @@ jb_err parse_http_request(const char *req, struct http_request *http)
       return JB_ERR_MEMORY;
    }
 
-   n = ssplit(buf, " \r\n", v, SZ(v), 1, 1);
+   n = ssplit(buf, " \r\n", v, SZ(v));
    if (n != 3)
    {
       freez(buf);
@@ -847,7 +847,7 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
    /*
     * Split the domain name into components
     */
-   url->dcount = ssplit(url->dbuffer, ".", v, SZ(v), 1, 1);
+   url->dcount = ssplit(url->dbuffer, ".", v, SZ(v));
 
    if (url->dcount < 0)
    {

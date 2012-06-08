@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.170 2012/03/09 17:55:50 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.171 2012/03/18 13:47:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1115,7 +1115,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
          return NULL;
       }
 
-      segments = ssplit(subject, "?&", url_segments, max_segments, 1, 1);
+      segments = ssplit(subject, "?&", url_segments, max_segments);
 
       while (segments-- > 0)
       {
@@ -2128,7 +2128,7 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
       return NULL;
    }
 
-   vec_count = ssplit(forward_settings, " \t", vec, SZ(vec), 1, 1);
+   vec_count = ssplit(forward_settings, " \t", vec, SZ(vec));
    if ((vec_count == 2) && !strcasecmp(vec[0], "forward"))
    {
       fwd->type = SOCKS_NONE;
