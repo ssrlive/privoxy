@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.87 2012/04/22 12:16:09 fabiankeil Exp $
+ $Id: faq.sgml,v 2.88 2012/04/22 12:16:24 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.87 2012/04/22 12:16:09 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.88 2012/04/22 12:16:24 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -240,24 +240,23 @@ Privoxy work? </title>
 <title id="whyprivoxy">Why <quote>Privoxy</quote>? Why change the name from
 Junkbuster at all?</title>
 <para>
- Though outdated, <ulink url="http://junkbusters.com/">Junkbusters Corporation</ulink>
- continues to offer their original version of the <application>Internet
- Junkbuster</application>, so publishing our
- <application> Junkbuster</application>-derived software under the same name
- led to confusion.
+ Though outdated, Junkbusters Corporation continued to offer their original
+ version of the <application>Internet Junkbuster</application> for a while,
+ so publishing our <application> Junkbuster</application>-derived software
+ under the same name would have led to confusion.
 </para>
 <para>
- There are also potential legal complications from our use of the
- <application>Junkbuster</application> name, which is a registered trademark of
- <ulink url="http://junkbusters.com/">Junkbusters Corporation</ulink>.
- There are, however, no objections from Junkbusters Corporation to the
- <application>Privoxy</application> project itself, and they, in fact, still
- share our ideals and goals.
+ There were also potential legal reasons not to use the
+ <application>Junkbuster</application> name, as it was (and maybe still is)
+ a registered trademark of Junkbusters Corporation.
+ There were, however, no objections from Junkbusters Corporation to the
+ <application>Privoxy</application> project itself, and they, in fact,
+ shared our ideals and goals.
 </para>
 <para>
- The developers also believed that there are so many improvements over the original
- code, that it was time to make a clean break from the past and make
- a name in their own right.
+ The Privoxy developers also believed that there were so many improvements
+ over the original code, that it was time to make a clean break from the past
+ and make a name in their own right.
 </para>
 <para>
  <application>Privoxy</application> is the
@@ -273,7 +272,7 @@ from the old Junkbuster?</title>
 <para>
  <application>Privoxy</application> picks up where
  <application>Junkbuster</application> left off.
- The new <application>Privoxy</application> still blocks ads and banners,
+ <application>Privoxy</application> still blocks ads and banners,
  still manages <ulink
  url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>, and still
  helps protect your privacy. But, most of these features have been enhanced,
@@ -2991,6 +2990,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.88  2012/04/22 12:16:24  fabiankeil
+Remove an obsolete newstuff marker
+
 Revision 2.87  2012/04/22 12:16:09  fabiankeil
 Fix an URL in the "Privoxy with Tor" FAQ
 
