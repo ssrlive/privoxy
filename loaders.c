@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.89 2012/03/09 16:24:36 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.90 2012/03/09 17:55:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -80,11 +80,6 @@ static struct file_list *current_re_filterfile[MAX_AF_FILES]  = {
    NULL, NULL, NULL, NULL, NULL,
    NULL, NULL, NULL, NULL, NULL
 };
-
-/*
- * Pseudo filter type for load_one_re_filterfile
- */
-#define NO_NEW_FILTER -1
 
 
 /*********************************************************************
@@ -1152,7 +1147,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
     */
    while (read_config_line(fp, &linenum, &buf) != NULL)
    {
-      int new_filter = NO_NEW_FILTER;
+      enum filter_type new_filter = FT_INVALID_FILTER;
 
       if (strncmp(buf, "FILTER:", 7) == 0)
       {
@@ -1179,7 +1174,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
        * If this is the head of a new filter block, make it a
        * re_filterfile spec of its own and chain it to the list:
        */
-      if (new_filter != NO_NEW_FILTER)
+      if (new_filter != FT_INVALID_FILTER)
       {
          new_bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
          if (new_bl == NULL)

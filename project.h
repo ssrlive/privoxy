@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.174 2012/03/04 11:50:32 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.175 2012/03/04 11:51:25 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1098,6 +1098,7 @@ enum filter_type
    FT_SERVER_HEADER_FILTER = 2,
    FT_CLIENT_HEADER_TAGGER = 3,
    FT_SERVER_HEADER_TAGGER = 4,
+   FT_INVALID_FILTER       = 42,
 };
 #define MAX_FILTER_TYPES        5
 
