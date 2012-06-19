@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.49 2012/03/20 13:05:55 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.50 2012/05/27 15:31:24 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.49 2012/03/20 13:05:55 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.50 2012/05/27 15:31:24 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1801,10 +1801,10 @@ static void unload_re_filterfile(void *f) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$I<!-- Break CVS Substitution -->d$";
+const char FILENAME_rcs[] = "$I&lt;!-- Break CVS Substitution -->d$";
 /*********************************************************************
  *
- * File        :  $S<!-- Break CVS Substitution -->ource$
+ * File        :  $S&lt;!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1855,10 +1855,10 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$I<!-- Break CVS Substitution -->d$"
+#define FILENAME_H_VERSION "$I&lt;!-- Break CVS Substitution -->d$"
 /*********************************************************************
  *
- * File        :  $S<!-- Break CVS Substitution -->ource$
+ * File        :  $S&lt;!-- Break CVS Substitution -->ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -3040,6 +3040,11 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.50  2012/05/27 15:31:24  fabiankeil
+  Remove a duplicated 'the'
+
+  Spotted by igor.
+
   Revision 2.49  2012/03/20 13:05:55  fabiankeil
   We use XXX not FIXME
 
