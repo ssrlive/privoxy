@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.379 2012/07/23 12:39:12 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.380 2012/07/23 12:39:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3198,12 +3198,9 @@ int main(int argc, char **argv)
       {
          log_error(LOG_LEVEL_FATAL, "Cannot setgid(): Insufficient permissions.");
       }
-      if (NULL != grp)
+      if ((NULL != grp) && setgroups(1, &grp->gr_gid))
       {
-         if (setgroups(1, &grp->gr_gid))
-         {
-            log_error(LOG_LEVEL_FATAL, "setgroups() failed: %E");
-         }
+         log_error(LOG_LEVEL_FATAL, "setgroups() failed: %E");
       }
       else if (initgroups(pw->pw_name, pw->pw_gid))
       {
