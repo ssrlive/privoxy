@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.16 2012/07/23 12:44:17 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.17 2012/07/23 12:44:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -70,6 +70,12 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
    unsigned char is_delim[256];
    unsigned char char_type;
    int vec_count = 0;
+   enum char_type {
+      WANTED     = 0,
+      SEPARATOR  = 1,
+      TERMINATOR = 2,
+   };
+
 
    if (!str)
    {
@@ -88,23 +94,23 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
 
    while (*delim)
    {
-      is_delim[(unsigned)(unsigned char)*delim++] = 1;   /* separator  */
+      is_delim[(unsigned)(unsigned char)*delim++] = SEPARATOR;
    }
 
-   is_delim[(unsigned)(unsigned char)'\0'] = 2;   /* terminator */
-   is_delim[(unsigned)(unsigned char)'\n'] = 2;   /* terminator */
+   is_delim[(unsigned)(unsigned char)'\0'] = TERMINATOR;
+   is_delim[(unsigned)(unsigned char)'\n'] = TERMINATOR;
 
 
    /* Parse string */
 
    /* Skip leading separators. XXX: Why do they matter? */
-   while (is_delim[(unsigned)(unsigned char)*str] == 1)
+   while (is_delim[(unsigned)(unsigned char)*str] == SEPARATOR)
    {
       str++;
    }
 
    /* The first pointer is the beginning of string */
-   if (is_delim[(unsigned)(unsigned char)*str] == 0)
+   if (is_delim[(unsigned)(unsigned char)*str] == WANTED)
    {
       /*
        * The first character in this field is not a
@@ -117,9 +123,9 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
       vec[vec_count++] = str;
    }
 
-   while ((char_type = is_delim[(unsigned)(unsigned char)*str]) != 2)
+   while ((char_type = is_delim[(unsigned)(unsigned char)*str]) != TERMINATOR)
    {
-      if (char_type == 1)
+      if (char_type == SEPARATOR)
       {
          /* the char is a separator */
 
@@ -127,7 +133,7 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
          *str++ = '\0';
 
          /* Check if we want to save this field */
-         if (is_delim[(unsigned)(unsigned char)*str] == 0)
+         if (is_delim[(unsigned)(unsigned char)*str] == WANTED)
          {
             /*
              * The first character in this field is not a
