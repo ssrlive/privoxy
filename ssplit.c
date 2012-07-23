@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.14 2012/06/08 15:15:11 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.15 2012/06/08 15:16:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -145,7 +145,8 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
          str++;
       }
    }
-   *str = '\0';     /* null terminate the substring */
+   /* null terminate the substring */
+   *str = '\0';
 
    return(vec_count);
 }
