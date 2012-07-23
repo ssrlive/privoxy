@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.244 2012/03/06 18:36:02 fabiankeil Exp $
+#  $Id: default.action.master,v 1.245 2012/04/29 16:18:39 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -869,6 +869,8 @@ scripts.chitika.net/.*\.js
 # Blocked URL = http://gadk.hit.gemius.pl/*/_1274097577014/rexdot.gif?l=30&id=..DlR.vCLZGB56RmfkYNSWZVLSqB3ueYOP.Oec5WWiv.h7&fr=1&fv=WIN%2010%2C0%2C45%2C2&tz=-120&href=http%3A//www.baadgalleri.dk/&ref=&screen=1440x900&col=32
 #MASTER# BLOCK-REFERRER: http://www.baadgalleri.dk/
 .gemius.pl/
+# Blocked URL = http://farm.plista.com/widgetdata.php?clientrev=12&domainid=4211&publickey=fdc5a7f9d15be004aa03fc4d&cb=PLISTA5_7ed57c93e0d17&requestID=5&5=widgetintegration%3A%02pictureads%03&6=pictureads%3A%1Cpictureid%1F%026716%03%1Eimgdim%1F%1Cx%1F547%1Ey%1F410%1D%1Ewidgetname%1F%02pictureads%03%1D
+farm.plista.com/widgetdata.php
 
 
 {+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
