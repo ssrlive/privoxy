@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.378 2012/03/10 11:08:10 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.379 2012/07/23 12:39:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -827,12 +827,7 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
      && (!strcmpic(http->ver, "HTTP/1.1")))
    {
       freez(http->ver);
-      http->ver = strdup("HTTP/1.0");
-
-      if (http->ver == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory downgrading HTTP version");
-      }
+      http->ver = strdup_or_die("HTTP/1.0");
    }
 
    /*
@@ -891,12 +886,7 @@ static jb_err change_request_destination(struct client_state *csp)
    else
    {
       /* XXX: ocmd is a misleading name */
-      http->ocmd = strdup(http->cmd);
-      if (http->ocmd == NULL)
-      {
-         log_error(LOG_LEVEL_FATAL,
-            "Out of memory copying rewritten HTTP request line");
-      }
+      http->ocmd = strdup_or_die(http->cmd);
    }
 
    return err;
@@ -1003,11 +993,7 @@ void save_connection_destination(jb_socket sfd,
    assert(NULL != http->host);
 
    server_connection->sfd = sfd;
-   server_connection->host = strdup(http->host);
-   if (NULL == server_connection->host)
-   {
-      log_error(LOG_LEVEL_FATAL, "Out of memory saving socket.");
-   }
+   server_connection->host = strdup_or_die(http->host);
    server_connection->port = http->port;
 
    assert(NULL != fwd);
@@ -1020,11 +1006,7 @@ void save_connection_destination(jb_socket sfd,
    server_connection->forwarder_type = fwd->type;
    if (NULL != fwd->gateway_host)
    {
-      server_connection->gateway_host = strdup(fwd->gateway_host);
-      if (NULL == server_connection->gateway_host)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory saving gateway_host.");
-      }
+      server_connection->gateway_host = strdup_or_die(fwd->gateway_host);
    }
    else
    {
@@ -1034,11 +1016,7 @@ void save_connection_destination(jb_socket sfd,
 
    if (NULL != fwd->forward_host)
    {
-      server_connection->forward_host = strdup(fwd->forward_host);
-      if (NULL == server_connection->forward_host)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory saving forward_host.");
-      }
+      server_connection->forward_host = strdup_or_die(fwd->forward_host);
    }
    else
    {
@@ -1405,12 +1383,7 @@ static jb_err receive_client_request(struct client_state *csp)
    /*
     * Save a copy of the original request for logging
     */
-   http->ocmd = strdup(http->cmd);
-   if (http->ocmd == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL,
-         "Out of memory copying HTTP request line");
-   }
+   http->ocmd = strdup_or_die(http->cmd);
    enlist(csp->headers, http->cmd);
 
    /* Append the previously read headers */
@@ -2975,7 +2948,7 @@ int main(int argc, char **argv)
       else if (strcmp(argv[argc_pos], "--pidfile") == 0)
       {
          if (++argc_pos == argc) usage(argv[0]);
-         pidfile = strdup(argv[argc_pos]);
+         pidfile = strdup_or_die(argv[argc_pos]);
       }
 
       else if (strcmp(argv[argc_pos], "--user") == 0)
@@ -2985,12 +2958,7 @@ int main(int argc, char **argv)
 
          if (++argc_pos == argc) usage(argv[argc_pos]);
 
-         user_arg = strdup(argv[argc_pos]);
-         if (NULL == user_arg)
-         {
-            log_error(LOG_LEVEL_FATAL,
-               "Out of memory splitting --user argument '%s'.", argv[argc_pos]);
-         }
+         user_arg = strdup_or_die(argv[argc_pos]);
          group_name = strchr(user_arg, '.');
          if (NULL != group_name)
          {
@@ -3018,7 +2986,7 @@ int main(int argc, char **argv)
       else if (strcmp(argv[argc_pos], "--pre-chroot-nslookup") == 0)
       {
          if (++argc_pos == argc) usage(argv[0]);
-         pre_chroot_nslookup_to_load_resolver = strdup(argv[argc_pos]);
+         pre_chroot_nslookup_to_load_resolver = strdup_or_die(argv[argc_pos]);
       }
 
       else if (strcmp(argv[argc_pos], "--chroot") == 0)
@@ -3061,12 +3029,11 @@ int main(int argc, char **argv)
          exit(1);
       }
 
+      basedir = strdup_or_die(cwd);
       /* XXX: why + 5? */
       abs_file_size = strlen(cwd) + strlen(configfile) + 5;
-      basedir = strdup(cwd);
-
-      if (NULL == basedir ||
-          NULL == (abs_file = malloc(abs_file_size)))
+      abs_file = malloc(abs_file_size);
+      if (NULL == abs_file)
       {
          perror("malloc failed");
          exit(1);
