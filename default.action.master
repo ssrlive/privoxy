@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.246 2012/07/23 12:47:39 fabiankeil Exp $
+#  $Id: default.action.master,v 1.247 2012/07/23 12:48:47 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1827,6 +1827,8 @@ adainitiative.org/
 adjamblog.wordpress.com/
 # URL = http://adjamblog.files.wordpress.com/2011/12/cropped-terra.jpg
 adjamblog.files.wordpress.com/
+# URL = http://www.urbandictionary.com/popular.php?character=C
+.urbandictionary.com/popular
 
 
 #############################################################################
