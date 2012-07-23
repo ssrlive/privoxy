@@ -1,4 +1,4 @@
-$Id: TODO,v 1.63 2012/04/22 12:15:33 fabiankeil Exp $
+$Id: TODO,v 1.64 2012/05/27 15:51:34 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -306,3 +306,5 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      a separate function. Currently we mess with it in three different
      files, but only in w32log.c the tray icon is explicitly set.
      The logging is inconsistent as well. For details see #3525694.
+
+105) Add support for socks authentication.
