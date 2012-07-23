@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.17 2012/07/23 12:44:30 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.18 2012/07/23 12:46:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -37,6 +37,7 @@ const char ssplit_rcs[] = "$Id: ssplit.c,v 1.17 2012/07/23 12:44:30 fabiankeil E
 
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "ssplit.h"
 #include "miscutil.h"
@@ -152,6 +153,8 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
       }
    }
    /* null terminate the substring */
+   /* XXX: this shouldn't be necessary, so assert that it isn't. */
+   assert(*str == '\0');
    *str = '\0';
 
    return(vec_count);
