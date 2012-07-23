@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.377 2012/03/09 16:24:36 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.378 2012/03/10 11:08:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1193,11 +1193,20 @@ static char *get_request_line(struct client_state *csp)
    {
       if (!data_is_available(csp->cfd, csp->config->socket_timeout))
       {
-         log_error(LOG_LEVEL_CONNECT,
-            "Stopped waiting for the request line. Timeout: %d.",
-            csp->config->socket_timeout);
-         write_socket(csp->cfd, CLIENT_CONNECTION_TIMEOUT_RESPONSE,
-            strlen(CLIENT_CONNECTION_TIMEOUT_RESPONSE));
+         if (socket_is_still_alive(csp->cfd))
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "No request line on socket %d received in time. Timeout: %d.",
+               csp->cfd, csp->config->socket_timeout);
+            write_socket(csp->cfd, CLIENT_CONNECTION_TIMEOUT_RESPONSE,
+               strlen(CLIENT_CONNECTION_TIMEOUT_RESPONSE));
+         }
+         else
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "The client side of the connection on socket %d got "
+               "closed without sending a complete request line.", csp->cfd);
+         }
          return NULL;
       }
 
