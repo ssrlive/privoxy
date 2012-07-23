@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.90 2012/03/09 17:55:50 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.91 2012/06/19 12:50:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -8,7 +8,7 @@ const char loaders_rcs[] = "$Id: loaders.c,v 1.90 2012/03/09 17:55:50 fabiankeil
  *                the list of active loaders, and to automatically
  *                unload files that are no longer in use.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2010 the
+ * Copyright   :  Written by and Copyright (C) 2001-2012 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
