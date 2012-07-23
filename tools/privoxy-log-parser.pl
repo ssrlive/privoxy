@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.130 2012/05/24 15:01:05 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.131 2012/05/24 15:02:00 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1531,10 +1531,17 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=Timeout is: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Assumed latency: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Stopped waiting for the request line./) {
+    } elsif ($c =~ m/^Stopped waiting for the request line/ or
+             $c =~ m/^No request line on socket \d received in time/ or
+             $c =~ m/^The client side of the connection on socket \d/) {
 
         # Stopped waiting for the request line. Timeout: 121.
+        # Privoxy 3.0.19 and later:
+        # No request line on socket 5 received in time. Timeout: 1.
+        # The client side of the connection on socket 5 got closed \
+        #  without sending a complete request line.
         $c =~ s@(?<=Timeout: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Waiting for \d/) {
 
