@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.75 2012/03/09 16:24:36 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.76 2012/03/09 17:55:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -8,7 +8,7 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.75 2012/03/09 16:24:36 fabianke
  *                to deserve their own file but don't really fit in
  *                any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2011 the
+ * Copyright   :  Written by and Copyright (C) 2001-2012 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -125,6 +125,42 @@ char *strdup_or_die(const char *str)
    }
 
    return(new_str);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  malloc_or_die
+ *
+ * Description :  malloc wrapper that either succeeds or causes
+ *                program termination.
+ *
+ *                Useful in situations were the buffer size is "small"
+ *                and malloc() failures couldn't be handled better
+ *                anyway. In case of debug builds, failures trigger
+ *                an assert().
+ *
+ * Parameters  :
+ *          1  :  buffer_size = Size of the space to allocate
+ *
+ * Returns     :  Pointer to newly malloc'd memory
+ *
+ *********************************************************************/
+void *malloc_or_die(size_t buffer_size)
+{
+   char *new_buf;
+
+   new_buf = malloc(buffer_size);
+
+   if (new_buf == NULL)
+   {
+      assert(new_buf != NULL);
+      log_error(LOG_LEVEL_FATAL, "Out of memory in malloc_or_die().");
+      exit(1);
+   }
+
+   return(new_buf);
 
 }
 
