@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.152 2012/06/08 15:08:33 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.153 2012/06/08 15:15:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -614,12 +614,7 @@ static struct map *parse_cgi_parameters(char *argstring)
        */
       max_segments = 1;
    }
-   vector = malloc(max_segments * sizeof(char *));
-
-   if (NULL == vector)
-   {
-      return NULL;
-   }
+   vector = malloc_or_die(max_segments * sizeof(char *));
 
    if (NULL == (cgi_params = new_map()))
    {
@@ -1186,11 +1181,7 @@ jb_err cgi_error_no_template(const struct client_state *csp,
    rsp->head_length = 0;
    rsp->is_static = 0;
 
-   rsp->body = malloc(body_size);
-   if (rsp->body == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
+   rsp->body = malloc_or_die(body_size);
    strlcpy(rsp->body, body_prefix, body_size);
    strlcat(rsp->body, template_name, body_size);
    strlcat(rsp->body, body_suffix, body_size);
@@ -1266,11 +1257,7 @@ jb_err cgi_error_unknown(const struct client_state *csp,
    rsp->is_static = 0;
    rsp->crunch_reason = INTERNAL_ERROR;
 
-   rsp->body = malloc(body_size);
-   if (rsp->body == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
+   rsp->body = malloc_or_die(body_size);
 
    snprintf(rsp->body, body_size, "%s%d%s", body_prefix, error_to_report, body_suffix);
 
@@ -1528,12 +1515,7 @@ char *compress_buffer(char *buffer, size_t *buffer_length, int compression_level
    /* Let zlib figure out the maximum length of the compressed data */
    new_length = compressBound((uLongf)*buffer_length);
 
-   compressed_buffer = malloc(new_length);
-   if (NULL == compressed_buffer)
-   {
-      log_error(LOG_LEVEL_FATAL,
-         "Out of memory allocation compression buffer.");
-   }
+   compressed_buffer = malloc_or_die(new_length);
 
    if (Z_OK != compress2((Bytef *)compressed_buffer, &new_length,
          (Bytef *)buffer, *buffer_length, compression_level))

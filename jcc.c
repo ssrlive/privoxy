@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.380 2012/07/23 12:39:42 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.381 2012/07/23 12:40:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3032,12 +3032,7 @@ int main(int argc, char **argv)
       basedir = strdup_or_die(cwd);
       /* XXX: why + 5? */
       abs_file_size = strlen(cwd) + strlen(configfile) + 5;
-      abs_file = malloc(abs_file_size);
-      if (NULL == abs_file)
-      {
-         perror("malloc failed");
-         exit(1);
-      }
+      abs_file = malloc_or_die(abs_file_size);
       strlcpy(abs_file, basedir, abs_file_size);
       strlcat(abs_file, "/", abs_file_size);
       strlcat(abs_file, configfile, abs_file_size);

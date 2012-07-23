@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.70 2012/03/09 17:55:50 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.71 2012/06/08 15:15:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -154,11 +154,7 @@ jb_err init_domain_components(struct http_request *http)
    /* save a copy of the pointers in dvec */
    size = (size_t)http->dcount * sizeof(*http->dvec);
 
-   http->dvec = (char **)malloc(size);
-   if (NULL == http->dvec)
-   {
-      return JB_ERR_MEMORY;
-   }
+   http->dvec = malloc_or_die(size);
 
    memcpy(http->dvec, vec, size);
 
@@ -861,12 +857,7 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
        */
       size = (size_t)url->dcount * sizeof(*url->dvec);
 
-      url->dvec = (char **)malloc(size);
-      if (NULL == url->dvec)
-      {
-         free_url_spec(url);
-         return JB_ERR_MEMORY;
-      }
+      url->dvec = malloc_or_die(size);
 
       memcpy(url->dvec, v, size);
    }

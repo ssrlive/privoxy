@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.74 2012/03/09 16:24:36 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.75 2012/03/09 17:55:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -765,12 +765,7 @@ jb_err edit_write_file(struct editable_file * file)
 
                /* Allocate new memory for string */
                len = strlen(cur_line->unprocessed) + (size_t)numhash;
-               if (NULL == (str = malloc(len + 1)))
-               {
-                  /* Uh oh, just trashed file! */
-                  fclose(fp);
-                  return JB_ERR_MEMORY;
-               }
+               str = malloc_or_die(len + 1);
 
                /* Copy string but quote hashes */
                src  = cur_line->unprocessed;
@@ -1061,10 +1056,7 @@ static jb_err split_line_on_equals(const char * line, char ** pname, char ** pva
    }
 
    name_len = (size_t)(name_end - line) + 1; /* Length excluding \0 */
-   if (NULL == (*pname = (char *) malloc(name_len + 1)))
-   {
-      return JB_ERR_MEMORY;
-   }
+   *pname = malloc_or_die(name_len + 1);
    strncpy(*pname, line, name_len);
    (*pname)[name_len] = '\0';
 
@@ -1326,12 +1318,7 @@ jb_err edit_parse_actions_file(struct editable_file * file)
       cur_line->type = FILE_LINE_ACTION;
 
       /* Remove {} and make copy */
-      if (NULL == (value = (char *) malloc(len + 1)))
-      {
-         /* Out of memory */
-         free_alias_list(alias_list);
-         return JB_ERR_MEMORY;
-      }
+      value = malloc_or_die(len + 1);
       strncpy(value, text, len);
       value[len] = '\0';
 
@@ -1792,11 +1779,7 @@ static jb_err get_file_name_param(struct client_state *csp,
 
    /* Append extension */
    name_size = len + strlen(suffix) + 1;
-   name = malloc(name_size);
-   if (name == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
+   name = malloc_or_die(name_size);
    strlcpy(name, param, name_size);
    strlcat(name, suffix, name_size);
 
@@ -1996,11 +1979,7 @@ static jb_err map_radio(struct map * exports,
    assert(optionname);
    assert(values);
 
-   buf = malloc(buf_size);
-   if (buf == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
+   buf = malloc_or_die(buf_size);
 
    strlcpy(buf, optionname, buf_size);
 
@@ -3240,13 +3219,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    }
 
    newtext_size = len + 2;
-   if (NULL == (newtext = malloc(newtext_size)))
-   {
-      /* Out of memory */
-      free(actiontext);
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
+   newtext = malloc_or_die(newtext_size);
    strlcpy(newtext, actiontext, newtext_size);
    free(actiontext);
    newtext[0]       = '{';
