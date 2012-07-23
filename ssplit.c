@@ -1,11 +1,11 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.18 2012/07/23 12:46:18 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.19 2012/07/23 12:46:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
  *
  * Purpose     :  A function to split a string at specified delimiters.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2012 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
