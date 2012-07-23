@@ -1,4 +1,4 @@
-const char ssplit_rcs[] = "$Id: ssplit.c,v 1.15 2012/06/08 15:16:15 fabiankeil Exp $";
+const char ssplit_rcs[] = "$Id: ssplit.c,v 1.16 2012/07/23 12:44:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.c,v $
@@ -114,7 +114,7 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
       {
          return(-1); /* overflow */
       }
-      vec[vec_count++] = (char *) str;
+      vec[vec_count++] = str;
    }
 
    while ((char_type = is_delim[(unsigned)(unsigned char)*str]) != 2)
@@ -137,7 +137,7 @@ int ssplit(char *str, const char *delim, char *vec[], size_t vec_len)
             {
                return(-1); /* overflow */
             }
-            vec[vec_count++] = (char *) str;
+            vec[vec_count++] = str;
          }
       }
       else
