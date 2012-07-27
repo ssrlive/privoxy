@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.132 2012/07/23 12:40:08 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.133 2012/07/27 17:37:00 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2041,7 +2041,15 @@ sub init_stats () {
 sub get_percentage ($$) {
     my $big = shift;
     my $small = shift;
+
+    # If small is 0 the percentage is always 0%.
+    # Make sure it works even if big is 0 as well.
+    return "0.00%" if ($small eq 0);
+
+    # Prevent division by zero.
+    # XXX: Is this still supposed to be reachable?
     return "NaN" if ($big eq 0);
+
     return sprintf("%.2f%%", $small / $big * 100);
 }
 
