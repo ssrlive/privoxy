@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.134 2012/07/27 17:37:22 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.135 2012/07/27 17:40:31 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1431,6 +1431,14 @@ sub handle_loglevel_connect ($) {
         # OK
         return '' if SUPPRESS_ACCEPTED_CONNECTIONS;
         $c = highlight_matched_host($c, '(?<=connection from ).*');
+
+    } elsif ($c =~ m/^Closing client socket/) {
+
+        # Closing client socket 5. Keep-alive: 0, Socket alive: 1. Data available: 0.
+        $c = highlight_matched_pattern($c, 'Number', '(?<=socket )\d+');
+        $c = highlight_matched_pattern($c, 'Number', '(?<=Keep-alive: )\d+');
+        $c = highlight_matched_pattern($c, 'Number', '(?<=Socket alive: )\d+');
+        $c = highlight_matched_pattern($c, 'Number', '(?<=available: )\d+');
 
     } elsif ($c =~ m/^write header to: .* failed:/) {
 
