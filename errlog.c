@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.113 2012/03/09 16:23:50 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.114 2012/03/09 17:55:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -241,6 +241,23 @@ void init_log_module(void)
 void set_debug_level(int debug_level)
 {
    debug = debug_level | LOG_LEVEL_MINIMUM;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  debug_level_is_enabled
+ *
+ * Description :  Checks if a certain debug level is enabled.
+ *
+ * Parameters  :  1: debug_level = The debug level to check.
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+int debug_level_is_enabled(int debug_level)
+{
+   return (0 != (debug & debug_level));
 }
 
 

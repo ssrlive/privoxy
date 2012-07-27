@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.26 2010/07/26 11:30:09 fabiankeil Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.27 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -66,6 +66,7 @@ extern "C" {
 
 extern void init_error_log(const char *prog_name, const char *logfname);
 extern void set_debug_level(int debuglevel);
+extern int  debug_level_is_enabled(int debuglevel);
 extern void disable_logging(void);
 extern void init_log_module(void);
 extern void show_version(const char *prog_name);
