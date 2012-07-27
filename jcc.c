@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.383 2012/07/23 12:55:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.384 2012/07/27 17:31:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -663,6 +663,34 @@ static const char *crunch_reason(const struct http_response *rsp)
 
 /*********************************************************************
  *
+ * Function    :  log_applied_actions
+ *
+ * Description :  Logs the applied actions if LOG_LEVEL_ACTIONS is
+ *                enabled.
+ *
+ * Parameters  :
+ *          1  :  actions = Current action spec to log
+ *
+ * Returns     :  Nothing.
+ *
+ *********************************************************************/
+static void log_applied_actions(const struct current_action_spec *actions)
+{
+   /*
+    * The conversion to text requires lots of memory allocations so
+    * we only do the conversion if the user is actually interested.
+    */
+   if (debug_level_is_enabled(LOG_LEVEL_ACTIONS))
+   {
+      char *actions_as_text = actions_to_line_of_text(actions);
+      log_error(LOG_LEVEL_ACTIONS, "%s", actions_as_text);
+      freez(actions_as_text);
+   }
+}
+
+
+/*********************************************************************
+ *
  * Function    :  send_crunch_response
  *
  * Description :  Delivers already prepared response for
@@ -705,6 +733,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
       status_code[3] = '\0';
 
       /* Log that the request was crunched and why. */
+      log_applied_actions(csp->action);
       log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
          csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
@@ -1602,6 +1631,7 @@ static void chat(struct client_state *csp)
       return;
    }
 
+   log_applied_actions(csp->action);
    log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
 
    if (fwd->forward_host)

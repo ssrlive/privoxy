@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.114 2012/03/09 17:55:50 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.115 2012/07/27 17:27:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -620,6 +620,9 @@ static inline const char *get_log_level_string(int loglevel)
          break;
       case LOG_LEVEL_CGI:
          log_level_string = "CGI";
+         break;
+      case LOG_LEVEL_ACTIONS:
+         log_level_string = "Actions";
          break;
       default:
          log_level_string = "Unknown log level";

@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.82 2012/06/08 15:09:06 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.83 2012/06/08 15:15:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1870,4 +1870,70 @@ char *current_action_to_html(const struct client_state *csp,
       freez(inactive);
    }
    return result;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  action_to_line_of_text
+ *
+ * Description :  Converts a action spec to a single text line
+ *                listing the enabled actions.
+ *
+ * Parameters  :
+ *          1  :  action = Current action spec to be converted
+ *
+ * Returns     :  A string. Caller must free it.
+ *                Out-of-memory errors are fatal.
+ *
+ *********************************************************************/
+char *actions_to_line_of_text(const struct current_action_spec *action)
+{
+   char buffer[200];
+   struct list_entry *lst;
+   char *active;
+   const unsigned long flags = action->flags;
+
+   active = strdup_or_die("");
+
+#define DEFINE_ACTION_BOOL(__name, __bit)               \
+   if (flags & __bit)                                   \
+   {                                                    \
+      snprintf(buffer, sizeof(buffer), "+%s ", __name); \
+      string_append(&active, buffer);                   \
+   }                                                    \
+
+#define DEFINE_ACTION_STRING(__name, __bit, __index)    \
+   if (flags & __bit)                                   \
+   {                                                    \
+      snprintf(buffer, sizeof(buffer), "+%s{%s} ",      \
+         __name, action->string[__index]);              \
+      string_append(&active, buffer);                   \
+   }                                                    \
+
+#define DEFINE_ACTION_MULTI(__name, __index)            \
+   lst = action->multi[__index]->first;                 \
+   while (lst != NULL)                                  \
+   {                                                    \
+      snprintf(buffer, sizeof(buffer), "+%s{%s} ",      \
+         __name, lst->str);                             \
+      string_append(&active, buffer);                   \
+      lst = lst->next;                                  \
+   }                                                    \
+
+#define DEFINE_ACTION_ALIAS 0 /* No aliases for output */
+
+#include "actionlist.h"
+
+#undef DEFINE_ACTION_MULTI
+#undef DEFINE_ACTION_STRING
+#undef DEFINE_ACTION_BOOL
+#undef DEFINE_ACTION_ALIAS
+
+   if (active == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory in action_to_line_of_text()");
+   }
+
+   return active;
 }

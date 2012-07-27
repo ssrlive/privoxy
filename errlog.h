@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.27 2011/09/04 11:10:56 fabiankeil Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.28 2012/07/27 17:27:47 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -58,6 +58,7 @@ extern "C" {
 #define LOG_LEVEL_CRUNCH     0x0400
 #define LOG_LEVEL_CGI        0x0800 /* CGI / templates */
 #define LOG_LEVEL_RECEIVED   0x8000
+#define LOG_LEVEL_ACTIONS   0x10000
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000
