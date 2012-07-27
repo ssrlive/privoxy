@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.249 2012/07/23 12:49:28 fabiankeil Exp $
+#  $Id: default.action.master,v 1.250 2012/07/27 17:26:13 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1100,6 +1100,9 @@ www91.intel.com/
 #MASTER# BLOCK-REFERRER: http://www.sport.pl/pilka/1,65080,10189388,Premier_League__Angielskie_media__Szaleni_United_zniszczyli.html
 # Blocked URL = http://reklamy.sfd.pl/sportpl.ashx?clickTag=http://gazeta.hit.gemius.pl/hitredir/id=ApuVHydwkYW81VSL0PZYqnXoDosBucMur1zZqGEAJa7.X7/stparam=sifgmrnlfi/url=http://reklamy.sfd.pl/sportpl_redirect.ashx
 reklamy.sfd.pl/
+#MASTER# BLOCK-REFERRER: http://lwn.net/Articles/478657/
+# Blocked URL = http://rotation.linuxnewmedia.com/www/delivery/avw.php?zoneid=26&n=aa584766
+rotation.linuxnewmedia.com/
 
 
 #----------------------------------------------------------------------------
