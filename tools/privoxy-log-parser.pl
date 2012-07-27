@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.131 2012/05/24 15:02:00 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.132 2012/07/23 12:40:08 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -914,6 +914,7 @@ sub handle_loglevel_header ($) {
           or $c =~ m/^Continue hack in da house/
           or $c =~ m/^Merged multiple header lines to:/
           or $c =~ m/^Added header: /
+          or $c =~ m/^Enlisting (?:sorted|left-over) header/
             )
     {
         # XXX: Some of these may need highlighting
@@ -962,6 +963,8 @@ sub handle_loglevel_header ($) {
         # Continue hack in da house.
         # Merged multiple header lines to: 'X-FORWARDED-PROTO: http X-HOST: 127.0.0.1'
         # Added header: Content-Encoding: deflate
+        # Enlisting sorted header User-Agent: Mozilla/5.0 (X11; SunOS i86pc; rv:10.0.3) Gecko/20100101 Firefox/10.0.3
+        # Enlisting left-over header Connection: close
 
     } elsif ($c =~ m/^scanning headers for:/) {
 
