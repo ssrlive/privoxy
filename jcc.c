@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.382 2012/07/23 12:42:53 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.383 2012/07/23 12:55:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2630,6 +2630,10 @@ static void serve(struct client_state *csp)
 
    if (csp->cfd != JB_INVALID_SOCKET)
    {
+      log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
+         "Keep-alive: %u, Socket alive: %u. Data available: %u.",
+         csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
+         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0));
       close_socket(csp->cfd);
    }
 
