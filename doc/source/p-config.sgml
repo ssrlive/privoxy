@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.80 2012/03/19 12:56:26 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.81 2012/03/19 12:56:41 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.80 2012/03/19 12:56:26 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.81 2012/03/19 12:56:41 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -3117,6 +3117,70 @@ forward-socks4, forward-socks4a and forward-socks5</title>
  </varlistentry>
 </variablelist>
 <![%config-file;[<literallayout>@@#compression-level 1</literallayout>]]>
+</sect3>
+
+
+<sect3 renderas="sect4" id="client-header-order"><title>client-header-order</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The order in which client headers are sorted before forwarding them.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>Client header names delimited by spaces or tabs</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+     By default &my-app; leaves the client headers in the order they
+     were sent by the client. Headers are modified in-place, new headers
+     are added at the end of the already existing headers.
+   </para>
+   <para>
+     The header order can be used to fingerprint client requests
+     independently of other headers like the User-Agent.
+   </para>
+   <para>
+     This directive allows to sort the headers differently to better
+     mimic a different User-Agent. Client headers will be emitted
+     in the order given, headers whose name isn't explicitly specified
+     are added at the end.
+   </para>
+   <para>
+     Note that sorting headers in an uncommon way will make fingerprinting
+     actually easier. Encrypted headers are not affected by this directive.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#client-header-order Host \
+# User-Agent \
+# Accept \
+# Accept-Language \
+# Accept-Encoding \
+# Proxy-Connection,\
+# Referer,Cookie \
+# If-Modified-Since \
+# Cache-Control \
+# Content-Length \
+# Content-Type
+</literallayout>]]>
 </sect3>
 
 

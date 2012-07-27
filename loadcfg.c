@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.128 2012/05/24 14:58:16 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.129 2012/06/08 15:15:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -123,6 +123,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_admin_address               4112573064U /* "admin-address" */
 #define hash_allow_cgi_request_crunching  258915987U /* "allow-cgi-request-crunching" */
 #define hash_buffer_limit                1881726070U /* "buffer-limit */
+#define hash_client_header_order         2701453514U /* "client-header-order" */
 #define hash_compression_level           2464423563U /* "compression-level" */
 #define hash_confdir                        1978389U /* "confdir" */
 #define hash_connection_sharing          1348841265U /* "connection-sharing" */
@@ -233,6 +234,8 @@ static void unload_configfile (void * data)
       freez(config->re_filterfile[i]);
    }
 
+   list_remove_all(config->ordered_client_headers);
+
    freez(config->admin_address);
    freez(config->proxy_info_url);
    freez(config->proxy_args);
@@ -312,6 +315,75 @@ static int parse_toggle_state(const char *name, const char *value)
    }
 
    return toggle_state;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  parse_client_header_order
+ *
+ * Description :  Parse the value of the header-order directive
+ *
+ * Parameters  :
+ *          1  :  ordered_header_list:  List to insert the ordered
+ *                                      headers into.
+ *          2  :  ordered_headers:  The ordered header names separated
+ *                                  by spaces or tabs.
+ *
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void parse_client_header_order(struct list *ordered_header_list, const char *ordered_headers)
+{
+   char *original_headers_copy;
+   char **vector;
+   int number_of_headers;
+   int i;
+
+   assert(ordered_header_list != NULL);
+   assert(ordered_headers != NULL);
+
+   if (ordered_headers == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL, "header-order used without argument");
+   }
+
+   /*
+    * XXX: This estimate is guaranteed to be high enough as we
+    *      let ssplit() ignore empty fields, but also a bit wasteful.
+    *      The same hack is used in get_last_url() so it looks like
+    *      a real solution is needed.
+    */
+   size_t max_segments = strlen(ordered_headers) / 2;
+   if (max_segments == 0)
+   {
+      max_segments = 1;
+   }
+   vector = malloc_or_die(max_segments * sizeof(char *));
+
+   original_headers_copy = strdup_or_die(ordered_headers);
+
+   number_of_headers = ssplit(original_headers_copy, "\t ", vector, max_segments);
+   if (number_of_headers == -1)
+   {
+      log_error(LOG_LEVEL_FATAL, "Failed to split ordered headers");
+   }
+
+   for (i = 0; i < number_of_headers; i++)
+   {
+      if (JB_ERR_OK != enlist(ordered_header_list, vector[i]))
+      {
+         log_error(LOG_LEVEL_FATAL,
+            "Failed to enlist ordered header: %s", vector[i]);
+      }
+   }
+
+   freez(vector);
+   freez(original_headers_copy);
+
+   return;
 
 }
 
@@ -537,6 +609,14 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_buffer_limit :
             config->buffer_limit = (size_t)(1024 * atoi(arg));
+            break;
+
+/* *************************************************************************
+ * client-header-order header-1 header-2 ... header-n
+ * *************************************************************************/
+         case hash_client_header_order:
+            list_remove_all(config->ordered_client_headers);
+            parse_client_header_order(config->ordered_client_headers, arg);
             break;
 
 /* *************************************************************************

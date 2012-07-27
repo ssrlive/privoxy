@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.176 2012/06/19 12:50:22 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.177 2012/07/23 12:43:42 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1260,6 +1260,9 @@ struct configuration_spec
 
    /** The short names of the pcre filter files. */
    const char *re_filterfile_short[MAX_AF_FILES];
+
+   /**< List of ordered client header names. */
+   struct list ordered_client_headers[1];
 
    /** The hostname to show on CGI pages, or NULL to use the real one. */
    const char *hostname;

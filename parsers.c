@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.245 2012/04/06 15:17:10 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.246 2012/07/23 12:40:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1027,6 +1027,79 @@ static jb_err scan_headers(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  enforce_header_order
+ *
+ * Description :  Enforces a given header order.
+ *
+ * Parameters  :
+ *          1  :  headers         = List of headers to order.
+ *          2  :  ordered_headers = List of ordered header names.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void enforce_header_order(struct list *headers, const struct list *ordered_headers)
+{
+   struct list_entry *sorted_header;
+   struct list new_headers[1];
+   struct list_entry *header;
+
+   init_list(new_headers);
+
+   /* The request line is always the first "header" */
+
+   assert(NULL != headers->first->str);
+   enlist(new_headers, headers->first->str);
+   freez(headers->first->str)
+
+   /* Enlist the specified headers in the given order */
+
+   for (sorted_header = ordered_headers->first; sorted_header != NULL;
+        sorted_header = sorted_header->next)
+   {
+      const size_t sorted_header_length = strlen(sorted_header->str);
+      for (header = headers->first; header != NULL; header = header->next)
+      {
+         /* Header enlisted in previous run? -> ignore */
+         if (header->str == NULL) continue;
+
+         if (0 == strncmpic(sorted_header->str, header->str, sorted_header_length)
+            && (header->str[sorted_header_length] == ':'))
+         {
+            log_error(LOG_LEVEL_HEADER, "Enlisting sorted header %s", header->str);
+            if (JB_ERR_OK != enlist(new_headers, header->str))
+            {
+               log_error(LOG_LEVEL_HEADER, "Failed to enlist %s", header->str);
+            }
+            freez(header->str);
+         }
+      }
+   }
+
+   /* Enlist the rest of the headers behind the ordered ones */
+   for (header = headers->first; header != NULL; header = header->next)
+   {
+      /* Header enlisted in previous run? -> ignore */
+      if (header->str == NULL) continue;
+
+      log_error(LOG_LEVEL_HEADER,
+         "Enlisting left-over header %s", header->str);
+      if (JB_ERR_OK != enlist(new_headers, header->str))
+      {
+         log_error(LOG_LEVEL_HEADER, "Failed to enlist %s", header->str);
+      }
+      freez(header->str);
+   }
+
+   list_remove_all(headers);
+   list_duplicate(headers, new_headers);
+   list_remove_all(new_headers);
+
+   return;
+}
+
+/*********************************************************************
+ *
  * Function    :  sed
  *
  * Description :  add, delete or modify lines in the HTTP header streams.
@@ -1089,6 +1162,11 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
    {
       err = (*f)(csp);
       f++;
+   }
+
+   if (!filter_server_headers && !list_is_empty(csp->config->ordered_client_headers))
+   {
+      enforce_header_order(csp->headers, csp->config->ordered_client_headers);
    }
 
    return err;
