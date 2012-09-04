@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.177 2012/07/23 12:43:42 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.178 2012/07/27 17:36:06 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -793,7 +793,9 @@ struct reusable_connection
 
 /**
  * Flag for csp->flags: Set if we think we can't reuse
- * the server socket.
+ * the server socket. XXX: It's also set after sabotaging
+ * pipelining attempts which is somewhat inconsistent with
+ * the name.
  */
 #define CSP_FLAG_SERVER_SOCKET_TAINTED          0x00040000U
 
