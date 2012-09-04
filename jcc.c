@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.385 2012/07/27 17:39:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.386 2012/07/27 17:41:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1454,6 +1454,12 @@ static jb_err parse_client_request(struct client_state *csp)
       /* Assume persistence until further notice */
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
    }
+
+   if (csp->http->ssl == 0)
+   {
+      csp->expected_client_content_length = get_expected_content_length(csp->headers);
+      verify_request_length(csp);
+   }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    err = sed(csp, FILTER_CLIENT_HEADERS);
@@ -1483,13 +1489,6 @@ static jb_err parse_client_request(struct client_state *csp)
 
       return JB_ERR_PARSE;
    }
-
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   if (csp->http->ssl == 0)
-   {
-      verify_request_length(csp);
-   }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    return JB_ERR_OK;
 
