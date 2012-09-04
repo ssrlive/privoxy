@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.386 2012/07/27 17:41:42 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.387 2012/09/04 08:37:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2507,6 +2507,9 @@ static void serve(struct client_state *csp)
 #endif /* def FEATURE_CONNECTION_SHARING */
    int continue_chatting = 0;
 
+   log_error(LOG_LEVEL_CONNECT, "Accepted connection from %s on socket %d",
+      csp->ip_addr_str, csp->cfd);
+
    do
    {
       unsigned int latency;
@@ -3553,12 +3556,6 @@ static void listen_loop(void)
 #endif
          freez(csp_list);
          continue;
-      }
-      else
-      {
-         log_error(LOG_LEVEL_CONNECT,
-            "accepted connection from %s on socket %d",
-            csp->ip_addr_str, csp->cfd);
       }
 
       csp->flags |= CSP_FLAG_ACTIVE;
