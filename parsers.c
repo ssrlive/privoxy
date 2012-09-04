@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.247 2012/07/27 17:36:06 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.248 2012/09/04 08:32:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4302,6 +4302,39 @@ static void create_content_length_header(unsigned long long content_length,
                                          char *header, size_t buffer_length)
 {
    snprintf(header, buffer_length, "Content-Length: %llu", content_length);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_expected_content_length
+ *
+ * Description :  Figures out the content length from a list of headers.
+ *
+ * Parameters  :
+ *          1  :  headers = List of headers
+ *
+ * Returns     :  Number of bytes to expect
+ *
+ *********************************************************************/
+unsigned long long get_expected_content_length(struct list *headers)
+{
+   const char *content_length_header;
+   unsigned long long content_length = 0;
+
+   content_length_header = get_header_value(headers, "Content-Length:");
+   if (content_length_header != NULL)
+   {
+      if (JB_ERR_OK != get_content_length(content_length_header, &content_length))
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to get the Content-Length in %s", content_length_header);
+         /* XXX: The header will be removed later on */
+         return 0;
+      }
+   }
+
+   return content_length;
 }
 
 
