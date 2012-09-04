@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.246 2012/07/23 12:40:30 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.247 2012/07/27 17:36:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1800,22 +1800,20 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
  *                Content-Length header.
  *
  * Parameters  :
- *          1  :  header = The Content-Length header.
+ *          1  :  header_value = The Content-Length header value.
  *          2  :  length = Storage to return the value.
  *
  * Returns     :  JB_ERR_OK on success, or
  *                JB_ERR_PARSE if no value is recognized.
  *
  *********************************************************************/
-static jb_err get_content_length(const char *header, unsigned long long *length)
+static jb_err get_content_length(const char *header_value, unsigned long long *length)
 {
-   assert(header[14] == ':');
-
 #ifdef _WIN32
    assert(sizeof(unsigned long long) > 4);
-   if (1 != sscanf(header+14, ": %I64u", length))
+   if (1 != sscanf(header_value, "%I64u", length))
 #else
-   if (1 != sscanf(header+14, ": %llu", length))
+   if (1 != sscanf(header_value, "%llu", length))
 #endif
    {
       return JB_ERR_PARSE;
@@ -1845,10 +1843,12 @@ static jb_err get_content_length(const char *header, unsigned long long *length)
 static jb_err client_save_content_length(struct client_state *csp, char **header)
 {
    unsigned long long content_length = 0;
+   const char *header_value;
 
    assert(*(*header+14) == ':');
 
-   if (JB_ERR_OK != get_content_length(*header, &content_length))
+   header_value = *header + 15;
+   if (JB_ERR_OK != get_content_length(header_value, &content_length))
    {
       log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
       freez(*header);
@@ -2378,10 +2378,12 @@ static jb_err server_adjust_content_length(struct client_state *csp, char **head
 static jb_err server_save_content_length(struct client_state *csp, char **header)
 {
    unsigned long long content_length = 0;
+   const char *header_value;
 
    assert(*(*header+14) == ':');
 
-   if (JB_ERR_OK != get_content_length(*header, &content_length))
+   header_value = *header + 15;
+   if (JB_ERR_OK != get_content_length(header_value, &content_length))
    {
       log_error(LOG_LEVEL_ERROR, "Crunching invalid header: %s", *header);
       freez(*header);
