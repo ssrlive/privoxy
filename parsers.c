@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.248 2012/09/04 08:32:32 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.249 2012/09/04 08:33:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1889,7 +1889,8 @@ static jb_err client_connection(struct client_state *csp, char **header)
    if (!strcmpic(*header, connection_close))
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING))
+      if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
+        && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
       {
           if (!strcmpic(csp->http->ver, "HTTP/1.1"))
           {
@@ -1921,7 +1922,8 @@ static jb_err client_connection(struct client_state *csp, char **header)
          csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       }
    }
-   else if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
+   else if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+        && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
    {
       log_error(LOG_LEVEL_HEADER,
          "Keeping the client header '%s' around. "
@@ -3712,6 +3714,7 @@ static jb_err client_connection_header_adder(struct client_state *csp)
    static const char connection_close[] = "Connection: close";
 
    if (!(csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
+     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
      && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
    {
       return JB_ERR_OK;
@@ -3719,6 +3722,7 @@ static jb_err client_connection_header_adder(struct client_state *csp)
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
+      && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
       && (csp->http->ssl == 0)
       && !strcmpic(csp->http->ver, "HTTP/1.1"))
    {
