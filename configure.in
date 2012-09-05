@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.166 2011/12/26 17:03:31 fabiankeil Exp $
+dnl $Id: configure.in,v 1.167 2011/12/31 14:43:40 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.166 $)
+AC_REVISION($Revision: 1.167 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -311,7 +311,14 @@ else
     echo "Using Cygnus (Win32 command line)"
   else
     SPECIAL_CFLAGS=
-    PTHREAD_LIB=-lpthread
+    if test $host_os = haiku; then
+      dnl Haiku's pthreads implementation is contained in its system
+      dnl library, libroot, so no additional library needs to be
+      dnl searched
+      PTHREAD_LIB=
+    else
+      PTHREAD_LIB=-lpthread
+    fi
   fi
 fi
 AC_SUBST(WIN_ONLY)
