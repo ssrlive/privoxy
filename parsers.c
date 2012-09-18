@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.250 2012/09/04 08:38:31 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.251 2012/09/04 08:39:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3714,7 +3714,6 @@ static jb_err client_connection_header_adder(struct client_state *csp)
    static const char connection_close[] = "Connection: close";
 
    if (!(csp->flags & CSP_FLAG_CLIENT_HEADER_PARSING_DONE)
-     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
      && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_HEADER_SET))
    {
       return JB_ERR_OK;
