@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.153 2012/06/08 15:15:11 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.154 2012/07/23 12:42:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1714,7 +1714,8 @@ struct http_response *finish_http_response(const struct client_state *csp, struc
       if (!err) err = enlist_unique_header(rsp->headers, "Pragma", "no-cache");
    }
 
-   if (!err && !(csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
+   if (!err && (!(csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
+              || (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)))
    {
       err = enlist_unique_header(rsp->headers, "Connection", "close");
    }
