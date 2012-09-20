@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.20 2011/12/26 17:05:40 fabiankeil Exp $
+ $Id: index.sgml,v 2.21 2012/03/18 15:41:49 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -46,16 +46,6 @@
  <![%p-index;[<subtitle>Project Index Page v&p-version;</subtitle>]]>
 
 <!-- copyright is at bottom of page -->
-
- <keywordset>
-  <keyword>privoxy</keyword> <keyword>HTTP</keyword> <keyword>proxy</keyword> <keyword>privacy</keyword>
-  <keyword>popups</keyword>  <keyword>po-ups</keyword> <keyword>HTML</keyword> <keyword>JavaScript</keyword>
-  <keyword>cleaning</keyword> <keyword>blocking</keyword> <keyword>cleaner</keyword> <keyword>blocker</keyword>
-  <keyword>filter</keyword> <keyword>proxy</keyword> <keyword>junk</keyword> <keyword>ad</keyword>
-  <keyword>advertisement</keyword> <keyword>banner</keyword> <keyword>webbugs</keyword>
-  <keyword>web-bugs</keyword> <keyword>werbung</keyword> <keyword>junkbusters</keyword>
-  <keyword>junkbuster</keyword>
- </keywordset>
 
  <abstract>
 
@@ -249,6 +239,9 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 2.21  2012/03/18 15:41:49  fabiankeil
+ Bump entities to 3.0.20 UNRELEASED
+
  Revision 2.20  2011/12/26 17:05:40  fabiankeil
  Bump entities for 3.0.19
 
