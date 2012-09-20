@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.206 2012/03/18 15:42:44 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.207 2012/03/18 15:47:54 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2011 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -142,7 +142,7 @@ PERL       = perl
 DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
-TIDY       = tidy -modify -indent -clean -wrap 78 --tidy-mark no
+TIDY       = tidy -modify -indent -wrap 78 --tidy-mark no
 
 # Program to do LF->CRLF
 #
