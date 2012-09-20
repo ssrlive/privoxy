@@ -79,6 +79,23 @@
 
 ;; HB added 03/20/02, see dbparam.dsl ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define %body-attr% 
+  ;; REFENTRY body-attr
+  ;; PURP What attributes should be hung off of BODY?
+  ;; DESC
+  ;; A list of the BODY attributes that should be generated.
+  ;; The format is a list of lists, each interior list contains the
+  ;; name and value of a BODY attribute.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  (list
+   (list "BGCOLOR" "#EEEEEE")
+   (list "TEXT" "#000000")
+   (list "LINK" "#0000FF")
+   (list "VLINK" "#840084")
+   (list "ALINK" "#0000FF")))
+
 (define %stylesheet%
   ;; REFENTRY stylesheet
   ;; PURP Name of the stylesheet to use
@@ -307,6 +324,23 @@
   3)
 
 ;; HB added 03/20/02, see dbparam.dsl ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define %body-attr% 
+  ;; REFENTRY body-attr
+  ;; PURP What attributes should be hung off of BODY?
+  ;; DESC
+  ;; A list of the the BODY attributes that should be generated.
+  ;; The format is a list of lists, each interior list contains the
+  ;; name and value of a BODY attribute.
+  ;; /DESC
+  ;; AUTHOR N/A
+  ;; /REFENTRY
+  (list
+   (list "BGCOLOR" "#EEEEEE")
+   (list "TEXT" "#000000")
+   (list "LINK" "#0000FF")
+   (list "VLINK" "#840084")
+   (list "ALINK" "#0000FF")))
 
 (define %stylesheet%
   ;; REFENTRY stylesheet
