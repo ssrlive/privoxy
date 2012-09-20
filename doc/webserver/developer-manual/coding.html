@@ -12,21 +12,10 @@
   <link rel="NEXT" title="Testing Guidelines" href="testing.html">
   <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <style type="text/css">
-body {
-  background-color: #EEEEEE;
-  color: #000000;
-  }
-  :link { color: #0000FF }
-  :visited { color: #840084 }
-  :active { color: #0000FF }
-  table.c3 {background-color: #E0E0E0}
-  span.c2 {font-style: italic}
-  hr.c1 {text-align: left}
-  </style>
 </head>
 
-<body class="SECT1">
+<body class="SECT1" bgcolor="#EEEEEE" text="#000000" link="#0000FF" vlink=
+"#840084" alink="#0000FF">
   <div class="NAVHEADER">
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
@@ -44,7 +33,7 @@ body {
         accesskey="N">Next</a></td>
       </tr>
     </table>
-    <hr class="c1" width="100%">
+    <hr align="left" width="100%">
   </div>
 
   <div class="SECT1">
@@ -73,7 +62,8 @@ body {
         <h3 class="SECT3"><a name="S3" id="S3">4.2.1. Comment, Comment,
         Comment</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Comment as much as possible without commenting the obvious. For
         example do not comment "variable_a is equal to variable_b". Instead
@@ -88,9 +78,9 @@ body {
         comment describes something different than what the code is doing
         then maybe a programming error is occurring.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -119,7 +109,8 @@ is actually being done.
         <h3 class="SECT3"><a name="S4" id="S4">4.2.2. Use blocks for
         comments</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Comments can help or they can clutter. They help when they are
         differentiated from the code they describe. One line comments do not
@@ -127,9 +118,9 @@ is actually being done.
         identifiers do, by surrounding the code with a clear, definable
         pattern.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -158,7 +149,8 @@ if ( this_variable == that_variable ) /* this may not either */
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Exception:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Exception:</i></span></p>
 
         <p>If you are trying to add a small logic comment and do not wish to
         "disrupt" the flow of the code, feel free to use a 1 line comment
@@ -169,7 +161,8 @@ if ( this_variable == that_variable ) /* this may not either */
         <h3 class="SECT3"><a name="S5" id="S5">4.2.3. Keep Comments on their
         own line</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>It goes back to the question of readability. If the comment is on
         the same line as the code it will be harder to read than the comment
@@ -179,9 +172,9 @@ if ( this_variable == that_variable ) /* this may not either */
         freely and often: during the definition of variables, at the end of
         closing braces, when used to comment parameters.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -229,7 +222,8 @@ short do_something_very_important(
         <h3 class="SECT3"><a name="S6" id="S6">4.2.4. Comment each logical
         step</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Logical steps should be commented to help others follow the intent
         of the written code and comments will make the code more
@@ -246,7 +240,8 @@ short do_something_very_important(
         <h3 class="SECT3"><a name="S7" id="S7">4.2.5. Comment All Functions
         Thoroughly</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>A reader of the code should be able to look at the comments just
         prior to the beginning of a function and discern the reason for its
@@ -265,7 +260,8 @@ short do_something_very_important(
         <h3 class="SECT3"><a name="S8" id="S8">4.2.6. Comment at the end of
         braces if the content is more than one screen length</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Each closing brace should be followed on the same line by a
         comment that describes the origination of the brace if the original
@@ -279,9 +275,9 @@ short do_something_very_important(
         <p>use following a closing brace: } /* -END- if() or while () or
         etc... */</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -312,7 +308,8 @@ if ( 1 == X )
         <h3 class="SECT3"><a name="S10" id="S10">4.3.1. Variable
         Names</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Use all lowercase, and separate words via an underscore ('_'). Do
         not start an identifier with an underscore. (ANSI C reserves these
@@ -320,9 +317,9 @@ if ( 1 == X )
         which are reserved in ANSI C++. (E.g. template, class, true, false,
         ...). This is in case we ever decide to port Privoxy to C++.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -332,9 +329,10 @@ int ms_iis5_hack = 0;
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -349,7 +347,8 @@ int msiis5hack = 0; int msIis5Hack = 0;
         <h3 class="SECT3"><a name="S11" id="S11">4.3.2. Function
         Names</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Use all lowercase, and separate words via an underscore ('_'). Do
         not start an identifier with an underscore. (ANSI C reserves these
@@ -357,9 +356,9 @@ int msiis5hack = 0; int msIis5Hack = 0;
         which are reserved in ANSI C++. (E.g. template, class, true, false,
         ...). This is in case we ever decide to port Privoxy to C++.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -369,9 +368,10 @@ int load_some_file( struct client_state *csp )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -387,15 +387,16 @@ int loadSomeFile( struct client_state *csp )
         <h3 class="SECT3"><a name="S12" id="S12">4.3.3. Header file
         prototypes</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Use a descriptive parameter name in the function prototype in
         header files. Use the same parameter name in the header file that you
         use in the c file.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -406,9 +407,10 @@ int loadSomeFile( struct client_state *csp )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -425,15 +427,16 @@ int loadSomeFile( struct client_state *csp )
         <h3 class="SECT3"><a name="S13" id="S13">4.3.4. Enumerations, and
         #defines</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Use all capital letters, with underscores between words. Do not
         start an identifier with an underscore. (ANSI C reserves these for
         use by the compiler and system headers.)</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -444,14 +447,14 @@ int loadSomeFile( struct client_state *csp )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> We have a standard
-        naming scheme for #defines that toggle a feature in the preprocessor:
-        FEATURE_&gt;, where &gt; is a short (preferably 1 or 2 word)
-        description.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> We
+        have a standard naming scheme for #defines that toggle a feature in
+        the preprocessor: FEATURE_&gt;, where &gt; is a short (preferably 1
+        or 2 word) description.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -469,7 +472,8 @@ int loadSomeFile( struct client_state *csp )
       <div class="SECT3">
         <h3 class="SECT3"><a name="S14" id="S14">4.3.5. Constants</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Spell common words out entirely (do not remove vowels).</p>
 
@@ -479,9 +483,9 @@ int loadSomeFile( struct client_state *csp )
         <p>Use underscore (_) to separate adjacent acronyms and
         abbreviations. Never terminate a name with an underscore.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -491,9 +495,10 @@ int loadSomeFile( struct client_state *csp )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -516,16 +521,17 @@ int loadSomeFile( struct client_state *csp )
         <h3 class="SECT3"><a name="S16" id="S16">4.4.1. Put braces on a line
         by themselves.</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>The brace needs to be on a line all by itself, not at the end of
         the statement. Curly braces should line up with the construct that
         they're associated with. This practice makes it easier to identify
         the opening and closing braces for a block.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -538,7 +544,8 @@ if ( this == that )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
         <p>if ( this == that ) { ... }</p>
 
@@ -546,18 +553,19 @@ if ( this == that )
 
         <p>if ( this == that ) { ... }</p>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> In the special
-        case that the if-statement is inside a loop, and it is trivial, i.e.
-        it tests for a condition that is obvious from the purpose of the
-        block, one-liners as above may optically preserve the loop structure
-        and make it easier to read.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> In the
+        special case that the if-statement is inside a loop, and it is
+        trivial, i.e. it tests for a condition that is obvious from the
+        purpose of the block, one-liners as above may optically preserve the
+        loop structure and make it easier to read.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
         developer-discretion.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example exception:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example
+        exception:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -578,15 +586,16 @@ while ( more lines are read )
         <h3 class="SECT3"><a name="S17" id="S17">4.4.2. ALL control
         statements should have a block</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Using braces to make a block will make your code more readable and
         less prone to error. All control statements should have a block
         defined.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -600,7 +609,8 @@ if ( this == that )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
         <p>if ( this == that ) do_something(); do_something_else();</p>
 
@@ -608,20 +618,20 @@ if ( this == that )
 
         <p>if ( this == that ) do_something();</p>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> The first example
-        in "Instead of" will execute in a manner other than that which the
-        developer desired (per indentation). Using code braces would have
-        prevented this "feature". The "explanation" and "exception" from the
-        point above also applies.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> The
+        first example in "Instead of" will execute in a manner other than
+        that which the developer desired (per indentation). Using code braces
+        would have prevented this "feature". The "explanation" and
+        "exception" from the point above also applies.</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S18" id="S18">4.4.3. Do not
         belabor/blow-up boolean expressions</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -631,30 +641,32 @@ structure-&gt;flag = ( condition );
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
         <p>if ( condition ) { structure-&gt;flag = 1; } else {
         structure-&gt;flag = 0; }</p>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> The former is
-        readable and concise. The later is wordy and inefficient. Please
-        assume that any developer new to the project has at least a "good"
-        knowledge of C/C++. (Hope I do not offend by that last comment ...
-        8-)</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> The
+        former is readable and concise. The later is wordy and inefficient.
+        Please assume that any developer new to the project has at least a
+        "good" knowledge of C/C++. (Hope I do not offend by that last comment
+        ... 8-)</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S19" id="S19">4.4.4. Use white space
         freely because it is free</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Make it readable. The notable exception to using white space
         freely is listed in the next guideline.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -676,7 +688,8 @@ first_value = old_value + ( ( some_value - another_value ) - whatever )
         <h3 class="SECT3"><a name="S20" id="S20">4.4.5. Don't use white space
         around structure operators</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>- structure pointer operator ( "-&gt;" ) - member operator ( "." )
         - functions and parentheses</p>
@@ -685,9 +698,9 @@ first_value = old_value + ( ( some_value - another_value ) - whatever )
         function parentheses next to names. With spaces, the connection
         between the object and variable/function name is not as clear.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -699,17 +712,17 @@ function_name();
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span> a_struct
-        -&gt; a_member; a_struct . a_member; function_name ();</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead of:</i></span>
+        a_struct -&gt; a_member; a_struct . a_member; function_name ();</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S21" id="S21">4.4.6. Make the last brace
         of a function stand out</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -729,20 +742,21 @@ int function2( ... )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
         <p>int function1( ... ) { ...code... return( ret_code ); } int
         function2( ... ) { }</p>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> Use 1 blank line
-        before the closing brace and 2 lines afterward. This makes the end of
-        function standout to the most casual viewer. Although function
-        comments help separate functions, this is still a good coding
-        practice. In fact, I follow these rules when using blocks in "for",
-        "while", "do" loops, and long if {} statements too. After all
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> Use 1
+        blank line before the closing brace and 2 lines afterward. This makes
+        the end of function standout to the most casual viewer. Although
+        function comments help separate functions, this is still a good
+        coding practice. In fact, I follow these rules when using blocks in
+        "for", "while", "do" loops, and long if {} statements too. After all
         whitespace is free!</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
         developer-discretion on the number of blank lines. Enforced is the
         end of function comments.</p>
       </div>
@@ -751,16 +765,17 @@ int function2( ... )
         <h3 class="SECT3"><a name="S22" id="S22">4.4.7. Use 3 character
         indentions</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>If some use 8 character TABs and some use 3 character TABs, the
         code can look *very* ragged. So use 3 character indentions only. If
         you like to use TABs, pass your code through a filter such as "expand
         -t3" before checking in your code.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -798,15 +813,16 @@ int function1( ... )
         <h3 class="SECT3"><a name="S24" id="S24">4.5.1. Initialize all
         variables</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Do not assume that the variables declared will not be used until
         after they have been assigned a value somewhere else in the code.
         Remove the chance of accidentally using an unassigned variable.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -818,12 +834,12 @@ struct *ptr = NULL;
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> It is much easier
-        to debug a SIGSEGV if the message says you are trying to access
-        memory address 00000000 and not 129FA012; or array_ptr[20] causes a
-        SIGSEV vs. array_ptr[0].</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> It is
+        much easier to debug a SIGSEGV if the message says you are trying to
+        access memory address 00000000 and not 129FA012; or array_ptr[20]
+        causes a SIGSEV vs. array_ptr[0].</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
         developer-discretion if and only if the variable is assigned a value
         "shortly after" declaration.</p>
       </div>
@@ -836,14 +852,15 @@ struct *ptr = NULL;
         <h3 class="SECT3"><a name="S26" id="S26">4.6.1. Name functions that
         return a boolean as a question.</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Value should be phrased as a question that would logically be
         answered as a true or false statement</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -860,7 +877,8 @@ is_web_page_blank();
         <h3 class="SECT3"><a name="S27" id="S27">4.6.2. Always specify a
         return type for a function.</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>The default return for a function is an int. To avoid ambiguity,
         create a return for a function when the return has a purpose, and
@@ -872,14 +890,15 @@ is_web_page_blank();
         <h3 class="SECT3"><a name="S28" id="S28">4.6.3. Minimize function
         calls when iterating by using variables</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>It is easy to write the following code, and a clear argument can
         be made that the code is easy to understand:</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -892,22 +911,22 @@ for ( size_t cnt = 0; cnt &lt; block_list_length(); cnt++ )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> Unfortunately,
-        this makes a function call for each and every iteration. This
-        increases the overhead in the program, because the compiler has to
-        look up the function each time, call it, and return a value.
-        Depending on what occurs in the block_list_length() call, it might
-        even be creating and destroying structures with each iteration, even
-        though in each case it is comparing "cnt" to the same value, over and
-        over. Remember too - even a call to block_list_length() is a function
-        call, with the same overhead.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span>
+        Unfortunately, this makes a function call for each and every
+        iteration. This increases the overhead in the program, because the
+        compiler has to look up the function each time, call it, and return a
+        value. Depending on what occurs in the block_list_length() call, it
+        might even be creating and destroying structures with each iteration,
+        even though in each case it is comparing "cnt" to the same value,
+        over and over. Remember too - even a call to block_list_length() is a
+        function call, with the same overhead.</p>
 
         <p>Instead of using a function call during the iterations, assign the
         value to a variable, and evaluate using the variable.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -922,16 +941,18 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Exceptions:</span> if the value
-        of block_list_length() *may* change or could *potentially* change,
-        then you must code the function call in the for/while loop.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Exceptions:</i></span>
+        if the value of block_list_length() *may* change or could
+        *potentially* change, then you must code the function call in the
+        for/while loop.</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S29" id="S29">4.6.4. Pass and Return by
         Const Reference</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>This allows a developer to define a const pointer and call your
         function. If your function does not have the const keyword, we may
@@ -949,7 +970,8 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
         <h3 class="SECT3"><a name="S30" id="S30">4.6.5. Pass and Return by
         Value</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Most structures cannot fit onto a normal stack entry (i.e. they
         are not 4 bytes or less). Aka, a function declaration like: int
@@ -964,7 +986,8 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
         <h3 class="SECT3"><a name="S31" id="S31">4.6.6. Names of include
         files</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Your include statements should contain the file name without a
         path. The path should be listed in the Makefile, using -I as
@@ -973,9 +996,9 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
         path to distinguish their header files from system or other header
         files.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -986,9 +1009,10 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Exception:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Exception:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -999,16 +1023,17 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> Please! do not add
-        "-I." to the Makefile without a _very_ good reason. This duplicates
-        the #include "file.h" behavior.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span>
+        Please! do not add "-I." to the Makefile without a _very_ good
+        reason. This duplicates the #include "file.h" behavior.</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S32" id="S32">4.6.7. Provide multiple
         inclusion protection</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Prevents compiler and linker errors resulting from redefinition of
         items.</p>
@@ -1017,9 +1042,9 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
         multiple inclusions of the file. Of course, replace PROJECT_H with
         your file name, with "." Changed to "_", and make it uppercase.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1037,15 +1062,16 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
         <h3 class="SECT3"><a name="S33" id="S33">4.6.8. Use `extern "C"` when
         appropriate</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>If our headers are included from C++, they must declare our
         functions as `extern "C"`. This has no cost in C, but increases the
         potential re-usability of our code.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1069,14 +1095,15 @@ extern "C"
         <h3 class="SECT3"><a name="S34" id="S34">4.6.9. Where Possible, Use
         Forward Struct Declaration Instead of Includes</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Useful in headers that include pointers to other struct's.
         Modifications to excess header files may cause needless compiles.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1090,13 +1117,13 @@ extern file_list *xyz;
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> If you declare
-        "file_list xyz;" (without the pointer), then including the proper
-        header file is necessary. If you only want to prototype a pointer,
-        however, the header file is unnecessary.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> If you
+        declare "file_list xyz;" (without the pointer), then including the
+        proper header file is necessary. If you only want to prototype a
+        pointer, however, the header file is unnecessary.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span> Use with
-        discretion.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span> Use
+        with discretion.</p>
       </div>
     </div>
 
@@ -1108,7 +1135,8 @@ extern file_list *xyz;
         <h3 class="SECT3"><a name="S36" id="S36">4.7.1. Turn on
         warnings</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation</i></span></p>
 
         <p>Compiler warnings are meant to help you find bugs. You should turn
         on as many as possible. With GCC, the switch is "-Wall". Try and fix
@@ -1119,16 +1147,17 @@ extern file_list *xyz;
         <h3 class="SECT3"><a name="S37" id="S37">4.7.2. Provide a default
         case for all switch statements</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>What you think is guaranteed is never really guaranteed. The value
         that you don't think you need to check is the one that someday will
         be passed. So, to protect yourself from the unknown, always have a
         default step in a switch statement.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1153,27 +1182,28 @@ switch( hash_string( cmd ) )
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> If you already
-        have a default condition, you are obviously exempt from this point.
-        Of note, most of the WIN32 code calls `DefWindowProc' after the
-        switch statement. This API call *should* be included in a default
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> If you
+        already have a default condition, you are obviously exempt from this
+        point. Of note, most of the WIN32 code calls `DefWindowProc' after
+        the switch statement. This API call *should* be included in a default
         statement.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Another Note:</span> This is
-        not so much a readability issue as a robust programming issue. The
-        "anomaly code goes here" may be no more than a print to the STDERR
-        stream (as in load_config). Or it may really be an abort
-        condition.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Another
+        Note:</i></span> This is not so much a readability issue as a robust
+        programming issue. The "anomaly code goes here" may be no more than a
+        print to the STDERR stream (as in load_config). Or it may really be
+        an abort condition.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span> Programmer
-        discretion is advised.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
+        Programmer discretion is advised.</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S38" id="S38">4.7.3. Try to avoid falling
         through cases in a switch statement.</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>In general, you will want to have a 'break' statement within each
         'case' of a switch statement. This allows for the code to be more
@@ -1196,23 +1226,25 @@ switch( hash_string( cmd ) )
         <h3 class="SECT3"><a name="S39" id="S39">4.7.4. Use 'long' or 'short'
         Instead of 'int'</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>On 32-bit platforms, int usually has the range of long. On 16-bit
         platforms, int has the range of short.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span> open-to-debate.
-        In the case of most FSF projects (including X/GNU-Emacs), there are
-        typedefs to int4, int8, int16, (or equivalence ... I forget the exact
-        typedefs now). Should we add these to IJB now that we have a
-        "configure" script?</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
+        open-to-debate. In the case of most FSF projects (including
+        X/GNU-Emacs), there are typedefs to int4, int8, int16, (or
+        equivalence ... I forget the exact typedefs now). Should we add these
+        to IJB now that we have a "configure" script?</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S40" id="S40">4.7.5. Don't mix size_t and
         other types</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>The type of size_t varies across platforms. Do not make
         assumptions about whether it is signed or unsigned, or about how long
@@ -1225,14 +1257,15 @@ switch( hash_string( cmd ) )
         <h3 class="SECT3"><a name="S41" id="S41">4.7.6. Declare each variable
         and struct on its own line.</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>It can be tempting to declare a series of variables all on one
         line. Don't.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1244,22 +1277,23 @@ long c = 0;
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Instead of:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Instead
+        of:</i></span></p>
 
         <p>long a, b, c;</p>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span> - there is
-        more room for comments on the individual variables - easier to add
-        new variables without messing up the original ones - when searching
-        on a variable to find its type, there is less clutter to "visually"
-        eliminate</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Explanation:</i></span>
+        - there is more room for comments on the individual variables -
+        easier to add new variables without messing up the original ones -
+        when searching on a variable to find its type, there is less clutter
+        to "visually" eliminate</p>
 
-        <p><span class="emphasis EMPHASIS c2">Exceptions:</span> when you
-        want to declare a bunch of loop variables or other trivial variables;
-        feel free to declare them on one line. You should, although, provide
-        a good comment on their functions.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Exceptions:</i></span>
+        when you want to declare a bunch of loop variables or other trivial
+        variables; feel free to declare them on one line. You should,
+        although, provide a good comment on their functions.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
         developer-discretion.</p>
       </div>
 
@@ -1267,7 +1301,8 @@ long c = 0;
         <h3 class="SECT3"><a name="S42" id="S42">4.7.7. Use malloc/zalloc
         sparingly</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>Create a local struct (on the stack) if the variable will live and
         die within the context of one function call.</p>
@@ -1275,9 +1310,9 @@ long c = 0;
         <p>Only "malloc" a struct (on the heap) if the variable's life will
         extend beyond the context of one function call.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1293,7 +1328,8 @@ list, then it should definitely be allocated via `malloc'.
         <h3 class="SECT3"><a name="S43" id="S43">4.7.8. The Programmer Who
         Uses 'malloc' is Responsible for Ensuring 'free'</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>If you have to "malloc" an instance, you are responsible for
         insuring that the instance is `free'd, even if the deallocation event
@@ -1303,9 +1339,9 @@ list, then it should definitely be allocated via `malloc'.
         You may need to offer a free/unload/destructor type function to
         accommodate this.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Example:</span></p>
+        <p><span class="emphasis"><i class="EMPHASIS">Example:</i></span></p>
 
-        <table class="c3" border="0" width="100%">
+        <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
@@ -1316,12 +1352,13 @@ static void unload_re_filterfile( void *f ) { ... }
           </tr>
         </table>
 
-        <p><span class="emphasis EMPHASIS c2">Exceptions:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Exceptions:</i></span></p>
 
         <p>The developer cannot be expected to provide `free'ing functions
         for C run-time library functions ... such as `strdup'.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Status:</span>
+        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
         developer-discretion. The "main" use of this standard is for
         allocating and freeing data structures (complex or nested).</p>
       </div>
@@ -1330,23 +1367,25 @@ static void unload_re_filterfile( void *f ) { ... }
         <h3 class="SECT3"><a name="S44" id="S44">4.7.9. Add loaders to the
         `file_list' structure and in order</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>I have ordered all of the "blocker" file code to be in alpha
         order. It is easier to add/read new blockers when you expect a
         certain order.</p>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> It may appear that
-        the alpha order is broken in places by POPUP tests coming before PCRS
-        tests. But since POPUPs can also be referred to as KILLPOPUPs, it is
-        clear that it should come first.</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> It may
+        appear that the alpha order is broken in places by POPUP tests coming
+        before PCRS tests. But since POPUPs can also be referred to as
+        KILLPOPUPs, it is clear that it should come first.</p>
       </div>
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="S45" id="S45">4.7.10. "Uncertain" new code
         and/or changes to existing code, use FIXME or XXX</a></h3>
 
-        <p><span class="emphasis EMPHASIS c2">Explanation:</span></p>
+        <p><span class="emphasis"><i class=
+        "EMPHASIS">Explanation:</i></span></p>
 
         <p>If you have enough confidence in new code or confidence in your
         changes, but are not *quite* sure of the repercussions, add this:</p>
@@ -1365,10 +1404,10 @@ static void unload_re_filterfile( void *f ) { ... }
         <p>/* FIXME: new code that *may* break something else... */ ...new
         code here...</p>
 
-        <p><span class="emphasis EMPHASIS c2">Note:</span> If you make it
-        clear that this may or may not be a "good thing (tm)", it will be
-        easier to identify and include in the project (or conversely exclude
-        from the project).</p>
+        <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> If you
+        make it clear that this may or may not be a "good thing (tm)", it
+        will be easier to identify and include in the project (or conversely
+        exclude from the project).</p>
       </div>
     </div>
 
@@ -1376,10 +1415,10 @@ static void unload_re_filterfile( void *f ) { ... }
       <h2 class="SECT2"><a name="S46" id="S46">4.8. Addendum: Template for
       files and function comment blocks:</a></h2>
 
-      <p><span class="emphasis EMPHASIS c2">Example for file
-      comments:</span></p>
+      <p><span class="emphasis"><i class="EMPHASIS">Example for file
+      comments:</i></span></p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="PROGRAMLISTING">
@@ -1425,21 +1464,22 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
         </tr>
       </table>
 
-      <p><span class="emphasis EMPHASIS c2">Note:</span> This declares the
-      rcs variables that should be added to the "show-proxy-args" page. If
-      this is a brand new creation by you, you are free to change the
-      "Copyright" section to represent the rights you wish to maintain.</p>
+      <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> This
+      declares the rcs variables that should be added to the
+      "show-proxy-args" page. If this is a brand new creation by you, you are
+      free to change the "Copyright" section to represent the rights you wish
+      to maintain.</p>
 
-      <p><span class="emphasis EMPHASIS c2">Note:</span> The formfeed
-      character that is present right after the comment flower box is handy
-      for (X|GNU)Emacs users to skip the verbiage and get to the heart of the
-      code (via `forward-page' and `backward-page'). Please include it if you
-      can.</p>
+      <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> The
+      formfeed character that is present right after the comment flower box
+      is handy for (X|GNU)Emacs users to skip the verbiage and get to the
+      heart of the code (via `forward-page' and `backward-page'). Please
+      include it if you can.</p>
 
-      <p><span class="emphasis EMPHASIS c2">Example for file header
-      comments:</span></p>
+      <p><span class="emphasis"><i class="EMPHASIS">Example for file header
+      comments:</i></span></p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="PROGRAMLISTING">
@@ -1507,10 +1547,10 @@ extern const char FILENAME_h_rcs[];
         </tr>
       </table>
 
-      <p><span class="emphasis EMPHASIS c2">Example for function
-      comments:</span></p>
+      <p><span class="emphasis"><i class="EMPHASIS">Example for function
+      comments:</i></span></p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="PROGRAMLISTING">
@@ -1538,14 +1578,14 @@ int FUNCTION_NAME( void *param1, const char *x )
         </tr>
       </table>
 
-      <p><span class="emphasis EMPHASIS c2">Note:</span> If we all follow
-      this practice, we should be able to parse our code to create a
-      "self-documenting" web page.</p>
+      <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> If we
+      all follow this practice, we should be able to parse our code to create
+      a "self-documenting" web page.</p>
     </div>
   </div>
 
   <div class="NAVFOOTER">
-    <hr class="c1" width="100%">
+    <hr align="left" width="100%">
 
     <table summary="Footer navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">

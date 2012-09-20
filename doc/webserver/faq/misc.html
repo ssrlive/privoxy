@@ -12,21 +12,10 @@
   <link rel="NEXT" title="Troubleshooting" href="trouble.html">
   <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <style type="text/css">
-body {
-  background-color: #EEEEEE;
-  color: #000000;
-  }
-  :link { color: #0000FF }
-  :visited { color: #840084 }
-  :active { color: #0000FF }
-  table.c3 {background-color: #E0E0E0}
-  span.c2 {font-style: italic}
-  hr.c1 {text-align: left}
-  </style>
 </head>
 
-<body class="SECT1">
+<body class="SECT1" bgcolor="#EEEEEE" text="#000000" link="#0000FF" vlink=
+"#840084" alink="#0000FF">
   <div class="NAVHEADER">
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
@@ -45,7 +34,7 @@ body {
         accesskey="N">Next</a></td>
       </tr>
     </table>
-    <hr class="c1" width="100%">
+    <hr align="left" width="100%">
   </div>
 
   <div class="SECT1">
@@ -140,8 +129,8 @@ body {
       you get a page saying <span class="QUOTE">"Privoxy is not
       working"</span> instead, then your browser didn't use <span class=
       "APPLICATION">Privoxy</span> for the request, hence it could not be
-      intercepted, and you have accessed the <span class=
-      "emphasis EMPHASIS c2">real</span> web site at config.privoxy.org.</p>
+      intercepted, and you have accessed the <span class="emphasis"><i class=
+      "EMPHASIS">real</i></span> web site at config.privoxy.org.</p>
     </div>
 
     <div class="SECT2">
@@ -223,12 +212,12 @@ body {
       assume that everything you do on the Web can be traced back to you.</p>
 
       <p><span class="APPLICATION">Privoxy</span> can remove various
-      information about you, and allows <span class=
-      "emphasis EMPHASIS c2">you</span> more freedom to decide which sites
-      you can trust, and what details you want to reveal. But it neither
-      hides your IP address, nor can it guarantee that the rest of the system
-      behaves correctly. There are several possibilities how a web sites can
-      find out who you are, even if you are using a strict <span class=
+      information about you, and allows <span class="emphasis"><i class=
+      "EMPHASIS">you</i></span> more freedom to decide which sites you can
+      trust, and what details you want to reveal. But it neither hides your
+      IP address, nor can it guarantee that the rest of the system behaves
+      correctly. There are several possibilities how a web sites can find out
+      who you are, even if you are using a strict <span class=
       "APPLICATION">Privoxy</span> configuration and chained it with
       <span class="APPLICATION">Tor</span>.</p>
 
@@ -313,7 +302,7 @@ body {
       "../user-manual/config.html#FORWARDING" target="_top">forwarding
       section</a> and uncomment the line:</p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="SCREEN">
@@ -328,7 +317,7 @@ body {
       want to uncomment the following forward rules, to make sure your local
       network is still reachable through Privoxy:</p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="SCREEN">
@@ -351,7 +340,7 @@ body {
       network by using their names, you will need additional exceptions that
       look like this:</p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="SCREEN">
@@ -407,9 +396,9 @@ body {
       server. The results of which could inadvertently cause pages to load
       incorrectly, partially, or even not at all. And there may be no obvious
       clues as to just what went wrong, or why. Nowhere will there be a
-      message that says <span class="QUOTE">"<span class=
-      "emphasis EMPHASIS c2">Turn off <tt class="LITERAL">fast-redirects</tt>
-      or else!</span> "</span></p>
+      message that says <span class="QUOTE">"<span class="emphasis"><i class=
+      "EMPHASIS">Turn off <tt class="LITERAL">fast-redirects</tt> or
+      else!</i></span> "</span></p>
 
       <p>Similar thoughts apply to modifying JavaScript, and, to a lesser
       degree, HTML elements.</p>
@@ -443,7 +432,7 @@ body {
       they can. <span class="APPLICATION">Privoxy</span> can help protect
       your privacy, but can't protect your system from intrusion attempts. It
       is, of course, perfectly possible to use <span class=
-      "emphasis EMPHASIS c2">both</span>.</p>
+      "emphasis"><i class="EMPHASIS">both</i></span>.</p>
     </div>
 
     <div class="SECT2">
@@ -453,8 +442,9 @@ body {
       <p>It is technically possible to eliminate banners and ads in a way
       that frees their allocated page space. This could easily be done by
       blocking with <span class="APPLICATION">Privoxy's</span> filters, and
-      eliminating the <span class="emphasis EMPHASIS c2">entire</span> image
-      references from the HTML page source.</p>
+      eliminating the <span class="emphasis"><i class=
+      "EMPHASIS">entire</i></span> image references from the HTML page
+      source.</p>
 
       <p>But, this would consume considerably more CPU resources (IOW, slow
       things down), would likely destroy the layout of some web pages which
@@ -479,9 +469,10 @@ body {
 
       <p>Since secure HTTP connections are encrypted SSL sessions between
       your browser and the secure site, and are meant to be reliably
-      <span class="emphasis EMPHASIS c2">secure</span>, there is little that
-      <span class="APPLICATION">Privoxy</span> can do but hand the raw
-      gibberish data though from one end to the other unprocessed.</p>
+      <span class="emphasis"><i class="EMPHASIS">secure</i></span>, there is
+      little that <span class="APPLICATION">Privoxy</span> can do but hand
+      the raw gibberish data though from one end to the other
+      unprocessed.</p>
 
       <p>The only exception to this is blocking by host patterns, as the
       client needs to tell <span class="APPLICATION">Privoxy</span> the name
@@ -581,12 +572,12 @@ body {
 
       <p>A <span class="QUOTE">"crunch"</span> simply means <span class=
       "APPLICATION">Privoxy</span> intercepted <span class=
-      "emphasis EMPHASIS c2">something</span>, nothing more. Often this is
-      indeed ads or banners, but <span class="APPLICATION">Privoxy</span>
-      uses the same mechanism for trapping requests for its own internal
-      pages. For instance, a request for <span class=
-      "APPLICATION">Privoxy's</span> configuration page at: <a href=
-      "http://config.privoxy.org" target=
+      "emphasis"><i class="EMPHASIS">something</i></span>, nothing more.
+      Often this is indeed ads or banners, but <span class=
+      "APPLICATION">Privoxy</span> uses the same mechanism for trapping
+      requests for its own internal pages. For instance, a request for
+      <span class="APPLICATION">Privoxy's</span> configuration page at:
+      <a href="http://config.privoxy.org" target=
       "_top">http://config.privoxy.org</a>, is intercepted (i.e. it does not
       go out to the 'net), and the familiar CGI configuration is returned to
       the browser, and the log consequently will show a <span class=
@@ -616,8 +607,8 @@ body {
       <span class="QUOTE">"good"</span> content that we do want. <span class=
       "APPLICATION">Privoxy</span> is blind to the differences, and can only
       distinguish <span class="QUOTE">"good from bad"</span> by the
-      configuration parameters <span class="emphasis EMPHASIS c2">we</span>
-      give it.</p>
+      configuration parameters <span class="emphasis"><i class=
+      "EMPHASIS">we</i></span> give it.</p>
 
       <p><span class="APPLICATION">Privoxy</span> knows the differences in
       files according to the <span class="QUOTE">"Content Type"</span> as
@@ -640,11 +631,11 @@ body {
 
       <p>In short, filtering is <span class="QUOTE">"ON"</span> if a) the
       content type as reported by the webserver is appropriate <span class=
-      "emphasis EMPHASIS c2">and</span> b) the configuration allows it (or at
-      least does not disallow it). That's it. There is no magic cookie
-      anywhere to say this is <span class="QUOTE">"good"</span> and this is
-      <span class="QUOTE">"bad"</span>. It's the configuration that lets it
-      all happen or not.</p>
+      "emphasis"><i class="EMPHASIS">and</i></span> b) the configuration
+      allows it (or at least does not disallow it). That's it. There is no
+      magic cookie anywhere to say this is <span class="QUOTE">"good"</span>
+      and this is <span class="QUOTE">"bad"</span>. It's the configuration
+      that lets it all happen or not.</p>
 
       <p>If you download text files, you probably do not want these to be
       filtered, particularly if the content is source code, or other critical
@@ -653,8 +644,9 @@ body {
       off filtering for download sites (particularly if the content may be
       plain text files and you are using version 3.0.2 or earlier) in your
       <tt class="FILENAME">user.action</tt> file. And also, for any site or
-      page where making <span class="emphasis EMPHASIS c2">any</span> changes
-      at all to the content is to be avoided.</p>
+      page where making <span class="emphasis"><i class=
+      "EMPHASIS">any</i></span> changes at all to the content is to be
+      avoided.</p>
 
       <p><span class="APPLICATION">Privoxy</span> does not do FTP at all,
       only HTTP and HTTPS (SSL) protocols.</p>
@@ -691,7 +683,7 @@ body {
       adding your list to your <tt class="FILENAME">user.action</tt>
       file:</p>
 
-      <table class="c3" border="0" width="100%">
+      <table border="0" bgcolor="#E0E0E0" width="100%">
         <tr>
           <td>
             <pre class="SCREEN">
@@ -898,7 +890,7 @@ body {
   </div>
 
   <div class="NAVFOOTER">
-    <hr class="c1" width="100%">
+    <hr align="left" width="100%">
 
     <table summary="Footer navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
