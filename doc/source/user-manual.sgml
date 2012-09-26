@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.148 2012/03/18 15:41:49 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.149 2012/04/22 12:15:53 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.148 2012/03/18 15:41:49 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.149 2012/04/22 12:15:53 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -7931,7 +7931,7 @@ pre-defined filters for your convenience:
  </varlistentry>
 
  <varlistentry>
-  <term><emphasis>refresh tags</emphasis></term>
+  <term><emphasis>refresh-tags</emphasis></term>
   <listitem>
    <para>
     Disable any refresh tags if the interval is greater than nine seconds (so
@@ -9506,6 +9506,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.149  2012/04/22 12:15:53  fabiankeil
+ Use another client-header-tagger{} example: disable filtering for range requests
+
  Revision 2.148  2012/03/18 15:41:49  fabiankeil
  Bump entities to 3.0.20 UNRELEASED
 
