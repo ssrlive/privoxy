@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.129 2012/06/08 15:15:11 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.130 2012/07/27 17:36:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -339,6 +339,7 @@ static void parse_client_header_order(struct list *ordered_header_list, const ch
 {
    char *original_headers_copy;
    char **vector;
+   size_t max_segments;
    int number_of_headers;
    int i;
 
@@ -356,7 +357,7 @@ static void parse_client_header_order(struct list *ordered_header_list, const ch
     *      The same hack is used in get_last_url() so it looks like
     *      a real solution is needed.
     */
-   size_t max_segments = strlen(ordered_headers) / 2;
+   max_segments = strlen(ordered_headers) / 2;
    if (max_segments == 0)
    {
       max_segments = 1;
