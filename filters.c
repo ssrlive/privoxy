@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.171 2012/03/18 13:47:33 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.172 2012/06/08 15:15:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1088,6 +1088,11 @@ char *get_last_url(char *subject, const char *redirect_mode)
 
    if (0 == strcmpic(redirect_mode, "check-decoded-url") && strchr(subject, '%'))
    {  
+      char *url_segment = NULL;
+      char **url_segments;
+      size_t max_segments;
+      int segments;
+
       log_error(LOG_LEVEL_REDIRECTS,
          "Checking \"%s\" for encoded redirects.", subject);
 
@@ -1097,15 +1102,12 @@ char *get_last_url(char *subject, const char *redirect_mode)
        * go backwards through the segments, URL-decode them
        * and look for a URL in the decoded result.
        * Stop the search after the first match.
-       */
-      char *url_segment = NULL;
-      /*
+       *
        * XXX: This estimate is guaranteed to be high enough as we
        *      let ssplit() ignore empty fields, but also a bit wasteful.
        */
-      size_t max_segments = strlen(subject) / 2;
-      char **url_segments = malloc(max_segments * sizeof(char *));
-      int segments;
+      max_segments = strlen(subject) / 2;
+      url_segments = malloc(max_segments * sizeof(char *));
 
       if (NULL == url_segments)
       {
