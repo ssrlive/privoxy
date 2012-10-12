@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.113 2012/03/09 16:23:50 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.114 2012/03/09 17:56:41 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -703,6 +703,68 @@ void close_socket(jb_socket fd)
 #else
    close(fd);
 #endif
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  drain_and_close_socket
+ *
+ * Description :  Closes a TCP/IP socket after draining unread data
+ *
+ * Parameters  :
+ *          1  :  fd = file descriptor of the socket to be closed
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void drain_and_close_socket(jb_socket fd)
+{
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   if (socket_is_still_alive(fd))
+#endif
+   {
+      int bytes_drained_total = 0;
+      int bytes_drained;
+
+#ifdef HAVE_SHUTDOWN
+/* Apparently Windows has shutdown() but now SHUT_WR */
+#ifndef SHUT_WR
+#define SHUT_WR 1
+#endif
+      if (0 != shutdown(fd, SHUT_WR))
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to shutdown socket %d %E", fd);
+      }
+#endif
+#define ARBITRARY_DRAIN_LIMIT 10000
+      do
+      {
+         char drainage[500];
+
+         bytes_drained = read_socket(fd, drainage, sizeof(drainage));
+         if (bytes_drained < 0)
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to drain socket %d %E", fd);
+         }
+         else if (bytes_drained > 0)
+         {
+            bytes_drained_total += bytes_drained;
+            if (bytes_drained_total > ARBITRARY_DRAIN_LIMIT)
+            {
+               log_error(LOG_LEVEL_CONNECT, "Giving up draining socket %d", fd);
+               break;
+            }
+         }
+      } while (bytes_drained > 0);
+      if (bytes_drained_total != 0)
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Drained %d bytes before closing socket %d", bytes_drained_total, fd);
+      }
+   }
+
+   close_socket(fd);
 
 }
 
