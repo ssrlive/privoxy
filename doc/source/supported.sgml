@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: supported.sgml,v 2.11 2012/03/20 13:02:50 fabiankeil Exp $
+ $Id: supported.sgml,v 2.12 2012/10/12 11:08:55 fabiankeil Exp $
 
  Copyright (C) 2001-2008 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -30,7 +30,7 @@
  Mac OS X,
  OS/2,
  Haiku,
- FreeBSD, NetBSD, OpenBSD,
+ DragonFly, FreeBSD, NetBSD, OpenBSD,
  Solaris,
  and various other flavors of Unix.
 </para>
