@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.171 2012/10/12 11:11:42 fabiankeil Exp $
+dnl $Id: configure.in,v 1.172 2012/10/12 11:12:22 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.171 $)
+AC_REVISION($Revision: 1.172 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -770,7 +770,6 @@ AC_CHECK_FUNCS([ \
  strlcat \
  strlcpy \
  strptime \
- strstr \
  strtoul \
  timegm \
  tzset \
