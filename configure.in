@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.168 2012/09/05 08:40:59 fabiankeil Exp $
+dnl $Id: configure.in,v 1.169 2012/10/05 12:14:33 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.168 $)
+AC_REVISION($Revision: 1.169 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -718,7 +718,25 @@ AC_CHECK_SIZEOF(size_t, 4)
 dnl Checks for header files.
 dnl AC_HEADER_SYS_WAIT
 dnl AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/time.h unistd.h)
-AC_CHECK_HEADERS([OS.h arpa/inet.h errno.h fcntl.h limits.h locale.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h sys/timeb.h sys/wait.h unistd.h])
+AC_CHECK_HEADERS([ \
+ OS.h \
+ arpa/inet.h \
+ errno.h \
+ fcntl.h \
+ limits.h \
+ locale.h \
+ netdb.h \
+ netinet/in.h \
+ stddef.h \
+ stdlib.h \
+ string.h \
+ sys/ioctl.h \
+ sys/socket.h \
+ sys/time.h \
+ sys/timeb.h \
+ sys/wait.h \
+ unistd.h \
+])
 
 dnl Checks for library functions.
 dnl bcopy is for PCRE
