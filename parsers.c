@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.251 2012/09/04 08:39:02 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.252 2012/09/18 17:39:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3667,8 +3667,7 @@ static jb_err server_connection_adder(struct client_state *csp)
  * Function    :  server_proxy_connection_adder
  *
  * Description :  Adds a "Proxy-Connection: keep-alive" header to
- *                csp->headers if the client asked for keep-alive.
- *                XXX: We should reuse existent ones.
+ *                csp->headers when appropriate.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
