@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.114 2012/03/09 17:56:41 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.115 2012/10/12 11:17:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -728,7 +728,7 @@ void drain_and_close_socket(jb_socket fd)
       int bytes_drained;
 
 #ifdef HAVE_SHUTDOWN
-/* Apparently Windows has shutdown() but now SHUT_WR */
+/* Apparently Windows has shutdown() but not SHUT_WR. */
 #ifndef SHUT_WR
 #define SHUT_WR 1
 #endif
