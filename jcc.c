@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.387 2012/09/04 08:37:51 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.388 2012/09/04 08:39:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2607,7 +2607,7 @@ static void serve(struct client_state *csp)
 
                remember_connection(&csp->server_connection);
                csp->server_connection.sfd = JB_INVALID_SOCKET;
-               close_socket(csp->cfd);
+               drain_and_close_socket(csp->cfd);
                csp->cfd = JB_INVALID_SOCKET;
                privoxy_mutex_lock(&connection_reuse_mutex);
                if (!monitor_thread_running)
@@ -2666,7 +2666,7 @@ static void serve(struct client_state *csp)
          "Keep-alive: %u, Socket alive: %u. Data available: %u.",
          csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
          socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0));
-      close_socket(csp->cfd);
+      drain_and_close_socket(csp->cfd);
    }
 
    csp->flags &= ~CSP_FLAG_ACTIVE;
