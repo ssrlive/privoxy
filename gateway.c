@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.87 2012/03/10 11:06:09 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.88 2012/10/17 18:11:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -220,11 +220,7 @@ void remember_connection(const struct reusable_connection *connection)
    }
 
    assert(NULL != connection->host);
-   reusable_connection[slot].host = strdup(connection->host);
-   if (NULL == reusable_connection[slot].host)
-   {
-      log_error(LOG_LEVEL_FATAL, "Out of memory saving socket.");
-   }
+   reusable_connection[slot].host = strdup_or_die(connection->host);
    reusable_connection[slot].sfd = connection->sfd;
    reusable_connection[slot].port = connection->port;
    reusable_connection[slot].in_use = 0;
@@ -242,11 +238,7 @@ void remember_connection(const struct reusable_connection *connection)
    reusable_connection[slot].forwarder_type = connection->forwarder_type;
    if (NULL != connection->gateway_host)
    {
-      reusable_connection[slot].gateway_host = strdup(connection->gateway_host);
-      if (NULL == reusable_connection[slot].gateway_host)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory saving gateway_host.");
-      }
+      reusable_connection[slot].gateway_host = strdup_or_die(connection->gateway_host);
    }
    else
    {
@@ -256,11 +248,7 @@ void remember_connection(const struct reusable_connection *connection)
 
    if (NULL != connection->forward_host)
    {
-      reusable_connection[slot].forward_host = strdup(connection->forward_host);
-      if (NULL == reusable_connection[slot].forward_host)
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory saving forward_host.");
-      }
+      reusable_connection[slot].forward_host = strdup_or_die(connection->forward_host);
    }
    else
    {
