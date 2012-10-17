@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.254 2012/10/17 18:18:54 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.255 2012/10/17 18:19:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3822,7 +3822,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
       log_error(LOG_LEVEL_HEADER, "Crunching incoming cookie: %s", *header);
       freez(*header);
    }
-   else if ((csp->action->flags & ACTION_NO_COOKIE_KEEP) != 0)
+   else if ((csp->action->flags & ACTION_SESSION_COOKIES_ONLY) != 0)
    {
       /* Flag whether or not to log a message */
       int changed = 0;

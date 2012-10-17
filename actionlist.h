@@ -113,7 +113,7 @@ DEFINE_ACTION_STRING     ("redirect",                   ACTION_REDIRECT,        
 DEFINE_CGI_PARAM_NO_RADIO("redirect",                   ACTION_REDIRECT,        ACTION_STRING_REDIRECT,  "http://localhost/")
 DEFINE_ACTION_MULTI      ("server-header-filter",       ACTION_MULTI_SERVER_HEADER_FILTER)
 DEFINE_ACTION_MULTI      ("server-header-tagger",       ACTION_MULTI_SERVER_HEADER_TAGGER)
-DEFINE_ACTION_BOOL       ("session-cookies-only",       ACTION_NO_COOKIE_KEEP)
+DEFINE_ACTION_BOOL       ("session-cookies-only",       ACTION_SESSION_COOKIES_ONLY)
 DEFINE_ACTION_STRING     ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
 DEFINE_CGI_PARAM_RADIO   ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "pattern", 1)
 DEFINE_CGI_PARAM_RADIO   ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER, "blank", 0)
@@ -125,7 +125,7 @@ DEFINE_CGI_PARAM_CUSTOM  ("set-image-blocker",          ACTION_IMAGE_BLOCKER,   
  * Alternative spellings
  */
 DEFINE_ACTION_STRING     ("hide-referer",   ACTION_HIDE_REFERER,    ACTION_STRING_REFERER)
-DEFINE_ACTION_BOOL       ("prevent-keeping-cookies", ACTION_NO_COOKIE_KEEP)
+DEFINE_ACTION_BOOL       ("prevent-keeping-cookies", ACTION_SESSION_COOKIES_ONLY)
 
 /*
  * Pre-3.0.7 (pseudo) compatibility
@@ -145,7 +145,7 @@ DEFINE_ACTION_STRING     ("hide-from",               ACTION_HIDE_FROM,       ACT
 DEFINE_ACTION_BOOL       ("image",                   ACTION_IMAGE)
 DEFINE_ACTION_STRING     ("image-blocker",           ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
 DEFINE_ACTION_BOOL       ("no-compression",          ACTION_NO_COMPRESSION)
-DEFINE_ACTION_BOOL       ("no-cookies-keep",         ACTION_NO_COOKIE_KEEP)
+DEFINE_ACTION_BOOL       ("no-cookies-keep",         ACTION_SESSION_COOKIES_ONLY)
 DEFINE_ACTION_BOOL       ("no-cookies-read",         ACTION_CRUNCH_OUTGOING_COOKIES)
 DEFINE_ACTION_BOOL       ("no-cookies-set",          ACTION_CRUNCH_INCOMING_COOKIES)
 #endif /* if DEFINE_ACTION_ALIAS */
