@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.115 2012/10/12 11:17:48 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.116 2012/10/12 11:23:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -734,7 +734,7 @@ void drain_and_close_socket(jb_socket fd)
 #endif
       if (0 != shutdown(fd, SHUT_WR))
       {
-         log_error(LOG_LEVEL_ERROR, "Failed to shutdown socket %d %E", fd);
+         log_error(LOG_LEVEL_CONNECT, "Failed to shutdown socket %d: %E", fd);
       }
 #endif
 #define ARBITRARY_DRAIN_LIMIT 10000
@@ -745,7 +745,7 @@ void drain_and_close_socket(jb_socket fd)
          bytes_drained = read_socket(fd, drainage, sizeof(drainage));
          if (bytes_drained < 0)
          {
-            log_error(LOG_LEVEL_ERROR, "Failed to drain socket %d %E", fd);
+            log_error(LOG_LEVEL_CONNECT, "Failed to drain socket %d: %E", fd);
          }
          else if (bytes_drained > 0)
          {
