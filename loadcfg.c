@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.130 2012/07/27 17:36:06 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.131 2012/10/05 12:16:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1340,7 +1340,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
 #ifdef FEATURE_TOGGLE
          case hash_toggle :
-            global_toggle_state = atoi(arg);
+            global_toggle_state = parse_toggle_state(cmd, arg);
             break;
 #endif /* def FEATURE_TOGGLE */
 
