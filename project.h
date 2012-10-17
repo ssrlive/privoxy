@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.179 2012/09/04 08:32:03 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.180 2012/10/17 18:18:54 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -477,8 +477,8 @@ struct iob
 #define ACTION_NO_COMPRESSION                        0x00000400UL
 /** Action bitmap: Change cookies to session only cookies. */
 #define ACTION_NO_COOKIE_KEEP                        0x00000800UL
-/** Action bitmap: Block rending cookies. */
-#define ACTION_NO_COOKIE_READ                        0x00001000UL
+/** Action bitmap: Block cookies coming from the client. */
+#define ACTION_CRUNCH_OUTGOING_COOKIES               0x00001000UL
 /** Action bitmap: Block cookies coming from the server. */
 #define ACTION_CRUNCH_INCOMING_COOKIES               0x00002000UL
 /** Action bitmap: Override the forward settings in the config file */

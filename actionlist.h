@@ -64,7 +64,7 @@ DEFINE_ACTION_STRING     ("crunch-client-header",       ACTION_CRUNCH_CLIENT_HEA
 DEFINE_CGI_PARAM_NO_RADIO("crunch-client-header",       ACTION_CRUNCH_CLIENT_HEADER, ACTION_STRING_CLIENT_HEADER,          "X-Whatever:")
 DEFINE_ACTION_BOOL       ("crunch-if-none-match",       ACTION_CRUNCH_IF_NONE_MATCH)
 DEFINE_ACTION_BOOL       ("crunch-incoming-cookies",    ACTION_CRUNCH_INCOMING_COOKIES)
-DEFINE_ACTION_BOOL       ("crunch-outgoing-cookies",    ACTION_NO_COOKIE_READ)
+DEFINE_ACTION_BOOL       ("crunch-outgoing-cookies",    ACTION_CRUNCH_OUTGOING_COOKIES)
 DEFINE_ACTION_STRING     ("crunch-server-header",       ACTION_CRUNCH_SERVER_HEADER, ACTION_STRING_SERVER_HEADER)
 DEFINE_CGI_PARAM_NO_RADIO("crunch-server-header",       ACTION_CRUNCH_SERVER_HEADER, ACTION_STRING_SERVER_HEADER,          "X-Whatever:")
 DEFINE_ACTION_STRING     ("deanimate-gifs",             ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE)
@@ -136,9 +136,9 @@ DEFINE_ACTION_MULTI      ("filter-server-headers",       ACTION_MULTI_SERVER_HEA
 /*
  * Pre-3.0 compatibility
  */
-DEFINE_ACTION_BOOL       ("no-cookie-read",          ACTION_NO_COOKIE_READ)
+DEFINE_ACTION_BOOL       ("no-cookie-read",          ACTION_CRUNCH_OUTGOING_COOKIES)
 DEFINE_ACTION_BOOL       ("no-cookie-set",           ACTION_CRUNCH_INCOMING_COOKIES)
-DEFINE_ACTION_BOOL       ("prevent-reading-cookies", ACTION_NO_COOKIE_READ)
+DEFINE_ACTION_BOOL       ("prevent-reading-cookies", ACTION_CRUNCH_OUTGOING_COOKIES)
 DEFINE_ACTION_BOOL       ("prevent-setting-cookies", ACTION_CRUNCH_INCOMING_COOKIES)
 DEFINE_ACTION_BOOL       ("downgrade",               ACTION_DOWNGRADE)
 DEFINE_ACTION_STRING     ("hide-from",               ACTION_HIDE_FROM,       ACTION_STRING_FROM)
@@ -146,7 +146,7 @@ DEFINE_ACTION_BOOL       ("image",                   ACTION_IMAGE)
 DEFINE_ACTION_STRING     ("image-blocker",           ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
 DEFINE_ACTION_BOOL       ("no-compression",          ACTION_NO_COMPRESSION)
 DEFINE_ACTION_BOOL       ("no-cookies-keep",         ACTION_NO_COOKIE_KEEP)
-DEFINE_ACTION_BOOL       ("no-cookies-read",         ACTION_NO_COOKIE_READ)
+DEFINE_ACTION_BOOL       ("no-cookies-read",         ACTION_CRUNCH_OUTGOING_COOKIES)
 DEFINE_ACTION_BOOL       ("no-cookies-set",          ACTION_CRUNCH_INCOMING_COOKIES)
 #endif /* if DEFINE_ACTION_ALIAS */
 
