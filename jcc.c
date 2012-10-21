@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.388 2012/09/04 08:39:58 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.389 2012/10/12 11:19:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2243,8 +2243,8 @@ static void chat(struct client_state *csp)
                    * we can parse the headers we just continue here.
                    */
                   log_error(LOG_LEVEL_CONNECT,
-                     "Continuing buffering headers. Bytes most recently read: %d.",
-                     len);
+                     "Continuing buffering server headers from socket %d. "
+                     "Bytes most recently read: %d.", csp->cfd, len);
                   continue;
                }
             }
