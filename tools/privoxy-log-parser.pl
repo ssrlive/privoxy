@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.139 2012/10/21 12:30:51 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.140 2012/10/21 13:00:36 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1640,16 +1640,19 @@ sub handle_loglevel_connect ($) {
 
     } elsif ($c =~ m/^Waiting for the next client request/ or
              $c =~ m/^The connection on server socket/ or
-             $c =~ m/^Client request arrived in time /) {
+             $c =~ m/^Client request (?:\d+ )?arrived in time /) {
 
         # Waiting for the next client request on socket 3. Keeping the server \
         #  socket 12 to a.fsdn.com open.
         # The connection on server socket 6 to upload.wikimedia.org isn't reusable. Closing.
-        # Used by Privoxy 3.0.18 and later:
+        # Privoxy 3.0.20 and later:
+        # Client request 4 arrived in time on socket 7.
+        # Used by Privoxy 3.0.18 and 3.0.19:
         # Client request arrived in time on socket 21.
         # Used by earlier version:
         # Client request arrived in time or the client closed the connection on socket 12.
 
+        $c =~ s@(?<=request )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=to )[^\s]+');
