@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.403 2012/10/21 13:00:06 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.404 2012/10/21 13:04:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1698,10 +1698,20 @@ static void chat(struct client_state *csp)
    {
       if (csp->server_connection.sfd != JB_INVALID_SOCKET)
       {
-         log_error(LOG_LEVEL_CONNECT,
-            "Closing server socket %u. Opened for %s.",
-            csp->server_connection.sfd, csp->server_connection.host);
-         close_socket(csp->server_connection.sfd);
+#ifdef FEATURE_CONNECTION_SHARING
+         if (csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
+         {
+            remember_connection(&csp->server_connection);
+         }
+         else
+#endif /* def FEATURE_CONNECTION_SHARING */
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Closing server socket %d connected to %s. Total requests: %u.",
+               csp->server_connection.sfd, csp->server_connection.host,
+               csp->server_connection.requests_sent_total);
+            close_socket(csp->server_connection.sfd);
+         }
          mark_connection_closed(&csp->server_connection);
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
