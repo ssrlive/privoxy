@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.131 2012/10/05 12:16:23 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.132 2012/10/17 18:02:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1400,21 +1400,21 @@ struct configuration_spec * load_config(void)
  * activity-animation (0|1)
  * *************************************************************************/
          case hash_activity_animation :
-            g_bShowActivityAnimation = atoi(arg);
+            g_bShowActivityAnimation = parse_toggle_state(cmd, arg);
             break;
 
 /* *************************************************************************
  *  close-button-minimizes (0|1)
  * *************************************************************************/
          case hash_close_button_minimizes :
-            g_bCloseHidesWindow = atoi(arg);
+            g_bCloseHidesWindow = parse_toggle_state(cmd, arg);
             break;
 
 /* *************************************************************************
  * log-buffer-size (0|1)
  * *************************************************************************/
          case hash_log_buffer_size :
-            g_bLimitBufferSize = atoi(arg);
+            g_bLimitBufferSize = parse_toggle_state(cmd, arg);
             break;
 
 /* *************************************************************************
@@ -1441,7 +1441,7 @@ struct configuration_spec * load_config(void)
  * log-highlight-messages (0|1)
  * *************************************************************************/
          case hash_log_highlight_messages :
-            g_bHighlightMessages = atoi(arg);
+            g_bHighlightMessages = parse_toggle_state(cmd, arg);
             break;
 
 /* *************************************************************************
@@ -1455,14 +1455,14 @@ struct configuration_spec * load_config(void)
  * log-messages (0|1)
  * *************************************************************************/
          case hash_log_messages :
-            g_bLogMessages = atoi(arg);
+            g_bLogMessages = parse_toggle_state(cmd, arg);
             break;
 
 /* *************************************************************************
  * show-on-task-bar (0|1)
  * *************************************************************************/
          case hash_show_on_task_bar :
-            g_bShowOnTaskBar = atoi(arg);
+            g_bShowOnTaskBar = parse_toggle_state(cmd, arg);
             break;
 
 #endif /* defined(_WIN32) && ! defined(_WIN_CONSOLE) */
