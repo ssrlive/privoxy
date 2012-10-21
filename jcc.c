@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.398 2012/10/21 12:51:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.399 2012/10/21 12:53:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1688,8 +1688,9 @@ static void chat(struct client_state *csp)
       && connection_destination_matches(&csp->server_connection, http, fwd))
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Reusing server socket %u. Opened for %s.",
-         csp->server_connection.sfd, csp->server_connection.host);
+         "Reusing server socket %d connected to %s. Total requests: %u.",
+         csp->server_connection.sfd, csp->server_connection.host,
+         csp->server_connection.requests_sent_total);
    }
    else
    {
@@ -1736,6 +1737,8 @@ static void chat(struct client_state *csp)
          (unsigned)csp->config->keep_alive_timeout;
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+   csp->server_connection.requests_sent_total++;
 
    if (fwd->forward_host || (http->ssl == 0))
    {

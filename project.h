@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.186 2012/10/21 12:52:35 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.187 2012/10/21 12:53:33 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -668,6 +668,11 @@ struct reusable_connection
     * connection will no longer be reused.
     */
    unsigned int keep_alive_timeout;
+   /*
+    * Number of requests that were sent to this connection.
+    * This is currently only for debugging purposes.
+    */
+   unsigned int requests_sent_total;
 
    char *host;
    int  port;

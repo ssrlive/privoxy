@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.89 2012/10/17 18:11:40 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.90 2012/10/17 18:13:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -228,6 +228,7 @@ void remember_connection(const struct reusable_connection *connection)
    reusable_connection[slot].request_sent = connection->request_sent;
    reusable_connection[slot].response_received = connection->response_received;
    reusable_connection[slot].keep_alive_timeout = connection->keep_alive_timeout;
+   reusable_connection[slot].requests_sent_total = connection->requests_sent_total;
 
    assert(reusable_connection[slot].gateway_host == NULL);
    assert(reusable_connection[slot].gateway_port == 0);
@@ -284,6 +285,7 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    closed_connection->request_sent = 0;
    closed_connection->response_received = 0;
    closed_connection->keep_alive_timeout = 0;
+   closed_connection->requests_sent_total = 0;
    closed_connection->forwarder_type = SOCKS_NONE;
    freez(closed_connection->gateway_host);
    closed_connection->gateway_port = 0;
@@ -494,13 +496,14 @@ static jb_socket get_reusable_connection(const struct http_request *http,
             reusable_connection[slot].in_use = TRUE;
             sfd = reusable_connection[slot].sfd;
             log_error(LOG_LEVEL_CONNECT,
-               "Found reusable socket %d for %s:%d in slot %d. "
-               "Timestamp made %d seconds ago. Timeout: %d. Latency: %d.",
+               "Found reusable socket %d for %s:%d in slot %d. Timestamp made %d "
+               "seconds ago. Timeout: %d. Latency: %d. Requests served: %d",
                sfd, reusable_connection[slot].host, reusable_connection[slot].port,
                slot, time(NULL) - reusable_connection[slot].timestamp,
                reusable_connection[slot].keep_alive_timeout,
                (int)(reusable_connection[slot].response_received -
-               reusable_connection[slot].request_sent));
+               reusable_connection[slot].request_sent),
+               reusable_connection[slot].requests_sent_total);
             break;
          }
       }
