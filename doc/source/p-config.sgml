@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.84 2012/10/21 12:33:27 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.85 2012/10/21 12:33:52 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.84 2012/10/21 12:33:27 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.85 2012/10/21 12:33:52 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -2594,7 +2594,7 @@ forward-socks4, forward-socks4a and forward-socks5</title>
     Several users have reported this as a Privoxy bug, so the
     default value has been reduced. Consider increasing it to
     300 seconds or even more if you think your browser can handle
-    it. If your browser appears to be hanging it can't.
+    it. If your browser appears to be hanging, it probably can't.
    </para>
   </listitem>
  </varlistentry>
