@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.395 2012/10/21 12:49:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.396 2012/10/21 12:50:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2513,6 +2513,7 @@ static void serve(struct client_state *csp)
    static int monitor_thread_running = 0;
 #endif /* def FEATURE_CONNECTION_SHARING */
    int continue_chatting = 0;
+   int config_file_change_detected = 0; /* Only used for debugging */
 
    log_error(LOG_LEVEL_CONNECT, "Accepted connection from %s on socket %d",
       csp->ip_addr_str, csp->cfd);
@@ -2520,7 +2521,6 @@ static void serve(struct client_state *csp)
    do
    {
       unsigned int latency;
-      int config_file_change_detected = 0; /* Only used for debugging */
 
       chat(csp);
 
@@ -2676,9 +2676,11 @@ static void serve(struct client_state *csp)
    if (csp->cfd != JB_INVALID_SOCKET)
    {
       log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
-         "Keep-alive: %u, Socket alive: %u. Data available: %u.",
+         "Keep-alive: %u, Socket alive: %u. Data available: %u. "
+         "Configuration file change detected: %u.",
          csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
-         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0));
+         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
+         config_file_change_detected);
       drain_and_close_socket(csp->cfd);
    }
 
