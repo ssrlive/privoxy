@@ -3,7 +3,7 @@
 ##############################################################################################
 # uagen (http://www.fabiankeil.de/sourcecode/uagen/)
 #
-# $Id: uagen.pl,v 1.22 2012/09/04 08:31:32 fabiankeil Exp $
+# $Id: uagen.pl,v 1.23 2012/10/21 13:05:09 fabiankeil Exp $
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -60,7 +60,7 @@ use constant {
    # are too lazy to check, but want to change them anyway, take the values you
    # see in the "Help/About Mozilla Firefox" menu.
 
-   BROWSER_VERSION                   => "16",
+   BROWSER_VERSION                   => "16.0",
    BROWSER_REVISION                  => '16.0',
    BROWSER_RELEASE_DATE              => '20100101',
 };
