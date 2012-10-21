@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.116 2012/10/12 11:23:53 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.117 2012/10/17 18:01:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1264,6 +1264,18 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    if (afd < 0)
    {
       return 0;
+   }
+#endif
+
+#ifdef SO_LINGER
+   {
+      struct linger linger_options;
+      linger_options.l_onoff  = 1;
+      linger_options.l_linger = 5;
+      if (0 != setsockopt(fd, SOL_SOCKET, SO_LINGER, &linger_options, sizeof(linger_options)))
+      {
+         log_error(LOG_LEVEL_ERROR, "Setting SO_LINGER on socket %d failed.", afd);
+      }
    }
 #endif
 
