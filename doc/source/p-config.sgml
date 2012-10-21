@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.83 2012/07/27 17:41:10 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.84 2012/10/21 12:33:27 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.83 2012/07/27 17:41:10 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.84 2012/10/21 12:33:27 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -856,8 +856,7 @@ actionsfile
    <para>
     Your logfile will grow indefinitely, and you will probably want to
     periodically remove it.  On Unix systems, you can do this with a cron job
-    (see <quote>man cron</quote>). For Red Hat based Linux distributions, a
-    <command>logrotate</command> script has been included.
+    (see <quote>man cron</quote>).
    </para>
    <para>
     Any log files must be writable by whatever user <application>Privoxy</application>
