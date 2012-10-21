@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.141 2012/10/21 13:00:56 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.142 2012/10/21 13:05:51 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1706,6 +1706,12 @@ sub handle_loglevel_connect ($) {
         # Privoxy 3.0.20 and later:
         # Stopping to watch the client socket 5. There's already another request waiting.
         $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Drained \d+ bytes before closing/) {
+
+        # Drained 180 bytes before closing socket 6
+        $c =~ s@(?<=Drained )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
