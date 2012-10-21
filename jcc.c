@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.389 2012/10/12 11:19:35 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.390 2012/10/21 12:30:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1743,7 +1743,7 @@ static void chat(struct client_state *csp)
       {
          return;
       }
-      IOB_RESET(csp);
+      IOB_RESET(csp->iob);
    }
 
    log_error(LOG_LEVEL_CONNECT, "to %s successful", http->hostport);

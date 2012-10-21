@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.182 2012/10/17 18:19:59 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.183 2012/10/21 12:31:21 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -422,7 +422,7 @@ struct iob
  * Remove any data in the I/O buffer associated with the passed
  * client_state pointer.
  */
-#define IOB_RESET(CSP) if(CSP->iob->buf) free(CSP->iob->buf); memset(CSP->iob, '\0', sizeof(CSP->iob));
+#define IOB_RESET(IOB) do {free(IOB->buf); memset(IOB, '\0', sizeof(*IOB));} while (0)
 
 /* Bits for csp->content_type bitmask: */
 #define CT_TEXT    0x0001U /**< Suitable for pcrs filtering. */
