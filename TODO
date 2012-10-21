@@ -1,4 +1,4 @@
-$Id: TODO,v 1.66 2012/07/27 17:37:43 fabiankeil Exp $
+$Id: TODO,v 1.67 2012/07/27 17:42:09 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -43,7 +43,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 11) CGI templates should use semantically-correct HTML
     and scale properly.
 
-12) Improve pipelining support.
+12) Support pipelining for outgoing connections.
 
 14) Allow to filter POST parameters.
 
