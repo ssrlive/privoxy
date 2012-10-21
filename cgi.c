@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.154 2012/07/23 12:42:53 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.155 2012/09/18 18:29:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -344,6 +344,21 @@ struct http_response *dispatch_cgi(struct client_state *csp)
    {
       /* Not a CGI */
       return NULL;
+   }
+
+   if (strcmpic(csp->http->gpc, "GET")
+    && strcmpic(csp->http->gpc, "HEAD"))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "CGI request with unsupported method received: %s", csp->http->gpc);
+      /*
+       * The CGI pages currently only support GET and HEAD requests.
+       *
+       * If the client used a different method, ditch any data following
+       * the current headers to reduce the likelihood of parse errors
+       * with the following request.
+       */
+      csp->client_iob->eod = csp->client_iob->cur;
    }
 
    /*
