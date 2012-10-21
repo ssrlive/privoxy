@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.394 2012/10/21 12:42:18 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.395 2012/10/21 12:49:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2534,27 +2534,40 @@ static void serve(struct client_state *csp)
       continue_chatting = (csp->config->feature_flags
          & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
          && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
-         && ((csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
-             || (csp->flags & CSP_FLAG_CRUNCHED))
          && (csp->cfd != JB_INVALID_SOCKET)
          && ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
              || (csp->config->feature_flags &
                 RUNTIME_FEATURE_CONNECTION_SHARING));
 
-      if (continue_chatting && !(csp->flags & CSP_FLAG_CRUNCHED))
+      if (!(csp->flags & CSP_FLAG_CRUNCHED)
+         && (csp->server_connection.sfd != JB_INVALID_SOCKET))
       {
-         continue_chatting = (csp->server_connection.sfd != JB_INVALID_SOCKET)
-            && socket_is_still_alive(csp->server_connection.sfd);
-         if (continue_chatting)
+         if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
          {
-            if (!(csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET))
+            csp->server_connection.keep_alive_timeout = csp->config->default_server_timeout;
+         }
+         if (!(csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE)
+            || (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+            || !socket_is_still_alive(csp->server_connection.sfd)
+            || !(latency < csp->server_connection.keep_alive_timeout))
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Closing connection on server socket %d to %s: "
+               "keep-alive %u, tainted: %u, socket alive %u. %s timeout: %u.",
+               csp->server_connection.sfd, csp->server_connection.host,
+               0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
+               0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
+               socket_is_still_alive(csp->server_connection.sfd),
+               ((csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET) ?
+               "Specified" : "Assumed"), csp->server_connection.keep_alive_timeout);
+#ifdef FEATURE_CONNECTION_SHARING
+            if (csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
             {
-               csp->server_connection.keep_alive_timeout = csp->config->default_server_timeout;
-               log_error(LOG_LEVEL_CONNECT,
-                  "The server didn't specify how long the connection will stay open. "
-                  "Assumed timeout is: %u.", csp->server_connection.keep_alive_timeout);
+               forget_connection(csp->server_connection.sfd);
             }
-            continue_chatting = (latency < csp->server_connection.keep_alive_timeout);
+#endif /* def FEATURE_CONNECTION_SHARING */
+            close_socket(csp->server_connection.sfd);
+            mark_connection_closed(&csp->server_connection);
          }
       }
 
@@ -2595,14 +2608,9 @@ static void serve(struct client_state *csp)
          }
          else
          {
-            if (0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
-            {
-               log_error(LOG_LEVEL_CONNECT,
-                  "No additional client request received in time on socket %d.",
-                  csp->cfd);
-            }
 #ifdef FEATURE_CONNECTION_SHARING
             if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
+               && (csp->server_connection.sfd != JB_INVALID_SOCKET)
                && (socket_is_still_alive(csp->server_connection.sfd)))
             {
                time_t time_open = time(NULL) - csp->server_connection.timestamp;
@@ -2634,15 +2642,13 @@ static void serve(struct client_state *csp)
       else if (csp->server_connection.sfd != JB_INVALID_SOCKET)
       {
          log_error(LOG_LEVEL_CONNECT,
-            "The connection on server socket %d to %s isn't reusable. Closing. "
-            "Server connection: keep-alive %u, tainted: %u, socket alive %u. "
-            "Client connection: socket alive: %u. Server timeout: %u. "
+            "Closing server socket %d connected to %s. Keep-alive %u. "
+            "Tainted: %u. Socket alive %u. Timeout: %u. "
             "Configuration file change detected: %u",
             csp->server_connection.sfd, csp->server_connection.host,
             0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
             0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
             socket_is_still_alive(csp->server_connection.sfd),
-            socket_is_still_alive(csp->cfd),
             csp->server_connection.keep_alive_timeout,
             config_file_change_detected);
       }
