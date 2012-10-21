@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.140 2012/10/21 13:00:36 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.141 2012/10/21 13:00:56 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1611,7 +1611,7 @@ sub handle_loglevel_connect ($) {
         # Rejecting connection from 178.63.152.227. Maximum number of connections reached.
         $c =~ s@(?<=onnection from )((?:\d+\.?){3}\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^(?:Reusing|Closing) server socket \d./ or
+    } elsif ($c =~ m/^(?:Reusing|Closing) server socket / or
              $c =~ m/^No additional client request/) {
 
         # Reusing server socket 4. Opened for 10.0.0.1.
@@ -1619,9 +1619,17 @@ sub handle_loglevel_connect ($) {
         # No additional client request received in time. \
         #  Closing server socket 4, initially opened for 10.0.0.1.
         # No additional client request received in time on socket 29.
+        # Privoxy 3.0.20 and later
+        # Reusing server socket 7 connected to www.privoxy.org. Total requests: 2.
+        # Closing server socket 6 connected to d.asset.soup.io. Keep-alive: 0.\
+        #  Tainted: 1. Socket alive: 1. Timeout: 60. Configuration file change detected: 0.
 
         $c =~ s@(?<= socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
-        $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.$)');
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.)');
+        $c = highlight_matched_host($c, '(?<=connected to )[^\s]+(?=\.)');
+        for my $number_pattern ('requests', 'Keep-alive', 'Tainted', ' alive', 'Timeout', 'detected') {
+            $c = highlight_matched_pattern($c, 'Number', '(?<='. $number_pattern . ': )\d+');
+        }
 
     } elsif ($c =~ m/^Connected to /) {
 
