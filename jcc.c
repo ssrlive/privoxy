@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.400 2012/10/21 12:56:38 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.401 2012/10/21 12:58:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1134,8 +1134,7 @@ static void verify_request_length(struct client_state *csp)
                "Possible pipeline attempt detected. The connection will not "
                "be kept alive and we will only serve the first request.");
             /* Nuke the pipelined requests from orbit, just to be sure. */
-            csp->client_iob->buf[0] = '\0';
-            csp->client_iob->eod = csp->client_iob->cur = csp->client_iob->buf;
+            clear_iob(csp->client_iob);
          }
          else
          {
