@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.255 2012/10/17 18:19:29 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.256 2012/10/17 18:19:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -280,21 +280,21 @@ long flush_socket(jb_socket fd, struct iob *iob)
  *
  * Function    :  add_to_iob
  *
- * Description :  Add content to the buffered page, expanding the
+ * Description :  Add content to the buffer, expanding the
  *                buffer if necessary.
  *
  * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  buf = holds the content to be added to the page
- *          3  :  n = number of bytes to be added
+ *          1  :  iob = Destination buffer.
+ *          2  :  buffer_limit = Limit to which the destination may grow
+ *          3  :  src = holds the content to be added
+ *          4  :  n = number of bytes to be added
  *
  * Returns     :  JB_ERR_OK on success, JB_ERR_MEMORY if out-of-memory
  *                or buffer limit reached.
  *
  *********************************************************************/
-jb_err add_to_iob(struct client_state *csp, char *buf, long n)
+jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
 {
-   struct iob *iob = csp->iob;
    size_t used, offset, need;
    char *p;
 
@@ -308,24 +308,24 @@ jb_err add_to_iob(struct client_state *csp, char *buf, long n)
     * If the buffer can't hold the new data, extend it first.
     * Use the next power of two if possible, else use the actual need.
     */
-   if (need > csp->config->buffer_limit)
+   if (need > buffer_limit)
    {
       log_error(LOG_LEVEL_INFO,
          "Buffer limit reached while extending the buffer (iob). Needed: %d. Limit: %d",
-         need, csp->config->buffer_limit);
+         need, buffer_limit);
       return JB_ERR_MEMORY;
    }
 
    if (need > iob->size)
    {
-      size_t want = csp->iob->size ? csp->iob->size : 512;
+      size_t want = iob->size ? iob->size : 512;
 
       while (want <= need)
       {
          want *= 2;
       }
 
-      if (want <= csp->config->buffer_limit && NULL != (p = (char *)realloc(iob->buf, want)))
+      if (want <= buffer_limit && NULL != (p = (char *)realloc(iob->buf, want)))
       {
          iob->size = want;
       }
@@ -346,7 +346,7 @@ jb_err add_to_iob(struct client_state *csp, char *buf, long n)
    }
 
    /* copy the new data into the iob buffer */
-   memcpy(iob->eod, buf, (size_t)n);
+   memcpy(iob->eod, src, (size_t)n);
 
    /* point to the end of the data */
    iob->eod += n;

@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.183 2012/10/21 12:31:21 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.184 2012/10/21 12:35:15 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -902,8 +902,12 @@ struct client_state
     */
    struct forward_spec * fwd;
 
-   /** An I/O buffer used for buffering data read from the network */
+   /** An I/O buffer used for buffering data read from the server */
+   /* XXX: should be renamed to server_iob */
    struct iob iob[1];
+
+   /** An I/O buffer used for buffering data read from the client */
+   struct iob client_iob[1];
 
    /** List of all headers for this request */
    struct list headers[1];

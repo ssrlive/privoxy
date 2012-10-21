@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.391 2012/10/21 12:35:15 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.392 2012/10/21 12:36:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1079,7 +1079,7 @@ void save_connection_destination(jb_socket sfd,
 static void verify_request_length(struct client_state *csp)
 {
    unsigned long long buffered_request_bytes =
-      (unsigned long long)(csp->iob->eod - csp->iob->cur);
+      (unsigned long long)(csp->client_iob->eod - csp->client_iob->cur);
 
    if ((csp->expected_client_content_length != 0)
       && (buffered_request_bytes != 0))
@@ -1093,8 +1093,8 @@ static void verify_request_length(struct client_state *csp)
       }
       else
       {
-         assert(csp->iob->eod > csp->iob->cur + csp->expected_client_content_length);
-         csp->iob->eod = csp->iob->cur + csp->expected_client_content_length;
+         assert(csp->client_iob->eod > csp->client_iob->cur + csp->expected_client_content_length);
+         csp->client_iob->eod = csp->client_iob->cur + csp->expected_client_content_length;
          log_error(LOG_LEVEL_CONNECT, "Reducing expected bytes to 0. "
             "Marking the server socket tainted after throwing %llu bytes away.",
             buffered_request_bytes - csp->expected_client_content_length);
@@ -1109,7 +1109,7 @@ static void verify_request_length(struct client_state *csp)
    }
 
    if (!(csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ)
-    && ((csp->iob->cur[0] != '\0') || (csp->expected_client_content_length != 0)))
+    && ((csp->client_iob->cur[0] != '\0') || (csp->expected_client_content_length != 0)))
    {
       csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
       if (strcmpic(csp->http->gpc, "GET")
@@ -1131,8 +1131,8 @@ static void verify_request_length(struct client_state *csp)
             "Possible pipeline attempt detected. The connection will not "
             "be kept alive and we will only serve the first request.");
          /* Nuke the pipelined requests from orbit, just to be sure. */
-         csp->iob->buf[0] = '\0';
-         csp->iob->eod = csp->iob->cur = csp->iob->buf;
+         csp->client_iob->buf[0] = '\0';
+         csp->client_iob->eod = csp->client_iob->cur = csp->client_iob->buf;
       }
    }
    else
@@ -1225,12 +1225,12 @@ static char *get_request_line(struct client_state *csp)
        * If there is no memory left for buffering the
        * request, there is nothing we can do but hang up
        */
-      if (add_to_iob(csp, buf, len))
+      if (add_to_iob(csp->client_iob, csp->config->buffer_limit, buf, len))
       {
          return NULL;
       }
 
-      request_line = get_header(csp->iob);
+      request_line = get_header(csp->client_iob);
 
    } while ((NULL != request_line) && ('\0' == *request_line));
 
@@ -1322,7 +1322,7 @@ static jb_err receive_client_request(struct client_state *csp)
    init_list(headers);
    for (;;)
    {
-      p = get_header(csp->iob);
+      p = get_header(csp->client_iob);
 
       if (p == NULL)
       {
@@ -1352,7 +1352,7 @@ static jb_err receive_client_request(struct client_state *csp)
             return JB_ERR_PARSE;
          }
 
-         if (add_to_iob(csp, buf, len))
+         if (add_to_iob(csp->client_iob, csp->config->buffer_limit, buf, len))
          {
             /*
              * If there is no memory left for buffering the
@@ -1715,7 +1715,7 @@ static void chat(struct client_state *csp)
        * (along with anything else that may be in the buffer)
        */
       if (write_socket(csp->server_connection.sfd, hdr, strlen(hdr))
-       || (flush_socket(csp->server_connection.sfd, csp->iob) <  0))
+       || (flush_socket(csp->server_connection.sfd, csp->client_iob) <  0))
       {
          log_error(LOG_LEVEL_CONNECT,
             "write header to: %s failed: %E", http->hostport);
@@ -1743,7 +1743,7 @@ static void chat(struct client_state *csp)
       {
          return;
       }
-      IOB_RESET(csp->iob);
+      IOB_RESET(csp->client_iob);
    }
 
    log_error(LOG_LEVEL_CONNECT, "to %s successful", http->hostport);
@@ -2144,7 +2144,7 @@ static void chat(struct client_state *csp)
                 * has been reached, switch to non-filtering mode, i.e. make & write the
                 * header, flush the iob and buf, and get out of the way.
                 */
-               if (add_to_iob(csp, buf, len))
+               if (add_to_iob(csp->iob, csp->config->buffer_limit, buf, len))
                {
                   size_t hdrlen;
                   long flushed;
@@ -2208,7 +2208,7 @@ static void chat(struct client_state *csp)
              * Buffer up the data we just read.  If that fails, there's
              * little we can do but send our static out-of-memory page.
              */
-            if (add_to_iob(csp, buf, len))
+            if (add_to_iob(csp->iob, csp->config->buffer_limit, buf, len))
             {
                log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
                rsp = cgi_error_memory();
