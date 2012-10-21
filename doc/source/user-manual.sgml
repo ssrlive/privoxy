@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.149 2012/04/22 12:15:53 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.150 2012/09/26 15:20:54 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.149 2012/04/22 12:15:53 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.150 2012/09/26 15:20:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -6312,6 +6312,10 @@ new action
     single pcrs command to the original URL.
    </para>
    <para>
+    The syntax for pcrs commands is documented in the
+    <link linkend="filter-file">filter file</link> section.
+   </para>
+   <para>
     This action will be ignored if you use it together with
     <literal><link linkend="block">block</link></literal>.
     It can be combined with
@@ -9506,6 +9510,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.150  2012/09/26 15:20:54  fabiankeil
+ Spell 'refresh-tags' correctly
+
+ Reported by Don in #3571927.
+
  Revision 2.149  2012/04/22 12:15:53  fabiankeil
  Use another client-header-tagger{} example: disable filtering for range requests
 
