@@ -133,21 +133,6 @@ DEFINE_ACTION_BOOL       ("prevent-keeping-cookies", ACTION_SESSION_COOKIES_ONLY
 DEFINE_ACTION_MULTI      ("filter-client-headers",       ACTION_MULTI_CLIENT_HEADER_FILTER)
 DEFINE_ACTION_MULTI      ("filter-server-headers",       ACTION_MULTI_SERVER_HEADER_FILTER)
 
-/*
- * Pre-3.0 compatibility
- */
-DEFINE_ACTION_BOOL       ("no-cookie-read",          ACTION_CRUNCH_OUTGOING_COOKIES)
-DEFINE_ACTION_BOOL       ("no-cookie-set",           ACTION_CRUNCH_INCOMING_COOKIES)
-DEFINE_ACTION_BOOL       ("prevent-reading-cookies", ACTION_CRUNCH_OUTGOING_COOKIES)
-DEFINE_ACTION_BOOL       ("prevent-setting-cookies", ACTION_CRUNCH_INCOMING_COOKIES)
-DEFINE_ACTION_BOOL       ("downgrade",               ACTION_DOWNGRADE)
-DEFINE_ACTION_STRING     ("hide-from",               ACTION_HIDE_FROM,       ACTION_STRING_FROM)
-DEFINE_ACTION_BOOL       ("image",                   ACTION_IMAGE)
-DEFINE_ACTION_STRING     ("image-blocker",           ACTION_IMAGE_BLOCKER,   ACTION_STRING_IMAGE_BLOCKER)
-DEFINE_ACTION_BOOL       ("no-compression",          ACTION_NO_COMPRESSION)
-DEFINE_ACTION_BOOL       ("no-cookies-keep",         ACTION_SESSION_COOKIES_ONLY)
-DEFINE_ACTION_BOOL       ("no-cookies-read",         ACTION_CRUNCH_OUTGOING_COOKIES)
-DEFINE_ACTION_BOOL       ("no-cookies-set",          ACTION_CRUNCH_INCOMING_COOKIES)
 #endif /* if DEFINE_ACTION_ALIAS */
 
 #undef DEFINE_ACTION_MULTI
