@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.115 2012/03/09 17:55:49 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.116 2012/10/21 12:39:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -255,7 +255,7 @@ jb_err cgi_show_request(struct client_state *csp,
    /*
     * Repair the damage done to the IOB by get_header()
     */
-   for (p = csp->client_iob->buf; p < csp->client_iob->eod; p++)
+   for (p = csp->client_iob->buf; p < csp->client_iob->cur; p++)
    {
       if (*p == '\0') *p = '\n';
    }
