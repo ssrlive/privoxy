@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.91 2012/06/19 12:50:22 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.92 2012/07/23 12:43:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -182,6 +182,7 @@ unsigned int sweep(void)
          last_active->next = client_list->next;
 
          freez(csp->ip_addr_str);
+         freez(csp->client_iob->buf);
          freez(csp->iob->buf);
          freez(csp->error_message);
 

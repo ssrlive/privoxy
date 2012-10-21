@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.397 2012/10/21 12:51:07 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.398 2012/10/21 12:51:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1111,7 +1111,6 @@ static void verify_request_length(struct client_state *csp)
    if (!(csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ)
     && ((csp->client_iob->cur[0] != '\0') || (csp->expected_client_content_length != 0)))
    {
-      csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
       if (strcmpic(csp->http->gpc, "GET")
          && strcmpic(csp->http->gpc, "HEAD")
          && strcmpic(csp->http->gpc, "TRACE")
@@ -1120,19 +1119,36 @@ static void verify_request_length(struct client_state *csp)
       {
          /* XXX: this is an incomplete hack */
          csp->flags &= ~CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
+         csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
          log_error(LOG_LEVEL_CONNECT,
             "There might be a request body. The connection will not be kept alive.");
       }
       else
       {
-         /* XXX: and so is this */
          csp->flags |= CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
-         log_error(LOG_LEVEL_CONNECT,
-            "Possible pipeline attempt detected. The connection will not "
-            "be kept alive and we will only serve the first request.");
-         /* Nuke the pipelined requests from orbit, just to be sure. */
-         csp->client_iob->buf[0] = '\0';
-         csp->client_iob->eod = csp->client_iob->cur = csp->client_iob->buf;
+
+         if ((csp->config->feature_flags & RUNTIME_FEATURE_TOLERATE_PIPELINING) == 0)
+         {
+            csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+            log_error(LOG_LEVEL_CONNECT,
+               "Possible pipeline attempt detected. The connection will not "
+               "be kept alive and we will only serve the first request.");
+            /* Nuke the pipelined requests from orbit, just to be sure. */
+            csp->client_iob->buf[0] = '\0';
+            csp->client_iob->eod = csp->client_iob->cur = csp->client_iob->buf;
+         }
+         else
+         {
+            /*
+             * Keep the pipelined data around for now, we'll deal with
+             * it once we're done serving the current request.
+             */
+            csp->flags |= CSP_FLAG_PIPELINED_REQUEST_WAITING;
+            assert(csp->client_iob->eod > csp->client_iob->cur);
+            log_error(LOG_LEVEL_CONNECT, "Complete client request followed by "
+               "%d bytes of pipelined data received.",
+               (int)(csp->client_iob->eod - csp->client_iob->cur));
+         }
       }
    }
    else
@@ -1195,6 +1211,27 @@ static char *get_request_line(struct client_state *csp)
    int len;
 
    memset(buf, 0, sizeof(buf));
+
+   if ((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) != 0)
+   {
+      /*
+       * If there are multiple pipelined requests waiting,
+       * the flag will be set again once the next request
+       * has been parsed.
+       */
+      csp->flags &= ~CSP_FLAG_PIPELINED_REQUEST_WAITING;
+
+      request_line = get_header(csp->client_iob);
+      if ((NULL != request_line) && ('\0' != *request_line))
+      {
+         return request_line;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_CONNECT, "No complete request line "
+            "received yet. Continuing reading from %d.", csp->cfd);
+      }
+   }
 
    do
    {
@@ -1539,7 +1576,7 @@ static void chat(struct client_state *csp)
    struct http_response *rsp;
    struct timeval timeout;
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   int watch_client_socket = 1;
+   int watch_client_socket;
 #endif
 
    memset(buf, 0, sizeof(buf));
@@ -1723,7 +1760,8 @@ static void chat(struct client_state *csp)
          log_error(LOG_LEVEL_CONNECT,
             "Failed sending request headers to: %s: %E", http->hostport);
       }
-      else if (flush_socket(csp->server_connection.sfd, csp->client_iob) <  0))
+      else if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
+         && (flush_socket(csp->server_connection.sfd, csp->client_iob) < 0))
       {
          write_failure = 1;
          log_error(LOG_LEVEL_CONNECT,
@@ -1767,6 +1805,8 @@ static void chat(struct client_state *csp)
     */
 
    server_body = 0;
+
+   watch_client_socket = 0 == (csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING);
 
    for (;;)
    {
@@ -2484,6 +2524,37 @@ static void prepare_csp_for_next_request(struct client_state *csp)
    {
       csp->flags |= CSP_FLAG_TOGGLED_ON;
    }
+
+   if (csp->client_iob->eod > csp->client_iob->cur)
+   {
+      long bytes_to_shift = csp->client_iob->cur - csp->client_iob->buf;
+      size_t data_length  = (size_t)(csp->client_iob->eod - csp->client_iob->cur);
+
+      assert(bytes_to_shift > 0);
+      assert(data_length > 0);
+
+      log_error(LOG_LEVEL_CONNECT, "Shifting %d pipelined bytes by %d bytes",
+         data_length, bytes_to_shift);
+      memmove(csp->client_iob->buf, csp->client_iob->cur, data_length);
+      csp->client_iob->cur = csp->client_iob->buf;
+      assert(csp->client_iob->eod == csp->client_iob->buf + bytes_to_shift + data_length);
+      csp->client_iob->eod = csp->client_iob->buf + data_length;
+      memset(csp->client_iob->eod, '\0', (size_t)bytes_to_shift);
+
+      csp->flags |= CSP_FLAG_PIPELINED_REQUEST_WAITING;
+   }
+   else
+   {
+      /*
+       * We mainly care about resetting client_iob->cur so we don't
+       * waste buffer space at the beginning and don't mess up the
+       * request restoration done by cgi_show_request().
+       *
+       * Freeing the buffer itself isn't technically necessary,
+       * but makes debugging more convenient.
+       */
+      IOB_RESET(csp->client_iob);
+   }
 }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
@@ -2530,6 +2601,15 @@ static void serve(struct client_state *csp)
        */
       latency = (unsigned)(csp->server_connection.response_received -
          csp->server_connection.request_sent) / 2;
+
+      if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
+         && (csp->flags & CSP_FLAG_CRUNCHED)
+         && (csp->expected_client_content_length != 0))
+      {
+         csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+         log_error(LOG_LEVEL_CONNECT,
+            "Tainting client socket %d due to unread data.", csp->cfd);
+      }
 
       continue_chatting = (csp->config->feature_flags
          & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
@@ -2579,6 +2659,16 @@ static void serve(struct client_state *csp)
 
       if (continue_chatting)
       {
+         if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) != 0)
+            && socket_is_still_alive(csp->cfd))
+         {
+            log_error(LOG_LEVEL_CONNECT, "A client request has been "
+               "pipelined on socket %d and the socket is still alive.",
+               csp->cfd);
+            prepare_csp_for_next_request(csp);
+            continue;
+         }
+
          if (0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE))
          {
             if (csp->server_connection.sfd != JB_INVALID_SOCKET)
@@ -2595,6 +2685,7 @@ static void serve(struct client_state *csp)
                   "No server socket to keep open.", csp->cfd);
             }
          }
+
          if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
             && data_is_available(csp->cfd, (int)csp->config->keep_alive_timeout)
             && socket_is_still_alive(csp->cfd))

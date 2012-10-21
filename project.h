@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.185 2012/10/21 12:39:27 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.186 2012/10/21 12:52:35 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -829,6 +829,12 @@ struct reusable_connection
  */
 #define CSP_FLAG_BUFFERED_CONTENT_DEFLATED          0x00400000U
 
+/**
+ * Flag for csp->flags: Set if we already read (parts of)
+ * a pipelined request in which case the client obviously
+ * isn't done talking.
+ */
+#define CSP_FLAG_PIPELINED_REQUEST_WAITING          0x00800000U
 
 /*
  * Flags for use in return codes of child processes
@@ -1201,6 +1207,9 @@ struct access_control_list
 
 /** configuration_spec::feature_flags: Buffered content is sent compressed if the client supports it. */
 #define RUNTIME_FEATURE_COMPRESSION               1024U
+
+/** configuration_spec::feature_flags: Pipelined requests are served instead of being discarded. */
+#define RUNTIME_FEATURE_TOLERATE_PIPELINING       2048U
 
 /**
  * Data loaded from the configuration file.
