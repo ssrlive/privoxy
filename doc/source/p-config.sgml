@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.85 2012/10/21 12:33:52 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.86 2012/10/21 13:01:40 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.85 2012/10/21 12:33:52 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.86 2012/10/21 13:01:40 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -2608,6 +2608,74 @@ forward-socks4, forward-socks4a and forward-socks5</title>
  </varlistentry>
 </variablelist>
 <![%config-file;[<literallayout>@@keep-alive-timeout 5</literallayout>]]>
+</sect3>
+
+
+<sect3 renderas="sect4" id="tolerate-pipelining"><title>tolerate-pipelining</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Whether or not pipelined requests should be served.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>0 or 1.</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    If Privoxy receives more than one request at once, it terminates the
+    client connection after serving the first one.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    &my-app; currently doesn't pipeline outgoing requests,
+    thus allowing pipelining on the client connection is not
+    guaranteed to improve the performance.
+   </para>
+   <para>
+    By default &my-app; tries to discourage clients from pipelining
+    by discarding aggressively pipelined requests, which forces the
+    client to resend them through a new connection.
+   </para>
+   <para>
+    This option lets &my-app; tolerate pipelining. Whether or not
+    that improves performance mainly depends on the client configuration.
+   </para>
+   <para>
+    This options is new and should be considered experimental.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    tolerate-pipelining 1
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#tolerate-pipelining 1</literallayout>]]>
 </sect3>
 
 
