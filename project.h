@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.188 2012/10/21 12:56:38 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.189 2012/10/21 12:58:03 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -876,6 +876,9 @@ struct client_state
 
    /** socket to talk to client (web browser) */
    jb_socket cfd;
+
+   /** Number of requests received on the client socket. */
+   unsigned int requests_received_total;
 
    /** current connection to the server (may go through a proxy) */
    struct reusable_connection server_connection;

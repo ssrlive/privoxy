@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.401 2012/10/21 12:58:03 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.402 2012/10/21 12:59:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1300,6 +1300,9 @@ static jb_err receive_client_request(struct client_state *csp)
    /* Temporary copy of the client's headers before they get enlisted in csp->headers */
    struct list header_list;
    struct list *headers = &header_list;
+
+   /* We don't care if the arriving data is a valid HTTP request or not. */
+   csp->requests_received_total++;
 
    http = csp->http;
 
@@ -2664,9 +2667,9 @@ static void serve(struct client_state *csp)
          if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) != 0)
             && socket_is_still_alive(csp->cfd))
          {
-            log_error(LOG_LEVEL_CONNECT, "A client request has been "
+            log_error(LOG_LEVEL_CONNECT, "Client request %d has been "
                "pipelined on socket %d and the socket is still alive.",
-               csp->cfd);
+               csp->requests_received_total+1, csp->cfd);
             prepare_csp_for_next_request(csp);
             continue;
          }
@@ -2693,7 +2696,8 @@ static void serve(struct client_state *csp)
             && socket_is_still_alive(csp->cfd))
          {
             log_error(LOG_LEVEL_CONNECT,
-               "Client request arrived in time on socket %d.", csp->cfd);
+               "Client request %u arrived in time on socket %d.",
+               csp->requests_received_total+1, csp->cfd);
             prepare_csp_for_next_request(csp);
          }
          else
@@ -2767,10 +2771,10 @@ static void serve(struct client_state *csp)
    {
       log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
          "Keep-alive: %u, Socket alive: %u. Data available: %u. "
-         "Configuration file change detected: %u.",
+         "Configuration file change detected: %u. Requests received: %u.",
          csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
          socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
-         config_file_change_detected);
+         config_file_change_detected, csp->requests_received_total);
       drain_and_close_socket(csp->cfd);
    }
 
