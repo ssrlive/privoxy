@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.402 2012/10/21 12:59:40 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.403 2012/10/21 13:00:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2637,14 +2637,13 @@ static void serve(struct client_state *csp)
             || !(latency < csp->server_connection.keep_alive_timeout))
          {
             log_error(LOG_LEVEL_CONNECT,
-               "Closing connection on server socket %d to %s: "
-               "keep-alive %u, tainted: %u, socket alive %u. %s timeout: %u.",
+               "Closing server socket %d connected to %s: "
+               "Keep-alive %u. Tainted: %u. Socket alive %u. Timeout: %u.",
                csp->server_connection.sfd, csp->server_connection.host,
                0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
                0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
                socket_is_still_alive(csp->server_connection.sfd),
-               ((csp->flags & CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET) ?
-               "Specified" : "Assumed"), csp->server_connection.keep_alive_timeout);
+               csp->server_connection.keep_alive_timeout);
 #ifdef FEATURE_CONNECTION_SHARING
             if (csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
             {
@@ -2736,8 +2735,8 @@ static void serve(struct client_state *csp)
       else if (csp->server_connection.sfd != JB_INVALID_SOCKET)
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Closing server socket %d connected to %s. Keep-alive %u. "
-            "Tainted: %u. Socket alive %u. Timeout: %u. "
+            "Closing server socket %d connected to %s. Keep-alive: %u. "
+            "Tainted: %u. Socket alive: %u. Timeout: %u. "
             "Configuration file change detected: %u",
             csp->server_connection.sfd, csp->server_connection.host,
             0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
@@ -2770,7 +2769,7 @@ static void serve(struct client_state *csp)
    if (csp->cfd != JB_INVALID_SOCKET)
    {
       log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
-         "Keep-alive: %u, Socket alive: %u. Data available: %u. "
+         "Keep-alive: %u. Socket alive: %u. Data available: %u. "
          "Configuration file change detected: %u. Requests received: %u.",
          csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
          socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
