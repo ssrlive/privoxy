@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.392 2012/10/21 12:36:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.393 2012/10/21 12:39:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1702,6 +1702,7 @@ static void chat(struct client_state *csp)
 
    if (fwd->forward_host || (http->ssl == 0))
    {
+      int write_failure;
       hdr = list_to_text(csp->headers);
       if (hdr == NULL)
       {
@@ -1714,22 +1715,30 @@ static void chat(struct client_state *csp)
        * Write the client's (modified) header to the server
        * (along with anything else that may be in the buffer)
        */
-      if (write_socket(csp->server_connection.sfd, hdr, strlen(hdr))
-       || (flush_socket(csp->server_connection.sfd, csp->client_iob) <  0))
+      write_failure = 0 != write_socket(csp->server_connection.sfd, hdr, strlen(hdr));
+      freez(hdr);
+
+      if (write_failure)
       {
          log_error(LOG_LEVEL_CONNECT,
-            "write header to: %s failed: %E", http->hostport);
+            "Failed sending request headers to: %s: %E", http->hostport);
+      }
+      else if (flush_socket(csp->server_connection.sfd, csp->client_iob) <  0))
+      {
+         write_failure = 1;
+         log_error(LOG_LEVEL_CONNECT,
+            "Failed sending request body to: %s: %E", http->hostport);
+      }
 
+      if (write_failure)
+      {
          rsp = error_response(csp, "connect-failed");
          if (rsp)
          {
             send_crunch_response(csp, rsp);
          }
-
-         freez(hdr);
          return;
       }
-      freez(hdr);
    }
    else
    {
