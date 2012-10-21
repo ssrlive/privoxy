@@ -3,7 +3,7 @@
 
 <html>
 <head>
-  <title>Privoxy 3.0.19 User Manual</title>
+  <title>Privoxy 3.0.20 User Manual</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
   <link rel="NEXT" title="Introduction" href="introduction.html">
@@ -16,14 +16,14 @@
 "#840084" alink="#0000FF">
   <div class="ARTICLE">
     <div class="TITLEPAGE">
-      <h1 class="TITLE"><a name="AEN2" id="AEN2">Privoxy 3.0.19 User
+      <h1 class="TITLE"><a name="AEN2" id="AEN2">Privoxy 3.0.20 User
       Manual</a></h1>
 
       <p class="PUBDATE"><sub><a href="copyright.html">Copyright</a> &copy;
       2001-2011 by <a href="http://www.privoxy.org/" target="_top">Privoxy
       Developers</a></sub><br></p>
 
-      <p class="PUBDATE">$Id: user-manual.sgml,v 2.146 2011/12/26 17:05:40
+      <p class="PUBDATE">$Id: user-manual.sgml,v 2.150 2012/09/26 15:20:54
       fabiankeil Exp $<br></p>
 
       <div>
@@ -116,12 +116,20 @@
                 OS X</a></dt>
 
                 <dt>2.1.7. <a href=
-                "installation.html#INSTALLATION-AMIGA">AmigaOS</a></dt>
+                "installation.html#OS-X-INSTALL-FROM-PACKAGE">Installation
+                from ready-built package</a></dt>
 
                 <dt>2.1.8. <a href=
-                "installation.html#INSTALLATION-TBZ">FreeBSD</a></dt>
+                "installation.html#OS-X-INSTALL-FROM-SOURCE">Installation
+                from source</a></dt>
 
                 <dt>2.1.9. <a href=
+                "installation.html#INSTALLATION-AMIGA">AmigaOS</a></dt>
+
+                <dt>2.1.10. <a href=
+                "installation.html#INSTALLATION-TBZ">FreeBSD</a></dt>
+
+                <dt>2.1.11. <a href=
                 "installation.html#INSTALLATTION-GENTOO">Gentoo</a></dt>
               </dl>
             </dd>
@@ -185,7 +193,7 @@
 
         <dd>
           <dl>
-            <dt>6.1. <a href="configuration.html#AEN1090">Controlling Privoxy
+            <dt>6.1. <a href="configuration.html#AEN1107">Controlling Privoxy
             with Your Web Browser</a></dt>
 
             <dt>6.2. <a href="configuration.html#CONFOVERVIEW">Configuration
@@ -317,25 +325,31 @@
                 "config.html#KEEP-ALIVE-TIMEOUT">keep-alive-timeout</a></dt>
 
                 <dt>7.6.5. <a href=
-                "config.html#DEFAULT-SERVER-TIMEOUT">default-server-timeout</a></dt>
+                "config.html#TOLERATE-PIPELINING">tolerate-pipelining</a></dt>
 
                 <dt>7.6.6. <a href=
-                "config.html#CONNECTION-SHARING">connection-sharing</a></dt>
+                "config.html#DEFAULT-SERVER-TIMEOUT">default-server-timeout</a></dt>
 
                 <dt>7.6.7. <a href=
-                "config.html#SOCKET-TIMEOUT">socket-timeout</a></dt>
+                "config.html#CONNECTION-SHARING">connection-sharing</a></dt>
 
                 <dt>7.6.8. <a href=
-                "config.html#MAX-CLIENT-CONNECTIONS">max-client-connections</a></dt>
+                "config.html#SOCKET-TIMEOUT">socket-timeout</a></dt>
 
                 <dt>7.6.9. <a href=
-                "config.html#HANDLE-AS-EMPTY-DOC-RETURNS-OK">handle-as-empty-doc-returns-ok</a></dt>
+                "config.html#MAX-CLIENT-CONNECTIONS">max-client-connections</a></dt>
 
                 <dt>7.6.10. <a href=
-                "config.html#ENABLE-COMPRESSION">enable-compression</a></dt>
+                "config.html#HANDLE-AS-EMPTY-DOC-RETURNS-OK">handle-as-empty-doc-returns-ok</a></dt>
 
                 <dt>7.6.11. <a href=
+                "config.html#ENABLE-COMPRESSION">enable-compression</a></dt>
+
+                <dt>7.6.12. <a href=
                 "config.html#COMPRESSION-LEVEL">compression-level</a></dt>
+
+                <dt>7.6.13. <a href=
+                "config.html#CLIENT-HEADER-ORDER">client-header-order</a></dt>
               </dl>
             </dd>
 
@@ -348,10 +362,10 @@
 
         <dd>
           <dl>
-            <dt>8.1. <a href="actions-file.html#AEN2879">Finding the Right
+            <dt>8.1. <a href="actions-file.html#AEN2954">Finding the Right
             Mix</a></dt>
 
-            <dt>8.2. <a href="actions-file.html#AEN2886">How to Edit</a></dt>
+            <dt>8.2. <a href="actions-file.html#AEN2961">How to Edit</a></dt>
 
             <dt>8.3. <a href="actions-file.html#ACTIONS-APPLY">How Actions
             are Applied to Requests</a></dt>
@@ -361,10 +375,10 @@
 
             <dd>
               <dl>
-                <dt>8.4.1. <a href="actions-file.html#AEN2998">The Domain
+                <dt>8.4.1. <a href="actions-file.html#AEN3073">The Domain
                 Pattern</a></dt>
 
-                <dt>8.4.2. <a href="actions-file.html#AEN3074">The Path
+                <dt>8.4.2. <a href="actions-file.html#AEN3149">The Path
                 Pattern</a></dt>
 
                 <dt>8.4.3. <a href="actions-file.html#TAG-PATTERN">The Tag
@@ -475,7 +489,7 @@
                 "actions-file.html#SET-IMAGE-BLOCKER">set-image-blocker</a></dt>
 
                 <dt>8.5.34. <a href=
-                "actions-file.html#AEN4706">Summary</a></dt>
+                "actions-file.html#AEN4785">Summary</a></dt>
               </dl>
             </dd>
 
@@ -487,13 +501,13 @@
             <dd>
               <dl>
                 <dt>8.7.1. <a href=
-                "actions-file.html#AEN4770">match-all.action</a></dt>
+                "actions-file.html#AEN4849">match-all.action</a></dt>
 
                 <dt>8.7.2. <a href=
-                "actions-file.html#AEN4792">default.action</a></dt>
+                "actions-file.html#AEN4871">default.action</a></dt>
 
                 <dt>8.7.3. <a href=
-                "actions-file.html#AEN4905">user.action</a></dt>
+                "actions-file.html#AEN4984">user.action</a></dt>
               </dl>
             </dd>
           </dl>
@@ -503,7 +517,7 @@
 
         <dd>
           <dl>
-            <dt>9.1. <a href="filter-file.html#AEN5060">Filter File
+            <dt>9.1. <a href="filter-file.html#AEN5139">Filter File
             Tutorial</a></dt>
 
             <dt>9.2. <a href="filter-file.html#PREDEFINED-FILTERS">The
@@ -547,7 +561,7 @@
 
         <dd>
           <dl>
-            <dt>12.1. <a href="copyright.html#AEN5542">License</a></dt>
+            <dt>12.1. <a href="copyright.html#AEN5621">License</a></dt>
 
             <dt>12.2. <a href="copyright.html#HISTORY">History</a></dt>
 
@@ -564,7 +578,7 @@
             <dt>14.1. <a href="appendix.html#REGEX">Regular
             Expressions</a></dt>
 
-            <dt>14.2. <a href="appendix.html#AEN5795">Privoxy's Internal
+            <dt>14.2. <a href="appendix.html#AEN5865">Privoxy's Internal
             Pages</a></dt>
 
             <dd>

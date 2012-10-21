@@ -6,7 +6,7 @@
   <title>Actions Files</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.19 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.20 User Manual" href="index.html">
   <link rel="PREVIOUS" title="The Main Configuration File" href=
   "config.html">
   <link rel="NEXT" title="Filter Files" href="filter-file.html">
@@ -21,7 +21,7 @@
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.19 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.20 User Manual</th>
       </tr>
 
       <tr>
@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2780" id="AEN2780"></a>
+          <a name="AEN2855" id="AEN2855"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -314,7 +314,7 @@
     actions</a>.</p>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2879" id="AEN2879">8.1. Finding the Right
+      <h2 class="SECT2"><a name="AEN2954" id="AEN2954">8.1. Finding the Right
       Mix</a></h2>
 
       <p>Note that some <a href="actions-file.html#ACTIONS">actions</a>, like
@@ -339,7 +339,7 @@
     </div>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2886" id="AEN2886">8.2. How to
+      <h2 class="SECT2"><a name="AEN2961" id="AEN2961">8.2. How to
       Edit</a></h2>
 
       <p>The easiest way to edit the actions files is with a browser by using
@@ -529,7 +529,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN2998" id="AEN2998">8.4.1. The Domain
+        <h3 class="SECT3"><a name="AEN3073" id="AEN3073">8.4.1. The Domain
         Pattern</a></h3>
 
         <p>The matching of the domain part offers some flexible options: if
@@ -634,7 +634,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3074" id="AEN3074">8.4.2. The Path
+        <h3 class="SECT3"><a name="AEN3149" id="AEN3149">8.4.2. The Path
         Pattern</a></h3>
 
         <p><span class="APPLICATION">Privoxy</span> uses <span class=
@@ -1300,6 +1300,28 @@ TAG:^User-Agent: RPM APT-HTTP/
 TAG:^User-Agent: fetch libfetch/
 TAG:^User-Agent: Ubuntu APT-HTTP/
 TAG:^User-Agent: MPlayer/
+
+</pre>
+                  </td>
+                </tr>
+              </table>
+
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
+# Tag all requests with the Range header set
+{+client-header-tagger{range-requests}}
+/
+
+# Disable filtering for the tagged requests.
+#
+# With filtering enabled Privoxy would remove the Range headers
+# to be able to filter the whole response. The downside is that
+# it prevents clients from resuming downloads or skipping over
+# parts of multimedia files.
+{-filter -deanimate-gifs}
+TAG:^RANGE-REQUEST$
 
 </pre>
                   </td>
@@ -3773,6 +3795,9 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
               provided as parameter, or derived by applying a single pcrs
               command to the original URL.</p>
 
+              <p>The syntax for pcrs commands is documented in the <a href=
+              "filter-file.html">filter file</a> section.</p>
+
               <p>This action will be ignored if you use it together with
               <tt class="LITERAL"><a href=
               "actions-file.html#BLOCK">block</a></tt>. It can be combined
@@ -4217,7 +4242,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4706" id="AEN4706">8.5.34.
+        <h3 class="SECT3"><a name="AEN4785" id="AEN4785">8.5.34.
         Summary</a></h3>
 
         <p>Note that many of these actions have the potential to cause a page
@@ -4376,7 +4401,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       together:</p>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4770" id="AEN4770">8.7.1.
+        <h3 class="SECT3"><a name="AEN4849" id="AEN4849">8.7.1.
         match-all.action</a></h3>
 
         <p>Remember <span class="emphasis"><i class="EMPHASIS">all actions
@@ -4425,7 +4450,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4792" id="AEN4792">8.7.2.
+        <h3 class="SECT3"><a name="AEN4871" id="AEN4871">8.7.2.
         default.action</a></h3>
 
         <p>If you aren't a developer, there's no need for you to edit the
@@ -4768,7 +4793,7 @@ wiki.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4905" id="AEN4905">8.7.3.
+        <h3 class="SECT3"><a name="AEN4984" id="AEN4984">8.7.3.
         user.action</a></h3>
 
         <p>So far we are painting with a broad brush by setting general

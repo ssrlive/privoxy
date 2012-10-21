@@ -71,8 +71,8 @@
         because a person can read code does not mean they will understand why
         or what is being done. A reader may spend a lot more time figuring
         out what is going on when a simple comment or explanation would have
-        prevented the extra research. Please help your brother IJB'ers
-        out!</p>
+        prevented the extra research. Please help your fellow Privoxy
+        developers out!</p>
 
         <p>The comments will also help justify the intent of the code. If the
         comment describes something different than what the code is doing
@@ -85,13 +85,13 @@
             <td>
               <pre class="PROGRAMLISTING">
 /* if page size greater than 1k ... */
-if ( page_length() &gt; 1024 )
+if (page_length() &gt; 1024)
 {
     ... "block" the page up ...
 }
 
 /* if page size is small, send it in blocks */
-if ( page_length() &gt; 1024 )
+if (page_length() &gt; 1024)
 {
     ... "block" the page up ...
 }
@@ -127,20 +127,20 @@ is actually being done.
 /*********************************************************************
  * This will stand out clearly in your code!
  *********************************************************************/
-if ( this_variable == that_variable )
+if (this_variable == that_variable)
 {
    do_something_very_important();
 }
 
 
 /* unfortunately, this may not */
-if ( this_variable == that_variable )
+if (this_variable == that_variable)
 {
    do_something_very_important();
 }
 
 
-if ( this_variable == that_variable ) /* this may not either */
+if (this_variable == that_variable) /* this may not either */
 {
    do_something_very_important();
 }
@@ -182,12 +182,12 @@ if ( this_variable == that_variable ) /* this may not either */
  * This will stand out clearly in your code,
  * But the second example won't.
  *********************************************************************/
-if ( this_variable == this_variable )
+if (this_variable == this_variable)
 {
    do_something_very_important();
 }
 
-if ( this_variable == this_variable ) /*can you see me?*/
+if (this_variable == this_variable) /*can you see me?*/
 {
    do_something_very_important(); /*not easily*/
 }
@@ -199,7 +199,7 @@ if ( this_variable == this_variable ) /*can you see me?*/
 int urls_read     = 0;     /* # of urls read + rejected */
 int urls_rejected = 0;     /* # of urls rejected */
 
-if ( 1 == X )
+if (1 == X)
 {
    do_something_very_important();
 }
@@ -281,7 +281,7 @@ short do_something_very_important(
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-if ( 1 == X )
+if (1 == X)
 {
    do_something_very_important();
    ...some long list of commands...
@@ -289,11 +289,11 @@ if ( 1 == X )
 
 or:
 
-if ( 1 == X )
+if (1 == X)
 {
    do_something_very_important();
    ...some long list of commands...
-} /* -END- if ( 1 == X ) */
+} /* -END- if (1 == X) */
 </pre>
             </td>
           </tr>
@@ -362,7 +362,7 @@ int msiis5hack = 0; int msIis5Hack = 0;
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-int load_some_file( struct client_state *csp )
+int load_some_file(struct client_state *csp)
 </pre>
             </td>
           </tr>
@@ -375,8 +375,8 @@ int load_some_file( struct client_state *csp )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-int loadsomefile( struct client_state *csp )
-int loadSomeFile( struct client_state *csp )
+int loadsomefile(struct client_state *csp)
+int loadSomeFile(struct client_state *csp)
 </pre>
             </td>
           </tr>
@@ -400,8 +400,8 @@ int loadSomeFile( struct client_state *csp )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-(.h) extern int load_aclfile( struct client_state *csp );
-(.c) int load_aclfile( struct client_state *csp )
+(.h) extern int load_aclfile(struct client_state *csp);
+(.c) int load_aclfile(struct client_state *csp)
 </pre>
             </td>
           </tr>
@@ -414,9 +414,9 @@ int loadSomeFile( struct client_state *csp )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-(.h) extern int load_aclfile( struct client_state * ); or
+(.h) extern int load_aclfile(struct client_state *); or
 (.h) extern int load_aclfile();
-(.c) int load_aclfile( struct client_state *csp )
+(.c) int load_aclfile(struct client_state *csp)
 </pre>
             </td>
           </tr>
@@ -440,7 +440,7 @@ int loadSomeFile( struct client_state *csp )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-(enumeration) : enum Boolean { FALSE, TRUE };
+(enumeration) : enum Boolean {FALSE, TRUE};
 (#define) : #define DEFAULT_SIZE 100;
 </pre>
             </td>
@@ -535,7 +535,7 @@ int loadSomeFile( struct client_state *csp )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-if ( this == that )
+if (this == that)
 {
    ...
 }
@@ -547,11 +547,11 @@ if ( this == that )
         <p><span class="emphasis"><i class="EMPHASIS">Instead
         of:</i></span></p>
 
-        <p>if ( this == that ) { ... }</p>
+        <p>if (this == that) { ... }</p>
 
         <p>or</p>
 
-        <p>if ( this == that ) { ... }</p>
+        <p>if (this == that) { ... }</p>
 
         <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> In the
         special case that the if-statement is inside a loop, and it is
@@ -569,12 +569,12 @@ if ( this == that )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-while ( more lines are read )
+while (more lines are read)
 {
    /* Please document what is/is not a comment line here */
-   if ( it's a comment ) continue;
+   if (it's a comment) continue;
 
-   do_something( line );
+   do_something(line);
 }
 </pre>
             </td>
@@ -599,7 +599,7 @@ while ( more lines are read )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-if ( this == that )
+if (this == that)
 {
    do_something();
    do_something_else();
@@ -612,11 +612,11 @@ if ( this == that )
         <p><span class="emphasis"><i class="EMPHASIS">Instead
         of:</i></span></p>
 
-        <p>if ( this == that ) do_something(); do_something_else();</p>
+        <p>if (this == that) do_something(); do_something_else();</p>
 
         <p>or</p>
 
-        <p>if ( this == that ) do_something();</p>
+        <p>if (this == that) do_something();</p>
 
         <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> The
         first example in "Instead of" will execute in a manner other than
@@ -635,7 +635,7 @@ if ( this == that )
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-structure-&gt;flag = ( condition );
+structure-&gt;flag = (condition);
 </pre>
             </td>
           </tr>
@@ -644,7 +644,7 @@ structure-&gt;flag = ( condition );
         <p><span class="emphasis"><i class="EMPHASIS">Instead
         of:</i></span></p>
 
-        <p>if ( condition ) { structure-&gt;flag = 1; } else {
+        <p>if (condition) { structure-&gt;flag = 1; } else {
         structure-&gt;flag = 0; }</p>
 
         <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> The
@@ -674,10 +674,6 @@ int first_value   = 0;
 int some_value    = 0;
 int another_value = 0;
 int this_variable = 0;
-
-if ( this_variable == this_variable )
-
-first_value = old_value + ( ( some_value - another_value ) - whatever )
 </pre>
             </td>
           </tr>
@@ -729,14 +725,14 @@ function_name();
 int function1( ... )
 {
    ...code...
-   return( ret_code );
+   return(ret_code);
 
-}   /* -END- function1 */
+} /* -END- function1 */
 
 
 int function2( ... )
 {
-}   /* -END- function2 */
+} /* -END- function2 */
 </pre>
             </td>
           </tr>
@@ -745,7 +741,7 @@ int function2( ... )
         <p><span class="emphasis"><i class="EMPHASIS">Instead
         of:</i></span></p>
 
-        <p>int function1( ... ) { ...code... return( ret_code ); } int
+        <p>int function1( ... ) { ...code... return(ret_code); } int
         function2( ... ) { }</p>
 
         <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> Use 1
@@ -787,16 +783,16 @@ static const char * const url_code_map[256] =
 
 int function1( ... )
 {
-   if ( 1 )
+   if (1)
    {
-      return( ALWAYS_TRUE );
+      return ALWAYS_TRUE;
    }
    else
    {
-      return( HOW_DID_YOU_GET_HERE );
+      return HOW_DID_YOU_GET_HERE;
    }
 
-   return( NEVER_GETS_HERE );
+   return NEVER_GETS_HERE;
 
 }
 </pre>
@@ -902,7 +898,7 @@ is_web_page_blank();
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-for ( size_t cnt = 0; cnt &lt; block_list_length(); cnt++ )
+for (size_t cnt = 0; cnt &lt; block_list_length(); cnt++)
 {
    ....
 }
@@ -932,7 +928,7 @@ for ( size_t cnt = 0; cnt &lt; block_list_length(); cnt++ )
               <pre class="PROGRAMLISTING">
 size_t len = block_list_length();
 
-for ( size_t cnt = 0; cnt &lt; len; cnt++ )
+for (size_t cnt = 0; cnt &lt; len; cnt++)
 {
    ....
 }
@@ -957,10 +953,10 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
         <p>This allows a developer to define a const pointer and call your
         function. If your function does not have the const keyword, we may
         not be able to use your function. Consider strcmp, if it were defined
-        as: extern int strcmp( char *s1, char *s2 );</p>
+        as: extern int strcmp(char *s1, char *s2);</p>
 
-        <p>I could then not use it to compare argv's in main: int main( int
-        argc, const char *argv[] ) { strcmp( argv[0], "privoxy" ); }</p>
+        <p>I could then not use it to compare argv's in main: int main(int
+        argc, const char *argv[]) { strcmp(argv[0], "privoxy"); }</p>
 
         <p>Both these pointers are *const*! If the c runtime library
         maintainers do it, we should too.</p>
@@ -975,11 +971,11 @@ for ( size_t cnt = 0; cnt &lt; len; cnt++ )
 
         <p>Most structures cannot fit onto a normal stack entry (i.e. they
         are not 4 bytes or less). Aka, a function declaration like: int
-        load_aclfile( struct client_state csp )</p>
+        load_aclfile(struct client_state csp)</p>
 
         <p>would not work. So, to be consistent, we should declare all
-        prototypes with "pass by value": int load_aclfile( struct
-        client_state *csp )</p>
+        prototypes with "pass by value": int load_aclfile(struct client_state
+        *csp)</p>
       </div>
 
       <div class="SECT3">
@@ -1161,22 +1157,22 @@ extern file_list *xyz;
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-switch( hash_string( cmd ) )
+switch (hash_string(cmd))
 {
-   case hash_actions_file :
+   case hash_actions_file:
       ... code ...
       break;
 
-   case hash_confdir :
+   case hash_confdir:
       ... code ...
       break;
 
-   default :
+   default:
       log_error( ... );
       ... anomaly code goes here ...
       continue; / break; / exit( 1 ); / etc ...
 
-} /* end switch( hash_string( cmd ) ) */
+} /* end switch (hash_string(cmd)) */
 </pre>
             </td>
           </tr>
@@ -1223,24 +1219,7 @@ switch( hash_string( cmd ) )
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="S39" id="S39">4.7.4. Use 'long' or 'short'
-        Instead of 'int'</a></h3>
-
-        <p><span class="emphasis"><i class=
-        "EMPHASIS">Explanation:</i></span></p>
-
-        <p>On 32-bit platforms, int usually has the range of long. On 16-bit
-        platforms, int has the range of short.</p>
-
-        <p><span class="emphasis"><i class="EMPHASIS">Status:</i></span>
-        open-to-debate. In the case of most FSF projects (including
-        X/GNU-Emacs), there are typedefs to int4, int8, int16, (or
-        equivalence ... I forget the exact typedefs now). Should we add these
-        to IJB now that we have a "configure" script?</p>
-      </div>
-
-      <div class="SECT3">
-        <h3 class="SECT3"><a name="S40" id="S40">4.7.5. Don't mix size_t and
+        <h3 class="SECT3"><a name="S40" id="S40">4.7.4. Don't mix size_t and
         other types</a></h3>
 
         <p><span class="emphasis"><i class=
@@ -1254,7 +1233,7 @@ switch( hash_string( cmd ) )
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="S41" id="S41">4.7.6. Declare each variable
+        <h3 class="SECT3"><a name="S41" id="S41">4.7.5. Declare each variable
         and struct on its own line.</a></h3>
 
         <p><span class="emphasis"><i class=
@@ -1298,7 +1277,7 @@ long c = 0;
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="S42" id="S42">4.7.7. Use malloc/zalloc
+        <h3 class="SECT3"><a name="S42" id="S42">4.7.6. Use malloc/zalloc
         sparingly</a></h3>
 
         <p><span class="emphasis"><i class=
@@ -1325,7 +1304,7 @@ list, then it should definitely be allocated via `malloc'.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="S43" id="S43">4.7.8. The Programmer Who
+        <h3 class="SECT3"><a name="S43" id="S43">4.7.7. The Programmer Who
         Uses 'malloc' is Responsible for Ensuring 'free'</a></h3>
 
         <p><span class="emphasis"><i class=
@@ -1345,8 +1324,8 @@ list, then it should definitely be allocated via `malloc'.
           <tr>
             <td>
               <pre class="PROGRAMLISTING">
-int load_re_filterfile( struct client_state *csp ) { ... }
-static void unload_re_filterfile( void *f ) { ... }
+int load_re_filterfile(struct client_state *csp) { ... }
+static void unload_re_filterfile(void *f) { ... }
 </pre>
             </td>
           </tr>
@@ -1364,7 +1343,7 @@ static void unload_re_filterfile( void *f ) { ... }
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="S44" id="S44">4.7.9. Add loaders to the
+        <h3 class="SECT3"><a name="S44" id="S44">4.7.8. Add loaders to the
         `file_list' structure and in order</a></h3>
 
         <p><span class="emphasis"><i class=
@@ -1381,8 +1360,8 @@ static void unload_re_filterfile( void *f ) { ... }
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="S45" id="S45">4.7.10. "Uncertain" new code
-        and/or changes to existing code, use FIXME or XXX</a></h3>
+        <h3 class="SECT3"><a name="S45" id="S45">4.7.9. "Uncertain" new code
+        and/or changes to existing code, use XXX</a></h3>
 
         <p><span class="emphasis"><i class=
         "EMPHASIS">Explanation:</i></span></p>
@@ -1390,19 +1369,18 @@ static void unload_re_filterfile( void *f ) { ... }
         <p>If you have enough confidence in new code or confidence in your
         changes, but are not *quite* sure of the repercussions, add this:</p>
 
-        <p>/* FIXME: this code has a logic error on platform XYZ, *
-        attempting to fix */ #ifdef PLATFORM ...changed code here...
-        #endif</p>
+        <p>/* XXX: this code has a logic error on platform XYZ, * attempting
+        to fix */ #ifdef PLATFORM ...changed code here... #endif</p>
 
         <p>or:</p>
 
-        <p>/* FIXME: I think the original author really meant this... */
+        <p>/* XXX: I think the original author really meant this... */
         ...changed code here...</p>
 
         <p>or:</p>
 
-        <p>/* FIXME: new code that *may* break something else... */ ...new
-        code here...</p>
+        <p>/* XXX: new code that *may* break something else... */ ...new code
+        here...</p>
 
         <p><span class="emphasis"><i class="EMPHASIS">Note:</i></span> If you
         make it clear that this may or may not be a "good thing (tm)", it
@@ -1422,10 +1400,10 @@ static void unload_re_filterfile( void *f ) { ... }
         <tr>
           <td>
             <pre class="PROGRAMLISTING">
-const char FILENAME_rcs[] = "$Id$";
+const char FILENAME_rcs[] = "$I&lt;!-- Break CVS Substitution --&gt;d$";
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $S&lt;!-- Break CVS Substitution --&gt;ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1485,10 +1463,10 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
             <pre class="PROGRAMLISTING">
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$Id$"
+#define FILENAME_H_VERSION "$I&lt;!-- Break CVS Substitution --&gt;d$"
 /*********************************************************************
  *
- * File        :  $Source$
+ * File        :  $S&lt;!-- Break CVS Substitution --&gt;ource$
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1567,10 +1545,10 @@ extern const char FILENAME_h_rcs[];
  * Returns     :  0 =&gt; Ok, everything else is an error.
  *
  *********************************************************************/
-int FUNCTION_NAME( void *param1, const char *x )
+int FUNCTION_NAME(void *param1, const char *x)
 {
    ...
-   return( 0 );
+   return 0;
 
 }
 </pre>

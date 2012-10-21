@@ -6,7 +6,7 @@
   <title>The Main Configuration File</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.19 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.20 User Manual" href="index.html">
   <link rel="PREVIOUS" title="Privoxy Configuration" href=
   "configuration.html">
   <link rel="NEXT" title="Actions Files" href="actions-file.html">
@@ -21,7 +21,7 @@
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.19 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.20 User Manual</th>
       </tr>
 
       <tr>
@@ -685,8 +685,7 @@
               <p>Your logfile will grow indefinitely, and you will probably
               want to periodically remove it. On Unix systems, you can do
               this with a cron job (see <span class="QUOTE">"man
-              cron"</span>). For Red Hat based Linux distributions, a
-              <b class="COMMAND">logrotate</b> script has been included.</p>
+              cron"</span>).</p>
 
               <p>Any log files must be writable by whatever user <span class=
               "APPLICATION">Privoxy</span> is being run as (on Unix, default
@@ -843,6 +842,7 @@
   debug  4096 # Startup banner and warnings.
   debug  8192 # Non-fatal errors
   debug 32768 # log all data read from the network
+  debug 65536 # Log the applying actions
 </pre>
                   </td>
                 </tr>
@@ -1082,10 +1082,10 @@
               Internet and/or the local network. Be aware that some GNU/Linux
               distributions modify that behaviour without updating the
               documentation. Check for non-standard patches if your
-              <span class="APPLICATION">Privoxy</span>version behaves
+              <span class="APPLICATION">Privoxy</span> version behaves
               differently.</p>
 
-              <p>If you configure <span class="APPLICATION">Privoxy</span>to
+              <p>If you configure <span class="APPLICATION">Privoxy</span> to
               be reachable from the network, consider using <a href=
               "config.html#ACLS">access control lists</a> (ACL's, see below),
               and/or a firewall.</p>
@@ -1096,12 +1096,6 @@
               "config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</a></tt>
               and <tt class="LITERAL"><a href=
               "config.html#ENABLE-REMOTE-TOGGLE">enable-remote-toggle</a></tt></p>
-
-              <p>With the exception noted above, listening on multiple
-              addresses is currently not supported by <span class=
-              "APPLICATION">Privoxy</span> directly. It can be done on most
-              operating systems by letting a packet filter redirect request
-              for certain addresses to Privoxy, though.</p>
             </dd>
 
             <dt>Example:</dt>
@@ -2429,7 +2423,7 @@
               <p>Several users have reported this as a Privoxy bug, so the
               default value has been reduced. Consider increasing it to 300
               seconds or even more if you think your browser can handle it.
-              If your browser appears to be hanging it can't.</p>
+              If your browser appears to be hanging, it probably can't.</p>
             </dd>
 
             <dt>Examples:</dt>
@@ -2442,8 +2436,70 @@
       </div>
 
       <div class="SECT3">
+        <h4 class="SECT3"><a name="TOLERATE-PIPELINING" id=
+        "TOLERATE-PIPELINING">7.6.5. tolerate-pipelining</a></h4>
+
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+
+            <dd>
+              <p>Whether or not pipelined requests should be served.</p>
+            </dd>
+
+            <dt>Type of value:</dt>
+
+            <dd>
+              <p><tt class="REPLACEABLE"><i>0 or 1.</i></tt></p>
+            </dd>
+
+            <dt>Default value:</dt>
+
+            <dd>
+              <p>None</p>
+            </dd>
+
+            <dt>Effect if unset:</dt>
+
+            <dd>
+              <p>If Privoxy receives more than one request at once, it
+              terminates the client connection after serving the first
+              one.</p>
+            </dd>
+
+            <dt>Notes:</dt>
+
+            <dd>
+              <p><span class="APPLICATION">Privoxy</span> currently doesn't
+              pipeline outgoing requests, thus allowing pipelining on the
+              client connection is not guaranteed to improve the
+              performance.</p>
+
+              <p>By default <span class="APPLICATION">Privoxy</span> tries to
+              discourage clients from pipelining by discarding aggressively
+              pipelined requests, which forces the client to resend them
+              through a new connection.</p>
+
+              <p>This option lets <span class="APPLICATION">Privoxy</span>
+              tolerate pipelining. Whether or not that improves performance
+              mainly depends on the client configuration.</p>
+
+              <p>This options is new and should be considered
+              experimental.</p>
+            </dd>
+
+            <dt>Examples:</dt>
+
+            <dd>
+              <p>tolerate-pipelining 1</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="SECT3">
         <h4 class="SECT3"><a name="DEFAULT-SERVER-TIMEOUT" id=
-        "DEFAULT-SERVER-TIMEOUT">7.6.5. default-server-timeout</a></h4>
+        "DEFAULT-SERVER-TIMEOUT">7.6.6. default-server-timeout</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2516,7 +2572,7 @@
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="CONNECTION-SHARING" id=
-        "CONNECTION-SHARING">7.6.6. connection-sharing</a></h4>
+        "CONNECTION-SHARING">7.6.7. connection-sharing</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2609,7 +2665,7 @@
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SOCKET-TIMEOUT" id="SOCKET-TIMEOUT">7.6.7.
+        <h4 class="SECT3"><a name="SOCKET-TIMEOUT" id="SOCKET-TIMEOUT">7.6.8.
         socket-timeout</a></h4>
 
         <div class="VARIABLELIST">
@@ -2658,7 +2714,7 @@
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="MAX-CLIENT-CONNECTIONS" id=
-        "MAX-CLIENT-CONNECTIONS">7.6.8. max-client-connections</a></h4>
+        "MAX-CLIENT-CONNECTIONS">7.6.9. max-client-connections</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2737,7 +2793,7 @@
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOC-RETURNS-OK" id=
-        "HANDLE-AS-EMPTY-DOC-RETURNS-OK">7.6.9.
+        "HANDLE-AS-EMPTY-DOC-RETURNS-OK">7.6.10.
         handle-as-empty-doc-returns-ok</a></h4>
 
         <div class="VARIABLELIST">
@@ -2797,7 +2853,7 @@
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="ENABLE-COMPRESSION" id=
-        "ENABLE-COMPRESSION">7.6.10. enable-compression</a></h4>
+        "ENABLE-COMPRESSION">7.6.11. enable-compression</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2855,7 +2911,7 @@
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="COMPRESSION-LEVEL" id=
-        "COMPRESSION-LEVEL">7.6.11. compression-level</a></h4>
+        "COMPRESSION-LEVEL">7.6.12. compression-level</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2919,6 +2975,56 @@
           </dl>
         </div>
       </div>
+
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CLIENT-HEADER-ORDER" id=
+        "CLIENT-HEADER-ORDER">7.6.13. client-header-order</a></h4>
+
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+
+            <dd>
+              <p>The order in which client headers are sorted before
+              forwarding them.</p>
+            </dd>
+
+            <dt>Type of value:</dt>
+
+            <dd>
+              <p><tt class="REPLACEABLE"><i>Client header names delimited by
+              spaces or tabs</i></tt></p>
+            </dd>
+
+            <dt>Default value:</dt>
+
+            <dd>
+              <p>None</p>
+            </dd>
+
+            <dt>Notes:</dt>
+
+            <dd>
+              <p>By default <span class="APPLICATION">Privoxy</span> leaves
+              the client headers in the order they were sent by the client.
+              Headers are modified in-place, new headers are added at the end
+              of the already existing headers.</p>
+
+              <p>The header order can be used to fingerprint client requests
+              independently of other headers like the User-Agent.</p>
+
+              <p>This directive allows to sort the headers differently to
+              better mimic a different User-Agent. Client headers will be
+              emitted in the order given, headers whose name isn't explicitly
+              specified are added at the end.</p>
+
+              <p>Note that sorting headers in an uncommon way will make
+              fingerprinting actually easier. Encrypted headers are not
+              affected by this directive.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
     </div>
 
     <div class="SECT2">
@@ -2940,8 +3046,9 @@
       "LOG-MESSAGES"></a>
 
       <p>If <span class="QUOTE">"log-messages"</span> is set to 1,
-      <span class="APPLICATION">Privoxy</span> will log messages to the
-      console window:</p>
+      <span class="APPLICATION">Privoxy</span> copy log messages to the
+      console window. The log detail depends on the <a href=
+      "config.html#DEBUG">debug</a> directive.</p>
 
       <p class="LITERALLAYOUT"><tt class="LITERAL">&nbsp;&nbsp;<span class=
       "emphasis"><i class="EMPHASIS">log-messages 1</i></span><br>
