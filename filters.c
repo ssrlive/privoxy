@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.173 2012/10/05 12:15:39 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.174 2012/10/21 12:35:15 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1692,7 +1692,7 @@ static char *pcrs_filter_response(struct client_state *csp)
 
    csp->flags |= CSP_FLAG_MODIFIED;
    csp->content_length = size;
-   IOB_RESET(csp->iob);
+   clear_iob(csp->iob);
 
    return(new);
 

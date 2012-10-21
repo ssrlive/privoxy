@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.399 2012/10/21 12:53:33 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.400 2012/10/21 12:56:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1793,7 +1793,7 @@ static void chat(struct client_state *csp)
       {
          return;
       }
-      IOB_RESET(csp->client_iob);
+      clear_iob(csp->client_iob);
    }
 
    log_error(LOG_LEVEL_CONNECT, "to %s successful", http->hostport);
@@ -2510,7 +2510,7 @@ static void prepare_csp_for_next_request(struct client_state *csp)
    csp->expected_content_length = 0;
    csp->expected_client_content_length = 0;
    list_remove_all(csp->headers);
-   IOB_RESET(csp->iob);
+   clear_iob(csp->iob);
    freez(csp->error_message);
    free_http_request(csp->http);
    destroy_list(csp->headers);
@@ -2556,7 +2556,7 @@ static void prepare_csp_for_next_request(struct client_state *csp)
        * Freeing the buffer itself isn't technically necessary,
        * but makes debugging more convenient.
        */
-      IOB_RESET(csp->client_iob);
+      clear_iob(csp->client_iob);
    }
 }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */

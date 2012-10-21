@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.187 2012/10/21 12:53:33 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.188 2012/10/21 12:56:38 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -416,12 +416,6 @@ struct iob
  */
 #define IOB_PEEK(IOB) ((IOB->cur > IOB->eod) ? (IOB->eod - IOB->cur) : 0)
 
-
-/**
- * Remove any data in the I/O buffer associated with the passed
- * client_state pointer.
- */
-#define IOB_RESET(IOB) do {free(IOB->buf); memset(IOB, '\0', sizeof(*IOB));} while (0)
 
 /* Bits for csp->content_type bitmask: */
 #define CT_TEXT    0x0001U /**< Suitable for pcrs filtering. */

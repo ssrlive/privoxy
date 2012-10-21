@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.256 2012/10/17 18:19:59 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.257 2012/10/21 12:39:27 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -356,6 +356,27 @@ jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
 
    return JB_ERR_OK;
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  clear_iob
+ *
+ * Description :  Frees the memory allocated for an I/O buffer and
+ *                resets the structure.
+ *
+ * Parameters  :
+ *          1  :  iob = I/O buffer to clear.
+ *
+ * Returns     :  JB_ERR_OK on success, JB_ERR_MEMORY if out-of-memory
+ *                or buffer limit reached.
+ *
+ *********************************************************************/
+void clear_iob(struct iob *iob)
+{
+   free(iob->buf);
+   memset(iob, '\0', sizeof(*iob));;
 }
 
 
