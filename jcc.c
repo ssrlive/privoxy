@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.404 2012/10/21 13:04:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.405 2012/10/21 13:04:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2630,9 +2630,7 @@ static void serve(struct client_state *csp)
          & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
          && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
          && (csp->cfd != JB_INVALID_SOCKET)
-         && ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
-             || (csp->config->feature_flags &
-                RUNTIME_FEATURE_CONNECTION_SHARING));
+         && (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE);
 
       if (!(csp->flags & CSP_FLAG_CRUNCHED)
          && (csp->server_connection.sfd != JB_INVALID_SOCKET))
