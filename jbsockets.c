@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.117 2012/10/17 18:01:34 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.118 2012/10/21 12:44:58 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -83,7 +83,6 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.117 2012/10/17 18:01:34 fabia
 
 #endif
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 #ifdef HAVE_POLL
 #ifdef __GLIBC__
 #include <sys/poll.h>
@@ -91,7 +90,6 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.117 2012/10/17 18:01:34 fabia
 #include <poll.h>
 #endif /* def __GLIBC__ */
 #endif /* HAVE_POLL */
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #include "project.h"
 
@@ -1423,7 +1421,6 @@ unsigned long resolve_hostname_to_ip(const char *host)
 }
 
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  socket_is_still_alive
@@ -1477,7 +1474,6 @@ int socket_is_still_alive(jb_socket sfd)
 
    return (no_data_waiting || (1 == recv(sfd, buf, 1, MSG_PEEK)));
 }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*
