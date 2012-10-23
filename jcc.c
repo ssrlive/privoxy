@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.405 2012/10/21 13:04:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.406 2012/10/21 14:40:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1821,7 +1821,9 @@ static void chat(struct client_state *csp)
 
    server_body = 0;
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
    watch_client_socket = 0 == (csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING);
+#endif
 
    for (;;)
    {
@@ -2594,12 +2596,12 @@ void serve(struct client_state *csp)
 static void serve(struct client_state *csp)
 #endif /* def AMIGA */
 {
+   int config_file_change_detected = 0; /* Only used for debugging */
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 #ifdef FEATURE_CONNECTION_SHARING
    static int monitor_thread_running = 0;
 #endif /* def FEATURE_CONNECTION_SHARING */
    int continue_chatting = 0;
-   int config_file_change_detected = 0; /* Only used for debugging */
 
    log_error(LOG_LEVEL_CONNECT, "Accepted connection from %s on socket %d",
       csp->ip_addr_str, csp->cfd);
