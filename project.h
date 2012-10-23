@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.189 2012/10/21 12:58:03 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.190 2012/10/21 13:00:06 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -763,7 +763,6 @@ struct reusable_connection
  */
 #define CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE  0x00001000U
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /**
  * Flag for csp->flags: Set if the server specified the
  * content length.
@@ -796,8 +795,6 @@ struct reusable_connection
  * keep the connection open for a known number of seconds.
  */
 #define CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET  0x00020000U
-
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 /**
  * Flag for csp->flags: Set if we think we can't reuse
@@ -934,7 +931,6 @@ struct client_state
    /** Length after content modification. */
    unsigned long long content_length;
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
    /* XXX: is this the right location? */
 
    /** Expected length of content after which we
@@ -946,7 +942,6 @@ struct client_state
     *  should stop reading from the client socket.
     */
    unsigned long long expected_client_content_length;
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #ifdef FEATURE_TRUST
 
