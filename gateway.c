@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.90 2012/10/17 18:13:26 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.91 2012/10/21 12:56:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -262,7 +262,6 @@ void remember_connection(const struct reusable_connection *connection)
 #endif /* def FEATURE_CONNECTION_SHARING */
 
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  mark_connection_closed
@@ -292,7 +291,6 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    freez(closed_connection->forward_host);
    closed_connection->forward_port = 0;
 }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 #ifdef FEATURE_CONNECTION_SHARING
