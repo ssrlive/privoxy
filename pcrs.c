@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.41 2012/05/24 15:02:38 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.42 2012/05/24 15:04:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -301,7 +301,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
                    */
                   const int ascii_value = xtoi(&replacement[i+2]);
 
-                  assert(ascii_value > 0);
+                  assert(ascii_value >= 0);
                   assert(ascii_value < 256);
                   text[k++] = (char)ascii_value;
                   i += 4;
