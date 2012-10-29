@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.142 2012/10/21 13:05:51 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.143 2012/10/21 13:06:20 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1711,6 +1711,11 @@ sub handle_loglevel_connect ($) {
 
         # Drained 180 bytes before closing socket 6
         $c =~ s@(?<=Drained )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Tainting client socket/) {
+
+        # Tainting client socket 7 due to unread data.
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we / or
