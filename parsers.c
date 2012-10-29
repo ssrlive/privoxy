@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.258 2012/10/21 12:58:03 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.259 2012/10/23 10:18:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3704,7 +3704,9 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
 
    if ((csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
-    && !(csp->flags & CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET))
+    && !(csp->flags & CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET)
+    && ((csp->flags & CSP_FLAG_SERVER_CONTENT_LENGTH_SET)
+       || (csp->flags & CSP_FLAG_CHUNKED)))
    {
       log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
       err = enlist(csp->headers, proxy_connection_header);
