@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.150 2012/09/26 15:20:54 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.151 2012/10/21 12:31:59 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.150 2012/09/26 15:20:54 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.151 2012/10/21 12:31:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3949,7 +3949,7 @@ for details.
     and use their output as input.
    </para>
    <para>
-    If the request URL gets changed, &my-app; will detect that and use the new
+    If the request URI gets changed, &my-app; will detect that and use the new
     one. This can be used to rewrite the request destination behind the client's
     back, for example to specify a Tor exit relay for certain requests.
    </para>
@@ -9510,6 +9510,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.151  2012/10/21 12:31:59  fabiankeil
+ In the redirect{} section, refer pcrs newbies to the 'filter file' section
+
  Revision 2.150  2012/09/26 15:20:54  fabiankeil
  Spell 'refresh-tags' correctly
 
