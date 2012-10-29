@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.408 2012/10/23 10:22:20 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.409 2012/10/29 11:59:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1141,7 +1141,7 @@ static void verify_request_length(struct client_state *csp)
              * it once we're done serving the current request.
              */
             csp->flags |= CSP_FLAG_PIPELINED_REQUEST_WAITING;
-            assert(csp->client_iob->eod > csp->client_iob->cur);
+            assert(csp->client_iob->eod >= csp->client_iob->cur);
             log_error(LOG_LEVEL_CONNECT, "Complete client request followed by "
                "%d bytes of pipelined data received.",
                (int)(csp->client_iob->eod - csp->client_iob->cur));
