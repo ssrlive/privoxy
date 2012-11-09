@@ -321,6 +321,24 @@
       <ul>
         <li>
           <p><span class="emphasis"><i class=
+          "EMPHASIS">--config-test</i></span></p>
+
+          <p>Exit after loading the configuration files before binding to the
+          listen address. The exit code signals whether or not the
+          configuration files have been successfully loaded.</p>
+
+          <p>If the exit code is 1, at least one of the configuration files
+          is invalid, if it is 0, all the configuration files have been
+          successfully loaded (but may still contain errors that can
+          currently only be detected at run time).</p>
+
+          <p>This option doesn't affect the log setting, combination with
+          <span class="emphasis"><i class="EMPHASIS">--no-daemon</i></span>
+          is recommended if a configured log file shouldn't be used.</p>
+        </li>
+
+        <li>
+          <p><span class="emphasis"><i class=
           "EMPHASIS">--version</i></span></p>
 
           <p>Print version info and exit. Unix only.</p>
