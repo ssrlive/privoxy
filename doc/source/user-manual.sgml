@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.151 2012/10/21 12:31:59 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.152 2012/10/29 12:02:55 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.151 2012/10/21 12:31:59 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.152 2012/10/29 12:02:55 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2438,6 +2438,27 @@ must find a better place for this paragraph
 <para>
  <itemizedlist>
 
+ <listitem>
+  <para>
+   <emphasis>--config-test</emphasis>
+  </para>
+  <para>
+   Exit after loading the configuration files before binding to
+   the listen address. The exit code signals whether or not the
+   configuration files have been successfully loaded.
+  </para>
+  <para>
+   If the exit code is 1, at least one of the configuration files
+   is invalid, if it is 0, all the configuration files have been
+   successfully loaded (but may still contain errors that can
+   currently only be detected at run time).
+  </para>
+  <para>
+   This option doesn't affect the log setting, combination with
+   <emphasis>--no-daemon</emphasis> is recommended if a configured
+   log file shouldn't be used.
+  </para>
+ </listitem>
  <listitem>
   <para>
     <emphasis>--version</emphasis>
@@ -9510,6 +9531,11 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.152  2012/10/29 12:02:55  fabiankeil
+ Clarify that the destination-change detection works for intercepted requests as well
+
+ For some values of "clarify".
+
  Revision 2.151  2012/10/21 12:31:59  fabiankeil
  In the redirect{} section, refer pcrs newbies to the 'filter file' section
 
