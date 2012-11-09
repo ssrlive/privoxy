@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: privoxy-man-page.sgml,v 2.43 2012/03/18 15:41:49 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.44 2012/11/09 10:48:40 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -72,14 +72,14 @@
 <refsynopsisdiv>
  <cmdsynopsis>
   <command>privoxy</command>
+  <arg><option>--chroot</option></arg>
   <arg><option>--config-test</option></arg>
   <arg><option>--help</option></arg>
-  <arg><option>--version</option></arg>
   <arg><option>--no-daemon</option></arg>
   <arg><option>--pidfile </option><replaceable class="parameter">pidfile</replaceable></arg>
-  <arg><option>--user </option><replaceable class="parameter">user[.group]</replaceable></arg>
-  <arg><option>--chroot</option></arg>
   <arg><option>--pre-chroot-nslookup </option><replaceable class="parameter">hostname</replaceable></arg>
+  <arg><option>--user </option><replaceable class="parameter">user[.group]</replaceable></arg>
+  <arg><option>--version</option></arg>
   <arg><replaceable class="parameter">configfile</replaceable></arg>
  </cmdsynopsis>
 
@@ -94,6 +94,21 @@
  </para>
 
  <variablelist>
+
+  <varlistentry>
+    <term>--chroot</term>
+     <listitem>
+      <para>
+       Before changing to the user ID given in the --user option, chroot to
+       that user's home directory, i.e. make the kernel pretend to the
+       <command>Privoxy</command> process that the directory tree starts
+       there. If set up carefully, this can limit the impact of possible
+       vulnerabilities in <command>Privoxy</command> to the files contained in
+       that hierarchy.
+      </para>
+    </listitem>
+  </varlistentry>
+
   <varlistentry>
     <term>--config-test</term>
       <listitem>
@@ -126,15 +141,6 @@
   </varlistentry>
 
   <varlistentry>
-    <term>--version</term>
-      <listitem>
-       <para>
-         Print version info and exit.
-        </para>
-      </listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term>--no-daemon</term>
      <listitem>
       <para>
@@ -157,6 +163,17 @@
   </varlistentry>
 
   <varlistentry>
+    <term>--pre-chroot-nslookup <replaceable class="parameter">hostname</replaceable></term>
+     <listitem>
+      <para>
+        Initialize the resolver library using <replaceable class="parameter">hostname</replaceable>
+        before chroot'ing. On some systems this reduces the number of files
+        that must be copied into the chroot tree.
+     </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term>--user <replaceable class="parameter">user[.group]</replaceable></term>
      <listitem>
       <para>
@@ -171,29 +188,16 @@
      </para>
     </listitem>
   </varlistentry>
+
   <varlistentry>
-    <term>--chroot</term>
-     <listitem>
-      <para>
-       Before changing to the user ID given in the --user option, chroot to
-       that user's home directory, i.e. make the kernel pretend to the
-       <command>Privoxy</command> process that the directory tree starts
-       there. If set up carefully, this can limit the impact of possible
-       vulnerabilities in <command>Privoxy</command> to the files contained in
-       that hierarchy.
-      </para>
-    </listitem>
+    <term>--version</term>
+      <listitem>
+       <para>
+         Print version info and exit.
+        </para>
+      </listitem>
   </varlistentry>
-  <varlistentry>
-    <term>--pre-chroot-nslookup <replaceable class="parameter">hostname</replaceable></term>
-     <listitem>
-      <para>
-        Initialize the resolver library using <replaceable class="parameter">hostname</replaceable>
-        before chroot'ing. On some systems this reduces the number of files
-        that must be copied into the chroot tree.
-     </para>
-    </listitem>
-  </varlistentry>
+
  </variablelist>
 
  <para>
