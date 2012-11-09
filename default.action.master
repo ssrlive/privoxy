@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.254 2012/11/09 10:45:15 fabiankeil Exp $
+#  $Id: default.action.master,v 1.255 2012/11/09 10:46:50 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1921,7 +1921,6 @@ i.cnn.net/cnn/.*/clickability/button
 #----------------------------------------------------------------------------
 # Sometimes (i.e. often!) fast-redirects catches things by mistake
 #----------------------------------------------------------------------------
-#MASTER# REMARKS: This section NOT checked 10/13/06 HB
 {-fast-redirects}
 # Sticky Actions = -fast-redirects
 www.ukc.ac.uk/cgi-bin/wac\.cgi\?
