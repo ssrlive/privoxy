@@ -5,7 +5,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: privoxy-man-page.sgml,v 2.42 2012/03/04 11:54:22 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.43 2012/03/18 15:41:49 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -54,7 +54,7 @@
 
 <refentry id="privoxy">
 <refentryinfo>
- <date>2009-02-15</date>
+ <date>2012-11-08</date>
 </refentryinfo>
 <refmeta>
  <refentrytitle>privoxy</refentrytitle>
@@ -72,6 +72,7 @@
 <refsynopsisdiv>
  <cmdsynopsis>
   <command>privoxy</command>
+  <arg><option>--config-test</option></arg>
   <arg><option>--help</option></arg>
   <arg><option>--version</option></arg>
   <arg><option>--no-daemon</option></arg>
@@ -93,6 +94,28 @@
  </para>
 
  <variablelist>
+  <varlistentry>
+    <term>--config-test</term>
+      <listitem>
+       <para>
+         Exit after loading the configuration files before binding to
+         the listen address. The exit code signals whether or not the
+         configuration files have been successfully loaded.
+       </para>
+       <para>
+         If the exit code is 1, at least one of the configuration files
+         is invalid, if it is 0, all the configuration files have been
+         successfully loaded (but may still contain errors that can
+         currently only be detected at run time).
+        </para>
+       <para>
+         This option doesn't affect the log setting, combination with
+         "--no-daemon" is recommended if a configured log file shouldn't
+         be used.
+       </para>
+      </listitem>
+  </varlistentry>
+
   <varlistentry>
     <term>--help</term>
       <listitem>
