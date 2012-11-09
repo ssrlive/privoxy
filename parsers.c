@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.259 2012/10/23 10:18:19 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.260 2012/10/29 12:04:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -531,11 +531,6 @@ jb_err decompress_iob(struct client_state *csp)
    }
    else if (csp->content_type & CT_DEFLATE)
    {
-      /*
-       * XXX: The debug level should be lowered
-       * before the next stable release.
-       */
-      log_error(LOG_LEVEL_INFO, "Decompressing deflated iob: %d", *cur);
       /*
        * In theory (that is, according to RFC 1950), deflate-compressed
        * data should begin with a two-byte zlib header and have an
