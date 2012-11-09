@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.412 2012/10/29 12:04:42 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.413 2012/11/09 10:48:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3259,7 +3259,8 @@ int main(int argc, char **argv)
 # endif /* def _WIN_CONSOLE */
 #endif /* def _WIN32 */
 
-   if (do_config_test) {
+   if (do_config_test)
+   {
       exit(NULL == load_config());
    }
 
