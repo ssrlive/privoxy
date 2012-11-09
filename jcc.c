@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.411 2012/10/29 12:00:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.412 2012/10/29 12:04:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2830,7 +2830,7 @@ static int32 server_thread(void *data)
 static void usage(const char *myname)
 {
    printf("Privoxy version " VERSION " (" HOME_PAGE_URL ")\n"
-          "Usage: %s "
+          "Usage: %s [--config-test] "
 #if defined(unix)
           "[--chroot] "
 #endif /* defined(unix) */
@@ -3020,6 +3020,7 @@ int main(int argc, char **argv)
 #endif
 {
    int argc_pos = 0;
+   int do_config_test = 0;
    unsigned int random_seed;
 #ifdef unix
    struct passwd *pw = NULL;
@@ -3150,6 +3151,11 @@ int main(int argc, char **argv)
       }
 #endif /* defined(unix) */
 
+      else if (strcmp(argv[argc_pos], "--config-test") == 0)
+      {
+         do_config_test = 1;
+      }
+
       else if (argc_pos + 1 != argc)
       {
          /*
@@ -3253,6 +3259,9 @@ int main(int argc, char **argv)
 # endif /* def _WIN_CONSOLE */
 #endif /* def _WIN32 */
 
+   if (do_config_test) {
+      exit(NULL == load_config());
+   }
 
    /* Initialize the CGI subsystem */
    cgi_init_error_messages();
