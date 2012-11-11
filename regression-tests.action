@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.45 2012/04/22 12:14:46 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.46 2012/11/09 10:45:41 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -26,8 +26,6 @@
 #
 #############################################################################
 
-# While the syntax used is understood by Privoxy 3.0.14 and later,
-# some of the +fast-redirects{} tests require at least 3.0.20 to work.
 {{settings}}
 for-privoxy-version=3.0.20
 
@@ -391,6 +389,7 @@ TAG:^hide-if-modified-since\{NaN\}$
 {\
  +crunch-outgoing-cookies \
  -crunch-incoming-cookies \
+ -limit-cookie-lifetime   \
  -session-cookies-only    \
  -hide-if-modified-since  \
 }
@@ -411,6 +410,7 @@ TAG:^crunch-outgoing-cookies$
 {\
  -crunch-outgoing-cookies \
  -crunch-incoming-cookies \
+ -limit-cookie-lifetime   \
  +session-cookies-only    \
  -hide-if-modified-since  \
 }
