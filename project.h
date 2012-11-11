@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.190 2012/10/21 13:00:06 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.191 2012/10/23 10:19:04 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -500,6 +500,8 @@ struct iob
 #define ACTION_OVERWRITE_LAST_MODIFIED               0x02000000UL
 /** Action bitmap: Replace or block Accept-Language header */
 #define ACTION_HIDE_ACCEPT_LANGUAGE                  0x04000000UL
+/** Action bitmap: Limit the cookie lifetime */
+#define ACTION_LIMIT_COOKIE_LIFETIME                 0x08000000UL
 
 
 /** Action string index: How to deanimate GIFs */
@@ -538,8 +540,10 @@ struct iob
 #define ACTION_STRING_BLOCK                16
 /** Action string index: what to do with the "X-Forwarded-For" header. */
 #define ACTION_STRING_CHANGE_X_FORWARDED_FOR 17
+/** Action string index: how many minutes cookies should be valid. */
+#define ACTION_STRING_LIMIT_COOKIE_LIFETIME 18
 /** Number of string actions. */
-#define ACTION_STRING_COUNT                18
+#define ACTION_STRING_COUNT                19
 
 
 /* To make the ugly hack in sed easier to understand */

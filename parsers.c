@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.261 2012/11/09 10:46:06 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.262 2012/11/11 12:37:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3804,6 +3804,50 @@ static jb_err server_http(struct client_state *csp, char **header)
    return JB_ERR_OK;
 }
 
+/*********************************************************************
+ *
+ * Function    :  add_cooky_expiry_date
+ *
+ * Description :  Adds a cookie expiry date to a string.
+ *
+ * Parameters  :
+ *          1  :  cookie = On input, pointer to cookie to modify.
+ *                         On output, pointer to the modified header.
+ *                         The original string is freed.
+ *          2  :  lifetime = Seconds the cookie should be valid
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void add_cookie_expiry_date(char **cookie, time_t lifetime)
+{
+   char tmp[50];
+   struct tm *timeptr = NULL;
+   time_t expiry_date = time(NULL) + lifetime;
+#ifdef HAVE_GMTIME_R
+   struct tm gmt;
+
+   timeptr = gmtime_r(&expiry_date, &gmt);
+#elif defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_lock(&gmtime_mutex);
+   timeptr = gmtime(&expiry_date);
+   privoxy_mutex_unlock(&gmtime_mutex);
+#else
+   timeptr = gmtime(&expiry_date);
+#endif
+
+   if (NULL == timeptr)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Failed to get the time in add_cooky_expiry_date()");
+   }
+   strftime(tmp, sizeof(tmp), "; expires=%a, %d-%b-%Y %H:%M:%S GMT", timeptr);
+   if (JB_ERR_OK != string_append(cookie, tmp))
+   {
+      log_error(LOG_LEVEL_FATAL, "Out of memory in add_cooky_expiry()");
+   }
+}
+
 
 /*********************************************************************
  *
@@ -3830,18 +3874,18 @@ static jb_err server_http(struct client_state *csp, char **header)
  *********************************************************************/
 static jb_err server_set_cookie(struct client_state *csp, char **header)
 {
-   time_t now;
-   time_t cookie_time;
-
    if ((csp->action->flags & ACTION_CRUNCH_INCOMING_COOKIES) != 0)
    {
       log_error(LOG_LEVEL_HEADER, "Crunching incoming cookie: %s", *header);
       freez(*header);
    }
-   else if ((csp->action->flags & ACTION_SESSION_COOKIES_ONLY) != 0)
+   else if ((0 != (csp->action->flags & ACTION_SESSION_COOKIES_ONLY))
+         || (0 != (csp->action->flags & ACTION_LIMIT_COOKIE_LIFETIME)))
    {
-      /* Flag whether or not to log a message */
-      int changed = 0;
+      time_t now;
+      time_t cookie_time;
+      long cookie_lifetime = 0;
+      int expiry_date_acceptable = 0;
 
       /* A variable to store the tag we're working on */
       char *cur_tag;
@@ -3856,6 +3900,18 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
       }
 
       time(&now);
+
+      if ((csp->action->flags & ACTION_LIMIT_COOKIE_LIFETIME) != 0)
+      {
+         const char *param = csp->action->string[ACTION_STRING_LIMIT_COOKIE_LIFETIME];
+
+         cookie_lifetime = strtol(param, NULL, 0);
+         if (cookie_lifetime < 0)
+         {
+            log_error(LOG_LEVEL_FATAL, "Invalid cookie lifetime limit: %s", param);
+         }
+         cookie_lifetime *= 60U;
+      }
 
       /* Loop through each tag in the cookie */
       while (*cur_tag)
@@ -3910,7 +3966,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                log_error(LOG_LEVEL_ERROR,
                   "Can't parse \'%s\', send by %s. Unsupported time format?", cur_tag, csp->http->url);
                string_move(cur_tag, next_tag);
-               changed = 1;
+               expiry_date_acceptable = 0;
             }
             else
             {
@@ -3948,12 +4004,21 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                 *   anyway, which in many cases will be shorter
                 *   than a browser session.
                 */
-               if (cookie_time - now < 0)
+               if (cookie_time < now)
                {
                   log_error(LOG_LEVEL_HEADER,
                      "Cookie \'%s\' is already expired and can pass unmodified.", *header);
                   /* Just in case some clown sets more then one expiration date */
                   cur_tag = next_tag;
+                  expiry_date_acceptable = 1;
+               }
+               else if ((cookie_lifetime != 0) && (cookie_time < (now + cookie_lifetime)))
+               {
+                  log_error(LOG_LEVEL_HEADER, "Cookie \'%s\' can pass unmodified. "
+                     "Its lifetime is below the limit.", *header);
+                  /* Just in case some clown sets more then one expiration date */
+                  cur_tag = next_tag;
+                  expiry_date_acceptable = 1;
                }
                else
                {
@@ -3964,7 +4029,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                   string_move(cur_tag, next_tag);
 
                   /* That changed the header, need to issue a log message */
-                  changed = 1;
+                  expiry_date_acceptable = 0;
 
                   /*
                    * Note that the next tag has now been moved to *cur_tag,
@@ -3981,11 +4046,19 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
          }
       }
 
-      if (changed)
+      if (!expiry_date_acceptable)
       {
          assert(NULL != *header);
-         log_error(LOG_LEVEL_HEADER, "Cookie rewritten to a temporary one: %s",
-            *header);
+         if (cookie_lifetime == 0)
+         {
+            log_error(LOG_LEVEL_HEADER, "Cookie rewritten to a temporary one: %s",
+               *header);
+         }
+         else
+         {
+            add_cookie_expiry_date(header, cookie_lifetime);
+            log_error(LOG_LEVEL_HEADER, "Cookie rewritten to: %s", *header);
+         }
       }
    }
 
