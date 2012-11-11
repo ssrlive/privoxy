@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.84 2012/07/27 17:39:57 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.85 2012/11/11 12:36:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -208,7 +208,7 @@ jb_err merge_actions (struct action_spec *dest,
  *          1  :  dest = Destination of copy.
  *          2  :  src = Source for copy.
  *
- * Returns     :  N/A
+ * Returns     :  JB_ERR_OK or JB_ERR_MEMORY
  *
  *********************************************************************/
 jb_err copy_action (struct action_spec *dest,
