@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.83 2012/06/08 15:15:11 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.84 2012/07/27 17:39:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -156,11 +156,7 @@ jb_err merge_actions (struct action_spec *dest,
       if (str)
       {
          freez(dest->string[i]);
-         dest->string[i] = strdup(str);
-         if (NULL == dest->string[i])
-         {
-            return JB_ERR_MEMORY;
-         }
+         dest->string[i] = strdup_or_die(str);
       }
    }
 
@@ -232,11 +228,7 @@ jb_err copy_action (struct action_spec *dest,
       char * str = src->string[i];
       if (str)
       {
-         str = strdup(str);
-         if (!str)
-         {
-            return JB_ERR_MEMORY;
-         }
+         str = strdup_or_die(str);
          dest->string[i] = str;
       }
    }
@@ -739,11 +731,7 @@ jb_err merge_current_action (struct current_action_spec *dest,
       char * str = src->string[i];
       if (str)
       {
-         str = strdup(str);
-         if (!str)
-         {
-            return JB_ERR_MEMORY;
-         }
+         str = strdup_or_die(str);
          freez(dest->string[i]);
          dest->string[i] = str;
       }
@@ -1330,15 +1318,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
              *
              * buf + 1 to skip the leading '{'
              */
-            actions_buf = strdup(buf + 1);
-            if (actions_buf == NULL)
-            {
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL,
-                  "can't load actions file '%s': out of memory",
-                  csp->config->actions_file[fileid]);
-               return 1; /* never get here */
-            }
+            actions_buf = strdup_or_die(buf + 1);
 
             /* check we have a trailing } and then trim it */
             end = actions_buf + strlen(actions_buf) - 1;
@@ -1391,14 +1371,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             char *version_string, *fields[3];
             int num_fields;
 
-            if ((version_string = strdup(buf + 20)) == NULL)
-            {
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL,
-                         "can't load actions file '%s': out of memory!",
-                         csp->config->actions_file[fileid]);
-               return 1; /* never get here */
-            }
+            version_string = strdup_or_die(buf + 20);
 
             num_fields = ssplit(version_string, ".", fields, SZ(fields));
 
@@ -1482,14 +1455,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             return 1; /* never get here */
          }
 
-         if ((new_alias->name = strdup(buf)) == NULL)
-         {
-            fclose(fp);
-            log_error(LOG_LEVEL_FATAL,
-               "can't load actions file '%s': out of memory!",
-               csp->config->actions_file[fileid]);
-            return 1; /* never get here */
-         }
+         new_alias->name = strdup_or_die(buf);
 
          strlcpy(actions_buf, start, sizeof(actions_buf));
 
@@ -1603,7 +1569,7 @@ char * actions_to_text(const struct action_spec *action)
 {
    unsigned long mask = action->mask;
    unsigned long add  = action->add;
-   char *result = strdup("");
+   char *result = strdup_or_die("");
    struct list_entry * lst;
 
    /* sanity - prevents "-feature +feature" */
@@ -1692,7 +1658,7 @@ char * actions_to_html(const struct client_state *csp,
 {
    unsigned long mask = action->mask;
    unsigned long add  = action->add;
-   char *result = strdup("");
+   char *result = strdup_or_die("");
    struct list_entry * lst;
 
    /* sanity - prevents "-feature +feature" */
@@ -1798,9 +1764,9 @@ char *current_action_to_html(const struct client_state *csp,
 {
    unsigned long flags  = action->flags;
    struct list_entry * lst;
-   char *result   = strdup("");
-   char *active   = strdup("");
-   char *inactive = strdup("");
+   char *result   = strdup_or_die("");
+   char *active   = strdup_or_die("");
+   char *inactive = strdup_or_die("");
 
 #define DEFINE_ACTION_BOOL(__name, __bit)  \
    if (flags & __bit)                      \
