@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.152 2012/10/29 12:02:55 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.153 2012/11/09 10:49:59 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.152 2012/10/29 12:02:55 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.153 2012/11/09 10:49:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -6076,6 +6076,94 @@ new action
 </variablelist>
 </sect3>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="limit-cookie-lifetime">
+<title>limit-cookie-lifetime</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Limit the lifetime of HTTP cookies to a couple of minutes or hours.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Overwrites the expires field in Set-Cookie server headers if it's above the specified limit.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The lifetime limit in minutes, or 0.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action reduces the lifetime of HTTP cookies coming from the
+    server to the specified number of minutes, starting from the time
+    the cookie passes Privoxy.
+   </para>
+   <para>
+    Cookies with a lifetime below the limit are not modified.
+    The lifetime of session cookies is set to the specified limit.
+   </para>
+   <para>
+    The effect of this action depends on the server.
+   </para>
+   <para>
+    In case of servers which refresh their cookies with each response
+    (or at least frequently), the lifetime limit set by this action
+    is updated as well.
+    Thus, a session associated with the cookie continues to work with
+    this action enabled, as long as a new request is made before the
+    last limit set is reached.
+   </para>
+   <para>
+    However, some servers send their cookies once, with a lifetime of several
+    years (the year 2037 is a popular choice), and do not refresh them
+    until a certain event in the future, for example the user logging out.
+    In this case this action may limit the absolute lifetime of the session,
+    even if requests are made frequently.
+   </para>
+   <para>
+    If the parameter is <quote>0</quote>, this action behaves like
+    <literal><link linkend="session-cookies-only">session-cookies-only</link></literal>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usages:</term>
+  <listitem>
+    <para>
+     <screen>+limit-cookie-lifetime{60}
+       </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="prevent-compression">
 <title>prevent-compression</title>
@@ -9531,6 +9619,9 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  USA
 
  $Log: user-manual.sgml,v $
+ Revision 2.153  2012/11/09 10:49:59  fabiankeil
+ Document --config-test option
+
  Revision 2.152  2012/10/29 12:02:55  fabiankeil
  Clarify that the destination-change detection works for intercepted requests as well
 
