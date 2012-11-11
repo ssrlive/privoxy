@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.262 2012/11/11 12:37:42 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.263 2012/11/11 12:38:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3856,10 +3856,6 @@ static void add_cookie_expiry_date(char **cookie, time_t lifetime)
  * Description :  Handle the server "cookie" header properly.
  *                Crunch, accept or rewrite it to a session cookie.
  *                Called from `sed'.
- *
- *                TODO: Allow the user to specify a new expiration
- *                time to cause the cookie to expire even before the
- *                browser is closed.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
