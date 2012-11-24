@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.267 2012/11/24 14:06:18 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.268 2012/11/24 14:07:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1228,6 +1228,7 @@ jb_err update_server_headers(struct client_state *csp)
          log_error(LOG_LEVEL_HEADER,
             "Content modified with no Content-Length header set. "
             "Created: %s.", header);
+         csp->flags |= CSP_FLAG_SERVER_CONTENT_LENGTH_SET;
       }
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
