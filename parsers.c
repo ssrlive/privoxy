@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.265 2012/11/24 13:57:30 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.266 2012/11/24 13:58:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -137,6 +137,7 @@ static jb_err server_keep_alive(struct client_state *csp, char **header);
 static jb_err server_proxy_connection(struct client_state *csp, char **header);
 static jb_err client_keep_alive(struct client_state *csp, char **header);
 static jb_err client_save_content_length(struct client_state *csp, char **header);
+static jb_err client_proxy_connection(struct client_state *csp, char **header);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 static jb_err client_host_adder       (struct client_state *csp);
@@ -184,11 +185,12 @@ static const struct parsers client_patterns[] = {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Keep-Alive:",              11,   client_keep_alive },
    { "Content-Length:",          15,   client_save_content_length },
+   { "Proxy-Connection:",        17,   client_proxy_connection },
 #else
    { "Keep-Alive:",              11,   crumble },
+   { "Proxy-Connection:",        17,   crumble },
 #endif
    { "connection:",              11,   client_connection },
-   { "proxy-connection:",        17,   crumble },
    { "max-forwards:",            13,   client_max_forwards },
    { "Accept-Language:",         16,   client_accept_language },
    { "if-none-match:",           14,   client_if_none_match },
@@ -1938,6 +1940,42 @@ static jb_err client_connection(struct client_state *csp, char **header)
 
    return JB_ERR_OK;
 }
+
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+/*********************************************************************
+ *
+ * Function    :  client_proxy_connection
+ *
+ * Description :  Sets the CLIENT_CONNECTION_KEEP_ALIVE flag when
+ *                appropriate and removes the Proxy-Connection
+ *                header.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK
+ *
+ *********************************************************************/
+static jb_err client_proxy_connection(struct client_state *csp, char **header)
+{
+   if (0 == (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE)
+      && (csp->http->ssl == 0)
+      && (NULL == strstr(*header, "close")))
+   {
+      log_error(LOG_LEVEL_HEADER,
+         "The client connection can be kept alive due to: %s", *header);
+      csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+   }
+   crumble(csp, header);
+
+   return JB_ERR_OK;
+}
+#endif  /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
