@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.191 2012/10/23 10:19:04 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.192 2012/11/11 12:38:42 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -856,7 +856,7 @@ struct reusable_connection
  * Maximum number of actions/filter files.  This limit is arbitrary - it's just used
  * to size an array.
  */
-#define MAX_AF_FILES 10
+#define MAX_AF_FILES 30
 
 /**
  * Maximum number of sockets to listen to.  This limit is arbitrary - it's just used
