@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.415 2012/11/24 14:00:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.416 2012/11/24 14:01:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1120,9 +1120,7 @@ static void verify_request_length(struct client_state *csp)
       {
          /* XXX: this is an incomplete hack */
          csp->flags &= ~CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ;
-         csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
-         log_error(LOG_LEVEL_CONNECT,
-            "There might be a request body. The connection will not be kept alive.");
+         log_error(LOG_LEVEL_CONNECT, "There better be a request body.");
       }
       else
       {
