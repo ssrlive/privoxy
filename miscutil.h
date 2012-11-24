@@ -1,6 +1,6 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.35 2012/03/04 11:52:45 fabiankeil Exp $"
+#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.36 2012/07/23 12:41:59 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -60,8 +60,9 @@ extern int strncmpic(const char *s1, const char *s2, size_t n);
 
 extern jb_err string_append(char **target_string, const char *text_to_append);
 extern jb_err string_join  (char **target_string,       char *text_to_append);
-
 extern char *string_toupper(const char *string);
+extern void string_move(char *dst, char *src);
+
 extern char *chomp(char *string);
 extern char *bindup(const char *string, size_t len);
 

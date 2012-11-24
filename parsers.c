@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.264 2012/11/11 12:41:12 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.265 2012/11/24 13:57:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -736,31 +736,6 @@ jb_err decompress_iob(struct client_state *csp)
 
 }
 #endif /* defined(FEATURE_ZLIB) */
-
-
-/*********************************************************************
- *
- * Function    :  string_move
- *
- * Description :  memmove wrapper to move the last part of a string
- *                towards the beginning, overwriting the part in
- *                the middle. strlcpy() can't be used here as the
- *                strings overlap.
- *
- * Parameters  :
- *          1  :  dst = Destination to overwrite
- *          2  :  src = Source to move.
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void string_move(char *dst, char *src)
-{
-   assert(dst < src);
-
-   /* +1 to copy the terminating nul as well. */
-   memmove(dst, src, strlen(src)+1);
-}
 
 
 /*********************************************************************

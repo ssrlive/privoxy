@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.76 2012/03/09 17:55:50 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.77 2012/07/23 12:41:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -521,6 +521,31 @@ char *string_toupper(const char *string)
 
    return result;
 
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  string_move
+ *
+ * Description :  memmove wrapper to move the last part of a string
+ *                towards the beginning, overwriting the part in
+ *                the middle. strlcpy() can't be used here as the
+ *                strings overlap.
+ *
+ * Parameters  :
+ *          1  :  dst = Destination to overwrite
+ *          2  :  src = Source to move.
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void string_move(char *dst, char *src)
+{
+   assert(dst < src);
+
+   /* +1 to copy the terminating nul as well. */
+   memmove(dst, src, strlen(src)+1);
 }
 
 
