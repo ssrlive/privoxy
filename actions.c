@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.85 2012/11/11 12:36:45 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.86 2012/11/11 12:37:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -395,7 +395,17 @@ jb_err get_action_token(char **line, char **name, char **value)
    str++;
    *value = str;
 
-   str = strchr(str, '}');
+   /* The value ends with the first non-escaped closing curly brace */
+   while ((str = strchr(str, '}')) != NULL)
+   {
+      if (str[-1] == '\\')
+      {
+         /* Overwrite the '\' so the action doesn't see it. */
+         string_move(str-1, str);
+         continue;
+      }
+      break;
+   }
    if (str == NULL)
    {
       /* error */
