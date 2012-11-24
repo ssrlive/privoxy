@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.413 2012/11/09 10:48:17 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.414 2012/11/09 10:53:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -951,6 +951,7 @@ static int server_response_is_complete(struct client_state *csp,
        */
       csp->expected_content_length = 0;
       content_length_known = TRUE;
+      csp->flags |= CSP_FLAG_SERVER_CONTENT_LENGTH_SET;
    }
 
    if (csp->http->status == 204 || csp->http->status == 304)
@@ -960,6 +961,7 @@ static int server_response_is_complete(struct client_state *csp,
        */
       csp->expected_content_length = 0;
       content_length_known = TRUE;
+      csp->flags |= CSP_FLAG_SERVER_CONTENT_LENGTH_SET;
    }
 
    return (content_length_known && ((0 == csp->expected_content_length)
