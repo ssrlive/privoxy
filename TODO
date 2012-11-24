@@ -1,4 +1,4 @@
-$Id: TODO,v 1.68 2012/10/21 12:59:08 fabiankeil Exp $
+$Id: TODO,v 1.69 2012/11/24 14:13:58 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -309,3 +309,5 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 107) Support more pcrs variables, for example $destination-ip-address
      and $source-ip-address.
+
+108) Allow to use a somewhat random string intead of PRIVOXY-FORCE.
