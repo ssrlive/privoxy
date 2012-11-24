@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.266 2012/11/24 13:58:17 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.267 2012/11/24 14:06:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3894,7 +3894,12 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
       time_t now;
       time_t cookie_time;
       long cookie_lifetime = 0;
-      int expiry_date_acceptable = 0;
+      enum
+      {
+         NO_EXPIRY_DATE_SPECIFIED,
+         EXPIRY_DATE_ACCEPTABLE,
+         EXPIRY_DATE_UNACCEPTABLE
+      } expiry_date_status = NO_EXPIRY_DATE_SPECIFIED;
 
       /* A variable to store the tag we're working on */
       char *cur_tag;
@@ -3975,7 +3980,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                log_error(LOG_LEVEL_ERROR,
                   "Can't parse \'%s\', send by %s. Unsupported time format?", cur_tag, csp->http->url);
                string_move(cur_tag, next_tag);
-               expiry_date_acceptable = 0;
+               expiry_date_status = EXPIRY_DATE_UNACCEPTABLE;
             }
             else
             {
@@ -4019,7 +4024,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                      "Cookie \'%s\' is already expired and can pass unmodified.", *header);
                   /* Just in case some clown sets more then one expiration date */
                   cur_tag = next_tag;
-                  expiry_date_acceptable = 1;
+                  expiry_date_status = EXPIRY_DATE_ACCEPTABLE;
                }
                else if ((cookie_lifetime != 0) && (cookie_time < (now + cookie_lifetime)))
                {
@@ -4027,7 +4032,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                      "Its lifetime is below the limit.", *header);
                   /* Just in case some clown sets more then one expiration date */
                   cur_tag = next_tag;
-                  expiry_date_acceptable = 1;
+                  expiry_date_status = EXPIRY_DATE_ACCEPTABLE;
                }
                else
                {
@@ -4038,7 +4043,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
                   string_move(cur_tag, next_tag);
 
                   /* That changed the header, need to issue a log message */
-                  expiry_date_acceptable = 0;
+                  expiry_date_status = EXPIRY_DATE_UNACCEPTABLE;
 
                   /*
                    * Note that the next tag has now been moved to *cur_tag,
@@ -4055,18 +4060,18 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
          }
       }
 
-      if (!expiry_date_acceptable)
+      if (expiry_date_status != EXPIRY_DATE_ACCEPTABLE)
       {
          assert(NULL != *header);
-         if (cookie_lifetime == 0)
-         {
-            log_error(LOG_LEVEL_HEADER, "Cookie rewritten to a temporary one: %s",
-               *header);
-         }
-         else
+         if (cookie_lifetime != 0)
          {
             add_cookie_expiry_date(header, cookie_lifetime);
             log_error(LOG_LEVEL_HEADER, "Cookie rewritten to: %s", *header);
+         }
+         else if (expiry_date_status != NO_EXPIRY_DATE_SPECIFIED)
+         {
+            log_error(LOG_LEVEL_HEADER,
+               "Cookie rewritten to a temporary one: %s", *header);
          }
       }
    }
