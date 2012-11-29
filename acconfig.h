@@ -97,11 +97,6 @@
 #undef FEATURE_CGI_EDIT_ACTIONS
 
 /*
- * Allows the use of jar files to capture cookies.
- */
-#undef FEATURE_COOKIE_JAR
-
-/*
  * Locally redirect remote script-redirect URLs
  */
 #undef FEATURE_FAST_REDIRECTS
