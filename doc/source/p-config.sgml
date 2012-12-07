@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.87 2012/10/21 13:02:01 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.88 2012/11/11 12:30:18 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.87 2012/10/21 13:02:01 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.88 2012/11/11 12:30:18 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -2028,7 +2028,7 @@ ACLs: permit-access and deny-access</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="socks"><title>
-forward-socks4, forward-socks4a and forward-socks5</title>
+forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
 <anchor id="forward-socks4">
 <anchor id="forward-socks4a">
 
@@ -2090,6 +2090,12 @@ forward-socks4, forward-socks4a and forward-socks5</title>
    </para>
    <para>
     With <literal>forward-socks5</literal> the DNS resolution will happen on the remote server as well.
+   </para>
+   <para>
+    <literal>forward-socks5t</literal> works like vanilla <literal>forward-socks5</literal> but
+    lets &my-app; additionally use Tor-specific SOCKS extensions. Currently the only supported
+    SOCKS extension is optimistic data which can reduce the latency for the first request made
+    on a newly created connection.
    </para>
    <para>
     <replaceable class="parameter">socks_proxy</replaceable> and
