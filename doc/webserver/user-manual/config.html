@@ -1846,9 +1846,9 @@
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SOCKS" id="SOCKS">7.5.2. forward-socks4,
-        forward-socks4a and forward-socks5</a></h4><a name="FORWARD-SOCKS4"
-        id="FORWARD-SOCKS4"></a><a name="FORWARD-SOCKS4A" id=
-        "FORWARD-SOCKS4A"></a>
+        forward-socks4a, forward-socks5 and forward-socks5t</a></h4><a name=
+        "FORWARD-SOCKS4" id="FORWARD-SOCKS4"></a><a name="FORWARD-SOCKS4A"
+        id="FORWARD-SOCKS4A"></a>
 
         <div class="VARIABLELIST">
           <dl>
@@ -1910,6 +1910,13 @@
 
               <p>With <tt class="LITERAL">forward-socks5</tt> the DNS
               resolution will happen on the remote server as well.</p>
+
+              <p><tt class="LITERAL">forward-socks5t</tt> works like vanilla
+              <tt class="LITERAL">forward-socks5</tt> but lets <span class=
+              "APPLICATION">Privoxy</span> additionally use Tor-specific
+              SOCKS extensions. Currently the only supported SOCKS extension
+              is optimistic data which can reduce the latency for the first
+              request made on a newly created connection.</p>
 
               <p><tt class="REPLACEABLE"><i>socks_proxy</i></tt> and
               <tt class="REPLACEABLE"><i>http_parent</i></tt> can be a
@@ -3046,7 +3053,7 @@
       "LOG-MESSAGES"></a>
 
       <p>If <span class="QUOTE">"log-messages"</span> is set to 1,
-      <span class="APPLICATION">Privoxy</span> copy log messages to the
+      <span class="APPLICATION">Privoxy</span> copies log messages to the
       console window. The log detail depends on the <a href=
       "config.html#DEBUG">debug</a> directive.</p>
 

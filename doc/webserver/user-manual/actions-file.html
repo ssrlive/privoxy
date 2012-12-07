@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2862" id="AEN2862"></a>
+          <a name="AEN2866" id="AEN2866"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -314,7 +314,7 @@
     actions</a>.</p>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2961" id="AEN2961">8.1. Finding the Right
+      <h2 class="SECT2"><a name="AEN2965" id="AEN2965">8.1. Finding the Right
       Mix</a></h2>
 
       <p>Note that some <a href="actions-file.html#ACTIONS">actions</a>, like
@@ -339,7 +339,7 @@
     </div>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2968" id="AEN2968">8.2. How to
+      <h2 class="SECT2"><a name="AEN2972" id="AEN2972">8.2. How to
       Edit</a></h2>
 
       <p>The easiest way to edit the actions files is with a browser by using
@@ -529,7 +529,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3080" id="AEN3080">8.4.1. The Domain
+        <h3 class="SECT3"><a name="AEN3084" id="AEN3084">8.4.1. The Domain
         Pattern</a></h3>
 
         <p>The matching of the domain part offers some flexible options: if
@@ -634,7 +634,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3156" id="AEN3156">8.4.2. The Path
+        <h3 class="SECT3"><a name="AEN3160" id="AEN3160">8.4.2. The Path
         Pattern</a></h3>
 
         <p><span class="APPLICATION">Privoxy</span> uses <span class=
@@ -3555,8 +3555,90 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
       </div>
 
       <div class="SECT3">
+        <h4 class="SECT3"><a name="LIMIT-COOKIE-LIFETIME" id=
+        "LIMIT-COOKIE-LIFETIME">8.5.27. limit-cookie-lifetime</a></h4>
+
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Typical use:</dt>
+
+            <dd>
+              <p>Limit the lifetime of HTTP cookies to a couple of minutes or
+              hours.</p>
+            </dd>
+
+            <dt>Effect:</dt>
+
+            <dd>
+              <p>Overwrites the expires field in Set-Cookie server headers if
+              it's above the specified limit.</p>
+            </dd>
+
+            <dt>Type:</dt>
+
+            <dd>
+              <p>Parameterized.</p>
+            </dd>
+
+            <dt>Parameter:</dt>
+
+            <dd>
+              <p>The lifetime limit in minutes, or 0.</p>
+            </dd>
+
+            <dt>Notes:</dt>
+
+            <dd>
+              <p>This action reduces the lifetime of HTTP cookies coming from
+              the server to the specified number of minutes, starting from
+              the time the cookie passes Privoxy.</p>
+
+              <p>Cookies with a lifetime below the limit are not modified.
+              The lifetime of session cookies is set to the specified
+              limit.</p>
+
+              <p>The effect of this action depends on the server.</p>
+
+              <p>In case of servers which refresh their cookies with each
+              response (or at least frequently), the lifetime limit set by
+              this action is updated as well. Thus, a session associated with
+              the cookie continues to work with this action enabled, as long
+              as a new request is made before the last limit set is
+              reached.</p>
+
+              <p>However, some servers send their cookies once, with a
+              lifetime of several years (the year 2037 is a popular choice),
+              and do not refresh them until a certain event in the future,
+              for example the user logging out. In this case this action may
+              limit the absolute lifetime of the session, even if requests
+              are made frequently.</p>
+
+              <p>If the parameter is <span class="QUOTE">"0"</span>, this
+              action behaves like <tt class="LITERAL"><a href=
+              "actions-file.html#SESSION-COOKIES-ONLY">session-cookies-only</a></tt>.</p>
+            </dd>
+
+            <dt>Example usages:</dt>
+
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
++limit-cookie-lifetime{60}
+
+</pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="SECT3">
         <h4 class="SECT3"><a name="PREVENT-COMPRESSION" id=
-        "PREVENT-COMPRESSION">8.5.27. prevent-compression</a></h4>
+        "PREVENT-COMPRESSION">8.5.28. prevent-compression</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3660,7 +3742,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="OVERWRITE-LAST-MODIFIED" id=
-        "OVERWRITE-LAST-MODIFIED">8.5.28. overwrite-last-modified</a></h4>
+        "OVERWRITE-LAST-MODIFIED">8.5.29. overwrite-last-modified</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3756,7 +3838,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="REDIRECT" id="REDIRECT">8.5.29.
+        <h4 class="SECT3"><a name="REDIRECT" id="REDIRECT">8.5.30.
         redirect</a></h4>
 
         <div class="VARIABLELIST">
@@ -3860,7 +3942,7 @@ www.privoxy.org/user-manual/
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SERVER-HEADER-FILTER" id=
-        "SERVER-HEADER-FILTER">8.5.30. server-header-filter</a></h4>
+        "SERVER-HEADER-FILTER">8.5.31. server-header-filter</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3932,7 +4014,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SERVER-HEADER-TAGGER" id=
-        "SERVER-HEADER-TAGGER">8.5.31. server-header-tagger</a></h4>
+        "SERVER-HEADER-TAGGER">8.5.32. server-header-tagger</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4005,7 +4087,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SESSION-COOKIES-ONLY" id=
-        "SESSION-COOKIES-ONLY">8.5.32. session-cookies-only</a></h4>
+        "SESSION-COOKIES-ONLY">8.5.33. session-cookies-only</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4103,7 +4185,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SET-IMAGE-BLOCKER" id=
-        "SET-IMAGE-BLOCKER">8.5.33. set-image-blocker</a></h4>
+        "SET-IMAGE-BLOCKER">8.5.34. set-image-blocker</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4242,7 +4324,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4792" id="AEN4792">8.5.34.
+        <h3 class="SECT3"><a name="AEN4832" id="AEN4832">8.5.35.
         Summary</a></h3>
 
         <p>Note that many of these actions have the potential to cause a page
@@ -4401,7 +4483,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       together:</p>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4856" id="AEN4856">8.7.1.
+        <h3 class="SECT3"><a name="AEN4896" id="AEN4896">8.7.1.
         match-all.action</a></h3>
 
         <p>Remember <span class="emphasis"><i class="EMPHASIS">all actions
@@ -4450,7 +4532,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4878" id="AEN4878">8.7.2.
+        <h3 class="SECT3"><a name="AEN4918" id="AEN4918">8.7.2.
         default.action</a></h3>
 
         <p>If you aren't a developer, there's no need for you to edit the
@@ -4793,7 +4875,7 @@ wiki.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4991" id="AEN4991">8.7.3.
+        <h3 class="SECT3"><a name="AEN5031" id="AEN5031">8.7.3.
         user.action</a></h3>
 
         <p>So far we are painting with a broad brush by setting general
