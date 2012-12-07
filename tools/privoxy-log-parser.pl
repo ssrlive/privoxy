@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.143 2012/10/21 13:06:20 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.144 2012/10/29 11:59:08 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1699,6 +1699,12 @@ sub handle_loglevel_connect ($) {
 
         # Waiting for up to 4999 bytes from the client.
         $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Optimistically sending /) {
+
+        # Optimistically sending 318 bytes of client headers intended for www.privoxy.org
+        $c =~ s@(?<=sending )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = highlight_matched_host($c, '(?<=for )[^\s]+');
 
     } elsif ($c =~ m/^Stopping to watch the client socket/) {
 
