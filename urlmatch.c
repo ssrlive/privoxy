@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.73 2012/11/29 09:57:39 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.74 2012/12/07 12:49:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -802,7 +802,7 @@ static jb_err compile_host_pattern(struct url_spec *url, const char *host_patter
    if (url->dcount < 0)
    {
       free_url_spec(url);
-      return JB_ERR_MEMORY;
+      return JB_ERR_PARSE;
    }
    else if (url->dcount != 0)
    {
