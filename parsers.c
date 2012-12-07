@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.268 2012/11/24 14:07:57 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.269 2012/11/24 14:09:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -198,6 +198,9 @@ static const struct parsers client_patterns[] = {
    { "Request-Range:",           14,   client_range },
    { "If-Range:",                 9,   client_range },
    { "X-Filter:",                 9,   client_x_filter },
+#if 0
+   { "Transfer-Encoding:",       18,   client_transfer_encoding },
+#endif
    { "*",                         0,   crunch_client_header },
    { "*",                         0,   filter_header },
    { NULL,                        0,   NULL }
@@ -1977,6 +1980,38 @@ static jb_err client_proxy_connection(struct client_state *csp, char **header)
    return JB_ERR_OK;
 }
 #endif  /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+
+/*********************************************************************
+ *
+ * Function    :  client_transfer_encoding
+ *
+ * Description :  Raise the CSP_FLAG_CHUNKED_CLIENT_BODY flag if
+ *                the request body is "chunked"
+ *
+ *                XXX: Currently not called through sed() as we
+ *                     need the flag earlier on. Should be fixed.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *
+ *********************************************************************/
+jb_err client_transfer_encoding(struct client_state *csp, char **header)
+{
+   if (strstr(*header, "chunked"))
+   {
+      csp->flags |= CSP_FLAG_CHUNKED_CLIENT_BODY;
+      log_error(LOG_LEVEL_HEADER, "Expecting chunked client body");
+   }
+
+   return JB_ERR_OK;
+}
 
 
 /*********************************************************************

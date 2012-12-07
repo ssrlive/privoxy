@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.192 2012/11/11 12:38:42 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.193 2012/11/24 13:55:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -835,6 +835,12 @@ struct reusable_connection
  * isn't done talking.
  */
 #define CSP_FLAG_PIPELINED_REQUEST_WAITING          0x00800000U
+
+/**
+ * Flag for csp->flags: Set if the client body is chunk-encoded
+ */
+#define CSP_FLAG_CHUNKED_CLIENT_BODY                0x01000000U
+
 
 /*
  * Flags for use in return codes of child processes

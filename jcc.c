@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.417 2012/11/24 14:04:29 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.418 2012/12/07 12:43:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -267,6 +267,13 @@ static const char CLIENT_CONNECTION_TIMEOUT_RESPONSE[] =
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "The connection timed out because the client request didn't arrive in time.\r\n";
+
+static const char CLIENT_BODY_PARSE_ERROR_RESPONSE[] =
+   "HTTP/1.1 400 Failed reading client body\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "Failed parsing or buffering the chunk-encoded client body.\r\n";
 
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
@@ -1273,6 +1280,146 @@ static char *get_request_line(struct client_state *csp)
 
 }
 
+enum chunk_status
+{
+   CHUNK_STATUS_MISSING_DATA,
+   CHUNK_STATUS_BODY_COMPLETE,
+   CHUNK_STATUS_PARSE_ERROR
+};
+
+
+/*********************************************************************
+ *
+ * Function    :  chunked_body_is_complete
+ *
+ * Description :  Figures out wheter or not a chunked body is complete.
+ *
+ *                Currently it always starts at the beginning of the
+ *                buffer which is somewhat wasteful and prevents Privoxy
+ *                from starting to forward the correctly parsed chunks
+ *                as soon as theoretically possible.
+ *
+ *                Should be modified to work with a common buffer,
+ *                and allow the caller to skip already parsed chunks.
+ *
+ *                This would allow the function to be used for unbuffered
+ *                response bodies as well.
+ *
+ * Parameters  :
+ *          1  :  iob = Buffer with the body to check.
+ *          2  :  length = Length of complete body
+ *
+ * Returns     :  Enum with the result of the check.
+ *
+ *********************************************************************/
+static enum chunk_status chunked_body_is_complete(struct iob *iob, size_t *length)
+{
+   unsigned int chunksize;
+   char *p = iob->cur;
+
+   do
+   {
+      /*
+       * We need at least a single digit, followed by "\r\n",
+       * followed by an unknown amount of data, followed by "\r\n".
+       */
+      if (p + 5 > iob->eod)
+      {
+         return CHUNK_STATUS_MISSING_DATA;
+      }
+      if (sscanf(p, "%x", &chunksize) != 1)
+      {
+         return CHUNK_STATUS_PARSE_ERROR;
+      }
+
+      /*
+       * We want at least a single digit, followed by "\r\n",
+       * followed by the specified amount of data, followed by "\r\n".
+       */
+      if (p + chunksize + 5 > iob->eod)
+      {
+         return CHUNK_STATUS_MISSING_DATA;
+      }
+
+      /* Skip chunk-size. */
+      p = strstr(p, "\r\n");
+      if (NULL == p)
+      {
+         return CHUNK_STATUS_PARSE_ERROR;
+      }
+      /*
+       * Skip "\r\n", the chunk data and another "\r\n".
+       * Moving p to either the beginning of the next chunk-size
+       * or one byte beyond the end of the chunked data.
+       */
+      p += 2 + chunksize + 2;
+   } while (chunksize > 0U);
+
+   *length = (size_t)(p - iob->cur);
+   assert(*length <= (size_t)(iob->eod - iob->cur));
+   assert(p <= iob->eod);
+
+   return CHUNK_STATUS_BODY_COMPLETE;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    : receive_chunked_client_request_body
+ *
+ * Description : Read the chunk-encoded client request body.
+ *               Failures are dealt with.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK or JB_ERR_PARSE
+ *
+ *********************************************************************/
+static jb_err receive_chunked_client_request_body(struct client_state *csp)
+{
+   size_t body_length;
+   enum chunk_status status;
+
+   while (CHUNK_STATUS_MISSING_DATA ==
+      (status = chunked_body_is_complete(csp->client_iob,&body_length)))
+   {
+      char buf[BUFFER_SIZE];
+      int len;
+
+      if (!data_is_available(csp->cfd, csp->config->socket_timeout))
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Timeout while waiting for the client body.");
+         break;
+      }
+      len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
+      if (len <= 0)
+      {
+         log_error(LOG_LEVEL_ERROR, "Read the client body failed: %E");
+         break;
+      }
+      if (add_to_iob(csp->client_iob, csp->config->buffer_limit, buf, len))
+      {
+         break;
+      }
+   }
+   if (status != CHUNK_STATUS_BODY_COMPLETE)
+   {
+      write_socket(csp->cfd, CLIENT_BODY_PARSE_ERROR_RESPONSE,
+         strlen(CLIENT_BODY_PARSE_ERROR_RESPONSE));
+      log_error(LOG_LEVEL_CLF,
+         "%s - - [%T] \"Failed reading chunked client body\" 400 0", csp->ip_addr_str);
+      return JB_ERR_PARSE;
+   }
+   log_error(LOG_LEVEL_CONNECT,
+      "Chunked client body completely read. Length: %d", body_length);
+   csp->expected_client_content_length = body_length;
+
+   return JB_ERR_OK;
+
+}
 
 /*********************************************************************
  *
@@ -1402,6 +1549,14 @@ static jb_err receive_client_request(struct client_state *csp)
       }
       else
       {
+         if (!strncmpic(p, "Transfer-Encoding:", 18))
+         {
+            /*
+             * XXX: should be called through sed()
+             *      but currently can't.
+             */
+            client_transfer_encoding(csp, &p);
+         }
          /*
           * We were able to read a complete
           * header and can finally enlist it.
@@ -1495,7 +1650,21 @@ static jb_err parse_client_request(struct client_state *csp)
 
    if (csp->http->ssl == 0)
    {
-      csp->expected_client_content_length = get_expected_content_length(csp->headers);
+      /*
+       * This whole block belongs to chat() but currently
+       * has to be executed before sed().
+       */
+      if (csp->flags & CSP_FLAG_CHUNKED_CLIENT_BODY)
+      {
+         if (receive_chunked_client_request_body(csp) != JB_ERR_OK)
+         {
+            return JB_ERR_PARSE;
+         }
+      }
+      else
+      {
+         csp->expected_client_content_length = get_expected_content_length(csp->headers);
+      }
       verify_request_length(csp);
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
