@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.156 2012/10/21 12:54:15 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.157 2012/11/09 10:47:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -977,6 +977,9 @@ struct http_response *error_response(struct client_state *csp,
             break;
          case SOCKS_5:
             socks_type = "socks5-";
+            break;
+         case SOCKS_5T:
+            socks_type = "socks5t-";
             break;
          default:
             log_error(LOG_LEVEL_FATAL, "Unknown socks type: %d.", fwd->type);

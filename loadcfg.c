@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.133 2012/10/21 12:32:21 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.134 2012/10/21 12:53:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -140,6 +140,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_forward_socks4              3963965521U /* "forward-socks4" */
 #define hash_forward_socks4a             2639958518U /* "forward-socks4a" */
 #define hash_forward_socks5              3963965522U /* "forward-socks5" */
+#define hash_forward_socks5t             2639958542U /* "forward-socks5t" */
 #define hash_forwarded_connect_retries    101465292U /* "forwarded-connect-retries" */
 #define hash_handle_as_empty_returns_ok  1444873247U /* "handle-as-empty-doc-returns-ok" */
 #define hash_hostname                      10308071U /* "hostname" */
@@ -1013,6 +1014,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_forward_socks4a:
          case hash_forward_socks5:
+         case hash_forward_socks5t:
             strlcpy(tmp, arg, sizeof(tmp));
             vec_count = ssplit(tmp, " \t", vec, SZ(vec));
 
@@ -1039,9 +1041,14 @@ struct configuration_spec * load_config(void)
             {
                cur_fwd->type = SOCKS_4A;
             }
-            else
+            else if (directive_hash == hash_forward_socks5)
             {
                cur_fwd->type = SOCKS_5;
+            }
+            else
+            {
+               assert(directive_hash == hash_forward_socks5t);
+               cur_fwd->type = SOCKS_5T;
             }
 
             /* Save the URL pattern */

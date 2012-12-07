@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.193 2012/11/24 13:55:51 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.194 2012/12/07 12:43:55 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -645,6 +645,8 @@ enum forwarder_type {
    SOCKS_4A   = 41,
    /**< SOCKS 5 with hostnames, DNS resolution is done by the SOCKS server */
    SOCKS_5    = 50,
+   /**< Like SOCKS5, but uses non-standard Tor extensions (currently only optimistic data) */
+   SOCKS_5T,
 };
 
 /*

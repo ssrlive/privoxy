@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.174 2012/10/21 12:35:15 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.175 2012/10/21 12:58:03 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2156,6 +2156,11 @@ const static struct forward_spec *get_forward_override_settings(struct client_st
       else if (!strcasecmp(vec[0], "forward-socks5"))
       {
          fwd->type = SOCKS_5;
+         socks_proxy = vec[1];
+      }
+      else if (!strcasecmp(vec[0], "forward-socks5t"))
+      {
+         fwd->type = SOCKS_5T;
          socks_proxy = vec[1];
       }
 

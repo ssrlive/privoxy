@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.418 2012/12/07 12:43:05 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.419 2012/12/07 12:43:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1920,7 +1920,12 @@ static void chat(struct client_state *csp)
 
    csp->server_connection.requests_sent_total++;
 
-   if (fwd->forward_host || (http->ssl == 0))
+   if ((fwd->type == SOCKS_5T) && (NULL == csp->headers->first))
+   {
+      /* Client headers have been sent optimistically */
+      assert(csp->headers->last == NULL);
+   }
+   else if (fwd->forward_host || (http->ssl == 0))
    {
       int write_failure;
       hdr = list_to_text(csp->headers);
@@ -1978,6 +1983,7 @@ static void chat(struct client_state *csp)
 
    log_error(LOG_LEVEL_CONNECT, "to %s successful", http->hostport);
 
+   /* XXX: should the time start earlier for optimistically sent data? */
    csp->server_connection.request_sent = time(NULL);
 
    maxfd = (csp->cfd > csp->server_connection.sfd) ?

@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.116 2012/10/21 12:39:27 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.117 2012/10/21 12:55:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1407,6 +1407,9 @@ jb_err cgi_show_url_info(struct client_state *csp,
                      break;
                   case SOCKS_5:
                      socks_type = "socks5";
+                     break;
+                  case SOCKS_5T:
+                     socks_type = "socks5t";
                      break;
                   default:
                      log_error(LOG_LEVEL_FATAL, "Unknown socks type: %d.", fwd->type);
