@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.416 2012/11/24 14:01:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.417 2012/11/24 14:04:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2666,7 +2666,7 @@ static void serve(struct client_state *csp)
          }
       }
 
-      if (continue_chatting && any_loaded_file_changed(csp->config->config_file_list))
+      if (continue_chatting && any_loaded_file_changed(csp))
       {
          continue_chatting = 0;
          config_file_change_detected = 1;
