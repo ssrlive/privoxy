@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.269 2012/11/24 14:09:11 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.270 2012/12/07 12:43:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3960,7 +3960,7 @@ static jb_err server_set_cookie(struct client_state *csp, char **header)
          {
             log_error(LOG_LEVEL_FATAL, "Invalid cookie lifetime limit: %s", param);
          }
-         cookie_lifetime *= 60U;
+         cookie_lifetime *= 60;
       }
 
       /* Loop through each tag in the cookie */
