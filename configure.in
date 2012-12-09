@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.173 2012/10/12 11:15:17 fabiankeil Exp $
+dnl $Id: configure.in,v 1.174 2012/10/12 11:17:48 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2010 the
 dnl Privoxy team. http://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.173 $)
+AC_REVISION($Revision: 1.174 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -966,6 +966,14 @@ AC_ARG_ENABLE(accept-filter,
 [  --enable-accept-filter          Try to use accf_http(9) if supported.],
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_ACCEPT_FILTER)
+fi])
+
+AC_ARG_ENABLE(strptime-sanity-checks,
+[  --enable-strptime-sanity-checks Only trust strptime() results if an additional strftime()/strptime()
+                                  conversion doesn't change the result. Can be useful if strptime() is
+                                  known or suspected to be broken.],
+[if test $enableval = yes; then
+  AC_DEFINE(FEATURE_STRPTIME_SANITY_CHECKS)
 fi])
 
 dnl pcre/pcrs is needed for CGI anyway, so

@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.270 2012/12/07 12:43:55 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.271 2012/12/07 12:50:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4212,6 +4212,44 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
             continue;
          }
          *result = timegm(&gmt);
+
+#ifdef FEATURE_STRPTIME_SANITY_CHECKS
+         /*
+          * Verify that parsing the date recreated from the first
+          * parse operation gets the previous result. If it doesn't,
+          * either strptime() or strftime() are malfunctioning.
+          *
+          * We could string-compare the recreated date with the original
+          * header date, but this leads to false positives as strptime()
+          * may let %a accept all day formats while strftime() will only
+          * create one.
+          */
+         {
+            char recreated_date[100];
+            struct tm *tm;
+            time_t result2;
+
+            tm = gmtime(result);
+            strftime(recreated_date, sizeof(recreated_date), time_formats[i], tm);
+            memset(&gmt, 0, sizeof(gmt));
+            if (NULL == strptime(recreated_date, time_formats[i], &gmt))
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "Failed to parse '%s' generated with '%s' to recreate '%s'.",
+                  recreated_date, time_formats[i], header_time);
+               continue;
+            }
+            result2 = timegm(&gmt);
+            if (*result != result2)
+            {
+               log_error(LOG_LEVEL_ERROR, "strftime() and strptime() disagree. "
+                  "Format: '%s'. In: '%s', out: '%s'. %d != %d. Rejecting.",
+                  time_formats[i], header_time, recreated_date, *result, result2);
+               continue;
+            }
+         }
+#endif
+
          return JB_ERR_OK;
       }
    }

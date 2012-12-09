@@ -182,6 +182,11 @@
 #undef FEATURE_STATISTICS
 
 /*
+ * Enable strptime() sanity checks.
+ */
+#undef FEATURE_STRPTIME_SANITY_CHECKS
+
+/*
  * Allow Privoxy to be "disabled" so it is just a normal non-blocking
  * non-anonymizing proxy.  This is useful if you're trying to access a
  * blocked or broken site - just change the setting in the config file,
