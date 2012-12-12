@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.259 2012/12/12 13:24:26 fabiankeil Exp $
+#  $Id: default.action.master,v 1.260 2012/12/12 13:24:51 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1852,6 +1852,9 @@ websupport.wdc.com/
 #MASTER# UNBLOCK-REFERRER: http://www.bbc.co.uk/programmes/b01mnyzd
 # URL = http://static.bbci.co.uk/radio/player/popup.js
 .bbci.co.uk/radio/
+#MASTER# UNBLOCK-REFERRER: http://conradelektronik.m13.mailplus.nl/genericservice/code/servlet/React?encId=xSgAxBFNnFrne8j&actId=357685&command=openhtml
+# URL = http://content.conrad.se/newsletter/banners/OFFER_750987_exk.jpg
+.conrad.se/newsletter/banners/
 
 
 #############################################################################
