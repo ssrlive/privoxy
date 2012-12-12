@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.260 2012/12/12 13:24:51 fabiankeil Exp $
+#  $Id: default.action.master,v 1.261 2012/12/12 13:25:07 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2352,6 +2352,11 @@ www.skweezer.net/bloglines
 # Redirected URL = http://www.awin1.com/cread.php?awinmid=2891&awinaffid=43305&clickref=&p=http://www.groupon.co.uk/
 # Redirect Destination = http://www.groupon.co.uk/
 .awin1.com/.*=http://
+# Redirected URL = http://tr.anp.se/track?t=c&mid=1132291&uid=328397249&&&http:%2F%2Fwww%2Eresume%2Ese%2F%2Fnyheter%2F2011%2F03%2F31%2Fexpressen%2Dkampanjen%2Danmald%2F
+# Redirect Destination = http://www.resume.se//nyheter/2011/03/31/expressen-kampanjen-anmald/
+# Redirected URL = http://tr.anp.se/track?t=c&mid=1129528&uid=328397249&&&http:%2F%2Fwww%2Eresume%2Ese%2F%2Fnyheter%2F2011%2F03%2F29%2Fanstalt%2Dforbjod%2Dskurk%2F
+# Redirect Destination = http://www.resume.se//nyheter/2011/03/29/anstalt-forbjod-skurk/
+tr.anp.se/
 
 {+block{Looks like an anti-leech trigger URL.}}
 #MASTER# COMMENTS: This section not checked 10/17/06 HB. Still out there?
