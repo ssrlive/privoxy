@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.262 2012/12/12 14:03:35 fabiankeil Exp $
+#  $Id: default.action.master,v 1.263 2012/12/12 14:15:23 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -813,7 +813,9 @@ x*.alexa.com
 #MASTER# BLOCK-REFERRER: http://mplayernetwork.com 11/07/06
 #MASTER# BLOCK-REFERRER: http://eetimes.com 09/26/06
 /event.ng/
+# MASTER# BLOCK-REFERRER: http://www.play.com/PC/PCs/-/653/860/-/12068815/Asus-VK192S-19-Widescreen-LCD-Monitor-With-Webcam-White/Product.html
 # Blocked URL = http://sd.play.com/eluminate?ci=90121638&st=1296424516858&vn1=4.3.1&ec=UTF-8&vn...
+# Blocked URL = http://data.coremetrics.com/cm?ci=90121638&st=1296435164623&vn1=4.3.1&ec=UTF-8&vn...
 /(eluminate|cm)\?[tc]i=\d+&st=\d+&
 #MASTER# BLOCK-REFERRER: http://www.snapfiles.com/feedback/ 12/13/06 SF tracker
 .snapfiles.net/rotation/.*\.asp
@@ -882,7 +884,8 @@ service.maxymiser.net/
 #MASTER# BLOCK-REFERRER: http://www.newyorker.com/reporting/2010/05/31/100531fa_fact_groopman
 # Blocked URL = http://tcr.tynt.com/javascripts/Tracer.js?user=cT9yCKGeer3PWlab7jrHtB&amp;s=62
 .tynt.com/
-
+# Blocked URL = http://pool.sanoma.adhese.com/tag/tag.js
+pool.*.adhese.com/
 
 {+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
