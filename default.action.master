@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.255 2012/11/09 10:46:50 fabiankeil Exp $
+#  $Id: default.action.master,v 1.256 2012/11/09 10:47:06 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2014,6 +2014,8 @@ webcache.googleusercontent.com/
 .googleusercontent.com/.*=cache:
 # URL = http://maps.googleapis.com/maps/api/js/AuthenticationService.Authenticate?1shttp%3A%2F%2Fwww.wunderground.com%2Fcgi-bin%2Ffindweather%2FgetForecast%3Fbrand%3Dwxmap%26query%3D42.649601%2C-88.298500%26zoom%3D8%26theprefset%3D531051599999WS%26theprefvalue%3DME0041&2sgme-weatherunderground&3swxmap&5e1&callback=_xdc_._9er073&token=129358
 .googleapis.com/
+# URL = http://www.google.com.au/sorry/?continue=http://www.google.com.au/search%3Fhl%3Den%26tbo%3Dd%26output%3Dsearch%26sclient%3Dpsy-ab%26q%3Dnew%2Bcars%26btnG%3D
+.google./sorry/\?continue?=
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
