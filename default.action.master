@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.258 2012/12/12 12:56:50 fabiankeil Exp $
+#  $Id: default.action.master,v 1.259 2012/12/12 13:24:26 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -880,6 +880,9 @@ farm.plista.com/widgetdata.php
 #MASTER# BLOCK-REFERRER: http://www.zoover.nl/
 # Blocked URL = http://service.maxymiser.net/cdn/zoover/js/mmcore.js
 service.maxymiser.net/
+#MASTER# BLOCK-REFERRER: http://www.newyorker.com/reporting/2010/05/31/100531fa_fact_groopman
+# Blocked URL = http://tcr.tynt.com/javascripts/Tracer.js?user=cT9yCKGeer3PWlab7jrHtB&amp;s=62
+.tynt.com/
 
 
 {+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
