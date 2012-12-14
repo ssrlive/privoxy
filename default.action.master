@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.267 2012/12/14 10:15:17 fabiankeil Exp $
+#  $Id: default.action.master,v 1.268 2012/12/14 10:59:50 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -721,6 +721,8 @@ linuxcounter.net/
 #MASTER# BLOCK-REFERRER: http://thequietus.com/articles/10512-jo-dunne-fuzzbox-dies
 # Blocked URL = http://thequietus.com/openx/www/delivery/ck.php?n=ae777ee2&cb=INSERT_RANDOM_NUMBER_HERE
 /openx/www/delivery/
+# Blocked URL = http://mem.brandreachsys.com/www/delivery/lg.php?bannerid=13783&campaignid=0&zoneid=550&cb=f22df9acaa
+/.*bannerid=
 
 #############################################################################
 # Generic unblockers by path:
