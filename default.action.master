@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.265 2012/12/12 15:16:28 fabiankeil Exp $
+#  $Id: default.action.master,v 1.266 2012/12/14 10:14:51 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1120,7 +1120,8 @@ reklamy.sfd.pl/
 #MASTER# BLOCK-REFERRER: http://lwn.net/Articles/478657/
 # Blocked URL = http://rotation.linuxnewmedia.com/www/delivery/avw.php?zoneid=26&n=aa584766
 rotation.linuxnewmedia.com/
-
+# Blocked URL = http://de17a.com/a/33039/26891.swf
+de17a.com/
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
