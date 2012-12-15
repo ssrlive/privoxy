@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.270 2012/12/15 13:00:49 fabiankeil Exp $
+#  $Id: default.action.master,v 1.271 2012/12/15 13:00:59 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1142,8 +1142,7 @@ jlinks.industrybrains.com/
 #MASTER# REMARKS: Actionsfile feedback item #1736794 2007-06-13
 js.adsonar.
 #MASTER# BLOCK-REFERRER: http://news.zdnet.co.uk/software/0,1000000121,39209666,00.htm
-#MASTER# REMARKS: Actionsfile feedback item #1736879 2007-06-13, sponsored links. 2007-08-02, more hosts using this scheme, broadening scope.
-#bwp.zdnet.
+# Blocked URL = http://bwp.zdnet.com/search?dw-siteid=2&dw-ptid=2100&dw-edid=2&dw-ontid=800004
 bwp.
 # Blocked URL = http://us.mc123.mail.yahoo.com/mc/stampNonJs
 .yahoo.com/mc/stampNonJs
