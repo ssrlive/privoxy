@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.271 2012/12/15 13:00:59 fabiankeil Exp $
+#  $Id: default.action.master,v 1.272 2012/12/15 13:01:22 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -924,6 +924,8 @@ stats./.*\.gif\?
 #MASTER# BLOCK-REFERRER: http://www.aktivist.pl/
 # Blocked URL = http://go.idmnet.bbelements.com/please/showit/46/1/1/1/?typkodu=img&keywords=
 go.idmnet.bbelements.com/please/showit/
+# Blocked URL = http://gm-link.com/tm_image.asp?c=12345&x=0&u=email@address.tld&orc.gif
+gm-link.com/
 
 #############################################################################
 # Site-specific block patterns;
