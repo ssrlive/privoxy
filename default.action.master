@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.268 2012/12/14 10:59:50 fabiankeil Exp $
+#  $Id: default.action.master,v 1.269 2012/12/14 11:09:43 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -25,12 +25,6 @@
 #
 #  Copyright   :  Written by and Copyright (C) 2001-2010 the
 #                 Privoxy team. http://www.privoxy.org/
-#
-#  Note: Updated versions of this file will be made available from time
-#        to time. Check http://sourceforge.net/project/showfiles.php?group_id=11118
-#        for updates and/or subscribe to the announce mailing list
-#        (http://lists.sourceforge.net/lists/listinfo/ijbswa-announce) if you
-#        wish to receive an email notice whenever updates are released.
 #
 # We value your feedback. However, to provide you with the best support,
 # please note:
