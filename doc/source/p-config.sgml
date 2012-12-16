@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.88 2012/11/11 12:30:18 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.89 2012/12/07 12:46:32 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.88 2012/11/11 12:30:18 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.89 2012/12/07 12:46:32 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
@@ -1365,14 +1365,6 @@ actionsfile
     <quote>toggled off</quote> mode, i.e. mostly behave like a normal,
     content-neutral proxy with both ad blocking and content filtering
     disabled. See <literal>enable-remote-toggle</literal> below.
-<!--
-    This is not really useful
-    anymore, since toggling is much easier via <ulink
-    url="http://config.privoxy.org/toggle">the web interface</ulink> than via
-    editing the <filename>conf</filename> file.
-
-    Remote toggling is now disabled by default. fk 2007-11-07)
--->
    </para>
    <para>
     The windows version will only display the toggle icon in the system tray
