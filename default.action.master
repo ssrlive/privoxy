@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.273 2012/12/15 13:01:39 fabiankeil Exp $
+#  $Id: default.action.master,v 1.274 2012/12/16 10:49:11 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -770,6 +770,12 @@ support./(.*/)?track
 #MASTER# REMARKS: Allow URLs containing DektopAdmin (matches .*top_?ad)
 # URL = http://support.apple.com/downloads/DL985/en_US/RemoteDesktopAdmin332.dmg
 /.*desktopadmin
+# URL = http://www.rai.it/dl/RaiTV/popup/player_radio.html?v=9
+# URL = http://www.rai.tv/dl/RaiTV/popup/player_radio.html?v=9
+#MASTER# UNBLOCK-REFERRER: http://www.bbc.co.uk/programmes/b01mnyzd
+# URL = http://static.bbci.co.uk/radio/player/popup.js
+/(.*/)?(player|radio|tv|television).?pop
+/(.*/)?pop[-_]?(up|over|under|open(er)?)?s?(/|\.)(player|radio|tv|television)
 
 
 #----------------------------------------------------------------------------
@@ -1863,9 +1869,6 @@ adjamblog.files.wordpress.com/
 .urbandictionary.com/popular
 # URL = http://websupport.wdc.com/sfclickcount.asp?s1=2&s2=1&s3=2&s4=6&lang=en&url=https%3A%2F%2Fwesterndigital.secure.force.com%2F%3Flang%3Den
 websupport.wdc.com/
-#MASTER# UNBLOCK-REFERRER: http://www.bbc.co.uk/programmes/b01mnyzd
-# URL = http://static.bbci.co.uk/radio/player/popup.js
-.bbci.co.uk/radio/
 #MASTER# UNBLOCK-REFERRER: http://conradelektronik.m13.mailplus.nl/genericservice/code/servlet/React?encId=xSgAxBFNnFrne8j&actId=357685&command=openhtml
 # URL = http://content.conrad.se/newsletter/banners/OFFER_750987_exk.jpg
 .conrad.se/newsletter/banners/
