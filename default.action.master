@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.274 2012/12/16 10:49:11 fabiankeil Exp $
+#  $Id: default.action.master,v 1.275 2012/12/17 12:36:53 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -767,7 +767,7 @@ support./(.*/)?track
 # Sticky Actions = -block
 
 #MASTER# REMARKS: Actionsfile feedback item #2933856  2010-01-17 16:59
-#MASTER# REMARKS: Allow URLs containing DektopAdmin (matches .*top_?ad)
+#MASTER# REMARKS: Allow URLs containing DesktopAdmin (matches .*top_?ad)
 # URL = http://support.apple.com/downloads/DL985/en_US/RemoteDesktopAdmin332.dmg
 /.*desktopadmin
 # URL = http://www.rai.it/dl/RaiTV/popup/player_radio.html?v=9
@@ -776,7 +776,10 @@ support./(.*/)?track
 # URL = http://static.bbci.co.uk/radio/player/popup.js
 /(.*/)?(player|radio|tv|television).?pop
 /(.*/)?pop[-_]?(up|over|under|open(er)?)?s?(/|\.)(player|radio|tv|television)
-
+#MASTER# REMARKS: Actionsfile feedback item #3498129  2012-03-06 17:14
+#MASTER# REMARKS: Allows URLs containing the word 'download'
+# URL = http://popplers5.bandcamp.com/download/track?enc=mp3-128&fsig=bad421a4c31dda49faceefb0f3923630&id=342903379&stream=1&ts=1355881937.0 embedded within http://munirihsparrow.bandcamp.com/track/lamp-lighted
+/.*download
 
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
