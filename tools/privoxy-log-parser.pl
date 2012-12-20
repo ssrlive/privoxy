@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.146 2012/12/20 17:02:30 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.147 2012/12/20 17:02:45 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1648,7 +1648,7 @@ sub handle_loglevel_connect ($) {
 
     } elsif ($c =~ m/^Waiting for the next client request/ or
              $c =~ m/^The connection on server socket/ or
-             $c =~ m/^Client request (?:\d+ )?arrived in time /) {
+             $c =~ m/^Client request (?:\d+ )?(?:arrived in time|has been pipelined) /) {
 
         # Waiting for the next client request on socket 3. Keeping the server \
         #  socket 12 to a.fsdn.com open.
@@ -1659,6 +1659,7 @@ sub handle_loglevel_connect ($) {
         # Client request arrived in time on socket 21.
         # Used by earlier version:
         # Client request arrived in time or the client closed the connection on socket 12.
+        # Client request 8 has been pipelined on socket 7 and the socket is still alive.
 
         $c =~ s@(?<=request )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
