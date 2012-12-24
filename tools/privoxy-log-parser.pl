@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.148 2012/12/20 17:03:10 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.149 2012/12/24 15:36:52 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -61,6 +61,7 @@ use constant {
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
     CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
+    CLI_OPTION_STRICT_CHECKS => 0,
     CLI_OPTION_UNBREAK_LINES_ONLY => 0,
     CLI_OPTION_URL_STATISTICS_THRESHOLD => 0,
     CLI_OPTION_HOST_STATISTICS_THRESHOLD => 0,
@@ -2360,43 +2361,41 @@ sub parse_loop () {
 sub stats_loop () {
 
     my ($day, $time_stamp, $msecs, $thread, $log_level, $content);
+    my $strict_checks = cli_option_is_set('strict-checks');
     my %log_level_handlers = (
-         'Re-Filter'         => \&handle_loglevel_ignore,
-         'Header'            => \&gather_loglevel_header_stats,
-         'Connect'           => \&gather_loglevel_connect_stats,
-         'Redirect'          => \&handle_loglevel_ignore,
-         'Request'           => \&gather_loglevel_request_stats,
-         'Crunch'            => \&gather_loglevel_crunch_stats,
-         'Gif-Deanimate'     => \&handle_loglevel_ignore,
-         'Info'              => \&handle_loglevel_ignore,
-         'CGI'               => \&handle_loglevel_ignore,
-         'Force'             => \&handle_loglevel_ignore,
-         'Error'             => \&gather_loglevel_error_stats,
-         'Fatal error'       => \&handle_loglevel_ignore,
-         'Writing'           => \&handle_loglevel_ignore,
-         'Received'          => \&handle_loglevel_ignore,
-         'Actions'           => \&handle_loglevel_ignore,
-         'Unknown log level' => \&handle_loglevel_ignore
+         'Connect:'           => \&gather_loglevel_connect_stats,
+         'Crunch:'            => \&gather_loglevel_crunch_stats,
+         'Error:'             => \&gather_loglevel_error_stats,
+         'Header:'            => \&gather_loglevel_header_stats,
+         'Request:'           => \&gather_loglevel_request_stats,
+    );
+    my %ignored_log_levels = (
+         'Actions:'           => \&handle_loglevel_ignore,
+         'CGI:'               => \&handle_loglevel_ignore,
+         'Fatal error:'       => \&handle_loglevel_ignore,
+         'Force:'             => \&handle_loglevel_ignore,
+         'Gif-Deanimate:'     => \&handle_loglevel_ignore,
+         'Info:'              => \&handle_loglevel_ignore,
+         'Re-Filter:'         => \&handle_loglevel_ignore,
+         'Received:'          => \&handle_loglevel_ignore,
+         'Redirect:'          => \&handle_loglevel_ignore,
+         'Unknown log level:' => \&handle_loglevel_ignore,
+         'Writing:'           => \&handle_loglevel_ignore,
     );
 
     while (<>) {
-        if (m/^(\d{4}-\d{2}-\d{2}|\w{3} \d{2}) (\d\d:\d\d:\d\d)\.?(\d+)? (?:Privoxy\()?([^\)\s]*)[\)]? ([\w -]*): (.*?)\r?$/) {
-            $day = $1;
-            $time_stamp = $2;
-            $msecs = $3 ? $3 : 0;
-            $thread = $4;
-            $log_level = $5;
-            $content = $6;
+        (undef, $time_stamp, $thread, $log_level, $content) = split(/ /, $_, 5);
 
-            if (defined($log_level_handlers{$log_level})) {
+        # Skip LOG_LEVEL_CLF
+        next if ($time_stamp eq "-");
 
-                $content = $log_level_handlers{$log_level}($content, $thread);
+        if (defined($log_level_handlers{$log_level})) {
 
-            } else {
+            $content = $log_level_handlers{$log_level}($content, $thread);
 
-                die "No handler found for log level \"$log_level\"\n";
+        } elsif ($strict_checks and not defined($ignored_log_levels{$log_level})) {
 
-            }
+            die "No handler found for: $_";
         }
     }
 
@@ -2450,6 +2449,7 @@ sub get_cli_options () {
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
         'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
+        'strict-checks'            => CLI_OPTION_STRICT_CHECKS,
         'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
         'unbreak-lines-only'       => CLI_OPTION_UNBREAK_LINES_ONLY,
         'host-statistics-threshold'=> CLI_OPTION_HOST_STATISTICS_THRESHOLD,
@@ -2465,6 +2465,7 @@ sub get_cli_options () {
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
         'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
         'statistics'               => \$cli_options{'statistics'},
+        'strict-checks'            => \$cli_options{'strict-checks'},
         'unbreak-lines-only'       => \$cli_options{'unbreak-lines-only'},
         'url-statistics-threshold=i'=> \$cli_options{'url-statistics-threshold'},
         'host-statistics-threshold=i'=> \$cli_options{'host-statistics-threshold'},
@@ -2594,6 +2595,11 @@ that didn't modify the content.
 log messages. This is an experimental feature, if the results look wrong
 they very well might be. Also note that the results are pretty much guaranteed
 to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
+
+[B<--strict-checks>] When generating statistics, look more careful at the
+input data and abort if the it is unexpected, even if it doesn't affect
+the results. Significantly slows the parsing down and is not expected to
+catch any problems that matter.
 
 [B<--unbreak-lines-only>] Tries to fix lines that got messed up by a broken or
 interestingly configured mail client and thus are no longer recognized properly.
