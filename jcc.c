@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.420 2012/12/07 12:45:20 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.421 2012/12/07 12:50:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1839,7 +1839,7 @@ static void chat(struct client_state *csp)
    }
 
    log_applied_actions(csp->action);
-   log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
+   log_error(LOG_LEVEL_GPC, "%s", http->url);
 
    if (fwd->forward_host)
    {
