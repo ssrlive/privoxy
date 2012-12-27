@@ -1,4 +1,4 @@
-const char encode_rcs[] = "$Id: encode.c,v 1.26 2012/03/09 16:24:36 fabiankeil Exp $";
+const char encode_rcs[] = "$Id: encode.c,v 1.27 2012/03/09 17:55:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.c,v $
@@ -47,7 +47,7 @@ const char encode_rcs[] = "$Id: encode.c,v 1.26 2012/03/09 16:24:36 fabiankeil E
 const char encode_h_rcs[] = ENCODE_H_VERSION;
 
 /* Maps special characters in a URL to their equivalent % codes. */
-static const char const url_code_map[256][4] = {
+static const char url_code_map[256][4] = {
    "",    "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09",
    "%0A", "%0B", "%0C", "%0D", "%0E", "%0F", "%10", "%11", "%12", "%13",
    "%14", "%15", "%16", "%17", "%18", "%19", "%1A", "%1B", "%1C", "%1D",
