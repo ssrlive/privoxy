@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.118 2012/10/21 12:44:58 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.119 2012/10/23 10:17:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -739,6 +739,15 @@ void drain_and_close_socket(jb_socket fd)
       do
       {
          char drainage[500];
+
+         if (!data_is_available(fd, 0))
+         {
+            /*
+             * If there is no data available right now, don't try
+             * to drain the socket as read_socket() could block.
+             */
+            break;
+         }
 
          bytes_drained = read_socket(fd, drainage, sizeof(drainage));
          if (bytes_drained < 0)
