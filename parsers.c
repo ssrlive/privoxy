@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.272 2012/12/09 12:27:01 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.273 2013/01/04 12:19:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2105,11 +2105,25 @@ static jb_err server_content_type(struct client_state *csp, char **header)
    /* Remove header if it isn't the first Content-Type header */
    if ((csp->content_type & CT_DECLARED))
    {
-      log_error(LOG_LEVEL_ERROR,
-         "Multiple Content-Type headers. Removing and ignoring: \'%s\'",
-         *header);
-      freez(*header);
-
+      if (content_filters_enabled(csp->action))
+      {
+         /*
+          * Making sure the client interprets the content the same way
+          * Privoxy did is only relevant if Privoxy modified it.
+          *
+          * Checking for this is "hard" as it's not yet known when
+          * this function is called, thus go shopping and and just
+          * check if Privoxy could filter it.
+          *
+          * The main thing is that we don't mess with the headers
+          * unless the user signalled that it's acceptable.
+          */
+         log_error(LOG_LEVEL_HEADER,
+            "Multiple Content-Type headers detected. "
+            "Removing and ignoring: %s",
+            *header);
+         freez(*header);
+      }
       return JB_ERR_OK;
    }
 
