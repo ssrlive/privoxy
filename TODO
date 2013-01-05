@@ -1,4 +1,4 @@
-$Id: TODO,v 1.73 2013/01/05 18:38:11 fabiankeil Exp $
+$Id: TODO,v 1.74 2013/01/05 18:38:34 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -106,8 +106,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 44) Privoxy-Log-Parser: Consider highlighting "Connection" in:
     23:13:03.506 283b6100 Header: Replaced: 'Connection: Keep-Alive' with 'Connection: close'
-
-49) Add FAQ for NTLM proxies. Still necessary?
 
 50) Investigate possible PCRS template speedup when searching
     macros with strstr() before compiling pcrs commands.
