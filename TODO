@@ -1,4 +1,4 @@
-$Id: TODO,v 1.75 2013/01/05 18:38:52 fabiankeil Exp $
+$Id: TODO,v 1.76 2013/01/05 18:39:19 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -155,7 +155,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     mess in favour of wml. There are already several threads
     in the mailinglist archives about this. See also #41.
 
-66) Increase maximum number of action and filter files.
+66) Stop hard-coding the number of action and filter files.
 
 67) Clean up source code directory layout. Depends on 54 so
     we don't lose the revision history.
