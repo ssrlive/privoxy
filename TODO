@@ -1,4 +1,4 @@
-$Id: TODO,v 1.71 2013/01/05 18:37:35 fabiankeil Exp $
+$Id: TODO,v 1.72 2013/01/05 18:37:52 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -8,6 +8,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 1)  Add some regression tests. Filters should be tested automatically
     (variables too). Could probably reuse large parts of Privoxy-Filter-Test.
+    Note that there is currently work in progress to leverage curl's
+    test suite which could be used for this as well.
 
 3)  Fix some more XXX: comments.
 
