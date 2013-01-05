@@ -1,4 +1,4 @@
-$Id: TODO,v 1.69 2012/11/24 14:13:58 fabiankeil Exp $
+$Id: TODO,v 1.70 2012/11/24 14:14:37 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -226,7 +226,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     trivial, though.
 
 88) Investigate if there's a Perl module that Privoxy-Regression-Test
-    could optionally use to keep connections alive.
+    could optionally use to keep connections alive, preferably while
+    requiring less forks at the same time.
 
 89) When multiple block actions apply, consider showing all the block
     reasons on the blocked page that haven't been overruled, not just
