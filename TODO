@@ -1,4 +1,4 @@
-$Id: TODO,v 1.72 2013/01/05 18:37:52 fabiankeil Exp $
+$Id: TODO,v 1.73 2013/01/05 18:38:11 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -12,9 +12,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     test suite which could be used for this as well.
 
 3)  Fix some more XXX: comments.
-
-4)  Fix some more compiler warnings. (Especially on amd64)
-    Partly done.
 
 6)  Remove actions that aren't needed anymore:
 
