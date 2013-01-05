@@ -1,4 +1,4 @@
-$Id: TODO,v 1.74 2013/01/05 18:38:34 fabiankeil Exp $
+$Id: TODO,v 1.75 2013/01/05 18:38:52 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -152,8 +152,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     is no legal entity.
 
 65) Polish Website. Probably involves ditching the Docbook
-    mess in favour of wml. There should be already some threads
-    in the mailinglists archives about this. See also #41.
+    mess in favour of wml. There are already several threads
+    in the mailinglist archives about this. See also #41.
 
 66) Increase maximum number of action and filter files.
 
