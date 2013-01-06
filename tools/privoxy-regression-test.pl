@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.82 2012/04/29 16:18:01 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.83 2013/01/06 18:14:17 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -311,6 +311,7 @@ sub load_regression_tests_through_privoxy () {
     my $curl_url = '';
     my $file_number = 0;
     my $feature;
+    my $privoxy_version = '(Unknown version!)';
 
     $curl_url .= $privoxy_cgi_url;
     $curl_url .= 'show-status';
@@ -342,10 +343,14 @@ sub load_regression_tests_through_privoxy () {
 
             $privoxy_features{$feature} = $1 if defined $feature;
             $feature = undef;
+
+        } elsif (m@This is <a href="http://www.privoxy.org/">Privoxy</a> (\d+\.\d+\.\d+) on@) {
+            $privoxy_version = $1;
         }
     }
 
-    l(LL_FILE_LOADING, "Recognized " . @actionfiles . " actions files");
+    l(LL_STATUS, "Gathering regression tests from " .
+      @actionfiles . " action file(s) delivered by Privoxy $privoxy_version.");
 
     load_action_files(\@actionfiles);
 }
@@ -490,9 +495,6 @@ sub load_action_files ($) {
     my $count = 0;
 
     my $ignored = 0;
-
-    l(LL_STATUS, "Gathering regression tests from " .
-      @actionfiles . " action file(s) delivered by Privoxy.");
 
     for my $file_number (0 .. @actionfiles - 1) {
 
