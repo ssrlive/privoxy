@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.81 2011/10/30 16:22:29 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.82 2012/04/29 16:18:01 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -1598,7 +1598,7 @@ sub quote ($) {
 }
 
 sub print_version () {
-    printf PRT_VERSION . "\n" . 'Copyright (C) 2007-2011 Fabian Keil <fk@fabiankeil.de>' . "\n";
+    printf PRT_VERSION . "\n";
 }
 
 sub list_test_types () {
