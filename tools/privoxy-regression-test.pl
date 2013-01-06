@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.84 2013/01/06 18:14:44 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.85 2013/01/06 18:14:58 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -479,6 +479,34 @@ sub enlist_new_test ($$$$$$) {
       "Regression test " . $number . " (section:" . $si . "):");
 }
 
+sub mark_matching_tests_for_skipping($) {
+    my $overwrite_condition = shift;
+
+    our @regression_tests;
+
+    for (my $s = 0;  $s < @regression_tests; $s++) {
+
+        my $r = 0;
+
+        while (defined $regression_tests[$s][$r]) {
+
+            if ($regression_tests[$s][$r]{'data'} eq $overwrite_condition) {
+                my $message = sprintf("Marking test %s for ignoring. Overwrite condition: %s.",
+                                      $regression_tests[$s][$r]{'number'}, $overwrite_condition);
+
+                # XXX: Should eventually be downgraded to LL_FILE_LOADING.
+                log_message($message);
+
+                # XXX: Should eventuall get it's own key so get_skip_reason()
+                #      can tell about the overwrite condition.
+                $regression_tests[$s][$r]{'ignore'} = 1;
+            }
+            $r++;
+        }
+    }
+}
+
+
 # XXX: Shares a lot of code with load_regression_tests_from_file()
 #      that should be factored out.
 sub load_action_files ($) {
@@ -545,7 +573,16 @@ sub load_action_files ($) {
                                 "action parameters are currently unsupported.");
                 }
             }
-            
+
+            if ($token eq 'overwrite condition') {
+
+                l(LL_FILE_LOADING, "Detected overwrite condition: " . $value);
+                # We can only skip matching tests that have already
+                # be loaded but that is exactly what we want anyway.
+                mark_matching_tests_for_skipping($value);
+                next;
+            }
+
             if ($si == -1 || $ri == -1) {
                 # No beginning of a test detected yet,
                 # so we don't care about any other test
@@ -1880,6 +1917,28 @@ To skip a test, add the following line:
 The difference between a skipped test and a removed one is that removing
 a test affects the numbers of the following tests, while a skipped test
 is still loaded and thus keeps the test numbers unchanged.
+
+Sometimes user modifications intentionally conflict with tests in the
+default configuration and thus cause test failures. Adding the Ignore
+directive to the failing tests works but is inconvenient as the directive
+is likely to get lost with the next update.
+
+Overwrite conditions are an alternative and can be added in any action
+file as long as the come after the test that is expected to fail.
+They causes all previous tests a matching the condition to be skipped.
+
+It is recommended to put the overwrite condition below the custom Privoxy
+section that causes the expected test failure and before the custom test
+that verifies that tests the now expected behaviour. Example:
+
+# The following section is expected to overwrite a section in
+# default.action, whose effect is tested. Thus also disable the
+# test that is now expected to fail and add a new one.
+#
+{+block{Facebook makes Firefox even more unstable. Do not want.}}
+# Overwrite condition = http://apps.facebook.com/onthefarm/track.php?creative=&cat=friendvisit&subcat=weeds&key=a789a971dc687bee4c20c044834fabdd&next=index.php%3Fref%3Dnotif%26visitId%3D898835505
+# Blocked URL = http://apps.facebook.com/
+.facebook./
 
 =head1 TEST LEVELS
 
