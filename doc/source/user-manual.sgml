@@ -12,7 +12,7 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.20">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.156 2013/01/05 22:56:31 ler762 Exp $
+ $Id: user-manual.sgml,v 2.157 2013/01/05 23:50:35 ler762 Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.156 2013/01/05 22:56:31 ler762 Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.157 2013/01/05 23:50:35 ler762 Exp $</pubdate>
 
 <!--
 
