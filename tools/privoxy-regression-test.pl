@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.86 2013/01/06 18:15:27 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.87 2013/01/06 18:16:10 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -497,7 +497,7 @@ sub mark_matching_tests_for_skipping($) {
                 # XXX: Should eventually be downgraded to LL_FILE_LOADING.
                 log_message($message);
 
-                # XXX: Should eventuall get it's own key so get_skip_reason()
+                # XXX: Should eventually get its own key so get_skip_reason()
                 #      can tell about the overwrite condition.
                 $regression_tests[$s][$r]{'ignore'} = 1;
             }
