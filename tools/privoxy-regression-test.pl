@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.83 2013/01/06 18:14:17 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.84 2013/01/06 18:14:44 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -1872,6 +1872,14 @@ To verify that requests for a URL get redirected, use:
 
     # Redirected URL = http://www.example.com/redirect-me
     # Redirect Destination = http://www.example.org/redirected
+
+To skip a test, add the following line:
+
+# Ignore = Yes
+
+The difference between a skipped test and a removed one is that removing
+a test affects the numbers of the following tests, while a skipped test
+is still loaded and thus keeps the test numbers unchanged.
 
 =head1 TEST LEVELS
 
