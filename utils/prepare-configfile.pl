@@ -1,5 +1,10 @@
 #!/usr/local/bin/perl
 
+# This script is used by the config-file target in GNUMakefile.
+#
+# It removes garbage in the w3m output and separates comments
+# and active directives.
+
 use strict;
 use warnings;
 
