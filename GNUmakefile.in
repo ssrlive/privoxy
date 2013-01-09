@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.210 2013/01/09 15:04:21 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.211 2013/01/09 15:04:41 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2011 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -576,7 +576,7 @@ dok-release:
 # version. This is hardcored to w3m for html/text conversion.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
-	env -u LANG LC_ALL=C w3m -dump -cols 67 __tmp.html > ../../config.new && $(RM) -r __tmp.*
+	env -u LANG LC_ALL=C w3m -dump -cols 67 __tmp.html > ../../config.new && $(RM) __tmp.*
 	$(PERL) -i.bak utils/prepare-configfile.pl config.new
 
 	$(RM) *.bak
