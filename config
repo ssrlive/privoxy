@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy v3.0.20
 #
-#  $Id: config,v 1.99 2013/01/09 15:07:21 fabiankeil Exp $
+#  $Id: config,v 1.100 2013/01/09 15:07:39 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
 #
@@ -1967,8 +1967,9 @@ socket-timeout 300
 #   Accept \
 #   Accept-Language \
 #   Accept-Encoding \
-#   Proxy-Connection,\
-#   Referer,Cookie \
+#   Proxy-Connection \
+#   Referer \
+#   Cookie \
 #   If-Modified-Since \
 #   Cache-Control \
 #   Content-Length \
