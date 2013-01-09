@@ -1,8 +1,8 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.212 2013/01/09 15:05:20 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.213 2013/01/09 15:06:30 fabiankeil Exp $
 #
-# Written by and Copyright (C) 2001-2011 members of the
+# Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
