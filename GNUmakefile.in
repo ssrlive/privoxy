@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.208 2012/09/20 10:42:49 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.209 2012/09/20 10:43:41 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2011 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -573,11 +573,10 @@ dok-release:
 # The main Privoxy config file, generated from sgml sources.
 # NOTE: This will require some hand editing. The new file is outputted
 # as config.new so that problem sections can be compared to previous
-# version. This is hardcored to w3m for html/text conversion. Also,
-# requires the shell util 'fmt'.
+# version. This is hardcored to w3m for html/text conversion.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
-	env -u LANG w3m -dump __tmp.html | fmt -w 70 > ../../config.new && $(RM) -r __tmp.*
+	env -u LANG w3m -dump -cols 67 __tmp.html > ../../config.new && $(RM) -r __tmp.*
 	$(PERL) -i.bak utils/prepare-configfile.pl config.new
 
 	$(RM) *.bak
