@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.211 2013/01/09 15:04:41 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.212 2013/01/09 15:05:20 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2011 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -571,22 +571,20 @@ dok-release:
 # 	rm -fr $(DOC_TMP)
 
 # The main Privoxy config file, generated from sgml sources.
-# NOTE: This will require some hand editing. The new file is outputted
-# as config.new so that problem sections can be compared to previous
-# version. This is hardcored to w3m for html/text conversion.
+# NOTE: This will require some hand editing.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
-	env -u LANG LC_ALL=C w3m -dump -cols 67 __tmp.html > ../../config.new && $(RM) __tmp.*
-	$(PERL) -i.bak utils/prepare-configfile.pl config.new
+	env -u LANG LC_ALL=C w3m -dump -cols 67 __tmp.html > ../../config && $(RM) __tmp.*
+	$(PERL) -i.bak utils/prepare-configfile.pl config
 
 	$(RM) *.bak
 	@$(ECHO)  "****************************************************"
-	@$(ECHO)  "The output file is config.new."
-	@$(ECHO)  "Now -- you need to hand edit the results!!!"
+	@$(ECHO)  "The config file has been optimistically updated"
+	@$(ECHO)  "Now -- you may need to hand edit the results!"
 	@$(ECHO)  "In particular, check the Debug levels, the"
 	@$(ECHO)  "permit-access, forward & socks examples and the"
 	@$(ECHO)  "various user-manual examples, which all"
-	@$(ECHO)  "probably got hammered."
+	@$(ECHO)  "might have gotten hammered."
 	@$(ECHO)  "****************************************************"
 
 # config file, alternate version using lynx (perl stuff unfinished). Lynx
