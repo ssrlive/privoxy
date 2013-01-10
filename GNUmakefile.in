@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.214 2013/01/09 15:08:51 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.215 2013/01/10 11:03:31 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -130,8 +130,8 @@ CHMOD      = chmod
 CHOWN      = chown
 CHGRP      = chgrp
 GROUPS     = groups
-WDUMP      = env -u LANG LC_ALL=C @WDUMP@ -dump
-WDUMP_UTF8 = @WDUMP@ -dump
+W3M_DUMP   = env -u LANG LC_ALL=C @W3M@ -dump
+W3M_DUMP_UTF8 = @W3M@ -dump
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
 DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#html
@@ -504,9 +504,9 @@ groff2html:
 # readme page and INSTALL file
 dok-readme: dok-release
 	cd doc/source && $(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
-	$(WDUMP) tmp.html > ../../README ;\
+	$(W3M_DUMP) tmp.html > ../../README ;\
 	$(DB)-notoc -V nochunks install.sgml > tmp.html &&\
-	$(WDUMP) tmp.html > ../../INSTALL ;\
+	$(W3M_DUMP) tmp.html > ../../INSTALL ;\
 	$(RM) tmp.*
 
 # index.sgml is used to create both the Home Page, and a local index
@@ -536,7 +536,7 @@ dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors
 
 ## Make AUTHORS file
 dok-authors:
-	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(WDUMP_UTF8) \
+	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(W3M_DUMP_UTF8) \
 	  tmp.html > ../../AUTHORS && $(RM) tmp.html
 
 # Set doc entities for VERSION and CODE_STATUS in sgml docs. Toggle content
@@ -565,9 +565,9 @@ dok-release:
 # announce: dok-release
 # 	mkdir -p $(DOC_TMP)
 # 	cd $(DOC_TMP) && cp -f ../announce.sgml . && $(DB) -iannounce-big announce.sgml &&\
-# 	mv -f index.html announce.html && $(WDUMP) announce.html > announce.txt
+# 	mv -f index.html announce.html && $(W3M_DUMP) announce.html > announce.txt
 # 	cd $(DOC_TMP) && $(DB) announce.sgml &&\
-# 	mv -f index.html announce-mini.html && $(WDUMP) announce-mini.html > announce-mini.txt &&\
+# 	mv -f index.html announce-mini.html && $(W3M_DUMP) announce-mini.html > announce-mini.txt &&\
 # 	mv -f *html *txt ../../..
 # 	rm -fr $(DOC_TMP)
 
@@ -575,7 +575,7 @@ dok-release:
 # NOTE: This will require some hand editing.
 config-file: dok-release
 	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > __tmp.html &&\
-	$(WDUMP) -cols 67 __tmp.html > ../../config && $(RM) __tmp.*
+	$(W3M_DUMP) -cols 67 __tmp.html > ../../config && $(RM) __tmp.*
 	$(PERL) -i.bak utils/prepare-configfile.pl config
 
 	$(RM) *.bak
