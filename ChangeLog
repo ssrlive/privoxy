@@ -4,7 +4,7 @@ ChangeLog for Privoxy
 *** Version 3.0.20 Beta ***
 
 - Bug fixes:
-  - Fix --disable-ipv6-support compile option for the Windows platform
+  - Fix --disable-ipv6-support compile option for the Windows platform.
   - Attempt to work around (or at least reduce the) video playback issues with
     various Apple clients as reported in #3426305. In client_range(), let
     headers pass if the range starts at the beginning.
