@@ -101,12 +101,12 @@ ChangeLog for Privoxy
     closes its side of the connection without sending a request line, do not
     send the CLIENT_CONNECTION_TIMEOUT_RESPONSE, but report the condition
     properly.
+  - Allow closing curly braces as part of action values as long as they are
+    escaped.
 
 - Action file improvements:
   - Remove the comment that indicated that updated versions of this file are
     released on their own.
-  - Allow closing curly braces as part of action values as long as they are
-    escaped.
   - Block 'optimize.indieclick.com/' and 'optimized-by.rubiconproject.com/'
   - Unblock 'adjamblog.wordpress.com/' and 'adjamblog.files.wordpress.com/'.
     Reported by Ryan Farmer in #3496116.
