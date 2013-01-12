@@ -40,7 +40,7 @@ ChangeLog for Privoxy
   - Make any_loaded_file_changed() more reliable. Using the timestamps from. If
     an action or filter file is reloaded the timestamps aren't updated so
     any_loaded_file_changed() continued to report file changes.
-    
+
 - General improvements:
   - New debug log level 65536 which logs all actions that were applied to each
     request that Privoxy acts upon.
@@ -133,7 +133,7 @@ ChangeLog for Privoxy
     trusting them. Broken strptime() implementations have caused problems in
     the past and the most recent offender seems to be FreeBSD's libc:
     http://www.freebsd.org/cgi/query-pr.cgi?pr=173421
-    
+
 - Action file improvements:
   - Remove the comment that indicated that updated versions of this file are
     released on their own.
@@ -187,7 +187,7 @@ ChangeLog for Privoxy
   - Add a referer tagger
   - Reduce the likelihood that the google filter messes up HTML-generating
     JavaScript. Reported by Zeno Kugy in #3520260.
-    
+
 - Documentation improvements:
   - Revised all OS X sections due to new packaging module (OSXPackageBuilder).
   - Update the list of supported operating systems to clarify that all Windows
@@ -219,7 +219,7 @@ ChangeLog for Privoxy
     Reported by Zeno Kugy in #3596395.
   - Add the DNT header to the client-header-order example.
   - Add new contributors since 3.0.19.
-    
+
 - Log message improvements:
   - When stopping to watch a client socket due to pipelining, additionally log
     the socket number.
@@ -234,7 +234,7 @@ ChangeLog for Privoxy
     connection which is nice when grepping for thread ids in log files. While
     at it, use an upper-case first character which is more consistent with the
     other log messages.
-    
+
 - Code cleanups:
   - Remove compatibility layer for versions prior to 3.0 since it has been
     obsolete for more than 10 years now.
@@ -267,7 +267,7 @@ ChangeLog for Privoxy
     FEATURE_CONNECTION_KEEP_ALIVE enabled for clarity.
   - Fix an assertion in pcrs_compile_replacement(), nul bytes are actually
     fine.
-    
+
 - Privoxy-Regression-Test:
   - Various grammar and spelling corrections in documentation and code.
   - Additional tests for range requests with filtering enabled.
@@ -284,6 +284,7 @@ ChangeLog for Privoxy
     it. As it has a global scope, using it is more convenient than clowning
     around with the Ignore directive.
   - Include the Privoxy version in the output.
+
 - Privoxy-Log-Parser:
   - Improve the --statistics performance by skipping sanity checks for input
     that shouldn't affect the results anyway. In my non-scientific benchmarks
@@ -318,10 +319,10 @@ ChangeLog for Privoxy
   - Accept and highlight: Shifting 360 pipelined bytes by 360 bytes.
   - Accept and highlight: Multiple Content-Type headers detected. Removing and
     ignoring: Content-Type: text/html.
-    
+
 - uagen:
   - Bump generated Firefox version to 16.
-  
+
 - CGI interface improvements & bug fixes:
   - Remove an unreasonable parameter limit in parse_cgi_parameters(). The new
     parameter limit depends on the memory available and is currently unlikely
@@ -330,7 +331,7 @@ ChangeLog for Privoxy
   - Catch ssplit() failures in parse_cgi_parameters().
   - Deal with unsupported methods sent to the CGI pages by discarding any
     data following the headers.
-    
+
 - GNUmakefile improvements:
   - The dok-tidy target no longer taints documents with a tidy-mark
   - Change RA_MODE from 0664 to 0644. Suggested by Markus Dittrich in
@@ -362,7 +363,7 @@ ChangeLog for Privoxy
     providing configure with custom LDFLAGS. Submitted by Simon South in
     #3574538.
   - Several improvements for clarity, diffability and logic.
-  
+
   *** Version 3.0.19 Stable ***
 
 - Bug fixes:
