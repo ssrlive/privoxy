@@ -43,10 +43,10 @@ ChangeLog for Privoxy
     before the end of the session. limit-cookie-lifetime{0} creates session
     cookies and can thus replace the session-cookies-only action in the future.
     Idea originally suggested by Rick Sykes in #1049575.
-  - Increase the maximum number of actions files from 10 to 30. This is set by
-    the compiler directive MAX_AF_FILES so could always be modified by
-    recompilation, but the default value was too low since an unused file slot
-    is pretty inexpensive.
+  - Increase the hard-coded maximum number of actions and filter files from
+    10 to 30 (each). It doesn't significantly affect Privoxy's memory usage
+    and recompiling wasn't an option for all Privoxy users that reached the
+    limit.
   - Significantly improved reuse of open connections.
   - Add support for chunk-encoded client request bodies. Previously
     chunk-encoded request bodies weren't guaranteed to be forwarded correctly,
