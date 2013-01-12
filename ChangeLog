@@ -4,6 +4,12 @@ ChangeLog for Privoxy
 *** Version 3.0.20 Beta ***
 
 - Bug fixes:
+  - Client sockets are now properly shutdown and drained before being
+    closed. This fixes page truncation issues with clients that aggressively
+    pipeline data on platforms that otherwise discard already written data.
+    The issue mainly affected Opera users and was initially reported
+    by Kevin in #3464439, szotsaki provided additional information to track
+    down the cause.
   - Fix latency calculation for shared connections (disabled by default).
     It was broken since their introduction in 2009. The calculated latency
     for most connections would be 0 in which case the timeout detection
@@ -59,15 +65,7 @@ ChangeLog for Privoxy
   - After preventing the client from pipelining, don't signal keep-alive
     intentions. When looking at the response headers alone, it previously
     wasn't obvious from the client's perspective that no additional responses
-    should be expected. This might improve compatibility with Opera (#3464439).
-  - Use new drain_and_close_socket() when closing client sockets in serve().
-    Hopefully this fixes the page truncation issue reported with Opera in
-    #3464439. Apparently on some platforms immediately closing a client socket
-    with both unread and written-but-not-yet-transmitted data may result in the
-    connection being torn down prematurely, in which case the client ends up
-    with an incomplete response. To prevent this, drain_and_close_socket()
-    shuts down our side of the connection (on platforms with shutdown()),
-    drains the unread data on the socket and finally calls close_socket().
+    should be expected.
   - Reject URLs with invalid port. Previously they were parsed incorrectly and
     characters between the port number and the first slash were silently
     dropped as shown by curl test 187.
