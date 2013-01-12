@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.158 2013/01/06 11:25:52 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.159 2013/01/09 15:03:06 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.158 2013/01/06 11:25:52 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.159 2013/01/09 15:03:06 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -454,13 +454,6 @@ How to install the binary packages depends on your operating system:
 </sect2>
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="installation-keepupdated"><title>Keeping your Installation Up-to-Date</title>
-<para>
- As user feedback comes in and development continues, we will make updated versions
- of both the main <link linkend="actions-file">actions file</link> (as a <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118&amp;release_id=103670">separate
- package</ulink>) and the software itself (including the actions file) available for
- download.
-</para>
 
 <para>
  If you wish to receive an email notification whenever we release updates of
