@@ -178,7 +178,7 @@ ChangeLog for Privoxy
   - Various grammar and spelling corrections
   - Add a client-header-tagger{} example for disabling filtering for range
     requests.
-  - Correct a URL the "Privoxy with Tor" FAQ
+  - Correct a URL in the "Privoxy with Tor" FAQ.
   - Spell 'refresh-tags' correctly. Reported by Don in #3571927.
   - Sort manpage options alphabetically
   - Remove an incorrect sentence in the toggle section. The toggle state
