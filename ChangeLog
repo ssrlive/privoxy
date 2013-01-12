@@ -75,9 +75,9 @@ ChangeLog for Privoxy
   - Allow HTTP/1.0 clients to signal interest in keep-alive through the
     Proxy-Connection header. While such client are rare in the real world, it
     doesn't hurt and couple of curl tests rely on it.
-  - Only remove duplicated headers when filters are enabled. If they are not it
-    doesn't cause ill effects and the user might not want it. While at it,
-    downgrade the removal message to LOG_LEVEL_HEADER to clarify that it's not
+  - Only remove duplicated Content-Type headers when filters are enabled.
+    If they are not it doesn't cause ill effects and the user might not want it.
+    Downgrade the removal message to LOG_LEVEL_HEADER to clarify that it's not
     an error in Privoxy and is unlikely to cause any problems in general.
     Anonymously reported in #3599335.
   - Accept a default-server-timeout of 0. It's the default after all.
