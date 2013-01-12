@@ -34,6 +34,8 @@ ChangeLog for Privoxy
     dropped as shown by curl test 187.
 
 - General improvements:
+  - Significantly improved keep-alive support for both client and server
+    connections.
   - New debug log level 65536 which logs all actions that were applied to each
     request that Privoxy acts upon.
   - New directive client-header-order can be used to forward client headers in
@@ -56,7 +58,6 @@ ChangeLog for Privoxy
     10 to 30 (each). It doesn't significantly affect Privoxy's memory usage
     and recompiling wasn't an option for all Privoxy users that reached the
     limit.
-  - Significantly improved reuse of open connections.
   - Add support for chunk-encoded client request bodies. Previously
     chunk-encoded request bodies weren't guaranteed to be forwarded correctly,
     so this can also be considered a bug fix although chunk-encoded request
@@ -87,11 +88,6 @@ ChangeLog for Privoxy
     accept_connection(). This should further reduce the chances of the client
     getting an incomplete response, even though Privoxy wrote it in its
     entirety to the socket.
-  - Let serve() wait for keep-alive-timeout seconds for new requests. The
-    server connection timeout is no longer relevant.
-  - Improve connection handling when connection sharing is enabled.
-  - Do not keep the client connection open if it has to be closed to mark the
-    end of the response.
   - Shorten ssplit()'s prototype by removing the last two arguments. We always
     want to skip empty fields and ignore leading delimiters, so having
     parameters for this only complicates the API.
