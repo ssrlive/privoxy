@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.159 2013/01/09 15:03:06 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.160 2013/01/12 12:20:29 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.159 2013/01/09 15:03:06 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.160 2013/01/12 12:20:29 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -181,36 +181,6 @@ How to install the binary packages depends on your operating system:
 <!-- XXX: The installation sections should be sorted -->
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-rpm"><title>Red Hat and Fedora RPMs</title>
-
-<para>
- RPMs can be installed with <literal>rpm -Uvh privoxy-&p-version;-1.rpm</literal>,
- and will use <filename>/etc/privoxy</filename> for the location
- of configuration files.
-</para>
-
-<para>
- Note that on Red Hat, <application>Privoxy</application> will
- <emphasis>not</emphasis> be automatically started on system boot. You will
- need to enable that using <command>chkconfig</command>,
- <command>ntsysv</command>, or similar methods.
-</para>
-
-<para>
- If you have problems with failed dependencies, try rebuilding the SRC RPM:
- <literal>rpm --rebuild privoxy-&p-version;-1.src.rpm</literal>. This
- will use your locally installed libraries and RPM version.
-</para>
-
-<para>
- Also note that if you have a <application>Junkbuster</application> RPM installed
- on your system, you need to remove it first, because the packages conflict.
- Otherwise, RPM will try to remove <application>Junkbuster</application>
- automatically if found, before installing <application>Privoxy</application>.
-</para>
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-deb"><title>Debian and Ubuntu</title>
 <para>
  DEBs can be installed with <literal>apt-get install privoxy</literal>,
@@ -260,16 +230,6 @@ How to install the binary packages depends on your operating system:
  write to its log and configuration files.
 </para>
 
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-pack-bintgz"><title>Solaris <!--, NetBSD, HP-UX--></title>
-
-<para>
- Create a new directory, <literal>cd</literal> to it, then unzip and
- untar the archive. For the most part, you'll have to figure out where
- things go. <!-- FIXME, more info needed? -->
-</para>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
@@ -373,16 +333,6 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-amiga"><title>AmigaOS</title>
-<para>
- Copy and then unpack the <filename>lha</filename> archive to a suitable location.
- All necessary files will be installed into <application>Privoxy</application>
- directory, including all configuration and log files. To uninstall, just
- remove this directory.
-</para>
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 id="installation-tbz"><title>FreeBSD</title>
 
 <para>
@@ -398,27 +348,6 @@ How to install the binary packages depends on your operating system:
  <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">File Release
  Page</ulink>, but there's no reason to use them unless you're interested in the
  beta releases which are only available there.
-</para>
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installattion-gentoo"><title>Gentoo</title>
-<para>
- Gentoo source packages (Ebuilds) for <application>Privoxy</application> are
- contained in the Gentoo  Portage Tree (they are not on the download page,
- but there is a Gentoo section, where you can see when a new
- <application>Privoxy</application> Version is added to the  Portage Tree).
-</para>
-<para>
- Before installing <application>Privoxy</application> under Gentoo just do
- first <literal>emerge --sync</literal> to get the latest changes from the
- Portage tree. With <literal>emerge privoxy</literal> you install the latest
- version.
-</para>
-<para>
- Configuration files are in <filename>/etc/privoxy</filename>, the
- documentation is in <filename>/usr/share/doc/privoxy-&p-version;</filename>
- and the Log directory is in <filename>/var/log/privoxy</filename>.
 </para>
 </sect3>
 
