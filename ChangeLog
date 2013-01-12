@@ -122,34 +122,34 @@ ChangeLog for Privoxy
   - Block '/openx/www/delivery/'.
   - Disable fast-redirects for '.googleapis.com/'.
   - Block 'imp.double.net/'. Reported by David Bo in #3070411.
-  - Block 'gm-link.com/' whis is used for email tracking. Reported by David Bo
-    in #1812733.
+  - Block 'gm-link.com/' whis is used for email tracking.
+    Reported by David Bo in #1812733.
   - Verify that requests to "bwp." are blocked. URL taken from #1736879
     submitted by Francois Marier.
   - Block '/.*bannerid='. Reported by Adam Piggott in #2975779.
-  - Block 'cltomedia.info/delivery/' and '.adexprt.com/'. Anonymously reported
-    in #2965254.
+  - Block 'cltomedia.info/delivery/' and '.adexprt.com/'.
+    Anonymously reported in #2965254.
   - Block 'de17a.com/'. Reported by David Bo in #3061472.
   - Block 'oskar.tradera.com/'. Reported by David Bo in #3060596.
   - Block '/scripts/webtrends\.js'. Reported by johnd16 in #3002729.
   - Block requests for 'pool.*.adhese.com/'. Reported by johnd16 in #3002716.
-  - Update path pattern for Coremetrics and add tests. Pattern and URLs
-    submitted by Adam Piggott #3168443.
-  - Enable +fast-redirects{check-decoded-url} for 'tr.anp.se/'. Reported by
-    David Bo in #3268832.
+  - Update path pattern for Coremetrics and add tests.
+    Pattern and URLs submitted by Adam Piggott #3168443.
+  - Enable +fast-redirects{check-decoded-url} for 'tr.anp.se/'.
+    Reported by David Bo in #3268832.
   - Unblock '.conrad.se/newsletter/banners/'. Reported by David Bo in #3413824.
   - Block '.tynt.com/'. Reported by Dan Stahlke in #3421767.
   - Unblock '.bbci.co.uk/radio/'. Reported by Adam Piggott in #3569603.
-  - Block requests to 'service.maxymiser.net/'. Reported by johnd16 in #3118401
-    (with a previous URL).
+  - Block requests to 'service.maxymiser.net/'.
+    Reported by johnd16 in #3118401 (with a previous URL).
   - Disable fast-redirects for Google's "let's pretend your computer is
     infected" page.
-  - Unblock '/.*download' to resolve actionsfile feedback #3498129 submitted by
-    Steven Kolins (soundcloud.com not working).
-  - Unblock '.wlxrs.com/' to resolve actionsfile feedback #3413827 (hotmail.com
-    not working) submitted by David Bo.
-  - Add two unblock patterns for popup radio and TV players. Submitted by Adam
-    Piggott in #3596089.
+  - Unblock '/.*download' to resolve actionsfile feedback #3498129.
+    Submitted by Steven Kolins (soundcloud.com not working).
+  - Unblock '.wlxrs.com/' which is required by hotmail.com.
+    Fixes #3413827 submitted by David Bo.
+  - Add two unblock patterns for popup radio and TV players.
+    Submitted by Adam Piggott in #3596089.
 
 - Filter file improvements & bug fixes:
   - Add a referer tagger
