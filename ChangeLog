@@ -88,20 +88,6 @@ ChangeLog for Privoxy
     accept_connection(). This should further reduce the chances of the client
     getting an incomplete response, even though Privoxy wrote it in its
     entirety to the socket.
-  - Shorten ssplit()'s prototype by removing the last two arguments. We always
-    want to skip empty fields and ignore leading delimiters, so having
-    parameters for this only complicates the API.
-  - Use an enum for the type of the action value.
-  - Rename action_name's member takes_value to value_type as it isn't used as
-    boolean.
-  - Turn family mismatches in match_sockaddr() into fatal errors
-  - Let enlist_unique_header() verify that the caller didn't pass a header
-    containing either \r or \n.
-  - Change the hashes used in load_config() to unsigned int.
-    That's what hash_string() actually returns and using a potentiallly larger
-    type is at best useless.
-  - Use privoxy_tolower() instead of vanilla tolower() with manual casting of
-    the argument.
   - Move several variable declarations to the beginning of their code block.
     It's how we usually do it and is apparently also required when compiling
     with gcc 2.95. Initial patch submitted by Simon South in #3564815.
@@ -255,6 +241,20 @@ ChangeLog for Privoxy
   - Fix a typo in the no-zlib-support complaint. Patch submitted by Matthew
     Fischer in #3507304.
   - Update an error message that still tried to print directive_hash as long
+  - Shorten ssplit()'s prototype by removing the last two arguments. We always
+    want to skip empty fields and ignore leading delimiters, so having
+    parameters for this only complicates the API.
+  - Use an enum for the type of the action value.
+  - Rename action_name's member takes_value to value_type as it isn't used as
+    boolean.
+  - Turn family mismatches in match_sockaddr() into fatal errors
+  - Let enlist_unique_header() verify that the caller didn't pass a header
+    containing either \r or \n.
+  - Change the hashes used in load_config() to unsigned int.
+    That's what hash_string() actually returns and using a potentiallly larger
+    type is at best useless.
+  - Use privoxy_tolower() instead of vanilla tolower() with manual casting of
+    the argument.
 
 - Privoxy-Regression-Test:
   - Various grammar and spelling corrections in documentation and code.
