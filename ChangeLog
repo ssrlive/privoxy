@@ -32,8 +32,7 @@ ChangeLog for Privoxy
   - New directive tolerate-pipelining can be used to enable client-side
     pipelining. If enabled (3.0.20 beta enables it by default), Privoxy will
     keep pipelined client requests around to deal with them once the current
-    request has been served. At the moment this is only done if the current
-    request is known to have no body.
+    request has been served.
   - New --config-test option lets Privoxy exit after checking whether or not
     the configuration seems valid. The limitations noted in TODO #22 and #23
     still apply. Logging the problem to the logfile if one is configured and
