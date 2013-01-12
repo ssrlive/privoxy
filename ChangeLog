@@ -4,42 +4,25 @@ ChangeLog for Privoxy
 *** Version 3.0.20 Beta ***
 
 - Bug fixes:
-  - Fix --disable-ipv6-support compile option for the Windows platform.
-  - Attempt to work around (or at least reduce the) video playback issues with
-    various Apple clients as reported in #3426305. In client_range(), let
-    headers pass if the range starts at the beginning.
-  - In pcrs_get_delimiter(), do not use delimiters ouside the ASCII range.
-    Fixes a clang complaint.
+  - Fix latency calculation for shared connections (disabled by default).
+    It was broken since their introduction in 2009. The calculated latency
+    for most connections would be 0 in which case the timeout detection
+    failed to account for the real latency.
+  - Fix a Windows-specific log viewer thread safety issue.
+    Reported by Tim H. in #3525694.
+  - Let fatal_error() write to the logfile right away, before showing the
+    Windows-specific error message which blocks until the user acknowledges
+    it, thus complicating automatic error detection.
+    Reported by Adriaan in #3593603.
+  - Fix the --disable-ipv6-support configure option for the Windows platform.
   - In socks5_connect(), do not try to print a negative number of socks
     response bytes if the read() for the socks5 negotiation failed
     completely. It's an API violation and can trigger an assert() in debug
     builds with "debug 2" enabled. Except for the assert(), log_error()
     already handled negative %N values gracefully so this commit only makes a
     difference for debug builds.
-  - Fix a Windows-specific log viewer thread safety issue, as reported by Tim
-    H. in #3525694.
-  - Do not confuse a client hanging up with a connection time out. If a client
-    closes its side of the connection without sending a request line, do not
-    send the CLIENT_CONNECTION_TIMEOUT_RESPONSE, but report the condition
-    properly.
-  - Fix latency calculation for shared connections; broken since a regression
-    in 2009. The calculated latency for most connections would be 0 due to
-    remember_connection() always putting the timestamps in the first slot.
-  - Let fatal_error() write to the logfile right away, before showing the
-    Windows-specific error message which blocks until the user acknowledges it,
-    thus complicating automatic error detection. Reported by Adriaan in
-    #3593603.
-  - Fix an error message in get_last_url() nobody is supposed to see. Reported
-    by Matthew Fischer in #3507301.
-  - Fix a typo in the no-zlib-support complaint. Patch submitted by Matthew
-    Fischer in #3507304.
-  - Update an error message that still tried to print directive_hash as long
-  - Let server_set_cookie() stay silent when the cookie isn't modified. It
-    previously would claim to have created a session cookie after letting a
-    session cookie pass unmodified.
-  - Make any_loaded_file_changed() more reliable. Using the timestamps from. If
-    an action or filter file is reloaded the timestamps aren't updated so
-    any_loaded_file_changed() continued to report file changes.
+  - Fix an assertion that could cause debug builds to abort() if a filter
+    contained nul bytes in the replacement text.
 
 - General improvements:
   - New debug log level 65536 which logs all actions that were applied to each
@@ -133,6 +116,13 @@ ChangeLog for Privoxy
     trusting them. Broken strptime() implementations have caused problems in
     the past and the most recent offender seems to be FreeBSD's libc:
     http://www.freebsd.org/cgi/query-pr.cgi?pr=173421
+  - Attempt to work around (or at least reduce the) video playback issues with
+    various Apple clients as reported in #3426305. In client_range(), let
+    headers pass if the range starts at the beginning.
+  - Do not confuse a client hanging up with a connection time out. If a client
+    closes its side of the connection without sending a request line, do not
+    send the CLIENT_CONNECTION_TIMEOUT_RESPONSE, but report the condition
+    properly.
 
 - Action file improvements:
   - Remove the comment that indicated that updated versions of this file are
@@ -265,8 +255,13 @@ ChangeLog for Privoxy
   - Various data type corrections.
   - Change visibility of several code segments when compiling without
     FEATURE_CONNECTION_KEEP_ALIVE enabled for clarity.
-  - Fix an assertion in pcrs_compile_replacement(), nul bytes are actually
-    fine.
+  - In pcrs_get_delimiter(), do not use delimiters ouside the ASCII range.
+    Fixes a clang complaint.
+  - Fix an error message in get_last_url() nobody is supposed to see.
+    Reported by Matthew Fischer in #3507301.
+  - Fix a typo in the no-zlib-support complaint. Patch submitted by Matthew
+    Fischer in #3507304.
+  - Update an error message that still tried to print directive_hash as long
 
 - Privoxy-Regression-Test:
   - Various grammar and spelling corrections in documentation and code.
