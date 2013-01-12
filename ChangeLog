@@ -152,7 +152,7 @@ ChangeLog for Privoxy
     Submitted by Adam Piggott in #3596089.
 
 - Filter file improvements & bug fixes:
-  - Add a referer tagger
+  - Add a referer tagger.
   - Reduce the likelihood that the google filter messes up HTML-generating
     JavaScript. Reported by Zeno Kugy in #3520260.
 
@@ -180,7 +180,7 @@ ChangeLog for Privoxy
     requests.
   - Correct a URL in the "Privoxy with Tor" FAQ.
   - Spell 'refresh-tags' correctly. Reported by Don in #3571927.
-  - Sort manpage options alphabetically
+  - Sort manpage options alphabetically.
   - Remove an incorrect sentence in the toggle section. The toggle state
     doesn't affect whether or not the Windows version uses the tray icon and
     having to toggle Privoxy off to not show the icon makes no sense anyway.
@@ -246,7 +246,7 @@ ChangeLog for Privoxy
   - Use an enum for the type of the action value.
   - Rename action_name's member takes_value to value_type as it isn't used as
     boolean.
-  - Turn family mismatches in match_sockaddr() into fatal errors
+  - Turn family mismatches in match_sockaddr() into fatal errors.
   - Let enlist_unique_header() verify that the caller didn't pass a header
     containing either \r or \n.
   - Change the hashes used in load_config() to unsigned int.
@@ -266,7 +266,7 @@ ChangeLog for Privoxy
   - Remove the "Copyright" line from print_version(). When using --help, every
     line of screen space matters and thus shouldn't be wasted on things the
     user doesn't care about.
-  - Fix comment typos
+  - Fix comment typos.
   - Add an 'Overwrite condition' directive to skip any matching tests before
     it. As it has a global scope, using it is more convenient than clowning
     around with the Ignore directive.
