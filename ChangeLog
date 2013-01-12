@@ -32,6 +32,8 @@ ChangeLog for Privoxy
   - Reject URLs with invalid port. Previously they were parsed incorrectly and
     characters between the port number and the first slash were silently
     dropped as shown by curl test 187.
+  - The default-server-timeout and socket-timeout directives accept 0 as
+    valid value.
 
 - General improvements:
   - Significantly improved keep-alive support for both client and server
@@ -81,9 +83,6 @@ ChangeLog for Privoxy
     Downgrade the removal message to LOG_LEVEL_HEADER to clarify that it's not
     an error in Privoxy and is unlikely to cause any problems in general.
     Anonymously reported in #3599335.
-  - Accept a default-server-timeout of 0. It's the default after all.
-  - Accept a socket-timeout value of 0 seconds. Impatience isn't necessarily a
-    syntax problem.
   - Set the socket option SO_LINGER for the client socket in
     accept_connection(). This should further reduce the chances of the client
     getting an incomplete response, even though Privoxy wrote it in its
