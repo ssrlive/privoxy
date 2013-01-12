@@ -29,6 +29,9 @@ ChangeLog for Privoxy
     difference for debug builds.
   - Fix an assertion that could cause debug builds to abort() if a filter
     contained nul bytes in the replacement text.
+  - Reject URLs with invalid port. Previously they were parsed incorrectly and
+    characters between the port number and the first slash were silently
+    dropped as shown by curl test 187.
 
 - General improvements:
   - New debug log level 65536 which logs all actions that were applied to each
@@ -66,9 +69,6 @@ ChangeLog for Privoxy
     intentions. When looking at the response headers alone, it previously
     wasn't obvious from the client's perspective that no additional responses
     should be expected.
-  - Reject URLs with invalid port. Previously they were parsed incorrectly and
-    characters between the port number and the first slash were silently
-    dropped as shown by curl test 187.
   - Stop considering client sockets tainted after receving a request with body.
     It hasn't been necessary for a while now and unnecessarily causes test
     failures when using curl's test suite.
