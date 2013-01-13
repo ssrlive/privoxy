@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.151 2012/12/24 15:53:26 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.152 2013/01/06 18:11:51 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -1723,9 +1723,12 @@ sub handle_loglevel_connect ($) {
         $c =~ s@(?<=Drained )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Tainting client socket/) {
+    } elsif ($c =~ m/^Tainting client socket/ or
+             $c =~ m/^Failed to shutdown socket/) {
 
         # Tainting client socket 7 due to unread data.
+        # Failed to shutdown socket 11: Connection reset by peer
+
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Shifting \d+ pipelined bytes/) {
