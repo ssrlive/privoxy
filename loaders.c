@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.93 2012/10/21 12:53:33 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.94 2012/12/07 12:43:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -1479,6 +1479,16 @@ int any_loaded_file_changed(const struct client_state *csp)
          }
       }
    }
+
+#ifdef FEATURE_TRUST
+   if (csp->tlist)
+   {
+      if (file_has_been_modified(csp->tlist->filename, csp->tlist->lastmodified))
+      {
+         return TRUE;
+      }
+   }
+#endif /* def FEATURE_TRUST */
 
    return FALSE;
 }
