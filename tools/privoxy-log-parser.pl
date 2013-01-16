@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.153 2013/01/13 15:38:35 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.154 2013/01/13 15:38:54 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -65,6 +65,7 @@ use constant {
     CLI_OPTION_UNBREAK_LINES_ONLY => 0,
     CLI_OPTION_URL_STATISTICS_THRESHOLD => 0,
     CLI_OPTION_HOST_STATISTICS_THRESHOLD => 0,
+    CLI_OPTION_SHOW_COMPLETE_REQUEST_DISTRIBUTION => 0,
 
     SUPPRESS_SUCCEEDED_FILTER_ADDITIONS => 1,
     SHOW_SCAN_INTRO => 0,
@@ -2059,6 +2060,14 @@ sub gather_loglevel_connect_stats ($$) {
 
         $thread_data{$thread}{'new_connection'} = 0;
         $stats{'reused-connections'}++;
+
+    } elsif ($c =~ m/^Closing client socket \d+. .* Requests received: (\d+)\.$/) {
+
+        # Closing client socket 12. Keep-alive: 1. Socket alive: 1. Data available: 0. \
+        #  Configuration file change detected: 0. Requests received: 14.
+
+        $stats{'client-requests-on-connection'}{$1}++;
+        $stats{'closed-client-connections'}++;
     }
 }
 
@@ -2101,7 +2110,9 @@ sub init_stats () {
         'blocked' => 0,
         'reused-connections' => 0,
         'server-keep-alive' => 0,
+        'closed-client-connections' => 0,
         );
+        $stats{'client-requests-on-connection'}{1} = 0;
 }
 
 sub get_percentage ($$) {
@@ -2125,6 +2136,7 @@ sub print_stats () {
     our %cli_options;
     my $new_connections = $stats{requests} - $stats{crunches} - $stats{'reused-connections'};
     my $outgoing_requests = $stats{requests} - $stats{crunches};
+    my $client_requests_checksum = 0;
 
     if ($stats{requests} eq 0) {
         print "No requests yet.\n";
@@ -2158,6 +2170,26 @@ sub print_stats () {
         $stats{'empty-responses-on-reused-connections'} . " (" .
         get_percentage($stats{requests}, $stats{'empty-responses-on-reused-connections'}) .
         ")\n";
+    print "Client connections: " .  $stats{'closed-client-connections'} . "\n";
+
+    my $lines_printed = 0;
+    print "Client requests per connection distribution:\n";
+    foreach my $client_requests (sort {
+        $stats{'client-requests-on-connection'}{$b} <=> $stats{'client-requests-on-connection'}{$a}}
+                                  keys %{$stats{'client-requests-on-connection'}
+                                  })
+    {
+        my $count = $stats{'client-requests-on-connection'}{$client_requests};
+        $client_requests_checksum += $count * $client_requests;
+        if ($cli_options{'show-complete-request-distribution'} or ($lines_printed < 10)) {
+            printf "%8d: %d\n", $count, $client_requests;
+            $lines_printed++;
+        }
+    }
+    unless ($cli_options{'show-complete-request-distribution'}) {
+        printf "Enable --show-complete-request-distribution to get less common numbers as well.\n";
+    }
+    printf "Unaccounted requests: ~%d\n", $stats{requests} - $client_requests_checksum;
 
     if ($stats{method} eq 0) {
         print "No response lines parsed yet yet.\n";
@@ -2460,6 +2492,7 @@ sub get_cli_options () {
         'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
         'unbreak-lines-only'       => CLI_OPTION_UNBREAK_LINES_ONLY,
         'host-statistics-threshold'=> CLI_OPTION_HOST_STATISTICS_THRESHOLD,
+        'show-complete-request-distribution' => CLI_OPTION_SHOW_COMPLETE_REQUEST_DISTRIBUTION,
     );
 
     GetOptions (
@@ -2476,6 +2509,7 @@ sub get_cli_options () {
         'unbreak-lines-only'       => \$cli_options{'unbreak-lines-only'},
         'url-statistics-threshold=i'=> \$cli_options{'url-statistics-threshold'},
         'host-statistics-threshold=i'=> \$cli_options{'host-statistics-threshold'},
+        'show-complete-request-distribution' => \$cli_options{'show-complete-request-distribution'},
         'version'                  => sub { VersionMessage && exit(0) },
         'help'                     => \&help,
    ) or exit(1);
@@ -2503,6 +2537,7 @@ Options and their default values if they have any:
     [--no-syntax-highlighting]
     [--shorten-thread-ids]
     [--show-ineffective-filters]
+    [--show-complete-request-distribution]
     [--statistics]
     [--unbreak-lines-only]
     [--url-statistics-threshold $cli_options{'url-statistics-threshold'}]
@@ -2597,6 +2632,10 @@ and thus varies with the input.
 
 [B<--show-ineffective-filters>] Don't suppress log lines for filters
 that didn't modify the content.
+
+[B<--show-complete-request-distribution>] Show the complete client request
+distribution in the B<--statistics> output. Without this option only the
+ten most common numbers are shown.
 
 [B<--statistics>] Gather various statistics instead of syntax highlighting
 log messages. This is an experimental feature, if the results look wrong
