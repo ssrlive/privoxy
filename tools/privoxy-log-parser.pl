@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.155 2013/01/16 16:29:13 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.156 2013/01/16 16:29:26 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -59,7 +59,6 @@ use constant {
     CLI_OPTION_NO_SYNTAX_HIGHLIGHTING => 0,
     CLI_OPTION_SHORTEN_THREAD_IDS => 0,
     CLI_OPTION_SHOW_INEFFECTIVE_FILTERS => 0,
-    CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES => 0,
     CLI_OPTION_STATISTICS => 0,
     CLI_OPTION_STRICT_CHECKS => 0,
     CLI_OPTION_UNBREAK_LINES_ONLY => 0,
@@ -555,7 +554,7 @@ sub found_unknown_content ($) {
     my $unknown = shift;
     my $message;
 
-    return if cli_option_is_set('accept-unknown-messages');
+    return unless cli_option_is_set('strict-checks');
 
     return if ($unknown =~ /\[too long, truncated\]$/);
 
@@ -2486,7 +2485,6 @@ sub get_cli_options () {
         'no-msecs'                 => CLI_OPTION_NO_MSECS,
         'shorten-thread-ids'       => CLI_OPTION_SHORTEN_THREAD_IDS,
         'show-ineffective-filters' => CLI_OPTION_SHOW_INEFFECTIVE_FILTERS,
-        'accept-unknown-messages'  => CLI_OPTION_ACCEPT_UNKNOWN_MESSAGES,
         'statistics'               => CLI_OPTION_STATISTICS,
         'strict-checks'            => CLI_OPTION_STRICT_CHECKS,
         'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
@@ -2503,7 +2501,6 @@ sub get_cli_options () {
         'no-msecs'                 => \$cli_options{'no-msecs'},
         'shorten-thread-ids'       => \$cli_options{'shorten-thread-ids'},
         'show-ineffective-filters' => \$cli_options{'show-ineffective-filters'},
-        'accept-unknown-messages'  => \$cli_options{'accept-unknown-messages'},
         'statistics'               => \$cli_options{'statistics'},
         'strict-checks'            => \$cli_options{'strict-checks'},
         'unbreak-lines-only'       => \$cli_options{'unbreak-lines-only'},
@@ -2529,7 +2526,6 @@ sub help () {
     print << "    EOF"
 
 Options and their default values if they have any:
-    [--accept-unknown-messages]
     [--host-statistics-threshold $cli_options{'host-statistics-threshold'}]
     [--html-output]
     [--no-embedded-css]
@@ -2580,7 +2576,7 @@ B<privoxy-log-parser> - A parser and syntax-highlighter for Privoxy log messages
 
 =head1 SYNOPSIS
 
-B<privoxy-log-parser> [B<--accept-unknown-messages>] [B<--html-output>]
+B<privoxy-log-parser> [B<--html-output>]
 [B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--statistics>]
 [B<--shorten-thread-ids>] [B<--show-ineffective-filters>]
 [B<--url-statistics-threshold>] [B<--version>]
@@ -2606,9 +2602,6 @@ affect the content. If a filter doesn't cause any hits, B<privoxy-log-parser>
 will hide the "filter foo caused 0 hits" message.
 
 =head1 OPTIONS
-
-[B<--accept-unknown-messages>] Don't print warnings in case of unknown messages,
-just don't highlight them.
 
 [B<--host-statistics-threshold>] Only show the request count for a host
 if it's above or equal to the given threshold. If the threshold is 0, host
@@ -2646,6 +2639,8 @@ to be incorrect if Privoxy and Privoxy-Log-Parser aren't in sync.
 input data and abort if it is unexpected, even if it doesn't affect the
 results. Significantly slows the parsing down and is not expected to catch
 any problems that matter.
+When highlighting, print warnings in case of unknown messages which can't be
+properly highlighted.
 
 [B<--unbreak-lines-only>] Tries to fix lines that got messed up by a broken or
 interestingly configured mail client and thus are no longer recognized properly.
