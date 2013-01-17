@@ -18,12 +18,8 @@ ChangeLog for Privoxy
     unresponsive after toggling it on or off through the taskbar icon.
     Reported by Tim H. in #3525694.
   - Fix the compilation on Windows when configured without IPv6 support.
-  - In socks5_connect(), do not try to print a negative number of socks
-    response bytes if the read() for the socks5 negotiation failed
-    completely. It's an API violation and can trigger an assert() in debug
-    builds with "debug 2" enabled. Except for the assert(), log_error()
-    already handled negative %N values gracefully so this commit only makes a
-    difference for debug builds.
+  - Fix an assertion that could cause debug builds to abort() in case of
+    socks5 connection failures with "debug 2" enabled.
   - Fix an assertion that could cause debug builds to abort() if a filter
     contained nul bytes in the replacement text.
   - Reject URLs with invalid port. Previously they were parsed incorrectly and
