@@ -223,7 +223,6 @@ ChangeLog for Privoxy
     Reported by Matthew Fischer in #3507301.
   - Fix a typo in the no-zlib-support complaint. Patch submitted by Matthew
     Fischer in #3507304.
-  - Update an error message that still tried to print directive_hash as long
   - Shorten ssplit()'s prototype by removing the last two arguments. We always
     want to skip empty fields and ignore leading delimiters, so having
     parameters for this only complicates the API.
@@ -233,9 +232,9 @@ ChangeLog for Privoxy
   - Turn family mismatches in match_sockaddr() into fatal errors.
   - Let enlist_unique_header() verify that the caller didn't pass a header
     containing either \r or \n.
-  - Change the hashes used in load_config() to unsigned int.
-    That's what hash_string() actually returns and using a potentiallly larger
-    type is at best useless.
+  - Change the hashes used in load_config() to unsigned int. That's what
+    hash_string() actually returns and using a potentiallly larger type
+    is at best useless.
   - Use privoxy_tolower() instead of vanilla tolower() with manual casting of
     the argument.
 
