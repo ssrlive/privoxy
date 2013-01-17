@@ -14,6 +14,11 @@ ChangeLog for Privoxy
     It was broken since their introduction in 2009. The calculated latency
     for most connections would be 0 in which case the timeout detection
     failed to account for the real latency.
+  - Reject URLs with invalid port. Previously they were parsed incorrectly and
+    characters between the port number and the first slash were silently
+    dropped as shown by curl test 187.
+  - The default-server-timeout and socket-timeout directives accept 0 as
+    valid value.
   - Fix a race condition on Windows that could cause Privoxy to become
     unresponsive after toggling it on or off through the taskbar icon.
     Reported by Tim H. in #3525694.
@@ -22,11 +27,6 @@ ChangeLog for Privoxy
     socks5 connection failures with "debug 2" enabled.
   - Fix an assertion that could cause debug builds to abort() if a filter
     contained nul bytes in the replacement text.
-  - Reject URLs with invalid port. Previously they were parsed incorrectly and
-    characters between the port number and the first slash were silently
-    dropped as shown by curl test 187.
-  - The default-server-timeout and socket-timeout directives accept 0 as
-    valid value.
 
 - General improvements:
   - Significantly improved keep-alive support for both client and server
