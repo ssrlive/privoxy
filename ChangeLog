@@ -93,8 +93,8 @@ ChangeLog for Privoxy
     Reported by Adriaan in #3593603.
 
 - Action file improvements:
-  - Remove the comment that indicated that updated versions of this file are
-    released on their own.
+  - Remove the comment that indicated that updated default.action versions
+    are released on their own.
   - Block 'optimize.indieclick.com/' and 'optimized-by.rubiconproject.com/'
   - Unblock 'adjamblog.wordpress.com/' and 'adjamblog.files.wordpress.com/'.
     Reported by Ryan Farmer in #3496116.
@@ -170,16 +170,14 @@ ChangeLog for Privoxy
   - Spell 'refresh-tags' correctly. Reported by Don in #3571927.
   - Sort manpage options alphabetically.
   - Remove an incorrect sentence in the toggle section. The toggle state
-    doesn't affect whether or not the Windows version uses the tray icon and
-    having to toggle Privoxy off to not show the icon makes no sense anyway.
+    doesn't affect whether or not the Windows version uses the tray icon.
     Reported by Zeno Kugy in #3596395.
-  - Add the DNT header to the client-header-order example.
   - Add new contributors since 3.0.19.
 
 - Log message improvements:
   - When stopping to watch a client socket due to pipelining, additionally log
     the socket number.
-  - log the client socket and its condition before closing it. This makes it
+  - Log the client socket and its condition before closing it. This makes it
     more obvious that the socket actually gets closed and should help when
     diagnosing problems like #3464439.
   - In case of SOCKS5 failures, do not explicitly log the server's response.
@@ -187,9 +185,7 @@ ChangeLog for Privoxy
     "debug 32768" anyway. This reverts v1.81 and the follow-up bug fix v1.84.
   - Relocate the connection-accepted message from listen_loop() to serve().
     This way it's printed by the thread that is actually serving the
-    connection which is nice when grepping for thread ids in log files. While
-    at it, use an upper-case first character which is more consistent with the
-    other log messages.
+    connection which is nice when grepping for thread ids in log files.
 
 - Code cleanups:
   - Remove compatibility layer for versions prior to 3.0 since it has been
