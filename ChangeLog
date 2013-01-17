@@ -256,38 +256,14 @@ ChangeLog for Privoxy
 
 - Privoxy-Log-Parser:
   - Improve the --statistics performance by skipping sanity checks for input
-    that shouldn't affect the results anyway. In my non-scientific benchmarks
-    this reduces the runtime by about 45%. Also add a --strict-checks option
+    that shouldn't affect the results anyway. Add a --strict-checks option
     that enables some of the checks again, just in case anybody cares.
-  - Accept and highlight: Stopping to watch the client socket. There's already
-    another request waiting.
-  - Cleanup variable initialization in print_non_clf_message().
-  - Properly highlight the new log messages from get_request_line().
-  - Let get_percentage() show 0 of x as 0% even if x is 0 as well.
-  - Accept and ignore: Enlisting (sorted|left-over) header ...
-  - Accept the shiny new LOG_LEVEL_ACTIONS.
-  - Accept and highlight: Closing client socket 5. Keep-alive: 0, Socket
-    alive: 1. Data available: 0.
-  - Stop suppressing messages about accepted client connections and highlight
-    them properly.
-  - Accept and highlight: Accepted connection from 10.0.0.1 on socket 5.
-  - Accept and highlight: Continuing buffering server headers from socket 5.
-    Bytes most recently read: 498.
-  - Accept and highlight: Client request 4 arrived in time on socket 7.
-  - Accept and highlight: Closing client socket 8. Keep-alive: 1. Socket
-    alive: 0. Data available: 0. Configuration file change detected: 0.
-    Requests received: 11.
-  - Accept and highlight: Drained 180 bytes before closing socket 6.
-  - Accept and highlight the extended log message for client sockets.
-  - Accept and highlight: Tainting client socket 7 due to unread data.
-  - Accept and highlight: Optimistically sending 318 bytes of client
-    headers intended for www.privoxy.org.
-  - Accept and highlight: Client request 8 has been pipelined on socket 7 and
-    the socket is still alive.
-  - Accept: There better be a request body.
-  - Accept and highlight: Shifting 360 pipelined bytes by 360 bytes.
-  - Accept and highlight: Multiple Content-Type headers detected. Removing and
-    ignoring: Content-Type: text/html.
+  - The distribution of client requests per connection is included in the
+    --statistic output.
+  - The --accept-unknown-messages option has been removed and the behavior
+    is now the default.
+  - Accept and (mostly) highlight new log messages introduced with
+    Privoxy 3.0.20.
 
 - uagen:
   - Bump generated Firefox version to 16.
