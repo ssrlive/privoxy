@@ -31,24 +31,19 @@ ChangeLog for Privoxy
 - General improvements:
   - Significantly improved keep-alive support for both client and server
     connections.
-  - New debug log level 65536 which logs all actions that were applied to each
-    request that Privoxy acts upon.
-  - New directive client-header-order can be used to forward client headers in
-    a different order than that in which they arrived.
-  - New directive tolerate-pipelining can be used to enable client-side
-    pipelining. If enabled (3.0.20 beta enables it by default), Privoxy will
-    keep pipelined client requests around to deal with them once the current
+  - New debug log level 65536 which logs all actions that were applied to
+    the request.
+  - New directive client-header-order to forward client headers in a
+    different order than the one in which they arrived.
+  - New directive tolerate-pipelining to allow client-side pipelining.
+    If enabled (3.0.20 beta enables it by default), Privoxy will keep
+    pipelined client requests around to deal with them once the current
     request has been served.
-  - New --config-test option lets Privoxy exit after checking whether or not
+  - New --config-test option to let Privoxy exit after checking whether or not
     the configuration seems valid. The limitations noted in TODO #22 and #23
-    still apply. Logging the problem to the logfile if one is configured and
-    --no-daemon isn't used could be considered non-intuitive and might also
-    clobber messages emitted by an already running instance. Based on a patch
-    by Ramkumar Chinchani.
-  - Add limit-cookie-lifetime{} action. It can be used to let cookies expire
-    before the end of the session. limit-cookie-lifetime{0} creates session
-    cookies and can thus replace the session-cookies-only action in the future.
-    Idea originally suggested by Rick Sykes in #1049575.
+    still apply. Based on a patch by Ramkumar Chinchani.
+  - New limit-cookie-lifetime{} action to let cookies expire before the end
+    of the session. Suggested by Rick Sykes in #1049575.
   - Increase the hard-coded maximum number of actions and filter files from
     10 to 30 (each). It doesn't significantly affect Privoxy's memory usage
     and recompiling wasn't an option for all Privoxy users that reached the
@@ -76,20 +71,17 @@ ChangeLog for Privoxy
     Downgrade the removal message to LOG_LEVEL_HEADER to clarify that it's not
     an error in Privoxy and is unlikely to cause any problems in general.
     Anonymously reported in #3599335.
-  - Set the socket option SO_LINGER for the client socket in
-    accept_connection(). This should further reduce the chances of the client
-    getting an incomplete response, even though Privoxy wrote it in its
-    entirety to the socket.
+  - Set the socket option SO_LINGER for the client socket.
   - Move several variable declarations to the beginning of their code block.
-    It's how we usually do it and is apparently also required when compiling
-    with gcc 2.95. Initial patch submitted by Simon South in #3564815.
-  - Optionally let parse_header_time() sanity check strptime() results before
-    trusting them. Broken strptime() implementations have caused problems in
-    the past and the most recent offender seems to be FreeBSD's libc:
+    It's required when compiling with gcc 2.95 which is still used on some
+    platforms. Initial patch submitted by Simon South in #3564815.
+  - Optionally try to sanity-check strptime() results before trusting them.
+    Broken strptime() implementations have caused problems in the past and
+    the most recent offender seems to be FreeBSD's libc:
     http://www.freebsd.org/cgi/query-pr.cgi?pr=173421
-  - Attempt to work around (or at least reduce the) video playback issues with
-    various Apple clients as reported in #3426305. In client_range(), let
-    headers pass if the range starts at the beginning.
+  - When filtering is enabled, let Range headers pass if the range starts at
+    the beginning. This should work around (or at least reduce ) the video
+    playback issues with various Apple clients as reported by Duc in #3426305.
   - Do not confuse a client hanging up with a connection time out. If a client
     closes its side of the connection without sending a request line, do not
     send the CLIENT_CONNECTION_TIMEOUT_RESPONSE, but report the condition
