@@ -17,10 +17,6 @@ ChangeLog for Privoxy
   - Fix a race condition on Windows that could cause Privoxy to become
     unresponsive after toggling it on or off through the taskbar icon.
     Reported by Tim H. in #3525694.
-  - Let fatal_error() write to the logfile right away, before showing the
-    Windows-specific error message which blocks until the user acknowledges
-    it, thus complicating automatic error detection.
-    Reported by Adriaan in #3593603.
   - Fix the --disable-ipv6-support configure option for the Windows platform.
   - In socks5_connect(), do not try to print a negative number of socks
     response bytes if the read() for the socks5 negotiation failed
@@ -104,6 +100,9 @@ ChangeLog for Privoxy
     properly.
   - Allow closing curly braces as part of action values as long as they are
     escaped.
+  - On Windows, the logfile is now written before showing the GUI error
+    message which blocks until the user acknowledges it.
+    Reported by Adriaan in #3593603.
 
 - Action file improvements:
   - Remove the comment that indicated that updated versions of this file are
