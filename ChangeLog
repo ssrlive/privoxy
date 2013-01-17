@@ -17,7 +17,7 @@ ChangeLog for Privoxy
   - Fix a race condition on Windows that could cause Privoxy to become
     unresponsive after toggling it on or off through the taskbar icon.
     Reported by Tim H. in #3525694.
-  - Fix the --disable-ipv6-support configure option for the Windows platform.
+  - Fix the compilation on Windows when configured without IPv6 support.
   - In socks5_connect(), do not try to print a negative number of socks
     response bytes if the read() for the socks5 negotiation failed
     completely. It's an API violation and can trigger an assert() in debug
