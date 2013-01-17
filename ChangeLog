@@ -239,21 +239,20 @@ ChangeLog for Privoxy
     the argument.
 
 - Privoxy-Regression-Test:
+  - Add an 'Overwrite condition' directive to skip any matching tests before
+    it. As it has a global scope, using it is more convenient than clowning
+    around with the Ignore directive.
+  - Log to STDOUT instead of STDERR.
+  - Include the Privoxy version in the output.
   - Various grammar and spelling corrections in documentation and code.
   - Additional tests for range requests with filtering enabled.
   - Tests with mostly invalid range request.
-  - Log to STDOUT instead of STDERR.
   - Add a couple of hide-if-modified-since{} tests with different date formats.
   - Cleaned up the format of the regression-tests.action file to match the
     format of default.action.
   - Remove the "Copyright" line from print_version(). When using --help, every
     line of screen space matters and thus shouldn't be wasted on things the
     user doesn't care about.
-  - Fix comment typos.
-  - Add an 'Overwrite condition' directive to skip any matching tests before
-    it. As it has a global scope, using it is more convenient than clowning
-    around with the Ignore directive.
-  - Include the Privoxy version in the output.
 
 - Privoxy-Log-Parser:
   - Improve the --statistics performance by skipping sanity checks for input
