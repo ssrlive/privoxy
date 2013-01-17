@@ -266,7 +266,7 @@ ChangeLog for Privoxy
     Privoxy 3.0.20.
 
 - uagen:
-  - Bump generated Firefox version to 16.
+  - Bump generated Firefox version to 17.
 
 - CGI interface improvements & bug fixes:
   - Remove an unreasonable parameter limit in parse_cgi_parameters(). The new
