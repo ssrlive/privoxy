@@ -264,8 +264,8 @@ ChangeLog for Privoxy
   - Improve the --statistics performance by skipping sanity checks for input
     that shouldn't affect the results anyway. Add a --strict-checks option
     that enables some of the checks again, just in case anybody cares.
-  - The distribution of client requests per connection is included in the
-    --statistic output.
+  - The distribution of client requests per connection is included in
+    the --statistic output.
   - The --accept-unknown-messages option has been removed and the behavior
     is now the default.
   - Accept and (mostly) highlight new log messages introduced with
