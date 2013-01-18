@@ -1,4 +1,4 @@
-              Announcing Privoxy v.3.0.20 beta
+               Announcing Privoxy 3.0.20 beta
 --------------------------------------------------------------------
 
 This is a beta release that introduces new features and fixes a
