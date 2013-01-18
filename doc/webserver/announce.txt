@@ -1,7 +1,10 @@
               Announcing Privoxy v.3.0.20 beta
 --------------------------------------------------------------------
 
-This is a beta release that introduces some new features and fixes a number of bugs, some of which are reasonably significant. One new feature (tolerate-pipelining) is enabled by default. See below for details.
+This is a beta release that introduces new features and fixes a
+couple of bugs. One new feature (tolerate-pipelining) is enabled
+in the default configuration, depending on the feedback it may be
+disabled in the next release.
 
 --------------------------------------------------------------------
 ChangeLog for Privoxy
