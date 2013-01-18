@@ -91,6 +91,12 @@ ChangeLog for Privoxy
   - On Windows, the logfile is now written before showing the GUI error
     message which blocks until the user acknowledges it.
     Reported by Adriaan in #3593603.
+  - Remove an unreasonable parameter limit in the CGI interface. The new
+    parameter limit depends on the memory available and is currently unlikely
+    to be reachable, due to other limits in both Privoxy and common clients.
+    Reported by Andrew on ijbswa-users@.
+  - Decrease the chances of parse failures after requests with unsupported
+    methods were sent to the CGI interface.
 
 - Action file improvements:
   - Remove the comment that indicated that updated default.action versions
@@ -237,6 +243,7 @@ ChangeLog for Privoxy
     is at best useless.
   - Use privoxy_tolower() instead of vanilla tolower() with manual casting of
     the argument.
+  - Catch ssplit() failures in parse_cgi_parameters().
 
 - Privoxy-Regression-Test:
   - Add an 'Overwrite condition' directive to skip any matching tests before
@@ -267,15 +274,6 @@ ChangeLog for Privoxy
 
 - uagen:
   - Bump generated Firefox version to 17.
-
-- CGI interface improvements & bug fixes:
-  - Remove an unreasonable parameter limit in parse_cgi_parameters(). The new
-    parameter limit depends on the memory available and is currently unlikely
-    to be reachable, due to other limits in both Privoxy and common clients.
-    Reported by Andrew on ijbswa-users@.
-  - Catch ssplit() failures in parse_cgi_parameters().
-  - Deal with unsupported methods sent to the CGI pages by discarding any
-    data following the headers.
 
 - GNUmakefile improvements:
   - The dok-tidy target no longer taints documents with a tidy-mark
