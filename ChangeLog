@@ -303,7 +303,7 @@ ChangeLog for Privoxy
     providing configure with custom LDFLAGS.
     Submitted by Simon South in #3574538.
 
-  *** Version 3.0.19 Stable ***
+*** Version 3.0.19 Stable ***
 
 - Bug fixes:
   - Prevent a segmentation fault when de-chunking buffered content.
