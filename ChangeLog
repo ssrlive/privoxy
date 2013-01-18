@@ -60,7 +60,7 @@ ChangeLog for Privoxy
     intentions. When looking at the response headers alone, it previously
     wasn't obvious from the client's perspective that no additional responses
     should be expected.
-  - Stop considering client sockets tainted after receving a request with body.
+  - Stop considering client sockets tainted after receiving a request with body.
     It hasn't been necessary for a while now and unnecessarily causes test
     failures when using curl's test suite.
   - Allow HTTP/1.0 clients to signal interest in keep-alive through the
@@ -79,7 +79,7 @@ ChangeLog for Privoxy
     Broken strptime() implementations have caused problems in the past and
     the most recent offender seems to be FreeBSD's libc (standards/173421).
   - When filtering is enabled, let Range headers pass if the range starts at
-    the beginning. This should work around (or at least reduce ) the video
+    the beginning. This should work around (or at least reduce) the video
     playback issues with various Apple clients as reported by Duc in #3426305.
   - Do not confuse a client hanging up with a connection time out. If a client
     closes its side of the connection without sending a request line, do not
@@ -115,7 +115,7 @@ ChangeLog for Privoxy
   - Block '/openx/www/delivery/'.
   - Disable fast-redirects for '.googleapis.com/'.
   - Block 'imp.double.net/'. Reported by David Bo in #3070411.
-  - Block 'gm-link.com/' whis is used for email tracking.
+  - Block 'gm-link.com/' which is used for email tracking.
     Reported by David Bo in #1812733.
   - Verify that requests to "bwp." are blocked. URL taken from #1736879
     submitted by Francois Marier.
@@ -222,7 +222,7 @@ ChangeLog for Privoxy
   - Various data type corrections.
   - Change visibility of several code segments when compiling without
     FEATURE_CONNECTION_KEEP_ALIVE enabled for clarity.
-  - In pcrs_get_delimiter(), do not use delimiters ouside the ASCII range.
+  - In pcrs_get_delimiter(), do not use delimiters outside the ASCII range.
     Fixes a clang complaint.
   - Fix an error message in get_last_url() nobody is supposed to see.
     Reported by Matthew Fischer in #3507301.
@@ -238,7 +238,7 @@ ChangeLog for Privoxy
   - Let enlist_unique_header() verify that the caller didn't pass a header
     containing either \r or \n.
   - Change the hashes used in load_config() to unsigned int. That's what
-    hash_string() actually returns and using a potentiallly larger type
+    hash_string() actually returns and using a potentially larger type
     is at best useless.
   - Use privoxy_tolower() instead of vanilla tolower() with manual casting of
     the argument.
