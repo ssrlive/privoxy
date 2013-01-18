@@ -286,10 +286,8 @@ ChangeLog for Privoxy
   - Let w3m itself do the line wrapping for the config file. It works better
     than fmt as it can honour pre tags causing less unintentional line breaks.
   - Ditch a pointless '-r' passed to rm to delete files.
-  - Prevent completely empty lines in configure and try to unfold
-    unintentional line breaks.
-  - Let the config-file target optimistically update the original. Most of the
-    issues are fixed now and it makes diffing with git easier.
+  - The config-file target now requires less manual intervention and updates
+    the original config.
   - Change WDUMP to generate ASCII. Add WDUMP_UTF8 to allow UTF-8 in the
     AUTHORS file so the names are right.
   - Stop pretending that lynx and links are supported for the documentation.
