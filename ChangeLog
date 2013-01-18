@@ -77,8 +77,7 @@ ChangeLog for Privoxy
     platforms. Initial patch submitted by Simon South in #3564815.
   - Optionally try to sanity-check strptime() results before trusting them.
     Broken strptime() implementations have caused problems in the past and
-    the most recent offender seems to be FreeBSD's libc:
-    http://www.freebsd.org/cgi/query-pr.cgi?pr=173421
+    the most recent offender seems to be FreeBSD's libc (standards/173421).
   - When filtering is enabled, let Range headers pass if the range starts at
     the beginning. This should work around (or at least reduce ) the video
     playback issues with various Apple clients as reported by Duc in #3426305.
