@@ -169,7 +169,7 @@
           </li>
 
           <li>
-            <p>Stop considering client sockets tainted after receving a
+            <p>Stop considering client sockets tainted after receiving a
             request with body. It hasn't been necessary for a while now and
             unnecessarily causes test failures when using curl's test
             suite.</p>
@@ -212,7 +212,7 @@
           <li>
             <p>When filtering is enabled, let Range headers pass if the range
             starts at the beginning. This should work around (or at least
-            reduce ) the video playback issues with various Apple clients as
+            reduce) the video playback issues with various Apple clients as
             reported by Duc in #3426305.</p>
           </li>
 
@@ -320,8 +320,8 @@
           </li>
 
           <li>
-            <p>Block 'gm-link.com/' whis is used for email tracking. Reported
-            by David Bo in #1812733.</p>
+            <p>Block 'gm-link.com/' which is used for email tracking.
+            Reported by David Bo in #1812733.</p>
           </li>
 
           <li>
@@ -643,7 +643,7 @@
           </li>
 
           <li>
-            <p>In pcrs_get_delimiter(), do not use delimiters ouside the
+            <p>In pcrs_get_delimiter(), do not use delimiters outside the
             ASCII range. Fixes a clang complaint.</p>
           </li>
 
@@ -686,7 +686,7 @@
           <li>
             <p>Change the hashes used in load_config() to unsigned int.
             That's what hash_string() actually returns and using a
-            potentiallly larger type is at best useless.</p>
+            potentially larger type is at best useless.</p>
           </li>
 
           <li>
