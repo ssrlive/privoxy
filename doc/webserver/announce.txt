@@ -329,10 +329,11 @@ Helping hands and donations are welcome:
 
   * http://www.privoxy.org/faq/general.html#DONATE
 
-At present, Privoxy is known to run on Windows(95, 98, ME, 2000,
-XP, Vista), GNU/Linux (Ubuntu, RedHat, SuSE, Debian, Fedora, Gentoo and
-others), Mac OSX, OS/2, AmigaOS, FreeBSD, NetBSD, OpenBSD, Solaris, and
-various other flavors of Unix.
+At present, Privoxy is known to run on Windows 95 and later versions
+(98, ME, 2000, XP, Vista, Windows 7 etc.), GNU/Linux (RedHat, SuSE,
+Debian, Fedora, Gentoo, Slackware and others), Mac OS X (10.4 and
+upwards on PPC and Intel processors), OS/2, Haiku, DragonFly,
+FreeBSD, NetBSD, OpenBSD, Solaris, and various other flavors of Unix.
 
 In addition to the core features of ad blocking and cookie management,
 Privoxy provides many supplemental features, that give the end-user
