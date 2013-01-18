@@ -295,15 +295,14 @@ ChangeLog for Privoxy
 - configure improvements:
   - On Haiku, do not pass -lpthread to the compiler. Haiku's pthreads
     implementation is contained in its system library, libroot, so no
-    additional library needs to be searched. Patch submitted by Simon South in
-    #3564815.
+    additional library needs to be searched.
+    Patch submitted by Simon South in #3564815.
   - Additional Haiku-specific improvements. Disable checks intended for
     multi-user systems as Haiku is presently single-user. Group Haiku-specific
     settings in their own section, following the pattern for Solaris, OS/2 and
     AmigaOS. Add additional library-related settings to remove the need for
-    providing configure with custom LDFLAGS. Submitted by Simon South in
-    #3574538.
-  - Several improvements for clarity, diffability and logic.
+    providing configure with custom LDFLAGS.
+    Submitted by Simon South in #3574538.
 
   *** Version 3.0.19 Stable ***
 
