@@ -1,12 +1,106 @@
-              Announcing Privoxy v.3.0.19 stable
+              Announcing Privoxy v.3.0.20 beta
 --------------------------------------------------------------------
 
-This is a beta release that introduces some new features and fixes a number of bugs, some of which are reasonably significant.
+This is a beta release that introduces some new features and fixes a number of bugs, some of which are reasonably significant. One new feature (tolerate-pipelining) is enabled by default. See below for details.
 
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Version 3.0.20 Beta ***
+
+- Bug fixes:
+  - Client sockets are now properly shutdown and drained before being
+    closed. This fixes page truncation issues with clients that aggressively
+    pipeline data on platforms that otherwise discard already written data.
+    The issue mainly affected Opera users and was initially reported
+    by Kevin in #3464439, szotsaki provided additional information to track
+    down the cause.
+  - Fix latency calculation for shared connections (disabled by default).
+    It was broken since their introduction in 2009. The calculated latency
+    for most connections would be 0 in which case the timeout detection
+    failed to account for the real latency.
+  - Reject URLs with invalid port. Previously they were parsed incorrectly and
+    characters between the port number and the first slash were silently
+    dropped as shown by curl test 187.
+  - The default-server-timeout and socket-timeout directives accept 0 as
+    valid value.
+  - Fix a race condition on Windows that could cause Privoxy to become
+    unresponsive after toggling it on or off through the taskbar icon.
+    Reported by Tim H. in #3525694.
+  - Fix the compilation on Windows when configured without IPv6 support.
+  - Fix an assertion that could cause debug builds to abort() in case of
+    socks5 connection failures with "debug 2" enabled.
+  - Fix an assertion that could cause debug builds to abort() if a filter
+    contained nul bytes in the replacement text.
+
+- General improvements:
+  - Significantly improved keep-alive support for both client and server
+    connections.
+  - New debug log level 65536 which logs all actions that were applied to
+    the request.
+  - New directive client-header-order to forward client headers in a
+    different order than the one in which they arrived.
+  - New directive tolerate-pipelining to allow client-side pipelining.
+    If enabled (3.0.20 beta enables it by default), Privoxy will keep
+    pipelined client requests around to deal with them once the current
+    request has been served.
+  - New --config-test option to let Privoxy exit after checking whether or not
+    the configuration seems valid. The limitations noted in TODO #22 and #23
+    still apply. Based on a patch by Ramkumar Chinchani.
+  - New limit-cookie-lifetime{} action to let cookies expire before the end
+    of the session. Suggested by Rick Sykes in #1049575.
+  - Increase the hard-coded maximum number of actions and filter files from
+    10 to 30 (each). It doesn't significantly affect Privoxy's memory usage
+    and recompiling wasn't an option for all Privoxy users that reached the
+    limit.
+  - Add support for chunk-encoded client request bodies. Previously
+    chunk-encoded request bodies weren't guaranteed to be forwarded correctly,
+    so this can also be considered a bug fix although chunk-encoded request
+    bodies aren't commonly used in the real world.
+  - Add support for Tor's optimistic-data SOCKS extension, which can reduce the
+    latency for requests on newly created connections. Currently only the
+    headers are sent optimistically and only if the client request has already
+    been read completely which rules out requests with large bodies.
+  - After preventing the client from pipelining, don't signal keep-alive
+    intentions. When looking at the response headers alone, it previously
+    wasn't obvious from the client's perspective that no additional responses
+    should be expected.
+  - Stop considering client sockets tainted after receving a request with body.
+    It hasn't been necessary for a while now and unnecessarily causes test
+    failures when using curl's test suite.
+  - Allow HTTP/1.0 clients to signal interest in keep-alive through the
+    Proxy-Connection header. While such client are rare in the real world, it
+    doesn't hurt and couple of curl tests rely on it.
+  - Only remove duplicated Content-Type headers when filters are enabled.
+    If they are not it doesn't cause ill effects and the user might not want it.
+    Downgrade the removal message to LOG_LEVEL_HEADER to clarify that it's not
+    an error in Privoxy and is unlikely to cause any problems in general.
+    Anonymously reported in #3599335.
+  - Set the socket option SO_LINGER for the client socket.
+  - Move several variable declarations to the beginning of their code block.
+    It's required when compiling with gcc 2.95 which is still used on some
+    platforms. Initial patch submitted by Simon South in #3564815.
+  - Optionally try to sanity-check strptime() results before trusting them.
+    Broken strptime() implementations have caused problems in the past and
+    the most recent offender seems to be FreeBSD's libc (standards/173421).
+  - When filtering is enabled, let Range headers pass if the range starts at
+    the beginning. This should work around (or at least reduce ) the video
+    playback issues with various Apple clients as reported by Duc in #3426305.
+  - Do not confuse a client hanging up with a connection time out. If a client
+    closes its side of the connection without sending a request line, do not
+    send the CLIENT_CONNECTION_TIMEOUT_RESPONSE, but report the condition
+    properly.
+  - Allow closing curly braces as part of action values as long as they are
+    escaped.
+  - On Windows, the logfile is now written before showing the GUI error
+    message which blocks until the user acknowledges it.
+    Reported by Adriaan in #3593603.
+  - Remove an unreasonable parameter limit in the CGI interface. The new
+    parameter limit depends on the memory available and is currently unlikely
+    to be reachable, due to other limits in both Privoxy and common clients.
+    Reported by Andrew on ijbswa-users@.
+  - Decrease the chances of parse failures after requests with unsupported
+    methods were sent to the CGI interface.
 
 *** Version 3.0.19 Stable ***
 
