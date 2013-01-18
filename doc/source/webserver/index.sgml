@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.22 2012/09/20 10:43:11 fabiankeil Exp $
+ $Id: index.sgml,v 2.23 2013/01/06 13:25:00 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -212,7 +212,7 @@
 <!-- GNUMakefile is inserting this now -->
 <para>
  <subscript>
-  Copyright __copy 2001-2010 by Privoxy Developers
+  Copyright __copy 2001-2013 by Privoxy Developers
  </subscript>
 </para>
 
@@ -239,6 +239,9 @@
  Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  $Log: index.sgml,v $
+ Revision 2.23  2013/01/06 13:25:00  fabiankeil
+ Bumped entities for 3.0.20 beta
+
  Revision 2.22  2012/09/20 10:43:11  fabiankeil
  Ditch pointless keywords. Search engines no longer need them.
 
