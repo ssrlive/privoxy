@@ -34,7 +34,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.161 2013/01/12 12:21:38 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.163 2013/01/18 12:31:41 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -60,7 +60,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.161 2013/01/12 12:21:38 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.163 2013/01/18 12:31:41 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -556,7 +556,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Stop considering client sockets tainted after receving a request with body.
+      Stop considering client sockets tainted after receiving a request with body.
       It hasn't been necessary for a while now and unnecessarily causes test
       failures when using curl's test suite.
      </para>
@@ -599,7 +599,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       When filtering is enabled, let Range headers pass if the range starts at
-      the beginning. This should work around (or at least reduce ) the video
+      the beginning. This should work around (or at least reduce) the video
       playback issues with various Apple clients as reported by Duc in #3426305.
      </para>
     </listitem>
@@ -724,7 +724,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      Block 'gm-link.com/' whis is used for email tracking.
+      Block 'gm-link.com/' which is used for email tracking.
       Reported by David Bo in #1812733.
      </para>
     </listitem>
@@ -1091,7 +1091,7 @@ How to install the binary packages depends on your operating system:
     </listitem>
     <listitem>
      <para>
-      In pcrs_get_delimiter(), do not use delimiters ouside the ASCII range.
+      In pcrs_get_delimiter(), do not use delimiters outside the ASCII range.
       Fixes a clang complaint.
      </para>
     </listitem>
@@ -1139,7 +1139,7 @@ How to install the binary packages depends on your operating system:
     <listitem>
      <para>
       Change the hashes used in load_config() to unsigned int. That's what
-      hash_string() actually returns and using a potentiallly larger type
+      hash_string() actually returns and using a potentially larger type
       is at best useless.
      </para>
     </listitem>
@@ -1336,7 +1336,6 @@ How to install the binary packages depends on your operating system:
       AmigaOS. Add additional library-related settings to remove the need for
       providing configure with custom LDFLAGS.
       Submitted by Simon South in #3574538.
-      *** Version 3.0.19 Stable ***
      </para>
      </listitem>
     </itemizedlist>
