@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.217 2013/01/25 14:17:15 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.218 2013/01/25 14:17:35 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -113,7 +113,7 @@ GZIP_PROG  = gzip
 #ID         = id -u
 ID         = id
 LD         = @CC@
-RM         = rm -f
+RM         = rm
 CP         = cp -f
 RMDIR      = rmdir
 MKDIR      = ./mkinstalldirs
