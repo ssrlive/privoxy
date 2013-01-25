@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.33 2013/01/25 14:23:44 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.34 2013/01/25 14:25:04 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -106,7 +106,7 @@
 
   <listitem>
    <para>
-    Whether you are using <application>Privoxy</application> in tandem with
+    Whether you are using <application>Privoxy</application> together with
     another proxy such as <application>Tor</application>. If so, please
     temporary disable the other proxy to see if the symptoms change.
    </para>
