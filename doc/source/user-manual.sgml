@@ -35,7 +35,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.164 2013/01/18 18:45:21 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.165 2013/01/20 18:10:28 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -61,7 +61,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.164 2013/01/18 18:45:21 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.165 2013/01/20 18:10:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -453,12 +453,6 @@ How to install the binary packages depends on your operating system:
   <para>
    On the other hand, other installers don't overwrite existing configuration
    files, thinking you will want to do that yourself.
-  </para>
- </listitem>
- <listitem>
-  <para>
-   <filename>standard.action</filename> has been merged into
-   the <filename>default.action</filename> file.
   </para>
  </listitem>
  <listitem>
