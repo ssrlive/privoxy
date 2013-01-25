@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.216 2013/01/10 11:03:58 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.217 2013/01/25 14:17:15 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -741,7 +741,8 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 
 clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action \
-		`find . -name TAGS -o -name tags | $(GREP) -v .git` config.base config.tmp \
+		config.base config.tmp \
+		`find . \( -name TAGS -o -name tags \) -and -not -path "./.git/refs/tags"` \
 		`find . -name "*.orig" -a -not -name rc.privoxy.orig`
 
 clean-editor-files:
