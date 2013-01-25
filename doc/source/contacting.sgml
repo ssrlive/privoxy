@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.31 2013/01/25 14:21:47 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.32 2013/01/25 14:23:11 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -70,9 +70,7 @@
 
   <listitem>
    <para>
-    The exact <application>Privoxy</application> version you are using
-    (if you got the source from CVS, please also provide the source code revisions
-     as shown in <ulink url="http://config.privoxy.org/show-version">http://config.privoxy.org/show-version</ulink>).
+    The exact <application>Privoxy</application> version you are using.
    </para>
   </listitem>
 
