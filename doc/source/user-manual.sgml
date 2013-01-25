@@ -35,7 +35,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.165 2013/01/20 18:10:28 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.166 2013/01/25 14:18:48 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -61,7 +61,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.165 2013/01/20 18:10:28 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.166 2013/01/25 14:18:48 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1072,28 +1072,6 @@ How to install the binary packages depends on your operating system:
  directory. Except on Win32 where it will try <filename>config.txt</filename>.
 </para>
 
-<sect2 id="start-redhat">
-<title>Red Hat and Fedora</title>
-<para>
- A default Red Hat installation may not start &my-app; upon boot. It will use
- the file <filename>/etc/privoxy/config</filename> as its main configuration
- file.
-</para>
-<para>
- <screen>
- # /etc/rc.d/init.d/privoxy start
-</screen>
-</para>
-<para>
- Or ...
-</para>
-<para>
- <screen>
- # service privoxy start
-</screen>
-</para>
-</sect2>
-
 <sect2 id="start-debian">
 <title>Debian</title>
 <para>
@@ -1181,42 +1159,6 @@ Example Unix startup command:
 </para>
 </sect2>
 
-
-<sect2 id="start-amigaos">
-<title>AmigaOS</title>
-<para>
- Start <application>Privoxy</application> (with RUN &lt;&gt;NIL:) in your
- <filename>startnet</filename> script (AmiTCP), in
- <filename>s:user-startup</filename> (RoadShow), as startup program in your
- startup script (Genesis), or as startup action (Miami and MiamiDx).
- <application>Privoxy</application> will automatically quit when you quit your
- TCP/IP stack (just ignore the harmless warning your TCP/IP stack may display that
- <application>Privoxy</application> is still running).
-</para>
-</sect2>
-
-<sect2 id="start-gentoo">
-<title>Gentoo</title>
-<para>
- A script is again used. It will use the file <filename>/etc/privoxy/config
- </filename> as its main configuration file.
-</para>
-<para>
- <screen>
- /etc/init.d/privoxy start
- </screen>
-</para>
-<para>
- Note that <application>Privoxy</application> is not automatically started at
- boot time by default. You can change this with the <literal>rc-update</literal>
- command.
-</para>
-<para>
- <screen>
- rc-update add privoxy default
- </screen>
-</para>
-</sect2>
 
 <!--
 
