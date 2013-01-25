@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.32 2013/01/25 14:23:11 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.33 2013/01/25 14:23:44 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -77,10 +77,8 @@
   <listitem>
    <para>
     The operating system and versions you run
-    <application>Privoxy</application> on, (e.g. <application>Windows
-    XP SP2</application>), if you are using a Unix flavor,
-    sending the output of <quote>uname -a</quote> should do,
-    in case of GNU/Linux, please also name the distribution.
+    <application>Privoxy</application> on, e.g. <application>Windows
+    XP SP2</application>.
    </para>
   </listitem>
 
