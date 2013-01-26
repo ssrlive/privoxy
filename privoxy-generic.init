@@ -33,6 +33,16 @@
 #
 ###########################################################################
 
+### BEGIN INIT INFO
+# Provides:          privoxy
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start privoxy at boot time
+# Description:       Start and stop the privacy-enhancing HTTP proxy privoxy.
+### END INIT INFO
+
 # NOTE: This script may require editing to ensure proper location of
 # config file, and the privoxy executable. Care should be taken to ensure
 # logfile is writable by $P_USER (logfile is defined in config), and that
