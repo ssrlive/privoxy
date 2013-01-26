@@ -1,18 +1,17 @@
 #!/bin/sh
-#
-#  ********************************************************************
+
+###########################################################################
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/privoxy-generic.init,v $
 #
-#  Purpose     :  This shell script takes care of starting and stopping
-#                 privoxy.
+#  Purpose     :  This script takes care of starting and stopping privoxy.
+#                 It is supposed to work cross-platform and thus doesn't
+#                 do too much. When packaging Privoxy it's recommended to
+#                 write a platform-specific start script instead of using
+#                 this one.
 #
-#  Copyright   :  Written by and Copyright (C) 2001,2002 the SourceForge
+#  Copyright   :  Written by and Copyright (C) 2001,2002 the
 #                 Privoxy team. http://www.privoxy.org/
-#
-#                 Based on the Internet Junkbuster originally written
-#                 by and Copyright (C) 1997 Anonymous Coders and
-#                 Junkbusters Corporation.  http://www.junkbusters.com
 #
 #                 This program is free software; you can redistribute it
 #                 and/or modify it under the terms of the GNU General
@@ -32,11 +31,7 @@
 #                 or write to the Free Software Foundation, Inc., 59
 #                 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-# Developer's NOTE: This script should be tested against a true /bin/sh, which
-# has notable differences from bash. By design, this script does not try to do
-# too much, so as to be as cross-platform as possible.
-#
-#######################################################################
+###########################################################################
 
 # NOTE: This script may require editing to ensure proper location of
 # config file, and the privoxy executable. Care should be taken to ensure
