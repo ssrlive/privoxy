@@ -38,9 +38,6 @@
 #
 #######################################################################
 
-# Is this needed by Solaris?
-#ident  "@(#)privoxy  1.0     02/09/05"
-
 # NOTE: This script may require editing to ensure proper location of 
 # config file, and the privoxy executable. Care should be taken to ensure 
 # logfile is writable by $P_USER (logfile is defined in config), and that 
