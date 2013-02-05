@@ -31,7 +31,7 @@ sub main() {
 
         s/^1\. \@\@TITLE\@\@/     /i;
 
-        if (m/^(\d\.)(\d\.)(\d\.)?\s/) {
+        if (m/^(\d*\.){1,3}\s/) {
             # Remove the first digit as it's the
             # config file section in the User Manual.
             s/^(\d\.)//;
