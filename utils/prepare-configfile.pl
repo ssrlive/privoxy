@@ -42,9 +42,6 @@ sub main() {
             # Remember to underline it.
             $hit_header = 1;
             $header_len = length($_);
-
-            # Separate it from the previous section.
-            print "#\n";
         }
 
         if ($unfold_mode) {
