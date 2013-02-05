@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.88 2013/01/06 18:19:24 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.89 2013/02/05 14:02:43 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -66,8 +66,6 @@ use constant {
     DEBUG_LEVEL_VERBOSE_SUCCESS => 0,
     DEBUG_LEVEL_STATUS          => 1,
 
-    VERBOSE_TEST_DESCRIPTION    => 1,
-
     # Internal use, don't modify
     # Available debug bits:
     LL_SOFT_ERROR       =>  1,
@@ -92,7 +90,6 @@ sub init_our_variables () {
     our $leading_log_time = LEADING_LOG_TIME;
     our $leading_log_date = LEADING_LOG_DATE;
     our $privoxy_cgi_url  = PRIVOXY_CGI_URL;
-    our $verbose_test_description = VERBOSE_TEST_DESCRIPTION;
     our $log_level = get_default_log_level();
 }
 
@@ -1546,7 +1543,6 @@ sub log_message ($) {
 
 sub log_result ($$) {
 
-    our $verbose_test_description;
     our $filtered_request;
 
     my $test = shift;
@@ -1563,68 +1559,65 @@ sub log_result ($$) {
                             $test->{'regression-test-id'});
     }
 
-    $message .= '.';
+    $message .= '. ';
 
-    if ($verbose_test_description) {
+    if ($test->{'type'} == CLIENT_HEADER_TEST) {
 
-        if ($test->{'type'} == CLIENT_HEADER_TEST) {
+        $message .= 'Header ';
+        $message .= quote($test->{'data'});
+        $message .= ' and tag ';
+        $message .= quote($test->{'tag'});
 
-            $message .= ' Header ';
-            $message .= quote($test->{'data'});
-            $message .= ' and tag ';
-            $message .= quote($test->{'tag'});
+    } elsif ($test->{'type'} == SERVER_HEADER_TEST) {
 
-        } elsif ($test->{'type'} == SERVER_HEADER_TEST) {
+        $message .= 'Request Header ';
+        $message .= quote($test->{'data'});
+        $message .= ' and tag ';
+        $message .= quote($test->{'tag'});
 
-            $message .= ' Request Header ';
-            $message .= quote($test->{'data'});
-            $message .= ' and tag ';
-            $message .= quote($test->{'tag'});
+    } elsif ($test->{'type'} == DUMB_FETCH_TEST) {
 
-        } elsif ($test->{'type'} == DUMB_FETCH_TEST) {
+        $message .= 'URL ';
+        $message .= quote($test->{'data'});
+        $message .= ' and expected status code ';
+        $message .= quote($test->{'expected-status-code'});
 
-            $message .= ' URL ';
-            $message .= quote($test->{'data'});
-            $message .= ' and expected status code ';
-            $message .= quote($test->{'expected-status-code'});
+    } elsif ($test->{'type'} == TRUSTED_CGI_REQUEST) {
 
-        } elsif ($test->{'type'} == TRUSTED_CGI_REQUEST) {
+        $message .= 'CGI URL ';
+        $message .= quote($test->{'data'});
+        $message .= ' and expected status code ';
+        $message .= quote($test->{'expected-status-code'});
 
-            $message .= ' CGI URL ';
-            $message .= quote($test->{'data'});
-            $message .= ' and expected status code ';
-            $message .= quote($test->{'expected-status-code'});
+    } elsif ($test->{'type'} == METHOD_TEST) {
 
-        } elsif ($test->{'type'} == METHOD_TEST) {
+        $message .= 'HTTP method ';
+        $message .= quote($test->{'data'});
+        $message .= ' and expected status code ';
+        $message .= quote($test->{'expected-status-code'});
 
-            $message .= ' HTTP method ';
-            $message .= quote($test->{'data'});
-            $message .= ' and expected status code ';
-            $message .= quote($test->{'expected-status-code'});
+    } elsif ($test->{'type'} == BLOCK_TEST) {
 
-        } elsif ($test->{'type'} == BLOCK_TEST) {
+        $message .= 'Supposedly-blocked URL: ';
+        $message .= quote($test->{'data'});
 
-            $message .= ' Supposedly-blocked URL: ';
-            $message .= quote($test->{'data'});
+    } elsif ($test->{'type'} == STICKY_ACTIONS_TEST) {
 
-        } elsif ($test->{'type'} == STICKY_ACTIONS_TEST) {
+        $message .= 'Sticky Actions: ';
+        $message .= quote($test->{'sticky-actions'});
+        $message .= ' and URL: ';
+        $message .= quote($test->{'data'});
 
-            $message .= ' Sticky Actions: ';
-            $message .= quote($test->{'sticky-actions'});
-            $message .= ' and URL: ';
-            $message .= quote($test->{'data'});
+    } elsif ($test->{'type'} == REDIRECT_TEST) {
 
-        } elsif ($test->{'type'} == REDIRECT_TEST) {
+        $message .= 'Redirected URL: ';
+        $message .= quote($test->{'data'});
+        $message .= ' and redirect destination: ';
+        $message .= quote($test->{'redirect destination'});
 
-            $message .= ' Redirected URL: ';
-            $message .= quote($test->{'data'});
-            $message .= ' and redirect destination: ';
-            $message .= quote($test->{'redirect destination'});
+    } else {
 
-        } else {
-
-            die "Incomplete support for test type " . $test->{'type'} .  " detected.";
-        }
+        die "Incomplete support for test type " . $test->{'type'} .  " detected.";
     }
 
     log_message($message) if (!$result or cli_option_is_set('verbose'));
