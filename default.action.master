@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.280 2013/02/09 15:16:29 fabiankeil Exp $
+#  $Id: default.action.master,v 1.281 2013/02/09 15:16:54 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1348,7 +1348,8 @@ img.directtrack.com
 # Blocked URL = http://rtb.pclick.yahoo.com/images/nojs.gif?p=3
 .pclick.yahoo.com/images/
 # Blocked URL = http://rover.ebay.com/ar/1/2/3?mpt=123&adtype=1&size=728x90
-rover.ebay./.*\&adtype=
+# Blocked URL = http://rover.ebay.com/ar/1/711-53200-19255-0/1?mpt=CacheBuster&adtype=1&size=1x1&type=3&campid=5336328269&toolid=10001
+rover.ebay./ar.*\&adtype=
 # Blocked URL = http://resources.parfym.se/tradedoubler/250x360.swf
 /tradedoubler/.*\.swf
 # Blocked URL = http://hstse.tradedoubler.com/file/142609/440x220.swf
