@@ -8,8 +8,8 @@
 <!entity contacting SYSTEM "contacting.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.20">
-<!entity p-status "beta">
+<!entity p-version "3.0.21">
+<!entity p-status "UNRELEASED">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -24,7 +24,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.51 2012/06/19 12:48:04 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.52 2013/01/06 11:25:52 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -51,7 +51,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.51 2012/06/19 12:48:04 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.52 2013/01/06 11:25:52 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3040,6 +3040,9 @@ at sourceforge. Three simple steps:
   Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   $Log: developer-manual.sgml,v $
+  Revision 2.52  2013/01/06 11:25:52  fabiankeil
+  Set entities to 3.0.20 beta
+
   Revision 2.51  2012/06/19 12:48:04  fabiankeil
   Prevent the CVS substitution in the generated example comment as well
 
