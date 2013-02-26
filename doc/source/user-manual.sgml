@@ -9,6 +9,7 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
+<!entity GPLv2 SYSTEM "../../LICENSE">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity changelog SYSTEM "changelog.sgml">
@@ -35,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.167 2013/01/25 14:19:27 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.168 2013/02/26 15:09:35 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -61,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.167 2013/01/25 14:19:27 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.168 2013/02/26 15:09:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -7360,11 +7361,20 @@ Requests</title>
  &copyright;
 <!-- end copyright -->
 
+<para>
+ <application>Privoxy</application> is free software; you can
+ redistribute it and/or modify it under the terms of the
+ <citetitle>GNU General Public License</citetitle>, version 2,
+ as published by the Free Software Foundation and included in
+ the next section.
+</para>
+
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2><title>License</title>
-<!-- Include copyright.sgml: -->
- &license;
-<!-- end copyright -->
+<para>
+ <screen><![ RCDATA [ &GPLv2; ]]></screen>
+</para>
+
 </sect2>
 <!--  ~  End section  ~  -->
 
