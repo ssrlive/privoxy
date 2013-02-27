@@ -41,8 +41,131 @@
     <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this
     Release</a></h1>
 
-    <p><span class="APPLICATION">Privoxy 3.0.20</span> is a beta release. The
-    changes since 3.0.19 stable are:</p>
+    <p><span class="APPLICATION">Privoxy 3.0.21</span> is UNRELEASED. The
+    changes since 3.0.20 beta are:</p>
+
+    <ul>
+      <li>
+        <p>Bug fixes:</p>
+
+        <ul>
+          <li>
+            <p>Compiles on OS/2 again now that unistd.h is only included on
+            platforms that have it.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>General improvements:</p>
+
+        <ul>
+          <li>
+            <p>The show-status page shows the FEATURE_STRPTIME_SANITY_CHECKS
+            status.</p>
+          </li>
+
+          <li>
+            <p>A couple of assert()s that could theoretically dereference
+            NULL pointers in debug builds have been relocated.</p>
+          </li>
+
+          <li>
+            <p>Added an LSB info block to the generic start script. Based on
+            a patch from Natxo Asenjo.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>Action file improvements:</p>
+
+        <ul>
+          <li>
+            <p>Block rover.ebay./ar.*\&amp;adtype= instead of
+            "/.*\&amp;adtype=" which caused too man false positives. Reported
+            by u302320 in #360284, additional feedback from Adam Piggott.</p>
+          </li>
+
+          <li>
+            <p>Unblock '.advrider.com/' and '/.*ADVrider'. Anonymously
+            reported in #3603636.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>Filter file improvements:</p>
+
+        <ul>
+          <li>
+            <p>Added an iframes filter.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>Documentation improvements:</p>
+
+        <ul>
+          <li>
+            <p>The whole GPLv2 text is included in the user manual now, so
+            Privoxy can serve it itself and the user can read it without
+            having to wade through GPLv3 ads first.</p>
+          </li>
+
+          <li>
+            <p>Properly numbered and underlined a couple of section titles in
+            the config that where previously overlooked due to a flaw in the
+            conversion script. Reported by Ralf Jungblut.</p>
+          </li>
+
+          <li>
+            <p>Improved the support instruction to hopefully make it harder
+            to unintentionally provide insufficient information when
+            requesting support. Previously it wasn't obvious that the
+            information we need in bug reports is usually also required in
+            support requests.</p>
+          </li>
+
+          <li>
+            <p>Removed documentation about packages that haven't been
+            provided in years.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>Privoxy-Regression-Test:</p>
+
+        <ul>
+          <li>
+            <p>Only log the test number when not running in verbose mode The
+            position of the test is rarely relevant and it previously wasn't
+            exactly obvious which one of the numbers was useful to repeat the
+            test with --test-number.</p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p>GNUmakefile improvements:</p>
+
+        <ul>
+          <li>
+            <p>Factor generate-config-file out of config-file to make testing
+            more convenient.</p>
+          </li>
+
+          <li>
+            <p>The clean target now also takes care of patch leftovers.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><span class="APPLICATION">Privoxy 3.0.20</span> beta contained the
+    following changes compared to the previous stable release:</p>
 
     <ul>
       <li>
