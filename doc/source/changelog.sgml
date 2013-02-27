@@ -1,9 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/p-authors.sgml,v $
+ File        :  $Source: /cvsroot/ijbswa/current/doc/source/changelog.sgml,v $
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.49 2013/01/10 11:39:05 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.1 2013/01/20 18:10:28 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -21,13 +21,158 @@
 -->
 
 <para>
- <application>Privoxy 3.0.20</application> is a beta release.
- The changes since 3.0.19 stable are:
+ <application>Privoxy 3.0.21</application> is UNRELEASED.
+ The changes since 3.0.20 beta are:
 </para>
 
 <!--
  The SGML ChangeLog can be generated with: utils/changelog2doc.pl ChangeLog
 -->
+<para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Bug fixes:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Compiles on OS/2 again now that unistd.h is only included
+      on platforms that have it.
+     </para>
+    </listitem>
+    </itemizedlist>
+  <listitem>
+   <para>
+    General improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      The show-status page shows the FEATURE_STRPTIME_SANITY_CHECKS status.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      A couple of assert()s that could theoretically dereference
+      NULL pointers in debug builds have been relocated.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Added an LSB info block to the generic start script.
+      Based on a patch from Natxo Asenjo.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Action file improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Block rover.ebay./ar.*\&amp;adtype= instead of "/.*\&amp;adtype=" which
+      caused too man false positives.
+      Reported by u302320 in #360284, additional feedback from Adam Piggott.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock '.advrider.com/' and '/.*ADVrider'.
+      Anonymously reported in #3603636.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Filter file improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Added an iframes filter.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Documentation improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      The whole GPLv2 text is included in the user manual now,
+      so Privoxy can serve it itself and the user can read it
+      without having to wade through GPLv3 ads first.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Properly numbered and underlined a couple of section titles
+      in the config that where previously overlooked due to a flaw
+      in the conversion script. Reported by Ralf Jungblut.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Improved the support instruction to hopefully make it harder to
+      unintentionally provide insufficient information when requesting
+      support. Previously it wasn't obvious that the information we need
+      in bug reports is usually also required in support requests.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Removed documentation about packages that haven't been provided
+      in years.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Privoxy-Regression-Test:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Only log the test number when not running in verbose mode
+      The position of the test is rarely relevant and it previously
+      wasn't exactly obvious which one of the numbers was useful to
+      repeat the test with --test-number.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    GNUmakefile improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Factor generate-config-file out of config-file to make testing
+      more convenient.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      The clean target now also takes care of patch leftovers.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+ </itemizedlist>
+</para>
+
+<para>
+ <application>Privoxy 3.0.20</application> beta contained the
+ following changes compared to the previous stable release:
+</para>
+
 <para>
  <itemizedlist>
     <listitem>
