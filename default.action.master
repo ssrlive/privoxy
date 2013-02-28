@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.281 2013/02/09 15:16:54 fabiankeil Exp $
+#  $Id: default.action.master,v 1.282 2013/02/11 18:55:52 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -731,6 +731,12 @@ support./(.*/)?track
 /.*\.git/objects/
 # URL = http://code.google.com/p/sm-ssc/wiki/Bugtracker?tm=3
 /.*Bugtracker
+# URL = http://tiggit.net/forum/jscripts/popup_menu.js?ver=1600
+# URL = http://www.av-comparatives.org/forum/wcf/js/PopupMenuList.class.js
+# URL = http://oystatic.ignimgs.com/src/ve3d/sites/ve3d.ign.com/js/production/popupmenu.js
+# URL = http://www.cutepdf.com/include/popmenu.js
+# URL = http://www.cutepdf.com/include/popmenuv.js
+/(.*/)?pop[a-z_-]*menu
 
 #############################################################################
 # Exceptions for academia and non-profits
