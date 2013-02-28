@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.283 2013/02/28 17:26:56 fabiankeil Exp $
+#  $Id: default.action.master,v 1.284 2013/02/28 17:27:42 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -26,31 +26,8 @@
 #  Copyright   :  Written by and Copyright (C) 2001-2013 the
 #                 Privoxy team. http://www.privoxy.org/
 #
-# We value your feedback. However, to provide you with the best support,
-# please note:
-#
-#  * Use the support forum to get help:
-#    http://sourceforge.net/tracker/?group_id=11118&atid=211118
-#  * Submit feedback for this actions file only through the
-#    SF actions file feedback tracker:
-#    http://sourceforge.net/tracker/?group_id=11118&atid=460288
-#  * Submit bugs only through our bug forum:
-#    http://sourceforge.net/tracker/?group_id=11118&atid=111118
-#    Make sure that the bug has not already been submitted. Please try
-#    to verify that it is a Privoxy bug, and not a browser or site
-#    bug first. If you are using your own custom configuration, please
-#    try the stock configs to see if the problem is a configuration
-#    related bug. And if possible please try the latest CVS sources.
-#  * Submit feature requests only through our feature request forum:
-#    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
-#
-# For any other issues, feel free to use the mailing lists:
-# http://sourceforge.net/mail/?group_id=11118
-#
-# Anyone interested in actively participating in development and related
-# discussions can join the appropriate mailing list here:
-# http://sourceforge.net/mail/?group_id=11118. Archives are available
-# here too.
+# Feedback welcome, for details please have a look at:
+# http://www.privoxy.org/user-manual/contact.html
 #
 # The current development version of this file is located:
 # http://ijbswa.cvs.sourceforge.net/*checkout*/ijbswa/current/default.action.master
