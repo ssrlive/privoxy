@@ -5,9 +5,6 @@
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
-<!entity contacting SYSTEM "contacting.sgml">
-<!entity copyright SYSTEM "copyright.sgml">
-<!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.21">
 <!entity p-status "UNRELEASED">
 <!entity % p-not-stable "INCLUDE">
@@ -24,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.53 2013/02/26 15:09:35 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.54 2013/03/01 17:42:34 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -45,13 +42,14 @@
      <subscript>
     <!-- Completely the wrong markup, but very little is allowed  -->
     <!-- in this part of an article. FIXME -->
-      <link linkend="copyright">Copyright</link> &my-copy; 2001-2009 by
+      <ulink url="http://www.privoxy.org/user-manual/copyright.html">Copyright</ulink>
+      &my-copy; 2001-2013 by
       <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
      </subscript>
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.53 2013/02/26 15:09:35 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.54 2013/03/01 17:42:34 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -101,8 +99,9 @@ Hal.
  the state at the release of version &p-version;.
  You can find the latest version of the this manual at <ulink
  url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
- Please see <link linkend="contact">the Contact section</link>
- on how to contact the developers.
+ Please have a look at the
+ <ulink url="http://www.privoxy.org/user-manual/contact.html">contact section in the user manual</ulink>
+ if you are interested in contacting the developers.
 </para>
 <!--        <para> -->
 <!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
@@ -2977,46 +2976,6 @@ at sourceforge. Three simple steps:
     upload docs from development branches or versions. The publicly posted
     docs should be in sync with the last official release.
    </para>
-  </sect1>
-
-  <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="contact"><title>Contacting the developers, Bug Reporting and Feature Requests</title>
-<!-- Include contacting.sgml  -->
- &contacting;
-<!-- end contacting -->
-  </sect1>
-
-
-<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
-<sect1 id="copyright"><title>Privoxy Copyright, License and History</title>
-
-<!-- Include copyright.sgml -->
- &copyright;
-<!-- end -->
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2><title>License</title>
-<!-- Include copyright.sgml: -->
- &license;
-<!-- end copyright -->
-</sect2>
-<!--  ~  End section  ~  -->
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect2><title>History</title>
-<!-- Include history.sgml -->
- &history;
-<!-- end -->
-</sect2>
-
-</sect1>
-
-  <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="seealso"><title>See also</title>
-<!-- Include seealso.sgml -->
- &seealso;
-<!-- end  -->
-
   </sect1>
 
   <!--
