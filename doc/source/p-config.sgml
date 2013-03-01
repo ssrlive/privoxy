@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.95 2013/01/09 15:19:47 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.96 2013/01/10 11:04:45 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy v&p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.95 2013/01/09 15:19:47 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.96 2013/01/10 11:04:45 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
@@ -2931,7 +2931,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para>None</para>
+   <para>128</para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -2975,6 +2975,13 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
    <para>
     Obviously using this option only makes sense if you choose a limit
     below the one enforced by the operating system.
+   </para>
+   <para>
+    One most POSIX-compliant systems &my-app; can't properly deal with
+    more than FD_SETSIZE file descriptors at the same time and has to reject
+    connections if the limit is reached. This will likely change in a
+    future version, but currently this limit can't be increased without
+    recompiling &my-app; with a different FD_SETSIZE limit.
    </para>
   </listitem>
  </varlistentry>
