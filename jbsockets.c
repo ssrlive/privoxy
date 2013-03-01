@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.119 2012/10/23 10:17:36 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.120 2013/01/01 22:11:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -278,6 +278,17 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          continue;
       }
 
+#ifndef _WIN32
+      if (fd >= FD_SETSIZE)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Server socket number too high to use select(): %d >= %d",
+            fd, FD_SETSIZE);
+         close_socket(fd);
+         return JB_INVALID_SOCKET;
+      }
+#endif
+
 #ifdef TCP_NODELAY
       {  /* turn off TCP coalescence */
          int mi = 1;
@@ -459,6 +470,17 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    {
       return(JB_INVALID_SOCKET);
    }
+
+#ifndef _WIN32
+   if (fd >= FD_SETSIZE)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Server socket number too high to use select(): %d >= %d",
+         fd, FD_SETSIZE);
+      close_socket(fd);
+      return JB_INVALID_SOCKET;
+   }
+#endif
 
 #ifdef TCP_NODELAY
    {  /* turn off TCP coalescence */
@@ -1283,6 +1305,17 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
       {
          log_error(LOG_LEVEL_ERROR, "Setting SO_LINGER on socket %d failed.", afd);
       }
+   }
+#endif
+
+#ifndef _WIN32
+   if (afd >= FD_SETSIZE)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Client socket number too high to use select(): %d >= %d",
+         afd, FD_SETSIZE);
+      close_socket(afd);
+      return 0;
    }
 #endif
 
