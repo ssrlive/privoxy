@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.134 2012/10/21 12:53:33 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.135 2012/12/07 12:45:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -467,7 +467,12 @@ struct configuration_spec * load_config(void)
    config->usermanual                = strdup(USER_MANUAL_URL);
    config->proxy_args                = strdup("");
    config->forwarded_connect_retries = 0;
-   config->max_client_connections    = 0;
+   /*
+    * 128 client sockets ought to be enough for everybody who can't
+    * be bothered to read the documentation to figure out how to
+    * increase the limit.
+    */
+   config->max_client_connections    = 128;
    config->socket_timeout            = 300; /* XXX: Should be a macro. */
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    config->default_server_timeout    = 0;
