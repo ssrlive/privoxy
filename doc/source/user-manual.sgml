@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.168 2013/02/26 15:09:35 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.169 2013/02/26 15:10:49 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.168 2013/02/26 15:09:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.169 2013/02/26 15:10:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -335,21 +335,11 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-tbz"><title>FreeBSD</title>
+<sect3 id="installation-freebsd"><title>FreeBSD</title>
 
 <para>
  Privoxy is part of FreeBSD's Ports Collection, you can build and install
  it with <literal>cd /usr/ports/www/privoxy; make install clean</literal>.
-</para>
-<para>
- If you don't use the ports, you can fetch and install
- the package with <literal>pkg_add -r privoxy</literal>.
-</para>
-<para>
- The port skeleton and the package can also be downloaded from the
- <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">File Release
- Page</ulink>, but there's no reason to use them unless you're interested in the
- beta releases which are only available there.
 </para>
 </sect3>
 
