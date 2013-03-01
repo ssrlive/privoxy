@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.170 2013/03/01 17:40:45 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.171 2013/03/01 17:41:32 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.170 2013/03/01 17:40:45 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.171 2013/03/01 17:41:32 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -117,7 +117,7 @@ Hal.
 <sect1 label="1" id="introduction"><title>Introduction</title>
 <para>
  This documentation is included with the current &p-status; version of
- <application>Privoxy</application>, v.&p-version;<![%p-not-stable;[,
+ <application>Privoxy</application>, &p-version;<![%p-not-stable;[,
  and is mostly complete at this point. The most up to date reference for the
  time being is still the comments in the source files and in the individual
  configuration files. Development of a new version is currently nearing
