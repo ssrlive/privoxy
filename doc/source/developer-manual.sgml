@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.54 2013/03/01 17:42:34 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.55 2013/03/01 17:42:51 fabiankeil Exp $
 
  Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.54 2013/03/01 17:42:34 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.55 2013/03/01 17:42:51 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2150,7 +2150,7 @@ at sourceforge. Three simple steps:
         Finished docs should be then be committed to CVS (for those
         without the ability to build these). Some docs may require
         rather obscure processing tools. <filename>config</filename>,
-        the man page (and the html version of the man page), and the PDF docs
+        the man page (and the html version of the man page)
         fall in this category. REAMDE, the man page, AUTHORS, and config
         should all also be committed to CVS for other packagers. The
         formal docs should be uploaded to the webserver. See the
@@ -2934,14 +2934,13 @@ at sourceforge. Three simple steps:
    </para>
    <para>
     <programlisting>
-  make dok dok-pdf # (or 'make redhat-dok dok-pdf' if 'make dok' doesn't work for you)
+  make dok
 </programlisting>
    </para>
    <para>
     That will generate <filename>doc/webserver/user-manual</filename>,
     <filename>doc/webserver/developer-manual</filename>,
     <filename>doc/webserver/faq</filename>,
-    <filename>doc/pdf/*.pdf</filename> and
     <filename>doc/webserver/index.html</filename> automatically.
    </para>
    <para>
