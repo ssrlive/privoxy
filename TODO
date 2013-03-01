@@ -1,4 +1,4 @@
-$Id: TODO,v 1.77 2013/01/05 18:39:35 fabiankeil Exp $
+$Id: TODO,v 1.78 2013/02/26 15:10:18 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -310,3 +310,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 109) Let log_error() support the format specifier %S which should
      work like %s but escape new lines like %N. This would be useful
      to log the result of header filters which may inject new lines.
+
+110) Add a global-buffer-limit directive that roughly limits how
+     much malloc'ed memory Privoxy will use and can potentionally
+     be smaller than (buffer-limit * max-client-connections).
