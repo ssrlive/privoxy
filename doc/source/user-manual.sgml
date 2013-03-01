@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.169 2013/02/26 15:10:49 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.170 2013/03/01 17:40:45 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.169 2013/02/26 15:10:49 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.170 2013/03/01 17:40:45 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -7360,7 +7360,7 @@ Requests</title>
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2><title>License</title>
+<sect2 id="license"><title>License</title>
 <para>
  <screen><![ RCDATA [ &GPLv2; ]]></screen>
 </para>
