@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.120 2013/01/01 22:11:08 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.121 2013/03/01 17:38:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -131,7 +131,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
  *
  * Parameters  :
  *          1  :  host = hostname to connect to
- *          2  :  portnum = port to connent on (XXX: should be unsigned)
+ *          2  :  portnum = port to connect to (XXX: should be unsigned)
  *          3  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  JB_INVALID_SOCKET => failure, else it is the socket
