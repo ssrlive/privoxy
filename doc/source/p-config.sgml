@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.96 2013/01/10 11:04:45 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.97 2013/03/01 17:39:27 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -94,10 +94,10 @@
 <sect1 id="config">
 <title>
  @@TITLE<!-- between the @@ is stripped by Makefile -->@@
- Sample Configuration File for Privoxy v&p-version;
+ Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.96 2013/01/10 11:04:45 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.97 2013/03/01 17:39:27 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
