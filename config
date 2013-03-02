@@ -1,6 +1,6 @@
-#        Sample Configuration File for Privoxy v3.0.20
+#        Sample Configuration File for Privoxy 3.0.21
 #
-#  $Id: config,v 1.101 2013/01/09 15:19:47 fabiankeil Exp $
+#  $Id: p-config.sgml,v 2.97 2013/03/01 17:39:27 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
 #
@@ -1726,7 +1726,7 @@ socket-timeout 300
 #
 #  Default value:
 #
-#      None
+#      128
 #
 #  Effect if unset:
 #
@@ -1761,6 +1761,13 @@ socket-timeout 300
 #
 #      Obviously using this option only makes sense if you choose a
 #      limit below the one enforced by the operating system.
+#
+#      One most POSIX-compliant systems Privoxy can't properly deal
+#      with more than FD_SETSIZE file descriptors at the same time
+#      and has to reject connections if the limit is reached. This
+#      will likely change in a future version, but currently this
+#      limit can't be increased without recompiling Privoxy with a
+#      different FD_SETSIZE limit.
 #
 #  Examples:
 #
