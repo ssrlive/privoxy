@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.284 2013/02/28 17:27:42 fabiankeil Exp $
+#  $Id: default.action.master,v 1.285 2013/02/28 17:27:57 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -202,11 +202,13 @@
 #
 #     image-requests:    Tags detected image requests as "IMAGE-REQUEST".
 #     css-requests:      Tags detected CSS requests as "CSS-REQUEST".
+#     range-requests:    Tags range requests as "RANGE-REQUEST".
 #     client-ip-address: Tags the request with the client's IP address.
 #     http-method:       Tags the request with its HTTP method.
 #     allow-post:        Tags POST requests as "ALLOWED-POST".
 #     complete-url:      Tags the request with the whole request URL.
 #     user-agent:        Tags the request with the complete User-Agent header.
+#     referer:           Tags the request with the complete Referer header.
 #     privoxy-control:   Creates tags with the content of X-Privoxy-Control headers.
 #
 # +content-type-overwrite
@@ -275,10 +277,10 @@
 #    Filters predefined in the supplied default.filter include:
 #
 #     js-annoyances:       Get rid of particularly annoying JavaScript abuse.
-#     js-events:           Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
+#     js-events:           Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).
 #     html-annoyances:     Get rid of particularly annoying HTML abuse.
 #     content-cookies:     Kill cookies that come in the HTML or JS content.
-#     refresh-tags:        Kill automatic refresh tags (for dial-on-demand setups).
+#     refresh-tags:        Kill automatic refresh tags if refresh time is larger than 9 seconds.
 #     unsolicited-popups:  Disable only unsolicited pop-up windows.
 #     all-popups:          Kill all popups in JavaScript and HTML.
 #     img-reorder:         Reorder attributes in <img> tags to make the banners-by-* filters more effective.
@@ -288,6 +290,7 @@
 #     tiny-textforms:      Extend those tiny textareas up to 40x80 and kill the hard wrap.
 #     jumping-windows:     Prevent windows from resizing and moving themselves.
 #     frameset-borders:    Give frames a border and make them resizable.
+#     iframes:             Removes all detected iframes. Should only be enabled for individual sites.
 #     demoronizer:         Fix MS's non-standard use of standard charsets.
 #     shockwave-flash:     Kill embedded Shockwave Flash objects.
 #     quicktime-kioskmode: Make Quicktime movies saveable.

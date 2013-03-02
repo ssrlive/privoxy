@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.172 2013/03/01 17:43:18 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.173 2013/03/01 17:44:24 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.172 2013/03/01 17:43:18 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.173 2013/03/01 17:44:24 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3834,7 +3834,7 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-js-events">
-    <screen>+filter{js-events}           # Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).</screen>
+    <screen>+filter{js-events}           # Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).</screen>
    </para>
    <para>
     <anchor id="filter-html-annoyances">
@@ -3846,15 +3846,15 @@ problem-host.example.com</screen>
    </para>
    <para>
     <anchor id="filter-refresh-tags">
-    <screen>+filter{refresh-tags}        # Kill automatic refresh tags (for dial-on-demand setups).</screen>
+    <screen>+filter{refresh-tags}        # Kill automatic refresh tags if refresh time is larger than 9 seconds.</screen>
    </para>
    <para>
     <anchor id="filter-unsolicited-popups">
-    <screen>+filter{unsolicited-popups}  # Disable only unsolicited pop-up windows. Useful if your browser lacks this ability.</screen>
+    <screen>+filter{unsolicited-popups}  # Disable only unsolicited pop-up windows.</screen>
    </para>
    <para>
     <anchor id="filter-all-popups">
-    <screen>+filter{all-popups}          # Kill all popups in JavaScript and HTML. Useful if your browser lacks this ability.</screen>
+    <screen>+filter{all-popups}          # Kill all popups in JavaScript and HTML.</screen>
    </para>
    <para>
     <anchor id="filter-img-reorder">
@@ -3883,6 +3883,10 @@ problem-host.example.com</screen>
    <para>
     <anchor id="filter-frameset-borders">
     <screen>+filter{frameset-borders}    # Give frames a border and make them resizable.</screen>
+   </para>
+   <para>
+    <anchor id="filter-iframes">
+    <screen>+filter{iframes}             # Removes all detected iframes. Should only be enabled for individual sites.</screen>
    </para>
    <para>
     <anchor id="filter-demoronizer">
