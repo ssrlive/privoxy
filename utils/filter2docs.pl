@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: filter2docs.pl,v 1.5 2008/05/12 09:31:36 fabiankeil Exp $
+# $Id: filter2docs.pl,v 1.6 2009/01/13 16:48:09 fabiankeil Exp $
 # $Source: /cvsroot/ijbswa/current/utils/filter2docs.pl,v $
 
 # Parse the filter names and descriptions from a filter file and
@@ -15,7 +15,7 @@ my (%comment_lines, %action_lines, %sgml_source_1, %sgml_source_2);
 sub main() {
 
     die "Usage: $0 filter-file\n" unless (@ARGV == 1) ;
-    open(INPUT, "< $ARGV[0]") or die "Coudln't open input file $ARGV[0] because $!\n";
+    open(INPUT, "< $ARGV[0]") or die "Couldn't open input file $ARGV[0]: $!\n";
 
     parse_file();
     print_markup();
