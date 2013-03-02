@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2822" id="AEN2822"></a>
+          <a name="AEN2826" id="AEN2826"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -314,7 +314,7 @@
     actions</a>.</p>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2921" id="AEN2921">8.1. Finding the Right
+      <h2 class="SECT2"><a name="AEN2925" id="AEN2925">8.1. Finding the Right
       Mix</a></h2>
 
       <p>Note that some <a href="actions-file.html#ACTIONS">actions</a>, like
@@ -339,7 +339,7 @@
     </div>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2928" id="AEN2928">8.2. How to
+      <h2 class="SECT2"><a name="AEN2932" id="AEN2932">8.2. How to
       Edit</a></h2>
 
       <p>The easiest way to edit the actions files is with a browser by using
@@ -529,7 +529,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3040" id="AEN3040">8.4.1. The Domain
+        <h3 class="SECT3"><a name="AEN3044" id="AEN3044">8.4.1. The Domain
         Pattern</a></h3>
 
         <p>The matching of the domain part offers some flexible options: if
@@ -634,7 +634,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3116" id="AEN3116">8.4.2. The Path
+        <h3 class="SECT3"><a name="AEN3120" id="AEN3120">8.4.2. The Path
         Pattern</a></h3>
 
         <p><span class="APPLICATION">Privoxy</span> uses <span class=
@@ -2241,7 +2241,7 @@ problem-host.example.com
                 <tr>
                   <td>
                     <pre class="SCREEN">
-+filter{js-events}           # Kill all JS event bindings and timers (Radically destructive! Only for extra nasty sites).
++filter{js-events}           # Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).
 </pre>
                   </td>
                 </tr>
@@ -2280,7 +2280,7 @@ problem-host.example.com
                 <tr>
                   <td>
                     <pre class="SCREEN">
-+filter{refresh-tags}        # Kill automatic refresh tags (for dial-on-demand setups).
++filter{refresh-tags}        # Kill automatic refresh tags if refresh time is larger than 9 seconds.
 </pre>
                   </td>
                 </tr>
@@ -2293,7 +2293,7 @@ problem-host.example.com
                 <tr>
                   <td>
                     <pre class="SCREEN">
-+filter{unsolicited-popups}  # Disable only unsolicited pop-up windows. Useful if your browser lacks this ability.
++filter{unsolicited-popups}  # Disable only unsolicited pop-up windows.
 </pre>
                   </td>
                 </tr>
@@ -2305,7 +2305,7 @@ problem-host.example.com
                 <tr>
                   <td>
                     <pre class="SCREEN">
-+filter{all-popups}          # Kill all popups in JavaScript and HTML. Useful if your browser lacks this ability.
++filter{all-popups}          # Kill all popups in JavaScript and HTML.
 </pre>
                   </td>
                 </tr>
@@ -2396,6 +2396,18 @@ problem-host.example.com
                   <td>
                     <pre class="SCREEN">
 +filter{frameset-borders}    # Give frames a border and make them resizable.
+</pre>
+                  </td>
+                </tr>
+              </table>
+
+              <p><a name="FILTER-IFRAMES" id="FILTER-IFRAMES"></a></p>
+
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
++filter{iframes}             # Removes all detected iframes. Should only be enabled for individual sites.
 </pre>
                   </td>
                 </tr>
@@ -4324,7 +4336,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4788" id="AEN4788">8.5.35.
+        <h3 class="SECT3"><a name="AEN4795" id="AEN4795">8.5.35.
         Summary</a></h3>
 
         <p>Note that many of these actions have the potential to cause a page
@@ -4483,7 +4495,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       together:</p>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4852" id="AEN4852">8.7.1.
+        <h3 class="SECT3"><a name="AEN4859" id="AEN4859">8.7.1.
         match-all.action</a></h3>
 
         <p>Remember <span class="emphasis"><i class="EMPHASIS">all actions
@@ -4532,7 +4544,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4874" id="AEN4874">8.7.2.
+        <h3 class="SECT3"><a name="AEN4881" id="AEN4881">8.7.2.
         default.action</a></h3>
 
         <p>If you aren't a developer, there's no need for you to edit the
@@ -4875,7 +4887,7 @@ wiki.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4987" id="AEN4987">8.7.3.
+        <h3 class="SECT3"><a name="AEN4994" id="AEN4994">8.7.3.
         user.action</a></h3>
 
         <p>So far we are painting with a broad brush by setting general

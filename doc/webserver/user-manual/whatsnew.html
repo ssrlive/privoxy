@@ -41,14 +41,23 @@
     <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this
     Release</a></h1>
 
-    <p><span class="APPLICATION">Privoxy 3.0.21</span> is UNRELEASED. The
-    changes since 3.0.20 beta are:</p>
+    <p><span class="APPLICATION">Privoxy 3.0.21</span> stable is a bug-fix
+    release for Privoxy 3.0.20 beta. It also addresses a security issue that
+    affects all previous Privoxy versions (on some platforms). The changes
+    since 3.0.20 beta are:</p>
 
     <ul>
       <li>
         <p>Bug fixes:</p>
 
         <ul>
+          <li>
+            <p>On POSIX-like platforms, network sockets with file descriptor
+            values above FD_SETSIZE are properly rejected. Previously they
+            could cause memory corruption in configurations that allowed the
+            limit to be reached.</p>
+          </li>
+
           <li>
             <p>Compiles on OS/2 again now that unistd.h is only included on
             platforms that have it.</p>
@@ -73,6 +82,11 @@
           <li>
             <p>Added an LSB info block to the generic start script. Based on
             a patch from Natxo Asenjo.</p>
+          </li>
+
+          <li>
+            <p>The max-client-connections default has been changed to 128
+            which should be more than enough for most setups.</p>
           </li>
         </ul>
       </li>
