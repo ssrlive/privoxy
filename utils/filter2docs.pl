@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: filter2docs.pl,v 1.7 2013/03/02 14:38:20 fabiankeil Exp $
+# $Id: filter2docs.pl,v 1.8 2013/03/02 14:38:38 fabiankeil Exp $
 # $Source: /cvsroot/ijbswa/current/utils/filter2docs.pl,v $
 
 # Parse the filter names and descriptions from a filter file and
@@ -71,10 +71,10 @@ sub print_markup() {
 
 Producing $type markup:
 
-Comment lines for default.action:
+Comment lines for default.action.master:
 
 $comment_lines{$type}
-Block of $type actions for default.action:
+Block of $type actions for default.action.master:
 
 $action_lines{$type}
 SGML Source for AF chapter in U-M:
