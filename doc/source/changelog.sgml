@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.1 2013/01/20 18:10:28 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.2 2013/02/27 16:49:20 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -21,8 +21,10 @@
 -->
 
 <para>
- <application>Privoxy 3.0.21</application> is UNRELEASED.
- The changes since 3.0.20 beta are:
+ <application>Privoxy 3.0.21</application> stable is a bug-fix release
+ for Privoxy 3.0.20 beta. It also addresses a security issue that affects
+ all previous Privoxy versions (on some platforms). The changes since
+ 3.0.20 beta are:
 </para>
 
 <!--
@@ -36,11 +38,21 @@
     <itemizedlist>
     <listitem>
      <para>
+      On POSIX-like platforms, network sockets with file descriptor
+      values above FD_SETSIZE are properly rejected. Previously they
+      could cause memory corruption in configurations that allowed
+      the limit to be reached.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
       Compiles on OS/2 again now that unistd.h is only included
       on platforms that have it.
      </para>
     </listitem>
     </itemizedlist>
+   </para>
+  </listitem>
   <listitem>
    <para>
     General improvements:
@@ -60,6 +72,12 @@
      <para>
       Added an LSB info block to the generic start script.
       Based on a patch from Natxo Asenjo.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      The max-client-connections default has been changed to 128
+      which should be more than enough for most setups.
      </para>
      </listitem>
     </itemizedlist>
