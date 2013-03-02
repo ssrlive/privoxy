@@ -1,9 +1,13 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Version 3.0.21 UNRELEASED ***
+*** Version 3.0.21 stable ***
 
 - Bug fixes:
+  - On POSIX-like platforms, network sockets with file descriptor
+    values above FD_SETSIZE are properly rejected. Previously they
+    could cause memory corruption in configurations that allowed
+    the limit to be reached.
   - Compiles on OS/2 again now that unistd.h is only included
     on platforms that have it.
 
@@ -13,6 +17,8 @@ ChangeLog for Privoxy
     NULL pointers in debug builds have been relocated.
   - Added an LSB info block to the generic start script.
     Based on a patch from Natxo Asenjo.
+  - The max-client-connections default has been changed to 128
+    which should be more than enough for most setups.
 
 - Action file improvements:
   - Block rover.ebay./ar.*\&adtype= instead of "/.*\&adtype=" which
