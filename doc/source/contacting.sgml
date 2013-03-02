@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.34 2013/01/25 14:25:04 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.35 2013/01/25 14:26:10 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -209,7 +209,7 @@ debug  8192 # Non-fatal errors</literallayout>
 </para>
 
 <para>
- Please don't sent private support requests to individual Privoxy
+ Please don't send private support requests to individual Privoxy
  developers, either use the mailing lists or the support trackers.
 </para>
 
