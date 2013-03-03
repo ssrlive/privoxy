@@ -26,6 +26,8 @@ ChangeLog for Privoxy
     Reported by u302320 in #360284, additional feedback from Adam Piggott.
   - Unblock '.advrider.com/' and '/.*ADVrider'.
     Anonymously reported in #3603636.
+  - Stop blocking '/js/slider\.js'.
+    Reported by Adam Piggott in #3606635 and _lvm in #2791160.
 
 - Filter file improvements:
   - Added an iframes filter.

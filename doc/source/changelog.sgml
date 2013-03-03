@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.2 2013/02/27 16:49:20 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.3 2013/03/02 14:40:18 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -99,7 +99,13 @@
       Unblock '.advrider.com/' and '/.*ADVrider'.
       Anonymously reported in #3603636.
      </para>
-     </listitem>
+    </listitem>
+    <listitem>
+     <para>
+      Stop blocking '/js/slider\.js'.
+      Reported by Adam Piggott in #3606635 and _lvm in #2791160.
+     </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
