@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.285 2013/02/28 17:27:57 fabiankeil Exp $
+#  $Id: default.action.master,v 1.286 2013/03/02 14:39:08 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -844,8 +844,6 @@ js.adlink.net/
 #MASTER# BLOCK-REFERRER: http://www.chip.de/artikel/c_artikelunterseite_10423683.html
 # Blocked URL = http://pagead.googlesyndication.example.com/foo/bar/baz.js
 pagead*.googlesyndication./.*\.js
-#MASTER# BLOCK-REFERRER: http://www.pcmag.com/ 11/22/06 per SF Tracker # 1601148
-/js/slider\.js
 #MASTER# BLOCK-REFERRER: http://floodle.net 2007-01-21 SF tracker
 scripts.chitika.net/.*\.js
 #MASTER# BLOCK-REFERRER: via Yahoo groups
