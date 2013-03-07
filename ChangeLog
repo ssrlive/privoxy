@@ -11,7 +11,7 @@ ChangeLog for Privoxy
   - Proxy authentication headers are removed unless the new directive
     enable-proxy-authentication-forwarding is used. Forwarding the
     headers potentionally allows malicious sites to trick the user
-    into providing it with login information.
+    into providing them with login information.
     Reported by Chris John Riley.
   - Compiles on OS/2 again now that unistd.h is only included
     on platforms that have it.
