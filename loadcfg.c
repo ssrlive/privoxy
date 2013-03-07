@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.135 2012/12/07 12:45:20 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.136 2013/03/01 17:39:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -132,6 +132,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_deny_access                 1227333715U /* "deny-access" */
 #define hash_enable_edit_actions         2517097536U /* "enable-edit-actions" */
 #define hash_enable_compression          3943696946U /* "enable-compression" */
+#define hash_enable_proxy_authentication_forwarding 4040610791U /* enable-proxy-authentication-forwarding */
 #define hash_enable_remote_toggle        2979744683U /* "enable-remote-toggle" */
 #define hash_enable_remote_http_toggle    110543988U /* "enable-remote-http-toggle" */
 #define hash_enforce_blocks              1862427469U /* "enforce-blocks" */
@@ -484,6 +485,7 @@ struct configuration_spec * load_config(void)
    config->feature_flags            &= ~RUNTIME_FEATURE_SPLIT_LARGE_FORMS;
    config->feature_flags            &= ~RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS;
    config->feature_flags            &= ~RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK;
+   config->feature_flags            &= ~RUNTIME_FEATURE_FORWARD_PROXY_AUTHENTICATION_HEADERS;
 #ifdef FEATURE_COMPRESSION
    config->feature_flags            &= ~RUNTIME_FEATURE_COMPRESSION;
    /*
@@ -821,6 +823,19 @@ struct configuration_spec * load_config(void)
             break;
 #endif /* def FEATURE_COMPRESSION */
 
+/* *************************************************************************
+ * enable-proxy-authentication-forwarding 0|1
+ * *************************************************************************/
+         case hash_enable_proxy_authentication_forwarding:
+            if (parse_toggle_state(cmd, arg) == 1)
+            {
+               config->feature_flags |= RUNTIME_FEATURE_FORWARD_PROXY_AUTHENTICATION_HEADERS;
+            }
+            else
+            {
+               config->feature_flags &= ~RUNTIME_FEATURE_FORWARD_PROXY_AUTHENTICATION_HEADERS;
+            }
+            break;
 
 /* *************************************************************************
  * enable-remote-toggle 0|1
