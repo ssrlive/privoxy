@@ -1,9 +1,9 @@
                Announcing Privoxy 3.0.21 stable
 --------------------------------------------------------------------
 
-This is a bug-fix release for Privoxy 3.0.20 beta. It also addresses
-a security issue that affects all previous Privoxy versions (on some
-platforms).
+Privoxy 3.0.21 stable is a bug-fix release for Privoxy 3.0.20 beta.
+It also addresses two security issues that affect all previous
+Privoxy versions.
 
 --------------------------------------------------------------------
 ChangeLog for Privoxy
@@ -15,6 +15,11 @@ ChangeLog for Privoxy
     values above FD_SETSIZE are properly rejected. Previously they
     could cause memory corruption in configurations that allowed
     the limit to be reached.
+  - Proxy authentication headers are removed unless the new directive
+    enable-proxy-authentication-forwarding is used. Forwarding the
+    headers potentionally allows malicious sites to trick the user
+    into providing them with login information.
+    Reported by Chris John Riley.
   - Compiles on OS/2 again now that unistd.h is only included
     on platforms that have it.
 
