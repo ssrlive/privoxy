@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.48 2012/11/11 12:42:00 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.49 2013/03/07 14:09:20 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -10,7 +10,7 @@
 #
 #############################################################################
 #
-# Copyright (c) 2007-2012 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2013 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
