@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.89 2013/02/05 14:02:43 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.90 2013/02/05 14:03:27 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -1554,7 +1554,7 @@ sub log_result ($$) {
                           $test->{'number'});
 
     if (cli_option_is_set('verbose')) {
-        $message = sprintf(" (%d/%d/%d)", $number,
+        $message .= sprintf(" (%d/%d/%d)", $number,
                             $test->{'section-id'},
                             $test->{'regression-test-id'});
     }
