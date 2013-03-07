@@ -42,9 +42,9 @@
     Release</a></h1>
 
     <p><span class="APPLICATION">Privoxy 3.0.21</span> stable is a bug-fix
-    release for Privoxy 3.0.20 beta. It also addresses a security issue that
-    affects all previous Privoxy versions (on some platforms). The changes
-    since 3.0.20 beta are:</p>
+    release for Privoxy 3.0.20 beta. It also addresses two security issues
+    that affect all previous Privoxy versions. The changes since 3.0.20 beta
+    are:</p>
 
     <ul>
       <li>
@@ -56,6 +56,14 @@
             values above FD_SETSIZE are properly rejected. Previously they
             could cause memory corruption in configurations that allowed the
             limit to be reached.</p>
+          </li>
+
+          <li>
+            <p>Proxy authentication headers are removed unless the new
+            directive enable-proxy-authentication-forwarding is used.
+            Forwarding the headers potentionally allows malicious sites to
+            trick the user into providing it with login information. Reported
+            by Chris John Riley.</p>
           </li>
 
           <li>
@@ -105,9 +113,10 @@
             <p>Unblock '.advrider.com/' and '/.*ADVrider'. Anonymously
             reported in #3603636.</p>
           </li>
+
           <li>
-            <p>Stop blocking '/js/slider\.js'.
-            Reported by Adam Piggott in #3606635 and _lvm in #2791160.</p>
+            <p>Stop blocking '/js/slider\.js'. Reported by Adam Piggott in
+            #3606635 and _lvm in #2791160.</p>
           </li>
         </ul>
       </li>
