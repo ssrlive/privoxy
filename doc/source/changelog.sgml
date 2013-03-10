@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.5 2013/03/07 14:11:11 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.6 2013/03/07 14:26:47 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -22,7 +22,7 @@
 
 <para>
  <application>Privoxy 3.0.21</application> stable is a bug-fix release
- for Privoxy 3.0.20 beta. It also addresses two security issues that
+ for Privoxy 3.0.20 beta. It addresses two security issues that
  affect all previous Privoxy versions. The changes since 3.0.20 beta are:
 </para>
 
@@ -47,7 +47,7 @@
      <para>
       Proxy authentication headers are removed unless the new directive
       enable-proxy-authentication-forwarding is used. Forwarding the
-      headers potentionally allows malicious sites to trick the user
+      headers potentially allows malicious sites to trick the user
       into providing them with login information.
       Reported by Chris John Riley.
      </para>
