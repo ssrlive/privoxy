@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.173 2013/03/01 17:44:24 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.174 2013/03/02 14:39:24 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.173 2013/03/01 17:44:24 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.174 2013/03/02 14:39:24 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5278,7 +5278,7 @@ new action
  example.com/stylesheet\.css
 
 # Create a short, easy to remember nickname for a favorite site
-# (relies on the browser accept and forward invalid URLs to &my-app;)
+# (relies on the browser to accept and forward invalid URLs to &my-app;)
 { +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
  a
 
