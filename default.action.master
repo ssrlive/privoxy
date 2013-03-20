@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.286 2013/03/02 14:39:08 fabiankeil Exp $
+#  $Id: default.action.master,v 1.287 2013/03/03 10:53:36 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -645,8 +645,6 @@ ad*.
 *banner*.
 count*.
 *counter.
-#MASTER# PROBLEM URL: http://www.newegg.com
-promotions.
 #MASTER# BLOCK-REFERRER: http://tech.cybernetnews.com/
 # Blocked URL = http://metrics.performancing.com/
 metrics.
