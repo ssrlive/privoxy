@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.90 2013/02/05 14:03:27 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.91 2013/03/07 14:10:04 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -717,12 +717,12 @@ sub execute_regression_tests () {
             #      from different sections isn't possible.
             #      Is this worth changing the layout?
             fisher_yates_shuffle(\@regression_tests);
-            for (my $s = 0;  $s < @regression_tests; $s++) {
+            for (my $s = 0; $s < @regression_tests; $s++) {
                 fisher_yates_shuffle($regression_tests[$s]);
             }
         }
 
-        for (my $s = 0;  $s < @regression_tests; $s++) {
+        for (my $s = 0; $s < @regression_tests; $s++) {
 
             my $r = 0;
 
