@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.99 2013/03/07 14:10:34 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.100 2013/03/07 14:10:48 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.99 2013/03/07 14:10:34 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.100 2013/03/07 14:10:48 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
@@ -1084,13 +1084,13 @@ actionsfile
  <varlistentry>
   <term>Type of value:</term>
   <listitem>
-   <para><emphasis>None</emphasis></para>
+   <para><emphasis>1 or 0</emphasis></para>
   </listitem>
  </varlistentry>
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para><emphasis>Unset</emphasis></para>
+   <para><emphasis>0</emphasis></para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -1113,7 +1113,7 @@ actionsfile
  </varlistentry>
 </variablelist>
 
-<![%config-file;[<literallayout>@@#single-threaded</literallayout>]]>
+<![%config-file;[<literallayout>@@#single-threaded 1</literallayout>]]>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
