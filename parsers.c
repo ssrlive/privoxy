@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.275 2013/03/07 14:08:50 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.276 2013/03/20 11:31:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1386,7 +1386,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                   if (0 == size)
                   {
                      /*
-                      * There is to technical limitation which makes
+                      * There is no technical limitation which makes
                       * it impossible to use empty tags, but I assume
                       * no one would do it intentionally.
                       */
