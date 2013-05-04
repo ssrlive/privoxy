@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.287 2013/03/03 10:53:36 fabiankeil Exp $
+#  $Id: default.action.master,v 1.288 2013/03/20 11:35:35 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2040,6 +2040,8 @@ webcache.googleusercontent.com/
 .googleapis.com/
 # URL = http://www.google.com.au/sorry/?continue=http://www.google.com.au/search%3Fhl%3Den%26tbo%3Dd%26output%3Dsearch%26sclient%3Dpsy-ab%26q%3Dnew%2Bcars%26btnG%3D
 .google./sorry/\?continue?=
+# URL = http://www.microsofttranslator.com/bv.aspx?from=ru&to=en&a=http://ru.wikipedia.org/wiki/Privoxy
+.microsofttranslator.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
