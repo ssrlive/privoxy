@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.289 2013/05/04 05:36:28 fabiankeil Exp $
+#  $Id: default.action.master,v 1.290 2013/05/04 05:37:16 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1868,6 +1868,10 @@ websupport.wdc.com/
 # URL = http://www.smugmug.com/community/ADVrider
 # URL = http://www.siteinfotool.com/advrider.com
 /.*ADVrider
+#MASTER# UNBLOCK-REFERRER: http://www.speedtest.net/
+#MASTER# REMARKS: Support request #3612908  2013-05-08 07:31:46 PDT
+#MASTER# REMARKS: Appears to be a content delivery subdomain for the parent domain
+adn.speedtest.net
 
 #############################################################################
 # Site-specific special rules:
