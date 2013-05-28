@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.291 2013/05/09 12:58:46 diem Exp $
+#  $Id: default.action.master,v 1.292 2013/05/28 14:39:05 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1871,6 +1871,7 @@ websupport.wdc.com/
 #MASTER# UNBLOCK-REFERRER: http://www.speedtest.net/
 #MASTER# REMARKS: Support request #3612908  2013-05-08 07:31:46 PDT
 #MASTER# REMARKS: Appears to be a content delivery subdomain for the parent domain
+# URL = http://adn.speedtest.net
 adn.speedtest.net
 
 #############################################################################
