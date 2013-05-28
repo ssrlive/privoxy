@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.158 2013/01/16 16:30:00 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.159 2013/01/16 16:30:16 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2188,7 +2188,8 @@ sub print_stats () {
     unless ($cli_options{'show-complete-request-distribution'}) {
         printf "Enable --show-complete-request-distribution to get less common numbers as well.\n";
     }
-    printf "Unaccounted requests: ~%d\n", $stats{requests} - $client_requests_checksum;
+    # Due to log rotation we may not have a complete picture for all the requests
+    printf "Improperly accounted requests: ~%d\n", abs($stats{requests} - $client_requests_checksum);
 
     if ($stats{method} eq 0) {
         print "No response lines parsed yet yet.\n";
