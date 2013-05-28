@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.292 2013/05/28 14:39:05 fabiankeil Exp $
+#  $Id: default.action.master,v 1.293 2013/05/28 14:39:18 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1118,6 +1118,9 @@ cltomedia.info/delivery/
 #MASTER# BLOCK-REFERRER: http://thepiratebay.se/
 # Blocked URL = http://cdn2.adexprt.com/clkads/sky2.html
 .adexprt.com/
+# Blocked URL = http://data.gosquared.com/pv?a=GSN-311503-M&cs=UTF-8&cd=24&fl=11.7%20r700&je=0&la=de-de&sw=1280&sh=1024&dm=adn.speedtest.net&pa=%2F&pt=Speedtest.net%20-%20Der%20Globale%20Breitband-Geschwindigkeitstest&pr=http%3A&po=-&pl=0&tl=82&ri=1&ru=http%3A%2F%2Fadn.speedtest.net%2F&ui=1876309225&re=1&vi=1&pv=5&lv=1369129426&vw=1280&vh=878&dw=1263&dh=1325&st=0&sl=0&tv=4.0
+data.gosquared.com/
+
 
 #----------------------------------------------------------------------------
 # JavaScripts and Texts for ad and popup generation
