@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.293 2013/05/28 14:39:18 fabiankeil Exp $
+#  $Id: default.action.master,v 1.294 2013/05/28 14:39:30 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1861,7 +1861,9 @@ adjamblog.files.wordpress.com/
 websupport.wdc.com/
 #MASTER# UNBLOCK-REFERRER: http://conradelektronik.m13.mailplus.nl/genericservice/code/servlet/React?encId=xSgAxBFNnFrne8j&actId=357685&command=openhtml
 # URL = http://content.conrad.se/newsletter/banners/OFFER_750987_exk.jpg
-.conrad.se/newsletter/banners/
+#MASTER# UNBLOCK-REFERRER: http://nyhetsbrev.conrad.se/form.do?agnCI=25&agnFN=fullview&agnUID=A.C.E4N.Bv_m.EnED.EDtQoE_5_4bI7xQlTGfxSA
+# URL = http://media.conrad.se/newsletter/banner7/endoskop_123344.jpg
+.conrad.se/newsletter/
 #MASTER# REMARKS: Actionsfile feedback item #3413827  2011-09-25 12:11
 #MASTER# REMARKS: This domain hosts JS, images and CSS upon which hotmail.com depends
 .wlxrs.com/
