@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.294 2013/05/28 14:39:30 fabiankeil Exp $
+#  $Id: default.action.master,v 1.295 2013/06/02 14:11:31 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1878,6 +1878,8 @@ websupport.wdc.com/
 #MASTER# REMARKS: Appears to be a content delivery subdomain for the parent domain
 # URL = http://adn.speedtest.net
 adn.speedtest.net
+# URL = http://adressbuch.bundestag.de/adressbuch/
+.bundestag.de/
 
 #############################################################################
 # Site-specific special rules:
