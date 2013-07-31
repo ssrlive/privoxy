@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.295 2013/06/02 14:11:31 fabiankeil Exp $
+#  $Id: default.action.master,v 1.296 2013/06/02 14:11:46 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1880,6 +1880,8 @@ websupport.wdc.com/
 adn.speedtest.net
 # URL = http://adressbuch.bundestag.de/adressbuch/
 .bundestag.de/
+# URL = http://www.rote-hilfe.de/images/banners/mitglied_werden_banner156.png
+.rote-hilfe.de/
 
 #############################################################################
 # Site-specific special rules:
