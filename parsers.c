@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.276 2013/03/20 11:31:20 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.277 2013/04/23 09:43:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1296,6 +1296,12 @@ static jb_err header_tagger(struct client_state *csp, char *header)
       multi_action_index = ACTION_MULTI_CLIENT_HEADER_TAGGER;
    }
 
+   if (list_is_empty(csp->action->multi[multi_action_index]))
+   {
+      /* No appropriate tagger enabled, nothing left to do. */
+      return JB_ERR_OK;
+   }
+
    if (filters_available(csp) == FALSE)
    {
       log_error(LOG_LEVEL_ERROR, "Inconsistent configuration: "
@@ -1497,6 +1503,12 @@ static jb_err filter_header(struct client_state *csp, char **header)
    {
       wanted_filter_type = FT_CLIENT_HEADER_FILTER;
       multi_action_index = ACTION_MULTI_CLIENT_HEADER_FILTER;
+   }
+
+   if (list_is_empty(csp->action->multi[multi_action_index]))
+   {
+      /* No appropriate header filter enabled, nothing left to do. */
+      return JB_ERR_OK;
    }
 
    if (filters_available(csp) == FALSE)
