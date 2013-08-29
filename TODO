@@ -1,4 +1,4 @@
-$Id: TODO,v 1.80 2013/05/28 14:38:39 fabiankeil Exp $
+$Id: TODO,v 1.81 2013/08/29 11:12:27 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -323,3 +323,5 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      following header actions do not treat them as a single string.
      Alternatively add another header injection mechanism.
      one
+
+113) Log statistics upon receiving a certain signal (SIGINFO or SIGUSR1).
