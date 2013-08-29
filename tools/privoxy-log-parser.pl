@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.159 2013/01/16 16:30:16 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.160 2013/05/28 14:38:15 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2426,7 +2426,7 @@ sub stats_loop () {
         (undef, $time_stamp, $thread, $log_level, $content) = split(/ /, $_, 5);
 
         # Skip LOG_LEVEL_CLF
-        next if ($time_stamp eq "-" or not defined($log_level));
+        next if (not defined($log_level) or $time_stamp eq "-");
 
         if (defined($log_level_handlers{$log_level})) {
 
