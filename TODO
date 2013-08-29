@@ -1,4 +1,4 @@
-$Id: TODO,v 1.81 2013/08/29 11:12:27 fabiankeil Exp $
+$Id: TODO,v 1.82 2013/08/29 11:12:37 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -325,3 +325,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      one
 
 113) Log statistics upon receiving a certain signal (SIGINFO or SIGUSR1).
+
+114) Properly deal with status code 100, the current "Continue hack"
+     prevents gpg from uploading keys through Privoxy.
