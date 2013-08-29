@@ -1,4 +1,4 @@
-$Id: TODO,v 1.79 2013/03/01 17:39:46 fabiankeil Exp $
+$Id: TODO,v 1.80 2013/05/28 14:38:39 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -317,3 +317,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 111) Reject requests if hosts and ports in request line and Host
      header don't match (before filters have been applied).
+
+112) If a header filter is used to inject another header by inserting
+     a \r\n (undocumented feature), detect it and split the headers so
+     following header actions do not treat them as a single string.
+     Alternatively add another header injection mechanism.
+     one
