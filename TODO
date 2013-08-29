@@ -1,4 +1,4 @@
-$Id: TODO,v 1.82 2013/08/29 11:12:37 fabiankeil Exp $
+$Id: TODO,v 1.83 2013/08/29 11:12:50 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -122,7 +122,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 54) Move away from CVS to a more modern revision control system.
     Find out if there are any objection against going with Git.
-    Using Git would also have the advantage that SF now pretents
+    Using Git would also have the advantage that SF now pretends
     to support it, so we could do it independently from 53).
 
 55) Apply for Coverity scans: http://scan.coverity.com/
@@ -255,7 +255,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     for misconfigured setups.
 
 95) Support a non-standard client header in CONNECT requests that
-    contains the URL of the requested ressource, which is then treated
+    contains the URL of the requested resource, which is then treated
     like the request URL.
 
     This way the client could opt-in for path-based blocking of https
@@ -276,7 +276,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 99) Figure out a mechanism through which a user can easily enable
     site-specific action sections that are too aggressive to be
-    enalbled by default. This could be similiar to the presettings
+    enabled by default. This could be similar to the presettings
     in default.action, but could also be just another action file
     that isn't used by default.
 
@@ -287,7 +287,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 102) Add an include directive to split the config file into several parts.
 
 103) Potential performance improvement for large action files:
-     when figuring out which actions apply, check the action bitmask
+     when figuring out which actions apply, check the action bit mask
      before pattern matching and skip section that wouldn't modify the
      actions already set. To increase the impact the sections would have
      to be applied in reverse.
@@ -305,14 +305,14 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 107) Support more pcrs variables, for example $destination-ip-address
      and $source-ip-address.
 
-108) Allow to use a somewhat random string intead of PRIVOXY-FORCE.
+108) Allow to use a somewhat random string instead of PRIVOXY-FORCE.
 
 109) Let log_error() support the format specifier %S which should
      work like %s but escape new lines like %N. This would be useful
      to log the result of header filters which may inject new lines.
 
 110) Add a global-buffer-limit directive that roughly limits how
-     much malloc'ed memory Privoxy will use and can potentionally
+     much malloc'ed memory Privoxy will use and can potentially
      be smaller than (buffer-limit * max-client-connections).
 
 111) Reject requests if hosts and ports in request line and Host
