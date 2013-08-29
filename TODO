@@ -1,4 +1,4 @@
-$Id: TODO,v 1.83 2013/08/29 11:12:50 fabiankeil Exp $
+$Id: TODO,v 1.84 2013/08/29 11:13:00 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -322,7 +322,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      a \r\n (undocumented feature), detect it and split the headers so
      following header actions do not treat them as a single string.
      Alternatively add another header injection mechanism.
-     one
 
 113) Log statistics upon receiving a certain signal (SIGINFO or SIGUSR1).
 
