@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.297 2013/07/31 17:21:33 fabiankeil Exp $
+#  $Id: default.action.master,v 1.298 2013/10/30 14:30:52 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2058,6 +2058,8 @@ webcache.googleusercontent.com/
 .microsofttranslator.com/
 # URL = http://www.facebook.com/plugins/like.php?locale=de_DE&href=http%3A%2F%2Fwww.spiegel.de%2Fpolitik%2Fausland%2Fnsa-und-britischer-geheimdienst-knacken-systematisch-verschluesselung-a-920710.html&layout=standard&show_faces=false&width=480&action=recommend&font=verdana&colorscheme=light&height=22
 .facebook.com/plugins/like.php
+# URL = http://creativecommons.org/choose/zero/confirm?license-class=zero&name=...&actor_href=http%3A%2F%2Fexample.org%2F&work_title=...&work_jurisdiction=DE&confirm=confirm&understand=confirm&lang=de&field1=weiter
+creativecommons.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
