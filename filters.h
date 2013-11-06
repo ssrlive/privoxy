@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.42 2011/07/30 15:17:35 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.43 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -45,15 +45,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-struct access_control_addr;
-struct client_state;
-struct http_request;
-struct http_response;
-struct current_action_spec;
-struct url_actions;
-struct url_spec;
 
 
 /*

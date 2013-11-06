@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.29 2011/09/04 11:10:56 fabiankeil Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.30 2012/12/07 12:43:05 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -41,12 +41,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* Structures taken from project.h */
-struct client_state;
-struct file_list;
-struct configuration_spec;
-struct url_spec;
 
 extern unsigned int sweep(void);
 extern char *read_config_line(FILE *fp, unsigned long *linenum, char **buf);
