@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.93 2013/06/21 14:46:09 fabiankeil Exp $
+ $Id: faq.sgml,v 2.94 2013/06/21 14:46:46 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.93 2013/06/21 14:46:09 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.94 2013/06/21 14:46:46 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -867,13 +867,23 @@ the differences?</title>
 <sect2 renderas="sect3" id="difficult">
 <title>Why is the configuration so complicated?</title>
  <para>
-  <quote>Complicated</quote> is in the eye of the beholder. Those that are
-  familiar with some of the underlying concepts, such as regular expression
-  syntax, take to it like a fish takes to water. Also, software that tries
-  hard to be <quote>user friendly</quote>, often lacks sophistication and
-  flexibility. There is always that trade-off there between power vs.
-  easy-of-use. Furthermore, anyone is welcome to contribute ideas and
-  implementations to enhance &my-app;.
+  <quote>Complicated</quote> is in the eye of the beholder.
+ </para>
+ <para>
+  Privoxy is currently mainly written by and for people who are already
+  familiar with the underlying concepts like regular expressions, HTTP and HTML,
+  or are willing to become familiar with them to be able to get the most
+  out of a powerful and flexible tool such as Privoxy.
+ </para>
+ <para>
+  While everybody is expected to be able to get a Privoxy default installation
+  up and running, fine-tuning requires a certain amount of background
+  information and Privoxy's documentation mainly concentrates on the
+  Privoxy-specific parts while only providing references to the rest.
+ </para>
+ <para>
+  If you or anyone you know has the skills, time and energy to
+  reduce the barrier of entry, please <link linkend="participate">get involved</link>.
  </para>
 </sect2>
 
@@ -2990,6 +3000,11 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.94  2013/06/21 14:46:46  fabiankeil
+Link to the SPI homepage instead of the "About SPI" page which no longer exists
+
+Reported by Mark Nelson in #3614557.
+
 Revision 2.93  2013/06/21 14:46:09  fabiankeil
 Update link to the SF registration form
 
