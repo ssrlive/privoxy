@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.94 2013/06/21 14:46:46 fabiankeil Exp $
+ $Id: faq.sgml,v 2.95 2013/11/06 16:28:58 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.94 2013/06/21 14:46:46 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.95 2013/11/06 16:28:58 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2584,7 +2584,6 @@ every time I start IE. What gives?</title>
  </para>
 </sect2>
 
-
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 renderas="sect3" id="macosximages">
 <title>In Mac OS X Panther (10.3), images often fail to load and/or I
@@ -2595,6 +2594,24 @@ every time I start IE. What gives?</title>
   understand the issue yet. In any case, changing the proxy setting to
   <literal>127.0.0.1</literal> instead of <literal>localhost</literal>
   works around the problem.
+ </para>
+</sect2>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect2 renderas="sect3" id="macosxaccountdeletion">
+<title>I just upgraded to Mac OS X 10.9 (Mavericks) and now &my-app; has stopped
+ working.</title>
+ <para>
+  The upgrade process to Mac OS X Mavericks (10.9) from an earlier version of OS
+  X deletes all user accounts that are either not part of OS X itself or are
+  not interactive user accounts (ones you log in with). Since,for the sake of
+  security, &my-app; runs as a non-privileged user that is created by its
+  installer (_privoxy), it can no longer start up once that account gets deleted
+  . The solution is to perform a complete uninstall using the supplied
+  <application>uninstall.command</application> script (either back up your
+  configuration files or select to not have the uninstaller remove them when it
+  prompts you) and then reinstall &my-app; using the installer package and merge
+  in your configuration.
  </para>
 </sect2>
 
@@ -3000,6 +3017,13 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.95  2013/11/06 16:28:58  fabiankeil
+Rephrase the 'Why is the configuration so complicated?' answer
+
+.. to be slightly less condescending.
+
+Anonymously suggested in #3615122.
+
 Revision 2.94  2013/06/21 14:46:46  fabiankeil
 Link to the SPI homepage instead of the "About SPI" page which no longer exists
 
