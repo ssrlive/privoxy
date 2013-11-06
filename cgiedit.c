@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.75 2012/03/09 17:55:49 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.76 2012/07/23 12:42:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -120,19 +120,6 @@ struct file_line
          int ivalue;
 
       } setting;
-
-      /* Add more data types here... e.g.
-
-
-      struct url_spec url[1];
-
-      struct
-      {
-         struct action_spec action[1];
-         const char * name;
-      } alias;
-
-      */
 
    } data;
 
