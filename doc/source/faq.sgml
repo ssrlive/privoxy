@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.95 2013/11/06 16:28:58 fabiankeil Exp $
+ $Id: faq.sgml,v 2.96 2013/11/06 19:24:18 diem Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.95 2013/11/06 16:28:58 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.96 2013/11/06 19:24:18 diem Exp $</pubdate>
 
 <!--
 
@@ -2604,10 +2604,10 @@ every time I start IE. What gives?</title>
  <para>
   The upgrade process to Mac OS X Mavericks (10.9) from an earlier version of OS
   X deletes all user accounts that are either not part of OS X itself or are
-  not interactive user accounts (ones you log in with). Since,for the sake of
+  not interactive user accounts (ones you log in with). Since, for the sake of
   security, &my-app; runs as a non-privileged user that is created by its
-  installer (_privoxy), it can no longer start up once that account gets deleted
-  . The solution is to perform a complete uninstall using the supplied
+  installer (_privoxy), it can no longer start up once that account gets deleted.
+  The solution is to perform a complete uninstall using the supplied
   <application>uninstall.command</application> script (either back up your
   configuration files or select to not have the uninstaller remove them when it
   prompts you) and then reinstall &my-app; using the installer package and merge
@@ -3017,6 +3017,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.96  2013/11/06 19:24:18  diem
+Added an entry for the _privoxy user account deletion issue when upgrading to OS X 10.9
+
 Revision 2.95  2013/11/06 16:28:58  fabiankeil
 Rephrase the 'Why is the configuration so complicated?' answer
 
