@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.201 2013/11/24 14:26:16 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.202 2013/11/24 14:26:27 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -603,7 +603,7 @@ struct action_spec
    unsigned long add;  /**< Actions to add.  A bit set to "1" means add action.    */
 
    /**
-    * Paramaters for those actions that require them.
+    * Parameters for those actions that require them.
     * Each entry is valid if & only if the corresponding entry in "flags" is
     * set.
     */
