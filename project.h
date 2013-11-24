@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.195 2012/12/07 12:45:20 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.196 2013/03/07 14:08:50 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -335,7 +335,6 @@ enum crunch_reason
  */
 struct http_response
 {
-  enum crunch_reason crunch_reason; /**< Why the response was generated in the first place. */
   char  *status;                    /**< HTTP status (string). */
   struct list headers[1];           /**< List of header lines. */
   char  *head;                      /**< Formatted http response head. */
@@ -344,6 +343,7 @@ struct http_response
   size_t content_length;            /**< Length of body, REQUIRED if binary body. */
   int    is_static;                 /**< Nonzero if the content will never change and
                                          should be cached by the browser (e.g. images). */
+  enum crunch_reason crunch_reason; /**< Why the response was generated in the first place. */
 };
 
 /**
