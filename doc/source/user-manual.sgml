@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.174 2013/03/02 14:39:24 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.175 2013/03/20 11:30:28 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.174 2013/03/02 14:39:24 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.175 2013/03/20 11:30:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2362,6 +2362,23 @@ for details.
 </para>
 
 </sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="negative-tag-patterns"><title>The Negative Tag Patterns</title>
+
+<para>
+ To match requests that do not have a certain tag, specify a negative tag pattern
+ by prefixing the tag pattern line with either <quote>NO-REQUEST-TAG:</quote>
+ or <quote>NO-RESPONSE-TAG:</quote> instead of <quote>TAG:</quote>.
+</para>
+
+<para>
+ Negative tag patterns created with <quote>NO-REQUEST-TAG:</quote> are checked
+ after all client headers are scanned, the ones created with <quote>NO-RESPONSE-TAG:</quote>
+ are checked after all server headers are scanned. In both cases all the created
+ tags are considered.
+</para>
+
 
 </sect2>
 
