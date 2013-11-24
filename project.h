@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.197 2013/11/24 14:21:58 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.198 2013/11/24 14:22:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -107,10 +107,6 @@
 #include <windows.h>
 #endif
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #ifdef _WIN32
 
@@ -1404,10 +1400,6 @@ struct configuration_spec
  * INCLUDES the trailing slash.
  */
 #define CGI_PREFIX  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef PROJECT_H_INCLUDED */
 

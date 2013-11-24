@@ -1,6 +1,6 @@
 #ifndef W32LOG_H_INCLUDED
 #define W32LOG_H_INCLUDED
-#define W32LOG_H_VERSION "$Id: w32log.h,v 1.15 2010/08/14 23:28:52 ler762 Exp $"
+#define W32LOG_H_VERSION "$Id: w32log.h,v 1.16 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
@@ -34,10 +34,6 @@
  *
  *********************************************************************/
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 extern HWND g_hwndLogFrame;
 
@@ -91,10 +87,6 @@ extern void LogShowActivity(void);
 /* Revision control strings from this header and associated .c file */
 extern const char w32log_rcs[];
 extern const char w32log_h_rcs[];
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef W32LOG_H_INCLUDED */
 

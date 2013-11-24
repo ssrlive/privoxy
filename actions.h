@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.20 2011/09/04 11:10:56 fabiankeil Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.21 2012/07/27 17:39:57 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -34,11 +34,6 @@
  *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *********************************************************************/
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 struct action_spec;
@@ -94,10 +89,6 @@ void unload_current_actions_file(void);
 /* Revision control strings from this header and associated .c file */
 extern const char actions_rcs[];
 extern const char actions_h_rcs[];
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef ACTIONS_H_INCLUDED */
 

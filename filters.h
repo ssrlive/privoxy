@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.43 2011/09/04 11:10:56 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.44 2013/11/06 16:27:37 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -41,11 +41,6 @@
 
 
 #include "project.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 
 /*
  * ACL checking
@@ -113,10 +108,6 @@ extern struct http_response *direct_response(struct client_state *csp);
  */
 extern const char filters_rcs[];
 extern const char filters_h_rcs[];
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef FILTERS_H_INCLUDED */
 

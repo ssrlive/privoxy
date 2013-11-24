@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.20 2011/09/04 11:10:56 fabiankeil Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.21 2012/10/12 11:17:48 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -40,10 +40,6 @@
 
 #include "project.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 struct client_state;
 
 extern jb_socket connect_to(const char *host, int portnum, struct client_state *csp);
@@ -77,10 +73,6 @@ extern const char jbsockets_h_rcs[];
 #define INADDR_NONE -1
 #endif
 
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef JBSOCKETS_H_INCLUDED */
 

@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.31 2011/10/30 16:20:12 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.32 2011/11/06 11:48:23 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -35,10 +35,6 @@
  *
  *********************************************************************/
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 struct client_state;
 struct file_list;
@@ -112,10 +108,6 @@ int main(int argc, char **argv);
 /* Revision control strings from this header and associated .c file */
 extern const char jcc_rcs[];
 extern const char jcc_h_rcs[];
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef JCC_H_INCLUDED */
 

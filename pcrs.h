@@ -11,15 +11,11 @@
  *
  *********************************************************************/
 
-#define PCRS_H_VERSION "$Id: pcrs.h,v 1.16 2007/04/30 15:02:19 fabiankeil Exp $"
+#define PCRS_H_VERSION "$Id: pcrs.h,v 1.17 2009/05/16 13:27:20 fabiankeil Exp $"
 
 
 #ifndef _PCRE_H
 #include <pcre.h>
-#endif
-
-#ifdef __cplusplus
-extern "C" {
 #endif
 
 /*
@@ -136,10 +132,6 @@ extern pcrs_job *pcrs_compile_dynamic_command(char *pcrs_command, const struct p
 #ifndef PCRS_BUFFER_SIZE
 #define PCRS_BUFFER_SIZE 4000
 #endif /* ndef PCRS_BUFFER_SIZE */
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef PCRS_H_INCLUDED */
 

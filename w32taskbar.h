@@ -1,6 +1,6 @@
 #ifndef W32TASKBAR_H_INCLUDED
 #define W32TASKBAR_H_INCLUDED
-#define W32TASKBAR_H_VERSION "$Id: w32taskbar.h,v 1.7 2009/05/16 13:27:20 fabiankeil Exp $"
+#define W32TASKBAR_H_VERSION "$Id: w32taskbar.h,v 1.8 2011/09/04 11:10:56 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32taskbar.h,v $
@@ -35,10 +35,6 @@
  *********************************************************************/
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern HWND CreateTrayWindow(HINSTANCE hInstance);
 extern BOOL TrayAddIcon(HWND hwnd, UINT uID, HICON hicon, const char *pszToolTip);
 extern BOOL TraySetIcon(HWND hwnd, UINT uID, HICON hicon);
@@ -47,10 +43,6 @@ extern BOOL TrayDeleteIcon(HWND hwnd, UINT uID);
 /* Revision control strings from this header and associated .c file */
 extern const char w32taskbar_rcs[];
 extern const char w32taskbar_h_rcs[];
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef W32TASKBAR_H_INCLUDED */
 

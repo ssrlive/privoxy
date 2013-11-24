@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.18 2011/11/06 11:41:05 fabiankeil Exp $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.19 2013/11/24 14:22:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -38,10 +38,6 @@
 
 #include "project.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern void free_http_request(struct http_request *http);
 #ifndef FEATURE_EXTENDED_HOST_PATTERNS
 extern jb_err init_domain_components(struct http_request *http);
@@ -66,10 +62,6 @@ extern jb_err parse_forwarder_address(char *address, char **hostname, int *port)
 /* Revision control strings from this header and associated .c file */
 extern const char urlmatch_rcs[];
 extern const char urlmatch_h_rcs[];
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* ndef URLMATCH_H_INCLUDED */
 
