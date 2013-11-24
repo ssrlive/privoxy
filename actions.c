@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.86 2012/11/11 12:37:10 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.87 2012/11/24 13:59:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -811,13 +811,13 @@ int update_action_bits_for_tag(struct client_state *csp, const char *tag)
       for (b = b->next; NULL != b; b = b->next)
       {
          /* skip the URL patterns, */
-         if (NULL == b->url->tag_regex)
+         if (NULL == b->url->pattern.tag_regex)
          {
             continue;
          }
 
          /* and check if one of the tag patterns matches the tag, */
-         if (0 == regexec(b->url->tag_regex, tag, 0, NULL, 0))
+         if (0 == regexec(b->url->pattern.tag_regex, tag, 0, NULL, 0))
          {
             /* if it does, update the action bit map, */
             if (merge_current_action(csp->action, b->action))

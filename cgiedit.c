@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.76 2012/07/23 12:42:53 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.77 2013/11/06 16:28:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1827,7 +1827,7 @@ static jb_err get_url_spec_param(struct client_state *csp,
    const char *orig_param;
    char *param;
    char *s;
-   struct url_spec compiled[1];
+   struct pattern_spec compiled[1];
    jb_err err;
 
    assert(csp);

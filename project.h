@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.196 2013/03/07 14:08:50 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.197 2013/11/24 14:21:58 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -346,15 +346,8 @@ struct http_response
   enum crunch_reason crunch_reason; /**< Why the response was generated in the first place. */
 };
 
-/**
- * A URL or a tag pattern.
- */
 struct url_spec
 {
-   /** The string which was parsed to produce this url_spec.
-       Used for debugging or display only.  */
-   char  *spec;
-
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
    regex_t *host_regex;/**< Regex for host matching                          */
 #else
@@ -367,17 +360,25 @@ struct url_spec
    char  *port_list;   /**< List of acceptable ports, or NULL to match all ports */
 
    regex_t *preg;      /**< Regex for matching path part                      */
-   regex_t *tag_regex; /**< Regex for matching tags                           */
 };
 
 /**
- * If you declare a static url_spec, this is the value to initialize it to zero.
+ * A URL or a tag pattern.
  */
-#ifndef FEATURE_EXTENDED_HOST_PATTERNS
-#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, 0, 0, NULL, NULL, NULL }
-#else
-#define URL_SPEC_INITIALIZER { NULL, NULL, NULL, NULL, NULL }
-#endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
+struct pattern_spec
+{
+   /** The string which was parsed to produce this pattern_spec.
+       Used for debugging or display only.  */
+   char  *spec;
+
+   union
+   {
+      struct url_spec url_spec;
+      regex_t *tag_regex;
+   } pattern;
+
+   unsigned int flags; /**< Bitmap with various pattern properties. */
+};
 
 /**
  * Constant for host part matching in URLs.  If set, indicates that the start of
@@ -627,7 +628,7 @@ struct action_spec
  */
 struct url_actions
 {
-   struct url_spec url[1];     /**< The URL or tag pattern. */
+   struct pattern_spec url[1]; /**< The URL or tag pattern. */
 
    struct action_spec *action; /**< Action settings that might be shared with
                                     the list entry before or after the current
@@ -1064,9 +1065,9 @@ struct file_list
  */
 struct block_spec
 {
-   struct url_spec url[1];   /**< The URL pattern              */
-   int    reject;            /**< FIXME: Please document this! */
-   struct block_spec *next;  /**< Next entry in linked list    */
+   struct pattern_spec url[1]; /**< The URL pattern              */
+   int    reject;              /**< FIXME: Please document this! */
+   struct block_spec *next;    /**< Next entry in linked list    */
 };
 
 /**
@@ -1082,7 +1083,7 @@ struct block_spec
 struct forward_spec
 {
    /** URL pattern that this forward_spec is for. */
-   struct url_spec url[1];
+   struct pattern_spec url[1];
 
    /** Connection type.  Must be SOCKS_NONE, SOCKS_4, SOCKS_4A or SOCKS_5. */
    enum forwarder_type type;
@@ -1103,11 +1104,6 @@ struct forward_spec
    struct forward_spec *next;
 };
 
-
-/**
- * Initializer for a static struct forward_spec.
- */
-#define FORWARD_SPEC_INITIALIZER { { URL_SPEC_INITIALIZER }, 0, NULL, 0, NULL, 0, NULL }
 
 /* Supported filter types */
 enum filter_type
@@ -1310,7 +1306,7 @@ struct configuration_spec
    struct list trust_info[1];
 
    /** FIXME: DOCME: Document this. */
-   struct url_spec *trust_list[MAX_TRUSTED_REFERRERS];
+   struct pattern_spec *trust_list[MAX_TRUSTED_REFERRERS];
 
 #endif /* def FEATURE_TRUST */
 

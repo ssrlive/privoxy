@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.94 2012/12/07 12:43:05 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.95 2013/01/13 15:38:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -829,7 +829,7 @@ int load_trustfile(struct client_state *csp)
    FILE *fp;
 
    struct block_spec *b, *bl;
-   struct url_spec **tl;
+   struct pattern_spec **tl;
 
    char *buf = NULL;
    int reject, trusted;
