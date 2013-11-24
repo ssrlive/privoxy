@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.77 2013/11/24 14:24:18 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.78 2013/11/24 14:25:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1106,6 +1106,23 @@ static int domain_match(const struct pattern_spec *pattern, const struct http_re
  *********************************************************************/
 jb_err create_pattern_spec(struct pattern_spec *pattern, char *buf)
 {
+   static const struct
+   {
+      /** The tag pattern prefix to match */
+      const char *prefix;
+
+      /** The length of the prefix to match */
+      const size_t prefix_length;
+
+      /** The pattern flag */
+      const unsigned flag;
+   } tag_pattern[] = {
+      { "TAG:",              4, PATTERN_SPEC_TAG_PATTERN},
+      { "NO-REQUEST-TAG:",  15, PATTERN_SPEC_NO_REQUEST_TAG_PATTERN},
+      { "NO-RESPONSE-TAG:", 16, PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN}
+   };
+   int i;
+
    assert(pattern);
    assert(buf);
 
@@ -1114,34 +1131,26 @@ jb_err create_pattern_spec(struct pattern_spec *pattern, char *buf)
    /* Remember the original specification for the CGI pages. */
    pattern->spec = strdup_or_die(buf);
 
-   /* Is it a positive tag pattern? */
-   if (0 == strncmpic(pattern->spec, "TAG:", 4))
+   /* Check if it's a tag pattern */
+   for (i = 0; i < SZ(tag_pattern); i++)
    {
-      /* The pattern starts with the first character after "TAG:" */
-      const char *tag_pattern = buf + 4;
-      pattern->flags |= PATTERN_SPEC_TAG_PATTERN;
-      return compile_pattern(tag_pattern, NO_ANCHORING, pattern, &pattern->pattern.tag_regex);
-   }
-   /* Is it a negative tag pattern? */
-   if (0 == strncmpic(pattern->spec, "NO-REQUEST-TAG:", 15))
-   {
-      /* The pattern starts with the first character after "NO-REQUEST-TAG:" */
-      const char *tag_pattern = buf + 15;
-      pattern->flags |= PATTERN_SPEC_NO_REQUEST_TAG_PATTERN;
-      return compile_pattern(tag_pattern, NO_ANCHORING, pattern, &pattern->pattern.tag_regex);
-   }
-   if (0 == strncmpic(pattern->spec, "NO-RESPONSE-TAG:", 16))
-   {
-      /* The pattern starts with the first character after "NO-RESPONSE-TAG:" */
-      const char *tag_pattern = buf + 16;
-      pattern->flags |= PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN;
-      return compile_pattern(tag_pattern, NO_ANCHORING, pattern, &pattern->pattern.tag_regex);
-   }
+      if (0 == strncmpic(pattern->spec, tag_pattern[i].prefix, tag_pattern[i].prefix_length))
+      {
+         /* The regex starts after the prefix */
+         const char *tag_regex = buf + tag_pattern[i].prefix_length;
 
-   pattern->flags |= PATTERN_SPEC_URL_PATTERN;
+         pattern->flags |= tag_pattern[i].flag;
+
+         return compile_pattern(tag_regex, NO_ANCHORING, pattern,
+            &pattern->pattern.tag_regex);
+      }
+   }
 
    /* If it isn't a tag pattern it must be an URL pattern. */
+   pattern->flags |= PATTERN_SPEC_URL_PATTERN;
+
    return compile_url_pattern(pattern, buf);
+
 }
 
 
