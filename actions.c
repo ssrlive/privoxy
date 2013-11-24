@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.87 2012/11/24 13:59:00 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.88 2013/11/24 14:22:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -810,8 +810,8 @@ int update_action_bits_for_tag(struct client_state *csp, const char *tag)
       /* and through all the action patterns, */
       for (b = b->next; NULL != b; b = b->next)
       {
-         /* skip the URL patterns, */
-         if (NULL == b->url->pattern.tag_regex)
+         /* skip everything but TAG patterns, */
+         if (!(b->url->flags & PATTERN_SPEC_TAG_PATTERN))
          {
             continue;
          }
@@ -832,6 +832,76 @@ int update_action_bits_for_tag(struct client_state *csp, const char *tag)
    }
 
    return updated;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  check_negative_tag_patterns
+ *
+ * Description :  Updates the action bits based on NO-*-TAG patterns.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  flag = The tag pattern type
+ *
+ * Returns     :  JB_ERR_OK in case off success, or
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err check_negative_tag_patterns(struct client_state *csp, unsigned int flag)
+{
+   struct list_entry *tag;
+   struct file_list *fl;
+   struct url_actions *b = NULL;
+   int i;
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      fl = csp->actions_list[i];
+      if ((fl == NULL) || ((b = fl->f) == NULL))
+      {
+         continue;
+      }
+      for (b = b->next; NULL != b; b = b->next)
+      {
+         int tag_found = 0;
+         if (0 == (b->url->flags & flag))
+         {
+            continue;
+         }
+         for (tag = csp->tags->first; NULL != tag; tag = tag->next)
+         {
+            if (0 == regexec(b->url->pattern.tag_regex, tag->str, 0, NULL, 0))
+            {
+               /*
+                * The pattern matches at least one tag, thus the action
+                * section doesn't apply and we don't need to look at the
+                * other tags.
+                */
+               tag_found = 1;
+               break;
+            }
+         }
+         if (!tag_found)
+         {
+            /*
+             * The pattern doesn't match any tags,
+             * thus the action section applies.
+             */
+            if (merge_current_action(csp->action, b->action))
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "Out of memory while changing action bits");
+               return JB_ERR_MEMORY;
+            }
+            log_error(LOG_LEVEL_HEADER, "Updated action bits based on: %s",
+               b->url->spec);
+         }
+      }
+   }
+
+   return JB_ERR_OK;
 }
 
 

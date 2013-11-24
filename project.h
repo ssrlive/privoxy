@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.198 2013/11/24 14:22:51 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.199 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -393,6 +393,17 @@ struct pattern_spec
  */
 #define ANCHOR_RIGHT 2
 
+/** Pattern spec bitmap: It's an URL pattern. */
+#define PATTERN_SPEC_URL_PATTERN          0x00000001UL
+
+/** Pattern spec bitmap: It's a TAG pattern. */
+#define PATTERN_SPEC_TAG_PATTERN          0x00000002UL
+
+/** Pattern spec bitmap: It's a NO-REQUEST-TAG pattern. */
+#define PATTERN_SPEC_NO_REQUEST_TAG_PATTERN 0x00000004UL
+
+/** Pattern spec bitmap: It's a NO-RESPONSE-TAG pattern. */
+#define PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN 0x00000008UL
 
 /**
  * An I/O buffer.  Holds a string which can be appended to, and can have data

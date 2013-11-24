@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.278 2013/08/06 12:58:28 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.279 2013/08/06 12:59:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1097,6 +1097,7 @@ static void enforce_header_order(struct list *headers, const struct list *ordere
    return;
 }
 
+
 /*********************************************************************
  *
  * Function    :  sed
@@ -1126,18 +1127,20 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
    const add_header_func_ptr *f;
    jb_err err = JB_ERR_OK;
 
+   scan_headers(csp);
+
    if (filter_server_headers)
    {
       v = server_patterns;
       f = add_server_headers;
+      check_negative_tag_patterns(csp, PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN);
    }
    else
    {
       v = client_patterns;
       f = add_client_headers;
+      check_negative_tag_patterns(csp, PATTERN_SPEC_NO_REQUEST_TAG_PATTERN);
    }
-
-   scan_headers(csp);
 
    while ((err == JB_ERR_OK) && (v->str != NULL))
    {

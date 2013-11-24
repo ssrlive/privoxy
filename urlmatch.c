@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.75 2012/12/07 12:49:47 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.76 2013/11/24 14:22:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -1114,13 +1114,31 @@ jb_err create_url_spec(struct pattern_spec *url, char *buf)
    /* Remember the original specification for the CGI pages. */
    url->spec = strdup_or_die(buf);
 
-   /* Is it a tag pattern? */
+   /* Is it a positive tag pattern? */
    if (0 == strncmpic(url->spec, "TAG:", 4))
    {
       /* The pattern starts with the first character after "TAG:" */
       const char *tag_pattern = buf + 4;
+      url->flags |= PATTERN_SPEC_TAG_PATTERN;
       return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->pattern.tag_regex);
    }
+   /* Is it a negative tag pattern? */
+   if (0 == strncmpic(url->spec, "NO-REQUEST-TAG:", 15))
+   {
+      /* The pattern starts with the first character after "NO-REQUEST-TAG:" */
+      const char *tag_pattern = buf + 15;
+      url->flags |= PATTERN_SPEC_NO_REQUEST_TAG_PATTERN;
+      return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->pattern.tag_regex);
+   }
+   if (0 == strncmpic(url->spec, "NO-RESPONSE-TAG:", 16))
+   {
+      /* The pattern starts with the first character after "NO-RESPONSE-TAG:" */
+      const char *tag_pattern = buf + 16;
+      url->flags |= PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN;
+      return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->pattern.tag_regex);
+   }
+
+   url->flags |= PATTERN_SPEC_URL_PATTERN;
 
    /* If it isn't a tag pattern it must be an URL pattern. */
    return compile_url_pattern(url, buf);
@@ -1250,9 +1268,9 @@ static int path_matches(const char *path, const struct pattern_spec *pattern)
 int url_match(const struct pattern_spec *pattern,
               const struct http_request *http)
 {
-   if (pattern->pattern.tag_regex != NULL)
+   if (!(pattern->flags & PATTERN_SPEC_URL_PATTERN))
    {
-      /* It's a tag pattern and shouldn't be matched against URLs */
+      /* It's not an URL pattern and thus shouldn't be matched against URLs */
       return 0;
    }
 
