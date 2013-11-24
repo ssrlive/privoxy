@@ -1,6 +1,6 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
-#define ACTIONS_H_VERSION "$Id: actions.h,v 1.22 2013/11/24 14:23:28 fabiankeil Exp $"
+#define ACTIONS_H_VERSION "$Id: actions.h,v 1.23 2013/11/24 14:24:17 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.h,v $
@@ -60,9 +60,6 @@ extern void init_action(struct action_spec *dest);
 extern void free_action(struct action_spec *src);
 extern jb_err merge_actions (struct action_spec *dest,
                              const struct action_spec *src);
-#if 0
-extern int update_action_bits_for_all_tags(struct client_state *csp);
-#endif
 extern int update_action_bits_for_tag(struct client_state *csp, const char *tag);
 extern jb_err check_negative_tag_patterns(struct client_state *csp, unsigned int flag);
 extern jb_err copy_action (struct action_spec *dest,
