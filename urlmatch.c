@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.76 2013/11/24 14:22:51 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.77 2013/11/24 14:24:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -610,7 +610,7 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
    *regex = zalloc(sizeof(**regex));
    if (NULL == *regex)
    {
-      free_url_spec(url);
+      free_pattern_spec(url);
       return JB_ERR_MEMORY;
    }
 
@@ -628,7 +628,7 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
       rebuf[errlen] = '\0';
       log_error(LOG_LEVEL_ERROR, "error compiling %s from %s: %s",
          pattern, url->spec, rebuf);
-      free_url_spec(url);
+      free_pattern_spec(url);
 
       return JB_ERR_PARSE;
    }
@@ -801,7 +801,7 @@ static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pa
 
    if (url->dcount < 0)
    {
-      free_url_spec(url);
+      free_pattern_spec(url);
       return JB_ERR_PARSE;
    }
    else if (url->dcount != 0)
@@ -1084,18 +1084,18 @@ static int domain_match(const struct pattern_spec *pattern, const struct http_re
 
 /*********************************************************************
  *
- * Function    :  create_url_spec
+ * Function    :  create_pattern_spec
  *
- * Description :  Creates a "url_spec" structure from a string.
- *                When finished, free with free_url_spec().
+ * Description :  Creates a "pattern_spec" structure from a string.
+ *                When finished, free with free_pattern_spec().
  *
  * Parameters  :
- *          1  :  url = Target url_spec to be filled in.  Will be
- *                      zeroed before use.
+ *          1  :  pattern = Target pattern_spec to be filled in.
+ *                          Will be zeroed before use.
  *          2  :  buf = Source pattern, null terminated.  NOTE: The
  *                      contents of this buffer are destroyed by this
  *                      function.  If this function succeeds, the
- *                      buffer is copied to url->spec.  If this
+ *                      buffer is copied to pattern->spec.  If this
  *                      function fails, the contents of the buffer
  *                      are lost forever.
  *
@@ -1104,86 +1104,86 @@ static int domain_match(const struct pattern_spec *pattern, const struct http_re
  *                               written to system log)
  *
  *********************************************************************/
-jb_err create_url_spec(struct pattern_spec *url, char *buf)
+jb_err create_pattern_spec(struct pattern_spec *pattern, char *buf)
 {
-   assert(url);
+   assert(pattern);
    assert(buf);
 
-   memset(url, '\0', sizeof(*url));
+   memset(pattern, '\0', sizeof(*pattern));
 
    /* Remember the original specification for the CGI pages. */
-   url->spec = strdup_or_die(buf);
+   pattern->spec = strdup_or_die(buf);
 
    /* Is it a positive tag pattern? */
-   if (0 == strncmpic(url->spec, "TAG:", 4))
+   if (0 == strncmpic(pattern->spec, "TAG:", 4))
    {
       /* The pattern starts with the first character after "TAG:" */
       const char *tag_pattern = buf + 4;
-      url->flags |= PATTERN_SPEC_TAG_PATTERN;
-      return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->pattern.tag_regex);
+      pattern->flags |= PATTERN_SPEC_TAG_PATTERN;
+      return compile_pattern(tag_pattern, NO_ANCHORING, pattern, &pattern->pattern.tag_regex);
    }
    /* Is it a negative tag pattern? */
-   if (0 == strncmpic(url->spec, "NO-REQUEST-TAG:", 15))
+   if (0 == strncmpic(pattern->spec, "NO-REQUEST-TAG:", 15))
    {
       /* The pattern starts with the first character after "NO-REQUEST-TAG:" */
       const char *tag_pattern = buf + 15;
-      url->flags |= PATTERN_SPEC_NO_REQUEST_TAG_PATTERN;
-      return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->pattern.tag_regex);
+      pattern->flags |= PATTERN_SPEC_NO_REQUEST_TAG_PATTERN;
+      return compile_pattern(tag_pattern, NO_ANCHORING, pattern, &pattern->pattern.tag_regex);
    }
-   if (0 == strncmpic(url->spec, "NO-RESPONSE-TAG:", 16))
+   if (0 == strncmpic(pattern->spec, "NO-RESPONSE-TAG:", 16))
    {
       /* The pattern starts with the first character after "NO-RESPONSE-TAG:" */
       const char *tag_pattern = buf + 16;
-      url->flags |= PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN;
-      return compile_pattern(tag_pattern, NO_ANCHORING, url, &url->pattern.tag_regex);
+      pattern->flags |= PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN;
+      return compile_pattern(tag_pattern, NO_ANCHORING, pattern, &pattern->pattern.tag_regex);
    }
 
-   url->flags |= PATTERN_SPEC_URL_PATTERN;
+   pattern->flags |= PATTERN_SPEC_URL_PATTERN;
 
    /* If it isn't a tag pattern it must be an URL pattern. */
-   return compile_url_pattern(url, buf);
+   return compile_url_pattern(pattern, buf);
 }
 
 
 /*********************************************************************
  *
- * Function    :  free_url_spec
+ * Function    :  free_pattern_spec
  *
- * Description :  Called from the "unloaders".  Freez the url
+ * Description :  Called from the "unloaders".  Freez the pattern
  *                structure elements.
  *
  * Parameters  :
- *          1  :  url = pointer to a pattern_spec structure.
+ *          1  :  pattern = pointer to a pattern_spec structure.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void free_url_spec(struct pattern_spec *url)
+void free_pattern_spec(struct pattern_spec *pattern)
 {
-   if (url == NULL) return;
+   if (pattern == NULL) return;
 
-   freez(url->spec);
+   freez(pattern->spec);
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
-   if (url->pattern.url_spec.host_regex)
+   if (pattern->pattern.url_spec.host_regex)
    {
-      regfree(url->pattern.url_spec.host_regex);
-      freez(url->pattern.url_spec.host_regex);
+      regfree(pattern->pattern.url_spec.host_regex);
+      freez(pattern->pattern.url_spec.host_regex);
    }
 #else
-   freez(url->pattern.url_spec.dbuffer);
-   freez(url->pattern.url_spec.dvec);
-   url->pattern.url_spec.dcount = 0;
+   freez(pattern->pattern.url_spec.dbuffer);
+   freez(pattern->pattern.url_spec.dvec);
+   pattern->pattern.url_spec.dcount = 0;
 #endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
-   freez(url->pattern.url_spec.port_list);
-   if (url->pattern.url_spec.preg)
+   freez(pattern->pattern.url_spec.port_list);
+   if (pattern->pattern.url_spec.preg)
    {
-      regfree(url->pattern.url_spec.preg);
-      freez(url->pattern.url_spec.preg);
+      regfree(pattern->pattern.url_spec.preg);
+      freez(pattern->pattern.url_spec.preg);
    }
-   if (url->pattern.tag_regex)
+   if (pattern->pattern.tag_regex)
    {
-      regfree(url->pattern.tag_regex);
-      freez(url->pattern.tag_regex);
+      regfree(pattern->pattern.tag_regex);
+      freez(pattern->pattern.tag_regex);
    }
 }
 

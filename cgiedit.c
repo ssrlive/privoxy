@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.77 2013/11/06 16:28:00 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.78 2013/11/24 14:22:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1875,14 +1875,14 @@ static jb_err get_url_spec_param(struct client_state *csp,
       free(param);
       return JB_ERR_MEMORY;
    }
-   err = create_url_spec(compiled, s);
+   err = create_pattern_spec(compiled, s);
    free(s);
    if (err)
    {
       free(param);
       return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
    }
-   free_url_spec(compiled);
+   free_pattern_spec(compiled);
 
    if (param[strlen(param) - 1] == '\\')
    {
@@ -1911,14 +1911,14 @@ static jb_err get_url_spec_param(struct client_state *csp,
          free(param);
          return JB_ERR_MEMORY;
       }
-      err = create_url_spec(compiled, s);
+      err = create_pattern_spec(compiled, s);
       free(s);
       if (err)
       {
          free(param);
          return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
       }
-      free_url_spec(compiled);
+      free_pattern_spec(compiled);
    }
 
    *pvalue = param;

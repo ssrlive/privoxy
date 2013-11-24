@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.95 2013/01/13 15:38:14 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.96 2013/11/24 14:22:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -779,7 +779,7 @@ static void unload_trustfile(void *f)
    {
       next = cur->next;
 
-      free_url_spec(cur->url);
+      free_pattern_spec(cur->url);
       free(cur);
 
       cur = next;
@@ -908,7 +908,7 @@ int load_trustfile(struct client_state *csp)
       b->reject = reject;
 
       /* Save the URL pattern */
-      if (create_url_spec(b->url, buf))
+      if (create_pattern_spec(b->url, buf))
       {
          fclose(fp);
          goto load_trustfile_error;
@@ -1014,7 +1014,7 @@ static void unload_re_filterfile(void *f)
  *********************************************************************/
 void unload_forward_spec(struct forward_spec *fwd)
 {
-   free_url_spec(fwd->url);
+   free_pattern_spec(fwd->url);
    freez(fwd->gateway_host);
    freez(fwd->forward_host);
    free(fwd);

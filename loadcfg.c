@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.137 2013/03/07 14:08:49 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.138 2013/04/23 09:42:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -209,7 +209,7 @@ static void unload_configfile (void * data)
    while (cur_fwd != NULL)
    {
       struct forward_spec * next_fwd = cur_fwd->next;
-      free_url_spec(cur_fwd->url);
+      free_pattern_spec(cur_fwd->url);
 
       freez(cur_fwd->gateway_host);
       freez(cur_fwd->forward_host);
@@ -937,7 +937,7 @@ struct configuration_spec * load_config(void)
             cur_fwd->type = SOCKS_NONE;
 
             /* Save the URL pattern */
-            if (create_url_spec(cur_fwd->url, vec[0]))
+            if (create_pattern_spec(cur_fwd->url, vec[0]))
             {
                log_error(LOG_LEVEL_ERROR, "Bad URL specifier for forward "
                      "directive in configuration file.");
@@ -992,7 +992,7 @@ struct configuration_spec * load_config(void)
             cur_fwd->type = SOCKS_4;
 
             /* Save the URL pattern */
-            if (create_url_spec(cur_fwd->url, vec[0]))
+            if (create_pattern_spec(cur_fwd->url, vec[0]))
             {
                log_error(LOG_LEVEL_ERROR, "Bad URL specifier for forward-socks4 "
                      "directive in configuration file.");
@@ -1072,7 +1072,7 @@ struct configuration_spec * load_config(void)
             }
 
             /* Save the URL pattern */
-            if (create_url_spec(cur_fwd->url, vec[0]))
+            if (create_pattern_spec(cur_fwd->url, vec[0]))
             {
                log_error(LOG_LEVEL_ERROR, "Bad URL specifier for forward-socks4a "
                      "directive in configuration file.");

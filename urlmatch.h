@@ -1,6 +1,6 @@
 #ifndef URLMATCH_H_INCLUDED
 #define URLMATCH_H_INCLUDED
-#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.19 2013/11/24 14:22:51 fabiankeil Exp $"
+#define URLMATCH_H_VERSION "$Id: urlmatch.h,v 1.20 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.h,v $
@@ -53,8 +53,8 @@ extern int url_requires_percent_encoding(const char *url);
 extern int url_match(const struct pattern_spec *pattern,
                      const struct http_request *http);
 
-extern jb_err create_url_spec(struct pattern_spec *url, char *buf);
-extern void free_url_spec(struct pattern_spec *url);
+extern jb_err create_pattern_spec(struct pattern_spec *url, char *buf);
+extern void free_pattern_spec(struct pattern_spec *url);
 extern int match_portlist(const char *portlist, int port);
 extern jb_err parse_forwarder_address(char *address, char **hostname, int *port);
 
