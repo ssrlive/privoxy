@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.200 2013/11/24 14:24:18 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.201 2013/11/24 14:26:16 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -198,14 +198,6 @@ typedef enum privoxy_err jb_err;
  * real fix ready for inclusion.
  */
 #define HOSTENT_BUFFER_SIZE 2048
-
-/**
- * Do not use.  Originally this was so that you can
- * say "while (FOREVER) { ...do something... }".
- * However, this gives a warning with some compilers (e.g. VC++).
- * Instead, use "for (;;) { ...do something... }".
- */
-#define FOREVER 1
 
 /**
  * Default TCP/IP address to listen on, as a string.
