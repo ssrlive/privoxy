@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.78 2013/11/24 14:25:19 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.79 2013/11/24 14:25:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -774,22 +774,22 @@ static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pa
     */
    if (host_pattern[strlen(host_pattern) - 1] == '.')
    {
-      url->unanchored |= ANCHOR_RIGHT;
+      url->pattern.url_spec.unanchored |= ANCHOR_RIGHT;
    }
    if (host_pattern[0] == '.')
    {
-      url->unanchored |= ANCHOR_LEFT;
+      url->pattern.url_spec.unanchored |= ANCHOR_LEFT;
    }
 
    /*
     * Split domain into components
     */
-   url->dbuffer = strdup_or_die(host_pattern);
+   url->pattern.url_spec.dbuffer = strdup_or_die(host_pattern);
 
    /*
     * Map to lower case
     */
-   for (p = url->dbuffer; *p ; p++)
+   for (p = url->pattern.url_spec.dbuffer; *p ; p++)
    {
       *p = (char)privoxy_tolower(*p);
    }
@@ -797,23 +797,23 @@ static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pa
    /*
     * Split the domain name into components
     */
-   url->dcount = ssplit(url->dbuffer, ".", v, SZ(v));
+   url->pattern.url_spec.dcount = ssplit(url->pattern.url_spec.dbuffer, ".", v, SZ(v));
 
-   if (url->dcount < 0)
+   if (url->pattern.url_spec.dcount < 0)
    {
       free_pattern_spec(url);
       return JB_ERR_PARSE;
    }
-   else if (url->dcount != 0)
+   else if (url->pattern.url_spec.dcount != 0)
    {
       /*
        * Save a copy of the pointers in dvec
        */
-      size = (size_t)url->dcount * sizeof(*url->dvec);
+      size = (size_t)url->pattern.url_spec.dcount * sizeof(*url->pattern.url_spec.dvec);
 
-      url->dvec = malloc_or_die(size);
+      url->pattern.url_spec.dvec = malloc_or_die(size);
 
-      memcpy(url->dvec, v, size);
+      memcpy(url->pattern.url_spec.dvec, v, size);
    }
    /*
     * else dcount == 0 in which case we needn't do anything,
@@ -1003,25 +1003,25 @@ static int simple_domaincmp(char **pv, char **fv, int len)
  * Function    :  domain_match
  *
  * Description :  Domain-wise Compare fqdn's. Governed by the bimap in
- *                pattern->unachored, the comparison is un-, left-,
+ *                p.pattern->unachored, the comparison is un-, left-,
  *                right-anchored, or both.
  *                The individual domain names are compared with
  *                simplematch().
  *
  * Parameters  :
- *          1  :  pattern = a domain that may contain a '*' as a wildcard.
+ *          1  :  p = a domain that may contain a '*' as a wildcard.
  *          2  :  fqdn = domain name against which the patterns are compared.
  *
  * Returns     :  0 => domains are equivalent, else no match.
  *
  *********************************************************************/
-static int domain_match(const struct pattern_spec *pattern, const struct http_request *fqdn)
+static int domain_match(const struct pattern_spec *p, const struct http_request *fqdn)
 {
    char **pv, **fv;  /* vectors  */
    int    plen, flen;
-   int unanchored = pattern->unanchored & (ANCHOR_RIGHT | ANCHOR_LEFT);
+   int unanchored = p->pattern.url_spec.unanchored & (ANCHOR_RIGHT | ANCHOR_LEFT);
 
-   plen = pattern->dcount;
+   plen = p->pattern.url_spec.dcount;
    flen = fqdn->dcount;
 
    if (flen < plen)
@@ -1030,7 +1030,7 @@ static int domain_match(const struct pattern_spec *pattern, const struct http_re
       return 1;
    }
 
-   pv   = pattern->dvec;
+   pv   = p->pattern.url_spec.dvec;
    fv   = fqdn->dvec;
 
    if (unanchored == ANCHOR_LEFT)
