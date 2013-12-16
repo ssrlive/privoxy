@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.56 2013/11/24 14:21:06 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.57 2013/11/24 14:21:17 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -153,6 +153,7 @@ Current Privoxy Team:
  Spinor S.
  Peter Thoenen
  Martin Thomas
+ Reuben Thomas
  Bobby G. Vinyard
  Jochen Voss
  David Wagner
