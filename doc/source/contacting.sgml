@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.35 2013/01/25 14:26:10 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.36 2013/03/02 14:39:38 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -257,6 +257,8 @@ debug  8192 # Non-fatal errors</literallayout>
    <para>
     <quote>Bugs</quote> in the programming code that makes up
     <application>Privoxy</application>, such as that might cause a crash.
+    Documentation issues, for example spelling errors and unclear descriptions,
+    are bugs, too.
    </para>
   </listitem>
 </itemizedlist>
