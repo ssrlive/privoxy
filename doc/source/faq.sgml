@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.96 2013/11/06 19:24:18 diem Exp $
+ $Id: faq.sgml,v 2.97 2013/11/07 14:42:02 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.96 2013/11/06 19:24:18 diem Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.97 2013/11/07 14:42:02 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -394,7 +394,7 @@ Privoxy. Why should I use Privoxy at all?</title>
   and <application>Privoxy's</application> privacy enhancing features
   at the same time. While your browser probably lacks some features
   &my-app; offers, it should also be able to do some things more
-  reliable, for example restricting and suppressing JavaScript.
+  reliably, for example restricting and suppressing JavaScript.
  </para>
 </sect2>
 
@@ -3017,6 +3017,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.97  2013/11/07 14:42:02  fabiankeil
+White-space adjustments for the previous commit
+
 Revision 2.96  2013/11/06 19:24:18  diem
 Added an entry for the _privoxy user account deletion issue when upgrading to OS X 10.9
 
