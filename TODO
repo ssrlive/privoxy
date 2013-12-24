@@ -1,4 +1,4 @@
-$Id: TODO,v 1.86 2013/10/30 14:31:23 fabiankeil Exp $
+$Id: TODO,v 1.87 2013/10/30 14:31:37 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -229,10 +229,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 89) When multiple block actions apply, consider showing all the block
     reasons on the blocked page that haven't been overruled, not just
     the last one.
-
-90) Implement NO-TAG: patterns that enable a section if the
-    provided pattern doesn't match any TAG. This would make
-    some things cleaner.
 
 91) Add an optional limit for internal redirects. It would probably
     be reasonable to default to a limit of one and showing an error
