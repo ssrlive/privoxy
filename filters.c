@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.178 2013/11/24 14:22:51 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.179 2013/12/24 13:32:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1638,80 +1638,80 @@ static char *pcrs_filter_response(struct client_state *csp)
    for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
         filtername != NULL; filtername = filtername->next)
    {
+      int current_hits = 0; /* Number of hits caused by this filter */
+      int job_number   = 0; /* Which job we're currently executing  */
+      int job_hits     = 0; /* How many hits the current job caused */
+      pcrs_job *joblist;
+
       b = get_filter(csp, filtername->str, FT_CONTENT_FILTER);
       if (b == NULL)
       {
          continue;
       }
+
+      joblist = b->joblist;
+
+      if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+
+      if (NULL == joblist)
+      {
+         log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
+         continue;
+      }
+
+      prev_size = size;
+      /* Apply all jobs from the joblist */
+      for (job = joblist; NULL != job; job = job->next)
+      {
+         job_number++;
+         job_hits = pcrs_execute(job, old, size, &new, &size);
+
+         if (job_hits >= 0)
          {
-            int current_hits = 0; /* Number of hits caused by this filter */
-            int job_number   = 0; /* Which job we're currently executing  */
-            int job_hits     = 0; /* How many hits the current job caused */
-            pcrs_job *joblist = b->joblist;
-
-            if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
-
-            if (NULL == joblist)
+            /*
+             * That went well. Continue filtering
+             * and use the result of this job as
+             * input for the next one.
+             */
+            current_hits += job_hits;
+            if (old != csp->iob->cur)
             {
-               log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
-               continue;
+               freez(old);
             }
-
-            prev_size = size;
-            /* Apply all jobs from the joblist */
-            for (job = joblist; NULL != job; job = job->next)
-            {
-               job_number++;
-               job_hits = pcrs_execute(job, old, size, &new, &size);
-
-               if (job_hits >= 0)
-               {
-                  /*
-                   * That went well. Continue filtering
-                   * and use the result of this job as
-                   * input for the next one.
-                   */
-                  current_hits += job_hits;
-                  if (old != csp->iob->cur)
-                  {
-                     freez(old);
-                  }
-                  old = new;
-               }
-               else
-               {
-                  /*
-                   * This job caused an unexpected error. Inform the user
-                   * and skip the rest of the jobs in this filter. We could
-                   * continue with the next job, but usually the jobs
-                   * depend on each other or are similar enough to
-                   * fail for the same reason.
-                   *
-                   * At the moment our pcrs expects the error codes of pcre 3.4,
-                   * but newer pcre versions can return additional error codes.
-                   * As a result pcrs_strerror()'s error message might be
-                   * "Unknown error ...", therefore we print the numerical value
-                   * as well.
-                   *
-                   * XXX: Is this important enough for LOG_LEVEL_ERROR or
-                   * should we use LOG_LEVEL_RE_FILTER instead?
-                   */
-                  log_error(LOG_LEVEL_ERROR, "Skipped filter \'%s\' after job number %u: %s (%d)",
-                     b->name, job_number, pcrs_strerror(job_hits), job_hits);
-                  break;
-               }
-            }
-
-            if (b->dynamic) pcrs_free_joblist(joblist);
-
-            log_error(LOG_LEVEL_RE_FILTER,
-               "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
-               csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
-
-            hits += current_hits;
+            old = new;
+         }
+         else
+         {
+            /*
+             * This job caused an unexpected error. Inform the user
+             * and skip the rest of the jobs in this filter. We could
+             * continue with the next job, but usually the jobs
+             * depend on each other or are similar enough to
+             * fail for the same reason.
+             *
+             * At the moment our pcrs expects the error codes of pcre 3.4,
+             * but newer pcre versions can return additional error codes.
+             * As a result pcrs_strerror()'s error message might be
+             * "Unknown error ...", therefore we print the numerical value
+             * as well.
+             *
+             * XXX: Is this important enough for LOG_LEVEL_ERROR or
+             * should we use LOG_LEVEL_RE_FILTER instead?
+             */
+            log_error(LOG_LEVEL_ERROR, "Skipped filter \'%s\' after job number %u: %s (%d)",
+               b->name, job_number, pcrs_strerror(job_hits), job_hits);
+            break;
          }
       }
 
+      if (b->dynamic) pcrs_free_joblist(joblist);
+
+      log_error(LOG_LEVEL_RE_FILTER,
+         "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
+         csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
+
+      hits += current_hits;
+   }
 
    /*
     * If there were no hits, destroy our copy and let
