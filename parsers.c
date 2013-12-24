@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.280 2013/11/24 14:24:17 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.281 2013/12/24 13:34:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1304,117 +1304,121 @@ static jb_err header_tagger(struct client_state *csp, char *header)
       return JB_ERR_OK;
    }
 
-         /* Execute all applying taggers */
-         for (tag_name = csp->action->multi[multi_action_index]->first;
-              NULL != tag_name; tag_name = tag_name->next)
+   /* Execute all applying taggers */
+   for (tag_name = csp->action->multi[multi_action_index]->first;
+        NULL != tag_name; tag_name = tag_name->next)
+   {
+      char *modified_tag = NULL;
+      char *tag = header;
+      size_t size = header_length;
+      pcrs_job *joblist;
+
+      b = get_filter(csp, tag_name->str, wanted_filter_type);
+      if (b == NULL)
+      {
+         continue;
+      }
+
+      joblist = b->joblist;
+
+      if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+
+      if (NULL == joblist)
+      {
+         log_error(LOG_LEVEL_RE_FILTER,
+            "Tagger %s has empty joblist. Nothing to do.", b->name);
+         continue;
+      }
+
+      /* execute their pcrs_joblist on the header. */
+      for (job = joblist; NULL != job; job = job->next)
+      {
+         const int hits = pcrs_execute(job, tag, size, &modified_tag, &size);
+
+         if (0 < hits)
          {
-            b = get_filter(csp, tag_name->str, wanted_filter_type);
-            if (b != NULL)
+            /* Success, continue with the modified version. */
+            if (tag != header)
             {
-               char *modified_tag = NULL;
-               char *tag = header;
-               size_t size = header_length;
-               pcrs_job *joblist = b->joblist;
+               freez(tag);
+            }
+            tag = modified_tag;
+         }
+         else
+         {
+            /* Tagger doesn't match */
+            if (0 > hits)
+            {
+               /* Regex failure, log it but continue anyway. */
+               assert(NULL != header);
+               log_error(LOG_LEVEL_ERROR,
+                  "Problems with tagger \'%s\' and header \'%s\': %s",
+                  b->name, *header, pcrs_strerror(hits));
+            }
+            freez(modified_tag);
+         }
+      }
 
-               if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+      if (b->dynamic) pcrs_free_joblist(joblist);
 
-               if (NULL == joblist)
+      /* If this tagger matched */
+      if (tag != header)
+      {
+         if (0 == size)
+         {
+            /*
+             * There is no technical limitation which makes
+             * it impossible to use empty tags, but I assume
+             * no one would do it intentionally.
+             */
+            freez(tag);
+            log_error(LOG_LEVEL_INFO,
+               "Tagger \'%s\' created an empty tag. Ignored.", b->name);
+            continue;
+         }
+
+         if (!list_contains_item(csp->tags, tag))
+         {
+            if (JB_ERR_OK != enlist(csp->tags, tag))
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "Insufficient memory to add tag \'%s\', "
+                  "based on tagger \'%s\' and header \'%s\'",
+                  tag, b->name, *header);
+            }
+            else
+            {
+               char *action_message;
+               /*
+                * update the action bits right away, to make
+                * tagging based on tags set by earlier taggers
+                * of the same kind possible.
+                */
+               if (update_action_bits_for_tag(csp, tag))
                {
-                  log_error(LOG_LEVEL_RE_FILTER,
-                     "Tagger %s has empty joblist. Nothing to do.", b->name);
-                  continue;
+                  action_message = "Action bits updated accordingly.";
+               }
+               else
+               {
+                  action_message = "No action bits update necessary.";
                }
 
-               /* execute their pcrs_joblist on the header. */
-               for (job = joblist; NULL != job; job = job->next)
-               {
-                  const int hits = pcrs_execute(job, tag, size, &modified_tag, &size);
-
-                  if (0 < hits)
-                  {
-                     /* Success, continue with the modified version. */
-                     if (tag != header)
-                     {
-                        freez(tag);
-                     }
-                     tag = modified_tag;
-                  }
-                  else
-                  {
-                     /* Tagger doesn't match */
-                     if (0 > hits)
-                     {
-                        /* Regex failure, log it but continue anyway. */
-                        assert(NULL != header);
-                        log_error(LOG_LEVEL_ERROR,
-                           "Problems with tagger \'%s\' and header \'%s\': %s",
-                           b->name, *header, pcrs_strerror(hits));
-                     }
-                     freez(modified_tag);
-                  }
-               }
-
-               if (b->dynamic) pcrs_free_joblist(joblist);
-
-               /* If this tagger matched */
-               if (tag != header)
-               {
-                  if (0 == size)
-                  {
-                     /*
-                      * There is no technical limitation which makes
-                      * it impossible to use empty tags, but I assume
-                      * no one would do it intentionally.
-                      */
-                     freez(tag);
-                     log_error(LOG_LEVEL_INFO,
-                        "Tagger \'%s\' created an empty tag. Ignored.",
-                        b->name);
-                     continue;
-                  }
-
-                  if (!list_contains_item(csp->tags, tag))
-                  {
-                     if (JB_ERR_OK != enlist(csp->tags, tag))
-                     {
-                        log_error(LOG_LEVEL_ERROR,
-                           "Insufficient memory to add tag \'%s\', "
-                           "based on tagger \'%s\' and header \'%s\'",
-                           tag, b->name, *header);
-                     }
-                     else
-                     {
-                        char *action_message;
-                        /*
-                         * update the action bits right away, to make
-                         * tagging based on tags set by earlier taggers
-                         * of the same kind possible.
-                         */
-                        if (update_action_bits_for_tag(csp, tag))
-                        {
-                           action_message = "Action bits updated accordingly.";
-                        }
-                        else
-                        {
-                           action_message = "No action bits update necessary.";
-                        }
-
-                        log_error(LOG_LEVEL_HEADER,
-                           "Tagger \'%s\' added tag \'%s\'. %s",
-                           b->name, tag, action_message);
-                     }
-                  }
-                  else
-                  {
-                     /* XXX: Is this log-worthy? */
-                     log_error(LOG_LEVEL_HEADER,
-                        "Tagger \'%s\' didn't add tag \'%s\'. "
-                        "Tag already present", b->name, tag);
-                  }
-                  freez(tag);
-               }
+               log_error(LOG_LEVEL_HEADER,
+                  "Tagger \'%s\' added tag \'%s\'. %s",
+                  b->name, tag, action_message);
             }
          }
+         else
+         {
+            /* XXX: Is this log-worthy? */
+            log_error(LOG_LEVEL_HEADER,
+               "Tagger \'%s\' didn't add tag \'%s\'. Tag already present",
+               b->name, tag);
+         }
+         freez(tag);
+      }
+   }
+
    return JB_ERR_OK;
 }
 
@@ -1477,62 +1481,66 @@ static jb_err filter_header(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
-         /* Execute all applying header filters */
-         for (filtername = csp->action->multi[multi_action_index]->first;
-              filtername ; filtername = filtername->next)
+   /* Execute all applying header filters */
+   for (filtername = csp->action->multi[multi_action_index]->first;
+        filtername != NULL; filtername = filtername->next)
+   {
+      int current_hits = 0;
+      pcrs_job *joblist;
+
+      b = get_filter(csp, filtername->str, wanted_filter_type);
+      if (b == NULL)
+      {
+         continue;
+      }
+
+      joblist = b->joblist;
+
+      if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+
+      if (NULL == joblist)
+      {
+         log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
+         continue;
+      }
+
+      log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %d) with \'%s\' ...",
+         *header, size, b->name);
+
+      /* Apply all jobs from the joblist */
+      for (job = joblist; NULL != job; job = job->next)
+      {
+         matches = pcrs_execute(job, *header, size, &newheader, &size);
+         if (0 < matches)
          {
-            b = get_filter(csp, filtername->str, wanted_filter_type);
-            if (b != NULL)
+            current_hits += matches;
+            log_error(LOG_LEVEL_HEADER, "Transforming \"%s\" to \"%s\"", *header, newheader);
+            freez(*header);
+            *header = newheader;
+         }
+         else if (0 == matches)
+         {
+            /* Filter doesn't change header */
+            freez(newheader);
+         }
+         else
+         {
+            /* RegEx failure */
+            log_error(LOG_LEVEL_ERROR, "Filtering \'%s\' with \'%s\' didn't work out: %s",
+               *header, b->name, pcrs_strerror(matches));
+            if (newheader != NULL)
             {
-               int current_hits = 0;
-               pcrs_job *joblist = b->joblist;
-
-               if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
-
-               if (NULL == joblist)
-               {
-                  log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
-                  continue;
-               }
-
-               log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %d) with \'%s\' ...",
-                         *header, size, b->name);
-
-               /* Apply all jobs from the joblist */
-               for (job = joblist; NULL != job; job = job->next)
-               {
-                  matches = pcrs_execute(job, *header, size, &newheader, &size);
-                  if (0 < matches)
-                  {
-                     current_hits += matches;
-                     log_error(LOG_LEVEL_HEADER, "Transforming \"%s\" to \"%s\"", *header, newheader);
-                     freez(*header);
-                     *header = newheader;
-                  }
-                  else if (0 == matches)
-                  {
-                     /* Filter doesn't change header */
-                     freez(newheader);
-                  }
-                  else
-                  {
-                     /* RegEx failure */
-                     log_error(LOG_LEVEL_ERROR, "Filtering \'%s\' with \'%s\' didn't work out: %s",
-                        *header, b->name, pcrs_strerror(matches));
-                     if (newheader != NULL)
-                     {
-                        log_error(LOG_LEVEL_ERROR, "Freeing what's left: %s", newheader);
-                        freez(newheader);
-                     }
-                  }
-               }
-
-               if (b->dynamic) pcrs_free_joblist(joblist);
-
-               log_error(LOG_LEVEL_RE_FILTER, "... produced %d hits (new size %d).", current_hits, size);
-               hits += current_hits;
+               log_error(LOG_LEVEL_ERROR, "Freeing what's left: %s", newheader);
+               freez(newheader);
             }
          }
+      }
+
+      if (b->dynamic) pcrs_free_joblist(joblist);
+
+      log_error(LOG_LEVEL_RE_FILTER, "... produced %d hits (new size %d).", current_hits, size);
+      hits += current_hits;
+   }
 
    /*
     * Additionally checking for hits is important because if
