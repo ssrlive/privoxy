@@ -1,4 +1,4 @@
-$Id: TODO,v 1.87 2013/10/30 14:31:37 fabiankeil Exp $
+$Id: TODO,v 1.88 2013/12/24 13:35:41 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -260,11 +260,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     acceptable if the client and Privoxy are running on the same system
     or in a trusted environment.
 
-96) Enabled filters should be easier to look up. Currently most functions
-    that work with filters spent more (duplicated) code on finding
-    filters than on actually doing something useful with them. Dividing
-    filters by type instead of filter file would reduce the lookup-code
-    quite a bit.
+96) Filters should be easier to look up. Currently get_filter() has to
+    go through all filters and skip the filter types the caller isn't
+    interested in.
 
 98) When showing action section on the CGI pages, properly escape
     line breaks so they can be copy&pasted into action files without
