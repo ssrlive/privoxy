@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.279 2013/08/06 12:59:34 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.280 2013/11/24 14:24:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1279,10 +1279,8 @@ static jb_err header_tagger(struct client_state *csp, char *header)
 {
    int wanted_filter_type;
    int multi_action_index;
-   int i;
    pcrs_job *job;
 
-   struct file_list *fl;
    struct re_filterfile_spec *b;
    struct list_entry *tag_name;
 
@@ -1306,37 +1304,12 @@ static jb_err header_tagger(struct client_state *csp, char *header)
       return JB_ERR_OK;
    }
 
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-      fl = csp->rlist[i];
-      if ((NULL == fl) || (NULL == fl->f))
-      {
-         /*
-          * Either there are no filter files
-          * left, or this filter file just
-          * contains no valid filters.
-          *
-          * Continue to be sure we don't miss
-          * valid filter files that are chained
-          * after empty or invalid ones.
-          */
-         continue;
-      }
-
-      /* For all filters, */
-      for (b = fl->f; b; b = b->next)
-      {
-         if (b->type != wanted_filter_type)
-         {
-            /* skip the ones we don't care about, */
-            continue;
-         }
-         /* leaving only taggers that could apply, of which we use the ones, */
+         /* Execute all applying taggers */
          for (tag_name = csp->action->multi[multi_action_index]->first;
               NULL != tag_name; tag_name = tag_name->next)
          {
-            /* that do apply, and */
-            if (strcmp(b->name, tag_name->str) == 0)
+            b = get_filter(csp, tag_name->str, wanted_filter_type);
+            if (b != NULL)
             {
                char *modified_tag = NULL;
                char *tag = header;
@@ -1439,12 +1412,9 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                         "Tag already present", b->name, tag);
                   }
                   freez(tag);
-               } /* if the tagger matched */
-            } /* if the tagger applies */
-         } /* for every tagger that could apply */
-      } /* for all filters */
-   } /* for all filter files */
-
+               }
+            }
+         }
    return JB_ERR_OK;
 }
 
@@ -1478,11 +1448,9 @@ static jb_err filter_header(struct client_state *csp, char **header)
    char *newheader = NULL;
    pcrs_job *job;
 
-   struct file_list *fl;
    struct re_filterfile_spec *b;
    struct list_entry *filtername;
 
-   int i;
    int wanted_filter_type;
    int multi_action_index;
 
@@ -1509,39 +1477,12 @@ static jb_err filter_header(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-      fl = csp->rlist[i];
-      if ((NULL == fl) || (NULL == fl->f))
-      {
-         /*
-          * Either there are no filter files
-          * left, or this filter file just
-          * contains no valid filters.
-          *
-          * Continue to be sure we don't miss
-          * valid filter files that are chained
-          * after empty or invalid ones.
-          */
-         continue;
-      }
-      /*
-       * For all applying +filter actions, look if a filter by that
-       * name exists and if yes, execute its pcrs_joblist on the
-       * buffer.
-       */
-      for (b = fl->f; b; b = b->next)
-      {
-         if (b->type != wanted_filter_type)
-         {
-            /* Skip other filter types */
-            continue;
-         }
-
+         /* Execute all applying header filters */
          for (filtername = csp->action->multi[multi_action_index]->first;
               filtername ; filtername = filtername->next)
          {
-            if (strcmp(b->name, filtername->str) == 0)
+            b = get_filter(csp, filtername->str, wanted_filter_type);
+            if (b != NULL)
             {
                int current_hits = 0;
                pcrs_job *joblist = b->joblist;
@@ -1592,8 +1533,6 @@ static jb_err filter_header(struct client_state *csp, char **header)
                hits += current_hits;
             }
          }
-      }
-   }
 
    /*
     * Additionally checking for hits is important because if
