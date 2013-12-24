@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.90 2013/11/24 14:25:19 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.91 2013/12/24 13:35:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1087,7 +1087,7 @@ int load_action_files(struct client_state *csp)
  *          3  :  multi_index = The index where to look for the filter.
  *          4  :  filter_type = The filter type the caller is interested in.
  *
- * Returns     :  0 => All referenced filters exists, everything else is an error.
+ * Returns     :  0 => All referenced filters exist, everything else is an error.
  *
  *********************************************************************/
 static int referenced_filters_are_missing(const struct client_state *csp,
