@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.44 2013/11/06 16:27:37 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.45 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -78,6 +78,11 @@ extern void get_url_actions(struct client_state *csp,
 extern void apply_url_actions(struct current_action_spec *action,
                               struct http_request *http,
                               struct url_actions *b);
+
+extern struct re_filterfile_spec *get_filter(const struct client_state *csp,
+                                             const char *requested_name,
+                                             enum filter_type requested_type);
+
 /*
  * Determining parent proxies
  */

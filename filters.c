@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.177 2013/04/23 09:37:28 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.178 2013/11/24 14:22:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1527,6 +1527,66 @@ int is_untrusted_url(const struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  get_filter
+ *
+ * Description :  Get a filter with a given name and type.
+ *                Note that taggers are filters, too.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  requested_name = Name of the content filter to get
+ *          3  :  requested_type = Type of the filter to tagger to lookup
+ *
+ * Returns     :  A pointer to the requested filter
+ *                or NULL if the filter wasn't found
+ *
+ *********************************************************************/
+struct re_filterfile_spec *get_filter(const struct client_state *csp,
+                                      const char *requested_name,
+                                      enum filter_type requested_type)
+{
+   int i;
+   struct re_filterfile_spec *b;
+   struct file_list *fl;
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+     fl = csp->rlist[i];
+     if ((NULL == fl) || (NULL == fl->f))
+     {
+        /*
+         * Either there are no filter files left or this
+         * filter file just contains no valid filters.
+         *
+         * Continue to be sure we don't miss valid filter
+         * files that are chained after empty or invalid ones.
+         */
+        continue;
+     }
+
+     for (b = fl->f; b != NULL; b = b->next)
+     {
+        if (b->type != requested_type)
+        {
+           /* The callers isn't interested in this filter type. */
+           continue;
+        }
+        if (strcmp(b->name, requested_name) == 0)
+        {
+           /* The requested filter has been found. Abort search. */
+           return b;
+        }
+     }
+   }
+
+   /* No filter with the given name and type exists. */
+   return NULL;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  pcrs_filter_response
  *
  * Description :  Execute all text substitutions from all applying
@@ -1543,14 +1603,12 @@ int is_untrusted_url(const struct client_state *csp)
 static char *pcrs_filter_response(struct client_state *csp)
 {
    int hits = 0;
-   int i;
    size_t size, prev_size;
 
    char *old = NULL;
    char *new = NULL;
    pcrs_job *job;
 
-   struct file_list *fl;
    struct re_filterfile_spec *b;
    struct list_entry *filtername;
 
@@ -1572,39 +1630,19 @@ static char *pcrs_filter_response(struct client_state *csp)
    size = (size_t)(csp->iob->eod - csp->iob->cur);
    old = csp->iob->cur;
 
-   for (i = 0; i < MAX_AF_FILES; i++)
-   {
-     fl = csp->rlist[i];
-     if ((NULL == fl) || (NULL == fl->f))
-     {
-        /*
-         * Either there are no filter files
-         * left, or this filter file just
-         * contains no valid filters.
-         *
-         * Continue to be sure we don't miss
-         * valid filter files that are chained
-         * after empty or invalid ones.
-         */
-        continue;
-     }
    /*
     * For all applying +filter actions, look if a filter by that
     * name exists and if yes, execute it's pcrs_joblist on the
     * buffer.
     */
-   for (b = fl->f; b; b = b->next)
+   for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
+        filtername != NULL; filtername = filtername->next)
    {
-      if (b->type != FT_CONTENT_FILTER)
+      b = get_filter(csp, filtername->str, FT_CONTENT_FILTER);
+      if (b == NULL)
       {
-         /* Skip header filters */
          continue;
       }
-
-      for (filtername = csp->action->multi[ACTION_MULTI_FILTER]->first;
-           filtername ; filtername = filtername->next)
-      {
-         if (strcmp(b->name, filtername->str) == 0)
          {
             int current_hits = 0; /* Number of hits caused by this filter */
             int job_number   = 0; /* Which job we're currently executing  */
@@ -1673,8 +1711,7 @@ static char *pcrs_filter_response(struct client_state *csp)
             hits += current_hits;
          }
       }
-   }
-   }
+
 
    /*
     * If there were no hits, destroy our copy and let
