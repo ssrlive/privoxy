@@ -1,4 +1,4 @@
-$Id: TODO,v 1.90 2014/01/31 12:47:15 fabiankeil Exp $
+$Id: TODO,v 1.91 2014/01/31 12:47:31 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -331,3 +331,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      https://bugzilla.mozilla.org/show_bug.cgi?id=959100
 
 117) Dynamic variables are documented poorly.
+
+118) There should be "escaped" dynamic variables that are guaranteed
+     not to break filters.
