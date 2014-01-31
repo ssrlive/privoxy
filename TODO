@@ -1,4 +1,4 @@
-$Id: TODO,v 1.88 2013/12/24 13:35:41 fabiankeil Exp $
+$Id: TODO,v 1.89 2013/12/24 13:36:01 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -323,3 +323,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      can cause problems for gpg when uploading keys through Privoxy.
 
 115) Add ICAP (RFC 3507) support. FR #3615158.
+
+116) Due to the use of sscanf(), Privoxy currently will fail to properly
+     parse chunks whose size can't be represented with 32 bit. This is
+     unlikely to cause problems in the real world, but should eventually
+     be fixed anyway. See also:
+     https://bugzilla.mozilla.org/show_bug.cgi?id=959100
