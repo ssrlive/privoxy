@@ -1,4 +1,4 @@
-$Id: TODO,v 1.92 2014/01/31 12:47:43 fabiankeil Exp $
+$Id: TODO,v 1.93 2014/02/02 12:03:36 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -336,3 +336,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      not to break filters.
 
 119) Evaluate using pcre's jit mode.
+
+120) Add an option to limit pcre's recursion limit below the default.
+     On some platforms the recursion limit doesn't prevent pcre from
+     running out of stack space, causing the kernel to kill Privoxy
+     ungracefully.
