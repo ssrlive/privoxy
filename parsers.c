@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.281 2013/12/24 13:34:22 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.282 2013/12/24 13:34:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1735,7 +1735,7 @@ static jb_err proxy_authentication(struct client_state *csp, char **header)
 static jb_err client_keep_alive(struct client_state *csp, char **header)
 {
    unsigned int keep_alive_timeout;
-   const char *timeout_position = strstr(*header, ": ");
+   char *timeout_position;
 
    if (!(csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE))
    {
@@ -1745,27 +1745,37 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
       return JB_ERR_OK;
    }
 
+   /* Check for parameter-less format "Keep-Alive: 100" */
+   timeout_position = strstr(*header, ": ");
    if ((NULL == timeout_position)
     || (1 != sscanf(timeout_position, ": %u", &keep_alive_timeout)))
    {
-      log_error(LOG_LEVEL_ERROR, "Couldn't parse: %s", *header);
+      /* Assume parameter format "Keep-Alive: timeout=100" */
+      timeout_position = strstr(*header, "timeout=");
+      if ((NULL == timeout_position)
+         || (1 != sscanf(timeout_position, "timeout=%u", &keep_alive_timeout)))
+      {
+         log_error(LOG_LEVEL_HEADER,
+            "Couldn't parse: '%s'. Using default timeout %u",
+            *header, csp->config->keep_alive_timeout);
+
+         return JB_ERR_OK;
+      }
+   }
+
+   if (keep_alive_timeout < csp->config->keep_alive_timeout)
+   {
+      log_error(LOG_LEVEL_HEADER,
+         "Reducing keep-alive timeout from %u to %u.",
+         csp->config->keep_alive_timeout, keep_alive_timeout);
+      csp->server_connection.keep_alive_timeout = keep_alive_timeout;
    }
    else
    {
-      if (keep_alive_timeout < csp->config->keep_alive_timeout)
-      {
-         log_error(LOG_LEVEL_HEADER,
-            "Reducing keep-alive timeout from %u to %u.",
-            csp->config->keep_alive_timeout, keep_alive_timeout);
-         csp->server_connection.keep_alive_timeout = keep_alive_timeout;
-      }
-      else
-      {
-         /* XXX: Is this log worthy? */
-         log_error(LOG_LEVEL_HEADER,
-            "Client keep-alive timeout is %u. Sticking with %u.",
-            keep_alive_timeout, csp->config->keep_alive_timeout);
-      }
+      /* XXX: Is this log worthy? */
+      log_error(LOG_LEVEL_HEADER,
+         "Client keep-alive timeout is %u. Sticking with %u.",
+         keep_alive_timeout, csp->config->keep_alive_timeout);
    }
 
    return JB_ERR_OK;
