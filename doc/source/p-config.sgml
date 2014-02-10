@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.101 2013/04/23 09:42:53 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.102 2013/10/30 14:30:24 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.101 2013/04/23 09:42:53 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.102 2013/10/30 14:30:24 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
@@ -2425,6 +2425,9 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     to use <application>Privoxy</application>, enable this
     option and configure your packet filter to redirect outgoing
     HTTP connections into <application>Privoxy</application>.
+   </para>
+   <para>
+    Note that intercepting encrypted connections (HTTPS) isn't supported.
    </para>
    <para>
     Make sure that <application>Privoxy's</application> own requests
