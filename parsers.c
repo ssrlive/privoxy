@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.282 2013/12/24 13:34:45 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.283 2014/02/10 14:42:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1758,6 +1758,7 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
          log_error(LOG_LEVEL_HEADER,
             "Couldn't parse: '%s'. Using default timeout %u",
             *header, csp->config->keep_alive_timeout);
+         freez(*header);
 
          return JB_ERR_OK;
       }
@@ -1776,6 +1777,7 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
       log_error(LOG_LEVEL_HEADER,
          "Client keep-alive timeout is %u. Sticking with %u.",
          keep_alive_timeout, csp->config->keep_alive_timeout);
+      freez(*header);
    }
 
    return JB_ERR_OK;
