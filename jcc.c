@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.423 2013/01/03 15:25:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.424 2013/03/01 17:38:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3643,7 +3643,7 @@ int main(int argc, char **argv)
  *                on failure.
  *
  * Parameters  :
- *          1  :  haddr = Host addres to bind to. Use NULL to bind to
+ *          1  :  haddr = Host address to bind to. Use NULL to bind to
  *                        INADDR_ANY.
  *          2  :  hport = Specifies port to bind to.
  *
