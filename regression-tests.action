@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.50 2013/03/07 14:09:34 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.51 2014/02/10 14:43:03 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -612,7 +612,13 @@ TAG:^Host header other than the target host$
 # Set Header = Keep-Alive: blah=fasel, timeout=20, max=3
 # Expect Header = NO CHANGE
 # Level = 13
-TAG:^Pass Keep-Alive header$
+# Set Header = Keep-Alive: timeuot=20, max=3
+# Expect Header = REMOVAL
+# Level = 13
+# Set Header = Keep-Alive: twenty seconds please
+# Expect Header = REMOVAL
+# Level = 13
+TAG:^Parse Keep-Alive header$
 
 {}
 # Set Header = Keep-Alive: 20
