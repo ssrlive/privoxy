@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.97 2013/11/07 14:42:02 fabiankeil Exp $
+ $Id: faq.sgml,v 2.98 2013/12/16 11:20:14 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.97 2013/11/07 14:42:02 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.98 2013/12/16 11:20:14 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2695,11 +2695,24 @@ Why?</title>
  Pages with UTF-8 fonts are garbled.
 </title>
 <para>
- This is caused by the <quote>demoronizer</quote> filter. You should either
- upgrade <application>Privoxy</application>, or at least upgrade to the most
- recent <filename>default.action</filename> file available from <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">SourceForge</ulink>.
- Or you can simply disable the demoronizer filter.
+ This may be the result of an overly aggressive filter. The filters that
+ are enabled in the default configuration aren't expected to cause problems
+ like this. If you enabled the <quote>demoronizer</quote> filter, please
+ try temporarily disabling it.
+</para>
+<para>
+ If that doesn't help, temporarily disable all filters to see if another
+ filter could be the culprit. If the problem disappears, enable the filters
+ one by one, until the problem reappears and the offending filter is found.
+</para>
+<para>
+ Once the problem-causing filter is known, it can be fixed or disabled.
+</para>
+<para>
+ Upgrading <application>Privoxy</application>, or going to the most recent
+ <filename>default.action</filename> file available from <ulink
+ url="http://sourceforge.net/project/showfiles.php?group_id=11118">SourceForge</ulink>
+ might be worth a try, too.
 </para>
 </sect2>
 
@@ -2709,13 +2722,11 @@ Why?</title>
  is used?
 </title>
 <para>
- This may also be caused by the <quote>demoronizer</quote> filter,
- in conjunction with a web server that is misreporting the content type. Binary
- files are exempted from <application>Privoxy's</application> filtering
- (unless the web server by mistake says the file is something else). Either
- upgrade <application>Privoxy</application>, or go to the most recent
- <filename>default.action</filename> file available from <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">SourceForge</ulink>.
+ This may also be caused by an (<link linkend="DEMORONIZER">overly aggressive
+ filter</link> in conjunction with a web server that is misreporting the content
+ type. By default binary files are exempted from
+ <application>Privoxy's</application> filtering
+ (unless the web server by mistake says the file is something else).
 </para>
 </sect2>
 
@@ -3017,6 +3028,11 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.98  2013/12/16 11:20:14  fabiankeil
+Spell 'more reliably' more correctly
+
+Reported by Reuben Thomas in #3615276.
+
 Revision 2.97  2013/11/07 14:42:02  fabiankeil
 White-space adjustments for the previous commit
 
