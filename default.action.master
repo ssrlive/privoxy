@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.299 2013/10/30 14:31:05 fabiankeil Exp $
+#  $Id: default.action.master,v 1.300 2013/11/06 16:30:23 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1890,6 +1890,11 @@ adn.speedtest.net
 .serverfault.com/(.*/)?popup
 # URL = http://cs.superuser.com/posts/popup/close/suggest-originals/16678?_=1383517814677
 .superuser.com/(.*/)?popup
+#MASTER# UNBLOCK-REFERRER: http://cologne.stopwatchingus.info/demo-12-april.html
+# URL = http://cologne.stopwatchingus.info/images/banner/Demo-Koeln-12-04-14-Banner.png
+# URL = http://cologne.stopwatchingus.info/images/banner/Demo-Koeln-12-04-14-Banner2.png
+# URL = http://cologne.stopwatchingus.info/images/banner/Demo-12-April.jpg
+.stopwatchingus.info/
 
 
 #############################################################################
