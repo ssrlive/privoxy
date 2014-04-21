@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.283 2014/02/10 14:42:18 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.284 2014/02/10 14:42:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1277,7 +1277,7 @@ jb_err update_server_headers(struct client_state *csp)
  *********************************************************************/
 static jb_err header_tagger(struct client_state *csp, char *header)
 {
-   int wanted_filter_type;
+   enum filter_type wanted_filter_type;
    int multi_action_index;
    pcrs_job *job;
 
@@ -1455,7 +1455,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
    struct re_filterfile_spec *b;
    struct list_entry *filtername;
 
-   int wanted_filter_type;
+   enum filter_type wanted_filter_type;
    int multi_action_index;
 
    if (csp->flags & CSP_FLAG_NO_FILTERING)
