@@ -1,4 +1,4 @@
-$Id: TODO,v 1.94 2014/02/02 12:03:50 fabiankeil Exp $
+$Id: TODO,v 1.95 2014/02/10 14:38:45 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -341,3 +341,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      On some platforms the recursion limit doesn't prevent pcre from
      running out of stack space, causing the kernel to kill Privoxy
      ungracefully.
+
+121) Add HTTP/2 support. As a first step, incomming HTTP/1.x requests
+     should be translated to outgoing HTTP/2 requests where possible
+     (and if desired by the user).
