@@ -1,4 +1,4 @@
-$Id: TODO,v 1.95 2014/02/10 14:38:45 fabiankeil Exp $
+$Id: TODO,v 1.96 2014/04/21 12:04:40 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -345,3 +345,5 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 121) Add HTTP/2 support. As a first step, incomming HTTP/1.x requests
      should be translated to outgoing HTTP/2 requests where possible
      (and if desired by the user).
+
+122) Allow customized log messages.
