@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.85 2012/04/22 12:17:08 fabiankeil Exp $
+#  $Id: default.filter,v 1.86 2013/02/19 11:14:47 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -93,7 +93,7 @@ FILTER: js-annoyances Get rid of particularly annoying JavaScript abuse.
 # Get rid of Javascript referrer tracking. 
 # Test page: http://www.javascript-page.com/referrer.html
 #
-s|(?:\w+\.)+referrer|"Not Your Business!"|gisU
+s|(?:\w+\.)+referrer|false.toString()|gisU
 
 # The status bar is for displaying link targets, not pointless blahblah
 #
