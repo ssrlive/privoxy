@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.86 2013/02/19 11:14:47 fabiankeil Exp $
+#  $Id: default.filter,v 1.87 2014/04/25 11:49:12 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -639,6 +639,8 @@ s@</head>@<style type="text/css">\n\
 .content, \#sw_foot, \#bf, \#sw_content, \#sidebar, \#pag\n\
  {width: 99% !important; min-width: 99% !important;\n\
  max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
+ /* Remove 'related' ads */\n\
+ .b_ad, .b_adlabel {clear: both; display:none;}\n\
  /* Remove "suggestions". They are next to worthless but partly overlap with the search results */\n\
  .suggestion, \#nys_right, \#nys {clear: both; display:none;}\n\
  \#s_notf_div,\n \
