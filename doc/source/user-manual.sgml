@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.176 2013/11/24 14:27:09 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.177 2014/04/21 12:04:23 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.176 2013/11/24 14:27:09 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.177 2014/04/21 12:04:23 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1985,23 +1985,23 @@ for details.
 
 <para>
  Generally, an URL pattern has the form
- <literal>&lt;domain&gt;&lt;port&gt;/&lt;path&gt;</literal>, where the
- <literal>&lt;domain&gt;</literal>, the <literal>&lt;port&gt;</literal>
+ <literal>&lt;host&gt;&lt;port&gt;/&lt;path&gt;</literal>, where the
+ <literal>&lt;host&gt;</literal>, the <literal>&lt;port&gt;</literal>
  and the <literal>&lt;path&gt;</literal> are optional. (This is why the special
  <literal>/</literal> pattern matches all URLs). Note that the protocol
  portion of the URL pattern (e.g. <literal>http://</literal>) should
  <emphasis>not</emphasis> be included in the pattern. This is assumed already!
 </para>
 <para>
- The pattern matching syntax is different for the domain and path parts of
- the URL. The domain part uses a simple globbing type matching technique,
+ The pattern matching syntax is different for the host and path parts of
+ the URL. The host part uses a simple globbing type matching technique,
  while the path part uses more flexible
  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
   Expressions</quote></ulink> (POSIX 1003.2).
 </para>
 <para>
  The port part of a pattern is a decimal port number preceded by a colon
- (<literal>:</literal>). If the domain part contains a numerical IPv6 address,
+ (<literal>:</literal>). If the host part contains a numerical IPv6 address,
  it has to be put into angle brackets
  (<literal>&lt;</literal>, <literal>&gt;</literal>).
 </para>
@@ -2011,7 +2011,7 @@ for details.
   <term><literal>www.example.com/</literal></term>
   <listitem>
    <para>
-    is a domain-only pattern and will match any request to <literal>www.example.com</literal>,
+    is a host-only pattern and will match any request to <literal>www.example.com</literal>,
     regardless of which document on that server is requested. So ALL pages in
     this domain would be covered by the scope of this action. Note that a
     simple <literal>example.com</literal> is different and would NOT match.
@@ -2022,7 +2022,7 @@ for details.
   <term><literal>www.example.com</literal></term>
   <listitem>
    <para>
-    means exactly the same. For domain-only patterns, the trailing <literal>/</literal> may
+    means exactly the same. For host-only patterns, the trailing <literal>/</literal> may
     be omitted.
    </para>
   </listitem>
@@ -2094,11 +2094,13 @@ for details.
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3><title>The Domain Pattern</title>
+<sect3 id="host-pattern"><title>The Host Pattern</title>
 
 <para>
- The matching of the domain part offers some flexible options: if the
- domain starts or ends with a dot, it becomes unanchored at that end.
+ The matching of the host part offers some flexible options: if the
+ host pattern starts or ends with a dot, it becomes unanchored at that end.
+ The host pattern is often referred to as domain pattern as it is usually
+ used to match domain names and not IP addresses.
  For example:
 </para>
 
