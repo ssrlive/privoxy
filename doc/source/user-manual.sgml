@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.179 2014/05/05 09:47:41 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.180 2014/05/05 09:48:36 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.179 2014/05/05 09:47:41 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.180 2014/05/05 09:48:36 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -6556,7 +6556,7 @@ stupid-server.example.com/</screen>
 
 <para>
  The non-standard option letter <literal>D</literal> (dynamic) allows
- to the variables $host, $origin (the IP address the request came from),
+ to use the variables $host, $origin (the IP address the request came from),
  $path and $url. The will be replaced with the value they refer to before
  the filter is executed.
 </para>
