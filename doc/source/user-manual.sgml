@@ -6557,12 +6557,12 @@ stupid-server.example.com/</screen>
 <para>
  The non-standard option letter <literal>D</literal> (dynamic) allows
  to use the variables $host, $origin (the IP address the request came from),
- $path and $url. The will be replaced with the value they refer to before
+ $path and $url. They will be replaced with the value they refer to before
  the filter is executed.
 </para>
 
 <para>
- Note that '$' is a bad choice as delimiter for dynamic filters as you
+ Note that '$' is a bad choice for a delimiter in a dynamic filter as you
  might end up with unintended variables if you use a variable name
  directly after the delimiter. Variables will be resolved without
  escaping anything, therefore you also have to be careful not to chose
@@ -6572,7 +6572,7 @@ stupid-server.example.com/</screen>
 
 <para>
  The non-standard option letter <literal>T</literal> (trivial) prevents
- parsing for backreferences in the substitute. Use if you want to include
+ parsing for backreferences in the substitute. Use it if you want to include
  text like '$&' in your substitute without quoting.
 </para>
 
