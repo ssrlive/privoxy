@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.116 2012/07/27 17:39:57 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.117 2012/12/09 12:28:14 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -636,6 +636,7 @@ static inline const char *get_log_level_string(int loglevel)
 }
 
 
+#define LOG_BUFFER_SIZE BUFFER_SIZE
 /*********************************************************************
  *
  * Function    :  log_error
@@ -655,7 +656,7 @@ void log_error(int loglevel, const char *fmt, ...)
    va_list ap;
    char *outbuf = NULL;
    static char *outbuf_save = NULL;
-   char tempbuf[BUFFER_SIZE];
+   char tempbuf[LOG_BUFFER_SIZE];
    size_t length = 0;
    const char * src = fmt;
    long thread_id;
@@ -665,7 +666,7 @@ void log_error(int loglevel, const char *fmt, ...)
     * why else do we allocate instead of using
     * an array?
     */
-   size_t log_buffer_size = BUFFER_SIZE;
+   size_t log_buffer_size = LOG_BUFFER_SIZE;
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /*
