@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.98 2013/12/16 11:20:14 fabiankeil Exp $
+ $Id: faq.sgml,v 2.99 2014/02/10 14:43:46 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.98 2013/12/16 11:20:14 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.99 2014/02/10 14:43:46 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1803,7 +1803,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
 
 <para>
- Since <application>Privoxy</application> 3.0.5, its
+ <application>Privoxy's</application>
  <ulink url="../user-manual/config.html">main configuration file</ulink>
  is already prepared for <application>Tor</application>, if you are using a
  default <application>Tor</application> configuration and run it on the same
@@ -1813,7 +1813,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
 <para>
  <screen>
-#        forward-socks5             /     127.0.0.1:9050 .
+#        forward-socks5t             /     127.0.0.1:9050 .
  </screen>
 </para>
 <para>
@@ -3028,6 +3028,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.99  2014/02/10 14:43:46  fabiankeil
+Make 'demoronizer' FAQ entries more generic
+
 Revision 2.98  2013/12/16 11:20:14  fabiankeil
 Spell 'more reliably' more correctly
 
