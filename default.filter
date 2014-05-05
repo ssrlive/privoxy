@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.88 2014/05/03 17:18:38 fabiankeil Exp $
+#  $Id: default.filter,v 1.89 2014/05/05 09:48:55 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -628,19 +628,22 @@ FILTER: msn CSS-based block for MSN text ads. Also removes tracking URLs and a w
 s@</head>@<style type="text/css">\n\
  /* Style sheet inserted by Privoxy's msn filter. */\n\
  .msn_ads, \#at, \#ar, .mktmsg {display: none !important;}\n\
- \#results, .flank, .results_area_flank, .results_area_stroke,\n\
+ \#results, \#b_results, .flank, .results_area_flank, .results_area_stroke,\n\
  \#results_area, \#content, .sb_tlst, .sa_cc, .sb_ph, \#sw_main,\n\
-.content, \#sw_foot, \#bf, \#sw_content, \#sidebar, \#pag\n\
+ .content, .b_content, \#sw_foot, \#bf, \#sw_content, \#sidebar, \#pag\n\
  {width: 99% !important; min-width: 99% !important;\n\
  max-width: 100% !important; /* width:100% sometimes causes horizontal scrollbars */}\n\
  /* Remove 'related' ads */\n\
  .b_ad, .b_adlabel {clear: both; display:none;}\n\
  /* Remove "suggestions". They are next to worthless but partly overlap with the search results */\n\
  .suggestion, \#nys_right, \#nys {clear: both; display:none;}\n\
+ /* Remove "Related searches" at the left side of the main results.\n\
+    They are next to worthless, too, and also are still present below the main search results */\n\
+ \#b_results > .b_ans {clear: both; display:none;}\n\
  \#s_notf_div,\n \
  /* Overlay ads to enable Facebook 'likes' in search results. */\n\
  .sn_container {display:none !important;}\n\
- \#content {padding-right: 0;}\n\
+ \#content, \#b_content {padding: 0px 0px 0px 0px}\n\
  </style>\n$0@
 # Are these ids still in use?
 s@(<div[^>]*) id=(["']?)ads_[^\2]*\2@$1 class="msn_ads"@Uig
