@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.178 2014/05/05 09:47:20 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.179 2014/05/05 09:47:41 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.178 2014/05/05 09:47:20 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.179 2014/05/05 09:47:41 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -6545,9 +6545,35 @@ stupid-server.example.com/</screen>
  in a syntax that imitates <ulink url="http://www.perl.org/">Perl</ulink>'s
  <literal>s///</literal> operator. If you are familiar with Perl, you
  will find this to be quite intuitive, and may want to look at the
- PCRS documentation for the subtle differences to Perl behaviour. Most
- notably, the non-standard option letter <literal>U</literal> is supported,
- which turns the default to ungreedy matching.
+ PCRS documentation for the subtle differences to Perl behaviour.
+</para>
+
+<para>
+ Most notably, the non-standard option letter <literal>U</literal> is supported,
+ which turns the default to ungreedy matching (add <literal>?</literal> to
+ quantifiers to turn them greedy again).
+</para>
+
+<para>
+ The non-standard option letter <literal>D</literal> (dynamic) allows
+ to the variables $host, $origin (the IP address the request came from),
+ $path and $url. The will be replaced with the value they refer to before
+ the filter is executed.
+</para>
+
+<para>
+ Note that '$' is a bad choice as delimiter for dynamic filters as you
+ might end up with unintended variables if you use a variable name
+ directly after the delimiter. Variables will be resolved without
+ escaping anything, therefore you also have to be careful not to chose
+ delimiters that appear in the replacement text. For example '<' should
+ be save, while '?' will sooner or later cause conflicts with $url.
+</para>
+
+<para>
+ The non-standard option letter <literal>T</literal> (trivial) prevents
+ parsing for backreferences in the substitute. Use if you want to include
+ text like '$&' in your substitute without quoting.
 </para>
 
 <para>
