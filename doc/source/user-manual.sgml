@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.177 2014/04/21 12:04:23 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.178 2014/05/05 09:47:20 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.177 2014/04/21 12:04:23 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.178 2014/05/05 09:47:20 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2068,6 +2068,15 @@ for details.
   <listitem>
    <para>
     Matches any URL pointing to TCP port 8000.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term><literal>10.0.0.1/</literal></term>
+  <listitem>
+   <para>
+    Matches any URL with the host address <literal>10.0.0.1</literal>.
+    (Note that the real URL uses plain brackets, not angle brackets.)
    </para>
   </listitem>
  </varlistentry>
