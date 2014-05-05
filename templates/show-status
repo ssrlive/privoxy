@@ -344,12 +344,6 @@
                Dynamically linking to an external libpcre is recommended as the internal
                one is outdated and lacks various features and bug-fixes you may be interested in.</td>
             </tr>
-            <tr>
-              <td><code>STATIC_PCRS</code></td>
-              <td>@if-STATIC_PCRS-then@ Yes @else-not-STATIC_PCRS@ No @endif-STATIC_PCRS@</td>
-              <td>Use the supplied statically-linked PCRS library.  This is set automatically
-               by <code>./configure</code> if you do not have the libpcrs installed.</td>
-            </tr>
           </table>
       </td>
     </tr>

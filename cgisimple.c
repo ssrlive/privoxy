@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.119 2013/01/25 21:52:02 david__schmidt Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.120 2013/01/26 13:30:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1679,12 +1679,6 @@ static jb_err show_defines(struct map *exports)
 #else /* ifndef STATIC_PCRE */
    if (!err) err = map_conditional(exports, "STATIC_PCRE", 0);
 #endif /* ndef STATIC_PCRE */
-
-#ifdef STATIC_PCRS
-   if (!err) err = map_conditional(exports, "STATIC_PCRS", 1);
-#else /* ifndef STATIC_PCRS */
-   if (!err) err = map_conditional(exports, "STATIC_PCRS", 0);
-#endif /* ndef STATIC_PCRS */
 
    return err;
 }
