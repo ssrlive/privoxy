@@ -347,5 +347,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 122) Allow customized log messages.
 
 123) Allow to decrypt encrypted traffic using the
-     voluntaray-disclose-session-keys option in Firefox.
+     voluntarly-disclose-session-keys option in Firefox.
      Depends on #16.
+
+124) Add Capsicum support.
