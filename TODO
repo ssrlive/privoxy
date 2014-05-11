@@ -1,4 +1,4 @@
-$Id: TODO,v 1.100 2014/05/11 13:16:58 fabiankeil Exp $
+$Id: TODO,v 1.101 2014/05/11 13:17:08 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -347,7 +347,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 122) Allow customized log messages.
 
 123) Allow to decrypt encrypted traffic using the
-     voluntarly-disclose-session-keys option in Firefox.
+     voluntarily-disclose-session-keys option in Firefox.
      Depends on #16.
 
 124) Add Capsicum support.
