@@ -1,4 +1,4 @@
-$Id: TODO,v 1.105 2014/05/13 11:15:28 fabiankeil Exp $
+$Id: TODO,v 1.106 2014/05/13 11:16:12 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -385,7 +385,7 @@ What we need:
 
 4. It would be preferable if the hoster didn't have a bad track
    record as far as user experience, security and privacy are
-   concerned and if the terms of services are "reasonable" and
+   concerned and if the terms of service are "reasonable" and
    haven't changed too often in the past. Updates in the past
    should have been improvements and not regressions.
 
