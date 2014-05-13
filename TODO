@@ -1,4 +1,4 @@
-$Id: TODO,v 1.104 2014/05/12 10:38:54 fabiankeil Exp $
+$Id: TODO,v 1.105 2014/05/13 11:15:28 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -119,6 +119,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     requirements are and which SF alternatives fulfil them.
     It would probably also make sense to look into what other
     projects did when migrating away from SF.
+
+    2014-05-13: Work in progress. Hosting wish list at the end
+    of this file.
 
 54) Move away from CVS to a more modern revision control system.
     Find out if there are any objection against going with Git.
@@ -354,3 +357,52 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      Capsicum. http://www.cl.cam.ac.uk/research/security/capsicum/
 
 125) Allow clients to HTTPS-encrypt the proxy connection.
+
+##########################################################################
+
+Hosting wish list (relevant for #53)
+
+What we need:
+
+- Bug tracker
+- Mailinglists (Mailman with public archives preferred)
+- Webspace (on a Unix-like OS that works with the webserver targets
+  in GNUMakefile)
+- Source code repositories (currently CVS, but migrating away
+  from it is TODO #54 anyway and shouldn't be too much trouble)
+- Commit mails (preferably with unified diffs)
+
+(Unsorted) details to look at when evaluating hosters:
+
+1. Preferably no third-party ads and trackers.
+   External images, CSS and JavaScript may count as trackers
+   but texts like "supported by company XYZ" may be acceptable.
+
+2. JavaScript should be optional or not used at all.
+
+3. Services we don't need shouldn't be enabled anyway.
+   (We currently don't use Web forums, wikis, surveys etc.)
+
+4. It would be preferable if the hoster didn't have a bad track
+   record as far as user experience, security and privacy are
+   concerned and if the terms of services are "reasonable" and
+   haven't changed too often in the past. Updates in the past
+   should have been improvements and not regressions.
+
+5. It would be preferable if most of the server administration
+   is done by a trusted third-party (or at least not a lot of work
+   for us).
+
+6. The server(s) should be located in a country with laws we can
+   understand and follow (or at least not unintentionally violate).
+
+7. A server location in a country with some kind of due process
+   and strong data protection laws (at least on paper) would be
+   preferable.
+
+8. Given that Privoxy is a free software project it would be
+   preferable if the hoster would use free software where possible.
+
+9. Migrating away from the hoster in the future without losing
+   any important data should be possible without writing web
+   scrapers first.
