@@ -67,10 +67,10 @@
 /*
  * Should pcre be statically built in instead of linkling with libpcre?
  * (This is determined by configure depending on the availiability of
- * libpcre and user preferences). The name is ugly, but pcre needs it.
+ * libpcre and user preferences).
  * Don't bother to change this here! Use configure instead.
  */
-#undef STATIC_PCRE
+#undef FEATURE_DYNAMIC_PCRE
 
 /*
  * Should pcrs be statically built in instead of linkling with libpcrs?
