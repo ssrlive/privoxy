@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.121 2014/05/05 09:55:51 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.122 2014/05/20 11:54:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1717,8 +1717,8 @@ static jb_err show_defines(struct map *exports)
 #endif
       },
       {
-         "STATIC_PCRE",
-#ifdef STATIC_PCRE
+         "FEATURE_DYNAMIC_PCRE",
+#ifdef FEATURE_DYNAMIC_PCRE
          1,
 #else
          0,
