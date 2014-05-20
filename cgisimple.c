@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.123 2014/05/20 11:55:09 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.124 2014/05/20 11:55:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -963,7 +963,7 @@ jb_err cgi_show_status(struct client_state *csp,
    }
 
 #else /* ndef FEATURE_STATISTICS */
-   err = err || map_block_killer(exports, "statistics");
+   if (!err) err = map_block_killer(exports, "statistics");
 #endif /* ndef FEATURE_STATISTICS */
 
    /*
