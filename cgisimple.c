@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.120 2013/01/26 13:30:20 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.121 2014/05/05 09:55:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1557,130 +1557,186 @@ jb_err cgi_robots_txt(struct client_state *csp,
 static jb_err show_defines(struct map *exports)
 {
    jb_err err = JB_ERR_OK;
+   int i;
+   struct feature {
+      const char name[31];
+      const unsigned char is_available;
+   };
 
+   static const struct feature features[] = {
+      {
+         "FEATURE_ACCEPT_FILTER",
 #ifdef FEATURE_ACCEPT_FILTER
-   if (!err) err = map_conditional(exports, "FEATURE_ACCEPT_FILTER", 1);
-#else /* ifndef FEATURE_ACCEPT_FILTER */
-   if (!err) err = map_conditional(exports, "FEATURE_ACCEPT_FILTER", 0);
-#endif /* ndef FEATURE_ACCEPT_FILTER */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_ACL",
 #ifdef FEATURE_ACL
-   if (!err) err = map_conditional(exports, "FEATURE_ACL", 1);
-#else /* ifndef FEATURE_ACL */
-   if (!err) err = map_conditional(exports, "FEATURE_ACL", 0);
-#endif /* ndef FEATURE_ACL */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_CGI_EDIT_ACTIONS",
 #ifdef FEATURE_CGI_EDIT_ACTIONS
-   if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 1);
-#else /* ifndef FEATURE_CGI_EDIT_ACTIONS */
-   if (!err) err = map_conditional(exports, "FEATURE_CGI_EDIT_ACTIONS", 0);
-#endif /* ndef FEATURE_CGI_EDIT_ACTIONS */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_COMPRESSION",
 #ifdef FEATURE_COMPRESSION
-   if (!err) err = map_conditional(exports, "FEATURE_COMPRESSION", 1);
-#else /* ifndef FEATURE_COMPRESSION */
-   if (!err) err = map_conditional(exports, "FEATURE_COMPRESSION", 0);
-#endif /* ndef FEATURE_COMPRESSION */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_CONNECTION_KEEP_ALIVE",
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   if (!err) err = map_conditional(exports, "FEATURE_CONNECTION_KEEP_ALIVE", 1);
-#else /* ifndef FEATURE_CONNECTION_KEEP_ALIVE */
-   if (!err) err = map_conditional(exports, "FEATURE_CONNECTION_KEEP_ALIVE", 0);
-#endif /* ndef FEATURE_CONNECTION_KEEP_ALIVE */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_CONNECTION_SHARING",
 #ifdef FEATURE_CONNECTION_SHARING
-   if (!err) err = map_conditional(exports, "FEATURE_CONNECTION_SHARING", 1);
-#else /* ifndef FEATURE_CONNECTION_SHARING */
-   if (!err) err = map_conditional(exports, "FEATURE_CONNECTION_SHARING", 0);
-#endif /* ndef FEATURE_CONNECTION_SHARING */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_FAST_REDIRECTS",
 #ifdef FEATURE_FAST_REDIRECTS
-   if (!err) err = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 1);
-#else /* ifndef FEATURE_FAST_REDIRECTS */
-   if (!err) err = map_conditional(exports, "FEATURE_FAST_REDIRECTS", 0);
-#endif /* ndef FEATURE_FAST_REDIRECTS */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_FORCE_LOAD",
 #ifdef FEATURE_FORCE_LOAD
-   if (!err) err = map_conditional(exports, "FEATURE_FORCE_LOAD", 1);
-   if (!err) err = map(exports, "FORCE_PREFIX", 1, FORCE_PREFIX, 1);
-#else /* ifndef FEATURE_FORCE_LOAD */
-   if (!err) err = map_conditional(exports, "FEATURE_FORCE_LOAD", 0);
-   if (!err) err = map(exports, "FORCE_PREFIX", 1, "(none - disabled)", 1);
-#endif /* ndef FEATURE_FORCE_LOAD */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_GRACEFUL_TERMINATION",
 #ifdef FEATURE_GRACEFUL_TERMINATION
-   if (!err) err = map_conditional(exports, "FEATURE_GRACEFUL_TERMINATION", 1);
-#else /* ifndef FEATURE_GRACEFUL_TERMINATION */
-   if (!err) err = map_conditional(exports, "FEATURE_GRACEFUL_TERMINATION", 0);
-#endif /* ndef FEATURE_GRACEFUL_TERMINATION */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_IMAGE_BLOCKING",
 #ifdef FEATURE_IMAGE_BLOCKING
-   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 1);
-#else /* ifndef FEATURE_IMAGE_BLOCKING */
-   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_BLOCKING", 0);
-#endif /* ndef FEATURE_IMAGE_BLOCKING */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_IMAGE_DETECT_MSIE",
 #ifdef FEATURE_IMAGE_DETECT_MSIE
-   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 1);
-#else /* ifndef FEATURE_IMAGE_DETECT_MSIE */
-   if (!err) err = map_conditional(exports, "FEATURE_IMAGE_DETECT_MSIE", 0);
-#endif /* ndef FEATURE_IMAGE_DETECT_MSIE */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_IPV6_SUPPORT",
 #ifdef HAVE_RFC2553
-   if (!err) err = map_conditional(exports, "FEATURE_IPV6_SUPPORT", 1);
-#else /* ifndef HAVE_RFC2553 */
-   if (!err) err = map_conditional(exports, "FEATURE_IPV6_SUPPORT", 0);
-#endif /* ndef HAVE_RFC2553 */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_NO_GIFS",
 #ifdef FEATURE_NO_GIFS
-   if (!err) err = map_conditional(exports, "FEATURE_NO_GIFS", 1);
-#else /* ifndef FEATURE_NO_GIFS */
-   if (!err) err = map_conditional(exports, "FEATURE_NO_GIFS", 0);
-#endif /* ndef FEATURE_NO_GIFS */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_PTHREAD",
 #ifdef FEATURE_PTHREAD
-   if (!err) err = map_conditional(exports, "FEATURE_PTHREAD", 1);
-#else /* ifndef FEATURE_PTHREAD */
-   if (!err) err = map_conditional(exports, "FEATURE_PTHREAD", 0);
-#endif /* ndef FEATURE_PTHREAD */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_STATISTICS",
 #ifdef FEATURE_STATISTICS
-   if (!err) err = map_conditional(exports, "FEATURE_STATISTICS", 1);
-#else /* ifndef FEATURE_STATISTICS */
-   if (!err) err = map_conditional(exports, "FEATURE_STATISTICS", 0);
-#endif /* ndef FEATURE_STATISTICS */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_STRPTIME_SANITY_CHECKS",
 #ifdef FEATURE_STRPTIME_SANITY_CHECKS
-   if (!err) err = map_conditional(exports, "FEATURE_STRPTIME_SANITY_CHECKS", 1);
-#else /* ifndef FEATURE_STRPTIME_SANITY_CHECKS */
-   if (!err) err = map_conditional(exports, "FEATURE_STRPTIME_SANITY_CHECKS", 0);
-#endif /* ndef FEATURE_STRPTIME_SANITY_CHECKS */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_TOGGLE",
 #ifdef FEATURE_TOGGLE
-   if (!err) err = map_conditional(exports, "FEATURE_TOGGLE", 1);
-#else /* ifndef FEATURE_TOGGLE */
-   if (!err) err = map_conditional(exports, "FEATURE_TOGGLE", 0);
-#endif /* ndef FEATURE_TOGGLE */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_TRUST",
 #ifdef FEATURE_TRUST
-   if (!err) err = map_conditional(exports, "FEATURE_TRUST", 1);
-#else /* ifndef FEATURE_TRUST */
-   if (!err) err = map_conditional(exports, "FEATURE_TRUST", 0);
-#endif /* ndef FEATURE_TRUST */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_ZLIB",
 #ifdef FEATURE_ZLIB
-   if (!err) err = map_conditional(exports, "FEATURE_ZLIB", 1);
-#else /* ifndef FEATURE_ZLIB */
-   if (!err) err = map_conditional(exports, "FEATURE_ZLIB", 0);
-#endif /* ndef FEATURE_ZLIB */
-
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "STATIC_PCRE",
 #ifdef STATIC_PCRE
-   if (!err) err = map_conditional(exports, "STATIC_PCRE", 1);
-#else /* ifndef STATIC_PCRE */
-   if (!err) err = map_conditional(exports, "STATIC_PCRE", 0);
-#endif /* ndef STATIC_PCRE */
+         1,
+#else
+         0,
+#endif
+      }
+   };
+
+   for (i = 0; i < SZ(features); i++)
+   {
+      err = map_conditional(exports, features[i].name, features[i].is_available);
+      if (err)
+      {
+         break;
+      }
+   }
 
    return err;
+
 }
 
 
