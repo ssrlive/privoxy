@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.124 2014/05/20 11:55:24 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.125 2014/05/20 11:56:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1063,6 +1063,8 @@ jb_err cgi_show_status(struct client_state *csp,
       err = map_block_killer(exports, "cgi-editor-is-disabled");
    }
 #endif /* ndef CGI_EDIT_ACTIONS */
+
+   if (!err) err = map(exports, "force-prefix", 1, FORCE_PREFIX, 1);
 
    if (err)
    {
