@@ -6,7 +6,7 @@
   <title>Actions Files</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.21 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.22 User Manual" href="index.html">
   <link rel="PREVIOUS" title="The Main Configuration File" href=
   "config.html">
   <link rel="NEXT" title="Filter Files" href="filter-file.html">
@@ -21,7 +21,7 @@
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.21 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.22 User Manual</th>
       </tr>
 
       <tr>
@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2858" id="AEN2858"></a>
+          <a name="AEN2863" id="AEN2863"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -314,7 +314,7 @@
     actions</a>.</p>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2957" id="AEN2957">8.1. Finding the Right
+      <h2 class="SECT2"><a name="AEN2962" id="AEN2962">8.1. Finding the Right
       Mix</a></h2>
 
       <p>Note that some <a href="actions-file.html#ACTIONS">actions</a>, like
@@ -339,7 +339,7 @@
     </div>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2964" id="AEN2964">8.2. How to
+      <h2 class="SECT2"><a name="AEN2969" id="AEN2969">8.2. How to
       Edit</a></h2>
 
       <p>The easiest way to edit the actions files is with a browser by using
@@ -430,8 +430,8 @@
       and potentially match against many similar patterns.</p>
 
       <p>Generally, an URL pattern has the form <tt class=
-      "LITERAL">&lt;domain&gt;&lt;port&gt;/&lt;path&gt;</tt>, where the
-      <tt class="LITERAL">&lt;domain&gt;</tt>, the <tt class=
+      "LITERAL">&lt;host&gt;&lt;port&gt;/&lt;path&gt;</tt>, where the
+      <tt class="LITERAL">&lt;host&gt;</tt>, the <tt class=
       "LITERAL">&lt;port&gt;</tt> and the <tt class=
       "LITERAL">&lt;path&gt;</tt> are optional. (This is why the special
       <tt class="LITERAL">/</tt> pattern matches all URLs). Note that the
@@ -440,15 +440,15 @@
       "EMPHASIS">not</i></span> be included in the pattern. This is assumed
       already!</p>
 
-      <p>The pattern matching syntax is different for the domain and path
-      parts of the URL. The domain part uses a simple globbing type matching
+      <p>The pattern matching syntax is different for the host and path parts
+      of the URL. The host part uses a simple globbing type matching
       technique, while the path part uses more flexible <a href=
       "http://en.wikipedia.org/wiki/Regular_expressions" target=
       "_top"><span class="QUOTE">"Regular Expressions"</span></a> (POSIX
       1003.2).</p>
 
       <p>The port part of a pattern is a decimal port number preceded by a
-      colon (<tt class="LITERAL">:</tt>). If the domain part contains a
+      colon (<tt class="LITERAL">:</tt>). If the host part contains a
       numerical IPv6 address, it has to be put into angle brackets
       (<tt class="LITERAL">&lt;</tt>, <tt class="LITERAL">&gt;</tt>).</p>
 
@@ -457,7 +457,7 @@
           <dt><tt class="LITERAL">www.example.com/</tt></dt>
 
           <dd>
-            <p>is a domain-only pattern and will match any request to
+            <p>is a host-only pattern and will match any request to
             <tt class="LITERAL">www.example.com</tt>, regardless of which
             document on that server is requested. So ALL pages in this domain
             would be covered by the scope of this action. Note that a simple
@@ -468,7 +468,7 @@
           <dt><tt class="LITERAL">www.example.com</tt></dt>
 
           <dd>
-            <p>means exactly the same. For domain-only patterns, the trailing
+            <p>means exactly the same. For host-only patterns, the trailing
             <tt class="LITERAL">/</tt> may be omitted.</p>
           </dd>
 
@@ -510,6 +510,14 @@
             <p>Matches any URL pointing to TCP port 8000.</p>
           </dd>
 
+          <dt><tt class="LITERAL">10.0.0.1/</tt></dt>
+
+          <dd>
+            <p>Matches any URL with the host address <tt class=
+            "LITERAL">10.0.0.1</tt>. (Note that the real URL uses plain
+            brackets, not angle brackets.)</p>
+          </dd>
+
           <dt><tt class="LITERAL">&lt;2001:db8::1&gt;/</tt></dt>
 
           <dd>
@@ -529,12 +537,14 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3076" id="AEN3076">8.4.1. The Domain
-        Pattern</a></h3>
+        <h3 class="SECT3"><a name="HOST-PATTERN" id="HOST-PATTERN">8.4.1. The
+        Host Pattern</a></h3>
 
-        <p>The matching of the domain part offers some flexible options: if
-        the domain starts or ends with a dot, it becomes unanchored at that
-        end. For example:</p>
+        <p>The matching of the host part offers some flexible options: if the
+        host pattern starts or ends with a dot, it becomes unanchored at that
+        end. The host pattern is often referred to as domain pattern as it is
+        usually used to match domain names and not IP addresses. For
+        example:</p>
 
         <div class="VARIABLELIST">
           <dl>
@@ -634,7 +644,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3152" id="AEN3152">8.4.2. The Path
+        <h3 class="SECT3"><a name="AEN3163" id="AEN3163">8.4.2. The Path
         Pattern</a></h3>
 
         <p><span class="APPLICATION">Privoxy</span> uses <span class=
@@ -783,6 +793,24 @@
         <p>While this is a limitation you should be aware of, this kind of
         indirection is seldom needed anyway and even the example doesn't make
         too much sense.</p>
+      </div>
+
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="NEGATIVE-TAG-PATTERNS" id=
+        "NEGATIVE-TAG-PATTERNS">8.4.4. The Negative Tag Patterns</a></h3>
+
+        <p>To match requests that do not have a certain tag, specify a
+        negative tag pattern by prefixing the tag pattern line with either
+        <span class="QUOTE">"NO-REQUEST-TAG:"</span> or <span class=
+        "QUOTE">"NO-RESPONSE-TAG:"</span> instead of <span class=
+        "QUOTE">"TAG:"</span>.</p>
+
+        <p>Negative tag patterns created with <span class=
+        "QUOTE">"NO-REQUEST-TAG:"</span> are checked after all client headers
+        are scanned, the ones created with <span class=
+        "QUOTE">"NO-RESPONSE-TAG:"</span> are checked after all server
+        headers are scanned. In both cases all the created tags are
+        considered.</p>
       </div>
     </div>
 
@@ -4336,7 +4364,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4827" id="AEN4827">8.5.35.
+        <h3 class="SECT3"><a name="AEN4847" id="AEN4847">8.5.35.
         Summary</a></h3>
 
         <p>Note that many of these actions have the potential to cause a page
@@ -4495,7 +4523,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       together:</p>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4891" id="AEN4891">8.7.1.
+        <h3 class="SECT3"><a name="AEN4911" id="AEN4911">8.7.1.
         match-all.action</a></h3>
 
         <p>Remember <span class="emphasis"><i class="EMPHASIS">all actions
@@ -4544,7 +4572,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4913" id="AEN4913">8.7.2.
+        <h3 class="SECT3"><a name="AEN4933" id="AEN4933">8.7.2.
         default.action</a></h3>
 
         <p>If you aren't a developer, there's no need for you to edit the
@@ -4887,7 +4915,7 @@ wiki.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN5026" id="AEN5026">8.7.3.
+        <h3 class="SECT3"><a name="AEN5046" id="AEN5046">8.7.3.
         user.action</a></h3>
 
         <p>So far we are painting with a broad brush by setting general
