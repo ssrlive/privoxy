@@ -1,4 +1,4 @@
-$Id: TODO,v 1.107 2014/05/13 11:42:20 fabiankeil Exp $
+$Id: TODO,v 1.108 2014/05/20 11:52:46 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -129,13 +129,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     to support it, so we could do it independently from 53).
 
 55) Apply for Coverity scans: http://scan.coverity.com/
-
-56) Apply for the "free online access for qualified open-source
-    software projects" for the Co-Advisor HTTP compliance tests:
-    http://coad.measurement-factory.com/details.html#pricing
-    2014-05-19: Applied. Privoxy is considered a qualified project,
-    developers can request free account upgrades for Privoxy testing.
-    Account created, upgrade requested. Dealing with the results is #126.
 
 57) Allow piping into external programs to allow more powerful
     filters and policy decisions. Incomplete support available
@@ -361,8 +354,10 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 125) Allow clients to HTTPS-encrypt the proxy connection.
 
 126) Run the Co-Advisor HTTP compliance tests, evaluate the results,
-     fix the compliance issues that aren't intentional and document
-     the rest. Work in progress. See also: #56.
+     fix the compliance issues that aren't by design and document
+     the rest.
+     Note that Privoxy developers qualified for free account upgrades:
+     http://coad.measurement-factory.com/details.html#pricing
 
 ##########################################################################
 
