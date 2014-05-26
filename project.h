@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.202 2013/11/24 14:26:27 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.203 2013/11/24 14:26:39 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1234,21 +1234,7 @@ struct configuration_spec
    /** Nonzero to enable multithreading. */
    int multi_threaded;
 
-   /**
-    * Bitmask of features that can be enabled/disabled through the config
-    * file.  Currently defined bits:
-    *
-    * - RUNTIME_FEATURE_CGI_EDIT_ACTIONS
-    * - RUNTIME_FEATURE_CGI_TOGGLE
-    * - RUNTIME_FEATURE_HTTP_TOGGLE
-    * - RUNTIME_FEATURE_SPLIT_LARGE_FORMS
-    * - RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS
-    * - RUNTIME_FEATURE_ENFORCE_BLOCKS
-    * - RUNTIME_FEATURE_CGI_CRUNCHING
-    * - RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE
-    * - RUNTIME_FEATURE_CONNECTION_SHARING
-    * - RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK
-    */
+   /** Bitmask of features that can be controlled through the config file. */
    unsigned feature_flags;
 
    /** The log file name. */
