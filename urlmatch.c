@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.79 2013/11/24 14:25:55 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.80 2013/11/24 14:47:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -489,7 +489,7 @@ static int unknown_method(const char *method)
 jb_err parse_http_request(const char *req, struct http_request *http)
 {
    char *buf;
-   char *v[10]; /* XXX: Why 10? We should only need three. */
+   char *v[3];
    int n;
    jb_err err;
 
