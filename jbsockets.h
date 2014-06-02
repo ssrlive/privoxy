@@ -1,6 +1,6 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.22 2013/11/24 14:23:28 fabiankeil Exp $"
+#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.23 2014/06/02 06:19:05 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -10,7 +10,7 @@
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.124 2013/03/20 11:30:05 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.125 2014/06/02 06:19:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -8,7 +8,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.124 2013/03/20 11:30:05 fabia
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2011 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

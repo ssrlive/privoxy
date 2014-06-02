@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.33 2013/11/24 14:23:28 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.34 2014/06/02 06:19:06 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Main file.  Contains main() method, main loop, and
  *                the main connection-handling function.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2006 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

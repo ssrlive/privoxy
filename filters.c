@@ -1,11 +1,11 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.180 2013/12/24 13:33:13 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.181 2014/06/02 06:19:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2011 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

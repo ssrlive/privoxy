@@ -36,9 +36,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.183 2014/05/26 10:48:39 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.184 2014/06/02 06:20:51 fabiankeil Exp $
 
- Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -57,12 +57,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2013 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2014 by
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.183 2014/05/26 10:48:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.184 2014/06/02 06:20:51 fabiankeil Exp $</pubdate>
 
 <!--
 

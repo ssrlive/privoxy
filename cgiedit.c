@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.79 2013/11/24 14:25:19 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.80 2014/06/02 06:19:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -13,7 +13,7 @@ const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.79 2013/11/24 14:25:19 fabiankeil
  *
  *                Stick to the short names in this file for consistency.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2008 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

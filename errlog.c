@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.118 2014/05/05 09:51:19 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.119 2014/06/02 06:19:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -6,7 +6,7 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.118 2014/05/05 09:51:19 fabiankeil 
  * Purpose     :  Log errors to a designated destination in an elegant,
  *                printf-like fashion.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2010 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

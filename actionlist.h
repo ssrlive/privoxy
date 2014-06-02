@@ -12,7 +12,7 @@
  *                    DEFINE_ACTION_BOOL()
  *                    DEFINE_ACTION_ALIAS
  *
- * Copyright   :  Written by and Copyright (C) 2001-2008 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

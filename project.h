@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.204 2014/05/26 10:46:45 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.205 2014/06/02 06:19:06 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -10,7 +10,7 @@
  *                project.  Does not define any variables or functions
  *                (though it does declare some macros).
  *
- * Copyright   :  Written by and Copyright (C) 2001-2012 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

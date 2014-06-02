@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.425 2014/02/10 14:39:43 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.426 2014/06/02 06:19:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -6,7 +6,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.425 2014/02/10 14:39:43 fabiankeil Exp $"
  * Purpose     :  Main file.  Contains main() method, main loop, and
  *                the main connection-handling function.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2012 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

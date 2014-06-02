@@ -10,7 +10,7 @@
  *                introduced because the compile command line started
  *                getting ludicrously long with feature defines.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2009 the
+ * Copyright   :  Written by and Copyright (C) 2001-2014 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
