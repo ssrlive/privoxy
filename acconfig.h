@@ -162,6 +162,11 @@
 #undef FEATURE_EXTENDED_HOST_PATTERNS
 
 /*
+ * Allow filtering with scripts and programs.
+ */
+#undef FEATURE_EXTERNAL_FILTERS
+
+/*
  * Keep connections alive if possible.
  */
 #undef FEATURE_CONNECTION_KEEP_ALIVE

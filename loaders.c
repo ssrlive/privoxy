@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.96 2013/11/24 14:22:51 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.97 2013/11/24 14:25:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -1170,6 +1170,12 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
       {
          new_filter = FT_SERVER_HEADER_TAGGER;
       }
+#ifdef FEATURE_EXTERNAL_FILTERS
+      else if (strncmp(buf, "EXTERNAL-FILTER:", 16) == 0)
+      {
+         new_filter = FT_EXTERNAL_CONTENT_FILTER;
+      }
+#endif
 
       /*
        * If this is the head of a new filter block, make it a
@@ -1186,6 +1192,12 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          {
             new_bl->name = chomp(buf + 7);
          }
+#ifdef FEATURE_EXTERNAL_FILTERS
+         else if (new_filter == FT_EXTERNAL_CONTENT_FILTER)
+         {
+            new_bl->name = chomp(buf + 16);
+         }
+#endif
          else
          {
             new_bl->name = chomp(buf + 21);
@@ -1234,12 +1246,33 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          continue;
       }
 
-      /*
-       * Else, save the expression, make it a pcrs_job
-       * and chain it into the current filter's joblist
-       */
+#ifdef FEATURE_EXTERNAL_FILTERS
+      if ((bl != NULL) && (bl->type == FT_EXTERNAL_CONTENT_FILTER))
+      {
+         /* Save the code as "pattern", but do not compile anything. */
+         if (bl->patterns->first != NULL)
+         {
+            log_error(LOG_LEVEL_FATAL, "External filter '%s' contains several jobss. "
+               "Did you forget to escape a line break?",
+               bl->name);
+         }
+         error = enlist(bl->patterns, buf);
+         if (JB_ERR_MEMORY == error)
+         {
+            log_error(LOG_LEVEL_FATAL,
+               "Out of memory while enlisting external filter code \'%s\' for filter %s.",
+               buf, bl->name);
+         }
+         freez(buf);
+         continue;
+      }
+#endif
       if (bl != NULL)
       {
+         /*
+          * Save the expression, make it a pcrs_job
+          * and chain it into the current filter's joblist
+          */
          error = enlist(bl->patterns, buf);
          if (JB_ERR_MEMORY == error)
          {

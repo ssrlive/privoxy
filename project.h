@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.203 2013/11/24 14:26:39 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.204 2014/05/26 10:46:45 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -566,7 +566,9 @@ struct iob
 /** Index into current_action_spec::multi[] for server-header tags to apply. */
 #define ACTION_MULTI_SERVER_HEADER_TAGGER    5
 /** Number of multi-string actions. */
-#define ACTION_MULTI_COUNT                   6
+#define ACTION_MULTI_EXTERNAL_FILTER         6
+/** Number of multi-string actions. */
+#define ACTION_MULTI_COUNT                   7
 
 
 /**
@@ -1115,9 +1117,17 @@ enum filter_type
    FT_SERVER_HEADER_FILTER = 2,
    FT_CLIENT_HEADER_TAGGER = 3,
    FT_SERVER_HEADER_TAGGER = 4,
+#ifdef FEATURE_EXTERNAL_FILTERS
+   FT_EXTERNAL_CONTENT_FILTER = 5,
+#endif
    FT_INVALID_FILTER       = 42,
 };
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+#define MAX_FILTER_TYPES        6
+#else
 #define MAX_FILTER_TYPES        5
+#endif
 
 /**
  * This struct represents one filter (one block) from
@@ -1245,6 +1255,11 @@ struct configuration_spec
 
    /** The directory for customized CGI templates. */
    const char *templdir;
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+   /** The template used to create temporary files. */
+   const char *temporary_directory;
+#endif
 
    /** The log file directory. */
    const char *logdir;

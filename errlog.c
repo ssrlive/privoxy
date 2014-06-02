@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.117 2012/12/09 12:28:14 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.118 2014/05/05 09:51:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -75,6 +75,9 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.117 2012/12/09 12:28:14 fabiankeil 
 #include "errlog.h"
 #include "project.h"
 #include "jcc.h"
+#ifdef FEATURE_EXTERNAL_FILTERS
+#include "jbsockets.h"
+#endif
 
 const char errlog_h_rcs[] = ERRLOG_H_VERSION;
 
@@ -353,6 +356,10 @@ void init_error_log(const char *prog_name, const char *logfname)
    {
       log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: \'%s\'", logfname);
    }
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+   mark_socket_for_close_on_execute(3);
+#endif
 
    /* set logging to be completely unbuffered */
    setbuf(fp, NULL);

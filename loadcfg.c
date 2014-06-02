@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.138 2013/04/23 09:42:53 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.139 2013/11/24 14:25:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -157,6 +157,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_split_large_cgi_forms        671658948U /* "split-large-cgi-forms" */
 #define hash_suppress_blocklists         1948693308U /* "suppress-blocklists" */
 #define hash_templdir                      11067889U /* "templdir" */
+#define hash_temporary_directory         1824125181U /* "temporary-directory" */
 #define hash_tolerate_pipelining         1360286620U /* "tolerate-pipelining" */
 #define hash_toggle                          447966U /* "toggle" */
 #define hash_trust_info_url               430331967U /* "trust-info-url" */
@@ -222,6 +223,9 @@ static void unload_configfile (void * data)
    freez(config->logdir);
    freez(config->templdir);
    freez(config->hostname);
+#ifdef FEATURE_EXTERNAL_FILTERS
+   freez(config->temporary_directory);
+#endif
 
    for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
    {
@@ -1363,6 +1367,16 @@ struct configuration_spec * load_config(void)
             freez(config->templdir);
             config->templdir = make_path(NULL, arg);
             break;
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+/* *************************************************************************
+ * temporary-directory directory-name
+ * *************************************************************************/
+         case hash_temporary_directory :
+            freez(config->temporary_directory);
+            config->temporary_directory = make_path(NULL, arg);
+            break;
+#endif
 
 /* *************************************************************************
  * tolerate-pipelining (0|1)

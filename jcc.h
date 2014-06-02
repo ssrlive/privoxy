@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.32 2011/11/06 11:48:23 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.33 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -78,6 +78,10 @@ extern void privoxy_mutex_unlock(privoxy_mutex_t *mutex);
 extern privoxy_mutex_t log_mutex;
 extern privoxy_mutex_t log_init_mutex;
 extern privoxy_mutex_t connection_reuse_mutex;
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+extern privoxy_mutex_t external_filter_mutex;
+#endif
 
 #ifndef HAVE_GMTIME_R
 extern privoxy_mutex_t gmtime_mutex;

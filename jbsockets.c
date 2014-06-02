@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.123 2013/03/06 21:06:18 diem Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.124 2013/03/20 11:30:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -289,6 +289,10 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       }
 #endif
 
+#ifdef FEATURE_EXTERNAL_FILTERS
+      mark_socket_for_close_on_execute(fd);
+#endif
+
 #ifdef TCP_NODELAY
       {  /* turn off TCP coalescence */
          int mi = 1;
@@ -494,6 +498,9 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    {
       flags |= O_NDELAY;
       fcntl(fd, F_SETFL, flags);
+#ifdef FEATURE_EXTERNAL_FILTERS
+      mark_socket_for_close_on_execute(fd);
+#endif
    }
 #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
 
@@ -908,6 +915,10 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    fd = socket(AF_INET, SOCK_STREAM, 0);
 #endif /* def HAVE_RFC2553 */
 
+#ifdef FEATURE_EXTERNAL_FILTERS
+   mark_socket_for_close_on_execute(fd);
+#endif
+
 #ifdef _WIN32
    if (fd == JB_INVALID_SOCKET)
 #else
@@ -1319,6 +1330,10 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    }
 #endif
 
+#ifdef FEATURE_EXTERNAL_FILTERS
+   mark_socket_for_close_on_execute(afd);
+#endif
+
    csp->cfd = afd;
 #ifdef HAVE_RFC2553
    csp->ip_addr_str = malloc(NI_MAXHOST);
@@ -1517,6 +1532,42 @@ int socket_is_still_alive(jb_socket sfd)
    return (no_data_waiting || (1 == recv(sfd, buf, 1, MSG_PEEK)));
 }
 
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+/*********************************************************************
+ *
+ * Function    :  mark_socket_for_close_on_execute
+ *
+ * Description :  Marks a socket for close on execute.
+ *
+ *                Used so that external filters have no direct
+ *                access to sockets they shouldn't care about.
+ *
+ *                Not implemented for all platforms.
+ *
+ * Parameters  :
+ *          1  :  fd = The socket to mark
+ *
+ * Returns     :  void.
+ *
+ *********************************************************************/
+void mark_socket_for_close_on_execute(jb_socket fd)
+{
+#ifdef FEATURE_PTHREAD
+   int ret;
+
+   ret = fcntl(fd, F_SETFD, FD_CLOEXEC);
+
+   if (ret == -1)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "fcntl(%d, F_SETFD, FD_CLOEXEC) failed", fd);
+   }
+#else
+#warning "Sockets will be visible to external filters"
+#endif
+}
+#endif /* def FEATURE_EXTERNAL_FILTERS */
 
 /*
   Local Variables:

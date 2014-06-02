@@ -527,6 +527,24 @@ function show_limit_connect_opts(tf)
       <td>Change HTTP/1.1 requests to HTTP/1.0.  Only change if you know
         what you're doing!</td>
     </tr>
+
+<!-- @if-external-content-filters-start -->
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="external_content_filter_all" id="external_content_filter_all_n" value="N" @external-content-filter-all-n@ ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="external_content_filter_all" id="external_content_filter_all_x" value="X" @external-content-filter-all-x@ ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@EXTERNAL_FILTER">external-filter</a> *</td>
+      <td>Filter the website through external scripts or programs.
+        You can use the radio buttons on this line to disable
+        all filters applied by previous rules, and/or you can enable or
+        disable the filters individually below.</td>
+    </tr>
+
+@external-content-filter-params@
+<!-- if-external-content-filters-end@ -->
+
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="fast_redirects" value="Y" @fast-redirects-y@

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.179 2013/12/24 13:32:51 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.180 2013/12/24 13:33:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -65,6 +65,7 @@ const char filters_rcs[] = "$Id: filters.c,v 1.179 2013/12/24 13:32:51 fabiankei
 #include "miscutil.h"
 #include "actions.h"
 #include "cgi.h"
+#include "jcc.h"
 #include "list.h"
 #include "deanimate.h"
 #include "urlmatch.h"
@@ -1732,6 +1733,229 @@ static char *pcrs_filter_response(struct client_state *csp)
 }
 
 
+#ifdef FEATURE_EXTERNAL_FILTERS
+/*********************************************************************
+ *
+ * Function    :  get_external_filter
+ *
+ * Description :  Lookup the code to execute for an external filter.
+ *                Masks the misuse of the re_filterfile_spec.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  name = Name of the content filter to get
+ *
+ * Returns     :  A pointer to the requested code
+ *                or NULL if the filter wasn't found
+ *
+ *********************************************************************/
+static const char *get_external_filter(const struct client_state *csp,
+                                const char *name)
+{
+   struct re_filterfile_spec *external_filter;
+
+   external_filter = get_filter(csp, name, FT_EXTERNAL_CONTENT_FILTER);
+   if (external_filter == NULL)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Didn't find stuff to execute for external filter: %s",
+         name);
+   }
+
+   return external_filter->patterns->first->str;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  set_privoxy_variables
+ *
+ * Description :  Sets a couple of privoxy-specific environment variables
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void set_privoxy_variables(const struct client_state *csp)
+{
+   int i;
+   struct {
+      const char *name;
+      const char *value;
+   } env[] = {
+      { "PRIVOXY_URL",    csp->http->url   },
+      { "PRIVOXY_PATH",   csp->http->path  },
+      { "PRIVOXY_HOST",   csp->http->host  },
+      { "PRIVOXY_ORIGIN", csp->ip_addr_str },
+   };
+
+   for (i = 0; i < SZ(env); i++)
+   {
+      if (setenv(env[i].name, env[i].value, 1))
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to set %s=%s: %E",
+            env[i].name, env[i].value);
+      }
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  execute_external_filter
+ *
+ * Description :  Pipe content into external filter and return the output
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  name = Name of the external filter to execute
+ *          3  :  content = The original content to filter
+ *          4  :  size = The size of the content buffer
+ *
+ * Returns     :  a pointer to the (newly allocated) modified buffer.
+ *                or NULL if there were no hits or something went wrong
+ *
+ *********************************************************************/
+static char *execute_external_filter(const struct client_state *csp,
+   const char *name, char *content, size_t *size)
+{
+   char cmd[200];
+   char file_name[FILENAME_MAX];
+   FILE *fp;
+   char *filter_output;
+   int fd;
+   int ret;
+   size_t new_size;
+   const char *external_filter;
+
+   if (csp->config->temporary_directory == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "No temporary-directory configured. Can't execute filter: %s",
+         name);
+      return NULL;
+   }
+
+   external_filter = get_external_filter(csp, name);
+
+   if (sizeof(file_name) < snprintf(file_name, sizeof(file_name),
+         "%s/privoxy-XXXXXXXX", csp->config->temporary_directory))
+   {
+      log_error(LOG_LEVEL_ERROR, "temporary-directory path too long");
+      return NULL;
+   }
+
+   fd = mkstemp(file_name);
+   if (fd == -1)
+   {
+      log_error(LOG_LEVEL_ERROR, "mkstemp() failed to create %s: %E", file_name);
+      return NULL;
+   }
+
+   fp = fdopen(fd, "w");
+   if (fp == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR, "fdopen() failed: %E");
+      unlink(file_name);
+      return NULL;
+   }
+
+   /*
+    * The size may be zero if a previous filter discarded everything.
+    *
+    * This isn't necessary unintentional, so we just don't try
+    * to fwrite() nothing and let the user deal with the rest.
+    */
+   if ((*size != 0) && fwrite(content, *size, 1, fp) != 1)
+   {
+      log_error(LOG_LEVEL_ERROR, "fwrite(..., %d, 1, ..) failed: %E", *size);
+      unlink(file_name);
+      return NULL;
+   }
+   fclose(fp);
+
+   if (sizeof(cmd) < snprintf(cmd, sizeof(cmd), "%s < %s", external_filter, file_name))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "temporary-directory or external filter path too long");
+      unlink(file_name);
+      return NULL;
+   }
+
+   log_error(LOG_LEVEL_RE_FILTER, "Executing '%s': %s", name, cmd);
+
+   /*
+    * The locking is necessary to prevent other threads
+    * from overwriting the environment variables before
+    * the popen fork. Afterwards this no longer matters.
+    */
+   privoxy_mutex_lock(&external_filter_mutex);
+   set_privoxy_variables(csp);
+   fp = popen(cmd, "r");
+   privoxy_mutex_unlock(&external_filter_mutex);
+   if (fp == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR, "popen(\"%s\", \"r\") failed: %E", cmd);
+      unlink(file_name);
+      return NULL;
+   }
+
+   filter_output = malloc_or_die(*size);
+
+   new_size = 0;
+   while (!feof(fp) && !ferror(fp))
+   {
+      size_t len;
+      /* Could be bigger ... */
+      enum { READ_LENGTH = 2048 };
+
+      if (new_size + READ_LENGTH >= *size)
+      {
+         char *p;
+
+         /* Could be considered wasteful if the content is 'large'. */
+         *size = (*size != 0) ? *size * 2 : READ_LENGTH;
+
+         p = realloc(filter_output, *size);
+         if (p == NULL)
+         {
+            log_error(LOG_LEVEL_ERROR, "Out of memory while reading "
+               "external filter output. Using what we got so far.");
+            break;
+         }
+         filter_output = p;
+      }
+      len = fread(&filter_output[new_size], 1, READ_LENGTH, fp);
+      if (len > 0)
+      {
+         new_size += len;
+      }
+   }
+
+   ret = pclose(fp);
+   if (ret == -1)
+   {
+      log_error(LOG_LEVEL_ERROR, "Executing %s failed: %E", cmd);
+   }
+   else
+   {
+      log_error(LOG_LEVEL_RE_FILTER,
+         "Executing '%s' resulted in return value %d. "
+         "Read %d of up to %d bytes.", name, (ret >> 8), new_size, *size);
+   }
+
+   unlink(file_name);
+   *size = new_size;
+
+   return filter_output;
+
+}
+#endif /* def FEATURE_EXTERNAL_FILTERS */
+
+
 /*********************************************************************
  *
  * Function    :  gif_deanimate_response
@@ -1798,7 +2022,8 @@ static char *gif_deanimate_response(struct client_state *csp)
  * Function    :  get_filter_function
  *
  * Description :  Decides which content filter function has
- *                to be applied (if any).
+ *                to be applied (if any). Only considers functions
+ *                for internal filters which are mutually-exclusive.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1993,6 +2218,7 @@ static jb_err prepare_for_filtering(struct client_state *csp)
  *********************************************************************/
 char *execute_content_filters(struct client_state *csp)
 {
+   char *content;
    filter_function_ptr content_filter;
 
    assert(content_filters_enabled(csp->action));
@@ -2023,8 +2249,32 @@ char *execute_content_filters(struct client_state *csp)
    }
 
    content_filter = get_filter_function(csp);
+   content = (content_filter != NULL) ? (*content_filter)(csp) : NULL;
 
-   return ((*content_filter)(csp));
+#ifdef FEATURE_EXTERNAL_FILTERS
+   if (!list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]))
+   {
+      struct list_entry *filtername;
+      size_t size = (size_t)csp->content_length;
+
+      if (content == NULL)
+      {
+         content = csp->iob->cur;
+         size = (size_t)(csp->iob->eod - csp->iob->cur);
+      }
+
+      for (filtername = csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]->first;
+           filtername ; filtername = filtername->next)
+      {
+         content = execute_external_filter(csp, filtername->str, content, &size);
+      }
+      csp->flags |= CSP_FLAG_MODIFIED;
+      csp->content_length = size;
+   }
+#endif /* def FEATURE_EXTERNAL_FILTERS */
+
+   return content;
+
 }
 
 
@@ -2414,7 +2664,7 @@ int content_requires_filtering(struct client_state *csp)
       return TRUE;
    }
 
-   return FALSE;
+   return (!list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]));
 
 }
 
@@ -2435,7 +2685,8 @@ int content_requires_filtering(struct client_state *csp)
 int content_filters_enabled(const struct current_action_spec *action)
 {
    return ((action->flags & ACTION_DEANIMATE) ||
-      !list_is_empty(action->multi[ACTION_MULTI_FILTER]));
+      !list_is_empty(action->multi[ACTION_MULTI_FILTER]) ||
+      !list_is_empty(action->multi[ACTION_MULTI_EXTERNAL_FILTER]));
 }
 
 

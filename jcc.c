@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.424 2013/03/01 17:38:34 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.425 2014/02/10 14:39:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -181,6 +181,10 @@ static int32 server_thread(void *data);
 privoxy_mutex_t log_mutex;
 privoxy_mutex_t log_init_mutex;
 privoxy_mutex_t connection_reuse_mutex;
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+privoxy_mutex_t external_filter_mutex;
+#endif
 
 #if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
 privoxy_mutex_t resolver_mutex;
@@ -3134,6 +3138,9 @@ static void initialize_mutexes(void)
    privoxy_mutex_init(&log_mutex);
    privoxy_mutex_init(&log_init_mutex);
    privoxy_mutex_init(&connection_reuse_mutex);
+#ifdef FEATURE_EXTERNAL_FILTERS
+   privoxy_mutex_init(&external_filter_mutex);
+#endif
 
    /*
     * XXX: The assumptions below are a bit naive
@@ -3517,6 +3524,13 @@ int main(int argc, char **argv)
          }
          close(fd);
       }
+
+#ifdef FEATURE_EXTERNAL_FILTERS
+      for (fd = 0; fd < 3; fd++)
+      {
+         mark_socket_for_close_on_execute(fd);
+      }
+#endif
 
       chdir("/");
 

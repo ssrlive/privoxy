@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.78 2013/11/24 14:22:51 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.79 2013/11/24 14:25:19 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -243,6 +243,14 @@ static const struct filter_type_info filter_type_info[] =
       "server-header-tagger-all", "server_header_tagger_all",
       "E", "SERVER-HEADER-TAGGER"
    },
+#ifdef FEATURE_EXTERNAL_FILTERS
+   {
+      ACTION_MULTI_EXTERNAL_FILTER,
+      "external-content-filter-params", "external-filter",
+      "external-content-filter-all", "external_content_filter_all",
+      "E", "EXTERNAL-CONTENT-FILTER"
+   },
+#endif
 };
 
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
@@ -2819,6 +2827,10 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
          break;
       }
    }
+
+#ifndef FEATURE_EXTERNAL_FILTERS
+   if (!err) err = map_block_killer(exports, "external-content-filters");
+#endif
 
    if (err)
    {
