@@ -1,4 +1,4 @@
-$Id: TODO,v 1.109 2014/05/26 10:47:21 fabiankeil Exp $
+$Id: TODO,v 1.110 2014/06/02 07:22:40 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -354,6 +354,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      the rest.
      Note that Privoxy developers qualified for free account upgrades:
      http://coad.measurement-factory.com/details.html#pricing
+
+127) Add "real" CGI support (serve program output instead of forwarding
+     the request). The work is mostly done due to +external-filter{}.
 
 ##########################################################################
 
