@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.103 2014/02/10 14:39:13 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.104 2014/05/05 09:59:30 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.103 2014/02/10 14:39:13 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.104 2014/05/05 09:59:30 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
@@ -585,6 +585,55 @@ II. FORMAT OF THE CONFIGURATION FILE
 </variablelist>
 
 <![%config-file;[<literallayout>@@#templdir .</literallayout>]]>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="temporary-directory"><title>temporary-directory</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>A directory where Privoxy can create temporary files.</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>Path name</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>unset</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>No temporary files are created, external filters don't work.</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    To execute <literal><ulink url="actions-file.html#EXTERNAL-FILTER">external filters</ulink></literal>,
+    <application>Privoxy</application> has to create temporary files.
+    This directive specifies the directory the temporary files should
+    be written to.
+   </para>
+   <para>
+    It should be a directory only <application>Privoxy</application>
+    (and trusted users) can access.
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@#temporary-directory .</literallayout>]]>
 </sect3>
 
 

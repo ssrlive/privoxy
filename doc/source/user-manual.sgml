@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.182 2014/05/05 10:08:43 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.183 2014/05/26 10:48:39 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.182 2014/05/05 10:08:43 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.183 2014/05/26 10:48:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3602,6 +3602,92 @@ problem-host.example.com</screen>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="external-filter">
+<title>external-filter</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Modify content using a programming language of your choice.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    All instances of text-based type, most notably HTML and JavaScript, to which
+    this action applies, can be filtered on-the-fly through the specified external
+    filter.
+    By default plain text documents are exempted from filtering, because web
+    servers often use the <literal>text/plain</literal> MIME type for all files
+    whose type they don't know.)
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of an external content filter, as defined in the
+    <link linkend="filter-file">filter file</link>.
+    External filters can be defined in one or more files as defined by the
+    <literal><link linkend="filterfile">filterfile</link></literal>
+    option in the <link linkend="config">config file</link>.
+   </para>
+   <para>
+    When used in its negative form,
+    and without parameters, <emphasis>all</emphasis> filtering with external
+    filters is completely disabled.
+  </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    External filters are scripts or programs that can modify the content in
+    case common <literal><link linkend="filter">filters</link></literal>
+    aren't powerful enough.
+   </para>
+   <warning>
+    <para>
+     Currently external filters are executed with &my-app;'s privileges.
+     Only use external filters you understand and trust.
+    </para>
+   </warning>
+   <para>
+    This feature is experimental, the <literal><link
+    linkend="external-filter-syntax">syntax</link></literal>
+    may change in the future.
+   </para>
+
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <para>
+    <screen>+external-filter{fancy-filter}</screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="fast-redirects">
 <title>fast-redirects</title>
 
@@ -6453,7 +6539,7 @@ stupid-server.example.com/</screen>
 </para>
 
 <para>
- &my-app; supports three different filter actions:
+ &my-app; supports three different pcrs-based filter actions:
  <literal><link linkend="filter">filter</link></literal> to
  rewrite the content that is send to the client,
  <literal><link linkend="client-header-filter">client-header-filter</link></literal>
@@ -6471,6 +6557,13 @@ stupid-server.example.com/</screen>
  is that taggers don't modify the text they are filtering, but use a rewritten
  version of the filtered text as tag. The tags can then be used to change the
  applying actions through sections with <link linkend="tag-pattern">tag-patterns</link>.
+</para>
+
+<para>
+ Finally &my-app; supports the
+ <literal><link linkend="external-filter">external-filter</link></literal> action
+ to enable <literal><link linkend="external-filter-syntax">external filters</link></literal>
+ written in proper programming languages.
 </para>
 
 
@@ -7290,6 +7383,72 @@ pre-defined filters for your convenience:
 </variablelist>
 
 </sect2>
+
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
+<sect2 id="external-filter-syntax"><title>External filter syntax</title>
+<para>
+ External filters are scripts or programs that can modify the content in
+ case common <literal><link linkend="filter">filters</link></literal>
+ aren't powerful enough.
+</para>
+<para>
+ External filters can be written in any language the platform &my-app; runs
+ on supports.
+</para>
+<para>
+ They are controlled with the
+ <literal><link linkend="external-filter">external-filter</link></literal> action
+ and have to be defined in the <literal><link linkend="filterfile">filterfile</link></literal>
+ first.
+</para>
+<para>
+ The header looks like any other filter, but instead of pcrs jobs, external
+ filters contain a single job which can be a program or a shell script (which
+ may call other scripts or programs).
+</para>
+<para>
+ External filters read the content from STDIN and write the rewritten
+ content to STDOUT. The environment variables PRIVOXY_URL, PRIVOXY_PATH,
+ PRIVOXY_HOST, PRIVOXY_ORIGIN can be used to get some details about the
+ client request.
+</para>
+<para>
+ &my-app; will temporary store the content to filter in the
+ <literal><link linkend="temporary-directory">temporary-directory</link></literal>.
+</para>
+<para>
+ <screen>
+EXTERNAL-FILTER: cat Pointless example filter that doesn't actually modify the content
+/bin/cat
+
+# Incorrect reimplementation of the filter above in POSIX shell.
+#
+# Note that it's a single job that spans multiple lines, the line
+# breaks are not passed to the shell, thus the semicolons are required.
+#
+# If the script isn't trivial, it is recommended to put it into an external file.
+#
+# In general, writing external filters entirely in POSIX shell is not
+# considered a good idea.
+EXTERNAL-FILTER: cat2 Pointless example filter that despite its name may actually modify the content
+while read line; \
+do \
+  echo "$line"; \
+done
+</screen>
+</para>
+
+<warning>
+ <para>
+  Currently external filters are executed with &my-app;'s privileges!
+  Only use external filters you understand and trust.
+ </para>
+</warning>
+<para>
+ External filters are experimental and the syntax may change in the future.
+</para>
+</sect2>
+
 </sect1>
 
 <!--  ~  End section  ~  -->
