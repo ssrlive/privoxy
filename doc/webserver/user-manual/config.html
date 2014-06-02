@@ -430,7 +430,55 @@
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="LOGDIR" id="LOGDIR">7.2.3. logdir</a></h4>
+        <h4 class="SECT3"><a name="TEMPORARY-DIRECTORY" id=
+        "TEMPORARY-DIRECTORY">7.2.3. temporary-directory</a></h4>
+
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+
+            <dd>
+              <p>A directory where Privoxy can create temporary files.</p>
+            </dd>
+
+            <dt>Type of value:</dt>
+
+            <dd>
+              <p>Path name</p>
+            </dd>
+
+            <dt>Default value:</dt>
+
+            <dd>
+              <p>unset</p>
+            </dd>
+
+            <dt>Effect if unset:</dt>
+
+            <dd>
+              <p>No temporary files are created, external filters don't
+              work.</p>
+            </dd>
+
+            <dt>Notes:</dt>
+
+            <dd>
+              <p>To execute <tt class="LITERAL"><a href=
+              "actions-file.html#EXTERNAL-FILTER" target="_top">external
+              filters</a></tt>, <span class="APPLICATION">Privoxy</span> has
+              to create temporary files. This directive specifies the
+              directory the temporary files should be written to.</p>
+
+              <p>It should be a directory only <span class=
+              "APPLICATION">Privoxy</span> (and trusted users) can
+              access.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="LOGDIR" id="LOGDIR">7.2.4. logdir</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -473,7 +521,7 @@
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="ACTIONSFILE" id="ACTIONSFILE">7.2.4.
+        <h4 class="SECT3"><a name="ACTIONSFILE" id="ACTIONSFILE">7.2.5.
         actionsfile</a></h4><a name="DEFAULT.ACTION" id=
         "DEFAULT.ACTION"></a><a name="STANDARD.ACTION" id=
         "STANDARD.ACTION"></a><a name="USER.ACTION" id="USER.ACTION"></a>
@@ -559,7 +607,7 @@
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FILTERFILE" id="FILTERFILE">7.2.5.
+        <h4 class="SECT3"><a name="FILTERFILE" id="FILTERFILE">7.2.6.
         filterfile</a></h4><a name="DEFAULT.FILTER" id="DEFAULT.FILTER"></a>
 
         <div class="VARIABLELIST">
@@ -630,7 +678,7 @@
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="LOGFILE" id="LOGFILE">7.2.6.
+        <h4 class="SECT3"><a name="LOGFILE" id="LOGFILE">7.2.7.
         logfile</a></h4>
 
         <div class="VARIABLELIST">
@@ -696,7 +744,7 @@
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="TRUSTFILE" id="TRUSTFILE">7.2.7.
+        <h4 class="SECT3"><a name="TRUSTFILE" id="TRUSTFILE">7.2.8.
         trustfile</a></h4>
 
         <div class="VARIABLELIST">

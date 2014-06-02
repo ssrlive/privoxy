@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2863" id="AEN2863"></a>
+          <a name="AEN2891" id="AEN2891"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -314,7 +314,7 @@
     actions</a>.</p>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2962" id="AEN2962">8.1. Finding the Right
+      <h2 class="SECT2"><a name="AEN2990" id="AEN2990">8.1. Finding the Right
       Mix</a></h2>
 
       <p>Note that some <a href="actions-file.html#ACTIONS">actions</a>, like
@@ -339,7 +339,7 @@
     </div>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN2969" id="AEN2969">8.2. How to
+      <h2 class="SECT2"><a name="AEN2997" id="AEN2997">8.2. How to
       Edit</a></h2>
 
       <p>The easiest way to edit the actions files is with a browser by using
@@ -644,7 +644,7 @@
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN3163" id="AEN3163">8.4.2. The Path
+        <h3 class="SECT3"><a name="AEN3191" id="AEN3191">8.4.2. The Path
         Pattern</a></h3>
 
         <p><span class="APPLICATION">Privoxy</span> uses <span class=
@@ -2000,8 +2000,100 @@ problem-host.example.com
       </div>
 
       <div class="SECT3">
+        <h4 class="SECT3"><a name="EXTERNAL-FILTER" id=
+        "EXTERNAL-FILTER">8.5.14. external-filter</a></h4>
+
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Typical use:</dt>
+
+            <dd>
+              <p>Modify content using a programming language of your
+              choice.</p>
+            </dd>
+
+            <dt>Effect:</dt>
+
+            <dd>
+              <p>All instances of text-based type, most notably HTML and
+              JavaScript, to which this action applies, can be filtered
+              on-the-fly through the specified external filter. By default
+              plain text documents are exempted from filtering, because web
+              servers often use the <tt class="LITERAL">text/plain</tt> MIME
+              type for all files whose type they don't know.)</p>
+            </dd>
+
+            <dt>Type:</dt>
+
+            <dd>
+              <p>Parameterized.</p>
+            </dd>
+
+            <dt>Parameter:</dt>
+
+            <dd>
+              <p>The name of an external content filter, as defined in the
+              <a href="filter-file.html">filter file</a>. External filters
+              can be defined in one or more files as defined by the
+              <tt class="LITERAL"><a href=
+              "config.html#FILTERFILE">filterfile</a></tt> option in the
+              <a href="config.html">config file</a>.</p>
+
+              <p>When used in its negative form, and without parameters,
+              <span class="emphasis"><i class="EMPHASIS">all</i></span>
+              filtering with external filters is completely disabled.</p>
+            </dd>
+
+            <dt>Notes:</dt>
+
+            <dd>
+              <p>External filters are scripts or programs that can modify the
+              content in case common <tt class="LITERAL"><a href=
+              "actions-file.html#FILTER">filters</a></tt> aren't powerful
+              enough.</p>
+
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+
+                  <tr>
+                    <td align="left">
+                      <p>Currently external filters are executed with
+                      <span class="APPLICATION">Privoxy</span>'s privileges.
+                      Only use external filters you understand and trust.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <p>This feature is experimental, the <tt class=
+              "LITERAL"><a href=
+              "filter-file.html#EXTERNAL-FILTER-SYNTAX">syntax</a></tt> may
+              change in the future.</p>
+            </dd>
+
+            <dt>Example usage:</dt>
+
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
++external-filter{fancy-filter}
+</pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="SECT3">
         <h4 class="SECT3"><a name="FAST-REDIRECTS" id=
-        "FAST-REDIRECTS">8.5.14. fast-redirects</a></h4>
+        "FAST-REDIRECTS">8.5.15. fast-redirects</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2123,7 +2215,7 @@ problem-host.example.com
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FILTER" id="FILTER">8.5.15.
+        <h4 class="SECT3"><a name="FILTER" id="FILTER">8.5.16.
         filter</a></h4>
 
         <div class="VARIABLELIST">
@@ -2597,7 +2689,7 @@ problem-host.example.com
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="FORCE-TEXT-MODE" id=
-        "FORCE-TEXT-MODE">8.5.16. force-text-mode</a></h4>
+        "FORCE-TEXT-MODE">8.5.17. force-text-mode</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2678,7 +2770,7 @@ problem-host.example.com
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="FORWARD-OVERRIDE" id=
-        "FORWARD-OVERRIDE">8.5.17. forward-override</a></h4>
+        "FORWARD-OVERRIDE">8.5.18. forward-override</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2811,7 +2903,7 @@ TAG:^User-Agent: fetch libfetch/2\.0$
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOCUMENT" id=
-        "HANDLE-AS-EMPTY-DOCUMENT">8.5.18. handle-as-empty-document</a></h4>
+        "HANDLE-AS-EMPTY-DOCUMENT">8.5.19. handle-as-empty-document</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2889,7 +2981,7 @@ example.org/.*\.js$
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HANDLE-AS-IMAGE" id=
-        "HANDLE-AS-IMAGE">8.5.19. handle-as-image</a></h4>
+        "HANDLE-AS-IMAGE">8.5.20. handle-as-image</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -2978,7 +3070,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HIDE-ACCEPT-LANGUAGE" id=
-        "HIDE-ACCEPT-LANGUAGE">8.5.20. hide-accept-language</a></h4>
+        "HIDE-ACCEPT-LANGUAGE">8.5.21. hide-accept-language</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3058,7 +3150,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HIDE-CONTENT-DISPOSITION" id=
-        "HIDE-CONTENT-DISPOSITION">8.5.21. hide-content-disposition</a></h4>
+        "HIDE-CONTENT-DISPOSITION">8.5.22. hide-content-disposition</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3144,7 +3236,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HIDE-IF-MODIFIED-SINCE" id=
-        "HIDE-IF-MODIFIED-SINCE">8.5.22. hide-if-modified-since</a></h4>
+        "HIDE-IF-MODIFIED-SINCE">8.5.23. hide-if-modified-since</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3231,7 +3323,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HIDE-FROM-HEADER" id=
-        "HIDE-FROM-HEADER">8.5.23. hide-from-header</a></h4>
+        "HIDE-FROM-HEADER">8.5.24. hide-from-header</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3306,7 +3398,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-REFERRER" id="HIDE-REFERRER">8.5.24.
+        <h4 class="SECT3"><a name="HIDE-REFERRER" id="HIDE-REFERRER">8.5.25.
         hide-referrer</a></h4><a name="HIDE-REFERER" id="HIDE-REFERER"></a>
 
         <div class="VARIABLELIST">
@@ -3426,7 +3518,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="HIDE-USER-AGENT" id=
-        "HIDE-USER-AGENT">8.5.25. hide-user-agent</a></h4>
+        "HIDE-USER-AGENT">8.5.26. hide-user-agent</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3515,7 +3607,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="LIMIT-CONNECT" id="LIMIT-CONNECT">8.5.26.
+        <h4 class="SECT3"><a name="LIMIT-CONNECT" id="LIMIT-CONNECT">8.5.27.
         limit-connect</a></h4>
 
         <div class="VARIABLELIST">
@@ -3596,7 +3688,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="LIMIT-COOKIE-LIFETIME" id=
-        "LIMIT-COOKIE-LIFETIME">8.5.27. limit-cookie-lifetime</a></h4>
+        "LIMIT-COOKIE-LIFETIME">8.5.28. limit-cookie-lifetime</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3678,7 +3770,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="PREVENT-COMPRESSION" id=
-        "PREVENT-COMPRESSION">8.5.28. prevent-compression</a></h4>
+        "PREVENT-COMPRESSION">8.5.29. prevent-compression</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3782,7 +3874,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="OVERWRITE-LAST-MODIFIED" id=
-        "OVERWRITE-LAST-MODIFIED">8.5.29. overwrite-last-modified</a></h4>
+        "OVERWRITE-LAST-MODIFIED">8.5.30. overwrite-last-modified</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -3878,7 +3970,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
       </div>
 
       <div class="SECT3">
-        <h4 class="SECT3"><a name="REDIRECT" id="REDIRECT">8.5.30.
+        <h4 class="SECT3"><a name="REDIRECT" id="REDIRECT">8.5.31.
         redirect</a></h4>
 
         <div class="VARIABLELIST">
@@ -3982,7 +4074,7 @@ www.privoxy.org/user-manual/
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SERVER-HEADER-FILTER" id=
-        "SERVER-HEADER-FILTER">8.5.31. server-header-filter</a></h4>
+        "SERVER-HEADER-FILTER">8.5.32. server-header-filter</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4054,7 +4146,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SERVER-HEADER-TAGGER" id=
-        "SERVER-HEADER-TAGGER">8.5.32. server-header-tagger</a></h4>
+        "SERVER-HEADER-TAGGER">8.5.33. server-header-tagger</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4127,7 +4219,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SESSION-COOKIES-ONLY" id=
-        "SESSION-COOKIES-ONLY">8.5.33. session-cookies-only</a></h4>
+        "SESSION-COOKIES-ONLY">8.5.34. session-cookies-only</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4225,7 +4317,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 
       <div class="SECT3">
         <h4 class="SECT3"><a name="SET-IMAGE-BLOCKER" id=
-        "SET-IMAGE-BLOCKER">8.5.34. set-image-blocker</a></h4>
+        "SET-IMAGE-BLOCKER">8.5.35. set-image-blocker</a></h4>
 
         <div class="VARIABLELIST">
           <dl>
@@ -4364,7 +4456,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4847" id="AEN4847">8.5.35.
+        <h3 class="SECT3"><a name="AEN4918" id="AEN4918">8.5.36.
         Summary</a></h3>
 
         <p>Note that many of these actions have the potential to cause a page
@@ -4523,7 +4615,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       together:</p>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4911" id="AEN4911">8.7.1.
+        <h3 class="SECT3"><a name="AEN4982" id="AEN4982">8.7.1.
         match-all.action</a></h3>
 
         <p>Remember <span class="emphasis"><i class="EMPHASIS">all actions
@@ -4572,7 +4664,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4933" id="AEN4933">8.7.2.
+        <h3 class="SECT3"><a name="AEN5004" id="AEN5004">8.7.2.
         default.action</a></h3>
 
         <p>If you aren't a developer, there's no need for you to edit the
@@ -4915,7 +5007,7 @@ wiki.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN5046" id="AEN5046">8.7.3.
+        <h3 class="SECT3"><a name="AEN5117" id="AEN5117">8.7.3.
         user.action</a></h3>
 
         <p>So far we are painting with a broad brush by setting general

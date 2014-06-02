@@ -20,10 +20,10 @@
       Manual</a></h1>
 
       <p class="PUBDATE"><sub><a href="copyright.html">Copyright</a> &copy;
-      2001-2013 by <a href="http://www.privoxy.org/" target="_top">Privoxy
+      2001-2014 by <a href="http://www.privoxy.org/" target="_top">Privoxy
       Developers</a></sub><br></p>
 
-      <p class="PUBDATE">$Id: user-manual.sgml,v 2.182 2014/05/05 10:08:43
+      <p class="PUBDATE">$Id: user-manual.sgml,v 2.183 2014/05/26 10:48:39
       fabiankeil Exp $<br></p>
 
       <div>
@@ -213,17 +213,20 @@
 
                 <dt>7.2.2. <a href="config.html#TEMPLDIR">templdir</a></dt>
 
-                <dt>7.2.3. <a href="config.html#LOGDIR">logdir</a></dt>
+                <dt>7.2.3. <a href=
+                "config.html#TEMPORARY-DIRECTORY">temporary-directory</a></dt>
 
-                <dt>7.2.4. <a href=
-                "config.html#ACTIONSFILE">actionsfile</a></dt>
+                <dt>7.2.4. <a href="config.html#LOGDIR">logdir</a></dt>
 
                 <dt>7.2.5. <a href=
+                "config.html#ACTIONSFILE">actionsfile</a></dt>
+
+                <dt>7.2.6. <a href=
                 "config.html#FILTERFILE">filterfile</a></dt>
 
-                <dt>7.2.6. <a href="config.html#LOGFILE">logfile</a></dt>
+                <dt>7.2.7. <a href="config.html#LOGFILE">logfile</a></dt>
 
-                <dt>7.2.7. <a href="config.html#TRUSTFILE">trustfile</a></dt>
+                <dt>7.2.8. <a href="config.html#TRUSTFILE">trustfile</a></dt>
               </dl>
             </dd>
 
@@ -345,10 +348,10 @@
 
         <dd>
           <dl>
-            <dt>8.1. <a href="actions-file.html#AEN2962">Finding the Right
+            <dt>8.1. <a href="actions-file.html#AEN2990">Finding the Right
             Mix</a></dt>
 
-            <dt>8.2. <a href="actions-file.html#AEN2969">How to Edit</a></dt>
+            <dt>8.2. <a href="actions-file.html#AEN2997">How to Edit</a></dt>
 
             <dt>8.3. <a href="actions-file.html#ACTIONS-APPLY">How Actions
             are Applied to Requests</a></dt>
@@ -361,7 +364,7 @@
                 <dt>8.4.1. <a href="actions-file.html#HOST-PATTERN">The Host
                 Pattern</a></dt>
 
-                <dt>8.4.2. <a href="actions-file.html#AEN3163">The Path
+                <dt>8.4.2. <a href="actions-file.html#AEN3191">The Path
                 Pattern</a></dt>
 
                 <dt>8.4.3. <a href="actions-file.html#TAG-PATTERN">The Tag
@@ -416,70 +419,73 @@
                 "actions-file.html#DOWNGRADE-HTTP-VERSION">downgrade-http-version</a></dt>
 
                 <dt>8.5.14. <a href=
-                "actions-file.html#FAST-REDIRECTS">fast-redirects</a></dt>
+                "actions-file.html#EXTERNAL-FILTER">external-filter</a></dt>
 
                 <dt>8.5.15. <a href=
-                "actions-file.html#FILTER">filter</a></dt>
+                "actions-file.html#FAST-REDIRECTS">fast-redirects</a></dt>
 
                 <dt>8.5.16. <a href=
-                "actions-file.html#FORCE-TEXT-MODE">force-text-mode</a></dt>
+                "actions-file.html#FILTER">filter</a></dt>
 
                 <dt>8.5.17. <a href=
-                "actions-file.html#FORWARD-OVERRIDE">forward-override</a></dt>
+                "actions-file.html#FORCE-TEXT-MODE">force-text-mode</a></dt>
 
                 <dt>8.5.18. <a href=
-                "actions-file.html#HANDLE-AS-EMPTY-DOCUMENT">handle-as-empty-document</a></dt>
+                "actions-file.html#FORWARD-OVERRIDE">forward-override</a></dt>
 
                 <dt>8.5.19. <a href=
-                "actions-file.html#HANDLE-AS-IMAGE">handle-as-image</a></dt>
+                "actions-file.html#HANDLE-AS-EMPTY-DOCUMENT">handle-as-empty-document</a></dt>
 
                 <dt>8.5.20. <a href=
-                "actions-file.html#HIDE-ACCEPT-LANGUAGE">hide-accept-language</a></dt>
+                "actions-file.html#HANDLE-AS-IMAGE">handle-as-image</a></dt>
 
                 <dt>8.5.21. <a href=
-                "actions-file.html#HIDE-CONTENT-DISPOSITION">hide-content-disposition</a></dt>
+                "actions-file.html#HIDE-ACCEPT-LANGUAGE">hide-accept-language</a></dt>
 
                 <dt>8.5.22. <a href=
-                "actions-file.html#HIDE-IF-MODIFIED-SINCE">hide-if-modified-since</a></dt>
+                "actions-file.html#HIDE-CONTENT-DISPOSITION">hide-content-disposition</a></dt>
 
                 <dt>8.5.23. <a href=
-                "actions-file.html#HIDE-FROM-HEADER">hide-from-header</a></dt>
+                "actions-file.html#HIDE-IF-MODIFIED-SINCE">hide-if-modified-since</a></dt>
 
                 <dt>8.5.24. <a href=
-                "actions-file.html#HIDE-REFERRER">hide-referrer</a></dt>
+                "actions-file.html#HIDE-FROM-HEADER">hide-from-header</a></dt>
 
                 <dt>8.5.25. <a href=
-                "actions-file.html#HIDE-USER-AGENT">hide-user-agent</a></dt>
+                "actions-file.html#HIDE-REFERRER">hide-referrer</a></dt>
 
                 <dt>8.5.26. <a href=
-                "actions-file.html#LIMIT-CONNECT">limit-connect</a></dt>
+                "actions-file.html#HIDE-USER-AGENT">hide-user-agent</a></dt>
 
                 <dt>8.5.27. <a href=
-                "actions-file.html#LIMIT-COOKIE-LIFETIME">limit-cookie-lifetime</a></dt>
+                "actions-file.html#LIMIT-CONNECT">limit-connect</a></dt>
 
                 <dt>8.5.28. <a href=
-                "actions-file.html#PREVENT-COMPRESSION">prevent-compression</a></dt>
+                "actions-file.html#LIMIT-COOKIE-LIFETIME">limit-cookie-lifetime</a></dt>
 
                 <dt>8.5.29. <a href=
-                "actions-file.html#OVERWRITE-LAST-MODIFIED">overwrite-last-modified</a></dt>
+                "actions-file.html#PREVENT-COMPRESSION">prevent-compression</a></dt>
 
                 <dt>8.5.30. <a href=
-                "actions-file.html#REDIRECT">redirect</a></dt>
+                "actions-file.html#OVERWRITE-LAST-MODIFIED">overwrite-last-modified</a></dt>
 
                 <dt>8.5.31. <a href=
-                "actions-file.html#SERVER-HEADER-FILTER">server-header-filter</a></dt>
+                "actions-file.html#REDIRECT">redirect</a></dt>
 
                 <dt>8.5.32. <a href=
-                "actions-file.html#SERVER-HEADER-TAGGER">server-header-tagger</a></dt>
+                "actions-file.html#SERVER-HEADER-FILTER">server-header-filter</a></dt>
 
                 <dt>8.5.33. <a href=
-                "actions-file.html#SESSION-COOKIES-ONLY">session-cookies-only</a></dt>
+                "actions-file.html#SERVER-HEADER-TAGGER">server-header-tagger</a></dt>
 
                 <dt>8.5.34. <a href=
-                "actions-file.html#SET-IMAGE-BLOCKER">set-image-blocker</a></dt>
+                "actions-file.html#SESSION-COOKIES-ONLY">session-cookies-only</a></dt>
 
                 <dt>8.5.35. <a href=
-                "actions-file.html#AEN4847">Summary</a></dt>
+                "actions-file.html#SET-IMAGE-BLOCKER">set-image-blocker</a></dt>
+
+                <dt>8.5.36. <a href=
+                "actions-file.html#AEN4918">Summary</a></dt>
               </dl>
             </dd>
 
@@ -491,13 +497,13 @@
             <dd>
               <dl>
                 <dt>8.7.1. <a href=
-                "actions-file.html#AEN4911">match-all.action</a></dt>
+                "actions-file.html#AEN4982">match-all.action</a></dt>
 
                 <dt>8.7.2. <a href=
-                "actions-file.html#AEN4933">default.action</a></dt>
+                "actions-file.html#AEN5004">default.action</a></dt>
 
                 <dt>8.7.3. <a href=
-                "actions-file.html#AEN5046">user.action</a></dt>
+                "actions-file.html#AEN5117">user.action</a></dt>
               </dl>
             </dd>
           </dl>
@@ -507,11 +513,15 @@
 
         <dd>
           <dl>
-            <dt>9.1. <a href="filter-file.html#AEN5208">Filter File
+            <dt>9.1. <a href="filter-file.html#AEN5285">Filter File
             Tutorial</a></dt>
 
             <dt>9.2. <a href="filter-file.html#PREDEFINED-FILTERS">The
             Pre-defined Filters</a></dt>
+
+            <dt>9.3. <a href=
+            "filter-file.html#EXTERNAL-FILTER-SYNTAX">External filter
+            syntax</a></dt>
           </dl>
         </dd>
 
@@ -571,7 +581,7 @@
             <dt>14.1. <a href="appendix.html#REGEX">Regular
             Expressions</a></dt>
 
-            <dt>14.2. <a href="appendix.html#AEN5929">Privoxy's Internal
+            <dt>14.2. <a href="appendix.html#AEN6030">Privoxy's Internal
             Pages</a></dt>
 
             <dd>
