@@ -1,8 +1,8 @@
-#        Sample Configuration File for Privoxy 3.0.21
+#        Sample Configuration File for Privoxy 3.0.22
 #
-#  $Id: config,v 1.103 2013/03/02 14:47:05 fabiankeil Exp $
+#  $Id: p-config.sgml,v 2.104 2014/05/05 09:59:30 fabiankeil Exp $
 #
-#  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
+#  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
 #
 ####################################################################
 #                                                                  #
@@ -291,7 +291,37 @@ confdir .
 #
 #templdir .
 #
-#  2.3. logdir
+#  2.3. temporary-directory
+#  =========================
+#
+#  Specifies:
+#
+#      A directory where Privoxy can create temporary files.
+#
+#  Type of value:
+#
+#      Path name
+#
+#  Default value:
+#
+#      unset
+#
+#  Effect if unset:
+#
+#      No temporary files are created, external filters don't work.
+#
+#  Notes:
+#
+#      To execute external filters, Privoxy has to create temporary
+#      files. This directive specifies the directory the temporary
+#      files should be written to.
+#
+#      It should be a directory only Privoxy (and trusted users) can
+#      access.
+#
+#temporary-directory .
+#
+#  2.4. logdir
 #  ============
 #
 #  Specifies:
@@ -317,7 +347,7 @@ confdir .
 #
 logdir .
 #
-#  2.4. actionsfile
+#  2.5. actionsfile
 #  =================
 #
 #  Specifies:
@@ -363,7 +393,7 @@ actionsfile match-all.action # Actions that are applied to all sites and maybe o
 actionsfile default.action   # Main actions file
 actionsfile user.action      # User customizations
 #
-#  2.5. filterfile
+#  2.6. filterfile
 #  ================
 #
 #  Specifies:
@@ -408,7 +438,7 @@ actionsfile user.action      # User customizations
 filterfile default.filter
 filterfile user.filter      # User customizations
 #
-#  2.6. logfile
+#  2.7. logfile
 #  =============
 #
 #  Specifies:
@@ -454,7 +484,7 @@ filterfile user.filter      # User customizations
 #
 logfile logfile
 #
-#  2.7. trustfile
+#  2.8. trustfile
 #  ===============
 #
 #  Specifies:
@@ -602,11 +632,11 @@ logfile logfile
 #
 #  Type of value:
 #
-#      None
+#      1 or 0
 #
 #  Default value:
 #
-#      Unset
+#      0
 #
 #  Effect if unset:
 #
@@ -618,7 +648,7 @@ logfile logfile
 #      This option is only there for debugging purposes. It will
 #      drastically reduce performance.
 #
-#single-threaded
+#single-threaded 1
 #
 #  3.3. hostname
 #  ==============
@@ -1311,7 +1341,7 @@ enable-proxy-authentication-forwarding 0
 #      To chain Privoxy and Tor, both running on the same system, you
 #      would use something like:
 #
-#        forward-socks5   /               127.0.0.1:9050 .
+#        forward-socks5t   /               127.0.0.1:9050 .
 #
 #      The public Tor network can't be used to reach your local
 #      network, if you need to access local servers you therefore
@@ -1411,6 +1441,9 @@ forwarded-connect-retries  0
 #      If you don't trust your clients and want to force them to use
 #      Privoxy, enable this option and configure your packet filter
 #      to redirect outgoing HTTP connections into Privoxy.
+#
+#      Note that intercepting encrypted connections (HTTPS) isn't
+#      supported.
 #
 #      Make sure that Privoxy's own requests aren't redirected as
 #      well. Additionally take care that Privoxy can't intentionally
