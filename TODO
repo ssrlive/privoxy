@@ -1,4 +1,4 @@
-$Id: TODO,v 1.108 2014/05/20 11:52:46 fabiankeil Exp $
+$Id: TODO,v 1.109 2014/05/26 10:47:21 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -129,10 +129,6 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
     to support it, so we could do it independently from 53).
 
 55) Apply for Coverity scans: http://scan.coverity.com/
-
-57) Allow piping into external programs to allow more powerful
-    filters and policy decisions. Incomplete support available
-    in Fabian's popen branch.
 
 58) Move more template strings from the code into the actual templates.
 
