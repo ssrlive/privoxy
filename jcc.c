@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.426 2014/06/02 06:19:06 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.427 2014/06/02 06:22:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -924,11 +924,6 @@ static jb_err change_request_destination(struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Couldn't parse rewritten request: %s.",
          jb_err_to_string(err));
    }
-   else
-   {
-      /* XXX: ocmd is a misleading name */
-      http->ocmd = strdup_or_die(http->cmd);
-   }
 
    return err;
 }
@@ -1607,10 +1602,6 @@ static jb_err receive_client_request(struct client_state *csp)
       get_url_actions(csp, http);
    }
 
-   /*
-    * Save a copy of the original request for logging
-    */
-   http->ocmd = strdup_or_die(http->cmd);
    enlist(csp->headers, http->cmd);
 
    /* Append the previously read headers */

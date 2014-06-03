@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.80 2013/11/24 14:47:45 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.81 2014/05/26 10:48:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -543,6 +543,7 @@ jb_err parse_http_request(const char *req, struct http_request *http)
    http->cmd = strdup_or_die(req);
    http->gpc = strdup_or_die(v[0]);
    http->ver = strdup_or_die(v[2]);
+   http->ocmd = strdup_or_die(http->cmd);
 
    freez(buf);
 
