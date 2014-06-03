@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.80 2014/06/02 06:19:04 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.81 2014/06/02 06:22:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -346,7 +346,7 @@ static char *section_target(const unsigned sectionid)
 {
    char buf[30];
 
-   snprintf(buf, sizeof(buf), "#l%d", sectionid);
+   snprintf(buf, sizeof(buf), "#l%u", sectionid);
    return(strdup(buf));
 
 }
@@ -368,7 +368,7 @@ static char *stringify(const unsigned number)
 {
    char buf[6];
 
-   snprintf(buf, sizeof(buf), "%i", number);
+   snprintf(buf, sizeof(buf), "%u", number);
    return strdup(buf);
 }
 
@@ -2386,9 +2386,9 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
        */
       if (!err) err = map_conditional(exports, "all-urls-present", 1);
 
-      snprintf(buf, sizeof(buf), "%d", line_number);
+      snprintf(buf, sizeof(buf), "%u", line_number);
       if (!err) err = map(exports, "all-urls-s", 1, buf, 1);
-      snprintf(buf, sizeof(buf), "%d", line_number + 2);
+      snprintf(buf, sizeof(buf), "%u", line_number + 2);
       if (!err) err = map(exports, "all-urls-s-next", 1, buf, 1);
       if (!err) err = map(exports, "all-urls-actions", 1,
                           actions_to_html(csp, cur_line->data.action), 0);
@@ -2499,7 +2499,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
          return JB_ERR_MEMORY;
       }
 
-      snprintf(buf, sizeof(buf), "%d", line_number);
+      snprintf(buf, sizeof(buf), "%u", line_number);
       err = map(section_exports, "s", 1, buf, 1);
       if (!err) err = map(section_exports, "actions", 1,
                           actions_to_html(csp, cur_line->data.action), 0);
@@ -2519,7 +2519,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
       if (prev_section_line_number != ((unsigned)(-1)))
       {
          /* Not last section */
-         snprintf(buf, sizeof(buf), "%d", prev_section_line_number);
+         snprintf(buf, sizeof(buf), "%u", prev_section_line_number);
          if (!err) err = map(section_exports, "s-prev", 1, buf, 1);
          if (!err) err = map_block_keep(section_exports, "s-prev-exists");
       }
@@ -2573,7 +2573,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
             return JB_ERR_MEMORY;
          }
 
-         snprintf(buf, sizeof(buf), "%d", line_number);
+         snprintf(buf, sizeof(buf), "%u", line_number);
          err = map(url_exports, "p", 1, buf, 1);
 
          snprintf(buf, sizeof(buf), "%d", url_1_2);
@@ -2639,7 +2639,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
       /* Could also do section-specific exports here, but it wouldn't be as fast */
 
-      snprintf(buf, sizeof(buf), "%d", line_number);
+      snprintf(buf, sizeof(buf), "%u", line_number);
       if (!err) err = map(section_exports, "s-next", 1, buf, 1);
 
       if ((cur_line != NULL)
@@ -3242,7 +3242,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%u",
             (long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
@@ -3363,7 +3363,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%u",
             (long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
@@ -3492,7 +3492,7 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%u",
             (long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
@@ -3603,7 +3603,7 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%d",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
             (long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
@@ -3725,7 +3725,7 @@ jb_err cgi_edit_actions_section_remove(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u",
             (long) time(NULL), file->identifier);
 
    edit_free_file(file);
@@ -3894,7 +3894,7 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u",
             (long) time(NULL), file->identifier);
 
    edit_free_file(file);
@@ -4083,7 +4083,7 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
       }
    } /* END if (section1 != section2) */
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u",
             (long) time(NULL), file->identifier);
 
    edit_free_file(file);
