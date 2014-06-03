@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.126 2014/05/20 11:58:36 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.127 2014/06/03 10:28:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -682,8 +682,8 @@ static const char *get_content_type(const char *filename)
    int i;
    struct content_type
    {
-      const char *extension;
-      const char *content_type;
+      const char extension[6];
+      const char content_type[11];
    };
    static const struct content_type content_types[] =
    {
