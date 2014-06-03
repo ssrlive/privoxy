@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.184 2014/06/02 06:20:51 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.185 2014/06/02 06:22:22 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.184 2014/06/02 06:20:51 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.185 2014/06/02 06:22:22 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5410,6 +5410,13 @@ undeadly.org/cgi\?action=article&amp;sid=\d*$
 # Redirect MSN search requests to Yahoo
 {+redirect{s@^http://[^/]*/results\.aspx\?q=([^&amp;]*).*@http://search.yahoo.com/search?p=$1@}}
 search.msn.com//results\.aspx\?q=
+
+# Redirect http://example.com/&amp;bla=fasel&amp;toChange=foo (and any other value but "bar")
+# to       http://example.com/&amp;bla=fasel&amp;toChange=bar
+#
+# The URL pattern makes sure that the following request isn't redirected again.
+{+redirect{s@toChange=[^&amp;]+@toChange=bar@}}
+example.com/.*toChange=(?!bar)
 
 # Redirect remote requests for this manual
 # to the local version delivered by Privoxy
