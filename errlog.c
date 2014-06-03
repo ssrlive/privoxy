@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.119 2014/06/02 06:19:05 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.120 2014/06/02 06:22:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -409,7 +409,7 @@ void init_error_log(const char *prog_name, const char *logfname)
  *********************************************************************/
 static long get_thread_id(void)
 {
-   long this_thread = 1;  /* was: pthread_t this_thread;*/
+   long this_thread;
 
 #ifdef __OS2__
    PTIB     ptib;
@@ -434,6 +434,9 @@ static long get_thread_id(void)
    ulrc = DosGetInfoBlocks(&ptib, NULL);
    if (ulrc == 0)
      this_thread = ptib -> tib_ptib2 -> tib2_ultid;
+#else
+   /* Forking instead of threading. */
+   this_thread = 1;
 #endif /* def FEATURE_PTHREAD */
 
    return this_thread;
