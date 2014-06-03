@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.182 2014/06/02 06:22:20 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.183 2014/06/03 10:29:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2252,7 +2252,9 @@ char *execute_content_filters(struct client_state *csp)
    content = (content_filter != NULL) ? (*content_filter)(csp) : NULL;
 
 #ifdef FEATURE_EXTERNAL_FILTERS
-   if (!list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]))
+   if ((csp->content_type & CT_TEXT) &&
+       (csp->rlist != NULL) &&
+       !list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]))
    {
       struct list_entry *filtername;
       size_t size = (size_t)csp->content_length;
@@ -2654,7 +2656,8 @@ int content_requires_filtering(struct client_state *csp)
     */
    if ((csp->content_type & CT_TEXT) &&
        (csp->rlist != NULL) &&
-       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
+       (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]) ||
+        !list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER])))
    {
       return TRUE;
    }
@@ -2664,7 +2667,7 @@ int content_requires_filtering(struct client_state *csp)
       return TRUE;
    }
 
-   return (!list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]));
+   return FALSE;
 
 }
 
