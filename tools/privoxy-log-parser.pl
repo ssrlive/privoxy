@@ -8,7 +8,7 @@
 #
 # http://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.160 2013/05/28 14:38:15 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.161 2013/08/29 11:12:13 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -646,7 +646,7 @@ sub highlight_request_line ($) {
 
         $rl = h('invalid-request') . $rl . h('Standard');
 
-    } elsif ($rl =~ m/^([-\w]+) (.*) (HTTP\/\d\.\d)/) {
+    } elsif ($rl =~ m/^([-\w]+) (.*) (HTTP\/\d+\.\d+)/) {
 
         # XXX: might not match in case of HTTP method fuzzing.
         # XXX: save these: ($method, $path, $http_version) = ($1, $2, $3);
