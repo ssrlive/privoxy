@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.185 2014/06/02 06:22:22 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.186 2014/06/03 10:30:20 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.185 2014/06/02 06:22:22 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.186 2014/06/03 10:30:20 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3659,7 +3659,9 @@ problem-host.example.com</screen>
    <para>
     External filters are scripts or programs that can modify the content in
     case common <literal><link linkend="filter">filters</link></literal>
-    aren't powerful enough.
+    aren't powerful enough. With the exception that this action doesn't
+    use pcrs-based filters, the notes in the
+    <literal><link linkend="filter">filter</link></literal> section apply.
    </para>
    <warning>
     <para>
