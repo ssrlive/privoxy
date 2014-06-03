@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.181 2014/06/02 06:19:05 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.182 2014/06/02 06:22:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2046,7 +2046,7 @@ static filter_function_ptr get_filter_function(const struct client_state *csp)
    {
       filter_function = pcrs_filter_response;
    }
-   else if ((csp->content_type & CT_GIF)  &&
+   else if ((csp->content_type & CT_GIF) &&
             (csp->action->flags & ACTION_DEANIMATE))
    {
       filter_function = gif_deanimate_response;
