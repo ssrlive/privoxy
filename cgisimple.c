@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.125 2014/05/20 11:56:08 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.126 2014/05/20 11:58:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -142,12 +142,7 @@ jb_err cgi_error_404(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   rsp->status = strdup("404 Privoxy configuration page not found");
-   if (rsp->status == NULL)
-   {
-      free_map(exports);
-      return JB_ERR_MEMORY;
-   }
+   rsp->status = strdup_or_die("404 Privoxy configuration page not found");
 
    return template_fill_for_cgi(csp, "cgi-error-404", exports, rsp);
 }
@@ -171,7 +166,6 @@ jb_err cgi_error_404(struct client_state *csp,
  * CGI Parameters : none
  *
  * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.
  *
  *********************************************************************/
 jb_err cgi_die (struct client_state *csp,
@@ -205,13 +199,8 @@ jb_err cgi_die (struct client_state *csp,
    rsp->head_length = 0;
    rsp->is_static = 0;
 
-   rsp->body = strdup(body);
-   rsp->status = strdup(status);
-
-   if ((rsp->body == NULL) || (rsp->status == NULL))
-   {
-      return JB_ERR_MEMORY;
-   }
+   rsp->body = strdup_or_die(body);
+   rsp->status = strdup_or_die(status);
 
    return JB_ERR_OK;
 }
@@ -374,11 +363,7 @@ jb_err cgi_send_banner(struct client_state *csp,
     */
    if (imagetype == 'r')
    {
-      rsp->status = strdup("302 Local Redirect from Privoxy");
-      if (rsp->status == NULL)
-      {
-         return JB_ERR_MEMORY;
-      }
+      rsp->status = strdup_or_die("302 Local Redirect from Privoxy");
       if (enlist_unique_header(rsp->headers, "Location",
                                csp->action->string[ACTION_STRING_IMAGE_BLOCKER]))
       {
@@ -1119,12 +1104,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
    /*
     * Get the url= parameter (if present) and remove any leading/trailing spaces.
     */
-   url_param = strdup(lookup(parameters, "url"));
-   if (url_param == NULL)
-   {
-      free_map(exports);
-      return JB_ERR_MEMORY;
-   }
+   url_param = strdup_or_die(lookup(parameters, "url"));
    chomp(url_param);
 
    /*
@@ -1167,7 +1147,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
        * No prefix or at least no prefix before
        * the first slash - assume http://
        */
-      char *url_param_prefixed = strdup("http://");
+      char *url_param_prefixed = strdup_or_die("http://");
 
       if (JB_ERR_OK != string_join(&url_param_prefixed, url_param))
       {
@@ -1279,7 +1259,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
          }
       }
 
-      matches = strdup("<table summary=\"\" class=\"transparent\">");
+      matches = strdup_or_die("<table summary=\"\" class=\"transparent\">");
 
       for (i = 0; i < MAX_AF_FILES; i++)
       {
@@ -1518,7 +1498,7 @@ jb_err cgi_robots_txt(struct client_state *csp,
    (void)csp;
    (void)parameters;
 
-   rsp->body = strdup(
+   rsp->body = strdup_or_die(
       "# This is the Privoxy control interface.\n"
       "# It isn't very useful to index it, and you're likely to break stuff.\n"
       "# So go away!\n"
@@ -1526,10 +1506,6 @@ jb_err cgi_robots_txt(struct client_state *csp,
       "User-agent: *\n"
       "Disallow: /\n"
       "\n");
-   if (rsp->body == NULL)
-   {
-      return JB_ERR_MEMORY;
-   }
 
    err = enlist_unique(rsp->headers, "Content-Type: text/plain", 13);
 
@@ -1755,7 +1731,7 @@ static jb_err show_defines(struct map *exports)
  *********************************************************************/
 static char *show_rcs(void)
 {
-   char *result = strdup("");
+   char *result = strdup_or_die("");
    char buf[BUFFER_SIZE];
 
    /* Instead of including *all* dot h's in the project (thus creating a
