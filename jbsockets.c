@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.125 2014/06/02 06:19:05 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.126 2014/06/02 06:22:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -99,6 +99,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.125 2014/06/02 06:19:05 fabia
 #include "jbsockets.h"
 #include "filters.h"
 #include "errlog.h"
+#include "miscutil.h"
 
 /* Mac OSX doesn't define AI_NUMERICSESRV */
 #ifndef AI_NUMERICSERV
@@ -232,14 +233,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       return(JB_INVALID_SOCKET);
    }
 
-   csp->http->host_ip_addr_str = malloc(NI_MAXHOST);
-   if (NULL == csp->http->host_ip_addr_str)
-   {
-      freeaddrinfo(result);
-      log_error(LOG_LEVEL_ERROR,
-         "Out of memory while getting the server IP address.");
-      return JB_INVALID_SOCKET;
-   }
+   csp->http->host_ip_addr_str = malloc_or_die(NI_MAXHOST);
 
    for (rp = result; rp != NULL; rp = rp->ai_next)
    {
@@ -1088,22 +1082,10 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
 #ifndef NI_MAXSERV
 #define NI_MAXSERV 32
 #endif
-      *port = malloc(NI_MAXSERV);
-      if (NULL == *port)
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "Out of memory while getting the client's port.");
-         return;
-      }
+      *port = malloc_or_die(NI_MAXSERV);
+
 #ifdef HAVE_RFC2553
-      *ip_address = malloc(NI_MAXHOST);
-      if (NULL == *ip_address)
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "Out of memory while getting the client's IP address.");
-         freez(*port);
-         return;
-      }
+      *ip_address = malloc_or_die(NI_MAXHOST);
       retval = getnameinfo((struct sockaddr *) &server, s_length,
          *ip_address, NI_MAXHOST, *port, NI_MAXSERV,
          NI_NUMERICHOST|NI_NUMERICSERV);
@@ -1129,13 +1111,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
       }
 
 #ifdef HAVE_RFC2553
-      *hostname = malloc(NI_MAXHOST);
-      if (NULL == *hostname)
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "Out of memory while getting the client's hostname.");
-         return;
-      }
+      *hostname = malloc_or_die(NI_MAXHOST);
       retval = getnameinfo((struct sockaddr *) &server, s_length,
          *hostname, NI_MAXHOST, NULL, 0, NI_NAMEREQD);
       if (retval)
@@ -1336,13 +1312,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
 
    csp->cfd = afd;
 #ifdef HAVE_RFC2553
-   csp->ip_addr_str = malloc(NI_MAXHOST);
-   if (NULL == csp->ip_addr_str)
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "Out of memory while getting the client's IP address.");
-      return 0;
-   }
+   csp->ip_addr_str = malloc_or_die(NI_MAXHOST);
    retval = getnameinfo((struct sockaddr *) &client, c_length,
          csp->ip_addr_str, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
    if (!csp->ip_addr_str || retval)
