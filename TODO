@@ -1,4 +1,4 @@
-$Id: TODO,v 1.110 2014/06/02 07:22:40 fabiankeil Exp $
+$Id: TODO,v 1.111 2014/06/02 07:23:14 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -357,6 +357,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 127) Add "real" CGI support (serve program output instead of forwarding
      the request). The work is mostly done due to +external-filter{}.
+
+128) Add a config directive to control the stack limit.
 
 ##########################################################################
 
