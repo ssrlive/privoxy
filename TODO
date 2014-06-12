@@ -1,4 +1,4 @@
-$Id: TODO,v 1.111 2014/06/02 07:23:14 fabiankeil Exp $
+$Id: TODO,v 1.112 2014/06/12 13:06:54 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -359,6 +359,10 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      the request). The work is mostly done due to +external-filter{}.
 
 128) Add a config directive to control the stack limit.
+
+129) Completely implement RFC 7230 4.1 (Chunked Transfer Coding).
+     Currently Privoxy doesn't properly deal with trailers which
+     are rarely used in the real world but should be supported anyway.
 
 ##########################################################################
 
