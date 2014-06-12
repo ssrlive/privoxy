@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.183 2014/06/03 10:29:40 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.184 2014/06/03 10:33:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1238,11 +1238,14 @@ struct http_response *redirect_url(struct client_state *csp)
        * properly formatted URL and use it for the redirection
        * directly.
        *
-       * According to RFC 2616 section 14.30 the URL
-       * has to be absolute and if the user tries:
-       * +redirect{shit/this/will/be/parsed/as/pcrs_command.html}
+       * According to (the now obsolete) RFC 2616 section 14.30
+       * the URL has to be absolute and if the user tries:
+       * +redirect{sadly/this/will/be/parsed/as/pcrs_command.html}
        * she would get undefined results anyway.
        *
+       * RFC 7231 7.1.2 actually allows relative references,
+       * but those start with a leading slash (RFC 3986 4.2) and
+       * thus can't be mistaken for pcrs commands either.
        */
 
       if (*redirection_string == 's')
