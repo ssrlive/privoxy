@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.284 2014/02/10 14:42:42 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.285 2014/04/21 12:04:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -753,9 +753,6 @@ jb_err decompress_iob(struct client_state *csp)
  * Description :  Reduces unquoted linear white space in headers
  *                to a single space in accordance with RFC 2616 2.2.
  *                This simplifies parsing and filtering later on.
- *
- *                XXX: Remove log messages before
- *                     the next stable release?
  *
  * Parameters  :
  *          1  :  header = A header with linear white space to reduce.
