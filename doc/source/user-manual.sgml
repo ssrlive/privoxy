@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.186 2014/06/03 10:30:20 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.187 2014/06/03 10:33:59 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.186 2014/06/03 10:30:20 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.187 2014/06/03 10:33:59 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5588,6 +5588,14 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 # Tag every request with the content type declared by the server
 {+server-header-tagger{content-type}}
 /
+
+# If the response has a tag starting with 'image/' enable an external
+# filter that only applies to images.
+#
+# Note that the filter is not available by default, it's just a
+# <literal><link linkend="external-filter-syntax">silly example</link></literal>.
+{+external-filter{rotate-image} +force-text-mode}
+TAG:^image/
     </screen>
     </para>
   </listitem>
@@ -7444,6 +7452,10 @@ while read line; \
 do \
   echo "$line"; \
 done
+
+EXTERNAL-FILTER: rotate-image Rotate an image by 180 degree. Test filter with limited value.
+/usr/local/bin/convert - -rotate 180 -
+
 </screen>
 </para>
 
