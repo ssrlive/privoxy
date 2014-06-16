@@ -1,4 +1,4 @@
-$Id: TODO,v 1.113 2014/06/12 13:08:42 fabiankeil Exp $
+$Id: TODO,v 1.114 2014/06/16 10:15:32 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -368,6 +368,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      taggers one-by-one against all headers so the header order has less
      influence on the tagging result. As a bonus, dynamic taggers would
      have to be compiled less often.
+
+131) The handle-as-empty-doc-returns-ok directive should be replaced with
+     an action so the behaviour can be enabled on a per-request basis.
 
 ##########################################################################
 
