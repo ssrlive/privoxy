@@ -1,4 +1,4 @@
-$Id: TODO,v 1.112 2014/06/12 13:06:54 fabiankeil Exp $
+$Id: TODO,v 1.113 2014/06/12 13:08:42 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -363,6 +363,11 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 129) Completely implement RFC 7230 4.1 (Chunked Transfer Coding).
      Currently Privoxy doesn't properly deal with trailers which
      are rarely used in the real world but should be supported anyway.
+
+130) Move header_tagger() out of the parser structs and let it execute
+     taggers one-by-one against all headers so the header order has less
+     influence on the tagging result. As a bonus, dynamic taggers would
+     have to be compiled less often.
 
 ##########################################################################
 
