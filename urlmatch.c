@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.81 2014/05/26 10:48:07 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.82 2014/06/03 10:25:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -454,6 +454,12 @@ static int unknown_method(const char *method)
        */
       "VERSION-CONTROL", "REPORT", "CHECKOUT", "CHECKIN", "UNCHECKOUT",
       "MKWORKSPACE", "UPDATE", "LABEL", "MERGE", "BASELINE-CONTROL", "MKACTIVITY",
+      /*
+       * The PATCH method is defined by RFC5789, the format of the
+       * actual patch in the body depends on the application, but from
+       * Privoxy's point of view it doesn't matter.
+       */
+      "PATCH",
    };
    int i;
 
