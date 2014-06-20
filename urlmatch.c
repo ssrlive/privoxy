@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.82 2014/06/03 10:25:57 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.83 2014/06/20 09:46:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -6,7 +6,7 @@ const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.82 2014/06/03 10:25:57 fabianke
  * Purpose     :  Declares functions to match URLs against URL
  *                patterns.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2011
+ * Copyright   :  Written by and Copyright (C) 2001-2014
  *                the Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
