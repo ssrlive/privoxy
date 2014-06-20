@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.51 2014/02/10 14:43:03 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.52 2014/02/10 14:43:22 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -27,7 +27,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.21
+for-privoxy-version=3.0.22
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
@@ -862,6 +862,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Method Test = MERGE
 # Method Test = BASELINE-CONTROL
 # Method Test = MKACTIVITY
+# Method Test = PATCH
 # Method Test = PRIVOXY-REGRESSION-TEST-IN-THE-HOUSE
 # Expect Status Code = 400
 
