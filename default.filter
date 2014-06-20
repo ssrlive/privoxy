@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.89 2014/05/05 09:48:55 fabiankeil Exp $
+#  $Id: default.filter,v 1.90 2014/05/05 09:59:51 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -144,7 +144,7 @@ FILTER: html-annoyances Get rid of particularly annoying HTML abuse.
 #
 s/(<a\s+href[^>]+resizable=)(['"]?)(?:no|0)\2/$1$2yes$2/igU 
 s/(<a\s+href[^>]+location=)(['"]?)(?:no|0)\2/$1$2yes$2/igU 
-s/(<a\s+href[^>]+status=)(['"]?)(?:no|0)\2/$1$2yes1$2/igU
+s/(<a\s+href[^>]+status=)(['"]?)(?:no|0)\2/$1$2yes$2/igU
 s/(<a\s+href[^>]+scrolling=)(['"]?)(?:no|0)\2/$1$2auto$2/igU
 s/(<a\s+href[^>]+menubar=)(['"]?)(?:no|0)\2/$1$2yes$2/igU
 
