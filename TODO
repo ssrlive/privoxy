@@ -1,4 +1,4 @@
-$Id: TODO,v 1.117 2014/06/25 10:08:13 fabiankeil Exp $
+$Id: TODO,v 1.118 2014/06/25 10:09:07 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -379,6 +379,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
      Interested donors: 1.
 
 132) Provide a Tor hidden service to reach the Privoxy website.
+     Interested donors: 1.
+
+133) Consider allowing bitcoin donations.
      Interested donors: 1.
 
 ##########################################################################
