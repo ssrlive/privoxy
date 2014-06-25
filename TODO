@@ -1,4 +1,4 @@
-$Id: TODO,v 1.116 2014/06/25 10:03:53 fabiankeil Exp $
+$Id: TODO,v 1.117 2014/06/25 10:08:13 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -376,6 +376,9 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 131) The handle-as-empty-doc-returns-ok directive should be replaced with
      an action so the behaviour can be enabled on a per-request basis.
+     Interested donors: 1.
+
+132) Provide a Tor hidden service to reach the Privoxy website.
      Interested donors: 1.
 
 ##########################################################################
