@@ -1,4 +1,4 @@
-$Id: TODO,v 1.115 2014/06/16 10:17:38 fabiankeil Exp $
+$Id: TODO,v 1.116 2014/06/25 10:03:53 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -123,6 +123,8 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
     2014-05-13: Work in progress. Hosting wish list at the end
     of this file.
+
+    Interested donors: 1.
 
 54) Move away from CVS to a more modern revision control system.
     Find out if there are any objection against going with Git.
@@ -347,8 +349,10 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 124) Add support for the "lightweight OS capability and sandbox framework"
      Capsicum. http://www.cl.cam.ac.uk/research/security/capsicum/
+     Interested donors: 1.
 
 125) Allow clients to HTTPS-encrypt the proxy connection.
+     Interested donors: 1.
 
 126) Run the Co-Advisor HTTP compliance tests, evaluate the results,
      fix the compliance issues that aren't by design and document
@@ -372,6 +376,7 @@ http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
 
 131) The handle-as-empty-doc-returns-ok directive should be replaced with
      an action so the behaviour can be enabled on a per-request basis.
+     Interested donors: 1.
 
 ##########################################################################
 
