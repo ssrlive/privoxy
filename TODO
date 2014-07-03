@@ -1,10 +1,18 @@
-$Id: TODO,v 1.118 2014/06/25 10:09:07 fabiankeil Exp $
+$Id: TODO,v 1.119 2014/06/25 10:09:57 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
 
 The latest version should be available at:
 http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
+
+There's work in progress to fund development on these items using
+donations. If you want to donate, please have a look at:
+http://www.spi-inc.org/donations/
+
+If you have any questions regarding donations please either mail to
+the public user mailing list (ijbswa-users@lists.sourceforge.net) or
+to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
 
 1)  Add more regression tests. Filters should be tested automatically
     (variables too). Could probably reuse large parts of Privoxy-Filter-Test.
