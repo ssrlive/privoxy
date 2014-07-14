@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.188 2014/06/12 13:07:19 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.189 2014/07/14 13:00:07 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.188 2014/06/12 13:07:19 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.189 2014/07/14 13:00:07 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5368,9 +5368,15 @@ new action
     <link linkend="filter-file">filter file</link> section.
    </para>
    <para>
-    This action will be ignored if you use it together with
-    <literal><link linkend="block">block</link></literal>.
-    It can be combined with
+    Requests can't be blocked and redirected at the same time,
+    applying this action together with
+    <literal><link linkend="block">block</link></literal>
+    is a configuration error. Currently the request is blocked
+    and an error message logged, the behavior may change in the
+    future and result in Privoxy rejecting the action file.
+   </para>
+   <para>
+    This action can be combined with
     <literal><link linkend="fast-redirects">fast-redirects{check-decoded-url}</link></literal>
     to redirect to a decoded version of a rewritten URL.
    </para>
