@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.304 2014/05/26 10:47:04 fabiankeil Exp $
+#  $Id: default.action.master,v 1.305 2014/06/02 05:45:44 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2460,6 +2460,13 @@ config.privoxy.org/
 # Redirected URL = http://us.ard.yahoo.com/SIG=AAAAAAAAA/M=NNNNNN.NNNNNNN.NNNNNNN.NNNNNNN/D=mail/S=NNNNNNNNN:HEADR/Y=YAHOO/EXP=NNNNNNNNNN/A=NNNNNNN/R=N/SIG=AAAAAAAAA/*http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 # Redirect Destination = http://login.yahoo.com/config/login?logout=1&.done=http://mail.yahoo.com&.src=ym&.intl=us
 .yahoo./.*http://login.yahoo.com/config/login.*http://
+
+#MASTER# PROBLEM-URL: http://www.washingtonpost.com/news/volokh-conspiracy/wp/2014/07/09/missouri-voters-will-consider-strengthening-state-constitutional-right-to-bear-arms/
+{-fast-redirects +redirect{s@.*(http://[^&]+\.jpg).*$@$1@i}}
+# Sticky Actions = -fast-redirects +redirect
+# Redirected URL = http://www.washingtonpost.com/wp-apps/imrs.php?src=http://img.washingtonpost.com/news/volokh-conspiracy/wp-content/uploads/sites/14/2014/07/Volk1.jpg&w=480
+# Redirect Destination = http://img.washingtonpost.com/news/volokh-conspiracy/wp-content/uploads/sites/14/2014/07/Volk1.jpg
+.washingtonpost.com/wp-apps/imrs\.php\?src=
 
 #MASTER# REMARKS: The next two sections are to get flickr's Ajax interface working
 #MASTER# REMARKS: with default pre-settings. For more aggressive defaults they additionally
