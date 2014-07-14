@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.305 2014/06/02 05:45:44 fabiankeil Exp $
+#  $Id: default.action.master,v 1.306 2014/07/14 12:57:00 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -680,9 +680,9 @@ linuxcounter.net/
 # Generic block patterns by path:
 #############################################################################
 {+block{Path matches generic block pattern.}}
-/(.*/)?ad(\?|/|s|v|_?(image|se?rv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log|space)
 # Blocked URL = http://www.example.org/adimage
 # Blocked URL = http://www.example.org/adspace
+/(.*/)?ad(\?|/|s|v|_?(image|se?rv|box)|cycle|rotate|mentor|click|f[ra]m|script|stream|fetch|log|space)
 /phpads(new)?/
 /(.*/)?(ad|all|nn|db|promo(tion)?)?[-_]?banner
 /(.*/)?(publicite|werbung|rekla(me|am)|annonse|maino(kset|nta|s)?/)
