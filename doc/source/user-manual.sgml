@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.187 2014/06/03 10:33:59 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.188 2014/06/12 13:07:19 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.187 2014/06/03 10:33:59 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.188 2014/06/12 13:07:19 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -7456,6 +7456,8 @@ done
 EXTERNAL-FILTER: rotate-image Rotate an image by 180 degree. Test filter with limited value.
 /usr/local/bin/convert - -rotate 180 -
 
+EXTERNAL-FILTER: citation-needed Adds a "[citation needed]" tag to an image. The coordinates may need adjustment.
+/usr/local/bin/convert - -pointsize 16 -fill white  -annotate +17+418 "[citation needed]" -
 </screen>
 </para>
 
