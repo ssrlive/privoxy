@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.306 2014/07/14 12:57:00 fabiankeil Exp $
+#  $Id: default.action.master,v 1.307 2014/07/14 13:01:02 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -695,6 +695,10 @@ linuxcounter.net/
 /openx/www/delivery/
 # Blocked URL = http://mem.brandreachsys.com/www/delivery/lg.php?bannerid=13783&campaignid=0&zoneid=550&cb=f22df9acaa
 /.*bannerid=
+# MASTER# BLOCK-REFERRER: http://www.augsburger-allgemeine.de/donauwoerth/Grosseinsatz-Polizist-schiesst-um-sich-Er-hat-mehrere-Waffen-id30561822.html
+# Blocked URL = http://bilder.augsburger-allgemeine.de/img/incoming/orig30444932/2560007661/DigiAd-Zeopexx-03072014.gif
+# Blocked URL = http://bilder.augsburger-allgemeine.de/img/incoming/orig30463337/9180008457/DigiAd-AugenblickOptik-04072014.gif
+/.*DigiAd
 
 #############################################################################
 # Generic unblockers by path:
