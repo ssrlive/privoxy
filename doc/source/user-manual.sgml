@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.191 2014/07/18 10:00:11 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.192 2014/07/18 10:01:20 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.191 2014/07/18 10:00:11 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.192 2014/07/18 10:01:20 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4231,15 +4231,17 @@ new action
   <listitem>
    <para>
      <screen>
-# Always use direct connections for requests previously tagged as
+# Use an ssh tunnel for requests previously tagged as
 # <quote>User-Agent: fetch libfetch/2.0</quote> and make sure
 # resuming downloads continues to work.
+#
 # This way you can continue to use Tor for your normal browsing,
 # without overloading the Tor network with your FreeBSD ports updates
 # or downloads of bigger files like ISOs.
+#
 # Note that HTTP headers are easy to fake and therefore their
 # values are as (un)trustworthy as your clients and users.
-{+forward-override{forward .} \
+{+forward-override{forward-socks5 10.0.0.2:2222 .} \
  -hide-if-modified-since      \
  -overwrite-last-modified     \
 }
