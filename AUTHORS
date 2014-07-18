@@ -41,6 +41,7 @@ Thanks to the many people who have tested Privoxy, reported bugs, provided
 patches, made suggestions or contributed in some way. These include (in
 alphabetical order):
 
+ Anatoly Arzhnikov
  Ken Arromdee
  Natxo Asenjo
  Devin Bayer
@@ -51,6 +52,7 @@ alphabetical order):
  Reiner Buehl
  Andrew J. Caines
  Clifford Caoile
+ Edward Carrel
  Wan-Teh Chang
  Ramkumar Chinchani
  Billy Crook
@@ -115,8 +117,10 @@ alphabetical order):
  Spinor S.
  Peter Thoenen
  Martin Thomas
+ Reuben Thomas
  Bobby G. Vinyard
  Jochen Voss
+ David Wagner
  Glenn Washburn
  Song Weijia
  Jörg Weinmann

@@ -2050,7 +2050,10 @@ problem-host.example.com
               <p>External filters are scripts or programs that can modify the
               content in case common <tt class="LITERAL"><a href=
               "actions-file.html#FILTER">filters</a></tt> aren't powerful
-              enough.</p>
+              enough. With the exception that this action doesn't use
+              pcrs-based filters, the notes in the <tt class=
+              "LITERAL"><a href="actions-file.html#FILTER">filter</a></tt>
+              section apply.</p>
 
               <div class="WARNING">
                 <table class="WARNING" border="1" width="90%">
@@ -2859,7 +2862,9 @@ problem-host.example.com
                       <p>If the ports are missing or invalid, default values
                       will be used. This might change in the future and you
                       shouldn't rely on it. Otherwise incorrect syntax causes
-                      Privoxy to exit.</p>
+                      Privoxy to exit. Due to design limitations, invalid
+                      parameter syntax isn't detected until the action is
+                      used the first time.</p>
 
                       <p>Use the <a href=
                       "http://config.privoxy.org/show-url-info" target=
@@ -2878,15 +2883,17 @@ problem-host.example.com
                 <tr>
                   <td>
                     <pre class="SCREEN">
-# Always use direct connections for requests previously tagged as
+# Use an ssh tunnel for requests previously tagged as
 # <span class="QUOTE">"User-Agent: fetch libfetch/2.0"</span> and make sure
 # resuming downloads continues to work.
+#
 # This way you can continue to use Tor for your normal browsing,
 # without overloading the Tor network with your FreeBSD ports updates
 # or downloads of bigger files like ISOs.
+#
 # Note that HTTP headers are easy to fake and therefore their
 # values are as (un)trustworthy as your clients and users.
-{+forward-override{forward .} \
+{+forward-override{forward-socks5 10.0.0.2:2222 .} \
  -hide-if-modified-since      \
  -overwrite-last-modified     \
 }
@@ -4012,11 +4019,15 @@ nasty-banner-server.example.com/junk.cgi\?output=trash
               <p>The syntax for pcrs commands is documented in the <a href=
               "filter-file.html">filter file</a> section.</p>
 
-              <p>This action will be ignored if you use it together with
-              <tt class="LITERAL"><a href=
-              "actions-file.html#BLOCK">block</a></tt>. It can be combined
-              with <tt class="LITERAL"><a href=
-              "actions-file.html#FAST-REDIRECTS">fast-redirects{check-decoded-url}</a></tt>
+              <p>Requests can't be blocked and redirected at the same time,
+              applying this action together with <tt class="LITERAL"><a href=
+              "actions-file.html#BLOCK">block</a></tt> is a configuration
+              error. Currently the request is blocked and an error message
+              logged, the behavior may change in the future and result in
+              Privoxy rejecting the action file.</p>
+
+              <p>This action can be combined with <tt class=
+              "LITERAL"><a href="actions-file.html#FAST-REDIRECTS">fast-redirects{check-decoded-url}</a></tt>
               to redirect to a decoded version of a rewritten URL.</p>
 
               <p>Use this action carefully, make sure not to create
@@ -4058,6 +4069,19 @@ undeadly.org/cgi\?action=article&amp;sid=\d*$
 # Redirect MSN search requests to Yahoo
 {+redirect{s@^http://[^/]*/results\.aspx\?q=([^&amp;]*).*@http://search.yahoo.com/search?p=$1@}}
 search.msn.com//results\.aspx\?q=
+
+# Redirect http://example.com/&amp;bla=fasel&amp;toChange=foo (and any other value but "bar")
+# to       http://example.com/&amp;bla=fasel&amp;toChange=bar
+#
+# The URL pattern makes sure that the following request isn't redirected again.
+{+redirect{s@toChange=[^&amp;]+@toChange=bar@}}
+example.com/.*toChange=(?!bar)
+
+# Add a shortcut to look up illumos bugs
+{+redirect{s@^http://i([0-9]+)/.*@https://www.illumos.org/issues/$1@}}
+# Redirected URL = http://i4974/
+# Redirect Destination = https://www.illumos.org/issues/4974
+i[0-9][0-9][0-9][0-9]*/
 
 # Redirect remote requests for this manual
 # to the local version delivered by Privoxy
@@ -4207,6 +4231,15 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 # Tag every request with the content type declared by the server
 {+server-header-tagger{content-type}}
 /
+
+# If the response has a tag starting with 'image/' enable an external
+# filter that only applies to images.
+#
+# Note that the filter is not available by default, it's just a
+# <tt class="LITERAL"><a href=
+"filter-file.html#EXTERNAL-FILTER-SYNTAX">silly example</a></tt>.
+{+external-filter{rotate-image} +force-text-mode}
+TAG:^image/
 
 </pre>
                   </td>
@@ -4456,7 +4489,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4918" id="AEN4918">8.5.36.
+        <h3 class="SECT3"><a name="AEN4923" id="AEN4923">8.5.36.
         Summary</a></h3>
 
         <p>Note that many of these actions have the potential to cause a page
@@ -4615,7 +4648,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       together:</p>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN4982" id="AEN4982">8.7.1.
+        <h3 class="SECT3"><a name="AEN4987" id="AEN4987">8.7.1.
         match-all.action</a></h3>
 
         <p>Remember <span class="emphasis"><i class="EMPHASIS">all actions
@@ -4664,7 +4697,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN5004" id="AEN5004">8.7.2.
+        <h3 class="SECT3"><a name="AEN5009" id="AEN5009">8.7.2.
         default.action</a></h3>
 
         <p>If you aren't a developer, there's no need for you to edit the
@@ -5007,7 +5040,7 @@ wiki.
       </div>
 
       <div class="SECT3">
-        <h3 class="SECT3"><a name="AEN5117" id="AEN5117">8.7.3.
+        <h3 class="SECT3"><a name="AEN5122" id="AEN5122">8.7.3.
         user.action</a></h3>
 
         <p>So far we are painting with a broad brush by setting general
