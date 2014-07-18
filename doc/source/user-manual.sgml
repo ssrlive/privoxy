@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.190 2014/07/14 13:37:08 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.191 2014/07/18 10:00:11 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.190 2014/07/14 13:37:08 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.191 2014/07/18 10:00:11 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4215,7 +4215,8 @@ new action
     <para>
      If the ports are missing or invalid, default values will be used. This might change
      in the future and you shouldn't rely on it. Otherwise incorrect syntax causes Privoxy
-     to exit.
+     to exit. Due to design limitations, invalid parameter syntax isn't detected until the
+     action is used the first time.
     </para>
     <para>
      Use the <ulink url="http://config.privoxy.org/show-url-info">show-url-info CGI page</ulink>
