@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.189 2014/07/14 13:00:07 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.190 2014/07/14 13:37:08 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.189 2014/07/14 13:00:07 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.190 2014/07/14 13:37:08 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -5425,6 +5425,12 @@ search.msn.com//results\.aspx\?q=
 # The URL pattern makes sure that the following request isn't redirected again.
 {+redirect{s@toChange=[^&amp;]+@toChange=bar@}}
 example.com/.*toChange=(?!bar)
+
+# Add a shortcut to look up illumos bugs
+{+redirect{s@^http://i([0-9]+)/.*@https://www.illumos.org/issues/$1@}}
+# Redirected URL = http://i4974/
+# Redirect Destination = https://www.illumos.org/issues/4974
+i[0-9][0-9][0-9][0-9]*/
 
 # Redirect remote requests for this manual
 # to the local version delivered by Privoxy
