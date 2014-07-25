@@ -1,4 +1,4 @@
-$Id: TODO,v 1.119 2014/06/25 10:09:57 fabiankeil Exp $
+$Id: TODO,v 1.120 2014/07/03 10:19:47 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -391,6 +391,8 @@ to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
 
 133) Consider allowing bitcoin donations.
      Interested donors: 1.
+
+134) Track the total number of bytes written to and received from a socket.
 
 ##########################################################################
 
