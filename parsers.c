@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.288 2014/07/25 11:55:27 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.289 2014/07/25 11:55:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -752,8 +752,8 @@ jb_err decompress_iob(struct client_state *csp)
  *
  * Function    :  normalize_lws
  *
- * Description :  Reduces unquoted linear whitespace in headers
- *                to a single space in accordance with RFC 2616 2.2.
+ * Description :  Reduces unquoted linear whitespace in headers to
+ *                a single space in accordance with RFC 7230 3.2.4.
  *                This simplifies parsing and filtering later on.
  *
  * Parameters  :
