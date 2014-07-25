@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.290 2014/07/25 11:56:02 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.291 2014/07/25 11:56:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3837,6 +3837,7 @@ static jb_err client_connection_header_adder(struct client_state *csp)
  *                  is a partial range (HTTP status 206)
  *                - Rewrite HTTP/1.1 answers to HTTP/1.0 if +downgrade
  *                  action applies.
+ *                - Normalize the HTTP-version.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3846,35 +3847,77 @@ static jb_err client_connection_header_adder(struct client_state *csp)
  *                original string if necessary.
  *
  * Returns     :  JB_ERR_OK on success, or
- *                JB_ERR_MEMORY on out-of-memory error.
+ *                JB_ERR_PARSE on fatal parse errors.
  *
  *********************************************************************/
 static jb_err server_http(struct client_state *csp, char **header)
 {
-   sscanf(*header, "HTTP/%*d.%*d %d", &(csp->http->status));
+   char *reason_phrase = NULL;
+   char *new_response_line;
+   char *p;
+   size_t length;
+   unsigned int major_version;
+   unsigned int minor_version;
+
+   /* Get the reason phrase which start after the second whitespace */
+   p = strchr(*header, ' ');
+   if (NULL != p)
+   {
+      p++;
+      reason_phrase = strchr(p, ' ');
+      if (reason_phrase != NULL)
+      {
+         reason_phrase++;
+      }
+   }
+
+   if ((reason_phrase == NULL) || (reason_phrase[0] == '\0') ||
+      (3 != sscanf(*header, "HTTP/%u.%u %u", &major_version,
+         &minor_version, &(csp->http->status))))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to parse the response line: %s", *header);
+      return JB_ERR_PARSE;
+   }
+
    if (csp->http->status == 206)
    {
       csp->content_type = CT_TABOO;
    }
 
-   if ((csp->action->flags & ACTION_DOWNGRADE) != 0)
+   if (major_version != 1 || (minor_version != 0 && minor_version != 1))
    {
-      /* XXX: Should we do a real validity check here? */
-      if (strlen(*header) > 8)
-      {
-         (*header)[7] = '0';
-         log_error(LOG_LEVEL_HEADER, "Downgraded answer to HTTP/1.0");
-      }
-      else
-      {
-         /*
-          * XXX: Should we block the request or
-          * enlist a valid status code line here?
-          */
-         log_error(LOG_LEVEL_INFO, "Malformed server response detected. "
-            "Downgrading to HTTP/1.0 impossible.");
-      }
+      /*
+       * According to RFC 7230 2.6 intermediaries MUST send
+       * their own HTTP-version in forwarded messages.
+       */
+      log_error(LOG_LEVEL_ERROR,
+         "Unsupported HTTP version. Downgrading to 1.1.");
+      major_version = 1;
+      minor_version = 1;
    }
+
+   if (((csp->action->flags & ACTION_DOWNGRADE) != 0) && (minor_version == 1))
+   {
+      log_error(LOG_LEVEL_HEADER, "Downgrading answer to HTTP/1.0");
+      minor_version = 0;
+   }
+
+   /* Rebuild response line. */
+   length = sizeof("HTTP/1.1 200 ") + strlen(reason_phrase) + 1;
+   new_response_line = malloc_or_die(length);
+
+   snprintf(new_response_line, length, "HTTP/%u.%u %u %s",
+      major_version, minor_version, csp->http->status, reason_phrase);
+
+   if (0 != strcmp(*header, new_response_line))
+   {
+      log_error(LOG_LEVEL_HEADER, "Response line '%s' changed to '%s'",
+         *header, new_response_line);
+   }
+
+   freez(*header);
+   *header = new_response_line;
 
    return JB_ERR_OK;
 }
