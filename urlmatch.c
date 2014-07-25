@@ -1,4 +1,4 @@
-const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.83 2014/06/20 09:46:56 fabiankeil Exp $";
+const char urlmatch_rcs[] = "$Id: urlmatch.c,v 1.84 2014/06/20 09:47:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/urlmatch.c,v $
@@ -478,6 +478,50 @@ static int unknown_method(const char *method)
 
 /*********************************************************************
  *
+ * Function    :  normalize_http_version
+ *
+ * Description :  Take a supported HTTP version string and remove
+ *                leading zeroes etc., reject unsupported versions.
+ *
+ *                This is an explicit RFC 2616 (3.1) MUST and
+ *                RFC 7230 mandates that intermediaries send their
+ *                own HTTP-version in forwarded messages.
+ *
+ * Parameters  :
+ *          1  :  http_version = HTTP version string
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_PARSE if the HTTP version is unsupported
+ *
+ *********************************************************************/
+jb_err static normalize_http_version(char *http_version)
+{
+   unsigned int major_version;
+   unsigned int minor_version;
+
+   if (2 != sscanf(http_version, "HTTP/%u.%u", &major_version, &minor_version))
+   {
+      log_error(LOG_LEVEL_ERROR, "Unsupported HTTP version: %s", http_version);
+      return JB_ERR_PARSE;
+   }
+
+   if (major_version != 1 || (minor_version != 0 && minor_version != 1))
+   {
+      log_error(LOG_LEVEL_ERROR, "The only supported HTTP "
+         "versions are 1.0 and 1.1. This rules out: %s", http_version);
+      return JB_ERR_PARSE;
+   }
+
+   assert(strlen(http_version) >= 8);
+   snprintf(http_version, 9, "HTTP/%u.%u", major_version, minor_version);
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  parse_http_request
  *
  * Description :  Parse out the host and port from the URL.  Find the
@@ -526,10 +570,8 @@ jb_err parse_http_request(const char *req, struct http_request *http)
       return JB_ERR_PARSE;
    }
 
-   if (strcmpic(v[2], "HTTP/1.1") && strcmpic(v[2], "HTTP/1.0"))
+   if (JB_ERR_OK != normalize_http_version(v[2]))
    {
-      log_error(LOG_LEVEL_ERROR, "The only supported HTTP "
-         "versions are 1.0 and 1.1. This rules out: %s", v[2]);
       freez(buf);
       return JB_ERR_PARSE;
    }
