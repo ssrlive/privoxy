@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.428 2014/06/03 10:25:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.429 2014/07/25 11:55:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1709,9 +1709,12 @@ static jb_err parse_client_request(struct client_state *csp)
    err = sed(csp, FILTER_CLIENT_HEADERS);
    if (JB_ERR_OK != err)
    {
-      /* XXX: Should be handled in sed(). */
-      assert(err == JB_ERR_PARSE);
-      log_error(LOG_LEVEL_FATAL, "Failed to parse client headers.");
+      log_error(LOG_LEVEL_ERROR, "Failed to parse client request from %s.",
+         csp->ip_addr_str);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
+         csp->ip_addr_str, csp->http->cmd);
+      write_socket(csp->cfd, CHEADER, strlen(CHEADER));
+      return JB_ERR_PARSE;
    }
    csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
@@ -2594,7 +2597,13 @@ static void chat(struct client_state *csp)
              */
             if (JB_ERR_OK != sed(csp, FILTER_SERVER_HEADERS))
             {
-               log_error(LOG_LEVEL_FATAL, "Failed to parse server headers.");
+               log_error(LOG_LEVEL_CLF,
+                  "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
+               write_socket(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
+                  strlen(INVALID_SERVER_HEADERS_RESPONSE));
+               free_http_request(http);
+               mark_server_socket_tainted(csp);
+               return;
             }
             hdr = list_to_text(csp->headers);
             if (hdr == NULL)

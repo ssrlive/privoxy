@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.289 2014/07/25 11:55:47 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.290 2014/07/25 11:56:02 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1115,7 +1115,8 @@ static void enforce_header_order(struct list *headers, const struct list *ordere
  *                                        server and header filtering.
  *
  * Returns     :  JB_ERR_OK in case off success, or
- *                JB_ERR_MEMORY on out-of-memory error.
+ *                JB_ERR_MEMORY on some out-of-memory errors, or
+ *                JB_ERR_PARSE in case of fatal parse errors.
  *
  *********************************************************************/
 jb_err sed(struct client_state *csp, int filter_server_headers)
@@ -1141,9 +1142,9 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
       check_negative_tag_patterns(csp, PATTERN_SPEC_NO_REQUEST_TAG_PATTERN);
    }
 
-   while ((err == JB_ERR_OK) && (v->str != NULL))
+   while (v->str != NULL)
    {
-      for (p = csp->headers->first; (err == JB_ERR_OK) && (p != NULL); p = p->next)
+      for (p = csp->headers->first; p != NULL; p = p->next)
       {
          /* Header crunch()ed in previous run? -> ignore */
          if (p->str == NULL) continue;
@@ -1153,6 +1154,10 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
              (v->len == CHECK_EVERY_HEADER_REMAINING))
          {
             err = v->parser(csp, &(p->str));
+            if (err != JB_ERR_OK)
+            {
+               return err;
+            }
          }
       }
       v++;
