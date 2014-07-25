@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.285 2014/04/21 12:04:01 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.286 2014/06/12 13:10:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -116,6 +116,7 @@ static jb_err client_if_none_match      (struct client_state *csp, char **header
 static jb_err crunch_client_header      (struct client_state *csp, char **header);
 static jb_err client_x_filter           (struct client_state *csp, char **header);
 static jb_err client_range              (struct client_state *csp, char **header);
+static jb_err client_expect             (struct client_state *csp, char **header);
 static jb_err server_set_cookie         (struct client_state *csp, char **header);
 static jb_err server_connection         (struct client_state *csp, char **header);
 static jb_err server_content_type       (struct client_state *csp, char **header);
@@ -203,6 +204,7 @@ static const struct parsers client_patterns[] = {
 #if 0
    { "Transfer-Encoding:",       18,   client_transfer_encoding },
 #endif
+   { "Expect:",                   7,   client_expect },
    { "*",                         0,   crunch_client_header },
    { "*",                         0,   filter_header },
    { NULL,                        0,   NULL }
@@ -2003,6 +2005,40 @@ jb_err client_transfer_encoding(struct client_state *csp, char **header)
    }
 
    return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_expect
+ *
+ * Description :  Raise the CSP_FLAG_UNSUPPORTED_CLIENT_EXPECTATION
+ *                if the Expect header value is unsupported.
+ *
+ *                Rejecting unsupported expectations is a RFC 7231 5.1.1
+ *                MAY and a RFC 2616 (obsolete) MUST.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  header = On input, pointer to header to modify.
+ *                On output, pointer to the modified header, or NULL
+ *                to remove the header.  This function frees the
+ *                original string if necessary.
+ *
+ * Returns     :  JB_ERR_OK on success, or
+ *
+ *********************************************************************/
+jb_err client_expect(struct client_state *csp, char **header)
+{
+   if (0 != strcmpic(*header, "Expect: 100-continue"))
+   {
+      csp->flags |= CSP_FLAG_UNSUPPORTED_CLIENT_EXPECTATION;
+      log_error(LOG_LEVEL_HEADER,
+         "Unsupported client expectaction: %s", *header);
+   }
+
+   return JB_ERR_OK;
+
 }
 
 

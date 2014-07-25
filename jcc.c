@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.427 2014/06/02 06:22:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.428 2014/06/03 10:25:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -279,6 +279,13 @@ static const char CLIENT_BODY_PARSE_ERROR_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Failed parsing or buffering the chunk-encoded client body.\r\n";
 
+static const char UNSUPPORTED_CLIENT_EXPECTATION_ERROR_RESPONSE[] =
+   "HTTP/1.1 417 Expecting too much\r\n"
+   "Proxy-Agent: Privoxy " VERSION "\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "Privoxy detected an unsupported Expect header value.\r\n";
+
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
 
@@ -434,6 +441,40 @@ static int client_protocol_is_unsupported(const struct client_state *csp, char *
    }
 
    return FALSE;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  client_has_unsupported_expectations
+ *
+ * Description :  Checks if the client used an unsupported expectation
+ *                in which case an error message is delivered.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  TRUE if an error response has been generated, or
+ *                FALSE if the request doesn't look invalid.
+ *
+ *********************************************************************/
+static int client_has_unsupported_expectations(const struct client_state *csp)
+{
+   if ((csp->flags & CSP_FLAG_UNSUPPORTED_CLIENT_EXPECTATION))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Rejecting request from client %s with unsupported Expect header value",
+         csp->ip_addr_str);
+      log_error(LOG_LEVEL_CLF,
+         "%s - - [%T] \"%s\" 417 0", csp->ip_addr_str, csp->http->cmd);
+      write_socket(csp->cfd, UNSUPPORTED_CLIENT_EXPECTATION_ERROR_RESPONSE,
+         strlen(UNSUPPORTED_CLIENT_EXPECTATION_ERROR_RESPONSE));
+
+      return TRUE;
+   }
+
+   return FALSE;
+
 }
 
 
@@ -1690,6 +1731,11 @@ static jb_err parse_client_request(struct client_state *csp)
          "Invalid request line after applying header filters.");
       free_http_request(http);
 
+      return JB_ERR_PARSE;
+   }
+
+   if (client_has_unsupported_expectations(csp))
+   {
       return JB_ERR_PARSE;
    }
 

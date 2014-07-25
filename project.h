@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.205 2014/06/02 06:19:06 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.206 2014/06/02 06:22:21 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -848,6 +848,10 @@ struct reusable_connection
  */
 #define CSP_FLAG_CHUNKED_CLIENT_BODY                0x01000000U
 
+/**
+ * Flag for csp->flags: Set if the client set the Expect header
+ */
+#define CSP_FLAG_UNSUPPORTED_CLIENT_EXPECTATION     0x02000000U
 
 /*
  * Flags for use in return codes of child processes
