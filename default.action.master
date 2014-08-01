@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.307 2014/07/14 13:01:02 fabiankeil Exp $
+#  $Id: default.action.master,v 1.308 2014/07/14 13:01:28 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -675,6 +675,8 @@ countr*.
 metrics.torproject.org/
 # URL = http://linuxcounter.net/
 linuxcounter.net/
+# URL = http://adinablafasel.example.org/
+adina*.
 
 #############################################################################
 # Generic block patterns by path:
