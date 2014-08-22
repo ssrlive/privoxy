@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.309 2014/08/01 12:34:21 fabiankeil Exp $
+#  $Id: default.action.master,v 1.310 2014/08/08 13:05:23 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -30,7 +30,7 @@
 # http://www.privoxy.org/user-manual/contact.html
 #
 # The current development version of this file is located:
-# http://ijbswa.cvs.sourceforge.net/*checkout*/ijbswa/current/default.action.master
+# http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/default.action.master
 #
 #############################################################################
 # Syntax
