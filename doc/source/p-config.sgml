@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.107 2014/06/16 10:16:53 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.108 2014/10/06 10:17:28 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.107 2014/06/16 10:16:53 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.108 2014/10/06 10:17:28 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
@@ -1073,11 +1073,6 @@ actionsfile
     probably only of interest if you are hunting down a specific problem.
     They can produce a hell of an output (especially 16).
     <!-- LOL -->
-   </para>
-   <para>
-    &my-app; used to ship with the debug levels recommended above enabled by
-    default, but due to privacy concerns 3.0.7 and later are configured to
-    only log fatal errors.
    </para>
    <para>
     If you are used to the more verbose settings, simply enable the debug lines
