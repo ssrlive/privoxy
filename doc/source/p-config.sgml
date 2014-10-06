@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.108 2014/10/06 10:17:28 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.109 2014/10/06 10:17:43 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.108 2014/10/06 10:17:28 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.109 2014/10/06 10:17:43 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
@@ -743,13 +743,6 @@ actionsfile
    <para>
     Actions files contain all the per site and per URL configuration for
     ad blocking, cookie management, privacy considerations, etc.
-    There is no point in using <application>Privoxy</application> without at
-    least one actions file.
-   </para>
-   <para>
-    Note that since Privoxy 3.0.7, the complete filename, including the <quote>.action</quote>
-    extension has to be specified.  The syntax change was necessary to be consistent
-    with the other file options and to allow previously forbidden characters.
    </para>
   </listitem>
  </varlistentry>
