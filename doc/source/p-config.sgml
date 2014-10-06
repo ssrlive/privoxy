@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.106 2014/06/02 06:22:22 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.107 2014/06/16 10:16:53 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.106 2014/06/02 06:22:22 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.107 2014/06/16 10:16:53 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
@@ -886,21 +886,21 @@ actionsfile
    <para>
     Depending on the debug options below, the logfile may be a privacy risk
     if third parties can get access to it. As most users will never look
-    at it, <application>Privoxy</application> 3.0.7 and later only log fatal
-    errors by default.
+    at it, <application>Privoxy</application> only logs fatal errors by default.
    </para>
    <para>
     For most troubleshooting purposes, you will have to change that,
     please refer to the debugging section for details.
    </para>
    <para>
-    Your logfile will grow indefinitely, and you will probably want to
-    periodically remove it.  On Unix systems, you can do this with a cron job
-    (see <quote>man cron</quote>).
-   </para>
-   <para>
     Any log files must be writable by whatever user <application>Privoxy</application>
     is being run as (on Unix, default user id is <quote>privoxy</quote>).
+   </para>
+   <para>
+    To prevent the logfile from growing indefinitely, it is recommended to
+    periodically rotate or shorten it. Many operating systems support log
+    rotation out of the box, some require additional software to do it.
+    For details, please refer to the documentation for your operating system.
    </para>
   </listitem>
  </varlistentry>
