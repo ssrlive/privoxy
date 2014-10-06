@@ -592,15 +592,7 @@
 
               <p>Actions files contain all the per site and per URL
               configuration for ad blocking, cookie management, privacy
-              considerations, etc. There is no point in using <span class=
-              "APPLICATION">Privoxy</span> without at least one actions
-              file.</p>
-
-              <p>Note that since Privoxy 3.0.7, the complete filename,
-              including the <span class="QUOTE">".action"</span> extension
-              has to be specified. The syntax change was necessary to be
-              consistent with the other file options and to allow previously
-              forbidden characters.</p>
+              considerations, etc.</p>
             </dd>
           </dl>
         </div>
@@ -724,20 +716,21 @@
               <p>Depending on the debug options below, the logfile may be a
               privacy risk if third parties can get access to it. As most
               users will never look at it, <span class=
-              "APPLICATION">Privoxy</span> 3.0.7 and later only log fatal
-              errors by default.</p>
+              "APPLICATION">Privoxy</span> only logs fatal errors by
+              default.</p>
 
               <p>For most troubleshooting purposes, you will have to change
               that, please refer to the debugging section for details.</p>
 
-              <p>Your logfile will grow indefinitely, and you will probably
-              want to periodically remove it. On Unix systems, you can do
-              this with a cron job (see <span class="QUOTE">"man
-              cron"</span>).</p>
-
               <p>Any log files must be writable by whatever user <span class=
               "APPLICATION">Privoxy</span> is being run as (on Unix, default
               user id is <span class="QUOTE">"privoxy"</span>).</p>
+
+              <p>To prevent the logfile from growing indefinitely, it is
+              recommended to periodically rotate or shorten it. Many
+              operating systems support log rotation out of the box, some
+              require additional software to do it. For details, please refer
+              to the documentation for your operating system.</p>
             </dd>
           </dl>
         </div>
@@ -906,11 +899,6 @@
               probably only of interest if you are hunting down a specific
               problem. They can produce a hell of an output (especially
               16).</p>
-
-              <p><span class="APPLICATION">Privoxy</span> used to ship with
-              the debug levels recommended above enabled by default, but due
-              to privacy concerns 3.0.7 and later are configured to only log
-              fatal errors.</p>
 
               <p>If you are used to the more verbose settings, simply enable
               the debug lines below again.</p>
@@ -2881,6 +2869,15 @@
               application running on the system, you may actually want to
               limit the resources used by <span class=
               "APPLICATION">Privoxy</span>.</p>
+
+              <p>Another relevant limit to keep in mind is the maximum number
+              of file descriptors the operating system is enforcing.
+              <span class="APPLICATION">Privoxy</span> needs two file
+              descriptors for each client request that isn't answered by
+              <span class="APPLICATION">Privoxy</span> itself and one for
+              each configuration file. Therefore it's reasonable to limit the
+              client connections to a bit less that half the number of file
+              descriptors Privoxy is allowed to use.</p>
 
               <p>If <span class="APPLICATION">Privoxy</span> is only used by
               a single trusted user, limiting the number of client
