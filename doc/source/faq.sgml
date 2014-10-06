@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.100 2014/05/05 09:59:30 fabiankeil Exp $
+ $Id: faq.sgml,v 2.101 2014/05/26 10:48:39 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.100 2014/05/05 09:59:30 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.101 2014/05/26 10:48:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -503,63 +503,43 @@ warranty? Registration?</title>
 
 <sect3 renderas="sect4" id="donate"><title>Would you like to donate?</title>
 <para>
- <application>Privoxy</application> is developed by unpaid volunteers
- and thus our current running costs are pretty low. Nevertheless, we
- have plans that will cost money in the future. They include,
- but aren't limited to spending money on:
-
+ Donations are welcome. Our
+ <ulink url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO">TODO list</ulink>
+ is rather long and being able to pay one (or more) developers to work on Privoxy
+ a couple of weeks in a row would make a huge difference.
 </para>
 
 <para>
-<itemizedlist>
- <listitem>
-   <para>
-     Hardware to help make sure <application>Privoxy</application>
-     keeps running on platforms the developers currently can't test
-     on and can be ported to others.
-   </para>
- </listitem>
- <listitem>
-   <para>
-     Technical books to educate our developers about said platforms
-     or to improve their knowledge in general.
-   </para>
- </listitem>
- <listitem>
-   <para>
-     More reliable hosting,
-   </para>
- </listitem>
-</itemizedlist>
-</para>
-
-<para>
- We would like to get this money through donations made by our users.
-</para>
-
-<para>
- <application>Privoxy</application> has therefore become an associated
+ <application>Privoxy</application> is an associated
  project of <ulink url="http://www.spi-inc.org/">Software
- in the Public Interest (SPI)</ulink>, which allows us to receive donations.
- In the United States they are tax-deductible, in a few other western countries
- they might be tax-deductible in the future.
+ in the Public Interest (SPI)</ulink>, which allows us to receive
+ tax-deductible donations in the United States. If you want to donate through
+ SPI, please use <ulink url="http://www.spi-inc.org/donations">SPI's donation page</ulink>
+ to see what the options are.
 </para>
 
 <para>
- If you read this section before you may notice that paying for the
- project domain privoxy.org is no longer on the list. It has been
- transferred to SPI is sponsored by Mythic Beasts Ltd.
+ You can also donate to Privoxy using a bank account managed by
+ <ulink url="https://www.zwiebelfreunde.de/">Zwiebelfreunde e.V.</ulink>:
+</para>
+<literallayout>
+ Name on Account: Zwiebelfreunde e.V.
+ IBAN: DE95430609671126825604
+ BIC: GENODEM1GLS
+ Bank: GLS Bank
+</literallayout>
+<para>
+ Donations made through Zwiebelfreunde e.V. are tax-deductible in Germany
+ and other countries that recognize German charitable clubs. Feel free to
+ use the Subject field to provide a name to be credited and a list of TODO
+ list items you are interested in the most. For example: Max Mustermann: #16, #1, #14.
 </para>
 
 <para>
- If you enjoy our software and feel like helping out with a donation,
- please have a look at
- <ulink url="http://www.spi-inc.org/donations">SPI's donation page</ulink>
- to see what the options are. If you have any questions regarding donations
- please mail to either the public user mailing list or, if it's a private
- matter, to <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink>
- (Privoxy's SPI liason) directly.
-</para>
+ If you have any questions regarding donations please mail to either the
+ public user mailing list or, if it's a private matter, to
+ <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink> (Privoxy's SPI liason)
+ directly.
 </sect3>
 
 </sect2>
@@ -3028,6 +3008,9 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.101  2014/05/26 10:48:39  fabiankeil
+Bump entities for 3.0.22 UNRELEASED
+
 Revision 2.100  2014/05/05 09:59:30  fabiankeil
 Recommend forward-socks5t when using Tor
 
