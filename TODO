@@ -1,4 +1,4 @@
-$Id: TODO,v 1.122 2014/10/06 10:13:56 fabiankeil Exp $
+$Id: TODO,v 1.123 2014/10/06 10:18:37 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -397,6 +397,8 @@ to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
 135) Add OpenBSM audit support.
 
 136) Make builds reproducible.
+
+137) Add a (preferably vector-based) logo.
 
 ##########################################################################
 
