@@ -1,4 +1,4 @@
-$Id: TODO,v 1.123 2014/10/06 10:18:37 fabiankeil Exp $
+$Id: TODO,v 1.124 2014/10/16 11:54:58 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -138,8 +138,6 @@ to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
     Find out if there are any objection against going with Git.
     Using Git would also have the advantage that SF now pretends
     to support it, so we could do it independently from 53).
-
-55) Apply for Coverity scans: http://scan.coverity.com/
 
 58) Move more template strings from the code into the actual templates.
 
@@ -399,6 +397,9 @@ to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
 136) Make builds reproducible.
 
 137) Add a (preferably vector-based) logo.
+
+138) Analyse Coverity scan results:
+     https://scan.coverity.com/projects/3212
 
 ##########################################################################
 
