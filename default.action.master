@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.310 2014/08/08 13:05:23 fabiankeil Exp $
+#  $Id: default.action.master,v 1.311 2014/08/22 09:45:29 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2085,6 +2085,8 @@ webcache.googleusercontent.com/
 .facebook.com/plugins/like.php
 # URL = http://creativecommons.org/choose/zero/confirm?license-class=zero&name=...&actor_href=http%3A%2F%2Fexample.org%2F&work_title=...&work_jurisdiction=DE&confirm=confirm&understand=confirm&lang=de&field1=weiter
 creativecommons.org/
+# URL = http://ixquick-proxy.com/do/spg/proxy?ah=&c=hnf&rid=LHLOLMSTPRKK&proxiedformtype=&q=%22lord+lucan%22&sp=19f738b4691d795804a6bc60c5b2c766&ts=MTQxMjg5NTcxNw%3D%3D&u=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FJohn_Bingham%2C_7th_Earl_of_Lucan&rpos=1&l=english_uk&cat=web&zst=1412895717.21&znt=1412895717.2125&rl=NONE&hlq=https%3A%2F%2Fstartpage.com%2Fdo%2Fsearch&mtppabp=1&mtppcat=web&mtppcmd=process_search&mtppenginecount=1&mtppflag_ac=0&mtpplanguage=english_uk&udata=e9a958f0a1bae930ec8f60fdef42ceb3&/file.gz
+ixquick-proxy.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
