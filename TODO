@@ -1,4 +1,4 @@
-$Id: TODO,v 1.124 2014/10/16 11:54:58 fabiankeil Exp $
+$Id: TODO,v 1.125 2014/10/16 11:55:45 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -397,9 +397,6 @@ to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
 136) Make builds reproducible.
 
 137) Add a (preferably vector-based) logo.
-
-138) Analyse Coverity scan results:
-     https://scan.coverity.com/projects/3212
 
 ##########################################################################
 
