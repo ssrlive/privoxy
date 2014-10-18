@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.28 2012/03/09 16:23:50 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.29 2012/03/09 17:55:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -876,15 +876,24 @@ int list_contains_item(const struct list *the_list, const char *str)
  * Function    :  new_map
  *
  * Description :  Create a new, empty map.
+ *                Causes program exit if the memory allocation fails.
  *
  * Parameters  :  N/A
  *
- * Returns     :  A new, empty map, or NULL if out of memory.
+ * Returns     :  A new, empty map
  *
  *********************************************************************/
 struct map *new_map(void)
 {
-   return (struct map *) zalloc(sizeof(struct map));
+   struct map *empty_map = zalloc(sizeof(struct map));
+
+   if (NULL == empty_map)
+   {
+      exit(1);
+   }
+
+   return empty_map;
+
 }
 
 

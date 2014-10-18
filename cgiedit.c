@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.85 2014/10/18 11:29:22 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.86 2014/10/18 11:29:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -2342,7 +2342,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
             {
                if (!strncmp(b->url->spec, "standard.", 9) && *(b->url->spec + 9) != '\0')
                {
-                  if (err || (NULL == (section_exports = new_map())))
+                  if (err)
                   {
                      freez(buttons);
                      free(section_template);
@@ -2351,6 +2351,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
                      return JB_ERR_MEMORY;
                   }
 
+                  section_exports = new_map();
                   err = map(section_exports, "button-name", 1, b->url->spec + 9, 1);
 
                   if (err || (NULL == (s = strdup(section_template))))
@@ -2482,15 +2483,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
    while ((cur_line != NULL) && (cur_line->type == FILE_LINE_ACTION))
    {
-      if (NULL == (section_exports = new_map()))
-      {
-         free(sections);
-         free(section_template);
-         free(url_template);
-         edit_free_file(file);
-         free_map(exports);
-         return JB_ERR_MEMORY;
-      }
+      section_exports = new_map();
 
       snprintf(buf, sizeof(buf), "%u", line_number);
       err = map(section_exports, "s", 1, buf, 1);
@@ -2554,17 +2547,7 @@ jb_err cgi_edit_actions_list(struct client_state *csp,
 
       while ((cur_line != NULL) && (cur_line->type == FILE_LINE_URL))
       {
-         if (NULL == (url_exports = new_map()))
-         {
-            free(urls);
-            free(sections);
-            free(section_template);
-            free(url_template);
-            edit_free_file(file);
-            free_map(exports);
-            free_map(section_exports);
-            return JB_ERR_MEMORY;
-         }
+         url_exports = new_map();
 
          snprintf(buf, sizeof(buf), "%u", line_number);
          err = map(url_exports, "p", 1, buf, 1);
