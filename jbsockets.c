@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.128 2014/10/18 11:24:53 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.129 2014/10/18 11:27:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -995,6 +995,7 @@ int bind_port(const char *hostnam, int portnum, jb_socket *pfd)
    {
       if (errno != EINTR)
       {
+         close_socket(fd);
          return(-1);
       }
    }
