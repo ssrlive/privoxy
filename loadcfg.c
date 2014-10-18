@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.140 2014/06/02 06:19:06 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.141 2014/06/02 06:22:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -948,6 +948,7 @@ struct configuration_spec * load_config(void)
                string_append(&config->proxy_args,
                   "<br>\nWARNING: Bad URL specifier for "
                   "forward directive in configuration file.");
+               freez(cur_fwd);
                break;
             }
 
@@ -1003,6 +1004,7 @@ struct configuration_spec * load_config(void)
                string_append(&config->proxy_args,
                   "<br>\nWARNING: Bad URL specifier for "
                   "forward-socks4 directive in configuration file.");
+               freez(cur_fwd);
                break;
             }
 
@@ -1083,6 +1085,7 @@ struct configuration_spec * load_config(void)
                string_append(&config->proxy_args,
                   "<br>\nWARNING: Bad URL specifier for "
                   "forward-socks4a directive in configuration file.");
+               freez(cur_fwd);
                break;
             }
 
