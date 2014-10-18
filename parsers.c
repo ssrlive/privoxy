@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.293 2014/10/18 11:24:34 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.294 2014/10/18 11:30:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2195,11 +2195,12 @@ static jb_err server_content_type(struct client_state *csp, char **header)
        */
       if ((csp->content_type & CT_TEXT) || (csp->action->flags & ACTION_FORCE_TEXT_MODE))
       {
+         jb_err err;
          freez(*header);
          *header = strdup_or_die("Content-Type: ");
-         string_append(header, csp->action->string[ACTION_STRING_CONTENT_TYPE]);
 
-         if (header == NULL)
+         err = string_append(header, csp->action->string[ACTION_STRING_CONTENT_TYPE]);
+         if (JB_ERR_OK != err)
          {
             log_error(LOG_LEVEL_HEADER, "Insufficient memory to replace Content-Type!");
             return JB_ERR_MEMORY;
