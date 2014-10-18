@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.190 2014/10/18 11:26:48 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.191 2014/10/18 11:28:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2009,7 +2009,6 @@ static filter_function_ptr get_filter_function(const struct client_state *csp)
     * the content type and action settings.
     */
    if ((csp->content_type & CT_TEXT) &&
-       (csp->rlist != NULL) &&
        (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
    {
       filter_function = pcrs_filter_response;
@@ -2222,7 +2221,6 @@ char *execute_content_filters(struct client_state *csp)
 
 #ifdef FEATURE_EXTERNAL_FILTERS
    if ((csp->content_type & CT_TEXT) &&
-       (csp->rlist != NULL) &&
        !list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]))
    {
       struct list_entry *filtername;
@@ -2627,7 +2625,6 @@ int content_requires_filtering(struct client_state *csp)
     * the content type and action settings.
     */
    if ((csp->content_type & CT_TEXT) &&
-       (csp->rlist != NULL) &&
        (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER]) ||
         !list_is_empty(csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER])))
    {
