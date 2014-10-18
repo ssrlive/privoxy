@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.120 2014/06/02 06:22:20 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.121 2014/06/03 10:24:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -1001,9 +1001,6 @@ const char *jb_err_to_string(int jb_error)
          return "File has been modified outside of the CGI actions editor.";
       case JB_ERR_COMPRESS:
          return "(De)compression failure";
-      default:
-         assert(0);
-         return "Unknown error";
    }
    assert(0);
    return "Internal error";
