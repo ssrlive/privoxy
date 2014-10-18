@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.126 2014/06/02 06:22:20 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.127 2014/06/03 10:27:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1276,7 +1276,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
       setsockopt(fd, SOL_SOCKET, SO_ACCEPTFILTER, &af_options, sizeof(af_options));
 #endif
       afd = accept (fd, (struct sockaddr *) &client, &c_length);
-   } while (afd < 1 && errno == EINTR);
+   } while (afd < 0 && errno == EINTR);
    if (afd < 0)
    {
       return 0;
