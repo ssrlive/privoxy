@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.127 2014/06/03 10:28:39 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.128 2014/06/03 10:29:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1167,6 +1167,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
        map_block_killer(exports, "privoxy-is-toggled-off")
       )
    {
+      freez(url_param);
       free_map(exports);
       return JB_ERR_MEMORY;
    }
