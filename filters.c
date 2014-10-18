@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.188 2014/10/18 11:25:57 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.189 2014/10/18 11:26:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1131,14 +1131,8 @@ char *get_last_url(char *subject, const char *redirect_mode)
          }
          if (NULL != url_segment)
          {
-            url_segment = strdup(url_segment);
+            url_segment = strdup_or_die(url_segment);
             freez(dtoken);
-            if (url_segment == NULL)
-            {
-               log_error(LOG_LEVEL_ERROR,
-                  "Out of memory while searching for redirects.");
-               return NULL;
-            }
             break;
          }
          freez(dtoken);
