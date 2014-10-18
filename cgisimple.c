@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.129 2014/10/18 11:25:13 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.130 2014/10/18 11:26:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1914,6 +1914,7 @@ static jb_err cgi_show_file(struct client_state *csp,
          s = html_encode_and_free_original(s);
          if (NULL == s)
          {
+            free_map(exports);
             return JB_ERR_MEMORY;
          }
 
