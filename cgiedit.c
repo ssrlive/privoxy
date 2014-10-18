@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.82 2014/06/03 10:31:27 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.83 2014/10/18 11:25:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1571,12 +1571,7 @@ jb_err edit_read_file(struct client_state *csp,
    freez(file->version_str);
    snprintf(version_buf, sizeof(version_buf), "%u", file->version);
    version_buf[sizeof(version_buf)-1] = '\0';
-   file->version_str = strdup(version_buf);
-   if (version_buf == NULL)
-   {
-      edit_free_file(file);
-      return JB_ERR_MEMORY;
-   }
+   file->version_str = strdup_or_die(version_buf);
 
    *pfile = file;
    return JB_ERR_OK;
