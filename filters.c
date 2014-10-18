@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.189 2014/10/18 11:26:18 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.190 2014/10/18 11:26:48 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -347,12 +347,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
     * Use a temporary acl spec copy so we can log
     * the unmodified original in case of parse errors.
     */
-   acl_spec = strdup(aspec);
-   if (acl_spec == NULL)
-   {
-      /* XXX: This will be logged as parse error. */
-      return(-1);
-   }
+   acl_spec = strdup_or_die(aspec);
 
    if ((p = strchr(acl_spec, '/')) != NULL)
    {
@@ -582,12 +577,7 @@ struct http_response *block_url(struct client_state *csp)
       /* and handle accordingly: */
       if ((p == NULL) || (0 == strcmpic(p, "pattern")))
       {
-         rsp->status = strdup("403 Request blocked by Privoxy");
-         if (rsp->status == NULL)
-         {
-            free_http_response(rsp);
-            return cgi_error_memory();
-         }
+         rsp->status = strdup_or_die("403 Request blocked by Privoxy");
          rsp->body = bindup(image_pattern_data, image_pattern_length);
          if (rsp->body == NULL)
          {
@@ -604,12 +594,7 @@ struct http_response *block_url(struct client_state *csp)
       }
       else if (0 == strcmpic(p, "blank"))
       {
-         rsp->status = strdup("403 Request blocked by Privoxy");
-         if (rsp->status == NULL)
-         {
-            free_http_response(rsp);
-            return cgi_error_memory();
-         }
+         rsp->status = strdup_or_die("403 Request blocked by Privoxy");
          rsp->body = bindup(image_blank_data, image_blank_length);
          if (rsp->body == NULL)
          {
@@ -626,12 +611,7 @@ struct http_response *block_url(struct client_state *csp)
       }
       else
       {
-         rsp->status = strdup("302 Local Redirect from Privoxy");
-         if (rsp->status == NULL)
-         {
-            free_http_response(rsp);
-            return cgi_error_memory();
-         }
+         rsp->status = strdup_or_die("302 Local Redirect from Privoxy");
 
          if (enlist_unique_header(rsp->headers, "Location", p))
          {
@@ -651,7 +631,7 @@ struct http_response *block_url(struct client_state *csp)
       new_content_type = csp->action->string[ACTION_STRING_CONTENT_TYPE];
 
       freez(rsp->body);
-      rsp->body = strdup(" ");
+      rsp->body = strdup_or_die(" ");
       rsp->content_length = 1;
 
       if (csp->config->feature_flags & RUNTIME_FEATURE_EMPTY_DOC_RETURNS_OK)
@@ -662,18 +642,13 @@ struct http_response *block_url(struct client_state *csp)
           * Return a 200 OK status for pages blocked with +handle-as-empty-document
           * if the "handle-as-empty-doc-returns-ok" runtime config option is set.
           */
-         rsp->status = strdup("200 Request blocked by Privoxy");
+         rsp->status = strdup_or_die("200 Request blocked by Privoxy");
       }
       else
       {
-         rsp->status = strdup("403 Request blocked by Privoxy");
+         rsp->status = strdup_or_die("403 Request blocked by Privoxy");
       }
 
-      if (rsp->status == NULL)
-      {
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
       if (new_content_type != 0)
       {
          log_error(LOG_LEVEL_HEADER, "Overwriting Content-Type with %s", new_content_type);
@@ -693,12 +668,7 @@ struct http_response *block_url(struct client_state *csp)
       jb_err err;
       struct map * exports;
 
-      rsp->status = strdup("403 Request blocked by Privoxy");
-      if (rsp->status == NULL)
-      {
-         free_http_response(rsp);
-         return cgi_error_memory();
-      }
+      rsp->status = strdup_or_die("403 Request blocked by Privoxy");
 
       exports = default_exports(csp, NULL);
       if (exports == NULL)
@@ -802,9 +772,9 @@ struct http_response *trust_url(struct client_state *csp)
       return cgi_error_memory();
    }
 
-   rsp->status = strdup("403 Request blocked by Privoxy");
+   rsp->status = strdup_or_die("403 Request blocked by Privoxy");
    exports = default_exports(csp, NULL);
-   if (exports == NULL || rsp->status == NULL)
+   if (exports == NULL)
    {
       free_http_response(rsp);
       return cgi_error_memory();
@@ -836,7 +806,7 @@ struct http_response *trust_url(struct client_state *csp)
    /*
     * Export the trust list
     */
-   p = strdup("");
+   p = strdup_or_die("");
    for (tl = csp->config->trust_list; (t = *tl) != NULL ; tl++)
    {
       snprintf(buf, sizeof(buf), "<li>%s</li>\n", t->spec);
@@ -858,7 +828,7 @@ struct http_response *trust_url(struct client_state *csp)
    {
       struct list_entry *l;
 
-      p = strdup("");
+      p = strdup_or_die("");
       for (l = csp->config->trust_info->first; l ; l = l->next)
       {
          snprintf(buf, sizeof(buf), "<li> <a href=\"%s\">%s</a><br>\n", l->str, l->str);
@@ -1318,8 +1288,8 @@ struct http_response *redirect_url(struct client_state *csp)
             return cgi_error_memory();
          }
 
-         if (enlist_unique_header(rsp->headers, "Location", new_url)
-           || (NULL == (rsp->status = strdup("302 Local Redirect from Privoxy"))))
+         rsp->status = strdup_or_die("302 Local Redirect from Privoxy");
+         if (enlist_unique_header(rsp->headers, "Location", new_url))
          {
             freez(new_url);
             free_http_response(rsp);
@@ -1464,7 +1434,7 @@ int is_untrusted_url(const struct client_state *csp)
          {
             char * path;
             char * path_end;
-            char * new_entry = strdup("~");
+            char * new_entry = strdup_or_die("~");
 
             string_append(&new_entry, csp->http->hostport);
 
@@ -2585,12 +2555,7 @@ struct http_response *direct_response(struct client_state *csp)
                   return cgi_error_memory();
                }
 
-               if (NULL == (rsp->status = strdup("501 Not Implemented")))
-               {
-                  free_http_response(rsp);
-                  return cgi_error_memory();
-               }
-
+               rsp->status = strdup_or_die("501 Not Implemented");
                rsp->is_static = 1;
                rsp->crunch_reason = UNSUPPORTED;
 
