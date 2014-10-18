@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.429 2014/07/25 11:55:11 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.430 2014/07/25 11:56:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1646,10 +1646,10 @@ static jb_err receive_client_request(struct client_state *csp)
    enlist(csp->headers, http->cmd);
 
    /* Append the previously read headers */
-   list_append_list_unique(csp->headers, headers);
+   err = list_append_list_unique(csp->headers, headers);
    destroy_list(headers);
 
-   return JB_ERR_OK;
+   return err;
 
 }
 
