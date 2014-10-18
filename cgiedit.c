@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.83 2014/10/18 11:25:42 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.84 2014/10/18 11:29:06 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -1555,7 +1555,7 @@ jb_err edit_read_file(struct client_state *csp,
    }
 
    file = (struct editable_file *) zalloc(sizeof(*file));
-   if (err)
+   if (file == NULL)
    {
       edit_free_file_lines(lines);
       return err;
