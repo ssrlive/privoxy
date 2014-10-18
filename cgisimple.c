@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.128 2014/06/03 10:29:23 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.129 2014/10/18 11:25:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1990,14 +1990,16 @@ static jb_err load_file(const char *filename, char **buffer, size_t *length)
    {
       err = JB_ERR_MEMORY;
    }
-   else if (!fread(*buffer, *length, 1, fp))
+   else if (1 != fread(*buffer, *length, 1, fp))
    {
       /*
-       * May happen if the file size changes between fseek() and
-       * fread(). If it does, we just log it and serve what we got.
+       * May theoretically happen if the file size changes between
+       * fseek() and fread() because it's edited in-place. Privoxy
+       * and common text editors don't do that, thus we just fail.
        */
       log_error(LOG_LEVEL_ERROR,
          "Couldn't completely read file %s.", filename);
+      freez(*buffer);
       err = JB_ERR_FILE;
    }
 
