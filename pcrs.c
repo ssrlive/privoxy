@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.42 2012/05/24 15:04:34 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.43 2012/10/29 12:01:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -825,7 +825,7 @@ int pcrs_execute(pcrs_job *job, const char *subject, size_t subject_length, char
       else
          offset = offsets[1];
    }
-   /* Pass pcre error through if (bad) failiure */
+   /* Pass pcre error through if (bad) failure */
    if (submatches < PCRE_ERROR_NOMATCH)
    {
       free(matches);
