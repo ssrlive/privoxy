@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.187 2014/07/18 09:59:51 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.188 2014/10/18 11:25:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2273,7 +2273,15 @@ char *execute_content_filters(struct client_state *csp)
       for (filtername = csp->action->multi[ACTION_MULTI_EXTERNAL_FILTER]->first;
            filtername ; filtername = filtername->next)
       {
-         content = execute_external_filter(csp, filtername->str, content, &size);
+         char *result = execute_external_filter(csp, filtername->str, content, &size);
+         if (result != NULL)
+         {
+            if (content != csp->iob->cur)
+            {
+               free(content);
+            }
+            content = result;
+         }
       }
       csp->flags |= CSP_FLAG_MODIFIED;
       csp->content_length = size;
