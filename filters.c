@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.186 2014/06/12 13:09:03 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.187 2014/07/18 09:59:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1876,6 +1876,7 @@ static char *execute_external_filter(const struct client_state *csp,
    {
       log_error(LOG_LEVEL_ERROR, "fwrite(..., %d, 1, ..) failed: %E", *size);
       unlink(file_name);
+      fclose(fp);
       return NULL;
    }
    fclose(fp);
