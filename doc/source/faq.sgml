@@ -27,9 +27,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.101 2014/05/26 10:48:39 fabiankeil Exp $
+ $Id: faq.sgml,v 2.102 2014/10/06 10:20:09 fabiankeil Exp $
 
- Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -73,12 +73,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2011 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2014 by
  <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.101 2014/05/26 10:48:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.102 2014/10/06 10:20:09 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3008,6 +3008,13 @@ browsing has slowed to a crawl. What gives? </title>
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 $Log: faq.sgml,v $
+Revision 2.102  2014/10/06 10:20:09  fabiankeil
+Update the 'Would you like to donate?' section
+
+Mention that donations will be used to get TODO list
+items done and add the Zwiebelfreunde e.V. bank
+account.
+
 Revision 2.101  2014/05/26 10:48:39  fabiankeil
 Bump entities for 3.0.22 UNRELEASED
 
