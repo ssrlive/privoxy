@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.222 2013/12/24 13:35:07 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.223 2014/10/21 15:29:20 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -648,22 +648,6 @@ web-actions: clean-editor-files
 	@$(ECHO) Fixing permissions
 	@$(SSH) ijbswa.sourceforge.net 'find $(WWW_ROOT)/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
 	@$(SSH) ijbswa.sourceforge.net 'chmod 666 $(WWW_ROOT)/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
-
-##
-dok-put:
-	tar --exclude ".cvsignore" --exclude "CVS" --exclude "source" --exclude ".htaccess" \
-	     --exclude "obsolete" --exclude "actions" --exclude "*.zip" --exclude "robots.txt"\
-		doc/* INSTALL LICENSE AUTHORS README \
-		-czf $(DOC_FILE) ;\
-		$(ECHO) "Uploading doc package ..." ;\
-		scp $(DOC_FILE) ijbswa.sourceforge.net:$(WWW_ROOT)/htdocs/docs/
-		@$(SSH) ijbswa.sourceforge.net 'chmod 775 $(WWW_ROOT)/htdocs/docs/*gz 2>/dev/null; true'
-		$(RM) $(DOC_FILE)
-
-dok-get:
-	cd /tmp ;\
-	$(WGET) http://www.privoxy.org/docs/$(DOC_FILE) ;\
-	$(TAR) -zxvf $(DOC_FILE)
 
 #############################################################################
 #
