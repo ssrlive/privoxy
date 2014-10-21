@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.29 2012/03/09 17:55:50 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.30 2014/10/18 11:31:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -902,7 +902,7 @@ struct map *new_map(void)
  * Function    :  free_map
  *
  * Description :  Free the memory occupied by a map and its
- *                depandant strings
+ *                dependent strings
  *
  * Parameters  :
  *          1  :  the_map = map to be freed.  May be NULL.
