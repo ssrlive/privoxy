@@ -1,4 +1,4 @@
-$Id: TODO,v 1.125 2014/10/16 11:55:45 fabiankeil Exp $
+$Id: TODO,v 1.126 2014/10/18 11:32:07 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -397,6 +397,15 @@ to Privoxy's SPI liason Fabian (fk@fabiankeil.de).
 136) Make builds reproducible.
 
 137) Add a (preferably vector-based) logo.
+
+138) Bring back the scripts to provide actions file feedback.
+
+     Once upon a time (~2003) there were scripts on the webserver
+     to make reporting action file feedback more convenient for the
+     user and the actual reports more useful for the developers.
+     They have been unusable for years and have thus been disabled,
+     but making the reporting mechanism available again would be a
+     good idea.
 
 ##########################################################################
 
