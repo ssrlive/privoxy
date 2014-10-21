@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.224 2014/10/21 15:29:34 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.225 2014/10/21 15:29:46 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -144,6 +144,7 @@ DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
 TIDY       = tidy -modify -indent -wrap 78 --tidy-mark no
+RSYNC	   = rsync -av
 
 # Program to do LF->CRLF
 DOSFILTER  = $(PERL) -p -e 's/\n/\r\n/'
@@ -642,6 +643,12 @@ web-actions: clean-editor-files
 	@$(ECHO) Fixing permissions
 	@$(SSH) ijbswa.sourceforge.net 'find $(WWW_ROOT)/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
 	@$(SSH) ijbswa.sourceforge.net 'chmod 666 $(WWW_ROOT)/htdocs/actions/results/actions-feedback.txt 2>/dev/null'
+
+web-faq:
+	@$(ECHO) Updating the FAQ on the webserver ...
+	@$(RSYNC) doc/webserver/faq/*.html shell.sourceforge.net:$(WWW_ROOT)/htdocs/faq
+	@$(ECHO) Enforcing reasonable permissions ...
+	@$(SSH) shell.sourceforge.net 'find $(WWW_ROOT)/htdocs/faq/ -type f | xargs chmod 664 2>/dev/null'
 
 #############################################################################
 #
