@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.221 2013/02/05 14:04:11 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.222 2013/12/24 13:35:07 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2013 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -159,6 +159,8 @@ CVSROOT    = :pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa
 # change this to "ssh -l sf-username"
 SSH	= ssh
 WWW_ROOT = /home/project-web/ijbswa
+# SourceForge login name used by the 'sf-shell' target (optional)
+SOURCE_FORGE_NAME = ''
 
 #############################################################################
 # Setup for make distribution for now.
@@ -606,6 +608,12 @@ config-file-alt:
 # moves dokumentation to webserver
 #
 #############################################################################
+sf-shell:
+	@sf_name=$(SOURCE_FORGE_NAME); \
+	[ -n "$${sf_name}" ] || read -p "Enter SourceForge username: " sf_name || exit 1; \
+	echo "Opening shell for $${sf_name} ..."; \
+	ssh -t $${sf_name},ijbswa@shell.sourceforge.net create
+
 webserver: clean-editor-files
 	@$(ECHO) -------------------------------------------------------
 	@$(ECHO) You will need to "create" a SF shell first:
