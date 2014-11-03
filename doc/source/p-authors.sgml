@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.59 2014/10/06 10:19:43 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.60 2014/11/03 14:39:37 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -73,8 +73,8 @@ Current Privoxy Team:
 <![%p-authors-formal;[
 <para>
  Thanks to the many people who have tested Privoxy, reported bugs, provided
- patches, made suggestions or contributed in some way. These include (in
- alphabetical order):
+ patches, made suggestions, donated or contributed in some other way.
+ These include (in alphabetical order):
 </para>
 <literallayout>
  Anatoly Arzhnikov
@@ -140,6 +140,7 @@ Current Privoxy Team:
  Angelina Matson
  David Mediavilla
  Raphael Moll
+ Mathew Murphy
  Amuro Namie
  Mark Nelson
  Adam Piggott
@@ -152,6 +153,7 @@ Current Privoxy Team:
  Andreas Rutkauskas
  Bart Schelstraete
  Chung-chieh Shan
+ Benjamin C. Wiley Sittler
  Simon South
  Dan Stahlke
  Oliver Stoeneberg
