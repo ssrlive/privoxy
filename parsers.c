@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.294 2014/10/18 11:30:04 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.295 2014/10/18 11:30:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3878,7 +3878,7 @@ static jb_err server_http(struct client_state *csp, char **header)
       reason_phrase="";
    }
 
-   if (3 != sscanf(*header, "HTTP/%u.%u %u", &major_version,
+   if (3 != sscanf(*header, "HTTP/%u.%u %d", &major_version,
          &minor_version, &(csp->http->status)))
    {
       log_error(LOG_LEVEL_ERROR,
@@ -3913,7 +3913,7 @@ static jb_err server_http(struct client_state *csp, char **header)
    length = sizeof("HTTP/1.1 200 ") + strlen(reason_phrase) + 1;
    new_response_line = malloc_or_die(length);
 
-   snprintf(new_response_line, length, "HTTP/%u.%u %u %s",
+   snprintf(new_response_line, length, "HTTP/%u.%u %d %s",
       major_version, minor_version, csp->http->status, reason_phrase);
 
    if (0 != strcmp(*header, new_response_line))
