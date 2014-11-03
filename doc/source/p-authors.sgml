@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.58 2013/12/16 11:20:30 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.59 2014/10/06 10:19:43 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -105,9 +105,11 @@ Current Privoxy Team:
  Matthew Fischer
  Dean Gaudet
  Stephen Gildea
+ John McGowan
  Lizik Grelier
  Daniel Griscom
  Felix Gröbert
+ Bernard Guillot
  Jeff H.
  Tim H.
  Aaron Hamid
@@ -123,6 +125,7 @@ Current Privoxy Team:
  Ralf Jungblut
  Petr Kadlec
  Steven Kolins
+ Stefan Kurtz
  Zeno Kugy
  David Laight
  Bert van Leeuwen
@@ -138,11 +141,13 @@ Current Privoxy Team:
  David Mediavilla
  Raphael Moll
  Amuro Namie
+ Mark Nelson
  Adam Piggott
  Petr Písar
  Dan Price
  Roberto Ragusa
  Félix Rauch
+ Chris John Riley
  Maynard Riley
  Andreas Rutkauskas
  Bart Schelstraete
