@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.311 2014/08/22 09:45:29 fabiankeil Exp $
+#  $Id: default.action.master,v 1.312 2014/10/16 11:55:15 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2252,6 +2252,8 @@ javabog.dk/ijk/
 .dgb-tagungszentren.de/
 # URL = http://creativecommons.org/licenses/
 creativecommons.org/
+# URL = http://kggp.de/Blogosphere/blog/2014/11/07/frankfurtmain-hessen-polizeibeamter-muss-sich-vor-gericht-verantworten/
+kggp.de/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
