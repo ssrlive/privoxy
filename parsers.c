@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.295 2014/10/18 11:30:56 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.296 2014/11/03 14:41:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1661,6 +1661,8 @@ static jb_err server_keep_alive(struct client_state *csp, char **header)
       }
       csp->flags |= CSP_FLAG_SERVER_KEEP_ALIVE_TIMEOUT_SET;
    }
+
+   freez(*header);
 
    return JB_ERR_OK;
 }
