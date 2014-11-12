@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.206 2014/06/02 06:22:21 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.207 2014/07/25 11:55:11 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -727,11 +727,6 @@ struct reusable_connection
 #define CSP_FLAG_TOGGLED_ON 0x20U
 
 /**
- * Flag for csp->flags: Set if we answered the request ourselve.
- */
-#define CSP_FLAG_CRUNCHED   0x40U
-
-/**
  * Flag for csp->flags: Set if an acceptable Connection header
  * has already been set by the client.
  */
@@ -852,6 +847,12 @@ struct reusable_connection
  * Flag for csp->flags: Set if the client set the Expect header
  */
 #define CSP_FLAG_UNSUPPORTED_CLIENT_EXPECTATION     0x02000000U
+
+/**
+ * Flag for csp->flags: Set if we answered the request ourselve.
+ */
+#define CSP_FLAG_CRUNCHED                           0x04000000U
+
 
 /*
  * Flags for use in return codes of child processes
