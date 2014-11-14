@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.54 2014/10/17 14:45:29 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.55 2014/10/17 14:45:41 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -473,7 +473,6 @@ TAG:^prevent-compression$
 {\
  -client-header-tagger{range-requests} \
  +deanimate-gifs{last} \
- -external-filter \
  -filter \
 }
 # Set Header    = Range: bytes=1234-5678
@@ -507,47 +506,6 @@ TAG:^deanimate-gifs\{last\}$
 {\
  -client-header-tagger{range-requests} \
  -deanimate-gifs \
- +external-filter{blafasel} \
- -filter \
-}
-# Set Header    = Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Range: bytes=1-5
-# Expect Header = REMOVAL
-# Set Header    = If-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Request-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Range: bytes=1-5
-# Expect Header = REMOVAL
-# Set Header    = If-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Request-Range: bytes=1234-5678
-# Expect Header = REMOVAL
-# Set Header    = Range: foo
-# Expect Header = REMOVAL
-# Set Header    = If-Range: foo
-# Expect Header = REMOVAL
-# Set Header    = Request-Range: foo
-# Expect Header = REMOVAL
-# Set Header    = Range: bytes=0-5678
-# Expect Header = NO CHANGE
-# Set Header    = Range: bytes=0-
-# Expect Header = NO CHANGE
-# Set Header    = If-Range: bytes=0-5678
-# Expect Header = NO CHANGE
-# Set Header    = If-Range: bytes=0-
-# Expect Header = NO CHANGE
-# Set Header    = Request-Range: bytes=0-5678
-# Expect Header = NO CHANGE
-# Set Header    = Request-Range: bytes=0-
-# Expect Header = NO CHANGE
-TAG:^external-filter\{blafasel\}$
-
-{\
- -client-header-tagger{range-requests} \
- -deanimate-gifs \
- -external-filter \
  +filter{banners-by-size} \
 }
 # Set Header    = Range: bytes=1234-5678
@@ -587,7 +545,6 @@ TAG:^filter\{banners-by-size\}$
 {\
  -client-header-tagger{range-requests} \
  -deanimate-gifs \
- -external-filter \
  -filter \
 }
 # Set Header    = Range: bytes=1234-5678
