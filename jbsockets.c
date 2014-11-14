@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.129 2014/10/18 11:27:43 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.130 2014/10/18 11:28:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -279,6 +279,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
             "Server socket number too high to use select(): %d >= %d",
             fd, FD_SETSIZE);
          close_socket(fd);
+         freeaddrinfo(result);
          return JB_INVALID_SOCKET;
       }
 #endif
