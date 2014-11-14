@@ -1,4 +1,4 @@
-const char list_rcs[] = "$Id: list.c,v 1.30 2014/10/18 11:31:52 fabiankeil Exp $";
+const char list_rcs[] = "$Id: list.c,v 1.31 2014/10/21 12:01:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/list.c,v $
@@ -1064,7 +1064,7 @@ jb_err unmap(struct map *the_map, const char *name)
    assert(the_map);
    assert(name);
 
-   last_entry = the_map->first;
+   last_entry = NULL;
 
    for (cur_entry = the_map->first; cur_entry != NULL; cur_entry = cur_entry->next)
    {
@@ -1096,7 +1096,11 @@ jb_err unmap(struct map *the_map, const char *name)
          freez(cur_entry->name);
          freez(cur_entry->value);
          freez(cur_entry);
-
+         if (last_entry == NULL)
+         {
+            /* The map only had a single entry which has just been removed. */
+            break;
+         }
          cur_entry = last_entry;
       }
       else
