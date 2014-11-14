@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.7 2013/03/10 13:52:04 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.8 2014/11/14 11:31:41 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -131,7 +131,7 @@
     </listitem>
     <listitem>
      <para>
-      Client 'Keep-Alive' headers are no longer forwarded. From a user's
+      Server 'Keep-Alive' headers are no longer forwarded. From a user's
       point of view it doesn't really matter, but RFC 2616 (obsolete)
       mandates that the header is removed and this fixes a Co-Advisor
       complaint.

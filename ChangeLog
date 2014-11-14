@@ -44,7 +44,7 @@ ChangeLog for Privoxy
     This is an explicit RFC 2616 MUST and RFC 7230 mandates that
     intermediaries send their own HTTP-version in forwarded
     messages.
-  - Client 'Keep-Alive' headers are no longer forwarded. From a user's
+  - Server 'Keep-Alive' headers are no longer forwarded. From a user's
     point of view it doesn't really matter, but RFC 2616 (obsolete)
     mandates that the header is removed and this fixes a Co-Advisor
     complaint.
