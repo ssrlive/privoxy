@@ -2870,15 +2870,6 @@
               limit the resources used by <span class=
               "APPLICATION">Privoxy</span>.</p>
 
-              <p>Another relevant limit to keep in mind is the maximum number
-              of file descriptors the operating system is enforcing.
-              <span class="APPLICATION">Privoxy</span> needs two file
-              descriptors for each client request that isn't answered by
-              <span class="APPLICATION">Privoxy</span> itself and one for
-              each configuration file. Therefore it's reasonable to limit the
-              client connections to a bit less that half the number of file
-              descriptors Privoxy is allowed to use.</p>
-
               <p>If <span class="APPLICATION">Privoxy</span> is only used by
               a single trusted user, limiting the number of client
               connections is probably unnecessary. If there are multiple

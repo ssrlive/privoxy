@@ -177,7 +177,7 @@ FILTER: foo Replace all "foo" with "bar"
     started.</p>
 
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN5285" id="AEN5285">9.1. Filter File
+      <h2 class="SECT2"><a name="AEN5053" id="AEN5053">9.1. Filter File
       Tutorial</a></h2>
 
       <p>Now, let's complete our <span class="QUOTE">"foo"</span> content
@@ -387,18 +387,6 @@ s/(&lt;body [^&gt;]*)onunload(.*&gt;)/$1never$2/iU
       prevent the match from exceeding the &lt;body&gt; tag if it doesn't
       contain <span class="QUOTE">"OnUnload"</span>, but the page's content
       does.</p>
-
-      <table border="0" bgcolor="#E0E0E0" width="100%">
-        <tr>
-          <td>
-            <pre class="SCREEN">
-# Completely removeKill OnUnload popups. Yummy. Test: http://www.zdnet.com/zdsubs/yahoo/tree/yfs.html
-#
-s/(&lt;body [^&gt;]*)onunload(.*&gt;)/$1never$2/iU
-</pre>
-          </td>
-        </tr>
-      </table>
 
       <p>The last example is from the fun department:</p>
 
