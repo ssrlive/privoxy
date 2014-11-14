@@ -4,6 +4,13 @@ ChangeLog for Privoxy
 *** Version 3.0.22 stable ***
 
 - Bug fixes:
+  - Fixed a memory leak when rejecting client connections due to
+    the socket limit being reached (CID 66382). This affected
+    Privoxy 3.0.21 when compiled with IPv6 support (on most
+    platforms this is the default).
+  - Fixed an immediate-use-after-free bug (CID 66394) and two
+    additional unconfirmed use-after-free complaints made by
+    Coverity scan (CID 66391, CID 66376).
   - Actually show the FORCE_PREFIX value on the show-status page
   - Properly deal with Keep-Alive headers with timeout= parameters
     If the timeout still can't be parsed, use the configured
@@ -12,6 +19,9 @@ ChangeLog for Privoxy
   - Not using any filter files no longer results in warning messages
     unless an action file is referencing header taggers or filters.
     Reported by Stefan Kurtz in #3614835.
+  - Fixed a bug that prevented Privoxy from reusing some reusable
+    connections. Two bit masks with different purpose unintentionally
+    shared the same bit.
   - A couple of additional bugs were discovered by Coverity Scan.
     The changes that are not expected to be user visible are not
     explicitly mentioned here, for details please have a look at
@@ -35,6 +45,10 @@ ChangeLog for Privoxy
     This is an explicit RFC 2616 MUST and RFC 7230 mandates
     that intermediaries send their own HTTP-version in forwarded
     messages.
+  - Client 'Keep-Alive' headers are no longer forwarded.
+    From a user's point of view it doesn't really matter,
+    but RFC 2616 (obsolete) mandates that the header is removed
+    and this fixes a Co-Advisor complaint.
   - Change declared template file encoding to UTF-8.
     The files already used a subset of UTF-8 anyway and changing
     the declaration allows to properly display UTF-8 characters
@@ -80,6 +94,7 @@ ChangeLog for Privoxy
   - Unblock "adina*." Fixes #919 reported by Morton A. Goldberg.
   - Block '/.*DigiAd'
   - Unblock 'adele*.'. Reported by Adele Lime in #1663.
+  - Disable banners-by-size for kggp.de/.
 
 - Filter file improvements & bug fixes:
   - Decrease the chances that js-annoyances creates invalid JavaScript.
