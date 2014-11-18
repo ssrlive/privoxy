@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.8 2014/11/14 11:31:41 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.9 2014/11/14 13:50:51 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -467,6 +467,23 @@
     <listitem>
      <para>
       Add a sf-shell target.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+ </itemizedlist>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Known bugs:
+    <itemizedlist>
+     <listitem>
+     <para>
+       To compile with --disable-force you need <ulink
+        url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/project.h?r1=1.208&amp;r2=1.209&amp;view=patch">this patch</ulink> which
+      didn't make it into the release.
+      Thanks to Kai Raven for the report.
      </para>
      </listitem>
     </itemizedlist>
