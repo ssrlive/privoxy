@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.55 2014/10/17 14:45:41 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.56 2014/11/14 12:59:11 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -34,7 +34,7 @@ for-privoxy-version=3.0.22
 # Level  9 needs = config line user-manual\s+(\.?\.?/|[A-Za-z]:)
 # Level 12 needs = config line enable-edit-actions\s+1
 # Level 13 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE Yes
-# Level 13 needs = config line keep-alive-timeout\s+[1-9]+
+# Level 13 needs = config line keep-alive-timeout\s+(2[1-9]+|[3-9]\d+|1\d{2,})
 # Level 14 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE No
 # Level 15 needs = config line connection-sharing\s+0
 # Level 16 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE Yes
