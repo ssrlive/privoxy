@@ -32,6 +32,7 @@ for-privoxy-version=3.0.22
 # Some dependencies Privoxy-Regression-Test should know about:
 #
 # Level  9 needs = config line user-manual\s+(\.?\.?/|[A-Za-z]:)
+# Level 12 needs = feature status FEATURE_CGI_EDIT_ACTIONS Yes
 # Level 12 needs = config line enable-edit-actions\s+1
 # Level 13 needs = feature status FEATURE_CONNECTION_KEEP_ALIVE Yes
 # Level 13 needs = config line keep-alive-timeout\s+(2[1-9]+|[3-9]\d+|1\d{2,})
