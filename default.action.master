@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.312 2014/10/16 11:55:15 fabiankeil Exp $
+#  $Id: default.action.master,v 1.313 2014/11/11 12:19:38 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1406,8 +1406,6 @@ www.xml.eshop.msn.com/tracksponsorimpression.asp
 content.ipro.com
 #MASTER# BLOCK-REFERRER: http://www.weatherbug.com/default.asp 10/05/06
 .247realmedia.com
-#MASTER# BLOCK-REFERRER: http://www.samachar.com/ 10/05/06
-.sify.com
 #MASTER# BLOCK-REFERRER: http://www.nbc4.com/news/2672416/detail.html 10/06/06
 .searchignite.com
 #MASTER# BLOCK-REFERRER: http://www.sdtimes.com/ 10/07/06
