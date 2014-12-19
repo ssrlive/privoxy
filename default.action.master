@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.314 2014/11/28 14:13:22 fabiankeil Exp $
+#  $Id: default.action.master,v 1.315 2014/12/19 12:29:20 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1915,6 +1915,8 @@ adn.speedtest.net
 # URL = http://cologne.stopwatchingus.info/images/banner/Demo-Koeln-12-04-14-Banner2.png
 # URL = http://cologne.stopwatchingus.info/images/banner/Demo-12-April.jpg
 .stopwatchingus.info/
+# URL = http://www.amnesty.de/files/Banner_gelb_Manning_300x250.gif
+.amnesty.de/
 
 
 #############################################################################
