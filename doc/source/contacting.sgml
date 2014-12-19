@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.38 2014/07/14 12:56:30 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.39 2014/12/19 12:29:39 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -274,14 +274,6 @@ debug  8192 # Non-fatal errors</literallayout>
  the Actions File Tracker.
 </para>
 
-<para>
- New, improved <filename>default.action</filename> files may occasionally be made
- available based on your feedback. These will be announced on the <ulink
- url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce">ijbswa-announce</ulink>
- list and available from our the <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
- our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
-</para>
 </sect3>
 
 
