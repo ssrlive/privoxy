@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.37 2013/12/16 11:31:07 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.38 2014/07/14 12:56:30 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -312,14 +312,6 @@ debug  8192 # Non-fatal errors</literallayout>
  likely that either your mail or the response didn't make it.
  If that happens, please mail to the developer list to request a
  status update.
-</para>
-</sect2>
-
-<sect2 id="contact-feature"><title>Request New Features</title>
-<para>
- You are welcome to submit ideas on new features or other proposals
- for improvement through our feature request tracker at
- <ulink url="http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118">http://sourceforge.net/tracker/?atid=361118&#38;group_id=11118</ulink>.
 </para>
 </sect2>
 
