@@ -1,4 +1,4 @@
-$Id: TODO,v 1.127 2014/10/21 15:31:32 fabiankeil Exp $
+$Id: TODO,v 1.128 2014/11/12 12:00:10 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -359,7 +359,7 @@ http://www.privoxy.org/faq/general.html#DONATE
 126) Run the Co-Advisor HTTP compliance tests, evaluate the results,
      fix the compliance issues that aren't by design and document
      the rest.
-     Note that Privoxy developers qualified for free account upgrades:
+     Note that Privoxy developers qualify for free account upgrades:
      http://coad.measurement-factory.com/details.html#pricing
 
 127) Add "real" CGI support (serve program output instead of forwarding
