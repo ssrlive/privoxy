@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.430 2014/07/25 11:56:54 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.431 2014/10/18 11:31:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3497,7 +3497,7 @@ int main(int argc, char **argv)
    cgi_init_error_messages();
 
    /*
-    * If runnig on unix and without the --nodaemon
+    * If running on unix and without the --no-daemon
     * option, become a daemon. I.e. fork, detach
     * from tty and get process group leadership
     */
