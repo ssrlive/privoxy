@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.105 2014/11/28 14:26:35 fabiankeil Exp $
+ $Id: faq.sgml,v 2.106 2014/12/19 12:31:28 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.105 2014/11/28 14:26:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.106 2014/12/19 12:31:28 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -521,14 +521,16 @@ warranty? Registration?</title>
 </para>
 
 <para>
- You can also donate to Privoxy using a bank account managed by
- <ulink url="https://www.zwiebelfreunde.de/">Zwiebelfreunde e.V.</ulink>:
+ You can also donate to Privoxy using a bank account or a "Paypal" address:
 </para>
 <literallayout>
- Name on Account: Zwiebelfreunde e.V.
+ Name on account: <ulink url="https://www.zwiebelfreunde.de/">Zwiebelfreunde e.V.</ulink>
  IBAN: DE95430609671126825604
  BIC: GENODEM1GLS
  Bank: GLS Bank
+</literallayout>
+<literallayout>
+ "Paypal" address: privoxy@zwiebelfreunde.de
 </literallayout>
 <para>
  Donations made through Zwiebelfreunde e.V. are tax-deductible in Germany
