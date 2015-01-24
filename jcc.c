@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.431 2014/10/18 11:31:12 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.432 2014/12/19 12:28:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1333,7 +1333,7 @@ enum chunk_status
  *
  * Function    :  chunked_body_is_complete
  *
- * Description :  Figures out wheter or not a chunked body is complete.
+ * Description :  Figures out whether or not a chunked body is complete.
  *
  *                Currently it always starts at the beginning of the
  *                buffer which is somewhat wasteful and prevents Privoxy
