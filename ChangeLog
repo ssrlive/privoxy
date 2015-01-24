@@ -50,10 +50,10 @@ ChangeLog for Privoxy
   - Fixed a memory leak when rejecting client connections due to
     the socket limit being reached (CID 66382). This affected
     Privoxy 3.0.21 when compiled with IPv6 support (on most
-    platforms this is the default).
+    platforms this is the default). CVE-2015-1030.
   - Fixed an immediate-use-after-free bug (CID 66394) and two
     additional unconfirmed use-after-free complaints made by
-    Coverity scan (CID 66391, CID 66376).
+    Coverity scan (CID 66391, CID 66376). CVE-2015-1031.
   - Actually show the FORCE_PREFIX value on the show-status page.
   - Properly deal with Keep-Alive headers with timeout= parameters
     If the timeout still can't be parsed, use the configured
