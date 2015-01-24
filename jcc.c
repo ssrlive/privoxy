@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.432 2014/12/19 12:28:10 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.433 2015/01/24 16:40:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1388,12 +1388,15 @@ static enum chunk_status chunked_body_is_complete(struct iob *iob, size_t *lengt
       {
          return CHUNK_STATUS_PARSE_ERROR;
       }
-      /*
-       * Skip "\r\n", the chunk data and another "\r\n".
-       * Moving p to either the beginning of the next chunk-size
-       * or one byte beyond the end of the chunked data.
-       */
-      p += 2 + chunksize + 2;
+      /* Move beyond the chunkdata. */
+      p += 2 + chunksize;
+
+      /* There should be another "\r\n" to skip */
+      if (memcmp(p, "\r\n", 2))
+      {
+         return CHUNK_STATUS_PARSE_ERROR;
+      }
+      p += 2;
    } while (chunksize > 0U);
 
    *length = (size_t)(p - iob->cur);
