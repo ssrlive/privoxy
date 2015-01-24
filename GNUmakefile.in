@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.228 2014/10/21 15:31:16 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.229 2015/01/24 16:39:53 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -656,10 +656,10 @@ web-user-manual:
 #
 # Try to clean up the generated HTML files.
 #
-# The files are a such a mess that some of them require two tidy runs
-# in row as the first abort prematurely. The vanilla tidy output renders
-# poorly as it contains a bit too much white-space, so we additionally run
-# the files through perl to fix this again.
+# The files are such a mess that some of them require two tidy runs in a
+# row as the first one aborts prematurely. The vanilla tidy output renders
+# poorly because it contains a bit too much whitespace, so we additionally
+# run the files through perl to fix this again.
 #
 #############################################################################
 dok-tidy:
