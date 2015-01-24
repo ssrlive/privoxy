@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.433 2015/01/24 16:40:37 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.434 2015/01/24 16:41:20 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1955,6 +1955,21 @@ static void chat(struct client_state *csp)
          {
             send_crunch_response(csp, rsp);
          }
+
+         /*
+          * Temporary workaround to prevent already-read client
+          * bodies from being parsed as new requests. For now we
+          * err on the safe side and throw all the following
+          * requests under the bus, even if no client body has been
+          * buffered. A compliant client will repeat the dropped
+          * requests on an untainted connection.
+          *
+          * The proper fix is to discard the no longer needed
+          * client body in the buffer (if there is one) and to
+          * continue parsing the bytes that follow.
+          */
+         drain_and_close_socket(csp->cfd);
+         csp->cfd = JB_INVALID_SOCKET;
 
          return;
       }
