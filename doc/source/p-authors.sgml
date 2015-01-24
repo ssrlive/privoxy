@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.61 2014/11/03 14:40:53 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.62 2014/11/20 15:30:38 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -94,6 +94,7 @@ Current Privoxy Team:
  Ramkumar Chinchani
  Billy Crook
  Frédéric Crozat
+ Matthew Daley
  Michael T. Davis
  Markus Dittrich
  Mattes Dolak
