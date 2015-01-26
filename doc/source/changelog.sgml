@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.10 2014/11/18 14:22:17 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.11 2015/01/24 16:43:58 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
     </listitem>
     <listitem>
      <para>
-      Compiles with --disable-force again. Reported by Kay Raven.
+      Compiles with --disable-force again. Reported by Kai Raven.
      </para>
     </listitem>
     <listitem>

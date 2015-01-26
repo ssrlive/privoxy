@@ -16,7 +16,7 @@ ChangeLog for Privoxy
     should not be writable by untrusted third-parties.
   - Fixed an 'invalid read' bug which could at least theoretically
     cause Privoxy to crash. So far, no crashes have been observed.
-  - Compiles with --disable-force again. Reported by Kay Raven.
+  - Compiles with --disable-force again. Reported by Kai Raven.
   - Client requests with body that can't be delivered no longer
     cause pipelined requests behind them to be rejected as invalid.
     Reported by Basil Hussain.
