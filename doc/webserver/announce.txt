@@ -22,7 +22,7 @@ ChangeLog for Privoxy
     should not be writable by untrusted third-parties.
   - Fixed an 'invalid read' bug which could at least theoretically
     cause Privoxy to crash. So far, no crashes have been observed.
-  - Compiles with --disable-force again. Reported by Kay Raven.
+  - Compiles with --disable-force again. Reported by Kai Raven.
   - Client requests with body that can't be delivered no longer
     cause pipelined requests behind them to be rejected as invalid.
     Reported by Basil Hussain.
@@ -72,7 +72,7 @@ Our TODO list is rather long. Helping hands and donations are welcome:
 At present, Privoxy is known to run on Windows 95 and later versions
 (98, ME, 2000, XP, Vista, Windows 7 etc.), GNU/Linux (RedHat, SuSE,
 Debian, Fedora, Gentoo, Slackware and others), Mac OS X (10.4 and
-upwards on PPC and Intel processors), OS/2, Haiku, DragonFly,
+upwards on PPC and Intel processors), OS/2, Haiku, DragonFly, ElectroBSD,
 FreeBSD, NetBSD, OpenBSD, Solaris, and various other flavors of Unix.
 
 In addition to the core features of ad blocking and cookie management,
@@ -102,7 +102,7 @@ more control, more privacy and more freedom:
      tracing of rule and filter effects. Remote toggling.
 
   *  Web page filtering (text replacements, removes banners based on size,
-     invisible <quote>web-bugs</quote> and HTML annoyances, etc.)
+     invisible "web-bugs" and HTML annoyances, etc.)
 
   *  Modularized configuration that allows for standard settings and user
      settings to reside in separate files, so that installing updated actions
