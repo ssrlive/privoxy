@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.315 2014/12/19 12:29:20 fabiankeil Exp $
+#  $Id: default.action.master,v 1.316 2014/12/19 12:31:10 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2098,6 +2098,10 @@ webcache.googleusercontent.com/
 creativecommons.org/
 # URL = http://ixquick-proxy.com/do/spg/proxy?ah=&c=hnf&rid=LHLOLMSTPRKK&proxiedformtype=&q=%22lord+lucan%22&sp=19f738b4691d795804a6bc60c5b2c766&ts=MTQxMjg5NTcxNw%3D%3D&u=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FJohn_Bingham%2C_7th_Earl_of_Lucan&rpos=1&l=english_uk&cat=web&zst=1412895717.21&znt=1412895717.2125&rl=NONE&hlq=https%3A%2F%2Fstartpage.com%2Fdo%2Fsearch&mtppabp=1&mtppcat=web&mtppcmd=process_search&mtppenginecount=1&mtppflag_ac=0&mtpplanguage=english_uk&udata=e9a958f0a1bae930ec8f60fdef42ceb3&/file.gz
 ixquick-proxy.com/
+# URL = http://yandex.ru/showcaptcha?cc=1&retpath=http%3A//yandex.ru/yandsearch%3Ftext%3Dgeli%2Bfreebsd%26lr%3D87%26p%3D3_...e690efd1ab5a14671c2362ea59
+yandex.ru/.*&retpath=http
+# URL = http://mc.yandex.ru/clmap/10630330?page-url=http%3A%2F%2Fyandex.ru%2Fshowcaptcha%3Fcc%3D1%26retpath%3Dhttp%253A%2F%2Fyandex.ru%2Fyandsearch%253Ftext%253Dgeli%252Bfreebsd%2526lr%25...faf28502&pointer-click=rn%3A121707220%3Ax%3A17873%3Ay%3A46420%3At%3A54%3Ap%3APA%5Db%5C%5BFA2A%5D2b%5C%5B1&browser-info=rqnl%3A2%3Ast%3A1423317904
+.yandex.ru/.*\?page-url=
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
