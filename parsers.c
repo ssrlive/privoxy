@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.297 2014/11/12 11:59:47 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.298 2015/01/24 16:41:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -436,7 +436,9 @@ jb_err decompress_iob(struct client_state *csp)
        * This is to protect the parsing of gzipped data,
        * but it should(?) be valid for deflated data also.
        */
-      log_error(LOG_LEVEL_ERROR, "Buffer too small decompressing iob");
+      log_error(LOG_LEVEL_ERROR,
+         "Insufficient data to start decompression. Bytes in buffer: %d",
+         csp->iob->eod - csp->iob->cur);
       return JB_ERR_COMPRESS;
    }
 
