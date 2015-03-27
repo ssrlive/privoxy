@@ -7,15 +7,16 @@ ChangeLog for Privoxy
   - Fixed a DoS issue in case of client requests with incorrect
     chunk-encoded body. When compiled with assertions enabled
     (the default) they could previously cause Privoxy to abort().
-    Reported by Matthew Daley.
+    Reported by Matthew Daley. CVE-2015-1380.
   - Fixed multiple segmentation faults and memory leaks in the
     pcrs code. This fix also increases the chances that an invalid
     pcrs command is rejected as such. Previously some invalid commands
     would be loaded without error. Note that Privoxy's pcrs sources
     (action and filter files) are considered trustworthy input and
-    should not be writable by untrusted third-parties.
+    should not be writable by untrusted third-parties. CVE-2015-1381.
   - Fixed an 'invalid read' bug which could at least theoretically
     cause Privoxy to crash. So far, no crashes have been observed.
+    CVE-2015-1382.
   - Compiles with --disable-force again. Reported by Kai Raven.
   - Client requests with body that can't be delivered no longer
     cause pipelined requests behind them to be rejected as invalid.
