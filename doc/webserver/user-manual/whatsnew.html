@@ -42,8 +42,7 @@
     Release</a></h1>
 
     <p><span class="APPLICATION">Privoxy 3.0.23</span> stable is a bug-fix
-    release, some of the fixed bugs are security issues (CVE requests
-    pending):</p>
+    release, some of the fixed bugs are security issues:</p>
 
     <ul>
       <li>
@@ -54,7 +53,7 @@
             <p>Fixed a DoS issue in case of client requests with incorrect
             chunk-encoded body. When compiled with assertions enabled (the
             default) they could previously cause Privoxy to abort(). Reported
-            by Matthew Daley.</p>
+            by Matthew Daley. CVE-2015-1380.</p>
           </li>
 
           <li>
@@ -63,13 +62,14 @@
             pcrs command is rejected as such. Previously some invalid
             commands would be loaded without error. Note that Privoxy's pcrs
             sources (action and filter files) are considered trustworthy
-            input and should not be writable by untrusted third-parties.</p>
+            input and should not be writable by untrusted third-parties.
+            CVE-2015-1381.</p>
           </li>
 
           <li>
             <p>Fixed an 'invalid read' bug which could at least theoretically
-            cause Privoxy to crash. So far, no crashes have been
-            observed.</p>
+            cause Privoxy to crash. So far, no crashes have been observed.
+            CVE-2015-1382.</p>
           </li>
 
           <li>
