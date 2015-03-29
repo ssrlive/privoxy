@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.11 2015/01/24 16:43:58 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.12 2015/01/26 11:25:45 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -22,7 +22,7 @@
 
 <para>
   <application>Privoxy 3.0.23</application> stable is a bug-fix release,
-  some of the fixed bugs are security issues (CVE requests pending):
+  some of the fixed bugs are security issues:
 </para>
 
 <!--
@@ -41,7 +41,7 @@
       Fixed a DoS issue in case of client requests with incorrect
       chunk-encoded body. When compiled with assertions enabled
       (the default) they could previously cause Privoxy to abort().
-      Reported by Matthew Daley.
+      Reported by Matthew Daley. CVE-2015-1380.
      </para>
     </listitem>
     <listitem>
@@ -51,13 +51,14 @@
       pcrs command is rejected as such. Previously some invalid commands
       would be loaded without error. Note that Privoxy's pcrs sources
       (action and filter files) are considered trustworthy input and
-      should not be writable by untrusted third-parties.
+      should not be writable by untrusted third-parties. CVE-2015-1381.
      </para>
     </listitem>
     <listitem>
      <para>
       Fixed an 'invalid read' bug which could at least theoretically
       cause Privoxy to crash. So far, no crashes have been observed.
+      CVE-2015-1382.
      </para>
     </listitem>
     <listitem>
