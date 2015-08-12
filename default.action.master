@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.318 2015/02/21 18:56:34 fabiankeil Exp $
+#  $Id: default.action.master,v 1.319 2015/08/12 10:33:32 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1920,6 +1920,8 @@ adn.speedtest.net
 #MASTER# UNBLOCK-REFERRER: http://www.deutschlandradiokultur.de/
 # URL = http://www.deutschlandradiokultur.de/themes/dradio/js.php?files=script/jquery-2.0.2.min.js,script/dkultur.script.js,script/jquery.bxslider.js,script/jquery.cookie.js,script/aod/jquery.mkdraod.interface.js,script/drk-audioplayer.js,script/mobileView.js,script/popup.js&16975
 .deutschlandradiokultur.de/
+# URL = http://klikki.fi/adv/wordpress2.html
+klikki.fi/adv/
 
 
 #############################################################################
