@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.93 2012/12/07 12:45:20 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.94 2015/06/18 15:26:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -894,7 +894,7 @@ static const char *translate_socks5_error(int socks_error)
       case SOCKS5_REQUEST_NETWORK_UNREACHABLE:
          return "SOCKS5 network unreachable";
       case SOCKS5_REQUEST_HOST_UNREACHABLE:
-         return "SOCKS5 host unreachable";
+         return "SOCKS5 destination host unreachable";
       case SOCKS5_REQUEST_CONNECTION_REFUSED:
          return "SOCKS5 connection refused";
       case SOCKS5_REQUEST_TTL_EXPIRED:
