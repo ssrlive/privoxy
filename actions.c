@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.91 2013/12/24 13:35:07 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.92 2013/12/24 13:35:23 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -518,7 +518,13 @@ jb_err get_actions(char *line,
             switch (action->value_type)
             {
             case AV_NONE:
-               /* ignore any option. */
+               if (value != NULL)
+               {
+                  log_error(LOG_LEVEL_ERROR,
+                     "Action %s does not take parameters but %s was given.",
+                     action->name, value);
+                  return JB_ERR_PARSE;
+               }
                break;
             case AV_ADD_STRING:
                {
