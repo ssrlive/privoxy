@@ -1,4 +1,4 @@
-$Id: TODO,v 1.130 2014/12/19 12:36:06 fabiankeil Exp $
+$Id: TODO,v 1.131 2015/08/12 10:37:44 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -378,6 +378,9 @@ http://www.privoxy.org/faq/general.html#DONATE
      Interested donors: 1.
 
 132) Provide a Tor hidden service to reach the Privoxy website.
+     Work in progress: http://jvauzb4sb3bwlsnc.onion/
+     This hidden service serves a copy of the www.privoxy.org content
+     (filtered through Privoxy to replace some absolute URLs).
      Interested donors: 1.
 
 133) Consider allowing bitcoin donations.
