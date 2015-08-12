@@ -1,4 +1,4 @@
-$Id: TODO,v 1.129 2014/12/19 12:35:30 fabiankeil Exp $
+$Id: TODO,v 1.130 2014/12/19 12:36:06 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -399,6 +399,9 @@ http://www.privoxy.org/faq/general.html#DONATE
      They have been unusable for years and have thus been disabled,
      but making the reporting mechanism available again would be a
      good idea.
+
+141) Port Privoxy to CloudABI, which, despite the name, is actually
+     rather neet. https://github.com/NuxiNL/cloudlibc
 
 ##########################################################################
 
