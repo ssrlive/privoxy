@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.141 2014/06/02 06:22:21 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.142 2014/10/18 11:27:28 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1046,11 +1046,14 @@ struct configuration_spec * load_config(void)
 
             if (vec_count != 3)
             {
-               log_error(LOG_LEVEL_ERROR, "Wrong number of parameters for "
-                     "forward-socks4a directive in configuration file.");
+               log_error(LOG_LEVEL_ERROR,
+                  "Wrong number of parameters for %s in configuration file.",
+                  cmd);
                string_append(&config->proxy_args,
-                  "<br>\nWARNING: Wrong number of parameters for "
-                  "forward-socks4a directive in configuration file.");
+                  "<br>\nWARNING: Wrong number of parameters for ");
+               string_append(&config->proxy_args, cmd);
+               string_append(&config->proxy_args,
+                  "directive in configuration file.");
                break;
             }
 
@@ -1080,11 +1083,14 @@ struct configuration_spec * load_config(void)
             /* Save the URL pattern */
             if (create_pattern_spec(cur_fwd->url, vec[0]))
             {
-               log_error(LOG_LEVEL_ERROR, "Bad URL specifier for forward-socks4a "
-                     "directive in configuration file.");
+               log_error(LOG_LEVEL_ERROR,
+                  "Bad URL specifier for %s in configuration file.",
+                  cmd);
                string_append(&config->proxy_args,
-                  "<br>\nWARNING: Bad URL specifier for "
-                  "forward-socks4a directive in configuration file.");
+                  "<br>\nWARNING: Bad URL specifier for ");
+               string_append(&config->proxy_args, cmd);
+               string_append(&config->proxy_args,
+                  "directive in configuration file.");
                freez(cur_fwd);
                break;
             }
