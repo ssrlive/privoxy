@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.63 2015/01/24 16:42:23 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.64 2015/01/24 16:43:11 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -165,6 +165,7 @@ Current Privoxy Team:
  Peter Thoenen
  Martin Thomas
  Reuben Thomas
+ Joel Verhagen
  Bobby G. Vinyard
  Jochen Voss
  David Wagner
@@ -173,6 +174,7 @@ Current Privoxy Team:
  Jörg Weinmann
  Darren Wiebe
  Anduin Withers
+ Jarry Xu
  Oliver Yeoh
  Jamie Zawinski
 </literallayout>
