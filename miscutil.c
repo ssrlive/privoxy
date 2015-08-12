@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.77 2012/07/23 12:41:59 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.78 2012/11/24 13:58:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -150,6 +150,14 @@ char *strdup_or_die(const char *str)
 void *malloc_or_die(size_t buffer_size)
 {
    char *new_buf;
+
+   if (buffer_size == 0)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "malloc_or_die() called with buffer size 0");
+      assert(buffer_size != 0);
+      buffer_size = 4096;
+   }
 
    new_buf = malloc(buffer_size);
 
