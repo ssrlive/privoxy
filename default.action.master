@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.317 2015/02/21 18:55:53 fabiankeil Exp $
+#  $Id: default.action.master,v 1.318 2015/02/21 18:56:34 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2272,6 +2272,8 @@ javabog.dk/ijk/
 creativecommons.org/
 # URL = http://kggp.de/Blogosphere/blog/2014/11/07/frankfurtmain-hessen-polizeibeamter-muss-sich-vor-gericht-verantworten/
 kggp.de/
+# URL = http://www.plasmaservice.de/interviews/interviews_kln/interview_koeln_christmann.htm
+.plasmaservice.de/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
