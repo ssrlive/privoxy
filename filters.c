@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.192 2014/10/18 11:30:24 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.193 2015/08/12 10:34:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1886,7 +1886,7 @@ static char *execute_external_filter(const struct client_state *csp,
          char *p;
 
          /* Could be considered wasteful if the content is 'large'. */
-         *size = (*size > READ_LENGTH) ? *size * 2 : READ_LENGTH;
+         *size += (*size >= READ_LENGTH) ? *size : READ_LENGTH;
 
          p = realloc(filter_output, *size);
          if (p == NULL)
