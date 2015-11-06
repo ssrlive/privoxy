@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.319 2015/08/12 10:33:32 fabiankeil Exp $
+#  $Id: default.action.master,v 1.320 2015/08/12 10:37:26 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1142,6 +1142,8 @@ cltomedia.info/delivery/
 .adexprt.com/
 # Blocked URL = http://data.gosquared.com/pv?a=GSN-311503-M&cs=UTF-8&cd=24&fl=11.7%20r700&je=0&la=de-de&sw=1280&sh=1024&dm=adn.speedtest.net&pa=%2F&pt=Speedtest.net%20-%20Der%20Globale%20Breitband-Geschwindigkeitstest&pr=http%3A&po=-&pl=0&tl=82&ri=1&ru=http%3A%2F%2Fadn.speedtest.net%2F&ui=1876309225&re=1&vi=1&pv=5&lv=1369129426&vw=1280&vh=878&dw=1263&dh=1325&st=0&sl=0&tv=4.0
 data.gosquared.com/
+# URL = http://resources.infolinks.com/js/infolinks_main.js
+resources.infolinks.com/
 
 
 #----------------------------------------------------------------------------
