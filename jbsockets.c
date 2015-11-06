@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.130 2014/10/18 11:28:05 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.131 2014/11/14 10:40:24 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -122,6 +122,33 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
 #else
 static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct client_state *csp);
 #endif
+
+/*********************************************************************
+ *
+ * Function    :  set_no_delay_flag
+ *
+ * Description :  Disables TCP coalescence for the given socket.
+ *
+ * Parameters  :
+ *          1  :  fd = The file descriptor to operate on
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void set_no_delay_flag(int fd)
+{
+#ifdef TCP_NODELAY
+   int mi = 1;
+
+   if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &mi, sizeof(int)))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to disable TCP coalescence for socket %d", fd);
+   }
+#else
+#warning set_no_delay_flag() is a nop due to lack of TCP_NODELAY
+#endif /* def TCP_NODELAY */
+}
 
 /*********************************************************************
  *
@@ -288,12 +315,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       mark_socket_for_close_on_execute(fd);
 #endif
 
-#ifdef TCP_NODELAY
-      {  /* turn off TCP coalescence */
-         int mi = 1;
-         setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &mi, sizeof (int));
-      }
-#endif /* def TCP_NODELAY */
+      set_no_delay_flag(fd);
 
 #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
       if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
@@ -481,12 +503,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    }
 #endif
 
-#ifdef TCP_NODELAY
-   {  /* turn off TCP coalescence */
-      int mi = 1;
-      setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &mi, sizeof (int));
-   }
-#endif /* def TCP_NODELAY */
+   set_no_delay_flag(fd);
 
 #if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
    if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
