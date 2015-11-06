@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.131 2014/11/14 10:40:24 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.132 2015/11/06 13:34:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1328,6 +1328,8 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
 #ifdef FEATURE_EXTERNAL_FILTERS
    mark_socket_for_close_on_execute(afd);
 #endif
+
+   set_no_delay_flag(afd);
 
    csp->cfd = afd;
 #ifdef HAVE_RFC2553
