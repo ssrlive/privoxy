@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.300 2015/12/27 12:48:59 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.301 2015/12/27 12:49:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3600,9 +3600,8 @@ static jb_err client_host_adder(struct client_state *csp)
 
    if (!csp->http->hostport || !*(csp->http->hostport))
    {
-      /* XXX: When does this happen and why is it OK? */
-      log_error(LOG_LEVEL_INFO, "Weirdness in client_host_adder detected and ignored.");
-      return JB_ERR_OK;
+      log_error(LOG_LEVEL_ERROR, "Destination host unknown.");
+      return JB_ERR_PARSE;
    }
 
    /*
