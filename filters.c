@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.194 2015/08/21 10:58:53 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.195 2015/12/27 12:46:34 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -386,13 +386,19 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    {
       p = strchr(acl_spec, ':');
    }
+   if (p != NULL)
+   {
+      assert(*p == ':');
+      *p = '\0';
+      p++;
+   }
 
 #ifdef HAVE_RFC2553
    memset(&hints, 0, sizeof(struct addrinfo));
    hints.ai_family = AF_UNSPEC;
    hints.ai_socktype = SOCK_STREAM;
 
-   i = getaddrinfo(acl_spec, ((p) ? ++p : NULL), &hints, &result);
+   i = getaddrinfo(acl_spec, p, &hints, &result);
 
    if (i != 0)
    {
@@ -411,7 +417,6 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    {
       char *endptr;
 
-      *p++ = '\0';
       port = strtol(p, &endptr, 10);
 
       if (port <= 0 || port > 65535 || *endptr != '\0')
