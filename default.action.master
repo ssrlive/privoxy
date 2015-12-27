@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.322 2015/12/27 16:40:20 fabiankeil Exp $
+#  $Id: default.action.master,v 1.323 2015/12/27 16:40:40 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1147,6 +1147,14 @@ resources.infolinks.com/
 #MASTER# BLOCK-REFERRER: http://www.libertaddigital.com/
 # Blocked URL = http://abs.proxistore.com/abe/js/psuniversaltag.js?v=
 abs.proxistore.com/abe/
+#MASTER# BLOCK-REFERRER: http://www.libertaddigital.com/
+# Blocked URL = http://rtax.criteo.com/delivery/rta/rta.js?netId=
+rtax.criteo.com/
+static.criteo.net/
+static.criteo.com/
+static.*.criteo.net/
+cas.*.criteo.com/
+cas.criteo.com/
 
 
 #----------------------------------------------------------------------------
