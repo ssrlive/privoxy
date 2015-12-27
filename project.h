@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.208 2014/11/12 12:00:41 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.209 2014/11/16 18:43:48 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -859,13 +859,13 @@ struct reusable_connection
  */
 
 /**
- * Flag for process return code: Set if exiting porcess has been toggled
+ * Flag for process return code: Set if exiting process has been toggled
  * during its lifetime.
  */
 #define RC_FLAG_TOGGLED   0x10
 
 /**
- * Flag for process return code: Set if exiting porcess has blocked its
+ * Flag for process return code: Set if exiting process has blocked its
  * request.
  */
 #define RC_FLAG_BLOCKED   0x20
