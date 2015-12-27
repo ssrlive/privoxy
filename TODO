@@ -1,4 +1,4 @@
-$Id: TODO,v 1.134 2015/12/27 12:56:04 fabiankeil Exp $
+$Id: TODO,v 1.135 2015/12/27 12:56:33 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -408,7 +408,7 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 142) Remove or update the "internal" pcre version.
 
-143) Add support OpenBSD's pledge feature once it's stablelized.
+143) Add support for OpenBSD's pledge feature once it's stablelized.
      This should be a lot less work then #124.
 
 144) Allow Privoxy admins to pre-define tags that are be set for
