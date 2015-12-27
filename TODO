@@ -1,4 +1,4 @@
-$Id: TODO,v 1.132 2015/08/12 10:38:16 fabiankeil Exp $
+$Id: TODO,v 1.133 2015/08/25 11:35:00 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -407,6 +407,9 @@ http://www.privoxy.org/faq/general.html#DONATE
      rather neet. https://github.com/NuxiNL/cloudlibc
 
 142) Remove or update the "internal" pcre version.
+
+143) Add support OpenBSD's pledge feature once it's stablelized.
+     This should be a lot less work then #124.
 
 ##########################################################################
 
