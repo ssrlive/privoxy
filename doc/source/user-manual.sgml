@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.194 2014/10/21 15:30:52 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.195 2015/12/28 18:56:19 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.194 2014/10/21 15:30:52 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.195 2015/12/28 18:56:19 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4145,7 +4145,7 @@ new action
   <term>Type:</term>
   <!-- Boolean, Parameterized, Multi-value -->
   <listitem>
-   <para>Multi-value.</para>
+   <para>Parameterized.</para>
   </listitem>
  </varlistentry>
 
