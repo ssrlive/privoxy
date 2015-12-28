@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.435 2015/01/24 16:42:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.436 2015/03/27 12:40:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1465,6 +1465,70 @@ static jb_err receive_chunked_client_request_body(struct client_state *csp)
 
 }
 
+
+#ifdef FEATURE_FORCE_LOAD
+/*********************************************************************
+ *
+ * Function    :  force_required
+ *
+ * Description : Checks a request line to see if it contains
+ *               the FORCE_PREFIX. If it does, it is removed
+ *               unless enforcing requests has beend disabled.
+ *
+ * Parameters  :
+ *          1  :  request_line = HTTP request line
+ *
+ * Returns     :  TRUE if force is required, FALSE otherwise.
+ *
+ *********************************************************************/
+static int force_required(const struct client_state *csp, char *request_line)
+{
+   char *p;
+
+   p = strstr(request_line, "http://");
+   if (p != NULL)
+   {
+      /* Skip protocol */
+      p += strlen("http://");
+   }
+   else
+   {
+      /* Intercepted request usually don't specify the protocol. */
+      p = request_line;
+   }
+
+   /* Go to the beginning of the path */
+   p = strstr(p, "/");
+   if (p == NULL)
+   {
+      /*
+       * If the path is missing the request line is invalid and we
+       * are done here. The client-visible rejection happens later on.
+       */
+      return 0;
+   }
+
+   if (0 == strncmpic(p, FORCE_PREFIX, strlen(FORCE_PREFIX) - 1))
+   {
+      if (!(csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS))
+      {
+         /* XXX: Should clean more carefully */
+         strclean(request_line, FORCE_PREFIX);
+         log_error(LOG_LEVEL_FORCE,
+            "Enforcing request: \"%s\".", request_line);
+
+         return 1;
+      }
+      log_error(LOG_LEVEL_FORCE,
+         "Ignored force prefix in request: \"%s\".", request_line);
+   }
+
+   return 0;
+
+}
+#endif /* def FEATURE_FORCE_LOAD */
+
+
 /*********************************************************************
  *
  * Function    :  receive_client_request
@@ -1512,23 +1576,9 @@ static jb_err receive_client_request(struct client_state *csp)
    }
 
 #ifdef FEATURE_FORCE_LOAD
-   /*
-    * If this request contains the FORCE_PREFIX and blocks
-    * aren't enforced, get rid of it and set the force flag.
-    */
-   if (strstr(req, FORCE_PREFIX))
+   if (force_required(csp, req))
    {
-      if (csp->config->feature_flags & RUNTIME_FEATURE_ENFORCE_BLOCKS)
-      {
-         log_error(LOG_LEVEL_FORCE,
-            "Ignored force prefix in request: \"%s\".", req);
-      }
-      else
-      {
-         strclean(req, FORCE_PREFIX);
-         log_error(LOG_LEVEL_FORCE, "Enforcing request: \"%s\".", req);
-         csp->flags |= CSP_FLAG_FORCED;
-      }
+      csp->flags |= CSP_FLAG_FORCED;
    }
 #endif /* def FEATURE_FORCE_LOAD */
 
