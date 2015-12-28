@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.193 2014/07/18 10:01:39 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.194 2014/10/21 15:30:52 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.193 2014/07/18 10:01:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.194 2014/10/21 15:30:52 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2778,7 +2778,7 @@ for details.
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Parameterized.</para>
+   <para>Multi-value.</para>
   </listitem>
  </varlistentry>
 
@@ -2865,7 +2865,7 @@ for details.
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Parameterized.</para>
+   <para>Multi-value.</para>
   </listitem>
  </varlistentry>
 
@@ -3616,7 +3616,7 @@ problem-host.example.com</screen>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Parameterized.</para>
+   <para>Multi-value.</para>
   </listitem>
  </varlistentry>
 
@@ -3828,7 +3828,7 @@ problem-host.example.com</screen>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Parameterized.</para>
+   <para>Multi-value.</para>
   </listitem>
  </varlistentry>
 
@@ -5460,7 +5460,7 @@ www.privoxy.org/user-manual/</screen>
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Parameterized.</para>
+   <para>Multi-value.</para>
   </listitem>
  </varlistentry>
 
@@ -5543,7 +5543,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
   <term>Type:</term>
   <!-- boolean, parameterized, Multi-value -->
   <listitem>
-   <para>Parameterized.</para>
+   <para>Multi-value.</para>
   </listitem>
  </varlistentry>
 
