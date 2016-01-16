@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.302 2015/12/27 12:54:12 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.303 2016/01/16 12:29:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4454,7 +4454,6 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
    /*
     * Regenerate request line in "proxy format"
     * to make rewrites more convenient.
-    * XXX: Code duplication.
     */
    assert(http->cmd != NULL);
    freez(http->cmd);
