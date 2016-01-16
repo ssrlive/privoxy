@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.303 2016/01/16 12:29:00 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.304 2016/01/16 12:31:40 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4448,7 +4448,8 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
       return JB_ERR_MEMORY;
    }
 
-   log_error(LOG_LEVEL_HEADER, "Destination extracted from \"Host:\" header. New request URL: %s",
+   log_error(LOG_LEVEL_HEADER,
+      "Destination extracted from \"Host\" header. New request URL: %s",
       http->url);
 
    /*
@@ -4466,9 +4467,6 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
    {
       return JB_ERR_MEMORY;
    }
-
-   log_error(LOG_LEVEL_HEADER, "Faked request-Line: %s",
-      http->cmd);
 
    return JB_ERR_OK;
 
