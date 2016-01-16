@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.92 2013/12/24 13:35:23 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.93 2015/08/12 10:33:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1381,10 +1381,13 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
              *
              * buf + 1 to skip the leading '{'
              */
-            actions_buf = strdup_or_die(buf + 1);
+            actions_buf = end = strdup_or_die(buf + 1);
 
             /* check we have a trailing } and then trim it */
-            end = actions_buf + strlen(actions_buf) - 1;
+            if (strlen(actions_buf))
+            {
+               end += strlen(actions_buf) - 1;
+            }
             if (*end != '}')
             {
                /* No closing } */
