@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.195 2015/12/28 18:56:19 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.196 2015/12/28 18:56:36 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.195 2015/12/28 18:56:19 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.196 2015/12/28 18:56:36 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -4176,6 +4176,32 @@ new action
       Replace <quote>forward-socks4a</quote> with <quote>forward-socks4</quote> to use a socks4 connection
       (with local DNS resolution) instead, use <quote>forward-socks5</quote>
       for socks5 connections (with remote DNS resolution).
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <quote>forward-webserver 127.0.0.1:80</quote> to use the HTTP
+      server listening at 127.0.0.1 port 80 without adjusting the
+      request headers.
+     </para>
+     <para>
+      This makes it more convenient to use Privoxy to make
+      existing websites available as onion services as well.
+     </para>
+     <para>
+      Many websites serve content with hardcoded URLs and
+      can't be easily adjusted to change the domain based
+      on the one used by the client.
+     </para>
+     <para>
+      Putting Privoxy between Tor and the webserver (or an stunnel
+      that forwards to the webserver) allows to rewrite headers and
+      content to make client and server happy at the same time.
+     </para>
+     <para>
+      Using Privoxy for webservers that are only reachable through
+      onion addresses and whose location is supposed to be secret
+      is not recommended and should not be necessary anyway.
      </para>
     </listitem>
    </itemizedlist>
