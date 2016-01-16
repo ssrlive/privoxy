@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.324 2015/12/27 16:40:54 fabiankeil Exp $
+#  $Id: default.action.master,v 1.325 2016/01/16 12:28:09 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2291,6 +2291,8 @@ creativecommons.org/
 kggp.de/
 # URL = http://www.plasmaservice.de/interviews/interviews_kln/interview_koeln_christmann.htm
 .plasmaservice.de/
+# URL = http://www.black-mosquito.org/index.php/kein-mensch-ist-illegal-fight-racism-now-40-aufkleber.html
+.black-mosquito.org/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
