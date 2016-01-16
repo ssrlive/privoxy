@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.209 2014/11/16 18:43:48 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.210 2015/12/27 12:46:46 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -642,7 +642,7 @@ struct url_actions
 };
 
 enum forwarder_type {
-   /**< Don't use a SOCKS server               */
+   /**< Don't use a SOCKS server, forward to a HTTP proxy directly */
    SOCKS_NONE =  0,
    /**< original SOCKS 4 protocol              */
    SOCKS_4    = 40,
