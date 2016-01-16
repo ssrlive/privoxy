@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.301 2015/12/27 12:49:29 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.302 2015/12/27 12:54:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -3286,6 +3286,13 @@ static jb_err client_max_forwards(struct client_state *csp, char **header)
 static jb_err client_host(struct client_state *csp, char **header)
 {
    char *p, *q;
+
+   if (strlen(*header) < 7)
+   {
+      log_error(LOG_LEVEL_HEADER, "Removing empty Host header");
+      freez(*header);
+      return JB_ERR_OK;
+   }
 
    if (!csp->http->hostport || (*csp->http->hostport == '*') ||
        *csp->http->hostport == ' ' || *csp->http->hostport == '\0')
