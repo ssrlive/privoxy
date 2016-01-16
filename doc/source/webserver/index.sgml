@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.29 2015/03/29 17:22:20 fabiankeil Exp $
+ $Id: index.sgml,v 2.30 2015/11/06 13:38:38 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -201,7 +201,7 @@
 <!-- GNUMakefile is inserting this now -->
 <para>
  <subscript>
-  Copyright __copy 2001-2015 by Privoxy Developers
+  Copyright __copy 2001-2016 by Privoxy Developers
  </subscript>
 </para>
 

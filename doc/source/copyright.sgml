@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: copyright.sgml,v 2.15 2013/01/05 23:50:35 ler762 Exp $
+ $Id: copyright.sgml,v 2.16 2015/03/27 12:42:13 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -36,7 +36,7 @@
 -->
 
 <para>
- Copyright &my-copy; 2001-2015 by Privoxy Developers <email>ijbswa-developers@lists.sourceforge.net</email>
+ Copyright &my-copy; 2001-2016 by Privoxy Developers <email>ijbswa-developers@lists.sourceforge.net</email>
 </para>
 
 <para>

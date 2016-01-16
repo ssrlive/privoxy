@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.78 2012/11/24 13:58:17 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.79 2015/08/12 10:34:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -8,7 +8,7 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.78 2012/11/24 13:58:17 fabianke
  *                to deserve their own file but don't really fit in
  *                any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2012 the
+ * Copyright   :  Written by and Copyright (C) 2001-2016 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

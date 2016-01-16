@@ -1,11 +1,11 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.93 2015/08/12 10:33:13 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.94 2016/01/16 12:29:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
  *
  * Purpose     :  Declares functions to work with actions files
  *
- * Copyright   :  Written by and Copyright (C) 2001-2011 the
+ * Copyright   :  Written by and Copyright (C) 2001-2016 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

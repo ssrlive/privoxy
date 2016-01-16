@@ -1,11 +1,11 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.304 2016/01/16 12:31:40 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.305 2016/01/16 12:32:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2014 the
+ * Copyright   :  Written by and Copyright (C) 2001-2016 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
