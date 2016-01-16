@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.437 2015/12/28 18:55:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.438 2016/01/16 12:30:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -212,12 +212,10 @@ static int received_hup_signal = 0;
 
 /* HTTP snipplets. */
 static const char CSUCCEED[] =
-   "HTTP/1.1 200 Connection established\r\n"
-   "Proxy-Agent: Privoxy/" VERSION "\r\n\r\n";
+   "HTTP/1.1 200 Connection established\r\n\r\n";
 
 static const char CHEADER[] =
    "HTTP/1.1 400 Invalid header received from client\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Invalid header received from client.\r\n";
@@ -237,7 +235,6 @@ static const char GOPHER_RESPONSE[] =
 /* XXX: should be a template */
 static const char MISSING_DESTINATION_RESPONSE[] =
    "HTTP/1.1 400 Bad request received from client\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Privoxy was unable to extract the destination.\r\n";
@@ -245,7 +242,6 @@ static const char MISSING_DESTINATION_RESPONSE[] =
 /* XXX: should be a template */
 static const char INVALID_SERVER_HEADERS_RESPONSE[] =
    "HTTP/1.1 502 Server or forwarder response invalid\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad response. The server or forwarder response doesn't look like HTTP.\r\n";
@@ -253,35 +249,30 @@ static const char INVALID_SERVER_HEADERS_RESPONSE[] =
 /* XXX: should be a template */
 static const char MESSED_UP_REQUEST_RESPONSE[] =
    "HTTP/1.1 400 Malformed request after rewriting\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Bad request. Messed up with header filters.\r\n";
 
 static const char TOO_MANY_CONNECTIONS_RESPONSE[] =
    "HTTP/1.1 503 Too many open connections\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Maximum number of open connections reached.\r\n";
 
 static const char CLIENT_CONNECTION_TIMEOUT_RESPONSE[] =
    "HTTP/1.1 504 Connection timeout\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "The connection timed out because the client request didn't arrive in time.\r\n";
 
 static const char CLIENT_BODY_PARSE_ERROR_RESPONSE[] =
    "HTTP/1.1 400 Failed reading client body\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Failed parsing or buffering the chunk-encoded client body.\r\n";
 
 static const char UNSUPPORTED_CLIENT_EXPECTATION_ERROR_RESPONSE[] =
    "HTTP/1.1 417 Expecting too much\r\n"
-   "Proxy-Agent: Privoxy " VERSION "\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
    "Privoxy detected an unsupported Expect header value.\r\n";
