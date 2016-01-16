@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.195 2015/12/27 12:46:34 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.196 2015/12/27 12:53:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2053,6 +2053,7 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
    size_t newsize = 0;
    unsigned int chunksize = 0;
    char *from_p, *to_p;
+   const char *end_of_buffer = buffer + *size;
 
    assert(buffer);
    from_p = to_p = buffer;
@@ -2065,13 +2066,12 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
 
    while (chunksize > 0U)
    {
-      if (NULL == (from_p = strstr(from_p, "\r\n")))
-      {
-         log_error(LOG_LEVEL_ERROR, "Parse error while stripping \"chunked\" transfer coding");
-         return JB_ERR_PARSE;
-      }
-
-      if (chunksize >= *size - newsize)
+      /*
+       * If the chunk-size is valid, we should have at least
+       * chunk-size bytes of chunk-data and five bytes of
+       * meta data (chunk-size, CRLF, CRLF) left in the buffer.
+       */
+      if (chunksize + 5 >= *size - newsize)
       {
          log_error(LOG_LEVEL_ERROR,
             "Chunk size %u exceeds buffered data left. "
@@ -2079,13 +2079,49 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
             chunksize, (unsigned int)newsize, (unsigned int)*size);
          return JB_ERR_PARSE;
       }
-      newsize += chunksize;
+
+      /*
+       * Skip the chunk-size, the optional chunk-ext and the CRLF
+       * that is supposed to be located directly before the start
+       * of chunk-data.
+       */
+      if (NULL == (from_p = strstr(from_p, "\r\n")))
+      {
+         log_error(LOG_LEVEL_ERROR, "Parse error while stripping \"chunked\" transfer coding");
+         return JB_ERR_PARSE;
+      }
       from_p += 2;
 
-      memmove(to_p, from_p, (size_t) chunksize);
-      to_p = buffer + newsize;
-      from_p += chunksize + 2;
+      /*
+       * The previous strstr() does not enforce chunk-validity
+       * and is sattisfied as long a CRLF is left in the buffer.
+       *
+       * Make sure the bytes we consider chunk-data are within
+       * the valid range.
+       */
+      if (from_p + chunksize >= end_of_buffer)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "End of chunk is beyond the end of the buffer.");
+         return JB_ERR_PARSE;
+      }
 
+      memmove(to_p, from_p, (size_t) chunksize);
+      newsize += chunksize;
+      to_p = buffer + newsize;
+      from_p += chunksize;
+
+      /*
+       * Not merging this check with the previous one allows us
+       * to keep chunks without trailing CRLF. It's not clear
+       * if we actually have to care about those, though.
+       */
+      if (from_p + 2 >= end_of_buffer)
+      {
+         log_error(LOG_LEVEL_ERROR, "Not enough room for trailing CRLF.");
+         return JB_ERR_PARSE;
+      }
+      from_p += 2;
       if (sscanf(from_p, "%x", &chunksize) != 1)
       {
          log_error(LOG_LEVEL_INFO, "Invalid \"chunked\" transfer encoding detected and ignored.");
