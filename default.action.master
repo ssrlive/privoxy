@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.323 2015/12/27 16:40:40 fabiankeil Exp $
+#  $Id: default.action.master,v 1.324 2015/12/27 16:40:54 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2120,6 +2120,8 @@ ixquick-proxy.com/
 yandex.ru/.*&retpath=http
 # URL = http://mc.yandex.ru/clmap/10630330?page-url=http%3A%2F%2Fyandex.ru%2Fshowcaptcha%3Fcc%3D1%26retpath%3Dhttp%253A%2F%2Fyandex.ru%2Fyandsearch%253Ftext%253Dgeli%252Bfreebsd%2526lr%25...faf28502&pointer-click=rn%3A121707220%3Ax%3A17873%3Ay%3A46420%3At%3A54%3Ap%3APA%5Db%5C%5BFA2A%5D2b%5C%5B1&browser-info=rqnl%3A2%3Ast%3A1423317904
 .yandex.ru/.*\?page-url=
+# URL = http://disqus.com/forums/daemonicdispatches/get_num_replies.js?url8=http%3A%2F%2Fwww.daemonology.net%2Fblog%2F2014-12-25-when-security-goes-right.html%23disqus_thread&
+disqus.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
