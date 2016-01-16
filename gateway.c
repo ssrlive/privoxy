@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.94 2015/06/18 15:26:40 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.95 2015/08/12 10:37:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -635,6 +635,7 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
    switch (fwd->type)
    {
       case SOCKS_NONE:
+      case FORWARD_WEBSERVER:
          sfd = connect_to(dest_host, dest_port, csp);
          break;
       case SOCKS_4:

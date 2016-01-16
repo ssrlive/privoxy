@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.196 2015/12/27 12:53:39 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.197 2016/01/16 12:29:17 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -2439,6 +2439,14 @@ static const struct forward_spec *get_forward_override_settings(struct client_st
       fwd->type = SOCKS_NONE;
 
       /* Parse the parent HTTP proxy host:port */
+      http_parent = vec[1];
+
+   }
+   else if ((vec_count == 2) && !strcasecmp(vec[0], "forward-webserver"))
+   {
+      fwd->type = FORWARD_WEBSERVER;
+
+      /* Parse the parent HTTP server host:port */
       http_parent = vec[1];
 
    }

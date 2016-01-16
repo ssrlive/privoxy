@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.436 2015/03/27 12:40:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.437 2015/12/28 18:55:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -918,7 +918,7 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
    *request_line = strdup(http->gpc);
    string_append(request_line, " ");
 
-   if (fwd->forward_host)
+   if (fwd->forward_host && fwd->type != FORWARD_WEBSERVER)
    {
       string_append(request_line, http->url);
    }
@@ -1986,7 +1986,7 @@ static void chat(struct client_state *csp)
 
       if (csp->server_connection.sfd == JB_INVALID_SOCKET)
       {
-         if (fwd->type != SOCKS_NONE)
+         if ((fwd->type != SOCKS_NONE) && (fwd->type != FORWARD_WEBSERVER))
          {
             /* Socks error. */
             rsp = error_response(csp, "forwarding-failed");
