@@ -1,4 +1,4 @@
-$Id: TODO,v 1.136 2015/12/27 13:32:02 fabiankeil Exp $
+$Id: TODO,v 1.137 2015/12/27 16:41:17 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -62,6 +62,8 @@ http://www.privoxy.org/faq/general.html#DONATE
 
     This should be good enough for most of the content the
     user would want to filter.
+
+    Interested donors: 1.
 
 19) enable-forward-fallback. Syntax? Suggested by K.R.
 
@@ -384,7 +386,7 @@ http://www.privoxy.org/faq/general.html#DONATE
      Interested donors: 1.
 
 133) Consider allowing bitcoin donations.
-     Interested donors: 1.
+     Interested donors: 2.
 
 134) Track the total number of bytes written to and received from a socket.
 
@@ -423,8 +425,12 @@ http://www.privoxy.org/faq/general.html#DONATE
      blocking while still crunching cookies, or to disable
      experimental filters only.
 
+     Interested donors: 1.
+
 145) Once #144 is implemented, allow clients to opt-in to the
      tagging for a limited amount of time (or number of requests).
+
+     Interested donors: 1.
 
 146) Once #144 is implemented, optionally allow to save the opt-in
      status to disk.
