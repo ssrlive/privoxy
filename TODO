@@ -1,4 +1,4 @@
-$Id: TODO,v 1.137 2015/12/27 16:41:17 fabiankeil Exp $
+$Id: TODO,v 1.138 2016/01/16 12:29:51 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -46,6 +46,8 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 11) CGI templates should use semantically-correct HTML
     and scale properly.
+
+    Work in progress.
 
 12) Support pipelining for outgoing connections.
 
