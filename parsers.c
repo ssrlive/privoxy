@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.305 2016/01/16 12:32:18 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.306 2016/01/16 12:33:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -2372,8 +2372,7 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
       /*
        * Log a warning if the user expects the content to be filtered.
        */
-      if ((csp->rlist != NULL) &&
-         (!list_is_empty(csp->action->multi[ACTION_MULTI_FILTER])))
+      if (content_filters_enabled(csp->action))
       {
          log_error(LOG_LEVEL_INFO,
             "Compressed content detected, content filtering disabled. "
