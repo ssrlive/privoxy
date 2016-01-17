@@ -3018,11 +3018,6 @@ while ((c = *(++ptr)) != 0)
         *errorptr = "internal error";
         goto PCRE_ERROR_RETURN;
         }
-      if ((int)ptr[1] >= tables_length - ctypes_offset)
-        {
-        *errorptr = ERR6;
-        goto PCRE_ERROR_RETURN;
-        }
       }
 
     /* This "while" is the end of the "do" above. */
