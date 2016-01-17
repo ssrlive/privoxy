@@ -8,7 +8,7 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.22">
+<!entity p-version "3.0.24">
 <!entity p-status "UNRELEASED">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.108 2015/08/12 10:38:45 fabiankeil Exp $
+ $Id: faq.sgml,v 2.109 2015/08/12 10:40:42 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.108 2015/08/12 10:38:45 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.109 2015/08/12 10:40:42 fabiankeil Exp $</pubdate>
 
 <!--
 
