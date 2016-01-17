@@ -3013,12 +3013,12 @@ while ((c = *(++ptr)) != 0)
 
       runlength++;
 
-      if (ptr > pattern + pattern_length)
+      if ((const char *)ptr > pattern + pattern_length)
         {
         *errorptr = "internal error";
         goto PCRE_ERROR_RETURN;
         }
-      if (ptr[1] >= tables_length - ctypes_offset)
+      if ((int)ptr[1] >= tables_length - ctypes_offset)
         {
         *errorptr = ERR6;
         goto PCRE_ERROR_RETURN;
