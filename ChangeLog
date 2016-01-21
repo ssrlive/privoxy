@@ -18,7 +18,7 @@ ChangeLog for Privoxy
   - Fixed buffer scaling in execute_external_filter() that could lead
     to crashes. Submitted by Yang Xia in #892.
   - Fixed crashes when executing external filters on platforms like
-    Mac OS X. Reported by Jonathan McKenzie on ijbswa-users@
+    Mac OS X. Reported by Jonathan McKenzie on ijbswa-users@.
   - Properly parse ACL directives with ports when compiled with HAVE_RFC2553.
     Previously the port wasn't removed from the host and in case of
     'permit-access 127.0.0.1 example.org:80' Privoxy would try (and fail)
@@ -90,7 +90,7 @@ ChangeLog for Privoxy
     Reported by u302320 in #924.
   - Add two fast-redirect exceptions for "yandex.ru".
   - Disable filter{banners-by-size} for ".plasmaservice.de/".
-  - Unblock klikki.fi/adv/.
+  - Unblock "klikki.fi/adv/".
   - Block requests for "resources.infolinks.com/".
     Reported by "Black Rider" on ijbswa-users@.
   - Block a bunch of criteo domains.

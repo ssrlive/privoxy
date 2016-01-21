@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.13 2015/03/29 17:22:05 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.14 2016/01/17 14:31:33 fabiankeil Exp $
 
  Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -75,7 +75,7 @@
     <listitem>
      <para>
       Fixed crashes when executing external filters on platforms like
-      Mac OS X. Reported by Jonathan McKenzie on ijbswa-users@
+      Mac OS X. Reported by Jonathan McKenzie on ijbswa-users@.
      </para>
     </listitem>
     <listitem>
@@ -253,7 +253,7 @@
     </listitem>
     <listitem>
      <para>
-      Unblock klikki.fi/adv/.
+      Unblock "klikki.fi/adv/".
      </para>
     </listitem>
     <listitem>
