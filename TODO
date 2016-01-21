@@ -1,4 +1,4 @@
-$Id: TODO,v 1.138 2016/01/16 12:29:51 fabiankeil Exp $
+$Id: TODO,v 1.139 2016/01/16 12:30:05 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -407,6 +407,10 @@ http://www.privoxy.org/faq/general.html#DONATE
      but making the reporting mechanism available again would be a
      good idea.
 
+140) Toggling Privoxy off, currently also disables stuff that
+     probably shouldn't be affected (like forward-override based
+     on tags). Investigate and fix or document.
+
 141) Port Privoxy to CloudABI, which, despite the name, is actually
      rather neet. https://github.com/NuxiNL/cloudlibc
 
@@ -436,6 +440,13 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 146) Once #144 is implemented, optionally allow to save the opt-in
      status to disk.
+
+147) Improve "Building from Source" section in the user manual.
+     A common problem seems to be that it's not obvious to non-technical
+     users how the listed dependencies can be installed on the commonly
+     used platforms. Adding a couple of examples should also be useful for
+     technical users (like Privoxy developers) who want to install or test
+     Privoxy on platforms they are not familiar with.
 
 ##########################################################################
 
