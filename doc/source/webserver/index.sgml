@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.32 2016/01/17 14:32:19 fabiankeil Exp $
+ $Id: index.sgml,v 2.33 2016/01/21 15:55:49 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -155,33 +155,6 @@
 </para>
 </sect1>
 
-<![%p-homepage;[
-<!--   ~~~~~       New section      ~~~~~     -->
-<sect1 label="">
-<!-- dummy section, for spacing -->
-<title></title>
-<para>
-<!-- show the SF logo per AUP -->
-<informaltable frame=none label="" pgwide="1">
- <tgroup cols=1 align="center" colsep=1 rowsep=1>
-  <colspec colname=c1 align="center">
-  <tbody>
-   <row>
-    <entry align="center">Privoxy is developed on:</entry>
-   </row>
-   <row>
-    <entry align="center">
-     <ulink url="http://sourceforge.net/">
-      <inlinegraphic  fileref="http://sourceforge.net/sflogo.php?group_id=11118&#38;type=1&#38;dummy=.gif"></inlinegraphic>
-     </ulink>
-    </entry>
-   </row>
-  </tbody>
- </tgroup>
-</informaltable>
-</para>
-]]>
-
 <!--
 <informalfigure pgwide="1">
  <ulink url="http://sourceforge.net/">
@@ -190,6 +163,16 @@
 </informalfigure>
 -->
 
+<![%p-homepage;[
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect1 label="">
+<!-- dummy section, for spacing -->
+<title></title>
+<para>
+<!-- Mention SF per AUP -->
+Privoxy is developed on <ulink url="http://sourceforge.net/">SourceForge</ulink>.
+</para>
+]]>
 
 <![%p-index;[
 <sect1 label=""><title></title>
