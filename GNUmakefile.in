@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.230 2015/01/24 16:40:07 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.231 2015/12/27 12:50:57 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -556,17 +556,6 @@ dok-release:
 		doc/source/*sgml doc/source/*/*sgml; \
 	fi;
 	$(RM) -r doc/source/*bak doc/source/*/*bak;
-
-# Create release announcement in text and html, with short and long versions.
-# This is a standalone target, and must be invoked directly.
-# announce: dok-release
-# 	mkdir -p $(DOC_TMP)
-# 	cd $(DOC_TMP) && cp -f ../announce.sgml . && $(DB) -iannounce-big announce.sgml &&\
-# 	mv -f index.html announce.html && $(W3M_DUMP) announce.html > announce.txt
-# 	cd $(DOC_TMP) && $(DB) announce.sgml &&\
-# 	mv -f index.html announce-mini.html && $(W3M_DUMP) announce-mini.html > announce-mini.txt &&\
-# 	mv -f *html *txt ../../..
-# 	rm -fr $(DOC_TMP)
 
 # The main Privoxy config file, generated from sgml sources.
 # NOTE: This will require some hand editing.
