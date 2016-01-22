@@ -5,9 +5,9 @@ ChangeLog for Privoxy
 
 - Security fixes (denial of service):
   - Prevent invalid reads in case of corrupt chunk-encoded content.
-    Bug discovered with afl-fuzz and AddressSanitizer.
+    CVE-2016-1982. Bug discovered with afl-fuzz and AddressSanitizer.
   - Remove empty Host headers in client requests.
-    Previously they would result in invalid reads.
+    Previously they would result in invalid reads. CVE-2016-1983.
     Bug discovered with afl-fuzz and AddressSanitizer.
 
 - Bug fixes:
