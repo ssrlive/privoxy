@@ -43,9 +43,8 @@
 
     <p><span class="APPLICATION">Privoxy 3.0.24</span> stable contains a
     couple of new features but is mainly a bug-fix release. Two of the fixed
-    bugs are security issues (CVE requests pending) and may be used to
-    remotely trigger crashes on platforms that carefully check memory
-    accesses (most don't).</p>
+    bugs are security issues and may be used to remotely trigger crashes on
+    platforms that carefully check memory accesses (most don't).</p>
 
     <ul>
       <li>
@@ -54,13 +53,14 @@
         <ul>
           <li>
             <p>Prevent invalid reads in case of corrupt chunk-encoded
-            content. Bug discovered with afl-fuzz and AddressSanitizer.</p>
+            content. CVE-2016-1982. Bug discovered with afl-fuzz and
+            AddressSanitizer.</p>
           </li>
 
           <li>
             <p>Remove empty Host headers in client requests. Previously they
-            would result in invalid reads. Bug discovered with afl-fuzz and
-            AddressSanitizer.</p>
+            would result in invalid reads. CVE-2016-1983. Bug discovered with
+            afl-fuzz and AddressSanitizer.</p>
           </li>
         </ul>
       </li>
@@ -83,7 +83,8 @@
 
           <li>
             <p>Fixed crashes when executing external filters on platforms
-            like Mac OS X. Reported by Jonathan McKenzie on ijbswa-users@.</p>
+            like Mac OS X. Reported by Jonathan McKenzie on
+            ijbswa-users@.</p>
           </li>
 
           <li>
