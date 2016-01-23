@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.231 2015/12/27 12:50:57 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.232 2016/01/22 11:31:15 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -258,7 +258,7 @@ all: $(PROGRAM) default.action
 #############################################################################
 # Phony targets
 #############################################################################
-.PHONY: all inifiles solaris-dist \
+.PHONY: all inifiles \
 win-dist tarball-dist dok webserver clean clobber tags \
 install CONF_DEST LOG_DEST \
 PID_DEST check_doc install-strip uninstall GROUP_T
