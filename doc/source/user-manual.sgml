@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.200 2016/01/23 11:59:20 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.201 2016/01/23 12:00:04 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.200 2016/01/23 11:59:20 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.201 2016/01/23 12:00:04 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1138,32 +1138,21 @@ Example Unix startup command:
 <sect2 id="start-macosx">
 <title>Mac OS X</title>
 <para>
-  After downloading the privoxy software, unzip the downloaded file by
-  double-clicking on the zip file icon.  Then, double-click on the
-  installer package icon and follow the installation process.
+ The privoxy service will automatically start after a successful installation
+ (and thereafter every time your computer starts up) however you will need to
+ configure your web browser(s) to use it. To do so, configure them to use a
+ proxy for HTTP and HTTPS at the address 127.0.0.1:8118.
 </para>
 <para>
-  The privoxy service will automatically start after a successful
-  installation.  In addition, the privoxy service will automatically
-  start every time your computer starts up.
+ To prevent the privoxy service from automatically starting when your computer
+ starts up, remove or rename the file <literal>/Library/LaunchDaemons/org.ijbswa.privoxy.plist</literal>
+ (on OS X 10.5 and higher) or the folder named
+ <literal>/Library/StartupItems/Privoxy</literal> (on OS X 10.4 'Tiger').
 </para>
 <para>
-  To prevent the privoxy service from automatically starting when your
-  computer starts up, remove or rename the folder named
-  /Library/StartupItems/Privoxy.
-</para>
-<para>
-  A simple application named Privoxy Utility has been created which
-  enables administrators to easily start and stop the privoxy service.
-</para>
-<para>
-  In addition, the Privoxy Utility presents a simple way for
-  administrators to edit the various privoxy config files.  A method
-  to uninstall the software is also available.
-</para>
-<para>
-  An administrator username and password must be supplied in order for
-  the Privoxy Utility to perform any of the tasks.
+ To manually start or stop the privoxy service, use the scripts startPrivoxy.sh
+ and stopPrivoxy.sh supplied in /Applications/Privoxy. They must be run from an
+ administrator account, using sudo.
 </para>
 </sect2>
 
