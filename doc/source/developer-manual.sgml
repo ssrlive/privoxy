@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.62 2016/01/22 12:14:51 ler762 Exp $
+ $Id: developer-manual.sgml,v 2.63 2016/01/23 11:57:50 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.62 2016/01/22 12:14:51 ler762 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.63 2016/01/23 11:57:50 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2736,39 +2736,8 @@ at sourceforge. Three simple steps:
 
     <sect3 id="newrelease-freebsd"><title>FreeBSD</title>
       <para>
-        Login to Sourceforge's compile-farm via ssh:
-      </para>
-      <para>
-        <programlisting>
-  ssh cf.sourceforge.net
-</programlisting>
-      </para>
-      <para>
-        Choose the right operating system.
-        When logged in, <emphasis>make sure that you have freshly exported the right
-        version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then run:
-      </para>
-      <para>
-        <programlisting>
-  cd current
-  autoheader && autoconf && ./configure
-</programlisting>
-      </para>
-      <para>
-        Then run:
-      </para>
-      <para>
-        <programlisting>
-  gmake freebsd-dist
-</programlisting>
-      </para>
-      <para>
-        which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-        freebsd-upload</command> on the Sourceforge machine (no ncftpput). You now have
-        to manually upload the archive to Sourceforge's ftp server and release
-        the file publicly. Use the release notes and Change Log from the
-        source tarball package.
+        Update the www/privoxy port and submit a diff upstream.
+        For details see the <ulink url="https://www.freebsd.org/doc/en_US.ISO8859-1/books/porters-handbook/">FreeBSD Porter's Handbook</ulink>.
       </para>
     </sect3>
 
