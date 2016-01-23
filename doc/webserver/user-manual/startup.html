@@ -239,28 +239,22 @@
       <h2 class="SECT2"><a name="START-MACOSX" id="START-MACOSX">5.6. Mac OS
       X</a></h2>
 
-      <p>After downloading the privoxy software, unzip the downloaded file by
-      double-clicking on the zip file icon. Then, double-click on the
-      installer package icon and follow the installation process.</p>
-
       <p>The privoxy service will automatically start after a successful
-      installation. In addition, the privoxy service will automatically start
-      every time your computer starts up.</p>
+      installation (and thereafter every time your computer starts up)
+      however you will need to configure your web browser(s) to use it. To do
+      so, configure them to use a proxy for HTTP and HTTPS at the address
+      127.0.0.1:8118.</p>
 
       <p>To prevent the privoxy service from automatically starting when your
-      computer starts up, remove or rename the folder named
-      /Library/StartupItems/Privoxy.</p>
+      computer starts up, remove or rename the file <tt class=
+      "LITERAL">/Library/LaunchDaemons/org.ijbswa.privoxy.plist</tt> (on OS X
+      10.5 and higher) or the folder named <tt class=
+      "LITERAL">/Library/StartupItems/Privoxy</tt> (on OS X 10.4
+      'Tiger').</p>
 
-      <p>A simple application named Privoxy Utility has been created which
-      enables administrators to easily start and stop the privoxy
-      service.</p>
-
-      <p>In addition, the Privoxy Utility presents a simple way for
-      administrators to edit the various privoxy config files. A method to
-      uninstall the software is also available.</p>
-
-      <p>An administrator username and password must be supplied in order for
-      the Privoxy Utility to perform any of the tasks.</p>
+      <p>To manually start or stop the privoxy service, use the scripts
+      startPrivoxy.sh and stopPrivoxy.sh supplied in /Applications/Privoxy.
+      They must be run from an administrator account, using sudo.</p>
     </div>
 
     <div class="SECT2">
