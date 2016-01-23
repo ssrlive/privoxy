@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.199 2016/01/21 15:55:49 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.200 2016/01/23 11:59:20 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.199 2016/01/21 15:55:49 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.200 2016/01/23 11:59:20 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1108,14 +1108,20 @@ Click on the &my-app; Icon to start <application>Privoxy</application>. If no co
 </sect2>
 
 <sect2 id="start-unices">
-<title>Solaris, NetBSD, HP-UX and others</title>
+<title>Generic instructions for Unix derivates (Solaris, NetBSD, HP-UX etc.)</title>
 <para>
 Example Unix startup command:
 </para>
 <para>
  <screen>
- # /usr/sbin/privoxy /etc/privoxy/config
+ # /usr/sbin/privoxy --user privoxy /etc/privoxy/config
 </screen>
+</para>
+<para>
+ Note that if you installed <application>Privoxy</application> through
+ a package manager, the package will probably contain a platform-specific
+ script or configuration file to start <application>Privoxy</application>
+ upon boot.
 </para>
 </sect2>
 
