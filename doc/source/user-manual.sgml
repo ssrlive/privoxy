@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.198 2016/01/17 14:32:19 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.199 2016/01/21 15:55:49 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.198 2016/01/17 14:32:19 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.199 2016/01/21 15:55:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1066,6 +1066,29 @@ How to install the binary packages depends on your operating system:
 </para>
 </sect2>
 
+<sect2 id="start-freebsd">
+<title>FreeBSD and ElectroBSD</title>
+<para>
+ To start <application>Privoxy</application> upon booting, add
+ "privoxy_enable='YES'" to <filename>/etc/rc.conf</filename>.
+ <application>Privoxy</application> will use
+ <filename>/usr/local/etc/privoxy/config</filename> as its main
+ configuration file.
+</para>
+<para>
+ If you installed <application>Privoxy</application> into a jail, the
+ paths above are relative to the jail root.
+</para>
+<para>
+ To start <application>Privoxy</application> manually, run:
+</para>
+<para>
+ <screen>
+ # service privoxy onestart
+</screen>
+</para>
+</sect2>
+
 <sect2 id="start-windows">
 <title>Windows</title>
 <para>
@@ -1085,7 +1108,7 @@ Click on the &my-app; Icon to start <application>Privoxy</application>. If no co
 </sect2>
 
 <sect2 id="start-unices">
-<title>Solaris, NetBSD, FreeBSD, HP-UX and others</title>
+<title>Solaris, NetBSD, HP-UX and others</title>
 <para>
 Example Unix startup command:
 </para>
