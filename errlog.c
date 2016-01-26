@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.123 2016/01/21 13:02:10 diem Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.124 2016/01/21 20:53:01 diem Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -422,11 +422,10 @@ static long get_thread_id(void)
 #ifdef __MACH__
    /*
     * Mac OSX (and perhaps other Mach instances) doesn't have a unique
-    * value at the lowest order 4 bytes of pthread_self()'s return value, a pthread_t.
-    * pthread_t is supposed to be opaque... however it's fairly random.
-    * The following will address these two issues to make it mostly presentable.
+    * value at the lowest order 4 bytes of pthread_self()'s return value, a pthread_t,
+    * so trim the three lowest-order bytes from the value (16^3).
     */
-   this_thread = labs(this_thread % 1000);
+   this_thread = this_thread / 4096;
 #endif /* def __MACH__ */
 #elif defined(_WIN32)
    this_thread = GetCurrentThreadId();
