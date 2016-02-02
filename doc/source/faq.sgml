@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.110 2016/01/17 14:32:19 fabiankeil Exp $
+ $Id: faq.sgml,v 2.111 2016/01/21 15:55:49 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.110 2016/01/17 14:32:19 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.111 2016/01/21 15:55:49 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -537,6 +537,12 @@ warranty? Registration?</title>
  and other countries that recognize German charitable clubs. Feel free to
  use the Subject field to provide a name to be credited and a list of TODO
  list items you are interested in the most. For example: Max Mustermann: #16, #1, #14.
+</para>
+
+<para>
+ Note that donations done through Zwiebelfreunde e.V. currently can't be checked
+ automatically so you may not get credited right away. The credits currently
+ reflect donations done before 2016-01-14.
 </para>
 
 <para>
