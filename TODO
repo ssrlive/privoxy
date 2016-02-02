@@ -1,4 +1,4 @@
-$Id: TODO,v 1.140 2016/01/21 14:06:20 fabiankeil Exp $
+$Id: TODO,v 1.141 2016/01/21 15:57:30 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -65,7 +65,7 @@ http://www.privoxy.org/faq/general.html#DONATE
     This should be good enough for most of the content the
     user would want to filter.
 
-    Interested donors: 1.
+    Interested donors: 2.
 
 19) enable-forward-fallback. Syntax? Suggested by K.R.
 
@@ -278,6 +278,7 @@ http://www.privoxy.org/faq/general.html#DONATE
 100) Create a cross-platform Privoxy control program and retire
      the win32 GUI. Integrate support for Privoxy-Regression-Test,
      Privoxy-Log-Parser, Privoxy-Filter-Test, uagen and similar tools.
+     Interested donors: 1.
 
 102) Add an include directive to split the config file into several parts.
 
@@ -344,6 +345,7 @@ http://www.privoxy.org/faq/general.html#DONATE
 121) Add HTTP/2 support. As a first step, incomming HTTP/1.x requests
      should be translated to outgoing HTTP/2 requests where possible
      (and if desired by the user).
+     Interested donors: 1.
 
 122) Allow customized log messages.
 
