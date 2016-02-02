@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.232 2016/01/22 11:31:15 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.233 2016/01/23 11:58:18 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -144,7 +144,7 @@ DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
 TIDY       = tidy -modify -indent -wrap 78 --tidy-mark no
-RSYNC	   = rsync -av
+RSYNC	   = rsync -av -c
 
 # Program to do LF->CRLF
 DOSFILTER  = $(PERL) -p -e 's/\n/\r\n/'
