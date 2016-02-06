@@ -1,0 +1,11 @@
+05_defaut_action.patch
+06_8bit_manual.patch
+14_config.patch
+15_mansection8.patch
+17_502_no_such_domain.patch
+25_standard_medium.patch
+27_remove_nsl.patch
+28_listen_localhost.patch
+32_bind_fixup.patch
+33_manpage_hyphen.patch
+34_system-docbook2man.patch

@@ -1,0 +1,14 @@
+Author: Roland Rosenfeld <roland@debian.org>
+Description: Remove unnecessary linking against libnsl.
+
+--- a/configure.in
++++ b/configure.in
+@@ -470,7 +470,7 @@ dnl gmtime and localtime
+ dnl =================================================================
+ 
+ dnl Next line needed to find the gethost*_r functions on Solaris
+-AC_CHECK_LIB(nsl, gethostbyname)
++dnl AC_CHECK_LIB(nsl, gethostbyname)
+ 
+ AC_CHECK_FUNC(gethostbyaddr_r, [
+   AC_MSG_CHECKING([signature of gethostbyaddr_r])

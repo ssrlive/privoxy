@@ -1,3 +1,190 @@
+privoxy (3.0.24-2) unstable; urgency=medium
+
+  * Upgrade Standards-Version to 3.9.7 (no changes).
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 04 Feb 2016 19:35:59 +0100
+
+privoxy (3.0.24-1) unstable; urgency=medium
+
+  * New upstream version 3.0.24.
+  * This fixes CVE-2016-1982 and CVE-2016-1983.
+  * Adapt all patches to new upstream version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 22 Jan 2016 16:08:05 +0100
+
+privoxy (3.0.23-5) unstable; urgency=medium
+
+  * Remove /lib/init/vars.sh from init script since it is no longer used.
+    As a consequence remove initscripts dependency (Closes: #804961).
+  * --enable-external-filters (Closes: #805296).
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 16 Nov 2015 21:05:41 +0100
+
+privoxy (3.0.23-4) unstable; urgency=medium
+
+  * Add rotate option to init.d script.
+  * Change logrotate to use rotate option (Closes: #783399).
+  * privoxy.service: define SuccessExitStatus=15.
+  * Set locales to C.UTF-8 for doc generation to make build reproducible.
+  * Run wrap-and-sort.
+  * 34_system-docbook2man: Use Debian docbook2man-spec.pl (from
+    docbook-utils) instead of local copy, to make package reproducible.
+  * Stop runing "make man2html", since this overrides "make man", which
+    should work reproducible.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 19 Sep 2015 15:05:41 +0200
+
+privoxy (3.0.23-3) unstable; urgency=medium
+
+  * Since there are no new bugs found, this goes to unstable now.
+  * Depend on perl-base instead of full perl.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 26 Apr 2015 11:01:08 +0200
+
+privoxy (3.0.23-2) experimental; urgency=low
+
+  * Fix cleanup to allow build twice in a row.
+  * Preserve auto build configuration from source package.
+  * This version checks and fails if the config file has erros
+    (Closes: #518006).
+  * init script is no longer silent (Closes: #543811).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 31 Jan 2015 12:31:26 +0100
+
+privoxy (3.0.23-1) experimental; urgency=low
+
+  * New upstream version 3.0.23-stable.
+  * Update all patches.
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 26 Jan 2015 14:15:47 +0100
+
+privoxy (3.0.22-1) unstable; urgency=low
+
+  * New upstream version 3.0.22-stable.
+  * Update all patches.
+  * Upgrade to Standards-Version 3.9.5 (no changes).
+  * Add upstream GPG signature check.
+  * Convert debian/copyright to DEP5.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 16 Nov 2014 18:38:40 +0100
+
+privoxy (3.0.21-7+deb8u1) jessie-security; urgency=high
+
+  * 40_CVE-2016-1982: Prevent invalid reads in case of corrupt
+    chunk-encoded content.
+  * 41_CVE-2016-1983: Remove empty Host headers in client requests.
+    Previously they would result in invalid reads.
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 22 Jan 2016 17:09:48 +0100
+
+privoxy (3.0.21-7) unstable; urgency=medium
+
+  * 37_CVE-2015-1380: denial of service.
+  * 38_CVE-2015-1381: multiple segmentation faults and memory leaks in the
+    pcrs code.
+  * 39_CVE-2015-1382: invalid read.
+  * These 3 patches Closes: #776490.
+
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 28 Jan 2015 19:46:42 +0100
+
+privoxy (3.0.21-5) unstable; urgency=low
+
+  * 34_CVE-2015-1030: Fix memory leak in rfc2553_connect_to().  CID 66382
+  * 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map 
+    only consists of one item.  CID 66394.
+  * 36_CVE-2015-1031-CID66376: pcrs_execute(): Consistently set *result to
+    NULL in case of errors.  Should make use-after-free in the caller less
+    likely.  CID 66391, CID 66376.
+  * These 3 patches Closes: #775167.
+  
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 12 Jan 2015 08:44:23 +0100
+
+privoxy (3.0.21-4) unstable; urgency=low
+
+  * Enable hardening=+all
+  * Hardcode PIDFile in privoxy.service, since this isn't allowed as
+    variable (Closes: #746262).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 10 May 2014 14:19:03 +0200
+
+privoxy (3.0.21-3) unstable; urgency=low
+
+  * When starting via systemd, do not run daemon as root, and honour log
+    file configuration. Thanks to Carlos Maddela for providing a patch
+    (Closes: #745274)
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 21 Apr 2014 17:24:01 +0200
+
+privoxy (3.0.21-2) unstable; urgency=low
+
+  * Use autotools-dev for arm64 compatibility (Closes: #727948).
+  * Depend on initscripts >= 2.87dsf-8, (Closes: #564563).
+  * Add systemd support (Thanks to Michael Stapelberg) (Closes: #639635).
+  * Upgrade to Standards-Version 3.9.5 (no changes).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 12 Apr 2014 12:54:58 +0200
+
+privoxy (3.0.21-1) unstable; urgency=low
+
+  * New upstream version 3.0.21-stable.
+  * This fixes CVE-2013-2503 (Closes: #702896).
+  * Update all patches.
+  * Upgrade to Standards-Version 3.9.4 (no changes).
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 05 Jul 2013 14:46:54 +0200
+
+privoxy (3.0.20-1) unstable; urgency=low
+
+  * New upstream version 3.0.20-beta.
+  * Update all patches.
+  * Remove 29_typos, which is incorporated upstream now.
+  * 33_manpage_hyphen: Replace all -- in man page by \-\- to make lintian
+    happy.
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 24 Jan 2013 17:40:51 +0100
+
+privoxy (3.0.19-2+deb7u3) wheezy-security; urgency=high
+
+  * 40_CVE-2016-1982: Prevent invalid reads in case of corrupt
+    chunk-encoded content.
+  * 41_CVE-2016-1983: Remove empty Host headers in client requests.
+    Previously they would result in invalid reads.
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 22 Jan 2016 17:51:41 +0100
+
+privoxy (3.0.19-2+deb7u2) wheezy-security; urgency=medium
+
+  * 38_CVE-2015-1381: multiple segmentation faults and memory leaks in the
+    pcrs code.
+  * 39_CVE-2015-1382: invalid read.
+  * These 2 patches Closes: #776490 in wheezy.
+
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 28 Jan 2015 20:33:47 +0100
+
+privoxy (3.0.19-2+deb7u1) stable-security; urgency=medium
+
+  * 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map 
+    only consists of one item.  CID 66394.
+  * 36_CVE-2015-1031-CID66376: pcrs_execute(): Consistently set *result to
+    NULL in case of errors.  Should make use-after-free in the caller less
+    likely.  CID 66391, CID 66376.
+  * These 2 patches Closes: #775167.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 17 Jan 2015 17:20:15 +0100
+
+privoxy (3.0.19-2) unstable; urgency=low
+
+  * Migrate from dpatch to 3.0 (quilt) format.
+  * Reformat all patches.
+  * Change build depenency from dpatch to debhelper (>= 9).
+  * Change debian/compat to "9".
+  * Complete rewrite of debian/rules.
+  * Now uses hardening via debhelper.
+  * Remove README.source.
+  * Update to Standards-Version 3.9.3 (no changes).
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 18 May 2012 21:24:55 +0200
+
 privoxy (3.0.19-1) unstable; urgency=low
 
   * New upstream version 3.0.19-stable.
@@ -27,6 +214,33 @@ privoxy (3.0.17-1) unstable; urgency=low
   * Install /etc/privoxy/user.filter
 
  -- Roland Rosenfeld <roland@debian.org>  Tue, 01 Mar 2011 21:10:26 +0100
+
+privoxy (3.0.16-1+deb6u2) squeeze-lts; urgency=high
+
+  * Non-maintainer upload by the Squeeze LTS Team. 
+  * CVE-2016-1982
+    Prevent invalid reads in case of corrupt chunk-encoded content
+  * CVE-2016-1983
+    Remove empty Host headers in client requests; resulting in 
+    invalid reads.
+ 
+ -- Thorsten Alteholz <debian@alteholz.de>  Fri, 22 Jan 2016 18:03:02 +0100
+
+privoxy (3.0.16-1+deb6u1) squeeze-lts; urgency=medium
+
+  * Non-maintainer upload by the Squeeze LTS team.
+  * Thanks to Roland Rosenfeld for maintaining privoxy and preparing these
+    patches:
+    - 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map
+      only consists of one item.  CID 66394.
+    - 36_CVE-2015-1031-CID66376: pcrs_execute(): Consistently set *result to
+      NULL in case of errors.  Should make use-after-free in the caller less
+      likely.  CID 66391, CID 66376.
+    - 38_CVE-2015-1381: multiple segmentation faults and memory leaks in the
+      pcrs code.
+    - 39_CVE-2015-1382: invalid read.
+
+ -- Holger Levsen <holger@debian.org>  Wed, 28 Jan 2015 19:44:30 +0100
 
 privoxy (3.0.16-1) unstable; urgency=low
 
@@ -627,4 +841,3 @@ privoxy (2.9.13-beta-1) unstable; urgency=low
   * Initial Release.
 
  -- Roland Rosenfeld <roland@debian.org>  Fri, 29 Mar 2002 11:52:03 +0100
-

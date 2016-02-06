@@ -1,14 +1,9 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 05_default_action.dpatch by Roland Rosenfeld <roland@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: Serveral changes/additons to default.action.
+Author: Roland Rosenfeld <roland@debian.org>
+Description: Serveral changes/additons to default.action.
 
-@DPATCH@
-diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/default.action.master privoxy/default.action.master
---- privoxy~/default.action.master
-+++ privoxy/default.action.master
-@@ -2259,6 +2259,9 @@
+--- a/default.action.master
++++ b/default.action.master
+@@ -2413,6 +2413,9 @@ schneegans.de/sv/\?url=referer
  #MASTER# REMARKS: Exclude per Debian bug report #377843
  # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
  blogs.msdn.com
@@ -18,12 +13,12 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/default.action.master priv
  
  {-filter{unsolicited-popups}}
  # Sticky Actions = -filter{unsolicited-popups}
-@@ -2312,6 +2315,11 @@
+@@ -2471,6 +2474,11 @@ tr.anp.se/
  {+filter{tiny-textforms}}
  .sourceforge.net/tracker
  
 +{-filter{ie-exploits}}
-+#MASTER# REMARKS: Allow %01 and %02 in URLs as they are used in Amazon's 
++#MASTER# REMARKS: Allow %01 and %02 in URLs as they are used in Amazon's
 +#MASTER# REMARKS: multi-page results see http://bugs.debian.org/243245
 +.amazon.de
 +

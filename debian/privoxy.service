@@ -1,0 +1,15 @@
+[Unit]
+Description=Privacy enhancing HTTP Proxy
+
+[Service]
+Environment=PIDFILE=/var/run/privoxy.pid
+Environment=OWNER=privoxy
+Environment=CONFIGFILE=/etc/privoxy/config
+Type=forking
+PIDFile=/var/run/privoxy.pid
+ExecStart=/usr/sbin/privoxy --pidfile $PIDFILE --user $OWNER $CONFIGFILE
+ExecStopPost=/bin/rm -f $PIDFILE
+SuccessExitStatus=15
+
+[Install]
+WantedBy=multi-user.target

@@ -6,11 +6,11 @@
 	compress
 	sharedscripts
 	postrotate
-	        if [ -x /usr/sbin/invoke-rc.d ]; then
-        	        invoke-rc.d privoxy restart > /dev/null
+	        if which invoke-rc.d >/dev/null 2>&1; then
+        	        invoke-rc.d privoxy rotate > /dev/null
 	        else
 			if [ -f /var/run/privoxy.pid ]; then
-	        	        /etc/init.d/privoxy restart > /dev/null
+	        	        /etc/init.d/privoxy rotate > /dev/null
 			fi
 	        fi
 	endscript

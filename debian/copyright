@@ -1,47 +1,34 @@
-This package was debianized by Roland Rosenfeld <roland@debian.org> on
-Fri, 29 Mar 2002 11:52:03 +0100.
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Privoxy
+Upstream-Contact: Privoxy team <ijbswa-developers@lists.sourceforge.net>
+Source: http://sourceforge.net/projects/ijbswa/files/Sources/
 
-It was downloaded from http://www.privoxy.org/ and
-http://sourceforge.net/project/showfiles.php?group_id=11118
-
-Upstream Authors: ijbswa-developers@lists.sourceforge.net
-
-Current Development Team:
-
- Hal Burgiss (docs)
- Jon Foster
- Andreas Oesterhelt
- David Schmidt (OS/2, Mac OSX ports)
-
-Originally developed by:
-
- Junkbusters Corp.
- Anonymous Coders
-
-Copyright:     Written by and Copyright (C) 2001-2010 the
-               Privoxy team.  http://www.privoxy.org/
-
-               Based on the Internet Junkbuster originally written
-               by and Copyright (C) 1997 Anonymous Coders and 
-               Junkbusters Corporation.  http://www.junkbusters.com
-
-               This program is free software; you can redistribute it 
-               and/or modify it under the terms of the GNU General
-               Public License as published by the Free Software
-               Foundation; either version 2 of the License, or (at
-               your option) any later version.
-
-               This program is distributed in the hope that it will
-               be useful, but WITHOUT ANY WARRANTY; without even the
-               implied warranty of MERCHANTABILITY or FITNESS FOR A
-               PARTICULAR PURPOSE.  See the GNU General Public
-               License for more details.
-
-               The GNU General Public License should be included with
-               this file.  If not, you can view it at
-               http://www.gnu.org/copyleft/gpl.html
-               or write to the Free Software Foundation, Inc., 
-               51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
-
-The complete GNU General Public License can be found at
-/usr/share/common-licenses/GPL-2
+Files: *
+Copyright: Written by and Copyright (C) 2001-2014 the Privoxy team.
+           http://www.privoxy.org/
+License: GPL-2
+ Based on the Internet Junkbuster originally written
+ by and Copyright (C) 1997 Anonymous Coders and
+ Junkbusters Corporation.  http://www.junkbusters.com
+ .
+ This program is free software; you can redistribute it
+ and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software
+ Foundation; either version 2 of the License, or (at
+ your option) any later version.
+ .
+ This program is distributed in the hope that it will
+ be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A
+ PARTICULAR PURPOSE.  See the GNU General Public
+ License for more details.
+ .
+ The GNU General Public License should be included with
+ this file.  If not, you can view it at
+ http://www.gnu.org/copyleft/gpl.html
+ or write to the Free Software Foundation, Inc.,
+ 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.

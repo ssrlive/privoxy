@@ -1,14 +1,10 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 32_bind_fixup.dpatch by  <roland@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: Work around bind problems on startup (Closes: #534735)
+Author: Roland Rosenfeld <roland@debian.org>
+Description: Work around bind problems on startup (Closes: #534735)
+Bug-Debian: http://bugs.debian.org/534735
 
-@DPATCH@
-diff -urNad '--exclude=CVS' '--exclude=.svn' privoxy~/jbsockets.c privoxy/jbsockets.c
---- privoxy~/jbsockets.c
-+++ privoxy/jbsockets.c
-@@ -757,20 +757,7 @@
+--- a/jbsockets.c
++++ b/jbsockets.c
+@@ -867,20 +867,7 @@ int bind_port(const char *hostnam, int p
     }
  
     memset(&hints, 0, sizeof(struct addrinfo));

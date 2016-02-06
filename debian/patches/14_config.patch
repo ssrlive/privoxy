@@ -1,0 +1,41 @@
+Author: Roland Rosenfeld <roland@debian.org>
+Description: Several Debian specific changes to config file
+
+--- a/config
++++ b/config
+@@ -1,6 +1,6 @@
+-#        Sample Configuration File for Privoxy 3.0.24
++#        Sample Configuration File for Privoxy
+ #
+-#  $Id: config,v 1.108 2016/01/17 14:33:03 fabiankeil Exp $
++#  Id: config,v
+ #
+ #  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
+ #
+@@ -128,7 +128,7 @@
+ #          config file, because it is used while the config file is
+ #          being read.
+ #
+-#user-manual http://www.privoxy.org/user-manual/
++user-manual /usr/share/doc/privoxy/user-manual
+ #
+ #  1.2. trust-info-url
+ #  ====================
+@@ -260,7 +260,7 @@
+ #
+ #      No trailing "/", please.
+ #
+-confdir .
++confdir /etc/privoxy
+ #
+ #  2.2. templdir
+ #  ==============
+@@ -345,7 +345,7 @@ confdir .
+ #
+ #      No trailing "/", please.
+ #
+-logdir .
++logdir /var/log/privoxy
+ #
+ #  2.5. actionsfile
+ #  =================
