@@ -1,6 +1,6 @@
 # Note:  Makefile is built automatically from Makefile.in
 #
-# $Id: GNUmakefile.in,v 1.233 2016/01/23 11:58:18 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.234 2016/02/02 13:08:03 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -580,7 +580,7 @@ generate-config-file:
 #
 # Webserver
 #
-# moves dokumentation to webserver
+# moves documentation to webserver
 #
 #############################################################################
 sf-shell:
