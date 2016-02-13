@@ -1,4 +1,4 @@
-$Id: TODO,v 1.141 2016/01/21 15:57:30 fabiankeil Exp $
+$Id: TODO,v 1.142 2016/02/02 13:12:33 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -381,12 +381,6 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 131) The handle-as-empty-doc-returns-ok directive should be replaced with
      an action so the behaviour can be enabled on a per-request basis.
-     Interested donors: 1.
-
-132) Provide a Tor hidden service to reach the Privoxy website.
-     Work in progress: http://jvauzb4sb3bwlsnc.onion/
-     This hidden service serves a copy of the www.privoxy.org content
-     (filtered through Privoxy to replace some absolute URLs).
      Interested donors: 1.
 
 133) Consider allowing bitcoin donations.
