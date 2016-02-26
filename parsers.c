@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.306 2016/01/16 12:33:36 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.307 2016/01/17 14:31:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -387,7 +387,7 @@ jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
 void clear_iob(struct iob *iob)
 {
    free(iob->buf);
-   memset(iob, '\0', sizeof(*iob));;
+   memset(iob, '\0', sizeof(*iob));
 }
 
 
