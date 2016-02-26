@@ -1,4 +1,4 @@
-$Id: TODO,v 1.142 2016/02/02 13:12:33 fabiankeil Exp $
+$Id: TODO,v 1.143 2016/02/13 11:18:15 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -443,6 +443,8 @@ http://www.privoxy.org/faq/general.html#DONATE
      used platforms. Adding a couple of examples should also be useful for
      technical users (like Privoxy developers) who want to install or test
      Privoxy on platforms they are not familiar with.
+
+146) Once #145 is implemented, allow clients to specify the time.
 
 ##########################################################################
 
