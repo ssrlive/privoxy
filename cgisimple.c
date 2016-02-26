@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.132 2015/11/06 13:38:13 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.133 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -178,7 +178,7 @@ jb_err cgi_die (struct client_state *csp,
       "<head>\n"
       " <title>Privoxy shutdown request received</title>\n"
       " <link rel=\"shortcut icon\" href=\"" CGI_PREFIX "error-favicon.ico\" type=\"image/x-icon\">\n"
-      " <link rel=\"stylesheet\" type=\"text/css\" href=\"http://config.privoxy.org/send-stylesheet\">\n"
+      " <link rel=\"stylesheet\" type=\"text/css\" href=\"" CGI_PREFIX "send-stylesheet\">\n"
       "</head>\n"
       "<body>\n"
       "<h1>Privoxy shutdown request received</h1>\n"
