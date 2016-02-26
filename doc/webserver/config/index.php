@@ -8,7 +8,7 @@
                  This file belongs in
                  ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.5 2006/07/18 14:48:52 david__schmidt Exp $
+  $Id: index.php,v 1.6 2016/02/26 12:31:28 fabiankeil Exp $
 
   Written by and Copyright (C) 2001 the SourceForge
   Privoxy team. http://www.privoxy.org/
@@ -84,8 +84,7 @@ manual</a> for details.</p></li>
 
 <p>If you have read the <a href="http://www.privoxy.org/user-manual/">user
 manual</a> and still have trouble, feel free to <a
-href="http://sourceforge.net/tracker/?group_id=11118&atid=211118">submit
-a support request</a> to get help.</p>
+href="http://www.privoxy.org/user-manual/contact.html">contact us to get help</a>.</p>
 
 </body>
 </html>
