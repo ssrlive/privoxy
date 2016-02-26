@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.113 2016/02/13 11:18:27 fabiankeil Exp $
+ $Id: faq.sgml,v 2.114 2016/02/26 12:27:32 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.113 2016/02/13 11:18:27 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.114 2016/02/26 12:27:32 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1620,6 +1620,13 @@ delays in page requests. What's wrong?</title>
  your browser didn't use <application>Privoxy</application> for the request,
  hence it could not be intercepted, and you have accessed the <emphasis>real</emphasis>
  web site at config.privoxy.org.
+</para>
+<para>
+ Note that config.privoxy.org resolves to a public IP address.
+ If you use config.privoxy.org as ping or traceroute target you will
+ reach the system on the Internet (Privoxy can't intercept ICMP requests).
+ If you want to ping the system Privoxy runs on,
+ you should use its IP address or local DNS name (if it has got one).
 </para>
 
 </sect2>
