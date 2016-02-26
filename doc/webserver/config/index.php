@@ -8,7 +8,7 @@
                  This file belongs in
                  ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.4.2.3 2003/10/16 13:40:52 oes Exp $
+  $Id: index.php,v 1.5 2006/07/18 14:48:52 david__schmidt Exp $
 
   Written by and Copyright (C) 2001 the SourceForge
   Privoxy team. http://www.privoxy.org/
@@ -81,13 +81,6 @@ refer to the
 chapter</a> of the <a href="http://www.privoxy.org/user-manual/">user
 manual</a> for details.</p></li>
 </ul>
-
-<p><small>Until version 2.9.13, Privoxy was also known as Internet
-Junkbuster. If you recently upgraded, then the web-based interface has
-moved - it is now at <a
-href="http://config.privoxy.org/">http://config.privoxy.org/</a>
-(Short form: <a href="http://ijbswa.sourceforge.net/config/">p.p</a>
-[Privoxy Proxy]).</small></p>
 
 <p>If you have read the <a href="http://www.privoxy.org/user-manual/">user
 manual</a> and still have trouble, feel free to <a
