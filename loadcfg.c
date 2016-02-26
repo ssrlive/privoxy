@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.145 2016/01/16 12:33:36 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.146 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -684,7 +684,7 @@ struct configuration_spec * load_config(void)
             int compression_level = parse_numeric_value(cmd, arg);
             if (-1 <= compression_level && compression_level <= 9)
             {
-               config->compression_level = compression_level;;
+               config->compression_level = compression_level;
             }
             else
             {
