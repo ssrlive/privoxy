@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.99 2014/06/02 06:22:21 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.100 2015/01/24 16:40:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -288,14 +288,7 @@ int check_file_changed(const struct file_list * current,
       return 0;
    }
 
-   fs = (struct file_list *)zalloc(sizeof(struct file_list));
-   if (fs == NULL)
-   {
-      /* Out of memory error */
-      return 1;
-   }
-
-
+   fs = zalloc_or_die(sizeof(struct file_list));
    fs->filename = strdup(filename);
    fs->lastmodified = statbuf->st_mtime;
 
@@ -848,11 +841,7 @@ int load_trustfile(struct client_state *csp)
       goto load_trustfile_error;
    }
 
-   fs->f = bl = (struct block_spec *)zalloc(sizeof(*bl));
-   if (bl == NULL)
-   {
-      goto load_trustfile_error;
-   }
+   fs->f = bl = zalloc_or_die(sizeof(*bl));
 
    if ((fp = fopen(csp->config->trustfile, "r")) == NULL)
    {
@@ -895,11 +884,7 @@ int load_trustfile(struct client_state *csp)
       }
 
       /* allocate a new node */
-      if ((b = zalloc(sizeof(*b))) == NULL)
-      {
-         fclose(fp);
-         goto load_trustfile_error;
-      }
+      b = zalloc_or_die(sizeof(*b));
 
       /* add it to the list */
       b->next  = bl->next;
@@ -1183,11 +1168,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
        */
       if (new_filter != FT_INVALID_FILTER)
       {
-         new_bl = (struct re_filterfile_spec  *)zalloc(sizeof(*bl));
-         if (new_bl == NULL)
-         {
-            goto load_re_filterfile_error;
-         }
+         new_bl = zalloc_or_die(sizeof(*bl));
          if (new_filter == FT_CONTENT_FILTER)
          {
             new_bl->name = chomp(buf + 7);

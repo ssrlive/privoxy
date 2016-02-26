@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.439 2016/01/16 12:33:03 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.440 2016/01/16 12:33:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3966,13 +3966,7 @@ static void listen_loop(void)
       }
 #endif
 
-      csp_list = (struct client_states *)zalloc(sizeof(*csp_list));
-      if (NULL == csp_list)
-      {
-         log_error(LOG_LEVEL_FATAL,
-            "malloc(%d) for csp_list failed: %E", sizeof(*csp_list));
-         continue;
-      }
+      csp_list = zalloc_or_die(sizeof(*csp_list));
       csp = &csp_list->csp;
 
       log_error(LOG_LEVEL_CONNECT,

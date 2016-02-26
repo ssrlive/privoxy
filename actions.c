@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.94 2016/01/16 12:29:30 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.95 2016/01/16 12:33:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1212,13 +1212,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
       return 1; /* never get here */
    }
 
-   fs->f = last_perm = (struct url_actions *)zalloc(sizeof(*last_perm));
-   if (last_perm == NULL)
-   {
-      log_error(LOG_LEVEL_FATAL, "can't load actions file '%s': out of memory!",
-                csp->config->actions_file[fileid]);
-      return 1; /* never get here */
-   }
+   fs->f = last_perm = zalloc_or_die(sizeof(*last_perm));
 
    if ((fp = fopen(csp->config->actions_file[fileid], "r")) == NULL)
    {
@@ -1362,15 +1356,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
                cur_action = NULL;
             }
             cur_action_used = 0;
-            cur_action = (struct action_spec *)zalloc(sizeof(*cur_action));
-            if (cur_action == NULL)
-            {
-               fclose(fp);
-               log_error(LOG_LEVEL_FATAL,
-                  "can't load actions file '%s': out of memory",
-                  csp->config->actions_file[fileid]);
-               return 1; /* never get here */
-            }
+            cur_action = zalloc_or_die(sizeof(*cur_action));
             init_action(cur_action);
 
             /*
@@ -1486,14 +1472,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
             return 1; /* never get here */
          }
 
-         if ((new_alias = zalloc(sizeof(*new_alias))) == NULL)
-         {
-            fclose(fp);
-            log_error(LOG_LEVEL_FATAL,
-               "can't load actions file '%s': out of memory!",
-               csp->config->actions_file[fileid]);
-            return 1; /* never get here */
-         }
+         new_alias = zalloc_or_die(sizeof(*new_alias));
 
          /* Eat any the whitespace before the '=' */
          end--;
@@ -1544,14 +1523,7 @@ static int load_one_actions_file(struct client_state *csp, int fileid)
          /* it's an URL pattern */
 
          /* allocate a new node */
-         if ((perm = zalloc(sizeof(*perm))) == NULL)
-         {
-            fclose(fp);
-            log_error(LOG_LEVEL_FATAL,
-               "can't load actions file '%s': out of memory!",
-               csp->config->actions_file[fileid]);
-            return 1; /* never get here */
-         }
+         perm = zalloc_or_die(sizeof(*perm));
 
          perm->action = cur_action;
          cur_action_used = 1;

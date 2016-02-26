@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.131 2014/10/18 11:28:49 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.132 2015/11/06 13:38:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1985,12 +1985,9 @@ static jb_err load_file(const char *filename, char **buffer, size_t *length)
          filename);
    }
 
-   *buffer = (char *)zalloc(*length + 1);
-   if (NULL == *buffer)
-   {
-      err = JB_ERR_MEMORY;
-   }
-   else if (1 != fread(*buffer, *length, 1, fp))
+   *buffer = zalloc_or_die(*length + 1);
+
+   if (1 != fread(*buffer, *length, 1, fp))
    {
       /*
        * May theoretically happen if the file size changes between

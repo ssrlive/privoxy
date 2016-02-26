@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.144 2015/12/27 12:50:42 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.145 2016/01/16 12:33:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -484,15 +484,7 @@ struct configuration_spec * load_config(void)
    global_toggle_state = 1;
 #endif /* def FEATURE_TOGGLE */
 
-   fs->f = config = (struct configuration_spec *)zalloc(sizeof(*config));
-
-   if (NULL == config)
-   {
-      freez(fs->filename);
-      freez(fs);
-      log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-      return NULL;
-   }
+   fs->f = config = zalloc_or_die(sizeof(*config));
 
    /*
     * This is backwards from how it's usually done.
@@ -766,14 +758,7 @@ struct configuration_spec * load_config(void)
             }
 
             /* allocate a new node */
-            cur_acl = (struct access_control_list *) zalloc(sizeof(*cur_acl));
-
-            if (cur_acl == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-               /* Never get here - LOG_LEVEL_FATAL causes program exit */
-               break;
-            }
+            cur_acl = zalloc_or_die(sizeof(*cur_acl));
             cur_acl->action = ACL_DENY;
 
             if (acl_addr(vec[0], cur_acl->src) < 0)
@@ -964,14 +949,7 @@ struct configuration_spec * load_config(void)
             }
 
             /* allocate a new node */
-            cur_fwd = zalloc(sizeof(*cur_fwd));
-            if (cur_fwd == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-               /* Never get here - LOG_LEVEL_FATAL causes program exit */
-               break;
-            }
-
+            cur_fwd = zalloc_or_die(sizeof(*cur_fwd));
             cur_fwd->type = SOCKS_NONE;
 
             /* Save the URL pattern */
@@ -1020,14 +998,7 @@ struct configuration_spec * load_config(void)
             }
 
             /* allocate a new node */
-            cur_fwd = zalloc(sizeof(*cur_fwd));
-            if (cur_fwd == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-               /* Never get here - LOG_LEVEL_FATAL causes program exit */
-               break;
-            }
-
+            cur_fwd = zalloc_or_die(sizeof(*cur_fwd));
             cur_fwd->type = SOCKS_4;
 
             /* Save the URL pattern */
@@ -1092,13 +1063,7 @@ struct configuration_spec * load_config(void)
             }
 
             /* allocate a new node */
-            cur_fwd = zalloc(sizeof(*cur_fwd));
-            if (cur_fwd == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-               /* Never get here - LOG_LEVEL_FATAL causes program exit */
-               break;
-            }
+            cur_fwd = zalloc_or_die(sizeof(*cur_fwd));
 
             if (directive_hash == hash_forward_socks4a)
             {
@@ -1291,14 +1256,7 @@ struct configuration_spec * load_config(void)
             }
 
             /* allocate a new node */
-            cur_acl = (struct access_control_list *) zalloc(sizeof(*cur_acl));
-
-            if (cur_acl == NULL)
-            {
-               log_error(LOG_LEVEL_FATAL, "can't allocate memory for configuration");
-               /* Never get here - LOG_LEVEL_FATAL causes program exit */
-               break;
-            }
+            cur_acl = zalloc_or_die(sizeof(*cur_acl));
             cur_acl->action = ACL_PERMIT;
 
             if (acl_addr(vec[0], cur_acl->src) < 0)
@@ -1758,7 +1716,7 @@ struct configuration_spec * load_config(void)
     *
     * Need to set up a fake csp, so they can get to the config.
     */
-   fake_csp = (struct client_state *) zalloc (sizeof(*fake_csp));
+   fake_csp = zalloc_or_die(sizeof(*fake_csp));
    fake_csp->config = config;
 
    if (run_loader(fake_csp))

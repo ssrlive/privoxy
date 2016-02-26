@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.198 2016/01/16 12:30:43 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.199 2016/01/16 12:33:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -1954,12 +1954,8 @@ static char *gif_deanimate_response(struct client_state *csp)
 
    size = (size_t)(csp->iob->eod - csp->iob->cur);
 
-   if (  (NULL == (in =  (struct binbuffer *)zalloc(sizeof *in )))
-      || (NULL == (out = (struct binbuffer *)zalloc(sizeof *out))) )
-   {
-      log_error(LOG_LEVEL_DEANIMATE, "failed! (no mem)");
-      return NULL;
-   }
+   in =  zalloc_or_die(sizeof(*in));
+   out = zalloc_or_die(sizeof(*out));
 
    in->buffer = csp->iob->cur;
    in->size = size;
@@ -2424,14 +2420,7 @@ static const struct forward_spec *get_forward_override_settings(struct client_st
     * the lifetime of this request. Save its location
     * in csp as well, so sweep() can free it later on.
     */
-   fwd = csp->fwd = zalloc(sizeof(*fwd));
-   if (NULL == fwd)
-   {
-      log_error(LOG_LEVEL_FATAL,
-         "can't allocate memory for forward-override{%s}", forward_override_line);
-      /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      return NULL;
-   }
+   fwd = csp->fwd = zalloc_or_die(sizeof(*fwd));
 
    vec_count = ssplit(forward_settings, " \t", vec, SZ(vec));
    if ((vec_count == 2) && !strcasecmp(vec[0], "forward"))
