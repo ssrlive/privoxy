@@ -8,7 +8,7 @@
                  This file belongs in
                  ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.6 2016/02/26 12:31:28 fabiankeil Exp $
+  $Id: index.php,v 1.7 2016/02/26 12:31:38 fabiankeil Exp $
 
   Written by and Copyright (C) 2001 the SourceForge
   Privoxy team. http://www.privoxy.org/
@@ -47,7 +47,7 @@
 
 <body>
 
-<h1><a href="http://privoxy.org/">Privoxy</a> is not being used</h1>
+<h1><a href="http://www.privoxy.org/">Privoxy</a> is not being used</h1>
 
 <p>The fact that you are reading this page shows that Privoxy was
 not used in the process of accessing it. Had the request been
