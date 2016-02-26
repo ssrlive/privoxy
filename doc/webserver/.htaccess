@@ -4,8 +4,7 @@
 #
 # Intercepts requests for these servers:
 #    http://ijbswa.sourceforge.net/
-#    http://privoxy.com/
-#    http://www.privoxy.com/
+#    http://www.privoxy.org/
 #    http://privoxy.org/
 #
 # And redirects all requests to the canonical web server:
