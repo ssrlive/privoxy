@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.100 2015/01/24 16:40:21 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.101 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -289,7 +289,7 @@ int check_file_changed(const struct file_list * current,
    }
 
    fs = zalloc_or_die(sizeof(struct file_list));
-   fs->filename = strdup(filename);
+   fs->filename = strdup_or_die(filename);
    fs->lastmodified = statbuf->st_mtime;
 
    if (fs->filename == NULL)
@@ -530,30 +530,15 @@ jb_err edit_read_line(FILE *fp,
 
    if (raw_out)
    {
-      raw = strdup("");
-      if (NULL == raw)
-      {
-         return JB_ERR_MEMORY;
-      }
+      raw = strdup_or_die("");
    }
    if (prefix_out)
    {
-      prefix = strdup("");
-      if (NULL == prefix)
-      {
-         freez(raw);
-         return JB_ERR_MEMORY;
-      }
+      prefix = strdup_or_die("");
    }
    if (data_out)
    {
-      data = strdup("");
-      if (NULL == data)
-      {
-         freez(raw);
-         freez(prefix);
-         return JB_ERR_MEMORY;
-      }
+      data = strdup_or_die("");
    }
 
    /* Main loop.  Loop while we need more data & it's not EOF. */
@@ -1195,15 +1180,16 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
             new_bl->description = html_encode(chomp(new_bl->description));
             if (NULL == new_bl->description)
             {
-               new_bl->description = strdup("Out of memory while encoding this filter's description to HTML");
+               new_bl->description = strdup_or_die("Out of memory while "
+                  "encoding filter description to HTML");
             }
          }
          else
          {
-            new_bl->description = strdup("No description available for this filter");
+            new_bl->description = strdup_or_die("No description available");
          }
 
-         new_bl->name = strdup(chomp(new_bl->name));
+         new_bl->name = strdup_or_die(chomp(new_bl->name));
 
          /*
           * If this is the first filter block, chain it
