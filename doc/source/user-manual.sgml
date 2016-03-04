@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.202 2016/01/23 13:57:17 diem Exp $
+ $Id: user-manual.sgml,v 2.203 2016/02/26 12:27:32 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.202 2016/01/23 13:57:17 diem Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.203 2016/02/26 12:27:32 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1408,7 +1408,7 @@ for details.
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
-<sect2>
+<sect2 id="control-with-webbrowser">
 <title>Controlling Privoxy with Your Web Browser</title>
 <para>
  <application>Privoxy</application>'s user interface can be reached through the special
@@ -1873,7 +1873,7 @@ for details.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
+<sect2 id="right-mix">
 <title>Finding the Right Mix</title>
 <para>
  Note that some <link linkend="actions">actions</link>, like cookie suppression
@@ -1898,7 +1898,7 @@ for details.
 </sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
+<sect2 id="how-to-edit">
 <title>How to Edit</title>
 <para>
  The easiest way to edit the actions files is with a browser by
@@ -2219,7 +2219,7 @@ for details.
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3><title>The Path Pattern</title>
+<sect3 id="path-pattern"><title>The Path Pattern</title>
 
 <para>
  <application>Privoxy</application> uses <quote>modern</quote> POSIX 1003.2
@@ -5858,7 +5858,7 @@ TAG:^image/
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3>
+<sect3 id="summary">
 <title>Summary</title>
 <para>
  Note that many of these actions have the potential to cause a page to
@@ -6001,7 +6001,7 @@ hal stop here
  and <filename>user.action</filename> file and see how all these pieces come together:
 </para>
 
-<sect3>
+<sect3 id="match-all">
 <title>match-all.action</title>
 <para>
  Remember <emphasis>all actions are disabled when matching starts</emphasis>,
@@ -6044,7 +6044,7 @@ hal stop here
 </para>
 </sect3>
 
-<sect3>
+<sect3 id="default-action">
 <title>default.action</title>
 
 <para>
@@ -6333,7 +6333,7 @@ wiki.
 
 </sect3>
 
-<sect3><title>user.action</title>
+<sect3 id="user-action"><title>user.action</title>
 
 <para>
  So far we are painting with a broad brush by setting general policies,
@@ -6747,7 +6747,7 @@ stupid-server.example.com/</screen>
 
 <!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
 
-<sect2><title>Filter File Tutorial</title>
+<sect2 id="filter-file-tut"><title>Filter File Tutorial</title>
 <para>
  Now, let's complete our <quote>foo</quote> content filter. We have already defined
  the heading, but the jobs are still missing. Since all it does is to replace
@@ -7917,7 +7917,7 @@ Requests</title>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect2>
+<sect2 id="internal-pages">
 <title>Privoxy's Internal Pages</title>
 
 <para>
