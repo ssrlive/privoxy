@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: buildsource.sgml,v 2.18 2009/02/23 09:03:12 fabiankeil Exp $
+ $Id: buildsource.sgml,v 2.19 2011/09/04 11:10:12 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -144,8 +144,7 @@
  ./configure  --disable-toggle  --disable-editor  --disable-force</screen>
 </para>
 <para>
-Then build as above. In Privoxy 3.0.7 and later, all of these options
-can also be disabled through the configuration file.
+ Note that all of these options can also be disabled through the configuration file.
 </para>
 <para>
  <emphasis>WARNING:</emphasis> If installing as root, the install will fail
