@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.115 2016/02/26 12:32:39 fabiankeil Exp $
+ $Id: faq.sgml,v 2.116 2016/02/26 12:33:18 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.115 2016/02/26 12:32:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.116 2016/02/26 12:33:18 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -236,8 +236,8 @@ Privoxy work? </title>
 </sect2>
 
 
-<sect2 renderas="sect3">
-<title id="whyprivoxy">Why <quote>Privoxy</quote>? Why change the name from
+<sect2 renderas="sect3" id="whyprivoxy">
+<title>Why <quote>Privoxy</quote>? Why change the name from
 Junkbuster at all?</title>
 <para>
  Though outdated, Junkbusters Corporation continued to offer their original
@@ -289,8 +289,7 @@ from the old Junkbuster?</title>
 </sect2>
 
 <sect2 renderas="sect3" id="whatsanad">
-<title id="knows">How does Privoxy know what is
-an ad, and what is not?</title>
+<title>How does Privoxy know what is an ad, and what is not?</title>
 <para>
  <application>Privoxy</application>'s approach to blocking ads is twofold:
 </para>
@@ -318,8 +317,8 @@ an ad, and what is not?</title>
 </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="mistakes">Can Privoxy make mistakes?
+<sect2 renderas="sect3" id="mistakes">
+<title>Can Privoxy make mistakes?
 This does not sound very scientific.</title>
 <para>
  Actually, it's a black art ;-) And yes, it is always possible to have a broad
@@ -338,8 +337,8 @@ This does not sound very scientific.</title>
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="configornot">Will I have to configure Privoxy
+<sect2 renderas="sect3" id="configornot">
+<title>Will I have to configure Privoxy
  before I can use it?</title>
 <para>
  That depends on your expectations.
@@ -463,9 +462,9 @@ warranty? Registration?</title>
 </para>
 </sect2>
 
-<sect2 renderas="sect3" id="help-the-developers"><title id="jointeam">I would like to help you, what can I do?</title>
+<sect2 renderas="sect3" id="help-the-developers"><title>I would like to help you, what can I do?</title>
 
-<sect3 renderas="sect4" id="participate"><title id="jointeam-work">Would you like to participate?</title>
+<sect3 renderas="sect4" id="participate"><title>Would you like to participate?</title>
 <para>
    Well, we <emphasis>always</emphasis> need help. There is something for
    everybody who wants to help us. We welcome new developers, packagers,
@@ -752,8 +751,8 @@ Privoxy is running and being used.</title>
 <!--   ~~~~~       New section      ~~~~~     -->
 
 <sect1 id="configuration"><title>Configuration</title>
-<sect2 renderas="sect3">
-<title id="actionsfile">What exactly is an <quote>actions</quote> file?</title>
+<sect2 renderas="sect3" id="actionsfile">
+<title>What exactly is an <quote>actions</quote> file?</title>
 
 <para>
  &my-app; utilizes the concept of <quote>
@@ -797,8 +796,8 @@ some of these <quote>actions</quote>.</title>
 </sect2>
 
 
-<sect2 renderas="sect3">
-<title id="actconfig">How are actions files configured? What is the easiest
+<sect2 renderas="sect3" id="actconfig">
+<title>How are actions files configured? What is the easiest
 way to do this?</title>
 
 <para>
@@ -983,8 +982,8 @@ with a browser? Does that not raise security issues?</title>
 </sect2>
 
 
-<sect2 renderas="sect3">
-<title id="filterfile">What is the <filename>default.filter</filename> file? What is a <quote>filter</quote>?</title>
+<sect2 renderas="sect3" id="filterfile">
+<title>What is the <filename>default.filter</filename> file? What is a <quote>filter</quote>?</title>
 <para>
  The <ulink url="../user-manual/filter-file.html"><filename>default.filter</filename></ulink>
  file is where <emphasis>filters</emphasis> as supplied by the developers are defined.
@@ -1102,8 +1101,8 @@ with a browser? Does that not raise security issues?</title>
 </sect2>
 
 
-<sect2 renderas="sect3">
-<title id="noseeum">Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</title>
+<sect2 renderas="sect3" id="noseeum">
+<title>Instead of ads, now I get a checkerboard pattern. I don't want to see anything.</title>
 <para>
  The replacement for blocked images can be controlled with the <ulink
  url="../user-manual/actions-file.html#SET-IMAGE-BLOCKER"><literal>set-image-blocker</literal>
@@ -1125,8 +1124,8 @@ with a browser? Does that not raise security issues?</title>
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="whyseeum">Why would anybody want to see a checkerboard pattern?</title>
+<sect2 renderas="sect3" id="whyseeum">
+<title>Why would anybody want to see a checkerboard pattern?</title>
 <para>
  Remember that <link linkend="whatsanad">telling which image is an ad and which
  isn't</link>, is an educated guess. While we hope that the standard configuration
@@ -1140,8 +1139,8 @@ with a browser? Does that not raise security issues?</title>
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="blockedbytext">I see some images being replaced with text
+<sect2 renderas="sect3" id="blockedbytext">
+<title>I see some images being replaced with text
 instead of the checkerboard image. Why and how do I get rid of this?</title>
 <para>
  This happens when the banners are not embedded in the HTML code of the
@@ -1530,8 +1529,8 @@ the <emphasis>BLOCKED</emphasis> page?</title>
 
 <sect1 id="misc"><title>Miscellaneous</title>
 
-<sect2 renderas="sect3">
-<title id="slowsme">How much does Privoxy slow my browsing down? This
+<sect2 renderas="sect3" id="slowsme">
+<title>How much does Privoxy slow my browsing down? This
 has to add extra time to browsing.</title>
 <para>
  How much of an impact depends on many things, including the CPU of the host
@@ -1711,8 +1710,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="anonforsure">Can Privoxy guarantee I am anonymous?</title>
+<sect2 renderas="sect3" id="anonforsure">
+<title>Can Privoxy guarantee I am anonymous?</title>
 <para>
  No. Your chances of remaining anonymous are improved, but unless you
  <ulink url="#TOR">chain <application>Privoxy</application> with <application>Tor</application></ulink>
@@ -1755,8 +1754,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="proxytest">A test site says I am not using a Proxy.</title>
+<sect2 renderas="sect3" id="proxytest">
+<title>A test site says I am not using a Proxy.</title>
 <para>
  Good! Actually, they are probably testing for some other kinds of proxies.
  Hiding yourself completely would require additional steps.
@@ -1868,8 +1867,8 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="sitebreak">Might some things break because header information or
+<sect2 renderas="sect3" id="sitebreak">
+<title>Might some things break because header information or
 content is being altered?</title>
 
 <para>
@@ -1918,8 +1917,8 @@ content is being altered?</title>
 </sect2>
 
 
-<sect2 renderas="sect3">
-<title id="caching">Can Privoxy act as a <quote>caching</quote> proxy to
+<sect2 renderas="sect3" id="caching">
+<title>Can Privoxy act as a <quote>caching</quote> proxy to
 speed up web browsing?</title>
 <para>
  No, it does not have this ability at all. You want something like
@@ -1933,8 +1932,8 @@ speed up web browsing?</title>
 </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="firewall">What about as a firewall? Can Privoxy protect me?</title>
+<sect2 renderas="sect3" id="firewall">
+<title>What about as a firewall? Can Privoxy protect me?</title>
 <para>
  Not in the way you mean, or in the way some firewall vendors claim they can.
  <application>Privoxy</application> can help protect your privacy, but can't
@@ -1943,8 +1942,8 @@ speed up web browsing?</title>
 </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="wasted">I have large empty spaces / a checkerboard pattern now where
+<sect2 renderas="sect3" id="wasted">
+<title>I have large empty spaces / a checkerboard pattern now where
 ads used to be. Why?</title>
 <para>
  It is technically possible to eliminate banners and ads in a way that frees
@@ -1972,8 +1971,8 @@ ads used to be. Why?</title>
 </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="ssl">How can Privoxy filter Secure (HTTPS) URLs?</title>
+<sect2 renderas="sect3" id="ssl">
+<title>How can Privoxy filter Secure (HTTPS) URLs?</title>
 <para>
  Since secure HTTP connections are encrypted SSL sessions between your browser
  and the secure site, and are meant to be reliably <emphasis>secure</emphasis>,
@@ -2004,8 +2003,8 @@ ads used to be. Why?</title>
 
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="secure">Privoxy runs as a <quote>server</quote>. How
+<sect2 renderas="sect3" id="secure">
+<title>Privoxy runs as a <quote>server</quote>. How
 secure is it? Do I need to take any special precautions?</title>
 <para>
  On Unix-like systems, <application>Privoxy</application> can run as a non-privileged
@@ -2277,8 +2276,8 @@ and related issues?</title>
 <sect1 id="trouble">
 <title>Troubleshooting</title>
 
-<sect2 renderas="sect3">
-<title id="refused">I cannot connect to any websites. Or, I am getting
+<sect2 renderas="sect3" id="refused">
+<title>I cannot connect to any websites. Or, I am getting
 <quote>connection refused</quote> message with every web page. Why?</title>
 <para>
  There are several possibilities:
@@ -2319,8 +2318,8 @@ and related issues?</title>
  </para>
 </sect2>
 
-<sect2 renderas="sect3">
-<title id="flushit">I just added a new rule, but the steenkin ad is
+<sect2 renderas="sect3" id="flushit">
+<title>I just added a new rule, but the steenkin ad is
 still getting through. How?</title>
 <para>
  If the ad had been displayed before you added its URL, it will probably be
@@ -2402,8 +2401,8 @@ Request: 66.70.21.80/scripts/click.php?hid=a71b9f6504b0c5681fa5&si=Ua
 
 </sect2>
 
-<sect2 id="badsite" renderas="sect3">
-<title >One of my favorite sites does not work with Privoxy.
+<sect2 renderas="sect3" id="badsite">
+<title>One of my favorite sites does not work with Privoxy.
 What can I do?</title>
 
 <para>
