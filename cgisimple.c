@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.133 2016/02/26 12:29:38 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.134 2016/02/26 12:32:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -6,7 +6,7 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.133 2016/02/26 12:29:38 fabia
  * Purpose     :  Simple CGIs to get information about Privoxy's
  *                status.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2014 the
+ * Copyright   :  Written by and Copyright (C) 2001-2016 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
