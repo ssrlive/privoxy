@@ -44,7 +44,7 @@
     Troubleshooting</a></h1>
 
     <div class="SECT2">
-      <h3 class="SECT2"><a name="AEN1090" id="AEN1090">5.1. I cannot connect
+      <h3 class="SECT2"><a name="REFUSED" id="REFUSED">5.1. I cannot connect
       to any websites. Or, I am getting <span class="QUOTE">"connection
       refused"</span> message with every web page. Why?</a></h3>
 
@@ -94,7 +94,7 @@
     </div>
 
     <div class="SECT2">
-      <h3 class="SECT2"><a name="AEN1113" id="AEN1113">5.3. I just added a
+      <h3 class="SECT2"><a name="FLUSHIT" id="FLUSHIT">5.3. I just added a
       new rule, but the steenkin ad is still getting through. How?</a></h3>
 
       <p>If the ad had been displayed before you added its URL, it will
@@ -720,6 +720,41 @@ Request: 66.70.21.80/scripts/click.php?hid=a71b9f6504b0c5681fa5&amp;si=Ua
       "_top">http://config.privoxy.org/show-status</a> will list <span class=
       "QUOTE">"FEATURE_PTHREAD"</span> as <span class=
       "QUOTE">"enabled"</span>.</p>
+    </div>
+
+    <div class="SECT2">
+      <h3 class="SECT2"><a name="TAINTED-SOCKETS" id="TAINTED-SOCKETS">5.25.
+      What are tainted sockets and how do I prevent them?</a></h3>
+
+      <p><span class="APPLICATION">Privoxy</span> marks sockets as tainted
+      when it can't use them to serve additional requests. This does not
+      necessarily mean that something went wrong and information about
+      tainted sockets is only logged if connection debugging is enabled
+      (debug 2).</p>
+
+      <p>For example server sockets that were used for CONNECT requests
+      (which are used to tunnel https:// requests) are considered tainted
+      once the client closed its connection to <span class=
+      "APPLICATION">Privoxy</span>. Technically <span class=
+      "APPLICATION">Privoxy</span> could keep the connection to the server
+      open, but the server would not accept requests that do not belong to
+      the previous TLS/SSL session (and the client may even have terminated
+      the session).</p>
+
+      <p>Server sockets are also marked tainted when a client requests a
+      resource, but closes the connection before <span class=
+      "APPLICATION">Privoxy</span> has completely received (and forwarded)
+      the resource to the client. In this case the server would (probably)
+      accept additional requests, but <span class=
+      "APPLICATION">Privoxy</span> could not get the response without
+      completely reading the leftovers from the previous response.</p>
+
+      <p>These are just two examples, there are currently a bit more than 25
+      scenarios in which a socket is considered tainted.</p>
+
+      <p>While sockets can also be marked tainted as a result of a technical
+      problem that may be worth fixing, the problem will be explicitly logged
+      as error.</p>
     </div>
   </div>
 

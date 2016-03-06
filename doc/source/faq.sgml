@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.116 2016/02/26 12:33:18 fabiankeil Exp $
+ $Id: faq.sgml,v 2.117 2016/03/04 13:21:33 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.116 2016/02/26 12:33:18 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.117 2016/03/04 13:21:33 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2952,6 +2952,42 @@ browsing has slowed to a crawl. What gives? </title>
 </para>
 </sect2>
 
+<sect2 renderas="sect3" id="tainted-sockets">
+<title>What are tainted sockets and how do I prevent them?</title>
+<para>
+ &my-app; marks sockets as tainted when it can't use them to
+ serve additional requests.
+ This does not necessarily mean that something went wrong and
+ information about tainted sockets is only logged if connection
+ debugging is enabled (debug 2).
+</para>
+<para>
+ For example server sockets that were used for CONNECT requests
+ (which are used to tunnel https:// requests) are considered tainted
+ once the client closed its connection to &my-app;.
+ Technically &my-app; could keep the connection to the server open,
+ but the server would not accept requests that do not belong to the
+ previous TLS/SSL session (and the client may even have terminated
+ the session).
+</para>
+<para>
+ Server sockets are also marked tainted when a client requests a
+ resource, but closes the connection before &my-app; has completely
+ received (and forwarded) the resource to the client.
+ In this case the server would (probably) accept additional requests,
+ but &my-app; could not get the response without completely reading
+ the leftovers from the previous response.
+</para>
+<para>
+ These are just two examples, there are currently a bit more than
+ 25 scenarios in which a socket is considered tainted.
+</para>
+<para>
+ While sockets can also be marked tainted as a result of a technical
+ problem that may be worth fixing, the problem will be explicitly
+ logged as error.
+</para>
+</sect2>
 
 </sect1>
 
