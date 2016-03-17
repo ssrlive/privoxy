@@ -1,4 +1,4 @@
-$Id: TODO,v 1.143 2016/02/13 11:18:15 fabiankeil Exp $
+$Id: TODO,v 1.144 2016/02/26 12:33:08 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -415,27 +415,8 @@ http://www.privoxy.org/faq/general.html#DONATE
 143) Add support for OpenBSD's pledge feature once it's stablelized.
      This should be a lot less work then #124.
 
-144) Allow Privoxy admins to pre-define tags that are be set for
-     clients that previously opted-in through the CGI interface.
-
-     This would be useful in multi-user setups where admins may
-     want to allow users to disable certain actions and filters
-     for themselves without affecting others.
-
-     Even in single-user setups this could be useful to allow
-     more fine-grained toggling. For example to disable request
-     blocking while still crunching cookies, or to disable
-     experimental filters only.
-
-     Interested donors: 1.
-
-145) Once #144 is implemented, allow clients to opt-in to the
-     tagging for a limited amount of time (or number of requests).
-
-     Interested donors: 1.
-
-146) Once #144 is implemented, optionally allow to save the opt-in
-     status to disk.
+146) Allow to save the internal client tag state to disk and
+     load it after restarts.
 
 147) Improve "Building from Source" section in the user manual.
      A common problem seems to be that it's not obvious to non-technical
@@ -443,8 +424,6 @@ http://www.privoxy.org/faq/general.html#DONATE
      used platforms. Adding a couple of examples should also be useful for
      technical users (like Privoxy developers) who want to install or test
      Privoxy on platforms they are not familiar with.
-
-146) Once #145 is implemented, allow clients to specify the time.
 
 ##########################################################################
 
