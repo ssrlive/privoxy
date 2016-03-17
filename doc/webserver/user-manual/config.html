@@ -3263,7 +3263,7 @@
             <dt>Default value:</dt>
 
             <dd>
-              <p>None</p>
+              <p>60</p>
             </dd>
 
             <dt>Notes:</dt>
@@ -3294,6 +3294,22 @@
               "_top">http://config.privoxy.org/show-client-tags</a> therefore
               provides a "enable this tag temporarily" option. If it is used,
               the tag will be set until the client-tag-lifetime is over.</p>
+            </dd>
+
+            <dt>Examples:</dt>
+
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
+      # Increase the time to life for temporarily enabled tags to 3 minutes
+      client-tag-lifetime 180
+
+</pre>
+                  </td>
+                </tr>
+              </table>
             </dd>
           </dl>
         </div>

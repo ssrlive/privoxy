@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2676" id="AEN2676"></a>
+          <a name="AEN2681" id="AEN2681"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -1064,7 +1064,16 @@ example.org/blocked-example-page
                 <tr>
                   <td>
                     <pre class="SCREEN">
-+add-header{X-User-Tracking: sucks}
+# Add a DNT ("Do not track") header to all requests,
+# event to those that already have one.
+#
+# This is just an example, not a recommendation.
+#
+# There is no reason to believe that user-tracking websites care
+# about the DNT header and depending on the User-Agent, adding the
+# header may make user-tracking easier.
+{+add-header{DNT: 1}}
+/
 </pre>
                   </td>
                 </tr>
