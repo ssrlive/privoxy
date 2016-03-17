@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.114 2016/02/26 12:32:56 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.115 2016/03/17 10:43:20 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.114 2016/02/26 12:32:56 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.115 2016/03/17 10:43:20 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
@@ -3431,6 +3431,58 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
     disable-content-filters Disable content-filters but do not affect other actions
     </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<sect3 renderas="sect4" id="client-tag-lifetime"><title>client-tag-lifetime</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    How long a temporarily enabled tag remains enabled.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>Time in seconds.</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <warning>
+   <para>
+    This is an experimental feature. The syntax is likely to change
+    in future versions.
+   </para>
+   </warning>
+   <para>
+    In case of some tags users may not want to enable them permanently,
+    but only for a short amount of time, for example to circumvent a block
+    that is the result of an overly-broad URL pattern.
+   </para>
+   <para>
+    The CGI interface <ulink
+     url="http://config.privoxy.org/show-client-tags">http://config.privoxy.org/show-client-tags</ulink>
+    therefore provides a "enable this tag temporarily" option.
+    If it is used, the tag will be set until the client-tag-lifetime
+    is over.
    </para>
   </listitem>
  </varlistentry>
