@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.204 2016/03/04 13:21:54 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.205 2016/03/17 10:42:54 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.204 2016/03/04 13:21:54 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.205 2016/03/17 10:42:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2394,6 +2394,62 @@ for details.
  tags are considered.
 </para>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 id="client-tag-pattern"><title>The Client Tag Pattern</title>
+
+<!-- XXX: This section contains duplicates content from the
+          client-specific-tag documentation. -->
+
+<warning>
+<para>
+ This is an experimental feature. The syntax is likely to change in future versions.
+</para>
+</warning>
+
+<para>
+ Client tag patterns are not set based on HTTP headers but based on
+ the client's IP address. Users can enable them themselves, but the
+ Privoxy admin controls which tags are available and what their effect
+ is.
+</para>
+
+<para>
+ After a client-specific tag has been defined with the
+ <link linkend="client-specific-tag">client-specific-tag</link>,
+ directive, action sections can be activated based on the tag by using a
+ CLIENT-TAG pattern. The CLIENT-TAG pattern is evaluated at the same priority
+ as URL patterns, as a result the last matching pattern wins. Tags that
+ are created based on client or server headers are evaluated later on
+ and can overrule CLIENT-TAG and URL patterns!
+</para>
+<para>
+ The tag is set for all requests that come from clients that requested
+ it to be set. Note that "clients" are  differentiated by IP address,
+ if the IP address changes the tag has to be requested again.
+</para>
+<para>
+ Clients can request tags to be set by using the CGI interface <ulink
+  url="http://config.privoxy.org/show-client-tags">http://config.privoxy.org/show-client-tags</ulink>.
+</para>
+
+<para>
+ Example:
+</para>
+
+<para>
+ <screen>
+# If the admin defined the client-specific-tag circumvent-blocks,
+# and the request comes from a client that previously requested
+# the tag to be set, overrule all previous +block actions that
+# are enabled based on URL to CLIENT-TAG patterns.
+{-block}
+CLIENT-TAG:^circumvent-blocks$
+
+# This section is not overruled because it's located after
+# the previous one.
+{+block{Nobody is supposed to request this.}}
+example.org/blocked-example-page</screen>
+</para>
 
 </sect2>
 
