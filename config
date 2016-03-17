@@ -1,8 +1,8 @@
-#        Sample Configuration File for Privoxy 3.0.24
+#        Sample Configuration File for Privoxy 3.0.25
 #
-#  $Id: p-config.sgml,v 2.113 2015/01/24 16:42:13 fabiankeil Exp $
+#  $Id: p-config.sgml,v 2.114 2016/02/26 12:32:56 fabiankeil Exp $
 #
-#  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
+#  Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
 #
 ####################################################################
 #                                                                  #
@@ -2018,6 +2018,106 @@ socket-timeout 300
 #   Cache-Control \
 #   Content-Length \
 #   Content-Type
+#
+#
+#  6.14. client-specific-tag
+#  ==========================
+#
+#  Specifies:
+#
+#      The name of a tag that will always be set for clients that
+#      requested it through the webinterface.
+#
+#  Type of value:
+#
+#      Tag name followed by a description that will be shown in the
+#      webinterface
+#
+#  Default value:
+#
+#      None
+#
+#  Notes:
+#
+#      +-----------------------------------------------------+
+#      |                       Warning                       |
+#      |-----------------------------------------------------|
+#      |This is an experimental feature. The syntax is likely|
+#      |to change in future versions.                        |
+#      +-----------------------------------------------------+
+#
+#      Client-specific tags allow Privoxy admins to create different
+#      profiles and let the users chose which one they want without
+#      impacting other users.
+#
+#      One use case is allowing users to circumvent certain blocks
+#      without having to allow them to circumvent all blocks. This is
+#      not possible with the enable-remote-toggle feature because it
+#      would bluntly disable all blocks for all users and also affect
+#      other actions like filters. It also is set globally which
+#      renders it useless in most multi-user setups.
+#
+#      After a client-specific tag has been defined with the
+#      client-specific-tag directive, action sections can be
+#      activated based on the tag by using a CLIENT-TAG pattern. The
+#      CLIENT-TAG pattern is evaluated at the same priority as URL
+#      patterns, as a result the last matching pattern wins. Tags
+#      that are created based on client or server headers are
+#      evaluated later on and can overrule CLIENT-TAG and URL
+#      patterns!
+#
+#      The tag is set for all requests that come from clients that
+#      requested it to be set. Note that "clients" are differentiated
+#      by IP address, if the IP address changes the tag has to be
+#      requested again.
+#
+#      Clients can request tags to be set by using the CGI interface
+#      http://config.privoxy.org/show-client-tags. The specific tag
+#      description is only used on the web page and should be phrased
+#      in away that the user understand the effect of the tag.
+#
+#  Examples:
+#
+#          # Define a couple of tags, the described effect requires action sections
+#          # that are enabled based on CLIENT-TAG patterns.
+#          client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
+#          disable-content-filters Disable content-filters but do not affect other actions
+#
+#
+#
+#  6.15. client-tag-lifetime
+#  ==========================
+#
+#  Specifies:
+#
+#      How long a temporarily enabled tag remains enabled.
+#
+#  Type of value:
+#
+#      Time in seconds.
+#
+#  Default value:
+#
+#      None
+#
+#  Notes:
+#
+#      +-----------------------------------------------------+
+#      |                       Warning                       |
+#      |-----------------------------------------------------|
+#      |This is an experimental feature. The syntax is likely|
+#      |to change in future versions.                        |
+#      +-----------------------------------------------------+
+#
+#      In case of some tags users may not want to enable them
+#      permanently, but only for a short amount of time, for example
+#      to circumvent a block that is the result of an overly-broad
+#      URL pattern.
+#
+#      The CGI interface http://config.privoxy.org/show-client-tags
+#      therefore provides a "enable this tag temporarily" option. If
+#      it is used, the tag will be set until the client-tag-lifetime
+#      is over.
 #
 #
 #  7. WINDOWS GUI OPTIONS
