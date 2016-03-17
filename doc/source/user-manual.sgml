@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.203 2016/02/26 12:27:32 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.204 2016/03/04 13:21:54 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.203 2016/02/26 12:27:32 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.204 2016/03/04 13:21:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2319,18 +2319,18 @@ for details.
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="tag-pattern"><title>The Tag Pattern</title>
+<sect3 id="tag-pattern"><title>The Request Tag Pattern</title>
 
 <para>
- Tag patterns are used to change the applying actions based on the
- request's tags. Tags can be created with either the
- <link linkend="CLIENT-HEADER-TAGGER">client-header-tagger</link>
+ Request tag patterns are used to change the applying actions based on the
+ request's tags. Tags can be created based on HTTP headers with either
+ the <link linkend="CLIENT-HEADER-TAGGER">client-header-tagger</link>
  or the  <link linkend="SERVER-HEADER-TAGGER">server-header-tagger</link> action.
 </para>
 
 <para>
- Tag patterns have to start with <quote>TAG:</quote>, so &my-app;
- can tell them apart from URL patterns. Everything after the colon
+ Request tag patterns have to start with <quote>TAG:</quote>, so &my-app;
+ can tell them apart from other patterns. Everything after the colon
  including white space, is interpreted as a regular expression with
  path pattern syntax, except that tag patterns aren't left-anchored
  automatically (&my-app; doesn't silently add a <quote>^</quote>,
@@ -2346,15 +2346,15 @@ for details.
 </para>
 
 <para>
- Sections can contain URL and tag patterns at the same time,
- but tag patterns are checked after the URL patterns and thus
+ Sections can contain URL and request tag patterns at the same time,
+ but request tag patterns are checked after the URL patterns and thus
  always overrule them, even if they are located before the URL patterns.
 </para>
 
 <para>
- Once a new tag is added, Privoxy checks right away if it's matched by one
- of the tag patterns and updates the action settings accordingly. As a result
- tags can be used to activate other tagger actions, as long as these other
+ Once a new request tag is added, Privoxy checks right away if it's matched by one
+ of the request tag patterns and updates the action settings accordingly. As a result
+ request tags can be used to activate other tagger actions, as long as these other
  taggers look for headers that haven't already be parsed.
 </para>
 
@@ -2379,16 +2379,16 @@ for details.
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="negative-tag-patterns"><title>The Negative Tag Patterns</title>
+<sect3 id="negative-tag-patterns"><title>The Negative Request Tag Patterns</title>
 
 <para>
- To match requests that do not have a certain tag, specify a negative tag pattern
+ To match requests that do not have a certain request tag, specify a negative tag pattern
  by prefixing the tag pattern line with either <quote>NO-REQUEST-TAG:</quote>
  or <quote>NO-RESPONSE-TAG:</quote> instead of <quote>TAG:</quote>.
 </para>
 
 <para>
- Negative tag patterns created with <quote>NO-REQUEST-TAG:</quote> are checked
+ Negative request tag patterns created with <quote>NO-REQUEST-TAG:</quote> are checked
  after all client headers are scanned, the ones created with <quote>NO-RESPONSE-TAG:</quote>
  are checked after all server headers are scanned. In both cases all the created
  tags are considered.
