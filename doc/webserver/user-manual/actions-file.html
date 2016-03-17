@@ -117,7 +117,7 @@
         in <tt class="FILENAME">default.action</tt> are:</p>
 
         <div class="TABLE">
-          <a name="AEN2618" id="AEN2618"></a>
+          <a name="AEN2676" id="AEN2676"></a>
 
           <p><b>Table 1. Default Configurations</b></p>
 
@@ -744,22 +744,24 @@
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="TAG-PATTERN" id="TAG-PATTERN">8.4.3. The
-        Tag Pattern</a></h3>
+        Request Tag Pattern</a></h3>
 
-        <p>Tag patterns are used to change the applying actions based on the
-        request's tags. Tags can be created with either the <a href=
+        <p>Request tag patterns are used to change the applying actions based
+        on the request's tags. Tags can be created based on HTTP headers with
+        either the <a href=
         "actions-file.html#CLIENT-HEADER-TAGGER">client-header-tagger</a> or
         the <a href=
         "actions-file.html#SERVER-HEADER-TAGGER">server-header-tagger</a>
         action.</p>
 
-        <p>Tag patterns have to start with <span class="QUOTE">"TAG:"</span>,
-        so <span class="APPLICATION">Privoxy</span> can tell them apart from
-        URL patterns. Everything after the colon including white space, is
-        interpreted as a regular expression with path pattern syntax, except
-        that tag patterns aren't left-anchored automatically (<span class=
-        "APPLICATION">Privoxy</span> doesn't silently add a <span class=
-        "QUOTE">"^"</span>, you have to do it yourself if you need it).</p>
+        <p>Request tag patterns have to start with <span class=
+        "QUOTE">"TAG:"</span>, so <span class="APPLICATION">Privoxy</span>
+        can tell them apart from other patterns. Everything after the colon
+        including white space, is interpreted as a regular expression with
+        path pattern syntax, except that tag patterns aren't left-anchored
+        automatically (<span class="APPLICATION">Privoxy</span> doesn't
+        silently add a <span class="QUOTE">"^"</span>, you have to do it
+        yourself if you need it).</p>
 
         <p>To match all requests that are tagged with <span class=
         "QUOTE">"foo"</span> your pattern line should be <span class=
@@ -769,15 +771,16 @@
         "QUOTE">"TAG: foo"</span> wouldn't work as it requires white
         space.</p>
 
-        <p>Sections can contain URL and tag patterns at the same time, but
-        tag patterns are checked after the URL patterns and thus always
-        overrule them, even if they are located before the URL patterns.</p>
+        <p>Sections can contain URL and request tag patterns at the same
+        time, but request tag patterns are checked after the URL patterns and
+        thus always overrule them, even if they are located before the URL
+        patterns.</p>
 
-        <p>Once a new tag is added, Privoxy checks right away if it's matched
-        by one of the tag patterns and updates the action settings
-        accordingly. As a result tags can be used to activate other tagger
-        actions, as long as these other taggers look for headers that haven't
-        already be parsed.</p>
+        <p>Once a new request tag is added, Privoxy checks right away if it's
+        matched by one of the request tag patterns and updates the action
+        settings accordingly. As a result request tags can be used to
+        activate other tagger actions, as long as these other taggers look
+        for headers that haven't already be parsed.</p>
 
         <p>For example you could tag client requests which use the <tt class=
         "LITERAL">POST</tt> method, then use this tag to activate another
@@ -797,20 +800,85 @@
 
       <div class="SECT3">
         <h3 class="SECT3"><a name="NEGATIVE-TAG-PATTERNS" id=
-        "NEGATIVE-TAG-PATTERNS">8.4.4. The Negative Tag Patterns</a></h3>
+        "NEGATIVE-TAG-PATTERNS">8.4.4. The Negative Request Tag
+        Patterns</a></h3>
 
-        <p>To match requests that do not have a certain tag, specify a
-        negative tag pattern by prefixing the tag pattern line with either
+        <p>To match requests that do not have a certain request tag, specify
+        a negative tag pattern by prefixing the tag pattern line with either
         <span class="QUOTE">"NO-REQUEST-TAG:"</span> or <span class=
         "QUOTE">"NO-RESPONSE-TAG:"</span> instead of <span class=
         "QUOTE">"TAG:"</span>.</p>
 
-        <p>Negative tag patterns created with <span class=
+        <p>Negative request tag patterns created with <span class=
         "QUOTE">"NO-REQUEST-TAG:"</span> are checked after all client headers
         are scanned, the ones created with <span class=
         "QUOTE">"NO-RESPONSE-TAG:"</span> are checked after all server
         headers are scanned. In both cases all the created tags are
         considered.</p>
+      </div>
+
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="CLIENT-TAG-PATTERN" id=
+        "CLIENT-TAG-PATTERN">8.4.5. The Client Tag Pattern</a></h3>
+
+        <div class="WARNING">
+          <table class="WARNING" border="1" width="100%">
+            <tr>
+              <td align="center"><b>Warning</b></td>
+            </tr>
+
+            <tr>
+              <td align="left">
+                <p>This is an experimental feature. The syntax is likely to
+                change in future versions.</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <p>Client tag patterns are not set based on HTTP headers but based on
+        the client's IP address. Users can enable them themselves, but the
+        Privoxy admin controls which tags are available and what their effect
+        is.</p>
+
+        <p>After a client-specific tag has been defined with the <a href=
+        "config.html#CLIENT-SPECIFIC-TAG">client-specific-tag</a>, directive,
+        action sections can be activated based on the tag by using a
+        CLIENT-TAG pattern. The CLIENT-TAG pattern is evaluated at the same
+        priority as URL patterns, as a result the last matching pattern wins.
+        Tags that are created based on client or server headers are evaluated
+        later on and can overrule CLIENT-TAG and URL patterns!</p>
+
+        <p>The tag is set for all requests that come from clients that
+        requested it to be set. Note that "clients" are differentiated by IP
+        address, if the IP address changes the tag has to be requested
+        again.</p>
+
+        <p>Clients can request tags to be set by using the CGI interface
+        <a href="http://config.privoxy.org/show-client-tags" target=
+        "_top">http://config.privoxy.org/show-client-tags</a>.</p>
+
+        <p>Example:</p>
+
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="SCREEN">
+# If the admin defined the client-specific-tag circumvent-blocks,
+# and the request comes from a client that previously requested
+# the tag to be set, overrule all previous +block actions that
+# are enabled based on URL to CLIENT-TAG patterns.
+{-block}
+CLIENT-TAG:^circumvent-blocks$
+
+# This section is not overruled because it's located after
+# the previous one.
+{+block{Nobody is supposed to request this.}}
+example.org/blocked-example-page
+</pre>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
 
