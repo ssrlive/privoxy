@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.117 2016/03/04 13:21:33 fabiankeil Exp $
+ $Id: faq.sgml,v 2.118 2016/03/06 11:32:06 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.117 2016/03/04 13:21:33 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.118 2016/03/06 11:32:06 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -547,7 +547,7 @@ warranty? Registration?</title>
 <para>
  If you have any questions regarding donations please mail to either the
  public user mailing list or, if it's a private matter, to
- <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink> (Privoxy's SPI liason)
+ <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink> (Privoxy's SPI liaison)
  directly.
 </sect3>
 
