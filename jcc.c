@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.440 2016/01/16 12:33:36 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.441 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -115,6 +115,9 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.440 2016/01/16 12:33:36 fabiankeil Exp $"
 #include "cgi.h"
 #include "loadcfg.h"
 #include "urlmatch.h"
+#ifdef FEATURE_CLIENT_TAGS
+#include "client-tags.h"
+#endif
 
 const char jcc_h_rcs[] = JCC_H_VERSION;
 const char project_h_rcs[] = PROJECT_H_VERSION;
@@ -184,6 +187,9 @@ privoxy_mutex_t connection_reuse_mutex;
 
 #ifdef FEATURE_EXTERNAL_FILTERS
 privoxy_mutex_t external_filter_mutex;
+#endif
+#ifdef FEATURE_CLIENT_TAGS
+privoxy_mutex_t client_tags_mutex;
 #endif
 
 #if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
@@ -1842,6 +1848,9 @@ static void chat(struct client_state *csp)
 
    http = csp->http;
 
+#if FEATURE_CLIENT_TAGS
+   get_tag_list_for_client(csp->client_tags, csp->ip_addr_str);
+#endif
    if (receive_client_request(csp) != JB_ERR_OK)
    {
       return;
@@ -2813,6 +2822,9 @@ static void prepare_csp_for_next_request(struct client_state *csp)
    free_http_request(csp->http);
    destroy_list(csp->headers);
    destroy_list(csp->tags);
+#ifdef FEATURE_CLIENT_TAGS
+   destroy_list(csp->client_tags);
+#endif
    free_current_action(csp->action);
    if (NULL != csp->fwd)
    {
@@ -3245,6 +3257,9 @@ static void initialize_mutexes(void)
    privoxy_mutex_init(&connection_reuse_mutex);
 #ifdef FEATURE_EXTERNAL_FILTERS
    privoxy_mutex_init(&external_filter_mutex);
+#endif
+#ifdef FEATURE_CLIENT_TAGS
+   privoxy_mutex_init(&client_tags_mutex);
 #endif
 
    /*

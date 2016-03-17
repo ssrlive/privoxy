@@ -1,6 +1,6 @@
 #ifndef FILTERS_H_INCLUDED
 #define FILTERS_H_INCLUDED
-#define FILTERS_H_VERSION "$Id: filters.h,v 1.45 2013/11/24 14:23:28 fabiankeil Exp $"
+#define FILTERS_H_VERSION "$Id: filters.h,v 1.46 2013/12/24 13:32:51 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.h,v $
@@ -75,9 +75,6 @@ extern int connect_port_is_forbidden(const struct client_state *csp);
  */
 extern void get_url_actions(struct client_state *csp,
                             struct http_request *http);
-extern void apply_url_actions(struct current_action_spec *action,
-                              struct http_request *http,
-                              struct url_actions *b);
 
 extern struct re_filterfile_spec *get_filter(const struct client_state *csp,
                                              const char *requested_name,

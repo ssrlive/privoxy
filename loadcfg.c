@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.146 2016/02/26 12:29:38 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.147 2016/02/26 12:30:59 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -124,6 +124,8 @@ static struct file_list *current_configfile = NULL;
 #define hash_allow_cgi_request_crunching  258915987U /* "allow-cgi-request-crunching" */
 #define hash_buffer_limit                1881726070U /* "buffer-limit */
 #define hash_client_header_order         2701453514U /* "client-header-order" */
+#define hash_client_specific_tag         3353703383U /* "client-specific-tag" */
+#define hash_client_tag_lifetime          647957580U /* "client-tag-lifetime" */
 #define hash_compression_level           2464423563U /* "compression-level" */
 #define hash_confdir                        1978389U /* "confdir" */
 #define hash_connection_sharing          1348841265U /* "connection-sharing" */
@@ -176,6 +178,9 @@ static struct file_list *current_configfile = NULL;
 
 
 static void savearg(char *command, char *argument, struct configuration_spec * config);
+#ifdef FEATURE_CLIENT_TAGS
+static void free_client_specific_tags(struct client_tag_spec *tag_list);
+#endif
 
 /*********************************************************************
  *
@@ -253,6 +258,10 @@ static void unload_configfile (void * data)
    list_remove_all(config->trust_info);
 #endif /* def FEATURE_TRUST */
 
+#ifdef FEATURE_CLIENT_TAGS
+   free_client_specific_tags(config->client_tags);
+#endif
+
    freez(config);
 }
 
@@ -279,6 +288,85 @@ void unload_current_config_file(void)
    }
 }
 #endif
+
+
+#ifdef FEATURE_CLIENT_TAGS
+/*********************************************************************
+ *
+ * Function    :  register_tag
+ *
+ * Description :  Registers a client-specific-tag and its description
+ *
+ * Parameters  :
+ *          1  :  config: The tag list
+ *          2  :  name:  The name of the client-specific-tag
+ *          3  :  description: The human-readable description for the tag
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void register_tag(struct client_tag_spec *tag_list,
+   const char *name, const char *description)
+{
+   struct client_tag_spec *new_tag;
+   struct client_tag_spec *last_tag;
+
+   last_tag = tag_list;
+   while (last_tag->next != NULL)
+   {
+      last_tag = last_tag->next;
+   }
+   if (last_tag->name == NULL)
+   {
+      /* First entry */
+      new_tag = last_tag;
+   }
+   else
+   {
+      new_tag = zalloc_or_die(sizeof(struct client_tag_spec));
+   }
+   new_tag->name = strdup_or_die(name);
+   new_tag->description = strdup_or_die(description);
+   if (new_tag != last_tag)
+   {
+      last_tag->next = new_tag;
+   }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  free_client_specific_tags
+ *
+ * Description :  Frees client-specific tags and their descriptions
+ *
+ * Parameters  :
+ *          1  :  tag_list: The tag list to free
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+static void free_client_specific_tags(struct client_tag_spec *tag_list)
+{
+   struct client_tag_spec *this_tag;
+   struct client_tag_spec *next_tag;
+
+   next_tag = tag_list;
+   do
+   {
+      this_tag = next_tag;
+      next_tag = next_tag->next;
+
+      freez(this_tag->name);
+      freez(this_tag->description);
+
+      if (this_tag != tag_list)
+      {
+         freez(this_tag);
+      }
+   } while (next_tag != NULL);
+}
+#endif /* def FEATURE_CLIENT_TAGS */
 
 
 /*********************************************************************
@@ -666,6 +754,49 @@ struct configuration_spec * load_config(void)
             list_remove_all(config->ordered_client_headers);
             parse_client_header_order(config->ordered_client_headers, arg);
             break;
+
+/* *************************************************************************
+ * client-specific-tag tag-name description
+ * *************************************************************************/
+#ifdef FEATURE_CLIENT_TAGS
+         case hash_client_specific_tag:
+            {
+               char *name;
+               char *description;
+
+               name = arg;
+               description = strstr(arg, " ");
+               if (description == NULL)
+               {
+                  log_error(LOG_LEVEL_FATAL,
+                     "client-specific-tag '%s' lacks a description.", name);
+               }
+               *description = '\0';
+               description++;
+               register_tag(config->client_tags, name, description);
+            }
+            break;
+#endif /* def FEATURE_CLIENT_TAGS */
+
+/* *************************************************************************
+ * client-tag-lifetime ttl
+ * *************************************************************************/
+#ifdef FEATURE_CLIENT_TAGS
+         case hash_client_tag_lifetime:
+         {
+            int ttl = parse_numeric_value(cmd, arg);
+            if (0 <= ttl)
+            {
+               config->client_tag_lifetime = (unsigned)ttl;
+            }
+            else
+            {
+               log_error(LOG_LEVEL_FATAL,
+                  "client-tag-lifetime can't be negative.");
+            }
+            break;
+         }
+#endif /* def FEATURE_CLIENT_TAGS */
 
 /* *************************************************************************
  * confdir directory-name

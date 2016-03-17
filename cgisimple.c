@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.134 2016/02/26 12:32:09 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.135 2016/03/04 13:22:22 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -60,6 +60,9 @@ const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.134 2016/02/26 12:32:09 fabia
 #include "parsers.h"
 #include "urlmatch.h"
 #include "errlog.h"
+#ifdef FEATURE_CLIENT_TAGS
+#include "client-tags.h"
+#endif
 
 const char cgisimple_h_rcs[] = CGISIMPLE_H_VERSION;
 
@@ -269,6 +272,136 @@ jb_err cgi_show_request(struct client_state *csp,
 
    return template_fill_for_cgi(csp, "show-request", exports, rsp);
 }
+
+
+#ifdef FEATURE_CLIENT_TAGS
+/*********************************************************************
+ *
+ * Function    :  cgi_show_client_tags
+ *
+ * Description :  Shows the tags that can be set based on the client
+ *                address (opt-in).
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : none
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err cgi_show_client_tags(struct client_state *csp,
+                        struct http_response *rsp,
+                        const struct map *parameters)
+{
+   struct map *exports;
+   struct client_tag_spec *this_tag;
+   jb_err err = JB_ERR_OK;
+   const char *toggled_tag;
+   const char *toggle_state;
+   const char *tag_expires;
+   time_t time_to_live;
+   char *client_tags = strdup_or_die("");
+   char buf[1000];
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, "show-client-tags")))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   toggled_tag = lookup(parameters, "tag");
+   if (*toggled_tag != '\0')
+   {
+      tag_expires = lookup(parameters, "expires");
+      if (*tag_expires == '0')
+      {
+         time_to_live = 0;
+      }
+      else
+      {
+         time_to_live = csp->config->client_tag_lifetime;
+      }
+      toggle_state = lookup(parameters, "toggle-state");
+      if (*toggle_state == '1')
+      {
+         enable_client_specific_tag(csp, toggled_tag, time_to_live);
+      }
+      else
+      {
+         disable_client_specific_tag(csp, toggled_tag);
+      }
+   }
+
+   this_tag = csp->config->client_tags;
+   if (this_tag->name == NULL)
+   {
+      if (!err) err = string_append(&client_tags, "<p>No tags available.</p>\n");
+   }
+   else
+   {
+      if (!err)
+      {
+         err = string_append(&client_tags, "<table border=\"1\">\n"
+            "<tr><th>Tag name</th>\n"
+            "<th>Current state</th><th>Change state</th><th>Description</th></tr>\n");
+      }
+      while ((this_tag != NULL) && (this_tag->name != NULL))
+      {
+         int tag_state;
+
+         privoxy_mutex_lock(&client_tags_mutex);
+         tag_state = client_has_requested_tag(csp->ip_addr_str, this_tag->name);
+         privoxy_mutex_unlock(&client_tags_mutex);
+         if (!err) err = string_append(&client_tags, "<tr><td>");
+         if (!err) err = string_append(&client_tags, this_tag->name);
+         if (!err) err = string_append(&client_tags, "</td><td>");
+         if (!err) err = string_append(&client_tags, tag_state == 1 ? "Enabled" : "Disabled");
+         snprintf(buf, sizeof(buf),
+            "</td><td><a href=\"/show-client-tags?tag=%s&toggle-state=%d&amp;expires=0\">%s</a>",
+            this_tag->name, !tag_state, tag_state == 1 ? "Disable" : "Enable");
+         if (!err) err = string_append(&client_tags, buf);
+         if (tag_state == 0)
+         {
+            snprintf(buf, sizeof(buf), ". <a href=\"/show-client-tags?"
+               "tag=%s&amp;toggle-state=1&amp;expires=1\">Enable temporarily</a>",
+               this_tag->name);
+            if (!err) err = string_append(&client_tags, buf);
+         }
+         if (!err) err = string_append(&client_tags, "</td><td>");
+         if (!err) err = string_append(&client_tags, this_tag->description);
+         if (!err) err = string_append(&client_tags, "</td></tr>\n");
+         if (err)
+         {
+            free_map(exports);
+            return JB_ERR_MEMORY;
+         }
+         this_tag = this_tag->next;
+      }
+      if (!err) err = string_append(&client_tags, "</table>\n");
+   }
+
+   if (map(exports, "client-tags", 1, client_tags, 0))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+
+   if (map(exports, "client-ip-addr", 1, csp->ip_addr_str, 1))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+
+   return template_fill_for_cgi(csp, "show-client-tags", exports, rsp);
+}
+#endif /* def FEATURE_CLIENT_TAGS */
 
 
 /*********************************************************************
@@ -1561,6 +1694,14 @@ static jb_err show_defines(struct map *exports)
       {
          "FEATURE_CGI_EDIT_ACTIONS",
 #ifdef FEATURE_CGI_EDIT_ACTIONS
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_CLIENT_TAGS",
+#ifdef FEATURE_CLIENT_TAGS
          1,
 #else
          0,

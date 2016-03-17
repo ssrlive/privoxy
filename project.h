@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.211 2016/01/16 12:30:28 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.212 2016/01/16 12:30:43 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -399,6 +399,9 @@ struct pattern_spec
 
 /** Pattern spec bitmap: It's a NO-RESPONSE-TAG pattern. */
 #define PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN 0x00000008UL
+
+/** Pattern spec bitmap: It's a CLIENT-TAG pattern. */
+#define PATTERN_SPEC_CLIENT_TAG_PATTERN      0x00000010UL
 
 /**
  * An I/O buffer.  Holds a string which can be appended to, and can have data
@@ -947,6 +950,11 @@ struct client_state
    /** List of all tags that apply to this request */
    struct list tags[1];
 
+#ifdef FEATURE_CLIENT_TAGS
+   /** List of all tags that apply to this client (assigned based on address) */
+   struct list client_tags[1];
+#endif
+
    /** MIME-Type key, see CT_* above */
    unsigned int content_type;
 
@@ -1202,6 +1210,15 @@ struct access_control_list
 /** Maximum number of loaders (actions, re_filter, ...) */
 #define NLOADERS 8
 
+/**
+ * This struct represents a client-spcific-tag and it's description
+ */
+struct client_tag_spec
+{
+   char *name;        /**< Name from "client-specific-tag bla" directive */
+   char *description; /**< Description from "client-specific-tag-description " directive */
+   struct client_tag_spec *next; /**< The pointer for chaining. */
+};
 
 /** configuration_spec::feature_flags: CGI actions editor. */
 #define RUNTIME_FEATURE_CGI_EDIT_ACTIONS             1U
@@ -1323,6 +1340,13 @@ struct configuration_spec
    struct pattern_spec *trust_list[MAX_TRUSTED_REFERRERS];
 
 #endif /* def FEATURE_TRUST */
+
+#ifdef FEATURE_CLIENT_TAGS
+   struct client_tag_spec client_tags[1];
+
+   /* Maximum number of seconds a temporarily enabled tag stays enabled. */
+   unsigned int client_tag_lifetime;
+#endif /* def FEATURE_CLIENT_TAGS */
 
 #ifdef FEATURE_ACL
 

@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.199 2016/01/16 12:33:35 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.200 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -70,6 +70,9 @@ const char filters_rcs[] = "$Id: filters.c,v 1.199 2016/01/16 12:33:35 fabiankei
 #include "deanimate.h"
 #include "urlmatch.h"
 #include "loaders.h"
+#ifdef FEATURE_CLIENT_TAGS
+#include "client-tags.h"
+#endif
 
 #ifdef _WIN32
 #include "win32.h"
@@ -81,6 +84,12 @@ typedef char *(*filter_function_ptr)();
 static filter_function_ptr get_filter_function(const struct client_state *csp);
 static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
 static jb_err prepare_for_filtering(struct client_state *csp);
+static void apply_url_actions(struct current_action_spec *action,
+                              struct http_request *http,
+#ifdef FEATURE_CLIENT_TAGS
+                              const struct list *client_tags,
+#endif
+                              struct url_actions *b);
 
 #ifdef FEATURE_ACL
 #ifdef HAVE_RFC2553
@@ -2322,12 +2331,15 @@ void get_url_actions(struct client_state *csp, struct http_request *http)
          return;
       }
 
+#ifdef FEATURE_CLIENT_TAGS
+      apply_url_actions(csp->action, http, csp->client_tags, b);
+#else
       apply_url_actions(csp->action, http, b);
+#endif
    }
 
    return;
 }
-
 
 /*********************************************************************
  *
@@ -2338,14 +2350,18 @@ void get_url_actions(struct client_state *csp, struct http_request *http)
  * Parameters  :
  *          1  :  action = Destination.
  *          2  :  http = Current URL
- *          3  :  b = list of URL actions to apply
+ *          3  :  client_tags = list of client tags
+ *          4  :  b = list of URL actions to apply
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void apply_url_actions(struct current_action_spec *action,
-                       struct http_request *http,
-                       struct url_actions *b)
+static void apply_url_actions(struct current_action_spec *action,
+                              struct http_request *http,
+#ifdef FEATURE_CLIENT_TAGS
+                              const struct list *client_tags,
+#endif
+                              struct url_actions *b)
 {
    if (b == NULL)
    {
@@ -2359,6 +2375,12 @@ void apply_url_actions(struct current_action_spec *action,
       {
          merge_current_action(action, b->action);
       }
+#ifdef FEATURE_CLIENT_TAGS
+      if (client_tag_match(b->url, client_tags))
+      {
+         merge_current_action(action, b->action);
+      }
+#endif
    }
 }
 
