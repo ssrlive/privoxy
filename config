@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy 3.0.25
 #
-#  $Id: p-config.sgml,v 2.114 2016/02/26 12:32:56 fabiankeil Exp $
+#  $Id: config,v 1.109 2016/03/17 10:43:39 fabiankeil Exp $
 #
 #  Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
 #
@@ -2098,7 +2098,7 @@ socket-timeout 300
 #
 #  Default value:
 #
-#      None
+#      60
 #
 #  Notes:
 #
@@ -2118,6 +2118,12 @@ socket-timeout 300
 #      therefore provides a "enable this tag temporarily" option. If
 #      it is used, the tag will be set until the client-tag-lifetime
 #      is over.
+#
+#  Examples:
+#
+#            # Increase the time to life for temporarily enabled tags to 3 minutes
+#            client-tag-lifetime 180
+#
 #
 #
 #  7. WINDOWS GUI OPTIONS
