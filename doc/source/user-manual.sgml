@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.205 2016/03/17 10:42:54 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.206 2016/03/17 10:43:07 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.205 2016/03/17 10:42:54 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.206 2016/03/17 10:43:07 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2642,7 +2642,16 @@ example.org/blocked-example-page</screen>
   <term>Example usage:</term>
   <listitem>
     <para>
-     <screen>+add-header{X-User-Tracking: sucks}</screen>
+     <screen># Add a DNT ("Do not track") header to all requests,
+# event to those that already have one.
+#
+# This is just an example, not a recommendation.
+#
+# There is no reason to believe that user-tracking websites care
+# about the DNT header and depending on the User-Agent, adding the
+# header may make user-tracking easier.
+{+add-header{DNT: 1}}
+/</screen>
    </para>
   </listitem>
  </varlistentry>
