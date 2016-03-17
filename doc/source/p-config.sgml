@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.113 2015/01/24 16:42:13 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.114 2016/02/26 12:32:56 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.113 2015/01/24 16:42:13 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.114 2016/02/26 12:32:56 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
@@ -3349,6 +3349,93 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
 </literallayout>]]>
 </sect3>
 
+
+<sect3 renderas="sect4" id="client-specific-tag"><title>client-specific-tag</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The name of a tag that will always be set for clients that
+    requested it through the webinterface.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>Tag name followed by a description that will be shown in the webinterface</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <warning>
+   <para>
+    This is an experimental feature. The syntax is likely to change
+    in future versions.
+   </para>
+   </warning>
+   <para>
+    Client-specific tags allow Privoxy admins to create different
+    profiles and let the users chose which one they want without
+    impacting other users.
+   </para>
+   <para>
+    One use case is allowing users to circumvent certain blocks
+    without having to allow them to circumvent all blocks.
+    This is not possible with the
+    <link linkend="enable-remote-toggle">enable-remote-toggle feature</link>
+    because it would bluntly disable all blocks for all users and also affect
+    other actions like filters.
+    It also is set globally which renders it useless in most multi-user setups.
+   </para>
+   <para>
+    After a client-specific tag has been defined with the client-specific-tag
+    directive, action sections can be activated based on the tag by using a
+    <ulink url="#CLIENT-TAG-PATTERN">CLIENT-TAG</ulink> pattern.
+    The CLIENT-TAG pattern is evaluated at the same priority
+    as URL patterns, as a result the last matching pattern wins.
+    Tags that are created based on client or server headers are evaluated
+    later on and can overrule CLIENT-TAG and URL patterns!
+   </para>
+   <para>
+    The tag is set for all requests that come from clients that requested
+    it to be set.
+    Note that "clients" are  differentiated by IP address,
+    if the IP address changes the tag has to be requested again.
+   </para>
+   <para>
+    Clients can request tags to be set by using the CGI interface <ulink
+     url="http://config.privoxy.org/show-client-tags">http://config.privoxy.org/show-client-tags</ulink>.
+    The specific tag description is only used on the web page and should
+    be phrased in away that the user understand the effect of the tag.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    <screen>
+    # Define a couple of tags, the described effect requires action sections
+    # that are enabled based on CLIENT-TAG patterns.
+    client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
+    disable-content-filters Disable content-filters but do not affect other actions
+    </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
 
 </sect2>
 
