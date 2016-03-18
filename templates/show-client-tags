@@ -109,8 +109,11 @@
       <td class="box">
 	<h2>Show client tags</h2>
           <p>
-            Here you see the client tags that are or can be optionally set based for
-            client with address @client-ip-addr@:
+            This page shows the configured
+            <a title="Lookup client-specific-tag directive in the user-manual"
+             href="@user-manual@config.html#CLIENT-SPECIFIC-TAG">client-specific tags</a>,
+            and whether or not they are enabled for the address your request came from
+            (@client-ip-addr@):
           </p>
 
         @client-tags@
