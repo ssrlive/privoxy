@@ -491,7 +491,8 @@ jb_err enable_client_specific_tag(struct client_state *csp,
    {
       add_tag_for_client(csp->ip_addr_str, tag_name, time_to_live);
       log_error(LOG_LEVEL_INFO,
-         "Tag '%s' enabled for client '%s'", tag->name, csp->ip_addr_str);
+         "Tag '%s' enabled for client '%s'. TTL: %d.",
+         tag->name, csp->ip_addr_str, time_to_live);
    }
 
    privoxy_mutex_unlock(&client_tags_mutex);
