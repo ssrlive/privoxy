@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#ifdef FEATURE_CLIENT_TAGS
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <stdlib.h>
@@ -586,3 +588,4 @@ int client_tag_match(const struct pattern_spec *pattern,
    return 0;
 
 }
+#endif /* def FEATURE_CLIENT_TAGS */
