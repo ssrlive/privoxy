@@ -588,4 +588,6 @@ int client_tag_match(const struct pattern_spec *pattern,
    return 0;
 
 }
+#else
+#error Compiling client-tags.c without FEATURE_CLIENT_TAGS
 #endif /* def FEATURE_CLIENT_TAGS */
