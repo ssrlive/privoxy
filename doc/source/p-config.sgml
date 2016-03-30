@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.117 2016/03/17 18:21:09 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.118 2016/03/21 12:26:59 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.117 2016/03/17 18:21:09 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.118 2016/03/21 12:26:59 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
@@ -2477,6 +2477,12 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     to itself, otherwise you could run into redirection loops if
     <application>Privoxy's</application> listening port is reachable
     by the outside or an attacker has access to the pages you visit.
+   </para>
+   <para>
+    If you are running Privoxy as intercepting proxy without being
+    able to intercept all client requests you may want to adjust
+    the CGI templates to make sure they don't reference content from
+    config.privoxy.org.
    </para>
   </listitem>
  </varlistentry>
