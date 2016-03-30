@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.212 2016/01/16 12:30:43 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.213 2016/03/17 10:40:53 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1412,7 +1412,7 @@ struct configuration_spec
  */
 
 /** URL for the Privoxy home page. */
-#define HOME_PAGE_URL     "http://www.privoxy.org/"
+#define HOME_PAGE_URL     "https://www.privoxy.org/"
 
 /** URL for the Privoxy user manual. */
 #define USER_MANUAL_URL   HOME_PAGE_URL VERSION "/user-manual/"
