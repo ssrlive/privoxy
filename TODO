@@ -1,4 +1,4 @@
-$Id: TODO,v 1.144 2016/02/26 12:33:08 fabiankeil Exp $
+$Id: TODO,v 1.145 2016/03/17 10:54:18 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -424,6 +424,14 @@ http://www.privoxy.org/faq/general.html#DONATE
      used platforms. Adding a couple of examples should also be useful for
      technical users (like Privoxy developers) who want to install or test
      Privoxy on platforms they are not familiar with.
+
+148) Add a config directive to change the CGI_SITE_2_HOST
+     (default: config.privoxy.org).
+
+     If Privoxy is used as reverse proxy or intercepting proxy without
+     getting intercepted requests, error pages created from default templates
+     currently can result in client requests to config.privoxy.org on the
+     Internet which may not be desirable.
 
 ##########################################################################
 
