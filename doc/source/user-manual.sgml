@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.206 2016/03/17 10:43:07 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.207 2016/03/17 18:20:42 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.206 2016/03/17 10:43:07 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.207 2016/03/17 18:20:42 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2429,7 +2429,7 @@ for details.
 </para>
 <para>
  Clients can request tags to be set by using the CGI interface <ulink
-  url="http://config.privoxy.org/show-client-tags">http://config.privoxy.org/show-client-tags</ulink>.
+  url="http://config.privoxy.org/client-tags">http://config.privoxy.org/client-tags</ulink>.
 </para>
 
 <para>
