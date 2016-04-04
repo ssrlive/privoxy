@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.236 2016/03/17 10:40:53 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.237 2016/04/04 10:50:37 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -326,8 +326,8 @@ dist-check:
 # create tar.gz from CVS:
 # This make-target is usually called through 'create-archive'. If you
 # run 'make create-snapshot' without setting SNAPVERSION, you'll get a
-# tar.gz with the current date in the name and as a releasenumber in the
-# spec-file. But the main usage is to run it as follows (Red Hat example):
+# tar.gz with the current date in the name.
+# The main usage is to run it as follows (Red Hat example):
 # make SNAPVERSION=1.6x create-snapshot
 # This creates a tar.gz.
 #############################################################################
