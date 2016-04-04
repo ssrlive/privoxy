@@ -1,6 +1,6 @@
-# Note:  Makefile is built automatically from Makefile.in
+# Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.235 2016/02/13 11:18:02 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.236 2016/03/17 10:40:53 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
