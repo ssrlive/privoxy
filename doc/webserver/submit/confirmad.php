@@ -1,11 +1,11 @@
 <?php
-//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/Attic/confirmad.php,v $
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/confirmad.php,v $
 //
 //  Purpose  :  Confirms ad submission.
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: confirmad.php,v 1.2 2002/03/29 09:55:21 swa Exp $
+//  $Id: confirmad.php,v 1.4 2006/07/18 14:48:53 david__schmidt Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -49,13 +49,3 @@ $headers = getallheaders();
 
 </body>
 </html>
-
-<!--
-	$Log: confirmad.php,v $
-	Revision 1.2  2002/03/29 09:55:21  swa
-	.
-	
-	Revision 1.1  2002/03/29 09:38:52  swa
-	2nd page
-	
--->

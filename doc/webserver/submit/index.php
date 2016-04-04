@@ -1,11 +1,11 @@
 <?php
-//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/Attic/index.php,v $
+//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/index.php,v $
 //
 //  Purpose  :  Submit form for ads and such
 //              This file belongs in
 //              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 //
-//  $Id: index.php,v 1.5 2002/03/29 21:03:56 swa Exp $
+//  $Id: index.php,v 1.7 2006/07/18 14:48:53 david__schmidt Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/
@@ -195,16 +195,3 @@ default action file was too agressive.</p>
 
 </body>
 </html>
-
-<!--
-	$Log: index.php,v $
-	Revision 1.5  2002/03/29 21:03:56  swa
-	further testing for email and file operations
-	
-	Revision 1.4  2002/03/29 09:55:21  swa
-	.
-	
-	Revision 1.3  2002/03/29 09:39:48  swa
-	added form
-	
--->
