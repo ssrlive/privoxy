@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.35 2016/01/21 15:56:27 fabiankeil Exp $
+ $Id: index.sgml,v 2.36 2016/02/26 12:27:32 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -148,7 +148,7 @@
    <para>
     <!-- please leave this link absolute so this file can be bundled with -->
     <!-- documentation and still used locally -->
-    <ulink url="http://www.privoxy.org/team/index.html">Pictures of the Privoxy Team</ulink>
+    <ulink url="https://www.privoxy.org/team/index.html">Pictures of the Privoxy Team</ulink>
    </para>
   </listitem>
  </itemizedlist>
