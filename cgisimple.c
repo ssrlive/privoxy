@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.135 2016/03/04 13:22:22 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.136 2016/03/17 10:40:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -277,6 +277,49 @@ jb_err cgi_show_request(struct client_state *csp,
 #ifdef FEATURE_CLIENT_TAGS
 /*********************************************************************
  *
+ * Function    :  cgi_create_client_tag_form
+ *
+ * Description :  Creates a HTML form to enable or disable a given
+ *                client tag.
+ *                XXX: Could use a template.
+ *
+ * Parameters  :
+ *          1  :  form = Buffer to fill with the generated form
+ *          2  :  size = Size of the form buffer
+ *          3  :  tag = Name of the tag this form should affect
+ *          4  :  toggle_state = Desired state after the button pressed 0
+ *          5  :  expires = Whether or not the tag should be enabled.
+ *                          Only checked if toggle_state is 1.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void cgi_create_client_tag_form(char *form, size_t size,
+   const char *tag, int toggle_state, int expires)
+{
+   char *button_name;
+
+   if (toggle_state == 1)
+   {
+      button_name = (expires == 1) ? "Enable" : "Enable temporarily";
+   }
+   else
+   {
+      assert(toggle_state == 0);
+      button_name = "Disable";
+   }
+
+   snprintf(form, size,
+      "<form method=\"GET\" action=\"show-client-tags\" style=\"display: inline\">\n"
+      " <input type=\"hidden\" name=\"tag\" value=\"%s\">\n"
+      " <input type=\"hidden\" name=\"toggle-state\" value=\"%u\">\n"
+      " <input type=\"hidden\" name=\"expires\" value=\"%u\">\n"
+      " <input type=\"submit\" value=\"%s\">\n"
+      "</form>", tag, toggle_state, !expires, button_name);
+}
+
+/*********************************************************************
+ *
  * Function    :  cgi_show_client_tags
  *
  * Description :  Shows the tags that can be set based on the client
@@ -363,15 +406,12 @@ jb_err cgi_show_client_tags(struct client_state *csp,
          if (!err) err = string_append(&client_tags, this_tag->name);
          if (!err) err = string_append(&client_tags, "</td><td>");
          if (!err) err = string_append(&client_tags, tag_state == 1 ? "Enabled" : "Disabled");
-         snprintf(buf, sizeof(buf),
-            "</td><td><a href=\"/show-client-tags?tag=%s&toggle-state=%d&amp;expires=0\">%s</a>",
-            this_tag->name, !tag_state, tag_state == 1 ? "Disable" : "Enable");
+         if (!err) err = string_append(&client_tags, "</td><td>");
+         cgi_create_client_tag_form(buf, sizeof(buf), this_tag->name, !tag_state, 1);
          if (!err) err = string_append(&client_tags, buf);
          if (tag_state == 0)
          {
-            snprintf(buf, sizeof(buf), ". <a href=\"/show-client-tags?"
-               "tag=%s&amp;toggle-state=1&amp;expires=1\">Enable temporarily</a>",
-               this_tag->name);
+            cgi_create_client_tag_form(buf, sizeof(buf), this_tag->name, !tag_state, 0);
             if (!err) err = string_append(&client_tags, buf);
          }
          if (!err) err = string_append(&client_tags, "</td><td>");
