@@ -16,8 +16,8 @@
 #                your option) any later version.
 #
 ##############################################################################
-       # This template should be kept in sync with the "blocked" template
-       # whose JavaScript version duplicates the content.
+# This template should be kept in sync with the "blocked" template
+# whose JavaScript version duplicates the content.
        <h2>Support and Service:</h2>
         <p>
           The Privoxy Team values your feedback.
