@@ -2340,6 +2340,11 @@
               redirection loops if <span class="APPLICATION">Privoxy's</span>
               listening port is reachable by the outside or an attacker has
               access to the pages you visit.</p>
+
+              <p>If you are running Privoxy as intercepting proxy without
+              being able to intercept all client requests you may want to
+              adjust the CGI templates to make sure they don't reference
+              content from config.privoxy.org.</p>
             </dd>
 
             <dt>Examples:</dt>
@@ -3215,9 +3220,9 @@
               requested again.</p>
 
               <p>Clients can request tags to be set by using the CGI
-              interface <a href="http://config.privoxy.org/show-client-tags"
-              target="_top">http://config.privoxy.org/show-client-tags</a>.
-              The specific tag description is only used on the web page and
+              interface <a href="http://config.privoxy.org/client-tags"
+              target="_top">http://config.privoxy.org/client-tags</a>. The
+              specific tag description is only used on the web page and
               should be phrased in away that the user understand the effect
               of the tag.</p>
             </dd>
@@ -3291,8 +3296,8 @@
               pattern.</p>
 
               <p>The CGI interface <a href=
-              "http://config.privoxy.org/show-client-tags" target=
-              "_top">http://config.privoxy.org/show-client-tags</a> therefore
+              "http://config.privoxy.org/client-tags" target=
+              "_top">http://config.privoxy.org/client-tags</a> therefore
               provides a "enable this tag temporarily" option. If it is used,
               the tag will be set until the client-tag-lifetime is over.</p>
             </dd>
