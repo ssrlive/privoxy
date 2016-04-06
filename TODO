@@ -1,4 +1,4 @@
-$Id: TODO,v 1.145 2016/03/17 10:54:18 fabiankeil Exp $
+$Id: TODO,v 1.146 2016/03/30 11:15:02 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -135,9 +135,8 @@ http://www.privoxy.org/faq/general.html#DONATE
     Interested donors: 1.
 
 54) Move away from CVS to a more modern revision control system.
-    Find out if there are any objection against going with Git.
-    Using Git would also have the advantage that SF now pretends
-    to support it, so we could do it independently from 53).
+    The move to git is work in progress:
+    https://sourceforge.net/p/ijbswa/mailman/message/34994343/
 
 58) Move more template strings from the code into the actual templates.
 
