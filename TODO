@@ -1,4 +1,4 @@
-$Id: TODO,v 1.146 2016/03/30 11:15:02 fabiankeil Exp $
+$Id: TODO,v 1.147 2016/04/06 12:39:14 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -129,8 +129,13 @@ http://www.privoxy.org/faq/general.html#DONATE
     It would probably also make sense to look into what other
     projects did when migrating away from SF.
 
-    2014-05-13: Work in progress. Hosting wish list at the end
-    of this file.
+    2014-05: Work in progress. Hosting wish list at the end
+             of this file. Looks like most of the other projects
+             that left SF had lower standards and moved to hosters
+             that don't come close to sattisfying the requirements.
+    2016-03: The website has been moved away from SF infrastructure
+             and is also available through https:// now.
+    2016-04: Server rent for a year has been sponsored by ChameleonJohn.
 
     Interested donors: 1.
 
