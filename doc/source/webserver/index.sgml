@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.37 2016/04/04 10:48:22 fabiankeil Exp $
+ $Id: index.sgml,v 2.38 2016/04/08 08:29:29 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -132,11 +132,6 @@
   <listitem>
    <para>
     <ulink url="user-manual/introduction.html#FEATURES">List of (new) Features</ulink>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <ulink url="https://sourceforge.net/projects/ijbswa/">The project page</ulink>
    </para>
   </listitem>
   <listitem>
