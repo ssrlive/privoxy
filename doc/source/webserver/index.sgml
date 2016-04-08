@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.39 2016/04/08 08:29:42 fabiankeil Exp $
+ $Id: index.sgml,v 2.40 2016/04/08 08:30:00 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -151,7 +151,10 @@
 <!-- dummy section, for spacing -->
 <title></title>
 <para>
-This page is also available as <ulink url="http://jvauzb4sb3bwlsnc.onion/">onion service</ulink>.
+ <subscript>
+   The Privoxy website is also available as
+   <ulink url="http://jvauzb4sb3bwlsnc.onion/">Tor onion service</ulink>.
+ </subscript>
 </para>
 ]]>
 
