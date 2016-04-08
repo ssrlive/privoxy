@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.239 2016/04/08 08:30:53 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.240 2016/04/08 08:31:04 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -520,7 +520,7 @@ dok-webserver:
 	s/\.\d\. //;\
 	s/__copy/&copy;/;\
 	s@(<SUB)@<p style="text-align: center">\1@; s@(</SUB)@\1></p@;\
-        s@ChameleonJohn@<br><a href="http://www.chameleonjohn.com/"><img align="center"\
+        s@ChameleonJohn@<br><a href="http://www.chameleonjohn.com/"><img align="middle"\
  src="images/sponsors/chameleonjohn.png" alt="ChameleonJohn Coupons"></a>@' \
      doc/webserver/index.html && $(RM) doc/webserver/*.bak
 
