@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.40 2016/04/08 08:30:00 fabiankeil Exp $
+ $Id: index.sgml,v 2.41 2016/04/08 08:30:38 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -171,6 +171,20 @@
   Copyright __copy 2001-2016 by Privoxy Developers
  </subscript>
 </para>
+
+<![%p-homepage;[
+<para>
+ <!--
+   The markup for the sponsor logo gets inserted into the generated
+   HTML by the dok-webserver target because the logo uses the shiny
+   new PNG format which our awesome Docbook toolchain apparently does
+   not support yet.
+  -->
+ <subscript>
+   Hosting sponsored by ChameleonJohn.
+ </subscript>
+</para>
+]]>
 
 </sect1>
  
