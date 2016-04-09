@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.118 2016/03/06 11:32:06 fabiankeil Exp $
+ $Id: faq.sgml,v 2.119 2016/03/17 10:18:57 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.118 2016/03/06 11:32:06 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.119 2016/03/17 10:18:57 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -503,7 +503,7 @@ warranty? Registration?</title>
 <sect3 renderas="sect4" id="donate"><title>Would you like to donate?</title>
 <para>
  Donations are welcome. Our
- <ulink url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO">TODO list</ulink>
+ <ulink url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO?view=markup">TODO list</ulink>
  is rather long and being able to pay one (or more) developers to work on Privoxy
  would make a huge difference, even if it was only for a couple of weeks. Donations may
  also be used for Privoxy-related travel expenses (for example to attend conferences),
@@ -830,14 +830,14 @@ the differences?</title>
   Based on your feedback and the continuing development, updates of
   <filename>default.action</filename> will be
   made available from time to time on the <ulink
-  url="http://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
-  our <ulink url="http://sf.net/projects/ijbswa/">project page</ulink>.
+  url="https://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
+  our <ulink url="https://sourceforge.net/projects/ijbswa/">project page</ulink>.
  </para>
 
  <para>
   If you wish to receive an email notification whenever we release updates of
   <application>Privoxy</application> or the actions file, <ulink
-  url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
+  url="https://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
   to our announce mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
  </para>
 
@@ -1179,7 +1179,7 @@ on Win2K/NT/XP?</title>
 <para>
  Earlier ]]>3.x versions could run as a system service using <command>srvany.exe</command>.
  See the discussion at <ulink
- url="http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>,
+ url="https://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">https://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>,
  for details, and a sample configuration.
 </para>
 </sect2>
@@ -1285,7 +1285,7 @@ and thus avoid individual browser configuration?</title>
 <para>
  For a good discussion of some of the issues involved (including privacy and
  security issues), see
- <ulink url="http://sourceforge.net/tracker/?func=detail&#38;atid=211118&#38;aid=629518&#38;group_id=11118">http://sourceforge.net/tracker/?func=detail&#38;atid=211118&#38;aid=629518&#38;group_id=11118</ulink>.
+ <ulink url="https://sourceforge.net/tracker/?func=detail&#38;atid=211118&#38;aid=629518&#38;group_id=11118">https://sourceforge.net/tracker/?func=detail&#38;atid=211118&#38;aid=629518&#38;group_id=11118</ulink>.
 </para>
 </sect2>
 
@@ -2246,7 +2246,7 @@ and related issues?</title>
 <para>
  Lately there have been reports of problems with some kind of
  "parental control" software based on Privoxy that came preinstalled on
- certain <ulink url="http://sourceforge.net/p/ijbswa/bugs/813/">ASUS Netbooks</ulink>.
+ certain <ulink url="https://sourceforge.net/p/ijbswa/bugs/813/">ASUS Netbooks</ulink>.
  The problems described are inconsistent with the behaviour of official
  Privoxy versions, which suggests that the preinstalled software may
  contain vendor modifications that we don't know about and thus can't debug.
@@ -2714,7 +2714,7 @@ Why?</title>
 <para>
  Upgrading <application>Privoxy</application>, or going to the most recent
  <filename>default.action</filename> file available from <ulink
- url="http://sourceforge.net/project/showfiles.php?group_id=11118">SourceForge</ulink>
+ url="https://sourceforge.net/project/showfiles.php?group_id=11118">SourceForge</ulink>
  might be worth a try, too.
 </para>
 </sect2>

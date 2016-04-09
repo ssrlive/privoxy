@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.207 2016/03/17 18:20:42 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.208 2016/04/04 10:56:35 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.207 2016/03/17 18:20:42 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.208 2016/04/04 10:56:35 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -162,7 +162,7 @@ Hal.
  <application>Privoxy</application> is available both in convenient pre-compiled
  packages for a wide range of operating systems, and as raw source code.
  For most users, we recommend using the packages, which can be downloaded from our
- <ulink url="http://sourceforge.net/projects/ijbswa/">Privoxy Project
+ <ulink url="https://sourceforge.net/projects/ijbswa/">Privoxy Project
  Page</ulink>.
 </para>
 
@@ -351,14 +351,14 @@ How to install the binary packages depends on your operating system:
 <para>
  The most convenient way to obtain the <application>Privoxy</application> sources
  is to download the source tarball from our
- <ulink url="http://sourceforge.net/project/showfiles.php?group_id=11118&amp;package_id=10571">project download
+ <ulink url="https://sourceforge.net/projects/ijbswa/files/Sources/">project download
  page</ulink>.
 </para>
 
 <para>
  If you like to live on the bleeding edge and are not afraid of using
  possibly unstable development versions, you can check out the up-to-the-minute
- version directly from <ulink url="http://sourceforge.net/cvs/?group_id=11118">the
+ version directly from <ulink url="https://sourceforge.net/p/ijbswa/code/?source=navbar">the
  CVS repository</ulink>.
 <!--
  deprecated...out of business.
@@ -379,7 +379,7 @@ How to install the binary packages depends on your operating system:
 <para>
  If you wish to receive an email notification whenever we release updates of
  <application>Privoxy</application> or the actions file, <ulink
- url="http://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
+ url="https://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
  to our announce  mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
 </para>
 
