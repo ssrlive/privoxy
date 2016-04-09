@@ -8,10 +8,10 @@
                  This file belongs in
                  ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
-  $Id: index.php,v 1.7 2016/02/26 12:31:38 fabiankeil Exp $
+  $Id: index.php,v 1.8 2016/02/26 12:31:47 fabiankeil Exp $
 
   Written by and Copyright (C) 2001 the SourceForge
-  Privoxy team. http://www.privoxy.org/
+  Privoxy team. https://www.privoxy.org/
 
   Based on the Internet Junkbuster originally written
   by and Copyright (C) 1997 Anonymous Coders and
@@ -47,7 +47,7 @@
 
 <body>
 
-<h1><a href="http://www.privoxy.org/">Privoxy</a> is not being used</h1>
+<h1><a href="https://www.privoxy.org/">Privoxy</a> is not being used</h1>
 
 <p>The fact that you are reading this page shows that Privoxy was
 not used in the process of accessing it. Had the request been
@@ -77,14 +77,14 @@ serves this page from its cache.</p>
 <p>Shift-reload, clear all caches, and if the problem still persists,
 trace the proxy chain starting with your browser's settings. Please
 refer to the
-<a href="http://www.privoxy.org/user-manual/config.html#FORWARDING">forwarding
-chapter</a> of the <a href="http://www.privoxy.org/user-manual/">user
+<a href="https://www.privoxy.org/user-manual/config.html#FORWARDING">forwarding
+chapter</a> of the <a href="https://www.privoxy.org/user-manual/">user
 manual</a> for details.</p></li>
 </ul>
 
-<p>If you have read the <a href="http://www.privoxy.org/user-manual/">user
+<p>If you have read the <a href="https://www.privoxy.org/user-manual/">user
 manual</a> and still have trouble, feel free to <a
-href="http://www.privoxy.org/user-manual/contact.html">contact us to get help</a>.</p>
+href="https://www.privoxy.org/user-manual/contact.html">contact us to get help</a>.</p>
 
 </body>
 </html>
