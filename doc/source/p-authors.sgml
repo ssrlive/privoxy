@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.74 2016/02/02 13:12:58 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.75 2016/02/02 13:13:08 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers http://www.privoxy.org/
  See LICENSE.
@@ -162,6 +162,7 @@ Current Privoxy Team:
  Andreas Rutkauskas
  Bart Schelstraete
  Gregory Seidman
+ Atman Sense
  Chung-chieh Shan
  Benjamin C. Wiley Sittler
  Simon South
