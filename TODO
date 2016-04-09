@@ -1,4 +1,4 @@
-$Id: TODO,v 1.147 2016/04/06 12:39:14 fabiankeil Exp $
+$Id: TODO,v 1.148 2016/04/06 12:39:36 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -436,6 +436,9 @@ http://www.privoxy.org/faq/general.html#DONATE
      getting intercepted requests, error pages created from default templates
      currently can result in client requests to config.privoxy.org on the
      Internet which may not be desirable.
+
+149) Use poll() for socket selection so the number of sockets Privoxy
+     can deal with isn't limited to FD_SETSIZE anymore.
 
 ##########################################################################
 
