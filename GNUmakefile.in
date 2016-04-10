@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.240 2016/04/08 08:31:04 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.241 2016/04/08 08:42:00 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -363,14 +363,14 @@ gen-dist: dist-check
 	$(STRIP_PROG) $(PROGRAM)
 	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
-	(cd .. && $(TAR) -cvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
+	(cd .. && $(TAR) --exclude "PACKAGERS" -cvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
 # add config files
 	for foo in $(CONFIG_FILES); do \
-		(cd .. && $(TAR) -uvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) --exclude "PACKAGERS" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done;
 # add documentation
 	for foo in $(DOC_FILES); do \
-		(cd .. && $(TAR) -uvhf --exclude "PACKAGERS" privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
+		(cd .. && $(TAR) --exclude "PACKAGERS" -uvhf privoxy-$(TARGET_OS)-$(VERSION)-$(CODE_STATUS)-src.tar privoxy-$(VERSION)-$(CODE_STATUS)/$$foo;) \
 	done;
 # and zip the archive
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
