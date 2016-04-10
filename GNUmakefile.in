@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.241 2016/04/08 08:42:00 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.242 2016/04/10 08:08:40 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2014 members of the
 # Privoxy team. http://www.privoxy.org/
@@ -166,7 +166,10 @@ TAR_ARCH = /tmp/privoxy-$(VERSION).tar.gz
 #############################################################################
 # We include these files in our distributions
 #############################################################################
-CONFIGS = config trust default.action match-all.action user.action default.filter user.filter
+CONFIGS = 	config trust default.action match-all.action \
+		user.action default.filter user.filter \
+		regression-tests.action
+
 # take care that no CVS .cvsignore or other crappy files
 # are included here
 # and escape every '#' in the find. doh.
