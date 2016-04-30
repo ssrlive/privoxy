@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.307 2016/01/17 14:31:47 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.308 2016/02/26 12:31:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4313,7 +4313,13 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
             time_t result2;
 
             tm = gmtime(result);
-            strftime(recreated_date, sizeof(recreated_date), time_formats[i], tm);
+            if (!strftime(recreated_date, sizeof(recreated_date),
+               time_formats[i], tm))
+            {
+               log_error(LOG_LEVEL_ERROR, "Failed to recreate date '%s' with '%s'.",
+                  header_time, time_formats[i]);
+               continue;
+            }
             memset(&gmt, 0, sizeof(gmt));
             if (NULL == strptime(recreated_date, time_formats[i], &gmt))
             {
