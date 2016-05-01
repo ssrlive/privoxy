@@ -2814,7 +2814,7 @@ It does not escape any input!
 [B<--keep-date>] Don't remove the date when printing highlighted log messages.
 Useful when parsing multiple log files at once.
 
-[B<--no-msecs>] Don't expect milisecond resolution
+[B<--no-msecs>] Don't expect millisecond resolution
 
 [B<--no-syntax-highlighting>] Disable syntax-highlighting. Useful when
 the filtered output is piped into less in which case the ANSI control
