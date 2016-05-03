@@ -27,9 +27,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.119 2016/03/17 10:18:57 fabiankeil Exp $
+ $Id: faq.sgml,v 2.120 2016/04/09 10:23:54 fabiankeil Exp $
 
- Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -74,11 +74,11 @@
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
  <link linkend="copyright">Copyright</link> &my-copy; 2001-2014 by
- <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
+ <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.119 2016/03/17 10:18:57 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.120 2016/04/09 10:23:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -118,7 +118,7 @@ Hal.
 ]]>
  <para>
  This FAQ gives quick answers to frequently asked questions about
- <ulink url="http://www.privoxy.org/">Privoxy</ulink>.
+ <ulink url="https://www.privoxy.org/">Privoxy</ulink>.
  It is not a substitute for the
  <ulink url="../user-manual/index.html"><citetitle>Privoxy User Manual</citetitle></ulink>.
 <!--
@@ -135,7 +135,7 @@ Hal.
   Please note that this document is a work in progress. This copy represents
   the state at the release of version &p-version;.
   You can find the latest version of the document at <ulink
-  url="http://www.privoxy.org/faq/">http://www.privoxy.org/faq/</ulink>.
+  url="https://www.privoxy.org/faq/">https://www.privoxy.org/faq/</ulink>.
   Please see the <link linkend="contact">Contact section</link> if you want to
   contact the developers.
  </para>
@@ -701,9 +701,9 @@ All the ads are there. What's wrong?</title>
  <application>Privoxy</application> is not running at all. Check the <ulink
  url="../user-manual/config.html#LOGFILE">log file</ulink>. For instructions
  on starting <application>Privoxy</application> and browser configuration,
- see the <ulink url="http://www.privoxy.org/user-manual/startup.html">chapter
+ see the <ulink url="https://www.privoxy.org/user-manual/startup.html">chapter
  on starting <application>Privoxy</application></ulink> in the
- <ulink url="http://www.privoxy.org/user-manual/">User Manual</ulink>.
+ <ulink url="https://www.privoxy.org/user-manual/">User Manual</ulink>.
 </para>
 
 </sect2>
@@ -716,9 +716,9 @@ Privoxy is running and being used.</title>
  First, make sure that Privoxy is <emphasis>really</emphasis> running and
  being used by visiting <ulink url="http://p.p/">http://p.p/</ulink>. You
  should see the <application>Privoxy</application> main page. If not, see
- the <ulink url="http://www.privoxy.org/user-manual/startup.html">chapter
+ the <ulink url="https://www.privoxy.org/user-manual/startup.html">chapter
  on starting <application>Privoxy</application></ulink> in the
- <ulink url="http://www.privoxy.org/user-manual/">User Manual</ulink>.
+ <ulink url="https://www.privoxy.org/user-manual/">User Manual</ulink>.
 </para>
 
 <para>
@@ -1036,7 +1036,7 @@ with a browser? Does that not raise security issues?</title>
 <para>
  If you intend to develop your own filters, you might want to have a look at
  <ulink
- url="http://www.fabiankeil.de/sourcecode/pft/">Privoxy-Filter-Test</ulink>.
+ url="https://www.fabiankeil.de/sourcecode/pft/">Privoxy-Filter-Test</ulink>.
 </para>
 
 </sect2>
