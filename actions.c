@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.95 2016/01/16 12:33:35 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.96 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -1082,6 +1082,44 @@ int load_action_files(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  filter_type_to_string
+ *
+ * Description :  Converts a filter type enum into a string.
+ *
+ * Parameters  :
+ *          1  :  filter_type = filter_type as enum
+ *
+ * Returns     :  Pointer to static string.
+ *
+ *********************************************************************/
+static const char *filter_type_to_string(enum filter_type filter_type)
+{
+   switch (filter_type)
+   {
+   case FT_CONTENT_FILTER:
+      return "content filter";
+   case FT_CLIENT_HEADER_FILTER:
+      return "client-header filter";
+   case FT_SERVER_HEADER_FILTER:
+      return "server-header filter";
+   case FT_CLIENT_HEADER_TAGGER:
+      return "client-header tagger";
+   case FT_SERVER_HEADER_TAGGER:
+      return "server-header tagger";
+#ifdef FEATURE_EXTERNAL_FILTERS
+   case FT_EXTERNAL_CONTENT_FILTER:
+      return "external content filter";
+#endif
+   case FT_INVALID_FILTER:
+      return "invalid filter type";
+   }
+
+   return "unknown filter type";
+
+}
+
+/*********************************************************************
+ *
  * Function    :  referenced_filters_are_missing
  *
  * Description :  Checks if any filters of a certain type referenced
@@ -1106,7 +1144,8 @@ static int referenced_filters_are_missing(const struct client_state *csp,
    {
       if (NULL == get_filter(csp, filtername->str, filter_type))
       {
-         log_error(LOG_LEVEL_ERROR, "Missing filter '%s'", filtername->str);
+         log_error(LOG_LEVEL_ERROR, "Missing %s '%s'",
+            filter_type_to_string(filter_type), filtername->str);
          return 1;
       }
    }
