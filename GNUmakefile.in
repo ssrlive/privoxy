@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.244 2016/05/03 13:20:58 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.245 2016/05/03 13:21:08 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2016 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -175,11 +175,11 @@ CONFIGS = 	config trust default.action match-all.action \
 # are included here
 # and escape every '#' in the find. doh.
 CONFIG_FILES = $(CONFIGS) \
-		`find templates/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS"`
+		`find templates/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS" | sort`
 
 DOC_FILES = AUTHORS LICENSE README ChangeLog INSTALL \
-		`find doc/webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html"` \
-		`find doc/webserver/ -name "*.css"` \
+		`find doc/webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html" | sort` \
+		`find doc/webserver/ -name "*.css" | sort` \
                 $(MAN_PAGE)
 
 #############################################################################
@@ -404,7 +404,7 @@ tarball-dist: dist-check clean clobber
 
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" \)`; do \
+	-name "PACKAGERS" \) | sort`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) -cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
