@@ -3,9 +3,9 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.119 2016/03/30 11:14:46 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.120 2016/04/04 10:56:35 fabiankeil Exp $
 
- Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -97,10 +97,10 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.119 2016/03/30 11:14:46 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.120 2016/04/04 10:56:35 fabiankeil Exp $
 </para>
 <para>
-Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
+Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
 </para>
 
 <para>
@@ -229,7 +229,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Effect if unset:</term>
   <listitem>
    <para>
-    <ulink url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/<replaceable class="parameter">version</replaceable>/user-manual/</ulink>
+    <ulink url="https://www.privoxy.org/user-manual/">https://www.privoxy.org/<replaceable class="parameter">version</replaceable>/user-manual/</ulink>
     will be used, where <replaceable class="parameter">version</replaceable> is the <application>Privoxy</application> version.
    </para>
   </listitem>
@@ -316,7 +316,7 @@ II. FORMAT OF THE CONFIGURATION FILE
  </varlistentry>
 </variablelist>
 
-<![%config-file;[<literallayout>@@#user-manual http://www.privoxy.org/user-manual/</literallayout>]]>
+<![%config-file;[<literallayout>@@#user-manual https://www.privoxy.org/user-manual/</literallayout>]]>
 </sect3>
 
 

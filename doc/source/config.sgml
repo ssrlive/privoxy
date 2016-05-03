@@ -13,9 +13,9 @@
 
  Purpose     :  config file generation
 
- $Id: config.sgml,v 2.29 2016/01/21 15:55:48 fabiankeil Exp $
+ $Id: config.sgml,v 2.30 2016/02/26 12:27:32 fabiankeil Exp $
 
- Copyright (C) 2001-2009 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2009 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================

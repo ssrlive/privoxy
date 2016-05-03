@@ -21,9 +21,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.67 2016/02/26 12:27:32 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.68 2016/04/09 10:23:54 fabiankeil Exp $
 
- Copyright (C) 2001-2016 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -42,14 +42,14 @@
      <subscript>
     <!-- Completely the wrong markup, but very little is allowed  -->
     <!-- in this part of an article. FIXME -->
-      <ulink url="http://www.privoxy.org/user-manual/copyright.html">Copyright</ulink>
+      <ulink url="https://www.privoxy.org/user-manual/copyright.html">Copyright</ulink>
       &my-copy; 2001-2016 by
-      <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
+      <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
      </subscript>
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.67 2016/02/26 12:27:32 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.68 2016/04/09 10:23:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -98,9 +98,9 @@ Hal.
  Please note that this document is constantly evolving. This copy represents
  the state at the release of version &p-version;.
  You can find the latest version of the this manual at <ulink
- url="http://www.privoxy.org/developer-manual/">http://www.privoxy.org/developer-manual/</ulink>.
+ url="https://www.privoxy.org/developer-manual/">https://www.privoxy.org/developer-manual/</ulink>.
  Please have a look at the
- <ulink url="http://www.privoxy.org/user-manual/contact.html">contact section in the user manual</ulink>
+ <ulink url="https://www.privoxy.org/user-manual/contact.html">contact section in the user manual</ulink>
  if you are interested in contacting the developers.
 </para>
 <!--        <para> -->
@@ -1806,7 +1806,7 @@ const char FILENAME_rcs[] = "$I&lt;!-- Break CVS Substitution -->d$";
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009
- *                the Privoxy team. http://www.privoxy.org/
+ *                the Privoxy team. https://www.privoxy.org/
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -1860,7 +1860,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
  * Purpose     :  (Fill me in with a good description!)
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009
- *                the Privoxy team. http://www.privoxy.org/
+ *                the Privoxy team. https://www.privoxy.org/
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -2842,7 +2842,7 @@ Install the rpm. Any error messages?
 </programlisting>
    </para>
    <para>
-    This will do the upload to <ulink url="http://www.privoxy.org/">the
+    This will do the upload to <ulink url="https://www.privoxy.org/">the
     webserver</ulink> (www.privoxy.org) and ensure all files and directories
     there are group writable.
    </para>

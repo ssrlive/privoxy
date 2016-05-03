@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.15 2016/01/21 15:57:16 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.16 2016/01/22 10:20:48 fabiankeil Exp $
 
- Copyright (C) 2013 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2013 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================

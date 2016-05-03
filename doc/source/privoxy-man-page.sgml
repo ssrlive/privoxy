@@ -5,9 +5,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: privoxy-man-page.sgml,v 2.51 2016/01/21 15:55:49 fabiankeil Exp $
+ $Id: privoxy-man-page.sgml,v 2.52 2016/02/26 12:27:32 fabiankeil Exp $
 
- Copyright (C) 2001-2012 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2012 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -284,7 +284,7 @@
 </para>
 <para>
  See the <ulink
- url="http://www.privoxy.org/user-manual/"><citetitle>User Manual</citetitle></ulink> for a detailed
+ url="https://www.privoxy.org/user-manual/"><citetitle>User Manual</citetitle></ulink> for a detailed
  explanation of installation, general usage, all configuration options, new
  features and notes on upgrading.
 </para>

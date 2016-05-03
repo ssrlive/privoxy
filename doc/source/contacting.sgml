@@ -3,9 +3,9 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.41 2014/12/19 12:30:38 fabiankeil Exp $
+ $Id: contacting.sgml,v 2.42 2016/04/09 10:23:54 fabiankeil Exp $
 
- Copyright (C) 2001-2011 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2011 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
@@ -58,7 +58,7 @@
 <para>
   If you aren't using the latest Privoxy version, the problem may have been found
   and fixed in the meantime. We would appreciate if you could take the time
-  to <ulink url="http://www.privoxy.org/user-manual/installation.html">upgrade
+  to <ulink url="https://www.privoxy.org/user-manual/installation.html">upgrade
   to the latest version</ulink> and verify that the problem still exists.
 </para>
 <para>
@@ -189,7 +189,7 @@ debug  8192 # Non-fatal errors</literallayout>
 </para>
 
 <para>
-  The <ulink url="http://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
+  The <ulink url="https://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
   of the Privoxy User Manual</ulink> also has helpful information
   on understanding <literal>actions</literal>, and <literal>action</literal> debugging.
 </para>
