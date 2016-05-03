@@ -36,9 +36,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.208 2016/04/04 10:56:35 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.209 2016/04/09 10:23:54 fabiankeil Exp $
 
- Copyright (C) 2001-2014 Privoxy Developers http://www.privoxy.org/
+ Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -57,12 +57,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2014 by
- <ulink url="http://www.privoxy.org/">Privoxy Developers</ulink>
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2016 by
+ <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.208 2016/04/04 10:56:35 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.209 2016/04/09 10:23:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -92,7 +92,7 @@ Hal.
  <para>
   The <citetitle>Privoxy User Manual</citetitle> gives users information on how to
   install, configure and use <ulink
-  url="http://www.privoxy.org/">Privoxy</ulink>.
+  url="https://www.privoxy.org/">Privoxy</ulink>.
  </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
@@ -101,7 +101,7 @@ Hal.
 
  <para>
   You can find the latest version of the <citetitle>Privoxy User Manual</citetitle> at  <ulink
-  url="http://www.privoxy.org/user-manual/">http://www.privoxy.org/user-manual/</ulink>.
+  url="https://www.privoxy.org/user-manual/">https://www.privoxy.org/user-manual/</ulink>.
   Please see the <link linkend="contact">Contact section</link> on how to
   contact the developers.
  </para>
@@ -1442,7 +1442,7 @@ for details.
  </member>
  <member>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink
-  url="http://www.privoxy.org/&p-version;/user-manual/">Documentation</ulink>
+  url="https://www.privoxy.org/&p-version;/user-manual/">Documentation</ulink>
  </member>
  </simplelist>
  </msgtext>
@@ -5499,7 +5499,7 @@ new action
 
 # Create a short, easy to remember nickname for a favorite site
 # (relies on the browser to accept and forward invalid URLs to &my-app;)
-{ +redirect{http://www.privoxy.org/user-manual/actions-file.html} }
+{ +redirect{https://www.privoxy.org/user-manual/actions-file.html} }
  a
 
 # Always use the expanded view for Undeadly.org articles
