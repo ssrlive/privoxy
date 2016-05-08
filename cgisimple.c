@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.137 2016/04/04 10:51:45 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.138 2016/04/04 10:55:47 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1715,6 +1715,14 @@ static jb_err show_defines(struct map *exports)
    };
 
    static const struct feature features[] = {
+      {
+         "FEATURE_64_BIT_TIME_T",
+#if (SIZEOF_TIME_T == 8)
+         1,
+#else
+         0,
+#endif
+      },
       {
          "FEATURE_ACCEPT_FILTER",
 #ifdef FEATURE_ACCEPT_FILTER

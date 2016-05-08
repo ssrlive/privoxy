@@ -224,6 +224,11 @@
             </tr>
 
             <tr>
+              <td><code>FEATURE_64_BIT_TIME_T</code></td>
+              <td>@if-FEATURE_64_BIT_TIME_T-then@ Yes @else-not-FEATURE_64_BIT_TIME_T@ No @endif-FEATURE_64_BIT_TIME_T@</td>
+              <td>Dates before 1970 and after 2038 are (hopefully) supported.</td>
+            </tr>
+            <tr>
               <td><code>FEATURE_ACCEPT_FILTER</code></td>
               <td>@if-FEATURE_ACCEPT_FILTER-then@ Yes @else-not-FEATURE_ACCEPT_FILTER@ No @endif-FEATURE_ACCEPT_FILTER@</td>
               <td>Support for FreeBSD's accf_http(9) which is also available on some other BSDs.</td>
