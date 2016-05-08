@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.247 2016/05/08 10:44:09 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.248 2016/05/08 10:44:20 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2016 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -731,8 +731,8 @@ $(PROGRAM): $(OBJS) $(W32_FILES)
 clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action \
 		config.base config.tmp \
-		`find . \( -name TAGS -o -name tags \) -and -not -path "./.git/refs/tags"` \
-		`find . -name "*.orig" -a -not -name rc.privoxy.orig`
+		`find . \( -name TAGS -o -name tags \) -a -not -path "./.git/*"` \
+		`find . -name "*.orig" -a -not -name rc.privoxy.orig -a -not -path "./.git/*"`
 
 clean-editor-files:
 	$(RM) `find . -name "*~"`
