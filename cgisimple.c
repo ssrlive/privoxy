@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.139 2016/05/08 10:44:39 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.140 2016/05/08 10:46:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -347,7 +347,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
    const char *toggle_state;
    const char *tag_expires;
    time_t time_to_live;
-   char *client_tags;
+   char *client_tag_status;
    char buf[1000];
 
    assert(csp);
@@ -381,15 +381,14 @@ jb_err cgi_show_client_tags(struct client_state *csp,
          disable_client_specific_tag(csp, toggled_tag);
       }
    }
-
    this_tag = csp->config->client_tags;
    if (this_tag->name == NULL)
    {
-      client_tags = strdup_or_die("<p>No tags available.</p>\n"));
+      client_tag_status = strdup_or_die("<p>No tags available.</p>\n");
    }
    else
    {
-      client_tags = strdup_or_die("<table border=\"1\">\n"
+      client_tag_status = strdup_or_die("<table border=\"1\">\n"
          "<tr><th>Tag name</th>\n"
          "<th>Current state</th><th>Change state</th><th>Description</th></tr>\n");
       while ((this_tag != NULL) && (this_tag->name != NULL))
@@ -399,21 +398,21 @@ jb_err cgi_show_client_tags(struct client_state *csp,
          privoxy_mutex_lock(&client_tags_mutex);
          tag_state = client_has_requested_tag(csp->ip_addr_str, this_tag->name);
          privoxy_mutex_unlock(&client_tags_mutex);
-         if (!err) err = string_append(&client_tags, "<tr><td>");
-         if (!err) err = string_append(&client_tags, this_tag->name);
-         if (!err) err = string_append(&client_tags, "</td><td>");
-         if (!err) err = string_append(&client_tags, tag_state == 1 ? "Enabled" : "Disabled");
-         if (!err) err = string_append(&client_tags, "</td><td>");
+         if (!err) err = string_append(&client_tag_status, "<tr><td>");
+         if (!err) err = string_append(&client_tag_status, this_tag->name);
+         if (!err) err = string_append(&client_tag_status, "</td><td>");
+         if (!err) err = string_append(&client_tag_status, tag_state == 1 ? "Enabled" : "Disabled");
+         if (!err) err = string_append(&client_tag_status, "</td><td>");
          cgi_create_client_tag_form(buf, sizeof(buf), this_tag->name, !tag_state, 1);
-         if (!err) err = string_append(&client_tags, buf);
+         if (!err) err = string_append(&client_tag_status, buf);
          if (tag_state == 0)
          {
             cgi_create_client_tag_form(buf, sizeof(buf), this_tag->name, !tag_state, 0);
-            if (!err) err = string_append(&client_tags, buf);
+            if (!err) err = string_append(&client_tag_status, buf);
          }
-         if (!err) err = string_append(&client_tags, "</td><td>");
-         if (!err) err = string_append(&client_tags, this_tag->description);
-         if (!err) err = string_append(&client_tags, "</td></tr>\n");
+         if (!err) err = string_append(&client_tag_status, "</td><td>");
+         if (!err) err = string_append(&client_tag_status, this_tag->description);
+         if (!err) err = string_append(&client_tag_status, "</td></tr>\n");
          if (err)
          {
             free_map(exports);
@@ -421,10 +420,10 @@ jb_err cgi_show_client_tags(struct client_state *csp,
          }
          this_tag = this_tag->next;
       }
-      if (!err) err = string_append(&client_tags, "</table>\n");
+      if (!err) err = string_append(&client_tag_status, "</table>\n");
    }
 
-   if (map(exports, "client-tags", 1, client_tags, 0))
+   if (map(exports, "client-tags", 1, client_tag_status, 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;
