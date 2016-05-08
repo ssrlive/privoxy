@@ -365,6 +365,13 @@ static void remove_tag_for_client(const char *client_address, const char *tag)
       clients_with_tags = clients_with_tags->next;
    }
 
+   assert(clients_with_tags != NULL);
+   if (clients_with_tags == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Tried to remove tag %s for tag-less client %s",
+         tag, client_address);
+   }
    enabled_tags = clients_with_tags->tags;
    while (enabled_tags != NULL)
    {
