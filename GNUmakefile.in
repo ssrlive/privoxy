@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.245 2016/05/03 13:21:08 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.246 2016/05/03 13:21:24 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2016 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -365,7 +365,7 @@ gen-dist: dist-check
 	@$(ECHO) ""
 	$(MAKE) $(PROGRAM)
 	$(STRIP_PROG) $(PROGRAM)
-	$(LN) -s current ../privoxy-$(VERSION)-$(CODE_STATUS)
+	$(LN) -s `pwd` ../privoxy-$(VERSION)-$(CODE_STATUS)
 # add program
 	(cd .. && $(TAR) --exclude "PACKAGERS" -cvhf $(GEN_DIST_TAR_NAME) privoxy-$(VERSION)-$(CODE_STATUS)/$(PROGRAM))
 # add config files
