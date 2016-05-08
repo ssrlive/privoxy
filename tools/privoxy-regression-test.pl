@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.92 2013/03/20 11:30:45 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.93 2013/12/24 13:36:58 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -341,7 +341,7 @@ sub load_regression_tests_through_privoxy () {
             $privoxy_features{$feature} = $1 if defined $feature;
             $feature = undef;
 
-        } elsif (m@This is <a href="http://www.privoxy.org/">Privoxy</a> (\d+\.\d+\.\d+) on@) {
+        } elsif (m@This is <a href="https?://www.privoxy.org/">Privoxy</a> (\d+\.\d+\.\d+) on@) {
             $privoxy_version = $1;
         }
     }
