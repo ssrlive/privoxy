@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.150 2016/03/27 16:54:50 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.151 2016/05/03 13:21:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1376,11 +1376,42 @@ struct configuration_spec * load_config(void)
          case hash_max_client_connections :
          {
             int max_client_connections = parse_numeric_value(cmd, arg);
-            if (0 <= max_client_connections)
+
+#ifndef _WIN32
+            /*
+             * Reject values below 1 for obvious reasons and values above
+             * FD_SETSIZE/2 because Privoxy needs two sockets to serve
+             * client connections that need forwarding.
+             *
+             * We ignore the fact that the first three file descriptors
+             * are usually set to /dev/null, one is used for logging
+             * and yet another file descriptor is required to load
+             * config files.
+             */
+            if ((max_client_connections < 1) || (FD_SETSIZE/2 < max_client_connections))
             {
-               /* XXX: log error */
-               config->max_client_connections = max_client_connections;
+               log_error(LOG_LEVEL_FATAL, "max-client-connections value %d"
+                  " is invalid. Value needs to be above 1 and below %d"
+                  " (FD_SETSIZE/2).", max_client_connections, FD_SETSIZE/2);
             }
+#else
+            /*
+             * The Windows libc uses FD_SETSIZE for an array used
+             * by select(), but has no problems with file descriptors
+             * above the limit as long as no more than FD_SETSIZE are
+             * passed to select().
+             * https://msdn.microsoft.com/en-us/library/windows/desktop/ms739169%28v=vs.85%29.aspx
+             *
+             * XXX: Do OS/2, Amiga etc. belong here as well?
+             */
+            if (max_client_connections < 1)
+            {
+               log_error(LOG_LEVEL_FATAL, "max-client-connections value"
+                  " has to be a number above 1. %d is invalid.",
+                  max_client_connections);
+            }
+#endif
+            config->max_client_connections = max_client_connections;
             break;
          }
 
