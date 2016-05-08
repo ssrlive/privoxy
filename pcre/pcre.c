@@ -2660,8 +2660,13 @@ while ((c = *(++ptr)) != 0)
         }
       else class_charcount++;
       ptr++;
+      if (*ptr == 0)
+        {
+        *errorptr = ERR6;
+        goto PCRE_ERROR_RETURN;
+        }
       }
-    while (*ptr != 0 && *ptr != ']');
+    while (*ptr != ']');
 
     /* Repeats for negated single chars are handled by the general code */
 
