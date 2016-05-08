@@ -730,7 +730,7 @@ if (*p == '}') max = min; else
 /* Do paranoid checks, then fill in the required variables, and pass back the
 pointer to the terminating '}'. */
 
-if (min > 65535 || max > 65535)
+if (min < 0 || min > 65535 || max < -1 || max > 65535)
   *errorptr = ERR5;
 else
   {
