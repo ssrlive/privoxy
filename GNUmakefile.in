@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.249 2016/05/08 10:48:19 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.250 2016/05/08 12:46:05 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2016 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -406,7 +406,7 @@ tarball-dist: dist-check clean clobber
 
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" \) | sort`; do \
+	-name "PACKAGERS" -o -path "*.git/*" \) | sort`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) -cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
