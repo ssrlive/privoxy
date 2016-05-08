@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.101 2016/02/26 12:29:38 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.102 2016/02/26 12:30:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -630,15 +630,12 @@ jb_err edit_read_line(FILE *fp,
       if (*linestart)
       {
          is_empty = 0;
-         if (data)
+         if (string_append(&data, linestart))
          {
-            if (string_append(&data, linestart))
-            {
-               freez(raw);
-               freez(prefix);
-               free(linebuf);
-               return JB_ERR_MEMORY;
-            }
+            freez(raw);
+            freez(prefix);
+            free(linebuf);
+            return JB_ERR_MEMORY;
          }
       }
 
