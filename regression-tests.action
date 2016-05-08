@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.59 2014/11/20 15:29:57 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.60 2016/05/08 10:44:56 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -329,6 +329,7 @@ TAG:^hide-if-modified-since\{-60\}$
 # Expect Header = SOME CHANGE
 # Set Header    = If-Modified-Since: Wed, 31 Dec 1969 23:59:59 GMT
 # Expect Header = SOME CHANGE
+# Level = 17
 TAG:^hide-if-modified-since\{\+60\}$
 
 {+hide-if-modified-since{60} -crunch-if-none-match}
