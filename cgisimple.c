@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.138 2016/04/04 10:55:47 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.139 2016/05/08 10:44:39 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -347,7 +347,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
    const char *toggle_state;
    const char *tag_expires;
    time_t time_to_live;
-   char *client_tags = strdup_or_die("");
+   char *client_tags;
    char buf[1000];
 
    assert(csp);
@@ -385,16 +385,13 @@ jb_err cgi_show_client_tags(struct client_state *csp,
    this_tag = csp->config->client_tags;
    if (this_tag->name == NULL)
    {
-      if (!err) err = string_append(&client_tags, "<p>No tags available.</p>\n");
+      client_tags = strdup_or_die("<p>No tags available.</p>\n"));
    }
    else
    {
-      if (!err)
-      {
-         err = string_append(&client_tags, "<table border=\"1\">\n"
-            "<tr><th>Tag name</th>\n"
-            "<th>Current state</th><th>Change state</th><th>Description</th></tr>\n");
-      }
+      client_tags = strdup_or_die("<table border=\"1\">\n"
+         "<tr><th>Tag name</th>\n"
+         "<th>Current state</th><th>Change state</th><th>Description</th></tr>\n");
       while ((this_tag != NULL) && (this_tag->name != NULL))
       {
          int tag_state;
