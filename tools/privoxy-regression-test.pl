@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.93 2013/12/24 13:36:58 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.94 2016/05/08 10:45:18 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -525,6 +525,7 @@ sub load_action_files ($) {
         my $curl_url = quote($actionfiles[$file_number]);
         my $actionfile = undef;
         my $sticky_actions = undef;
+        my $level_offset = 0;
 
         foreach (@{get_cgi_page_or_else($curl_url)}) {
 
@@ -544,6 +545,11 @@ sub load_action_files ($) {
             next unless defined $token;
 
             # Load regression tests
+            if ($token eq 'default level offset') {
+
+                $level_offset = $value;
+                l(LL_FILE_LOADING, "Setting default level offset to " . $level_offset);
+            }
 
             if (token_starts_new_test($token)) {
 
@@ -552,6 +558,9 @@ sub load_action_files ($) {
                 $count++;
                 enlist_new_test(\@regression_tests, $token, $value, $si, $ri, $count);
                 $no_checks = 1; # Already validated by enlist_new_test().
+                if ($level_offset != 0) {
+                    $regression_tests[$si][$ri]{'level'} += $level_offset;
+                }
             }
 
             if ($token =~ /level\s+(\d+)/i) {
@@ -1947,6 +1956,13 @@ The current redirect test level is above the default
 max-level value as failed tests will result in outgoing
 connections. Use the B<--max-level> option to run them
 as well.
+
+The "Default level offset" directive can be used to change
+the default level by a given value. This directive affects
+all tests located after it until the end of the file or a another
+"Default level offset" directive is reached. The purpose of this
+directive is to make it more convenient to skip similar tests in
+a given file without having to remove or disable the tests completely.
 
 =head1 OPTIONS
 
