@@ -7,7 +7,7 @@
 # A regression test "framework" for Privoxy. For documentation see:
 # perldoc privoxy-regression-test.pl
 #
-# $Id: privoxy-regression-test.pl,v 1.96 2016/05/12 08:42:57 fabiankeil Exp $
+# $Id: privoxy-regression-test.pl,v 1.97 2016/05/12 08:43:04 fabiankeil Exp $
 #
 # Wish list:
 #
@@ -370,8 +370,9 @@ sub tokenize ($) {
 
     my ($token, $value) = (undef, undef);
 
-    # Remove leading and trailing white space.
-    s@^\s*@@;
+    # Remove leading and trailing white space and a
+    # a leading <pre> which is part of the first line.
+    s@^\s*(<pre>)?@@;
     s@\s*$@@;
 
     # Reverse HTML-encoding
