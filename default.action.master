@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.327 2016/03/27 16:54:05 fabiankeil Exp $
+#  $Id: default.action.master,v 1.328 2016/03/27 16:54:16 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1938,6 +1938,9 @@ adn.speedtest.net
 .deutschlandradiokultur.de/
 # URL = http://klikki.fi/adv/wordpress2.html
 klikki.fi/adv/
+#MASTER# UNBLOCK-REFERRER: http://www.ardmediathek.de/tv
+# URL = http://www.ardmediathek.de/ard/static/img/ardmt/banner/ard-mediathek.svg
+.ardmediathek.de/
 
 
 #############################################################################
