@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.122 2016/05/22 12:41:30 fabiankeil Exp $
+ $Id: faq.sgml,v 2.123 2016/05/22 12:42:11 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.122 2016/05/22 12:41:30 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.123 2016/05/22 12:42:11 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2612,37 +2612,6 @@ every time I start IE. What gives?</title>
   configuration files or select to not have the uninstaller remove them when it
   prompts you) and then reinstall &my-app; using the installer package and merge
   in your configuration.
- </para>
-</sect2>
-
-<!--   ~~~~~       New section      ~~~~~     -->
-<!-- XXX: Is this still relevant now that we have gzip support? -->
-<sect2 renderas="sect3" id="blankpage">
-<title>I get a completely blank page at one site. <quote>View Source</quote>
- shows only: <markup><![CDATA[<html><body></body></html>]]></markup>. Without
- Privoxy the page loads fine.</title>
- <para>
-  Chances are that the site suffers from a bug in
-  <ulink url="http://www.php.net/"><application>PHP</application></ulink>,
-  which results in empty pages being sent if the client explicitly requests
-  an uncompressed page, like <application>Privoxy</application> does.
-  This bug has been fixed in PHP 4.2.3.
- </para>
- <para>
-  To find out if this is in fact the source of the problem, try adding
-  the site to a <literal>-prevent-compression</literal> section in
-  <filename>user.action</filename>:
- </para>
- <screen>
-   # Make exceptions for ill-behaved sites:
-   #
-   {-prevent-compression}
-    .example.com</screen>
- <para>
-  If that works, you may also want to report the problem to the
-  site's webmasters, telling them to use zlib.output_compression
-  instead of ob_gzhandler in their PHP applications (workaround)
-  or upgrade to PHP 4.2.3 or later (fix).
  </para>
 </sect2>
 
