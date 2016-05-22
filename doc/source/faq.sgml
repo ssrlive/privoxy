@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.120 2016/04/09 10:23:54 fabiankeil Exp $
+ $Id: faq.sgml,v 2.121 2016/05/03 13:21:55 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.120 2016/04/09 10:23:54 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.121 2016/05/03 13:21:55 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2988,6 +2988,26 @@ browsing has slowed to a crawl. What gives? </title>
  logged as error.
 </para>
 </sect2>
+
+<sect2 renderas="sect3" id="pcre-stack-limit">
+<title>After adding my custom filters, &my-app; crashes when visitting certain websites</title>
+<para>
+ This can happen if your custom filters require more memory than &my-app;
+ is allowed to use.
+ Usually the problem is that the operating system enforces a stack size limit
+ that isn't sufficient.
+</para>
+<para>
+ Unless the problem occurs with the filters available in the default configuration,
+ this is not considered a Privoxy bug.
+</para>
+<para>
+ To prevent the crashes you can rewrite your filter to use less ressources,
+ increase the relevant memory limit or recompile pcre to use less stack space.
+ For details please see the
+ <ulink url="http://pcre.org/original/doc/html/pcrestack.html">pcrestack man page</ulink>
+ and the documentation of your operating system.
+</para>
 
 </sect1>
 
