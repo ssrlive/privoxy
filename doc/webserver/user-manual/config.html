@@ -3320,6 +3320,92 @@
           </dl>
         </div>
       </div>
+
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="TRUST-X-FORWARDED-FOR" id=
+        "TRUST-X-FORWARDED-FOR">7.6.16. trust-x-forwarded-for</a></h4>
+
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+
+            <dd>
+              <p>Whether or not Privoxy should use IP addresses specified
+              with the X-Forwarded-For header</p>
+            </dd>
+
+            <dt>Type of value:</dt>
+
+            <dd>
+              <p><tt class="REPLACEABLE"><i>0 or one</i></tt></p>
+            </dd>
+
+            <dt>Default value:</dt>
+
+            <dd>
+              <p>0</p>
+            </dd>
+
+            <dt>Notes:</dt>
+
+            <dd>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+
+                  <tr>
+                    <td align="left">
+                      <p>This is an experimental feature. The syntax is
+                      likely to change in future versions.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <p>If clients reach Privoxy through another proxy, for example
+              a load balancer, Privoxy can't tell the client's IP address
+              from the connection. If multiple clients use the same proxy,
+              they will share the same client tag settings which is usually
+              not desired.</p>
+
+              <p>This option lets Privoxy use the X-Forwarded-For header
+              value as client IP address. If the proxy sets the header,
+              multiple clients using the same proxy do not share the same
+              client tag settings.</p>
+
+              <p>This option should only be enabled if Privoxy can only be
+              reached through a proxy and if the proxy can be trusted to set
+              the header correctly. It is recommended that ACL are used to
+              make sure only trusted systems can reach Privoxy.</p>
+
+              <p>If access to Privoxy isn't limited to trusted systems, this
+              option would allow malicious clients to change the client tags
+              for other clients or increase Privoxy's memory requirements by
+              registering lots of client tag settings for clients that don't
+              exist.</p>
+            </dd>
+
+            <dt>Examples:</dt>
+
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
+      # Allow systems that can reach Privoxy to provide the client
+      # IP address with a X-Forwarded-For header.
+      trust-x-forwarded-for 1
+
+</pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
     </div>
 
     <div class="SECT2">

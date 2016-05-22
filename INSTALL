@@ -1,11 +1,11 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/INSTALL,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/doc/source/install.sgml,v $
  *
  * Purpose     :  INSTALL file to help with installing from source.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
