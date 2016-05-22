@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.213 2016/03/17 10:40:53 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.214 2016/03/30 11:13:25 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -953,6 +953,12 @@ struct client_state
 #ifdef FEATURE_CLIENT_TAGS
    /** List of all tags that apply to this client (assigned based on address) */
    struct list client_tags[1];
+   /** The address of the client the request (presumably) came from.
+    *  Either the address returned by accept(), or the address provided
+    *  with the X-Forwarded-For header, provided Privoxy has been configured
+    *  to use it.
+    */
+   char *client_address;
 #endif
 
    /** MIME-Type key, see CT_* above */
@@ -1347,6 +1353,7 @@ struct configuration_spec
    /* Maximum number of seconds a temporarily enabled tag stays enabled. */
    unsigned int client_tag_lifetime;
 #endif /* def FEATURE_CLIENT_TAGS */
+   int trust_x_forwarded_for;
 
 #ifdef FEATURE_ACL
 

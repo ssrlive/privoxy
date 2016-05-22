@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.151 2016/05/03 13:21:42 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.152 2016/05/08 10:46:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -166,6 +166,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_tolerate_pipelining         1360286620U /* "tolerate-pipelining" */
 #define hash_toggle                          447966U /* "toggle" */
 #define hash_trust_info_url               430331967U /* "trust-info-url" */
+#define hash_trust_x_forwarded_for       2971537414U /* "trust-x-forwarded-for" */
 #define hash_trustfile                     56494766U /* "trustfile" */
 #define hash_usermanual                  1416668518U /* "user-manual" */
 #define hash_activity_animation          1817904738U /* "activity-animation" */
@@ -599,6 +600,7 @@ struct configuration_spec * load_config(void)
 #ifdef FEATURE_CLIENT_TAGS
    config->client_tag_lifetime       = 60;
 #endif
+   config->trust_x_forwarded_for     = 0;
    /*
     * 128 client sockets ought to be enough for everybody who can't
     * be bothered to read the documentation to figure out how to
@@ -1586,6 +1588,13 @@ struct configuration_spec * load_config(void)
             enlist(config->trust_info, arg);
             break;
 #endif /* def FEATURE_TRUST */
+
+/* *************************************************************************
+ * trust-x-forwarded-for (0|1)
+ * *************************************************************************/
+         case hash_trust_x_forwarded_for :
+            config->trust_x_forwarded_for = parse_toggle_state(cmd, arg);
+            break;
 
 /* *************************************************************************
  * trustfile filename

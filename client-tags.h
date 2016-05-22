@@ -1,6 +1,6 @@
 #ifndef CLIENT_TAGS_H_INCLUDED
 #define CLIENT_TAGS_H_INCLUDED
-#define CLIENT_TAGS_H_VERSION "$Id: client-tags.h,v 1.1 2016/03/17 10:42:27 fabiankeil Exp $"
+#define CLIENT_TAGS_H_VERSION "$Id: client-tags.h,v 1.2 2016/05/03 13:21:42 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/client-tags.h,v $
@@ -40,6 +40,8 @@ extern jb_err enable_client_specific_tag(struct client_state *csp,
                                          const time_t time_to_live);
 extern int client_has_requested_tag(const char *client_address,
                                     const char *tag);
+extern void set_client_address(struct client_state *csp,
+                               const struct list *headers);
 
 #define CLIENT_TAG_LENGTH_MAX 50
 #endif

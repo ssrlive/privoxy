@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.441 2016/02/26 12:29:38 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.442 2016/03/17 10:40:53 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1678,6 +1678,12 @@ static jb_err receive_client_request(struct client_state *csp)
       }
    }
 
+#ifdef FEATURE_CLIENT_TAGS
+   /* XXX: If the headers were enlisted sooner, passing csp would do. */
+   set_client_address(csp, headers);
+   get_tag_list_for_client(csp->client_tags, csp->client_address);
+#endif
+
    /*
     * Determine the actions for this URL
     */
@@ -1848,9 +1854,6 @@ static void chat(struct client_state *csp)
 
    http = csp->http;
 
-#if FEATURE_CLIENT_TAGS
-   get_tag_list_for_client(csp->client_tags, csp->ip_addr_str);
-#endif
    if (receive_client_request(csp) != JB_ERR_OK)
    {
       return;
@@ -2824,6 +2827,7 @@ static void prepare_csp_for_next_request(struct client_state *csp)
    destroy_list(csp->tags);
 #ifdef FEATURE_CLIENT_TAGS
    destroy_list(csp->client_tags);
+   freez(csp->client_address);
 #endif
    free_current_action(csp->action);
    if (NULL != csp->fwd)

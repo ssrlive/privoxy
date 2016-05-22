@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.140 2016/05/08 10:46:18 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.141 2016/05/08 10:46:29 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -358,7 +358,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
    {
       return JB_ERR_MEMORY;
    }
-
+   assert(csp->client_address != NULL);
    toggled_tag = lookup(parameters, "tag");
    if (*toggled_tag != '\0')
    {
@@ -396,7 +396,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
          int tag_state;
 
          privoxy_mutex_lock(&client_tags_mutex);
-         tag_state = client_has_requested_tag(csp->ip_addr_str, this_tag->name);
+         tag_state = client_has_requested_tag(csp->client_address, this_tag->name);
          privoxy_mutex_unlock(&client_tags_mutex);
          if (!err) err = string_append(&client_tag_status, "<tr><td>");
          if (!err) err = string_append(&client_tag_status, this_tag->name);
@@ -429,7 +429,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
-   if (map(exports, "client-ip-addr", 1, csp->ip_addr_str, 1))
+   if (map(exports, "client-ip-addr", 1, csp->client_address, 1))
    {
       free_map(exports);
       return JB_ERR_MEMORY;

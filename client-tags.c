@@ -42,6 +42,7 @@
 #include "jcc.h"
 #include "miscutil.h"
 #include "errlog.h"
+#include "parsers.h"
 
 struct client_specific_tag
 {
@@ -491,17 +492,17 @@ jb_err enable_client_specific_tag(struct client_state *csp,
       return JB_ERR_PARSE;
    }
 
-   if (client_has_requested_tag(csp->ip_addr_str, tag_name))
+   if (client_has_requested_tag(csp->client_address, tag_name))
    {
       log_error(LOG_LEVEL_ERROR,
-         "Tag '%s' already enabled for client '%s'", tag->name, csp->ip_addr_str);
+         "Tag '%s' already enabled for client '%s'", tag->name, csp->client_address);
    }
    else
    {
-      add_tag_for_client(csp->ip_addr_str, tag_name, time_to_live);
+      add_tag_for_client(csp->client_address, tag_name, time_to_live);
       log_error(LOG_LEVEL_INFO,
          "Tag '%s' enabled for client '%s'. TTL: %d.",
-         tag->name, csp->ip_addr_str, time_to_live);
+         tag->name, csp->client_address, time_to_live);
    }
 
    privoxy_mutex_unlock(&client_tags_mutex);
@@ -536,17 +537,17 @@ jb_err disable_client_specific_tag(struct client_state *csp, const char *tag_nam
       return JB_ERR_PARSE;
    }
 
-   if (client_has_requested_tag(csp->ip_addr_str, tag_name))
+   if (client_has_requested_tag(csp->client_address, tag_name))
    {
-      remove_tag_for_client(csp->ip_addr_str, tag_name);
+      remove_tag_for_client(csp->client_address, tag_name);
       log_error(LOG_LEVEL_INFO,
-         "Tag '%s' disabled for client '%s'", tag->name, csp->ip_addr_str);
+         "Tag '%s' disabled for client '%s'", tag->name, csp->client_address);
    }
    else
    {
       log_error(LOG_LEVEL_ERROR,
          "Tag '%s' currently not set for client '%s'",
-         tag->name, csp->ip_addr_str);
+         tag->name, csp->client_address);
    }
 
    privoxy_mutex_unlock(&client_tags_mutex);
@@ -595,6 +596,44 @@ int client_tag_match(const struct pattern_spec *pattern,
    return 0;
 
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  set_client_address
+ *
+ * Description :  Sets the client address that will be used to enable,
+ *                disable, or apply client tags.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  headers = Client headers
+ *
+ * Returns     :  void.
+ *
+ *********************************************************************/
+void set_client_address(struct client_state *csp, const struct list *headers)
+{
+   if (csp->config->trust_x_forwarded_for)
+   {
+      const char *client_address;
+
+      client_address = get_header_value(headers, "X-Forwarded-For:");
+      if (client_address != NULL)
+      {
+         csp->client_address = strdup_or_die(client_address);
+         log_error(LOG_LEVEL_HEADER,
+            "Got client address %s from X-Forwarded-For header",
+            csp->client_address);
+      }
+   }
+
+   if (csp->client_address == NULL)
+   {
+      csp->client_address = strdup_or_die(csp->ip_addr_str);
+   }
+}
+
 #else
 #error Compiling client-tags.c without FEATURE_CLIENT_TAGS
 #endif /* def FEATURE_CLIENT_TAGS */
