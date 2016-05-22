@@ -3,7 +3,7 @@
 
  Purpose     :  AUTHORS file for Privoxy
 
- $Id: authors.sgml,v 2.29 2016/02/26 12:27:32 fabiankeil Exp $
+ $Id: authors.sgml,v 2.30 2016/05/03 13:22:13 fabiankeil Exp $
 
 
  Copyright (C) 2001-2009 Privoxy Developers https://www.privoxy.org/
@@ -61,7 +61,7 @@
 
 <literallayout>
  Privoxy team. <ulink url="https://www.privoxy.org/">https://www.privoxy.org/</ulink>
- <email>ijbswa-developers@lists.sourceforge.net</email>
+ <email>privoxy-devel@lists.privoxy.org</email>
 </literallayout>
 
 </article>

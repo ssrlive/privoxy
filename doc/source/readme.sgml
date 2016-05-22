@@ -17,7 +17,7 @@
 
  Purpose     :  README for Privoxy
 
- $Id: readme.sgml,v 2.57 2016/02/26 12:27:32 fabiankeil Exp $
+ $Id: readme.sgml,v 2.58 2016/05/03 13:22:13 fabiankeil Exp $
 
  Copyright (C) 2001-2011 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -226,13 +226,7 @@
 </sect1>
 
 <!-- <para> -->
-<!--  <LiteralLayout> -->
-<!--  ------------------------------------------------------------------------- -->
-<!--  ijbswa-developers@lists.sourceforge.net -->
-<!-- </LiteralLayout> -->
-<!-- </para> -->
-<!-- <para> -->
-<!--  $Id: readme.sgml,v 2.57 2016/02/26 12:27:32 fabiankeil Exp $ -->
+<!--  $Id: readme.sgml,v 2.58 2016/05/03 13:22:13 fabiankeil Exp $ -->
 <!-- </para> -->
 
 </article>

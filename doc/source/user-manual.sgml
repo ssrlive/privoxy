@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.209 2016/04/09 10:23:54 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.210 2016/05/03 13:20:20 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.209 2016/04/09 10:23:54 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.210 2016/05/03 13:20:20 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -106,9 +106,6 @@ Hal.
   contact the developers.
  </para>
 
-<!--   <para> -->
-<!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
-<!--   </para> -->
 </abstract>
 
 </artheader>
@@ -379,8 +376,8 @@ How to install the binary packages depends on your operating system:
 <para>
  If you wish to receive an email notification whenever we release updates of
  <application>Privoxy</application> or the actions file, <ulink
- url="https://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
- to our announce  mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
+ url="https://lists.privoxy.org/mailman/listinfo/privoxy-announce">subscribe
+ to our announce mailing list</ulink>, privoxy-announce@lists.privoxy.org.
 </para>
 
 <para>

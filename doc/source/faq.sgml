@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.121 2016/05/03 13:21:55 fabiankeil Exp $
+ $Id: faq.sgml,v 2.122 2016/05/22 12:41:30 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.121 2016/05/03 13:21:55 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.122 2016/05/22 12:41:30 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -140,9 +140,6 @@ Hal.
   contact the developers.
  </para>
 
-<!--   <para> -->
-<!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
-<!--   </para> -->
 </abstract>
 </artheader>
 
@@ -478,8 +475,8 @@ warranty? Registration?</title>
  </para>
  <para>
   So first thing, subscribe to the <ulink
-   url="https://lists.sourceforge.net/lists/listinfo/ijbswa-users">Privoxy Users</ulink>
-  or the <ulink url="https://lists.sourceforge.net/lists/listinfo/ijbswa-developers">Privoxy
+   url="https://lists.privoxy.org/mailman/listinfo/privoxy-users">Privoxy Users</ulink>
+  or the <ulink url="https://lists.privoxy.org/mailman/listinfo/privoxy-devel">Privoxy
   Developers</ulink> mailing list, join the discussion, help out other users, provide general
   feedback or report problems you noticed.
  </para>
@@ -837,8 +834,8 @@ the differences?</title>
  <para>
   If you wish to receive an email notification whenever we release updates of
   <application>Privoxy</application> or the actions file, <ulink
-  url="https://lists.sourceforge.net/lists/listinfo/ijbswa-announce/">subscribe
-  to our announce mailing list</ulink>, ijbswa-announce@lists.sourceforge.net.
+  url="https://lists.privoxy.org/mailman/listinfo/privoxy-announce">subscribe
+  to our announce mailing list</ulink>, privoxy-announce@lists.privoxy.org.
  </para>
 
 </sect2>

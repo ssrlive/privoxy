@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.68 2016/04/09 10:23:54 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.69 2016/05/03 13:22:13 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.68 2016/04/09 10:23:54 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.69 2016/05/03 13:22:13 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -103,9 +103,6 @@ Hal.
  <ulink url="https://www.privoxy.org/user-manual/contact.html">contact section in the user manual</ulink>
  if you are interested in contacting the developers.
 </para>
-<!--        <para> -->
-<!--    Feel free to send a note to the developers at <email>ijbswa-developers@lists.sourceforge.net</email>. -->
-<!--   </para> -->
 
     </abstract>
   </artheader>
@@ -137,7 +134,7 @@ Hal.
   <sect2 id="quickstart"><title>Quickstart to Privoxy Development</title>
    <para>
     The first step is to join the <ulink
-      url="mailto:ijbswa-developers@lists.sourceforge.net">developer's mailing list</ulink>.
+      url="https://lists.privoxy.org/mailman/listinfo/privoxy-devel">privoxy-devel mailing list</ulink>.
     You can submit your ideas, or even better patches. Patches are best
     submitted to the Sourceforge tracker set up for this purpose, but
     can be sent to the list for review too.
@@ -2784,7 +2781,7 @@ Install the rpm. Any error messages?
     <title>After the Release</title>
      <para>
       When all (or: most of the) packages have been uploaded and made available,
-      send an email to the <ulink url="mailto:ijbswa-announce@lists.sourceforge.net">announce
+      send an email to the <ulink url="mailto:privoxy-announce@lists.privoxy.org">announce
       mailing list</ulink>, Subject: "Version X.Y.Z available for download". Be sure to
       include the
       <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">download
