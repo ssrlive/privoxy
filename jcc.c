@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.444 2016/05/25 10:50:55 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.445 2016/05/25 10:51:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2813,8 +2813,6 @@ static void chat(struct client_state *csp)
  *********************************************************************/
 static void prepare_csp_for_next_request(struct client_state *csp)
 {
-   unsigned int toggled_on_flag_set = (0 != (csp->flags & CSP_FLAG_TOGGLED_ON));
-
    csp->content_type = 0;
    csp->content_length = 0;
    csp->expected_content_length = 0;
@@ -2837,7 +2835,9 @@ static void prepare_csp_for_next_request(struct client_state *csp)
    }
    /* XXX: Store per-connection flags someplace else. */
    csp->flags = (CSP_FLAG_ACTIVE | CSP_FLAG_REUSED_CLIENT_CONNECTION);
-   if (toggled_on_flag_set)
+#ifdef FEATURE_TOGGLE
+   if (global_toggle_state)
+#endif /* def FEATURE_TOGGLE */
    {
       csp->flags |= CSP_FLAG_TOGGLED_ON;
    }
