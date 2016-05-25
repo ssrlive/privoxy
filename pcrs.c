@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.48 2015/12/27 12:45:46 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.49 2016/05/08 10:45:51 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -375,6 +375,8 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
                goto plainchar;
             }
 
+            assert(l < PCRS_MAX_SUBMATCHES - 1);
+            assert(r->backref[l] < PCRS_MAX_SUBMATCHES + 2);
             /* Valid and in range? -> record */
             if ((0 <= r->backref[l]) &&
                (r->backref[l] < PCRS_MAX_SUBMATCHES + 2) &&
