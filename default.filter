@@ -2,7 +2,7 @@
 # 
 #  File        :  $Source: /cvsroot/ijbswa/current/default.filter,v $
 # 
-#  $Id: default.filter,v 1.91 2014/06/20 09:46:13 fabiankeil Exp $
+#  $Id: default.filter,v 1.92 2014/10/17 14:45:10 fabiankeil Exp $
 #
 #  Purpose     :  Rules to process the content of web pages
 # 
@@ -57,7 +57,8 @@
 #     quoting.
 #
 # 'D' (Dynamic) allows the use of variables. Supported variables are:
-#     $host, $origin (the IP address the request came from), $path and $url.
+#     $host, $listen-address, $origin (the IP address the request came
+#     from), $path and $url.
 #
 #     Note that '$' is a bad choice as delimiter for dynamic filters as you
 #     might end up with unintended variables if you use a variable name

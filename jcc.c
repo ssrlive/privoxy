@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.442 2016/03/17 10:40:53 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.443 2016/05/22 12:43:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3992,6 +3992,12 @@ static void listen_loop(void)
          "Waiting for the next client connection. Currently active threads: %d",
          active_threads);
 
+      /*
+       * This config may be outdated, but for accept_connection()
+       * it's fresh enough.
+       */
+      csp->config = config;
+
       if (!accept_connection(csp, bfds))
       {
          log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
@@ -4051,6 +4057,7 @@ static void listen_loop(void)
             "Connection from %s on socket %d dropped due to ACL", csp->ip_addr_str, csp->cfd);
          close_socket(csp->cfd);
          freez(csp->ip_addr_str);
+         freez(csp->listen_addr_str);
          freez(csp_list);
          continue;
       }
@@ -4066,6 +4073,7 @@ static void listen_loop(void)
             strlen(TOO_MANY_CONNECTIONS_RESPONSE));
          close_socket(csp->cfd);
          freez(csp->ip_addr_str);
+         freez(csp->listen_addr_str);
          freez(csp_list);
          continue;
       }

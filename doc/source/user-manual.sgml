@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.210 2016/05/03 13:20:20 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.211 2016/05/22 12:42:11 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.210 2016/05/03 13:20:20 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.211 2016/05/22 12:42:11 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -6773,8 +6773,10 @@ stupid-server.example.com/</screen>
 <para>
  The non-standard option letter <literal>D</literal> (dynamic) allows
  to use the variables $host, $origin (the IP address the request came from),
- $path and $url. They will be replaced with the value they refer to before
- the filter is executed.
+ $path, $url and $listen-address (the address on which Privoxy accepted the
+ client request. Example: 127.0.0.1:8118).
+ They will be replaced with the value they refer to before the filter
+ is executed.
 </para>
 
 <para>
@@ -7531,9 +7533,10 @@ pre-defined filters for your convenience:
 </para>
 <para>
  External filters read the content from STDIN and write the rewritten
- content to STDOUT. The environment variables PRIVOXY_URL, PRIVOXY_PATH,
- PRIVOXY_HOST, PRIVOXY_ORIGIN can be used to get some details about the
- client request.
+ content to STDOUT.
+ The environment variables PRIVOXY_URL, PRIVOXY_PATH, PRIVOXY_HOST,
+ PRIVOXY_ORIGIN, PRIVOXY_LISTEN_ADDRESS can be used to get some details
+ about the client request.
 </para>
 <para>
  &my-app; will temporary store the content to filter in the

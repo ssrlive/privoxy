@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.214 2016/03/30 11:13:25 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.215 2016/05/22 12:43:07 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -926,6 +926,10 @@ struct client_state
        As a number. */
    unsigned long ip_addr_long;
 #endif /* def HAVE_RFC2553 */
+
+   /** The host name and port (as a string of the form '<hostname>:<port>')
+       of the server socket to which the client connected. */
+   char *listen_addr_str;
 
    /** The URL that was requested */
    struct http_request http[1];
