@@ -2,7 +2,7 @@
 <!entity % dummy "IGNORE">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.25">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % user-man "IGNORE">
 <!entity % config-file "IGNORE">
@@ -13,7 +13,7 @@
 
  Purpose     :  config file generation
 
- $Id: config.sgml,v 2.30 2016/02/26 12:27:32 fabiankeil Exp $
+ $Id: config.sgml,v 2.31 2016/05/03 13:22:13 fabiankeil Exp $
 
  Copyright (C) 2001-2009 Privoxy Developers https://www.privoxy.org/
  See LICENSE.

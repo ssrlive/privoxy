@@ -6,7 +6,7 @@
 <!entity history SYSTEM "history.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity p-version "3.0.25">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.69 2016/05/03 13:22:13 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.70 2016/05/22 12:42:11 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.69 2016/05/03 13:22:13 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.70 2016/05/22 12:42:11 fabiankeil Exp $</pubdate>
 
 <!--
 

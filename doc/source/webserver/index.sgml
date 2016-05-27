@@ -6,7 +6,7 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.25">
-<!entity p-status "UNRELEASED">
+<!entity p-status "beta">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.42 2016/04/08 08:30:53 fabiankeil Exp $
+ $Id: index.sgml,v 2.43 2016/05/03 13:19:56 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
