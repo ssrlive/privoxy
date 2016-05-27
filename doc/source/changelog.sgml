@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.18 2016/05/27 15:23:56 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.19 2016/05/27 15:24:51 fabiankeil Exp $
 
  Copyright (C) 2013-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -21,7 +21,7 @@
 -->
 
 <para>
-  <application>Privoxy 3.0.25</application> beta introduces client-based
+  <application>Privoxy 3.0.25</application> beta introduces client-specific
   tags and includes a couple of minor improvements. It will be followed
   by a stable release in the near future.
 </para>

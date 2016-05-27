@@ -1,8 +1,8 @@
                Announcing Privoxy 3.0.25 beta
 --------------------------------------------------------------------
 
-Privoxy 3.0.25 beta introduces client-based tags and includes a
-couple of minor improvements. It will be followed by a stable
+Privoxy 3.0.25 beta introduces client-specific tags and includes
+a couple of minor improvements. It will be followed by a stable
 release in the near future.
 --------------------------------------------------------------------
 ChangeLog for Privoxy
