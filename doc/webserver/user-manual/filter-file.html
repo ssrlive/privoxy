@@ -150,8 +150,9 @@ FILTER: foo Replace all "foo" with "bar"
 
     <p>The non-standard option letter <tt class="LITERAL">D</tt> (dynamic)
     allows to use the variables $host, $origin (the IP address the request
-    came from), $path and $url. They will be replaced with the value they
-    refer to before the filter is executed.</p>
+    came from), $path, $url and $listen-address (the address on which Privoxy
+    accepted the client request. Example: 127.0.0.1:8118). They will be
+    replaced with the value they refer to before the filter is executed.</p>
 
     <p>Note that '$' is a bad choice for a delimiter in a dynamic filter as
     you might end up with unintended variables if you use a variable name
@@ -874,8 +875,8 @@ s* industry[ -]leading \
 
       <p>External filters read the content from STDIN and write the rewritten
       content to STDOUT. The environment variables PRIVOXY_URL, PRIVOXY_PATH,
-      PRIVOXY_HOST, PRIVOXY_ORIGIN can be used to get some details about the
-      client request.</p>
+      PRIVOXY_HOST, PRIVOXY_ORIGIN, PRIVOXY_LISTEN_ADDRESS can be used to get
+      some details about the client request.</p>
 
       <p><span class="APPLICATION">Privoxy</span> will temporary store the
       content to filter in the <tt class="LITERAL"><a href=
