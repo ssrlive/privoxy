@@ -1,4 +1,4 @@
-$Id: TODO,v 1.149 2016/04/09 10:23:17 fabiankeil Exp $
+$Id: TODO,v 1.150 2016/04/10 08:07:10 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -439,6 +439,8 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 149) Use poll() for socket selection so the number of sockets Privoxy
      can deal with isn't limited to FD_SETSIZE anymore.
+
+150) Add blacklistd support.
 
 ##########################################################################
 
