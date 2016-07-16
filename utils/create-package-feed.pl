@@ -38,6 +38,7 @@ opendir(D1, $scan_dir) or die "Can't open 1st directory! /";
 while (my $fi1 = readdir(D1)) {
     next if ($fi1 =~ m/^\./);
 
+    next if ($fi1 eq 'OldFiles' or $fi1 eq 'pkgsrc');
     opendir(D2, $scan_dir . $fi1 . '/')
         or die "Can't open 2nd directory! /$fi1";
     while (my $fi2 = readdir(D2)) {
