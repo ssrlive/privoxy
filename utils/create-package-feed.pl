@@ -11,6 +11,7 @@ my $scan_dir   = '/xxxxxxxxxxxxxxxxxxxxxx/sf-download/';
 my $base_dlurl = 'https://www.privoxy.org/sf-download-mirror/';
 my $save_rss_file ='/xxxxxxxxxxxxxxxxxxxxxx/release.xml'; # e.g., release.rss
 my $maxlimit = 1000;
+my $max_advertised_files = 100;
 
 #< Config END >
 
@@ -117,7 +118,10 @@ $result .= '</pubDate>';
 # Sort Array
 my @resArray = sort { @$a[0] <=> @$b[0] } @Array;
 $i--;
-while ($i >= 0) { $result .= $resArray[$i][1]; $i--; }
+while ($max_advertised_files-- > 0 && $i >= 0) {
+    $result .= $resArray[$i][1];
+    $i--;
+}
 $result .= '</channel></rss>';
 
 # Save it.
