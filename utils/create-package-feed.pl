@@ -35,30 +35,31 @@ my $target_line;
 #
 # 1st & 2nd directory should NOT contain ANY 'FILES'. (expecting only 'Directory')
 #
-opendir(D1, $scan_dir) or die "Can't open 1st directory! /";
-while (my $fi1 = readdir(D1)) {
+opendir(my $D1, $scan_dir) or die "Can't open 1st directory! /";
+while (my $fi1 = readdir($D1)) {
     next if ($fi1 =~ m/^\./);
 
     next if ($fi1 eq 'OldFiles' or $fi1 eq 'pkgsrc');
-    opendir(D2, $scan_dir . $fi1 . '/')
+    opendir(my $D2, $scan_dir . $fi1 . '/')
         or die "Can't open 2nd directory! /$fi1";
-    while (my $fi2 = readdir(D2)) {
+    while (my $fi2 = readdir($D2)) {
         next if ($fi2 =~ m/^\./);
 
 ## start listing /OS/Version/FILE
-        opendir(D3, $scan_dir . $fi1 . '/' . $fi2 . '/')
+        opendir(my $D3, $scan_dir . $fi1 . '/' . $fi2 . '/')
             or die "Can't open 3rd directory! /$fi1/$fi2";
-        while (my $fi3 = readdir(D3)) {
+        while (my $fi3 = readdir($D3)) {
             next if ($fi3 =~ m/^\./);
             $target = $scan_dir . $fi1 . '/' . $fi2 . '/' . $fi3;
             next if (!-e $target);    # skip if file is not exist
 
             # Get SHA-1 hash
             my $filedata;
-            unless (open $filedata, $target) { next; }
+            open($filedata, "<", $target)
+                or die "Can't open '$target' to generate checksum $!";
             my $sha1 = Digest::SHA1->new;
             $sha1->addfile($filedata);
-            close $filedata;
+            close($filedata);
             $target_sha1 = $sha1->hexdigest;
 
             # URI and Time
@@ -96,14 +97,14 @@ while (my $fi1 = readdir(D1)) {
             $i++;
             die "maxlimit $maxlimit reached!" unless ($i < $maxlimit);
         }
-        closedir D3;
+        closedir($D3);
 ## end listing /OS/Version/FILE
 
     }
-    closedir D2;
+    closedir($D2);
 
 }
-closedir D1;
+closedir($D1);
 
 # Result = Full XML Codes
 my $result =
@@ -125,6 +126,6 @@ while ($max_advertised_files-- > 0 && $i >= 0) {
 $result .= '</channel></rss>';
 
 # Save it.
-open(XMLF, "> $save_rss_file") or die "Failed to write XML file";
-print XMLF $result;
-close(XMLF);
+open(my $XMLF, ">", $save_rss_file) or die "Failed to write XML file";
+print $XMLF $result;
+close($XMLF);
