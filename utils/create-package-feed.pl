@@ -88,10 +88,9 @@ while (my $fi1 = readdir($D1)) {
             $target_line .= '<pubDate>';
             ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) =
                 gmtime($target_time);
-            $target_line .=
-                  "$days[$wday], $mday $months[$mon] "
-                . ($year + 1900)
-                . " $hour:$min:$sec GMT";
+            $target_line .= sprintf("%s, %s %s %d %.2d:%.2d:%.2d GMT",
+                $days[$wday], $mday, $months[$mon], ($year + 1900),
+                $hour, $min, $sec);
             $target_line .= '</pubDate></item>';
 
             # Add it to Array
