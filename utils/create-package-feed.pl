@@ -1,6 +1,13 @@
 #!/usr/local/bin/perl
 
 ############################################################################
+# create-package-feed.pl
+#
+# Generates an RSS feed for the released files.
+#
+# Usage:
+# create-package-feed.pl "path/to/release/files" "path/to/rss/outputfile"
+#
 # Copyright (c) 2016 "Unknown", Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
