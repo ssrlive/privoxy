@@ -7,9 +7,11 @@ my @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 my @days   = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
 
 #< Config START >
-my $scan_dir   = '/xxxxxxxxxxxxxxxxxxxxxx/sf-download/';
+my $scan_dir = shift(@ARGV)
+    or die "Local package directory not specified (first argument)\n";
+my $save_rss_file = shift(@ARGV)
+    or die "RSS output file path not specified (second argument)\n";
 my $base_dlurl = 'https://www.privoxy.org/sf-download-mirror/';
-my $save_rss_file ='/xxxxxxxxxxxxxxxxxxxxxx/release.xml'; # e.g., release.rss
 my $maxlimit = 1000;
 my $max_advertised_files = 100;
 
