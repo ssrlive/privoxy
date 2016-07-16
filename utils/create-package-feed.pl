@@ -10,7 +10,7 @@ my @days   = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
 my $scan_dir   = '/xxxxxxxxxxxxxxxxxxxxxx/sf-download/';
 my $base_dlurl = 'https://www.privoxy.org/sf-download-mirror/';
 my $save_rss_file ='/xxxxxxxxxxxxxxxxxxxxxx/release.xml'; # e.g., release.rss
-my $maxlimit = 10;
+my $maxlimit = 1000;
 
 #< Config END >
 
@@ -35,7 +35,7 @@ my $target_line;
 # 1st & 2nd directory should NOT contain ANY 'FILES'. (expecting only 'Directory')
 #
 opendir(D1, $scan_dir) or die "Can't open 1st directory! /";
-MOUT: while (my $fi1 = readdir(D1)) {
+while (my $fi1 = readdir(D1)) {
     next if ($fi1 =~ m/^\./);
 
     opendir(D2, $scan_dir . $fi1 . '/')
@@ -92,7 +92,7 @@ MOUT: while (my $fi1 = readdir(D1)) {
             # Add it to Array
             $Array[$i] = ([$target_time, $target_line]);
             $i++;
-            if ($i >= $maxlimit) { last MOUT; }
+            die "maxlimit $maxlimit reached!" unless ($i < $maxlimit);
         }
         closedir D3;
 ## end listing /OS/Version/FILE
