@@ -66,6 +66,8 @@ while (my $fi1 = readdir($D1)) {
 
             # URI and Time
             $target_uri  = $fi1 . '/' . $fi2 . '/' . $fi3;
+            my $escaped_target_uri = $target_uri;
+            $escaped_target_uri =~ s@ @%20@g;
             $target_time = (stat $target)[9];
 
             # RSS line
@@ -80,10 +82,10 @@ while (my $fi1 = readdir($D1)) {
             $target_line .=
                   '<link>'
                 . $base_dlurl
-                . $target_uri
+                . $escaped_target_uri
                 . '</link><guid>'
                 . $base_dlurl
-                . $target_uri
+                . $escaped_target_uri
                 . '</guid>';
             $target_line .= '<pubDate>';
             ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) =
