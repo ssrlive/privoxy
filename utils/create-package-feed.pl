@@ -94,6 +94,7 @@ while (my $fi1 = readdir($D1)) {
                 $days[$wday], $mday, $months[$mon], ($year + 1900),
                 $hour, $min, $sec);
             $target_line .= '</pubDate></item>';
+            $target_line .= "\n";
 
             # Add it to Array
             $Array[$i] = ([$target_time, $target_line]);
@@ -111,13 +112,20 @@ closedir($D1);
 
 # Result = Full XML Codes
 my $result =
-    '<?xml version="1.0" encoding="utf-8"?><rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Privoxy Releases</title><link>https://www.privoxy.org/announce.txt</link><description><![CDATA[Privoxy Releases RSS feed]]></description><pubDate>';
+    '<?xml version="1.0" encoding="utf-8"?>
+ <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+   <title>Privoxy Releases</title>
+   <link>https://www.privoxy.org/announce.txt</link>
+   <description><![CDATA[Privoxy Releases RSS feed]]></description>
+   <pubDate>';
 ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime();
 $result .=
       "$days[$wday], $mday $months[$mon] "
     . ($year + 1900)
     . " $hour:$min:$sec GMT";
 $result .= '</pubDate>';
+$result .= "\n";
 
 # Sort Array
 my @resArray = sort { @$a[0] <=> @$b[0] } @Array;
@@ -126,7 +134,8 @@ while ($max_advertised_files-- > 0 && $i >= 0) {
     $result .= $resArray[$i][1];
     $i--;
 }
-$result .= '</channel></rss>';
+$result .= '  </channel>
+   </rss>';
 
 # Save it.
 open(my $XMLF, ">", $save_rss_file) or die "Failed to write XML file";
