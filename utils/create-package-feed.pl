@@ -2,7 +2,7 @@
 #< LICENSE: WTFPL >
 use warnings;
 use strict;
-use Digest::SHA1;
+use Digest::SHA;
 my @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 my @days   = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
 
@@ -27,7 +27,7 @@ my $wday;
 my $yday;
 my $isdst;
 my $target;
-my $target_sha1;
+my $target_sha256;
 my $target_uri;
 my $target_time;
 my $target_line;
@@ -53,14 +53,14 @@ while (my $fi1 = readdir($D1)) {
             $target = $scan_dir . $fi1 . '/' . $fi2 . '/' . $fi3;
             next if (!-e $target);    # skip if file is not exist
 
-            # Get SHA-1 hash
+            # Get SHA-256 hash
             my $filedata;
             open($filedata, "<", $target)
                 or die "Can't open '$target' to generate checksum $!";
-            my $sha1 = Digest::SHA1->new;
-            $sha1->addfile($filedata);
+            my $sha256 = Digest::SHA->new("SHA-256");
+            $sha256->addfile($filedata);
             close($filedata);
-            $target_sha1 = $sha1->hexdigest;
+            $target_sha256 = $sha256->hexdigest;
 
             # URI and Time
             $target_uri  = $fi1 . '/' . $fi2 . '/' . $fi3;
@@ -72,8 +72,8 @@ while (my $fi1 = readdir($D1)) {
             $target_line .=
                   '<description><![CDATA['
                 . $target_uri
-                . ' (SHA-1: '
-                . $target_sha1
+                . ' (SHA-256: '
+                . $target_sha256
                 . ')]]></description>';
             $target_line .=
                   '<link>'
