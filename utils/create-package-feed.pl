@@ -7,7 +7,6 @@ my @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 my @days   = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
 
 my $base_dlurl = 'https://www.privoxy.org/sf-download-mirror/';
-my $maxlimit = 1000;
 my $max_advertised_files = 100;
 
 sub generate_rss_item($$$$) {
@@ -87,16 +86,12 @@ sub get_released_files($) {
                 $target = $scan_dir . $fi1 . '/' . $fi2 . '/' . $fi3;
                 next if (!-e $target);    # skip if file is not exist
 
-                $target_sha256 = get_sha256_sum($target);
-                
                 $target_uri  = $fi1 . '/' . $fi2 . '/' . $fi3;
                 $target_time = (stat $target)[9];
 
-                $target_line = generate_rss_item($target, $target_uri, $target_time, $target_sha256);
+                $Array[$i] = ([$target_time, $target, $target_uri]);
 
-                $Array[$i] = ([$target_time, $target_line]);
                 $i++;
-                die "maxlimit $maxlimit reached!" unless ($i < $maxlimit);
             }
             closedir($D3);
         }
@@ -129,7 +124,15 @@ sub generate_feed($) {
     my @resArray = get_released_files($scan_dir);
     my $i = @resArray - 1;
     while ($max_advertised_files-- > 0 && $i >= 0) {
-        $result .= $resArray[$i][1];
+        my $target_time =  $resArray[$i][0];
+        my $target = $resArray[$i][1];
+        my $target_uri =  $resArray[$i][2];
+
+        my $target_sha256 = get_sha256_sum($target);
+
+        my $rss_item = generate_rss_item($target, $target_uri, $target_time, $target_sha256);
+
+        $result .= $rss_item;
         $i--;
     }
     $result .= '  </channel>
