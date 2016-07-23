@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.49 2015/12/27 12:53:54 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.50 2016/07/23 17:23:43 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -168,6 +168,8 @@ static struct _Pattern
    { "Connect: Reusing server socket",     STYLE_HIGHLIGHT },
    { "Connect: Created new connection to", STYLE_HIGHLIGHT },
    { "hung up on us",               STYLE_HIGHLIGHT },
+   { "Info: Loading actions file:", STYLE_HIGHLIGHT },
+   { "Info: Loading filter file:",  STYLE_HIGHLIGHT },
    { "Info: Now toggled ",          STYLE_HIGHLIGHT },
    { "Crunching Referer:",          STYLE_HIGHLIGHT },
    /* what are all the possible error strings?? */
