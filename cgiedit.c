@@ -1,4 +1,4 @@
-const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.87 2014/10/18 11:31:52 fabiankeil Exp $";
+const char cgiedit_rcs[] = "$Id: cgiedit.c,v 1.88 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgiedit.c,v $
@@ -4406,6 +4406,8 @@ jb_err cgi_toggle(struct client_state *csp,
       /* Toggle */
       global_toggle_state = !global_toggle_state;
    }
+
+   log_error(LOG_LEVEL_INFO, "Now toggled %s.", global_toggle_state ? "ON" : "OFF");
 
    if (NULL == (exports = default_exports(csp, "toggle")))
    {

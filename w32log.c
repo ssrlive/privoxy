@@ -1,4 +1,4 @@
-const char w32log_rcs[] = "$Id: w32log.c,v 1.48 2012/05/27 15:45:05 fabiankeil Exp $";
+const char w32log_rcs[] = "$Id: w32log.c,v 1.49 2015/12/27 12:53:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.c,v $
@@ -41,6 +41,7 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.48 2012/05/27 15:45:05 fabiankeil E
 #ifndef STRICT
 #define STRICT
 #endif
+#include <winsock2.h>    /* i686-w64-mingw32-gcc compiler warning if winsock2.h is included after windows.h */
 #include <windows.h>
 #include <richedit.h>
 
@@ -55,11 +56,6 @@ const char w32log_rcs[] = "$Id: w32log.c,v 1.48 2012/05/27 15:45:05 fabiankeil E
 #include "loadcfg.h"
 
 const char w32res_h_rcs[] = W32RES_H_VERSION;
-
-#ifdef __MINGW32__
-#include "cygwin.h"
-const char cygwin_h_rcs[] = CYGWIN_H_VERSION;
-#endif
 
 const char w32log_h_rcs[] = W32LOG_H_VERSION;
 
@@ -172,6 +168,7 @@ static struct _Pattern
    { "Connect: Reusing server socket",     STYLE_HIGHLIGHT },
    { "Connect: Created new connection to", STYLE_HIGHLIGHT },
    { "hung up on us",               STYLE_HIGHLIGHT },
+   { "Info: Now toggled ",          STYLE_HIGHLIGHT },
    { "Crunching Referer:",          STYLE_HIGHLIGHT },
    /* what are all the possible error strings?? */
    { "Error:",                      STYLE_HIGHLIGHT },
