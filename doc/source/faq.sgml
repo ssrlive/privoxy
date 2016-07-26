@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.125 2016/05/27 15:24:13 fabiankeil Exp $
+ $Id: faq.sgml,v 2.126 2016/07/26 10:45:39 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.125 2016/05/27 15:24:13 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.126 2016/07/26 10:45:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3024,6 +3024,7 @@ browsing has slowed to a crawl. What gives? </title>
  <ulink url="http://pcre.org/original/doc/html/pcrestack.html">pcrestack man page</ulink>
  and the documentation of your operating system.
 </para>
+</sect2>
 
 </sect1>
 
