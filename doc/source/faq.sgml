@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.126 2016/07/26 10:45:39 fabiankeil Exp $
+ $Id: faq.sgml,v 2.127 2016/07/26 10:46:07 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -73,12 +73,12 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2014 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2016 by
  <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.126 2016/07/26 10:45:39 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.127 2016/07/26 10:46:07 fabiankeil Exp $</pubdate>
 
 <!--
 
