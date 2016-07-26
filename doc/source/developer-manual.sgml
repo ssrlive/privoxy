@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.70 2016/05/22 12:42:11 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.71 2016/05/27 15:24:13 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.70 2016/05/22 12:42:11 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.71 2016/05/27 15:24:13 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2718,6 +2718,7 @@ Install the rpm. Any error messages?
         For details see the <ulink url="https://www.freebsd.org/doc/en_US.ISO8859-1/books/porters-handbook/">FreeBSD Porter's Handbook</ulink>.
       </para>
     </sect3>
+   </sect2>
 
    <sect2 id="releasing">
    <title>Uploading and Releasing Your Package</title>
