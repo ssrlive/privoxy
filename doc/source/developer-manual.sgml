@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.74 2016/08/22 20:19:40 ler762 Exp $
+ $Id: developer-manual.sgml,v 2.75 2016/08/25 19:07:40 ler762 Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.74 2016/08/22 20:19:40 ler762 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.75 2016/08/25 19:07:40 ler762 Exp $</pubdate>
 
 <!--
 
@@ -2122,22 +2122,6 @@ Install the rpm. Any error messages?
 #MASTER# COMMENT: The minimum Privoxy version:
 for-privoxy-version=3.0.11
 </programlisting>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        If <filename>default.action</filename> has changed since last
-        release (i.e. software release or standalone actions file release),
-        bump up its version info to A.B in this line:
-       </para>
-       <para>
-        <programlisting>
-  {+add-header{X-Actions-File-Version: A.B} -filter -no-popups}
-</programlisting>
-       </para>
-       <para>
-        Then change the version info in doc/webserver/actions/index.php,
-        line: '$required_actions_file_version = "A.B";'
        </para>
       </listitem>
       <listitem>
