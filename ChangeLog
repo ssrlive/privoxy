@@ -1,6 +1,42 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.26 stable ***
+
+- Bug fixes:
+  - accept_connection(): Fix crashes with "listen-addr :8118"
+      After jbsockets.c v1.136 a valid text representation of
+      the host address is required for the $listen-address
+      variable. If no host address has been specified, use an
+      empty string to prevent NULL pointer dereferences.
+
+      The problem was reported by Marvin Renich in Debian bug #834941,
+      the offending commit was tracked down by Roland in SF Bug #902.
+
+- General improvements:
+  - Log when privoxy is toggled on or off via cgi interface.
+  - Highlight the "Info: Now toggled " on/off log message in the windows log viewer.
+  - Highlight the loading actions/filter file log message in the windows log viewer
+  - Mention client-specific tags on the toggle page as a potentionally more appropriate alternative
+
+- Documentation improvements:
+  - Update download section on the homepage
+      The downloads are available from the website now.
+  - Add sponsor FAQ
+  - Remove obsolete reference to mailing lists hosted at SourceForge
+  - Update the "Before the Release" section of the developer manual
+
+- Infrastructure improvements:
+  - Add perl script to generate an RSS feed for the packages
+      Submitted by "Unknown":
+      https://lists.privoxy.org/pipermail/privoxy-devel/2016-July/000068.html
+
+- Build system improvements:
+  - strptime.h: fix a compiler warning about ambiguous else
+  - configure.in: Check for Docbook goo on the BSDs as well
+  - GNUMakefile.in: Let the dok-user target remove temporary files
+
+
 *** Version 3.0.25 beta ***
 
 - Bug fixes:
