@@ -6,9 +6,9 @@
 <!entity history SYSTEM "history.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
 <!entity p-version "3.0.26">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % seealso-extra "INCLUDE"> <!-- extra stuff from seealso.sgml    -->
@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.73 2016/07/28 08:25:33 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.74 2016/08/22 20:19:40 ler762 Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.73 2016/07/28 08:25:33 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.74 2016/08/22 20:19:40 ler762 Exp $</pubdate>
 
 <!--
 
@@ -2109,6 +2109,19 @@ Install the rpm. Any error messages?
       <listitem>
        <para>
          Update the code status (CODE_STATUS="xxx") to one of "alpha", "beta" or "stable".
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        If action file processing has changed and is not backward-compatable,
+        make sure the "for-privoxy-version=x.y.z" minimum version number in
+        default.action.master has been updated:
+        <programlisting>
+{{settings}}
+#############################################################################
+#MASTER# COMMENT: The minimum Privoxy version:
+for-privoxy-version=3.0.11
+</programlisting>
        </para>
       </listitem>
       <listitem>
