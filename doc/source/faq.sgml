@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.128 2016/07/26 10:46:29 fabiankeil Exp $
+ $Id: faq.sgml,v 2.129 2016/07/28 08:25:33 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.128 2016/07/26 10:46:29 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.129 2016/07/28 08:25:33 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -586,7 +586,9 @@ warranty? Registration?</title>
  </varlistentry>
 </variablelist>
 <para>
- The logo sizes depend on the sponsor level.
+ The logo sizes depend on the sponsor level. Logos are served from
+ our server, no requests are made to the sponsor website unless
+ the links are being used.
 </para>
 <para>
  The details may change over time but changes will only affect new sponsors
