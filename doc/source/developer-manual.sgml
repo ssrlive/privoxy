@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.79 2016/08/26 12:31:58 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.80 2016/08/26 12:32:07 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.79 2016/08/26 12:31:58 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.80 2016/08/26 12:32:07 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2102,13 +2102,15 @@ Install the rpm. Any error messages?
       <listitem>
        <para>
          Increment the version number (point from odd to even in development
-         branches!) in <filename>configure.in</filename>. (RPM spec files
-         will need to be incremented as well.)
+         branches!) in <filename>configure.in</filename> and update the code
+         status (CODE_STATUS="xxx") to one of "alpha", "beta" or "stable".
+         Rebuild configure and GNUMakefile to make sure the updated values are
+         being used.
        </para>
       </listitem>
       <listitem>
        <para>
-         Update the code status (CODE_STATUS="xxx") in <filename>configure.in</filename> to one of "alpha", "beta" or "stable".
+        Use the dok-release target to update the sgml documentation source files.
        </para>
       </listitem>
       <listitem>
@@ -2121,31 +2123,6 @@ Install the rpm. Any error messages?
 #############################################################################
 #MASTER# COMMENT: The minimum Privoxy version:
 for-privoxy-version=3.0.11
-</programlisting>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Update the sgml documentation source files with the version number
-        <programlisting>
-&lt;!entity p-version "3.0.26"&gt;
-</programlisting>
-        and set the code status
-        <programlisting>
-&lt;!entity p-status "stable"&gt;
-</programlisting>
-        to one of "alpha", "beta" or "stable" in
-        <programlisting>
-  current/doc/source/authors.sgml
-  current/doc/source/config.sgml
-  current/doc/source/developer-manual.sgml
-  current/doc/source/faq.sgml
-  current/doc/source/install.sgml
-  current/doc/source/privoxy-man-page.sgml
-  current/doc/source/readme.sgml
-  current/doc/source/user-manual.sgml
-and in
-  current/doc/source/webserver/index.sgml
 </programlisting>
        </para>
       </listitem>
