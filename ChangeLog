@@ -26,8 +26,7 @@ ChangeLog for Privoxy
 
 - Infrastructure improvements:
   - Add perl script to generate an RSS feed for the packages
-    Submitted by "Unknown":
-    https://lists.privoxy.org/pipermail/privoxy-devel/2016-July/000068.html
+    Submitted by "Unknown".
 
 - Build system improvements:
   - strptime.h: fix a compiler warning about ambiguous else.
