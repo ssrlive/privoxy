@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.21 2016/08/26 03:21:04 ler762 Exp $
+ $Id: changelog.sgml,v 2.22 2016/08/26 12:31:25 fabiankeil Exp $
 
  Copyright (C) 2013-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -142,12 +142,9 @@
  </itemizedlist>
 </para>
 
-
-
 <para>
-  <application>Privoxy 3.0.25</application> beta introduces client-specific
-  tags and includes a couple of minor improvements. It will be followed
-  by a stable release in the near future.
+ Changes between <application>Privoxy 3.0.25 beta</application>
+ and the previous release:
 </para>
 <para>
  <itemizedlist>
