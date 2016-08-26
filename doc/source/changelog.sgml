@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: changelog.sgml,v 2.20 2016/05/27 17:27:55 fabiankeil Exp $
+ $Id: changelog.sgml,v 2.21 2016/08/26 03:21:04 ler762 Exp $
 
  Copyright (C) 2013-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -26,128 +26,120 @@
 -->
 
 <para>
-  <application>Privoxy 3.0.26</application> changes
-  <itemizedlist>
+  <application>Privoxy 3.0.26</application> stable is a bug-fix release
+  for the previously released 3.0.25 beta which introduced client-specific
+  tags and included a couple of minor improvements.
+</para>
+<para>
+ <itemizedlist>
+  <listitem>
+   <para>
+    Bug fixes:
+    <itemizedlist>
     <listitem>
-      <para>
-        Bug fixes:
-        <itemizedlist>
-          <listitem>
-            <para>
-              accept_connection(): Fix crashes with "listen-addr :8118"
-            </para>
-            <para>
-              After jbsockets.c v1.136 a valid text representation of
-              the host address is required for the $listen-address
-              variable. If no host address has been specified, use an
-              empty string to prevent NULL pointer dereferences.
-            </para>
-            <para>
-              The problem was reported by Marvin Renich in Debian bug #834941,
-              the offending commit was tracked down by Roland in SF Bug #902.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
+     <para>
+      Fixed crashes with "listen-addr :8118" (SF Bug #902).
+      The regression was introduced in 3.0.25 beta and reported
+      by Marvin Renich in Debian bug #834941.
+    </para>
     </listitem>
-
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    General improvements:
+    <itemizedlist>
     <listitem>
-      <para>
-        General improvements:
-        <itemizedlist>
-          <listitem>
-            <para>
-              Log when privoxy is toggled on or off via cgi interface.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Highlight the "Info: Now toggled " on/off log message in the windows log viewer.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Highlight the loading actions/filter file log message in the windows log viewer.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Mention client-specific tags on the toggle page as a potentionally more appropriate alternative.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
+     <para>
+      Log when privoxy is toggled on or off via cgi interface.
+     </para>
     </listitem>
-
     <listitem>
-      <para>
-        Documentation improvements:
-        <itemizedlist>
-          <listitem>
-            <para>
-              Update download section on the homepage.
-              The downloads are available from the website now.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Add sponsor FAQ
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Remove obsolete reference to mailing lists hosted at SourceForge
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Update the "Before the Release" section of the developer manual.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
+     <para>
+      Highlight the "Info: Now toggled " on/off log message
+      in the Windows log viewer.
+     </para>
     </listitem>
-
     <listitem>
-      <para>
-        Infrastructure improvements:
-        <itemizedlist>
-          <listitem>
-            <para>
-              Add perl script to generate an RSS feed for the packages
-            </para>
-            <para>
-              Submitted by "Unknown":
-              https://lists.privoxy.org/pipermail/privoxy-devel/2016-July/000068.html
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
+     <para>
+      Highlight the loading actions/filter file log message
+      in the Windows log viewer.
+     </para>
     </listitem>
-
     <listitem>
-      <para>
-        Build system improvements:
-        <itemizedlist>
-          <listitem>
-            <para>
-              strptime.h: fix a compiler warning about ambiguous else
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              configure.in: Check for Docbook goo on the BSDs as well
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              GNUMakefile.in: Let the dok-user target remove temporary files
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
+     <para>
+      Mention client-specific tags on the toggle page as a
+      potentionally more appropriate alternative.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Documentation improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Update download section on the homepage.
+      The downloads are available from the website now.
+     </para>
     </listitem>
-  </itemizedlist>
+    <listitem>
+     <para>
+      Add sponsor FAQ.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove obsolete reference to mailing lists hosted at SourceForge.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Update the "Before the Release" section of the developer manual.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Infrastructure improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Add perl script to generate an RSS feed for the packages
+      Submitted by "Unknown".
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Build system improvements:
+    <itemizedlist>
+    <listitem>
+     <para>
+      strptime.h: fix a compiler warning about ambiguous else.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      configure.in: Check for Docbook goo on the BSDs as well.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      GNUMakefile.in: Let the dok-user target remove temporary files.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+ </itemizedlist>
 </para>
 
 
