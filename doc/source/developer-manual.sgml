@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.77 2016/08/25 19:22:20 ler762 Exp $
+ $Id: developer-manual.sgml,v 2.78 2016/08/25 19:53:28 ler762 Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.77 2016/08/25 19:22:20 ler762 Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.78 2016/08/25 19:53:28 ler762 Exp $</pubdate>
 
 <!--
 
@@ -2113,7 +2113,7 @@ Install the rpm. Any error messages?
       </listitem>
       <listitem>
        <para>
-        If action file processing has changed and is not backward-compatable,
+        If action file processing has changed and is not backward-compatible,
         make sure the "for-privoxy-version=x.y.z" minimum version number in
         default.action.master has been updated:
         <programlisting>
