@@ -13,18 +13,22 @@ Build-Depends: autoconf,
                jade,
                libpcre3-dev,
                man2html,
+               po-debconf,
                sgmlspl,
                sp,
                w3m,
                zlib1g-dev
-Standards-Version: 3.9.7
-Homepage: http://www.privoxy.org/
+Standards-Version: 3.9.8
+Homepage: https://www.privoxy.org/
+Testsuite: autopkgtest
 
 Package: privoxy
 Architecture: any
 Depends: adduser,
+         debconf,
          logrotate,
          lsb-base (>= 3.2-13),
+         ucf,
          ${misc:Depends},
          ${perl:Depends},
          ${shlibs:Depends}

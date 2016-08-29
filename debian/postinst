@@ -25,6 +25,9 @@ set -e
 
 CONFDIR=/etc/privoxy
 CONFIG=$CONFDIR/config
+EXAMPLE_CONFIG=/usr/share/privoxy/config
+
+. /usr/share/debconf/confmodule
 
 case "$1" in
     configure)
@@ -35,6 +38,28 @@ case "$1" in
 	chown privoxy $CONFDIR/user.action $CONFDIR/trust
 	[ -f $CONFDIR/match-all.action ] \
 	    && chown privoxy $CONFDIR/match-all.action
+
+	db_get privoxy/listen-address || true
+	perl -le '
+                $done = 0;
+                while (<STDIN>) {
+                    chomp;
+                    if ($_ =~ m/^\s*listen-address\s+.*/) {
+                        if (!$done) {
+                            foreach (@ARGV) {
+                                print "listen-address  $_";
+                            }
+                        }
+                        $done = 1;
+                    } else {
+                        print;
+                    }
+                }' \
+	     $RET \
+	     < $EXAMPLE_CONFIG > $CONFIG.ucftmp
+	ucf --three-way --debconf-ok $CONFIG.ucftmp $CONFIG
+	ucfr privoxy $CONFIG
+	rm -f $CONFIG.ucftmp
 
 	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.4"
 	then

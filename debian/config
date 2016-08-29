@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+CONFIG=/etc/privoxy/config
+
+# Get current configuration.
+if [ -e $CONFIG ]; then
+    LISTENADDRESS=$(perl -le '
+        my @listens;
+        while (<STDIN>) {
+            chomp;
+            if ($_ =~ m/^\s*listen-address\s+(\S+)/) {
+                push @listens, $1;
+            }
+        }
+        print "@listens\n";' \
+                         < $CONFIG)
+
+    db_set privoxy/listen-address "$LISTENADDRESS"
+fi
+
+db_input medium privoxy/listen-address || true
+db_go || true

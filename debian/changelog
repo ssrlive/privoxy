@@ -1,8 +1,51 @@
+privoxy (3.0.26-1) unstable; urgency=medium
+
+  * New upstream version 3.0.26.
+  * This includes 36_listen-nohost.patch.
+  * Updated all patches to new version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 27 Aug 2016 22:28:32 +0200
+
+privoxy (3.0.25-2) unstable; urgency=medium
+
+  * Add pt_BR debconf translation.  Thanks to Adriano Rafael Gomes
+    (Closes: #827327).
+  * Symlink p_doc.css to user-manual.
+  * Install regression-tests.action.
+  * Enable autopkgtest and run privoxy-regression-test.pl.
+  * Install privoxy-regression-test and man page to binary package.
+  * Updated debian/copyright to catch all copyright variants.
+  * Remove outdated stuff from README.Debian.
+  * 36_listen-nohost: Fix crashes with "listen-addr :8118" (Closes: #834941).
+
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 23 Aug 2016 09:27:34 +0200
+
+privoxy (3.0.25-1) unstable; urgency=medium
+
+  * New upstream version 3.0.25 (beta).
+  * Adapt all patches to new upstream version.
+  * Update debian/copyright to new privoxy home.
+  * Add sv debconf translation.  Thanks to Jonatan Nyberg (Closes: #824913).
+  * Add fr debconf translation.  Thanks to Steve Petruzzello (Closes: #825478).
+  * Add nl debconf translation.  Thanks to Frans Spiesschaert (Closes: #825691).
+  * privoxy.service: Run after network.target (Closes: #825358).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 28 May 2016 23:13:56 +0200
+
 privoxy (3.0.24-2) unstable; urgency=medium
 
-  * Upgrade Standards-Version to 3.9.7 (no changes).
+  * Upgrade Standards-Version to 3.9.8 (no changes).
+  * Add -p to QUILT_DIFF_OPTS.
+  * Add Documentation key to privoxy.service.
+  * 35_man-spelling: Fix spelling error in privoxy-log-parser(1).
+  * Add debconf and ucf support to make listen-address configurable.
+    Thanks to James Valleroy for providing the code (Closes: #798219).
+  * Remove 28_listen_localhost, but listen on 127.0.0.1:8118 and
+    [::1]:8118 by default, since otherwise privoxy listens only on IPv6
+    (Closes: #518010, #557443).
+  * Change several URLs from http to https.
 
- -- Roland Rosenfeld <roland@debian.org>  Thu, 04 Feb 2016 19:35:59 +0100
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 01 May 2016 14:21:22 +0200
 
 privoxy (3.0.24-1) unstable; urgency=medium
 
@@ -90,13 +133,13 @@ privoxy (3.0.21-7) unstable; urgency=medium
 privoxy (3.0.21-5) unstable; urgency=low
 
   * 34_CVE-2015-1030: Fix memory leak in rfc2553_connect_to().  CID 66382
-  * 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map 
+  * 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map
     only consists of one item.  CID 66394.
   * 36_CVE-2015-1031-CID66376: pcrs_execute(): Consistently set *result to
     NULL in case of errors.  Should make use-after-free in the caller less
     likely.  CID 66391, CID 66376.
   * These 3 patches Closes: #775167.
-  
+
  -- Roland Rosenfeld <roland@debian.org>  Mon, 12 Jan 2015 08:44:23 +0100
 
 privoxy (3.0.21-4) unstable; urgency=low
@@ -143,6 +186,15 @@ privoxy (3.0.20-1) unstable; urgency=low
 
  -- Roland Rosenfeld <roland@debian.org>  Thu, 24 Jan 2013 17:40:51 +0100
 
+privoxy (3.0.19-2+deb7u4) oldstable; urgency=high
+
+  * 42_CVE-2013-2503: Proxy authentication headers are removed unless the
+    new directive enable-proxy-authentication-forwarding is used.
+    Forwarding the headers potentionally allows malicious sites to trick
+    the user into providing it with login information (Closes: #702896).
+
+ -- Roland Rosenfeld <roland@debian.org>  Tue, 08 Mar 2016 08:52:26 +0100
+
 privoxy (3.0.19-2+deb7u3) wheezy-security; urgency=high
 
   * 40_CVE-2016-1982: Prevent invalid reads in case of corrupt
@@ -163,7 +215,7 @@ privoxy (3.0.19-2+deb7u2) wheezy-security; urgency=medium
 
 privoxy (3.0.19-2+deb7u1) stable-security; urgency=medium
 
-  * 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map 
+  * 35_CVE-2015-1031-CID66394: unmap(): Prevent use-after-free if the map
     only consists of one item.  CID 66394.
   * 36_CVE-2015-1031-CID66376: pcrs_execute(): Consistently set *result to
     NULL in case of errors.  Should make use-after-free in the caller less
@@ -217,13 +269,13 @@ privoxy (3.0.17-1) unstable; urgency=low
 
 privoxy (3.0.16-1+deb6u2) squeeze-lts; urgency=high
 
-  * Non-maintainer upload by the Squeeze LTS Team. 
+  * Non-maintainer upload by the Squeeze LTS Team.
   * CVE-2016-1982
     Prevent invalid reads in case of corrupt chunk-encoded content
   * CVE-2016-1983
-    Remove empty Host headers in client requests; resulting in 
+    Remove empty Host headers in client requests; resulting in
     invalid reads.
- 
+
  -- Thorsten Alteholz <debian@alteholz.de>  Fri, 22 Jan 2016 18:03:02 +0100
 
 privoxy (3.0.16-1+deb6u1) squeeze-lts; urgency=medium
@@ -267,7 +319,7 @@ privoxy (3.0.15-3) unstable; urgency=low
 privoxy (3.0.15-2) unstable; urgency=low
 
   * 30_localhost_fixup: Remove workaround for "localhost" listen-address,
-    which should solve all problems with privoxy not starting. 
+    which should solve all problems with privoxy not starting.
     (Closes: #534735).
 
  -- Roland Rosenfeld <roland@debian.org>  Sun, 13 Dec 2009 10:09:11 +0100
@@ -331,7 +383,7 @@ privoxy (3.0.11-1) unstable; urgency=low
     weren't noticed, cause they are written to the console on start now
     (Closes: #375174)
   * Modify init.d script to be more lsb compliant.
-    Depends on lsb-base (>= 3.2-13) 
+    Depends on lsb-base (>= 3.2-13)
   * Allow disabling privoxy via RUN_DAEMON=no in /etc/default/privoxy.
     (Closes: #482563).
   * Update README.Debian to fit all changes.
@@ -342,7 +394,7 @@ privoxy (3.0.10-2) unstable; urgency=low
 
   * IPv6 patch added again: 03_ipv6: privoxy-3.0.10-ipv6-all-6.diff by
     Petr Písař (Closes: #179461).
-    It seems that the old bugs #391600 and #393605, which appeared with 
+    It seems that the old bugs #391600 and #393605, which appeared with
     the previous version, are fixed now.
   * 28_listen_localhost: Listen on localhost:8118 instead of 127.0.0.1:8118,
     because this is independent from localhost IP (127.0.0.1 vs. 127.0.1.1)
@@ -457,12 +509,12 @@ privoxy (3.0.6-1) unstable; urgency=low
 privoxy (3.0.5-beta-3) unstable; urgency=medium
 
   * Disable the IPv6 patch, because this is seems to have too many bugs
-    for a release right now.  
+    for a release right now.
     - This reopens #179461.
     - This solves the problem, that "listen-address :8118" listens on
       localhost only (Closes: #391600).
     - This solves the problem, that regex pattern at front of hostname
-      is ignored (Closes: #393605). 
+      is ignored (Closes: #393605).
   * Use /usr/share/dpatch/dpatch.make in debian/rules instead of adding
     the content by hand.
   * Extended version of 26_edit_only_writable.dpatch by Fabian Keil.  Now
@@ -482,8 +534,8 @@ privoxy (3.0.5-beta-2) unstable; urgency=low
 privoxy (3.0.5-beta-1) unstable; urgency=low
 
   * New upstream version 3.0.5-beta.
-  * hide-referrer{foo} now allows everything as a forged referrer not 
-    only http/https URLs and ignoring invalid URLs (Closes: #258193).  
+  * hide-referrer{foo} now allows everything as a forged referrer not
+    only http/https URLs and ignoring invalid URLs (Closes: #258193).
   * Fixes the name of the filter from "popups" to "all-popups" in
     user.action. (Closes: #385886).
   * Block http://www.google-analytics.com/urchin.js because this is used
@@ -586,7 +638,7 @@ privoxy (3.0.3-5) unstable; urgency=low
 
 privoxy (3.0.3-4) unstable; urgency=low
 
-  * Stop converting entities to 8bit chars in the documentation 
+  * Stop converting entities to 8bit chars in the documentation
     (Closes: #203697).
   * Fix typos ('persistant' and 'Januar') in man page and man page sources
     (Closes: #302145).
@@ -602,7 +654,7 @@ privoxy (3.0.3-4) unstable; urgency=low
 privoxy (3.0.3-3) unstable; urgency=low
 
   * Now really remove multiproxy.org from all documentation, not only from
-    the config file (Closes: #198953). 
+    the config file (Closes: #198953).
 
  -- Roland Rosenfeld <roland@debian.org>  Sun, 15 Feb 2004 23:11:29 +0100
 
@@ -629,13 +681,13 @@ privoxy (3.0.3-1) unstable; urgency=low
     - This introduces workarounds for server (PHP <4.2.3) bugs including
       the "blank page" problem (Closes: #215231).
     - Avoid the conversion of "open" in scripts to "PrivoxyWindowOpen"
-      (Closes: #197995). 
+      (Closes: #197995).
     - "advocancy" is no longer blocked (Closes: #202042).
     - Fixed yet another two memory leaks (Closes: #215911).
   * Stop backup of pdf directory, because it is no longer contained in the
     upstream package.
   * Create doc/pdf, which is missing upstream.
-  * disable filter{unsolicited-popups} for www.perl.com/language/newdocs/pod/ 
+  * disable filter{unsolicited-popups} for www.perl.com/language/newdocs/pod/
     to avoid problems with "PrivoxyWindowOpen" in Perl manuals
     (Closes: #195311).
   * Apply patch make privoxy compilable on woody where htmldoc --version
@@ -711,7 +763,7 @@ privoxy (3.0.0-5) unstable; urgency=low
 
   * Stop build-depending on special versions of libc6-dev and gcc.
     Hopefully all auto-builders run new versions which shouldn't cause
-    trouble (Closes: #182267)  
+    trouble (Closes: #182267)
 
  -- Roland Rosenfeld <roland@debian.org>  Mon, 24 Feb 2003 19:07:11 +0100
 
@@ -790,7 +842,7 @@ privoxy (2.9.16-1) unstable; urgency=low
   * Do no longer build html and txt versions of documentation using
     docbook, but use the converted versions which come with the upstream
     package.
-  * default.action fixed upstream: "downloads" no longer blocked 
+  * default.action fixed upstream: "downloads" no longer blocked
     (Closes: #148290).
   * default.filter fixed upstream: Made WeBugs job ungreedy (Closes: #149450).
   * Remove the "beta" from the version number (the final release will be

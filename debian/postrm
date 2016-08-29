@@ -21,7 +21,17 @@ set -e
 case "$1" in
     purge)
         # deluser --quiet privoxy
+        if [ -x "$(which ucf 2>/dev/null)" ]; then
+            ucf --purge /etc/privoxy/config
+        fi
+        if [ -x "$(which ucfr 2>/dev/null)" ]; then
+            ucfr --purge privoxy /etc/privoxy/config
+        fi
         rm -rf /var/log/privoxy /etc/privoxy
+        if [ -e /usr/share/debconf/confmodule ]; then
+            . /usr/share/debconf/confmodule
+            db_purge
+        fi
         ;;
 
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)

@@ -1,0 +1,6 @@
+Template: privoxy/listen-address
+Type: string
+Default: 127.0.0.1:8118 [::1]:8118
+_Description: Adresses on with Privoxy listens:
+ Please enter a space separated list of address:port combinations on
+ which Privoxy will listen for client requests.

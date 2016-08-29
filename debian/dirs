@@ -2,5 +2,6 @@ etc/privoxy
 usr/bin
 usr/sbin
 usr/share/doc/privoxy
+usr/share/privoxy
 var/log/privoxy
 usr/share/man/man1

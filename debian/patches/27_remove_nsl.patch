@@ -3,7 +3,7 @@ Description: Remove unnecessary linking against libnsl.
 
 --- a/configure.in
 +++ b/configure.in
-@@ -470,7 +470,7 @@ dnl gmtime and localtime
+@@ -491,7 +491,7 @@ dnl gmtime and localtime
  dnl =================================================================
  
  dnl Next line needed to find the gethost*_r functions on Solaris

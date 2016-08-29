@@ -1,16 +1,68 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Privoxy
-Upstream-Contact: Privoxy team <ijbswa-developers@lists.sourceforge.net>
-Source: http://sourceforge.net/projects/ijbswa/files/Sources/
+Upstream-Contact: Privoxy Developers <privoxy-devel@lists.privoxy.org>
+Source: http://www.privoxy.org/sf-download-mirror/Sources/
 
 Files: *
-Copyright: Written by and Copyright (C) 2001-2014 the Privoxy team.
-           http://www.privoxy.org/
-License: GPL-2
+Copyright:
+ Copyright (C) 2001-2016 by the Privoxy team. http://www.privoxy.org/
+ Parts Copyright (C) 1999 Adam Lock <locka@iol.ie>
+ Parts Copyright (C) 2003 Ian Cummings <ian_a_c@hotmail.com>
+ Parts Copyright (C) 2000, 2001 by Andreas S. Oesterhelt <andreas@oesterhelt.org>
+ Parts Copyright (C) 2006-2016 Fabian Keil <fk@fabiankeil.de>
+Comment:
  Based on the Internet Junkbuster originally written
  by and Copyright (C) 1997 Anonymous Coders and
  Junkbusters Corporation.  http://www.junkbusters.com
+License: GPL-2+
+
+Files: regression-tests.action tools/uagen.pl tools/privoxy-regression-test.pl
+ tools/privoxy-log-parser.pl tools/url-pattern-translator.pl utils/changelog2doc.pl
+ utils/create-package-feed.pl
+Copyright:
+ Copyright (c) 2006-2016 Fabian Keil <fk@fabiankeil.de>
+License: ISC
+
+Files: strptime.h
+Copyright:
+ Copyright (C) 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
+Comment:
+ This file is part of the GNU C Library.
+ Contributed by Ulrich Drepper <drepper@cygnus.com>, 1996.
+License: GPL-2+
+
+Files: debian/*
+Copyright:
+ 2002-2016  Roland Rosenfeld <roland@debian.org>
+License: GPL-2+
+
+Files: pcre/*
+Copyright: Copyright (c) 1997-2000 University of Cambridge
+Comment: 
+ Written by: Philip Hazel <ph10@cam.ac.uk>
  .
+ University of Cambridge Computing Service,
+ Cambridge, England. Phone: +44 1223 334714.
+License: BSD-like
+ Permission is granted to anyone to use this software for any purpose on any
+ computer system, and to redistribute it freely, subject to the following
+ restrictions:
+ .
+ 1. This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ .
+ 2. The origin of this software must not be misrepresented, either by
+    explicit claim or by omission.
+ .  
+ 3. Altered versions must be plainly marked as such, and must not be
+    misrepresented as being the original software.
+ .
+ 4. If PCRE is embedded in any software that is released under the GNU
+    General Purpose Licence (GPL), then the terms of that licence shall
+    supersede any condition above with which it is incompatible.
+
+License: GPL-2+
  This program is free software; you can redistribute it
  and/or modify it under the terms of the GNU General
  Public License as published by the Free Software
@@ -32,3 +84,16 @@ License: GPL-2
  On Debian systems, the full text of the GNU General Public
  License version 2 can be found in the file
  `/usr/share/common-licenses/GPL-2'.
+
+License: ISC
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

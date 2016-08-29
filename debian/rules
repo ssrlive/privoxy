@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (c) 2002-2015 Roland Rosenfeld <roland@debian.org>
+# (c) 2002-2016 Roland Rosenfeld <roland@debian.org>
 #
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -51,10 +51,14 @@ override_dh_auto_clean:
 
 override_dh_auto_install:
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy
-	install -m 644 config $(DEBDIR)/etc/privoxy/config
+	sed -e 's/\(Sample Configuration File for Privoxy\).*/\1/;' \
+	    -e 's/\$$Id: config,v.*/Id: config,v/' < config \
+	    > $(DEBDIR)/usr/share/privoxy/config
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
 	install -m 0644 match-all.action $(DEBDIR)/etc/privoxy/match-all.action
 	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
+	install -m 0644 regression-tests.action \
+		$(DEBDIR)/etc/privoxy/regression-tests.action
 	install -m 0644 default.filter $(DEBDIR)/etc/privoxy/default.filter
 	install -m 0644 user.filter $(DEBDIR)/etc/privoxy/user.filter
 	install -m 0644 trust $(DEBDIR)/etc/privoxy/trust
@@ -63,6 +67,11 @@ override_dh_auto_install:
 		$(DEBDIR)/usr/bin/privoxy-log-parser
 	pod2man tools/privoxy-log-parser.pl \
 		> $(DEBDIR)/usr/share/man/man1/privoxy-log-parser.1
+
+	install -m 0755 tools/privoxy-regression-test.pl \
+		$(DEBDIR)/usr/bin/privoxy-regression-test
+	pod2man tools/privoxy-regression-test.pl \
+		> $(DEBDIR)/usr/share/man/man1/privoxy-regression-test.1
 
 	cp -r templates $(DEBDIR)/etc/privoxy/
 	rm -f $(DEBDIR)/etc/privoxy/templates/*~
@@ -83,6 +92,7 @@ override_dh_installdocs:
 	dh_installdocs -XCVS
 	(cd $(DEBDIR)/usr/share/doc/privoxy/; \
 	 mv privoxy-index.html index.html)
+	(cd $(DEBDIR)/usr/share/doc/privoxy/user-manual; ln -s '../p_doc.css')
 
 override_dh_perl:
 #	We only need perl-base:

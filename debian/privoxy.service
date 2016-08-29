@@ -1,5 +1,7 @@
 [Unit]
 Description=Privacy enhancing HTTP Proxy
+Documentation=man:privoxy(8) https://www.privoxy.org/user-manual/
+After=network.target
 
 [Service]
 Environment=PIDFILE=/var/run/privoxy.pid

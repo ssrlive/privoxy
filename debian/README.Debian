@@ -1,22 +1,6 @@
 privoxy for Debian
 ==================
 
-- enable-edit-actions, enable-remote-toggle, and
-  enable-remote-http-toggle are disabled in the Debian package for
-  security reasons, because these options allow every user of your
-  privoxy to change its configuration.  Except this there exist
-  exploits using Java and/or JavaScript that tell your browser to send
-  out requests for disabling the proxy or the filtering, which may
-  compromise your anonymity.  If you still want to use these features,
-  you can enable them in /etc/privoxy/config and do a
-  "/etc/init.d/privoxy restart".
-
-- Experimental IPv6 support was added to the package.
-
-- The global default for all URLs (/) is now set in match-all.action
-  in contrast to versions up to 3.0.10, where a Debian only patch
-  configured them in global.action.
-
 - Since 3.0.5 the upstream package uses the Cautious default settings
   instead of Medium (like 3.0.3 did).  To avoid problems on upgrades
   of old packages, the Debian package still uses the Medium settings.
@@ -44,4 +28,3 @@ privoxy for Debian
   editable again.
 
 Roland Rosenfeld <roland@debian.org>
-$Id: README.Debian,v 1.8 2009-02-22 21:07:20 roland Exp $

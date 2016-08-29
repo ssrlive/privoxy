@@ -1,0 +1,14 @@
+Description: Fix typo in man page privoxy-log-parser(1)
+Author: Roland Rosenfeld <roland@debian.org>
+
+--- a/tools/privoxy-log-parser.pl
++++ b/tools/privoxy-log-parser.pl
+@@ -2612,7 +2612,7 @@ omitted, ANSI escape sequences are used
+ This option is only intended to make embedding log excerpts in web pages easier.
+ It does not escape any input!
+ 
+-[B<--no-msecs>] Don't expect milisecond resolution
++[B<--no-msecs>] Don't expect millisecond resolution
+ 
+ [B<--no-syntax-highlighting>] Disable syntax-highlighting. Useful when
+ the filtered output is piped into less in which case the ANSI control

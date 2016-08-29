@@ -4,7 +4,7 @@ Description: Use Debian docbook2man-spec.pl (from docbook-utils)
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -469,7 +469,7 @@ dok-man:
+@@ -479,7 +479,7 @@ dok-man:
  # target for man page generation!
  man: dok-release
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\

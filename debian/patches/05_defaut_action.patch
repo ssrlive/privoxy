@@ -3,7 +3,7 @@ Description: Serveral changes/additons to default.action.
 
 --- a/default.action.master
 +++ b/default.action.master
-@@ -2413,6 +2413,9 @@ schneegans.de/sv/\?url=referer
+@@ -2419,6 +2419,9 @@ schneegans.de/sv/\?url=referer
  #MASTER# REMARKS: Exclude per Debian bug report #377843
  # URL = http://blogs.msdn.com/wga/archive/2006/07/16/667063.aspx
  blogs.msdn.com
@@ -13,7 +13,7 @@ Description: Serveral changes/additons to default.action.
  
  {-filter{unsolicited-popups}}
  # Sticky Actions = -filter{unsolicited-popups}
-@@ -2471,6 +2474,11 @@ tr.anp.se/
+@@ -2477,6 +2480,11 @@ tr.anp.se/
  {+filter{tiny-textforms}}
  .sourceforge.net/tracker
  
