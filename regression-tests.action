@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.60 2016/05/08 10:44:56 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.61 2016/05/08 14:15:40 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -47,6 +47,7 @@ for-privoxy-version=3.0.22
 # Level 21 needs = feature status FEATURE_TOGGLE No
 # Level 22 needs = config line enable-proxy-authentication-forwarding\s+0
 # Level 23 needs = config line enable-proxy-authentication-forwarding\s+1
+# Level 24 needs = feature status FEATURE_CLIENT_TAGS Yes
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -772,6 +773,8 @@ TAG:^Proxy-Authorization header forwarding$
 # Fetch Test = http://p.p/send-stylesheet
 # Fetch Test = http://p.p/t
 # Fetch Test = http://p.p/url-info-osd.xml
+# Trusted CGI Request = http://p.p/client-tags
+# Level = 24
 
 # Trusted CGI Request = http://p.p/edit-actions
 # Expect Status Code = 302
