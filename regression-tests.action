@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.62 2016/09/19 14:16:14 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.63 2016/09/19 14:16:22 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -679,7 +679,7 @@ TAG:^Proxy-Authorization header forwarding$
 #
 # These are mainly useful for checking for memory leaks
 # with Valgrind or whether or not the user manual is installed
-# correctly and are unlikely to actually detect any
+# correctly.
 #
 # Note that if "Expect Status Code" is missing, 200 is implied.
 #
