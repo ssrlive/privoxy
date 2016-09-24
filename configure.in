@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.203 2016/08/26 12:26:43 fabiankeil Exp $
+dnl $Id: configure.in,v 1.204 2016/09/19 14:16:05 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2016 the
 dnl Privoxy team. https://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.203 $)
+AC_REVISION($Revision: 1.204 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -408,6 +408,10 @@ AC_ARG_ENABLE(large-file-support,
 [if test $enableval = yes; then
     CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D_LARGEFILE_SOURCE=1"
 fi])
+
+AC_ARG_ENABLE(static-linking,
+[  --enable-static-linking         Use static linking instead of dynamic linking (ie. LDFLAGS=-static)],
+[ if test $enableval = yes; then LDFLAGS="$LDFLAGS -static"; fi ])
 
 dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
 old_CFLAGS_nospecial=$CFLAGS
