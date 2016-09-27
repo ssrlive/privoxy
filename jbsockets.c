@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.136 2016/05/25 10:50:55 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.137 2016/08/22 14:50:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -50,6 +50,7 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.136 2016/05/25 10:50:55 fabia
 #ifndef STRICT
 #define STRICT
 #endif
+#include <winsock2.h>
 #include <windows.h>
 #include <sys/timeb.h>
 #include <io.h>

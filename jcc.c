@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.445 2016/05/25 10:51:10 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.446 2016/05/25 10:54:01 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -50,6 +50,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.445 2016/05/25 10:51:10 fabiankeil Exp $"
 #  ifndef STRICT
 #   define STRICT
 #  endif
+#  include <winsock2.h>
 #  include <windows.h>
 #  include <process.h>
 # endif /* ndef FEATURE_PTHREAD */

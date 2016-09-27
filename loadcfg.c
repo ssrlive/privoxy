@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.152 2016/05/08 10:46:55 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.153 2016/05/22 12:43:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -53,6 +53,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.152 2016/05/08 10:46:55 fabiankei
 # ifndef STRICT
 #  define STRICT
 # endif
+# include <winsock2.h>
 # include <windows.h>
 
 # include "win32.h"

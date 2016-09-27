@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.141 2016/05/08 10:46:29 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.142 2016/05/22 12:43:07 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1946,9 +1946,6 @@ static char *show_rcs(void)
 #endif /* def FEATURE_CGI_EDIT_ACTIONS */
    SHOW_RCS(cgisimple_h_rcs)
    SHOW_RCS(cgisimple_rcs)
-#ifdef __MINGW32__
-   SHOW_RCS(cygwin_h_rcs)
-#endif
    SHOW_RCS(deanimate_h_rcs)
    SHOW_RCS(deanimate_rcs)
    SHOW_RCS(encode_h_rcs)

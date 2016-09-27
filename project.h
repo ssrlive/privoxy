@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.215 2016/05/22 12:43:07 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.216 2016/05/25 10:50:55 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -53,7 +53,6 @@
 #    include <sys/socket.h>
 #  else
 #    include <stdint.h>
-#    include <winsock2.h>
 #    include <ws2tcpip.h>
      typedef unsigned short in_port_t;
 #  endif
