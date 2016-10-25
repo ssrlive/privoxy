@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.96 2016/01/16 12:30:43 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.97 2016/10/25 10:43:00 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1171,6 +1171,10 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
             {
                errstr = "SOCKS5 negotiation read failed (IPv6 address)";
             }
+         }
+         else if (sbuf[3] != '\x01')
+         {
+             errstr = "SOCKS5 reply contains unsupported address type";
          }
          if (errstr == NULL)
          {
