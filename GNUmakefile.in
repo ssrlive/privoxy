@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.251 2016/05/08 12:46:15 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.252 2016/07/28 08:16:04 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2016 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -197,6 +197,9 @@ C_HDRS = $(C_SRC:.c=.h) project.h actionlist.h
 CLIENT_TAG_SRC = @FEATURE_CLIENT_TAGS_ONLY@client-tags.c
 CLIENT_TAG_OBJS = @FEATURE_CLIENT_TAGS_ONLY@client-tags.@OBJEXT@
 
+FUZZ_SRC = @FUZZ_ONLY@fuzz.c
+FUZZ_OBJS = @FUZZ_ONLY@fuzz.@OBJEXT@
+
 W32_SRC   = @WIN_ONLY@w32log.c w32taskbar.c win32.c w32svrapi.c
 W32_FILES = @WIN_ONLY@w32.res
 W32_OBJS  = @WIN_ONLY@$(W32_SRC:.c=.@OBJEXT@) $(W32_FILES)
@@ -228,8 +231,8 @@ SOCKET_LIB   = @SOCKET_LIB@
 # PThreads library, if needed.
 PTHREAD_LIB  = @PTHREAD_ONLY@@PTHREAD_LIB@
 
-SRCS         = $(C_SRC) $(CLIENT_TAG_SRC) $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
-OBJS         = $(C_OBJS) $(CLIENT_TAG_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
+SRCS         = $(C_SRC) $(CLIENT_TAG_SRC) $(FUZZ_SRC) $(W32_SRC)  $(PCRS_SRC)  $(PCRE_SRC)  $(REGEX_SRC)
+OBJS         = $(C_OBJS) $(CLIENT_TAG_OBJS) $(FUZZ_OBJS) $(W32_OBJS) $(PCRS_OBJS) $(PCRE_OBJS) $(REGEX_OBJS)
 HDRS         = $(C_HDRS) $(W32_HDRS) $(PCRS_HDRS) $(PCRE_OBJS) $(REGEX_HDRS)
 LIBS         = @LIBS@ $(W32_LIB) $(SOCKET_LIB) $(PTHREAD_LIB)
 

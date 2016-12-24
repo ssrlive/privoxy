@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.447 2016/09/27 22:48:28 ler762 Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.448 2016/12/24 15:58:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -176,6 +176,11 @@ static int32 server_thread(void *data);
 
 #ifdef __OS2__
 #define sleep(N)  DosSleep(((N) * 100))
+#endif
+
+#ifdef FUZZ
+int process_fuzzed_input(char *fuzz_input_type, char *fuzz_input_file);
+void show_fuzz_usage(const char *name);
 #endif
 
 #ifdef MUTEX_LOCKS_AVAILABLE
@@ -1279,7 +1284,12 @@ static char *get_request_line(struct client_state *csp)
 
    do
    {
-      if (!data_is_available(csp->cfd, csp->config->socket_timeout))
+      if (
+#ifdef FUZZ
+          0 == (csp->flags & CSP_FLAG_FUZZED_INPUT) &&
+#endif
+          !data_is_available(csp->cfd, csp->config->socket_timeout)
+          )
       {
          if (socket_is_still_alive(csp->cfd))
          {
@@ -1462,6 +1472,80 @@ static jb_err receive_chunked_client_request_body(struct client_state *csp)
    return JB_ERR_OK;
 
 }
+
+
+#ifdef FUZZ
+/*********************************************************************
+ *
+ * Function    :  fuzz_chunked_transfer_encoding
+ *
+ * Description :  Treat the fuzzed input as chunked transfer encoding
+ *                to check and dechunk.
+ *
+ * Parameters  :
+ *          1  :  csp      = Used to store the data.
+ *          2  :  fuzz_input_file = File to read the input from.
+ *
+ * Returns     : Result of dechunking
+ *
+ *********************************************************************/
+extern int fuzz_chunked_transfer_encoding(struct client_state *csp, char *fuzz_input_file)
+{
+   size_t length;
+   size_t size = (size_t)(csp->iob->eod - csp->iob->cur);
+   enum chunk_status status;
+
+   status = chunked_body_is_complete(csp->iob, &length);
+   if (CHUNK_STATUS_BODY_COMPLETE != status)
+   {
+      log_error(LOG_LEVEL_INFO, "Chunked body is incomplete or invalid");
+   }
+
+   return (JB_ERR_OK == remove_chunked_transfer_coding(csp->iob->cur, &size));
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    : fuzz_client_request
+ *
+ * Description : Try to get a client request from the fuzzed input.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  fuzz_input_file = File to read the input from.
+ *
+ * Returns     :  Result of fuzzing.
+ *
+ *********************************************************************/
+extern int fuzz_client_request(struct client_state *csp, char *fuzz_input_file)
+{
+   jb_err err;
+
+   csp->cfd = 0;
+   csp->ip_addr_str = "fuzzer";
+
+   if (strcmp(fuzz_input_file, "-") != 0)
+   {
+      log_error(LOG_LEVEL_FATAL,
+         "Fuzzed client requests can currenty only be read from stdin (-).");
+   }
+   err = receive_client_request(csp);
+   if (err != JB_ERR_OK)
+   {
+      return 1;
+   }
+   err = parse_client_request(csp);
+   if (err != JB_ERR_OK)
+   {
+      return 1;
+   }
+
+   return 0;
+
+}
+#endif  /* def FUZZ */
 
 
 #ifdef FEATURE_FORCE_LOAD
@@ -2539,6 +2623,7 @@ static void handle_established_connection(struct client_state *csp,
    csp->server_connection.timestamp = time(NULL);
 }
 
+
 /*********************************************************************
  *
  * Function    :  chat
@@ -2826,6 +2911,66 @@ static void chat(struct client_state *csp)
 
    handle_established_connection(csp, fwd);
 }
+
+
+#ifdef FUZZ
+/*********************************************************************
+ *
+ * Function    :  fuzz_server_response
+ *
+ * Description :  Treat the input as a whole server response.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  fuzz_input_file = File to read the input from.
+ *
+ * Returns     :  0
+ *
+ *********************************************************************/
+extern int fuzz_server_response(struct client_state *csp, char *fuzz_input_file)
+{
+   static struct forward_spec fwd; /* Zero'd due to being static */
+   csp->cfd = 0;
+
+   if (strcmp(fuzz_input_file, "-") == 0)
+   {
+      /* XXX: Doesn'T work yet. */
+      csp->server_connection.sfd = 0;
+   }
+   else
+   {
+      csp->server_connection.sfd = open(fuzz_input_file, O_RDONLY);
+      if (csp->server_connection.sfd == -1)
+      {
+         log_error(LOG_LEVEL_FATAL, "Failed to open %s: %E",
+            fuzz_input_file);
+      }
+   }
+   csp->content_type |= CT_GIF;
+   csp->action->flags |= ACTION_DEANIMATE;
+   csp->action->string[ACTION_STRING_DEANIMATE] = "last";
+
+   csp->http->path = strdup_or_die("/");
+   csp->http->host = strdup_or_die("fuzz.example.org");
+   csp->http->hostport = strdup_or_die("fuzz.example.org:80");
+   /* Prevent client socket monitoring */
+   csp->flags |= CSP_FLAG_PIPELINED_REQUEST_WAITING;
+   csp->flags |= CSP_FLAG_CHUNKED;
+
+   csp->config->feature_flags |= RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE;
+   csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+
+   csp->content_type |= CT_DECLARED|CT_GIF;
+
+   csp->config->socket_timeout = 0;
+
+   cgi_init_error_messages();
+
+   handle_established_connection(csp, &fwd);
+
+   return 0;
+}
+#endif
 
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
@@ -3158,7 +3303,7 @@ static int32 server_thread(void *data)
  * Returns     :  No. ,-)
  *
  *********************************************************************/
-static void usage(const char *myname)
+static void usage(const char *name)
 {
    printf("Privoxy version " VERSION " (" HOME_PAGE_URL ")\n"
           "Usage: %s [--config-test] "
@@ -3169,8 +3314,14 @@ static void usage(const char *myname)
 #if defined(unix)
           "[--no-daemon] [--pidfile pidfile] [--pre-chroot-nslookup hostname] [--user user[.group]] "
 #endif /* defined(unix) */
-          "[--version] [configfile]\n"
-          "Aborting\n", myname);
+         "[--version] [configfile]\n",
+          name);
+
+#ifdef FUZZ
+   show_fuzz_usage(name);
+#endif
+
+   printf("Aborting\n");
 
    exit(2);
 
@@ -3326,7 +3477,6 @@ static void initialize_mutexes(void)
 #endif /* def MUTEX_LOCKS_AVAILABLE */
 }
 
-
 /*********************************************************************
  *
  * Function    :  main
@@ -3364,6 +3514,10 @@ int main(int argc, char **argv)
    struct group *grp = NULL;
    int do_chroot = 0;
    char *pre_chroot_nslookup_to_load_resolver = NULL;
+#endif
+#ifdef FUZZ
+   char *fuzz_input_type = NULL;
+   char *fuzz_input_file = NULL;
 #endif
 
    Argc = argc;
@@ -3492,7 +3646,20 @@ int main(int argc, char **argv)
       {
          do_config_test = 1;
       }
-
+#ifdef FUZZ
+      else if (strcmp(argv[argc_pos], "--fuzz") == 0)
+      {
+         argc_pos++;
+         if (argc < argc_pos + 2) usage(argv[0]);
+         fuzz_input_type = argv[argc_pos];
+         argc_pos++;
+         fuzz_input_file = argv[argc_pos];
+      }
+      else if (strcmp(argv[argc_pos], "--stfu") == 0)
+      {
+         set_debug_level(LOG_LEVEL_STFU);
+      }
+#endif
       else if (argc_pos + 1 != argc)
       {
          /*
@@ -3595,6 +3762,13 @@ int main(int argc, char **argv)
    printf("%s", win32_blurb);
 # endif /* def _WIN_CONSOLE */
 #endif /* def _WIN32 */
+
+#ifdef FUZZ
+   if (fuzz_input_type != NULL)
+   {
+      exit(process_fuzzed_input(fuzz_input_type, fuzz_input_file));
+   }
+#endif
 
    if (do_config_test)
    {

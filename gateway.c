@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.98 2016/10/25 10:45:56 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.99 2016/10/25 10:46:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -664,6 +664,51 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
 }
 
 
+#ifdef FUZZ_SOCKS
+/*********************************************************************
+ *
+ * Function    :  socks_fuzz
+ *
+ * Description :  Wrapper around socks[45]_connect() used for fuzzing.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK or JB_ERR_PARSE
+ *
+ *********************************************************************/
+extern jb_err socks_fuzz(struct client_state *csp)
+{
+   jb_socket socket;
+   static struct forward_spec fwd;
+   char target_host[] = "fuzz.example.org";
+   int target_port = 12345;
+
+   fwd.gateway_host = strdup_or_die("fuzz.example.org");
+   fwd.gateway_port = 12345;
+
+   fwd.type = SOCKS_4A;
+   socket = socks4_connect(&fwd, target_host, target_port, csp);
+
+   if (JB_INVALID_SOCKET != socket)
+   {
+      fwd.type = SOCKS_5;
+      socket = socks5_connect(&fwd, target_host, target_port, csp);
+   }
+
+   if (JB_INVALID_SOCKET == socket)
+   {
+      log_error(LOG_LEVEL_ERROR, "%s", csp->error_message);
+      return JB_ERR_PARSE;
+   }
+
+   log_error(LOG_LEVEL_INFO, "Input looks like an acceptable socks response");
+
+   return JB_ERR_OK;
+
+}
+#endif
+
 /*********************************************************************
  *
  * Function    :  socks4_connect
@@ -794,6 +839,9 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    c->dstip[2]    = (unsigned char)((web_server_addr   >>  8) & 0xff);
    c->dstip[3]    = (unsigned char)((web_server_addr        ) & 0xff);
 
+#ifdef FUZZ_SOCKS
+   sfd = 0;
+#else
    /* pass the request to the socks server */
    sfd = connect_to(fwd->gateway_host, fwd->gateway_port, csp);
 
@@ -823,7 +871,9 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
       err = 1;
       close_socket(sfd);
    }
-   else if (read_socket(sfd, buf, sizeof(buf)) != sizeof(*s))
+   else
+#endif
+       if (read_socket(sfd, buf, sizeof(buf)) != sizeof(*s))
    {
       errstr = "SOCKS4 negotiation read failed.";
       log_error(LOG_LEVEL_CONNECT, "socks4_connect: %s", errstr);
@@ -911,6 +961,7 @@ static const char *translate_socks5_error(int socks_error)
    }
 }
 
+
 /*********************************************************************
  *
  * Function    :  socks5_connect
@@ -989,6 +1040,10 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       return(JB_INVALID_SOCKET);
    }
 
+#ifdef FUZZ_SOCKS
+   sfd = 0;
+   if (!err && read_socket(sfd, sbuf, 2) != 2)
+#else
    /* pass the request to the socks server */
    sfd = connect_to(fwd->gateway_host, fwd->gateway_port, csp);
 
@@ -1015,7 +1070,6 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       close_socket(sfd);
       return(JB_INVALID_SOCKET);
    }
-
    if (!data_is_available(sfd, csp->config->socket_timeout))
    {
       if (socket_is_still_alive(sfd))
@@ -1030,6 +1084,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    }
 
    if (!err && read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
+#endif
    {
       errstr = "SOCKS5 negotiation read failed";
       err = 1;
@@ -1076,6 +1131,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    cbuf[client_pos++] = (char)((target_port >> 8) & 0xff);
    cbuf[client_pos++] = (char)((target_port     ) & 0xff);
 
+#ifndef FUZZ_SOCKS
    if (write_socket(sfd, cbuf, client_pos))
    {
       errstr = "SOCKS5 negotiation write failed";
@@ -1136,6 +1192,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
          clear_iob(csp->client_iob);
       }
    }
+#endif
 
    server_size = read_socket(sfd, sbuf, SIZE_SOCKS5_REPLY_IPV4);
    if (server_size != SIZE_SOCKS5_REPLY_IPV4)

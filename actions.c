@@ -1,4 +1,4 @@
-const char actions_rcs[] = "$Id: actions.c,v 1.96 2016/02/26 12:29:38 fabiankeil Exp $";
+const char actions_rcs[] = "$Id: actions.c,v 1.97 2016/05/03 13:20:37 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/actions.c,v $
@@ -124,7 +124,10 @@ static const struct action_name action_names[] =
 };
 
 
-static int load_one_actions_file(struct client_state *csp, int fileid);
+#ifndef FUZZ
+static
+#endif
+int load_one_actions_file(struct client_state *csp, int fileid);
 
 
 /*********************************************************************
@@ -1210,7 +1213,10 @@ static int action_spec_is_valid(struct client_state *csp, const struct action_sp
  * Returns     :  0 => Ok, everything else is an error.
  *
  *********************************************************************/
-static int load_one_actions_file(struct client_state *csp, int fileid)
+#ifndef FUZZ
+static
+#endif
+int load_one_actions_file(struct client_state *csp, int fileid)
 {
 
    /*

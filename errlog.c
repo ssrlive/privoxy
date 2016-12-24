@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.125 2016/01/26 17:12:14 diem Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.126 2016/02/26 12:29:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -245,6 +245,17 @@ void init_log_module(void)
  *********************************************************************/
 void set_debug_level(int debug_level)
 {
+#ifdef FUZZ
+   if (LOG_LEVEL_STFU == debug_level)
+   {
+      debug = LOG_LEVEL_STFU;
+   }
+   if (LOG_LEVEL_STFU == debug)
+   {
+      return;
+   }
+#endif
+
    debug = debug_level | LOG_LEVEL_MINIMUM;
 }
 
@@ -700,6 +711,12 @@ void log_error(int loglevel, const char *fmt, ...)
 #endif
       )
    {
+#ifdef FUZZ
+      if (debug == LOG_LEVEL_STFU)
+      {
+         return;
+      }
+#endif
       if (loglevel == LOG_LEVEL_FATAL)
       {
          fatal_error("Fatal error. You're not supposed to"

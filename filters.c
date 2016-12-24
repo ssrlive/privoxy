@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.201 2016/03/17 10:40:53 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.202 2016/05/25 10:50:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -82,7 +82,6 @@ const char filters_h_rcs[] = FILTERS_H_VERSION;
 
 typedef char *(*filter_function_ptr)();
 static filter_function_ptr get_filter_function(const struct client_state *csp);
-static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
 static jb_err prepare_for_filtering(struct client_state *csp);
 static void apply_url_actions(struct current_action_spec *action,
                               struct http_request *http,
@@ -1957,7 +1956,11 @@ static char *execute_external_filter(const struct client_state *csp,
  *                or NULL in case something went wrong.
  *
  *********************************************************************/
+#ifdef FUZZ
+char *gif_deanimate_response(struct client_state *csp)
+#else
 static char *gif_deanimate_response(struct client_state *csp)
+#endif
 {
    struct binbuffer *in, *out;
    char *p;
@@ -2055,12 +2058,22 @@ static filter_function_ptr get_filter_function(const struct client_state *csp)
  *                JB_ERR_PARSE otherwise
  *
  *********************************************************************/
+#ifdef FUZZ
+extern jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
+#else
 static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
+#endif
 {
    size_t newsize = 0;
    unsigned int chunksize = 0;
    char *from_p, *to_p;
    const char *end_of_buffer = buffer + *size;
+
+   if (*size == 0)
+   {
+      log_error(LOG_LEVEL_FATAL, "Invalid chunked input. Buffer is empty.");
+      return JB_ERR_PARSE;
+   }
 
    assert(buffer);
    from_p = to_p = buffer;

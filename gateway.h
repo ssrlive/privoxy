@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.22 2012/10/23 10:16:52 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.23 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -65,6 +65,10 @@ extern int connection_destination_matches(const struct reusable_connection *conn
                                           const struct http_request *http,
                                           const struct forward_spec *fwd);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+
+#ifdef FUZZ
+extern jb_err socks_fuzz(struct client_state *csp);
+#endif
 
 /*
  * Revision control strings from this header and associated .c file

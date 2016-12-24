@@ -1,6 +1,6 @@
 #ifndef JCC_H_INCLUDED
 #define JCC_H_INCLUDED
-#define JCC_H_VERSION "$Id: jcc.h,v 1.35 2014/06/02 06:22:21 fabiankeil Exp $"
+#define JCC_H_VERSION "$Id: jcc.h,v 1.36 2016/03/17 10:40:53 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.h,v $
@@ -116,6 +116,12 @@ int main(int argc, char **argv);
 /* Revision control strings from this header and associated .c file */
 extern const char jcc_rcs[];
 extern const char jcc_h_rcs[];
+
+#ifdef FUZZ
+extern int fuzz_client_request(struct client_state *csp, char *fuzz_input_file);
+extern int fuzz_server_response(struct client_state *csp, char *fuzz_input_file);
+extern int fuzz_chunked_transfer_encoding(struct client_state *csp, char *fuzz_input_file);
+#endif
 
 #endif /* ndef JCC_H_INCLUDED */
 

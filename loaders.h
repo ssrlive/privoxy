@@ -1,6 +1,6 @@
 #ifndef LOADERS_H_INCLUDED
 #define LOADERS_H_INCLUDED
-#define LOADERS_H_VERSION "$Id: loaders.h,v 1.31 2013/11/06 16:27:37 fabiankeil Exp $"
+#define LOADERS_H_VERSION "$Id: loaders.h,v 1.32 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.h,v $
@@ -74,6 +74,9 @@ extern jb_err simple_read_line(FILE *fp, char **dest, int *newline);
 extern short int MustReload;
 extern int load_action_files(struct client_state *csp);
 extern int load_re_filterfiles(struct client_state *csp);
+#ifdef FUZZ
+extern int load_one_re_filterfile(struct client_state *csp, int fileid);
+#endif
 
 #ifdef FEATURE_TRUST
 extern int load_trustfile(struct client_state *csp);

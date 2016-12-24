@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.205 2016/09/24 16:16:55 ler762 Exp $
+dnl $Id: configure.in,v 1.206 2016/09/27 22:48:28 ler762 Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2016 the
 dnl Privoxy team. https://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.205 $)
+AC_REVISION($Revision: 1.206 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -1026,6 +1026,16 @@ else
   FEATURE_CLIENT_TAGS_ONLY=""
 fi
 AC_SUBST(FEATURE_CLIENT_TAGS_ONLY)
+
+AC_ARG_ENABLE(fuzz,
+[  --enable-fuzz                Enable code that makes fuzzing more convenient],
+[if test $enableval = yes; then
+  FUZZ_ONLY=""
+  AC_DEFINE(FUZZ,1,[Define to make fuzzing more convenient.])
+ else
+  FUZZ_ONLY="#"
+fi])
+AC_SUBST(FUZZ_ONLY)
 
 dnl pcre/pcrs is needed for CGI anyway, so
 dnl the choice is only between static and

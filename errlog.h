@@ -1,6 +1,6 @@
 #ifndef ERRLOG_H_INCLUDED
 #define ERRLOG_H_INCLUDED
-#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.29 2012/07/27 17:39:57 fabiankeil Exp $"
+#define ERRLOG_H_VERSION "$Id: errlog.h,v 1.30 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.h,v $
@@ -55,6 +55,14 @@
 #define LOG_LEVEL_CGI        0x0800 /* CGI / templates */
 #define LOG_LEVEL_RECEIVED   0x8000
 #define LOG_LEVEL_ACTIONS   0x10000
+#ifdef FUZZ
+/*
+ * Permanently disables logging through log_error().
+ * Useful to reduce pointless overhead when fuzzing
+ * without watching stdout.
+ */
+#define LOG_LEVEL_STFU      0x20000
+#endif
 
 /* Following are always on: */
 #define LOG_LEVEL_INFO    0x1000

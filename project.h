@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.216 2016/05/25 10:50:55 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.217 2016/09/27 22:48:28 ler762 Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -861,6 +861,12 @@ struct reusable_connection
  */
 #define CSP_FLAG_CRUNCHED                           0x04000000U
 
+#ifdef FUZZ
+/**
+ * Flag for csp->flags: Set if we are working with fuzzed input
+ */
+#define CSP_FLAG_FUZZED_INPUT                       0x08000000U
+#endif
 
 /*
  * Flags for use in return codes of child processes

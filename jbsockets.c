@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.137 2016/08/22 14:50:18 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.138 2016/09/27 22:48:28 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -593,6 +593,14 @@ int write_socket(jb_socket fd, const char *buf, size_t len)
    {
       return 0;
    }
+
+#ifdef FUZZ
+   if (!daemon_mode && fd <= 3)
+   {
+      log_error(LOG_LEVEL_WRITING, "Pretending to write to socket %d: %N", fd, len, buf);
+      return 0;
+   }
+#endif
 
    log_error(LOG_LEVEL_WRITING, "to socket %d: %N", fd, len, buf);
 
