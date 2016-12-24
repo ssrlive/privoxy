@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.448 2016/12/24 15:58:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.449 2016/12/24 16:00:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1890,6 +1890,57 @@ static jb_err parse_client_request(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    : send_http_request
+ *
+ * Description : Sends the HTTP headers from the client request
+ *               and all the body data that has already been received.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  0 on success, anything else is na error.
+ *
+ *********************************************************************/
+static int send_http_request(struct client_state *csp)
+{
+   char *hdr;
+   int write_failure;
+
+   hdr = list_to_text(csp->headers);
+   if (hdr == NULL)
+   {
+      /* FIXME Should handle error properly */
+      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
+   }
+   list_remove_all(csp->headers);
+
+   /*
+    * Write the client's (modified) header to the server
+    * (along with anything else that may be in the buffer)
+    */
+   write_failure = 0 != write_socket(csp->server_connection.sfd, hdr, strlen(hdr));
+   freez(hdr);
+
+   if (write_failure)
+   {
+      log_error(LOG_LEVEL_CONNECT, "Failed sending request headers to: %s: %E",
+         csp->http->hostport);
+   }
+   else if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
+      && (flush_socket(csp->server_connection.sfd, csp->client_iob) < 0))
+   {
+      write_failure = 1;
+      log_error(LOG_LEVEL_CONNECT, "Failed sending request body to: %s: %E",
+         csp->http->hostport);
+   }
+
+   return write_failure;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  handle_established_connection
  *
  * Description :  Shuffle data between client and server once the
@@ -2651,7 +2702,6 @@ static void handle_established_connection(struct client_state *csp,
 static void chat(struct client_state *csp)
 {
    char buf[BUFFER_SIZE];
-   char *hdr;
    const struct forward_spec *fwd;
    struct http_request *http;
    /* Skeleton for HTTP response, if we should intercept the request */
@@ -2850,36 +2900,7 @@ static void chat(struct client_state *csp)
    }
    else if (fwd->forward_host || (http->ssl == 0))
    {
-      int write_failure;
-      hdr = list_to_text(csp->headers);
-      if (hdr == NULL)
-      {
-         /* FIXME Should handle error properly */
-         log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
-      }
-      list_remove_all(csp->headers);
-
-      /*
-       * Write the client's (modified) header to the server
-       * (along with anything else that may be in the buffer)
-       */
-      write_failure = 0 != write_socket(csp->server_connection.sfd, hdr, strlen(hdr));
-      freez(hdr);
-
-      if (write_failure)
-      {
-         log_error(LOG_LEVEL_CONNECT,
-            "Failed sending request headers to: %s: %E", http->hostport);
-      }
-      else if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
-         && (flush_socket(csp->server_connection.sfd, csp->client_iob) < 0))
-      {
-         write_failure = 1;
-         log_error(LOG_LEVEL_CONNECT,
-            "Failed sending request body to: %s: %E", http->hostport);
-      }
-
-      if (write_failure)
+      if (send_http_request(csp))
       {
          rsp = error_response(csp, "connect-failed");
          if (rsp)
