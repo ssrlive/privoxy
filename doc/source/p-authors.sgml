@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.79 2016/10/25 10:48:24 fabiankeil Exp $
+ $Id: p-authors.sgml,v 2.80 2016/12/09 09:35:48 fabiankeil Exp $
 
  Copyright (C) 2001-2013 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -152,6 +152,7 @@ Current Privoxy Team:
  Mathew Murphy
  Amuro Namie
  Mark Nelson
+ Tobias Netzel
  Adam Piggott
  Petr Písar
  Dan Price
