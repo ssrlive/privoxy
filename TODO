@@ -1,4 +1,4 @@
-$Id: TODO,v 1.152 2016/08/26 12:27:18 fabiankeil Exp $
+$Id: TODO,v 1.153 2017/01/10 12:13:19 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -173,6 +173,9 @@ http://www.privoxy.org/faq/general.html#DONATE
 68) Use standard make syntax so we don't depend on GNU make.
 
 69) Update autoconf setup (or move away from it).
+    Unfortunately the autoconf files can't be simply updated
+    due to license issues:
+    https://lists.privoxy.org/pipermail/privoxy-devel/2016-April/000008.html
 
 70) If the server connection is reset but the headers are
     received, consider passing the mess to the client instead
