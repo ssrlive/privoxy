@@ -1,4 +1,4 @@
-$Id: TODO,v 1.151 2016/06/22 12:21:20 fabiankeil Exp $
+$Id: TODO,v 1.152 2016/08/26 12:27:18 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -136,6 +136,8 @@ http://www.privoxy.org/faq/general.html#DONATE
     2016-03: The website has been moved away from SF infrastructure
              and is also available through https:// now.
     2016-04: Server rent for a year has been sponsored by ChameleonJohn.
+    2016-04: The SF mailing lists have been deprecated, the new ones
+             are available at: https://lists.privoxy.org/
 
     Interested donors: 1.
 
