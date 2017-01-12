@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.47 2016/08/26 12:27:34 fabiankeil Exp $
+ $Id: index.sgml,v 2.48 2016/08/29 10:45:28 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
  See LICENSE.
@@ -80,6 +80,11 @@
  You can <ulink url="/sf-download-mirror/">download Privoxy here</ulink>,
  from <ulink url="http://www.silvester.org.uk/privoxy/">this mirror</ulink>,
  or from <ulink url="https://sourceforge.net/projects/ijbswa/files/">SourceForge</ulink>.
+</para>
+<para>
+ Note that the Privoxy project currently has no trusted build infrastructure.
+ Binary packages are built and uploaded by individual members of the Privoxy
+ project or external contributors. For details check the signatures.
 </para>
 <para>
  Subscribe to the <ulink url="/feeds/privoxy-releases.xml">release feed</ulink>
