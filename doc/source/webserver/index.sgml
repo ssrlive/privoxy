@@ -20,9 +20,9 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.48 2016/08/29 10:45:28 fabiankeil Exp $
+ $Id: index.sgml,v 2.49 2017/01/12 14:19:27 fabiankeil Exp $
 
- Copyright (C) 2001-2016 Privoxy Developers <ijbswa-developers@lists.sourceforge.net>
+ Copyright (C) 2001-2017 Privoxy developers <privoxy-devel@lists.privoxy.org>
  See LICENSE.
 
  ========================================================================
