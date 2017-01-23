@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.165 2016/05/03 13:22:30 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.166 2017/01/23 13:02:45 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -101,10 +101,15 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          "View the source code version numbers",
           TRUE },
 #ifdef FEATURE_CLIENT_TAGS
+   /*
+    * This is marked as harmless because despite the description
+    * used in the menu the actual toggling is done through another
+    * path ("/toggle-client-tag").
+    */
    { "client-tags",
          cgi_show_client_tags,
          "View or toggle the tags that can be set based on the clients address",
-          FALSE },
+         TRUE },
 #endif
    { "show-request",
          cgi_show_request,
@@ -120,6 +125,12 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          "Toggle Privoxy on or off",
          FALSE },
 #endif /* def FEATURE_TOGGLE */
+#ifdef FEATURE_CLIENT_TAGS
+   { "toggle-client-tag",
+         cgi_toggle_client_tag,
+         NULL,
+         FALSE },
+#endif
 #ifdef FEATURE_CGI_EDIT_ACTIONS
    { "edit-actions", /* Edit the actions list */
          cgi_edit_actions,
