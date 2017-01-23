@@ -1,4 +1,4 @@
-$Id: TODO,v 1.154 2017/01/10 12:13:32 fabiankeil Exp $
+$Id: TODO,v 1.155 2017/01/23 13:03:26 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -449,6 +449,12 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 151) Let the dok-tidy target work cross-platform without introducing
      a ton of white-space changes that hide the content changes.
+
+152) Fix CSS references in the website documentation.
+     For many pages p_doc.css is specified twice using different paths.
+     Usually at least one works, but not all of them do and the
+     duplicated requests are pointless even if they don't end up with
+     a 404.
 
 ##########################################################################
 
