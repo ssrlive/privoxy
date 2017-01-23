@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.168 2017/01/23 13:05:12 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.169 2017/01/23 13:05:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1389,7 +1389,7 @@ char *add_help_link(const char *item,
    }
    else
    {
-      string_append(&result, "https://");
+      string_append(&result, "http://");
       string_append(&result, CGI_SITE_2_HOST);
       string_append(&result, "/user-manual/");
    }
