@@ -1,6 +1,6 @@
 #ifndef CGISIMPLE_H_INCLUDED
 #define CGISIMPLE_H_INCLUDED
-#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.21 2017/01/23 13:02:45 fabiankeil Exp $"
+#define CGISIMPLE_H_VERSION "$Id: cgisimple.h,v 1.22 2017/01/23 13:04:58 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
@@ -11,7 +11,7 @@
  *                Functions declared include:
  *
  *
- * Copyright   :  Written by and Copyright (C) 2001-2007 members of the
+ * Copyright   :  Written by and Copyright (C) 2001-2017 members of the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
