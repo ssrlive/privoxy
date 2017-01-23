@@ -126,14 +126,6 @@ function validate(text)
       </td>
     </tr>
 
-    <tr>
-      <td class="info">
-
-#include mod-support-and-service
-
-      </td>
-    </tr>
-
 <!-- @if-have-help-info-start -->
     <tr>
       <td class="info">
@@ -143,6 +135,14 @@ function validate(text)
       </td>
     </tr>
 <!-- if-have-help-info-end@ -->
+
+    <tr>
+      <td class="info">
+
+#include mod-support-and-service
+
+      </td>
+    </tr>
 
   </table>
 </body>
