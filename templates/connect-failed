@@ -44,8 +44,7 @@
 #    The development status of the proxy software: "alpha", "beta",
 #    or "stable".
 #  homepage:
-#    The URL of the SourceForge ijbswa project, who maintains this
-#    software.
+#    The URL of the Privoxy project, which maintains this software.
 #
 #  host-ip:
 #    The IP address of the host that could not be reached

@@ -42,8 +42,7 @@
 #  code-status:
 #    The Privoxy development status: "alpha", "beta", or "stable".
 #  homepage:
-#    The URL of the SourceForge ijbswa project, who maintains this
-#    software.
+#    The URL of the Privoxy project, which maintains this software.
 #
 #  redirect-url:
 #    The URL to a script that will redirect to the Privoxy
