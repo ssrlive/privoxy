@@ -1,4 +1,4 @@
-$Id: TODO,v 1.153 2017/01/10 12:13:19 fabiankeil Exp $
+$Id: TODO,v 1.154 2017/01/10 12:13:32 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -221,7 +221,7 @@ http://www.privoxy.org/faq/general.html#DONATE
 82) Detect if the system time goes back in time let the user
     know if it caused any connections to get closed.
 
-85) Once #84 is done, write a script that populates a directory with
+85) Once #51 is done, write a script that populates a directory with
     various common third-party icons (stumbleupon.png, facebook.png ...)
     and redirect requests for them to Privoxy.
 
