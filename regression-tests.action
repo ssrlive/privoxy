@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: regression-tests.action,v 1.67 2017/01/23 13:05:58 fabiankeil Exp $
+# $Id: regression-tests.action,v 1.68 2017/01/23 13:06:19 fabiankeil Exp $
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
@@ -775,7 +775,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Expect Status Code = 403
 # Fetch Test = http://p.p/t
 # Fetch Test = http://p.p/url-info-osd.xml
-# Trusted CGI Request = http://p.p/client-tags
+# Fetch Test = http://p.p/client-tags
 # Level = 24
 
 # Trusted CGI Request = http://p.p/edit-actions
