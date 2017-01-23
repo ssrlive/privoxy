@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.167 2017/01/23 13:04:57 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.168 2017/01/23 13:05:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -1050,6 +1050,8 @@ jb_err cgi_error_disabled(const struct client_state *csp,
 
    assert(csp);
    assert(rsp);
+
+   rsp->status = strdup_or_die("403 Request not trusted or feature disabled");
 
    if (NULL == (exports = default_exports(csp, "cgi-error-disabled")))
    {
