@@ -1,13 +1,13 @@
 #ifndef SSPLIT_H_INCLUDED
 #define SSPLIT_H_INCLUDED
-#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.11 2012/06/08 15:15:11 fabiankeil Exp $"
+#define SSPLIT_H_VERSION "$Id: ssplit.h,v 1.12 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/ssplit.h,v $
  *
  * Purpose     :  A function to split a string at specified deliminters.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001 members of the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

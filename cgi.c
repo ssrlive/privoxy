@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.164 2016/04/04 10:55:47 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.165 2016/05/03 13:22:30 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -9,7 +9,7 @@ const char cgi_rcs[] = "$Id: cgi.c,v 1.164 2016/04/04 10:55:47 fabiankeil Exp $"
  *                actual handler functions are declared elsewhere.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2004, 2006-2008
- *                the SourceForge Privoxy team. http://www.privoxy.org/
+ *                members of the Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and

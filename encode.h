@@ -1,6 +1,6 @@
 #ifndef ENCODE_H_INCLUDED
 #define ENCODE_H_INCLUDED
-#define ENCODE_H_VERSION "$Id: encode.h,v 1.12 2011/11/06 11:44:56 fabiankeil Exp $"
+#define ENCODE_H_VERSION "$Id: encode.h,v 1.13 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/encode.h,v $
@@ -8,7 +8,7 @@
  * Purpose     :  Functions to encode and decode URLs, and also to
  *                encode cookies and HTML text.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001 members of the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written

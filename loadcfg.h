@@ -1,6 +1,6 @@
 #ifndef LOADCFG_H_INCLUDED
 #define LOADCFG_H_INCLUDED
-#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.16 2011/09/04 11:10:56 fabiankeil Exp $"
+#define LOADCFG_H_VERSION "$Id: loadcfg.h,v 1.17 2013/11/24 14:23:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.h,v $
@@ -10,7 +10,7 @@
  *                routine to load the configuration and the global
  *                variables it writes to.
  *
- * Copyright   :  Written by and Copyright (C) 2001 the SourceForge
+ * Copyright   :  Written by and Copyright (C) 2001 members of the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
