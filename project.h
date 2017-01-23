@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.217 2016/09/27 22:48:28 ler762 Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.218 2016/12/24 16:00:49 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -497,7 +497,7 @@ struct iob
 #define ACTION_CRUNCH_CLIENT_HEADER                  0x00200000UL
 /** Action bitmap: Enable text mode by force */
 #define ACTION_FORCE_TEXT_MODE                       0x00400000UL
-/** Action bitmap: Enable text mode by force */
+/** Action bitmap: Remove the "If-None-Match" header. */
 #define ACTION_CRUNCH_IF_NONE_MATCH                  0x00800000UL
 /** Action bitmap: Enable content-disposition crunching */
 #define ACTION_HIDE_CONTENT_DISPOSITION              0x01000000UL
