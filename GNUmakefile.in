@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.254 2017/01/12 14:19:02 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.255 2017/01/12 14:19:13 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2017 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -144,7 +144,7 @@ DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
 TIDY       = tidy -modify -indent -wrap 78 --tidy-mark no
-RSYNC	   = rsync -av -c
+RSYNC	   = rsync -av -c --chmod=D755,F644
 
 # Program to do LF->CRLF
 DOSFILTER  = $(PERL) -p -e 's/\n/\r\n/'
@@ -627,27 +627,17 @@ webserver: clean-editor-files
           upload=`find . -type f -a -not \( -path "*/CVS*" -o -path "*/results*" \)`; \
           $(TAR) cf - $$upload | $(SSH) shell.sourceforge.net 'cd $(WWW_ROOT)/htdocs/; tar xvm 2>&1 | grep -v timestamp'
 
-	@$(ECHO) Fixing permissions
-	@$(SSH) shell.sourceforge.net 'chmod -R 775 $(WWW_ROOT)/htdocs 2>/dev/null; true'
-	@$(SSH) shell.sourceforge.net 'find $(WWW_ROOT)/htdocs/ -type f | xargs chmod 664 2>/dev/null; true'
-
 web-actions:
 	@$(ECHO) Updating the actions on the webserver ...
 	@$(RSYNC) doc/webserver/actions/*.php shell.sourceforge.net:$(WWW_ROOT)/htdocs/actions
-	@$(ECHO) Enforcing reasonable permissions ...
-	@$(SSH) shell.sourceforge.net 'find $(WWW_ROOT)/htdocs/actions/ -type f | xargs chmod 664 2>/dev/null'
 
 web-faq:
 	@$(ECHO) Updating the FAQ on the webserver ...
 	@$(RSYNC) doc/webserver/faq/*.html shell.sourceforge.net:$(WWW_ROOT)/htdocs/faq
-	@$(ECHO) Enforcing reasonable permissions ...
-	@$(SSH) shell.sourceforge.net 'find $(WWW_ROOT)/htdocs/faq/ -type f | xargs chmod 664 2>/dev/null'
 
 web-user-manual:
 	@$(ECHO) Updating the user manual on the webserver (do not use in case of version changes) ...
 	@$(RSYNC) doc/webserver/user-manual/*.html shell.sourceforge.net:$(WWW_ROOT)/htdocs/user-manual/
-	@$(ECHO) Enforcing reasonable permissions ...
-	@$(SSH) shell.sourceforge.net 'find $(WWW_ROOT)/htdocs/user-manual/ -type f | xargs chmod 664 2>/dev/null'
 
 #############################################################################
 #
