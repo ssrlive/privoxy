@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.122 2016/05/22 12:41:50 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.123 2016/05/22 12:44:02 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.122 2016/05/22 12:41:50 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.123 2016/05/22 12:44:02 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
@@ -1956,6 +1956,82 @@ ACLs: permit-access and deny-access</title>
 </variablelist>
 
 <![%config-file;[<literallayout>@@enable-proxy-authentication-forwarding 0</literallayout>]]>
+</sect3>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="trusted-cgi-referer"><title>trusted-cgi-referer</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A trusted website or webpage whose links can be followed to reach sensitive CGI pages
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>URL or URL prefix</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>Unset</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No external pages are considered trusted referers.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Before &my-app; accepts configuration changes through CGI pages like
+    <link linkend="client-specific-tag">client-tags</link> or the
+    <link linkend="enable-remote-toggle">remote toggle</link>, it checks
+    the Referer header to see if the request comes from a trusted source.
+   </para>
+   <para>
+    By default only the webinterface domains
+    <ulink url="http://config.privoxy.org/">config.privoxy.org</ulink>
+    and
+    <ulink url="http://p.p/">p.p</ulink>
+    are considered trustworthy.
+    Requests originating from other domains are rejected to prevent
+    third-parties from modifiying Privoxy's state by e.g. embedding
+    images that result in CGI requests.
+   </para>
+   <para>
+    In some environments it may be desirable to embed links to CGI pages
+    on external pages, for example on an Intranet homepage the Privoxy admin
+    controls.
+   </para>
+   <para>
+    The <quote>trusted-cgi-referer</quote> option can be used to add that page,
+    or the whole domain, as trusted source so the resulting requests aren't
+    rejected.
+    Requests are accepted if the specified trusted-cgi-refer is the prefix
+    of the Referer.
+   </para>
+   <warning>
+    <para>
+     Declaring pages the admin doesn't control trustworthy may allow
+     malicious third parties to modify Privoxy's internal state against
+     the user's wishes and without the user's knowledge.
+   </para>
+   </warning>
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@trusted-cgi-referer http://www.example.org/local-privoxy-control-page</literallayout>]]>
 </sect3>
 
 </sect2>
