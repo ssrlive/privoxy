@@ -372,7 +372,7 @@ static void add_tag_for_client(const char *client_address,
       {
          enabled_tags->next = zalloc_or_die(sizeof(struct client_specific_tag));
          enabled_tags->next->name = strdup_or_die(tag);
-         clients_with_tags->tags->end_of_life = time_to_live ?
+         enabled_tags->next->end_of_life = time_to_live ?
             (time(NULL) + time_to_live) : 0;
          enabled_tags->next->prev = enabled_tags;
          break;
