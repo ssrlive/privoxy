@@ -5,7 +5,7 @@
   <title>The Main Configuration File</title>
   <meta name="GENERATOR" content=
   "Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.26 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.27 User Manual" href="index.html">
   <link rel="PREVIOUS" title="Privoxy Configuration" href=
   "configuration.html">
   <link rel="NEXT" title="Actions Files" href="actions-file.html">
@@ -19,7 +19,7 @@
     <table summary="Header navigation table" width="100%" border="0"
     cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.26 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.27 User Manual</th>
       </tr>
       <tr>
         <td width="10%" align="left" valign="bottom"><a href=
@@ -1386,6 +1386,70 @@
               recommended to use a client header filter to remove the
               authentication headers for requests where they aren't
               needed.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="TRUSTED-CGI-REFERER" id=
+        "TRUSTED-CGI-REFERER">7.4.10. trusted-cgi-referer</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>A trusted website or webpage whose links can be followed to
+              reach sensitive CGI pages</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>URL or URL prefix</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p>Unset</p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>No external pages are considered trusted referers.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>Before <span class="APPLICATION">Privoxy</span> accepts
+              configuration changes through CGI pages like <a href=
+              "config.html#CLIENT-SPECIFIC-TAG">client-tags</a> or the
+              <a href="config.html#ENABLE-REMOTE-TOGGLE">remote toggle</a>,
+              it checks the Referer header to see if the request comes from a
+              trusted source.</p>
+              <p>By default only the webinterface domains <a href=
+              "http://config.privoxy.org/" target=
+              "_top">config.privoxy.org</a> and <a href="http://p.p/" target=
+              "_top">p.p</a> are considered trustworthy. Requests originating
+              from other domains are rejected to prevent third-parties from
+              modifiying Privoxy's state by e.g. embedding images that result
+              in CGI requests.</p>
+              <p>In some environments it may be desirable to embed links to
+              CGI pages on external pages, for example on an Intranet
+              homepage the Privoxy admin controls.</p>
+              <p>The <span class="QUOTE">"trusted-cgi-referer"</span> option
+              can be used to add that page, or the whole domain, as trusted
+              source so the resulting requests aren't rejected. Requests are
+              accepted if the specified trusted-cgi-refer is the prefix of
+              the Referer.</p>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <p>Declaring pages the admin doesn't control
+                      trustworthy may allow malicious third parties to modify
+                      Privoxy's internal state against the user's wishes and
+                      without the user's knowledge.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </dd>
           </dl>
         </div>
