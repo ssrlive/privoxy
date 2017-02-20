@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.153 2016/05/22 12:43:07 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.154 2016/09/27 22:48:28 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -168,6 +168,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_toggle                          447966U /* "toggle" */
 #define hash_trust_info_url               430331967U /* "trust-info-url" */
 #define hash_trust_x_forwarded_for       2971537414U /* "trust-x-forwarded-for" */
+#define hash_trusted_cgi_referrer        4270883427U /* "trusted-cgi-referrer" */
 #define hash_trustfile                     56494766U /* "trustfile" */
 #define hash_usermanual                  1416668518U /* "user-manual" */
 #define hash_activity_animation          1817904738U /* "activity-animation" */
@@ -257,6 +258,7 @@ static void unload_configfile (void * data)
    freez(config->proxy_info_url);
    freez(config->proxy_args);
    freez(config->usermanual);
+   freez(config->trusted_cgi_referrer);
 
 #ifdef FEATURE_TRUST
    freez(config->trustfile);
@@ -602,6 +604,7 @@ struct configuration_spec * load_config(void)
    config->client_tag_lifetime       = 60;
 #endif
    config->trust_x_forwarded_for     = 0;
+   config->trusted_cgi_referrer      = NULL;
    /*
     * 128 client sockets ought to be enough for everybody who can't
     * be bothered to read the documentation to figure out how to
@@ -1595,6 +1598,18 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_trust_x_forwarded_for :
             config->trust_x_forwarded_for = parse_toggle_state(cmd, arg);
+            break;
+
+/* *************************************************************************
+ * trusted-cgi-referrer http://www.example.org/some/path.html
+ * *************************************************************************/
+         case hash_trusted_cgi_referrer :
+            /*
+             * We don't validate the specified referrer as
+             * it's only used for string comparison.
+             */
+            freez(config->trusted_cgi_referrer);
+            config->trusted_cgi_referrer = strdup_or_die(arg);
             break;
 
 /* *************************************************************************

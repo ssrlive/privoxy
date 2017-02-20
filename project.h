@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.218 2016/12/24 16:00:49 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.219 2017/01/23 16:10:28 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1336,6 +1336,11 @@ struct configuration_spec
 
    /** IP addresses to bind to.  Defaults to HADDR_DEFAULT == 127.0.0.1. */
    const char *haddr[MAX_LISTENING_SOCKETS];
+
+   /** Trusted referring site that can be used to reach CGI
+     * pages that aren't marked as harmful.
+     */
+   const char *trusted_cgi_referrer;
 
    /** Ports to bind to.  Defaults to HADDR_PORT == 8118. */
    int         hport[MAX_LISTENING_SOCKETS];

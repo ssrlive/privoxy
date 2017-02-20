@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.169 2017/01/23 13:05:26 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.170 2017/01/23 16:12:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -441,6 +441,7 @@ static int referrer_is_safe(const struct client_state *csp)
 {
    char *referrer;
    static const char alternative_prefix[] = "http://" CGI_SITE_1_HOST "/";
+   const char *trusted_cgi_referrer = csp->config->trusted_cgi_referrer;
 
    referrer = grep_cgi_referrer(csp);
 
@@ -455,6 +456,18 @@ static int referrer_is_safe(const struct client_state *csp)
    {
       /* Trustworthy referrer */
       log_error(LOG_LEVEL_CGI, "Granting access to %s, referrer %s is trustworthy.",
+         csp->http->url, referrer);
+
+      return TRUE;
+   }
+   else if ((trusted_cgi_referrer != NULL) && (0 == strncmp(referrer,
+            trusted_cgi_referrer, strlen(trusted_cgi_referrer))))
+   {
+      /*
+       * After some more testing this block should be merged with
+       * the previous one or the log level should bedowngraded.
+       */
+      log_error(LOG_LEVEL_INFO, "Granting access to %s based on trusted referrer %s",
          csp->http->url, referrer);
 
       return TRUE;
