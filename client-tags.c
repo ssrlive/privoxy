@@ -4,7 +4,7 @@
  *
  * Purpose     :  Functions related to client-specific tags.
  *
- * Copyright   :  Copyright (C) 2016 Fabian Keil <fk@fabiankeil.de>
+ * Copyright   :  Copyright (C) 2016-2017 Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
