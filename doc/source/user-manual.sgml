@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.216 2016/08/26 12:27:34 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.217 2017/01/23 12:59:45 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.216 2016/08/26 12:27:34 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.217 2017/01/23 12:59:45 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -6170,7 +6170,7 @@ for-privoxy-version=3.0.11</screen>
  The first of our specialized sections is concerned with <quote>fragile</quote>
  sites, i.e. sites that require minimum interference, because they are either
  very complex or very keen on tracking you (and have mechanisms in place that
- make them unusable for people who avoid being tracked). We will simply use
+ make them unusable for people who avoid being tracked). We will use
  our pre-defined <literal>fragile</literal> alias instead of stating the list
  of actions explicitly:
 </para>
@@ -6320,7 +6320,7 @@ count*.
 <para>
  It's quite remarkable how many advertisers actually call their banner
  servers ads.<replaceable>company</replaceable>.com, or call the directory
- in which the banners are stored simply <quote>banners</quote>. So the above
+ in which the banners are stored literally <quote>banners</quote>. So the above
  generic patterns are surprisingly effective.
 </para>
 <para>
