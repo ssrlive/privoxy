@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.131 2016/08/26 12:27:34 fabiankeil Exp $
+ $Id: faq.sgml,v 2.132 2017/01/23 12:59:45 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.131 2016/08/26 12:27:34 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.132 2017/01/23 12:59:45 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2124,7 +2124,7 @@ out of the picture?</title>
 <title>My logs show Privoxy <quote>crunches</quote>
 ads, but also its own internal CGI pages. What is a <quote>crunch</quote>?</title>
 <para>
- A <quote>crunch</quote> simply means <application>Privoxy</application> intercepted
+ A <quote>crunch</quote> means <application>Privoxy</application> intercepted
  <emphasis>something</emphasis>, nothing more. Often this is indeed ads or
  banners, but <application>Privoxy</application> uses the same mechanism for
  trapping requests for its own internal pages. For instance, a request for
