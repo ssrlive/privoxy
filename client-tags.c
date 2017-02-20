@@ -300,6 +300,35 @@ time_t get_next_tag_timeout_for_client(const char *client_address)
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  create_client_specific_tag
+ *
+ * Description :  Allocates memory for a client specific tag
+ *                and populates it.
+ *
+ * Parameters  :
+ *          1  :  name = The name of the tag to create.
+ *          2  :  time_to_live = 0, or the number of seconds
+ *                               the tag remains activated.
+ *
+ * Returns     :  Pointer to populated tag
+ *
+ *********************************************************************/
+static struct client_specific_tag *create_client_specific_tag(const char *name,
+   const time_t time_to_live)
+{
+   struct client_specific_tag *tag;
+
+   tag = zalloc_or_die(sizeof(struct client_specific_tag));
+   tag->name = strdup_or_die(name);
+   tag->end_of_life = time_to_live ? (time(NULL) + time_to_live) : 0;
+
+   return tag;
+
+}
+
 /*********************************************************************
  *
  * Function    :  add_tag_for_client
@@ -328,10 +357,7 @@ static void add_tag_for_client(const char *client_address,
       /* XXX: Code duplication. */
       requested_tags = zalloc_or_die(sizeof(struct requested_tags));
       requested_tags->client = strdup_or_die(client_address);
-      requested_tags->tags = zalloc_or_die(sizeof(struct client_specific_tag));
-      requested_tags->tags->name = strdup_or_die(tag);
-      requested_tags->tags->end_of_life = time_to_live ?
-         (time(NULL) + time_to_live) : 0;
+      requested_tags->tags = create_client_specific_tag(tag, time_to_live);
 
       validate_requested_tags();
       return;
@@ -354,10 +380,7 @@ static void add_tag_for_client(const char *client_address,
          clients_with_tags->next->prev = clients_with_tags;
          clients_with_tags = clients_with_tags->next;
          clients_with_tags->client = strdup_or_die(client_address);
-         clients_with_tags->tags = zalloc_or_die(sizeof(struct client_specific_tag));
-         clients_with_tags->tags->name = strdup_or_die(tag);
-         clients_with_tags->tags->end_of_life = time_to_live ?
-            (time(NULL) + time_to_live) : 0;
+         clients_with_tags->tags = create_client_specific_tag(tag, time_to_live);
 
          validate_requested_tags();
 
@@ -370,10 +393,7 @@ static void add_tag_for_client(const char *client_address,
    {
       if (enabled_tags->next == NULL)
       {
-         enabled_tags->next = zalloc_or_die(sizeof(struct client_specific_tag));
-         enabled_tags->next->name = strdup_or_die(tag);
-         enabled_tags->next->end_of_life = time_to_live ?
-            (time(NULL) + time_to_live) : 0;
+         enabled_tags->next = create_client_specific_tag(tag, time_to_live);
          enabled_tags->next->prev = enabled_tags;
          break;
       }
