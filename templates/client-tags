@@ -80,6 +80,9 @@
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" type="text/css" href="@default-cgi@send-stylesheet">
   <link rel="shortcut icon" href="@default-cgi@favicon.ico" type="image/x-icon">
+<!-- @if-tags-expire-start -->
+  <meta http-equiv="refresh" content="@refresh-delay@">
+<!-- if-tags-expire-end@ -->
 </head>
 
 <body>

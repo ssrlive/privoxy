@@ -254,6 +254,54 @@ void get_tag_list_for_client(struct list *tag_list,
 
 /*********************************************************************
  *
+ * Function    :  get_next_tag_timeout_for_client
+ *
+ * Description :  Figures out when the next temporarily enabled tag
+ *                for the client will have timed out.
+ *
+ * Parameters  :
+ *          1  :  client_address = Address of the client
+ *
+ * Returns     :  Lowest timeout in seconds
+ *
+ *********************************************************************/
+time_t get_next_tag_timeout_for_client(const char *client_address)
+{
+   struct client_specific_tag *enabled_tags;
+   time_t next_timeout = 0;
+   const time_t now = time(NULL);
+
+   privoxy_mutex_lock(&client_tags_mutex);
+
+   enabled_tags = get_tags_for_client(client_address);
+   while (enabled_tags != NULL)
+   {
+      log_error(LOG_LEVEL_CGI, "Evaluating tag '%s' for client %s. End of life %d",
+         enabled_tags->name, client_address, enabled_tags->end_of_life);
+      if (enabled_tags->end_of_life)
+      {
+          time_t time_left = enabled_tags->end_of_life - now;
+          /* Add a second to make sure the tag will have expired */
+          time_left++;
+          log_error(LOG_LEVEL_CGI, "%d > %d?", next_timeout, time_left);
+          if (next_timeout == 0 || next_timeout > time_left)
+          {
+             next_timeout = time_left;
+          }
+       }
+       enabled_tags = enabled_tags->next;
+   }
+
+   privoxy_mutex_unlock(&client_tags_mutex);
+
+   log_error(LOG_LEVEL_CGI, "Next timeout in %d seconds", next_timeout);
+
+   return next_timeout;
+
+}
+
+/*********************************************************************
+ *
  * Function    :  add_tag_for_client
  *
  * Description :  Adds the tag for the client.
