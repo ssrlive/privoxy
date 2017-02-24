@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.166 2017/02/24 12:00:07 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.167 2017/02/24 12:00:16 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -45,7 +45,7 @@ use warnings;
 use Getopt::Long;
 
 use constant {
-    PRIVOXY_LOG_PARSER_VERSION => '0.8',
+    PRIVOXY_LOG_PARSER_VERSION => '0.9',
     # Feel free to mess with these ...
     DEFAULT_BACKGROUND => 'black',  # Choose registered colour (like 'black')
     DEFAULT_TEXT_COLOUR => 'white', # Choose registered colour (like 'black')
