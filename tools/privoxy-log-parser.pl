@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.165 2017/02/24 11:59:58 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.166 2017/02/24 12:00:07 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -25,7 +25,7 @@
 #         hash key as input.
 #       - Add --compress and --decompress options.
 #
-# Copyright (c) 2007-2013 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2017 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
