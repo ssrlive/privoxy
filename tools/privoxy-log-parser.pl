@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.164 2017/02/20 15:57:40 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.165 2017/02/24 11:59:58 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2009,6 +2009,10 @@ sub gather_loglevel_crunch_stats ($$) {
     } elsif ($c =~ m/^Connection timeout:/) {
         # Connection timeout: http://c.tile.openstreetmap.org/18/136116/87842.png
         $stats{'connection-timeout'}++;
+
+    } elsif ($c =~ m/^Connection failure:/) {
+        # Connection failure: http://127.0.0.1:8080/
+        $stats{'connection-failure'}++;
     }
 }
 
@@ -2155,6 +2159,8 @@ sub print_stats () {
         get_percentage($stats{requests}, $stats{'fast-redirections'}) . ")\n";
     print "Connection timeouts: " . $stats{'connection-timeout'} . " (" .
         get_percentage($stats{requests}, $stats{'connection-timeout'}) . ")\n";
+    print "Connection failures: " . $stats{'connection-failure'} . " (" .
+        get_percentage($stats{requests}, $stats{'connection-failure'}) . ")\n";
     print "Outgoing requests: " . $outgoing_requests . " (" .
         get_percentage($stats{requests}, $outgoing_requests) . ")\n";
     print "Server keep-alive offers: " . $stats{'server-keep-alive'} . " (" .
