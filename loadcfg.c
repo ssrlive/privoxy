@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.154 2016/09/27 22:48:28 ler762 Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.155 2017/02/20 13:44:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -597,8 +597,8 @@ struct configuration_spec * load_config(void)
     */
    config->multi_threaded            = 1;
    config->buffer_limit              = 4096 * 1024;
-   config->usermanual                = strdup(USER_MANUAL_URL);
-   config->proxy_args                = strdup("");
+   config->usermanual                = strdup_or_die(USER_MANUAL_URL);
+   config->proxy_args                = strdup_or_die("");
    config->forwarded_connect_retries = 0;
 #ifdef FEATURE_CLIENT_TAGS
    config->client_tag_lifetime       = 60;
@@ -712,7 +712,7 @@ struct configuration_spec * load_config(void)
                   "(You can increase this limit by changing MAX_AF_FILES in project.h and recompiling).",
                   MAX_AF_FILES);
             }
-            config->actions_file_short[i] = strdup(arg);
+            config->actions_file_short[i] = strdup_or_die(arg);
             config->actions_file[i] = make_path(config->confdir, arg);
 
             break;
@@ -735,7 +735,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_admin_address :
             freez(config->admin_address);
-            config->admin_address = strdup(arg);
+            config->admin_address = strdup_or_die(arg);
             break;
 
 /* *************************************************************************
@@ -1080,7 +1080,7 @@ struct configuration_spec * load_config(void)
                   "(You can increase this limit by changing MAX_AF_FILES in project.h and recompiling).",
                   MAX_AF_FILES);
             }
-            config->re_filterfile_short[i] = strdup(arg);
+            config->re_filterfile_short[i] = strdup_or_die(arg);
             config->re_filterfile[i] = make_path(config->confdir, arg);
 
             break;
@@ -1303,11 +1303,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_hostname :
             freez(config->hostname);
-            config->hostname = strdup(arg);
-            if (NULL == config->hostname)
-            {
-               log_error(LOG_LEVEL_FATAL, "Out of memory saving hostname.");
-            }
+            config->hostname = strdup_or_die(arg);
             break;
 
 /* *************************************************************************
@@ -1346,11 +1342,7 @@ struct configuration_spec * load_config(void)
                   "(You can increase this limit by changing MAX_LISTENING_SOCKETS in project.h and recompiling).",
                   MAX_LISTENING_SOCKETS);
             }
-            config->haddr[i] = strdup(arg);
-            if (NULL == config->haddr[i])
-            {
-               log_error(LOG_LEVEL_FATAL, "Out of memory while copying listening address");
-            }
+            config->haddr[i] = strdup_or_die(arg);
             break;
 
 /* *************************************************************************
@@ -1502,7 +1494,7 @@ struct configuration_spec * load_config(void)
  * *************************************************************************/
          case hash_proxy_info_url :
             freez(config->proxy_info_url);
-            config->proxy_info_url = strdup(arg);
+            config->proxy_info_url = strdup_or_die(arg);
             break;
 
 /* *************************************************************************
@@ -1633,7 +1625,7 @@ struct configuration_spec * load_config(void)
              * for the directives that were already parsed. Lame.
              */
             freez(config->usermanual);
-            config->usermanual = strdup(arg);
+            config->usermanual = strdup_or_die(arg);
             break;
 
 /* *************************************************************************
@@ -1875,11 +1867,7 @@ struct configuration_spec * load_config(void)
 
    if (NULL == config->haddr[0])
    {
-      config->haddr[0] = strdup(HADDR_DEFAULT);
-      if (NULL == config->haddr[0])
-      {
-         log_error(LOG_LEVEL_FATAL, "Out of memory while copying default listening address");
-      }
+      config->haddr[0] = strdup_or_die(HADDR_DEFAULT);
    }
 
    for (i = 0; i < MAX_LISTENING_SOCKETS && NULL != config->haddr[i]; i++)
@@ -2027,7 +2015,7 @@ static void savearg(char *command, char *argument, struct configuration_spec * c
     * Add config option name embedded in
     * link to its section in the user-manual
     */
-   buf = strdup("\n<a href=\"");
+   buf = strdup_or_die("\n<a href=\"");
    if (!strncmpic(config->usermanual, "file://", 7) ||
        !strncmpic(config->usermanual, "http", 4))
    {
