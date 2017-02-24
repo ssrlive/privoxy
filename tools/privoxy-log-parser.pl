@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.163 2016/08/26 11:19:53 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.164 2017/02/20 15:57:40 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2005,6 +2005,10 @@ sub gather_loglevel_crunch_stats ($$) {
     } elsif ($c =~ m/^Blocked:/) {
         # Blocked: blogger.googleusercontent.com:443
         $stats{'blocked'}++;
+
+    } elsif ($c =~ m/^Connection timeout:/) {
+        # Connection timeout: http://c.tile.openstreetmap.org/18/136116/87842.png
+        $stats{'connection-timeout'}++;
     }
 }
 
@@ -2149,6 +2153,8 @@ sub print_stats () {
         get_percentage($stats{requests}, $stats{'blocked'}) . ")\n";
     print "Fast redirections: " . $stats{'fast-redirections'} . " (" .
         get_percentage($stats{requests}, $stats{'fast-redirections'}) . ")\n";
+    print "Connection timeouts: " . $stats{'connection-timeout'} . " (" .
+        get_percentage($stats{requests}, $stats{'connection-timeout'}) . ")\n";
     print "Outgoing requests: " . $outgoing_requests . " (" .
         get_percentage($stats{requests}, $outgoing_requests) . ")\n";
     print "Server keep-alive offers: " . $stats{'server-keep-alive'} . " (" .
