@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.167 2017/02/24 12:00:16 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.168 2017/02/24 12:00:25 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2115,6 +2115,8 @@ sub init_stats () {
         'empty-responses-on-reused-connections' => 0,
         'fast-redirections' => 0,
         'blocked' => 0,
+        'connection-failure' => 0,
+        'connection-timeout' => 0,
         'reused-connections' => 0,
         'server-keep-alive' => 0,
         'closed-client-connections' => 0,
