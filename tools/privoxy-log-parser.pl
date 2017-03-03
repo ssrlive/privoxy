@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.168 2017/02/24 12:00:25 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.169 2017/03/03 17:43:11 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2082,6 +2082,7 @@ sub gather_loglevel_header_stats ($$) {
 
     my ($c, $thread) = @_;
     our %stats;
+    our %cli_options;
 
     if ($c =~ m/^A HTTP\/1\.1 response without/ or
         $c =~ m/^Keeping the server header 'Connection: keep-alive' around./)
@@ -2094,10 +2095,13 @@ sub gather_loglevel_header_stats ($$) {
 
         # scan: HTTP/1.1 200 OK
         $stats{'method'}{$2}++;
-        $stats{'resource'}{$3}++;
+        if ($cli_options{'url-statistics-threshold'} != 0) {
+            $stats{'resource'}{$3}++;
+        }
         $stats{'http-version'}{$4}++;
 
-    } elsif ($c =~ m/^scan: Host: ([^\s]+)/) {
+    } elsif ($c =~ m/^scan: Host: ([^\s]+)/ and
+             $cli_options{'host-statistics-threshold'} != 0) {
 
         # scan: Host: p.p
         $stats{'hosts'}{$1}++;
