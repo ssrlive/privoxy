@@ -1,4 +1,4 @@
-$Id: TODO,v 1.155 2017/01/23 13:03:26 fabiankeil Exp $
+$Id: TODO,v 1.156 2017/01/23 13:06:53 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -52,9 +52,6 @@ http://www.privoxy.org/faq/general.html#DONATE
 12) Support pipelining for outgoing connections.
 
 14) Allow to filter POST parameters.
-
-15) If trusted CGI pages are requested without trusted referrer,
-    set the status code to 403 instead of 200.
 
 16) Filter SSL encrypted content as well.
 
