@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.170 2017/01/23 16:12:18 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.171 2017/02/20 13:44:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -2126,15 +2126,12 @@ jb_err template_fill_for_cgi(const struct client_state *csp,
    err = template_load(csp, &rsp->body, templatename, 0);
    if (err == JB_ERR_FILE)
    {
-      free_map(exports);
-      return cgi_error_no_template(csp, rsp, templatename);
+      err = cgi_error_no_template(csp, rsp, templatename);
    }
-   else if (err)
+   else if (err == JB_ERR_OK)
    {
-      free_map(exports);
-      return err; /* JB_ERR_MEMORY */
+      err = template_fill(&rsp->body, exports);
    }
-   err = template_fill(&rsp->body, exports);
    free_map(exports);
    return err;
 }
