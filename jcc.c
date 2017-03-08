@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.449 2016/12/24 16:00:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.450 2016/12/24 16:01:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3749,7 +3749,10 @@ int main(int argc, char **argv)
     *
     * Catch the abort, interrupt and terminate signals for a graceful exit
     * Catch the hangup signal so the errlog can be reopened.
-    * Ignore the broken pipe signals (FIXME: Why?)
+    *
+    * Ignore the broken pipe signal as connection failures
+    * are handled when and where they occur without relying
+    * on a signal.
     */
 #if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
 {
