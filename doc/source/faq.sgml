@@ -27,7 +27,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: faq.sgml,v 2.132 2017/01/23 12:59:45 fabiankeil Exp $
+ $Id: faq.sgml,v 2.133 2017/02/20 13:45:25 fabiankeil Exp $
 
  Copyright (C) 2001-2014 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -78,7 +78,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: faq.sgml,v 2.132 2017/01/23 12:59:45 fabiankeil Exp $</pubdate>
+<pubdate>$Id: faq.sgml,v 2.133 2017/02/20 13:45:25 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -511,9 +511,11 @@ warranty? Registration?</title>
  <application>Privoxy</application> is an associated
  project of <ulink url="http://www.spi-inc.org/">Software
  in the Public Interest (SPI)</ulink>, which allows us to receive
- tax-deductible donations in the United States. If you want to donate through
- SPI, please use <ulink url="http://www.spi-inc.org/donations">SPI's donation page</ulink>
- to see what the options are.
+ tax-deductible donations in the United States.
+ You can <ulink url="https://www.spi-inc.org/projects/privoxy/">donate via Paypal</ulink>
+ and <ulink url="https://co.clickandpledge.com/advanced/default.aspx?wid=34115">Click & Pledge</a>.
+ For details, please have a look at
+ <ulink url="http://www.spi-inc.org/donations">SPI's general donation page</ulink>.
 </para>
 
 <para>
