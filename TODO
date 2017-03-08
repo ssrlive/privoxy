@@ -1,4 +1,4 @@
-$Id: TODO,v 1.157 2017/03/08 13:11:15 fabiankeil Exp $
+$Id: TODO,v 1.158 2017/03/08 13:11:25 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -456,6 +456,9 @@ http://www.privoxy.org/faq/general.html#DONATE
 153) Catch SIGINT and use it to close the listen socket, serve
      remaining connections and shut down. This would allow higher
      uptime and make testing more convenient.
+
+154) Underline links in docs and cgi pages. More precisely,
+     don't mess with the browser defaults for link underlining.
 
 ##########################################################################
 
