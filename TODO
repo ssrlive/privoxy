@@ -1,4 +1,4 @@
-$Id: TODO,v 1.158 2017/03/08 13:11:25 fabiankeil Exp $
+$Id: TODO,v 1.159 2017/03/08 13:11:38 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -459,6 +459,11 @@ http://www.privoxy.org/faq/general.html#DONATE
 
 154) Underline links in docs and cgi pages. More precisely,
      don't mess with the browser defaults for link underlining.
+
+155) The sig_handler() shouldn't call log_error().
+     While it isn't known to cause actual problems in normal operation,
+     it's technically incorrect and causes crashes when running in
+     valgrind.
 
 ##########################################################################
 
