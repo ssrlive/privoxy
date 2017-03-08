@@ -1,4 +1,4 @@
-const char cgi_rcs[] = "$Id: cgi.c,v 1.171 2017/02/20 13:44:32 fabiankeil Exp $";
+const char cgi_rcs[] = "$Id: cgi.c,v 1.172 2017/03/08 13:10:33 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
@@ -98,7 +98,7 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
          TRUE },
    { "show-version",
          cgi_show_version,
-         "View the source code version numbers",
+          NULL, /* Not considered important enought to include in the menu */
           TRUE },
 #ifdef FEATURE_CLIENT_TAGS
    /*
