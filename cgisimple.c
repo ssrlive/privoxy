@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.146 2017/02/20 13:45:14 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.147 2017/02/20 13:47:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1868,14 +1868,6 @@ static jb_err show_defines(struct map *exports)
       {
          "FEATURE_IMAGE_BLOCKING",
 #ifdef FEATURE_IMAGE_BLOCKING
-         1,
-#else
-         0,
-#endif
-      },
-      {
-         "FEATURE_IMAGE_DETECT_MSIE",
-#ifdef FEATURE_IMAGE_DETECT_MSIE
          1,
 #else
          0,

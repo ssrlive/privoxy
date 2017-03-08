@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.206 2016/09/27 22:48:28 ler762 Exp $
+dnl $Id: configure.in,v 1.207 2016/12/24 16:00:49 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2016 the
 dnl Privoxy team. https://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.206 $)
+AC_REVISION($Revision: 1.207 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -930,13 +930,6 @@ AC_ARG_ENABLE(stats,
 [if test $enableval = yes; then
   AC_DEFINE(FEATURE_STATISTICS)
 fi],AC_DEFINE(FEATURE_STATISTICS))
-
-AC_ARG_ENABLE(ie-images,
-[  --enable-ie-images              Enable a quick but not always reliable auto-detect whether requests from
-                                  MS Internet Explorer are for an image or not.],
-[if test $enableval = yes; then
-  AC_DEFINE(FEATURE_IMAGE_DETECT_MSIE)
-fi],)
 
 AC_ARG_ENABLE(image-blocking,
 [  --disable-image-blocking        Don't try to figure out whether a request is
