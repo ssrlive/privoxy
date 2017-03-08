@@ -335,7 +335,7 @@
             <tr>
               <td><code>FEATURE_TOGGLE</code></td>
               <td>@if-FEATURE_TOGGLE-then@ Yes @else-not-FEATURE_TOGGLE@ No @endif-FEATURE_TOGGLE@</td>
-              <td>Allow Privoxy to be <q>disabled</q> so it is just a normal non-blocking non-anonymizing proxy.</td>
+              <td>Allow Privoxy to be <q>disabled</q> so it is just a normal non-blocking non-filtering proxy.</td>
             </tr>
             <tr>
               <td><code>FEATURE_TRUST</code></td>
