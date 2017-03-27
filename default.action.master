@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.331 2017/01/12 14:18:43 fabiankeil Exp $
+#  $Id: default.action.master,v 1.332 2017/01/12 14:19:58 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2562,7 +2562,28 @@ TAG:^IMAGE-REQUEST$
 #############################################################################
 # Depends on +client-header-tagger{css-requests}
 #############################################################################
-{+handle-as-empty-document \
+{-filter{html-annoyances} \
+ -filter{content-cookies} \
+ -filter{refresh-tags} \
+ -filter{img-reorder} \
+ -filter{banners-by-size} \
+ -filter{banners-by-link} \
+ -filter{webbugs} \
+ -filter{tiny-textforms} \
+ -filter{frameset-borders} \
+ -filter{iframes} \
+ -filter{demoronizer} \
+ -filter{shockwave-flash} \
+ -filter{quicktime-kioskmode} \
+ -filter{fun} \
+ -filter{crude-parental} \
+ -filter{site-specifics} \
+ -filter{no-ping} \
+ -filter{google} \
+ -filter{yahoo} \
+ -filter{msn} \
+ -filter{blogspot} \
+ +handle-as-empty-document \
  -handle-as-image \
 }
 TAG:^CSS-REQUEST$
