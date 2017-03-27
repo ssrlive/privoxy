@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.51 2017/01/23 12:59:45 fabiankeil Exp $
+ $Id: index.sgml,v 2.52 2017/03/27 10:20:27 fabiankeil Exp $
 
  Copyright (C) 2001-2017 Privoxy developers <privoxy-devel@lists.privoxy.org>
  See LICENSE.
@@ -194,6 +194,11 @@
     not support yet.
    -->
    ChameleonJohn
+ </subscript>
+</para>
+<para>
+ <subscript>
+  <ulink url="/faq/general.html#SPONSOR">Become a sponsor</ulink>
  </subscript>
 </para>
 ]]>
