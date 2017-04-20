@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.217 2017/01/23 12:59:45 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.218 2017/02/20 13:45:36 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.217 2017/01/23 12:59:45 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.218 2017/02/20 13:45:36 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -3021,6 +3021,21 @@ TAG:^User-Agent: MPlayer/
 {-filter -deanimate-gifs}
 TAG:^RANGE-REQUEST$
     </screen>
+    </para>
+    <para>
+     <screen>
+# Tag all requests with the client IP address
+#
+# (Technically the client IP address isn't included in the
+# client headers but client-header taggers can set it anyway.
+# For details see the tagger in default.filter)
+{+client-header-tagger{client-ip-address}}
+/
+
+# Change forwarding settings for requests coming from address 10.0.0.1
+{+forward-override{forward-socks5 127.0.1.2:2222 .}}
+TAG:^IP-ADDRESS: 10\.0\.0\.1$
+     </screen>
     </para>
   </listitem>
  </varlistentry>
