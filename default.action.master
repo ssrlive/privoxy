@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.335 2017/03/27 10:19:42 fabiankeil Exp $
+#  $Id: default.action.master,v 1.336 2017/04/09 09:11:46 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1945,6 +1945,8 @@ klikki.fi/adv/
 .ardmediathek.de/
 # URL = http://adventofcode.com/
 adventofcode.com/
+# URL = http://msdn.microsoft.com/en-us/library/system.diagnostics.stacktrace.framecount.aspx
+msdn.microsoft.com/
 
 
 #############################################################################
