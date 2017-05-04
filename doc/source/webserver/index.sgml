@@ -20,7 +20,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
                 
- $Id: index.sgml,v 2.53 2017/03/27 10:20:42 fabiankeil Exp $
+ $Id: index.sgml,v 2.54 2017/03/27 10:20:52 fabiankeil Exp $
 
  Copyright (C) 2001-2017 Privoxy developers <privoxy-devel@lists.privoxy.org>
  See LICENSE.
@@ -187,13 +187,6 @@
  </subscript>
  <subscript>
    <ulink url="http://www.7binaryoptions.com/robot/">7binaryoptions.com</ulink>
-   <!--
-    The markup for the ChameleonJohn logo gets inserted into the generated
-    HTML by the dok-webserver target because the logo uses the shiny
-    new PNG format which our awesome Docbook toolchain apparently does
-    not support yet.
-   -->
-   ChameleonJohn
  </subscript>
 </para>
 <para>
