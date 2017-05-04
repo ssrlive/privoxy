@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.450 2016/12/24 16:01:32 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.451 2017/03/08 13:15:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -210,9 +210,9 @@ privoxy_mutex_t gmtime_mutex;
 privoxy_mutex_t localtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
 
-#ifndef HAVE_RANDOM
+#if !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM)
 privoxy_mutex_t rand_mutex;
-#endif /* ndef HAVE_RANDOM */
+#endif /* !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM) */
 
 #endif /* def MUTEX_LOCKS_AVAILABLE */
 
@@ -3491,9 +3491,9 @@ static void initialize_mutexes(void)
    privoxy_mutex_init(&localtime_mutex);
 #endif /* ndef HAVE_GMTIME_R */
 
-#ifndef HAVE_RANDOM
+#if !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM)
    privoxy_mutex_init(&rand_mutex);
-#endif /* ndef HAVE_RANDOM */
+#endif /* !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM) */
 
 #endif /* def MUTEX_LOCKS_AVAILABLE */
 }
@@ -3529,7 +3529,9 @@ int main(int argc, char **argv)
 {
    int argc_pos = 0;
    int do_config_test = 0;
+#ifndef HAVE_ARC4RANDOM
    unsigned int random_seed;
+#endif
 #ifdef unix
    struct passwd *pw = NULL;
    struct group *grp = NULL;
@@ -3737,12 +3739,14 @@ int main(int argc, char **argv)
    InitWin32();
 #endif
 
+#ifndef HAVE_ARC4RANDOM
    random_seed = (unsigned int)time(NULL);
 #ifdef HAVE_RANDOM
    srandom(random_seed);
 #else
    srand(random_seed);
 #endif /* ifdef HAVE_RANDOM */
+#endif /* ifndef HAVE_ARC4RANDOM */
 
    /*
     * Unix signal handling
