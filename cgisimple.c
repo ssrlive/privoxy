@@ -1,4 +1,4 @@
-const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.147 2017/02/20 13:47:04 fabiankeil Exp $";
+const char cgisimple_rcs[] = "$Id: cgisimple.c,v 1.148 2017/03/08 13:13:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.c,v $
@@ -1836,6 +1836,14 @@ static jb_err show_defines(struct map *exports)
       {
          "FEATURE_CONNECTION_SHARING",
 #ifdef FEATURE_CONNECTION_SHARING
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_EXTERNAL_FILTERS",
+#ifdef FEATURE_EXTERNAL_FILTERS
          1,
 #else
          0,
