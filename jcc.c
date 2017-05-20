@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.451 2017/03/08 13:15:49 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.452 2017/05/04 14:34:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -93,7 +93,6 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.451 2017/03/08 13:15:49 fabiankeil Exp $"
 # ifdef __OS2__
 #define INCL_DOS
 # include <os2.h>
-#define bzero(B,N) memset(B,0x00,n)
 # endif
 
 # ifndef FD_ZERO
