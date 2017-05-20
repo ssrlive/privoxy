@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.219 2017/04/20 11:11:43 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.220 2017/04/20 11:12:12 fabiankeil Exp $
 
  Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.219 2017/04/20 11:11:43 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.220 2017/04/20 11:12:12 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2278,7 +2278,7 @@ for details.
     This regular expression is conditional so it will match any page
     named <quote>index.html</quote> regardless of path which in this case can
     have one or more <quote>/'s</quote>. And this one must contain exactly
-    <quote>.html</quote> (but does not have to end with that!).
+    <quote>.html</quote> (and end with that!).
    </para>
   </listitem>
  </varlistentry>
