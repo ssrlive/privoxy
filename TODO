@@ -1,4 +1,4 @@
-$Id: TODO,v 1.160 2017/03/08 13:16:08 fabiankeil Exp $
+$Id: TODO,v 1.161 2017/04/20 11:10:54 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -468,6 +468,8 @@ http://www.privoxy.org/faq/general.html#DONATE
 156) Reject socks requests with an explicit error message similar
      to the one used for ftp. Motivation:
      https://lists.privoxy.org/pipermail/privoxy-users/2017-March/000195.html
+
+157) Add a directive to control the currently hardcoded receive-buffer size.
 
 ##########################################################################
 
