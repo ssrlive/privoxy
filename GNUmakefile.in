@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.258 2017/03/27 10:20:42 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.259 2017/05/04 14:35:02 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2017 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -627,6 +627,10 @@ webserver: clean-editor-files
 web-actions:
 	@$(ECHO) Updating the actions on the webserver ...
 	@$(RSYNC) doc/webserver/actions/*.php shell.sourceforge.net:$(WWW_ROOT)/htdocs/actions
+
+web-homepage:
+	@$(ECHO) "Updating the home page (index.html) only (be careful in case of version changes) ..."
+	@$(RSYNC) doc/webserver/index.html shell.sourceforge.net:$(WWW_ROOT)/htdocs/
 
 web-faq:
 	@$(ECHO) Updating the FAQ on the webserver ...
