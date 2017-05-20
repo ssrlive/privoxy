@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.155 2017/02/20 13:44:32 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.156 2017/02/24 11:59:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1944,9 +1944,6 @@ struct configuration_spec * load_config(void)
                                            current_configfile->f;
       /*
        * Check if config->haddr[i],hport[i] == oldcfg->haddr[i],hport[i]
-       *
-       * The following could be written more compactly as a single,
-       * (unreadably long) if statement.
        */
       config->need_bind = 0;
 
