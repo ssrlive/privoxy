@@ -36,7 +36,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: user-manual.sgml,v 2.220 2017/04/20 11:12:12 fabiankeil Exp $
+ $Id: user-manual.sgml,v 2.221 2017/05/20 09:27:54 fabiankeil Exp $
 
  Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -62,7 +62,7 @@
  </subscript>
 </pubdate>
 
-<pubdate>$Id: user-manual.sgml,v 2.220 2017/04/20 11:12:12 fabiankeil Exp $</pubdate>
+<pubdate>$Id: user-manual.sgml,v 2.221 2017/05/20 09:27:54 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -2290,6 +2290,7 @@ for details.
     that contains any of the words <quote>ads</quote>, <quote>banner</quote>,
     <quote>banners</quote> (because of the <quote>?</quote>) or <quote>junk</quote>.
     The path does not have to end in these words, just contain them.
+    The path has to contain at least two slashes (including the one at the beginning).
    </para>
   </listitem>
  </varlistentry>
