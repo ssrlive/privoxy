@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.209 2017/05/04 14:34:18 fabiankeil Exp $
+dnl $Id: configure.in,v 1.210 2017/05/04 14:34:28 fabiankeil Exp $
 dnl
 dnl Written by and Copyright (C) 2001-2017 the
 dnl Privoxy team. https://www.privoxy.org/
@@ -32,7 +32,7 @@ dnl =================================================================
 dnl AutoConf Initialization
 dnl =================================================================
 
-AC_REVISION($Revision: 1.209 $)
+AC_REVISION($Revision: 1.210 $)
 AC_INIT(jcc.c)
 
 if test ! -f config.h.in; then
@@ -81,6 +81,10 @@ VERSION_MINOR=0
 VERSION_POINT=27
 CODE_STATUS="UNRELEASED"
 
+dnl Timestamp (date +%s) used by the mtree-spec target.
+dnl Should be updated before releases but forgetting it isn't critical.
+SOURCE_DATE_EPOCH=1494070262
+
 dnl CODE_STATUS can be "alpha", "beta", "stable" or "UNRELEASED",
 dnl and will be used for CGI output. Increment version number and
 dnl set status to "UNRELEASED" whenever CVS differs from the last
@@ -94,6 +98,7 @@ AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_POINT)
 AC_SUBST(CODE_STATUS)
+AC_SUBST(SOURCE_DATE_EPOCH)
 
 dnl
 AC_DEFINE_UNQUOTED(VERSION_MAJOR,${VERSION_MAJOR})
