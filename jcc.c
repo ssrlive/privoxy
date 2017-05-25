@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.453 2017/05/20 09:24:08 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.454 2017/05/25 11:14:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2700,13 +2700,10 @@ static void handle_established_connection(struct client_state *csp,
  *********************************************************************/
 static void chat(struct client_state *csp)
 {
-   char buf[BUFFER_SIZE];
    const struct forward_spec *fwd;
    struct http_request *http;
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
-
-   memset(buf, 0, sizeof(buf));
 
    http = csp->http;
 
