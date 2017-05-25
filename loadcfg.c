@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.156 2017/02/24 11:59:44 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.157 2017/05/20 09:24:35 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1375,7 +1375,7 @@ struct configuration_spec * load_config(void)
          {
             int max_client_connections = parse_numeric_value(cmd, arg);
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(HAVE_POLL)
             /*
              * Reject values below 1 for obvious reasons and values above
              * FD_SETSIZE/2 because Privoxy needs two sockets to serve
@@ -1399,6 +1399,9 @@ struct configuration_spec * load_config(void)
              * above the limit as long as no more than FD_SETSIZE are
              * passed to select().
              * https://msdn.microsoft.com/en-us/library/windows/desktop/ms739169%28v=vs.85%29.aspx
+             *
+             * On platforms were we use poll() we don't have to enforce
+             * an upper connection limit either.
              *
              * XXX: Do OS/2, Amiga etc. belong here as well?
              */

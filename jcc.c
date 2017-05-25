@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.454 2017/05/25 11:14:38 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.455 2017/05/25 11:16:04 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -95,9 +95,17 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.454 2017/05/25 11:14:38 fabiankeil Exp $"
 # include <os2.h>
 # endif
 
+#ifdef HAVE_POLL
+#ifdef __GLIBC__
+#include <sys/poll.h>
+#else
+#include <poll.h>
+#endif /* def __GLIBC__ */
+#else
 # ifndef FD_ZERO
 #  include <select.h>
 # endif
+#endif /* HAVE_POLL */
 
 #endif
 
@@ -1957,9 +1965,14 @@ static void handle_established_connection(struct client_state *csp,
    char buf[BUFFER_SIZE];
    char *hdr;
    char *p;
-   fd_set rfds;
    int n;
+#ifdef HAVE_POLL
+   struct pollfd poll_fds[2];
+#else
+   fd_set rfds;
    jb_socket maxfd;
+   struct timeval timeout;
+#endif
    int server_body;
    int ms_iis5_hack = 0;
    unsigned long long byte_count = 0;
@@ -1969,7 +1982,6 @@ static void handle_established_connection(struct client_state *csp,
 
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
-   struct timeval timeout;
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    int watch_client_socket;
 #endif
@@ -1978,8 +1990,10 @@ static void handle_established_connection(struct client_state *csp,
 
    http = csp->http;
 
+#ifndef HAVE_POLL
    maxfd = (csp->cfd > csp->server_connection.sfd) ?
       csp->cfd : csp->server_connection.sfd;
+#endif
 
    /* pass data between the client and server
     * until one or the other shuts down the connection.
@@ -1993,6 +2007,7 @@ static void handle_established_connection(struct client_state *csp,
 
    for (;;)
    {
+#ifndef HAVE_POLL
 #ifdef __OS2__
       /*
        * FD_ZERO here seems to point to an errant macro which crashes.
@@ -2014,6 +2029,7 @@ static void handle_established_connection(struct client_state *csp,
       }
 
       FD_SET(csp->server_connection.sfd, &rfds);
+#endif /* ndef HAVE_POLL */
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if ((csp->flags & CSP_FLAG_CHUNKED)
@@ -2058,9 +2074,32 @@ static void handle_established_connection(struct client_state *csp,
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
+#ifdef HAVE_POLL
+      poll_fds[0].fd = csp->cfd;
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+      if (!watch_client_socket)
+      {
+         /*
+          * Ignore incoming data, but still watch out
+          * for disconnects etc. These flags are always
+          * implied anyway but explicitly setting them
+          * doesn't hurt.
+          */
+         poll_fds[0].events = POLLERR|POLLHUP;
+      }
+      else
+#endif
+      {
+         poll_fds[0].events = POLLIN;
+      }
+      poll_fds[1].fd = csp->server_connection.sfd;
+      poll_fds[1].events = POLLIN;
+      n = poll(poll_fds, 2, csp->config->socket_timeout * 1000);
+#else
       timeout.tv_sec = csp->config->socket_timeout;
       timeout.tv_usec = 0;
       n = select((int)maxfd+1, &rfds, NULL, NULL, &timeout);
+#endif /* def HAVE_POLL */
 
       if (n == 0)
       {
@@ -2075,7 +2114,11 @@ static void handle_established_connection(struct client_state *csp,
       }
       else if (n < 0)
       {
+#ifdef HAVE_POLL
+         log_error(LOG_LEVEL_ERROR, "poll() failed!: %E");
+#else
          log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
+#endif
          mark_server_socket_tainted(csp);
          return;
       }
@@ -2087,7 +2130,21 @@ static void handle_established_connection(struct client_state *csp,
        * XXX: Make sure the client doesn't use pipelining
        * behind Privoxy's back.
        */
+#ifdef HAVE_POLL
+      if ((poll_fds[0].revents & (POLLERR|POLLHUP|POLLNVAL)) != 0)
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "The client socket %d has become unusable while "
+            "the server socket %d is still open.",
+            csp->cfd, csp->server_connection.sfd);
+         mark_server_socket_tainted(csp);
+         break;
+      }
+
+      if (poll_fds[0].revents != 0)
+#else
       if (FD_ISSET(csp->cfd, &rfds))
+#endif /* def HAVE_POLL*/
       {
          int max_bytes_to_read = sizeof(buf) - 1;
 
@@ -2175,7 +2232,11 @@ static void handle_established_connection(struct client_state *csp,
        * If `hdr' is null, then it's the header otherwise it's the body.
        * FIXME: Does `hdr' really mean `host'? No.
        */
+#ifdef HAVE_POLL
+      if (poll_fds[1].revents != 0)
+#else
       if (FD_ISSET(csp->server_connection.sfd, &rfds))
+#endif /* HAVE_POLL */
       {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          /*
@@ -4048,6 +4109,7 @@ static jb_socket bind_port_helper(const char *haddr, int hport)
       return JB_INVALID_SOCKET;
    }
 
+#ifndef HAVE_POLL
 #ifndef _WIN32
    if (bfd >= FD_SETSIZE)
    {
@@ -4055,6 +4117,7 @@ static jb_socket bind_port_helper(const char *haddr, int hport)
          "Bind socket number too high to use select(): %d >= %d",
          bfd, FD_SETSIZE);
    }
+#endif
 #endif
 
    if (haddr == NULL)
