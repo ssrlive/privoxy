@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.260 2017/05/20 09:27:07 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.261 2017/05/25 11:14:27 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2017 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -702,6 +702,8 @@ miscutil.@OBJEXT@:  miscutil.c  miscutil.h  config.h
 parsers.@OBJEXT@:   parsers.c   parsers.h   config.h $(PROJECT_H_DEPS) errlog.h filters.h jbsockets.h jcc.h loadcfg.h loaders.h miscutil.h ssplit.h
 ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
 urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
+client-tags.@OBJEXT@: client-tags.c client-tags.h config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
+fuzz.@OBJEXT@: fuzz.c config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
