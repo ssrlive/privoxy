@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.452 2017/05/04 14:34:18 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.453 2017/05/20 09:24:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1434,7 +1434,7 @@ static jb_err receive_chunked_client_request_body(struct client_state *csp)
    enum chunk_status status;
 
    while (CHUNK_STATUS_MISSING_DATA ==
-      (status = chunked_body_is_complete(csp->client_iob,&body_length)))
+      (status = chunked_body_is_complete(csp->client_iob, &body_length)))
    {
       char buf[BUFFER_SIZE];
       int len;
