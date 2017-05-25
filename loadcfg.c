@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.157 2017/05/20 09:24:35 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.158 2017/05/25 11:16:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -8,7 +8,7 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.157 2017/05/20 09:24:35 fabiankei
  *                routine to load the configuration and the global
  *                variables it writes to.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2016 the
+ * Copyright   :  Written by and Copyright (C) 2001-2017 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
