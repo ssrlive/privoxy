@@ -1,4 +1,4 @@
-const char pcrs_rcs[] = "$Id: pcrs.c,v 1.50 2016/05/25 10:50:28 fabiankeil Exp $";
+const char pcrs_rcs[] = "$Id: pcrs.c,v 1.51 2016/12/24 16:00:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/pcrs.c,v $
@@ -241,16 +241,12 @@ extern pcrs_substitute *pcrs_compile_fuzzed_replacement(const char *replacement,
 static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int trivialflag, int capturecount, int *errptr)
 {
    int i, k, l, quoted;
-   size_t length;
    char *text;
    pcrs_substitute *r;
-#ifdef FUZZ
-   static const char *replacement_stack;
-   static const size_t *length_stack;
-   static pcrs_substitute *r_stack;
-
-   replacement_stack = replacement;
-   length_stack = &length;
+#ifndef FUZZ
+   size_t length;
+#else
+   static size_t length;
 #endif
    i = k = l = quoted = 0;
 
@@ -271,10 +267,6 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
       return NULL;
    }
    memset(r, '\0', sizeof(pcrs_substitute));
-
-#ifdef FUZZ
-   r_stack = r;
-#endif
 
    length = strlen(replacement);
 
