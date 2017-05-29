@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.82 2016/07/23 23:05:15 ler762 Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.83 2017/05/04 14:34:18 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -71,22 +71,27 @@ const char miscutil_h_rcs[] = MISCUTIL_H_VERSION;
  *
  * Function    :  zalloc
  *
- * Description :  Malloc some memory and set it to '\0'.
+ * Description :  Returns allocated memory that is initialized
+ *                with zeros.
  *
  * Parameters  :
  *          1  :  size = Size of memory chunk to return.
  *
- * Returns     :  Pointer to newly malloc'd memory chunk.
+ * Returns     :  Pointer to newly alloc'd memory chunk.
  *
  *********************************************************************/
 void *zalloc(size_t size)
 {
    void * ret;
 
+#ifdef HAVE_CALLOC
+   ret = calloc(1, size);
+#else
    if ((ret = (void *)malloc(size)) != NULL)
    {
       memset(ret, 0, size);
    }
+#endif
 
    return(ret);
 
