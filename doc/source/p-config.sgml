@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.124 2017/02/20 13:44:54 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.125 2017/03/08 13:11:01 fabiankeil Exp $
 
  Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -97,7 +97,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.124 2017/02/20 13:44:54 fabiankeil Exp $
+ $Id: p-config.sgml,v 2.125 2017/03/08 13:11:01 fabiankeil Exp $
 </para>
 <para>
 Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
@@ -3657,9 +3657,83 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
 </variablelist>
 </sect3>
 
-</sect2>
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="receive-buffer-size"><title>receive-buffer-size</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The size of the buffer Privoxy uses to receive data from the server.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    <replaceable>Size in bytes</replaceable>
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>5000</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Increasing the receive-buffer-size increases Privoxy's memory usage but
+    can lower the number of context switches and thereby reduce the
+    cpu usage and potentially increase the throughput.
+   </para>
+   <para>
+    This is mostly relevant for fast network connections and
+    large downloads that don't require filtering.
+   </para>
+   <para>
+    Reducing the buffer size reduces the amount of memory Privoxy
+    needs to handle the request but increases the number of systemcalls
+    and may reduce the throughput.
+   </para>
+   <para>
+    A dtrace command like:
+    <quote>sudo dtrace -n 'syscall::read:return /execname == "privoxy"/ { @[execname] = llquantize(arg0, 10, 0, 5, 20); @m = max(arg0)}'</quote>
+    can be used to properly tune the receive-buffer-size.
+    On systems without dtrace, strace or truss may be used as
+    less convenient alternatives.
+   </para>
+   <para>
+    If the buffer is too large it will increase Privoxy's memory
+    footprint without any benefit. As the memory is (currently)
+    cleared before using it, a buffer that is too large can
+    actually reduce the throughput.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    <screen>
+      # Increase the receive buffer size
+      receive-buffer-size 32768
+    </screen>
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
 
 <!--  ~  End section  ~  -->
+
+</sect2>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
