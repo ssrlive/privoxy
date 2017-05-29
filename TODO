@@ -1,4 +1,4 @@
-$Id: TODO,v 1.164 2017/05/20 09:27:17 fabiankeil Exp $
+$Id: TODO,v 1.165 2017/05/29 10:40:28 fabiankeil Exp $
 
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
@@ -465,8 +465,6 @@ http://www.privoxy.org/faq/general.html#DONATE
 156) Reject socks requests with an explicit error message similar
      to the one used for ftp. Motivation:
      https://lists.privoxy.org/pipermail/privoxy-users/2017-March/000195.html
-
-157) Add a directive to control the currently hardcoded receive-buffer size.
 
 158) Use a single thread to wait for new requests on reused client connections.
      Currently the thread that handles the first request on a connection
