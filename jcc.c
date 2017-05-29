@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.457 2017/05/25 11:17:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.458 2017/05/29 10:02:11 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3893,6 +3893,9 @@ int main(int argc, char **argv)
    {
       exit(process_fuzzed_input(fuzz_input_type, fuzz_input_file));
    }
+   log_error(LOG_LEVEL_FATAL,
+      "When compiled with fuzzing support, Privoxy should only be used for fuzzing. "
+      "Various data structures are static which is unsafe when using threads.");
 #endif
 
    if (do_config_test)
