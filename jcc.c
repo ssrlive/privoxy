@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.456 2017/05/25 11:16:56 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.457 2017/05/25 11:17:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1962,7 +1962,7 @@ static int send_http_request(struct client_state *csp)
 static void handle_established_connection(struct client_state *csp,
                                           const struct forward_spec *fwd)
 {
-   char buf[BUFFER_SIZE];
+   char *receive_buffer;
    char *hdr;
    char *p;
    int n;
@@ -1985,8 +1985,17 @@ static void handle_established_connection(struct client_state *csp,
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    int watch_client_socket;
 #endif
+   const size_t receive_buffer_size = csp->config->receive_buffer_size;
 
-   memset(buf, 0, sizeof(buf));
+   receive_buffer = zalloc(receive_buffer_size + 1);
+   if (receive_buffer == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Out of memory. Failed to allocate the receive buffer.");
+      rsp = cgi_error_memory();
+      send_crunch_response(csp, rsp);
+      return;
+   }
 
    http = csp->http;
 
@@ -2110,6 +2119,7 @@ static void handle_established_connection(struct client_state *csp,
             send_crunch_response(csp, error_response(csp, "connection-timeout"));
          }
          mark_server_socket_tainted(csp);
+         freez(receive_buffer);
          return;
       }
       else if (n < 0)
@@ -2120,6 +2130,7 @@ static void handle_established_connection(struct client_state *csp,
          log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
 #endif
          mark_server_socket_tainted(csp);
+         freez(receive_buffer);
          return;
       }
 
@@ -2146,7 +2157,7 @@ static void handle_established_connection(struct client_state *csp,
       if (FD_ISSET(csp->cfd, &rfds))
 #endif /* def HAVE_POLL*/
       {
-         int max_bytes_to_read = sizeof(buf) - 1;
+         int max_bytes_to_read = (int)receive_buffer_size;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          if ((csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ))
@@ -2180,7 +2191,7 @@ static void handle_established_connection(struct client_state *csp,
          }
          if (csp->expected_client_content_length != 0)
          {
-            if (csp->expected_client_content_length < (sizeof(buf) - 1))
+            if (csp->expected_client_content_length < receive_buffer_size)
             {
                max_bytes_to_read = (int)csp->expected_client_content_length;
             }
@@ -2188,10 +2199,10 @@ static void handle_established_connection(struct client_state *csp,
                "Waiting for up to %d bytes from the client.",
                max_bytes_to_read);
          }
-         assert(max_bytes_to_read < sizeof(buf));
+         assert(max_bytes_to_read <= receive_buffer_size);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-         len = read_socket(csp->cfd, buf, max_bytes_to_read);
+         len = read_socket(csp->cfd, receive_buffer, max_bytes_to_read);
 
          if (len <= 0)
          {
@@ -2218,10 +2229,11 @@ static void handle_established_connection(struct client_state *csp,
          }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-         if (write_socket(csp->server_connection.sfd, buf, (size_t)len))
+         if (write_socket(csp->server_connection.sfd, receive_buffer, (size_t)len))
          {
             log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
             mark_server_socket_tainted(csp);
+            freez(receive_buffer);
             return;
          }
          continue;
@@ -2255,12 +2267,13 @@ static void handle_established_connection(struct client_state *csp,
             log_error(LOG_LEVEL_CONNECT,
                "The server still wants to talk, but the client hung up on us.");
             mark_server_socket_tainted(csp);
+            freez(receive_buffer);
             return;
 #endif /* def _WIN32 */
          }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-         len = read_socket(csp->server_connection.sfd, buf, sizeof(buf) - 1);
+         len = read_socket(csp->server_connection.sfd, receive_buffer, (int)receive_buffer_size);
 
          if (len < 0)
          {
@@ -2275,6 +2288,7 @@ static void handle_established_connection(struct client_state *csp,
                 */
                log_error(LOG_LEVEL_ERROR,
                   "CONNECT already confirmed. Unable to tell the client about the problem.");
+               freez(receive_buffer);
                return;
             }
             else if (byte_count)
@@ -2289,6 +2303,7 @@ static void handle_established_connection(struct client_state *csp,
                log_error(LOG_LEVEL_ERROR, "Already forwarded the original headers. "
                   "Unable to tell the client about the problem.");
                mark_server_socket_tainted(csp);
+               freez(receive_buffer);
                return;
             }
             /*
@@ -2301,7 +2316,7 @@ static void handle_established_connection(struct client_state *csp,
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          if (csp->flags & CSP_FLAG_CHUNKED)
          {
-            if ((len >= 5) && !memcmp(buf+len-5, "0\r\n\r\n", 5))
+            if ((len >= 5) && !memcmp(receive_buffer+len-5, "0\r\n\r\n", 5))
             {
                /* XXX: this is a temporary hack */
                log_error(LOG_LEVEL_CONNECT,
@@ -2315,10 +2330,22 @@ static void handle_established_connection(struct client_state *csp,
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
          /*
+          * This is guaranteed by allocating with zalloc_or_die()
+          * and never (intentionally) writing to the last byte.
+          *
+          * receive_buffer_size is the size of the part of the
+          * buffer we intentionally write to, but we actually
+          * allocated receive_buffer_size+1 bytes so the assertion
+          * stays within the allocated range.
+          */
+         assert(receive_buffer[receive_buffer_size] == '\0');
+
+         /*
           * Add a trailing zero to let be able to use string operations.
           * XXX: do we still need this with filter_popups gone?
           */
-         buf[len] = '\0';
+         assert(len <= receive_buffer_size);
+         receive_buffer[len] = '\0';
 
          /*
           * Normally, this would indicate that we've read
@@ -2397,6 +2424,7 @@ static void handle_established_connection(struct client_state *csp,
                      freez(hdr);
                      freez(p);
                      mark_server_socket_tainted(csp);
+                     freez(receive_buffer);
                      return;
                   }
 
@@ -2411,8 +2439,8 @@ static void handle_established_connection(struct client_state *csp,
              * This is NOT the body, so
              * Let's pretend the server just sent us a blank line.
              */
-            snprintf(buf, sizeof(buf), "\r\n");
-            len = (int)strlen(buf);
+            snprintf(receive_buffer, receive_buffer_size, "\r\n");
+            len = (int)strlen(receive_buffer);
 
             /*
              * Now, let the normal header parsing algorithm below do its
@@ -2436,7 +2464,7 @@ static void handle_established_connection(struct client_state *csp,
                 * has been reached, switch to non-filtering mode, i.e. make & write the
                 * header, flush the iob and buf, and get out of the way.
                 */
-               if (add_to_iob(csp->iob, csp->config->buffer_limit, buf, len))
+               if (add_to_iob(csp->iob, csp->config->buffer_limit, receive_buffer, len))
                {
                   size_t hdrlen;
                   long flushed;
@@ -2455,18 +2483,20 @@ static void handle_established_connection(struct client_state *csp,
                      rsp = cgi_error_memory();
                      send_crunch_response(csp, rsp);
                      mark_server_socket_tainted(csp);
+                     freez(receive_buffer);
                      return;
                   }
                   hdrlen = strlen(hdr);
 
                   if (write_socket(csp->cfd, hdr, hdrlen)
                    || ((flushed = flush_socket(csp->cfd, csp->iob)) < 0)
-                   || (write_socket(csp->cfd, buf, (size_t)len)))
+                   || (write_socket(csp->cfd, receive_buffer, (size_t)len)))
                   {
                      log_error(LOG_LEVEL_CONNECT,
                         "Flush header and buffers to client failed: %E");
                      freez(hdr);
                      mark_server_socket_tainted(csp);
+                     freez(receive_buffer);
                      return;
                   }
 
@@ -2483,10 +2513,11 @@ static void handle_established_connection(struct client_state *csp,
             }
             else
             {
-               if (write_socket(csp->cfd, buf, (size_t)len))
+               if (write_socket(csp->cfd, receive_buffer, (size_t)len))
                {
                   log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
                   mark_server_socket_tainted(csp);
+                  freez(receive_buffer);
                   return;
                }
             }
@@ -2500,12 +2531,13 @@ static void handle_established_connection(struct client_state *csp,
              * Buffer up the data we just read.  If that fails, there's
              * little we can do but send our static out-of-memory page.
              */
-            if (add_to_iob(csp->iob, csp->config->buffer_limit, buf, len))
+            if (add_to_iob(csp->iob, csp->config->buffer_limit, receive_buffer, len))
             {
                log_error(LOG_LEVEL_ERROR, "Out of memory while looking for end of server headers.");
                rsp = cgi_error_memory();
                send_crunch_response(csp, rsp);
                mark_server_socket_tainted(csp);
+               freez(receive_buffer);
                return;
             }
 
@@ -2526,6 +2558,7 @@ static void handle_established_connection(struct client_state *csp,
                   write_socket(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
                      strlen(INVALID_SERVER_HEADERS_RESPONSE));
                   mark_server_socket_tainted(csp);
+                  freez(receive_buffer);
                   return;
                }
                else
@@ -2571,6 +2604,7 @@ static void handle_established_connection(struct client_state *csp,
                }
                free_http_request(http);
                mark_server_socket_tainted(csp);
+               freez(receive_buffer);
                return;
             }
 
@@ -2611,6 +2645,7 @@ static void handle_established_connection(struct client_state *csp,
                   strlen(INVALID_SERVER_HEADERS_RESPONSE));
                free_http_request(http);
                mark_server_socket_tainted(csp);
+               freez(receive_buffer);
                return;
             }
             hdr = list_to_text(csp->headers);
@@ -2645,6 +2680,7 @@ static void handle_established_connection(struct client_state *csp,
                 */
                 freez(hdr);
                 mark_server_socket_tainted(csp);
+                freez(receive_buffer);
                 return;
             }
             /* Buffer and pcrs filter this if appropriate. */
@@ -2675,6 +2711,7 @@ static void handle_established_connection(struct client_state *csp,
                    */
                   freez(hdr);
                   mark_server_socket_tainted(csp);
+                  freez(receive_buffer);
                   return;
                }
             }
@@ -2699,14 +2736,17 @@ static void handle_established_connection(struct client_state *csp,
                write_socket(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
                   strlen(INVALID_SERVER_HEADERS_RESPONSE));
                mark_server_socket_tainted(csp);
+               freez(receive_buffer);
                return;
             }
          }
          continue;
       }
       mark_server_socket_tainted(csp);
+      freez(receive_buffer);
       return; /* huh? we should never get here */
    }
+   freez(receive_buffer);
 
    if (csp->content_length == 0)
    {

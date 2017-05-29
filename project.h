@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.219 2017/01/23 16:10:28 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.220 2017/02/20 13:44:32 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1347,6 +1347,9 @@ struct configuration_spec
 
    /** Size limit for IOB */
    size_t buffer_limit;
+
+   /** Size of the receive buffer */
+   size_t receive_buffer_size;
 
 #ifdef FEATURE_TRUST
 

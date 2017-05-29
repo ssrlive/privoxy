@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.158 2017/05/25 11:16:56 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.159 2017/05/25 11:17:38 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -158,6 +158,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_max_client_connections      3595884446U /* "max-client-connections" */
 #define hash_permit_access               3587953268U /* "permit-access" */
 #define hash_proxy_info_url              3903079059U /* "proxy-info-url" */
+#define hash_receive_buffer_size         2880297454U /* "receive-buffer-size */
 #define hash_single_threaded             4250084780U /* "single-threaded" */
 #define hash_socket_timeout              1809001761U /* "socket-timeout" */
 #define hash_split_large_cgi_forms        671658948U /* "split-large-cgi-forms" */
@@ -597,6 +598,7 @@ struct configuration_spec * load_config(void)
     */
    config->multi_threaded            = 1;
    config->buffer_limit              = 4096 * 1024;
+   config->receive_buffer_size       = BUFFER_SIZE;
    config->usermanual                = strdup_or_die(USER_MANUAL_URL);
    config->proxy_args                = strdup_or_die("");
    config->forwarded_connect_retries = 0;
@@ -1498,6 +1500,21 @@ struct configuration_spec * load_config(void)
          case hash_proxy_info_url :
             freez(config->proxy_info_url);
             config->proxy_info_url = strdup_or_die(arg);
+            break;
+
+
+/* *************************************************************************
+ * receive-buffer-size n
+ * *************************************************************************/
+         case hash_receive_buffer_size :
+            config->receive_buffer_size = (size_t)parse_numeric_value(cmd, arg);
+            if (config->receive_buffer_size < BUFFER_SIZE)
+            {
+               log_error(LOG_LEVEL_INFO,
+                  "receive-buffer-size %d seems low and may cause problems."
+                  "Consider setting it to at least %d.",
+                  config->receive_buffer_size, BUFFER_SIZE);
+            }
             break;
 
 /* *************************************************************************
