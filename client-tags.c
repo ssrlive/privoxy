@@ -473,17 +473,16 @@ static void remove_tag_for_client(const char *client_address, const char *tag)
                /* Client has preceding client */
                clients_with_tags->prev->next = clients_with_tags->next;
             }
-            freez(clients_with_tags->client);
             if (clients_with_tags == requested_tags)
             {
-               /* Removing last tag */
-               freez(requested_tags);
-               clients_with_tags = requested_tags;
+               /*
+                * We're in the process of removing the last tag,
+                * mark the global list as empty.
+                */
+               requested_tags = NULL;
             }
-            else
-            {
-               freez(clients_with_tags);
-            }
+            freez(clients_with_tags->client);
+            freez(clients_with_tags);
          }
          freez(enabled_tags->name);
          freez(enabled_tags);
