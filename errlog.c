@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.126 2016/02/26 12:29:38 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.127 2016/12/24 16:00:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -686,7 +686,7 @@ void log_error(int loglevel, const char *fmt, ...)
     * why else do we allocate instead of using
     * an array?
     */
-   size_t log_buffer_size = LOG_BUFFER_SIZE;
+   const size_t log_buffer_size = LOG_BUFFER_SIZE;
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /*
