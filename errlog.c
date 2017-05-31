@@ -1,4 +1,4 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.128 2017/05/29 10:06:09 fabiankeil Exp $";
+const char errlog_rcs[] = "$Id: errlog.c,v 1.129 2017/05/29 10:06:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -954,7 +954,7 @@ void log_error(int loglevel, const char *fmt, ...)
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /* Write to display */
-   LogPutString(outbuf_save);
+   LogPutString(outbuf);
 #endif /* defined(_WIN32) && !defined(_WIN_CONSOLE) */
 
    unlock_logfile();
