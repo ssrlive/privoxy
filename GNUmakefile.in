@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.261 2017/05/25 11:14:27 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.262 2017/05/25 11:15:34 fabiankeil Exp $
 #
 # Written by and Copyright (C) 2001-2017 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -732,7 +732,7 @@ w32taskbar.@OBJEXT@: w32taskbar.c config.h w32log.h w32taskbar.h
 win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pcrs.h project.h w32log.h win32.h w32svrapi.h
 
 w32.res: w32.rc w32res.h icons/radar-01.ico icons/radar-02.ico icons/radar-03.ico icons/radar-04.ico icons/radar-05.ico icons/radar-06.ico icons/radar-07.ico icons/radar-08.ico icons/idle.ico icons/privoxy.ico config.h
-	windres -D__MINGW32__=0.2 -O coff -i $< -o $@
+	windres -F pe-i386 -D__MINGW32__=0.2 -O coff -i $< -o $@
 
 # AmigaOS
 @AMIGAOS_ONLY@OBJS += amiga.o
