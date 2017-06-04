@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.205 2017/06/04 14:42:54 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.206 2017/06/04 14:43:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -105,12 +105,12 @@ static void apply_url_actions(struct current_action_spec *action,
  *          3  :  len  = length of IP address in octets
  *          4  :  port = port number in network order;
  *
- * Returns     :  0 = no errror; -1 otherwise.
+ * Returns     :  void
  *
  *********************************************************************/
-static int sockaddr_storage_to_ip(const struct sockaddr_storage *addr,
-                                  uint8_t **ip, unsigned int *len,
-                                  in_port_t **port)
+static void sockaddr_storage_to_ip(const struct sockaddr_storage *addr,
+                                   uint8_t **ip, unsigned int *len,
+                                   in_port_t **port)
 {
    assert(NULL != addr);
    assert(addr->ss_family == AF_INET || addr->ss_family == AF_INET6);
@@ -148,12 +148,7 @@ static int sockaddr_storage_to_ip(const struct sockaddr_storage *addr,
          }
          break;
 
-      default:
-         /* Unsupported address family */
-         return(-1);
    }
-
-   return(0);
 }
 
 
@@ -453,10 +448,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    }
 
    aca->mask.ss_family = aca->addr.ss_family;
-   if (sockaddr_storage_to_ip(&aca->mask, &mask_data, &addr_len, &mask_port))
-   {
-      return(-1);
-   }
+   sockaddr_storage_to_ip(&aca->mask, &mask_data, &addr_len, &mask_port);
 
    if (p)
    {
