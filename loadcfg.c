@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.160 2017/05/29 10:02:11 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.161 2017/06/04 14:42:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -89,6 +89,12 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.160 2017/05/29 10:02:11 fabiankei
 #ifdef FEATURE_CLIENT_TAGS
 #include "client-tags.h"
 #endif
+
+/*
+ * Default number of seconds after which an
+ * open connection will no longer be reused.
+ */
+#define DEFAULT_KEEP_ALIVE_TIMEOUT 180
 
 const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
