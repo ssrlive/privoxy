@@ -1,4 +1,4 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.204 2017/03/08 13:13:18 fabiankeil Exp $";
+const char filters_rcs[] = "$Id: filters.c,v 1.205 2017/06/04 14:42:54 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -113,6 +113,7 @@ static int sockaddr_storage_to_ip(const struct sockaddr_storage *addr,
                                   in_port_t **port)
 {
    assert(NULL != addr);
+   assert(addr->ss_family == AF_INET || addr->ss_family == AF_INET6);
 
    switch (addr->ss_family)
    {
