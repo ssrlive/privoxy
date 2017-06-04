@@ -1,10 +1,10 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.141 2017/05/25 11:17:29 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.142 2017/06/04 14:36:44 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
  *
  * Purpose     :  Contains wrappers for system-specific sockets code,
- *                so that the rest of Junkbuster can be more
+ *                so that the rest of Privoxy can be more
  *                OS-independent.  Contains #ifdefs to make this work
  *                on many platforms.
  *
