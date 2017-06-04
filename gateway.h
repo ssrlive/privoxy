@@ -1,6 +1,6 @@
 #ifndef GATEWAY_H_INCLUDED
 #define GATEWAY_H_INCLUDED
-#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.23 2013/11/24 14:23:28 fabiankeil Exp $"
+#define GATEWAY_H_VERSION "$Id: gateway.h,v 1.24 2016/12/24 16:00:49 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.h,v $
@@ -52,7 +52,6 @@ extern jb_socket forwarded_connect(const struct forward_spec * fwd,
 #define DEFAULT_KEEP_ALIVE_TIMEOUT 180
 
 #ifdef FEATURE_CONNECTION_SHARING
-extern void set_keep_alive_timeout(unsigned int timeout);
 extern void initialize_reusable_connections(void);
 extern void forget_connection(jb_socket sfd);
 extern void remember_connection(const struct reusable_connection *connection);
