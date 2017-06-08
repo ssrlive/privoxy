@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.310 2016/12/09 09:13:19 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.311 2016/12/24 16:00:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -1816,7 +1816,9 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
 static jb_err get_content_length(const char *header_value, unsigned long long *length)
 {
 #ifdef _WIN32
-   assert(sizeof(unsigned long long) > 4);
+#if SIZEOF_LONG_LONG < 8
+#error sizeof(unsigned long long) too small
+#endif
    if (1 != sscanf(header_value, "%I64u", length))
 #else
    if (1 != sscanf(header_value, "%llu", length))
