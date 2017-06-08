@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.458 2017/05/29 10:02:11 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.459 2017/05/29 10:12:50 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2678,10 +2678,10 @@ static void handle_established_connection(struct client_state *csp,
                 * delivered the crunch response to the client
                 * and are done here after cleaning up.
                 */
-                freez(hdr);
-                mark_server_socket_tainted(csp);
-                freez(receive_buffer);
-                return;
+               freez(hdr);
+               mark_server_socket_tainted(csp);
+               freez(receive_buffer);
+               return;
             }
             /* Buffer and pcrs filter this if appropriate. */
 
