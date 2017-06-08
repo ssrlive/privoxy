@@ -8,7 +8,7 @@
 #
 # https://www.fabiankeil.de/sourcecode/privoxy-log-parser/
 #
-# $Id: privoxy-log-parser.pl,v 1.169 2017/03/03 17:43:11 fabiankeil Exp $
+# $Id: privoxy-log-parser.pl,v 1.170 2017/03/03 17:43:35 fabiankeil Exp $
 #
 # TODO:
 #       - LOG_LEVEL_CGI, LOG_LEVEL_ERROR, LOG_LEVEL_WRITE content highlighting
@@ -2100,8 +2100,8 @@ sub gather_loglevel_header_stats ($$) {
         }
         $stats{'http-version'}{$4}++;
 
-    } elsif ($c =~ m/^scan: Host: ([^\s]+)/ and
-             $cli_options{'host-statistics-threshold'} != 0) {
+    } elsif ($cli_options{'host-statistics-threshold'} != 0 and
+             $c =~ m/^scan: Host: ([^\s]+)/) {
 
         # scan: Host: p.p
         $stats{'hosts'}{$1}++;
