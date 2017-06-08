@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.142 2017/06/04 14:36:44 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.143 2017/06/04 14:37:05 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -370,10 +370,10 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
 #endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
 
 #ifdef HAVE_POLL
-   poll_fd[0].fd = fd;
-   poll_fd[0].events = POLLOUT;
+      poll_fd[0].fd = fd;
+      poll_fd[0].events = POLLOUT;
 
-   if (poll(poll_fd, 1, 30000) > 0)
+      if (poll(poll_fd, 1, 30000) > 0)
 #else
       /* wait for connection to complete */
       FD_ZERO(&wfds);
