@@ -100,7 +100,7 @@
         <p>The default profiles, and their associated actions, as pre-defined
         in <tt class="FILENAME">default.action</tt> are:</p>
         <div class="TABLE">
-          <a name="AEN2829" id="AEN2829"></a>
+          <a name="AEN2859" id="AEN2859"></a>
           <p><b>Table 1. Default Configurations</b></p>
           <table border="1" frame="border" rules="all" class="CALSTABLE">
             <col width="1*" title="C1">
@@ -561,8 +561,7 @@
               page named <span class="QUOTE">"index.html"</span> regardless
               of path which in this case can have one or more <span class=
               "QUOTE">"/'s"</span>. And this one must contain exactly
-              <span class="QUOTE">".html"</span> (but does not have to end
-              with that!).</p>
+              <span class="QUOTE">".html"</span> (and end with that!).</p>
             </dd>
             <dt><tt class=
             "LITERAL">.example.com/(.*/)(ads|banners?|junk)</tt></dt>
@@ -573,7 +572,8 @@
               "QUOTE">"banner"</span>, <span class="QUOTE">"banners"</span>
               (because of the <span class="QUOTE">"?"</span>) or <span class=
               "QUOTE">"junk"</span>. The path does not have to end in these
-              words, just contain them.</p>
+              words, just contain them. The path has to contain at least two
+              slashes (including the one at the beginning).</p>
             </dd>
             <dt><tt class=
             "LITERAL">.example.com/(.*/)(ads|banners?|junk)/.*\.(jpe?g|gif|png)$</tt></dt>
@@ -1153,6 +1153,25 @@ TAG:^User-Agent: MPlayer/
 {-filter -deanimate-gifs}
 TAG:^RANGE-REQUEST$
     </pre>
+                  </td>
+                </tr>
+              </table>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
+                    # Tag all requests with the client IP address
+#
+# (Technically the client IP address isn't included in the
+# client headers but client-header taggers can set it anyway.
+# For details see the tagger in default.filter)
+{+client-header-tagger{client-ip-address}}
+/
+
+# Change forwarding settings for requests coming from address 10.0.0.1
+{+forward-override{forward-socks5 127.0.1.2:2222 .}}
+TAG:^IP-ADDRESS: 10\.0\.0\.1$
+     </pre>
                   </td>
                 </tr>
               </table>

@@ -2725,6 +2725,62 @@
           </dl>
         </div>
       </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="RECEIVE-BUFFER-SIZE" id=
+        "RECEIVE-BUFFER-SIZE">7.6.17. receive-buffer-size</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>The size of the buffer Privoxy uses to receive data from the
+              server.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p><tt class="REPLACEABLE"><i>Size in bytes</i></tt></p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p>5000</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>Increasing the receive-buffer-size increases Privoxy's
+              memory usage but can lower the number of context switches and
+              thereby reduce the cpu usage and potentially increase the
+              throughput.</p>
+              <p>This is mostly relevant for fast network connections and
+              large downloads that don't require filtering.</p>
+              <p>Reducing the buffer size reduces the amount of memory
+              Privoxy needs to handle the request but increases the number of
+              systemcalls and may reduce the throughput.</p>
+              <p>A dtrace command like: <span class="QUOTE">"sudo dtrace -n
+              'syscall::read:return /execname == "privoxy"/ { @[execname] =
+              llquantize(arg0, 10, 0, 5, 20); @m = max(arg0)}'"</span> can be
+              used to properly tune the receive-buffer-size. On systems
+              without dtrace, strace or truss may be used as less convenient
+              alternatives.</p>
+              <p>If the buffer is too large it will increase Privoxy's memory
+              footprint without any benefit. As the memory is (currently)
+              cleared before using it, a buffer that is too large can
+              actually reduce the throughput.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">
+                    # Increase the receive buffer size
+      receive-buffer-size 32768
+    </pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
     </div>
     <div class="SECT2">
       <h2 class="SECT2"><a name="WINDOWS-GUI" id="WINDOWS-GUI">7.7. Windows
