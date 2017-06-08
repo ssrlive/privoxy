@@ -1,4 +1,4 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.83 2017/05/04 14:34:18 fabiankeil Exp $";
+const char miscutil_rcs[] = "$Id: miscutil.c,v 1.84 2017/05/29 10:05:46 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -217,7 +217,8 @@ void *malloc_or_die(size_t buffer_size)
  *
  * Function    :  write_pid_file
  *
- * Description :  Writes a pid file with the pid of the main process
+ * Description :  Writes a pid file with the pid of the main process.
+ *                Exits if the file can't be opened
  *
  * Parameters  :  None
  *
@@ -236,7 +237,7 @@ void write_pid_file(void)
 
    if ((fp = fopen(pidfile, "w")) == NULL)
    {
-      log_error(LOG_LEVEL_INFO, "can't open pidfile '%s': %E", pidfile);
+      log_error(LOG_LEVEL_FATAL, "can't open pidfile '%s': %E", pidfile);
    }
    else
    {
