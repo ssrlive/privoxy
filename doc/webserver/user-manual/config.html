@@ -2388,8 +2388,52 @@
         </div>
       </div>
       <div class="SECT3">
+        <h4 class="SECT3"><a name="ENABLE-ACCEPT-FILTER" id=
+        "ENABLE-ACCEPT-FILTER">7.6.11. enable-accept-filter</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>Whether or not Privoxy should use an accept filter</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p><tt class="REPLACEABLE"><i>0 or 1</i></tt></p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p>0</p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>No accept filter is enabled.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>Accept filters reduce the number of context switches by not
+              passing sockets for new connections to Privoxy until a complete
+              HTTP request is available.</p>
+              <p>As a result, Privoxy can process the whole request right
+              away without having to wait for additional data first.</p>
+              <p>For this option to work, Privoxy has to be compiled with
+              FEATURE_ACCEPT_FILTER and the operating system has to support
+              it (which may require loading a kernel module).</p>
+              <p>Currently accept filters are only supported on FreeBSD-based
+              systems. Check the <a href=
+              "https://www.freebsd.org/cgi/man.cgi?query=accf_http" target=
+              "_top">accf_http(9) man page</a> to learn how to enable the
+              support in the operating system.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>enable-accept-filter 1</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
         <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOC-RETURNS-OK" id=
-        "HANDLE-AS-EMPTY-DOC-RETURNS-OK">7.6.11.
+        "HANDLE-AS-EMPTY-DOC-RETURNS-OK">7.6.12.
         handle-as-empty-doc-returns-ok</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2436,7 +2480,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="ENABLE-COMPRESSION" id=
-        "ENABLE-COMPRESSION">7.6.12. enable-compression</a></h4>
+        "ENABLE-COMPRESSION">7.6.13. enable-compression</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2479,7 +2523,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="COMPRESSION-LEVEL" id=
-        "COMPRESSION-LEVEL">7.6.13. compression-level</a></h4>
+        "COMPRESSION-LEVEL">7.6.14. compression-level</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2533,7 +2577,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CLIENT-HEADER-ORDER" id=
-        "CLIENT-HEADER-ORDER">7.6.14. client-header-order</a></h4>
+        "CLIENT-HEADER-ORDER">7.6.15. client-header-order</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2571,7 +2615,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CLIENT-SPECIFIC-TAG" id=
-        "CLIENT-SPECIFIC-TAG">7.6.15. client-specific-tag</a></h4>
+        "CLIENT-SPECIFIC-TAG">7.6.16. client-specific-tag</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2654,7 +2698,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CLIENT-TAG-LIFETIME" id=
-        "CLIENT-TAG-LIFETIME">7.6.16. client-tag-lifetime</a></h4>
+        "CLIENT-TAG-LIFETIME">7.6.17. client-tag-lifetime</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2712,7 +2756,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="TRUST-X-FORWARDED-FOR" id=
-        "TRUST-X-FORWARDED-FOR">7.6.17. trust-x-forwarded-for</a></h4>
+        "TRUST-X-FORWARDED-FOR">7.6.18. trust-x-forwarded-for</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2781,7 +2825,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="RECEIVE-BUFFER-SIZE" id=
-        "RECEIVE-BUFFER-SIZE">7.6.18. receive-buffer-size</a></h4>
+        "RECEIVE-BUFFER-SIZE">7.6.19. receive-buffer-size</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
