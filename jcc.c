@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.461 2017/06/26 12:09:56 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.462 2017/06/26 12:10:31 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -4210,6 +4210,20 @@ static void bind_ports_helper(struct configuration_spec * config,
       if (config->hport[i])
       {
          sockets[i] = bind_port_helper(config->haddr[i], config->hport[i]);
+#if defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER)
+         if (config->enable_accept_filter && sockets[i] != JB_INVALID_SOCKET)
+         {
+            struct accept_filter_arg af_options;
+            bzero(&af_options, sizeof(af_options));
+            strlcpy(af_options.af_name, "httpready", sizeof(af_options.af_name));
+            if (setsockopt(sockets[i], SOL_SOCKET, SO_ACCEPTFILTER, &af_options,
+                  sizeof(af_options)))
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "Enabling accept filter for socket %d failed: %E", sockets[i]);
+            }
+         }
+#endif
       }
       else
       {

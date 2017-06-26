@@ -1,4 +1,4 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.145 2017/06/08 13:04:56 fabiankeil Exp $";
+const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.146 2017/06/26 12:11:12 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -1377,20 +1377,6 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
 #else
    do
    {
-#if defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER)
-      if (csp->config->enable_accept_filter)
-      {
-         struct accept_filter_arg af_options;
-         bzero(&af_options, sizeof(af_options));
-         strlcpy(af_options.af_name, "httpready", sizeof(af_options.af_name));
-         if (setsockopt(fd, SOL_SOCKET, SO_ACCEPTFILTER, &af_options,
-            sizeof(af_options)))
-         {
-            log_error(LOG_LEVEL_ERROR,
-               "Enabling accept filter for socket %d failed: %E", fd);
-         }
-      }
-#endif
       afd = accept (fd, (struct sockaddr *) &client, &c_length);
    } while (afd < 0 && errno == EINTR);
    if (afd < 0)
