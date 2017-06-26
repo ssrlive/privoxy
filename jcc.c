@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.463 2017/06/26 12:12:55 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.464 2017/06/26 12:13:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -2116,8 +2116,8 @@ static void handle_established_connection(struct client_state *csp,
 
       if (n == 0)
       {
-         log_error(LOG_LEVEL_ERROR,
-            "Didn't receive data in time: %s", http->url);
+         log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
+            csp->config->socket_timeout, http->url);
          if ((byte_count == 0) && (http->ssl == 0))
          {
             send_crunch_response(csp, error_response(csp, "connection-timeout"));
