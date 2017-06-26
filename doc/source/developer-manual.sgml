@@ -21,7 +21,7 @@
                 This file belongs into
                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- $Id: developer-manual.sgml,v 2.82 2017/01/23 12:59:45 fabiankeil Exp $
+ $Id: developer-manual.sgml,v 2.83 2017/06/08 13:08:39 fabiankeil Exp $
 
  Copyright (C) 2001-2016 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -49,7 +49,7 @@
     </pubdate>
 
 
-    <pubdate>$Id: developer-manual.sgml,v 2.82 2017/01/23 12:59:45 fabiankeil Exp $</pubdate>
+    <pubdate>$Id: developer-manual.sgml,v 2.83 2017/06/08 13:08:39 fabiankeil Exp $</pubdate>
 
 <!--
 
@@ -1835,7 +1835,7 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 </programlisting>
 
     <para><emphasis>Note:</emphasis> This declares the rcs variables that should be
-    added to the "show-proxy-args" page. If this is a brand new
+    added to the "show-version" page. If this is a brand new
     creation by you, you are free to change the "Copyright" section
     to represent the rights you wish to maintain.</para>
 
