@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.105 2016/05/25 10:50:55 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.106 2016/12/24 16:00:49 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -83,6 +83,42 @@ static struct file_list *current_re_filterfile[MAX_AF_FILES]  = {
    NULL, NULL, NULL, NULL, NULL
 };
 
+/*********************************************************************
+ *
+ * Function    :  free_csp_resources
+ *
+ * Description :  Frees memory referenced by the csp that isn't
+ *                shared with other csps.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+void free_csp_resources(struct client_state *csp)
+{
+   freez(csp->ip_addr_str);
+#ifdef FEATURE_CLIENT_TAGS
+   freez(csp->client_address);
+#endif
+   freez(csp->listen_addr_str);
+   freez(csp->client_iob->buf);
+   freez(csp->iob->buf);
+   freez(csp->error_message);
+
+   if (csp->action->flags & ACTION_FORWARD_OVERRIDE &&
+      NULL != csp->fwd)
+   {
+      unload_forward_spec(csp->fwd);
+   }
+   free_http_request(csp->http);
+
+   destroy_list(csp->headers);
+   destroy_list(csp->tags);
+
+   free_current_action(csp->action);
+}
 
 /*********************************************************************
  *
@@ -183,26 +219,7 @@ unsigned int sweep(void)
       {
          last_active->next = client_list->next;
 
-         freez(csp->ip_addr_str);
-#ifdef FEATURE_CLIENT_TAGS
-         freez(csp->client_address);
-#endif
-         freez(csp->listen_addr_str);
-         freez(csp->client_iob->buf);
-         freez(csp->iob->buf);
-         freez(csp->error_message);
-
-         if (csp->action->flags & ACTION_FORWARD_OVERRIDE &&
-             NULL != csp->fwd)
-         {
-            unload_forward_spec(csp->fwd);
-         }
-         free_http_request(csp->http);
-
-         destroy_list(csp->headers);
-         destroy_list(csp->tags);
-
-         free_current_action(csp->action);
+         free_csp_resources(csp);
 
 #ifdef FEATURE_STATISTICS
          urls_read++;
