@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy 3.0.27
 #
-# $Id: p-config.sgml,v 2.126 2017/05/29 10:02:37 fabiankeil Exp $
+# $Id: config,v 1.113 2017/06/08 13:09:34 fabiankeil Exp $
 #
 # Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
 #
@@ -1905,7 +1905,61 @@ socket-timeout 300
 #
 #max-client-connections 256
 #
-#  6.10. handle-as-empty-doc-returns-ok
+#  6.10. listen-backlog
+#  =====================
+#
+#  Specifies:
+#
+#      Connection queue length requested from the operating system.
+#
+#  Type of value:
+#
+#      Number.
+#
+#  Default value:
+#
+#      128
+#
+#  Effect if unset:
+#
+#      A connection queue length of 128 is requested from the
+#      operating system.
+#
+#  Notes:
+#
+#      Under high load incoming connection may queue up before
+#      Privoxy gets around to serve them. The queue length is
+#      limitted by the operating system. Once the queue is full,
+#      additional connections are dropped before Privoxy can accept
+#      and serve them.
+#
+#      Increasing the queue length allows Privoxy to accept more
+#      incomming connections that arrive roughly at the same time.
+#
+#      Note that Privoxy can only request a certain queue length,
+#      whether or not the requested length is actually used depends
+#      on the operating system which may use a different length
+#      instead.
+#
+#      On many operating systems a limit of -1 can be specified to
+#      instruct the operating system to use the maximum queue length
+#      allowed. Check the listen man page to see if your platform
+#      allows this.
+#
+#      On some platforms you can use "netstat -Lan -p tcp" to see the
+#      effective queue length.
+#
+#      Effectively using a value above 128 usually requires changing
+#      the system configuration as well. On FreeBSD-based system the
+#      limit is controlled by the kern.ipc.soacceptqueue sysctl.
+#
+#  Examples:
+#
+#      listen-backlog 4096
+#
+#listen-backlog -1
+#
+#  6.11. handle-as-empty-doc-returns-ok
 #  =====================================
 #
 #  Specifies:
@@ -1943,7 +1997,7 @@ socket-timeout 300
 #
 #handle-as-empty-doc-returns-ok 1
 #
-#  6.11. enable-compression
+#  6.12. enable-compression
 #  =========================
 #
 #  Specifies:
@@ -1984,7 +2038,7 @@ socket-timeout 300
 #
 #enable-compression 1
 #
-#  6.12. compression-level
+#  6.13. compression-level
 #  ========================
 #
 #  Specifies:
@@ -2030,7 +2084,7 @@ socket-timeout 300
 #
 #compression-level 1
 #
-#  6.13. client-header-order
+#  6.14. client-header-order
 #  ==========================
 #
 #  Specifies:
@@ -2078,7 +2132,7 @@ socket-timeout 300
 #   Content-Type
 #
 #
-#  6.14. client-specific-tag
+#  6.15. client-specific-tag
 #  ==========================
 #
 #  Specifies:
@@ -2143,7 +2197,7 @@ socket-timeout 300
 #
 #
 #
-#  6.15. client-tag-lifetime
+#  6.16. client-tag-lifetime
 #  ==========================
 #
 #  Specifies:
@@ -2184,7 +2238,7 @@ socket-timeout 300
 #
 #
 #
-#  6.16. trust-x-forwarded-for
+#  6.17. trust-x-forwarded-for
 #  ============================
 #
 #  Specifies:
@@ -2239,7 +2293,7 @@ socket-timeout 300
 #
 #
 #
-#  6.17. receive-buffer-size
+#  6.18. receive-buffer-size
 #  ==========================
 #
 #  Specifies:
