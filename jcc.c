@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.465 2017/06/26 12:14:25 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.466 2017/06/26 12:17:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -4296,6 +4296,12 @@ static void listen_loop(void)
    jb_socket bfds[MAX_LISTENING_SOCKETS];
    struct configuration_spec *config;
    unsigned int active_threads = 0;
+#if defined(FEATURE_PTHREAD)
+   pthread_attr_t attrs;
+
+   pthread_attr_init(&attrs);
+   pthread_attr_setdetachstate(&attrs, PTHREAD_CREATE_DETACHED);
+#endif
 
    config = load_config();
 
@@ -4451,14 +4457,10 @@ static void listen_loop(void)
 #define SELECTED_ONE_OPTION
          {
             pthread_t the_thread;
-            pthread_attr_t attrs;
 
-            pthread_attr_init(&attrs);
-            pthread_attr_setdetachstate(&attrs, PTHREAD_CREATE_DETACHED);
             errno = pthread_create(&the_thread, &attrs,
                (void * (*)(void *))serve, csp);
             child_id = errno ? -1 : 0;
-            pthread_attr_destroy(&attrs);
          }
 #endif
 
@@ -4622,6 +4624,10 @@ static void listen_loop(void)
          serve(csp);
       }
    }
+
+#if defined(FEATURE_PTHREAD)
+   pthread_attr_destroy(&attrs);
+#endif
 
    /* NOTREACHED unless FEATURE_GRACEFUL_TERMINATION is defined */
 
