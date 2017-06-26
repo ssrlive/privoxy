@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.462 2017/06/26 12:10:31 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.463 2017/06/26 12:12:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -162,7 +162,7 @@ static void serve(struct client_state *csp);
 static void usage(const char *myname);
 #endif
 static void initialize_mutexes(void);
-static jb_socket bind_port_helper(const char *haddr, int hport);
+static jb_socket bind_port_helper(const char *haddr, int hport, int backlog);
 static void bind_ports_helper(struct configuration_spec *config, jb_socket sockets[]);
 static void close_ports_helper(jb_socket sockets[]);
 static void listen_loop(void);
@@ -4120,16 +4120,17 @@ int main(int argc, char **argv)
  *          1  :  haddr = Host address to bind to. Use NULL to bind to
  *                        INADDR_ANY.
  *          2  :  hport = Specifies port to bind to.
+ *          3  :  backlog = Listen backlog.
  *
  * Returns     :  Port that was opened.
  *
  *********************************************************************/
-static jb_socket bind_port_helper(const char *haddr, int hport)
+static jb_socket bind_port_helper(const char *haddr, int hport, int backlog)
 {
    int result;
    jb_socket bfd;
 
-   result = bind_port(haddr, hport, &bfd);
+   result = bind_port(haddr, hport, backlog, &bfd);
 
    if (result < 0)
    {
@@ -4209,7 +4210,8 @@ static void bind_ports_helper(struct configuration_spec * config,
    {
       if (config->hport[i])
       {
-         sockets[i] = bind_port_helper(config->haddr[i], config->hport[i]);
+         sockets[i] = bind_port_helper(config->haddr[i],
+            config->hport[i], config->listen_backlog);
 #if defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER)
          if (config->enable_accept_filter && sockets[i] != JB_INVALID_SOCKET)
          {

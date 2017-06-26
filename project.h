@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.221 2017/05/29 10:02:11 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.222 2017/06/26 12:11:13 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1353,6 +1353,9 @@ struct configuration_spec
 
    /** Use accf_http(4) if available */
    int enable_accept_filter;
+
+   /** Backlog passed to listen() */
+   int listen_backlog;
 
 #ifdef FEATURE_TRUST
 

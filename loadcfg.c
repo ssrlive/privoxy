@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.163 2017/06/26 12:09:56 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.164 2017/06/26 12:11:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -96,6 +96,11 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.163 2017/06/26 12:09:56 fabiankei
  */
 #define DEFAULT_KEEP_ALIVE_TIMEOUT 180
 
+/*
+ * Default backlog passed to listen().
+ */
+#define DEFAULT_LISTEN_BACKLOG 128
+
 const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
 #ifdef FEATURE_TOGGLE
@@ -160,6 +165,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_hostname                      10308071U /* "hostname" */
 #define hash_keep_alive_timeout          3878599515U /* "keep-alive-timeout" */
 #define hash_listen_address              1255650842U /* "listen-address" */
+#define hash_listen_backlog              1255655735U /* "listen-backlog" */
 #define hash_logdir                          422889U /* "logdir" */
 #define hash_logfile                        2114766U /* "logfile" */
 #define hash_max_client_connections      3595884446U /* "max-client-connections" */
@@ -616,6 +622,7 @@ struct configuration_spec * load_config(void)
 #if defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER)
    config->enable_accept_filter      = 0;
 #endif
+   config->listen_backlog            = DEFAULT_LISTEN_BACKLOG;
    config->trusted_cgi_referrer      = NULL;
    /*
     * 128 client sockets ought to be enough for everybody who can't
@@ -1364,6 +1371,18 @@ struct configuration_spec * load_config(void)
                   MAX_LISTENING_SOCKETS);
             }
             config->haddr[i] = strdup_or_die(arg);
+            break;
+
+/* *************************************************************************
+ * listen-backlog n
+ * *************************************************************************/
+         case hash_listen_backlog :
+            /*
+             * We don't enfore an upper or lower limit because on
+             * many platforms all values are valid and negative
+             * number mean "use the highest value allowed".
+             */
+            config->listen_backlog = parse_numeric_value(cmd, arg);
             break;
 
 /* *************************************************************************
