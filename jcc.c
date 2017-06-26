@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.460 2017/06/08 13:05:09 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.461 2017/06/26 12:09:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1851,6 +1851,10 @@ static jb_err parse_client_request(struct client_state *csp)
          csp->expected_client_content_length = get_expected_content_length(csp->headers);
       }
       verify_request_length(csp);
+   }
+   else
+   {
+      csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
    }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
