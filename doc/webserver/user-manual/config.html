@@ -2334,8 +2334,62 @@
         </div>
       </div>
       <div class="SECT3">
+        <h4 class="SECT3"><a name="LISTEN-BACKLOG" id=
+        "LISTEN-BACKLOG">7.6.10. listen-backlog</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>Connection queue length requested from the operating
+              system.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p><tt class="REPLACEABLE"><i>Number.</i></tt></p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p>128</p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>A connection queue length of 128 is requested from the
+              operating system.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>Under high load incoming connection may queue up before
+              Privoxy gets around to serve them. The queue length is limitted
+              by the operating system. Once the queue is full, additional
+              connections are dropped before Privoxy can accept and serve
+              them.</p>
+              <p>Increasing the queue length allows Privoxy to accept more
+              incomming connections that arrive roughly at the same time.</p>
+              <p>Note that Privoxy can only request a certain queue length,
+              whether or not the requested length is actually used depends on
+              the operating system which may use a different length
+              instead.</p>
+              <p>On many operating systems a limit of -1 can be specified to
+              instruct the operating system to use the maximum queue length
+              allowed. Check the listen man page to see if your platform
+              allows this.</p>
+              <p>On some platforms you can use "netstat -Lan -p tcp" to see
+              the effective queue length.</p>
+              <p>Effectively using a value above 128 usually requires
+              changing the system configuration as well. On FreeBSD-based
+              system the limit is controlled by the kern.ipc.soacceptqueue
+              sysctl.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>listen-backlog 4096</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
         <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOC-RETURNS-OK" id=
-        "HANDLE-AS-EMPTY-DOC-RETURNS-OK">7.6.10.
+        "HANDLE-AS-EMPTY-DOC-RETURNS-OK">7.6.11.
         handle-as-empty-doc-returns-ok</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2382,7 +2436,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="ENABLE-COMPRESSION" id=
-        "ENABLE-COMPRESSION">7.6.11. enable-compression</a></h4>
+        "ENABLE-COMPRESSION">7.6.12. enable-compression</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2425,7 +2479,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="COMPRESSION-LEVEL" id=
-        "COMPRESSION-LEVEL">7.6.12. compression-level</a></h4>
+        "COMPRESSION-LEVEL">7.6.13. compression-level</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2479,7 +2533,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CLIENT-HEADER-ORDER" id=
-        "CLIENT-HEADER-ORDER">7.6.13. client-header-order</a></h4>
+        "CLIENT-HEADER-ORDER">7.6.14. client-header-order</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2517,7 +2571,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CLIENT-SPECIFIC-TAG" id=
-        "CLIENT-SPECIFIC-TAG">7.6.14. client-specific-tag</a></h4>
+        "CLIENT-SPECIFIC-TAG">7.6.15. client-specific-tag</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2600,7 +2654,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CLIENT-TAG-LIFETIME" id=
-        "CLIENT-TAG-LIFETIME">7.6.15. client-tag-lifetime</a></h4>
+        "CLIENT-TAG-LIFETIME">7.6.16. client-tag-lifetime</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2658,7 +2712,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="TRUST-X-FORWARDED-FOR" id=
-        "TRUST-X-FORWARDED-FOR">7.6.16. trust-x-forwarded-for</a></h4>
+        "TRUST-X-FORWARDED-FOR">7.6.17. trust-x-forwarded-for</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2727,7 +2781,7 @@
       </div>
       <div class="SECT3">
         <h4 class="SECT3"><a name="RECEIVE-BUFFER-SIZE" id=
-        "RECEIVE-BUFFER-SIZE">7.6.17. receive-buffer-size</a></h4>
+        "RECEIVE-BUFFER-SIZE">7.6.18. receive-buffer-size</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
