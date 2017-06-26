@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.162 2017/06/04 14:42:32 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.163 2017/06/26 12:09:56 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -142,6 +142,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_debug                            78263U /* "debug" */
 #define hash_default_server_timeout      2530089913U /* "default-server-timeout" */
 #define hash_deny_access                 1227333715U /* "deny-access" */
+#define hash_enable_accept_filter        2909040407U /* "enable-accept-filter" */
 #define hash_enable_edit_actions         2517097536U /* "enable-edit-actions" */
 #define hash_enable_compression          3943696946U /* "enable-compression" */
 #define hash_enable_proxy_authentication_forwarding 4040610791U /* enable-proxy-authentication-forwarding */
@@ -612,6 +613,9 @@ struct configuration_spec * load_config(void)
    config->client_tag_lifetime       = 60;
 #endif
    config->trust_x_forwarded_for     = 0;
+#if defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER)
+   config->enable_accept_filter      = 0;
+#endif
    config->trusted_cgi_referrer      = NULL;
    /*
     * 128 client sockets ought to be enough for everybody who can't
@@ -975,6 +979,15 @@ struct configuration_spec * load_config(void)
 
             break;
 #endif /* def FEATURE_ACL */
+
+#if defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER)
+/* *************************************************************************
+ * enable-accept-filter 0|1
+ * *************************************************************************/
+         case hash_enable_accept_filter :
+            config->enable_accept_filter = parse_toggle_state(cmd, arg);
+            break;
+#endif /* defined(FEATURE_ACCEPT_FILTER) && defined(SO_ACCEPTFILTER) */
 
 /* *************************************************************************
  * enable-edit-actions 0|1

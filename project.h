@@ -1,7 +1,7 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
 /** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.220 2017/02/20 13:44:32 fabiankeil Exp $"
+#define PROJECT_H_VERSION "$Id: project.h,v 1.221 2017/05/29 10:02:11 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $
@@ -1350,6 +1350,9 @@ struct configuration_spec
 
    /** Size of the receive buffer */
    size_t receive_buffer_size;
+
+   /** Use accf_http(4) if available */
+   int enable_accept_filter;
 
 #ifdef FEATURE_TRUST
 
