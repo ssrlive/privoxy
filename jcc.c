@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.464 2017/06/26 12:13:52 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.465 2017/06/26 12:14:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -3385,6 +3385,8 @@ static void serve(struct client_state *csp)
          config_file_change_detected, csp->requests_received_total);
       drain_and_close_socket(csp->cfd);
    }
+
+   free_csp_resources(csp);
 
    csp->flags &= ~CSP_FLAG_ACTIVE;
 

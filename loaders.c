@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.106 2016/12/24 16:00:49 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.107 2017/06/26 12:17:43 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -218,8 +218,6 @@ unsigned int sweep(void)
        */
       {
          last_active->next = client_list->next;
-
-         free_csp_resources(csp);
 
 #ifdef FEATURE_STATISTICS
          urls_read++;
