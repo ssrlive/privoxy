@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.337 2017/04/27 17:14:10 fabiankeil Exp $
+#  $Id: default.action.master,v 1.338 2017/06/26 12:09:30 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -2136,6 +2136,8 @@ yandex.ru/.*&retpath=http
 .yandex.ru/.*\?page-url=
 # URL = http://disqus.com/forums/daemonicdispatches/get_num_replies.js?url8=http%3A%2F%2Fwww.daemonology.net%2Fblog%2F2014-12-25-when-security-goes-right.html%23disqus_thread&
 disqus.com/
+# URL = http://www.youtube.com/embed/blafasel?feature=oembed&enablejsapi=1&origin=http://www.example.com&wmode=opaque
+.youtube.com/.*origin=http
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
