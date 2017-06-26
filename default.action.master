@@ -11,7 +11,7 @@
 #
 #  File        :  $Source: /cvsroot/ijbswa/current/default.action.master,v $
 #
-#  $Id: default.action.master,v 1.336 2017/04/09 09:11:46 fabiankeil Exp $
+#  $Id: default.action.master,v 1.337 2017/04/27 17:14:10 fabiankeil Exp $
 #
 #  Requires    :  This version requires Privoxy v3.0.11 or later due to
 #                 syntax changes.
@@ -1947,6 +1947,8 @@ klikki.fi/adv/
 adventofcode.com/
 # URL = http://msdn.microsoft.com/en-us/library/system.diagnostics.stacktrace.framecount.aspx
 msdn.microsoft.com/
+# URL = http://talks.golang.org/2013/advconc/gopherswrench.jpg
+.golang.org/
 
 
 #############################################################################
