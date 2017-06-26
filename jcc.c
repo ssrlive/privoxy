@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.459 2017/05/29 10:12:50 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.460 2017/06/08 13:05:09 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -4361,7 +4361,7 @@ static void listen_loop(void)
           * new one.
           *
           * Which-ever is correct, we will serve 1 more page via the
-          * old settings.  This should probably be a "show-proxy-args"
+          * old settings.  This should probably be a "show-status"
           * request.  This should not be a so common of an operation
           * that this will hurt people's feelings.
           */

@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.161 2017/06/04 14:42:13 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.162 2017/06/04 14:42:32 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -2011,7 +2011,7 @@ struct configuration_spec * load_config(void)
  * Description :  Called from `load_config'.  It saves each non-empty
  *                and non-comment line from config into
  *                config->proxy_args.  This is used to create the
- *                show-proxy-args page.  On error, frees
+ *                show-status page.  On error, frees
  *                config->proxy_args and sets it to NULL
  *
  * Parameters  :
