@@ -1,4 +1,4 @@
-const char loaders_rcs[] = "$Id: loaders.c,v 1.107 2017/06/26 12:17:43 fabiankeil Exp $";
+const char loaders_rcs[] = "$Id: loaders.c,v 1.108 2017/06/26 12:17:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loaders.c,v $
@@ -313,12 +313,6 @@ int check_file_changed(const struct file_list * current,
    fs->filename = strdup_or_die(filename);
    fs->lastmodified = statbuf->st_mtime;
 
-   if (fs->filename == NULL)
-   {
-      /* Out of memory error */
-      freez (fs);
-      return 1;
-   }
    *newfl = fs;
    return 1;
 }
