@@ -1,4 +1,4 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.311 2016/12/24 16:00:49 fabiankeil Exp $";
+const char parsers_rcs[] = "$Id: parsers.c,v 1.312 2017/06/08 13:13:26 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -4646,7 +4646,14 @@ static jb_err handle_conditional_hide_referrer_parameter(char **header,
 static void create_content_length_header(unsigned long long content_length,
                                          char *header, size_t buffer_length)
 {
+#ifdef _WIN32
+#if SIZEOF_LONG_LONG < 8
+#error sizeof(unsigned long long) too small
+#endif
+   snprintf(header, buffer_length, "Content-Length: %I64u", content_length);
+#else
    snprintf(header, buffer_length, "Content-Length: %llu", content_length);
+#endif
 }
 
 
