@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.100 2016/12/24 16:00:49 fabiankeil Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.101 2017/06/04 14:42:13 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -1159,13 +1159,13 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
          unsigned long long buffered_request_bytes =
             (unsigned long long)(csp->client_iob->eod - csp->client_iob->cur);
          log_error(LOG_LEVEL_CONNECT,
-            "Optimistically sending %d bytes of client body. Expected %d",
+            "Optimistically sending %llu bytes of client body. Expected %llu",
             csp->expected_client_content_length, buffered_request_bytes);
          assert(csp->expected_client_content_length == buffered_request_bytes);
          if (write_socket(sfd, csp->client_iob->cur, buffered_request_bytes))
          {
             log_error(LOG_LEVEL_CONNECT,
-               "optimistically writing %d bytes of client body to: %s failed: %E",
+               "optimistically writing %llu bytes of client body to: %s failed: %E",
                buffered_request_bytes, csp->http->hostport);
             return(JB_INVALID_SOCKET);
          }
