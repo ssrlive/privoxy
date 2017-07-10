@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.262 2017/05/25 11:15:34 fabiankeil Exp $
+# $Id: GNUmakefile.in,v 1.263 2017/06/01 13:22:46 ler762 Exp $
 #
 # Written by and Copyright (C) 2001-2017 members of the
 # Privoxy team. https://www.privoxy.org/
@@ -565,7 +565,7 @@ dok-index:
      doc/webserver/privoxy-index.html && $(RM) doc/webserver/*.bak
 
 # Main documentation target.
-dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors dok-index
+dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors dok-index dok-tidy
 	@$(ECHO) Documentation created.
 
 ## Make AUTHORS file
