@@ -1,4 +1,4 @@
-const char gateway_rcs[] = "$Id: gateway.c,v 1.102 2017/07/01 17:08:25 ler762 Exp $";
+const char gateway_rcs[] = "$Id: gateway.c,v 1.103 2017/07/01 18:34:07 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/gateway.c,v $
@@ -644,7 +644,7 @@ jb_socket forwarded_connect(const struct forward_spec * fwd,
 }
 
 
-#ifdef FUZZ_SOCKS
+#ifdef FUZZ
 /*********************************************************************
  *
  * Function    :  socks_fuzz
@@ -819,7 +819,7 @@ static jb_socket socks4_connect(const struct forward_spec * fwd,
    c->dstip[2]    = (unsigned char)((web_server_addr   >>  8) & 0xff);
    c->dstip[3]    = (unsigned char)((web_server_addr        ) & 0xff);
 
-#ifdef FUZZ_SOCKS
+#ifdef FUZZ
    sfd = 0;
 #else
    /* pass the request to the socks server */
@@ -1020,7 +1020,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       return(JB_INVALID_SOCKET);
    }
 
-#ifdef FUZZ_SOCKS
+#ifdef FUZZ
    sfd = 0;
    if (!err && read_socket(sfd, sbuf, 2) != 2)
 #else
@@ -1111,7 +1111,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    cbuf[client_pos++] = (char)((target_port >> 8) & 0xff);
    cbuf[client_pos++] = (char)((target_port     ) & 0xff);
 
-#ifndef FUZZ_SOCKS
+#ifndef FUZZ
    if (write_socket(sfd, cbuf, client_pos))
    {
       errstr = "SOCKS5 negotiation write failed";

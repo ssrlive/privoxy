@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source:$
+ * File        :  $Source: /cvsroot/ijbswa/current/fuzz.c,v $
  *
  * Purpose     :  Fuzz-related functions for Privoxy.
  *
@@ -59,9 +59,7 @@ static int fuzz_deflate(struct client_state *csp, char *fuzz_input_file);
 static int fuzz_filter(struct client_state *csp, char *fuzz_input_file);
 static int fuzz_gif(struct client_state *csp, char *fuzz_input_file);
 static int fuzz_gzip(struct client_state *csp, char *fuzz_input_file);
-#ifdef FUZZ_SOCKS
 static int fuzz_socks(struct client_state *csp, char *fuzz_input_file);
-#endif
 static int fuzz_pcrs_substitute(struct client_state *csp, char *fuzz_input_file);
 static int fuzz_server_header(struct client_state *csp, char *fuzz_input_file);
 
@@ -85,9 +83,7 @@ static const struct fuzz_mode fuzz_modes[] = {
    { "pcrs-substitute", "A pcrs-substitute to compile. Not a whole pcrs job! Example: Bla $1 bla \x43 $3 blah.", 1, fuzz_pcrs_substitute },
    { "server-header", "Server header to parse.", 1, fuzz_server_header },
    { "server-response", "Server response to parse.", 1, fuzz_server_response },
-#ifdef FUZZ_SOCKS
    { "socks", "A socks server response. Only reads from stdin!", 1, fuzz_socks },
-#endif
 };
 
 /*********************************************************************
@@ -428,7 +424,6 @@ static int fuzz_gzip(struct client_state *csp, char *fuzz_input_file)
 }
 
 
-#ifdef FUZZ_SOCKS
 /*********************************************************************
  *
  * Function    :  fuzz_socks
@@ -448,7 +443,6 @@ static int fuzz_socks(struct client_state *csp, char *fuzz_input_file)
 {
    return(JB_ERR_OK == socks_fuzz(csp));
 }
-#endif
 
 
 /*********************************************************************
