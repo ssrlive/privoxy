@@ -530,8 +530,6 @@ int fuzz_server_header(struct client_state *csp, char *fuzz_input_file)
  * Description :  Process the fuzzed input in a specified file treating
  *                it like the input type specified.
  *
- *                XXX: Does not check malloc succcess.
- *
  * Parameters  :
  *          1  :  fuzz_input_type = Type of input.
  *          2  :  fuzz_input_file = File to read the input from.
