@@ -1,4 +1,4 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.164 2017/06/26 12:11:13 fabiankeil Exp $";
+const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.165 2017/06/26 12:13:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -1990,9 +1990,11 @@ struct configuration_spec * load_config(void)
 /* FIXME: end kludge */
 
 
-   config->need_bind = 1;
-
-   if (current_configfile)
+   if (current_configfile == NULL)
+   {
+      config->need_bind = 1;
+   }
+   else
    {
       struct configuration_spec * oldcfg = (struct configuration_spec *)
                                            current_configfile->f;
