@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.466 2017/06/26 12:17:57 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.467 2017/06/26 12:18:21 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -105,6 +105,7 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.466 2017/06/26 12:17:57 fabiankeil Exp $"
 # ifndef FD_ZERO
 #  include <select.h>
 # endif
+#warning poll() appears to be unavailable. Your platform will become unsupported in the future.
 #endif /* HAVE_POLL */
 
 #endif
