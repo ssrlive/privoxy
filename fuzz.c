@@ -547,6 +547,8 @@ int process_fuzzed_input(char *fuzz_input_type, char *fuzz_input_file)
    csp = &csp_stack_storage;
    csp->config = &config_stack_storage;
    csp->config->buffer_limit = 4096 * 1024;
+   csp->config->receive_buffer_size = 4096;
+
    /* In --stfu mode, these will be ignored ... */
    set_debug_level(LOG_LEVEL_ACTIONS|LOG_LEVEL_CONNECT|LOG_LEVEL_DEANIMATE|LOG_LEVEL_INFO|LOG_LEVEL_ERROR|LOG_LEVEL_RE_FILTER|LOG_LEVEL_HEADER|LOG_LEVEL_WRITING|LOG_LEVEL_RECEIVED);
 
