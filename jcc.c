@@ -1,4 +1,4 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.467 2017/06/26 12:18:21 fabiankeil Exp $";
+const char jcc_rcs[] = "$Id: jcc.c,v 1.468 2017/08/12 09:33:25 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -1964,8 +1964,7 @@ static int send_http_request(struct client_state *csp)
  * Returns     :  Nothing.
  *
  *********************************************************************/
-static void handle_established_connection(struct client_state *csp,
-                                          const struct forward_spec *fwd)
+static void handle_established_connection(struct client_state *csp)
 {
    char *receive_buffer;
    char *hdr;
@@ -2284,7 +2283,7 @@ static void handle_established_connection(struct client_state *csp,
          {
             log_error(LOG_LEVEL_ERROR, "read from: %s failed: %E", http->host);
 
-            if (http->ssl && (fwd->forward_host == NULL))
+            if (http->ssl && (csp->fwd == NULL))
             {
                /*
                 * Just hang up. We already confirmed the client's CONNECT
@@ -3032,7 +3031,7 @@ static void chat(struct client_state *csp)
    /* XXX: should the time start earlier for optimistically sent data? */
    csp->server_connection.request_sent = time(NULL);
 
-   handle_established_connection(csp, fwd);
+   handle_established_connection(csp);
 }
 
 
@@ -3069,6 +3068,7 @@ extern int fuzz_server_response(struct client_state *csp, char *fuzz_input_file)
             fuzz_input_file);
       }
    }
+   csp->fwd = &fwd;
    csp->content_type |= CT_GIF;
    csp->action->flags |= ACTION_DEANIMATE;
    csp->action->string[ACTION_STRING_DEANIMATE] = "last";
@@ -3089,7 +3089,7 @@ extern int fuzz_server_response(struct client_state *csp, char *fuzz_input_file)
 
    cgi_init_error_messages();
 
-   handle_established_connection(csp, &fwd);
+   handle_established_connection(csp);
 
    return 0;
 }
