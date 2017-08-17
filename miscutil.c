@@ -63,7 +63,6 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.85 2017/06/08 13:11:08 fabianke
 #include "project.h"
 #include "miscutil.h"
 #include "errlog.h"
-#include "jcc.h"
 
 const char miscutil_h_rcs[] = MISCUTIL_H_VERSION;
 
@@ -221,20 +220,15 @@ void *malloc_or_die(size_t buffer_size)
  * Description :  Writes a pid file with the pid of the main process.
  *                Exits if the file can't be opened
  *
- * Parameters  :  None
+ * Parameters  :
+ *          1  :  pidfile = Path of the pidfile that gets created.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void write_pid_file(void)
+void write_pid_file(const char *pidfile)
 {
    FILE   *fp;
-
-   /*
-    * If no --pidfile option was given,
-    * we can live without one.
-    */
-   if (pidfile == NULL) return;
 
    if ((fp = fopen(pidfile, "w")) == NULL)
    {

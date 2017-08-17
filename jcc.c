@@ -3985,8 +3985,10 @@ int main(int argc, char **argv)
     * As soon as we have written the PID file, we can switch
     * to the user and group ID indicated by the --user option
     */
-   write_pid_file();
-
+   if (pidfile != NULL)
+   {
+      write_pid_file(pidfile);
+   }
    if (NULL != pw)
    {
       if (setgid((NULL != grp) ? grp->gr_gid : pw->pw_gid))

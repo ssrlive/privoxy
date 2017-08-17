@@ -51,7 +51,7 @@ extern char *strdup_or_die(const char *str);
 extern void *malloc_or_die(size_t buffer_size);
 
 #if defined(unix)
-extern void write_pid_file(void);
+extern void write_pid_file(const char *pidfile);
 #endif /* unix */
 
 extern unsigned int hash_string(const char* s);
