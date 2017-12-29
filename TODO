@@ -348,7 +348,7 @@ http://www.privoxy.org/faq/general.html#DONATE
      running out of stack space, causing the kernel to kill Privoxy
      ungracefully.
 
-121) Add HTTP/2 support. As a first step, incomming HTTP/1.x requests
+121) Add HTTP/2 support. As a first step, incoming HTTP/1.x requests
      should be translated to outgoing HTTP/2 requests where possible
      (and if desired by the user).
      Interested donors: 1.
