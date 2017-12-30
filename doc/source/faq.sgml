@@ -2054,6 +2054,20 @@ ads used to be. Why?</title>
 
 </sect2>
 
+<sect2 renderas="sect3" id="http2">
+<title>Does Privoxy support HTTP/2?</title>
+<para>
+  Privoxy currently doesn't parse HTTP/2 but applications
+  cann tunnel HTTP/2 through Privoxy if Privoxy is configured
+  to allow CONNECT requests (default) which are also used
+  for HTTPS.
+</para>
+<para>
+  Adding HTTP/2 support is on the TODO list but currently
+  nobody is known to work on it.
+</para>
+</sect2>
+
 <sect2 renderas="sect3" id="secure">
 <title>Privoxy runs as a <quote>server</quote>. How
 secure is it? Do I need to take any special precautions?</title>
