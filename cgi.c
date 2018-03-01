@@ -93,10 +93,6 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
         "View the current configuration",
 #endif
          TRUE },
-   { "show-version",
-         cgi_show_version,
-          NULL, /* Not considered important enough to include in the menu */
-          TRUE },
 #ifdef FEATURE_CLIENT_TAGS
    /*
     * This is marked as harmless because despite the description

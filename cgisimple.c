@@ -1033,43 +1033,6 @@ jb_err cgi_send_user_manual(struct client_state *csp,
 
 /*********************************************************************
  *
- * Function    :  cgi_show_version
- *
- * Description :  CGI function that returns a a web page describing the
- *                file versions of Privoxy.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  rsp = http_response data structure for output
- *          3  :  parameters = map of cgi parameters
- *
- * CGI Parameters : none
- *
- * Returns     :  JB_ERR_OK on success
- *                JB_ERR_MEMORY on out-of-memory error.
- *
- *********************************************************************/
-jb_err cgi_show_version(struct client_state *csp,
-                        struct http_response *rsp,
-                        const struct map *parameters)
-{
-   struct map *exports;
-
-   assert(csp);
-   assert(rsp);
-   assert(parameters);
-
-   if (NULL == (exports = default_exports(csp, "show-version")))
-   {
-      return JB_ERR_MEMORY;
-   }
-
-   return template_fill_for_cgi(csp, "show-version", exports, rsp);
-}
-
-
-/*********************************************************************
- *
  * Function    :  cgi_show_status
  *
  * Description :  CGI function that returns a web page describing the
