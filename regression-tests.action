@@ -705,6 +705,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Fetch Test = http://config.privoxy.org/show-status?file=invalid
 # Fetch Test = http://config.privoxy.org/show-status?file=trust
 # Fetch Test = http://p.p/show-version
+# Expect Status Code = 404
 # Fetch Test = http://p.p/show-request
 # Fetch Test = http://p.p/show-url-info
 # Fetch Test = http://p.p/show-url-info?url=www.privoxy.org%2F
