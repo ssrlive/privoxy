@@ -1,4 +1,3 @@
-const char filters_rcs[] = "$Id: filters.c,v 1.206 2017/06/04 14:43:10 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/filters.c,v $
@@ -77,8 +76,6 @@ const char filters_rcs[] = "$Id: filters.c,v 1.206 2017/06/04 14:43:10 fabiankei
 #ifdef _WIN32
 #include "win32.h"
 #endif
-
-const char filters_h_rcs[] = FILTERS_H_VERSION;
 
 typedef char *(*filter_function_ptr)();
 static filter_function_ptr get_filter_function(const struct client_state *csp);

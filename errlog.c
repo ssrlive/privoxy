@@ -1,4 +1,3 @@
-const char errlog_rcs[] = "$Id: errlog.c,v 1.129 2017/05/29 10:06:57 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/errlog.c,v $
@@ -78,9 +77,6 @@ const char errlog_rcs[] = "$Id: errlog.c,v 1.129 2017/05/29 10:06:57 fabiankeil 
 #ifdef FEATURE_EXTERNAL_FILTERS
 #include "jbsockets.h"
 #endif
-
-const char errlog_h_rcs[] = ERRLOG_H_VERSION;
-
 
 /*
  * LOG_LEVEL_FATAL cannot be turned off.  (There are

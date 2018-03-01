@@ -1,6 +1,5 @@
 #ifndef JBSOCKETS_H_INCLUDED
 #define JBSOCKETS_H_INCLUDED
-#define JBSOCKETS_H_VERSION "$Id: jbsockets.h,v 1.25 2017/06/04 14:37:05 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.h,v $
@@ -64,10 +63,6 @@ extern int socket_is_still_alive(jb_socket sfd);
 #ifdef FEATURE_EXTERNAL_FILTERS
 extern void mark_socket_for_close_on_execute(jb_socket fd);
 #endif
-
-/* Revision control strings from this header and associated .c file */
-extern const char jbsockets_rcs[];
-extern const char jbsockets_h_rcs[];
 
 /*
  * Solaris workaround

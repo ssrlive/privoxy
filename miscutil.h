@@ -1,6 +1,5 @@
 #ifndef MISCUTIL_H_INCLUDED
 #define MISCUTIL_H_INCLUDED
-#define MISCUTIL_H_VERSION "$Id: miscutil.h,v 1.37 2012/11/24 13:58:17 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.h,v $
@@ -91,10 +90,6 @@ size_t privoxy_strlcpy(char *destination, const char *source, size_t size);
 size_t privoxy_strlcat(char *destination, const char *source, size_t size);
 #define strlcat privoxy_strlcat
 #endif /* ndef HAVE_STRLCAT */
-
-/* Revision control strings from this header and associated .c file */
-extern const char miscutil_rcs[];
-extern const char miscutil_h_rcs[];
 
 #if defined(__cplusplus)
 }

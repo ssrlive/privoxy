@@ -1,4 +1,3 @@
-const char amiga_rcs[] = "$Id: amiga.c,v 1.16 2012/03/09 16:24:36 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/amiga.c,v $
@@ -37,8 +36,6 @@ const char amiga_rcs[] = "$Id: amiga.c,v 1.16 2012/03/09 16:24:36 fabiankeil Exp
 #include <signal.h>
 
 #include "project.h"
-
-const char amiga_h_rcs[] = AMIGA_H_VERSION;
 
 static char *ver USED = "$VER: Privoxy " __AMIGAVERSION__ " (" __AMIGADATE__ ")";
 #ifdef __amigaos4__

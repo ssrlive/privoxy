@@ -1,7 +1,5 @@
 #ifndef PROJECT_H_INCLUDED
 #define PROJECT_H_INCLUDED
-/** Version string. */
-#define PROJECT_H_VERSION "$Id: project.h,v 1.223 2017/06/26 12:13:52 fabiankeil Exp $"
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/project.h,v $

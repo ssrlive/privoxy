@@ -1,4 +1,3 @@
-const char parsers_rcs[] = "$Id: parsers.c,v 1.313 2017/07/01 17:14:12 ler762 Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/parsers.c,v $
@@ -89,8 +88,6 @@ const char parsers_rcs[] = "$Id: parsers.c,v 1.313 2017/07/01 17:14:12 ler762 Ex
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
-
-const char parsers_h_rcs[] = PARSERS_H_VERSION;
 
 static char *get_header_line(struct iob *iob);
 static jb_err scan_headers(struct client_state *csp);

@@ -1,4 +1,3 @@
-const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.165 2017/06/26 12:13:52 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/loadcfg.c,v $
@@ -100,8 +99,6 @@ const char loadcfg_rcs[] = "$Id: loadcfg.c,v 1.165 2017/06/26 12:13:52 fabiankei
  * Default backlog passed to listen().
  */
 #define DEFAULT_LISTEN_BACKLOG 128
-
-const char loadcfg_h_rcs[] = LOADCFG_H_VERSION;
 
 #ifdef FEATURE_TOGGLE
 /* Privoxy is enabled by default. */

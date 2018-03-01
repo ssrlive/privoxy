@@ -1,4 +1,3 @@
-const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.147 2017/06/26 12:12:55 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jbsockets.c,v $
@@ -106,8 +105,6 @@ const char jbsockets_rcs[] = "$Id: jbsockets.c,v 1.147 2017/06/26 12:12:55 fabia
 #ifndef AI_NUMERICSERV
 #define AI_NUMERICSERV 0
 #endif
-
-const char jbsockets_h_rcs[] = JBSOCKETS_H_VERSION;
 
 /*
  * Maximum number of gethostbyname(_r) retries in case of

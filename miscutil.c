@@ -1,4 +1,3 @@
-const char miscutil_rcs[] = "$Id: miscutil.c,v 1.85 2017/06/08 13:11:08 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/miscutil.c,v $
@@ -63,8 +62,6 @@ const char miscutil_rcs[] = "$Id: miscutil.c,v 1.85 2017/06/08 13:11:08 fabianke
 #include "project.h"
 #include "miscutil.h"
 #include "errlog.h"
-
-const char miscutil_h_rcs[] = MISCUTIL_H_VERSION;
 
 /*********************************************************************
  *

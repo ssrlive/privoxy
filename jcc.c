@@ -1,4 +1,3 @@
-const char jcc_rcs[] = "$Id: jcc.c,v 1.469 2017/08/12 09:36:42 fabiankeil Exp $";
 /*********************************************************************
  *
  * File        :  $Source: /cvsroot/ijbswa/current/jcc.c,v $
@@ -127,9 +126,6 @@ const char jcc_rcs[] = "$Id: jcc.c,v 1.469 2017/08/12 09:36:42 fabiankeil Exp $"
 #ifdef FEATURE_CLIENT_TAGS
 #include "client-tags.h"
 #endif
-
-const char jcc_h_rcs[] = JCC_H_VERSION;
-const char project_h_rcs[] = PROJECT_H_VERSION;
 
 int daemon_mode = 1;
 struct client_states clients[1];
