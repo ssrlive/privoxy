@@ -126,7 +126,8 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
  *
  * Function    :  set_no_delay_flag
  *
- * Description :  Disables TCP coalescence for the given socket.
+ * Description :  Disables the Nagle algorithm (TCP send coalescence)
+ *                for the given socket.
  *
  * Parameters  :
  *          1  :  fd = The file descriptor to operate on
