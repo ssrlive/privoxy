@@ -2058,7 +2058,7 @@ ads used to be. Why?</title>
 <title>Does Privoxy support HTTP/2?</title>
 <para>
   Privoxy currently doesn't parse HTTP/2 but applications
-  cann tunnel HTTP/2 through Privoxy if Privoxy is configured
+  can tunnel HTTP/2 through Privoxy if Privoxy is configured
   to allow CONNECT requests (default) which are also used
   for HTTPS.
 </para>
