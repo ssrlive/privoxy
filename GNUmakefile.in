@@ -145,7 +145,7 @@ PERL       = perl
 DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
-TIDY       = tidy -modify -indent -wrap 78 --tidy-mark no
+TIDY       = tidy -modify -indent -wrap 120 --tidy-mark no
 RSYNC	   = rsync -av -c --chmod=D755,F644
 
 # Program to do LF->CRLF
