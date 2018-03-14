@@ -3042,6 +3042,47 @@ browsing has slowed to a crawl. What gives? </title>
 </para>
 </sect2>
 
+<sect2 renderas="sect3" id="file-permissions">
+<title>What to do if editing the config file of privoxy is access denied?</title>
+<para>
+ Your userid probably isn't allowed to edit the file.
+ <!--  show how to check permissions? -->
+ On Windows you can use the windows equivalent of sudo:
+ <screen>runas /user:administrator "notepad \privoxy\config.txt"</screen>
+</para>
+
+<para>
+ or fix the file permissions:
+<screen>C:\Privoxy>icacls config.txt
+config.txt BUILTIN\Administrators:(I)(F)
+           NT AUTHORITY\SYSTEM:(I)(F)
+           BUILTIN\Users:(I)(RX)
+           NT AUTHORITY\Authenticated Users:(I)(M)
+
+Successfully processed 1 files; Failed processing 0 files
+
+C:\Privoxy>icacls config.txt /grant Lee:F
+processed file: config.txt
+Successfully processed 1 files; Failed processing 0 files
+
+C:\Privoxy>icacls config.txt
+config.txt I3668\Lee:(F)
+           BUILTIN\Administrators:(I)(F)
+           NT AUTHORITY\SYSTEM:(I)(F)
+           BUILTIN\Users:(I)(RX)
+           NT AUTHORITY\Authenticated Users:(I)(M)
+
+Successfully processed 1 files; Failed processing 0 files
+
+C:\Privoxy></screen>
+</para>
+
+<para>
+ or try to point-n-click your way through adjusting the file
+ permissions in windows explorer.
+</para>
+</sect2>
+
 </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
