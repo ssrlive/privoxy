@@ -565,7 +565,7 @@ dok-index:
      doc/webserver/privoxy-index.html && $(RM) doc/webserver/*.bak
 
 # Main documentation target.
-dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors dok-index dok-tidy
+dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors dok-index
 	@$(ECHO) Documentation created.
 
 ## Make AUTHORS file
