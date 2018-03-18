@@ -488,9 +488,11 @@ Hal.
 </para>
 
 <para>
- You might also find <quote><ulink
- url="http://opensource.bureau-cornavin.com/crash-course/index.html">Writing Documentation
- Using DocBook - A Crash Course</ulink></quote> useful.
+ You might also find
+ <!-- <quote><ulink url="http://opensource.bureau-cornavin.com/crash-course/index.html">
+              domain no longer exists so link to the wayback archive -->
+ <quote><ulink url="https://web.archive.org/web/20160315230758/http://opensource.bureau-cornavin.com/crash-course/index.html">
+ Writing Documentation Using DocBook - A Crash Course</ulink></quote> useful.
 </para>
 </sect2>
 
