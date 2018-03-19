@@ -21,7 +21,7 @@
   faq
 
 -->
-<para>
+
  <itemizedlist>
 
 <!--
@@ -32,6 +32,7 @@
   </para>
  </listitem>
 -->
+
  <listitem>
   <para>
      Supports "Connection: keep-alive". Outgoing connections can
@@ -141,4 +142,4 @@
 </listitem>
 
  </itemizedlist>
-</para>
+

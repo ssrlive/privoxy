@@ -30,11 +30,12 @@
   for the previously released 3.0.25 beta which introduced client-specific
   tags and included a couple of minor improvements.
 </para>
-<para>
+
  <itemizedlist>
   <listitem>
    <para>
     Bug fixes:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -44,11 +45,11 @@
     </para>
     </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     General improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -74,11 +75,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Documentation improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -102,11 +103,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Infrastructure improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -115,11 +116,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Build system improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -137,20 +138,19 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
  </itemizedlist>
-</para>
 
 <para>
  Changes between <application>Privoxy 3.0.25 beta</application>
  and the previous release:
 </para>
-<para>
+
  <itemizedlist>
   <listitem>
    <para>
     Bug fixes:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -170,11 +170,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     General improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -243,11 +243,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Action file improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -262,11 +262,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Documentation improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -398,11 +398,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Infrastructure improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -423,11 +423,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Build system improvements:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -509,11 +509,11 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
   <listitem>
    <para>
     Privoxy-Regression-Test:
+   </para>
     <itemizedlist>
     <listitem>
      <para>
@@ -555,7 +555,6 @@
      </para>
      </listitem>
     </itemizedlist>
-   </para>
   </listitem>
  </itemizedlist>
-</para>
+

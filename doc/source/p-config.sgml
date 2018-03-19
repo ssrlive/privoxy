@@ -251,30 +251,22 @@ II. FORMAT OF THE CONFIGURATION FILE
   <para>
    Unix, in local filesystem (may not work with all browsers):
   </para>
-  <para>
    <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:///usr/share/doc/privoxy-&p-version;/user-manual/</screen>
-  </para>
   <para>
    Windows, in local filesystem, <emphasis>must</emphasis> use forward slash notation:
   </para>
-  <para>
    <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file:/c:/some-dir/privoxy-&p-version;/user-manual/</screen>
-  </para>
   <para>
    Windows, UNC notation (with forward slashes):
   </para>
-  <para>
    <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;file://///some-server/some-path/privoxy-&p-version;/user-manual/</screen>
-  </para>
  -->
   <para>
    The best all purpose solution is simply to put the full local
    <literal>PATH</literal> to where the <citetitle>User Manual</citetitle> is
    located:
   </para>
-  <para>
    <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;/usr/share/doc/privoxy/user-manual</screen>
-  </para>
   <para>
    The User Manual is then available to anyone with access to
    <application>Privoxy</application>, by following the built-in URL:
@@ -285,9 +277,7 @@ II. FORMAT OF THE CONFIGURATION FILE
    If the documentation is not on the local system, it can be accessed
    from a remote server, as:
   </para>
-  <para>
    <screen>&nbsp;&nbsp;user-manual&nbsp;&nbsp;http://example.com/privoxy/user-manual/</screen>
-  </para>
   <![%user-man;[
    <!-- this gets hammered in conversion to config. Text repeated below. -->
   <warning>
@@ -1035,7 +1025,6 @@ actionsfile
    <para>
     The available debug levels are:
    </para>
-   <para>
     <programlisting>
   debug     1 # Log the destination for each request &my-app; let through. See also debug 1024.
   debug     2 # show each connection status
@@ -1054,7 +1043,6 @@ actionsfile
   debug 32768 # log all data read from the network
   debug 65536 # Log the applying actions
 </programlisting>
-   </para>
    <para>
     To select multiple debug levels, you can either add them or use
     multiple <literal>debug</literal> lines.
@@ -1329,21 +1317,17 @@ actionsfile
      (192.168.0.0) and has another outside connection with a different address.
      You want it to serve requests from inside only:
    </para>
-   <para>
     <programlisting>
   listen-address  192.168.0.1:8118
 </programlisting>
-   </para>
    <para>
     Suppose you are running <application>Privoxy</application> on an
     IPv6-capable machine and you want it to listen on the IPv6 address
     of the loopback device:
    </para>
-   <para>
     <programlisting>
   listen-address [::1]:8118
 </programlisting>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -1790,49 +1774,39 @@ ACLs: permit-access and deny-access</title>
     is OK. The absence of a <replaceable class="parameter">dst_addr</replaceable> implies that
     <emphasis>all</emphasis> destination addresses are OK:
    </para>
-   <para>
     <screen>
   permit-access  localhost
 </screen>
-   </para>
    <para>
     Allow any host on the same class C subnet as www.privoxy.org access to
     nothing but www.example.com (or other domains hosted on the same system):
    </para>
-   <para>
     <screen>
   permit-access  www.privoxy.org/24 www.example.com/32
 </screen>
-   </para>
    <para>
     Allow access from any host on the 26-bit subnet 192.168.45.64 to anywhere,
     with the exception that 192.168.45.73 may not access the IP address behind
     www.dirty-stuff.example.com:
    </para>
-   <para>
     <screen>
   permit-access  192.168.45.64/26
   deny-access    192.168.45.73    www.dirty-stuff.example.com
 </screen>
-   </para>
    <para>
      Allow access from the IPv4 network 192.0.2.0/24 even if listening on
      an IPv6 wild card address (not supported on all platforms):
    </para>
-   <para>
     <programlisting>
   permit-access  192.0.2.0/24
 </programlisting>
-   </para>
    <para>
      This is equivalent to the following line even if listening on an
      IPv4 address (not supported on all platforms):
    </para>
-   <para>
     <programlisting>
   permit-access  [::ffff:192.0.2.0]/120
 </programlisting>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -2138,40 +2112,32 @@ ACLs: permit-access and deny-access</title>
    <para>
     Everything goes to an example parent proxy, except SSL on port 443 (which it doesn't handle):
    </para>
-   <para>
     <screen>
   forward   /      parent-proxy.example.org:8080
   forward   :443   .
 </screen>
-   </para>
    <para>
     Everything goes to our example ISP's caching proxy, except for requests
     to that ISP's sites:
    </para>
-   <para>
     <screen>
   forward   /                  caching-proxy.isp.example.net:8000
   forward   .isp.example.net   .
 </screen>
-   </para>
    <para>
     Parent proxy specified by an IPv6 address:
    </para>
-   <para>
     <programlisting>
   forward   /                   [2001:DB8::1]:8000
 </programlisting>
-   </para>
    <para>
     Suppose your parent proxy doesn't support IPv6:
    </para>
-   <para>
     <programlisting>
   forward  /                        parent-proxy.example.org:8000
   forward  ipv6-server.example.org  .
   forward  &lt;[2-3][0-9a-f][0-9a-f][0-9a-f]:*&gt;   .
 </programlisting>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -2276,30 +2242,24 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
      their ISP's proxy by way of example.com's corporate SOCKS 4A gateway to
      the Internet.
    </para>
-   <para>
     <screen>
   forward-socks4a   /              socks-gw.example.com:1080  www-cache.isp.example.net:8080
   forward           .example.com   .
 </screen>
-   </para>
    <para>
     A rule that uses a SOCKS 4 gateway for all destinations but no HTTP parent looks like this:
    </para>
-   <para>
     <screen>
   forward-socks4   /               socks-gw.example.com:1080  .
 </screen>
-   </para>
 
     <para>
     To chain Privoxy and Tor, both running on the same system, you would use
     something like:
    </para>
-   <para>
     <screen>
   forward-socks5t   /               127.0.0.1:9050 .
 </screen>
-   </para>
    <para>
     Note that if you got Tor through one of the bundles, you may
     have to change the port from 9050 to 9150 (or even another one).
@@ -2311,13 +2271,11 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     reach your local network, if you need to access local servers you
     therefore might want to make some exceptions:
    </para>
-   <para>
     <screen>
   forward         192.168.*.*/     .
   forward            10.*.*.*/     .
   forward           127.*.*.*/     .
 </screen>
-   </para>
    <para>
     Unencrypted connections to systems in these address ranges will
     be as (un)secure as the local network is, but the alternative is that you
@@ -2330,11 +2288,9 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     using their names, you will need additional exceptions that look like
     this:
    </para>
-   <para>
     <screen>
  forward           localhost/     .
 </screen>
-   </para>
 
   </listitem>
  </varlistentry>
@@ -2362,23 +2318,19 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  host-a:
 </para>
 
-<para>
  <screen>
   forward    /           .
   forward    .isp-b.example.net  host-b:8118
 </screen>
-</para>
 
 <para>
  host-b:
 </para>
 
-<para>
  <screen>
   forward    /           .
   forward    .isp-a.example.org  host-a:8118
 </screen>
-</para>
 
 <para>
  Now, your users can set their browser's proxy to use either
@@ -2397,7 +2349,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  run on the same box, your <application>squid</application> configuration could then look like this:
 </para>
 
-<para>
  <screen>
   # Define Privoxy as parent proxy (without ICP)
   cache_peer 127.0.0.1 parent 8118 7 no-query
@@ -2410,7 +2361,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
 
   # Forward all the rest to Privoxy
   never_direct allow all</screen>
-</para>
 
 <para>
  You would then need to change your browser's proxy settings to <application>squid</application>'s address and port.
@@ -2423,11 +2373,9 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  say, on <literal>antivir.example.com</literal>, port 8010:
 </para>
 
-<para>
  <screen>
   forward   /                          .
   forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010</screen>
-</para>
 
 </sect3>
 ]]>
@@ -3495,7 +3443,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Examples:</term>
   <listitem>
-   <para>
     <screen>
     # Best speed (compared to the other levels)
     compression-level 1
@@ -3508,7 +3455,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     # is likely to be flawed.
     compression-level 0
     </screen>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -3656,14 +3602,12 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Examples:</term>
   <listitem>
-   <para>
     <screen>
     # Define a couple of tags, the described effect requires action sections
     # that are enabled based on CLIENT-TAG patterns.
     client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
     disable-content-filters Disable content-filters but do not affect other actions
     </screen>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -3721,12 +3665,10 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Examples:</term>
   <listitem>
-   <para>
     <screen>
       # Increase the time to life for temporarily enabled tags to 3 minutes
       client-tag-lifetime 180
     </screen>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -3795,13 +3737,11 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Examples:</term>
   <listitem>
-   <para>
     <screen>
       # Allow systems that can reach Privoxy to provide the client
       # IP address with a X-Forwarded-For header.
       trust-x-forwarded-for 1
     </screen>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -3870,12 +3810,10 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Examples:</term>
   <listitem>
-   <para>
     <screen>
       # Increase the receive buffer size
       receive-buffer-size 32768
     </screen>
-   </para>
   </listitem>
  </varlistentry>
 </variablelist>

@@ -935,12 +935,10 @@ the differences?</title>
   for them in the <filename>user.action</filename> file. An example for yahoo might
   look like:
  </para>
- <para>
   <screen># Allow all cookies for Yahoo login:
 #
 { -<ulink url="../user-manual/actions-file.html#CRUNCH-INCOMING-COOKIES">crunch-incoming-cookies</ulink> -<ulink url="../user-manual/actions-file.html#CRUNCH-OUTGOING-COOKIES">crunch-outgoing-cookies</ulink> -<ulink url="../user-manual/actions-file.html#SESSION-COOKIES-ONLY">session-cookies-only</ulink> }
 .login.yahoo.com</screen>
- </para>
  <para>
   These kinds of sites are often quite complex and heavy with
   <ulink url="http://en.wikipedia.org/wiki/Javascript">Javascript</ulink> and
@@ -949,13 +947,11 @@ the differences?</title>
   url="../user-manual/actions-file.html#ALIASES">alias</ulink> just for such
   sticky situations:
  </para>
- <para>
   <screen># Gmail is a _fragile_ site:
 #
 { <literal>fragile</literal> }
  # Gmail is ...
  mail.google.com</screen>
- </para>
  <para>
   Be sure to flush your browser's caches whenever making these kinds of
   changes, just to make sure the changes <quote>take</quote>.
@@ -1106,10 +1102,8 @@ with a browser? Does that not raise security issues?</title>
  should look like:
 </para>
 
-<para>
  <screen>
   listen-address  192.168.1.1:8118</screen>
-</para>
 
 <para>
  Save the file, and restart <application>Privoxy</application>. Configure
@@ -1121,10 +1115,8 @@ with a browser? Does that not raise security issues?</title>
  all available interfaces:
 </para>
 
-<para>
  <screen>
   listen-address    :8118</screen>
-</para>
 
 <para>
  And then use <application>Privoxy's</application>
@@ -1397,11 +1389,9 @@ and thus avoid individual browser configuration?</title>
   To disable all cookie actions, so that cookies are allowed unrestricted,
   both in and out, for <literal>example.com</literal>:
 </para>
-<para>
  <screen>
  { -crunch-incoming-cookies -crunch-outgoing-cookies -session-cookies-only -filter{content-cookies} }
   .example.com</screen>
-</para>
 <para>
  Place the above in <filename>user.action</filename>. Note that some of these may
  be off by default anyway, so this might be redundant, but there is no harm
@@ -1492,16 +1482,13 @@ and thus avoid individual browser configuration?</title>
  can very easily over-ride <emphasis>all</emphasis> blocking with the
  following very simple rule in your <filename>user.action</filename>:
  </para>
- <para>
  <screen>
  # Unblock everybody, everywhere
  { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
  / # UN-Block *all* URLs</screen>
-</para>
 <para>
  Or even a more comprehensive reversing of various ad related actions:
 </para>
-<para>
  <screen>
  # Unblock everybody, everywhere, and turn off appropriate filtering, etc
  { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> \
@@ -1510,7 +1497,6 @@ and thus avoid individual browser configuration?</title>
   <literal>allow-popups</literal> \
  }
  / # UN-Block *all* URLs and allow ads</screen>
-</para>
 <para>
  This last <quote>action</quote> in this compound statement,
  <literal>allow-popups</literal>, is an <ulink
@@ -1551,10 +1537,8 @@ the <emphasis>BLOCKED</emphasis> page?</title>
  available as compile-time options. You should
  <command>configure</command> the sources as follows:
 </para>
-<para>
  <screen>
  ./configure  --disable-toggle  --disable-editor  --disable-force</screen>
-</para>
 <para>
  This will create an executable with hard-coded security features so that
  &my-app; does not allow easy bypassing of blocked sites, or changing the
@@ -1855,11 +1839,9 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  <ulink url="../user-manual/config.html#FORWARDING">forwarding section</ulink>
  and uncomment the line:
 </para>
-<para>
  <screen>
 #        forward-socks5t             /     127.0.0.1:9050 .
  </screen>
-</para>
 <para>
  Note that if you got Tor through one of the bundles, you may
  have to change the port from 9050 to 9150 (or even another one).
@@ -1872,13 +1854,11 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  uncomment the following forward rules, to make sure your local network is still
  reachable through Privoxy:
 </para>
-<para>
  <screen>
 #        forward         192.168.*.*/     .
 #        forward            10.*.*.*/     .
 #        forward           127.*.*.*/     .
  </screen>
-</para>
 <para>
  Unencrypted connections to systems in these address ranges will
  be as (un)secure as the local network is, but the alternative is
@@ -1892,11 +1872,9 @@ us help you. Your efforts are not wasted, and we do appreciate them.
  network by using their names, you will need additional exceptions
  that look like this:
 </para>
-<para>
  <screen>
 #        forward           localhost/     .
  </screen>
-</para>
 <para>
  Save the modified configuration file and open
  <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
@@ -2241,14 +2219,12 @@ altered it! Yikes, what is wrong!</title>
  your hosts list is neglected by <application>Privoxy's </application>
  configuration, consider adding your list to your <filename>user.action</filename> file:
 </para>
-<para>
  <screen>
   { +block }
    www.ad.example1.com
    ad.example2.com
    ads.galore.example.com
    etc.example.com</screen>
-</para>
 </sect2>
 
 <sect2 renderas="sect3" id="seealso">
@@ -2344,7 +2320,6 @@ and related issues?</title>
 <para>
  There are several possibilities:
 </para>
-<para>
 <itemizedlist>
 <listitem><para>
 <application>Privoxy</application> is not running. Solution: verify
@@ -2364,7 +2339,6 @@ and related issues?</title>
   try disabling or removing the firewall as a simple test.
  </para></listitem>
 </itemizedlist>
-</para>
 
 </sect2>
 
@@ -2417,7 +2391,6 @@ still getting through. How?</title>
  our job a little easier. &my-app; has <quote>crunched</quote> (meaning caught
  and BLOCKED) quite a few items in this example, but perhaps missed a few as well.
 </para>
-<para>
 <screen>
 <![CDATA[
 Request: www.example.com/
@@ -2455,7 +2428,6 @@ Request: www.adtrak.net/adlog.php?bannerid=1309&clientid=439&zoneid=58&source=Ua
 Request: 66.70.21.80/scripts/click.php?hid=a71b9f6504b0c5681fa5&si=Ua
 ]]>
 </screen>
-</para>
 <para>
  Despite 12 out of 32 requests being blocked, the page looked, and seemed to
  behave perfectly <quote>normal</quote> (minus some ads, of course).
@@ -2915,14 +2887,12 @@ browsing has slowed to a crawl. What gives? </title>
  To do that, enable logging to figure out which requests get blocked by
  &my-app; and add the hosts (no path patterns) to a section like this:
 </para>
-<para>
 <screen>
 <![CDATA[
 {+redirect{http://127.0.0.1:0/} -block -limit-connect}
 .ivwbox.de:443/
 ]]>
 </screen>
-</para>
 <para>
  Additionally you have to configure your browser to contact
  <quote>127.0.0.1:0</quote> directly (instead of through &my-app;).
@@ -3047,11 +3017,12 @@ browsing has slowed to a crawl. What gives? </title>
  Your userid probably isn't allowed to edit the file.
  <!--  show how to check permissions? -->
  On Windows you can use the windows equivalent of sudo:
- <screen>runas /user:administrator "notepad \privoxy\config.txt"</screen>
 </para>
+ <screen>runas /user:administrator "notepad \privoxy\config.txt"</screen>
 
 <para>
  or fix the file permissions:
+</para>
 <screen>C:\Privoxy>icacls config.txt
 config.txt BUILTIN\Administrators:(I)(F)
            NT AUTHORITY\SYSTEM:(I)(F)
@@ -3074,7 +3045,6 @@ config.txt I3668\Lee:(F)
 Successfully processed 1 files; Failed processing 0 files
 
 C:\Privoxy></screen>
-</para>
 
 <para>
  or try to point-n-click your way through adjusting the file

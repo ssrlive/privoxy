@@ -231,7 +231,6 @@ Hal.
       <para>
        Basic Guidelines, for all branches:
       </para>
-      <para>
         <itemizedlist>
           <listitem><para>
             Please don't commit even
@@ -267,7 +266,6 @@ Hal.
           </para>
          </listitem>
         </itemizedlist>
-      </para>
 
 <!--
       <para>
@@ -375,6 +373,7 @@ Hal.
     </para>
     <para>
      How do you update the webserver (i.e. the pages on privoxy.org)?
+    </para>
 
      <orderedlist numeration="arabic">
       <listitem><para>
@@ -387,7 +386,6 @@ Hal.
         sourceforge webserver via scp.
       </para></listitem>
      </orderedlist>
-  </para>
 
   <para>
    Finished docs should be occasionally submitted to CVS
@@ -443,7 +441,6 @@ Hal.
  Some common elements that you likely will use:
 </para>
 
-<para>
   <simplelist>
     <member>
       <emphasis>&lt;para&gt;&lt;/para&gt;</emphasis>, paragraph delimiter. Most
@@ -481,7 +478,6 @@ Hal.
       <emphasis>&lt;quote&gt;&lt;/quote&gt;</emphasis>, for, doh, quoting text.
     </member>
   </simplelist>
-</para>
 
 <para>
  Look at any of the existing docs for examples of all these and more.
@@ -507,7 +503,6 @@ Hal.
    <para>
     Here it is:
    </para>
-   <para>
     <itemizedlist>
      <listitem>
       <para>
@@ -518,21 +513,24 @@ Hal.
      <para>
        Tags delimiting a <emphasis>block</emphasis> of text (even small
        blocks) should be on their own line. Like:
+     </para>
        <literallayout>
  &lt;para&gt;
   Some text goes here.
  &lt;/para&gt;
        </literallayout>
+     <para>
        Tags marking individual words, or few words, should be in-line:
+     </para>
        <literallayout>
   Just to &lt;emphasis&gt;emphasize&lt;/emphasis&gt;, some text goes here.
        </literallayout>
-     </para>
    </listitem>
    <listitem>
     <para>
       Tags should be nested and step indented for block text like: (except
       in-line tags)
+    </para>
      <literallayout>
  &lt;para&gt;
   &lt;itemizedlist&gt;
@@ -544,6 +542,7 @@ Hal.
   &lt;/itemizedlist&gt;
  &lt;/para&gt;
        </literallayout>
+    <para>
       This makes it easier to find the text amongst the tags ;-)
     </para>
    </listitem>
@@ -604,7 +603,6 @@ Hal.
   </listitem>
 
   </itemizedlist>
- </para>
 
   </sect2>
 
@@ -636,7 +634,6 @@ Hal.
   custom entities are listed below. See any of the main docs for examples.
  </para>
 
- <para>
   <itemizedlist>
   <listitem>
    <para>
@@ -680,7 +677,6 @@ Hal.
   </simplelist>
  </listitem>
  </itemizedlist>
- </para>
  <para>
   There are others in various places that are defined for a specific
   purpose. Read the source!
@@ -948,11 +944,9 @@ int ms_iis5_hack = 0;</programlisting>
 
     <para><emphasis>Instead of:</emphasis></para>
 
-    <para>
 <programlisting>
 int msiis5hack = 0; int msIis5Hack = 0;
 </programlisting>
-</para>
 
 
 
@@ -975,12 +969,10 @@ int load_some_file(struct client_state *csp)</programlisting>
 
     <para><emphasis>Instead of:</emphasis></para>
 
-    <para>
 <programlisting>
 int loadsomefile(struct client_state *csp)
 int loadSomeFile(struct client_state *csp)
 </programlisting>
-</para>
 
 
   </sect3>
@@ -999,13 +991,12 @@ int loadSomeFile(struct client_state *csp)
 (.h) extern int load_aclfile(struct client_state *csp);
 (.c) int load_aclfile(struct client_state *csp)</programlisting>
 
-    <para><emphasis>Instead of:</emphasis>
+    <para><emphasis>Instead of:</emphasis></para>
 <programlisting>
 (.h) extern int load_aclfile(struct client_state *); or
 (.h) extern int load_aclfile();
 (.c) int load_aclfile(struct client_state *csp)
 </programlisting>
-</para>
 
 
   </sect3>
@@ -1057,7 +1048,6 @@ int loadSomeFile(struct client_state *csp)
 
     <para><emphasis>Instead of:</emphasis></para>
 
-    <para>
 <programlisting>
 #define USE_IMG_LST 1 or
 #define _USE_IMAGE_LIST 1 or
@@ -1065,7 +1055,6 @@ int loadSomeFile(struct client_state *csp)
 #define use_image_list 1 or
 #define UseImageList 1
 </programlisting>
-</para>
 
 
   </sect3>
@@ -1466,12 +1455,10 @@ for (size_t cnt = 0; cnt &lt; len; cnt++)
 
     <para><emphasis>Exception:</emphasis></para>
 
-    <para>
 <programlisting>
 /* This is not a local include, but requires a path element. */
 #include &lt;sys/fileName.h&gt;
 </programlisting>
-</para>
 
     <para><emphasis>Note:</emphasis> Please! do not add "-I." to the Makefile
     without a _very_ good reason. This duplicates the #include
@@ -1950,13 +1937,14 @@ int FUNCTION_NAME(void *param1, const char *x)
     <sect2 id="testing-plan"><title>Testplan for releases</title>
       <para>
        Explain release numbers. major, minor. developer releases. etc.
-
+      </para>
 <orderedlist numeration="arabic">
           <listitem><para>
 Remove any existing rpm with rpm -e
 </para></listitem>
           <listitem><para>
 Remove any file that was left over. This includes (but is not limited to)
+          </para>
       <itemizedlist>
                 <listitem><para>/var/log/privoxy</para></listitem>
                 <listitem><para>/etc/privoxy</para></listitem>
@@ -1964,7 +1952,7 @@ Remove any file that was left over. This includes (but is not limited to)
                 <listitem><para>/etc/init.d/privoxy</para></listitem>
                 <listitem><para>/usr/doc/privoxy*</para></listitem>
               </itemizedlist>
-</para></listitem>
+          </listitem>
           <listitem><para>
 Install the rpm. Any error messages?
 </para></listitem>
@@ -1974,7 +1962,6 @@ Install the rpm. Any error messages?
           <listitem><para>Start browsing. Does <application>Privoxy</application> work? Logfile written?</para></listitem>
           <listitem><para>Remove the rpm. Any error messages? All files removed?</para></listitem>
         </orderedlist>
-</para>
     </sect2>
     <!-- XXX: Document how to write test reports and where to send them -->
 
@@ -2071,6 +2058,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
       First you need to determine which version number the release will have.
       <application>Privoxy</application> version numbers consist of three numbers,
       separated by dots, like in X.Y.Z (e.g. 3.0.0), where:
+    </para>
         <itemizedlist>
           <listitem>
             <para>
@@ -2122,7 +2110,6 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
             </para>
           </listitem>
         </itemizedlist>
-    </para>
     <para>
      In summary, the main CVS trunk is the development branch where new
      features are being worked on for the next stable series. This should
@@ -2155,7 +2142,6 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
        The following <emphasis>must be done by one of the
        developers</emphasis> prior to each new release.
      </para>
-     <para>
       <itemizedlist>
        <listitem>
         <para>
@@ -2184,13 +2170,13 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
         If action file processing has changed and is not backward-compatible,
         make sure the "for-privoxy-version=x.y.z" minimum version number in
         default.action.master has been updated:
+       </para>
         <programlisting>
 {{settings}}
 #############################################################################
 #MASTER# COMMENT: The minimum Privoxy version:
 for-privoxy-version=3.0.11
 </programlisting>
-       </para>
       </listitem>
       <listitem>
        <para>
@@ -2255,7 +2241,6 @@ for-privoxy-version=3.0.11
        </para>
       </listitem>
       </itemizedlist>
-     </para>
     </sect2>
 
     <sect2 id="therelease">
@@ -2272,14 +2257,12 @@ for-privoxy-version=3.0.11
       asked for a password):
      </para>
 
-     <para>
       <programlisting>
   mkdir dist # delete or choose different name if it already exists
   cd dist
   cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
 </programlisting>
-    </para>
 
     <para>
      <emphasis>Do NOT change</emphasis> a single bit, including, but not limited to
@@ -2311,7 +2294,6 @@ for-privoxy-version=3.0.11
       Please keep these general guidelines in mind when putting together
       your package. These apply to <emphasis>all</emphasis> platforms!
      </para>
-     <para>
       <itemizedlist>
        <listitem>
         <para>
@@ -2420,7 +2402,6 @@ for-privoxy-version=3.0.11
     </listitem>
 
       </itemizedlist>
-     </para>
 
     </sect3>
 
@@ -2430,28 +2411,22 @@ for-privoxy-version=3.0.11
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
       </para>
-      <para>
         <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-      </para>
       <para>
         Then do:
       </para>
-      <para>
         <programlisting>
   make tarball-dist
 </programlisting>
-      </para>
       <para>
         To upload the package to Sourceforge, simply issue
       </para>
-      <para>
         <programlisting>
   make tarball-upload
 </programlisting>
-      </para>
       <para>
         Go to the displayed URL and release the file publicly on Sourceforge.
         For the change log field, use the relevant section of the
@@ -2484,28 +2459,22 @@ for-privoxy-version=3.0.11
       <para>
         Then run:
       </para>
-      <para>
         <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-      </para>
       <para>
         Then do
       </para>
-      <para>
         <programlisting>
   make <replaceable class="parameter">dist</replaceable>-dist
 </programlisting>
-      </para>
       <para>
         To upload the package to Sourceforge, simply issue
       </para>
-      <para>
         <programlisting>
   make <replaceable class="parameter">dist</replaceable>-upload <replaceable class="parameter">rpm_packagerev</replaceable>
 </programlisting>
-      </para>
       <para>
         where <replaceable class="parameter">rpm_packagerev</replaceable> is the
         RPM release number as determined above.
@@ -2520,11 +2489,9 @@ for-privoxy-version=3.0.11
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then get the OS/2 Setup module:
       </para>
-      <para>
         <programlisting>
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co os2setup
 </programlisting>
-      </para>
       <para>
         You will need a mix of development tools.
         The main compilation takes place with IBM Visual Age C++.
@@ -2540,28 +2507,22 @@ for-privoxy-version=3.0.11
         Edit the os2build.cmd file to set the final executable filename.
         For example,
       </para>
-      <para>
         <programlisting>
   installExeName='privoxyos2_setup_X.Y.Z.exe'
 </programlisting>
-      </para>
       <para>
         Next, edit the <filename>IJB.wis</filename> file so the release number matches
         in the <filename>PACKAGEID</filename> section:
       </para>
-      <para>
         <programlisting>
   PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
 </programlisting>
-      </para>
       <para>
         You're now ready to build.  Run:
       </para>
-      <para>
         <programlisting>
   os2build
 </programlisting>
-      </para>
       <para>
          You will find the  WarpIN-installable executable in the
         <filename>./files</filename> directory. Upload this anonymously to
@@ -2575,31 +2536,25 @@ for-privoxy-version=3.0.11
       <para>
         Login to Sourceforge's compilefarm via ssh:
       </para>
-      <para>
         <programlisting>
   ssh cf.sourceforge.net
 </programlisting>
-      </para>
       <para>
         Choose the right operating system (not the Debian one).
         When logged in, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then run:
       </para>
-      <para>
         <programlisting>
   cd current
   autoheader && autoconf && ./configure
 </programlisting>
-      </para>
       <para>
         Then run
       </para>
-      <para>
         <programlisting>
   gmake solaris-dist
 </programlisting>
-      </para>
       <para>
         which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
         solaris-upload</command> on the Sourceforge machine (no ncftpput). You now have
@@ -2620,22 +2575,18 @@ for-privoxy-version=3.0.11
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above). Then get the Windows setup module:
       </para>
-      <para>
       <programlisting>
   cvs -z3  -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co winsetup
 </programlisting>
-      </para>
       <para>
         Then you can build the package.  This is fully automated, and is
         controlled by <filename>winsetup/GNUmakefile</filename>.
         All you need to do is:
       </para>
-      <para>
       <programlisting>
   cd winsetup
   make
 </programlisting>
-      </para>
       <para>
         Now you can manually rename <filename>privoxy_setup.exe</filename> to
         <filename>privoxy_setup_X_Y_Z.exe</filename>, and upload it to
@@ -2652,30 +2603,24 @@ for-privoxy-version=3.0.11
         entry to <filename>debian/changelog</filename>, if it is not
         already there, for example by running:
       </para>
-      <para>
         <programlisting>
   debchange -v &p-version;-&p-status;-1 "New upstream version"
 </programlisting>
-      </para>
       <para>
         Then, run:
       </para>
-      <para>
         <programlisting>
   dpkg-buildpackage -rfakeroot -us -uc -b
 </programlisting>
-      </para>
       <para>
         This will create
         <filename>../privoxy_&p-version;-&p-status;-1_i386.deb</filename>
         which can be uploaded.  To upload the package to Sourceforge, simply
         issue
       </para>
-      <para>
         <programlisting>
   make debian-upload
 </programlisting>
-      </para>
     </sect3>
 
     <sect3 id="newrelease-macosx"><title>Mac OS X</title>
@@ -2695,10 +2640,10 @@ for-privoxy-version=3.0.11
           The OSXPackageBuilder module generates OS X installer packages
           supporting all Macs running OS X 10.4 and above. Obtain it from CVS as
           follows into a folder parallel to the exported privoxy source:
+        </para>
           <programlisting>
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co OSXPackageBuilder
 </programlisting>
-        </para>
         <para>
           The module contains complete instructions on its usage in the file
           <filename>OS X Package Builder HOWTO.txt</filename>.
@@ -2722,19 +2667,17 @@ for-privoxy-version=3.0.11
         <para>
           Check out the module from CVS as follows into a folder parallel to the
           exported privoxy source:
+        </para>
           <programlisting>
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co osxsetup
 </programlisting>
-        </para>
         <para>
           Then run:
         </para>
-        <para>
           <programlisting>
   cd osxsetup
   build
 </programlisting>
-        </para>
         <para>
           This will run <filename>autoheader</filename>, <filename>autoconf</filename>
           and <filename>configure</filename> as well as <filename>make</filename>.
@@ -2747,11 +2690,9 @@ for-privoxy-version=3.0.11
         package" button. If you specify ./Privoxy.pkg as the output package
         name, you can then create the distributable zip file with the command:
         </para>
-        <para>
           <programlisting>
   zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
 </programlisting>
-        </para>
         <para>
           You can then upload this file directly to the Files section of the
           Sourceforge project in the Macintosh (OS X) folder. Each new version
@@ -2770,10 +2711,10 @@ for-privoxy-version=3.0.11
         <para>
           Check out the module from CVS as follows into a folder parallel to the
           exported privoxy source:
+        </para>
           <programlisting>
   cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co macsetup
 </programlisting>
-        </para>
         <para>
           The module contains complete instructions on its usage in its
           <filename>README</filename> file. The end result will be the
@@ -2797,7 +2738,6 @@ for-privoxy-version=3.0.11
       to SourceForge, and go through the release steps. The upload
       is done via FTP:
     </para>
-     <para>
       <itemizedlist>
        <listitem>
         <para>
@@ -2815,7 +2755,6 @@ for-privoxy-version=3.0.11
        </para>
       </listitem>
      </itemizedlist>
-    </para>
     <para>
      Or use the <command>make</command> targets as described above.
     </para>
@@ -2877,11 +2816,9 @@ for-privoxy-version=3.0.11
     If you have changed anything in the stable-branch documentation source
     SGML files, do:
    </para>
-   <para>
     <programlisting>
   make dok
 </programlisting>
-   </para>
    <para>
     That will generate <filename>doc/webserver/user-manual</filename>,
     <filename>doc/webserver/developer-manual</filename>,
@@ -2904,11 +2841,9 @@ for-privoxy-version=3.0.11
     Next, commit any changes from the above steps to CVS. All set?
     If these are docs in the stable branch, then do:
    </para>
-   <para>
     <programlisting>
   make webserver
 </programlisting>
-   </para>
    <para>
     This will do the upload to <ulink url="https://www.privoxy.org/">the
     webserver</ulink> (www.privoxy.org) and ensure all files and directories
