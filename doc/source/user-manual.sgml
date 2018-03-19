@@ -239,7 +239,6 @@ How to install the binary packages depends on your operating system:
  system. Check that no <application>Junkbuster</application>
  or <application>Privoxy</application> objects are in
  your startup folder.
-
 </para>
 
 <para>
@@ -971,7 +970,6 @@ How to install the binary packages depends on your operating system:
 
 <literallayout>
  <guibutton>Tools</guibutton> -> <guibutton>Options</guibutton> ->  <guibutton>Advanced</guibutton> -> <guibutton>Network</guibutton> -><guibutton>Connection</guibutton> -> <guibutton>Settings</guibutton>
-
 </literallayout>
 
 <para>
@@ -980,7 +978,6 @@ How to install the binary packages depends on your operating system:
 
 <literallayout>
  <guibutton>Edit</guibutton> -> <guibutton>Preferences</guibutton> -> <guibutton>General</guibutton> -> <guibutton>Connection Settings</guibutton> -> <guibutton>Manual Proxy Configuration</guibutton>
-
 </literallayout>
 
 
@@ -994,7 +991,6 @@ How to install the binary packages depends on your operating system:
 <!-- Mix ascii and gui art, something for everybody -->
 <!-- spacing on this is tricky -->
  <guibutton>Edit</guibutton> -> <guibutton>Preferences</guibutton> -> <guibutton>Advanced</guibutton> -> <guibutton>Proxies</guibutton> -> <guibutton>HTTP Proxy</guibutton>
-
 </literallayout>
 
 <para>
@@ -1411,7 +1407,6 @@ for details.
  (shortcut: <ulink url="http://p.p/">http://p.p/</ulink>),
  which is a built-in page and works without Internet access.
  You will see the following section:
-
 </para>
 
 <!-- Needs to be put in a table and colorized  -->
@@ -2468,7 +2463,6 @@ example.org/blocked-example-page</screen>
  following patterns</quote>, and <literal>-block</literal> means <quote>don't
  block URLs that match the following patterns, even if <literal>+block</literal>
  previously applied.</quote>
-
 </para>
 
 <para>
@@ -6478,7 +6472,6 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 # Alias for specific file types that are text, but might have conflicting
 # MIME types. We want the browser to force these to be text documents.
 handle-as-text = -<link linkend="FILTER">filter</link> +-<link linkend="content-type-overwrite">content-type-overwrite{text/plain}</link> +-<link linkend="FORCE-TEXT-MODE">force-text-mode</link> -<link linkend="HIDE-CONTENT-DISPOSITION">hide-content-disposition</link></screen>
-
 </para>
 
 <para>
@@ -8011,7 +8004,6 @@ Requests</title>
  rules and other configuration options, and even turn
  <application>Privoxy's</application> filtering off, all with
  a web browser.
-
 </para>
 
 <para>
@@ -8396,12 +8388,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  And finally we pull it all together in the bottom section and summarize how
  <application>Privoxy</application> is applying all its <quote>actions</quote>
  to <quote>google.com</quote>:
-
 </para>
 
 <para>
  <screen>
-
  Final results:
 
  -add-header
@@ -8475,7 +8465,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  <screen>
-
  { +block{Domains starts with "ad"} }
   ad*.
 
@@ -8519,7 +8508,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  <screen>
-
  Matches for http://www.example.net/adsl/HOWTO/:
 
  In file: default.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibutton>
@@ -8601,7 +8589,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  <screen>
-
  { -block }
   /adsl
 </screen>
@@ -8621,7 +8608,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  <screen>
-
  { +block{Path starts with "ads".} +handle-as-image }
  /ads
 </screen>
@@ -8641,7 +8627,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 
 <para>
  <screen>
-
  { shop }
  .quietpc.com
  .worldpay.com   # for quietpc.com
@@ -8655,12 +8640,10 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
  <quote><literal>{ shop }</literal></quote> is an <quote>alias</quote> that expands to
  <quote><literal>{ -filter -session-cookies-only }</literal></quote>.
  Or you could do your own exception to negate filtering:
-
 </para>
 
 <para>
  <screen>
-
  { -filter }
  # Disable ALL filter actions for sites in this section
  .forbes.com
@@ -8692,7 +8675,6 @@ In file: user.action <guibutton>[ View ]</guibutton> <guibutton>[ Edit ]</guibut
 </para>
 <para>
  <screen>
-
  { fragile }
  # Handle with care: easy to break
  mail.google.
