@@ -679,6 +679,7 @@ web-user-manual:
 #############################################################################
 dok-tidy:
 	for html_file in `find doc/webserver -name "*.html"`; do \
+		$(ECHO) "------ begin processing $$html_file" >&2 ; \
 		$(TIDY) $$html_file || $(TIDY) $$html_file; \
 		$(PERL) -i'' -e 's@^\s*<br>\s*$$@@; s@ +$$@@;' -n -p $$html_file; \
 	done
