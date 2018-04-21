@@ -491,7 +491,7 @@ static int unknown_method(const char *method)
  *                JB_ERR_PARSE if the HTTP version is unsupported
  *
  *********************************************************************/
-jb_err static normalize_http_version(char *http_version)
+static jb_err normalize_http_version(char *http_version)
 {
    unsigned int major_version;
    unsigned int minor_version;
