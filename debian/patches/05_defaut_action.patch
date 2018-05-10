@@ -1,5 +1,6 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Serveral changes/additons to default.action.
+From: Roland Rosenfeld <roland@debian.org>
+Date: Sun, 15 Feb 2009 13:39:10 +0100
+Subject: Several changes/additons to default.action.
 
 --- a/default.action.master
 +++ b/default.action.master

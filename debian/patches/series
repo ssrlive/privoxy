@@ -9,3 +9,5 @@
 33_manpage_hyphen.patch
 34_system-docbook2man.patch
 35_man-spelling.patch
+36_openspopenjade.patch
+37_adventofcode.patch

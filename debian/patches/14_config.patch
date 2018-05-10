@@ -1,5 +1,6 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Several Debian specific changes to config file
+From: Roland Rosenfeld <roland@debian.org>
+Date: Sat, 11 Feb 2006 21:27:14 +0100
+Subject: Several Debian specific changes to config file
 
 --- a/config
 +++ b/config

@@ -1,5 +1,6 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Replace all -- in man page by \-\- to make lintian happy.
+From: Roland Rosenfeld <roland@debian.org>
+Date: Thu, 24 Jan 2013 17:40:51 +0100
+Subject: Replace all -- in man page by \-\- to make lintian happy.
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in

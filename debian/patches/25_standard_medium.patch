@@ -1,7 +1,7 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Change the global default from standard.Cautious to
- standard.Medium, which is similar to the old 3.0.3 behavior and 
- doesn't change too much.
+From: Roland Rosenfeld <roland@debian.org>
+Date: Sat, 23 Sep 2006 23:37:03 +0200
+Subject: Change the global default from standard.Cautious to standard.Medium,
+ which is similar to the old 3.0.3 behavior and doesn't change too much.
 
 --- a/match-all.action
 +++ b/match-all.action

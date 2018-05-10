@@ -1,7 +1,7 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Privoxy
 Upstream-Contact: Privoxy Developers <privoxy-devel@lists.privoxy.org>
-Source: http://www.privoxy.org/sf-download-mirror/Sources/
+Source: https://sourceforge.net/projects/ijbswa/files/Sources/
 
 Files: *
 Copyright:
@@ -38,7 +38,7 @@ License: GPL-2+
 
 Files: pcre/*
 Copyright: Copyright (c) 1997-2000 University of Cambridge
-Comment: 
+Comment:
  Written by: Philip Hazel <ph10@cam.ac.uk>
  .
  University of Cambridge Computing Service,
@@ -54,7 +54,7 @@ License: BSD-like
  .
  2. The origin of this software must not be misrepresented, either by
     explicit claim or by omission.
- .  
+ .
  3. Altered versions must be plainly marked as such, and must not be
     misrepresented as being the original software.
  .

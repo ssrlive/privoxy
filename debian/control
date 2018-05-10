@@ -3,24 +3,22 @@ Section: web
 Priority: optional
 Maintainer: Roland Rosenfeld <roland@debian.org>
 Build-Depends: autoconf,
-               autotools-dev,
-               debhelper (>= 9),
-               dh-systemd (>= 1.4),
+               debhelper (>= 11~),
                docbook,
                docbook-dsssl,
                docbook-utils,
                groff,
-               jade,
                libpcre3-dev,
                man2html,
+               opensp,
                po-debconf,
                sgmlspl,
-               sp,
                w3m,
                zlib1g-dev
-Standards-Version: 3.9.8
+Standards-Version: 4.1.4
 Homepage: https://www.privoxy.org/
-Testsuite: autopkgtest
+Vcs-Git: https://salsa.debian.org/debian/privoxy.git
+Vcs-Browser: https://salsa.debian.org/debian/privoxy
 
 Package: privoxy
 Architecture: any

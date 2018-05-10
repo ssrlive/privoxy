@@ -1,5 +1,6 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Move man page from man section 1 to man section 8.
+From: Roland Rosenfeld <roland@debian.org>
+Date: Mon, 21 Apr 2003 11:11:31 +0200
+Subject: Move man page from man section 1 to man section 8.
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in

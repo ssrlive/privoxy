@@ -1,6 +1,7 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Stop converting 8bit chars in the documentation (#203697)
-Bug-Debian: http://bugs.debian.org/203697
+From: Roland Rosenfeld <roland@debian.org>
+Date: Sun, 15 May 2005 15:28:56 +0200
+Subject: Stop converting 8bit chars in the documentation (#203697)
+Bug-Debian: https://bugs.debian.org/203697
 
 --- a/doc/source/ldp.dsl.in
 +++ b/doc/source/ldp.dsl.in

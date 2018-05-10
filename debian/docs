@@ -1,10 +1,10 @@
-README
 AUTHORS
+README
 TODO
-doc/webserver/faq
-doc/webserver/user-manual
 doc/webserver/developer-manual
+doc/webserver/faq
 doc/webserver/images
+doc/webserver/man-page
 doc/webserver/p_doc.css
 doc/webserver/privoxy-index.html
-doc/webserver/man-page
+doc/webserver/user-manual

@@ -33,7 +33,9 @@ case "$1" in
     configure)
         adduser --quiet --system --home $CONFDIR --no-create-home \
 	    --ingroup nogroup --disabled-password privoxy
-        chown -R privoxy:adm /var/log/privoxy
+        chown privoxy:adm /var/log/privoxy
+	[ -f /var/log/privoxy/logfile ] \
+	    && chown privoxy:adm /var/log/privoxy/logfile
         chmod 750 /var/log/privoxy
 	chown privoxy $CONFDIR/user.action $CONFDIR/trust
 	[ -f $CONFDIR/match-all.action ] \
@@ -60,6 +62,7 @@ case "$1" in
 	ucf --three-way --debconf-ok $CONFIG.ucftmp $CONFIG
 	ucfr privoxy $CONFIG
 	rm -f $CONFIG.ucftmp
+	db_stop
 
 	if [ "x$2" != "x" ] && dpkg --compare-versions "$2" lt "3.0.4"
 	then

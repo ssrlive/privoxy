@@ -1,5 +1,6 @@
-Description: Fix typo in man page privoxy-log-parser(1)
-Author: Roland Rosenfeld <roland@debian.org>
+From: Roland Rosenfeld <roland@debian.org>
+Date: Sun, 1 May 2016 14:21:22 +0200
+Subject: Fix typo in man page privoxy-log-parser(1)
 
 --- a/tools/privoxy-log-parser.pl
 +++ b/tools/privoxy-log-parser.pl

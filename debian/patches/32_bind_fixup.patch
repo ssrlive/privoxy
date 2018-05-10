@@ -1,6 +1,7 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Work around bind problems on startup (Closes: #534735)
-Bug-Debian: http://bugs.debian.org/534735
+From: Roland Rosenfeld <roland@debian.org>
+Date: Tue, 18 May 2010 10:14:18 +0200
+Subject: Work around bind problems on startup (Closes: #534735)
+Bug-Debian: https://bugs.debian.org/534735
 
 --- a/jbsockets.c
 +++ b/jbsockets.c

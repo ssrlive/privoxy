@@ -1,5 +1,6 @@
-Author: Roland Rosenfeld <roland@debian.org>
-Description: Remove unnecessary linking against libnsl.
+From: Roland Rosenfeld <roland@debian.org>
+Date: Sat, 7 Oct 2006 13:12:13 +0200
+Subject: Remove unnecessary linking against libnsl.
 
 --- a/configure.in
 +++ b/configure.in

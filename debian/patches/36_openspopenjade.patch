@@ -1,0 +1,35 @@
+From: Neil Roeth <neil@debian.org>
+Date: Sat, 10 Sep 2016 08:48:35 +0200
+Subject: Replace sp and jade with opensp and openjade.
+Bug-Debian: https://bugs.debian.org/837207
+
+--- a/GNUmakefile.in
++++ b/GNUmakefile.in
+@@ -479,7 +479,7 @@ dok-man:
+ # target for man page generation!
+ man: dok-release
+ 	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
+-	nsgmls ../privoxy-man-page.sgml  | sgmlspl /usr/share/perl5/sgmlspl-specs/docbook2man-spec.pl &&\
++	onsgmls ../privoxy-man-page.sgml  | sgmlspl /usr/share/perl5/sgmlspl-specs/docbook2man-spec.pl &&\
+ 	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' $(MAN_PAGE) ;\
+ 	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" $(MAN_PAGE); \
+ 	perl -pi.bak -e "s/ö/\\\\[:o]/g" $(MAN_PAGE); \
+--- a/utils/docbook2man/docbook2man-spec.pl.1
++++ b/utils/docbook2man/docbook2man-spec.pl.1
+@@ -11,14 +11,14 @@ docbook2man-spec.pl \- convert DocBook R
+ \fBsgmlspl\fR \fBdocbook2man-spec.pl\fR
+ 
+ 
+-\fBnsgmls\fR [ \fB\fIsgml document\fB\fR ]\fB| sgmlspl\fR \fBdocbook2man-spec.pl\fR
++\fBonsgmls\fR [ \fB\fIsgml document\fB\fR ]\fB| sgmlspl\fR \fBdocbook2man-spec.pl\fR
+ 
+ .SH "DESCRIPTION"
+ .PP
+ \fBdocbook2man\fR is a sgmlspl spec file that produced man
+ pages (using the -man macros) from DocBook RefEntry markup.
+ .PP
+-The program reads ESIS produced by nsgmls (or other SGML parsers) from
++The program reads ESIS produced by onsgmls (or other SGML parsers) from
+ standard input.  Markup not found in RefEntry is discarded.
+ .PP
+ Its output, the converted man pages, are written to the current directory.  If

@@ -1,3 +1,50 @@
+privoxy (3.0.26-6) unstable; urgency=medium
+
+  * Fix typo in patch description.
+  * postinst: avoid using chown -R.
+  * Move source.lintian-overrides to soure/lintian-overrides.
+  * Add Vcs-headers pointing to salsa.
+  * Upgrade to Standards-Version 4.1.4 (no changes).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 29 Apr 2018 11:57:47 +0200
+
+privoxy (3.0.26-5) unstable; urgency=medium
+
+  * Add ru debconf translation.  Thanks to Lev Lamberov (Closes: #883110).
+  * Optimize patches for gbp pq.
+  * Upgrade to Standards-Version 4.1.3 (no changes).
+  * Upgrade to debhelper v11 (remove systemd from dh call).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 20 Jan 2018 12:49:42 +0100
+
+privoxy (3.0.26-4) unstable; urgency=medium
+
+  * Add pt debconf translation.  Thanks to Rui Branco (Closes: #858743).
+  * Add description to 36_openspopenjade.patch.
+  * Upgrade to debhelper v10 and remove dh-systemd build dependency.
+  * debhelper v10 replaces autotools-dev.
+  * Remove Testsuite header, since this is automatically added.
+  * Upgrade to Standards-Version 4.1.1
+    - change copyrights-format to https.
+
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 01 Nov 2017 10:45:49 +0100
+
+privoxy (3.0.26-3) unstable; urgency=medium
+
+  * Add da debconf translation.  Thanks to Joe Dalton (Closes: #850876).
+  * 37_adventofcode: unlock adventofcode.com (Closes: #848211).
+
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 11 Jan 2017 22:24:55 +0100
+
+privoxy (3.0.26-2) unstable; urgency=medium
+
+  * Add db_stop to postinst, since upgrade fails otherwise in some
+    situations (Closes: #835409).
+  * Replace sp and jade with opensp and openjade.  Thanks to Neil Roeth
+    for providing a patch (Closes: #837207).
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 10 Sep 2016 08:48:35 +0200
+
 privoxy (3.0.26-1) unstable; urgency=medium
 
   * New upstream version 3.0.26.
