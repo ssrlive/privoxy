@@ -1,10 +1,8 @@
-$Id: TODO,v 1.165 2017/05/29 10:40:28 fabiankeil Exp $
-
 Some Privoxy-related tasks, sorted by the time they
 have been added, not by priority.
 
 The latest version should be available at:
-http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO
+https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=TODO;hb=HEAD
 
 There's work in progress to fund development on these items using
 donations. If you want to donate, please have a look at:
