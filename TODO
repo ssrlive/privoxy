@@ -6,7 +6,7 @@ https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=TODO;hb=HEAD
 
 There's work in progress to fund development on these items using
 donations. If you want to donate, please have a look at:
-http://www.privoxy.org/faq/general.html#DONATE
+https://www.privoxy.org/faq/general.html#DONATE
 
 1)  Add more regression tests. Filters should be tested automatically
     (variables too). Could probably reuse large parts of Privoxy-Filter-Test.
