@@ -489,7 +489,7 @@ warranty? Registration?</title>
    While it is partly out of date, it's still worth reading.
 </para>
 <para>
-   Our <ulink url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO?view=markup">TODO list</ulink>
+   Our <ulink url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=TODO;hb=HEAD">TODO list</ulink>
    may be of interest to you as well.
    Please let us know if you want to work on one of the items listed.
 </para>
@@ -498,7 +498,7 @@ warranty? Registration?</title>
 <sect3 renderas="sect4" id="donate"><title>Would you like to donate?</title>
 <para>
  Donations are welcome. Our
- <ulink url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/TODO?view=markup">TODO list</ulink>
+ <ulink url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=TODO;hb=HEAD">TODO list</ulink>
  is rather long and being able to pay one (or more) developers to work on Privoxy
  would make a huge difference, even if it was only for a couple of weeks. Donations may
  also be used for Privoxy-related travel expenses (for example to attend conferences),
