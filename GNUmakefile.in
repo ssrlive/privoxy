@@ -1,8 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# $Id: GNUmakefile.in,v 1.263 2017/06/01 13:22:46 ler762 Exp $
-#
-# Written by and Copyright (C) 2001-2017 members of the
+# Written by and Copyright (C) 2001-2018 members of the
 # Privoxy team. https://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written

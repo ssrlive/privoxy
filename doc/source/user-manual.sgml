@@ -30,13 +30,11 @@
 <!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/user-manual.sgml,v $
+ File        :  doc/source/user-manual.sgml
 
  Purpose     :  user manual
-                This file belongs into
-                ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
- Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -59,8 +57,6 @@
  <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
-
-<pubdate>$Id: user-manual.sgml,v 2.221 2017/05/20 09:27:54 fabiankeil Exp $</pubdate>
 
 <!--
 

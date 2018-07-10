@@ -1,11 +1,7 @@
 <?php
-//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/confirmad.php,v $
+//  File :   doc/webserver/submit/confirmad.php
 //
 //  Purpose  :  Confirms ad submission.
-//              This file belongs in
-//              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-//
-//  $Id: confirmad.php,v 1.4 2006/07/18 14:48:53 david__schmidt Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/

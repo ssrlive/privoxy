@@ -1,11 +1,7 @@
 <?php
-//  File :  $Source: /cvsroot/ijbswa/current/doc/webserver/submit/index.php,v $
+//  File :   doc/webserver/submit/index.php
 //
 //  Purpose  :  Submit form for ads and such
-//              This file belongs in
-//              ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-//
-//  $Id: index.php,v 1.7 2006/07/18 14:48:53 david__schmidt Exp $
 //
 //  Written by and Copyright (C) 2001 the SourceForge
 //  Privoxy team. http://www.privoxy.org/

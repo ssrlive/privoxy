@@ -9,13 +9,11 @@
 <!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/config.sgml,v $
+ File        :  doc/source/config.sgml
 
  Purpose     :  config file generation
 
- $Id: config.sgml,v 2.34 2016/08/26 12:27:34 fabiankeil Exp $
-
- Copyright (C) 2001-2009 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================

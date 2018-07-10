@@ -2,13 +2,9 @@
 
 <!--
 
-  File        :  $Source: /cvsroot/ijbswa/current/doc/webserver/config/index.php,v $
+  File        :  doc/webserver/config/index.php
 
   Purpose     :  Warn user of incorrect configuration.
-                 This file belongs in
-                 ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
-
-  $Id: index.php,v 1.8 2016/02/26 12:31:47 fabiankeil Exp $
 
   Written by and Copyright (C) 2001 the SourceForge
   Privoxy team. https://www.privoxy.org/

@@ -1,11 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/contacting.sgml,v $
+ File        :  doc/source/contacting.sgml
 
  Purpose     :  Entity included in other project documents.
 
- $Id: contacting.sgml,v 2.46 2017/01/23 13:03:06 fabiankeil Exp $
-
- Copyright (C) 2001-2011 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================

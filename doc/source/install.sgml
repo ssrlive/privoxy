@@ -12,13 +12,11 @@
 <!entity % p-readme "INCLUDE">     <!-- This is now in INSTALL           -->
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/install.sgml,v $
+ File        :  doc/source/install.sgml
 
  Purpose     :  INSTALL file for Privoxy
 
- $Id: install.sgml,v 2.33 2016/08/26 12:27:34 fabiankeil Exp $
-
- Copyright (C) 2001-2009 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================

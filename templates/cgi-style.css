@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# File        :  $Source: /cvsroot/ijbswa/current/templates/cgi-style.css,v $
+# File        :  templates/cgi-style.css
 #
 # Purpose     :  Style sheet for the web-based config interface.
 #
@@ -32,8 +32,6 @@
 
 /*
  * CSS for Privoxy CGI and script output
- *
- * $Id: cgi-style.css,v 1.15 2017/01/23 13:01:55 fabiankeil Exp $
  */
 
 /*

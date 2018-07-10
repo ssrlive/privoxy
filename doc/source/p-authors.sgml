@@ -1,11 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/p-authors.sgml,v $
+ File        :  doc/source/p-authors.sgml
 
  Purpose     :  Entity included in other project documents.
 
- $Id: p-authors.sgml,v 2.84 2017/01/23 16:23:16 fabiankeil Exp $
-
- Copyright (C) 2001-2013 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================

@@ -1,8 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.in,v 1.213 2017/05/25 11:17:11 fabiankeil Exp $
-dnl
-dnl Written by and Copyright (C) 2001-2017 the
+dnl Written by and Copyright (C) 2001-2018 the
 dnl Privoxy team. https://www.privoxy.org/
 dnl
 dnl Based on the Internet Junkbuster originally written

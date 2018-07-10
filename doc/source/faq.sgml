@@ -21,11 +21,9 @@
 <!entity  my-app "<application>Privoxy</application>">
 ]>
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/faq.sgml,v $
+ File        :  doc/source/faq.sgml
 
  Purpose     :  FAQ
-                This file belongs into
-                ijbswa.sourceforge.net:/home/groups/i/ij/ijbswa/htdocs/
 
  Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
@@ -75,8 +73,6 @@
  <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
-
-<pubdate>$Id: faq.sgml,v 2.135 2017/03/27 10:22:27 fabiankeil Exp $</pubdate>
 
 <!--
 

@@ -1,11 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/p-config.sgml,v $
+ File        :  doc/source/p-config.sgml
 
  Purpose     :  Used with other docs and files only.
 
- $Id: p-config.sgml,v 2.127 2017/06/26 12:14:38 fabiankeil Exp $
-
- Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -97,10 +95,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
- $Id: p-config.sgml,v 2.127 2017/06/26 12:14:38 fabiankeil Exp $
-</para>
-<para>
-Copyright (C) 2001-2017 Privoxy Developers https://www.privoxy.org/
+Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
 </para>
 
 <para>

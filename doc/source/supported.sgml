@@ -1,11 +1,9 @@
 <!--
- File        :  $Source: /cvsroot/ijbswa/current/doc/source/supported.sgml,v $
+ File        :  doc/source/supported.sgml
 
  Purpose     :  Entity included in other project documents.
 
- $Id: supported.sgml,v 2.15 2015/01/24 16:40:47 fabiankeil Exp $
-
- Copyright (C) 2001-2008 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
