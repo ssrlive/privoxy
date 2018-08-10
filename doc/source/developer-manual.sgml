@@ -128,15 +128,15 @@ Hal.
    <para>
     The first step is to join the <ulink
       url="https://lists.privoxy.org/mailman/listinfo/privoxy-devel">privoxy-devel mailing list</ulink>.
-    You can submit your ideas, or even better patches. Patches are best
+    You can submit your ideas or, even better, patches. Patches are best
     submitted to the Sourceforge tracker set up for this purpose, but
     can be sent to the list for review too.
    </para>
     <para>
-     You will also need to have a cvs package installed, which will
-     entail having ssh installed as well (which seems to be a requirement of
-     SourceForge), in order to access the cvs repository. Having the GNU build
-     tools is also going to be important (particularly, autoconf and gmake).
+     You will also need to have a git package installed, which will
+     entail having ssh installed as well, in order to access the git repository.
+     Having the GNU build tools is also going to be important (particularly,
+     autoconf and gmake).
     </para>
     <para>
       For the time being (read, this section is under construction), you can
@@ -147,35 +147,40 @@ Hal.
   </sect1>
 
   <!--   ~~~~~       New section      ~~~~~     -->
-  <sect1 id="cvs"><title>The CVS Repository</title>
+  <sect1 id="git"><title>The Git Repository</title>
     <para>
       If you become part of the active development team, you will eventually
-      need write access to our holy grail, the CVS repository. One of the
+      need write access to our holy grail, the Git repository. One of the
       team members will need to set this up for you. Please read
-      this chapter completely before accessing via CVS.
+      this chapter completely before accessing via Git.
     </para>
 
-    <sect2 id="cvsaccess"><title>Access to CVS</title>
+    <sect2 id="gitaccess"><title>Access to Git</title>
       <para>
-        The project's CVS repository is hosted on
-        <ulink url="https://sourceforge.net/">SourceForge.</ulink>
-        For historical reasons, the CVS server is
-        called <literal>ijbswa.cvs.sourceforge.net</literal>, the repository is
-        called <literal>ijbswa</literal>, and the source tree module is called
-        <literal>current</literal>.
+        The project's Git repository is hosted at the
+        <ulink url="https://privoxy.org/">Privoxy site.</ulink>
+        The Git repository URL is
+        <literal>ssh://git@git.privoxy.org:23/git/privoxy.git</literal>,
+        the central repository is called <literal>privoxy</literal>, and the
+        source branch is called <literal>master</literal>. Subfolders exist
+        within the project for target-dependent build and  packaging tools, each
+        including the name of the target operating system in their name (e.g.
+        Windows, OSXPackageBuilder, debian). There is a webview of the Git
+        hierarchy at
+        <ulink url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=tree">
+                    https://www.privoxy.org/gitweb/?p=privoxy.git;a=tree</ulink>,
+        which might help with visualizing how these pieces fit together.
       </para>
     </sect2>
 
-    <sect2 id="cvsbranches">
+    <sect2 id="gitbranches">
     <title>Branches</title>
      <para>
-       Within the CVS repository, there are modules and branches. As
-       mentioned, the sources are in the <literal>current</literal>
-       <quote>module</quote>. Other modules are present for platform specific
-       issues. There is a webview of the CVS hierarchy at <ulink
-        url="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/"
-            >http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/</ulink>,
-       which might help with visualizing how these pieces fit together.
+       Whilst the central repository contains only the master branch, developers
+       are of course free to create branches in their local repositories as they
+       develop features, fixes, or update the target-dependent tools. Only once
+       such changes are fully tested ought they be pushed back to the central
+       repository master branch.
      </para>
      <!--
      <para>
@@ -188,7 +193,7 @@ Hal.
        just for stable series releases (e.g. 3.0.0 -> 3.0.1 -> 3.0.2, etc).
        Once the initial stable release of any stable branch has taken place,
        this branch is <emphasis>only used for bugfixes</emphasis>, which have
-       had prior testing before being committed to CVS. (See <link
+       had prior testing before being committed to Git. (See <link
        linkend="versionnumbers">Version Numbers</link> below for details on
        versioning.)
      </para>
@@ -212,12 +217,12 @@ Hal.
     -->
     </sect2>
 
-    <sect2 id="cvscommit"><title>CVS Commit Guidelines</title>
+    <sect2 id="gitcommit"><title>Git Commit Guidelines</title>
       <para>
         The source tree is the heart of every software project. Every effort must
         be made to ensure that it is readable, compilable and consistent at all
         times. <!-- There are differing guidelines for the stable branch and the
-        main development trunk, and --> We expect anyone with CVS access to strictly
+        main development trunk, and --> We expect anyone with Git access to strictly
         adhere to the following guidelines:
       </para>
 
@@ -247,7 +252,7 @@ Hal.
             If necessary, prepare the commit messages in advance.
           </para></listitem>
           <listitem><para>
-            Before changing things on CVS, make sure that your changes are in line
+            Before changing things on Git, make sure that your changes are in line
             with the team's general consensus on what should be done.
           </para></listitem>
           <listitem>
@@ -287,9 +292,11 @@ Hal.
        </listitem>
        <listitem>
         <para>
-          Alternately, proposed changes can be submitted as patches to the patch tracker on
-          Sourceforge first: <ulink
-          url="https://sourceforge.net/tracker/?group_id=11118&#38;atid=311118">https://sourceforge.net/tracker/?group_id=11118&#38;atid=311118</ulink>.
+          Alternately, proposed changes can be submitted as patches output by
+          <literal>git format-patch</literal> to the privoxy-devel mailing list
+          or alternatively to the patch tracker on Sourceforge:
+          <ulink url="https://sourceforge.net/tracker/?group_id=11118&#38;atid=311118">
+                      https://sourceforge.net/tracker/?group_id=11118&#38;atid=311118</ulink>.
           Then ask for peer review.
         </para>
        </listitem>
@@ -349,7 +356,7 @@ Hal.
     <para>
      Packagers are encouraged to include this documentation. For those without
      the ability to build the docs locally, text versions of each are kept in
-     CVS. HTML versions are also being kept in CVS under
+     Git. HTML versions are also being kept in Git under
      <filename>doc/webserver/*</filename>.
     </para>
     <para>
@@ -362,7 +369,7 @@ Hal.
     </para>
     <para>
      Documentation writers should please make sure documents build
-     successfully before committing to CVS, if possible.
+     successfully before committing to Git, if possible.
     </para>
     <para>
      How do you update the webserver (i.e. the pages on privoxy.org)?
@@ -381,7 +388,7 @@ Hal.
      </orderedlist>
 
   <para>
-   Finished docs should be occasionally submitted to CVS
+   Finished docs should be occasionally submitted to Git
    (<filename>doc/webserver/*/*.html</filename>) so that those without
    the ability to build them locally, have access to them if needed.
    This is especially important just prior to a new release! Please
@@ -1777,10 +1784,9 @@ static void unload_re_filterfile(void *f) { ... }</programlisting>
 
     <para><emphasis>Example for file comments:</emphasis></para>
 <programlisting>
-const char FILENAME_rcs[] = "$I&lt;!-- Break CVS Substitution -->d$";
 /*********************************************************************
  *
- * File        :  $S&lt;!-- Break CVS Substitution -->ource$
+ * File        :  $Source
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -1831,10 +1837,9 @@ const char FILENAME_h_rcs[] = FILENAME_H_VERSION;
 <programlisting>
 #ifndef _FILENAME_H
 #define _FILENAME_H
-#define FILENAME_H_VERSION "$I&lt;!-- Break CVS Substitution -->d$"
 /*********************************************************************
  *
- * File        :  $S&lt;!-- Break CVS Substitution -->ource$
+ * File        :  $Source
  *
  * Purpose     :  (Fill me in with a good description!)
  *
@@ -2083,11 +2088,11 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
               Z, the point or sub version, represents a release of the software within a branch.
               It is therefore incremented immediately before each code freeze.
               In development branches, only the even point versions correspond to actual releases,
-              while the odd ones denote the evolving state of the sources on CVS in between.
-              It follows that Z is odd on CVS in development branches most of the time. There, it gets
+              while the odd ones denote the evolving state of the sources on Git in between.
+              It follows that Z is odd on Git in development branches most of the time. There, it gets
               increased to an even number immediately before a code freeze, and is increased to an odd
               number again immediately thereafter.
-              This ensures that builds from CVS snapshots are easily distinguished from released versions.
+              This ensures that builds from Git snapshots are easily distinguished from released versions.
               The point version is reset to zero when the minor changes.
             </para>
             <para>
@@ -2104,7 +2109,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
           </listitem>
         </itemizedlist>
     <para>
-     In summary, the main CVS trunk is the development branch where new
+     In summary, the main Git trunk is the development branch where new
      features are being worked on for the next stable series. This should
      almost always be where the most activity takes place. There is always at
      least one stable branch from the trunk, e.g now it is
@@ -2121,7 +2126,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
     <para>
      Developers should remember too that if they commit a bugfix to the stable
      branch, this will more than likely require a separate submission to the
-     main trunk, since these are separate development trees within CVS. If you
+     main trunk, since these are separate development trees within Git. If you
      are working on both, then this would require at least two separate check
      outs (i.e main trunk, <emphasis>and</emphasis> the stable release branch,
      which is <literal>v_3_0_branch</literal> at the moment).
@@ -2174,12 +2179,12 @@ for-privoxy-version=3.0.11
       <listitem>
        <para>
         All documentation should be rebuild after the version bump.
-        Finished docs should be then be committed to CVS (for those
+        Finished docs should be then be committed to Git (for those
         without the ability to build these). Some docs may require
         rather obscure processing tools. <filename>config</filename>,
         the man page (and the html version of the man page)
         fall in this category. README, the man page, AUTHORS, and config
-        should all also be committed to CVS for other packagers. The
+        should all also be committed to Git for other packagers. The
         formal docs should be uploaded to the webserver. See the
         Section "Updating the webserver" in this manual for details.
        </para>
@@ -2211,7 +2216,7 @@ for-privoxy-version=3.0.11
       </listitem>
       <listitem>
        <para>
-        Tag all files in CVS with the version number with
+        Tag all files in Git with the version number with
         <quote><command>cvs tag v_X_Y_Z</command></quote>.
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </para>
@@ -2246,7 +2251,7 @@ for-privoxy-version=3.0.11
      <para>
       For <emphasis>all</emphasis> types of packages, including the source tarball,
       <emphasis>you must make sure that you build from clean sources by exporting
-      the right version from CVS into an empty directory</emphasis> (just press return when
+      the right version from Git into an empty directory</emphasis> (just press return when
       asked for a password):
      </para>
 
@@ -2259,7 +2264,7 @@ for-privoxy-version=3.0.11
 
     <para>
      <emphasis>Do NOT change</emphasis> a single bit, including, but not limited to
-     version information after export from CVS. This is to make sure that
+     version information after export from Git. This is to make sure that
      all release packages, and with them, all future bug reports, are based
      on exactly the same code.
     </para>
@@ -2347,7 +2352,7 @@ for-privoxy-version=3.0.11
          interest (and possibly renamed to <filename>index.html</filename>).
          This should be one level up from the manuals. There is a link also
          on this page to an HTMLized version of the man page. To avoid 404 for
-         this, it is in CVS as
+         this, it is in Git as
          <filename>doc/webserver/man-page/privoxy-man-page.html</filename>,
          and should be included along with the manuals. There is also a
          css stylesheets that can be included for better presentation:
@@ -2438,7 +2443,7 @@ for-privoxy-version=3.0.11
         packages" above).
       </para>
       <para>
-        As the only exception to not changing anything after export from CVS,
+        As the only exception to not changing anything after export from Git,
         now examine the file <filename>privoxy-</filename><replaceable class="parameter">dist</replaceable><filename>.spec</filename>
         and make sure that the version information and the RPM release number are
         correct. The RPM release numbers for each version start at one. Hence it must
@@ -2623,7 +2628,7 @@ for-privoxy-version=3.0.11
         packages" above).
       </para>
       <para>
-        There are three modules available in the CVS repository for use on Mac
+        There are three modules available in the Git repository for use on Mac
         OS X, though technically only two of them generate a release (the other
         can be used to install from source).
       </para>
@@ -2631,7 +2636,7 @@ for-privoxy-version=3.0.11
       <title>OSXPackageBuilder module</title>
         <para>
           The OSXPackageBuilder module generates OS X installer packages
-          supporting all Macs running OS X 10.4 and above. Obtain it from CVS as
+          supporting all Macs running OS X 10.4 and above. Obtain it from Git as
           follows into a folder parallel to the exported privoxy source:
         </para>
           <programlisting>
@@ -2658,7 +2663,7 @@ for-privoxy-version=3.0.11
           supports only Intel Macs running OS X 10.6 or higher.</emphasis>
         </para>
         <para>
-          Check out the module from CVS as follows into a folder parallel to the
+          Check out the module from Git as follows into a folder parallel to the
           exported privoxy source:
         </para>
           <programlisting>
@@ -2702,7 +2707,7 @@ for-privoxy-version=3.0.11
           from source on a single machine.
         </para>
         <para>
-          Check out the module from CVS as follows into a folder parallel to the
+          Check out the module from Git as follows into a folder parallel to the
           exported privoxy source:
         </para>
           <programlisting>
@@ -2823,7 +2828,7 @@ for-privoxy-version=3.0.11
     <filename>doc/webserver/man-page/privoxy-man-page.html</filename>
     by running <quote><command>make man</command></quote>. (This is
     a separate target due to dependencies on some obscure perl scripts
-    [now in CVS, but not well tested]. See comments in <filename>GNUmakefile</filename>.)
+    [now in Git, but not well tested]. See comments in <filename>GNUmakefile</filename>.)
    </para>
    <para>
     If you want to add new files to the webserver, create them locally in
@@ -2831,7 +2836,7 @@ for-privoxy-version=3.0.11
     create new directories under <filename>doc/webserver</filename>).
    </para>
    <para>
-    Next, commit any changes from the above steps to CVS. All set?
+    Next, commit any changes from the above steps to Git. All set?
     If these are docs in the stable branch, then do:
    </para>
     <programlisting>
