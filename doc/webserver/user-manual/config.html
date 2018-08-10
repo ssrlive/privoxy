@@ -94,9 +94,6 @@ CLASS="FILENAME"
  values, all separated by whitespace (any number of spaces or tabs). For
  example:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -104,9 +101,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >confdir /etc/privoxy</I
 ></SPAN
-></P
->
- </TT
 ></P
 ><P
 > Assigns the value <TT
@@ -257,7 +251,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  user-manual  /usr/share/doc/privoxy/user-manual</PRE
+>  user-manual  /usr/share/doc/privoxy/user-manual</PRE
 ></TD
 ></TR
 ></TABLE
@@ -288,7 +282,7 @@ WIDTH="90%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  user-manual  http://example.com/privoxy/user-manual/</PRE
+>  user-manual  http://example.com/privoxy/user-manual/</PRE
 ></TD
 ></TR
 ></TABLE
@@ -3581,8 +3575,8 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >  forward         192.168.*.*/     .
-  forward            10.*.*.*/     .
-  forward           127.*.*.*/     .</PRE
+  forward          10.*.*.*/       .
+  forward         127.*.*.*/       .</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5005,7 +4999,7 @@ CLASS="QUOTE"
     (<A
 HREF="https://bugzilla.mozilla.org/show_bug.cgi?id=492459"
 TARGET="_top"
->https://bugzilla.mozilla.org/show_bug.cgi?id=492459</A
+>                 https://bugzilla.mozilla.org/show_bug.cgi?id=492459</A
 >),
     the bug has been fixed for quite some time, but this directive is also useful
     to make it harder for websites to detect whether or not resources are being
@@ -5154,15 +5148,16 @@ WIDTH="90%"
 CLASS="SCREEN"
 >    # Best speed (compared to the other levels)
     compression-level 1
+
     # Best compression
     compression-level 9
+
     # No compression. Only useful for testing as the added header
     # slightly increases the amount of data that has to be sent.
     # If your benchmark shows that using this compression level
     # is superior to using no compression at all, the benchmark
     # is likely to be flawed.
-    compression-level 0
-    </PRE
+    compression-level 0</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5365,8 +5360,7 @@ CLASS="SCREEN"
 >    # Define a couple of tags, the described effect requires action sections
     # that are enabled based on CLIENT-TAG patterns.
     client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
-    disable-content-filters Disable content-filters but do not affect other actions
-    </PRE
+    disable-content-filters Disable content-filters but do not affect other actions</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5469,8 +5463,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >      # Increase the time to life for temporarily enabled tags to 3 minutes
-      client-tag-lifetime 180
-    </PRE
+      client-tag-lifetime 180</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5582,8 +5575,7 @@ WIDTH="90%"
 CLASS="SCREEN"
 >      # Allow systems that can reach Privoxy to provide the client
       # IP address with a X-Forwarded-For header.
-      trust-x-forwarded-for 1
-    </PRE
+      trust-x-forwarded-for 1</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5675,8 +5667,7 @@ WIDTH="90%"
 ><PRE
 CLASS="SCREEN"
 >      # Increase the receive buffer size
-      receive-buffer-size 32768
-    </PRE
+      receive-buffer-size 32768</PRE
 ></TD
 ></TR
 ></TABLE
@@ -5716,9 +5707,6 @@ CLASS="QUOTE"
 >"Privoxy"</SPAN
 > is active. To turn off, set to 0.</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5726,10 +5714,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >activity-animation   1</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="LOG-MESSAGES"
@@ -5749,9 +5733,6 @@ HREF="config.html#DEBUG"
 >debug</A
 > directive.</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5759,10 +5740,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >log-messages       1</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="LOG-BUFFER-SIZE"
@@ -5781,9 +5758,6 @@ CLASS="QUOTE"
 > Warning: Setting this to 0 will result in the buffer to grow infinitely and
  eat up all your memory!</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5791,10 +5765,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >log-buffer-size      1</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="LOG-MAX-LINES"
@@ -5806,9 +5776,6 @@ CLASS="APPLICATION"
 > is the maximum number of lines held
  in the log buffer. See above.</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5816,10 +5783,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >log-max-lines      200</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="LOG-HIGHLIGHT-MESSAGES"
@@ -5835,9 +5798,6 @@ CLASS="APPLICATION"
 > will highlight portions of the log
  messages with a bold-faced font:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5845,10 +5805,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >log-highlight-messages   1</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="LOG-FONT-NAME"
@@ -5856,9 +5812,6 @@ NAME="LOG-FONT-NAME"
 ><P
 > The font used in the console window:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5866,10 +5819,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >log-font-name        Comic Sans MS</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="LOG-FONT-SIZE"
@@ -5877,9 +5826,6 @@ NAME="LOG-FONT-SIZE"
 ><P
 > Font size used in the console window:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5887,10 +5833,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >log-font-size        8</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="SHOW-ON-TASK-BAR"
@@ -5906,9 +5848,6 @@ CLASS="APPLICATION"
 > will appear as a button on the Task bar
  when minimized:</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5916,10 +5855,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >show-on-task-bar     0</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="CLOSE-BUTTON-MINIMIZES"
@@ -5935,9 +5870,6 @@ CLASS="APPLICATION"
 > instead of closing
  the program (close with the exit option on the File menu).</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;<SPAN
 CLASS="emphasis"
@@ -5945,10 +5877,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >close-button-minimizes  1</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ><A
 NAME="HIDE-CONSOLE"
@@ -5968,9 +5896,6 @@ CLASS="APPLICATION"
 > will disconnect from and hide the
  command console.</P
 ><P
-> <TT
-CLASS="LITERAL"
->  <P
 CLASS="LITERALLAYOUT"
 >&nbsp;&nbsp;#<SPAN
 CLASS="emphasis"
@@ -5978,10 +5903,6 @@ CLASS="emphasis"
 CLASS="EMPHASIS"
 >hide-console</I
 ></SPAN
-><br>
-&nbsp;&nbsp;&nbsp;</P
->
- </TT
 ></P
 ></DIV
 ></DIV

@@ -144,7 +144,8 @@ CLASS="APPLICATION"
 ></LI
 ><LI
 ><P
->              Y, the version minor, represents the branch within the major version.
+> 
+              Y, the version minor, represents the branch within the major version.
               At any point in time, there are two branches being maintained:
               The stable branch, with an even minor, say, 2N, in which no functionality is
               being added and only bug-fixes are made, and 2N+1, the development branch, in
@@ -164,13 +165,8 @@ CLASS="APPLICATION"
 ><LI
 ><P
 >              Z, the point or sub version, represents a release of the software within a branch.
-              It is therefore incremented immediately before each code freeze.
-              In development branches, only the even point versions correspond to actual releases,
-              while the odd ones denote the evolving state of the sources on Git in between.
-              It follows that Z is odd on Git in development branches most of the time. There, it gets
-              increased to an even number immediately before a code freeze, and is increased to an odd
-              number again immediately thereafter.
-              This ensures that builds from Git snapshots are easily distinguished from released versions.
+              It is therefore incremented immediately after each software release.
+      
               The point version is reset to zero when the minor changes.
             </P
 ><P
@@ -270,23 +266,38 @@ CLASS="QUOTE"
 > in case
          they have pending changes/fixes in their pipelines. Announce the
          freeze so that nobody will interfere with last minute changes.
-        </P
-></LI
-><LI
-><P
->         Increment the version number (point from odd to even in development
-         branches!) in <TT
-CLASS="FILENAME"
->configure.in</TT
-> and update the code
-         status (CODE_STATUS="xxx") to one of "alpha", "beta" or "stable".
-         Rebuild configure and GNUMakefile to make sure the updated values are
-         being used.
        </P
 ></LI
 ><LI
 ><P
->        Use the dok-release target to update the sgml documentation source files.
+>         Update the code status (CODE_STATUS="xxx") in configure.in to one of
+         "alpha", "beta" or "stable".
+       </P
+></LI
+><LI
+><P
+>         Rebuild configure and GNUMakefile to make sure the updated values are being used.
+       </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>$ autoheader &#38;&#38; autoconf     # rebuild configure
+$ ./configure                # rebuild GNUmakefile</PRE
+></TD
+></TR
+></TABLE
+></LI
+><LI
+><P
+>        <B
+CLASS="COMMAND"
+>make dok-release</B
+> to update the sgml documentation source files.
        </P
 ></LI
 ><LI
@@ -313,7 +324,7 @@ for-privoxy-version=3.0.11</PRE
 ></LI
 ><LI
 ><P
->        All documentation should be rebuild after the version bump.
+>        All documentation should be rebuild after the code status has been changed.
         Finished docs should be then be committed to Git (for those
         without the ability to build these). Some docs may require
         rather obscure processing tools. <TT
@@ -323,8 +334,13 @@ CLASS="FILENAME"
         the man page (and the html version of the man page)
         fall in this category. README, the man page, AUTHORS, and config
         should all also be committed to Git for other packagers. The
-        formal docs should be uploaded to the webserver. See the
-        Section "Updating the webserver" in this manual for details.
+        formal docs should be uploaded to the webserver. See the section
+        <A
+HREF="webserver-update.html"
+TARGET="_top"
+>"Updating the webserver"</A
+>
+        in this manual for details.
        </P
 ></LI
 ><LI
@@ -1196,12 +1212,8 @@ NAME="NEWRELEASE-WINDOWS"
 >6.3.6. Windows</A
 ></H3
 ><P
->        Use the <A
-HREF="http://www.fruitbat.org/Cygwin/index.html#cygwincirca"
-TARGET="_top"
->        Cygwin Time Machine</A
-> to install the last 1.5 version of Cygwin.
-        Run the following commands from within the Cygwin 1.5 bash shell.
+>        Note that the docbook generated files might need some hand editing,
+        so the Windows build makefile does not rebuild the docs.
       </P
 ><P
 >        First, <SPAN
@@ -1212,25 +1224,14 @@ CLASS="EMPHASIS"
         version into an empty directory</I
 ></SPAN
 >. (See "Building and releasing
-        packages" above). Then get the Windows setup module:
+        packages" above).
+        
       </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  cvs -z3  -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co winsetup</PRE
-></TD
-></TR
-></TABLE
 ><P
 >        Then you can build the package.  This is fully automated, and is
         controlled by <TT
 CLASS="FILENAME"
->winsetup/GNUmakefile</TT
+>windows/GNUmakefile</TT
 >.
         All you need to do is:
       </P
@@ -1242,7 +1243,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="PROGRAMLISTING"
->  cd winsetup
+>  cd windows
   make</PRE
 ></TD
 ></TR
@@ -1254,9 +1255,45 @@ CLASS="FILENAME"
 > to
         <TT
 CLASS="FILENAME"
->privoxy_setup_X_Y_Z.exe</TT
->, and upload it to
-        SourceForge. When releasing the package on SourceForge, use the release notes
+>privoxy_setup_X.Y.Z.exe</TT
+>, and the <TT
+CLASS="FILENAME"
+>build</TT
+>
+        directory to <TT
+CLASS="FILENAME"
+>privoxy_X.Y.Z</TT
+>.
+        Create a .zip file of the newly renamed <TT
+CLASS="FILENAME"
+>privoxy_X.Y.Z</TT
+> directory,
+        GPG sign the installer and zip file,
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  $ gpg --armor --detach --sign <TT
+CLASS="FILENAME"
+>privoxy_setup_X.Y.Z.exe</TT
+>
+  $ gpg --armor --detach --sign <TT
+CLASS="FILENAME"
+>privoxy_X.Y.Z.zip</TT
+></PRE
+></TD
+></TR
+></TABLE
+><P
+>        and upload the files to SourceForge.
+      </P
+><P
+>        When releasing the package on SourceForge, use the release notes
         and Change Log from the source tarball package.
       </P
 ></DIV
@@ -1571,28 +1608,28 @@ NAME="RELEASING"
 ><UL
 ><LI
 ><P
->          Upload to: <A
+>        Upload to: <A
 HREF="ftp://upload.sourceforge.net/incoming"
 TARGET="_top"
 >ftp://upload.sourceforge.net/incoming</A
 >
-        </P
+      </P
 ></LI
 ><LI
 ><P
->         user: <TT
+>       user: <TT
 CLASS="LITERAL"
 >anonymous</TT
 >
-       </P
+      </P
 ></LI
 ><LI
 ><P
->         password: <TT
+>       password: <TT
 CLASS="LITERAL"
 >ijbswa-developers@lists.sourceforge.net</TT
 >
-       </P
+      </P
 ></LI
 ></UL
 ><P
@@ -1602,10 +1639,11 @@ CLASS="COMMAND"
 > targets as described above.
     </P
 ><P
->     Once this done go to <A
+>     Once this done go to
+     <A
 HREF="https://sourceforge.net/project/admin/editpackages.php?group_id=11118"
 TARGET="_top"
->https://sourceforge.net/project/admin/editpackages.php?group_id=11118</A
+>                 https://sourceforge.net/project/admin/editpackages.php?group_id=11118</A
 >,
      making sure you are logged in. Find your target platform in the
      second column, and click <TT
@@ -1671,23 +1709,73 @@ NAME="AFTERRELEASE"
 ></H2
 ><P
 >      When all (or: most of the) packages have been uploaded and made available,
-      send an email to the <A
+      send an email to the
+      <A
 HREF="mailto:privoxy-announce@lists.privoxy.org"
 TARGET="_top"
->announce
-      mailing list</A
+>announce mailing
+      list</A
 >, Subject: "Version X.Y.Z available for download". Be sure to
       include the
       <A
 HREF="https://sourceforge.net/project/showfiles.php?group_id=11118"
 TARGET="_top"
->download
-      location</A
+>      download location</A
 >, the release notes and the Changelog. Also, post an
       updated News item on the project page Sourceforge, and update the Home
       page and docs linked from the Home page (see below). Other news sites
       and release oriented sites, such as Freshmeat, should also be notified.
      </P
+><P
+>      Then update the source code for the next version to be released:
+     </P
+><P
+></P
+><UL
+><LI
+><P
+>        Increment the version number and change the code status to "UNRELEASED"
+        in <TT
+CLASS="FILENAME"
+>configure.in</TT
+>
+       </P
+></LI
+><LI
+><P
+>        Rebuild configure (<SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>autoheader &#38;&#38; autoconf</B
+>"</SPAN
+>)
+        and GNUMakefile (<SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>./configure</B
+>"</SPAN
+>)
+       </P
+></LI
+><LI
+><P
+>        <SPAN
+CLASS="QUOTE"
+>"<B
+CLASS="COMMAND"
+>make dok-release</B
+>"</SPAN
+> to update the sgml documentation source files.
+       </P
+></LI
+><LI
+><P
+>        Commit all your changes.
+       </P
+></LI
+></UL
 ></DIV
 ></DIV
 ><DIV

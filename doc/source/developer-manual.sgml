@@ -518,13 +518,13 @@ Hal.
  &lt;para&gt;
   Some text goes here.
  &lt;/para&gt;
-       </literallayout>
+</literallayout>
      <para>
        Tags marking individual words, or few words, should be in-line:
      </para>
        <literallayout>
   Just to &lt;emphasis&gt;emphasize&lt;/emphasis&gt;, some text goes here.
-       </literallayout>
+</literallayout>
    </listitem>
    <listitem>
     <para>
@@ -541,7 +541,7 @@ Hal.
    &lt;/para&gt;
   &lt;/itemizedlist&gt;
  &lt;/para&gt;
-       </literallayout>
+</literallayout>
     <para>
       This makes it easier to find the text amongst the tags ;-)
     </para>
@@ -651,6 +651,7 @@ Hal.
      the finished doc at that point.
    </para>
   </listitem>
+
   <listitem>
    <para>
     Commonly used <quote>internal entities</quote>:
@@ -2069,6 +2070,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
           </listitem>
           <listitem>
             <para>
+ <!-- FIXME   this is not the way it works anymore -->
               Y, the version minor, represents the branch within the major version.
               At any point in time, there are two branches being maintained:
               The stable branch, with an even minor, say, 2N, in which no functionality is
@@ -2086,13 +2088,15 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
           <listitem>
             <para>
               Z, the point or sub version, represents a release of the software within a branch.
-              It is therefore incremented immediately before each code freeze.
+              It is therefore incremented immediately after each software release.
+      <!-- FIXME   this is not the way it works any more
               In development branches, only the even point versions correspond to actual releases,
               while the odd ones denote the evolving state of the sources on Git in between.
               It follows that Z is odd on Git in development branches most of the time. There, it gets
               increased to an even number immediately before a code freeze, and is increased to an odd
               number again immediately thereafter.
               This ensures that builds from Git snapshots are easily distinguished from released versions.
+           didn't Fabian get rid of the even=stable, odd=dev convention for release numbering? -->
               The point version is reset to zero when the minor changes.
             </para>
             <para>
@@ -2140,27 +2144,34 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
        The following <emphasis>must be done by one of the
        developers</emphasis> prior to each new release.
      </para>
-      <itemizedlist>
-       <listitem>
-        <para>
+     <itemizedlist>
+      <listitem>
+       <para>
          Make sure that everybody who has worked on the code in the last
          couple of days has had a chance to yell <quote>no!</quote> in case
          they have pending changes/fixes in their pipelines. Announce the
          freeze so that nobody will interfere with last minute changes.
-        </para>
-      </listitem>
-      <listitem>
-       <para>
-         Increment the version number (point from odd to even in development
-         branches!) in <filename>configure.in</filename> and update the code
-         status (CODE_STATUS="xxx") to one of "alpha", "beta" or "stable".
-         Rebuild configure and GNUMakefile to make sure the updated values are
-         being used.
        </para>
       </listitem>
       <listitem>
        <para>
-        Use the dok-release target to update the sgml documentation source files.
+         Update the code status (CODE_STATUS="xxx") in configure.in to one of
+         "alpha", "beta" or "stable".
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         Rebuild configure and GNUMakefile to make sure the updated values are being used.
+       </para>
+
+       <programlisting>
+$ autoheader && autoconf     # rebuild configure
+$ ./configure                # rebuild GNUmakefile
+</programlisting>
+      </listitem>
+      <listitem>
+       <para>
+        <command>make dok-release</command> to update the sgml documentation source files.
        </para>
       </listitem>
       <listitem>
@@ -2178,15 +2189,16 @@ for-privoxy-version=3.0.11
       </listitem>
       <listitem>
        <para>
-        All documentation should be rebuild after the version bump.
+        All documentation should be rebuild after the code status has been changed.
         Finished docs should be then be committed to Git (for those
         without the ability to build these). Some docs may require
         rather obscure processing tools. <filename>config</filename>,
         the man page (and the html version of the man page)
         fall in this category. README, the man page, AUTHORS, and config
         should all also be committed to Git for other packagers. The
-        formal docs should be uploaded to the webserver. See the
-        Section "Updating the webserver" in this manual for details.
+        formal docs should be uploaded to the webserver. See the section
+        <ulink url="webserver-update.html">"Updating the webserver"</ulink>
+        in this manual for details.
        </para>
       </listitem>
       <listitem>
@@ -2562,33 +2574,50 @@ for-privoxy-version=3.0.11
       </para>
     </sect3>
 
-    <sect3 id="newrelease-windows"><title>Windows</title>
+    <sect3 id="NEWRELEASE-WINDOWS"><title>Windows</title>
+    <!-- so annoying: docbook generated ids are UPPERCASE so
+                links to "whatever.html#idtag" DO NOT WORK!!
+         They have to be "whatever.html#IDTAG".
+         So be consistent and use uppercase on the definition.
+      -->
       <para>
-        Use the <ulink url="http://www.fruitbat.org/Cygwin/index.html#cygwincirca">
-        Cygwin Time Machine</ulink> to install the last 1.5 version of Cygwin.
-        Run the following commands from within the Cygwin 1.5 bash shell.
+        Note that the docbook generated files might need some hand editing,
+        so the Windows build makefile does not rebuild the docs.
       </para>
+
       <para>
         First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then get the Windows setup module:
+        packages" above).
+        <!-- XXX  ??? are we still basing releases off a tarball???
+          -->
       </para>
-      <programlisting>
-  cvs -z3  -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co winsetup
-</programlisting>
       <para>
         Then you can build the package.  This is fully automated, and is
-        controlled by <filename>winsetup/GNUmakefile</filename>.
+        controlled by <filename>windows/GNUmakefile</filename>.
         All you need to do is:
       </para>
       <programlisting>
-  cd winsetup
+  cd windows
   make
 </programlisting>
       <para>
         Now you can manually rename <filename>privoxy_setup.exe</filename> to
-        <filename>privoxy_setup_X_Y_Z.exe</filename>, and upload it to
-        SourceForge. When releasing the package on SourceForge, use the release notes
+        <filename>privoxy_setup_X.Y.Z.exe</filename>, and the <filename>build</filename>
+        directory to <filename>privoxy_X.Y.Z</filename>.
+        Create a .zip file of the newly renamed <filename>privoxy_X.Y.Z</filename> directory,
+        GPG sign the installer and zip file,
+      </para>
+      <programlisting>
+  $ gpg --armor --detach --sign <filename>privoxy_setup_X.Y.Z.exe</filename>
+  $ gpg --armor --detach --sign <filename>privoxy_X.Y.Z.zip</filename>
+</programlisting>
+      <para>
+        and upload the files to SourceForge.
+      </para>
+
+      <para>
+        When releasing the package on SourceForge, use the release notes
         and Change Log from the source tarball package.
       </para>
     </sect3>
@@ -2736,30 +2765,30 @@ for-privoxy-version=3.0.11
       to SourceForge, and go through the release steps. The upload
       is done via FTP:
     </para>
-      <itemizedlist>
-       <listitem>
-        <para>
-          Upload to: <ulink url="ftp://upload.sourceforge.net/incoming">ftp://upload.sourceforge.net/incoming</ulink>
-        </para>
-      </listitem>
-      <listitem>
-       <para>
-         user: <literal>anonymous</literal>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-         password: <literal>ijbswa-developers@lists.sourceforge.net</literal>
-       </para>
-      </listitem>
-     </itemizedlist>
+    <itemizedlist>
+     <listitem>
+      <para>
+        Upload to: <ulink url="ftp://upload.sourceforge.net/incoming">ftp://upload.sourceforge.net/incoming</ulink>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       user: <literal>anonymous</literal>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       password: <literal>ijbswa-developers@lists.sourceforge.net</literal>
+      </para>
+     </listitem>
+    </itemizedlist>
     <para>
      Or use the <command>make</command> targets as described above.
     </para>
     <para>
-     Once this done go to <ulink
-      url="https://sourceforge.net/project/admin/editpackages.php?group_id=11118"
-      >https://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>,
+     Once this done go to
+     <ulink url="https://sourceforge.net/project/admin/editpackages.php?group_id=11118">
+                 https://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>,
      making sure you are logged in. Find your target platform in the
      second column, and click <literal>Add Release</literal>. You will
      then need to create a new release for your package, using the format
@@ -2789,15 +2818,44 @@ for-privoxy-version=3.0.11
     <title>After the Release</title>
      <para>
       When all (or: most of the) packages have been uploaded and made available,
-      send an email to the <ulink url="mailto:privoxy-announce@lists.privoxy.org">announce
-      mailing list</ulink>, Subject: "Version X.Y.Z available for download". Be sure to
+      send an email to the
+      <ulink url="mailto:privoxy-announce@lists.privoxy.org">announce mailing
+      list</ulink>, Subject: "Version X.Y.Z available for download". Be sure to
       include the
-      <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">download
-      location</ulink>, the release notes and the Changelog. Also, post an
+      <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">
+      download location</ulink>, the release notes and the Changelog. Also, post an
       updated News item on the project page Sourceforge, and update the Home
       page and docs linked from the Home page (see below). Other news sites
       and release oriented sites, such as Freshmeat, should also be notified.
      </para>
+     <para>
+      Then update the source code for the next version to be released:
+     </para>
+     <itemizedlist>
+      <listitem>
+       <para>
+        Increment the version number and change the code status to "UNRELEASED"
+        in <filename>configure.in</filename>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Rebuild configure (<quote><command>autoheader && autoconf</command></quote>)
+        and GNUMakefile (<quote><command>./configure</command></quote>)
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <quote><command>make dok-release</command></quote> to update the sgml documentation source files.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Commit all your changes.
+       </para>
+      </listitem>
+     </itemizedlist>
+
    </sect2>
 
   </sect1>

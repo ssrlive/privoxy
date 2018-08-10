@@ -1208,7 +1208,7 @@ on Win2K/NT/XP?</title>
 <para>
 <![%p-newstuff;[
  Yes. Version 3.0.5 introduces full <application>Windows</application> service
- functionality. See <ulink url="../user-manual/installation.html#installation-pack-win">
+ functionality. See <ulink url="../user-manual/installation.html#INSTALLATION-PACK-WIN">
  the <citetitle>User Manual</citetitle></ulink> for details on how to install and configure
  <application>Privoxy</application> as a service.
 </para>
@@ -1516,7 +1516,7 @@ and thus avoid individual browser configuration?</title>
  during upgrades. You can, however, create completely new templates,
  place them in another directory and specify the alternate path in the main
  <filename>config</filename>. For details, have a look at the <ulink
- url="../user-manual/config.html#templdir">templdir</ulink> option.
+ url="../user-manual/config.html#TEMPLDIR">templdir</ulink> option.
 </para>
 </sect2>
 
@@ -1837,7 +1837,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
  <screen>
 #        forward-socks5t             /     127.0.0.1:9050 .
- </screen>
+</screen>
 <para>
  Note that if you got Tor through one of the bundles, you may
  have to change the port from 9050 to 9150 (or even another one).
@@ -1854,7 +1854,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 #        forward         192.168.*.*/     .
 #        forward            10.*.*.*/     .
 #        forward           127.*.*.*/     .
- </screen>
+</screen>
 <para>
  Unencrypted connections to systems in these address ranges will
  be as (un)secure as the local network is, but the alternative is
@@ -1870,7 +1870,7 @@ us help you. Your efforts are not wasted, and we do appreciate them.
 </para>
  <screen>
 #        forward           localhost/     .
- </screen>
+</screen>
 <para>
  Save the modified configuration file and open
  <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>

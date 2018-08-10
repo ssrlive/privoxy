@@ -405,22 +405,18 @@ NAME="INSTALLATION-SOURCE"
 > The most convenient way to obtain the <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
-> sources
- is to download the source tarball from our
+> source
+ code is to download the source tarball from our
  <A
 HREF="https://sourceforge.net/projects/ijbswa/files/Sources/"
 TARGET="_top"
->project download
- page</A
->.</P
-><P
-> If you like to live on the bleeding edge and are not afraid of using
- possibly unstable development versions, you can check out the up-to-the-minute
- version directly from <A
-HREF="https://sourceforge.net/p/ijbswa/code/?source=navbar"
+>    project download page</A
+>,
+ or you can get the up-to-the-minute, possibly unstable, development version from
+ <A
+HREF="https://www.privoxy.org/"
 TARGET="_top"
->the
- CVS repository</A
+>https://www.privoxy.org/</A
 >.</P
 ><P
 > To build <SPAN
@@ -435,9 +431,10 @@ TARGET="_top"
  <A
 HREF="http://www.gnu.org/software/make/make.html"
 TARGET="_top"
->GNU make
- (gmake)</A
->, and, of course, a C compiler like <A
+>GNU make (gmake)</A
+>,
+ and, of course, a C compiler like
+ <A
 HREF="http://www.gnu.org/software/gcc/gcc.html"
 TARGET="_top"
 >gcc</A
@@ -459,10 +456,7 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ><P
-> For retrieving the current CVS sources, you'll need a CVS client installed.
- Note that sources from CVS are typically development quality, and may not be
- stable, or well tested. To download CVS source, check the Sourceforge
- documentation, which might give commands like:</P
+> To build the development version, you can get the source code by doing:</P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -471,34 +465,22 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="SCREEN"
->  cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co current
-  cd current</PRE
+>  cd &#60;root-dir&#62;
+  git clone https://www.privoxy.org/git/privoxy.git</PRE
 ></TD
 ></TR
 ></TABLE
 ><P
 > This will create a directory named <TT
 CLASS="FILENAME"
->current/</TT
->, which will
- contain the source tree.</P
+>&#60;root-dir&#62;/privoxy/</TT
+>,
+ which will contain the source tree.</P
 ><P
-> You can also check out any <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->
- <SPAN
-CLASS="QUOTE"
->"branch"</SPAN
->, just exchange the <SPAN
-CLASS="APPLICATION"
->current</SPAN
->
- name with the wanted branch name (Example: v_3_0_branch for the 3.0 cvs
- tree).</P
+> Note that source code in GIT is development quality, and may not be
+ stable or well tested.</P
 ><P
-> It is also strongly recommended to not run <SPAN
+> It is strongly recommended to not run <SPAN
 CLASS="APPLICATION"
 >Privoxy</SPAN
 >
@@ -506,7 +488,7 @@ CLASS="APPLICATION"
 CLASS="APPLICATION"
 >Privoxy</SPAN
 > as
- an unprivileged user, preferably by  creating a <SPAN
+ an unprivileged user, preferably by creating a <SPAN
 CLASS="QUOTE"
 >"privoxy"</SPAN
 > user
@@ -848,6 +830,258 @@ HREF="https://www.privoxy.org/developer-manual/newrelease.html"
 TARGET="_top"
 >developer manual</A
 >.</P
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="WINBUILD-CYGWIN"
+>2.2.1. Windows</A
+></H3
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="WINBUILD-SETUP"
+>2.2.1.1. Setup</A
+></H4
+><P
+>        Install the Cygwin utilities needed to build <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+>.
+        If you have a 64 bit CPU (which most people do by now), get the
+        Cygwin setup-x86_64.exe program <A
+HREF="https://cygwin.com/setup-x86_64.exe"
+TARGET="_top"
+>here</A
+>
+        (the .sig file is <A
+HREF="https://cygwin.com/setup-x86_64.exe.sig"
+TARGET="_top"
+>here</A
+>).
+      </P
+><P
+>        Run the setup program and from View / Category select:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  Devel
+    autoconf 2.5
+    automake 1.15
+    binutils
+    cmake
+    gcc-core
+    gcc-g++
+    git
+    make
+    mingw64-i686-gcc-core
+    mingw64-i686-zlib
+  Editors
+    vim
+  Libs
+    libxslt: GNOME XSLT library (runtime)
+  Net
+    curl
+    openssh
+  Text
+    docbook-dssl
+    docbook-sgml31
+    docbook-utils
+    openjade
+  Utils
+    gnupg
+  Web
+    w3m</PRE
+></TD
+></TR
+></TABLE
+><P
+>        If you haven't already downloaded the Privoxy source code, get it now:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  mkdir &#60;root-dir&#62;
+  cd &#60;root-dir&#62;
+  git clone https://www.privoxy.org/git/privoxy.git</PRE
+></TD
+></TR
+></TABLE
+><P
+>        Get the source code (.zip or .tar.gz) for tidy from
+        <A
+HREF="https://github.com/htacg/tidy-html5/releases"
+TARGET="_top"
+>                    https://github.com/htacg/tidy-html5/releases</A
+>,
+        unzip into &#60;root-dir&#62; and build the software:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>  cd &#60;root-dir&#62;
+  cd tidy-html5-x.y.z/build/cmake
+  cmake ../.. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIB:BOOL=OFF -DCMAKE_INSTALL_PREFIX=/usr/local
+  make &#38;&#38; make install</PRE
+></TD
+></TR
+></TABLE
+><P
+>        If you want to be able to make a Windows release package, get the NSIS .zip file from
+            
+        <A
+HREF="https://sourceforge.net/projects/nsis/files/NSIS%203/"
+TARGET="_top"
+>                    https://sourceforge.net/projects/nsis/files/NSIS%203/</A
+>
+        and extract the NSIS directory to <TT
+CLASS="LITERAL"
+>privoxy/windows</TT
+>.
+        Then edit the windows/GNUmakefile to set the location of the NSIS executable - eg:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+># Path to NSIS
+MAKENSIS = ./nsis/makensis.exe</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT4"
+><H4
+CLASS="SECT4"
+><A
+NAME="WINBUILD-BUILD"
+>2.2.1.2. Build</A
+></H4
+><P
+>        To build just the Privoxy executable and not the whole installation package, do:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  cd &#60;root-dir&#62;/privoxy
+  ./windows/MYconfigure &#38;&#38; make</PRE
+></TD
+></TR
+></TABLE
+><P
+>        Privoxy uses the <A
+HREF="https://en.wikipedia.org/wiki/GNU_build_system"
+TARGET="_top"
+>GNU Autotools</A
+>
+        for building software, so the process is:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  $ autoheader              # creates config.h.in
+  $ autoconf                # uses config.h.in to create the configure shell script
+  $ ./configure [options]   # creates GNUmakefile
+  $ make        [options]   # builds the program</PRE
+></TD
+></TR
+></TABLE
+><P
+>        The usual <TT
+CLASS="LITERAL"
+>configure</TT
+> options for building a native Windows application under cygwin are
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="LITERALLAYOUT"
+>  --host=i686-w64-mingw32
+  --enable-mingw32
+  --enable-zlib
+  --enable-static-linking
+  --disable-pthread
+  --disable-dynamic-pcre</PRE
+></TD
+></TR
+></TABLE
+><P
+>        You can set the <TT
+CLASS="LITERAL"
+>CFLAGS</TT
+> and <TT
+CLASS="LITERAL"
+>LDFLAGS</TT
+> envars before
+        running <TT
+CLASS="LITERAL"
+>configure</TT
+> to set compiler and linker flags.  For example:
+      </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  $ export CFLAGS="-O2"              # set gcc optimization level
+  $ export LDFLAGS="-Wl,--nxcompat"  # Enable DEP
+  $ ./configure --host=i686-w64-mingw32 --enable-mingw32  --enable-zlib \
+  &#62;             --enable-static-linking --disable-pthread --disable-dynamic-pcre
+  $ make                             # build Privoxy</PRE
+></TD
+></TR
+></TABLE
+><P
+>        See the <A
+HREF="../developer-manual/newrelease.html#NEWRELEASE-WINDOWS"
+TARGET="_top"
+>Developer's Manual</A
+>
+        for building a Windows release package.
+      </P
+></DIV
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT2"
