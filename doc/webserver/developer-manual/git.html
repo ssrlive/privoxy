@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->The CVS Repository</TITLE
+>The Git Repository</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
@@ -76,43 +76,53 @@ CLASS="SECT1"
 ><H1
 CLASS="SECT1"
 ><A
-NAME="CVS"
->2. The CVS Repository</A
+NAME="GIT"
+>2. The Git Repository</A
 ></H1
 ><P
 >      If you become part of the active development team, you will eventually
-      need write access to our holy grail, the CVS repository. One of the
+      need write access to our holy grail, the Git repository. One of the
       team members will need to set this up for you. Please read
-      this chapter completely before accessing via CVS.
+      this chapter completely before accessing via Git.
     </P
 ><DIV
 CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CVSACCESS"
->2.1. Access to CVS</A
+NAME="GITACCESS"
+>2.1. Access to Git</A
 ></H2
 ><P
->        The project's CVS repository is hosted on
+>        The project's Git repository is hosted at the
         <A
-HREF="https://sourceforge.net/"
+HREF="https://privoxy.org/"
 TARGET="_top"
->SourceForge.</A
+>Privoxy site.</A
 >
-        For historical reasons, the CVS server is
-        called <TT
-CLASS="LITERAL"
->ijbswa.cvs.sourceforge.net</TT
->, the repository is
-        called <TT
-CLASS="LITERAL"
->ijbswa</TT
->, and the source tree module is called
+        The Git repository URL is
         <TT
 CLASS="LITERAL"
->current</TT
->.
+>ssh://git@git.privoxy.org:23/git/privoxy.git</TT
+>,
+        the central repository is called <TT
+CLASS="LITERAL"
+>privoxy</TT
+>, and the
+        source branch is called <TT
+CLASS="LITERAL"
+>master</TT
+>. Subfolders exist
+        within the project for target-dependent build and  packaging tools, each
+        including the name of the target operating system in their name (e.g.
+        Windows, OSXPackageBuilder, debian). There is a webview of the Git
+        hierarchy at
+        <A
+HREF="https://www.privoxy.org/gitweb/?p=privoxy.git;a=tree"
+TARGET="_top"
+>                    https://www.privoxy.org/gitweb/?p=privoxy.git;a=tree</A
+>,
+        which might help with visualizing how these pieces fit together.
       </P
 ></DIV
 ><DIV
@@ -120,25 +130,15 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CVSBRANCHES"
+NAME="GITBRANCHES"
 >2.2. Branches</A
 ></H2
 ><P
->       Within the CVS repository, there are modules and branches. As
-       mentioned, the sources are in the <TT
-CLASS="LITERAL"
->current</TT
->
-       <SPAN
-CLASS="QUOTE"
->"module"</SPAN
->. Other modules are present for platform specific
-       issues. There is a webview of the CVS hierarchy at <A
-HREF="http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/"
-TARGET="_top"
->http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/</A
->,
-       which might help with visualizing how these pieces fit together.
+>       Whilst the central repository contains only the master branch, developers
+       are of course free to create branches in their local repositories as they
+       develop features, fixes, or update the target-dependent tools. Only once
+       such changes are fully tested ought they be pushed back to the central
+       repository master branch.
      </P
 ><P
 >      At one time there were two distinct branches: stable and unstable. The
@@ -152,13 +152,13 @@ CLASS="SECT2"
 ><H2
 CLASS="SECT2"
 ><A
-NAME="CVSCOMMIT"
->2.3. CVS Commit Guidelines</A
+NAME="GITCOMMIT"
+>2.3. Git Commit Guidelines</A
 ></H2
 ><P
 >        The source tree is the heart of every software project. Every effort must
         be made to ensure that it is readable, compilable and consistent at all
-        times.  We expect anyone with CVS access to strictly
+        times.  We expect anyone with Git access to strictly
         adhere to the following guidelines:
       </P
 ><P
@@ -210,7 +210,7 @@ CLASS="EMPHASIS"
 ></LI
 ><LI
 ><P
->            Before changing things on CVS, make sure that your changes are in line
+>            Before changing things on Git, make sure that your changes are in line
             with the team's general consensus on what should be done.
           </P
 ></LI

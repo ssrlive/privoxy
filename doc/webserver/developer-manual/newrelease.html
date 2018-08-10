@@ -166,11 +166,11 @@ CLASS="APPLICATION"
 >              Z, the point or sub version, represents a release of the software within a branch.
               It is therefore incremented immediately before each code freeze.
               In development branches, only the even point versions correspond to actual releases,
-              while the odd ones denote the evolving state of the sources on CVS in between.
-              It follows that Z is odd on CVS in development branches most of the time. There, it gets
+              while the odd ones denote the evolving state of the sources on Git in between.
+              It follows that Z is odd on Git in development branches most of the time. There, it gets
               increased to an even number immediately before a code freeze, and is increased to an odd
               number again immediately thereafter.
-              This ensures that builds from CVS snapshots are easily distinguished from released versions.
+              This ensures that builds from Git snapshots are easily distinguished from released versions.
               The point version is reset to zero when the minor changes.
             </P
 ><P
@@ -199,7 +199,7 @@ CLASS="LITERAL"
 ></LI
 ></UL
 ><P
->     In summary, the main CVS trunk is the development branch where new
+>     In summary, the main Git trunk is the development branch where new
      features are being worked on for the next stable series. This should
      almost always be where the most activity takes place. There is always at
      least one stable branch from the trunk, e.g now it is
@@ -225,7 +225,7 @@ CLASS="EMPHASIS"
 ><P
 >     Developers should remember too that if they commit a bugfix to the stable
      branch, this will more than likely require a separate submission to the
-     main trunk, since these are separate development trees within CVS. If you
+     main trunk, since these are separate development trees within Git. If you
      are working on both, then this would require at least two separate check
      outs (i.e main trunk, <SPAN
 CLASS="emphasis"
@@ -314,7 +314,7 @@ for-privoxy-version=3.0.11</PRE
 ><LI
 ><P
 >        All documentation should be rebuild after the version bump.
-        Finished docs should be then be committed to CVS (for those
+        Finished docs should be then be committed to Git (for those
         without the ability to build these). Some docs may require
         rather obscure processing tools. <TT
 CLASS="FILENAME"
@@ -322,7 +322,7 @@ CLASS="FILENAME"
 >,
         the man page (and the html version of the man page)
         fall in this category. README, the man page, AUTHORS, and config
-        should all also be committed to CVS for other packagers. The
+        should all also be committed to Git for other packagers. The
         formal docs should be uploaded to the webserver. See the
         Section "Updating the webserver" in this manual for details.
        </P
@@ -372,7 +372,7 @@ CLASS="EMPHASIS"
 ></LI
 ><LI
 ><P
->        Tag all files in CVS with the version number with
+>        Tag all files in Git with the version number with
         <SPAN
 CLASS="QUOTE"
 >"<B
@@ -445,7 +445,7 @@ CLASS="emphasis"
 ><I
 CLASS="EMPHASIS"
 >you must make sure that you build from clean sources by exporting
-      the right version from CVS into an empty directory</I
+      the right version from Git into an empty directory</I
 ></SPAN
 > (just press return when
       asked for a password):
@@ -473,7 +473,7 @@ CLASS="EMPHASIS"
 >Do NOT change</I
 ></SPAN
 > a single bit, including, but not limited to
-     version information after export from CVS. This is to make sure that
+     version information after export from Git. This is to make sure that
      all release packages, and with them, all future bug reports, are based
      on exactly the same code.
     </P
@@ -697,7 +697,7 @@ CLASS="FILENAME"
 >).
          This should be one level up from the manuals. There is a link also
          on this page to an HTMLized version of the man page. To avoid 404 for
-         this, it is in CVS as
+         this, it is in Git as
          <TT
 CLASS="FILENAME"
 >doc/webserver/man-page/privoxy-man-page.html</TT
@@ -884,7 +884,7 @@ CLASS="EMPHASIS"
         packages" above).
       </P
 ><P
->        As the only exception to not changing anything after export from CVS,
+>        As the only exception to not changing anything after export from Git,
         now examine the file <TT
 CLASS="FILENAME"
 >privoxy-</TT
@@ -1353,7 +1353,7 @@ CLASS="EMPHASIS"
         packages" above).
       </P
 ><P
->        There are three modules available in the CVS repository for use on Mac
+>        There are three modules available in the Git repository for use on Mac
         OS X, though technically only two of them generate a release (the other
         can be used to install from source).
       </P
@@ -1367,7 +1367,7 @@ NAME="OS-X-OSXPACKAGEBUILDER-MODULE"
 ></H4
 ><P
 >          The OSXPackageBuilder module generates OS X installer packages
-          supporting all Macs running OS X 10.4 and above. Obtain it from CVS as
+          supporting all Macs running OS X 10.4 and above. Obtain it from Git as
           follows into a folder parallel to the exported privoxy source:
         </P
 ><TABLE
@@ -1418,7 +1418,7 @@ CLASS="EMPHASIS"
 >
         </P
 ><P
->          Check out the module from CVS as follows into a folder parallel to the
+>          Check out the module from Git as follows into a folder parallel to the
           exported privoxy source:
         </P
 ><TABLE
@@ -1510,7 +1510,7 @@ NAME="OS-X-MACSETUP-MODULE"
           from source on a single machine.
         </P
 ><P
->          Check out the module from CVS as follows into a folder parallel to the
+>          Check out the module from Git as follows into a folder parallel to the
           exported privoxy source:
         </P
 ><TABLE
