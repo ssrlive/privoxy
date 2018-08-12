@@ -143,7 +143,19 @@ PERL       = perl
 DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
-TIDY       = tidy -modify -indent -wrap 120 --tidy-mark no
+TIDY       = tidy -latin1 -q -modify -indent -wrap 120 --tidy-mark no --mute MISSING_ATTRIBUTE --mute TRIM_EMPTY_ELEMENT
+# -latin1
+#     docbook output is ISO-8859-1 and tidy assumes ASCII
+# -q
+#     suppress nonessential output
+# -modify
+#     modify the original input file
+# --mute MISSING_ATTRIBUTE
+#     don't show <img> lacks "alt" attribute
+#             or <table> lacks "summary" attribute
+# --mute TRIM_EMPTY_ELEMENT
+#     don't show trimming empty <p>
+#
 RSYNC	   = rsync -av -c --chmod=D755,F644
 
 # Program to do LF->CRLF
