@@ -256,6 +256,7 @@ static const add_header_func_ptr add_server_headers[] = {
  * Parameters  :
  *          1  :  fd = file descriptor of the socket to read
  *          2  :  iob = The I/O buffer to flush, usually csp->iob.
+ *          3  :  delay = Number of milliseconds to delay the writes
  *
  * Returns     :  On success, the number of bytes written are returned (zero
  *                indicates nothing was written).  On error, -1 is returned,
@@ -265,7 +266,7 @@ static const add_header_func_ptr add_server_headers[] = {
  *                file, the results are not portable.
  *
  *********************************************************************/
-long flush_socket(jb_socket fd, struct iob *iob)
+long flush_socket(jb_socket fd, struct iob *iob, unsigned int delay)
 {
    long len = iob->eod - iob->cur;
 
@@ -274,7 +275,7 @@ long flush_socket(jb_socket fd, struct iob *iob)
       return(0);
    }
 
-   if (write_socket(fd, iob->cur, (size_t)len))
+   if (write_socket_delayed(fd, iob->cur, (size_t)len, delay))
    {
       return(-1);
    }

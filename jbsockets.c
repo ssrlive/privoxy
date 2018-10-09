@@ -675,6 +675,60 @@ int write_socket(jb_socket fd, const char *buf, size_t len)
 
 /*********************************************************************
  *
+ * Function    :  write_socket_delayed
+ *
+ * Description :  Write the contents of buf (for n bytes) to
+ *                socket fd, optionally delaying the operation.
+ *
+ * Parameters  :
+ *          1  :  fd = File descriptor (aka. handle) of socket to write to.
+ *          2  :  buf = Pointer to data to be written.
+ *          3  :  len = Length of data to be written to the socket "fd".
+ *          4  :  delay = Delay in milliseconds.
+ *
+ * Returns     :  0 on success (entire buffer sent).
+ *                nonzero on error.
+ *
+ *********************************************************************/
+int write_socket_delayed(jb_socket fd, const char *buf, size_t len, unsigned int delay)
+{
+   size_t i = 0;
+
+   if (delay == 0)
+   {
+      return write_socket(fd, buf, len);
+   }
+
+   while (i < len)
+   {
+      size_t write_length;
+      enum {MAX_WRITE_LENGTH = 10};
+
+      if ((i + MAX_WRITE_LENGTH) > len)
+      {
+         write_length = len - i;
+      }
+      else
+      {
+         write_length = MAX_WRITE_LENGTH;
+      }
+
+      privoxy_millisleep(delay);
+
+      if (write_socket(fd, buf + i, write_length) != 0)
+      {
+         return 1;
+      }
+      i += write_length;
+   }
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  read_socket
  *
  * Description :  Read from a TCP/IP socket in a platform independent way.

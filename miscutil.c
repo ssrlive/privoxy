@@ -815,6 +815,45 @@ size_t privoxy_strlcat(char *destination, const char *source, const size_t size)
 #endif /* ndef HAVE_STRLCAT */
 
 
+/*********************************************************************
+ *
+ * Function    :  privoxy_millisleep
+ *
+ * Description :  Sleep a number of milliseconds
+ *
+ * Parameters  :
+ *          1  :  delay: Number of milliseconds to sleep
+ *
+ * Returns     :  -1 on error, 0 otherwise
+ *
+ *********************************************************************/
+int privoxy_millisleep(unsigned milliseconds)
+{
+#ifdef HAVE_NANOSLEEP
+   struct timespec rqtp = {0};
+   struct timespec rmtp = {0};
+
+   rqtp.tv_sec = milliseconds / 1000;
+   rqtp.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
+
+   return nanosleep(&rqtp, &rmtp);
+#elif defined (_WIN32)
+   Sleep(milliseconds);
+
+   return 0;
+#elif defined(__OS2__)
+   DosSleep(milliseconds * 10);
+
+   return 0;
+#else
+#warning Missing privoxy_milisleep() implementation. delay-response{} will not work.
+
+   return -1;
+#endif /* def HAVE_NANOSLEEP */
+
+}
+
+
 #if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 /*********************************************************************
  *
