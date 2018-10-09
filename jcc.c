@@ -1065,7 +1065,7 @@ static void wait_for_alive_connections(void)
  *          1  :  sfd  = Open socket to remember.
  *          2  :  http = The destination for the connection.
  *          3  :  fwd  = The forwarder settings used.
- *          3  :  server_connection  = storage.
+ *          4  :  server_connection  = storage.
  *
  * Returns     : void
  *
