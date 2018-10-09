@@ -758,7 +758,7 @@ static void log_applied_actions(const struct current_action_spec *actions)
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
- *          1  :  rsp = Fully prepared response. Will be freed on exit.
+ *          2  :  rsp = Fully prepared response. Will be freed on exit.
  *
  * Returns     :  Nothing.
  *
