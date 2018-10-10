@@ -1440,7 +1440,7 @@ struct configuration_spec * load_config(void)
              * On platforms were we use poll() we don't have to enforce
              * an upper connection limit either.
              *
-             * XXX: Do OS/2, Amiga etc. belong here as well?
+             * XXX: Do OS/2 etc. belong here as well?
              */
             if (max_client_connections < 1)
             {

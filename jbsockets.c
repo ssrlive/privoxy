@@ -213,7 +213,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    fd_set wfds;
    struct timeval timeout;
 #endif
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
    int   flags;
 #endif
    int connect_failed;
@@ -320,13 +320,13 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
 
       set_no_delay_flag(fd);
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
       if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
       {
          flags |= O_NDELAY;
          fcntl(fd, F_SETFL, flags);
       }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__) */
 
       connect_failed = 0;
       while (connect(fd, rp->ai_addr, rp->ai_addrlen) == JB_INVALID_SOCKET)
@@ -357,13 +357,13 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          continue;
       }
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
       if (flags != -1)
       {
          flags &= ~O_NDELAY;
          fcntl(fd, F_SETFL, flags);
       }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__) */
 
 #ifdef HAVE_POLL
       poll_fd[0].fd = fd;
@@ -464,7 +464,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    fd_set wfds;
    struct timeval tv[1];
 #endif
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
    int   flags;
 #endif
 
@@ -540,7 +540,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
 
    set_no_delay_flag(fd);
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
    if ((flags = fcntl(fd, F_GETFL, 0)) != -1)
    {
       flags |= O_NDELAY;
@@ -549,7 +549,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
       mark_socket_for_close_on_execute(fd);
 #endif
    }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__) */
 
    while (connect(fd, (struct sockaddr *) & inaddr, sizeof inaddr) == JB_INVALID_SOCKET)
    {
@@ -575,13 +575,13 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
       }
    }
 
-#if !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
    if (flags != -1)
    {
       flags &= ~O_NDELAY;
       fcntl(fd, F_SETFL, flags);
    }
-#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__) */
+#endif /* !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__) */
 
 #ifdef HAVE_POLL
    poll_fd[0].fd = fd;
@@ -624,11 +624,7 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
  *                nonzero on error.
  *
  *********************************************************************/
-#ifdef AMIGA
-int write_socket(jb_socket fd, const char *buf, ssize_t len)
-#else
 int write_socket(jb_socket fd, const char *buf, size_t len)
-#endif
 {
    if (len == 0)
    {
@@ -647,7 +643,7 @@ int write_socket(jb_socket fd, const char *buf, size_t len)
 
 #if defined(_WIN32)
    return (send(fd, buf, (int)len, 0) != (int)len);
-#elif defined(__BEOS__) || defined(AMIGA)
+#elif defined(__BEOS__)
    return (send(fd, buf, len, 0) != len);
 #elif defined(__OS2__)
    /*
@@ -713,7 +709,7 @@ int read_socket(jb_socket fd, char *buf, int len)
 
 #if defined(_WIN32)
    ret = recv(fd, buf, len, 0);
-#elif defined(__BEOS__) || defined(AMIGA) || defined(__OS2__)
+#elif defined(__BEOS__) || defined(__OS2__)
    ret = recv(fd, buf, (size_t)len, 0);
 #else
    ret = (int)read(fd, buf, (size_t)len);
@@ -794,8 +790,6 @@ void close_socket(jb_socket fd)
 {
 #if defined(_WIN32) || defined(__BEOS__)
    closesocket(fd);
-#elif defined(AMIGA)
-   CloseSocket(fd);
 #elif defined(__OS2__)
    soclose(fd);
 #else
@@ -1118,7 +1112,7 @@ void get_host_information(jb_socket afd, char **ip_address, char **port,
    struct sockaddr_in server;
    struct hostent *host = NULL;
 #endif /* HAVE_RFC2553 */
-#if defined(_WIN32) || defined(__OS2__) || defined(AMIGA)
+#if defined(_WIN32) || defined(__OS2__)
    /* according to accept_connection() this fixes a warning. */
    int s_length, s_length_provided;
 #else
@@ -1270,7 +1264,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    struct sockaddr_in client;
 #endif
    jb_socket afd;
-#if defined(_WIN32) || defined(__OS2__) || defined(AMIGA)
+#if defined(_WIN32) || defined(__OS2__)
    /* Wierdness - fix a warning. */
    int c_length;
 #else

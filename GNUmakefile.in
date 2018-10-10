@@ -760,18 +760,6 @@ win32.@OBJEXT@: win32.c config.h jcc.h loadcfg.h pcre/pcre.h pcre/pcreposix.h pc
 w32.res: w32.rc w32res.h icons/radar-01.ico icons/radar-02.ico icons/radar-03.ico icons/radar-04.ico icons/radar-05.ico icons/radar-06.ico icons/radar-07.ico icons/radar-08.ico icons/idle.ico icons/privoxy.ico config.h
 	windres -F pe-i386 -D__MINGW32__=0.2 -O coff -i $< -o $@
 
-# AmigaOS
-@AMIGAOS_ONLY@OBJS += amiga.o
-@AMIGAOS_ONLY@ifeq ($(shell $(CC) -dumpmachine), m68k-amigaos)
-@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -W -m68020 -noixemul -fbaserel -msmall-code
-@AMIGAOS_ONLY@LDFLAGS += -m68020 -noixemul -fbaserel
-@AMIGAOS_ONLY@LIBS = -lm /gg/lib/libb/libm020/libnix/swapstack.o
-@AMIGAOS_ONLY@else
-@AMIGAOS_ONLY@CFLAGS += -D__AMIGAVERSION__=\"$(VERSION_MAJOR).$(VERSION_MINOR)$(VERSION_POINT)\" -D__AMIGADATE__=\"`date +%d.%m.%Y`\" -Wextra -D__USE_INLINE__ -D__NO_INTUITION_RJ_MACROS
-@AMIGAOS_ONLY@endif
-@AMIGAOS_ONLY@amiga.o: amiga.c amiga.h config.h
-
-
 $(PROGRAM): $(OBJS) $(W32_FILES)
 	$(LD) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
 

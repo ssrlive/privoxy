@@ -89,10 +89,6 @@
 #  endif
 #endif
 
-#ifdef AMIGA
-#include "amiga.h"
-#endif /* def AMIGA */
-
 #ifdef _WIN32
 /*
  * I don't want to have to #include all this just for the declaration

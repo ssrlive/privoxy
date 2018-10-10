@@ -640,42 +640,6 @@ char *bindup(const char *string, size_t len)
  *********************************************************************/
 char * make_path(const char * dir, const char * file)
 {
-#ifdef AMIGA
-   char path[512];
-
-   if (dir)
-   {
-      if (dir[0] == '.')
-      {
-         if (dir[1] == '/')
-         {
-            strncpy(path,dir+2,512);
-         }
-         else
-         {
-            strncpy(path,dir+1,512);
-         }
-      }
-      else
-      {
-         strncpy(path,dir,512);
-      }
-      path[511]=0;
-   }
-   else
-   {
-      path[0]=0;
-   }
-   if (AddPart(path,file,512))
-   {
-      return strdup(path);
-   }
-   else
-   {
-      return NULL;
-   }
-#else /* ndef AMIGA */
-
    if ((file == NULL) || (*file == '\0'))
    {
       return NULL; /* Error */
@@ -733,7 +697,6 @@ char * make_path(const char * dir, const char * file)
 
       return path;
    }
-#endif /* ndef AMIGA */
 }
 
 

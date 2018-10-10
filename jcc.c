@@ -140,7 +140,7 @@ int urls_rejected = 0;     /* total nr of urls rejected */
 int g_terminate = 0;
 #endif
 
-#if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__OS2__)
 static void sig_handler(int the_signal);
 #endif
 static int client_protocol_is_unsupported(const struct client_state *csp, char *req);
@@ -163,12 +163,7 @@ static jb_socket bind_port_helper(const char *haddr, int hport, int backlog);
 static void bind_ports_helper(struct configuration_spec *config, jb_socket sockets[]);
 static void close_ports_helper(jb_socket sockets[]);
 static void listen_loop(void);
-
-#ifdef AMIGA
-void serve(struct client_state *csp);
-#else /* ifndef AMIGA */
 static void serve(struct client_state *csp);
-#endif /* def AMIGA */
 
 #ifdef __BEOS__
 static int32 server_thread(void *data);
@@ -339,7 +334,7 @@ static const struct cruncher crunchers_light[] = {
  *
  * here?
  */
-#if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__OS2__)
 /*********************************************************************
  *
  * Function    :  sig_handler
@@ -3166,11 +3161,7 @@ static void prepare_csp_for_next_request(struct client_state *csp)
  * Returns     :  N/A
  *
  *********************************************************************/
-#ifdef AMIGA
-void serve(struct client_state *csp)
-#else /* ifndef AMIGA */
 static void serve(struct client_state *csp)
-#endif /* def AMIGA */
 {
    int config_file_change_detected = 0; /* Only used for debugging */
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
@@ -3815,9 +3806,7 @@ int main(int argc, char **argv)
    clients->next = NULL;
 
    /* XXX: factor out initialising after the next stable release. */
-#ifdef AMIGA
-   InitAmiga();
-#elif defined(_WIN32)
+#ifdef _WIN32
    InitWin32();
 #endif
 
@@ -3840,7 +3829,7 @@ int main(int argc, char **argv)
     * are handled when and where they occur without relying
     * on a signal.
     */
-#if !defined(_WIN32) && !defined(__OS2__) && !defined(AMIGA)
+#if !defined(_WIN32) && !defined(__OS2__)
 {
    int idx;
    const int catched_signals[] = { SIGTERM, SIGINT, SIGHUP };
@@ -4302,12 +4291,12 @@ static void listen_loop(void)
    for (;;)
 #endif
    {
-#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) && !defined(__OS2__)
+#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
       while (waitpid(-1, NULL, WNOHANG) > 0)
       {
          /* zombie children */
       }
-#endif /* !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(AMIGA) */
+#endif /* !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) */
 
       /*
        * Free data that was used by died threads
@@ -4344,13 +4333,6 @@ static void listen_loop(void)
       if (!accept_connection(csp, bfds))
       {
          log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
-
-#ifdef AMIGA
-         if (!childs)
-         {
-            exit(1);
-         }
-#endif
          freez(csp_list);
          continue;
       }
@@ -4476,34 +4458,6 @@ static void listen_loop(void)
             {
                child_id = -1;
             }
-         }
-#endif
-
-#if defined(AMIGA) && !defined(SELECTED_ONE_OPTION)
-#define SELECTED_ONE_OPTION
-         csp->cfd = ReleaseSocket(csp->cfd, -1);
-
-#ifdef __amigaos4__
-         child_id = (int)CreateNewProcTags(NP_Entry, (ULONG)server_thread,
-                                           NP_Output, Output(),
-                                           NP_CloseOutput, FALSE,
-                                           NP_Name, (ULONG)"privoxy child",
-                                           NP_Child, TRUE,
-                                           TAG_DONE);
-#else
-         child_id = (int)CreateNewProcTags(NP_Entry, (ULONG)server_thread,
-                                           NP_Output, Output(),
-                                           NP_CloseOutput, FALSE,
-                                           NP_Name, (ULONG)"privoxy child",
-                                           NP_StackSize, 200*1024,
-                                           TAG_DONE);
-#endif
-         if (0 != child_id)
-         {
-            childs++;
-            ((struct Task *)child_id)->tc_UserData = csp;
-            Signal((struct Task *)child_id, SIGF_SINGLE);
-            Wait(SIGF_SINGLE);
          }
 #endif
 
