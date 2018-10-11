@@ -249,7 +249,7 @@ static const add_header_func_ptr add_server_headers[] = {
 
 /*********************************************************************
  *
- * Function    :  flush_socket
+ * Function    :  flush_iob
  *
  * Description :  Write any pending "buffered" content.
  *
@@ -266,7 +266,7 @@ static const add_header_func_ptr add_server_headers[] = {
  *                file, the results are not portable.
  *
  *********************************************************************/
-long flush_socket(jb_socket fd, struct iob *iob, unsigned int delay)
+long flush_iob(jb_socket fd, struct iob *iob, unsigned int delay)
 {
    long len = iob->eod - iob->cur;
 

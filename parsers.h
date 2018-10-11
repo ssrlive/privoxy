@@ -49,7 +49,7 @@
 #define FILTER_CLIENT_HEADERS 0
 #define FILTER_SERVER_HEADERS 1
 
-extern long flush_socket(jb_socket fd, struct iob *iob, unsigned int delay);
+extern long flush_iob(jb_socket fd, struct iob *iob, unsigned int delay);
 extern jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n);
 extern void clear_iob(struct iob *iob);
 extern jb_err decompress_iob(struct client_state *csp);

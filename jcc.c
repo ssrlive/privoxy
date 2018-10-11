@@ -1974,7 +1974,7 @@ static int send_http_request(struct client_state *csp)
          csp->http->hostport);
    }
    else if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
-      && (flush_socket(csp->server_connection.sfd, csp->client_iob, 0) < 0))
+      && (flush_iob(csp->server_connection.sfd, csp->client_iob, 0) < 0))
    {
       write_failure = 1;
       log_error(LOG_LEVEL_CONNECT, "Failed sending request body to: %s: %E",
@@ -2522,8 +2522,7 @@ static void handle_established_connection(struct client_state *csp)
                   hdrlen = strlen(hdr);
 
                   if (write_socket_delayed(csp->cfd, hdr, hdrlen, write_delay)
-                   || ((flushed = flush_socket(csp->cfd, csp->iob,
-                         write_delay) < 0)
+                   || ((flushed = flush_iob(csp->cfd, csp->iob, write_delay) < 0)
                    || (write_socket_delayed(csp->cfd, csp->receive_buffer,
                          (size_t)len, write_delay))))
                   {
@@ -2731,7 +2730,7 @@ static void handle_established_connection(struct client_state *csp)
                 */
 
                if (write_socket_delayed(csp->cfd, hdr, strlen(hdr), write_delay)
-                  || ((len = flush_socket(csp->cfd, csp->iob, write_delay)) < 0))
+                  || ((len = flush_iob(csp->cfd, csp->iob, write_delay)) < 0))
                {
                   log_error(LOG_LEVEL_CONNECT, "write header to client failed: %E");
 
