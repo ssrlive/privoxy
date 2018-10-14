@@ -7,7 +7,7 @@
  *                to deserve their own file but don't really fit in
  *                any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2016 the
+ * Copyright   :  Written by and Copyright (C) 2001-2018 the
  *                Privoxy team. http://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
