@@ -130,11 +130,20 @@ CHMOD      = chmod
 CHOWN      = chown
 CHGRP      = chgrp
 GROUPS     = groups
-W3M_DUMP   = env -u LANG LC_ALL=C @W3M@ -dump
-W3M_DUMP_UTF8 = @W3M@ -dump
+W3M_DUMP   = @W3M@ -I ISO-8859 -O ASCII -dump
+W3M_DUMP_UTF8 = @W3M@ -I ISO-8859 -O UTF-8 -dump
+# docbook output is ISO-8859 (which is a superset of ascii)
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
 DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#html
+DB_TXT     = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#print
+# -d dsssl_spec
+#     This specifies that dsssl_spec is the system identifier of the DSSSL specification to be used.
+# ldp.dsl#html  : keep '&char;' strings as is
+# ldp.dsl#print : convert '&char;' strings to ISO-8859 equivalent
+# NOTE: '-d ldp.dsl\#whatever' _MUST_ be last and _MUST NOT_ have
+#       a trailing space so that '$(DB)-notoc' or '$(DB_TXT)-notoc'
+#       pulls in the correct dsl stylesheet
 DB2HTML    = @DB2HTML@
 MAN2HTML   = @MAN2HTML@
 G2H_CMD    = groff -mandoc -Thtml
@@ -143,9 +152,11 @@ PERL       = perl
 DOC_DIR    = doc/source
 DOC_TMP    = $(DOC_DIR)/tmp
 DOC_STATUS = @DOC_STATUS@
-TIDY       = tidy -latin1 -q -modify -indent -wrap 120 --tidy-mark no --mute MISSING_ATTRIBUTE --mute TRIM_EMPTY_ELEMENT
+TIDY       = tidy -latin1 -q -modify -indent -wrap 120 --tidy-mark no --preserve-entities yes \
+ --mute MISSING_ATTRIBUTE --mute TRIM_EMPTY_ELEMENT
 # -latin1
-#     docbook output is ISO-8859-1 and tidy assumes ASCII
+#     use ISO-8859-1 for both input and output
+#     docbook output is ISO-8859 and tidy assumes UTF-8
 # -q
 #     suppress nonessential output
 # -modify
@@ -546,9 +557,9 @@ groff2html:
 
 # readme page and INSTALL file
 dok-readme: dok-release
-	cd doc/source && $(DB)-notoc -V nochunks readme.sgml > tmp.html &&\
+	cd doc/source && $(DB_TXT)-notoc -V nochunks readme.sgml > tmp.html &&\
 	$(W3M_DUMP) tmp.html > ../../README ;\
-	$(DB)-notoc -V nochunks install.sgml > tmp.html &&\
+	$(DB_TXT)-notoc -V nochunks install.sgml > tmp.html &&\
 	$(W3M_DUMP) tmp.html > ../../INSTALL ;\
 	$(RM) tmp.*
 
@@ -580,8 +591,8 @@ dok: dok-release dok-devel dok-user dok-faq dok-readme dok-webserver dok-authors
 
 ## Make AUTHORS file
 dok-authors:
-	cd doc/source && $(DB) -V nochunks authors.sgml > tmp.html && $(W3M_DUMP_UTF8) \
-	  tmp.html > ../../AUTHORS && $(RM) tmp.html
+	cd doc/source && $(DB_TXT) -V nochunks authors.sgml > tmp.html && \
+	  $(W3M_DUMP_UTF8) tmp.html > ../../AUTHORS && $(RM) tmp.html
 
 # Set doc entities for VERSION and CODE_STATUS in sgml docs. Toggle content
 # exceptions accordingly. This needs to go before any doc building (doh).
@@ -619,7 +630,7 @@ config-file: dok-release generate-config-file
 	@$(ECHO)  "****************************************************"
 
 generate-config-file:
-	cd doc/source && $(DB)-notoc -iconfig-file -V nochunks config.sgml > ../../config.html
+	cd doc/source && $(DB_TXT)-notoc -iconfig-file -V nochunks config.sgml > ../../config.html
 	$(W3M_DUMP) -cols 67 config.html > config
 	$(PERL) -i.bak utils/prepare-configfile.pl config
 
