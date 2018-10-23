@@ -306,6 +306,9 @@ if test $target_type = mingw; then
   WIN_ONLY=
   CFLAGS="$CFLAGS -DWINVER=0x501"
   SPECIAL_CFLAGS="-mwindows"
+dnl from the cygwin FAQ: The regular setup allows you to use the -mwindows option
+dnl to include a set of the basic libraries user32, gdi32 and comdlg32.
+dnl (and also make your program a GUI program instead of a console program)
   PTHREAD_LIB=-lpthread
   echo "Using mingw32 (Win32 GUI)"
 else
