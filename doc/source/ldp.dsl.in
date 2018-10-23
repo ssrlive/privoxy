@@ -46,8 +46,8 @@
   ;; Put chapter labels in running heads?
   #t)
 
-;; this is necessary because right now jadetex does not understand
-;; symbolic entities, whereas things work well with numeric entities.
+;; this is the 'print' portion of the stylesheet so we want to
+;; convert ampersand-code strings to character values
 (declare-characteristic preserve-sdata?
   "UNREGISTERED::James Clark//Characteristic::preserve-sdata?"
   #f)
@@ -241,6 +241,22 @@
   ;; Which Lists of Titles should be produced for Articles?
   (list ))
 
+
+</style-specification-body>
+</style-specification>
+
+
+<style-specification id="print-notoc" use="print">
+<style-specification-body>
+
+;; ===================================================
+;; Variant without TOC
+;; ===================================================
+
+(define %generate-article-toc%
+  ;; Should a Table of Contents be produced for Articles?
+  ;; If true, a Table of Contents will be generated for each 'Article'.
+  #f)
 
 </style-specification-body>
 </style-specification>
