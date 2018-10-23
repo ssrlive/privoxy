@@ -974,7 +974,7 @@ void log_error(int loglevel, const char *fmt, ...)
  * Returns     :  A string with the jb_err translation
  *
  *********************************************************************/
-const char *jb_err_to_string(int jb_error)
+const char *jb_err_to_string(jb_err jb_error)
 {
    switch (jb_error)
    {
