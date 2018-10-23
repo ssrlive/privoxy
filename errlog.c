@@ -964,10 +964,6 @@ void log_error(int loglevel, const char *fmt, ...)
  *
  * Description :  Translates JB_ERR_FOO codes into strings.
  *
- *                XXX: the type of error codes is jb_err
- *                but the typedef'inition is currently not
- *                visible to all files that include errlog.h.
- *
  * Parameters  :
  *          1  :  jb_error = a valid jb_err code
  *
