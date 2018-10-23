@@ -40,8 +40,8 @@
 #include <string.h>
 #include <fcntl.h>
 
-#include "errlog.h"
 #include "project.h"
+#include "errlog.h"
 #include "deanimate.h"
 #include "miscutil.h"
 
