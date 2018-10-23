@@ -1097,7 +1097,6 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
    struct file_list *fs;
 
    char *buf = NULL;
-   int error;
    unsigned long linenum = 0;
    pcrs_job *dummy, *lastjob = NULL;
 
@@ -1227,6 +1226,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
 #ifdef FEATURE_EXTERNAL_FILTERS
       if ((bl != NULL) && (bl->type == FT_EXTERNAL_CONTENT_FILTER))
       {
+         jb_err jb_error;
          /* Save the code as "pattern", but do not compile anything. */
          if (bl->patterns->first != NULL)
          {
@@ -1234,8 +1234,8 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
                "Did you forget to escape a line break?",
                bl->name);
          }
-         error = enlist(bl->patterns, buf);
-         if (JB_ERR_MEMORY == error)
+         jb_error = enlist(bl->patterns, buf);
+         if (JB_ERR_MEMORY == jb_error)
          {
             log_error(LOG_LEVEL_FATAL,
                "Out of memory while enlisting external filter code \'%s\' for filter %s.",
@@ -1247,17 +1247,19 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
 #endif
       if (bl != NULL)
       {
+         int pcrs_error;
+         jb_err jb_error;
          /*
           * Save the expression, make it a pcrs_job
           * and chain it into the current filter's joblist
           */
-         error = enlist(bl->patterns, buf);
-         if (JB_ERR_MEMORY == error)
+         jb_error = enlist(bl->patterns, buf);
+         if (JB_ERR_MEMORY == jb_error)
          {
             log_error(LOG_LEVEL_FATAL,
                "Out of memory while enlisting re_filter job \'%s\' for filter %s.", buf, bl->name);
          }
-         assert(JB_ERR_OK == error);
+         assert(JB_ERR_OK == jb_error);
 
          if (pcrs_job_is_dynamic(buf))
          {
@@ -1289,11 +1291,11 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
             continue;
          }
 
-         if ((dummy = pcrs_compile_command(buf, &error)) == NULL)
+         if ((dummy = pcrs_compile_command(buf, &pcrs_error)) == NULL)
          {
             log_error(LOG_LEVEL_ERROR,
                "Adding re_filter job \'%s\' to filter %s failed: %s",
-               buf, bl->name, pcrs_strerror(error));
+               buf, bl->name, pcrs_strerror(pcrs_error));
             freez(buf);
             continue;
          }
