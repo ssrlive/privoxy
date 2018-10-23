@@ -2833,7 +2833,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                char number[20];
                struct list_entry *filter_name;
                struct map *line_exports;
-               const int type = filter_group->type;
+               const enum filter_type type = filter_group->type;
                const int multi_action_index = filter_type_info[type].multi_action_index;
 
                assert(type < MAX_FILTER_TYPES);
