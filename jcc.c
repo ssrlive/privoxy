@@ -758,7 +758,7 @@ static void log_applied_actions(const struct current_action_spec *actions)
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
- *          1  :  rsp = Fully prepared response. Will be freed on exit.
+ *          2  :  rsp = Fully prepared response. Will be freed on exit.
  *
  * Returns     :  Nothing.
  *
@@ -1065,7 +1065,7 @@ static void wait_for_alive_connections(void)
  *          1  :  sfd  = Open socket to remember.
  *          2  :  http = The destination for the connection.
  *          3  :  fwd  = The forwarder settings used.
- *          3  :  server_connection  = storage.
+ *          4  :  server_connection  = storage.
  *
  * Returns     : void
  *
