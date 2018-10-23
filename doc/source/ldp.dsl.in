@@ -31,7 +31,8 @@
 
 (define %indent-screen-lines%
   ;; Indent lines in a 'Screen'?
-  #t)
+  ;; "#f" or string to be used as the indent on 'screen'
+  "")
 
 (define %callout-fancy-bug%
   ;; Use fancy callout bugs?
