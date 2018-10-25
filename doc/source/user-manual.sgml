@@ -1575,8 +1575,8 @@ for details.
 <title>Configuration Files Overview</title>
 <para>
  For Unix, *BSD and Linux, all configuration files are located in
- <filename>/etc/privoxy/</filename> by default. For MS Windows, OS/2, and
- AmigaOS these are all in the same directory as the
+ <filename>/etc/privoxy/</filename> by default. For MS Windows and OS/2
+ these are all in the same directory as the
  <application>Privoxy</application> executable. <![%p-not-stable;[ The name
  and number of configuration files has changed from previous versions, and is
  subject to change as development progresses.]]>
@@ -1593,7 +1593,7 @@ for details.
   <listitem>
    <para>
      The <link linkend="config">main configuration file</link> is named <filename>config</filename>
-     on Linux, Unix, BSD, OS/2, and AmigaOS and <filename>config.txt</filename>
+     on Linux, Unix, BSD, and OS/2, and <filename>config.txt</filename>
      on Windows. This is a required file.
    </para>
   </listitem>
