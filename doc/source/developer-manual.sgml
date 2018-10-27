@@ -2189,7 +2189,55 @@ for-privoxy-version=3.0.11
       </listitem>
       <listitem>
        <para>
-        All documentation should be rebuild after the code status has been changed.
+        Create the change log:
+       </para>
+       <programlisting>
+  $ git tag
+  #   to see the tags
+  $ git log [last release tag]..HEAD &gt; /tmp/log
+  #   get the commit log since the last release
+  $ utils/makeChangeLog /tmp/log &gt; /tmp/change.log
+  #   reformat the commit log
+</programlisting>
+       <para>
+        Edit <filename>/tmp/change.log</filename> to remove trivial
+        changes and group the changes under general headings like:
+       </para>
+       <programlisting>
+- Bug fixes:
+- Action file improvements:
+- Filter file improvements:
+- General improvements:
+- Documentation improvements:
+- Build system improvements:
+- Code cleanups:
+- Privoxy-Log-Parser:
+- Privoxy-Regression-Test:
+</programlisting>
+       <para>
+        Add the contents of <filename>/tmp/change.log</filename> to the
+        start of <filename>ChangeLog</filename> and re-create
+        <filename>doc/source/changelog.sgml</filename>:
+       </para>
+       <programlisting>
+  $ utils/changelog2doc.pl /tmp/change.log &gt;| doc/source/changelog.sgml
+</programlisting>
+      </listitem>
+      <listitem>
+       <para>
+        All developers should look at the <filename>ChangeLog</filename> and
+        make sure noteworthy changes are referenced.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        All documentation should be rebuilt:
+       <programlisting>
+  $ make dok
+  $ make dok-tidy
+  $ make man
+  $ make config-file
+</programlisting>
         Finished docs should be then be committed to Git (for those
         without the ability to build these). Some docs may require
         rather obscure processing tools. <filename>config</filename>,
@@ -2215,12 +2263,6 @@ for-privoxy-version=3.0.11
          target for this at this time!!! It needs to be done manually.
        </para>
       </listitem>
-      <listitem>
-       <para>
-        All developers should look at the <filename>ChangeLog</filename> and
-        make sure noteworthy changes are referenced.
-       </para>
-     </listitem>
       <listitem>
        <para>
         <emphasis>Commit all files that were changed in the above steps!</emphasis>
