@@ -2251,6 +2251,11 @@ for-privoxy-version=3.0.11
       </listitem>
       <listitem>
        <para>
+        <emphasis>Commit all files that were changed in the above steps!</emphasis>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
          The <citetitle>User Manual</citetitle> is also used for context
          sensitive help for the CGI editor. This is version sensitive, so that
          the user will get appropriate help for his/her release. So with
@@ -2261,11 +2266,6 @@ for-privoxy-version=3.0.11
          <literal>http://privoxy.org/$(VERSION)/user-manual/</literal>. This
          will need to be updated for each new release. There is no Makefile
          target for this at this time!!! It needs to be done manually.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        <emphasis>Commit all files that were changed in the above steps!</emphasis>
        </para>
       </listitem>
       <listitem>
