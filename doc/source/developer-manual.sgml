@@ -2277,13 +2277,6 @@ for-privoxy-version=3.0.11
       </listitem>
      <listitem>
        <para>
-        If the release was in a development branch, increase the point version
-        from even to odd (X.Y.(Z+1)) again in <filename>configure.in</filename> and
-        commit your change.
-       </para>
-      </listitem>
-     <listitem>
-       <para>
         On the webserver, copy the user manual to a new top-level directory
         called <filename>X.Y.Z</filename>. This ensures that help links from the CGI
         pages, which have the version as a prefix, will go into the right version of the manual.
