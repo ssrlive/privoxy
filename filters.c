@@ -1055,7 +1055,7 @@ char *get_last_url(char *subject, const char *redirect_mode)
    }
 
    if (0 == strcmpic(redirect_mode, "check-decoded-url") && strchr(subject, '%'))
-   {  
+   {
       char *url_segment = NULL;
       char **url_segments;
       size_t max_segments;
