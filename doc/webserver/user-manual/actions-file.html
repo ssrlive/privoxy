@@ -1313,7 +1313,50 @@ www.example.net/.*style</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="DOWNGRADE-HTTP-VERSION" id="DOWNGRADE-HTTP-VERSION">8.5.13.
+        <h4 class="SECT3"><a name="DELAY-RESPONSE" id="DELAY-RESPONSE">8.5.13. delay-response</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Typical use:</dt>
+            <dd>
+              <p>Delay responses to the client to reduce the load</p>
+            </dd>
+            <dt>Effect:</dt>
+            <dd>
+              <p>Delays responses to the client by sending the response in ca. 10 byte chunks.</p>
+            </dd>
+            <dt>Type:</dt>
+            <dd>
+              <p>Parameterized.</p>
+            </dd>
+            <dt>Parameter:</dt>
+            <dd>
+              <p><span class="QUOTE">"Number of milliseconds"</span></p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>Sometimes when JavaScript code is used to fetch advertisements it doesn't respect Privoxy's blocks and
+              retries to fetch the same resource again causing unnecessary load on the client.</p>
+              <p>This action delays responses to the client and can be combined with <tt class="LITERAL"><a href=
+              "actions-file.html#BLOCK">blocks</a></tt> to slow down the JavaScript code, thus reducing the load on the
+              client.</p>
+              <p>When used without <tt class="LITERAL"><a href="actions-file.html#BLOCK">blocks</a></tt> the action can
+              also be used to simulate a slow internet connection.</p>
+            </dd>
+            <dt>Example usage:</dt>
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">+delay-response{100}</pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="DOWNGRADE-HTTP-VERSION" id="DOWNGRADE-HTTP-VERSION">8.5.14.
         downgrade-http-version</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -1360,7 +1403,7 @@ problem-host.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="EXTERNAL-FILTER" id="EXTERNAL-FILTER">8.5.14. external-filter</a></h4>
+        <h4 class="SECT3"><a name="EXTERNAL-FILTER" id="EXTERNAL-FILTER">8.5.15. external-filter</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1422,7 +1465,7 @@ problem-host.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FAST-REDIRECTS" id="FAST-REDIRECTS">8.5.15. fast-redirects</a></h4>
+        <h4 class="SECT3"><a name="FAST-REDIRECTS" id="FAST-REDIRECTS">8.5.16. fast-redirects</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1503,7 +1546,7 @@ problem-host.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FILTER" id="FILTER">8.5.16. filter</a></h4>
+        <h4 class="SECT3"><a name="FILTER" id="FILTER">8.5.17. filter</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1579,8 +1622,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{js-annoyances}       # Get rid of particularly annoying JavaScript abuse.</pre>
+                    <pre class="SCREEN">
+                    +filter{js-annoyances}       # Get rid of particularly annoying JavaScript abuse.</pre>
                   </td>
                 </tr>
               </table>
@@ -1588,8 +1631,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{js-events}           # Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).</pre>
+                    <pre class="SCREEN">
+                    +filter{js-events}           # Kill JavaScript event bindings and timers (Radically destructive! Only for extra nasty sites).</pre>
                   </td>
                 </tr>
               </table>
@@ -1597,8 +1640,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{html-annoyances}     # Get rid of particularly annoying HTML abuse.</pre>
+                    <pre class="SCREEN">
+                    +filter{html-annoyances}     # Get rid of particularly annoying HTML abuse.</pre>
                   </td>
                 </tr>
               </table>
@@ -1606,8 +1649,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{content-cookies}     # Kill cookies that come in the HTML or JS content.</pre>
+                    <pre class="SCREEN">
+                    +filter{content-cookies}     # Kill cookies that come in the HTML or JS content.</pre>
                   </td>
                 </tr>
               </table>
@@ -1615,8 +1658,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{refresh-tags}        # Kill automatic refresh tags if refresh time is larger than 9 seconds.</pre>
+                    <pre class="SCREEN">
+                    +filter{refresh-tags}        # Kill automatic refresh tags if refresh time is larger than 9 seconds.</pre>
                   </td>
                 </tr>
               </table>
@@ -1640,8 +1683,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{img-reorder}         # Reorder attributes in &lt;img&gt; tags to make the banners-by-* filters more effective.</pre>
+                    <pre class="SCREEN">
+                    +filter{img-reorder}         # Reorder attributes in &lt;img&gt; tags to make the banners-by-* filters more effective.</pre>
                   </td>
                 </tr>
               </table>
@@ -1657,8 +1700,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{banners-by-link}     # Kill banners by their links to known clicktrackers.</pre>
+                    <pre class="SCREEN">
+                    +filter{banners-by-link}     # Kill banners by their links to known clicktrackers.</pre>
                   </td>
                 </tr>
               </table>
@@ -1666,8 +1709,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{webbugs}             # Squish WebBugs (1x1 invisible GIFs used for user tracking).</pre>
+                    <pre class="SCREEN">
+                    +filter{webbugs}             # Squish WebBugs (1x1 invisible GIFs used for user tracking).</pre>
                   </td>
                 </tr>
               </table>
@@ -1675,8 +1718,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{tiny-textforms}      # Extend those tiny textareas up to 40x80 and kill the hard wrap.</pre>
+                    <pre class="SCREEN">
+                    +filter{tiny-textforms}      # Extend those tiny textareas up to 40x80 and kill the hard wrap.</pre>
                   </td>
                 </tr>
               </table>
@@ -1684,8 +1727,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{jumping-windows}     # Prevent windows from resizing and moving themselves.</pre>
+                    <pre class="SCREEN">
+                    +filter{jumping-windows}     # Prevent windows from resizing and moving themselves.</pre>
                   </td>
                 </tr>
               </table>
@@ -1693,8 +1736,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{frameset-borders}    # Give frames a border and make them resizable.</pre>
+                    <pre class="SCREEN">
+                    +filter{frameset-borders}    # Give frames a border and make them resizable.</pre>
                   </td>
                 </tr>
               </table>
@@ -1702,8 +1745,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{iframes}             # Removes all detected iframes. Should only be enabled for individual sites.</pre>
+                    <pre class="SCREEN">
+                    +filter{iframes}             # Removes all detected iframes. Should only be enabled for individual sites.</pre>
                   </td>
                 </tr>
               </table>
@@ -1711,8 +1754,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{demoronizer}         # Fix MS's non-standard use of standard charsets.</pre>
+                    <pre class="SCREEN">
+                    +filter{demoronizer}         # Fix MS's non-standard use of standard charsets.</pre>
                   </td>
                 </tr>
               </table>
@@ -1736,8 +1779,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{fun}                 # Text replacements for subversive browsing fun!</pre>
+                    <pre class="SCREEN">
+                    +filter{fun}                 # Text replacements for subversive browsing fun!</pre>
                   </td>
                 </tr>
               </table>
@@ -1745,8 +1788,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{crude-parental}      # Crude parental filtering. Note that this filter doesn't work reliably.</pre>
+                    <pre class="SCREEN">
+                    +filter{crude-parental}      # Crude parental filtering. Note that this filter doesn't work reliably.</pre>
                   </td>
                 </tr>
               </table>
@@ -1754,8 +1797,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{ie-exploits}         # Disable some known Internet Explorer bug exploits.</pre>
+                    <pre class="SCREEN">
+                    +filter{ie-exploits}         # Disable some known Internet Explorer bug exploits.</pre>
                   </td>
                 </tr>
               </table>
@@ -1763,8 +1806,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{site-specifics}      # Cure for site-specific problems. Don't apply generally!</pre>
+                    <pre class="SCREEN">
+                    +filter{site-specifics}      # Cure for site-specific problems. Don't apply generally!</pre>
                   </td>
                 </tr>
               </table>
@@ -1772,8 +1815,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{no-ping}             # Removes non-standard ping attributes in &lt;a&gt; and &lt;area&gt; tags.</pre>
+                    <pre class="SCREEN">
+                    +filter{no-ping}             # Removes non-standard ping attributes in &lt;a&gt; and &lt;area&gt; tags.</pre>
                   </td>
                 </tr>
               </table>
@@ -1781,8 +1824,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{google}              # CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.</pre>
+                    <pre class="SCREEN">
+                    +filter{google}              # CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.</pre>
                   </td>
                 </tr>
               </table>
@@ -1790,8 +1833,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{yahoo}               # CSS-based block for Yahoo text ads. Also removes a width limitation.</pre>
+                    <pre class="SCREEN">
+                    +filter{yahoo}               # CSS-based block for Yahoo text ads. Also removes a width limitation.</pre>
                   </td>
                 </tr>
               </table>
@@ -1799,8 +1842,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{msn}                 # CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.</pre>
+                    <pre class="SCREEN">
+                    +filter{msn}                 # CSS-based block for MSN text ads. Also removes tracking URLs and a width limitation.</pre>
                   </td>
                 </tr>
               </table>
@@ -1808,8 +1851,8 @@ problem-host.example.com</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">+filter{blogspot}            # Cleans up some Blogspot blogs. Read the fine print before using this.</pre>
+                    <pre class="SCREEN">
+                    +filter{blogspot}            # Cleans up some Blogspot blogs. Read the fine print before using this.</pre>
                   </td>
                 </tr>
               </table>
@@ -1818,7 +1861,7 @@ problem-host.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FORCE-TEXT-MODE" id="FORCE-TEXT-MODE">8.5.17. force-text-mode</a></h4>
+        <h4 class="SECT3"><a name="FORCE-TEXT-MODE" id="FORCE-TEXT-MODE">8.5.18. force-text-mode</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1875,7 +1918,7 @@ problem-host.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FORWARD-OVERRIDE" id="FORWARD-OVERRIDE">8.5.18. forward-override</a></h4>
+        <h4 class="SECT3"><a name="FORWARD-OVERRIDE" id="FORWARD-OVERRIDE">8.5.19. forward-override</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1982,7 +2025,7 @@ TAG:^User-Agent: fetch libfetch/2\.0$</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOCUMENT" id="HANDLE-AS-EMPTY-DOCUMENT">8.5.19.
+        <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOCUMENT" id="HANDLE-AS-EMPTY-DOCUMENT">8.5.20.
         handle-as-empty-document</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2035,7 +2078,7 @@ example.org/.*\.js$</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HANDLE-AS-IMAGE" id="HANDLE-AS-IMAGE">8.5.20. handle-as-image</a></h4>
+        <h4 class="SECT3"><a name="HANDLE-AS-IMAGE" id="HANDLE-AS-IMAGE">8.5.21. handle-as-image</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2095,7 +2138,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-ACCEPT-LANGUAGE" id="HIDE-ACCEPT-LANGUAGE">8.5.21.
+        <h4 class="SECT3"><a name="HIDE-ACCEPT-LANGUAGE" id="HIDE-ACCEPT-LANGUAGE">8.5.22.
         hide-accept-language</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2148,7 +2191,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-CONTENT-DISPOSITION" id="HIDE-CONTENT-DISPOSITION">8.5.22.
+        <h4 class="SECT3"><a name="HIDE-CONTENT-DISPOSITION" id="HIDE-CONTENT-DISPOSITION">8.5.23.
         hide-content-disposition</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2204,7 +2247,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-IF-MODIFIED-SINCE" id="HIDE-IF-MODIFIED-SINCE">8.5.23.
+        <h4 class="SECT3"><a name="HIDE-IF-MODIFIED-SINCE" id="HIDE-IF-MODIFIED-SINCE">8.5.24.
         hide-if-modified-since</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2263,7 +2306,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-FROM-HEADER" id="HIDE-FROM-HEADER">8.5.24. hide-from-header</a></h4>
+        <h4 class="SECT3"><a name="HIDE-FROM-HEADER" id="HIDE-FROM-HEADER">8.5.25. hide-from-header</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2314,7 +2357,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-REFERRER" id="HIDE-REFERRER">8.5.25. hide-referrer</a></h4><a name=
+        <h4 class="SECT3"><a name="HIDE-REFERRER" id="HIDE-REFERRER">8.5.26. hide-referrer</a></h4><a name=
         "HIDE-REFERER" id="HIDE-REFERER"></a>
         <div class="VARIABLELIST">
           <dl>
@@ -2395,7 +2438,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-USER-AGENT" id="HIDE-USER-AGENT">8.5.26. hide-user-agent</a></h4>
+        <h4 class="SECT3"><a name="HIDE-USER-AGENT" id="HIDE-USER-AGENT">8.5.27. hide-user-agent</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2456,7 +2499,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="LIMIT-CONNECT" id="LIMIT-CONNECT">8.5.27. limit-connect</a></h4>
+        <h4 class="SECT3"><a name="LIMIT-CONNECT" id="LIMIT-CONNECT">8.5.28. limit-connect</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2508,7 +2551,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="LIMIT-COOKIE-LIFETIME" id="LIMIT-COOKIE-LIFETIME">8.5.28.
+        <h4 class="SECT3"><a name="LIMIT-COOKIE-LIFETIME" id="LIMIT-COOKIE-LIFETIME">8.5.29.
         limit-cookie-lifetime</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2560,7 +2603,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="PREVENT-COMPRESSION" id="PREVENT-COMPRESSION">8.5.29. prevent-compression</a></h4>
+        <h4 class="SECT3"><a name="PREVENT-COMPRESSION" id="PREVENT-COMPRESSION">8.5.30. prevent-compression</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2631,7 +2674,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="OVERWRITE-LAST-MODIFIED" id="OVERWRITE-LAST-MODIFIED">8.5.30.
+        <h4 class="SECT3"><a name="OVERWRITE-LAST-MODIFIED" id="OVERWRITE-LAST-MODIFIED">8.5.31.
         overwrite-last-modified</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2693,7 +2736,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="REDIRECT" id="REDIRECT">8.5.31. redirect</a></h4>
+        <h4 class="SECT3"><a name="REDIRECT" id="REDIRECT">8.5.32. redirect</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2785,7 +2828,7 @@ www.privoxy.org/user-manual/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SERVER-HEADER-FILTER" id="SERVER-HEADER-FILTER">8.5.32.
+        <h4 class="SECT3"><a name="SERVER-HEADER-FILTER" id="SERVER-HEADER-FILTER">8.5.33.
         server-header-filter</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2835,7 +2878,7 @@ example.org/instance-that-is-delivered-as-xml-but-is-not</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SERVER-HEADER-TAGGER" id="SERVER-HEADER-TAGGER">8.5.33.
+        <h4 class="SECT3"><a name="SERVER-HEADER-TAGGER" id="SERVER-HEADER-TAGGER">8.5.34.
         server-header-tagger</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2892,7 +2935,7 @@ TAG:^image/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SESSION-COOKIES-ONLY" id="SESSION-COOKIES-ONLY">8.5.34.
+        <h4 class="SECT3"><a name="SESSION-COOKIES-ONLY" id="SESSION-COOKIES-ONLY">8.5.35.
         session-cookies-only</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2954,7 +2997,7 @@ TAG:^image/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SET-IMAGE-BLOCKER" id="SET-IMAGE-BLOCKER">8.5.35. set-image-blocker</a></h4>
+        <h4 class="SECT3"><a name="SET-IMAGE-BLOCKER" id="SET-IMAGE-BLOCKER">8.5.36. set-image-blocker</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -3043,7 +3086,7 @@ TAG:^image/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="SUMMARY" id="SUMMARY">8.5.36. Summary</a></h3>
+        <h3 class="SECT3"><a name="SUMMARY" id="SUMMARY">8.5.37. Summary</a></h3>
         <p>Note that many of these actions have the potential to cause a page to misbehave, possibly even not to
         display at all. There are many ways a site designer may choose to design his site, and what HTTP header
         content, and other criteria, he may depend on. There is no way to have hard and fast rules for all sites. See
