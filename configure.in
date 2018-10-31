@@ -350,7 +350,7 @@ fi
 AC_SUBST(RPM_BASE)
 
 dnl Check for jade, so we can build the documentation
-AC_CHECK_PROGS(JADEBIN,jade openjade,false)
+AC_CHECK_PROGS(JADEBIN,openjade jade,false)
 AC_SUBST(JADEBIN)
 
 dnl Check for man2html for docs.
