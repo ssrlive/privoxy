@@ -839,8 +839,8 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
       {
          /* There is nothing we can do about it. */
          log_error(LOG_LEVEL_ERROR,
-            "Couldn't deliver the error message through client socket %d: %E",
-            csp->cfd);
+            "Couldn't deliver the error message for %s through client socket %d: %E",
+            http->url, csp->cfd);
       }
 
       /* Clean up and return */
