@@ -838,7 +838,7 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
        || write_socket_delayed(csp->cfd, rsp->body, rsp->content_length, get_write_delay(csp)))
       {
          /* There is nothing we can do about it. */
-         log_error(LOG_LEVEL_ERROR,
+         log_error(LOG_LEVEL_CONNECT,
             "Couldn't deliver the error message for %s through client socket %d: %E",
             http->url, csp->cfd);
       }
