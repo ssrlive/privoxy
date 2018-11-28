@@ -74,7 +74,7 @@
 <sect1 renderas="sect2" id="download" label=""><title>Download</title>
 <para>
  You can <ulink url="/sf-download-mirror/">download Privoxy here</ulink>,
- from <ulink url="http://www.silvester.org.uk/privoxy/">this mirror</ulink>,
+ from <ulink url="https://www.silvester.org.uk/privoxy/">this mirror</ulink>,
  or from <ulink url="https://sourceforge.net/projects/ijbswa/files/">SourceForge</ulink>.
 </para>
 <para>
