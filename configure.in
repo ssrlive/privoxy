@@ -781,6 +781,7 @@ AC_CHECK_FUNCS([ \
  memchr \
  memmove \
  memset \
+ nanosleep \
  poll \
  putenv \
  random \

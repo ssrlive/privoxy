@@ -91,6 +91,8 @@ size_t privoxy_strlcat(char *destination, const char *source, size_t size);
 #define strlcat privoxy_strlcat
 #endif /* ndef HAVE_STRLCAT */
 
+extern int privoxy_millisleep(unsigned milliseconds);
+
 #if defined(__cplusplus)
 }
 #endif

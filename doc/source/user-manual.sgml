@@ -3659,6 +3659,76 @@ new action
 </variablelist>
 </sect3>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="delay-response">
+<title>delay-response</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Delay responses to the client to reduce the load</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Delays responses to the client by sending the response in ca. 10 byte chunks.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Parameterized.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    <quote>Number of milliseconds</quote>
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Sometimes when JavaScript code is used to fetch advertisements
+    it doesn't respect Privoxy's blocks and retries to fetch the
+    same resource again causing unnecessary load on the client.
+   </para>
+   <para>
+    This action delays responses to the client and can be combined
+    with <literal><link linkend="block">blocks</link></literal>
+    to slow down the JavaScript code, thus reducing
+    the load on the client.
+   </para>
+   <para>
+    When used without <literal><link linkend="block">blocks</link></literal>
+    the action can also be used to simulate a slow internet connection.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+      <screen>+delay-response{100}</screen>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="downgrade-http-version">
 <title>downgrade-http-version</title>
