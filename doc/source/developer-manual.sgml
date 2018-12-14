@@ -2139,7 +2139,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
     </sect2>
 
     <sect2 id="beforerelease">
-    <title>Before the Release: Freeze</title>
+    <title>Before the Release</title>
      <para>
        The following <emphasis>must be done by one of the
        developers</emphasis> prior to each new release.
