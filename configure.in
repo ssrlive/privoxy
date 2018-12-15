@@ -349,9 +349,15 @@ if test $RPMBIN != false; then
 fi
 AC_SUBST(RPM_BASE)
 
+dnl prefer openjade to jade
 dnl Check for jade, so we can build the documentation
 AC_CHECK_PROGS(JADEBIN,openjade jade,false)
 AC_SUBST(JADEBIN)
+
+dnl Prefer OpenSP to SP
+dnl   ref: https://lists.privoxy.org/pipermail/privoxy-devel/2018-November/000293.html
+AC_CHECK_PROGS(NSGMLS,onsgmls nsgmls,false)
+AC_SUBST(NSGMLS)
 
 dnl Check for man2html for docs.
 AC_CHECK_PROGS(MAN2HTML,man2html,false)

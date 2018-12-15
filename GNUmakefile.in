@@ -135,6 +135,7 @@ W3M_DUMP_UTF8 = @W3M@ -I ISO-8859 -O UTF-8 -dump
 # docbook output is ISO-8859 (which is a superset of ascii)
 JADECAT    = @JADECAT@
 JADEBIN    = @JADEBIN@
+NSGMLS     = @NSGMLS@
 DB         = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#html
 DB_TXT     = $(JADEBIN) $(JADECAT) -ihtml -t sgml  -D.. -d ldp.dsl\#print
 # -d dsssl_spec
@@ -526,7 +527,7 @@ dok-man:
 # target for man page generation!
 man: dok-release
 	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
-	nsgmls ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
+	$(NSGMLS) ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
 	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' $(MAN_PAGE) ;\
 	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" $(MAN_PAGE); \
 	perl -pi.bak -e "s/ö/\\\\[:o]/g" $(MAN_PAGE); \
