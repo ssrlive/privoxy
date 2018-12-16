@@ -2233,9 +2233,10 @@ for-privoxy-version=3.0.11
        <para>
         All documentation should be rebuilt:
        <programlisting>
-  $ make dok
-  $ make dok-tidy
   $ make man
+  $ make dok
+  $ make dok-man
+  $ make dok-tidy
   $ make config-file
 </programlisting>
         Finished docs should be then be committed to Git (for those
