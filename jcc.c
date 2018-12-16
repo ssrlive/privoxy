@@ -1945,7 +1945,7 @@ static jb_err parse_client_request(struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  0 on success, anything else is na error.
+ * Returns     :  0 on success, anything else is an error.
  *
  *********************************************************************/
 static int send_http_request(struct client_state *csp)
