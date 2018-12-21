@@ -77,7 +77,7 @@ dnl =================================================================
 VERSION_MAJOR=3
 VERSION_MINOR=0
 VERSION_POINT=27
-CODE_STATUS="UNRELEASED"
+CODE_STATUS="stable"
 
 dnl Timestamp (date +%s) used by the mtree-spec target.
 dnl Should be updated before releases but forgetting it isn't critical.
