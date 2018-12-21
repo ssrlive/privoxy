@@ -84,7 +84,7 @@
       "LITERAL">v_3_0_branch</tt> at the moment).</p>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="BEFORERELEASE" id="BEFORERELEASE">6.2. Before the Release: Freeze</a></h2>
+      <h2 class="SECT2"><a name="BEFORERELEASE" id="BEFORERELEASE">6.2. Before the Release</a></h2>
       <p>The following <span class="emphasis"><i class="EMPHASIS">must be done by one of the developers</i></span>
       prior to each new release.</p>
       <ul>
@@ -175,9 +175,10 @@ for-privoxy-version=3.0.11</pre>
           <table border="0" bgcolor="#E0E0E0" width="90%">
             <tr>
               <td>
-                <pre class="PROGRAMLISTING">  $ make dok
+                <pre class="PROGRAMLISTING">  $ make man
+  $ make dok
+  $ make dok-man
   $ make dok-tidy
-  $ make man
   $ make config-file</pre>
               </td>
             </tr>
@@ -540,7 +541,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  debchange -v 3.0.27-UNRELEASED-1 "New upstream version"</pre>
+              <pre class="PROGRAMLISTING">  debchange -v 3.0.27-stable-1 "New upstream version"</pre>
             </td>
           </tr>
         </table>
@@ -552,7 +553,7 @@ for-privoxy-version=3.0.11</pre>
             </td>
           </tr>
         </table>
-        <p>This will create <tt class="FILENAME">../privoxy_3.0.27-UNRELEASED-1_i386.deb</tt> which can be uploaded. To
+        <p>This will create <tt class="FILENAME">../privoxy_3.0.27-stable-1_i386.deb</tt> which can be uploaded. To
         upload the package to Sourceforge, simply issue</p>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
