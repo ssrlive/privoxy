@@ -38,7 +38,7 @@ ChangeLog for Privoxy
     https://www.fabiankeil.de/talks/fuzzing-on-freebsd/
     This work was partially funded with donations and done
     as part of the Privoxy month in 2015.
-  - Consistently use the U(ngreedy) flag in the 'img-reorder' filter
+  - Consistently use the U(ngreedy) flag in the 'img-reorder' filter.
   - listen_loop(): Reuse a single thread attribute object
     The object doesn't change and creating a new one for
     every thread is a waste of (CPU) time.
@@ -58,7 +58,7 @@ ChangeLog for Privoxy
   - Explicitly taint the server socket in case of CONNECT requests.
     This doesn't fix any known problems, but makes
     some log messages less confusing.
-  - Let write_pid_file() terminate if the pid file can't be opened
+  - Let write_pid_file() terminate if the pid file can't be opened.
     Logging the issue at info level is unlikely to help.
   - log_error(): Reduce the mutex-protected area by not using a
     heap-allocated buffer that is shared between all threads.
@@ -128,7 +128,7 @@ ChangeLog for Privoxy
     Finally, refreshing the /client-tags page to show the
     current state can no longer unintentionally repeat the
     previous toggle request.
-  - Don't add a "Connection" header for CONNECT requests
+  - Don't add a "Connection" header for CONNECT requests.
     Explicitly sending "Connection: close" is not necessary and
     apparently it causes problems with some forwarding proxies
     that will close the connection prematurely.
@@ -240,7 +240,7 @@ ChangeLog for Privoxy
     CGI request being rejected with status code 403 (instead of 200).
   - Update test for /send-stylesheet and add another one
 
-- Templates
+- Templates:
   - Consistently use https:// when linking to the Privoxy website.
   - Remove SourceForge references in Copyright header.
   - Remove a couple of SourceForge references in a comment.
