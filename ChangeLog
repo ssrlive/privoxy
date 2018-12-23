@@ -58,18 +58,6 @@ ChangeLog for Privoxy
   - Explicitly taint the server socket in case of CONNECT requests.
     This doesn't fix any known problems, but makes
     some log messages less confusing.
-  - Remove a mysterious comment with a GNU FDL link as it isn't
-    useful and could confuse license scanners.
-    In May 2002 it was briefly claimed that "this document" was covered
-    by the GNU FDL. The commit message (r1.5) doesn't explain the motivation
-    or whether all copyright holders were actually asked and agreed to the
-    declared license change.
-    It's thus hard to tell whether or not the license change was legit,
-    but luckily two days later the "doc license" was "put" "back to GPL"
-    anyway (r1.6).
-    At the same time the offending comment with a link to the FDL
-    (not the GPL) was added for no obvious reason.
-    Now it's gone again.
   - Let write_pid_file() terminate if the pid file can't be opened
     Logging the issue at info level is unlikely to help.
   - log_error(): Reduce the mutex-protected area by not using a
@@ -234,6 +222,18 @@ ChangeLog for Privoxy
   - Explicitly mention that Privoxy binaries are built by individuals
     on their own systems. Buyer beware!
   - Mention the release feed on the homepage.
+  - Remove a mysterious comment with a GNU FDL link as it isn't
+    useful and could confuse license scanners.
+    In May 2002 it was briefly claimed that "this document" was covered
+    by the GNU FDL. The commit message (r1.5) doesn't explain the motivation
+    or whether all copyright holders were actually asked and agreed to the
+    declared license change.
+    It's thus hard to tell whether or not the license change was legit,
+    but luckily two days later the "doc license" was "put" "back to GPL"
+    anyway (r1.6).
+    At the same time the offending comment with a link to the FDL
+    (not the GPL) was added for no obvious reason.
+    Now it's gone again.
 
 - Regression tests:
   - Bump for-privoxy-version to 3.0.27 as we now rely on untrusted
