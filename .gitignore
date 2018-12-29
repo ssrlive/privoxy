@@ -27,7 +27,7 @@ _$*
 core
 # CVS default ignores end
 *.txt
-GNUmakefile
+/GNUmakefile
 Makefile
 configure
 config.base
