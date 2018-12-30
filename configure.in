@@ -76,7 +76,7 @@ dnl =================================================================
 
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=27
+VERSION_POINT=28
 CODE_STATUS="stable"
 
 dnl Timestamp (date +%s) used by the mtree-spec target.
