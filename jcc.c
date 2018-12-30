@@ -2522,9 +2522,9 @@ static void handle_established_connection(struct client_state *csp)
                   hdrlen = strlen(hdr);
 
                   if (write_socket_delayed(csp->cfd, hdr, hdrlen, write_delay)
-                   || ((flushed = flush_iob(csp->cfd, csp->iob, write_delay) < 0)
-                   || (write_socket_delayed(csp->cfd, csp->receive_buffer,
-                         (size_t)len, write_delay))))
+                   || ((flushed = flush_iob(csp->cfd, csp->iob, write_delay)) < 0)
+                   || write_socket_delayed(csp->cfd, csp->receive_buffer,
+                         (size_t)len, write_delay))
                   {
                      log_error(LOG_LEVEL_CONNECT,
                         "Flush header and buffers to client failed: %E");
