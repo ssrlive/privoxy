@@ -1,6 +1,14 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.28 stable ***
+
+- Bug fixes for regressions in 3.0.27:
+  - Fixed misplaced parentheses.
+    Reported by David Binderman.
+  - Changed two regression tests to depend on config directive
+    enable-remote-toggle instead of FEATURE_TOGGLE.
+
 *** Version 3.0.27 stable ***
 
 - General improvements:
