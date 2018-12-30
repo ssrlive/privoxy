@@ -28,7 +28,24 @@
   <div class="SECT1">
     <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this Release</a></h1>
     <p><span class="APPLICATION">Privoxy 3.0.27</span> stable scales better in multi-user environments and brings a
-    couple of tuning directives.</p>
+    couple of tuning directives. <span class="APPLICATION">Privoxy 3.0.28</span> stable fixes two regressions
+    introduced in 3.0.27.</p>
+    <p>Changes in <span class="APPLICATION">Privoxy 3.0.28</span> stable:</p>
+    <ul>
+      <li>
+        <p>Bug fixes for regressions in 3.0.27:</p>
+        <ul>
+          <li>
+            <p>Fixed misplaced parentheses. Reported by David Binderman.</p>
+          </li>
+          <li>
+            <p>Changed two regression tests to depend on config directive enable-remote-toggle instead of
+            FEATURE_TOGGLE.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p>Changes in <span class="APPLICATION">Privoxy 3.0.27</span> stable:</p>
     <ul>
       <li>
         <p>General improvements:</p>
