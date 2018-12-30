@@ -26,8 +26,36 @@
 <para>
   <application>Privoxy 3.0.27</application> stable scales better
   in multi-user environments and brings a couple of tuning directives.
+  <application>Privoxy 3.0.28</application> stable fixes two regressions
+  introduced in 3.0.27.
 </para>
-
+ <para>
+  Changes in <application>Privoxy 3.0.28</application> stable:
+ </para>
+ <itemizedlist>
+   <listitem>
+   <para>
+    Bug fixes for regressions in 3.0.27:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Fixed misplaced parentheses.
+      Reported by David Binderman.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Changed two regression tests to depend on config directive
+      enable-remote-toggle instead of FEATURE_TOGGLE.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+ </itemizedlist>
+ <para>
+  Changes in <application>Privoxy 3.0.27</application> stable:
+ </para>
  <itemizedlist>
   <listitem>
    <para>
