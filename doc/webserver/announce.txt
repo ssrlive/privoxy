@@ -1,10 +1,22 @@
-               Announcing Privoxy 3.0.27 stable
+               Announcing Privoxy 3.0.28 stable
 --------------------------------------------------------------------
 
 Privoxy 3.0.27 stable scales better in multi-user environments
 and brings a couple of tuning directives.
+
+Privoxy 3.0.28 stable fixes two regressions introduced in 3.0.27.
+
 --------------------------------------------------------------------
-ChangeLog for Privoxy
+ChangeLog for Privoxy 3.0.28
+--------------------------------------------------------------------
+- Bug fixes for regressions in 3.0.27:
+  - Fixed misplaced parentheses.
+    Reported by David Binderman.
+  - Changed two regression tests to depend on config directive
+    enable-remote-toggle instead of FEATURE_TOGGLE.
+
+--------------------------------------------------------------------
+ChangeLog for Privoxy 3.0.27
 --------------------------------------------------------------------
 - General improvements:
   - Add a receive-buffer-size directive which can be used to
