@@ -719,7 +719,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Fetch Test = http://p.p/toggle
 # Level = 20
 # Fetch Test = http://p.p/toggle
-# Expect Status Code = 404
+# Expect Status Code = 403
 # Level = 21
 # Fetch Test = http://p.p/edit-actions
 # Level = 12
