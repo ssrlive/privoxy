@@ -1215,7 +1215,7 @@ enable-proxy-authentication-forwarding 0
 #      |the user's knowledge.                                |
 #      +-----------------------------------------------------+
 #
-trusted-cgi-referer http://www.example.org/
+#trusted-cgi-referer http://www.example.org/
 #
 #
 #  5. FORWARDING

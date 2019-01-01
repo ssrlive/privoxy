@@ -1994,7 +1994,7 @@ ACLs: permit-access and deny-access</title>
  </varlistentry>
 </variablelist>
 
-<![%config-file;[<literallayout>@@trusted-cgi-referer http://www.example.org/local-privoxy-control-page</literallayout>]]>
+<![%config-file;[<literallayout>@@#trusted-cgi-referer http://www.example.org/local-privoxy-control-page</literallayout>]]>
 </sect3>
 
 </sect2>
