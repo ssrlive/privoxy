@@ -3193,7 +3193,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%u",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
             (long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
@@ -3314,7 +3314,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%u",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
             (long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
@@ -3437,7 +3437,7 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
       return err;
    }
 
-   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%i#l%u",
+   snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
             (long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
