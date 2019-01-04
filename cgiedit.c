@@ -3194,7 +3194,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    }
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
-            (long) time(NULL), file->identifier, sectionid);
+            (unsigned long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
 
@@ -3315,7 +3315,7 @@ jb_err cgi_edit_actions_url(struct client_state *csp,
    }
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
-            (long) time(NULL), file->identifier, section_start_line_number);
+            (unsigned long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
 
@@ -3438,7 +3438,7 @@ jb_err cgi_edit_actions_add_url(struct client_state *csp,
    }
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
-            (long) time(NULL), file->identifier, sectionid);
+            (unsigned long) time(NULL), file->identifier, sectionid);
 
    edit_free_file(file);
 
@@ -3549,7 +3549,7 @@ jb_err cgi_edit_actions_remove_url(struct client_state *csp,
    }
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u#l%u",
-            (long) time(NULL), file->identifier, section_start_line_number);
+            (unsigned long) time(NULL), file->identifier, section_start_line_number);
 
    edit_free_file(file);
 
@@ -3671,7 +3671,7 @@ jb_err cgi_edit_actions_section_remove(struct client_state *csp,
    }
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u",
-            (long) time(NULL), file->identifier);
+            (unsigned long) time(NULL), file->identifier);
 
    edit_free_file(file);
 
@@ -3834,7 +3834,7 @@ jb_err cgi_edit_actions_section_add(struct client_state *csp,
    }
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u",
-            (long) time(NULL), file->identifier);
+            (unsigned long) time(NULL), file->identifier);
 
    edit_free_file(file);
 
@@ -4023,7 +4023,7 @@ jb_err cgi_edit_actions_section_swap(struct client_state *csp,
    } /* END if (section1 != section2) */
 
    snprintf(target, sizeof(target), CGI_PREFIX "edit-actions-list?foo=%lu&f=%u",
-            (long) time(NULL), file->identifier);
+            (unsigned long) time(NULL), file->identifier);
 
    edit_free_file(file);
 
