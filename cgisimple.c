@@ -308,7 +308,7 @@ static void cgi_create_client_tag_form(char *form, size_t size,
    snprintf(form, size,
       "<form method=\"GET\" action=\""CGI_PREFIX"toggle-client-tag\" style=\"display: inline\">\n"
       " <input type=\"hidden\" name=\"tag\" value=\"%s\">\n"
-      " <input type=\"hidden\" name=\"toggle-state\" value=\"%u\">\n"
+      " <input type=\"hidden\" name=\"toggle-state\" value=\"%i\">\n"
       " <input type=\"hidden\" name=\"expires\" value=\"%u\">\n"
       " <input type=\"submit\" value=\"%s\">\n"
       "</form>", tag, toggle_state, !expires, button_name);
@@ -401,7 +401,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
    refresh_delay = get_next_tag_timeout_for_client(csp->client_address);
    if (refresh_delay != 0)
    {
-      snprintf(buf, sizeof(buf), "%d", csp->config->client_tag_lifetime);
+      snprintf(buf, sizeof(buf), "%u", csp->config->client_tag_lifetime);
       if (map(exports, "refresh-delay", 1, buf, 1))
       {
          free_map(exports);
