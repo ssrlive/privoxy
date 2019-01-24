@@ -62,5 +62,6 @@ extern void ssl_send_certificate_error(struct client_state *csp);
 extern int  create_client_ssl_connection(struct client_state *csp);
 extern int  create_server_ssl_connection(struct client_state *csp);
 extern void close_client_and_server_ssl_connections(struct client_state *csp);
+extern void close_client_ssl_connection(struct client_state *csp);
 
 #endif /* ndef SSL_H_INCLUDED */

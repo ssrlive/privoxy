@@ -578,7 +578,7 @@ exit:
  * Returns     :  N/A
  *
  *********************************************************************/
-static void close_client_ssl_connection(struct client_state *csp)
+extern void close_client_ssl_connection(struct client_state *csp)
 {
    int ret = 0;
 

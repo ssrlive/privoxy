@@ -1060,6 +1060,11 @@ struct client_state
    /** List of all headers for this request */
    struct list headers[1];
 
+#ifdef FEATURE_HTTPS_FILTERING
+   /** List of all encrypted headers for this request */
+   struct list https_headers[1];
+#endif
+
    /** List of all tags that apply to this request */
    struct list tags[1];
 

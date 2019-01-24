@@ -150,7 +150,7 @@ static int client_protocol_is_unsupported(const struct client_state *csp, char *
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers);
 static jb_err get_server_headers(struct client_state *csp);
 static const char *crunch_reason(const struct http_response *rsp);
-static void send_crunch_response(const struct client_state *csp, struct http_response *rsp);
+static void send_crunch_response(struct client_state *csp, struct http_response *rsp);
 static char *get_request_line(struct client_state *csp);
 static jb_err receive_client_request(struct client_state *csp);
 static jb_err parse_client_request(struct client_state *csp);
@@ -809,7 +809,7 @@ static void log_applied_actions(const struct current_action_spec *actions)
  * Returns     :  Nothing.
  *
  *********************************************************************/
-static void send_crunch_response(const struct client_state *csp, struct http_response *rsp)
+static void send_crunch_response(struct client_state *csp, struct http_response *rsp)
 {
       const struct http_request *http = csp->http;
       char status_code[4];
@@ -844,13 +844,33 @@ static void send_crunch_response(const struct client_state *csp, struct http_res
          csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
 
       /* Write the answer to the client */
-      if (write_socket_delayed(csp->cfd, rsp->head, rsp->head_length, get_write_delay(csp))
-       || write_socket_delayed(csp->cfd, rsp->body, rsp->content_length, get_write_delay(csp)))
+#ifdef FEATURE_HTTPS_FILTERING
+      if (client_use_ssl(csp))
       {
-         /* There is nothing we can do about it. */
-         log_error(LOG_LEVEL_CONNECT,
-            "Couldn't deliver the error message for %s through client socket %d: %E",
-            http->url, csp->cfd);
+         if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                 (const unsigned char *)rsp->head, rsp->head_length) < 0)
+          || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                 (const unsigned char *)rsp->body, rsp->content_length) < 0))
+         {
+            /* There is nothing we can do about it. */
+            log_error(LOG_LEVEL_CONNECT, "Couldn't deliver the error message "
+               "for %s through client socket %d using TLS/SSL",
+               http->url, csp->cfd);
+         }
+      }
+      else
+#endif
+      {
+         if (write_socket_delayed(csp->cfd, rsp->head, rsp->head_length,
+                get_write_delay(csp))
+          || write_socket_delayed(csp->cfd, rsp->body, rsp->content_length,
+                get_write_delay(csp)))
+         {
+            /* There is nothing we can do about it. */
+            log_error(LOG_LEVEL_CONNECT,
+               "Couldn't deliver the error message for %s through client socket %d: %E",
+               http->url, csp->cfd);
+         }
       }
 
       /* Clean up and return */
@@ -1992,6 +2012,300 @@ static int send_http_request(struct client_state *csp)
    return write_failure;
 
 }
+
+
+#ifdef FEATURE_HTTPS_FILTERING
+/*********************************************************************
+ *
+ * Function    : send_https_request
+ *
+ * Description : Sends the HTTP headers from the client request
+ *               and all the body data that has already been received.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  0 on success, anything else is an error.
+ *
+ *********************************************************************/
+static int send_https_request(struct client_state *csp)
+{
+   char *hdr;
+   int ret;
+   long flushed = 0;
+
+   hdr = list_to_text(csp->https_headers);
+   if (hdr == NULL)
+   {
+      /* FIXME Should handle error properly */
+      log_error(LOG_LEVEL_FATAL, "Out of memory parsing client header");
+   }
+   list_remove_all(csp->https_headers);
+
+   /*
+    * Write the client's (modified) header to the server
+    * (along with anything else that may be in the buffer)
+    */
+   ret = ssl_send_data(&(csp->mbedtls_server_attr.ssl),
+      (const unsigned char *)hdr, strlen(hdr));
+   freez(hdr);
+
+   if (ret < 0)
+   {
+      log_error(LOG_LEVEL_CONNECT,
+         "Failed sending encrypted request headers to: %s: %E",
+         csp->http->hostport);
+      mark_server_socket_tainted(csp);
+      close_client_and_server_ssl_connections(csp);
+      return 1;
+   }
+
+   if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
+      && ((flushed = ssl_flush_socket(&(csp->mbedtls_server_attr.ssl),
+            csp->client_iob)) < 0))
+   {
+      log_error(LOG_LEVEL_CONNECT, "Failed sending request body to: %s: %E",
+         csp->http->hostport);
+      return 1;
+   }
+   if (flushed != 0)
+   {
+      if (csp->expected_client_content_length != 0)
+      {
+         if (csp->expected_client_content_length < flushed)
+         {
+            log_error(LOG_LEVEL_ERROR,
+               "Flushed %d bytes of request body while only expecting %llu",
+               flushed, csp->expected_client_content_length);
+            csp->expected_client_content_length = 0;
+         }
+         else
+         {
+            log_error(LOG_LEVEL_CONNECT,
+               "Flushed %d bytes of request body while expecting %llu",
+               flushed, csp->expected_client_content_length);
+            csp->expected_client_content_length -= (unsigned)flushed;
+         }
+      }
+      else
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Flushed %d bytes of request body", flushed);
+      }
+   }
+
+   log_error(LOG_LEVEL_CONNECT, "Encrypted request sent");
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  receive_encrypted_request
+ *
+ * Description :  Receives an encrypted request.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK on success,
+ *                JB_ERR_PARSE or JB_ERR_MEMORY otherwise
+ *
+ *********************************************************************/
+static jb_err receive_encrypted_request(struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
+   int len;
+   char *p;
+
+   do
+   {
+      log_error(LOG_LEVEL_HEADER, "Reading encrypted headers");
+      if (!data_is_available(csp->cfd, (int)csp->config->keep_alive_timeout))
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Socket %d timed out while waiting for client headers", csp->cfd);
+         return JB_ERR_PARSE;
+      }
+      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl),
+         (unsigned char *)buf, sizeof(buf));
+      if (len == -1)
+      {
+         return JB_ERR_PARSE;
+      }
+      if (add_to_iob(csp->client_iob, csp->config->buffer_limit, buf, len))
+      {
+         return JB_ERR_MEMORY;
+      }
+      p = strstr(csp->client_iob->cur, "\r\n\r\n");
+   } while (p == NULL);
+
+   log_error(LOG_LEVEL_HEADER, "Encrypted headers received completely");
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  process_encrypted_request
+ *
+ * Description :  Receives and parses an encrypted request.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK on success,
+ *                JB_ERR_PARSE or JB_ERR_MEMORY otherwise
+ *
+ *********************************************************************/
+static jb_err process_encrypted_request(struct client_state *csp)
+{
+   char *p;
+   char *request_line;
+   jb_err err;
+   /* Temporary copy of the client's headers before they get enlisted in csp->https_headers */
+   struct list header_list;
+   struct list *headers = &header_list;
+
+   err = receive_encrypted_request(csp);
+   if (err != JB_ERR_OK)
+   {
+      /* XXX: Also used for JB_ERR_MEMORY */
+      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER));
+      return err;
+   }
+
+   /* We don't need get_request_line() because the whole HTTP head is buffered. */
+   request_line = get_header(csp->client_iob);
+   if (request_line == NULL)
+   {
+      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER));
+      return JB_ERR_PARSE;
+   }
+   assert(*request_line != '\0');
+
+   if (client_protocol_is_unsupported(csp, request_line))
+   {
+      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER));
+      return JB_ERR_PARSE;
+   }
+
+#ifdef FEATURE_FORCE_LOAD
+   if (force_required(csp, request_line))
+   {
+      csp->flags |= CSP_FLAG_FORCED;
+   }
+#endif /* def FEATURE_FORCE_LOAD */
+
+   free_http_request(csp->http);
+
+   err = parse_http_request(request_line, csp->http);
+   /* XXX: Restore ssl setting. This is ugly */
+   csp->http->client_ssl = 1;
+   csp->http->server_ssl = 1;
+
+   freez(request_line);
+   if (JB_ERR_OK != err)
+   {
+      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER));
+      /* XXX: Use correct size */
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
+      log_error(LOG_LEVEL_ERROR,
+         "Couldn't parse request line received from %s: %s",
+         csp->ip_addr_str, jb_err_to_string(err));
+
+      free_http_request(csp->http);
+      return JB_ERR_PARSE;
+   }
+
+   /* Parse the rest of the client's headers. */
+   init_list(headers);
+   for (;;)
+   {
+      p = get_header(csp->client_iob);
+
+      if (p == NULL)
+      {
+         /* There are no additional headers to read. */
+         break;
+      }
+      enlist(headers, p);
+      freez(p);
+   }
+
+   if (JB_ERR_OK != get_destination_from_https_headers(headers, csp->http))
+   {
+      /*
+       * Our attempts to get the request destination
+       * elsewhere failed.
+       */
+      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER));
+      return JB_ERR_PARSE;
+   }
+
+#ifndef FEATURE_EXTENDED_HOST_PATTERNS
+   /* Split the domain we just got for pattern matching */
+   init_domain_components(csp->http);
+#endif
+
+   /*
+    * Determine the actions for this URL
+    */
+#ifdef FEATURE_TOGGLE
+   if (!(csp->flags & CSP_FLAG_TOGGLED_ON))
+   {
+      /* Most compatible set of actions (i.e. none) */
+      init_current_action(csp->action);
+   }
+   else
+#endif /* ndef FEATURE_TOGGLE */
+   {
+      get_url_actions(csp, csp->http);
+   }
+
+   enlist(csp->https_headers, csp->http->cmd);
+
+   /* Append the previously read headers */
+   err = list_append_list_unique(csp->https_headers, headers);
+   destroy_list(headers);
+   if (JB_ERR_OK != err)
+   {
+      /* XXX: Send error message */
+      return err;
+   }
+
+   /* XXX: Work around crash */
+   csp->error_message = NULL;
+
+   /* XXX: Why do this here? */
+   csp->http->ssl = 1;
+
+   err = sed_https(csp);
+   if (JB_ERR_OK != err)
+   {
+      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER));
+      log_error(LOG_LEVEL_ERROR, "Failed to parse client request from %s.",
+         csp->ip_addr_str);
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
+         csp->ip_addr_str, csp->http->cmd);
+      return JB_ERR_PARSE;
+   }
+
+   log_error(LOG_LEVEL_HEADER, "Encrypted request processed");
+
+   return err;
+
+}
+#endif
 
 
 /*********************************************************************
@@ -3353,7 +3667,60 @@ static void chat(struct client_state *csp)
          mark_connection_closed(&csp->server_connection);
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
+#ifdef FEATURE_HTTPS_FILTERING
+      if (http->ssl && !use_ssl_tunnel)
+      {
+         int ret;
+         /*
+          * Creating an SSL proxy. If forwarding is disabled, we must send
+          * CSUCCEED mesage to client. Then TLS/SSL connection with client
+          * is created.
+          */
 
+         if (fwd->forward_host == NULL)
+         {
+            /*
+             * We're lying to the client as the connection hasn't actually
+             * been established yet. We don't establish the connection until
+             * we have seen and parsed the encrypted client headers.
+             */
+            if (write_socket_delayed(csp->cfd, CSUCCEED,
+                  strlen(CSUCCEED), get_write_delay(csp)) != 0)
+            {
+               log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
+               return;
+            }
+         }
+
+         ret = create_client_ssl_connection(csp);
+         if (ret != 0)
+         {
+            log_error(LOG_LEVEL_ERROR,
+               "Can't open secure connection with client");
+            close_client_ssl_connection(csp); /* XXX: Is this needed? */
+            return;
+         }
+         if (JB_ERR_OK != process_encrypted_request(csp))
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to parse encrypted request.");
+            close_client_ssl_connection(csp);
+            return;
+         }
+         /*
+          * We have an encrypted request. Check if one of the crunchers now
+          * wants it (for example because the previously invisible path was
+          * required to match).
+          */
+         if (crunch_response_triggered(csp, crunchers_all))
+         {
+            /*
+             * Yes. The client got the crunch response and we're done here.
+             */
+            close_client_ssl_connection(csp);
+            return;
+         }
+      }
+#endif
       /*
        * Connecting to destination server
        */
@@ -3434,6 +3801,7 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_CONNECT,
                   "Sending request headers to: %s failed", http->hostport);
                mark_server_socket_tainted(csp);
+               close_client_ssl_connection(csp);
                return;
             }
 
@@ -3452,6 +3820,7 @@ static void chat(struct client_state *csp)
                   send_crunch_response(csp, rsp);
                }
                mark_server_socket_tainted(csp);
+               close_client_ssl_connection(csp);
                return;
             }
 
@@ -3467,6 +3836,7 @@ static void chat(struct client_state *csp)
 
                write_socket(csp->cfd, server_response, (size_t)len);
                mark_server_socket_tainted(csp);
+               close_client_ssl_connection(csp);
                return;
             }
 
@@ -3503,6 +3873,7 @@ static void chat(struct client_state *csp)
                log_error(LOG_LEVEL_ERROR,
                   "Sending parent proxy response to client failed");
                mark_server_socket_tainted(csp);
+               close_client_ssl_connection(csp);
                return;
             }
          }/* -END- if (fwd->forward_host != NULL) */
@@ -3588,33 +3959,6 @@ static void chat(struct client_state *csp)
 #ifdef FEATURE_HTTPS_FILTERING
       else
       {
-         int ret;
-         /*
-          * Creating an SSL proxy. If forwarding is disabled, we must send
-          * CSUCCEED mesage to client. Then TLS/SSL connection with client
-          * is created.
-          */
-
-         if (fwd->forward_host == NULL)
-         {
-            if (write_socket_delayed(csp->cfd, CSUCCEED,
-                  strlen(CSUCCEED), get_write_delay(csp)) != 0)
-            {
-               log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
-               close_client_and_server_ssl_connections(csp);
-               return;
-            }
-         }
-
-         ret = create_client_ssl_connection(csp);
-         if (ret != 0)
-         {
-            log_error(LOG_LEVEL_ERROR,
-               "Can't open secure connection with client");
-            close_client_and_server_ssl_connections(csp);
-            return;
-         }
-
          /*
           * If server certificate is invalid, we must inform client and then
           * close connection with client.
@@ -3622,6 +3966,16 @@ static void chat(struct client_state *csp)
          if (csp->server_cert_verification_result != SSL_CERT_VALID)
          {
             ssl_send_certificate_error(csp);
+            close_client_and_server_ssl_connections(csp);
+            return;
+         }
+         if (send_https_request(csp))
+         {
+            rsp = error_response(csp, "connect-failed");
+            if (rsp)
+            {
+               send_crunch_response(csp, rsp); /* XXX: use ssl*/
+            }
             close_client_and_server_ssl_connections(csp);
             return;
          }
