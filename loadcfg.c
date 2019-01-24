@@ -135,6 +135,11 @@ static struct file_list *current_configfile = NULL;
 #define hash_admin_address               4112573064U /* "admin-address" */
 #define hash_allow_cgi_request_crunching  258915987U /* "allow-cgi-request-crunching" */
 #define hash_buffer_limit                1881726070U /* "buffer-limit */
+#define hash_ca_cert_file                1622923720U /* "ca-cert-file" */
+#define hash_ca_directory                1623615670U /* "ca-directory" */
+#define hash_ca_key_file                 1184187891U /* "ca-key-file" */
+#define hash_ca_password                 1184543320U /* "ca-password" */
+#define hash_certificate_directory       1367994217U /* "certificate-directory" */
 #define hash_client_header_order         2701453514U /* "client-header-order" */
 #define hash_client_specific_tag         3353703383U /* "client-specific-tag" */
 #define hash_client_tag_lifetime          647957580U /* "client-tag-lifetime" */
@@ -181,6 +186,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_trust_info_url               430331967U /* "trust-info-url" */
 #define hash_trust_x_forwarded_for       2971537414U /* "trust-x-forwarded-for" */
 #define hash_trusted_cgi_referrer        4270883427U /* "trusted-cgi-referrer" */
+#define hash_trusted_cas_file            2679803024U /* "trusted-cas-files" */
 #define hash_trustfile                     56494766U /* "trustfile" */
 #define hash_usermanual                  1416668518U /* "user-manual" */
 #define hash_activity_animation          1817904738U /* "activity-animation" */
@@ -271,6 +277,15 @@ static void unload_configfile (void * data)
    freez(config->proxy_args);
    freez(config->usermanual);
    freez(config->trusted_cgi_referrer);
+
+#ifdef FEATURE_HTTPS_FILTERING
+   freez(config->ca_password);
+   freez(config->ca_directory);
+   freez(config->ca_cert_file);
+   freez(config->ca_key_file);
+   freez(config->certificate_directory);
+   freez(config->trusted_cas_file);
+#endif
 
 #ifdef FEATURE_TRUST
    freez(config->trustfile);
@@ -568,7 +583,14 @@ struct configuration_spec * load_config(void)
    struct file_list *fs;
    unsigned long linenum = 0;
    int i;
-   char *logfile = NULL;
+   char *logfile          = NULL;
+#ifdef FEATURE_HTTPS_FILTERING
+   char *ca_cert_file     = NULL;
+   char *ca_key_file      = NULL;
+   char *ca_directory     = NULL;
+   char *trusted_cas_file = NULL;
+   char *certificate_directory = NULL;
+#endif
 
    if (!check_file_changed(current_configfile, configfile, &fs))
    {
@@ -613,6 +635,15 @@ struct configuration_spec * load_config(void)
    config->usermanual                = strdup_or_die(USER_MANUAL_URL);
    config->proxy_args                = strdup_or_die("");
    config->forwarded_connect_retries = 0;
+#ifdef FEATURE_HTTPS_FILTERING
+   config->ca_password               = strdup("");
+   ca_cert_file                      = strdup("cacert.crt");
+   ca_key_file                       = strdup("cakey.pem");
+   ca_directory                      = strdup("./CA");
+   trusted_cas_file                  = strdup("trustedCAs.pem");
+   certificate_directory             = strdup("./certs");
+#endif
+
 #ifdef FEATURE_CLIENT_TAGS
    config->client_tag_lifetime       = 60;
 #endif
@@ -1702,6 +1733,84 @@ struct configuration_spec * load_config(void)
             config->usermanual = strdup_or_die(arg);
             break;
 
+#ifdef FEATURE_HTTPS_FILTERING
+/* *************************************************************************
+ * ca private key file password
+ * *************************************************************************/
+         case hash_ca_password:
+            freez(config->ca_password);
+            config->ca_password = strdup(arg);
+            break;
+
+/* *************************************************************************
+ * ca-directory directory
+ * *************************************************************************/
+         case hash_ca_directory:
+            ca_directory = make_path(NULL, arg);
+
+            if (NULL == ca_directory)
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memory while creating ca dir path");
+            }
+
+            break;
+
+/* *************************************************************************
+ * ca cert file ca-cert-file
+ * In ca dir by default
+ * *************************************************************************/
+         case hash_ca_cert_file:
+            ca_cert_file = make_path(config->ca_directory, arg);
+
+            if (NULL == ca_cert_file)
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memory while creating ca certificate file path");
+            }
+
+            break;
+
+/* *************************************************************************
+ * ca key file ca-key-file
+ * In ca dir by default
+ * *************************************************************************/
+         case hash_ca_key_file:
+            ca_key_file = make_path(config->ca_directory, arg);
+
+            if (NULL == ca_key_file)
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memory while creating ca key file path");
+            }
+
+            break;
+
+/* *************************************************************************
+ * certificate-directory directory
+ * *************************************************************************/
+         case hash_certificate_directory:
+            certificate_directory = make_path(NULL, arg);
+
+            if (NULL == certificate_directory)
+            {
+               log_error(LOG_LEVEL_FATAL,
+                  "Out of memory while creating certificate directory path");
+            }
+
+            break;
+
+/* *************************************************************************
+ * trusted CAs file name trusted-cas-file
+ * *************************************************************************/
+         case hash_trusted_cas_file:
+            trusted_cas_file = make_path(config->ca_directory, arg);
+
+            if (NULL == trusted_cas_file)
+            {
+               log_error(LOG_LEVEL_FATAL, "Out of memory while creating trusted CAs file path");
+            }
+
+            break;
+#endif
+
 /* *************************************************************************
  * Win32 Console options:
  * *************************************************************************/
@@ -1877,6 +1986,30 @@ struct configuration_spec * load_config(void)
       }
    }
 
+#ifdef FEATURE_HTTPS_FILTERING
+   /*
+    * Setting SSL parameters from loaded values into structures
+    */
+   freez(config->ca_directory);
+   config->ca_directory = make_path(NULL, ca_directory);
+   freez(ca_directory);
+
+   freez(config->ca_cert_file);
+   config->ca_cert_file = make_path(config->ca_directory, ca_cert_file);
+   freez(ca_cert_file);
+
+   freez(config->ca_key_file);
+   config->ca_key_file  = make_path(config->ca_directory, ca_key_file);
+   freez(ca_key_file);
+
+   freez(config->trusted_cas_file);
+   config->trusted_cas_file = make_path(config->ca_directory, trusted_cas_file);
+   freez(trusted_cas_file);
+
+   freez(config->certificate_directory);
+   config->certificate_directory = make_path(NULL, certificate_directory);
+   freez(certificate_directory);
+#endif
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if (config->default_server_timeout > config->keep_alive_timeout)
    {

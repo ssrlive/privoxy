@@ -3801,6 +3801,72 @@ problem-host.example.com</screen>
 </variablelist>
 </sect3>
 
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="enable-https-filtering">
+<title>enable-https-filtering</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Filter encrypted requests and responses</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Encrypted requests are decrypted, filtered and forwarded encrypted.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+
+<varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action allows &my-app; to filter encrypted requests and responses.
+    For this to work &my-app; has to generate a certificate and send it
+    to the client which has to accept it.
+   </para>
+   <para>
+    Before this works the directives in the
+    <link linkend="config">TLS section of the config</link>
+    file have to be configured.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+     <screen>{+enable-https-filtering}
+www.example.com</screen>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="external-filter">
 <title>external-filter</title>
@@ -5140,6 +5206,76 @@ new action
   <term>Example usage:</term>
   <listitem>
      <screen>+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}</screen>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="ignore-certificate-errors">
+<title>ignore-certificate-errors</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Filter encrypted requests and responses without verifying the certificate</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Encrypted requests are forwarded to sites without verifying the certificate.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- Boolean, Parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    When the
+    <link linkend="ENABLE-HTTPS-FILTERING"><quote>+enable-https-filtering</quote></link>
+    action is used &my-app; by default verifies that the remote site uses a valid
+    certificate.
+   </para>
+   <para>
+    If the certificate is invalid the connection is aborted.
+   </para>
+   <para>
+    This action disabled the certificate check allowing requests to sites
+    with invalid certificates.
+   </para>
+   </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage:</term>
+  <listitem>
+   <screen>
+    {+ignore-certificate-errors}
+    www.example.org
+   </screen>
   </listitem>
  </varlistentry>
 </variablelist>
