@@ -695,6 +695,8 @@ adele*.
 adlibris.
 # URL = http://www.adbshell.com/
 .adbshell.com
+# URL = http://adbinstaller.com/
+.adbinstaller.com/
 
 #############################################################################
 # Generic block patterns by path:
