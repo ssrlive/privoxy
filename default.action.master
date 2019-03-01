@@ -693,6 +693,8 @@ adina*.
 adele*.
 # URL = http://adlibris.com/
 adlibris.
+# URL = http://www.adbshell.com/
+.adbshell.com
 
 #############################################################################
 # Generic block patterns by path:
