@@ -1036,7 +1036,16 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
    client_pos = 0;
    cbuf[client_pos++] = '\x05'; /* Version */
-   cbuf[client_pos++] = '\x01'; /* One authentication method supported */
+
+   if (fwd->auth_username && fwd->auth_password)
+   {
+      cbuf[client_pos++] = '\x02'; /* Two authentication methods supported */
+      cbuf[client_pos++] = '\x02'; /* Username/password */
+   }
+   else
+   {
+      cbuf[client_pos++] = '\x01'; /* One authentication method supported */
+   }
    cbuf[client_pos++] = '\x00'; /* The no authentication authentication method */
 
    if (write_socket(sfd, cbuf, client_pos))
@@ -1079,7 +1088,51 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       err = 1;
    }
 
-   if (!err && (sbuf[1] != '\x00'))
+   if (!err && (sbuf[1] == '\x02'))
+   {
+      /* check cbuf overflow */
+      size_t auth_len = strlen(fwd->auth_username) + strlen(fwd->auth_password) + 3;
+      if (auth_len > sizeof(cbuf))
+      {
+         errstr = "SOCKS5 username and/or password too long";
+         err = 1;
+      }
+
+      if (!err)
+      {
+         client_pos = 0;
+         cbuf[client_pos++] = '\x01'; /* Version */
+         cbuf[client_pos++] = (char)strlen(fwd->auth_username);
+
+         memcpy(cbuf + client_pos, fwd->auth_username, strlen(fwd->auth_username));
+         client_pos += strlen(fwd->auth_username);
+         cbuf[client_pos++] = (char)strlen(fwd->auth_password);
+         memcpy(cbuf + client_pos, fwd->auth_password, strlen(fwd->auth_password));
+         client_pos += strlen(fwd->auth_password);
+
+         if (write_socket(sfd, cbuf, client_pos))
+         {
+            errstr = "SOCKS5 negotiation auth write failed";
+            csp->error_message = strdup(errstr);
+            log_error(LOG_LEVEL_CONNECT, "%s", errstr);
+            close_socket(sfd);
+            return(JB_INVALID_SOCKET);
+         }
+
+         if (read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
+         {
+            errstr = "SOCKS5 negotiation auth read failed";
+            err = 1;
+         }
+      }
+
+      if (!err && (sbuf[1] != '\x00'))
+      {
+         errstr = "SOCKS5 authentication failed";
+         err = 1;
+      }
+   }
+   else if (!err && (sbuf[1] != '\x00'))
    {
       errstr = "SOCKS5 negotiation protocol error";
       err = 1;

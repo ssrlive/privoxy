@@ -1136,6 +1136,12 @@ struct forward_spec
    /** SOCKS server port. */
    int   gateway_port;
 
+   /** SOCKS5 username. */
+   char *auth_username;
+
+   /** SOCKS5 password. */
+   char *auth_password;
+
    /** Parent HTTP proxy hostname, or NULL for none. */
    char *forward_host;
 

@@ -2226,7 +2226,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   <listitem>
    <para>
     <replaceable class="parameter">target_pattern</replaceable>
-    <replaceable class="parameter">socks_proxy</replaceable>[:<replaceable class="parameter">port</replaceable>]
+    [<replaceable class="parameter">user</replaceable>:<replaceable class="parameter">pass</replaceable>@]<replaceable class="parameter">socks_proxy</replaceable>[:<replaceable class="parameter">port</replaceable>]
     <replaceable class="parameter">http_parent</replaceable>[:<replaceable class="parameter">port</replaceable>]
    </para>
    <para>
@@ -2239,7 +2239,8 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     (<replaceable class="parameter">http_parent</replaceable>
     may be <quote>.</quote> to denote <quote>no HTTP forwarding</quote>), and the optional
     <replaceable class="parameter">port</replaceable> parameters are TCP ports,
-    i.e. integer values from 1 to 65535
+    i.e. integer values from 1 to 65535. <replaceable class="parameter">user</replaceable> and
+    <replaceable class="parameter">pass</replaceable> can be used for SOCKS5 authentication if required.
    </para>
   </listitem>
  </varlistentry>
@@ -2313,6 +2314,13 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
    </para>
     <screen>
   forward-socks4   /               socks-gw.example.com:1080  .
+</screen>
+
+   <para>
+    To connect SOCKS5 proxy which requires username/password authentication:
+   </para>
+    <screen>
+  forward-socks5   /               user:pass@socks-gw.example.com:1080  .
 </screen>
 
     <para>

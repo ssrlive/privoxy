@@ -1420,30 +1420,49 @@ int match_portlist(const char *portlist, int port)
  *
  * Function    :  parse_forwarder_address
  *
- * Description :  Parse out the host and port from a forwarder address.
+ * Description :  Parse out the username, password, host and port from
+ *                a forwarder address.
  *
  * Parameters  :
  *          1  :  address = The forwarder address to parse.
  *          2  :  hostname = Used to return the hostname. NULL on error.
  *          3  :  port = Used to return the port. Untouched if no port
  *                       is specified.
+ *          4  :  username = Used to return the username if any.
+ *          5  :  password = Used to return the password if any.
  *
  * Returns     :  JB_ERR_OK on success
  *                JB_ERR_MEMORY on out of memory
  *                JB_ERR_PARSE on malformed address.
  *
  *********************************************************************/
-jb_err parse_forwarder_address(char *address, char **hostname, int *port)
+jb_err parse_forwarder_address(char *address, char **hostname, int *port,
+                               char **username, char **password)
 {
-   char *p = address;
+   char *p;
+   *hostname = strdup_or_die(address);
 
-   if ((*address == '[') && (NULL == strchr(address, ']')))
+   /* Parse username and password */
+   if (username && password && (NULL != (p = strchr(*hostname, '@'))))
+   {
+      *p++ = '\0';
+      *username = *hostname;
+      *hostname = p;
+
+      if (NULL != (p = strchr(*username, ':')))
+      {
+         *p++ = '\0';
+         *password = strdup_or_die(p);
+      }
+   }
+
+   /* Parse hostname and port */
+   p = *hostname;
+   if ((*p == '[') && (NULL == strchr(p, ']')))
    {
       /* XXX: Should do some more validity checks here. */
       return JB_ERR_PARSE;
    }
-
-   *hostname = strdup_or_die(address);
 
    if ((**hostname == '[') && (NULL != (p = strchr(*hostname, ']'))))
    {

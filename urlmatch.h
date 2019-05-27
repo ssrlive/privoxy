@@ -55,7 +55,8 @@ extern int url_match(const struct pattern_spec *pattern,
 extern jb_err create_pattern_spec(struct pattern_spec *url, char *buf);
 extern void free_pattern_spec(struct pattern_spec *url);
 extern int match_portlist(const char *portlist, int port);
-extern jb_err parse_forwarder_address(char *address, char **hostname, int *port);
+extern jb_err parse_forwarder_address(char *address, char **hostname, int *port,
+                                      char **username, char **password);
 
 #endif /* ndef URLMATCH_H_INCLUDED */
 
