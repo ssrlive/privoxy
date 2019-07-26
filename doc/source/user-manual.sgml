@@ -1517,9 +1517,6 @@ for details.
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-status">View & change the current configuration</ulink>
  </member>
  <member>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-version">View the source code version numbers</ulink>
- </member>
- <member>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-request">View the request headers.</ulink>
  </member>
  <member>
@@ -8047,17 +8044,6 @@ Requests</title>
    <blockquote>
    <para>
     <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
-   </para>
-  </blockquote>
- </listitem>
-
- <listitem>
-  <para>
-    Show the source code version numbers:
-  </para>
-  <blockquote>
-   <para>
-    <ulink url="http://config.privoxy.org/show-version">http://config.privoxy.org/show-version</ulink>
    </para>
   </blockquote>
  </listitem>
