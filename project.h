@@ -1303,6 +1303,9 @@ struct configuration_spec
    /** The directory for customized CGI templates. */
    const char *templdir;
 
+   /** "Cross-origin resource sharing" (CORS) allowed origin */
+   const char *cors_allowed_origin;
+
 #ifdef FEATURE_EXTERNAL_FILTERS
    /** The template used to create temporary files. */
    const char *temporary_directory;
