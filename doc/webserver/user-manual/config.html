@@ -4,7 +4,7 @@
 <head>
   <title>The Main Configuration File</title>
   <meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.28 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.29 User Manual" href="index.html">
   <link rel="PREVIOUS" title="Privoxy Configuration" href="configuration.html">
   <link rel="NEXT" title="Actions Files" href="actions-file.html">
   <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
@@ -15,7 +15,7 @@
   <div class="NAVHEADER">
     <table summary="Header navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.28 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.29 User Manual</th>
       </tr>
       <tr>
         <td width="10%" align="left" valign="bottom"><a href="configuration.html" accesskey="P">Prev</a></td>
@@ -1154,6 +1154,8 @@
               <p>The <span class="QUOTE">"trusted-cgi-referer"</span> option can be used to add that page, or the whole
               domain, as trusted source so the resulting requests aren't rejected. Requests are accepted if the
               specified trusted-cgi-refer is the prefix of the Referer.</p>
+              <p>If the trusted source is supposed to access the CGI pages via JavaScript the <a href=
+              "config.html#CORS-ALLOWED-ORIGIN">cors-allowed-origin</a> option can be used.</p>
               <div class="WARNING">
                 <table class="WARNING" border="1" width="90%">
                   <tr>
@@ -1162,6 +1164,55 @@
                   <tr>
                     <td align="left">
                       <p>Declaring pages the admin doesn't control trustworthy may allow malicious third parties to
+                      modify Privoxy's internal state against the user's wishes and without the user's knowledge.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CORS-ALLOWED-ORIGIN" id="CORS-ALLOWED-ORIGIN">7.4.11. cors-allowed-origin</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>A trusted website which can access <span class="APPLICATION">Privoxy</span>'s CGI pages through
+              JavaScript.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>URL</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p>Unset</p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>No external sites get access via cross-origin resource sharing.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>Modern browsers by default prevent cross-origin requests made via JavaScript to <span class=
+              "APPLICATION">Privoxy</span>'s CGI interface even if <span class="APPLICATION">Privoxy</span> would trust
+              the referer because it's white listed via the <a href=
+              "config.html#TRUSTED-CGI-REFERER">trusted-cgi-referer</a> directive.</p>
+              <p><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_top">Cross-origin
+              resource sharing (CORS)</a> is a mechanism to allow cross-origin requests.</p>
+              <p>The <span class="QUOTE">"cors-allowed-origin"</span> option can be used to specify a domain that is
+              allowed to make requests to Privoxy CGI interface via JavaScript. It is used in combination with the
+              <a href="config.html#TRUSTED-CGI-REFERER">trusted-cgi-referer</a> directive.</p>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <p>Declaring domains the admin doesn't control trustworthy may allow malicious third parties to
                       modify Privoxy's internal state against the user's wishes and without the user's knowledge.</p>
                     </td>
                   </tr>
@@ -1329,8 +1380,8 @@
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class=
-                    "SCREEN">  forward-socks4a   /              socks-gw.example.com:1080  www-cache.isp.example.net:8080
+                    <pre class="SCREEN">
+                    forward-socks4a   /              socks-gw.example.com:1080  www-cache.isp.example.net:8080
   forward           .example.com   .</pre>
                   </td>
                 </tr>
