@@ -3,7 +3,7 @@
 
  Purpose     :  Used with other docs and files only.
 
- Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2019 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -90,7 +90,7 @@
  Sample Configuration File for Privoxy &p-version;
 </title>
 <para>
-Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
+Copyright (C) 2001-2019 Privoxy Developers https://www.privoxy.org/
 </para>
 
 <literallayout>
