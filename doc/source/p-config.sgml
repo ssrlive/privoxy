@@ -1983,6 +1983,11 @@ ACLs: permit-access and deny-access</title>
     Requests are accepted if the specified trusted-cgi-refer is the prefix
     of the Referer.
    </para>
+   <para>
+    If the trusted source is supposed to access the CGI pages via
+    JavaScript the <link linkend="cors-allowed-origin">cors-allowed-origin</link>
+    option can be used.
+   </para>
    <warning>
     <para>
      Declaring pages the admin doesn't control trustworthy may allow
@@ -1995,6 +2000,74 @@ ACLs: permit-access and deny-access</title>
 </variablelist>
 
 <![%config-file;[<literallayout>@@#trusted-cgi-referer http://www.example.org/local-privoxy-control-page</literallayout>]]>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="cors-allowed-origin"><title>cors-allowed-origin</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A trusted website which can access &my-app;'s CGI pages through JavaScript.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>URL</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>Unset</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    No external sites get access via cross-origin resource sharing.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Modern browsers by default prevent cross-origin requests made
+    via JavaScript to &my-app;'s CGI interface even if &my-app;
+    would trust the referer because it's white listed via the
+    <link linkend="trusted-cgi-referer">trusted-cgi-referer</link>
+    directive.
+   </para>
+   <para>
+    <ulink url="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing"
+     >Cross-origin resource sharing (CORS)</ulink> is a mechanism to allow
+    cross-origin requests.
+   </para>
+   <para>
+    The <quote>cors-allowed-origin</quote> option can be used to specify
+    a domain that is allowed to make requests to Privoxy CGI interface
+    via JavaScript. It is used in combination with the
+    <link linkend="trusted-cgi-referer">trusted-cgi-referer</link>
+    directive.
+   </para>
+   <warning>
+    <para>
+     Declaring domains the admin doesn't control trustworthy may allow
+     malicious third parties to modify Privoxy's internal state against
+     the user's wishes and without the user's knowledge.
+   </para>
+   </warning>
+  </listitem>
+ </varlistentry>
+</variablelist>
+
+<![%config-file;[<literallayout>@@#cors-allowed-origin http://www.example.org/</literallayout>]]>
 </sect3>
 
 </sect2>
