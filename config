@@ -1367,7 +1367,7 @@ enable-proxy-authentication-forwarding 0
 #
 #  Type of value:
 #
-#      target_pattern socks_proxy[:port] http_parent[:port]
+#      target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]
 #
 #      where target_pattern is a URL pattern that specifies to which
 #      requests (i.e. URLs) this forward rule shall apply. Use / to
@@ -1375,7 +1375,8 @@ enable-proxy-authentication-forwarding 0
 #      addresses in dotted decimal notation or valid DNS names (
 #      http_parent may be "." to denote "no HTTP forwarding"), and
 #      the optional port parameters are TCP ports, i.e. integer
-#      values from 1 to 65535
+#      values from 1 to 65535. user and pass can be used for SOCKS5
+#      authentication if required.
 #
 #  Default value:
 #
@@ -1429,6 +1430,11 @@ enable-proxy-authentication-forwarding 0
 #      HTTP parent looks like this:
 #
 #        forward-socks4   /               socks-gw.example.com:1080  .
+#
+#      To connect SOCKS5 proxy which requires username/password
+#      authentication:
+#
+#        forward-socks5   /               user:pass@socks-gw.example.com:1080  .
 #
 #      To chain Privoxy and Tor, both running on the same system, you
 #      would use something like:
