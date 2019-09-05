@@ -1330,7 +1330,8 @@
             </dd>
             <dt>Type of value:</dt>
             <dd>
-              <p><tt class="REPLACEABLE"><i>target_pattern</i></tt> <tt class=
+              <p><tt class="REPLACEABLE"><i>target_pattern</i></tt> [<tt class=
+              "REPLACEABLE"><i>user</i></tt>:<tt class="REPLACEABLE"><i>pass</i></tt>@]<tt class=
               "REPLACEABLE"><i>socks_proxy</i></tt>[:<tt class="REPLACEABLE"><i>port</i></tt>] <tt class=
               "REPLACEABLE"><i>http_parent</i></tt>[:<tt class="REPLACEABLE"><i>port</i></tt>]</p>
               <p>where <tt class="REPLACEABLE"><i>target_pattern</i></tt> is a <a href=
@@ -1340,7 +1341,8 @@
               IP addresses in dotted decimal notation or valid DNS names (<tt class=
               "REPLACEABLE"><i>http_parent</i></tt> may be <span class="QUOTE">"."</span> to denote <span class=
               "QUOTE">"no HTTP forwarding"</span>), and the optional <tt class="REPLACEABLE"><i>port</i></tt>
-              parameters are TCP ports, i.e. integer values from 1 to 65535</p>
+              parameters are TCP ports, i.e. integer values from 1 to 65535. <tt class="REPLACEABLE"><i>user</i></tt>
+              and <tt class="REPLACEABLE"><i>pass</i></tt> can be used for SOCKS5 authentication if required.</p>
             </dd>
             <dt>Default value:</dt>
             <dd>
@@ -1391,6 +1393,14 @@
                 <tr>
                   <td>
                     <pre class="SCREEN">  forward-socks4   /               socks-gw.example.com:1080  .</pre>
+                  </td>
+                </tr>
+              </table>
+              <p>To connect SOCKS5 proxy which requires username/password authentication:</p>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">  forward-socks5   /               user:pass@socks-gw.example.com:1080  .</pre>
                   </td>
                 </tr>
               </table>
