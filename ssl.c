@@ -884,6 +884,7 @@ static void free_server_ssl_structures(struct client_state *csp)
 
 
 /*********************************************************************
+ *
  * Function    :  close_client_and_server_ssl_connections
  *
  * Description :  Checks if client or server should use secured
@@ -910,6 +911,7 @@ extern void close_client_and_server_ssl_connections(struct client_state *csp)
 /*====================== Certificates ======================*/
 
 /*********************************************************************
+ *
  * Function    :  write_certificate
  *
  * Description :  Writes certificate into file.
@@ -976,6 +978,7 @@ static int write_certificate(mbedtls_x509write_cert *crt, const char *output_fil
 
 
 /*********************************************************************
+ *
  * Function    :  write_private_key
  *
  * Description :  Writes private key into file and copies saved
@@ -1062,6 +1065,7 @@ exit:
 
 
 /*********************************************************************
+ *
  * Function    :  generate_key
  *
  * Description : Tests if private key for host saved in csp already
@@ -1920,19 +1924,19 @@ static int file_exists(const char *path)
 
 
 /*********************************************************************
-*
-* Function    :  host_to_hash
-*
-* Description :  Creates MD5 hash from host name. Host name is loaded
-*                from structure csp and saved again into it.
-*
-* Parameters  :
-*          1  :  csp = Current client state (buffers, headers, etc...)
-*
-* Returns     :  1 => Error while creating hash
-*                0 => Hash created successfully
-*
-*********************************************************************/
+ *
+ * Function    :  host_to_hash
+ *
+ * Description :  Creates MD5 hash from host name. Host name is loaded
+ *                from structure csp and saved again into it.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  1 => Error while creating hash
+ *                0 => Hash created successfully
+ *
+ *********************************************************************/
 static int host_to_hash(struct client_state * csp)
 {
    int ret = 0;
