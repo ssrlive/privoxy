@@ -107,7 +107,8 @@ Copyright (C) 2001-2019 Privoxy Developers https://www.privoxy.org/
       4. ACCESS CONTROL AND SECURITY                             #
       5. FORWARDING                                              #
       6. MISCELLANEOUS                                           #
-      7. WINDOWS GUI OPTIONS                                     #
+      7. TLS                                                     #
+      8. WINDOWS GUI OPTIONS                                     #
                                                                  #
 ##################################################################
 
@@ -3889,6 +3890,368 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
 </variablelist>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+</sect2>
+
+
+<sect2 id="tls">
+<title>TLS/SSL</title>
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="ca-directory"><title>ca-directory</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Directory with the CA key, the CA certificate and the trusted CAs file.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    Text
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Empty string</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Default value is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive specifies the directory where the
+    CA key, the CA certificate and the trusted CAs file
+    are located.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    ca-directory /usr/local/etc/privoxy/CA
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#ca-directory /usr/local/etc/privoxy/CA</literallayout>]]>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="ca-cert-file"><title>ca-cert-file</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The CA certificate file in ".crt" format.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    Text
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>cacert.crt</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Default value is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive specifies the name of the CA certificate file
+    in ".crt" format.
+   </para>
+   <para>
+    It can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.crt -days 3650
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    ca-cert-file root.crt
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#ca-cert-file cacert.crt</literallayout>]]>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="ca-key-file"><title>ca-key-file</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The CA key file in ".pem" format.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    Text
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>cacert.pem</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Default value is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive specifies the name of the CA key file
+    in ".pem" format. See the <ulink url="#CA-CERT-FILE">ca-cert-file</ulink>
+    for a command to generate it.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    ca-key-file cakey.pem
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#ca-key-file root.pem</literallayout>]]>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="ca-password"><title>ca-password</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The password for the CA keyfile.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    Text
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>Empty string</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Default value is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive specifies the password for the CA keyfile
+    that is used when Privoxy generates certificates for intercepted
+    requests.
+   </para>
+   <para>
+     Note that the password is shown on the CGI page so don't
+     reuse an important one.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    ca-password blafasel
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#ca-password swordfish</literallayout>]]>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="certificate-directory"><title>certificate-directory</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    Directory to safe generated keys and certificates.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    Text
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>./certs</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Default value is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive specifies the directory where generated
+    TLS/SSL keys and certificates are saved.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    certificate-directory /usr/local/var/privoxy/certs
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#certificate-directory /usr/local/var/privoxy/certs</literallayout>]]>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect3 renderas="sect4" id="trusted-cas-file"><title>trusted-cas-file</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    The trusted CAs file in ".pem" format.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    File name relative to ca-directory
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para><emphasis>trustedCAs.pem</emphasis></para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    Default value is used.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive specifies the trusted CAs file that is used when validating
+    certificates for intercepted TLS/SSL request.
+   </para>
+   <para>
+    An example file can be downloaded from
+    <ulink url="https://curl.haxx.se/ca/cacert.pem">https://curl.haxx.se/ca/cacert.pem</ulink>.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <para>
+    trusted-cas-file trusted_cas_file.pem
+   </para>
+  </listitem>
+ </varlistentry>
+</variablelist>
+<![%config-file;[<literallayout>@@#trusted-cas-file trustedCAs.pem</literallayout>]]>
 </sect3>
 
 <!--  ~  End section  ~  -->

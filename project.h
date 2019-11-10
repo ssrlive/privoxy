@@ -44,6 +44,34 @@
 /* Needed for pcre choice */
 #include "config.h"
 
+#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_PTHREAD
+#  include <pthread.h>
+   typedef pthread_mutex_t privoxy_mutex_t;
+#else
+#  ifdef _WIN32
+#     include <windows.h>
+#  endif
+   typedef CRITICAL_SECTION privoxy_mutex_t;
+#endif
+
+#include "mbedtls/net_sockets.h"
+#include "mbedtls/entropy.h"
+#include "mbedtls/ctr_drbg.h"
+
+#if defined(MBEDTLS_SSL_CACHE_C)
+#include "mbedtls/ssl_cache.h"
+#endif
+
+/*
+* Macros for SSL structures
+*/
+#define CERT_INFO_BUF_SIZE         4096
+#define CERT_FILE_BUF_SIZE         16384
+#define ISSUER_NAME_BUF_SIZE       2048
+#define HASH_OF_HOST_BUF_SIZE      16
+#endif
+
 /* Need for struct sockaddr_storage */
 #ifdef HAVE_RFC2553
 #  ifndef _WIN32
@@ -259,6 +287,23 @@ struct map
    struct map_entry *last;
 };
 
+#ifdef FEATURE_HTTPS_FILTERING
+/*
+ * Struct of attributes necessary for TLS/SSL connection
+ */
+typedef struct {
+   mbedtls_ssl_context      ssl;
+   mbedtls_ssl_config       conf;
+   mbedtls_net_context      socket_fd;
+   mbedtls_x509_crt         server_cert;
+   mbedtls_x509_crt         ca_cert;
+   mbedtls_pk_context       prim_key;
+
+   #if defined(MBEDTLS_SSL_CACHE_C)
+      mbedtls_ssl_cache_context cache;
+   #endif
+} mbedtls_connection_attr;
+#endif
 
 /**
  * A HTTP request.  This includes the method (GET, POST) and
@@ -291,7 +336,54 @@ struct http_request
    char **dvec;    /**< List of pointers to the strings in dbuffer.       */
    int    dcount;  /**< How many parts to this domain? (length of dvec)   */
 #endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
+
+#ifdef FEATURE_HTTPS_FILTERING
+   int client_ssl;                                                  /**< Flag if we should comunicate with slient over ssl   */
+   int server_ssl;                                                  /**< Flag if we should comunicate with server over ssl   */
+   unsigned char hash_of_host_hex[(HASH_OF_HOST_BUF_SIZE * 2) + 1]; /**< chars for hash in hex string and one for '\0'       */
+   unsigned char hash_of_host[HASH_OF_HOST_BUF_SIZE+1];             /**< chars for bytes of hash and one for '\0'            */
+#endif
 };
+
+
+#ifdef FEATURE_HTTPS_FILTERING
+/*
+ * Properties of cert for generating
+ */
+typedef struct{
+   char       *issuer_crt;                         /* filename of the issuer certificate       */
+   char       *subject_key;                        /* filename of the subject key file         */
+   char       *issuer_key;                         /* filename of the issuer key file          */
+   const char *subject_pwd;                        /* password for the subject key file        */
+   const char *issuer_pwd;                         /* password for the issuer key file         */
+   char       *output_file;                        /* where to store the constructed key file  */
+   const char *subject_name;                       /* subject name for certificate             */
+   char       issuer_name[ISSUER_NAME_BUF_SIZE];   /* issuer name for certificate              */
+   const char *not_before;                         /* validity period not before               */
+   const char *not_after;                          /* validity period not after                */
+   const char *serial;                             /* serial number string                     */
+   int        is_ca;                               /* is a CA certificate                      */
+   int        max_pathlen;                         /* maximum CA path length                   */
+} cert_options;
+
+/*
+ * Properties of key for generating
+ */
+typedef struct{
+   mbedtls_pk_type_t type;       /* type of key to generate    */
+   int  rsa_keysize;             /* length of key in bits      */
+   char *key_file_path;          /* filename of the key file   */
+} key_options;
+
+/*
+ * Struct for linked list containing certificates
+ */
+typedef struct certs_chain {
+   char text_buf[CERT_INFO_BUF_SIZE];    /* text info about properties of certificate               */
+   char file_buf[CERT_FILE_BUF_SIZE];    /* buffer for whole certificate - format to save in file   */
+   struct certs_chain *next;             /* next certificate in chain of trust                      */
+}certs_chain_t;
+#endif
 
 /**
  * Reasons for generating a http_response instead of delivering
@@ -503,7 +595,10 @@ struct iob
 #define ACTION_LIMIT_COOKIE_LIFETIME                 0x08000000UL
 /** Action bitmap: Delay writes */
 #define ACTION_DELAY_RESPONSE                        0x10000000UL
-
+/** Action bitmap: Turn https filtering on */
+#define ACTION_ENABLE_HTTPS_FILTER                   0x20000000UL
+/** Action bitmap: Turn certificates verification off */
+#define ACTION_IGNORE_CERTIFICATE_ERRORS             0x40000000UL
 
 /** Action string index: How to deanimate GIFs */
 #define ACTION_STRING_DEANIMATE             0
@@ -948,6 +1043,11 @@ struct client_state
    /* XXX: should be renamed to server_iob */
    struct iob iob[1];
 
+#ifdef FEATURE_HTTPS_FILTERING
+   mbedtls_connection_attr  mbedtls_server_attr; /* attributes for connection to server */
+   mbedtls_connection_attr  mbedtls_client_attr; /* attributes for connection to client */
+#endif
+
    /** An I/O buffer used for buffering data read from the client */
    struct iob client_iob[1];
 
@@ -959,6 +1059,11 @@ struct client_state
 
    /** List of all headers for this request */
    struct list headers[1];
+
+#ifdef FEATURE_HTTPS_FILTERING
+   /** List of all encrypted headers for this request */
+   struct list https_headers[1];
+#endif
 
    /** List of all tags that apply to this request */
    struct list tags[1];
@@ -1010,6 +1115,28 @@ struct client_state
     * or NULL. Currently only used for socks errors.
     */
    char *error_message;
+
+#ifdef FEATURE_HTTPS_FILTERING
+   /* Result of server certificate verification */
+   uint32_t server_cert_verification_result;
+
+   /* Flag for certificate validity checking */
+   int dont_verify_certificate;
+
+   /*
+    * Flags if SSL connection with server or client is opened.
+    * Thanks to this flags, we can call function to close both connections
+    * and we don't have to care about more details.
+    */
+   int ssl_with_server_is_opened;
+   int ssl_with_client_is_opened;
+
+   /*
+    * Server certificate chain of trust including strings with certificates
+    * informations and string with whole certificate file
+    */
+   struct certs_chain server_certs_chain;
+#endif
 };
 
 /**
@@ -1433,6 +1560,26 @@ struct configuration_spec
 
    /** Nonzero if we need to bind() to the new port. */
    int need_bind;
+
+#ifdef FEATURE_HTTPS_FILTERING
+   /** Password for proxy ca file **/
+   char * ca_password;
+
+   /** Directory with files of ca **/
+   char *ca_directory;
+
+   /** Filename of ca certificate **/
+   char * ca_cert_file;
+
+   /** Filename of ca key **/
+   char * ca_key_file;
+
+   /** Directory for saving certificates and keys for each webpage **/
+   char *certificate_directory;
+
+   /** Filename of trusted CAs certificates **/
+   char * trusted_cas_file;
+#endif
 };
 
 /** Calculates the number of elements in an array, using sizeof. */

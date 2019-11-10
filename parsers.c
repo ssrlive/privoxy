@@ -1185,6 +1185,46 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
 }
 
 
+#ifdef FEATURE_HTTPS_FILTERING
+/*********************************************************************
+ *
+ * Function    :  sed_https
+ *
+ * Description :  add, delete or modify lines in the HTTPS client
+ *                header streams. Wrapper around sed().
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK in case off success, or
+ *                JB_ERR_MEMORY on some out-of-memory errors, or
+ *                JB_ERR_PARSE in case of fatal parse errors.
+ *
+ *********************************************************************/
+jb_err sed_https(struct client_state *csp)
+{
+   jb_err err;
+   struct list headers;
+
+   /*
+    * Temporarly replace csp->headers with csp->https_headers
+    * to trick sed() into filtering the https headers.
+    */
+   headers.first = csp->headers->first;
+   headers.last  = csp->headers->last;
+   csp->headers->first = csp->https_headers->first;
+   csp->headers->last  = csp->https_headers->last;
+
+   err = sed(csp, FILTER_CLIENT_HEADERS);
+
+   csp->headers->first = headers.first;
+   csp->headers->last  = headers.last;
+
+   return err;
+}
+#endif /* def FEATURE_HTTPS_FILTERING */
+
+
 /*********************************************************************
  *
  * Function    :  update_server_headers
@@ -4429,8 +4469,6 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
    char *p;
    char *host;
 
-   assert(!http->ssl);
-
    host = get_header_value(headers, "Host:");
 
    if (NULL == host)
@@ -4492,6 +4530,88 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
    return JB_ERR_OK;
 
 }
+
+
+#ifdef FEATURE_HTTPS_FILTERING
+/*********************************************************************
+ *
+ * Function    :  get_destination_from_https_headers
+ *
+ * Description :  Parse the previously encrypted "Host:" header to
+ *                get the request's destination.
+ *
+ * Parameters  :
+ *          1  :  headers = List of headers (one of them hopefully being
+ *                the "Host:" header)
+ *          2  :  http = storage for the result (host, port and hostport).
+ *
+ * Returns     :  JB_ERR_MEMORY (or terminates) in case of memory problems,
+ *                JB_ERR_PARSE if the host header couldn't be found,
+ *                JB_ERR_OK otherwise.
+ *
+ *********************************************************************/
+jb_err get_destination_from_https_headers(const struct list *headers, struct http_request *http)
+{
+   char *q;
+   char *p;
+   char *host;
+
+   host = get_header_value(headers, "Host:");
+
+   if (NULL == host)
+   {
+      log_error(LOG_LEVEL_ERROR, "No \"Host:\" header found.");
+      return JB_ERR_PARSE;
+   }
+
+   p = strdup_or_die(host);
+   chomp(p);
+   q = strdup_or_die(p);
+
+   freez(http->hostport);
+   http->hostport = p;
+   freez(http->host);
+   http->host = q;
+   q = strchr(http->host, ':');
+   if (q != NULL)
+   {
+      /* Terminate hostname and evaluate port string */
+      *q++ = '\0';
+      http->port = atoi(q);
+   }
+   else
+   {
+      http->port = 443;
+   }
+
+   /* Rebuild request URL */
+   freez(http->url);
+   http->url = strdup_or_die(http->path);
+
+   log_error(LOG_LEVEL_HEADER,
+      "Destination extracted from \"Host\" header. New request URL: %s",
+      http->url);
+
+   /*
+    * Regenerate request line in "proxy format"
+    * to make rewrites more convenient.
+    */
+   assert(http->cmd != NULL);
+   freez(http->cmd);
+   http->cmd = strdup_or_die(http->gpc);
+   string_append(&http->cmd, " ");
+   string_append(&http->cmd, http->url);
+   string_append(&http->cmd, " ");
+   string_append(&http->cmd, http->ver);
+   if (http->cmd == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   return JB_ERR_OK;
+
+}
+#endif /* def FEATURE_HTTPS_FILTERING */
 
 
 /*********************************************************************

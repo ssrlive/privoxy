@@ -1831,6 +1831,14 @@ static jb_err show_defines(struct map *exports)
 #endif
       },
       {
+         "FEATURE_HTTPS_FILTERING",
+#ifdef FEATURE_HTTPS_FILTERING
+         1,
+#else
+         0,
+#endif
+      },
+      {
          "FEATURE_IMAGE_BLOCKING",
 #ifdef FEATURE_IMAGE_BLOCKING
          1,

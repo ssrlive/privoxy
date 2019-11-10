@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2019 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
@@ -29,7 +29,7 @@
 -->
 
 <para>
- Copyright &my-copy; 2001-2018 by Privoxy Developers <email>privoxy-devel@lists.privoxy.org</email>
+ Copyright &my-copy; 2001-2019 by Privoxy Developers <email>privoxy-devel@lists.privoxy.org</email>
 </para>
 
 <para>

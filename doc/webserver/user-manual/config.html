@@ -2404,7 +2404,206 @@
       </div>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="WINDOWS-GUI" id="WINDOWS-GUI">7.7. Windows GUI Options</a></h2>
+      <h2 class="SECT2"><a name="TLS" id="TLS">7.7. TLS/SSL</a></h2>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CA-DIRECTORY" id="CA-DIRECTORY">7.7.1. ca-directory</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>Directory with the CA key, the CA certificate and the trusted CAs file.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>Text</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p><span class="emphasis"><i class="EMPHASIS">Empty string</i></span></p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>Default value is used.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive specifies the directory where the CA key, the CA certificate and the trusted CAs file
+              are located.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>ca-directory /usr/local/etc/privoxy/CA</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CA-CERT-FILE" id="CA-CERT-FILE">7.7.2. ca-cert-file</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>The CA certificate file in ".crt" format.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>Text</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p><span class="emphasis"><i class="EMPHASIS">cacert.crt</i></span></p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>Default value is used.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive specifies the name of the CA certificate file in ".crt" format.</p>
+              <p>It can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.crt
+              -days 3650</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>ca-cert-file root.crt</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CA-KEY-FILE" id="CA-KEY-FILE">7.7.3. ca-key-file</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>The CA key file in ".pem" format.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>Text</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p><span class="emphasis"><i class="EMPHASIS">cacert.pem</i></span></p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>Default value is used.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive specifies the name of the CA key file in ".pem" format. See the <a href="#CA-CERT-FILE"
+              target="_top">ca-cert-file</a> for a command to generate it.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>ca-key-file cakey.pem</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CA-PASSWORD" id="CA-PASSWORD">7.7.4. ca-password</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>The password for the CA keyfile.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>Text</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p><span class="emphasis"><i class="EMPHASIS">Empty string</i></span></p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>Default value is used.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive specifies the password for the CA keyfile that is used when Privoxy generates
+              certificates for intercepted requests.</p>
+              <p>Note that the password is shown on the CGI page so don't reuse an important one.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>ca-password blafasel</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="CERTIFICATE-DIRECTORY" id="CERTIFICATE-DIRECTORY">7.7.5.
+        certificate-directory</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>Directory to safe generated keys and certificates.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>Text</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p><span class="emphasis"><i class="EMPHASIS">./certs</i></span></p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>Default value is used.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive specifies the directory where generated TLS/SSL keys and certificates are saved.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>certificate-directory /usr/local/var/privoxy/certs</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="TRUSTED-CAS-FILE" id="TRUSTED-CAS-FILE">7.7.6. trusted-cas-file</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>The trusted CAs file in ".pem" format.</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>File name relative to ca-directory</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p><span class="emphasis"><i class="EMPHASIS">trustedCAs.pem</i></span></p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>Default value is used.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive specifies the trusted CAs file that is used when validating certificates for
+              intercepted TLS/SSL request.</p>
+              <p>An example file can be downloaded from <a href="https://curl.haxx.se/ca/cacert.pem" target=
+              "_top">https://curl.haxx.se/ca/cacert.pem</a>.</p>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <p>trusted-cas-file trusted_cas_file.pem</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="WINDOWS-GUI" id="WINDOWS-GUI">7.8. Windows GUI Options</a></h2>
       <p><span class="APPLICATION">Privoxy</span> has a number of options specific to the Windows GUI
       interface:</p><a name="ACTIVITY-ANIMATION" id="ACTIVITY-ANIMATION"></a>
       <p>If <span class="QUOTE">"activity-animation"</span> is set to 1, the <span class="APPLICATION">Privoxy</span>

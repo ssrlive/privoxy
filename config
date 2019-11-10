@@ -15,7 +15,8 @@
 #        4. ACCESS CONTROL AND SECURITY                             #
 #        5. FORWARDING                                              #
 #        6. MISCELLANEOUS                                           #
-#        7. WINDOWS GUI OPTIONS                                     #
+#        7. TLS                                                     #
+#        8. WINDOWS GUI OPTIONS                                     #
 #                                                                   #
 #####################################################################
 #
@@ -2435,13 +2436,205 @@ socket-timeout 300
 #            receive-buffer-size 32768
 #
 #
+#  7. TLS/SSL
+#  ===========
 #
-#  7. WINDOWS GUI OPTIONS
+#  7.1. ca-directory
+#  ==================
+#
+#  Specifies:
+#
+#      Directory with the CA key, the CA certificate and the trusted
+#      CAs file.
+#
+#  Type of value:
+#
+#      Text
+#
+#  Default value:
+#
+#      Empty string
+#
+#  Effect if unset:
+#
+#      Default value is used.
+#
+#  Notes:
+#
+#      This directive specifies the directory where the CA key, the
+#      CA certificate and the trusted CAs file are located.
+#
+#  Examples:
+#
+#      ca-directory /usr/local/etc/privoxy/CA
+#
+#ca-directory /usr/local/etc/privoxy/CA
+#
+#  7.2. ca-cert-file
+#  ==================
+#
+#  Specifies:
+#
+#      The CA certificate file in ".crt" format.
+#
+#  Type of value:
+#
+#      Text
+#
+#  Default value:
+#
+#      cacert.crt
+#
+#  Effect if unset:
+#
+#      Default value is used.
+#
+#  Notes:
+#
+#      This directive specifies the name of the CA certificate file
+#      in ".crt" format.
+#
+#      It can be generated with: openssl req -new -x509 -extensions
+#      v3_ca -keyout cakey.pem -out cacert.crt -days 3650
+#
+#  Examples:
+#
+#      ca-cert-file root.crt
+#
+#ca-cert-file cacert.crt
+#
+#  7.3. ca-key-file
+#  =================
+#
+#  Specifies:
+#
+#      The CA key file in ".pem" format.
+#
+#  Type of value:
+#
+#      Text
+#
+#  Default value:
+#
+#      cacert.pem
+#
+#  Effect if unset:
+#
+#      Default value is used.
+#
+#  Notes:
+#
+#      This directive specifies the name of the CA key file in ".pem"
+#      format. See the ca-cert-file for a command to generate it.
+#
+#  Examples:
+#
+#      ca-key-file cakey.pem
+#
+#ca-key-file root.pem
+#
+#  7.4. ca-password
+#  =================
+#
+#  Specifies:
+#
+#      The password for the CA keyfile.
+#
+#  Type of value:
+#
+#      Text
+#
+#  Default value:
+#
+#      Empty string
+#
+#  Effect if unset:
+#
+#      Default value is used.
+#
+#  Notes:
+#
+#      This directive specifies the password for the CA keyfile that
+#      is used when Privoxy generates certificates for intercepted
+#      requests.
+#
+#      Note that the password is shown on the CGI page so don't reuse
+#      an important one.
+#
+#  Examples:
+#
+#      ca-password blafasel
+#
+#ca-password swordfish
+#
+#  7.5. certificate-directory
+#  ===========================
+#
+#  Specifies:
+#
+#      Directory to safe generated keys and certificates.
+#
+#  Type of value:
+#
+#      Text
+#
+#  Default value:
+#
+#      ./certs
+#
+#  Effect if unset:
+#
+#      Default value is used.
+#
+#  Notes:
+#
+#      This directive specifies the directory where generated TLS/SSL
+#      keys and certificates are saved.
+#
+#  Examples:
+#
+#      certificate-directory /usr/local/var/privoxy/certs
+#
+#certificate-directory /usr/local/var/privoxy/certs
+#
+#  7.6. trusted-cas-file
+#  ======================
+#
+#  Specifies:
+#
+#      The trusted CAs file in ".pem" format.
+#
+#  Type of value:
+#
+#      File name relative to ca-directory
+#
+#  Default value:
+#
+#      trustedCAs.pem
+#
+#  Effect if unset:
+#
+#      Default value is used.
+#
+#  Notes:
+#
+#      This directive specifies the trusted CAs file that is used
+#      when validating certificates for intercepted TLS/SSL request.
+#
+#      An example file can be downloaded from https://curl.haxx.se/ca
+#      /cacert.pem.
+#
+#  Examples:
+#
+#      trusted-cas-file trusted_cas_file.pem
+#
+#trusted-cas-file trustedCAs.pem
+#
+#  8. WINDOWS GUI OPTIONS
 #  =======================
 #
 #  Privoxy has a number of options specific to the Windows GUI
 #  interface:
-#
 #
 #
 #  If "activity-animation" is set to 1, the Privoxy icon will animate
@@ -2449,14 +2642,10 @@ socket-timeout 300
 #
 #activity-animation   1
 #
-#
-#
 #  If "log-messages" is set to 1, Privoxy copies log messages to the
 #  console window. The log detail depends on the debug directive.
 #
 #log-messages   1
-#
-#
 #
 #  If "log-buffer-size" is set to 1, the size of the log buffer, i.e.
 #  the amount of memory used for the log messages displayed in the

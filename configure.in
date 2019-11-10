@@ -1131,6 +1131,36 @@ dnl fi
 AC_SUBST(STATIC_PCRE_ONLY)
 AC_SUBST(STATIC_PCRS_ONLY)
 
+dnl =======================================================
+dnl check for mbedTLS which is required for https filtering
+dnl =======================================================
+FEATURE_HTTPS_FILTERING_ONLY=#
+OPT_MBEDTLS=no
+AC_ARG_WITH(mbedtls,dnl
+AC_HELP_STRING([--with-mbedtls],[enable mbedTLS detection for https filtering.])
+AC_HELP_STRING([--without-mbedtls], [disable mbedTLS detection]),
+  OPT_MBEDTLS=$withval)
+
+if test X"$OPT_MBEDTLS" != Xno; then
+
+  AC_CHECK_LIB(mbedtls, mbedtls_ssl_init,
+   [
+     AC_DEFINE(FEATURE_HTTPS_FILTERING, 1, [if mbedTLS is enabled])
+     AC_SUBST(FEATURE_HTTPS_FILTERING, [1])
+     FEATURE_HTTPS_FILTERING="yes"
+   ], [], -lmbedx509 -lmbedcrypto)
+
+  if test "x$FEATURE_HTTPS_FILTERING" = "xyes"; then
+    AC_MSG_NOTICE([Detected mbedTLS. Enabling https filtering.])
+
+    LIBS="-lmbedtls -lmbedx509 -lmbedcrypto $LIBS"
+
+    FEATURE_HTTPS_FILTERING_ONLY=
+  fi
+fi
+AC_SUBST(FEATURE_HTTPS_FILTERING_ONLY)
+
+
 dnl =================================================================
 dnl Final cleanup and output
 dnl =================================================================
