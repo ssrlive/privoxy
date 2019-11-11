@@ -981,7 +981,7 @@ struct reusable_connection
  * Maximum number of actions/filter files.  This limit is arbitrary - it's just used
  * to size an array.
  */
-#define MAX_AF_FILES 30
+#define MAX_AF_FILES 100
 
 /**
  * Maximum number of sockets to listen to.  This limit is arbitrary - it's just used
