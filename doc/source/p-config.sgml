@@ -3679,7 +3679,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     # Define a couple of tags, the described effect requires action sections
     # that are enabled based on CLIENT-TAG patterns.
     client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
-    disable-content-filters Disable content-filters but do not affect other actions
+    client-specific-tag disable-content-filters Disable content-filters but do not affect other actions
 </screen>
   </listitem>
  </varlistentry>
