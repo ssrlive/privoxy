@@ -1440,20 +1440,23 @@ jb_err parse_forwarder_address(char *address, char **hostname, int *port,
                                char **username, char **password)
 {
    char *p;
-   *hostname = strdup_or_die(address);
+   char *tmp;
+
+   tmp = *hostname = strdup_or_die(address);
 
    /* Parse username and password */
    if (username && password && (NULL != (p = strchr(*hostname, '@'))))
    {
       *p++ = '\0';
-      *username = *hostname;
-      *hostname = p;
+      *username = strdup_or_die(*hostname);
+      *hostname = strdup_or_die(p);
 
       if (NULL != (p = strchr(*username, ':')))
       {
          *p++ = '\0';
          *password = strdup_or_die(p);
       }
+      freez(tmp);
    }
 
    /* Parse hostname and port */
