@@ -1260,6 +1260,9 @@ actionsfile
     If the specified address isn't available on the system, or if the
     hostname can't be resolved, <application>Privoxy</application>
     will fail to start.
+    On GNU/Linux, and other platforms that can listen on not yet assigned IP
+    addresses, Privoxy will start and will listen on the specified
+    address whenever the IP address is assigned to the system
    </para>
    <para>
     IPv6 addresses containing colons have to be quoted by brackets.
