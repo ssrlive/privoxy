@@ -731,7 +731,11 @@ logfile logfile
 #      result in DNS traffic.
 #
 #      If the specified address isn't available on the system, or if
-#      the hostname can't be resolved, Privoxy will fail to start.
+#      the hostname can't be resolved, Privoxy will fail to start. On
+#      GNU/Linux, and other platforms that can listen on not yet
+#      assigned IP addresses, Privoxy will start and will listen on
+#      the specified address whenever the IP address is assigned to
+#      the system
 #
 #      IPv6 addresses containing colons have to be quoted by
 #      brackets. They can only be used if Privoxy has been compiled
@@ -2290,8 +2294,7 @@ socket-timeout 300
 #          # Define a couple of tags, the described effect requires action sections
 #          # that are enabled based on CLIENT-TAG patterns.
 #          client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
-#          disable-content-filters Disable content-filters but do not affect other actions
-#
+#          client-specific-tag disable-content-filters Disable content-filters but do not affect other actions
 #
 #
 #  6.17. client-tag-lifetime
