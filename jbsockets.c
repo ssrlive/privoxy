@@ -1068,6 +1068,10 @@ int bind_port(const char *hostnam, int portnum, int backlog, jb_socket *pfd)
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
 
+#ifdef IP_FREEBIND
+   setsockopt(fd, IPPROTO_IP, IP_FREEBIND, (char *)&one, sizeof(one));
+#endif
+
 #ifdef HAVE_RFC2553
    if (bind(fd, rp->ai_addr, rp->ai_addrlen) < 0)
 #else
