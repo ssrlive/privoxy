@@ -69,7 +69,6 @@
 #define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be setted in generated certificates as parameter valid to */
 #define CERT_SIGNATURE_ALGORITHM         MBEDTLS_MD_SHA256 /* The MD algorithm to use for the signature */
 #define CERT_SERIAL_NUM_LENGTH           4                 /* Bytes of hash to be used for creating serial number of certificate. Min=2 and max=16 */
-#define LIMIT_MUTEX_NUMBER                                 /* If this macro is defined, mutexes count for generating private keys is changed from 65536 to 32 */
 #define INVALID_CERT_INFO_BUF_SIZE       2048              /* Size of buffer for message with information about reason of certificate invalidity. Data after the end of buffer will not be saved */
 #define CERT_PARAM_COMMON_NAME           "CN="
 #define CERT_PARAM_ORGANIZATION          ",O="
