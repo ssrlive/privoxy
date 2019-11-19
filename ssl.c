@@ -1379,7 +1379,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
       sizeof(cert_opt.issuer_name), &issuer_cert.subject);
    if (ret < 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "mbedtls_x509_dn_gets failed: %s", err_buf);
       ret = -1;
       goto exit;
@@ -1446,7 +1446,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_subject_name(&cert, cert_opt.subject_name);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Setting subject name in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1456,7 +1456,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_issuer_name(&cert, cert_opt.issuer_name);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Setting issuer name in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1477,7 +1477,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
       cert_opt.not_after);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Setting validity in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1491,7 +1491,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
       cert_opt.max_pathlen);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "Setting the basicConstraints extension "
          "in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1503,7 +1503,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_subject_key_identifier(&cert);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "mbedtls_x509write_crt_set_subject_key_"
          "identifier failed: %s", err_buf);
       ret = -1;
@@ -1514,7 +1514,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_authority_key_identifier(&cert);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "mbedtls_x509write_crt_set_authority_key_"
          "identifier failed: %s", err_buf);
       ret = -1;
