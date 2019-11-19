@@ -194,11 +194,11 @@ privoxy_mutex_t log_init_mutex;
 privoxy_mutex_t connection_reuse_mutex;
 
 #ifdef LIMIT_MUTEX_NUMBER
-   privoxy_mutex_t certificates_mutexes[32];
+privoxy_mutex_t certificates_mutexes[32];
 #else
-   privoxy_mutex_t certificates_mutexes[65536];
+privoxy_mutex_t certificates_mutexes[65536];
 #endif /* LIMIT_MUTEX_NUMBER */
-   privoxy_mutex_t rng_mutex;
+privoxy_mutex_t rng_mutex;
 
 #ifdef FEATURE_EXTERNAL_FILTERS
 privoxy_mutex_t external_filter_mutex;
