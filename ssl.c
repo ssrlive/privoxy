@@ -80,6 +80,33 @@
 #define CERT_SUBJECT_PASSWORD            ""
 #define CERT_INFO_PREFIX                 ""
 
+/*
+ * Properties of cert for generating
+ */
+typedef struct {
+   char       *issuer_crt;                         /* filename of the issuer certificate       */
+   char       *subject_key;                        /* filename of the subject key file         */
+   char       *issuer_key;                         /* filename of the issuer key file          */
+   const char *subject_pwd;                        /* password for the subject key file        */
+   const char *issuer_pwd;                         /* password for the issuer key file         */
+   char       *output_file;                        /* where to store the constructed key file  */
+   const char *subject_name;                       /* subject name for certificate             */
+   char       issuer_name[ISSUER_NAME_BUF_SIZE];   /* issuer name for certificate              */
+   const char *not_before;                         /* validity period not before               */
+   const char *not_after;                          /* validity period not after                */
+   const char *serial;                             /* serial number string                     */
+   int        is_ca;                               /* is a CA certificate                      */
+   int        max_pathlen;                         /* maximum CA path length                   */
+} cert_options;
+
+/*
+ * Properties of key for generating
+ */
+typedef struct {
+   mbedtls_pk_type_t type;   /* type of key to generate  */
+   int  rsa_keysize;         /* length of key in bits    */
+   char *key_file_path;      /* filename of the key file */
+} key_options;
 
 extern int generate_webpage_certificate(struct client_state * csp);
 static char * make_certs_path(const char * conf_dir, const char * file_name, const char * suffix);
