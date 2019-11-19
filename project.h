@@ -354,7 +354,7 @@ typedef struct certs_chain {
    char text_buf[CERT_INFO_BUF_SIZE];    /* text info about properties of certificate               */
    char file_buf[CERT_FILE_BUF_SIZE];    /* buffer for whole certificate - format to save in file   */
    struct certs_chain *next;             /* next certificate in chain of trust                      */
-}certs_chain_t;
+} certs_chain_t;
 #endif
 
 /**
