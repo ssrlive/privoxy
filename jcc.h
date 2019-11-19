@@ -103,9 +103,9 @@ extern privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
 
 #ifdef LIMIT_MUTEX_NUMBER
-   extern privoxy_mutex_t certificates_mutexes[32];
+extern privoxy_mutex_t certificates_mutexes[32];
 #else
-   extern privoxy_mutex_t certificates_mutexes[65536];
+extern privoxy_mutex_t certificates_mutexes[65536];
 #endif /* LIMIT_MUTEX_NUMBER */
 extern privoxy_mutex_t rng_mutex;
 
