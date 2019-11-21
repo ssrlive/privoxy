@@ -66,7 +66,7 @@
 #define RSA_KEY_PUBLIC_EXPONENT          65537             /* Public exponent for RSA private key generating */
 #define RSA_KEYSIZE                      2048              /* Size of generated RSA keys */
 #define GENERATED_CERT_VALID_FROM        "20100101000000"  /* Date and time, which will be set in generated certificates as parameter valid from */
-#define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be setted in generated certificates as parameter valid to */
+#define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be set in generated certificates as parameter valid to */
 #define CERT_SIGNATURE_ALGORITHM         MBEDTLS_MD_SHA256 /* The MD algorithm to use for the signature */
 #define CERT_SERIAL_NUM_LENGTH           4                 /* Bytes of hash to be used for creating serial number of certificate. Min=2 and max=16 */
 #define INVALID_CERT_INFO_BUF_SIZE       2048              /* Size of buffer for message with information about reason of certificate invalidity. Data after the end of buffer will not be saved */
