@@ -965,7 +965,7 @@ static int write_certificate(mbedtls_x509write_cert *crt, const char *output_fil
    memset(cert_buf, 0, sizeof(cert_buf));
 
    /*
-    * Writing certificate into PEM string. If buffer is too small, fuction
+    * Writing certificate into PEM string. If buffer is too small, function
     * returns specific error and no buffer overflow can happen.
     */
    if ((ret = mbedtls_x509write_crt_pem(crt, cert_buf,
