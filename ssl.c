@@ -241,7 +241,6 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
          {
             char err_buf[ERROR_BUF_SIZE];
 
-            memset(err_buf, 0, sizeof(err_buf));
             mbedtls_strerror(ret, err_buf, sizeof(err_buf));
             log_error(LOG_LEVEL_ERROR,
                "Sending data over TLS/SSL failed: %s", err_buf);
@@ -290,7 +289,6 @@ extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t ma
    {
       char err_buf[ERROR_BUF_SIZE];
 
-      memset(err_buf, 0, sizeof(err_buf));
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Receiving data over TLS/SSL failed: %s", err_buf);
@@ -384,8 +382,6 @@ extern int create_client_ssl_connection(struct client_state *csp)
    char *cert_file = NULL;
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
-
-   memset(err_buf, 0, sizeof(err_buf));
 
    /*
     * Initializing mbedtls structures for TLS/SSL connection
@@ -679,8 +675,6 @@ extern int create_server_ssl_connection(struct client_state *csp)
    char *trusted_cas_file = NULL;
    int auth_mode = MBEDTLS_SSL_VERIFY_REQUIRED;
 
-   memset(err_buf, 0, sizeof(err_buf));
-
    csp->server_cert_verification_result = SSL_CERT_NOT_VERIFIED;
    csp->server_certs_chain.next = NULL;
 
@@ -961,7 +955,6 @@ static int write_certificate(mbedtls_x509write_cert *crt, const char *output_fil
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
 
-   memset(err_buf,  0, sizeof(err_buf));
    memset(cert_buf, 0, sizeof(cert_buf));
 
    /*
@@ -1028,8 +1021,6 @@ static int write_private_key(mbedtls_pk_context *key, unsigned char **ret_buf,
    FILE *f = NULL;                /* File to save certificate */
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
-
-   memset(err_buf, 0, sizeof(err_buf));
 
    /* Initializing buffer for key file content */
    *ret_buf = zalloc_or_die(PRIVATE_KEY_BUF_SIZE + 1);
@@ -1110,7 +1101,6 @@ static int generate_key(unsigned char **key_buf, struct client_state *csp)
    char err_buf[ERROR_BUF_SIZE];
 
    key_opt.key_file_path = NULL;
-   memset(err_buf, 0, sizeof(err_buf));
 
    /*
     * Initializing structures for key generating
@@ -1227,8 +1217,6 @@ extern int generate_webpage_certificate(struct client_state *csp)
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
    cert_options cert_opt;
-
-   memset(err_buf, 0, sizeof(err_buf));
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -2041,8 +2029,6 @@ static int seed_rng(struct client_state *csp)
 {
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
-
-   memset(err_buf, 0, sizeof(err_buf));
 
    if (rng_seeded == 0)
    {
