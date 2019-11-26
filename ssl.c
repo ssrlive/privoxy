@@ -1,32 +1,32 @@
 /*********************************************************************
-*
-* File        :  $Source: /cvsroot/ijbswa/current/ssl.c,v $
-*
-* Purpose     :  File with TLS/SSL extension. Contains methods for
-*                creating, using and closing TLS/SSL connections.
-*
-* Copyright   :  Written by and Copyright (c) 2017 Vaclav Svec. FIT CVUT.
-*                Copyright (C) 2018-2019 by Fabian Keil <fk@fabiankeil.de>
-*
-*                This program is free software; you can redistribute it
-*                and/or modify it under the terms of the GNU General
-*                Public License as published by the Free Software
-*                Foundation; either version 2 of the License, or (at
-*                your option) any later version.
-*
-*                This program is distributed in the hope that it will
-*                be useful, but WITHOUT ANY WARRANTY; without even the
-*                implied warranty of MERCHANTABILITY or FITNESS FOR A
-*                PARTICULAR PURPOSE.  See the GNU General Public
-*                License for more details.
-*
-*                The GNU General Public License should be included with
-*                this file.  If not, you can view it at
-*                http://www.gnu.org/copyleft/gpl.html
-*                or write to the Free Software Foundation, Inc., 59
-*                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*
-*********************************************************************/
+ *
+ * File        :  $Source: /cvsroot/ijbswa/current/ssl.c,v $
+ *
+ * Purpose     :  File with TLS/SSL extension. Contains methods for
+ *                creating, using and closing TLS/SSL connections.
+ *
+ * Copyright   :  Written by and Copyright (c) 2017 Vaclav Svec. FIT CVUT.
+ *                Copyright (C) 2018-2019 by Fabian Keil <fk@fabiankeil.de>
+ *
+ *                This program is free software; you can redistribute it
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *********************************************************************/
 
 #include <string.h>
 #include <unistd.h>
@@ -160,18 +160,18 @@ extern int server_use_ssl(const struct client_state *csp)
 
 
 /*********************************************************************
-*
-* Function    :  is_ssl_pending
-*
-* Description :  Tests if there are some waiting data on ssl connection
-*
-* Parameters  :
-*          1  :  ssl = SSL context to test
-*
-* Returns     :   0 => No data are pending
-*                >0 => Pending data length
-*
-*********************************************************************/
+ *
+ * Function    :  is_ssl_pending
+ *
+ * Description :  Tests if there are some waiting data on ssl connection
+ *
+ * Parameters  :
+ *          1  :  ssl = SSL context to test
+ *
+ * Returns     :   0 => No data are pending
+ *                >0 => Pending data length
+ *
+ *********************************************************************/
 extern size_t is_ssl_pending(mbedtls_ssl_context *ssl)
 {
    if (ssl == NULL)
@@ -1924,18 +1924,18 @@ static void free_certificate_chain(struct client_state *csp)
 
 
 /*********************************************************************
-*
-* Function    :  file_exists
-*
-* Description :  Tests if file exists and is readable.
-*
-* Parameters  :
-*          1  :  path = Path to tested file.
-*
-* Returns     :  1 => File exists and is readable.
-*                0 => File doesn't exist or is not readable.
-*
-*********************************************************************/
+ *
+ * Function    :  file_exists
+ *
+ * Description :  Tests if file exists and is readable.
+ *
+ * Parameters  :
+ *          1  :  path = Path to tested file.
+ *
+ * Returns     :  1 => File exists and is readable.
+ *                0 => File doesn't exist or is not readable.
+ *
+ *********************************************************************/
 static int file_exists(const char *path)
 {
    FILE *f;
