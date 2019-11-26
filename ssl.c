@@ -1597,13 +1597,7 @@ static char *make_certs_path(const char *conf_dir, const char *file_name,
        * absolute path to cwd.
        */
       path_size += strlen(basedir) + 2;
-      path = (char *)malloc(path_size);
-      if (path == NULL)
-      {
-         log_error(LOG_LEVEL_ERROR, "make_certs_path failed: malloc fail");
-         return NULL;
-      }
-      memset(path, 0, path_size);
+      path = zalloc_or_die(path_size);
 
       strlcpy(path, basedir,   path_size);
       strlcat(path, delim,     path_size);
@@ -1615,13 +1609,7 @@ static char *make_certs_path(const char *conf_dir, const char *file_name,
    else
 #endif /* defined unix */
    {
-      path = (char *)malloc(path_size);
-      if (path == NULL)
-      {
-         log_error(LOG_LEVEL_ERROR, "make_certs_path failed: malloc fail");
-         return NULL;
-      }
-      memset(path, 0, path_size);
+      path = zalloc_or_die(path_size);
 
       strlcpy(path, conf_dir,  path_size);
       strlcat(path, delim,     path_size);
