@@ -1032,15 +1032,7 @@ static int write_private_key(mbedtls_pk_context *key, unsigned char **ret_buf,
    memset(err_buf, 0, sizeof(err_buf));
 
    /* Initializing buffer for key file content */
-   *ret_buf = (unsigned char *)malloc(PRIVATE_KEY_BUF_SIZE + 1);
-   if (*ret_buf == NULL)
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "Creating buffer for private key failed: malloc fail");
-      ret = -1;
-      goto exit;
-   }
-   memset(*ret_buf, 0, PRIVATE_KEY_BUF_SIZE + 1);
+   *ret_buf = zalloc_or_die(PRIVATE_KEY_BUF_SIZE + 1);
 
    /*
     * Writing private key into PEM string
