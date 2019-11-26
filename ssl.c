@@ -1829,37 +1829,27 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
 
    /*
     * Preparing next item in linked list for next certificate
-    * If malloc fails, we are continuing without this certificate
     */
-   last->next = (struct certs_chain *)malloc(sizeof(struct certs_chain));
-   if (last->next != NULL)
-   {
-      last->next->next = NULL;
-      memset(last->next->text_buf, 0, sizeof(last->next->text_buf));
-      memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
+   last->next = malloc_or_die(sizeof(struct certs_chain));
+   last->next->next = NULL;
+   memset(last->next->text_buf, 0, sizeof(last->next->text_buf));
+   memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
 
-      /*
-       * Saving certificate file into buffer
-       */
-      if ((ret = mbedtls_pem_write_buffer(PEM_BEGIN_CRT, PEM_END_CRT,
-         crt->raw.p, crt->raw.len, (unsigned char *)last->file_buf,
-         sizeof(last->file_buf)-1, &olen)) != 0)
-      {
-         return(ret);
-      }
-
-      /*
-       * Saving certificate information into buffer
-       */
-      mbedtls_x509_crt_info(last->text_buf, sizeof(last->text_buf) - 1,
-         CERT_INFO_PREFIX, crt);
-   }
-   else
+   /*
+    * Saving certificate file into buffer
+    */
+   if ((ret = mbedtls_pem_write_buffer(PEM_BEGIN_CRT, PEM_END_CRT,
+      crt->raw.p, crt->raw.len, (unsigned char *)last->file_buf,
+      sizeof(last->file_buf)-1, &olen)) != 0)
    {
-      log_error(LOG_LEVEL_ERROR,
-         "Malloc memory for server certificate informations failed");
-      return -1;
+      return(ret);
    }
+
+   /*
+    * Saving certificate information into buffer
+    */
+   mbedtls_x509_crt_info(last->text_buf, sizeof(last->text_buf) - 1,
+      CERT_INFO_PREFIX, crt);
 
    return 0;
 }
