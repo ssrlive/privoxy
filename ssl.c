@@ -687,7 +687,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    mbedtls_net_init(&(csp->mbedtls_server_attr.socket_fd));
    mbedtls_ssl_init(&(csp->mbedtls_server_attr.ssl));
    mbedtls_ssl_config_init(&(csp->mbedtls_server_attr.conf));
-   mbedtls_x509_crt_init( &(csp->mbedtls_server_attr.ca_cert));
+   mbedtls_x509_crt_init(&(csp->mbedtls_server_attr.ca_cert));
 
    /*
    * Setting socket fd in mbedtls_net_context structure. This structure
@@ -1238,7 +1238,7 @@ extern int generate_webpage_certificate(struct client_state *csp)
     * Initializing structures for certificate generating
     */
    mbedtls_x509write_crt_init(&cert);
-   mbedtls_x509write_crt_set_md_alg( &cert, CERT_SIGNATURE_ALGORITHM);
+   mbedtls_x509write_crt_set_md_alg(&cert, CERT_SIGNATURE_ALGORITHM);
    mbedtls_pk_init(&loaded_issuer_key);
    mbedtls_pk_init(&loaded_subject_key);
    mbedtls_mpi_init(&serial);
@@ -1407,8 +1407,8 @@ extern int generate_webpage_certificate(struct client_state *csp)
    if (!mbedtls_pk_can_do(&issuer_cert.pk, MBEDTLS_PK_RSA) ||
       mbedtls_mpi_cmp_mpi(&mbedtls_pk_rsa(issuer_cert.pk)->N,
          &mbedtls_pk_rsa(*issuer_key)->N) != 0 ||
-      mbedtls_mpi_cmp_mpi( &mbedtls_pk_rsa(issuer_cert.pk)->E,
-         &mbedtls_pk_rsa(*issuer_key )->E) != 0)
+      mbedtls_mpi_cmp_mpi(&mbedtls_pk_rsa(issuer_cert.pk)->E,
+         &mbedtls_pk_rsa(*issuer_key)->E) != 0)
    {
       log_error(LOG_LEVEL_ERROR,
          "Issuer key doesn't match issuer certificate");
