@@ -42,11 +42,11 @@
 #include "mbedtls/base64.h"
 #include "mbedtls/error.h"
 
+#include "config.h"
 #include "project.h"
 #include "miscutil.h"
 #include "errlog.h"
 #include "jcc.h"
-#include "config.h"
 #include "ssl.h"
 
 
