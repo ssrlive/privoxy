@@ -9,7 +9,7 @@
 	        if which invoke-rc.d >/dev/null 2>&1; then
         	        invoke-rc.d privoxy rotate > /dev/null
 	        else
-			if [ -f /var/run/privoxy.pid ]; then
+			if [ -f /run/privoxy.pid ]; then
 	        	        /etc/init.d/privoxy rotate > /dev/null
 			fi
 	        fi

@@ -5,12 +5,12 @@ Subject: Use Debian docbook2man-spec.pl (from docbook-utils) instead of local
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -479,7 +479,7 @@ dok-man:
+@@ -527,7 +527,7 @@ dok-man:
  # target for man page generation!
  man: dok-release
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\
--	nsgmls ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
-+	nsgmls ../privoxy-man-page.sgml  | sgmlspl /usr/share/perl5/sgmlspl-specs/docbook2man-spec.pl &&\
+-	$(NSGMLS) ../privoxy-man-page.sgml  | sgmlspl ../../../utils/docbook2man/docbook2man-spec.pl &&\
++	$(NSGMLS) ../privoxy-man-page.sgml  | sgmlspl /usr/share/perl5/sgmlspl-specs/docbook2man-spec.pl &&\
  	perl -pi.bak -e 's/ <URL:.*>//; s/\[ /\[/g' $(MAN_PAGE) ;\
  	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" $(MAN_PAGE); \
  	perl -pi.bak -e "s/ö/\\\\[:o]/g" $(MAN_PAGE); \

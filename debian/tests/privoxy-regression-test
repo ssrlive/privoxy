@@ -3,18 +3,20 @@
 # Run privoxy-regression-test.pl on a configuration extended by
 # regression-tests.action.
 #
-# (c) 2016 Roland Rosenfeld <roland@debian.org>
+# (c) 2018 Roland Rosenfeld <roland@debian.org>
 
 PORT=8119
 
-if [ -z "$ADTTMP" ]; then
-    ADTTMP=$(mktemp -d)
+if [ -z "$AUTOPKGTEST_TMP" ]; then
+    AUTOPKGTEST_TMP=$(mktemp -d)
 fi
 
-CONFIG=$ADTTMP/config
-PIDFILE=$ADTTMP/privoxy.pid
+trap "rm -rf $AUTOPKGTEST_TMP" EXIT
+
+CONFIG=$AUTOPKGTEST_TMP/config
+PIDFILE=$AUTOPKGTEST_TMP/privoxy.pid
 sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
-    -e "s%^logdir.*%logdir $ADTTMP%" \
+    -e "s%^logdir.*%logdir $AUTOPKGTEST_TMP%" \
     -e "s/^enable-edit-actions.*/enable-edit-actions 1/" \
     -e "s/^keep-alive-timeout.*/keep-alive-timeout 21/" \
     -e "s/^#connection-sharing.*/connection-sharing 1/" \
@@ -27,7 +29,7 @@ echo "Starting privoxy on port $PORT"
 http_proxy=http://127.0.0.1:$PORT/
 export http_proxy
 
-OUTFILE=$ADTTMP/output
+OUTFILE=$AUTOPKGTEST_TMP/output
 
 /usr/bin/privoxy-regression-test --max-level 200 --show-skipped-tests \
     | tee $OUTFILE 2>&1

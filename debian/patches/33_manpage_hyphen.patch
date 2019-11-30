@@ -4,7 +4,7 @@ Subject: Replace all -- in man page by \-\- to make lintian happy.
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -484,8 +484,7 @@ man: dok-release
+@@ -532,8 +532,7 @@ man: dok-release
  	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" $(MAN_PAGE); \
  	perl -pi.bak -e "s/ö/\\\\[:o]/g" $(MAN_PAGE); \
  	perl -pi.bak -e 's/([ {])-([a-z])/$$1\\-$$2/g' $(MAN_PAGE); \

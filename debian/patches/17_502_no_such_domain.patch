@@ -6,7 +6,7 @@ Subject: Changes the 404 HTTP status code of the "No such Domain" template
 
 --- a/templates/no-such-domain
 +++ b/templates/no-such-domain
-@@ -79,7 +79,7 @@
+@@ -78,7 +78,7 @@
  <html>
  
  <head>
@@ -15,7 +15,7 @@ Subject: Changes the 404 HTTP status code of the "No such Domain" template
    <meta http-equiv="Content-Style-Type" content="text/css">
    <meta http-equiv="Content-Script-Type" content="text/javascript">
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-@@ -95,7 +95,7 @@
+@@ -94,7 +94,7 @@
    <table summary="" cellpadding="20" cellspacing="10" border="0" width="100%">
      <tr>
        <td class="status">

@@ -51,8 +51,7 @@ override_dh_auto_clean:
 
 override_dh_auto_install:
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy
-	sed -e 's/\(Sample Configuration File for Privoxy\).*/\1/;' \
-	    -e 's/\$$Id: config,v.*/Id: config,v/' < config \
+	sed -e 's/\(Sample Configuration File for Privoxy\).*/\1/;' < config \
 	    > $(DEBDIR)/usr/share/privoxy/config
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
 	install -m 0644 match-all.action $(DEBDIR)/etc/privoxy/match-all.action
@@ -75,21 +74,17 @@ override_dh_auto_install:
 
 	cp -r templates $(DEBDIR)/etc/privoxy/
 	rm -f $(DEBDIR)/etc/privoxy/templates/*~
-	rm -rf $(DEBDIR)/etc/privoxy/templates/CVS
 
-#	Remove CVS tags and trailing spaces from config files:
+#      Remove trailing spaces from config files:
 	find $(DEBDIR)/etc/privoxy -type f \
-	| xargs grep -l '\$$[A-Z][^$$]*:[^$$]*\$$' \
+	| xargs grep -l ' $$' \
 	| while read f; do \
-	    sed -e 's/\$$\(Id: [^$$]*,v\)[^$$]*\$$/\1/' \
-		-e 's/\$$\(Source: [^$$]*\)\$$/\1/' \
-		-e 's/\$$\(Log: [^$$]*\)\$$/\1/' \
-		-e 's/ *$$//' < $$f > $$f.new; \
+	    sed -e 's/  *$$//' < $$f > $$f.new; \
 	    mv -f $$f.new $$f; \
 	done
 
 override_dh_installdocs:
-	dh_installdocs -XCVS
+	dh_installdocs
 	(cd $(DEBDIR)/usr/share/doc/privoxy/; \
 	 mv privoxy-index.html index.html)
 	(cd $(DEBDIR)/usr/share/doc/privoxy/user-manual; ln -s '../p_doc.css')

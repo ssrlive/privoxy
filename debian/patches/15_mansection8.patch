@@ -15,7 +15,7 @@ Subject: Move man page from man section 1 to man section 8.
  VAR_DEST     = @localstatedir@
 --- a/doc/source/privoxy-man-page.sgml
 +++ b/doc/source/privoxy-man-page.sgml
-@@ -58,7 +58,7 @@
+@@ -54,7 +54,7 @@
  </refentryinfo>
  <refmeta>
   <refentrytitle>privoxy</refentrytitle>

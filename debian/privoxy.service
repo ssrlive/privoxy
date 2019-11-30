@@ -4,11 +4,11 @@ Documentation=man:privoxy(8) https://www.privoxy.org/user-manual/
 After=network.target
 
 [Service]
-Environment=PIDFILE=/var/run/privoxy.pid
+Environment=PIDFILE=/run/privoxy.pid
 Environment=OWNER=privoxy
 Environment=CONFIGFILE=/etc/privoxy/config
 Type=forking
-PIDFile=/var/run/privoxy.pid
+PIDFile=/run/privoxy.pid
 ExecStart=/usr/sbin/privoxy --pidfile $PIDFILE --user $OWNER $CONFIGFILE
 ExecStopPost=/bin/rm -f $PIDFILE
 SuccessExitStatus=15
