@@ -1199,7 +1199,7 @@ exit:
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  -1 => Error while creating certificate.
- *                 0 => Certificate alreaday exist.
+ *                 0 => Certificate already exists.
  *                >0 => Length of created certificate.
  *
  *********************************************************************/
