@@ -107,7 +107,7 @@ typedef struct {
    char *key_file_path;      /* filename of the key file */
 } key_options;
 
-extern int generate_webpage_certificate(struct client_state *csp);
+static int generate_webpage_certificate(struct client_state *csp);
 static char *make_certs_path(const char *conf_dir, const char *file_name, const char *suffix);
 static int file_exists(const char *path);
 static int host_to_hash(struct client_state *csp);
@@ -1203,7 +1203,7 @@ exit:
  *                >0 => Length of created certificate.
  *
  *********************************************************************/
-extern int generate_webpage_certificate(struct client_state *csp)
+static int generate_webpage_certificate(struct client_state *csp)
 {
    mbedtls_x509_crt issuer_cert;
    mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
