@@ -8,7 +8,7 @@
  *                ouputting strings, processing messages and so on.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009 members of
- *                the Privoxy team.  http://www.privoxy.org/
+ *                the Privoxy team.  https://www.privoxy.org/
  *
  *                Written by and Copyright (C) 1999 Adam Lock
  *                <locka@iol.ie>
