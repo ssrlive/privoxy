@@ -7,7 +7,7 @@
  *                  - Deanimation of GIF images
  *
  * Copyright   :  Written by and Copyright (C) 2001 - 2004, 2006 by the
- *                SourceForge Privoxy team. https://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the GIF file format specification (see
  *                http://tronche.com/computer-graphics/gif/gif89a.html)

@@ -1,4 +1,4 @@
-# Written by and Copyright (C) 2001 the SourceForge
+# Written by and Copyright (C) 2001 the
 # Privoxy team. https://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
