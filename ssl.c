@@ -1864,7 +1864,7 @@ static void free_certificate_chain(struct client_state *csp)
    /* Cleaning buffers */
    memset(csp->server_certs_chain.text_buf, 0,
       sizeof(csp->server_certs_chain.text_buf));
-   memset(csp->server_certs_chain.text_buf, 0,
+   memset(csp->server_certs_chain.file_buf, 0,
       sizeof(csp->server_certs_chain.file_buf));
    csp->server_certs_chain.next = NULL;
 
