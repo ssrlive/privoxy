@@ -158,10 +158,16 @@ Hal.
     <sect2 id="gitaccess"><title>Access to Git</title>
       <para>
         The project's Git repository is hosted at the
-        <ulink url="https://privoxy.org/">Privoxy site.</ulink>
-        The Git repository URL is
-        <literal>ssh://git@git.privoxy.org:23/git/privoxy.git</literal>,
-        the central repository is called <literal>privoxy</literal>, and the
+        <ulink url="https://privoxy.org/">Privoxy website</ulink>.
+        For Privoxy team members with push privileges the Git repository URL is
+        <literal>ssh://git@git.privoxy.org:23/git/privoxy.git</literal>.
+      </para>
+      <para>
+       Contributors without push privileges can
+       <quote>git clone https://www.privoxy.org/git/privoxy.git</quote>.
+      </para>
+      <para>
+        The central repository is called <literal>privoxy</literal>, and the
         source branch is called <literal>master</literal>. Subfolders exist
         within the project for target-dependent build and  packaging tools, each
         including the name of the target operating system in their name (e.g.
