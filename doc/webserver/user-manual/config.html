@@ -689,7 +689,9 @@
               <p>If the address for the hostname isn't already known on the system (for example because it's in
               /etc/hostname), this may result in DNS traffic.</p>
               <p>If the specified address isn't available on the system, or if the hostname can't be resolved,
-              <span class="APPLICATION">Privoxy</span> will fail to start.</p>
+              <span class="APPLICATION">Privoxy</span> will fail to start. On GNU/Linux, and other platforms that can
+              listen on not yet assigned IP addresses, Privoxy will start and will listen on the specified address
+              whenever the IP address is assigned to the system</p>
               <p>IPv6 addresses containing colons have to be quoted by brackets. They can only be used if <span class=
               "APPLICATION">Privoxy</span> has been compiled with IPv6 support. If you aren't sure if your version
               supports it, have a look at <tt class="LITERAL">http://config.privoxy.org/show-status</tt>.</p>
@@ -2240,7 +2242,7 @@
                     <pre class="SCREEN">    # Define a couple of tags, the described effect requires action sections
     # that are enabled based on CLIENT-TAG patterns.
     client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
-    disable-content-filters Disable content-filters but do not affect other actions</pre>
+    client-specific-tag disable-content-filters Disable content-filters but do not affect other actions</pre>
                   </td>
                 </tr>
               </table>
