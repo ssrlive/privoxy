@@ -1085,15 +1085,15 @@ exit:
  *               contain NULL and no private key is generated.
  *
  * Parameters  :
- *          1  :  key_buf = buffer to save new generated key
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  key_buf = buffer to save new generated key
  *
  * Returns     :  -1 => Error while generating private key
  *                 0 => Key already exists
  *                >0 => Length of generated private key
  *
  *********************************************************************/
-static int generate_key(unsigned char **key_buf, struct client_state *csp)
+static int generate_key(struct client_state *csp, unsigned char **key_buf)
 {
    mbedtls_pk_context key;
    key_options key_opt;
@@ -1227,7 +1227,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    /*
     * Create key for requested host
     */
-   int subject_key_len = generate_key(&key_buf, csp);
+   int subject_key_len = generate_key(csp, &key_buf);
    if (subject_key_len < 0)
    {
       log_error(LOG_LEVEL_ERROR, "Key generating failed");
