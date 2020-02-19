@@ -3945,6 +3945,10 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     CA key, the CA certificate and the trusted CAs file
     are located.
    </para>
+   <para>
+    The permissions should only let &my-app; and the  &my-app;
+    admin access the directory.
+   </para>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -4181,6 +4185,10 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
    <para>
     This directive specifies the directory where generated
     TLS/SSL keys and certificates are saved.
+   </para>
+   <para>
+    The permissions should only let &my-app; and the  &my-app;
+    admin access the directory.
    </para>
   </listitem>
  </varlistentry>
