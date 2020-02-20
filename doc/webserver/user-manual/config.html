@@ -2431,6 +2431,8 @@
             <dd>
               <p>This directive specifies the directory where the CA key, the CA certificate and the trusted CAs file
               are located.</p>
+              <p>The permissions should only let <span class="APPLICATION">Privoxy</span> and the <span class=
+              "APPLICATION">Privoxy</span> admin access the directory.</p>
             </dd>
             <dt>Examples:</dt>
             <dd>
@@ -2462,8 +2464,13 @@
             <dt>Notes:</dt>
             <dd>
               <p>This directive specifies the name of the CA certificate file in ".crt" format.</p>
-              <p>It can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.crt
-              -days 3650</p>
+              <p>The file is used by <span class="APPLICATION">Privoxy</span> to generate website certificates when
+              https filtering is enabled with the <tt class="LITERAL"><a href="actions-file.html#ENABLE-HTTP-FILTERING"
+              target="_top">enable-https-filtering</a></tt> action.</p>
+              <p><span class="APPLICATION">Privoxy</span> clients should import the certificate so that they can
+              validate the generated certificates.</p>
+              <p>The file can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out
+              cacert.crt -days 3650</p>
             </dd>
             <dt>Examples:</dt>
             <dd>
@@ -2560,7 +2567,14 @@
             </dd>
             <dt>Notes:</dt>
             <dd>
-              <p>This directive specifies the directory where generated TLS/SSL keys and certificates are saved.</p>
+              <p>This directive specifies the directory where generated TLS/SSL keys and certificates are saved when
+              https filtering is enabled with the <tt class="LITERAL"><a href="actions-file.html#ENABLE-HTTP-FILTERING"
+              target="_top">enable-https-filtering</a></tt> action.</p>
+              <p>The keys and certificates currently have to be deleted manually when changing the <a href=
+              "#CA-CERT-FILE" target="_top">ca-cert-file</a> and the <a href="#CA-CERT-KEY" target=
+              "_top">ca-cert-key</a>.</p>
+              <p>The permissions should only let <span class="APPLICATION">Privoxy</span> and the <span class=
+              "APPLICATION">Privoxy</span> admin access the directory.</p>
             </dd>
             <dt>Examples:</dt>
             <dd>
@@ -2592,7 +2606,7 @@
             <dt>Notes:</dt>
             <dd>
               <p>This directive specifies the trusted CAs file that is used when validating certificates for
-              intercepted TLS/SSL request.</p>
+              intercepted TLS/SSL requests.</p>
               <p>An example file can be downloaded from <a href="https://curl.haxx.se/ca/cacert.pem" target=
               "_top">https://curl.haxx.se/ca/cacert.pem</a>.</p>
             </dd>
