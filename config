@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy 3.0.29
 #
-# Copyright (C) 2001-2019 Privoxy Developers https://www.privoxy.org/
+# Copyright (C) 2001-2020 Privoxy Developers https://www.privoxy.org/
 #
 #####################################################################
 #                                                                   #
@@ -2467,6 +2467,9 @@ socket-timeout 300
 #      This directive specifies the directory where the CA key, the
 #      CA certificate and the trusted CAs file are located.
 #
+#      The permissions should only let Privoxy and the Privoxy admin
+#      access the directory.
+#
 #  Examples:
 #
 #      ca-directory /usr/local/etc/privoxy/CA
@@ -2497,8 +2500,15 @@ socket-timeout 300
 #      This directive specifies the name of the CA certificate file
 #      in ".crt" format.
 #
-#      It can be generated with: openssl req -new -x509 -extensions
-#      v3_ca -keyout cakey.pem -out cacert.crt -days 3650
+#      The file is used by Privoxy to generate website certificates
+#      when https filtering is enabled with the
+#      enable-https-filtering action.
+#
+#      Privoxy clients should import the certificate so that they can
+#      validate the generated certificates.
+#
+#      The file can be generated with: openssl req -new -x509
+#      -extensions v3_ca -keyout cakey.pem -out cacert.crt -days 3650
 #
 #  Examples:
 #
@@ -2592,7 +2602,14 @@ socket-timeout 300
 #  Notes:
 #
 #      This directive specifies the directory where generated TLS/SSL
-#      keys and certificates are saved.
+#      keys and certificates are saved when https filtering is
+#      enabled with the enable-https-filtering action.
+#
+#      The keys and certificates currently have to be deleted
+#      manually when changing the ca-cert-file and the ca-cert-key.
+#
+#      The permissions should only let Privoxy and the Privoxy admin
+#      access the directory.
 #
 #  Examples:
 #
@@ -2622,7 +2639,7 @@ socket-timeout 300
 #  Notes:
 #
 #      This directive specifies the trusted CAs file that is used
-#      when validating certificates for intercepted TLS/SSL request.
+#      when validating certificates for intercepted TLS/SSL requests.
 #
 #      An example file can be downloaded from https://curl.haxx.se/ca
 #      /cacert.pem.
