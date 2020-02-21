@@ -4007,7 +4007,18 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     in ".crt" format.
    </para>
    <para>
-    It can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.crt -days 3650
+    The file is used by &my-app; to generate website certificates
+    when https filtering is enabled with the
+    <literal><ulink url="actions-file.html#ENABLE-HTTP-FILTERING">enable-https-filtering</ulink></literal>
+    action.
+   </para>
+   <para>
+    &my-app; clients should import the certificate so that they
+    can validate the generated certificates.
+   </para>
+   <para>
+    The file can be generated with:
+    openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.crt -days 3650
    </para>
   </listitem>
  </varlistentry>
