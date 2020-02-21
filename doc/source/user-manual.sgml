@@ -3850,8 +3850,8 @@ problem-host.example.com</screen>
    </para>
    <para>
     Before this works the directives in the
-    <link linkend="config#TLS">TLS section of the config</link>
-    file have to be configured.
+    <literal><ulink url="config.html#TLS">TLS section</ulink></literal>
+    of the config file have to be configured.
    </para>
   </listitem>
  </varlistentry>
