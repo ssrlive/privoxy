@@ -267,8 +267,8 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
  *          2  :  buf = Pointer to buffer where data will be written
  *          3  :  max_length = Maximum number of bytes to read
  *
- * Returns     :  Number of bytes read, 0 for EOF, or negative
- *                value on error.
+ * Returns     :  Number of bytes read, 0 for EOF, or -1
+ *                on error.
  *
  *********************************************************************/
 extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t max_length)
@@ -298,6 +298,8 @@ extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t ma
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Receiving data over TLS/SSL failed: %s", err_buf);
+
+      return -1;
    }
 
    return ret;
