@@ -3611,9 +3611,12 @@ static void chat(struct client_state *csp)
    build_request_line(csp, fwd, &csp->headers->first->str);
 
    /*
-    * We have a request. Check if one of the crunchers wants it.
+    * We have a request. Check if one of the crunchers wants it
+    * unless the client wants to use TLS/SSL in which case we
+    * haven't setup the TLS context yet and will send the crunch
+    * response later.
     */
-   if (crunch_response_triggered(csp, crunchers_all))
+   if (!client_use_ssl(csp) && crunch_response_triggered(csp, crunchers_all))
    {
       /*
        * Yes. The client got the crunch response and we're done here.
