@@ -50,12 +50,12 @@ static int rng_seeded;
 extern int    client_use_ssl(const struct client_state *csp);
 extern int    server_use_ssl(const struct client_state *csp);
 extern size_t is_ssl_pending(mbedtls_ssl_context *ssl);
-extern int tunnel_established_successfully(const char * response, unsigned int response_len);
+extern int tunnel_established_successfully(const char *response, unsigned int response_len);
 
 /* Functions for sending and receiving data over TLS/SSL connections */
-extern int  ssl_send_data(mbedtls_ssl_context * ssl, const unsigned char * buf, size_t len);
-extern int  ssl_recv_data(mbedtls_ssl_context * ssl, unsigned char * buf, size_t maxLen);
-extern long ssl_flush_socket(mbedtls_ssl_context * ssl, struct iob *iob);
+extern int  ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, size_t len);
+extern int  ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t maxLen);
+extern long ssl_flush_socket(mbedtls_ssl_context *ssl, struct iob *iob);
 extern void ssl_send_certificate_error(struct client_state *csp);
 
 /* Functions for opening and closing TLS/SSL connections */
