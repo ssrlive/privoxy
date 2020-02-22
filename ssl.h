@@ -46,7 +46,7 @@ static mbedtls_ctr_drbg_context ctr_drbg;
 static mbedtls_entropy_context  entropy;
 static int rng_seeded;
 
-/* Boolean functions to get informations about TLS/SSL connections */
+/* Boolean functions to get information about TLS/SSL connections */
 extern int    client_use_ssl(const struct client_state *csp);
 extern int    server_use_ssl(const struct client_state *csp);
 extern size_t is_ssl_pending(mbedtls_ssl_context *ssl);
