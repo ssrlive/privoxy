@@ -289,6 +289,12 @@ extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t ma
    {
       char err_buf[ERROR_BUF_SIZE];
 
+      if (ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY)
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "The peer notified us that the connection is going to be closed");
+         return 0;
+      }
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Receiving data over TLS/SSL failed: %s", err_buf);
