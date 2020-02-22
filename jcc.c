@@ -3616,7 +3616,11 @@ static void chat(struct client_state *csp)
     * haven't setup the TLS context yet and will send the crunch
     * response later.
     */
-   if (!client_use_ssl(csp) && crunch_response_triggered(csp, crunchers_all))
+   if (
+#ifdef FEATURE_HTTPS_FILTERING
+       !client_use_ssl(csp) &&
+#endif
+       crunch_response_triggered(csp, crunchers_all))
    {
       /*
        * Yes. The client got the crunch response and we're done here.
