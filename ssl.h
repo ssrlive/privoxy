@@ -34,9 +34,9 @@
 /*
  * Values for flag determining certificate validity.
  * These values are compatible with return value of function
- * mbedtls_ssl_get_verify_result. There is not value for invalid
- * certificate, this value is setted by function
- * mbedtls_ssl_get_verify_result.
+ * mbedtls_ssl_get_verify_result(). There is no value for
+ * "invalid certificate", this value is set by the function
+ * mbedtls_ssl_get_verify_result().
  */
 #define SSL_CERT_VALID          0
 #define SSL_CERT_NOT_VERIFIED   0xFFFFFFFF
