@@ -813,11 +813,17 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
          if (ret == MBEDTLS_ERR_X509_CERT_VERIFY_FAILED)
          {
-            log_error(LOG_LEVEL_ERROR,
-               "Server certificate verification failed: %s", err_buf);
+            char reason[INVALID_CERT_INFO_BUF_SIZE];
+
             csp->server_cert_verification_result =
                mbedtls_ssl_get_verify_result(&(csp->mbedtls_server_attr.ssl));
+            mbedtls_x509_crt_verify_info(reason, sizeof(reason), "",
+               csp->server_cert_verification_result);
 
+            /* Log the reason without the trailing new line */
+            log_error(LOG_LEVEL_ERROR,
+               "The X509 certificate verification failed: %N",
+               strlen(reason)-1, reason);
             ret = -1;
          }
          else
