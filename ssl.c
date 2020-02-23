@@ -1542,7 +1542,7 @@ exit:
  *
  * Function    :  make_certs_path
  *
- * Description : Creates path to file from three pieces. This fuction
+ * Description : Creates path to file from three pieces. This function
  *               takes parameters and puts them in one new mallocated
  *               char * in correct order. Returned variable must be freed
  *               by caller. This function is mainly used for creating
