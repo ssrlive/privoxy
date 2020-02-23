@@ -3855,7 +3855,7 @@ static void chat(struct client_state *csp)
 
             /*
             * If TLS/SSL connection wasn't created and invalid certificate
-            * wasn't detected, we can interrupt this fuction. Otherwise, we
+            * wasn't detected, we can interrupt this function. Otherwise, we
             * must inform the client about invalid server certificate.
             */
             if (ret != 0
