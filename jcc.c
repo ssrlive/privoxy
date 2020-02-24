@@ -2017,6 +2017,59 @@ static int send_http_request(struct client_state *csp)
 #ifdef FEATURE_HTTPS_FILTERING
 /*********************************************************************
  *
+ * Function    : receive_and_send_encrypted_post_data
+ *
+ * Description : Reads remaining POST data from the client and sends
+ *               it to the server.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  0 on success, anything else is an error.
+ *
+ *********************************************************************/
+static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
+{
+   unsigned char buf[BUFFER_SIZE];
+   int len;
+
+   while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl)))
+   {
+      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl), buf, sizeof(buf));
+      if (len == -1)
+      {
+         return 1;
+      }
+      if (len == 0)
+      {
+         /* XXX: Does this actually happen? */
+         break;
+      }
+      log_error(LOG_LEVEL_HEADER, "Forwarding %d bytes of encrypted POST data",
+         len);
+      len = ssl_send_data(&(csp->mbedtls_server_attr.ssl), buf, (size_t)len);
+      if (len == -1)
+      {
+         return 1;
+      }
+      if (csp->expected_client_content_length != 0)
+      {
+         if (csp->expected_client_content_length >= len)
+         {
+            csp->expected_client_content_length -= (unsigned)len;
+         }
+      }
+   }
+
+   log_error(LOG_LEVEL_HEADER, "Done forwarding encrypted POST data");
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    : send_https_request
  *
  * Description : Sends the HTTP headers from the client request
@@ -2085,6 +2138,10 @@ static int send_https_request(struct client_state *csp)
                "Flushed %d bytes of request body while expecting %llu",
                flushed, csp->expected_client_content_length);
             csp->expected_client_content_length -= (unsigned)flushed;
+            if (receive_and_send_encrypted_post_data(csp))
+            {
+               return 1;
+            }
          }
       }
       else
