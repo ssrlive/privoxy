@@ -2501,8 +2501,8 @@ socket-timeout 300
 #      in ".crt" format.
 #
 #      The file is used by Privoxy to generate website certificates
-#      when https filtering is enabled with the
-#      enable-https-filtering action.
+#      when https inspection is enabled with the https-inspection
+#      action.
 #
 #      Privoxy clients should import the certificate so that they can
 #      validate the generated certificates.
@@ -2602,8 +2602,8 @@ socket-timeout 300
 #  Notes:
 #
 #      This directive specifies the directory where generated TLS/SSL
-#      keys and certificates are saved when https filtering is
-#      enabled with the enable-https-filtering action.
+#      keys and certificates are saved when https inspection is
+#      enabled with the https-inspection action.
 #
 #      The keys and certificates currently have to be deleted
 #      manually when changing the ca-cert-file and the ca-cert-key.
