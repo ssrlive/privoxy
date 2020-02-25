@@ -302,6 +302,8 @@ extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t ma
       return -1;
    }
 
+   log_error(LOG_LEVEL_RECEIVED, "TLS: %N", ret, buf);
+
    return ret;
 }
 
