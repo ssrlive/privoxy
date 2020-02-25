@@ -1831,8 +1831,8 @@ static jb_err show_defines(struct map *exports)
 #endif
       },
       {
-         "FEATURE_HTTPS_FILTERING",
-#ifdef FEATURE_HTTPS_FILTERING
+         "FEATURE_HTTPS_INSPECTION",
+#ifdef FEATURE_HTTPS_INSPECTION
          1,
 #else
          0,

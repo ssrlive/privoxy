@@ -1185,7 +1185,7 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
 }
 
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
 /*********************************************************************
  *
  * Function    :  sed_https
@@ -1222,7 +1222,7 @@ jb_err sed_https(struct client_state *csp)
 
    return err;
 }
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
 
 
 /*********************************************************************
@@ -4532,7 +4532,7 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
 }
 
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
 /*********************************************************************
  *
  * Function    :  get_destination_from_https_headers
@@ -4611,7 +4611,7 @@ jb_err get_destination_from_https_headers(const struct list *headers, struct htt
    return JB_ERR_OK;
 
 }
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
 
 
 /*********************************************************************

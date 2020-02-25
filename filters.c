@@ -2300,7 +2300,7 @@ void get_url_actions(struct client_state *csp, struct http_request *http)
    struct url_actions *b;
    int i;
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    if (!csp->http->client_ssl)
 #endif
    {

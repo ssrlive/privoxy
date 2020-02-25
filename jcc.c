@@ -112,7 +112,7 @@
 #include "project.h"
 #include "list.h"
 #include "jcc.h"
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
 #include "ssl.h"
 #endif
 #include "filters.h"
@@ -844,7 +844,7 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
          csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
 
       /* Write the answer to the client */
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
          if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
@@ -2014,7 +2014,7 @@ static int send_http_request(struct client_state *csp)
 }
 
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
 /*********************************************************************
  *
  * Function    : receive_and_send_encrypted_post_data
@@ -2391,7 +2391,7 @@ static void handle_established_connection(struct client_state *csp)
    long len = 0; /* for buffer sizes (and negative error codes) */
    int buffer_and_filter_content = 0;
    unsigned int write_delay;
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    int ret = 0;
    int use_ssl_tunnel = 0;
    csp->dont_verify_certificate = 0;
@@ -2514,7 +2514,7 @@ static void handle_established_connection(struct client_state *csp)
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       /*
        * Test if some data from client or destination server are pending
        * on TLS/SSL. We must work with them preferably. TLS/SSL data can
@@ -2573,7 +2573,7 @@ static void handle_established_connection(struct client_state *csp)
                send_crunch_response(csp, error_response(csp, "connection-timeout"));
             }
             mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
             close_client_and_server_ssl_connections(csp);
 #endif
             return;
@@ -2586,13 +2586,13 @@ static void handle_established_connection(struct client_state *csp)
             log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
 #endif
             mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
             close_client_and_server_ssl_connections(csp);
 #endif
             return;
          }
       }
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       else
       {
          /* set FD if some data are pending on TLS/SSL connections */
@@ -2692,7 +2692,7 @@ static void handle_established_connection(struct client_state *csp)
          assert(max_bytes_to_read <= csp->receive_buffer_size);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
          /*
           * Reading data from standard or secured connection (HTTP/HTTPS)
           */
@@ -2724,7 +2724,7 @@ static void handle_established_connection(struct client_state *csp)
             }
          }
          else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
          {
             len = read_socket(csp->cfd, csp->receive_buffer, max_bytes_to_read);
 
@@ -2757,7 +2757,7 @@ static void handle_established_connection(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -2794,7 +2794,7 @@ static void handle_established_connection(struct client_state *csp)
             log_error(LOG_LEVEL_CONNECT,
                "The server still wants to talk, but the client hung up on us.");
             mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
             close_client_and_server_ssl_connections(csp);
 #endif
             return;
@@ -2802,7 +2802,7 @@ static void handle_established_connection(struct client_state *csp)
          }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
          /*
           * Reading data from standard or secured connection (HTTP/HTTPS)
           */
@@ -2823,7 +2823,7 @@ static void handle_established_connection(struct client_state *csp)
             log_error(LOG_LEVEL_ERROR, "read from: %s failed: %E", http->host);
 
             if ((http->ssl && (csp->fwd == NULL))
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                && use_ssl_tunnel
 #endif
                 )
@@ -2849,7 +2849,7 @@ static void handle_established_connection(struct client_state *csp)
                log_error(LOG_LEVEL_ERROR, "Already forwarded the original headers. "
                   "Unable to tell the client about the problem.");
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -2918,7 +2918,7 @@ static void handle_established_connection(struct client_state *csp)
          {
 
             if (server_body || (http->ssl
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                   && use_ssl_tunnel
 #endif
                ))
@@ -2968,7 +2968,7 @@ static void handle_established_connection(struct client_state *csp)
                      log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
                   }
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                   /*
                    * Sending data with standard or secured connection (HTTP/HTTPS)
                    */
@@ -2990,7 +2990,7 @@ static void handle_established_connection(struct client_state *csp)
                      }
                   }
                   else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                   {
                      if (write_socket_delayed(csp->cfd, hdr, strlen(hdr), write_delay)
                       || write_socket_delayed(csp->cfd, ((p != NULL) ? p : csp->iob->cur),
@@ -3000,7 +3000,7 @@ static void handle_established_connection(struct client_state *csp)
                         freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                         close_client_and_server_ssl_connections(csp);
 #endif
                         return;
@@ -3035,7 +3035,7 @@ static void handle_established_connection(struct client_state *csp)
           * content-filtering.
           */
          if (server_body || (http->ssl
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                && use_ssl_tunnel
 #endif
             ))
@@ -3066,14 +3066,14 @@ static void handle_established_connection(struct client_state *csp)
                      rsp = cgi_error_memory();
                      send_crunch_response(csp, rsp);
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                      close_client_and_server_ssl_connections(csp);
 #endif
                      return;
                   }
                   hdrlen = strlen(hdr);
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                   /*
                    * Sending data with standard or secured connection (HTTP/HTTPS)
                    */
@@ -3095,7 +3095,7 @@ static void handle_established_connection(struct client_state *csp)
                      }
                   }
                   else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                   {
                      if (write_socket_delayed(csp->cfd, hdr, hdrlen, write_delay)
                       || ((flushed = flush_iob(csp->cfd, csp->iob, write_delay)) < 0)
@@ -3106,7 +3106,7 @@ static void handle_established_connection(struct client_state *csp)
                            "Flush header and buffers to client failed: %E");
                         freez(hdr);
                         mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                         close_client_and_server_ssl_connections(csp);
 #endif
                         return;
@@ -3126,7 +3126,7 @@ static void handle_established_connection(struct client_state *csp)
             }
             else
             {
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                /*
                 * Sending data with standard or secured connection (HTTP/HTTPS)
                 */
@@ -3144,14 +3144,14 @@ static void handle_established_connection(struct client_state *csp)
                   }
                }
                else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                {
                   if (write_socket_delayed(csp->cfd, csp->receive_buffer,
                         (size_t)len, write_delay))
                   {
                      log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                      close_client_and_server_ssl_connections(csp);
 #endif
                      return;
@@ -3174,7 +3174,7 @@ static void handle_established_connection(struct client_state *csp)
                rsp = cgi_error_memory();
                send_crunch_response(csp, rsp);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -3194,7 +3194,7 @@ static void handle_established_connection(struct client_state *csp)
                      "Applying the MS IIS5 hack didn't help.");
                   log_error(LOG_LEVEL_CLF,
                      "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                   /*
                    * Sending data with standard or secured connection (HTTP/HTTPS)
                    */
@@ -3205,14 +3205,14 @@ static void handle_established_connection(struct client_state *csp)
                         strlen(INVALID_SERVER_HEADERS_RESPONSE));
                   }
                   else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                   {
                      write_socket_delayed(csp->cfd,
                         INVALID_SERVER_HEADERS_RESPONSE,
                         strlen(INVALID_SERVER_HEADERS_RESPONSE), write_delay);
                   }
                   mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                   close_client_and_server_ssl_connections(csp);
 #endif
                   return;
@@ -3260,7 +3260,7 @@ static void handle_established_connection(struct client_state *csp)
                }
                free_http_request(http);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -3288,7 +3288,7 @@ static void handle_established_connection(struct client_state *csp)
                   csp->headers->first->str);
                log_error(LOG_LEVEL_CLF,
                   "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                /*
                 * Sending data with standard or secured connection (HTTP/HTTPS)
                 */
@@ -3299,14 +3299,14 @@ static void handle_established_connection(struct client_state *csp)
                      strlen(INVALID_SERVER_HEADERS_RESPONSE));
                }
                else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                {
                   write_socket_delayed(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
                      strlen(INVALID_SERVER_HEADERS_RESPONSE), write_delay);
                }
                free_http_request(http);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -3320,7 +3320,7 @@ static void handle_established_connection(struct client_state *csp)
             {
                log_error(LOG_LEVEL_CLF,
                   "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                /*
                 * Sending data with standard or secured connection (HTTP/HTTPS)
                 */
@@ -3338,7 +3338,7 @@ static void handle_established_connection(struct client_state *csp)
                }
                free_http_request(http);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -3375,7 +3375,7 @@ static void handle_established_connection(struct client_state *csp)
                 */
                freez(hdr);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -3392,7 +3392,7 @@ static void handle_established_connection(struct client_state *csp)
                 * may be in the buffer). Use standard or secured
                 * connection.
                 */
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                if (client_use_ssl(csp))
                {
                   if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
@@ -3408,14 +3408,14 @@ static void handle_established_connection(struct client_state *csp)
                       */
                      freez(hdr);
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                      close_client_and_server_ssl_connections(csp);
 #endif
                      return;
                   }
                }
                else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                {
                   if (write_socket_delayed(csp->cfd, hdr, strlen(hdr), write_delay)
                      || ((len = flush_iob(csp->cfd, csp->iob, write_delay)) < 0))
@@ -3428,7 +3428,7 @@ static void handle_established_connection(struct client_state *csp)
                       */
                      freez(hdr);
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                      close_client_and_server_ssl_connections(csp);
 #endif
                      return;
@@ -3453,7 +3453,7 @@ static void handle_established_connection(struct client_state *csp)
                   "Applying the MS IIS5 hack didn't help.");
                log_error(LOG_LEVEL_CLF,
                   "%s - - [%T] \"%s\" 502 0", csp->ip_addr_str, http->cmd);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                /*
                 * Sending data with standard or secured connection (HTTP/HTTPS)
                 */
@@ -3464,13 +3464,13 @@ static void handle_established_connection(struct client_state *csp)
                      strlen(INVALID_SERVER_HEADERS_RESPONSE));
                }
                else
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
                {
                   write_socket_delayed(csp->cfd, INVALID_SERVER_HEADERS_RESPONSE,
                      strlen(INVALID_SERVER_HEADERS_RESPONSE), write_delay);
                }
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
 #endif
                return;
@@ -3479,12 +3479,12 @@ static void handle_established_connection(struct client_state *csp)
          continue;
       }
       mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       close_client_and_server_ssl_connections(csp);
 #endif
       return; /* huh? we should never get here */
    }
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    close_client_and_server_ssl_connections(csp);
 #endif
    if (csp->content_length == 0)
@@ -3544,7 +3544,7 @@ static void chat(struct client_state *csp)
    struct http_request *http;
    /* Skeleton for HTTP response, if we should intercept the request */
    struct http_response *rsp;
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    int use_ssl_tunnel = 0;
 #endif
 
@@ -3568,7 +3568,7 @@ static void chat(struct client_state *csp)
       return;
    }
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Setting flags to use old solution with SSL tunnel and to disable
     * certificates verification.
@@ -3625,7 +3625,7 @@ static void chat(struct client_state *csp)
     *
     */
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Presetting SSL client and server flags
     */
@@ -3651,7 +3651,7 @@ static void chat(struct client_state *csp)
          csp->ip_addr_str, acceptable_connect_ports, csp->http->hostport);
       csp->action->flags |= ACTION_BLOCK;
       http->ssl = 0;
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       http->client_ssl = 0;
       http->server_ssl = 0;
 #endif
@@ -3668,7 +3668,7 @@ static void chat(struct client_state *csp)
     * response later.
     */
    if (
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
        !client_use_ssl(csp) &&
 #endif
        crunch_response_triggered(csp, crunchers_all))
@@ -3725,7 +3725,7 @@ static void chat(struct client_state *csp)
          mark_connection_closed(&csp->server_connection);
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       if (http->ssl && !use_ssl_tunnel)
       {
          int ret;
@@ -3824,7 +3824,7 @@ static void chat(struct client_state *csp)
          return;
       }
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       /*
        * Creating TLS/SSL connections with destination server or parent
        * proxy. If forwarding is enabled, we must send client request to
@@ -3973,7 +3973,7 @@ static void chat(struct client_state *csp)
             }
          }
       }/* -END- if (http->ssl) */
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       save_connection_destination(csp->server_connection.sfd,
@@ -3991,7 +3991,7 @@ static void chat(struct client_state *csp)
       assert(csp->headers->last == NULL);
    }
    else if (http->ssl == 0 || (fwd->forward_host
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
          && use_ssl_tunnel
 #endif
            ))
@@ -4012,7 +4012,7 @@ static void chat(struct client_state *csp)
        * Using old solution with SSL tunnel or new solution with SSL proxy
        */
       list_remove_all(csp->headers);
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       if (use_ssl_tunnel)
 #endif
       {
@@ -4027,7 +4027,7 @@ static void chat(struct client_state *csp)
             return;
          }
       }
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
       else
       {
          /*
@@ -4051,7 +4051,7 @@ static void chat(struct client_state *csp)
             return;
          }
       }
-#endif /* def FEATURE_HTTPS_FILTERING */
+#endif /* def FEATURE_HTTPS_INSPECTION */
       clear_iob(csp->client_iob);
    }/* -END- else ... if (http->ssl == 1) */
 
@@ -5637,7 +5637,7 @@ static void listen_loop(void)
 
    /* NOTREACHED unless FEATURE_GRACEFUL_TERMINATION is defined */
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    /* Clean up.  Aim: free all memory (no leaks) */
    if (rng_seeded == 1)
    {

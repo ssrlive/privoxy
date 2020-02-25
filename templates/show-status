@@ -309,8 +309,8 @@
               <td>Allows to shutdown Privoxy through the web interface.</td>
             </tr>
             <tr>
-              <td><code>FEATURE_HTTPS_FILTERING</code></td>
-              <td>@if-FEATURE_HTTPS_FILTERING-then@ Yes @else-not-FEATURE_HTTPS_FILTERING@ No @endif-FEATURE_HTTPS_FILTERING@</td>
+              <td><code>FEATURE_HTTPS_INSPECTION</code></td>
+              <td>@if-FEATURE_HTTPS_INSPECTION-then@ Yes @else-not-FEATURE_HTTPS_INSPECTION@ No @endif-FEATURE_HTTPS_INSPECTION@</td>
               <td>Allows to intercept and filter HTTPS traffic.</td>
             </tr>
             <tr>
