@@ -2465,8 +2465,8 @@
             <dd>
               <p>This directive specifies the name of the CA certificate file in ".crt" format.</p>
               <p>The file is used by <span class="APPLICATION">Privoxy</span> to generate website certificates when
-              https filtering is enabled with the <tt class="LITERAL"><a href=
-              "actions-file.html#ENABLE-HTTPS-FILTERING" target="_top">enable-https-filtering</a></tt> action.</p>
+              https inspection is enabled with the <tt class="LITERAL"><a href="actions-file.html#HTTPS-INSPECTION"
+              target="_top">https-inspection</a></tt> action.</p>
               <p><span class="APPLICATION">Privoxy</span> clients should import the certificate so that they can
               validate the generated certificates.</p>
               <p>The file can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out
@@ -2568,8 +2568,8 @@
             <dt>Notes:</dt>
             <dd>
               <p>This directive specifies the directory where generated TLS/SSL keys and certificates are saved when
-              https filtering is enabled with the <tt class="LITERAL"><a href=
-              "actions-file.html#ENABLE-HTTPS-FILTERING" target="_top">enable-https-filtering</a></tt> action.</p>
+              https inspection is enabled with the <tt class="LITERAL"><a href="actions-file.html#HTTPS-INSPECTION"
+              target="_top">https-inspection</a></tt> action.</p>
               <p>The keys and certificates currently have to be deleted manually when changing the <a href=
               "#CA-CERT-FILE" target="_top">ca-cert-file</a> and the <a href="#CA-CERT-KEY" target=
               "_top">ca-cert-key</a>.</p>

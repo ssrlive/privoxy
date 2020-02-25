@@ -1403,50 +1403,7 @@ problem-host.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="ENABLE-HTTPS-FILTERING" id="ENABLE-HTTPS-FILTERING">8.5.15.
-        enable-https-filtering</a></h4>
-        <div class="VARIABLELIST">
-          <dl>
-            <dt>Typical use:</dt>
-            <dd>
-              <p>Filter encrypted requests and responses</p>
-            </dd>
-            <dt>Effect:</dt>
-            <dd>
-              <p>Encrypted requests are decrypted, filtered and forwarded encrypted.</p>
-            </dd>
-            <dt>Type:</dt>
-            <dd>
-              <p>Boolean.</p>
-            </dd>
-            <dt>Parameter:</dt>
-            <dd>
-              <p>N/A</p>
-            </dd>
-            <dt>Notes:</dt>
-            <dd>
-              <p>This action allows <span class="APPLICATION">Privoxy</span> to filter encrypted requests and
-              responses. For this to work <span class="APPLICATION">Privoxy</span> has to generate a certificate and
-              send it to the client which has to accept it.</p>
-              <p>Before this works the directives in the <tt class="LITERAL"><a href="config.html#TLS" target=
-              "_top">TLS section</a></tt> of the config file have to be configured.</p>
-            </dd>
-            <dt>Example usage (section):</dt>
-            <dd>
-              <table border="0" bgcolor="#E0E0E0" width="90%">
-                <tr>
-                  <td>
-                    <pre class="SCREEN">{+enable-https-filtering}
-www.example.com</pre>
-                  </td>
-                </tr>
-              </table>
-            </dd>
-          </dl>
-        </div>
-      </div>
-      <div class="SECT3">
-        <h4 class="SECT3"><a name="EXTERNAL-FILTER" id="EXTERNAL-FILTER">8.5.16. external-filter</a></h4>
+        <h4 class="SECT3"><a name="EXTERNAL-FILTER" id="EXTERNAL-FILTER">8.5.15. external-filter</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1508,7 +1465,7 @@ www.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FAST-REDIRECTS" id="FAST-REDIRECTS">8.5.17. fast-redirects</a></h4>
+        <h4 class="SECT3"><a name="FAST-REDIRECTS" id="FAST-REDIRECTS">8.5.16. fast-redirects</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1589,7 +1546,7 @@ www.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FILTER" id="FILTER">8.5.18. filter</a></h4>
+        <h4 class="SECT3"><a name="FILTER" id="FILTER">8.5.17. filter</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1904,7 +1861,7 @@ www.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FORCE-TEXT-MODE" id="FORCE-TEXT-MODE">8.5.19. force-text-mode</a></h4>
+        <h4 class="SECT3"><a name="FORCE-TEXT-MODE" id="FORCE-TEXT-MODE">8.5.18. force-text-mode</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -1961,7 +1918,7 @@ www.example.com</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="FORWARD-OVERRIDE" id="FORWARD-OVERRIDE">8.5.20. forward-override</a></h4>
+        <h4 class="SECT3"><a name="FORWARD-OVERRIDE" id="FORWARD-OVERRIDE">8.5.19. forward-override</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2068,7 +2025,7 @@ TAG:^User-Agent: fetch libfetch/2\.0$</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOCUMENT" id="HANDLE-AS-EMPTY-DOCUMENT">8.5.21.
+        <h4 class="SECT3"><a name="HANDLE-AS-EMPTY-DOCUMENT" id="HANDLE-AS-EMPTY-DOCUMENT">8.5.20.
         handle-as-empty-document</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2121,7 +2078,7 @@ example.org/.*\.js$</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HANDLE-AS-IMAGE" id="HANDLE-AS-IMAGE">8.5.22. handle-as-image</a></h4>
+        <h4 class="SECT3"><a name="HANDLE-AS-IMAGE" id="HANDLE-AS-IMAGE">8.5.21. handle-as-image</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2181,7 +2138,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-ACCEPT-LANGUAGE" id="HIDE-ACCEPT-LANGUAGE">8.5.23.
+        <h4 class="SECT3"><a name="HIDE-ACCEPT-LANGUAGE" id="HIDE-ACCEPT-LANGUAGE">8.5.22.
         hide-accept-language</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2234,7 +2191,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-CONTENT-DISPOSITION" id="HIDE-CONTENT-DISPOSITION">8.5.24.
+        <h4 class="SECT3"><a name="HIDE-CONTENT-DISPOSITION" id="HIDE-CONTENT-DISPOSITION">8.5.23.
         hide-content-disposition</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2290,7 +2247,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-IF-MODIFIED-SINCE" id="HIDE-IF-MODIFIED-SINCE">8.5.25.
+        <h4 class="SECT3"><a name="HIDE-IF-MODIFIED-SINCE" id="HIDE-IF-MODIFIED-SINCE">8.5.24.
         hide-if-modified-since</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -2349,7 +2306,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-FROM-HEADER" id="HIDE-FROM-HEADER">8.5.26. hide-from-header</a></h4>
+        <h4 class="SECT3"><a name="HIDE-FROM-HEADER" id="HIDE-FROM-HEADER">8.5.25. hide-from-header</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2400,7 +2357,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-REFERRER" id="HIDE-REFERRER">8.5.27. hide-referrer</a></h4><a name=
+        <h4 class="SECT3"><a name="HIDE-REFERRER" id="HIDE-REFERRER">8.5.26. hide-referrer</a></h4><a name=
         "HIDE-REFERER" id="HIDE-REFERER"></a>
         <div class="VARIABLELIST">
           <dl>
@@ -2481,7 +2438,7 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="HIDE-USER-AGENT" id="HIDE-USER-AGENT">8.5.28. hide-user-agent</a></h4>
+        <h4 class="SECT3"><a name="HIDE-USER-AGENT" id="HIDE-USER-AGENT">8.5.27. hide-user-agent</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -2542,6 +2499,51 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
         </div>
       </div>
       <div class="SECT3">
+        <h4 class="SECT3"><a name="HTTPS-INSPECTION" id="HTTPS-INSPECTION">8.5.28. https-inspection</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Typical use:</dt>
+            <dd>
+              <p>Filter encrypted requests and responses</p>
+            </dd>
+            <dt>Effect:</dt>
+            <dd>
+              <p>Encrypted requests are decrypted, filtered and forwarded encrypted.</p>
+            </dd>
+            <dt>Type:</dt>
+            <dd>
+              <p>Boolean.</p>
+            </dd>
+            <dt>Parameter:</dt>
+            <dd>
+              <p>N/A</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This action allows <span class="APPLICATION">Privoxy</span> to filter encrypted requests and
+              responses. For this to work <span class="APPLICATION">Privoxy</span> has to generate a certificate and
+              send it to the client which has to accept it.</p>
+              <p>Before this works the directives in the <tt class="LITERAL"><a href="config.html#TLS" target=
+              "_top">TLS section</a></tt> of the config file have to be configured.</p>
+              <p>Note that the action has to be enabled based on the CONNECT request which doesn't contain a path.
+              Enabling it based on a pattern with path doesn't work as the path is only seen by <span class=
+              "APPLICATION">Privoxy</span> if the action is already enabled.</p>
+            </dd>
+            <dt>Example usage (section):</dt>
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">{+https-inspection}
+www.example.com</pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
         <h4 class="SECT3"><a name="IGNORE-CERTIFICATE-ERRORS" id="IGNORE-CERTIFICATE-ERRORS">8.5.29.
         ignore-certificate-errors</a></h4>
         <div class="VARIABLELIST">
@@ -2564,9 +2566,9 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
             </dd>
             <dt>Notes:</dt>
             <dd>
-              <p>When the <a href="actions-file.html#ENABLE-HTTPS-FILTERING"><span class=
-              "QUOTE">"+enable-https-filtering"</span></a> action is used <span class="APPLICATION">Privoxy</span> by
-              default verifies that the remote site uses a valid certificate.</p>
+              <p>When the <a href="actions-file.html#HTTPS-INSPECTION"><span class=
+              "QUOTE">"+https-inspection"</span></a> action is used <span class="APPLICATION">Privoxy</span> by default
+              verifies that the remote site uses a valid certificate.</p>
               <p>If the certificate is invalid the connection is aborted.</p>
               <p>This action disabled the certificate check allowing requests to sites with invalid certificates.</p>
             </dd>
