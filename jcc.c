@@ -4038,7 +4038,7 @@ static void chat(struct client_state *csp)
             rsp = error_response(csp, "connect-failed");
             if (rsp)
             {
-               send_crunch_response(csp, rsp); /* XXX: use ssl*/
+               send_crunch_response(csp, rsp);
             }
             close_client_and_server_ssl_connections(csp);
             return;
