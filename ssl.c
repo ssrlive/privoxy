@@ -802,7 +802,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
     * Handshake with server
     */
    log_error(LOG_LEVEL_CONNECT,
-      "Performing the TLS/SSL handshake with server");
+      "Performing the TLS/SSL handshake with the server");
 
    while ((ret = mbedtls_ssl_handshake(&(csp->mbedtls_server_attr.ssl))) != 0)
    {
