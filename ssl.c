@@ -229,6 +229,8 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
          send_len = (int)max_fragment_size;
       }
 
+      log_error(LOG_LEVEL_WRITING, "TLS: %N", send_len, buf+pos);
+
       /*
        * Sending one part of the buffer
        */
