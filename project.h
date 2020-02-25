@@ -572,8 +572,8 @@ struct iob
 #define ACTION_LIMIT_COOKIE_LIFETIME                 0x08000000UL
 /** Action bitmap: Delay writes */
 #define ACTION_DELAY_RESPONSE                        0x10000000UL
-/** Action bitmap: Turn https filtering on */
-#define ACTION_ENABLE_HTTPS_FILTER                   0x20000000UL
+/** Action bitmap: Turn https inspection on */
+#define ACTION_HTTPS_INSPECTION                      0x20000000UL
 /** Action bitmap: Turn certificates verification off */
 #define ACTION_IGNORE_CERTIFICATE_ERRORS             0x40000000UL
 

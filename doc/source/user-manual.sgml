@@ -3803,77 +3803,6 @@ problem-host.example.com</screen>
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 renderas="sect4" id="enable-https-filtering">
-<title>enable-https-filtering</title>
-
-<variablelist>
- <varlistentry>
-  <term>Typical use:</term>
-  <listitem>
-   <para>Filter encrypted requests and responses</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Effect:</term>
-  <listitem>
-   <para>
-    Encrypted requests are decrypted, filtered and forwarded encrypted.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Type:</term>
-  <!-- boolean, parameterized, Multi-value -->
-  <listitem>
-   <para>Boolean.</para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Parameter:</term>
-  <listitem>
-   <para>
-    N/A
-   </para>
-  </listitem>
- </varlistentry>
-
-<varlistentry>
-  <term>Notes:</term>
-  <listitem>
-   <para>
-    This action allows &my-app; to filter encrypted requests and responses.
-    For this to work &my-app; has to generate a certificate and send it
-    to the client which has to accept it.
-   </para>
-   <para>
-    Before this works the directives in the
-    <literal><ulink url="config.html#TLS">TLS section</ulink></literal>
-    of the config file have to be configured.
-   </para>
-   <para>
-    Note that the action has to be enabled based on the CONNECT
-    request which doesn't contain a path. Enabling it based on
-    a pattern with path doesn't work as the path is only seen
-    by &my-app; if the action is already enabled.
-   </para>
-  </listitem>
- </varlistentry>
-
- <varlistentry>
-  <term>Example usage (section):</term>
-  <listitem>
-     <screen>{+enable-https-filtering}
-www.example.com</screen>
-  </listitem>
- </varlistentry>
-
-</variablelist>
-</sect3>
-
-<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="external-filter">
 <title>external-filter</title>
 
@@ -5219,6 +5148,78 @@ new action
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="https-inspection">
+<title>https-inspection</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>Filter encrypted requests and responses</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Encrypted requests are decrypted, filtered and forwarded encrypted.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Boolean.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    N/A
+   </para>
+  </listitem>
+ </varlistentry>
+
+<varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This action allows &my-app; to filter encrypted requests and responses.
+    For this to work &my-app; has to generate a certificate and send it
+    to the client which has to accept it.
+   </para>
+   <para>
+    Before this works the directives in the
+    <literal><ulink url="config.html#TLS">TLS section</ulink></literal>
+    of the config file have to be configured.
+   </para>
+   <para>
+    Note that the action has to be enabled based on the CONNECT
+    request which doesn't contain a path. Enabling it based on
+    a pattern with path doesn't work as the path is only seen
+    by &my-app; if the action is already enabled.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+     <screen>{+https-inspection}
+www.example.com</screen>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="ignore-certificate-errors">
 <title>ignore-certificate-errors</title>
 
@@ -5261,7 +5262,7 @@ new action
   <listitem>
    <para>
     When the
-    <link linkend="ENABLE-HTTPS-FILTERING"><quote>+enable-https-filtering</quote></link>
+    <link linkend="HTTPS-INSPECTION"><quote>+https-inspection</quote></link>
     action is used &my-app; by default verifies that the remote site uses a valid
     certificate.
    </para>

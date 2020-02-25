@@ -2403,7 +2403,7 @@ static void handle_established_connection(struct client_state *csp)
    csp->ssl_with_server_is_opened = 0;
    csp->ssl_with_client_is_opened = 0;
 
-   if (csp->http->ssl && !(csp->action->flags & ACTION_ENABLE_HTTPS_FILTER))
+   if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION))
    {
       /* Pass encrypted content without filtering. */
       use_ssl_tunnel = 1;
@@ -3573,7 +3573,7 @@ static void chat(struct client_state *csp)
     * Setting flags to use old solution with SSL tunnel and to disable
     * certificates verification.
     */
-   if (csp->http->ssl && !(csp->action->flags & ACTION_ENABLE_HTTPS_FILTER))
+   if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION))
    {
       use_ssl_tunnel = 1;
    }
