@@ -907,7 +907,7 @@ static void free_server_ssl_structures(struct client_state *csp)
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
-   csp->mbedtls_client_attr.socket_fd.fd = -1;
+   csp->mbedtls_server_attr.socket_fd.fd = -1;
 
    mbedtls_x509_crt_free(&(csp->mbedtls_server_attr.ca_cert));
    mbedtls_ssl_free(&(csp->mbedtls_server_attr.ssl));
