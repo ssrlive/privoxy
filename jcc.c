@@ -3948,21 +3948,34 @@ static void chat(struct client_state *csp)
              * with destination server
              */
             int ret = create_server_ssl_connection(csp);
-            /*
-             * If TLS/SSL connection wasn't created and invalid certificate
-             * wasn't detected, we can interrupt this function. Otherwise, we
-             * must inform client about invalid server certificate.
-             */
-            if (ret != 0
-               && (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
-                  || csp->server_cert_verification_result == SSL_CERT_VALID))
+            if (ret != 0)
             {
-               rsp = error_response(csp, "connect-failed");
-               if (rsp)
+               if (csp->server_cert_verification_result != SSL_CERT_VALID &&
+                   csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
                {
-                  send_crunch_response(csp, rsp);
+                  /*
+                   * If the server certificate is invalid, we must inform
+                   * the client and then close connection to the client.
+                   */
+                  ssl_send_certificate_error(csp);
+                  close_client_and_server_ssl_connections(csp);
+                  return;
                }
-               return;
+               if (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
+                || csp->server_cert_verification_result == SSL_CERT_VALID)
+               {
+                  /*
+                   * The TLS/SSL connection wasn't created but an invalid
+                   * certificate wasn't detected. Report it as connection
+                   * failure.
+                   */
+                  rsp = error_response(csp, "connect-failed");
+                  if (rsp)
+                  {
+                     send_crunch_response(csp, rsp);
+                  }
+                  return;
+               }
             }
          }
       }/* -END- if (http->ssl) */
