@@ -2300,7 +2300,20 @@ void get_url_actions(struct client_state *csp, struct http_request *http)
    struct url_actions *b;
    int i;
 
-   init_current_action(csp->action);
+#ifdef FEATURE_HTTPS_FILTERING
+   if (!csp->http->client_ssl)
+#endif
+   {
+      /*
+       * When filtering TLS traffic this function gets called a
+       * second time after the encrypted headers have been received.
+       *
+       * Only initialize the first time. The second time we apply
+       * the newly set actions on top of the ones that were set
+       * the first time.
+       */
+      init_current_action(csp->action);
+   }
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {
