@@ -2351,6 +2351,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
    }
 
    log_error(LOG_LEVEL_HEADER, "Encrypted request processed");
+   log_applied_actions(csp->action);
 
    return err;
 
