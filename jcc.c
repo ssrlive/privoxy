@@ -2313,18 +2313,11 @@ static jb_err process_encrypted_request(struct client_state *csp)
    init_domain_components(csp->http);
 #endif
 
-   /*
-    * Determine the actions for this URL
-    */
 #ifdef FEATURE_TOGGLE
-   if (!(csp->flags & CSP_FLAG_TOGGLED_ON))
+   if ((csp->flags & CSP_FLAG_TOGGLED_ON) != 0)
+#endif
    {
-      /* Most compatible set of actions (i.e. none) */
-      init_current_action(csp->action);
-   }
-   else
-#endif /* ndef FEATURE_TOGGLE */
-   {
+      /* Determine the actions for this URL */
       get_url_actions(csp, csp->http);
    }
 
