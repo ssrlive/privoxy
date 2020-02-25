@@ -1664,7 +1664,8 @@ static unsigned int get_certificate_mutex_id(struct client_state *csp) {
  * Returns     :  Serial number for new certificate
  *
  *********************************************************************/
-static unsigned long  get_certificate_serial(struct client_state *csp) {
+static unsigned long get_certificate_serial(struct client_state *csp)
+{
    unsigned long exp    = 1;
    unsigned long serial = 0;
 
