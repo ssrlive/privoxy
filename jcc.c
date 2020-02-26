@@ -2028,12 +2028,23 @@ static int send_http_request(struct client_state *csp)
  *********************************************************************/
 static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
 {
-   unsigned char buf[BUFFER_SIZE];
-   int len;
+   int content_length_known = csp->expected_client_content_length != 0;
 
    while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl)))
    {
-      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl), buf, sizeof(buf));
+      unsigned char buf[BUFFER_SIZE];
+      int len;
+      int max_bytes_to_read = sizeof(buf);
+
+      if (content_length_known && csp->expected_client_content_length < sizeof(buf))
+      {
+         max_bytes_to_read = (int)csp->expected_client_content_length;
+      }
+      log_error(LOG_LEVEL_CONNECT,
+         "Waiting for up to %d bytes of POST data from the client.",
+         max_bytes_to_read);
+      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl), buf,
+         (unsigned)max_bytes_to_read);
       if (len == -1)
       {
          return 1;
@@ -2055,6 +2066,11 @@ static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
          if (csp->expected_client_content_length >= len)
          {
             csp->expected_client_content_length -= (unsigned)len;
+         }
+         if (csp->expected_client_content_length == 0)
+         {
+            log_error(LOG_LEVEL_HEADER, "Forwarded the last %d bytes", len);
+            break;
          }
       }
    }
