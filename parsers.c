@@ -1216,6 +1216,13 @@ jb_err sed_https(struct client_state *csp)
    csp->headers->last  = csp->https_headers->last;
 
    /*
+    * Start with fresh tags. Already exising tags may
+    * be set again. This is necessary to overrule
+    * URL-based patterns.
+    */
+   destroy_list(csp->tags);
+
+   /*
     * We want client header filters and taggers
     * so temporarly remove the flag.
     */
