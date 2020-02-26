@@ -193,11 +193,7 @@ privoxy_mutex_t log_mutex;
 privoxy_mutex_t log_init_mutex;
 privoxy_mutex_t connection_reuse_mutex;
 
-#ifdef LIMIT_MUTEX_NUMBER
-privoxy_mutex_t certificates_mutexes[32];
-#else
-privoxy_mutex_t certificates_mutexes[65536];
-#endif /* LIMIT_MUTEX_NUMBER */
+privoxy_mutex_t certificate_mutex;
 privoxy_mutex_t rng_mutex;
 
 #ifdef FEATURE_EXTERNAL_FILTERS
@@ -4590,16 +4586,7 @@ static void initialize_mutexes(void)
     * Prepare global mutex semaphores
     */
 
-#ifdef LIMIT_MUTEX_NUMBER
-   int i = 0;
-   for (i = 0; i < 32; i++)
-#else
-   int i = 0;
-   for (i = 0; i < 65536; i++)
-#endif /* LIMIT_MUTEX_NUMBER */
-   {
-      privoxy_mutex_init(&(certificates_mutexes[i]));
-   }
+   privoxy_mutex_init(&certificate_mutex);
    privoxy_mutex_init(&rng_mutex);
 
    privoxy_mutex_init(&log_mutex);

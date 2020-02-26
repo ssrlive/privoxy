@@ -348,11 +348,6 @@ struct http_request
 
 #ifdef FEATURE_HTTPS_INSPECTION
 /*
- * If this macro is defined, mutexes count for generating
- * private keys is changed from 65536 to 32.
- */
-#define LIMIT_MUTEX_NUMBER
-/*
  * Struct for linked list containing certificates
  */
 typedef struct certs_chain {

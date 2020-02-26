@@ -113,7 +113,6 @@ static int file_exists(const char *path);
 static int host_to_hash(struct client_state *csp);
 static int ssl_verify_callback(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags);
 static void free_certificate_chain(struct client_state *csp);
-static unsigned int get_certificate_mutex_id(struct client_state *csp);
 static unsigned long  get_certificate_serial(struct client_state *csp);
 static void free_client_ssl_structures(struct client_state *csp);
 static void free_server_ssl_structures(struct client_state *csp);
@@ -437,19 +436,18 @@ extern int create_client_ssl_connection(struct client_state *csp)
     * Generating certificate for requested host. Mutex to prevent
     * certificate and key inconsistence must be locked.
     */
-   unsigned int cert_mutex_id = get_certificate_mutex_id(csp);
-   privoxy_mutex_lock(&(certificates_mutexes[cert_mutex_id]));
+   privoxy_mutex_lock(&certificate_mutex);
 
    ret = generate_webpage_certificate(csp);
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
          "Generate_webpage_certificate failed: %d", ret);
-      privoxy_mutex_unlock(&(certificates_mutexes[cert_mutex_id]));
+      privoxy_mutex_unlock(&certificate_mutex);
       ret = -1;
       goto exit;
    }
-   privoxy_mutex_unlock(&(certificates_mutexes[cert_mutex_id]));
+   privoxy_mutex_unlock(&certificate_mutex);
 
    /*
     * Seed the RNG
@@ -1624,29 +1622,6 @@ static char *make_certs_path(const char *conf_dir, const char *file_name,
    }
 
    return path;
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_certificate_mutex_id
- *
- * Description :  Computes mutex id from host name hash. This hash must
- *                be already saved in csp structure
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  Mutex id for given host name
- *
- *********************************************************************/
-static unsigned int get_certificate_mutex_id(struct client_state *csp) {
-#ifdef LIMIT_MUTEX_NUMBER
-   return (unsigned int)(csp->http->hash_of_host[0] % 32);
-#else
-   return (unsigned int)(csp->http->hash_of_host[1]
-      + 256 * (int)csp->http->hash_of_host[0]);
-#endif /* LIMIT_MUTEX_NUMBER */
 }
 
 
