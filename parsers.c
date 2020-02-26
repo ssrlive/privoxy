@@ -1215,7 +1215,13 @@ jb_err sed_https(struct client_state *csp)
    csp->headers->first = csp->https_headers->first;
    csp->headers->last  = csp->https_headers->last;
 
+   /*
+    * We want client header filters and taggers
+    * so temporarly remove the flag.
+    */
+   csp->flags &= ~CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
    err = sed(csp, FILTER_CLIENT_HEADERS);
+   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
    csp->headers->first = headers.first;
    csp->headers->last  = headers.last;
