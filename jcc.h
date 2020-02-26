@@ -102,8 +102,10 @@ extern privoxy_mutex_t resolver_mutex;
 extern privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
 
+#ifdef FEATURE_HTTPS_INSPECTION
 extern privoxy_mutex_t certificate_mutex;
 extern privoxy_mutex_t rng_mutex;
+#endif
 
 #endif /* FEATURE_PTHREAD */
 

@@ -193,8 +193,10 @@ privoxy_mutex_t log_mutex;
 privoxy_mutex_t log_init_mutex;
 privoxy_mutex_t connection_reuse_mutex;
 
+#ifdef FEATURE_HTTPS_INSPECTION
 privoxy_mutex_t certificate_mutex;
 privoxy_mutex_t rng_mutex;
+#endif
 
 #ifdef FEATURE_EXTERNAL_FILTERS
 privoxy_mutex_t external_filter_mutex;
@@ -4586,8 +4588,10 @@ static void initialize_mutexes(void)
     * Prepare global mutex semaphores
     */
 
+#ifdef FEATURE_HTTPS_INSPECTION
    privoxy_mutex_init(&certificate_mutex);
    privoxy_mutex_init(&rng_mutex);
+#endif
 
    privoxy_mutex_init(&log_mutex);
    privoxy_mutex_init(&log_init_mutex);
