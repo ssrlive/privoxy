@@ -820,8 +820,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
             /* Log the reason without the trailing new line */
             log_error(LOG_LEVEL_ERROR,
-               "The X509 certificate verification failed: %N",
-               strlen(reason)-1, reason);
+               "X509 certificate verification for %s failed: %N",
+               csp->http->hostport, strlen(reason)-1, reason);
             ret = -1;
          }
          else
