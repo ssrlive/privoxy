@@ -1945,9 +1945,7 @@ static int host_to_hash(struct client_state *csp)
    int ret = 0;
 
 #if !defined(MBEDTLS_MD5_C)
-   log_error(LOG_LEVEL_ERROR, "MBEDTLS_MD5_C is not defined. Can't create"
-      "MD5 hash for certificate and key name.");
-   return -1;
+#error mbedTLS needs to be compiled with md5 support
 #else
    memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
    mbedtls_md5((unsigned char *)csp->http->host, strlen(csp->http->host),
