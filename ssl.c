@@ -1764,11 +1764,6 @@ extern void ssl_send_certificate_error(struct client_state *csp)
     */
    ssl_send_data(&(csp->mbedtls_client_attr.ssl),
       (const unsigned char *)message, strlen(message));
-   /*
-    * Waiting before closing connection. Some browsers don't show received
-    * message if there isn't this delay.
-    */
-   sleep(1);
 
    free_certificate_chain(csp);
 }
