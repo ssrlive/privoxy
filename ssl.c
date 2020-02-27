@@ -1,32 +1,32 @@
 /*********************************************************************
-*
-* File        :  $Source: /cvsroot/ijbswa/current/ssl.c,v $
-*
-* Purpose     :  File with TLS/SSL extension. Contains methods for
-*                creating, using and closing TLS/SSL connections.
-*
-* Copyright   :  Written by and Copyright (c) 2017 Vaclav Svec. FIT CVUT.
-*                Copyright (C) 2018-2019 by Fabian Keil <fk@fabiankeil.de>
-*
-*                This program is free software; you can redistribute it
-*                and/or modify it under the terms of the GNU General
-*                Public License as published by the Free Software
-*                Foundation; either version 2 of the License, or (at
-*                your option) any later version.
-*
-*                This program is distributed in the hope that it will
-*                be useful, but WITHOUT ANY WARRANTY; without even the
-*                implied warranty of MERCHANTABILITY or FITNESS FOR A
-*                PARTICULAR PURPOSE.  See the GNU General Public
-*                License for more details.
-*
-*                The GNU General Public License should be included with
-*                this file.  If not, you can view it at
-*                http://www.gnu.org/copyleft/gpl.html
-*                or write to the Free Software Foundation, Inc., 59
-*                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*
-*********************************************************************/
+ *
+ * File        :  $Source: /cvsroot/ijbswa/current/ssl.c,v $
+ *
+ * Purpose     :  File with TLS/SSL extension. Contains methods for
+ *                creating, using and closing TLS/SSL connections.
+ *
+ * Copyright   :  Written by and Copyright (c) 2017 Vaclav Svec. FIT CVUT.
+ *                Copyright (C) 2018-2020 by Fabian Keil <fk@fabiankeil.de>
+ *
+ *                This program is free software; you can redistribute it
+ *                and/or modify it under the terms of the GNU General
+ *                Public License as published by the Free Software
+ *                Foundation; either version 2 of the License, or (at
+ *                your option) any later version.
+ *
+ *                This program is distributed in the hope that it will
+ *                be useful, but WITHOUT ANY WARRANTY; without even the
+ *                implied warranty of MERCHANTABILITY or FITNESS FOR A
+ *                PARTICULAR PURPOSE.  See the GNU General Public
+ *                License for more details.
+ *
+ *                The GNU General Public License should be included with
+ *                this file.  If not, you can view it at
+ *                http://www.gnu.org/copyleft/gpl.html
+ *                or write to the Free Software Foundation, Inc., 59
+ *                Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *********************************************************************/
 
 #include <string.h>
 #include <unistd.h>
@@ -42,11 +42,11 @@
 #include "mbedtls/base64.h"
 #include "mbedtls/error.h"
 
+#include "config.h"
 #include "project.h"
 #include "miscutil.h"
 #include "errlog.h"
 #include "jcc.h"
-#include "config.h"
 #include "ssl.h"
 
 
@@ -66,10 +66,9 @@
 #define RSA_KEY_PUBLIC_EXPONENT          65537             /* Public exponent for RSA private key generating */
 #define RSA_KEYSIZE                      2048              /* Size of generated RSA keys */
 #define GENERATED_CERT_VALID_FROM        "20100101000000"  /* Date and time, which will be set in generated certificates as parameter valid from */
-#define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be setted in generated certificates as parameter valid to */
+#define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be set in generated certificates as parameter valid to */
 #define CERT_SIGNATURE_ALGORITHM         MBEDTLS_MD_SHA256 /* The MD algorithm to use for the signature */
 #define CERT_SERIAL_NUM_LENGTH           4                 /* Bytes of hash to be used for creating serial number of certificate. Min=2 and max=16 */
-#define LIMIT_MUTEX_NUMBER                                 /* If this macro is defined, mutexes count for generating private keys is changed from 65536 to 32 */
 #define INVALID_CERT_INFO_BUF_SIZE       2048              /* Size of buffer for message with information about reason of certificate invalidity. Data after the end of buffer will not be saved */
 #define CERT_PARAM_COMMON_NAME           "CN="
 #define CERT_PARAM_ORGANIZATION          ",O="
@@ -80,10 +79,37 @@
 #define CERT_SUBJECT_PASSWORD            ""
 #define CERT_INFO_PREFIX                 ""
 
+/*
+ * Properties of cert for generating
+ */
+typedef struct {
+   char       *issuer_crt;                         /* filename of the issuer certificate       */
+   char       *subject_key;                        /* filename of the subject key file         */
+   char       *issuer_key;                         /* filename of the issuer key file          */
+   const char *subject_pwd;                        /* password for the subject key file        */
+   const char *issuer_pwd;                         /* password for the issuer key file         */
+   char       *output_file;                        /* where to store the constructed key file  */
+   const char *subject_name;                       /* subject name for certificate             */
+   char       issuer_name[ISSUER_NAME_BUF_SIZE];   /* issuer name for certificate              */
+   const char *not_before;                         /* validity period not before               */
+   const char *not_after;                          /* validity period not after                */
+   const char *serial;                             /* serial number string                     */
+   int        is_ca;                               /* is a CA certificate                      */
+   int        max_pathlen;                         /* maximum CA path length                   */
+} cert_options;
 
-extern int generate_webpage_certificate(struct client_state * csp);
-static char * make_certs_path(const char * conf_dir, const char * file_name, const char * suffix);
-static int file_exists(const char * path);
+/*
+ * Properties of key for generating
+ */
+typedef struct {
+   mbedtls_pk_type_t type;   /* type of key to generate  */
+   int  rsa_keysize;         /* length of key in bits    */
+   char *key_file_path;      /* filename of the key file */
+} key_options;
+
+static int generate_webpage_certificate(struct client_state *csp);
+static char *make_certs_path(const char *conf_dir, const char *file_name, const char *suffix);
+static int file_exists(const char *path);
 static int host_to_hash(struct client_state *csp);
 static int ssl_verify_callback(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags);
 static void free_certificate_chain(struct client_state *csp);
@@ -134,18 +160,18 @@ extern int server_use_ssl(const struct client_state *csp)
 
 
 /*********************************************************************
-*
-* Function    :  is_ssl_pending
-*
-* Description :  Tests if there are some waitting data on ssl connection
-*
-* Parameters  :
-*          1  :  ssl = SSL context to test
-*
-* Returns     :   0 => No data are pending
-*                >0 => Pending data length
-*
-*********************************************************************/
+ *
+ * Function    :  is_ssl_pending
+ *
+ * Description :  Tests if there are some waiting data on ssl connection
+ *
+ * Parameters  :
+ *          1  :  ssl = SSL context to test
+ *
+ * Returns     :   0 => No data are pending
+ *                >0 => Pending data length
+ *
+ *********************************************************************/
 extern size_t is_ssl_pending(mbedtls_ssl_context *ssl)
 {
    if (ssl == NULL)
@@ -203,6 +229,8 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
          send_len = (int)max_fragment_size;
       }
 
+      log_error(LOG_LEVEL_WRITING, "TLS: %N", send_len, buf+pos);
+
       /*
        * Sending one part of the buffer
        */
@@ -215,7 +243,6 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
          {
             char err_buf[ERROR_BUF_SIZE];
 
-            memset(err_buf, 0, sizeof(err_buf));
             mbedtls_strerror(ret, err_buf, sizeof(err_buf));
             log_error(LOG_LEVEL_ERROR,
                "Sending data over TLS/SSL failed: %s", err_buf);
@@ -242,8 +269,8 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
  *          2  :  buf = Pointer to buffer where data will be written
  *          3  :  max_length = Maximum number of bytes to read
  *
- * Returns     :  Number of bytes read, 0 for EOF, or negative
- *                value on error.
+ * Returns     :  Number of bytes read, 0 for EOF, or -1
+ *                on error.
  *
  *********************************************************************/
 extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t max_length)
@@ -264,11 +291,20 @@ extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t ma
    {
       char err_buf[ERROR_BUF_SIZE];
 
-      memset(err_buf, 0, sizeof(err_buf));
+      if (ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY)
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "The peer notified us that the connection is going to be closed");
+         return 0;
+      }
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Receiving data over TLS/SSL failed: %s", err_buf);
+
+      return -1;
    }
+
+   log_error(LOG_LEVEL_RECEIVED, "TLS: %N", ret, buf);
 
    return ret;
 }
@@ -358,8 +394,6 @@ extern int create_client_ssl_connection(struct client_state *csp)
    char *cert_file = NULL;
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
-
-   memset(err_buf, 0, sizeof(err_buf));
 
    /*
     * Initializing mbedtls structures for TLS/SSL connection
@@ -653,8 +687,6 @@ extern int create_server_ssl_connection(struct client_state *csp)
    char *trusted_cas_file = NULL;
    int auth_mode = MBEDTLS_SSL_VERIFY_REQUIRED;
 
-   memset(err_buf, 0, sizeof(err_buf));
-
    csp->server_cert_verification_result = SSL_CERT_NOT_VERIFIED;
    csp->server_certs_chain.next = NULL;
 
@@ -667,7 +699,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    mbedtls_net_init(&(csp->mbedtls_server_attr.socket_fd));
    mbedtls_ssl_init(&(csp->mbedtls_server_attr.ssl));
    mbedtls_ssl_config_init(&(csp->mbedtls_server_attr.conf));
-   mbedtls_x509_crt_init( &(csp->mbedtls_server_attr.ca_cert));
+   mbedtls_x509_crt_init(&(csp->mbedtls_server_attr.ca_cert));
 
    /*
    * Setting socket fd in mbedtls_net_context structure. This structure
@@ -770,7 +802,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
     * Handshake with server
     */
    log_error(LOG_LEVEL_CONNECT,
-      "Performing the TLS/SSL handshake with server");
+      "Performing the TLS/SSL handshake with the server");
 
    while ((ret = mbedtls_ssl_handshake(&(csp->mbedtls_server_attr.ssl))) != 0)
    {
@@ -781,11 +813,17 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
          if (ret == MBEDTLS_ERR_X509_CERT_VERIFY_FAILED)
          {
-            log_error(LOG_LEVEL_ERROR,
-               "Server certificate verification failed: %s", err_buf);
+            char reason[INVALID_CERT_INFO_BUF_SIZE];
+
             csp->server_cert_verification_result =
                mbedtls_ssl_get_verify_result(&(csp->mbedtls_server_attr.ssl));
+            mbedtls_x509_crt_verify_info(reason, sizeof(reason), "",
+               csp->server_cert_verification_result);
 
+            /* Log the reason without the trailing new line */
+            log_error(LOG_LEVEL_ERROR,
+               "The X509 certificate verification failed: %N",
+               strlen(reason)-1, reason);
             ret = -1;
          }
          else
@@ -875,7 +913,7 @@ static void free_server_ssl_structures(struct client_state *csp)
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
-   csp->mbedtls_client_attr.socket_fd.fd = -1;
+   csp->mbedtls_server_attr.socket_fd.fd = -1;
 
    mbedtls_x509_crt_free(&(csp->mbedtls_server_attr.ca_cert));
    mbedtls_ssl_free(&(csp->mbedtls_server_attr.ssl));
@@ -935,11 +973,10 @@ static int write_certificate(mbedtls_x509write_cert *crt, const char *output_fil
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
 
-   memset(err_buf,  0, sizeof(err_buf));
    memset(cert_buf, 0, sizeof(cert_buf));
 
    /*
-    * Writing certificate into PEM string. If buffer is too small, fuction
+    * Writing certificate into PEM string. If buffer is too small, function
     * returns specific error and no buffer overflow can happen.
     */
    if ((ret = mbedtls_x509write_crt_pem(crt, cert_buf,
@@ -1003,18 +1040,8 @@ static int write_private_key(mbedtls_pk_context *key, unsigned char **ret_buf,
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
 
-   memset(err_buf, 0, sizeof(err_buf));
-
    /* Initializing buffer for key file content */
-   *ret_buf = (unsigned char *)malloc(PRIVATE_KEY_BUF_SIZE + 1);
-   if (*ret_buf == NULL)
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "Creating buffer for private key failed: malloc fail");
-      ret = -1;
-      goto exit;
-   }
-   memset(*ret_buf, 0, PRIVATE_KEY_BUF_SIZE + 1);
+   *ret_buf = zalloc_or_die(PRIVATE_KEY_BUF_SIZE + 1);
 
    /*
     * Writing private key into PEM string
@@ -1076,15 +1103,15 @@ exit:
  *               contain NULL and no private key is generated.
  *
  * Parameters  :
- *          1  :  key_buf = buffer to save new generated key
- *          2  :  csp = Current client state (buffers, headers, etc...)
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  key_buf = buffer to save new generated key
  *
  * Returns     :  -1 => Error while generating private key
  *                 0 => Key already exists
  *                >0 => Length of generated private key
  *
  *********************************************************************/
-static int generate_key(unsigned char **key_buf, struct client_state *csp)
+static int generate_key(struct client_state *csp, unsigned char **key_buf)
 {
    mbedtls_pk_context key;
    key_options key_opt;
@@ -1092,7 +1119,6 @@ static int generate_key(unsigned char **key_buf, struct client_state *csp)
    char err_buf[ERROR_BUF_SIZE];
 
    key_opt.key_file_path = NULL;
-   memset(err_buf, 0, sizeof(err_buf));
 
    /*
     * Initializing structures for key generating
@@ -1191,11 +1217,11 @@ exit:
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
  * Returns     :  -1 => Error while creating certificate.
- *                 0 => Certificate alreaday exist.
+ *                 0 => Certificate already exists.
  *                >0 => Length of created certificate.
  *
  *********************************************************************/
-extern int generate_webpage_certificate(struct client_state * csp)
+static int generate_webpage_certificate(struct client_state *csp)
 {
    mbedtls_x509_crt issuer_cert;
    mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
@@ -1210,8 +1236,6 @@ extern int generate_webpage_certificate(struct client_state * csp)
    char err_buf[ERROR_BUF_SIZE];
    cert_options cert_opt;
 
-   memset(err_buf, 0, sizeof(err_buf));
-
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
    cert_opt.subject_key = NULL;
@@ -1221,7 +1245,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    /*
     * Create key for requested host
     */
-   int subject_key_len = generate_key(&key_buf, csp);
+   int subject_key_len = generate_key(csp, &key_buf);
    if (subject_key_len < 0)
    {
       log_error(LOG_LEVEL_ERROR, "Key generating failed");
@@ -1232,7 +1256,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
     * Initializing structures for certificate generating
     */
    mbedtls_x509write_crt_init(&cert);
-   mbedtls_x509write_crt_set_md_alg( &cert, CERT_SIGNATURE_ALGORITHM);
+   mbedtls_x509write_crt_set_md_alg(&cert, CERT_SIGNATURE_ALGORITHM);
    mbedtls_pk_init(&loaded_issuer_key);
    mbedtls_pk_init(&loaded_subject_key);
    mbedtls_mpi_init(&serial);
@@ -1352,7 +1376,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
       sizeof(cert_opt.issuer_name), &issuer_cert.subject);
    if (ret < 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "mbedtls_x509_dn_gets failed: %s", err_buf);
       ret = -1;
       goto exit;
@@ -1401,8 +1425,8 @@ extern int generate_webpage_certificate(struct client_state * csp)
    if (!mbedtls_pk_can_do(&issuer_cert.pk, MBEDTLS_PK_RSA) ||
       mbedtls_mpi_cmp_mpi(&mbedtls_pk_rsa(issuer_cert.pk)->N,
          &mbedtls_pk_rsa(*issuer_key)->N) != 0 ||
-      mbedtls_mpi_cmp_mpi( &mbedtls_pk_rsa(issuer_cert.pk)->E,
-         &mbedtls_pk_rsa(*issuer_key )->E) != 0)
+      mbedtls_mpi_cmp_mpi(&mbedtls_pk_rsa(issuer_cert.pk)->E,
+         &mbedtls_pk_rsa(*issuer_key)->E) != 0)
    {
       log_error(LOG_LEVEL_ERROR,
          "Issuer key doesn't match issuer certificate");
@@ -1419,7 +1443,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_subject_name(&cert, cert_opt.subject_name);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Setting subject name in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1429,7 +1453,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_issuer_name(&cert, cert_opt.issuer_name);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Setting issuer name in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1450,7 +1474,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
       cert_opt.not_after);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
          "Setting validity in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1464,7 +1488,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
       cert_opt.max_pathlen);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "Setting the basicConstraints extension "
          "in signed certificate failed: %s", err_buf);
       ret = -1;
@@ -1476,7 +1500,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_subject_key_identifier(&cert);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "mbedtls_x509write_crt_set_subject_key_"
          "identifier failed: %s", err_buf);
       ret = -1;
@@ -1487,7 +1511,7 @@ extern int generate_webpage_certificate(struct client_state * csp)
    ret = mbedtls_x509write_crt_set_authority_key_identifier(&cert);
    if (ret != 0)
    {
-      mbedtls_strerror( ret, err_buf, sizeof(err_buf));
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR, "mbedtls_x509write_crt_set_authority_key_"
          "identifier failed: %s", err_buf);
       ret = -1;
@@ -1528,7 +1552,7 @@ exit:
  *
  * Function    :  make_certs_path
  *
- * Description : Creates path to file from three pieces. This fuction
+ * Description : Creates path to file from three pieces. This function
  *               takes parameters and puts them in one new mallocated
  *               char * in correct order. Returned variable must be freed
  *               by caller. This function is mainly used for creating
@@ -1579,13 +1603,7 @@ static char *make_certs_path(const char *conf_dir, const char *file_name,
        * absolute path to cwd.
        */
       path_size += strlen(basedir) + 2;
-      path = (char *)malloc(path_size);
-      if (path == NULL)
-      {
-         log_error(LOG_LEVEL_ERROR, "make_certs_path failed: malloc fail");
-         return NULL;
-      }
-      memset(path, 0, path_size);
+      path = zalloc_or_die(path_size);
 
       strlcpy(path, basedir,   path_size);
       strlcat(path, delim,     path_size);
@@ -1597,13 +1615,7 @@ static char *make_certs_path(const char *conf_dir, const char *file_name,
    else
 #endif /* defined unix */
    {
-      path = (char *)malloc(path_size);
-      if (path == NULL)
-      {
-         log_error(LOG_LEVEL_ERROR, "make_certs_path failed: malloc fail");
-         return NULL;
-      }
-      memset(path, 0, path_size);
+      path = zalloc_or_die(path_size);
 
       strlcpy(path, conf_dir,  path_size);
       strlcat(path, delim,     path_size);
@@ -1652,7 +1664,8 @@ static unsigned int get_certificate_mutex_id(struct client_state *csp) {
  * Returns     :  Serial number for new certificate
  *
  *********************************************************************/
-static unsigned long  get_certificate_serial(struct client_state *csp) {
+static unsigned long get_certificate_serial(struct client_state *csp)
+{
    unsigned long exp    = 1;
    unsigned long serial = 0;
 
@@ -1777,7 +1790,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    ssl_send_data(&(csp->mbedtls_client_attr.ssl),
       (const unsigned char *)message, strlen(message));
    /*
-    * Waiting before closing connection. Some browsers doesn't show received
+    * Waiting before closing connection. Some browsers don't show received
     * message if there isn't this delay.
     */
    sleep(1);
@@ -1823,37 +1836,27 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
 
    /*
     * Preparing next item in linked list for next certificate
-    * If malloc fails, we are continuing without this certificate
     */
-   last->next = (struct certs_chain *)malloc(sizeof(struct certs_chain));
-   if (last->next != NULL)
-   {
-      last->next->next = NULL;
-      memset(last->next->text_buf, 0, sizeof(last->next->text_buf));
-      memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
+   last->next = malloc_or_die(sizeof(struct certs_chain));
+   last->next->next = NULL;
+   memset(last->next->text_buf, 0, sizeof(last->next->text_buf));
+   memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
 
-      /*
-       * Saving certificate file into buffer
-       */
-      if ((ret = mbedtls_pem_write_buffer(PEM_BEGIN_CRT, PEM_END_CRT,
-         crt->raw.p, crt->raw.len, (unsigned char *)last->file_buf,
-         sizeof(last->file_buf)-1, &olen)) != 0)
-      {
-         return(ret);
-      }
-
-      /*
-       * Saving certificate information into buffer
-       */
-      mbedtls_x509_crt_info(last->text_buf, sizeof(last->text_buf) - 1,
-         CERT_INFO_PREFIX, crt);
-   }
-   else
+   /*
+    * Saving certificate file into buffer
+    */
+   if ((ret = mbedtls_pem_write_buffer(PEM_BEGIN_CRT, PEM_END_CRT,
+      crt->raw.p, crt->raw.len, (unsigned char *)last->file_buf,
+      sizeof(last->file_buf)-1, &olen)) != 0)
    {
-      log_error(LOG_LEVEL_ERROR,
-         "Malloc memory for server certificate informations failed");
-      return -1;
+      return(ret);
    }
+
+   /*
+    * Saving certificate information into buffer
+    */
+   mbedtls_x509_crt_info(last->text_buf, sizeof(last->text_buf) - 1,
+      CERT_INFO_PREFIX, crt);
 
    return 0;
 }
@@ -1880,7 +1883,7 @@ static void free_certificate_chain(struct client_state *csp)
    /* Cleaning buffers */
    memset(csp->server_certs_chain.text_buf, 0,
       sizeof(csp->server_certs_chain.text_buf));
-   memset(csp->server_certs_chain.text_buf, 0,
+   memset(csp->server_certs_chain.file_buf, 0,
       sizeof(csp->server_certs_chain.file_buf));
    csp->server_certs_chain.next = NULL;
 
@@ -1898,18 +1901,18 @@ static void free_certificate_chain(struct client_state *csp)
 
 
 /*********************************************************************
-*
-* Function    :  file_exists
-*
-* Description :  Tests if file exists and is readable.
-*
-* Parameters  :
-*          1  :  path = Path to tested file.
-*
-* Returns     :  1 => File exists and is readable.
-*                0 => File doesn't exist or is not readable.
-*
-*********************************************************************/
+ *
+ * Function    :  file_exists
+ *
+ * Description :  Tests if file exists and is readable.
+ *
+ * Parameters  :
+ *          1  :  path = Path to tested file.
+ *
+ * Returns     :  1 => File exists and is readable.
+ *                0 => File doesn't exist or is not readable.
+ *
+ *********************************************************************/
 static int file_exists(const char *path)
 {
    FILE *f;
@@ -1937,7 +1940,7 @@ static int file_exists(const char *path)
  *                0 => Hash created successfully
  *
  *********************************************************************/
-static int host_to_hash(struct client_state * csp)
+static int host_to_hash(struct client_state *csp)
 {
    int ret = 0;
 
@@ -2045,8 +2048,6 @@ static int seed_rng(struct client_state *csp)
 {
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
-
-   memset(err_buf, 0, sizeof(err_buf));
 
    if (rng_seeded == 0)
    {

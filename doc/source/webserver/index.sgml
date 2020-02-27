@@ -18,7 +18,7 @@
 
  Purpose     :  Index file of the project's homepage and also documentation index
                 
- Copyright (C) 2001-2018 Privoxy developers <privoxy-devel@lists.privoxy.org>
+ Copyright (C) 2001-2020 Privoxy developers <privoxy-devel@lists.privoxy.org>
  See LICENSE.
 
  ========================================================================
@@ -172,7 +172,7 @@
 <!-- GNUMakefile is inserting this now -->
 <para>
  <subscript>
-  Copyright __copy 2001-2019 by Privoxy Developers
+  Copyright __copy 2001-2020 by Privoxy Developers
  </subscript>
 </para>
 
@@ -183,6 +183,9 @@
  </subscript>
  <subscript>
   <ulink url="https://www.top10vpn.com">https://www.top10vpn.com</ulink>
+ </subscript>
+ <subscript>
+  <ulink url="https://www.vpnranks.com/">https://www.vpnranks.com/</ulink>
  </subscript>
 </para>
 <para>

@@ -1,0 +1,54 @@
+# privoxy po-debconf translation to Spanish.
+# Copyright (C) 2018 Software in the Public Interest
+# This file is distributed under the same license as the privoxy package.
+#
+# - Initial translation
+# Jonathan Bustillos <jathanblackred@openmailbox.com>, 2018.
+#
+# Traductores, si no conocen el formato PO, merece la pena leer la
+# documentación de gettext, especialmente las secciones dedicadas a este
+# formato, por ejemplo ejecutando:
+# info -n '(gettext)PO Files'
+# info -n '(gettext)Header Entry'
+#
+# Equipo de traducción al español, por favor lean antes de traducir
+# los siguientes documentos:
+#
+# - El proyecto de traducción de Debian al español
+# http://www.debian.org/intl/spanish/
+# especialmente las notas y normas de traducción en
+# http://www.debian.org/intl/spanish/notas
+#
+# - La guía de traducción de po's de debconf:
+# /usr/share/doc/po-debconf/README-trans
+# o http://www.debian.org/intl/l10n/po-debconf/README-trans
+msgid ""
+msgstr ""
+"Project-Id-Version: privoxy\n"
+"Report-Msgid-Bugs-To: privoxy@packages.debian.org\n"
+"POT-Creation-Date: 2016-04-08 17:17+0200\n"
+"PO-Revision-Date: 2018-07-16 00:23+0200\n"
+"Last-Translator: Jonathan Bustillos <jathanblackred@openmailbox.com>\n"
+"Language-Team: Debian Spanish <debian-l10n-spanish@lists.debian.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.7\n"
+
+#. Type: string
+#. Description
+#: ../templates:1001
+msgid "Adresses on with Privoxy listens:"
+msgstr "Direcciones que Privoxy escucha:"
+
+#. Type: string
+#. Description
+#: ../templates:1001
+msgid ""
+"Please enter a space separated list of address:port combinations on which "
+"Privoxy will listen for client requests."
+msgstr ""
+"Introduzca una lista de combinaciones dirección:puerto separadas por "
+"espacios en las que Privoxy escuchará las solicitudes de los clientes."

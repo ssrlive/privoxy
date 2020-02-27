@@ -8,7 +8,7 @@
  *                variables it writes to.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2017 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -278,7 +278,7 @@ static void unload_configfile (void * data)
    freez(config->usermanual);
    freez(config->trusted_cgi_referrer);
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    freez(config->ca_password);
    freez(config->ca_directory);
    freez(config->ca_cert_file);
@@ -584,7 +584,7 @@ struct configuration_spec * load_config(void)
    unsigned long linenum = 0;
    int i;
    char *logfile          = NULL;
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    char *ca_cert_file     = NULL;
    char *ca_key_file      = NULL;
    char *ca_directory     = NULL;
@@ -635,7 +635,7 @@ struct configuration_spec * load_config(void)
    config->usermanual                = strdup_or_die(USER_MANUAL_URL);
    config->proxy_args                = strdup_or_die("");
    config->forwarded_connect_retries = 0;
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    config->ca_password               = strdup("");
    ca_cert_file                      = strdup("cacert.crt");
    ca_key_file                       = strdup("cakey.pem");
@@ -1733,7 +1733,7 @@ struct configuration_spec * load_config(void)
             config->usermanual = strdup_or_die(arg);
             break;
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
 /* *************************************************************************
  * ca private key file password
  * *************************************************************************/
@@ -1986,7 +1986,7 @@ struct configuration_spec * load_config(void)
       }
    }
 
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Setting SSL parameters from loaded values into structures
     */

@@ -13,7 +13,7 @@
  *                    DEFINE_ACTION_ALIAS
  *
  * Copyright   :  Written by and Copyright (C) 2001-2014 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -73,9 +73,6 @@ DEFINE_ACTION_STRING     ("delay-response",             ACTION_DELAY_RESPONSE,  
 DEFINE_CGI_PARAM_NO_RADIO("delay-response",             ACTION_DELAY_RESPONSE,  ACTION_STRING_DELAY_RESPONSE, "100")
 DEFINE_CGI_PARAM_RADIO   ("deanimate-gifs",             ACTION_DEANIMATE,       ACTION_STRING_DEANIMATE,     "last",  1)
 DEFINE_ACTION_BOOL       ("downgrade-http-version",     ACTION_DOWNGRADE)
-#ifdef FEATURE_HTTPS_FILTERING
-DEFINE_ACTION_BOOL       ("enable-https-filtering",     ACTION_ENABLE_HTTPS_FILTER)
-#endif
 #ifdef FEATURE_EXTERNAL_FILTERS
 DEFINE_ACTION_MULTI      ("external-filter",            ACTION_MULTI_EXTERNAL_FILTER)
 #endif
@@ -110,7 +107,8 @@ DEFINE_CGI_PARAM_RADIO   ("hide-referrer",              ACTION_HIDE_REFERER,    
 DEFINE_CGI_PARAM_CUSTOM  ("hide-referrer",              ACTION_HIDE_REFERER,    ACTION_STRING_REFERER,       "http://www.privoxy.org/")
 DEFINE_ACTION_STRING     ("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT)
 DEFINE_CGI_PARAM_NO_RADIO("hide-user-agent",            ACTION_HIDE_USER_AGENT, ACTION_STRING_USER_AGENT,    "Privoxy " VERSION)
-#ifdef FEATURE_HTTPS_FILTERING
+#ifdef FEATURE_HTTPS_INSPECTION
+DEFINE_ACTION_BOOL       ("https-inspection",           ACTION_HTTPS_INSPECTION)
 DEFINE_ACTION_BOOL       ("ignore-certificate-errors",  ACTION_IGNORE_CERTIFICATE_ERRORS)
 #endif
 DEFINE_ACTION_STRING     ("limit-connect",              ACTION_LIMIT_CONNECT,   ACTION_STRING_LIMIT_CONNECT)

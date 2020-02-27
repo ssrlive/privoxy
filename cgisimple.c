@@ -6,7 +6,7 @@
  *                status.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2017 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1831,8 +1831,8 @@ static jb_err show_defines(struct map *exports)
 #endif
       },
       {
-         "FEATURE_HTTPS_FILTERING",
-#ifdef FEATURE_HTTPS_FILTERING
+         "FEATURE_HTTPS_INSPECTION",
+#ifdef FEATURE_HTTPS_INSPECTION
          1,
 #else
          0,

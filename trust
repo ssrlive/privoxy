@@ -7,7 +7,7 @@
 #                 techniques).
 # 
 #  Copyright   :  Written by and Copyright
-#                 Privoxy team. http://www.privoxy.org/
+#                 Privoxy team. https://www.privoxy.org/
 #
 #                 Based on the Internet Junkbuster originally written
 #                 by and Copyright (C) 1997 Anonymous Coders and
@@ -47,7 +47,7 @@
 
 # Trustfiles are an experimental feature used for building "whitelists"
 # of "trusted" sites (versus the usual "blacklists" technique). For more
-# detail, see http://www.privoxy.org/user-manual/config.html#TRUSTFILE.
+# detail, see https://www.privoxy.org/user-manual/config.html#TRUSTFILE.
 
 # List trusted domains here. The default is to block any URL that is NOT
 # referenced. Access to trusted domains includes all paths within that

@@ -8,7 +8,7 @@
  *                the main connection-handling function.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2014 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -103,9 +103,9 @@ extern privoxy_mutex_t rand_mutex;
 #endif /* ndef HAVE_RANDOM */
 
 #ifdef LIMIT_MUTEX_NUMBER
-   extern privoxy_mutex_t certificates_mutexes[32];
+extern privoxy_mutex_t certificates_mutexes[32];
 #else
-   extern privoxy_mutex_t certificates_mutexes[65536];
+extern privoxy_mutex_t certificates_mutexes[65536];
 #endif /* LIMIT_MUTEX_NUMBER */
 extern privoxy_mutex_t rng_mutex;
 

@@ -4,7 +4,7 @@ Subject: Several Debian specific changes to config file
 
 --- a/config
 +++ b/config
-@@ -128,7 +128,7 @@
+@@ -127,7 +127,7 @@
  #          config file, because it is used while the config file is
  #          being read.
  #
@@ -13,7 +13,7 @@ Subject: Several Debian specific changes to config file
  #
  #  1.2. trust-info-url
  #  ====================
-@@ -260,7 +260,7 @@
+@@ -259,7 +259,7 @@
  #
  #      No trailing "/", please.
  #
@@ -22,7 +22,7 @@ Subject: Several Debian specific changes to config file
  #
  #  2.2. templdir
  #  ==============
-@@ -345,7 +345,7 @@ confdir .
+@@ -344,7 +344,7 @@ confdir .
  #
  #      No trailing "/", please.
  #

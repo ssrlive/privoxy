@@ -50,7 +50,7 @@ To build the development version, you can get the source code by doing:
 This will create a directory named <root-dir>/privoxy/, which will contain the
 source tree.
 
-Note that source code in GIT is development quality, and may not be stable or
+Note that source code in Git is development quality, and may not be stable or
 well tested.
 
 It is strongly recommended to not run Privoxy as root. You should configure/

@@ -1,3 +1,56 @@
+privoxy (3.0.29~git6a358e-1) UNRELEASED; urgency=medium
+
+  * New upstream developement version.
+  * Update all patches to new version.
+  * 36_trusted-cgi-referer-example and 37_ppedit-tests403 are now
+    incorporated upstream.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 30 Nov 2019 12:44:20 +0100
+
+privoxy (3.0.28-2) unstable; urgency=medium
+
+  * d/tests/privoxy-regression-test: Remove tmpdir on exit.
+  * 36_trusted-cgi-referer-example: Comment trusted-cgi-referer pointing
+    to example.org
+  * d/maintscript: Remove orphaned /etc/privoxy/templates/show-version
+    (Closes: #918110).
+  * 37_ppedit-tests403: Update a bunch of regression tests that have to
+    expect status code 403 now.
+  * Enable enable-edit-actions in privoxy-regression-test again.
+  * Upgrade to debhelper v12.
+  * Update (minimal) upstream signing key.
+  * Add Pre-Depends: ${misc:Pre-Depends} for --skip-systemd-native.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 06 Jan 2019 13:07:14 +0100
+
+privoxy (3.0.28-1) unstable; urgency=medium
+
+  [ Roland Rosenfeld ]
+  * Add es debconf translation.  Thanks to Jonathan Bustillos (Closes: #903863).
+  * 38_connection_close: Don't add a "Connection" header for CONNECT requests.
+
+  [ Ondřej Nový ]
+  * d/tests: Use AUTOPKGTEST_TMP instead of ADTTMP
+  * d/watch: Use https protocol
+
+  [ Roland Rosenfeld ]
+  * d/tests: Fix leftover ADTTMP.
+  * Add salsa CI pipeline in debian/gitlab-ci.yml.
+  * New upstream version 3.0.28.
+  * Adapt all patches to new version (06_8bit_manual is implemented in a
+    better way upstream now, 36_openspopenjade is replaced by some
+    autoconf code, 37_adventofcode and 38_connection_close are included
+    upstream).
+  * Update debian/copyright.
+  * Upgrade to Standards-Version 4.3.0 (Declare Rules-Requires-Root: no).
+  * Move PID file from /var/run to /run.
+  * Undo voodoo to remove CVS tags from configs since upstream uses git
+    now.
+  * Disable enable-edit-actions in privoxy-regression-test, since the test
+    seems to be broken (does not use referrer, which is required here).
+
+ -- Roland Rosenfeld <roland@debian.org>  Mon, 31 Dec 2018 16:52:27 +0100
+
 privoxy (3.0.26-6) unstable; urgency=medium
 
   * Fix typo in patch description.

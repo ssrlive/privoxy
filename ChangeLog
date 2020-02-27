@@ -1829,7 +1829,7 @@ ChangeLog for Privoxy
   if connection-sharing is enabled.
 - A TODO list has been added to the source tarball to give potential
   volunteers a better idea of what the current goals are. Donations
-  are still welcome too: http://www.privoxy.org/faq/general.html#DONATE
+  are still welcome too: https://www.privoxy.org/faq/general.html#DONATE
 
 *** Version 3.0.12 ***
 

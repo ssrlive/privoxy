@@ -11,7 +11,7 @@
  *
  *
  * Copyright   :  Written by and Copyright (C) 2001-2017 members of the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and

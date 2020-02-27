@@ -5,7 +5,7 @@
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2016 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -2300,7 +2300,20 @@ void get_url_actions(struct client_state *csp, struct http_request *http)
    struct url_actions *b;
    int i;
 
-   init_current_action(csp->action);
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (!csp->http->client_ssl)
+#endif
+   {
+      /*
+       * When filtering TLS traffic this function gets called a
+       * second time after the encrypted headers have been received.
+       *
+       * Only initialize the first time. The second time we apply
+       * the newly set actions on top of the ones that were set
+       * the first time.
+       */
+      init_current_action(csp->action);
+   }
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {

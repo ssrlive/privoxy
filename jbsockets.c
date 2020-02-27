@@ -8,7 +8,7 @@
  *                on many platforms.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2017 the
- *                Privoxy team. http://www.privoxy.org/
+ *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
  *                by and Copyright (C) 1997 Anonymous Coders and
@@ -1067,6 +1067,10 @@ int bind_port(const char *hostnam, int portnum, int backlog, jb_socket *pfd)
     */
    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
 #endif /* ndef _WIN32 */
+
+#ifdef IP_FREEBIND
+   setsockopt(fd, IPPROTO_IP, IP_FREEBIND, (char *)&one, sizeof(one));
+#endif
 
 #ifdef HAVE_RFC2553
    if (bind(fd, rp->ai_addr, rp->ai_addrlen) < 0)
