@@ -1475,14 +1475,17 @@ static int generate_webpage_certificate(struct client_state *csp)
     * We must compute length of serial number in string + terminating null.
     */
    unsigned long certificate_serial = get_certificate_serial(csp);
-   int serial_num_size = snprintf(NULL, 0, "%lu", certificate_serial) + 1;
+   unsigned long certificate_serial_time = (unsigned long)time(NULL);
+   int serial_num_size = snprintf(NULL, 0, "%lu%lu",
+      certificate_serial_time, certificate_serial) + 1;
    if (serial_num_size <= 0)
    {
       serial_num_size = 1;
    }
 
    char serial_num_text[serial_num_size];  /* Buffer for serial number */
-   ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu", certificate_serial);
+   ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu%lu",
+      certificate_serial_time, certificate_serial);
    if (ret < 0 || ret >= serial_num_size)
    {
       log_error(LOG_LEVEL_ERROR,
