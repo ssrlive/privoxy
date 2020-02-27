@@ -65,8 +65,6 @@
 #define PRIVATE_KEY_BUF_SIZE             16000             /* Size of buffer to save private key. Value 16000 is taken from mbed TLS library examples. */
 #define RSA_KEY_PUBLIC_EXPONENT          65537             /* Public exponent for RSA private key generating */
 #define RSA_KEYSIZE                      2048              /* Size of generated RSA keys */
-#define GENERATED_CERT_VALID_FROM        "20100101000000"  /* Date and time, which will be set in generated certificates as parameter valid from */
-#define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be set in generated certificates as parameter valid to */
 #define CERT_SIGNATURE_ALGORITHM         MBEDTLS_MD_SHA256 /* The MD algorithm to use for the signature */
 #define CERT_SERIAL_NUM_LENGTH           4                 /* Bytes of hash to be used for creating serial number of certificate. Min=2 and max=16 */
 #define INVALID_CERT_INFO_BUF_SIZE       2048              /* Size of buffer for message with information about reason of certificate invalidity. Data after the end of buffer will not be saved */
@@ -1252,6 +1250,102 @@ static int ssl_certificate_is_invalid(const char *cert_file)
 
 /*********************************************************************
  *
+ * Function    :  generate_certificate_valid_date
+ *
+ * Description :  Turns a time_t into the format expected by mbedTLS.
+ *
+ * Parameters  :
+ *          1  :  time_spec = The timestamp to convert
+ *          2  :  buffer = The buffer to write the date to
+ *          3  :  buffer_size = The size of the buffer
+ *
+ * Returns     :   0 => The conversion worked
+ *                 1 => The conversion failed
+ *
+ *********************************************************************/
+static int generate_certificate_valid_date(time_t time_spec, char *buffer,
+                                           size_t buffer_size)
+{
+   struct tm valid_date;
+   size_t ret;
+
+#ifndef HAVE_GMTIME_R
+#error HTTP inspection currently requires gmtime_r() which seems to be missing
+#endif
+   if (NULL == gmtime_r(&time_spec, &valid_date))
+   {
+      return 1;
+   }
+
+   ret = strftime(buffer, buffer_size, "%Y%m%d%H%M%S", &valid_date);
+   if (ret != 14)
+   {
+      return 1;
+   }
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_certificate_valid_from_date
+ *
+ * Description :  Generates a "valid from" date in the format
+ *                expected by mbedTLS.
+ *
+ * Parameters  :
+ *          1  :  buffer = The buffer to write the date to
+ *          2  :  buffer_size = The size of the buffer
+ *
+ * Returns     :   0 => The generation worked
+ *                 1 => The generation failed
+ *
+ *********************************************************************/
+static int get_certificate_valid_from_date(char *buffer, size_t buffer_size)
+{
+   time_t time_spec;
+
+   time_spec = time(NULL);
+   /* 1 month in the past */
+   time_spec -= 30 * 24 * 60 * 60;
+
+   return generate_certificate_valid_date(time_spec, buffer, buffer_size);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_certificate_valid_to_date
+ *
+ * Description :  Generates a "valid to" date in the format
+ *                expected by mbedTLS.
+ *
+ * Parameters  :
+ *          1  :  buffer = The buffer to write the date to
+ *          2  :  buffer_size = The size of the buffer
+ *
+ * Returns     :   0 => The generation worked
+ *                 1 => The generation failed
+ *
+ *********************************************************************/
+static int get_certificate_valid_to_date(char *buffer, size_t buffer_size)
+{
+   time_t time_spec;
+
+   time_spec = time(NULL);
+   /* Three months in the future */
+   time_spec += 90 * 24 * 60 * 60;
+
+   return generate_certificate_valid_date(time_spec, buffer, buffer_size);
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  generate_webpage_certificate
  *
  * Description :  Creates certificate file in presetted directory.
@@ -1282,6 +1376,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
    cert_options cert_opt;
+   char cert_valid_from[15];
+   char cert_valid_to[15];
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -1365,11 +1461,19 @@ static int generate_webpage_certificate(struct client_state *csp)
       goto exit;
    }
 
+   if (get_certificate_valid_from_date(cert_valid_from, sizeof(cert_valid_from))
+    || get_certificate_valid_to_date(cert_valid_to, sizeof(cert_valid_to)))
+   {
+      log_error(LOG_LEVEL_ERROR, "Generating one of the validity dates failed");
+      ret = -1;
+      goto exit;
+   }
+
    cert_opt.subject_pwd   = CERT_SUBJECT_PASSWORD;
    cert_opt.issuer_pwd    = csp->config->ca_password;
    cert_opt.subject_name  = cert_params;
-   cert_opt.not_before    = GENERATED_CERT_VALID_FROM;
-   cert_opt.not_after     = GENERATED_CERT_VALID_TO;
+   cert_opt.not_before    = cert_valid_from;
+   cert_opt.not_after     = cert_valid_to;
    cert_opt.serial        = serial_num_text;
    cert_opt.is_ca         = 0;
    cert_opt.max_pathlen   = -1;
