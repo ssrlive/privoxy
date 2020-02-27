@@ -1203,6 +1203,55 @@ exit:
 
 /*********************************************************************
  *
+ * Function    :  ssl_certificate_is_invalid
+ *
+ * Description :  Checks whether or not a certificate is valid.
+ *                Currently only checks that the certificate can be
+ *                parsed and that the "valid to" date is in the future.
+ *
+ * Parameters  :
+ *          1  :  cert_file = The certificate to check
+ *
+ * Returns     :   0 => The certificate is valid.
+ *                 1 => The certificate is invalid
+ *
+ *********************************************************************/
+static int ssl_certificate_is_invalid(const char *cert_file)
+{
+   mbedtls_x509_crt cert;
+   int ret;
+
+   mbedtls_x509_crt_init(&cert);
+
+   ret = mbedtls_x509_crt_parse_file(&cert, cert_file);
+   if (ret != 0)
+   {
+      char err_buf[ERROR_BUF_SIZE];
+
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "Loading certificate %s to check validity failed: %s",
+         cert_file, err_buf);
+      mbedtls_x509_crt_free(&cert);
+
+      return 1;
+   }
+   if (mbedtls_x509_time_is_past(&cert.valid_to))
+   {
+      mbedtls_x509_crt_free(&cert);
+
+      return 1;
+   }
+
+   mbedtls_x509_crt_free(&cert);
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  generate_webpage_certificate
  *
  * Description :  Creates certificate file in presetted directory.
@@ -1330,8 +1379,25 @@ static int generate_webpage_certificate(struct client_state *csp)
     */
    if (file_exists(cert_opt.output_file) == 1 && subject_key_len == 0)
    {
-      ret = 0;
-      goto exit;
+      /* The file exists, but is it valid */
+      if (ssl_certificate_is_invalid(cert_opt.output_file))
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Certificate %s is no longer valid. Removing.",
+            cert_opt.output_file);
+         if (unlink(cert_opt.output_file))
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
+               cert_opt.output_file);
+            ret = -1;
+            goto exit;
+         }
+      }
+      else
+      {
+         ret = 0;
+         goto exit;
+      }
    }
 
    /*
