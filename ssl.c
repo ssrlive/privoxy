@@ -1383,7 +1383,59 @@ static int generate_webpage_certificate(struct client_state *csp)
    cert_opt.issuer_key  = NULL;
    cert_opt.subject_key = NULL;
    cert_opt.issuer_crt  = NULL;
-   cert_opt.output_file = NULL;
+
+   cert_opt.output_file = make_certs_path(csp->config->certificate_directory,
+      (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
+   if (cert_opt.output_file == NULL)
+   {
+      return -1;
+   }
+
+   cert_opt.subject_key = make_certs_path(csp->config->certificate_directory,
+      (const char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
+   if (cert_opt.subject_key == NULL)
+   {
+      freez(cert_opt.output_file);
+      return -1;
+   }
+
+   if (file_exists(cert_opt.output_file) == 1)
+   {
+      /* The file exists, but is it valid? */
+      if (ssl_certificate_is_invalid(cert_opt.output_file))
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Certificate %s is no longer valid. Removing it.",
+            cert_opt.output_file);
+         if (unlink(cert_opt.output_file))
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
+               cert_opt.output_file);
+
+            freez(cert_opt.output_file);
+            freez(cert_opt.subject_key);
+
+            return -1;
+         }
+         if (unlink(cert_opt.subject_key))
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
+               cert_opt.subject_key);
+
+            freez(cert_opt.output_file);
+            freez(cert_opt.subject_key);
+
+            return -1;
+         }
+      }
+      else
+      {
+         freez(cert_opt.output_file);
+         freez(cert_opt.subject_key);
+
+         return 0;
+      }
+   }
 
    /*
     * Create key for requested host
@@ -1391,6 +1443,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    int subject_key_len = generate_key(csp, &key_buf);
    if (subject_key_len < 0)
    {
+      freez(cert_opt.output_file);
+      freez(cert_opt.subject_key);
       log_error(LOG_LEVEL_ERROR, "Key generating failed");
       return -1;
    }
@@ -1450,16 +1504,6 @@ static int generate_webpage_certificate(struct client_state *csp)
 
    cert_opt.issuer_crt = csp->config->ca_cert_file;
    cert_opt.issuer_key = csp->config->ca_key_file;
-   cert_opt.subject_key = make_certs_path(csp->config->certificate_directory,
-      (const char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
-   cert_opt.output_file = make_certs_path(csp->config->certificate_directory,
-      (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
-
-   if (cert_opt.subject_key == NULL || cert_opt.output_file == NULL)
-   {
-      ret = -1;
-      goto exit;
-   }
 
    if (get_certificate_valid_from_date(cert_valid_from, sizeof(cert_valid_from))
     || get_certificate_valid_to_date(cert_valid_to, sizeof(cert_valid_to)))
@@ -1479,29 +1523,14 @@ static int generate_webpage_certificate(struct client_state *csp)
    cert_opt.max_pathlen   = -1;
 
    /*
-    * Test if certificate exists and private key was already created
+    * Test if the private key was already created.
+    * XXX: Can this still happen?
     */
-   if (file_exists(cert_opt.output_file) == 1 && subject_key_len == 0)
+   if (subject_key_len == 0)
    {
-      /* The file exists, but is it valid */
-      if (ssl_certificate_is_invalid(cert_opt.output_file))
-      {
-         log_error(LOG_LEVEL_CONNECT,
-            "Certificate %s is no longer valid. Removing.",
-            cert_opt.output_file);
-         if (unlink(cert_opt.output_file))
-         {
-            log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
-               cert_opt.output_file);
-            ret = -1;
-            goto exit;
-         }
-      }
-      else
-      {
-         ret = 0;
-         goto exit;
-      }
+      log_error(LOG_LEVEL_ERROR, "Subject key was already created");
+      ret = 0;
+      goto exit;
    }
 
    /*
