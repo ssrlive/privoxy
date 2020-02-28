@@ -41,6 +41,8 @@
 #include "mbedtls/pem.h"
 #include "mbedtls/base64.h"
 #include "mbedtls/error.h"
+#include "mbedtls/oid.h"
+#include "mbedtls/asn1write.h"
 
 #include "config.h"
 #include "project.h"
@@ -1346,6 +1348,112 @@ static int get_certificate_valid_to_date(char *buffer, size_t buffer_size)
 
 /*********************************************************************
  *
+ * Function    :  set_subject_alternative_name
+ *
+ * Description :  Sets the Subject Alternative Name extension to a cert
+ *
+ * Parameters  :
+ *          1  :  cert = The certificate to modify
+ *          2  :  hostname = The hostname to add
+ *
+ * Returns     :  <0 => Error while creating certificate.
+ *                 0 => It worked
+ *
+ *********************************************************************/
+static int set_subject_alternative_name(mbedtls_x509write_cert *cert, const char *hostname)
+{
+   char err_buf[ERROR_BUF_SIZE];
+   int ret;
+   char *subject_alternative_name;
+   size_t subject_alternative_name_len;
+#define MBEDTLS_SUBJECT_ALTERNATIVE_NAME_MAX_LEN 255
+   unsigned char san_buf[MBEDTLS_SUBJECT_ALTERNATIVE_NAME_MAX_LEN + 1];
+   unsigned char *c;
+   int len;
+
+   subject_alternative_name_len = strlen(hostname) + 1;
+   subject_alternative_name = zalloc_or_die(subject_alternative_name_len);
+
+   strlcpy(subject_alternative_name, hostname, subject_alternative_name_len);
+
+   memset(san_buf, 0, sizeof(san_buf));
+
+   c = san_buf + sizeof(san_buf);
+   len = 0;
+
+   ret = mbedtls_asn1_write_raw_buffer(&c, san_buf,
+      (const unsigned char *)subject_alternative_name,
+      strlen(subject_alternative_name));
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_raw_buffer() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_len(&c, san_buf, strlen(subject_alternative_name));
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_len() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_tag(&c, san_buf, MBEDTLS_ASN1_CONTEXT_SPECIFIC | 2);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_tag() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_len(&c, san_buf, (size_t)len);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_len() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_tag(&c, san_buf,
+      MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_tag() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_x509write_crt_set_extension(cert,
+      MBEDTLS_OID_SUBJECT_ALT_NAME,
+      MBEDTLS_OID_SIZE(MBEDTLS_OID_SUBJECT_ALT_NAME),
+      0, san_buf + sizeof(san_buf) - len, (size_t)len);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_x509write_crt_set_extension() failed: %s", err_buf);
+   }
+
+exit:
+   freez(subject_alternative_name);
+
+   return ret;
+
+}
+
+/*********************************************************************
+ *
  * Function    :  generate_webpage_certificate
  *
  * Description :  Creates certificate file in presetted directory.
@@ -1718,6 +1826,13 @@ static int generate_webpage_certificate(struct client_state *csp)
       goto exit;
    }
 #endif /* MBEDTLS_SHA1_C */
+
+   if (set_subject_alternative_name(&cert, csp->http->host))
+   {
+      /* Errors are already logged by set_subject_alternative_name() */
+      ret = -1;
+      goto exit;
+   }
 
    /*
     * Writing certificate into file
