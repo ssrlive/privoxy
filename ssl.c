@@ -1847,15 +1847,6 @@ static unsigned long get_certificate_serial(struct client_state *csp)
    unsigned long serial = 0;
 
    int i = CERT_SERIAL_NUM_LENGTH;
-   /* Length of hash is 16 bytes, we must avoid to read next chars */
-   if (i > 16)
-   {
-      i = 16;
-   }
-   if (i < 2)
-   {
-      i = 2;
-   }
 
    for (; i >= 0; i--)
    {
