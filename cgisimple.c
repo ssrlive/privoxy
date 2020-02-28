@@ -1438,9 +1438,12 @@ jb_err cgi_show_url_info(struct client_state *csp,
       }
 
       /*
-       * We have a warning about SSL paths.  Hide it for unencrypted sites.
+       * We have a warning about SSL paths. Hide it for unencrypted sites
+       * and unconditionally if https inspection is enabled.
        */
+#ifndef FEATURE_HTTPS_INSPECTION
       if (!url_to_query->ssl)
+#endif
       {
          if (map_block_killer(exports, "https"))
          {
