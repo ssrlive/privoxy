@@ -291,12 +291,17 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
          /*
           * Got a path.
           *
-          * NOTE: The following line ignores the path for HTTPS URLS.
-          * This means that you get consistent behaviour if you type a
-          * https URL in and it's parsed by the function.  (When the
-          * URL is actually retrieved, SSL hides the path part).
+          * If FEATURE_HTTPS_INSPECTION isn't available, ignore the
+          * path for https URLs so that we get consistent behaviour
+          * if a https URL is parsed. When the URL is actually
+          * retrieved, https hides the path part.
           */
-         http->path = strdup_or_die(http->ssl ? "/" : url_path);
+         http->path = strdup_or_die(
+#ifndef FEATURE_HTTPS_INSPECTION
+            http->ssl ? "/" :
+#endif
+            url_path
+         );
          *url_path = '\0';
          http->hostport = strdup_or_die(url_noproto);
       }
