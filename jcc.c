@@ -2621,7 +2621,6 @@ static void handle_established_connection(struct client_state *csp)
 #else
             FD_SET(csp->cfd, &rfds);
 #endif
-            n++;
          }
 
          if (read_ssl_server)
@@ -2632,7 +2631,6 @@ static void handle_established_connection(struct client_state *csp)
 #else
             FD_SET(csp->server_connection.sfd, &rfds);
 #endif
-            n++;
          }
       }
 #endif
