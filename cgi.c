@@ -1594,7 +1594,7 @@ struct http_response *finish_http_response(struct client_state *csp, struct http
    if (NULL != csp->config->cors_allowed_origin)
    {
       enlist_unique_header(rsp->headers, "Access-Control-Allow-Origin",
-         strdup_or_die(csp->config->cors_allowed_origin));
+         csp->config->cors_allowed_origin);
       enlist_unique_header(rsp->headers, "Access-Control-Allow-Methods", "GET,POST");
       enlist_unique_header(rsp->headers, "Access-Control-Allow-Headers", "X-Requested-With");
       enlist_unique_header(rsp->headers, "Access-Control-Max-Age", "86400");
