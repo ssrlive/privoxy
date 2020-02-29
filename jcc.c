@@ -2666,35 +2666,10 @@ static void handle_established_connection(struct client_state *csp)
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #ifdef FEATURE_HTTPS_INSPECTION
-         /*
-          * Reading data from standard or secured connection (HTTP/HTTPS)
-          */
          if (client_use_ssl(csp))
          {
-            /*
-             * Receiving HTTP request from client over TLS/SSL and sending
-             * it to server over TLS/SSL.
-             */
-            len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl),
-               (unsigned char *)csp->receive_buffer, (size_t)max_bytes_to_read);
-
-            if (len <= 0)
-            {
-               mark_server_socket_tainted(csp);
-               break;
-            }
-
-            ret = ssl_send_data(&(csp->mbedtls_server_attr.ssl),
-               (const unsigned char *)csp->receive_buffer, (size_t)len);
-
-            if (ret < 0)
-            {
-               log_error(LOG_LEVEL_ERROR,
-                  "Send request over TLS/SSL to: %s failed", http->host);
-               mark_server_socket_tainted(csp);
-               close_client_and_server_ssl_connections(csp);
-               return;
-            }
+            log_error(LOG_LEVEL_CONNECT, "Breaking with TLS/SSL.");
+            break;
          }
          else
 #endif /* def FEATURE_HTTPS_INSPECTION */
