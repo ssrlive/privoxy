@@ -2528,27 +2528,6 @@ static void handle_established_connection(struct client_state *csp)
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-#ifdef FEATURE_HTTPS_INSPECTION
-      /*
-       * Test if some data from client or destination server are pending
-       * on TLS/SSL. We must work with them preferably. TLS/SSL data can
-       * be pending because of maximal fragment size.
-       */
-      int read_ssl_server = 0;
-      int read_ssl_client = 0;
-
-      if (client_use_ssl(csp))
-      {
-         read_ssl_client = is_ssl_pending(&(csp->mbedtls_client_attr.ssl)) != 0;
-      }
-
-      if (server_use_ssl(csp))
-      {
-         read_ssl_server = is_ssl_pending(&(csp->mbedtls_server_attr.ssl)) != 0;
-      }
-
-      if (!read_ssl_server && !read_ssl_client)
-#endif
       {
 #ifdef HAVE_POLL
          poll_fds[0].fd = csp->cfd;
@@ -2606,34 +2585,7 @@ static void handle_established_connection(struct client_state *csp)
             return;
          }
       }
-#ifdef FEATURE_HTTPS_INSPECTION
-      else
-      {
-         /* set FD if some data are pending on TLS/SSL connections */
-#ifndef HAVE_POLL
-         FD_ZERO(&rfds);
-#endif
-         if (read_ssl_client)
-         {
-#ifdef HAVE_POLL
-            poll_fds[0].fd = csp->cfd;
-            poll_fds[0].events = POLLIN;
-#else
-            FD_SET(csp->cfd, &rfds);
-#endif
-         }
 
-         if (read_ssl_server)
-         {
-#ifdef HAVE_POLL
-            poll_fds[1].fd = csp->server_connection.sfd;
-            poll_fds[1].events = POLLIN;
-#else
-            FD_SET(csp->server_connection.sfd, &rfds);
-#endif
-         }
-      }
-#endif
       /*
        * This is the body of the browser's request,
        * just read and write it.
