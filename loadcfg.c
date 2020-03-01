@@ -1746,6 +1746,7 @@ struct configuration_spec * load_config(void)
  * ca-directory directory
  * *************************************************************************/
          case hash_ca_directory:
+            freez(ca_directory);
             ca_directory = make_path(NULL, arg);
 
             if (NULL == ca_directory)
@@ -1760,6 +1761,7 @@ struct configuration_spec * load_config(void)
  * In ca dir by default
  * *************************************************************************/
          case hash_ca_cert_file:
+            freez(ca_cert_file);
             ca_cert_file = make_path(config->ca_directory, arg);
 
             if (NULL == ca_cert_file)
@@ -1774,6 +1776,7 @@ struct configuration_spec * load_config(void)
  * In ca dir by default
  * *************************************************************************/
          case hash_ca_key_file:
+            freez(ca_key_file);
             ca_key_file = make_path(config->ca_directory, arg);
 
             if (NULL == ca_key_file)
@@ -1787,6 +1790,7 @@ struct configuration_spec * load_config(void)
  * certificate-directory directory
  * *************************************************************************/
          case hash_certificate_directory:
+            freez(certificate_directory);
             certificate_directory = make_path(NULL, arg);
 
             if (NULL == certificate_directory)
@@ -1801,6 +1805,7 @@ struct configuration_spec * load_config(void)
  * trusted CAs file name trusted-cas-file
  * *************************************************************************/
          case hash_trusted_cas_file:
+            freez(trusted_cas_file);
             trusted_cas_file = make_path(config->ca_directory, arg);
 
             if (NULL == trusted_cas_file)
