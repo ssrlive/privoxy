@@ -2410,13 +2410,6 @@ static void handle_established_connection(struct client_state *csp)
    int use_ssl_tunnel = 0;
    csp->dont_verify_certificate = 0;
 
-   /*
-    * Preset flags informing if SSL connections with server or client
-    * are opened or closed
-    */
-   csp->ssl_with_server_is_opened = 0;
-   csp->ssl_with_client_is_opened = 0;
-
    if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION))
    {
       /* Pass encrypted content without filtering. */
