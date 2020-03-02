@@ -273,6 +273,7 @@ static void unload_configfile (void * data)
    list_remove_all(config->ordered_client_headers);
 
    freez(config->admin_address);
+   freez(config->cors_allowed_origin);
    freez(config->proxy_info_url);
    freez(config->proxy_args);
    freez(config->usermanual);
