@@ -3925,6 +3925,7 @@ static void chat(struct client_state *csp)
                   {
                      send_crunch_response(csp, rsp);
                   }
+                  close_client_and_server_ssl_connections(csp);
                   return;
                }
             }
