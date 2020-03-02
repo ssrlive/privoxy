@@ -116,6 +116,9 @@ void free_csp_resources(struct client_state *csp)
    destroy_list(csp->https_headers);
 #endif
    destroy_list(csp->tags);
+#ifdef FEATURE_CLIENT_TAGS
+   destroy_list(csp->client_tags);
+#endif
 
    free_current_action(csp->action);
 }
