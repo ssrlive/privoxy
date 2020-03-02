@@ -633,6 +633,7 @@ jb_err decompress_iob(struct client_state *csp)
       if (bufsize >= csp->config->buffer_limit)
       {
          log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
+         freez(buf);
          return JB_ERR_MEMORY;
       }
 
