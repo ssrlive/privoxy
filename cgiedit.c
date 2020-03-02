@@ -2782,6 +2782,9 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 #ifndef FEATURE_EXTERNAL_FILTERS
    if (!err) err = map_block_killer(exports, "external-content-filters");
 #endif
+#ifndef FEATURE_HTTP_INSPECTION
+   if (!err) err = map_block_killer(exports, "https-inspection");
+#endif
 
    if (err)
    {
