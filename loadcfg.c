@@ -239,11 +239,9 @@ static void unload_configfile (void * data)
    while (cur_fwd != NULL)
    {
       struct forward_spec * next_fwd = cur_fwd->next;
-      free_pattern_spec(cur_fwd->url);
 
-      freez(cur_fwd->gateway_host);
-      freez(cur_fwd->forward_host);
-      free(cur_fwd);
+      unload_forward_spec(cur_fwd);
+
       cur_fwd = next_fwd;
    }
    config->forward = NULL;
