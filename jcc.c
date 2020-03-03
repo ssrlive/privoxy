@@ -146,7 +146,7 @@ int g_terminate = 0;
 #if !defined(_WIN32) && !defined(__OS2__)
 static void sig_handler(int the_signal);
 #endif
-static int client_protocol_is_unsupported(const struct client_state *csp, char *req);
+static int client_protocol_is_unsupported(struct client_state *csp, char *req);
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers);
 static jb_err get_server_headers(struct client_state *csp);
 static const char *crunch_reason(const struct http_response *rsp);
@@ -445,7 +445,7 @@ static unsigned int get_write_delay(const struct client_state *csp)
  *                FALSE if the request doesn't look invalid.
  *
  *********************************************************************/
-static int client_protocol_is_unsupported(const struct client_state *csp, char *req)
+static int client_protocol_is_unsupported(struct client_state *csp, char *req)
 {
    /*
     * If it's a FTP or gopher request, we don't support it.
@@ -481,8 +481,19 @@ static int client_protocol_is_unsupported(const struct client_state *csp, char *
       log_error(LOG_LEVEL_CLF,
          "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, req);
       freez(req);
-      write_socket_delayed(csp->cfd, response, strlen(response),
-         get_write_delay(csp));
+
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp))
+      {
+         ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+            (const unsigned char *)response, strlen(response));
+      }
+      else
+#endif
+      {
+         write_socket_delayed(csp->cfd, response, strlen(response),
+            get_write_delay(csp));
+      }
 
       return TRUE;
    }
