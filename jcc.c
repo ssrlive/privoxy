@@ -2123,7 +2123,6 @@ static int send_https_request(struct client_state *csp)
          "Failed sending encrypted request headers to: %s: %E",
          csp->http->hostport);
       mark_server_socket_tainted(csp);
-      close_client_and_server_ssl_connections(csp);
       return 1;
    }
 
