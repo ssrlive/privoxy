@@ -2275,8 +2275,11 @@ static jb_err process_encrypted_request(struct client_state *csp)
 
    if (client_protocol_is_unsupported(csp, request_line))
    {
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      /*
+       * If the protocol is unsupported we're done here.
+       * client_protocol_is_unsupported() took care of sending
+       * the error response and logging the error message.
+       */
       return JB_ERR_PARSE;
    }
 
