@@ -2520,62 +2520,60 @@ static void handle_established_connection(struct client_state *csp)
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-      {
 #ifdef HAVE_POLL
-         poll_fds[0].fd = csp->cfd;
+      poll_fds[0].fd = csp->cfd;
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-         if (!watch_client_socket)
-         {
-            /*
-             * Ignore incoming data, but still watch out
-             * for disconnects etc. These flags are always
-             * implied anyway but explicitly setting them
-             * doesn't hurt.
-             */
-            poll_fds[0].events = POLLERR|POLLHUP;
-         }
-         else
+      if (!watch_client_socket)
+      {
+         /*
+          * Ignore incoming data, but still watch out
+          * for disconnects etc. These flags are always
+          * implied anyway but explicitly setting them
+          * doesn't hurt.
+          */
+         poll_fds[0].events = POLLERR|POLLHUP;
+      }
+      else
 #endif
-         {
-            poll_fds[0].events = POLLIN;
-         }
-         poll_fds[1].fd = csp->server_connection.sfd;
-         poll_fds[1].events = POLLIN;
-         n = poll(poll_fds, 2, csp->config->socket_timeout * 1000);
+      {
+         poll_fds[0].events = POLLIN;
+      }
+      poll_fds[1].fd = csp->server_connection.sfd;
+      poll_fds[1].events = POLLIN;
+      n = poll(poll_fds, 2, csp->config->socket_timeout * 1000);
 #else
-         timeout.tv_sec = csp->config->socket_timeout;
-         timeout.tv_usec = 0;
-         n = select((int)maxfd + 1, &rfds, NULL, NULL, &timeout);
+      timeout.tv_sec = csp->config->socket_timeout;
+      timeout.tv_usec = 0;
+      n = select((int)maxfd + 1, &rfds, NULL, NULL, &timeout);
 #endif /* def HAVE_POLL */
 
-         /*server or client not responding in timeout */
-         if (n == 0)
+      /*server or client not responding in timeout */
+      if (n == 0)
+      {
+         log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
+            csp->config->socket_timeout, http->url);
+         if ((byte_count == 0) && (http->ssl == 0))
          {
-            log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
-               csp->config->socket_timeout, http->url);
-            if ((byte_count == 0) && (http->ssl == 0))
-            {
-               send_crunch_response(csp, error_response(csp, "connection-timeout"));
-            }
-            mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-            close_client_and_server_ssl_connections(csp);
-#endif
-            return;
+            send_crunch_response(csp, error_response(csp, "connection-timeout"));
          }
-         else if (n < 0)
-         {
+         mark_server_socket_tainted(csp);
+#ifdef FEATURE_HTTPS_INSPECTION
+         close_client_and_server_ssl_connections(csp);
+#endif
+         return;
+      }
+      else if (n < 0)
+      {
 #ifdef HAVE_POLL
-            log_error(LOG_LEVEL_ERROR, "poll() failed!: %E");
+         log_error(LOG_LEVEL_ERROR, "poll() failed!: %E");
 #else
-            log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
+         log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
 #endif
-            mark_server_socket_tainted(csp);
+         mark_server_socket_tainted(csp);
 #ifdef FEATURE_HTTPS_INSPECTION
-            close_client_and_server_ssl_connections(csp);
+         close_client_and_server_ssl_connections(csp);
 #endif
-            return;
-         }
+         return;
       }
 
       /*
