@@ -2244,6 +2244,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    if (err != JB_ERR_OK)
    {
       /* XXX: Also used for JB_ERR_MEMORY */
+      log_error(LOG_LEVEL_ERROR, "Failed to receive encrypted request: %s",
+         jb_err_to_string(err));
       ssl_send_data(&(csp->mbedtls_client_attr.ssl),
          (const unsigned char *)CHEADER, strlen(CHEADER));
       return err;
@@ -2253,6 +2255,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
    request_line = get_header(csp->client_iob);
    if (request_line == NULL)
    {
+      log_error(LOG_LEVEL_ERROR, "Failed to get the encrypted request line");
       ssl_send_data(&(csp->mbedtls_client_attr.ssl),
          (const unsigned char *)CHEADER, strlen(CHEADER));
       return JB_ERR_PARSE;
@@ -2316,6 +2319,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
        * Our attempts to get the request destination
        * elsewhere failed.
        */
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to get the encrypted request destination");
       ssl_send_data(&(csp->mbedtls_client_attr.ssl),
          (const unsigned char *)CHEADER, strlen(CHEADER));
       return JB_ERR_PARSE;
