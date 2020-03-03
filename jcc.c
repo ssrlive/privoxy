@@ -2711,9 +2711,6 @@ static void handle_established_connection(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-               close_client_and_server_ssl_connections(csp);
-#endif
                return;
             }
          }
@@ -2954,9 +2951,6 @@ static void handle_established_connection(struct client_state *csp)
                         freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                        close_client_and_server_ssl_connections(csp);
-#endif
                         return;
                      }
                   }
@@ -3060,9 +3054,6 @@ static void handle_established_connection(struct client_state *csp)
                            "Flush header and buffers to client failed: %E");
                         freez(hdr);
                         mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                        close_client_and_server_ssl_connections(csp);
-#endif
                         return;
                      }
                   }
@@ -3105,9 +3096,6 @@ static void handle_established_connection(struct client_state *csp)
                   {
                      log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                     close_client_and_server_ssl_connections(csp);
-#endif
                      return;
                   }
                }
@@ -3382,9 +3370,6 @@ static void handle_established_connection(struct client_state *csp)
                       */
                      freez(hdr);
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                     close_client_and_server_ssl_connections(csp);
-#endif
                      return;
                   }
                }
