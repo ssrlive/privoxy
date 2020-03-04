@@ -2127,6 +2127,12 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
       crt->raw.p, crt->raw.len, (unsigned char *)last->file_buf,
       sizeof(last->file_buf)-1, &olen)) != 0)
    {
+      char err_buf[ERROR_BUF_SIZE];
+
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR, "mbedtls_pem_write_buffer() failed: %s",
+         err_buf);
+
       return(ret);
    }
 
