@@ -94,7 +94,7 @@
 </para>
 
 <para>
- Then, to build from either unpacked tarball or CVS source:
+ Then, to build from either unpacked tarball or Git checkout:
 </para>
 
  <screen>
