@@ -133,8 +133,8 @@ Hal.
     can be sent to the list for review too.
    </para>
     <para>
-     You will also need to have a git package installed, which will
-     entail having ssh installed as well, in order to access the git repository.
+     You will also need to have a git package installed,
+     in order to access the git repository.
      Having the GNU build tools is also going to be important (particularly,
      autoconf and gmake).
     </para>
