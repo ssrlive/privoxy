@@ -4,7 +4,7 @@
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2017 the
+ * Copyright   :  Written by and Copyright (C) 2001-2020 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -633,6 +633,7 @@ jb_err decompress_iob(struct client_state *csp)
       if (bufsize >= csp->config->buffer_limit)
       {
          log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
+         freez(buf);
          return JB_ERR_MEMORY;
       }
 
@@ -1215,7 +1216,20 @@ jb_err sed_https(struct client_state *csp)
    csp->headers->first = csp->https_headers->first;
    csp->headers->last  = csp->https_headers->last;
 
+   /*
+    * Start with fresh tags. Already exising tags may
+    * be set again. This is necessary to overrule
+    * URL-based patterns.
+    */
+   destroy_list(csp->tags);
+
+   /*
+    * We want client header filters and taggers
+    * so temporarly remove the flag.
+    */
+   csp->flags &= ~CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
    err = sed(csp, FILTER_CLIENT_HEADERS);
+   csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
    csp->headers->first = headers.first;
    csp->headers->last  = headers.last;

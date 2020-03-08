@@ -193,12 +193,10 @@ privoxy_mutex_t log_mutex;
 privoxy_mutex_t log_init_mutex;
 privoxy_mutex_t connection_reuse_mutex;
 
-#ifdef LIMIT_MUTEX_NUMBER
-privoxy_mutex_t certificates_mutexes[32];
-#else
-privoxy_mutex_t certificates_mutexes[65536];
-#endif /* LIMIT_MUTEX_NUMBER */
+#ifdef FEATURE_HTTPS_INSPECTION
+privoxy_mutex_t certificate_mutex;
 privoxy_mutex_t rng_mutex;
+#endif
 
 #ifdef FEATURE_EXTERNAL_FILTERS
 privoxy_mutex_t external_filter_mutex;
@@ -2030,12 +2028,23 @@ static int send_http_request(struct client_state *csp)
  *********************************************************************/
 static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
 {
-   unsigned char buf[BUFFER_SIZE];
-   int len;
+   int content_length_known = csp->expected_client_content_length != 0;
 
    while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl)))
    {
-      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl), buf, sizeof(buf));
+      unsigned char buf[BUFFER_SIZE];
+      int len;
+      int max_bytes_to_read = sizeof(buf);
+
+      if (content_length_known && csp->expected_client_content_length < sizeof(buf))
+      {
+         max_bytes_to_read = (int)csp->expected_client_content_length;
+      }
+      log_error(LOG_LEVEL_CONNECT,
+         "Waiting for up to %d bytes of POST data from the client.",
+         max_bytes_to_read);
+      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl), buf,
+         (unsigned)max_bytes_to_read);
       if (len == -1)
       {
          return 1;
@@ -2057,6 +2066,11 @@ static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
          if (csp->expected_client_content_length >= len)
          {
             csp->expected_client_content_length -= (unsigned)len;
+         }
+         if (csp->expected_client_content_length == 0)
+         {
+            log_error(LOG_LEVEL_HEADER, "Forwarded the last %d bytes", len);
+            break;
          }
       }
    }
@@ -2396,13 +2410,6 @@ static void handle_established_connection(struct client_state *csp)
    int use_ssl_tunnel = 0;
    csp->dont_verify_certificate = 0;
 
-   /*
-    * Preset flags informing if SSL connections with server or client
-    * are opened or closed
-    */
-   csp->ssl_with_server_is_opened = 0;
-   csp->ssl_with_client_is_opened = 0;
-
    if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION))
    {
       /* Pass encrypted content without filtering. */
@@ -2514,27 +2521,6 @@ static void handle_established_connection(struct client_state *csp)
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-#ifdef FEATURE_HTTPS_INSPECTION
-      /*
-       * Test if some data from client or destination server are pending
-       * on TLS/SSL. We must work with them preferably. TLS/SSL data can
-       * be pending because of maximal fragment size.
-       */
-      int read_ssl_server = 0;
-      int read_ssl_client = 0;
-
-      if (client_use_ssl(csp))
-      {
-         read_ssl_client = is_ssl_pending(&(csp->mbedtls_client_attr.ssl)) != 0;
-      }
-
-      if (server_use_ssl(csp))
-      {
-         read_ssl_server = is_ssl_pending(&(csp->mbedtls_server_attr.ssl)) != 0;
-      }
-
-      if (!read_ssl_server && !read_ssl_client)
-#endif
       {
 #ifdef HAVE_POLL
          poll_fds[0].fd = csp->cfd;
@@ -2592,36 +2578,7 @@ static void handle_established_connection(struct client_state *csp)
             return;
          }
       }
-#ifdef FEATURE_HTTPS_INSPECTION
-      else
-      {
-         /* set FD if some data are pending on TLS/SSL connections */
-#ifndef HAVE_POLL
-         FD_ZERO(&rfds);
-#endif
-         if (read_ssl_client)
-         {
-#ifdef HAVE_POLL
-            poll_fds[0].fd = csp->cfd;
-            poll_fds[0].events = POLLIN;
-#else
-            FD_SET(csp->cfd, &rfds);
-#endif
-            n++;
-         }
 
-         if (read_ssl_server)
-         {
-#ifdef HAVE_POLL
-            poll_fds[1].fd = csp->server_connection.sfd;
-            poll_fds[1].events = POLLIN;
-#else
-            FD_SET(csp->server_connection.sfd, &rfds);
-#endif
-            n++;
-         }
-      }
-#endif
       /*
        * This is the body of the browser's request,
        * just read and write it.
@@ -3968,6 +3925,7 @@ static void chat(struct client_state *csp)
                   {
                      send_crunch_response(csp, rsp);
                   }
+                  close_client_and_server_ssl_connections(csp);
                   return;
                }
             }
@@ -4590,17 +4548,10 @@ static void initialize_mutexes(void)
     * Prepare global mutex semaphores
     */
 
-#ifdef LIMIT_MUTEX_NUMBER
-   int i = 0;
-   for (i = 0; i < 32; i++)
-#else
-   int i = 0;
-   for (i = 0; i < 65536; i++)
-#endif /* LIMIT_MUTEX_NUMBER */
-   {
-      privoxy_mutex_init(&(certificates_mutexes[i]));
-   }
+#ifdef FEATURE_HTTPS_INSPECTION
+   privoxy_mutex_init(&certificate_mutex);
    privoxy_mutex_init(&rng_mutex);
+#endif
 
    privoxy_mutex_init(&log_mutex);
    privoxy_mutex_init(&log_init_mutex);

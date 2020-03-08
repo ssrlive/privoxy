@@ -239,11 +239,9 @@ static void unload_configfile (void * data)
    while (cur_fwd != NULL)
    {
       struct forward_spec * next_fwd = cur_fwd->next;
-      free_pattern_spec(cur_fwd->url);
 
-      freez(cur_fwd->gateway_host);
-      freez(cur_fwd->forward_host);
-      free(cur_fwd);
+      unload_forward_spec(cur_fwd);
+
       cur_fwd = next_fwd;
    }
    config->forward = NULL;
@@ -273,6 +271,7 @@ static void unload_configfile (void * data)
    list_remove_all(config->ordered_client_headers);
 
    freez(config->admin_address);
+   freez(config->cors_allowed_origin);
    freez(config->proxy_info_url);
    freez(config->proxy_args);
    freez(config->usermanual);
@@ -1746,6 +1745,7 @@ struct configuration_spec * load_config(void)
  * ca-directory directory
  * *************************************************************************/
          case hash_ca_directory:
+            freez(ca_directory);
             ca_directory = make_path(NULL, arg);
 
             if (NULL == ca_directory)
@@ -1760,6 +1760,7 @@ struct configuration_spec * load_config(void)
  * In ca dir by default
  * *************************************************************************/
          case hash_ca_cert_file:
+            freez(ca_cert_file);
             ca_cert_file = make_path(config->ca_directory, arg);
 
             if (NULL == ca_cert_file)
@@ -1774,6 +1775,7 @@ struct configuration_spec * load_config(void)
  * In ca dir by default
  * *************************************************************************/
          case hash_ca_key_file:
+            freez(ca_key_file);
             ca_key_file = make_path(config->ca_directory, arg);
 
             if (NULL == ca_key_file)
@@ -1787,6 +1789,7 @@ struct configuration_spec * load_config(void)
  * certificate-directory directory
  * *************************************************************************/
          case hash_certificate_directory:
+            freez(certificate_directory);
             certificate_directory = make_path(NULL, arg);
 
             if (NULL == certificate_directory)
@@ -1801,6 +1804,7 @@ struct configuration_spec * load_config(void)
  * trusted CAs file name trusted-cas-file
  * *************************************************************************/
          case hash_trusted_cas_file:
+            freez(trusted_cas_file);
             trusted_cas_file = make_path(config->ca_directory, arg);
 
             if (NULL == trusted_cas_file)

@@ -46,6 +46,7 @@ for-privoxy-version=3.0.27
 # Level 22 needs = config line enable-proxy-authentication-forwarding\s+0
 # Level 23 needs = config line enable-proxy-authentication-forwarding\s+1
 # Level 24 needs = feature status FEATURE_CLIENT_TAGS Yes
+# Level 25 needs = feature status FEATURE_HTTPS_INSPECTION No
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -912,6 +913,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Method Test = OPTIONS
 # Method Test = TRACE
 # Method Test = CONNECT
+# Level = 25
 # Method Test = PROPFIND
 # Method Test = PROPPATCH
 # Method Test = MOVE

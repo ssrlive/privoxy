@@ -41,6 +41,8 @@
 #include "mbedtls/pem.h"
 #include "mbedtls/base64.h"
 #include "mbedtls/error.h"
+#include "mbedtls/oid.h"
+#include "mbedtls/asn1write.h"
 
 #include "config.h"
 #include "project.h"
@@ -65,8 +67,6 @@
 #define PRIVATE_KEY_BUF_SIZE             16000             /* Size of buffer to save private key. Value 16000 is taken from mbed TLS library examples. */
 #define RSA_KEY_PUBLIC_EXPONENT          65537             /* Public exponent for RSA private key generating */
 #define RSA_KEYSIZE                      2048              /* Size of generated RSA keys */
-#define GENERATED_CERT_VALID_FROM        "20100101000000"  /* Date and time, which will be set in generated certificates as parameter valid from */
-#define GENERATED_CERT_VALID_TO          "20401231235959"  /* Date and time, which will be set in generated certificates as parameter valid to */
 #define CERT_SIGNATURE_ALGORITHM         MBEDTLS_MD_SHA256 /* The MD algorithm to use for the signature */
 #define CERT_SERIAL_NUM_LENGTH           4                 /* Bytes of hash to be used for creating serial number of certificate. Min=2 and max=16 */
 #define INVALID_CERT_INFO_BUF_SIZE       2048              /* Size of buffer for message with information about reason of certificate invalidity. Data after the end of buffer will not be saved */
@@ -113,7 +113,6 @@ static int file_exists(const char *path);
 static int host_to_hash(struct client_state *csp);
 static int ssl_verify_callback(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags);
 static void free_certificate_chain(struct client_state *csp);
-static unsigned int get_certificate_mutex_id(struct client_state *csp);
 static unsigned long  get_certificate_serial(struct client_state *csp);
 static void free_client_ssl_structures(struct client_state *csp);
 static void free_server_ssl_structures(struct client_state *csp);
@@ -437,19 +436,18 @@ extern int create_client_ssl_connection(struct client_state *csp)
     * Generating certificate for requested host. Mutex to prevent
     * certificate and key inconsistence must be locked.
     */
-   unsigned int cert_mutex_id = get_certificate_mutex_id(csp);
-   privoxy_mutex_lock(&(certificates_mutexes[cert_mutex_id]));
+   privoxy_mutex_lock(&certificate_mutex);
 
    ret = generate_webpage_certificate(csp);
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
          "Generate_webpage_certificate failed: %d", ret);
-      privoxy_mutex_unlock(&(certificates_mutexes[cert_mutex_id]));
+      privoxy_mutex_unlock(&certificate_mutex);
       ret = -1;
       goto exit;
    }
-   privoxy_mutex_unlock(&(certificates_mutexes[cert_mutex_id]));
+   privoxy_mutex_unlock(&certificate_mutex);
 
    /*
     * Seed the RNG
@@ -822,8 +820,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
             /* Log the reason without the trailing new line */
             log_error(LOG_LEVEL_ERROR,
-               "The X509 certificate verification failed: %N",
-               strlen(reason)-1, reason);
+               "X509 certificate verification for %s failed: %N",
+               csp->http->hostport, strlen(reason)-1, reason);
             ret = -1;
          }
          else
@@ -1205,6 +1203,257 @@ exit:
 
 /*********************************************************************
  *
+ * Function    :  ssl_certificate_is_invalid
+ *
+ * Description :  Checks whether or not a certificate is valid.
+ *                Currently only checks that the certificate can be
+ *                parsed and that the "valid to" date is in the future.
+ *
+ * Parameters  :
+ *          1  :  cert_file = The certificate to check
+ *
+ * Returns     :   0 => The certificate is valid.
+ *                 1 => The certificate is invalid
+ *
+ *********************************************************************/
+static int ssl_certificate_is_invalid(const char *cert_file)
+{
+   mbedtls_x509_crt cert;
+   int ret;
+
+   mbedtls_x509_crt_init(&cert);
+
+   ret = mbedtls_x509_crt_parse_file(&cert, cert_file);
+   if (ret != 0)
+   {
+      char err_buf[ERROR_BUF_SIZE];
+
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "Loading certificate %s to check validity failed: %s",
+         cert_file, err_buf);
+      mbedtls_x509_crt_free(&cert);
+
+      return 1;
+   }
+   if (mbedtls_x509_time_is_past(&cert.valid_to))
+   {
+      mbedtls_x509_crt_free(&cert);
+
+      return 1;
+   }
+
+   mbedtls_x509_crt_free(&cert);
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  generate_certificate_valid_date
+ *
+ * Description :  Turns a time_t into the format expected by mbedTLS.
+ *
+ * Parameters  :
+ *          1  :  time_spec = The timestamp to convert
+ *          2  :  buffer = The buffer to write the date to
+ *          3  :  buffer_size = The size of the buffer
+ *
+ * Returns     :   0 => The conversion worked
+ *                 1 => The conversion failed
+ *
+ *********************************************************************/
+static int generate_certificate_valid_date(time_t time_spec, char *buffer,
+                                           size_t buffer_size)
+{
+   struct tm valid_date;
+   size_t ret;
+
+#ifndef HAVE_GMTIME_R
+#error HTTP inspection currently requires gmtime_r() which seems to be missing
+#endif
+   if (NULL == gmtime_r(&time_spec, &valid_date))
+   {
+      return 1;
+   }
+
+   ret = strftime(buffer, buffer_size, "%Y%m%d%H%M%S", &valid_date);
+   if (ret != 14)
+   {
+      return 1;
+   }
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_certificate_valid_from_date
+ *
+ * Description :  Generates a "valid from" date in the format
+ *                expected by mbedTLS.
+ *
+ * Parameters  :
+ *          1  :  buffer = The buffer to write the date to
+ *          2  :  buffer_size = The size of the buffer
+ *
+ * Returns     :   0 => The generation worked
+ *                 1 => The generation failed
+ *
+ *********************************************************************/
+static int get_certificate_valid_from_date(char *buffer, size_t buffer_size)
+{
+   time_t time_spec;
+
+   time_spec = time(NULL);
+   /* 1 month in the past */
+   time_spec -= 30 * 24 * 60 * 60;
+
+   return generate_certificate_valid_date(time_spec, buffer, buffer_size);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_certificate_valid_to_date
+ *
+ * Description :  Generates a "valid to" date in the format
+ *                expected by mbedTLS.
+ *
+ * Parameters  :
+ *          1  :  buffer = The buffer to write the date to
+ *          2  :  buffer_size = The size of the buffer
+ *
+ * Returns     :   0 => The generation worked
+ *                 1 => The generation failed
+ *
+ *********************************************************************/
+static int get_certificate_valid_to_date(char *buffer, size_t buffer_size)
+{
+   time_t time_spec;
+
+   time_spec = time(NULL);
+   /* Three months in the future */
+   time_spec += 90 * 24 * 60 * 60;
+
+   return generate_certificate_valid_date(time_spec, buffer, buffer_size);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  set_subject_alternative_name
+ *
+ * Description :  Sets the Subject Alternative Name extension to a cert
+ *
+ * Parameters  :
+ *          1  :  cert = The certificate to modify
+ *          2  :  hostname = The hostname to add
+ *
+ * Returns     :  <0 => Error while creating certificate.
+ *                 0 => It worked
+ *
+ *********************************************************************/
+static int set_subject_alternative_name(mbedtls_x509write_cert *cert, const char *hostname)
+{
+   char err_buf[ERROR_BUF_SIZE];
+   int ret;
+   char *subject_alternative_name;
+   size_t subject_alternative_name_len;
+#define MBEDTLS_SUBJECT_ALTERNATIVE_NAME_MAX_LEN 255
+   unsigned char san_buf[MBEDTLS_SUBJECT_ALTERNATIVE_NAME_MAX_LEN + 1];
+   unsigned char *c;
+   int len;
+
+   subject_alternative_name_len = strlen(hostname) + 1;
+   subject_alternative_name = zalloc_or_die(subject_alternative_name_len);
+
+   strlcpy(subject_alternative_name, hostname, subject_alternative_name_len);
+
+   memset(san_buf, 0, sizeof(san_buf));
+
+   c = san_buf + sizeof(san_buf);
+   len = 0;
+
+   ret = mbedtls_asn1_write_raw_buffer(&c, san_buf,
+      (const unsigned char *)subject_alternative_name,
+      strlen(subject_alternative_name));
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_raw_buffer() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_len(&c, san_buf, strlen(subject_alternative_name));
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_len() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_tag(&c, san_buf, MBEDTLS_ASN1_CONTEXT_SPECIFIC | 2);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_tag() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_len(&c, san_buf, (size_t)len);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_len() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_asn1_write_tag(&c, san_buf,
+      MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_asn1_write_tag() failed: %s", err_buf);
+      goto exit;
+   }
+   len += ret;
+
+   ret = mbedtls_x509write_crt_set_extension(cert,
+      MBEDTLS_OID_SUBJECT_ALT_NAME,
+      MBEDTLS_OID_SIZE(MBEDTLS_OID_SUBJECT_ALT_NAME),
+      0, san_buf + sizeof(san_buf) - len, (size_t)len);
+   if (ret < 0)
+   {
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR,
+         "mbedtls_x509write_crt_set_extension() failed: %s", err_buf);
+   }
+
+exit:
+   freez(subject_alternative_name);
+
+   return ret;
+
+}
+
+/*********************************************************************
+ *
  * Function    :  generate_webpage_certificate
  *
  * Description :  Creates certificate file in presetted directory.
@@ -1235,12 +1484,66 @@ static int generate_webpage_certificate(struct client_state *csp)
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
    cert_options cert_opt;
+   char cert_valid_from[15];
+   char cert_valid_to[15];
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
    cert_opt.subject_key = NULL;
    cert_opt.issuer_crt  = NULL;
-   cert_opt.output_file = NULL;
+
+   cert_opt.output_file = make_certs_path(csp->config->certificate_directory,
+      (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
+   if (cert_opt.output_file == NULL)
+   {
+      return -1;
+   }
+
+   cert_opt.subject_key = make_certs_path(csp->config->certificate_directory,
+      (const char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
+   if (cert_opt.subject_key == NULL)
+   {
+      freez(cert_opt.output_file);
+      return -1;
+   }
+
+   if (file_exists(cert_opt.output_file) == 1)
+   {
+      /* The file exists, but is it valid? */
+      if (ssl_certificate_is_invalid(cert_opt.output_file))
+      {
+         log_error(LOG_LEVEL_CONNECT,
+            "Certificate %s is no longer valid. Removing it.",
+            cert_opt.output_file);
+         if (unlink(cert_opt.output_file))
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
+               cert_opt.output_file);
+
+            freez(cert_opt.output_file);
+            freez(cert_opt.subject_key);
+
+            return -1;
+         }
+         if (unlink(cert_opt.subject_key))
+         {
+            log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
+               cert_opt.subject_key);
+
+            freez(cert_opt.output_file);
+            freez(cert_opt.subject_key);
+
+            return -1;
+         }
+      }
+      else
+      {
+         freez(cert_opt.output_file);
+         freez(cert_opt.subject_key);
+
+         return 0;
+      }
+   }
 
    /*
     * Create key for requested host
@@ -1248,6 +1551,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    int subject_key_len = generate_key(csp, &key_buf);
    if (subject_key_len < 0)
    {
+      freez(cert_opt.output_file);
+      freez(cert_opt.subject_key);
       log_error(LOG_LEVEL_ERROR, "Key generating failed");
       return -1;
    }
@@ -1278,14 +1583,17 @@ static int generate_webpage_certificate(struct client_state *csp)
     * We must compute length of serial number in string + terminating null.
     */
    unsigned long certificate_serial = get_certificate_serial(csp);
-   int serial_num_size = snprintf(NULL, 0, "%lu", certificate_serial) + 1;
+   unsigned long certificate_serial_time = (unsigned long)time(NULL);
+   int serial_num_size = snprintf(NULL, 0, "%lu%lu",
+      certificate_serial_time, certificate_serial) + 1;
    if (serial_num_size <= 0)
    {
       serial_num_size = 1;
    }
 
    char serial_num_text[serial_num_size];  /* Buffer for serial number */
-   ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu", certificate_serial);
+   ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu%lu",
+      certificate_serial_time, certificate_serial);
    if (ret < 0 || ret >= serial_num_size)
    {
       log_error(LOG_LEVEL_ERROR,
@@ -1307,13 +1615,11 @@ static int generate_webpage_certificate(struct client_state *csp)
 
    cert_opt.issuer_crt = csp->config->ca_cert_file;
    cert_opt.issuer_key = csp->config->ca_key_file;
-   cert_opt.subject_key = make_certs_path(csp->config->certificate_directory,
-      (const char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
-   cert_opt.output_file = make_certs_path(csp->config->certificate_directory,
-      (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
 
-   if (cert_opt.subject_key == NULL || cert_opt.output_file == NULL)
+   if (get_certificate_valid_from_date(cert_valid_from, sizeof(cert_valid_from))
+    || get_certificate_valid_to_date(cert_valid_to, sizeof(cert_valid_to)))
    {
+      log_error(LOG_LEVEL_ERROR, "Generating one of the validity dates failed");
       ret = -1;
       goto exit;
    }
@@ -1321,17 +1627,19 @@ static int generate_webpage_certificate(struct client_state *csp)
    cert_opt.subject_pwd   = CERT_SUBJECT_PASSWORD;
    cert_opt.issuer_pwd    = csp->config->ca_password;
    cert_opt.subject_name  = cert_params;
-   cert_opt.not_before    = GENERATED_CERT_VALID_FROM;
-   cert_opt.not_after     = GENERATED_CERT_VALID_TO;
+   cert_opt.not_before    = cert_valid_from;
+   cert_opt.not_after     = cert_valid_to;
    cert_opt.serial        = serial_num_text;
    cert_opt.is_ca         = 0;
    cert_opt.max_pathlen   = -1;
 
    /*
-    * Test if certificate exists and private key was already created
+    * Test if the private key was already created.
+    * XXX: Can this still happen?
     */
-   if (file_exists(cert_opt.output_file) == 1 && subject_key_len == 0)
+   if (subject_key_len == 0)
    {
+      log_error(LOG_LEVEL_ERROR, "Subject key was already created");
       ret = 0;
       goto exit;
    }
@@ -1519,6 +1827,13 @@ static int generate_webpage_certificate(struct client_state *csp)
    }
 #endif /* MBEDTLS_SHA1_C */
 
+   if (set_subject_alternative_name(&cert, csp->http->host))
+   {
+      /* Errors are already logged by set_subject_alternative_name() */
+      ret = -1;
+      goto exit;
+   }
+
    /*
     * Writing certificate into file
     */
@@ -1629,29 +1944,6 @@ static char *make_certs_path(const char *conf_dir, const char *file_name,
 
 /*********************************************************************
  *
- * Function    :  get_certificate_mutex_id
- *
- * Description :  Computes mutex id from host name hash. This hash must
- *                be already saved in csp structure
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  Mutex id for given host name
- *
- *********************************************************************/
-static unsigned int get_certificate_mutex_id(struct client_state *csp) {
-#ifdef LIMIT_MUTEX_NUMBER
-   return (unsigned int)(csp->http->hash_of_host[0] % 32);
-#else
-   return (unsigned int)(csp->http->hash_of_host[1]
-      + 256 * (int)csp->http->hash_of_host[0]);
-#endif /* LIMIT_MUTEX_NUMBER */
-}
-
-
-/*********************************************************************
- *
  * Function    :  get_certificate_serial
  *
  * Description :  Computes serial number for new certificate from host
@@ -1670,15 +1962,6 @@ static unsigned long get_certificate_serial(struct client_state *csp)
    unsigned long serial = 0;
 
    int i = CERT_SERIAL_NUM_LENGTH;
-   /* Length of hash is 16 bytes, we must avoid to read next chars */
-   if (i > 16)
-   {
-      i = 16;
-   }
-   if (i < 2)
-   {
-      i = 2;
-   }
 
    for (; i >= 0; i--)
    {
@@ -1714,7 +1997,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
       "HTTP/1.1 200 OK\r\n"
       "Content-Type: text/html\r\n"
       "Connection: close\r\n\r\n"
-      "<html><body><h1>Invalid server certificate</h1><p>Reason: ";
+      "<html><body><h1>Server certificate verification failed</h1><p>Reason: ";
    const char message_end[] = "</body></html>\r\n\r\n";
    char reason[INVALID_CERT_INFO_BUF_SIZE];
    memset(reason, 0, sizeof(reason));
@@ -1789,11 +2072,6 @@ extern void ssl_send_certificate_error(struct client_state *csp)
     */
    ssl_send_data(&(csp->mbedtls_client_attr.ssl),
       (const unsigned char *)message, strlen(message));
-   /*
-    * Waiting before closing connection. Some browsers don't show received
-    * message if there isn't this delay.
-    */
-   sleep(1);
 
    free_certificate_chain(csp);
 }
@@ -1945,9 +2223,7 @@ static int host_to_hash(struct client_state *csp)
    int ret = 0;
 
 #if !defined(MBEDTLS_MD5_C)
-   log_error(LOG_LEVEL_ERROR, "MBEDTLS_MD5_C is not defined. Can't create"
-      "MD5 hash for certificate and key name.");
-   return -1;
+#error mbedTLS needs to be compiled with md5 support
 #else
    memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
    mbedtls_md5((unsigned char *)csp->http->host, strlen(csp->http->host),
