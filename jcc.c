@@ -3776,6 +3776,9 @@ static void chat(struct client_state *csp)
           * client body in the buffer (if there is one) and to
           * continue parsing the bytes that follow.
           */
+#ifdef FEATURE_HTTPS_INSPECTION
+         close_client_ssl_connection(csp);
+#endif
          drain_and_close_socket(csp->cfd);
          csp->cfd = JB_INVALID_SOCKET;
 
