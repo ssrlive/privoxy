@@ -3898,66 +3898,40 @@ static void chat(struct client_state *csp)
                close_client_ssl_connection(csp);
                return;
             }
+         } /* -END- if (fwd->forward_host != NULL) */
 
-            /*
-             * Parent proxy has established connection with destination server.
-             * Now we must create TLS/SSL connection with parent proxy.
-             */
-            ret = create_server_ssl_connection(csp);
-
-            /*
-             * If TLS/SSL connection wasn't created and invalid certificate
-             * wasn't detected, we can interrupt this function. Otherwise, we
-             * must inform the client about invalid server certificate.
-             */
-            if (ret != 0
-               && (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
-                  || csp->server_cert_verification_result == SSL_CERT_VALID))
+         /*
+          * We can now create the TLS/SSL connection with the destination server.
+          */
+         int ret = create_server_ssl_connection(csp);
+         if (ret != 0)
+         {
+            if (csp->server_cert_verification_result != SSL_CERT_VALID &&
+                csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
             {
+               /*
+                * If the server certificate is invalid, we must inform
+                * the client and then close connection to the client.
+                */
+               ssl_send_certificate_error(csp);
+               close_client_and_server_ssl_connections(csp);
+               return;
+            }
+            if (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
+             || csp->server_cert_verification_result == SSL_CERT_VALID)
+            {
+               /*
+                * The TLS/SSL connection wasn't created but an invalid
+                * certificate wasn't detected. Report it as connection
+                * failure.
+                */
                rsp = error_response(csp, "connect-failed");
                if (rsp)
                {
                   send_crunch_response(csp, rsp);
                }
+               close_client_and_server_ssl_connections(csp);
                return;
-            }
-         }/* -END- if (fwd->forward_host != NULL) */
-         else
-         {
-            /*
-             * Parent proxy is not used, we can just create TLS/SSL connection
-             * with destination server
-             */
-            int ret = create_server_ssl_connection(csp);
-            if (ret != 0)
-            {
-               if (csp->server_cert_verification_result != SSL_CERT_VALID &&
-                   csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
-               {
-                  /*
-                   * If the server certificate is invalid, we must inform
-                   * the client and then close connection to the client.
-                   */
-                  ssl_send_certificate_error(csp);
-                  close_client_and_server_ssl_connections(csp);
-                  return;
-               }
-               if (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
-                || csp->server_cert_verification_result == SSL_CERT_VALID)
-               {
-                  /*
-                   * The TLS/SSL connection wasn't created but an invalid
-                   * certificate wasn't detected. Report it as connection
-                   * failure.
-                   */
-                  rsp = error_response(csp, "connect-failed");
-                  if (rsp)
-                  {
-                     send_crunch_response(csp, rsp);
-                  }
-                  close_client_and_server_ssl_connections(csp);
-                  return;
-               }
             }
          }
       }/* -END- if (http->ssl) */
