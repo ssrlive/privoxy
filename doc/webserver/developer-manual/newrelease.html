@@ -203,7 +203,7 @@ for-privoxy-version=3.0.11</pre>
           to be done manually.</p>
         </li>
         <li>
-          <p>Tag all files in Git with the version number with <span class="QUOTE">"<b class="COMMAND">cvs tag
+          <p>Tag all files in Git with the version number with <span class="QUOTE">"<b class="COMMAND">git tag
           v_X_Y_Z</b>"</span>. Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.</p>
         </li>
         <li>
@@ -227,8 +227,9 @@ for-privoxy-version=3.0.11</pre>
           <td>
             <pre class="PROGRAMLISTING">  mkdir dist # delete or choose different name if it already exists
   cd dist
-  cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current</pre>
+  git clone https://www.privoxy.org/git/privoxy.git
+  cd privoxy
+  git checkout v_X_Y_Z</pre>
           </td>
         </tr>
       </table>
