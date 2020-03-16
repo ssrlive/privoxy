@@ -69,7 +69,7 @@ And then /etc/group, like:
 
 Some binary packages may do this for you.
 
-Then, to build from either unpacked tarball or CVS source:
+Then, to build from either unpacked tarball or Git checkout:
 
  autoheader
  autoconf

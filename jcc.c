@@ -146,7 +146,7 @@ int g_terminate = 0;
 #if !defined(_WIN32) && !defined(__OS2__)
 static void sig_handler(int the_signal);
 #endif
-static int client_protocol_is_unsupported(const struct client_state *csp, char *req);
+static int client_protocol_is_unsupported(struct client_state *csp, char *req);
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers);
 static jb_err get_server_headers(struct client_state *csp);
 static const char *crunch_reason(const struct http_response *rsp);
@@ -445,7 +445,7 @@ static unsigned int get_write_delay(const struct client_state *csp)
  *                FALSE if the request doesn't look invalid.
  *
  *********************************************************************/
-static int client_protocol_is_unsupported(const struct client_state *csp, char *req)
+static int client_protocol_is_unsupported(struct client_state *csp, char *req)
 {
    /*
     * If it's a FTP or gopher request, we don't support it.
@@ -481,8 +481,19 @@ static int client_protocol_is_unsupported(const struct client_state *csp, char *
       log_error(LOG_LEVEL_CLF,
          "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, req);
       freez(req);
-      write_socket_delayed(csp->cfd, response, strlen(response),
-         get_write_delay(csp));
+
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp))
+      {
+         ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+            (const unsigned char *)response, strlen(response));
+      }
+      else
+#endif
+      {
+         write_socket_delayed(csp->cfd, response, strlen(response),
+            get_write_delay(csp));
+      }
 
       return TRUE;
    }
@@ -2123,7 +2134,6 @@ static int send_https_request(struct client_state *csp)
          "Failed sending encrypted request headers to: %s: %E",
          csp->http->hostport);
       mark_server_socket_tainted(csp);
-      close_client_and_server_ssl_connections(csp);
       return 1;
    }
 
@@ -2245,6 +2255,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    if (err != JB_ERR_OK)
    {
       /* XXX: Also used for JB_ERR_MEMORY */
+      log_error(LOG_LEVEL_ERROR, "Failed to receive encrypted request: %s",
+         jb_err_to_string(err));
       ssl_send_data(&(csp->mbedtls_client_attr.ssl),
          (const unsigned char *)CHEADER, strlen(CHEADER));
       return err;
@@ -2254,6 +2266,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
    request_line = get_header(csp->client_iob);
    if (request_line == NULL)
    {
+      log_error(LOG_LEVEL_ERROR, "Failed to get the encrypted request line");
       ssl_send_data(&(csp->mbedtls_client_attr.ssl),
          (const unsigned char *)CHEADER, strlen(CHEADER));
       return JB_ERR_PARSE;
@@ -2262,8 +2275,11 @@ static jb_err process_encrypted_request(struct client_state *csp)
 
    if (client_protocol_is_unsupported(csp, request_line))
    {
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      /*
+       * If the protocol is unsupported we're done here.
+       * client_protocol_is_unsupported() took care of sending
+       * the error response and logging the error message.
+       */
       return JB_ERR_PARSE;
    }
 
@@ -2317,6 +2333,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
        * Our attempts to get the request destination
        * elsewhere failed.
        */
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to get the encrypted request destination");
       ssl_send_data(&(csp->mbedtls_client_attr.ssl),
          (const unsigned char *)CHEADER, strlen(CHEADER));
       return JB_ERR_PARSE;
@@ -2521,62 +2539,60 @@ static void handle_established_connection(struct client_state *csp)
       }
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
-      {
 #ifdef HAVE_POLL
-         poll_fds[0].fd = csp->cfd;
+      poll_fds[0].fd = csp->cfd;
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-         if (!watch_client_socket)
-         {
-            /*
-             * Ignore incoming data, but still watch out
-             * for disconnects etc. These flags are always
-             * implied anyway but explicitly setting them
-             * doesn't hurt.
-             */
-            poll_fds[0].events = POLLERR|POLLHUP;
-         }
-         else
+      if (!watch_client_socket)
+      {
+         /*
+          * Ignore incoming data, but still watch out
+          * for disconnects etc. These flags are always
+          * implied anyway but explicitly setting them
+          * doesn't hurt.
+          */
+         poll_fds[0].events = POLLERR|POLLHUP;
+      }
+      else
 #endif
-         {
-            poll_fds[0].events = POLLIN;
-         }
-         poll_fds[1].fd = csp->server_connection.sfd;
-         poll_fds[1].events = POLLIN;
-         n = poll(poll_fds, 2, csp->config->socket_timeout * 1000);
+      {
+         poll_fds[0].events = POLLIN;
+      }
+      poll_fds[1].fd = csp->server_connection.sfd;
+      poll_fds[1].events = POLLIN;
+      n = poll(poll_fds, 2, csp->config->socket_timeout * 1000);
 #else
-         timeout.tv_sec = csp->config->socket_timeout;
-         timeout.tv_usec = 0;
-         n = select((int)maxfd + 1, &rfds, NULL, NULL, &timeout);
+      timeout.tv_sec = csp->config->socket_timeout;
+      timeout.tv_usec = 0;
+      n = select((int)maxfd + 1, &rfds, NULL, NULL, &timeout);
 #endif /* def HAVE_POLL */
 
-         /*server or client not responding in timeout */
-         if (n == 0)
+      /*server or client not responding in timeout */
+      if (n == 0)
+      {
+         log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
+            csp->config->socket_timeout, http->url);
+         if ((byte_count == 0) && (http->ssl == 0))
          {
-            log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
-               csp->config->socket_timeout, http->url);
-            if ((byte_count == 0) && (http->ssl == 0))
-            {
-               send_crunch_response(csp, error_response(csp, "connection-timeout"));
-            }
-            mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-            close_client_and_server_ssl_connections(csp);
-#endif
-            return;
+            send_crunch_response(csp, error_response(csp, "connection-timeout"));
          }
-         else if (n < 0)
-         {
+         mark_server_socket_tainted(csp);
+#ifdef FEATURE_HTTPS_INSPECTION
+         close_client_and_server_ssl_connections(csp);
+#endif
+         return;
+      }
+      else if (n < 0)
+      {
 #ifdef HAVE_POLL
-            log_error(LOG_LEVEL_ERROR, "poll() failed!: %E");
+         log_error(LOG_LEVEL_ERROR, "poll() failed!: %E");
 #else
-            log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
+         log_error(LOG_LEVEL_ERROR, "select() failed!: %E");
 #endif
-            mark_server_socket_tainted(csp);
+         mark_server_socket_tainted(csp);
 #ifdef FEATURE_HTTPS_INSPECTION
-            close_client_and_server_ssl_connections(csp);
+         close_client_and_server_ssl_connections(csp);
 #endif
-            return;
-         }
+         return;
       }
 
       /*
@@ -2714,9 +2730,6 @@ static void handle_established_connection(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "write to: %s failed: %E", http->host);
                mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-               close_client_and_server_ssl_connections(csp);
-#endif
                return;
             }
          }
@@ -2957,9 +2970,6 @@ static void handle_established_connection(struct client_state *csp)
                         freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                        close_client_and_server_ssl_connections(csp);
-#endif
                         return;
                      }
                   }
@@ -3063,9 +3073,6 @@ static void handle_established_connection(struct client_state *csp)
                            "Flush header and buffers to client failed: %E");
                         freez(hdr);
                         mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                        close_client_and_server_ssl_connections(csp);
-#endif
                         return;
                      }
                   }
@@ -3108,9 +3115,6 @@ static void handle_established_connection(struct client_state *csp)
                   {
                      log_error(LOG_LEVEL_ERROR, "write to client failed: %E");
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                     close_client_and_server_ssl_connections(csp);
-#endif
                      return;
                   }
                }
@@ -3385,9 +3389,6 @@ static void handle_established_connection(struct client_state *csp)
                       */
                      freez(hdr);
                      mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                     close_client_and_server_ssl_connections(csp);
-#endif
                      return;
                   }
                }
@@ -3775,6 +3776,9 @@ static void chat(struct client_state *csp)
           * client body in the buffer (if there is one) and to
           * continue parsing the bytes that follow.
           */
+#ifdef FEATURE_HTTPS_INSPECTION
+         close_client_ssl_connection(csp);
+#endif
          drain_and_close_socket(csp->cfd);
          csp->cfd = JB_INVALID_SOCKET;
 

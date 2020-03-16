@@ -133,8 +133,8 @@ Hal.
     can be sent to the list for review too.
    </para>
     <para>
-     You will also need to have a git package installed, which will
-     entail having ssh installed as well, in order to access the git repository.
+     You will also need to have a git package installed,
+     in order to access the git repository.
      Having the GNU build tools is also going to be important (particularly,
      autoconf and gmake).
     </para>
@@ -2278,7 +2278,7 @@ for-privoxy-version=3.0.11
       <listitem>
        <para>
         Tag all files in Git with the version number with
-        <quote><command>cvs tag v_X_Y_Z</command></quote>.
+        <quote><command>git tag v_X_Y_Z</command></quote>.
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </para>
       </listitem>
@@ -2312,8 +2312,9 @@ for-privoxy-version=3.0.11
       <programlisting>
   mkdir dist # delete or choose different name if it already exists
   cd dist
-  cvs -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa login
-  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa export -r v_X_Y_Z current
+  git clone https://www.privoxy.org/git/privoxy.git
+  cd privoxy
+  git checkout v_X_Y_Z
 </programlisting>
 
     <para>
