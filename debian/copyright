@@ -16,14 +16,14 @@ Comment:
  Junkbusters Corporation.  http://www.junkbusters.com
 License: GPL-2+
 
-Files: regression-tests.action tools/uagen.pl tools/privoxy-regression-test.pl
- tools/privoxy-log-parser.pl tools/url-pattern-translator.pl utils/changelog2doc.pl
- utils/create-package-feed.pl
+Files: ./regression-tests.action ./tools/uagen.pl ./tools/privoxy-regression-test.pl
+ ./tools/privoxy-log-parser.pl ./tools/url-pattern-translator.pl ./utils/changelog2doc.pl
+ ./utils/create-package-feed.pl
 Copyright:
  Copyright (c) 2006-2017 Fabian Keil <fk@fabiankeil.de>
 License: ISC
 
-Files: strptime.h
+Files: ./strptime.h
 Copyright:
  Copyright (C) 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
 Comment:
@@ -36,7 +36,7 @@ Copyright:
  2002-2018  Roland Rosenfeld <roland@debian.org>
 License: GPL-2+
 
-Files: pcre/*
+Files: ./pcre/*
 Copyright: Copyright (c) 1997-2000 University of Cambridge
 Comment:
  Written by: Philip Hazel <ph10@cam.ac.uk>
