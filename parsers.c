@@ -1217,7 +1217,7 @@ jb_err sed_https(struct client_state *csp)
    csp->headers->last  = csp->https_headers->last;
 
    /*
-    * Start with fresh tags. Already exising tags may
+    * Start with fresh tags. Already existing tags may
     * be set again. This is necessary to overrule
     * URL-based patterns.
     */
