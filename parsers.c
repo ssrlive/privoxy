@@ -1231,6 +1231,12 @@ jb_err sed_https(struct client_state *csp)
    err = sed(csp, FILTER_CLIENT_HEADERS);
    csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
 
+   /*
+    * Update the last header which may have changed
+    * due to header additions,
+    */
+   csp->https_headers->last = csp->headers->last;
+
    csp->headers->first = headers.first;
    csp->headers->last  = headers.last;
 
