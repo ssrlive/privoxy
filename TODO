@@ -51,17 +51,6 @@ https://www.privoxy.org/faq/general.html#DONATE
 
 14) Allow to filter POST parameters.
 
-16) Filter SSL encrypted content as well.
-
-    At the beginning we could use a unencrypted connection between
-    client and Privoxy, and use an encrypted connection between
-    Privoxy and the server.
-
-    This should be good enough for most of the content the
-    user would want to filter.
-
-    Interested donors: 2.
-
 19) enable-forward-fallback. Syntax? Suggested by K.R.
 
 21) User Manual delivery doesn't accept multiple slashes. Should it?
