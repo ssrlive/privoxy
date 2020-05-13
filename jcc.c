@@ -3440,9 +3440,19 @@ static void handle_established_connection(struct client_state *csp)
    }
 #endif
 
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %llu",
-      csp->ip_addr_str, http->ocmd, csp->content_length);
-
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp))
+   {
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %llu",
+         csp->ip_addr_str, http->gpc, http->hostport, http->path,
+         http->ver, csp->content_length);
+   }
+   else
+#endif
+   {
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %llu",
+         csp->ip_addr_str, http->ocmd, csp->content_length);
+   }
    csp->server_connection.timestamp = time(NULL);
 }
 
