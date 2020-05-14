@@ -2172,14 +2172,11 @@ static void free_certificate_chain(struct client_state *csp)
    csp->server_certs_chain.next = NULL;
 
    /* Freeing memory in whole linked list */
-   if (cert != NULL)
+   while (cert != NULL)
    {
-      do
-      {
-         struct certs_chain *cert_for_free = cert;
-         cert = cert->next;
-         freez(cert_for_free);
-      } while (cert != NULL);
+      struct certs_chain *cert_for_free = cert;
+      cert = cert->next;
+      freez(cert_for_free);
    }
 }
 
