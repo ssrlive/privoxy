@@ -2082,10 +2082,10 @@ extern void ssl_send_certificate_error(struct client_state *csp)
  * Function    :  ssl_verify_callback
  *
  * Description :  This is a callback function for certificate verification.
- *                It's called for all certificates in server certificate
- *                trusted chain and it's preparing information about this
- *                certificates. Prepared informations can be used to inform
- *                user about invalid certificates.
+ *                It's called once for each certificate in the server's
+ *                certificate trusted chain and prepares information about
+ *                the certificate. The information can be used to inform
+ *                the user about invalid certificates.
  *
  * Parameters  :
  *          1  :  csp_void = Current client state (buffers, headers, etc...)
