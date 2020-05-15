@@ -828,6 +828,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
          {
             log_error(LOG_LEVEL_ERROR,
                "mbedtls_ssl_handshake with server failed: %s", err_buf);
+            free_certificate_chain(csp);
             ret = -1;
          }
          goto exit;
