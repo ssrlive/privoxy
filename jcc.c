@@ -848,10 +848,22 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
 
       /* Log that the request was crunched and why. */
       log_applied_actions(csp->action);
-      log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
-         csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
-
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp))
+      {
+         log_error(LOG_LEVEL_CRUNCH, "%s: https://%s%s", crunch_reason(rsp),
+            http->hostport, http->path);
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %llu",
+            csp->ip_addr_str, http->gpc, http->hostport, http->path,
+            http->ver, status_code, rsp->content_length);
+      }
+      else
+#endif
+      {
+         log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
+            csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
+      }
       /* Write the answer to the client */
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
