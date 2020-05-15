@@ -855,7 +855,7 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
             http->hostport, http->path);
          log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %llu",
             csp->ip_addr_str, http->gpc, http->hostport, http->path,
-            http->ver, status_code, rsp->content_length);
+            http->version, status_code, rsp->content_length);
       }
       else
 #endif
@@ -997,10 +997,10 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
     * if +downgrade action applies.
     */
    if ((csp->action->flags & ACTION_DOWNGRADE)
-     && (!strcmpic(http->ver, "HTTP/1.1")))
+     && (!strcmpic(http->version, "HTTP/1.1")))
    {
-      freez(http->ver);
-      http->ver = strdup_or_die("HTTP/1.0");
+      freez(http->version);
+      http->version = strdup_or_die("HTTP/1.0");
    }
 
    /*
@@ -1019,7 +1019,7 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
       string_append(request_line, http->path);
    }
    string_append(request_line, " ");
-   string_append(request_line, http->ver);
+   string_append(request_line, http->version);
 
    if (*request_line == NULL)
    {
@@ -1910,7 +1910,7 @@ static jb_err parse_client_request(struct client_state *csp)
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-    && (!strcmpic(csp->http->ver, "HTTP/1.1"))
+    && (!strcmpic(csp->http->version, "HTTP/1.1"))
     && (csp->http->ssl == 0))
    {
       /* Assume persistence until further notice */
@@ -3459,7 +3459,7 @@ static void handle_established_connection(struct client_state *csp)
    {
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %llu",
          csp->ip_addr_str, http->gpc, http->hostport, http->path,
-         http->ver, csp->content_length);
+         http->version, csp->content_length);
    }
    else
 #endif

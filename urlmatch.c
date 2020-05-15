@@ -87,7 +87,7 @@ void free_http_request(struct http_request *http)
    freez(http->url);
    freez(http->hostport);
    freez(http->path);
-   freez(http->ver);
+   freez(http->version);
    freez(http->host_ip_addr_str);
 #ifndef FEATURE_EXTENDED_HOST_PATTERNS
    freez(http->dbuffer);
@@ -587,7 +587,7 @@ jb_err parse_http_request(const char *req, struct http_request *http)
     */
    http->cmd = strdup_or_die(req);
    http->gpc = strdup_or_die(v[0]);
-   http->ver = strdup_or_die(v[2]);
+   http->version = strdup_or_die(v[2]);
    http->ocmd = strdup_or_die(http->cmd);
 
    freez(buf);

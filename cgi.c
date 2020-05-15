@@ -1605,7 +1605,7 @@ struct http_response *finish_http_response(struct client_state *csp, struct http
     * unless the client asked for HTTP/1.0.
     */
    snprintf(buf, sizeof(buf), "%s %s",
-      strcmpic(csp->http->ver, "HTTP/1.0") ? "HTTP/1.1" : "HTTP/1.0",
+      strcmpic(csp->http->version, "HTTP/1.0") ? "HTTP/1.1" : "HTTP/1.0",
       rsp->status ? rsp->status : "200 OK");
    err = enlist_first(rsp->headers, buf);
 

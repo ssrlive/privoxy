@@ -319,7 +319,7 @@ struct http_request
    char *ocmd;     /**< Backup of original cmd for CLF logging */
    char *gpc;      /**< HTTP method: GET, POST, ... */
    char *url;      /**< The URL */
-   char *ver;      /**< Protocol version */
+   char *version;  /**< Protocol version */
    int status;     /**< HTTP Status */
 
    char *host;     /**< Host part of URL */

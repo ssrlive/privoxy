@@ -1958,7 +1958,7 @@ static jb_err client_connection(struct client_state *csp, char **header)
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
         && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
       {
-          if (!strcmpic(csp->http->ver, "HTTP/1.1"))
+          if (!strcmpic(csp->http->version, "HTTP/1.1"))
           {
              log_error(LOG_LEVEL_HEADER,
                 "Removing \'%s\' to imply keep-alive.", *header);
@@ -3899,7 +3899,7 @@ static jb_err client_connection_header_adder(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
       && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
-      && !strcmpic(csp->http->ver, "HTTP/1.1"))
+      && !strcmpic(csp->http->version, "HTTP/1.1"))
    {
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return JB_ERR_OK;
@@ -4541,7 +4541,7 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
    string_append(&http->cmd, " ");
    string_append(&http->cmd, http->url);
    string_append(&http->cmd, " ");
-   string_append(&http->cmd, http->ver);
+   string_append(&http->cmd, http->version);
    if (http->cmd == NULL)
    {
       return JB_ERR_MEMORY;
@@ -4622,7 +4622,7 @@ jb_err get_destination_from_https_headers(const struct list *headers, struct htt
    string_append(&http->cmd, " ");
    string_append(&http->cmd, http->url);
    string_append(&http->cmd, " ");
-   string_append(&http->cmd, http->ver);
+   string_append(&http->cmd, http->version);
    if (http->cmd == NULL)
    {
       return JB_ERR_MEMORY;
