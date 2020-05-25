@@ -2093,13 +2093,13 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
          }
          if (csp->expected_client_content_length == 0)
          {
-            log_error(LOG_LEVEL_HEADER, "Forwarded the last %d bytes", len);
+            log_error(LOG_LEVEL_CONNECT, "Forwarded the last %d bytes", len);
             break;
          }
       }
    }
 
-   log_error(LOG_LEVEL_HEADER, "Done forwarding encrypted POST data");
+   log_error(LOG_LEVEL_CONNECT, "Done forwarding encrypted POST data");
 
    return 0;
 
