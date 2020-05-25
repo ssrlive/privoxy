@@ -2049,7 +2049,7 @@ static int send_http_request(struct client_state *csp)
  * Returns     :  0 on success, anything else is an error.
  *
  *********************************************************************/
-static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
+static int receive_and_send_encrypted_post_data(struct client_state *csp)
 {
    int content_length_known = csp->expected_client_content_length != 0;
 
