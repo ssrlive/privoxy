@@ -2053,7 +2053,8 @@ static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
 {
    int content_length_known = csp->expected_client_content_length != 0;
 
-   while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl)))
+   while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl))
+      || (content_length_known && csp->expected_client_content_length != 0))
    {
       unsigned char buf[BUFFER_SIZE];
       int len;
