@@ -162,7 +162,10 @@ extern int server_use_ssl(const struct client_state *csp)
  *
  * Function    :  is_ssl_pending
  *
- * Description :  Tests if there are some waiting data on ssl connection
+ * Description :  Tests if there are some waiting data on ssl connection.
+ *                Only considers data that has actually been received
+ *                locally and ignores data that is still on the fly
+ *                or has not yet been sent by the remote end.
  *
  * Parameters  :
  *          1  :  ssl = SSL context to test
