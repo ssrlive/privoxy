@@ -2078,7 +2078,7 @@ static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
          /* XXX: Does this actually happen? */
          break;
       }
-      log_error(LOG_LEVEL_HEADER, "Forwarding %d bytes of encrypted POST data",
+      log_error(LOG_LEVEL_CONNECT, "Forwarding %d bytes of encrypted POST data",
          len);
       len = ssl_send_data(&(csp->mbedtls_server_attr.ssl), buf, (size_t)len);
       if (len == -1)
