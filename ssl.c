@@ -50,6 +50,7 @@
 #include "errlog.h"
 #include "jcc.h"
 #include "ssl.h"
+#include "encode.h"
 
 
 /*
@@ -2143,8 +2144,15 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
    /*
     * Saving certificate information into buffer
     */
-   mbedtls_x509_crt_info(last->text_buf, sizeof(last->text_buf) - 1,
-      CERT_INFO_PREFIX, crt);
+   {
+      char buf[CERT_INFO_BUF_SIZE];
+      char *encoded_text;
+
+      mbedtls_x509_crt_info(buf, sizeof(buf), CERT_INFO_PREFIX, crt);
+      encoded_text = html_encode(buf);
+      strlcpy(last->text_buf, encoded_text, sizeof(last->text_buf));
+      freez(encoded_text);
+   }
 
    return 0;
 }
