@@ -2022,7 +2022,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    {
       size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1;
 
-      message_len += strlen(cert->text_buf) + strlen("<pre></pre>\n")
+      message_len += strlen(cert->info_buf) + strlen("<pre></pre>\n")
                      +  base64_len + strlen("<a href=\"data:application"
                         "/x-x509-ca-cert;base64,\">Download certificate</a>");
       cert = cert->next;
@@ -2057,7 +2057,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
       }
 
       strlcat(message, "<pre>",        message_len);
-      strlcat(message, cert->text_buf, message_len);
+      strlcat(message, cert->info_buf, message_len);
       strlcat(message, "</pre>\n",     message_len);
 
       if (ret == 0)
@@ -2122,7 +2122,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
     */
    last->next = malloc_or_die(sizeof(struct certs_chain));
    last->next->next = NULL;
-   memset(last->next->text_buf, 0, sizeof(last->next->text_buf));
+   memset(last->next->info_buf, 0, sizeof(last->next->info_buf));
    memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
 
    /*
@@ -2150,7 +2150,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
 
       mbedtls_x509_crt_info(buf, sizeof(buf), CERT_INFO_PREFIX, crt);
       encoded_text = html_encode(buf);
-      strlcpy(last->text_buf, encoded_text, sizeof(last->text_buf));
+      strlcpy(last->info_buf, encoded_text, sizeof(last->info_buf));
       freez(encoded_text);
    }
 
@@ -2177,8 +2177,8 @@ static void free_certificate_chain(struct client_state *csp)
    struct certs_chain *cert = csp->server_certs_chain.next;
 
    /* Cleaning buffers */
-   memset(csp->server_certs_chain.text_buf, 0,
-      sizeof(csp->server_certs_chain.text_buf));
+   memset(csp->server_certs_chain.info_buf, 0,
+      sizeof(csp->server_certs_chain.info_buf));
    memset(csp->server_certs_chain.file_buf, 0,
       sizeof(csp->server_certs_chain.file_buf));
    csp->server_certs_chain.next = NULL;
