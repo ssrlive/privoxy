@@ -5523,9 +5523,10 @@ www.example.com</screen>
    <para>
     Note that some (rare) ill-configured sites don't handle requests for uncompressed
     documents correctly. Broken PHP applications tend to send an empty document body,
-    some IIS versions only send the beginning of the content. If you enable
-    <literal>prevent-compression</literal> per default, you might want to add
-    exceptions for those sites. See the example for how to do that.
+    some IIS versions only send the beginning of the content and some content delivery
+    networks let the connection time out.
+    If you enable <literal>prevent-compression</literal> per default, you might
+    want to add exceptions for those sites. See the example for how to do that.
    </para>
   </listitem>
  </varlistentry>
