@@ -1603,6 +1603,7 @@ struct configuration_spec
  * INCLUDES the trailing slash.
  */
 #define CGI_PREFIX  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
+#define CGI_PREFIX_HTTPS "https://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
 
 #endif /* ndef PROJECT_H_INCLUDED */
 
