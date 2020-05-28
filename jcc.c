@@ -1619,7 +1619,7 @@ extern int fuzz_client_request(struct client_state *csp, char *fuzz_input_file)
    if (strcmp(fuzz_input_file, "-") != 0)
    {
       log_error(LOG_LEVEL_FATAL,
-         "Fuzzed client requests can currenty only be read from stdin (-).");
+         "Fuzzed client requests can currently only be read from stdin (-).");
    }
    err = receive_client_request(csp);
    if (err != JB_ERR_OK)
@@ -3698,7 +3698,7 @@ static void chat(struct client_state *csp)
          int ret;
          /*
           * Creating an SSL proxy. If forwarding is disabled, we must send
-          * CSUCCEED mesage to client. Then TLS/SSL connection with client
+          * CSUCCEED message to client. Then TLS/SSL connection with client
           * is created.
           */
 
