@@ -1208,7 +1208,7 @@ jb_err sed_https(struct client_state *csp)
    struct list headers;
 
    /*
-    * Temporarly replace csp->headers with csp->https_headers
+    * Temporarily replace csp->headers with csp->https_headers
     * to trick sed() into filtering the https headers.
     */
    headers.first = csp->headers->first;
@@ -1225,7 +1225,7 @@ jb_err sed_https(struct client_state *csp)
 
    /*
     * We want client header filters and taggers
-    * so temporarly remove the flag.
+    * so temporarily remove the flag.
     */
    csp->flags &= ~CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
    err = sed(csp, FILTER_CLIENT_HEADERS);
@@ -2459,7 +2459,7 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
  *
  * Description :  Remove the Content-Encoding header if the
  *                decompression was successful and the content
- *                has been modifed.
+ *                has been modified.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
