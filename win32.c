@@ -163,7 +163,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 0
    /*
     * Cheat in parsing the command line.  We only ever have at most one
-    * paramater, which may optionally be specified inside double quotes.
+    * parameter, which may optionally be specified inside double quotes.
     */
 
    if (lpCmdLine != NULL)
