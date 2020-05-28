@@ -1677,7 +1677,7 @@ ACLs: permit-access and deny-access</title>
     If your system implements
     <ulink url="http://tools.ietf.org/html/rfc3493">RFC 3493</ulink>, then
     <replaceable class="parameter">src_addr</replaceable> and <replaceable
-    class="parameter">dst_addr</replaceable> can be IPv6 addresses delimeted by
+    class="parameter">dst_addr</replaceable> can be IPv6 addresses delimited by
     brackets, <replaceable class="parameter">port</replaceable> can be a number
     or a service name, and
     <replaceable class="parameter">src_masklen</replaceable> and
@@ -3235,13 +3235,13 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   <listitem>
    <para>
     Under high load incoming connection may queue up before Privoxy
-    gets around to serve them. The queue length is limitted by the
+    gets around to serve them. The queue length is limited by the
     operating system. Once the queue is full, additional connections
     are dropped before Privoxy can accept and serve them.
    </para>
    <para>
     Increasing the queue length allows Privoxy to accept more
-    incomming connections that arrive roughly at the same time.
+    incoming connections that arrive roughly at the same time.
    </para>
    <para>
     Note that Privoxy can only request a certain queue length,
