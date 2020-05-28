@@ -799,7 +799,7 @@ void log_error(int loglevel, const char *fmt, ...)
             break;
          case 'c':
             /*
-             * Note that char paramaters are converted to int, so we need to
+             * Note that char parameters are converted to int, so we need to
              * pass "int" to va_arg.  (See K&R, 2nd ed, section A7.3.2, page 202)
              */
             tempbuf[0] = (char) va_arg(ap, int);
