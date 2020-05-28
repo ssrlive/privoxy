@@ -2403,6 +2403,33 @@ static jb_err process_encrypted_request(struct client_state *csp)
    return err;
 
 }
+
+/*********************************************************************
+ *
+ * Function    :  cgi_page_requested
+ *
+ * Description :  Checks if a request is for an internal CGI page.
+ *
+ * Parameters  :
+ *          1  :  host = The host requested by the client.
+ *
+ * Returns     :  1 if a CGI page has been requested, 0 otherwise
+ *
+ *********************************************************************/
+static int cgi_page_requested(const char *host)
+{
+   if ((0 == strcmpic(host, CGI_SITE_1_HOST))
+    || (0 == strcmpic(host, CGI_SITE_1_HOST "."))
+    || (0 == strcmpic(host, CGI_SITE_2_HOST))
+    || (0 == strcmpic(host, CGI_SITE_2_HOST ".")))
+   {
+      return 1;
+   }
+
+   return 0;
+
+}
+
 #endif
 
 
@@ -3531,7 +3558,8 @@ static void chat(struct client_state *csp)
     * Setting flags to use old solution with SSL tunnel and to disable
     * certificates verification.
     */
-   if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION))
+   if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION)
+      && !cgi_page_requested(csp->http->host))
    {
       use_ssl_tunnel = 1;
    }
