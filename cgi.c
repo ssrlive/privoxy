@@ -3,7 +3,7 @@
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
- *                html or gif answers, and to compose HTTP resonses.
+ *                html or gif answers, and to compose HTTP responses.
  *                This only contains the framework functions, the
  *                actual handler functions are declared elsewhere.
  *
@@ -244,7 +244,7 @@ const char image_pattern_data[] =
    "\000\000\000\000\111\105\116\104\256\102\140\202";
 
 /*
- * 1x1 transparant PNG.
+ * 1x1 transparent PNG.
  */
 const char image_blank_data[] =
  "\211\120\116\107\015\012\032\012\000\000\000\015\111\110\104\122"
@@ -267,7 +267,7 @@ const char image_pattern_data[] =
    "\270\005\000\073";
 
 /*
- * 1x1 transparant GIF.
+ * 1x1 transparent GIF.
  */
 const char image_blank_data[] =
    "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
@@ -735,22 +735,22 @@ char get_char_param(const struct map *parameters,
  *
  * Function    :  get_string_param
  *
- * Description :  Get a string paramater, to be used as an
- *                ACTION_STRING or ACTION_MULTI paramater.
+ * Description :  Get a string parameter, to be used as an
+ *                ACTION_STRING or ACTION_MULTI parameter.
  *                Validates the input to prevent stupid/malicious
  *                users from corrupting their action file.
  *
  * Parameters  :
  *          1  :  parameters = map of cgi parameters
  *          2  :  param_name = The name of the parameter to read
- *          3  :  pparam = destination for paramater.  Allocated as
+ *          3  :  pparam = destination for parameter.  Allocated as
  *                part of the map "parameters", so don't free it.
  *                Set to NULL if not specified.
  *
- * Returns     :  JB_ERR_OK         on success, or if the paramater
+ * Returns     :  JB_ERR_OK         on success, or if the parameter
  *                                  was not specified.
  *                JB_ERR_MEMORY     on out-of-memory.
- *                JB_ERR_CGI_PARAMS if the paramater is not valid.
+ *                JB_ERR_CGI_PARAMS if the parameter is not valid.
  *
  *********************************************************************/
 jb_err get_string_param(const struct map *parameters,
@@ -1225,7 +1225,7 @@ jb_err cgi_error_no_template(const struct client_state *csp,
  *                In this context, "unexpected" means "anything other
  *                than JB_ERR_MEMORY or JB_ERR_CGI_PARAMS" - CGIs are
  *                expected to handle all other errors internally,
- *                since they can give more relavent error messages
+ *                since they can give more relevant error messages
  *                that way.
  *
  *                Note this is not a true CGI, it takes an error
