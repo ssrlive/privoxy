@@ -5,7 +5,7 @@
  * File        :  $Source: /cvsroot/ijbswa/current/cgisimple.h,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
- *                html or gif answers, and to compose HTTP resonses.
+ *                html or gif answers, and to compose HTTP responses.
  *
  *                Functions declared include:
  *
