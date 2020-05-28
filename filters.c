@@ -206,7 +206,7 @@ static int match_sockaddr(const struct sockaddr_storage *network,
       return 0;
    }
 
-   /* TODO: Optimize by checking by words insted of octets */
+   /* TODO: Optimize by checking by words instead of octets */
    for (i = 0; (i < addr_len) && netmask_addr[i]; i++)
    {
       if ((network_addr[i] & netmask_addr[i]) !=
@@ -505,7 +505,7 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
  *
  * Description :  Check to see if CONNECT requests to the destination
  *                port of this request are forbidden. The check is
- *                independend of the actual request method.
+ *                independent of the actual request method.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
