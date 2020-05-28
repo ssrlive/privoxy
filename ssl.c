@@ -651,7 +651,7 @@ static void free_client_ssl_structures(struct client_state *csp)
 {
    /*
    * We can't use function mbedtls_net_free, because this function
-   * inter alia close TCP connection on setted fd. Instead of this
+   * inter alia close TCP connection on set fd. Instead of this
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
@@ -911,7 +911,7 @@ static void free_server_ssl_structures(struct client_state *csp)
 {
    /*
    * We can't use function mbedtls_net_free, because this function
-   * inter alia close TCP connection on setted fd. Instead of this
+   * inter alia close TCP connection on set fd. Instead of this
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
@@ -1996,7 +1996,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    int ret = 0;
    struct certs_chain *cert = NULL;
 
-   /* Header of message with certificate informations */
+   /* Header of message with certificate information */
    const char message_begin[] =
       "HTTP/1.1 200 OK\r\n"
       "Content-Type: text/html\r\n"
@@ -2155,7 +2155,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  * Function    :  free_certificate_chain
  *
  * Description :  Frees certificates linked list. This linked list is
- *                used to save informations about certificates in
+ *                used to save information about certificates in
  *                trusted chain.
  *
  * Parameters  :
@@ -2258,7 +2258,7 @@ static int host_to_hash(struct client_state *csp)
  * Function    :  tunnel_established_successfully
  *
  * Description :  Check if parent proxy server response contains
- *                informations about successfully created connection with
+ *                information about successfully created connection with
  *                destination server. (HTTP/... 2xx ...)
  *
  * Parameters  :
