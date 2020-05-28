@@ -1100,7 +1100,7 @@ jb_err edit_parse_actions_file(struct editable_file * file)
 
    /* alias_list contains the aliases defined in this file.
     * It might be better to use the "file_line.data" fields
-    * in the relavent places instead.
+    * in the relevant places instead.
     */
 
    cur_line = file->lines;
@@ -2750,7 +2750,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
     * browsers (BR #1570678).
     *
     * The config option split-large-forms works around this browser
-    * bug (HTTP has no URL length limitation) by deviding the action
+    * bug (HTTP has no URL length limitation) by dividing the action
     * list form into multiple smaller ones. It means the URLs are shorter
     * and work in broken browsers as well, but the user can no longer change
     * all actions with one submit.
