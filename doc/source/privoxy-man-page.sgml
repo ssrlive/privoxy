@@ -43,7 +43,7 @@
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">           <!-- define we are not a text only doc -->
-<!entity % p-authors-formal "IGNORE"> <!-- exclude additional formating      -->
+<!entity % p-authors-formal "IGNORE"> <!-- exclude additional formatting      -->
 <!entity my-copy "(C)">               <!-- db2man barfs on copyright symbol  -->
 <!entity % seealso-extra "IGNORE">    <!-- for excluding sections of seealso -->
 ]>
