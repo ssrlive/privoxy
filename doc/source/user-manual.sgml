@@ -3987,7 +3987,7 @@ problem-host.example.com</screen>
     looks for the string <quote>http://</quote>, either in plain text
     (invalid but often used) or encoded as <quote>http%3a//</quote>.
     Some sites use their own URL encoding scheme, encrypt the address
-    of the target server or replace it with a database id. In theses cases
+    of the target server or replace it with a database id. In these cases
     <literal>fast-redirects</literal> is fooled and the request reaches the
     redirection server where it probably gets logged.
    </para>
@@ -7473,7 +7473,7 @@ pre-defined filters for your convenience:
     sometimes appear on some pages, or user agents that don't correct for this on
     the fly.
 <!--
-    My version of Mozilla (ancient) shows litte square boxes for quote
+    My version of Mozilla (ancient) shows little square boxes for quote
     characters, and apostrophes on moronized pages. So many pages have this, I
     can read them fine now. HB 08/27/06
 -->
