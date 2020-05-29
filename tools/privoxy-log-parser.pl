@@ -2024,7 +2024,6 @@ sub gather_loglevel_crunch_stats ($$) {
     my $thread = shift;
     our %stats;
 
-    $stats{requests}++;
     $stats{crunches}++;
 
     if ($c =~ m/^Redirected:/) {
