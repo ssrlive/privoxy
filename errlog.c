@@ -601,7 +601,7 @@ static inline const char *get_log_level_string(int loglevel)
       case LOG_LEVEL_FATAL:
          log_level_string = "Fatal error";
          break;
-      case LOG_LEVEL_GPC:
+      case LOG_LEVEL_REQUEST:
          log_level_string = "Request";
          break;
       case LOG_LEVEL_CONNECT:
@@ -684,7 +684,7 @@ void log_error(int loglevel, const char *fmt, ...)
     * the taskbar icon animate.  (There is an option to disable
     * this but checking that is handled inside LogShowActivity()).
     */
-   if ((loglevel == LOG_LEVEL_GPC) || (loglevel == LOG_LEVEL_CRUNCH))
+   if ((loglevel == LOG_LEVEL_REQUEST) || (loglevel == LOG_LEVEL_CRUNCH))
    {
       LogShowActivity();
    }

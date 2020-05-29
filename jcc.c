@@ -2397,7 +2397,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
 
    log_error(LOG_LEVEL_HEADER, "Encrypted request processed");
    log_applied_actions(csp->action);
-   log_error(LOG_LEVEL_GPC, "https://%s%s", csp->http->hostport,
+   log_error(LOG_LEVEL_REQUEST, "https://%s%s", csp->http->hostport,
       csp->http->path);
 
    return err;
@@ -3675,7 +3675,7 @@ static void chat(struct client_state *csp)
    if (!client_use_ssl(csp))
 #endif
    {
-      log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
+      log_error(LOG_LEVEL_REQUEST, "%s%s", http->hostport, http->path);
    }
    if (fwd->forward_host)
    {
