@@ -244,7 +244,7 @@ https://www.privoxy.org/faq/general.html#DONATE
     go through all filters and skip the filter types the caller isn't
     interested in.
 
-98) When showing action section on the CGI pages, properly escape
+98) When showing action sections on the CGI pages, properly escape
     line breaks so they can be copy&pasted into action files without
     adjustments.
 
