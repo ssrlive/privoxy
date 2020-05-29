@@ -1445,7 +1445,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
       if (!url_to_query->ssl)
 #endif
       {
-         if (map_block_killer(exports, "https"))
+         if (map_block_killer(exports, "https-and-no-https-inspection"))
          {
             free_current_action(action);
             free_map(exports);
