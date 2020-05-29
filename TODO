@@ -330,9 +330,6 @@ https://www.privoxy.org/faq/general.html#DONATE
 
 122) Allow customized log messages.
 
-123) Evaluate if the voluntarily-disclose-session-keys option in Firefox
-     (and other browsers) can be leveraged. Probably depends on #16.
-
 124) Add support for the "lightweight OS capability and sandbox framework"
      Capsicum. http://www.cl.cam.ac.uk/research/security/capsicum/
      Interested donors: 1.
