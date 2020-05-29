@@ -125,10 +125,6 @@ https://www.privoxy.org/faq/general.html#DONATE
 
     Interested donors: 1.
 
-54) Move away from CVS to a more modern revision control system.
-    The move to git is work in progress:
-    https://sourceforge.net/p/ijbswa/mailman/message/34994343/
-
 58) Move more template strings from the code into the actual templates.
 
 59) Import the German template translation.
