@@ -1924,7 +1924,7 @@ is likely to get lost with the next update.
 
 Overwrite conditions are an alternative and can be added in any action
 file as long as the come after the test that is expected to fail.
-They causes all previous tests a matching the condition to be skipped.
+They cause all previous tests that match the condition to be skipped.
 
 It is recommended to put the overwrite condition below the custom Privoxy
 section that causes the expected test failure and before the custom test
