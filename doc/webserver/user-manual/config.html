@@ -947,7 +947,7 @@
               destination part are optional.</p>
               <p>If your system implements <a href="http://tools.ietf.org/html/rfc3493" target="_top">RFC 3493</a>,
               then <tt class="REPLACEABLE"><i>src_addr</i></tt> and <tt class="REPLACEABLE"><i>dst_addr</i></tt> can be
-              IPv6 addresses delimeted by brackets, <tt class="REPLACEABLE"><i>port</i></tt> can be a number or a
+              IPv6 addresses delimited by brackets, <tt class="REPLACEABLE"><i>port</i></tt> can be a number or a
               service name, and <tt class="REPLACEABLE"><i>src_masklen</i></tt> and <tt class=
               "REPLACEABLE"><i>dst_masklen</i></tt> can be a number from 0 to 128.</p>
             </dd>
@@ -1970,9 +1970,9 @@
             <dt>Notes:</dt>
             <dd>
               <p>Under high load incoming connection may queue up before Privoxy gets around to serve them. The queue
-              length is limitted by the operating system. Once the queue is full, additional connections are dropped
+              length is limited by the operating system. Once the queue is full, additional connections are dropped
               before Privoxy can accept and serve them.</p>
-              <p>Increasing the queue length allows Privoxy to accept more incomming connections that arrive roughly at
+              <p>Increasing the queue length allows Privoxy to accept more incoming connections that arrive roughly at
               the same time.</p>
               <p>Note that Privoxy can only request a certain queue length, whether or not the requested length is
               actually used depends on the operating system which may use a different length instead.</p>

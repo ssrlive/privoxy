@@ -1524,7 +1524,7 @@ problem-host.example.com</pre>
               <p>To detect a redirection URL, <tt class="LITERAL">fast-redirects</tt> only looks for the string
               <span class="QUOTE">"http://"</span>, either in plain text (invalid but often used) or encoded as
               <span class="QUOTE">"http%3a//"</span>. Some sites use their own URL encoding scheme, encrypt the address
-              of the target server or replace it with a database id. In theses cases <tt class=
+              of the target server or replace it with a database id. In these cases <tt class=
               "LITERAL">fast-redirects</tt> is fooled and the request reaches the redirection server where it probably
               gets logged.</p>
             </dd>
@@ -2730,8 +2730,9 @@ www.example.com</pre>
               action settings.</p>
               <p>Note that some (rare) ill-configured sites don't handle requests for uncompressed documents correctly.
               Broken PHP applications tend to send an empty document body, some IIS versions only send the beginning of
-              the content. If you enable <tt class="LITERAL">prevent-compression</tt> per default, you might want to
-              add exceptions for those sites. See the example for how to do that.</p>
+              the content and some content delivery networks let the connection time out. If you enable <tt class=
+              "LITERAL">prevent-compression</tt> per default, you might want to add exceptions for those sites. See the
+              example for how to do that.</p>
             </dd>
             <dt>Example usage (sections):</dt>
             <dd>
