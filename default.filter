@@ -745,6 +745,16 @@ s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
 
 #################################################################################
 #
+# no-brotli-accepted: Strips "br" from the Accept-Encoding header as Privoxy
+#                     currently doesn't support Brotli.
+#
+#################################################################################
+CLIENT-HEADER-FILTER: no-brotli-accepted Strip "br" from Accept-Encoding header
+
+s@(^Accept-Encoding:.*?)(?:br, |, br|br)@$1@i
+
+#################################################################################
+#
 # less-download-windows: Prevents annoying download windows for content types
 #                        the browser can handle itself.
 #

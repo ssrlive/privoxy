@@ -187,6 +187,7 @@
 #    Client-header filters predefined in the supplied default.filter include:
 #
 #     hide-tor-exit-notation: Removes the Tor exit node notation in Host and Referer headers.
+#     no-brotli-accepted:     Strips "br" from the Accept-Encoding header
 #     privoxy-control:        Removes X-Privoxy-Control headers.
 #
 # +client-header-tagger{string}
