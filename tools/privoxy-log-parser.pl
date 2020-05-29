@@ -2009,6 +2009,7 @@ sub gather_loglevel_clf_stats ($) {
         $resource =~ m@(?:http[s]://)([^/]+)/?@;
         $stats{'hosts'}{$1}++;
     }
+    $stats{'content-size-total'} += $size;
 }
 
 sub gather_loglevel_request_stats ($$) {
@@ -2137,6 +2138,7 @@ sub init_stats () {
         'reused-connections' => 0,
         'server-keep-alive' => 0,
         'closed-client-connections' => 0,
+        'content-size-total' => 0,
         );
         $stats{'client-requests-on-connection'}{1} = 0;
 }
@@ -2201,7 +2203,9 @@ sub print_stats () {
         get_percentage($stats{requests}, $stats{'empty-responses-on-reused-connections'}) .
         ")\n";
     print "Client connections: " .  $stats{'closed-client-connections'} . "\n";
-
+    if ($stats{'content-size-total'}) {
+        print "Bytes transfered excluding headers: " .  $stats{'content-size-total'} . "\n";
+    }
     my $lines_printed = 0;
     print "Client requests per connection distribution:\n";
     foreach my $client_requests (sort {
