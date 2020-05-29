@@ -442,6 +442,9 @@ https://www.privoxy.org/faq/general.html#DONATE
      performance point of view, using a single thread should reduce Privoxy's
      memory footprint a bit which may be noticeable in case of multi-user setups
      with hundreds of idle connections.
+
+159) Support Brotli compression.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
