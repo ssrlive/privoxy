@@ -1980,6 +1980,37 @@ sub handle_loglevel_ignore ($) {
     return shift;
 }
 
+sub gather_loglevel_clf_stats ($) {
+
+    my $content = shift;
+    my ($method, $resource, $http_version, $status_code, $size);
+    our %stats;
+    our %cli_options;
+
+    # +0200] "GET https://www.youtube.com/watch?v=JmcA9LIIXWw HTTP/1.1" 200 68004
+    $content =~ m/^[+-]\d{4}\] "(\w+) (.+) (HTTP\/\d\.\d)" (\d+) (\d+)/;
+    $method       = $1;
+    $resource     = $2;
+    $http_version = $3;
+    $status_code  = $4;
+    $size         = $5;
+
+    unless (defined $method) {
+        print("Failed to parse: $content\n");
+        return;
+    }
+    $stats{'method'}{$method}++;
+    if ($cli_options{'url-statistics-threshold'} != 0) {
+        $stats{'resource'}{$resource}++;
+    }
+    $stats{'http-version'}{$http_version}++;
+
+    if ($cli_options{'host-statistics-threshold'} != 0) {
+        $resource =~ m@(?:http[s]://)([^/]+)/?@;
+        $stats{'hosts'}{$1}++;
+    }
+}
+
 sub gather_loglevel_request_stats ($$) {
     my $c = shift;
     my $thread = shift;
@@ -2088,21 +2119,6 @@ sub gather_loglevel_header_stats ($$) {
         # A HTTP/1.1 response without Connection header implies keep-alive.
         # Keeping the server header 'Connection: keep-alive' around.
         $stats{'server-keep-alive'}++;
-
-    } elsif ($c =~ m/^scan: ((\w+) (.+) (HTTP\/\d\.\d))/) {
-
-        # scan: HTTP/1.1 200 OK
-        $stats{'method'}{$2}++;
-        if ($cli_options{'url-statistics-threshold'} != 0) {
-            $stats{'resource'}{$3}++;
-        }
-        $stats{'http-version'}{$4}++;
-
-    } elsif ($cli_options{'host-statistics-threshold'} != 0 and
-             $c =~ m/^scan: Host: ([^\s]+)/) {
-
-        # scan: Host: p.p
-        $stats{'hosts'}{$1}++;
     }
 }
 
@@ -2213,7 +2229,7 @@ sub print_stats () {
             printf "%8d : %-8s\n", $stats{'method'}{$method}, $method;
         }
     } else {
-        print "Method distribution unknown. No response headers parsed yet. Is 'debug 8' enabled?\n";
+        print "Method distribution unknown. No CLF message parsed yet. Is 'debug 512' enabled?\n";
     }
     print "Client HTTP versions:\n";
     foreach my $http_version (sort {$stats{'http-version'}{$b} <=> $stats{'http-version'}{$a}} keys %{$stats{'http-version'}}) {
@@ -2441,10 +2457,14 @@ sub stats_loop () {
     while (<>) {
         (undef, $time_stamp, $thread, $log_level, $content) = split(/ /, $_, 5);
 
-        # Skip LOG_LEVEL_CLF
-        next if (not defined($log_level) or $time_stamp eq "-");
 
-        if (defined($log_level_handlers{$log_level})) {
+        next if (not defined($log_level));
+
+        if ($time_stamp eq "-") {
+
+            gather_loglevel_clf_stats($content);
+
+        } elsif (defined($log_level_handlers{$log_level})) {
 
             $content = $log_level_handlers{$log_level}($content, $thread);
 
