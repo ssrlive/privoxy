@@ -2011,6 +2011,7 @@ sub gather_loglevel_clf_stats($) {
     }
     $stats{'content-size-total'} += $size;
     $stats{'status-code'}{$status_code}++;
+    $stats{requests_clf}++;
 }
 
 sub gather_loglevel_request_stats($$) {
@@ -2126,6 +2127,7 @@ sub gather_loglevel_header_stats($$) {
 sub init_stats() {
     our %stats = (
         requests => 0,
+        requests_clf => 0,
         crunches => 0,
         'server-keep-alive' => 0,
         'reused-connections' => 0,
@@ -2166,6 +2168,10 @@ sub print_stats() {
     my $new_connections = $stats{requests} - $stats{crunches} - $stats{'reused-connections'};
     my $outgoing_requests = $stats{requests} - $stats{crunches};
     my $client_requests_checksum = 0;
+
+    if ($stats{requests_clf} && $stats{requests} eq 0) {
+        $stats{requests} = $stats{requests_clf};
+    }
 
     if ($stats{requests} eq 0) {
         print "No requests yet.\n";
