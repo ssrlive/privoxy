@@ -1735,6 +1735,12 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=Shifting )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=by )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Flushed (\d+) bytes of request body while expecting (\d+)/) {
+
+        # Flushed 30 bytes of request body while expecting 30
+        $c =~ s@(?<=Flushed )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=expecting )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
