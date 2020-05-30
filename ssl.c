@@ -262,6 +262,69 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
 
 /*********************************************************************
  *
+ * Function    :  ssl_send_data_delayed
+ *
+ * Description :  Sends the contents of buf (for n bytes) to given SSL
+ *                connection, optionally delaying the operation.
+ *
+ * Parameters  :
+ *          1  :  ssl = SSL context to send data to
+ *          2  :  buf = Pointer to data to be sent
+ *          3  :  len = Length of data to be sent to the SSL context
+ *          4  :  delay = Delay in milliseconds.
+ *
+ * Returns     :  0 on success (entire buffer sent).
+ *                nonzero on error.
+ *
+ *********************************************************************/
+extern int ssl_send_data_delayed(mbedtls_ssl_context *ssl,
+                                 const unsigned char *buf, size_t len,
+                                 unsigned int delay)
+{
+   size_t i = 0;
+
+   if (delay == 0)
+   {
+      if (ssl_send_data(ssl, buf, len) < 0)
+      {
+         return -1;
+      }
+      else
+      {
+         return 0;
+      }
+   }
+
+   while (i < len)
+   {
+      size_t write_length;
+      enum { MAX_WRITE_LENGTH = 10 };
+
+      if ((i + MAX_WRITE_LENGTH) > len)
+      {
+         write_length = len - i;
+      }
+      else
+      {
+         write_length = MAX_WRITE_LENGTH;
+      }
+
+      privoxy_millisleep(delay);
+
+      if (ssl_send_data(ssl, buf + i, write_length) < 0)
+      {
+         return -1;
+      }
+      i += write_length;
+   }
+
+   return 0;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  ssl_recv_data
  *
  * Description :  Receives data from given SSL context and puts
