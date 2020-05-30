@@ -1741,6 +1741,11 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=Flushed )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=expecting )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Performing the TLS\/SSL handshake with client. Hash of host:/) {
+
+        # Performing the TLS/SSL handshake with client. Hash of host: bab5296b25e256c7b06b92b17b56bcae
+        $c = highlight_matched_host($c, '(?<=Hash of host: ).+');
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
