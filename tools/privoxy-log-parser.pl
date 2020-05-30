@@ -111,7 +111,7 @@ my $no_msecs_mode; # XXX: should probably be removed
 my $shorten_thread_ids;
 my $line_end;
 
-sub prepare_our_stuff () {
+sub prepare_our_stuff() {
 
     # Syntax Higlight hash
     @all_colours = (
@@ -219,7 +219,7 @@ sub prepare_our_stuff () {
     init_stats();
 }
 
-sub paint_it ($) {
+sub paint_it($) {
 ###############################################################
 # Takes a colour string and returns an ANSI escape sequence
 # (unless --no-syntax-highlighting is used).
@@ -296,7 +296,7 @@ sub paint_it ($) {
     return $colour_code;
 }
 
-sub get_semantic_html_markup ($) {
+sub get_semantic_html_markup($) {
 ###############################################################
 # Takes a string and returns a span element
 ###############################################################
@@ -314,7 +314,7 @@ sub get_semantic_html_markup ($) {
     return $code;
 }
 
-sub cli_option_is_set ($) {
+sub cli_option_is_set($) {
 
     our %cli_options;
     my $cli_option = shift;
@@ -324,7 +324,7 @@ sub cli_option_is_set ($) {
     return $cli_options{$cli_option};
 }
 
-sub get_html_title () {
+sub get_html_title() {
 
     our %cli_options;
     return $cli_options{'title'};
@@ -354,7 +354,7 @@ sub init_css_colours() {
     );
 }
 
-sub get_css_colour ($) {
+sub get_css_colour($) {
 
    our %css_colours;
    my $colour = shift;
@@ -364,7 +364,7 @@ sub get_css_colour ($) {
    return '#' . $css_colours{$colour};
 }
 
-sub get_css_line ($) {
+sub get_css_line($) {
 
     my $class = shift;
     my $css_line;
@@ -378,7 +378,7 @@ sub get_css_line ($) {
     return $css_line;
 }
 
-sub get_css_line_for_colour ($) {
+sub get_css_line_for_colour($) {
 
     my $colour = shift;
     my $css_line;
@@ -392,7 +392,7 @@ sub get_css_line_for_colour ($) {
 }
 
 # XXX: Wrong solution
-sub get_missing_css_lines () {
+sub get_missing_css_lines() {
 
     my $css_line;
 
@@ -404,7 +404,7 @@ sub get_missing_css_lines () {
     return $css_line;
 }
 
-sub get_css () {
+sub get_css() {
 
     our %css_colours; #XXX: Wrong solution
 
@@ -433,7 +433,7 @@ sub get_css () {
     return $css;
 }
 
-sub print_intro () {
+sub print_intro() {
 
     my $intro = '';
 
@@ -451,7 +451,7 @@ sub print_intro () {
     }
 }
 
-sub print_outro () {
+sub print_outro() {
 
     my $outro = '';
 
@@ -463,11 +463,11 @@ sub print_outro () {
     }
 }
 
-sub get_line_end () {
+sub get_line_end() {
     return cli_option_is_set('html-output') ? "<br>\n" : "\n";
 }
 
-sub get_colour_html_markup ($) {
+sub get_colour_html_markup($) {
 ###############################################################
 # Takes a colour string a span element. XXX: WHAT?
 # XXX: This function shouldn't be necessary, the
@@ -486,21 +486,21 @@ sub get_colour_html_markup ($) {
     return $code;
 }
 
-sub default_colours () {
+sub default_colours() {
     # XXX: Properly
     our $bg_code;
     return reset_colours();
 }
 
-sub show_colours () {
+sub show_colours() {
     # XXX: Implement
 }
 
-sub reset_colours () {
+sub reset_colours() {
     return ESCAPE . "0m";
 }
 
-sub set_background ($){
+sub set_background($) {
 
     my $colour = shift;
     our $bg_code;
@@ -523,11 +523,11 @@ sub set_background ($){
     }
 }
 
-sub get_background (){
+sub get_background() {
     return our $bg_code;
 }
 
-sub prepare_highlight_hash ($) {
+sub prepare_highlight_hash($) {
     my $ref = shift;
 
     foreach my $key (keys %$ref) {
@@ -537,7 +537,7 @@ sub prepare_highlight_hash ($) {
     }
 }
 
-sub prepare_colour_array ($) {
+sub prepare_colour_array($) {
     my $ref = shift;
 
     foreach my $i (0 ... @$ref - 1) {
@@ -547,7 +547,7 @@ sub prepare_colour_array ($) {
     }
 }
 
-sub found_unknown_content ($) {
+sub found_unknown_content($) {
 
     my $unknown = shift;
     my $message;
@@ -566,7 +566,7 @@ sub found_unknown_content ($) {
     die "Unworthy content parser" if PUNISH_MISSING_LOG_KNOWLEDGE_WITH_DEATH;
 }
 
-sub log_parse_error ($) {
+sub log_parse_error($) {
 
     my $message = shift;
 
@@ -577,7 +577,7 @@ sub log_parse_error ($) {
     }
 }
 
-sub debug_message (@) {
+sub debug_message(@) {
     my @message = @_;
 
     print $h{'debug'} . "@message" . $h{'Standard'} . "\n";
@@ -587,7 +587,7 @@ sub debug_message (@) {
 # highlighter functions that aren't loglevel-specific
 ################################################################################
 
-sub h ($) {
+sub h($) {
 
     # Get highlight marker
     my $highlight = shift; # XXX: Stupid name;
@@ -609,7 +609,7 @@ sub h ($) {
     return $result;
 }
 
-sub highlight_known_headers ($) {
+sub highlight_known_headers($) {
 
     my $content = shift;
 
@@ -624,7 +624,7 @@ sub highlight_known_headers ($) {
     return $content;
 }
 
-sub highlight_matched_request_line ($$) {
+sub highlight_matched_request_line($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -634,7 +634,7 @@ sub highlight_matched_request_line ($$) {
     return $result;
 }
 
-sub highlight_request_line ($) {
+sub highlight_request_line($) {
 
     my $rl = shift;
     my ($method, $url, $http_version);
@@ -675,7 +675,7 @@ sub highlight_request_line ($) {
     return $rl;
 }
 
-sub highlight_response_line ($) {
+sub highlight_response_line($) {
 
     my $rl = shift;
     my ($http_version, $status_code, $status_message);
@@ -702,7 +702,7 @@ sub highlight_response_line ($) {
     return $rl;
 }
 
-sub highlight_matched_url ($$) {
+sub highlight_matched_url($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -717,7 +717,7 @@ sub highlight_matched_url ($$) {
     return $result;
 }
 
-sub highlight_matched_host ($$) {
+sub highlight_matched_host($$) {
 
     my ($result, $regex) = @_; # XXX: result ist stupid name;
 
@@ -728,7 +728,7 @@ sub highlight_matched_host ($$) {
     return $result;
 }
 
-sub highlight_matched_pattern ($$$) {
+sub highlight_matched_pattern($$$) {
 
     my $result = shift; # XXX: Stupid name;
     my $key = shift;
@@ -743,7 +743,7 @@ sub highlight_matched_pattern ($$$) {
     return $result;
 }
 
-sub highlight_matched_path ($$) {
+sub highlight_matched_path($$) {
 
     my $result = shift; # XXX: Stupid name;
     my $regex = shift;
@@ -755,7 +755,7 @@ sub highlight_matched_path ($$) {
     return $result;
 }
 
-sub highlight_url ($) {
+sub highlight_url($) {
 
     my $url = shift;
 
@@ -772,7 +772,7 @@ sub highlight_url ($) {
     return $url;
 }
 
-sub update_header_highlight_regex ($) {
+sub update_header_highlight_regex($) {
 
     my $header = shift;
     my $headers = join ('|', keys %header_colours);
@@ -785,7 +785,7 @@ sub update_header_highlight_regex ($) {
 # loglevel-specific highlighter functions
 ################################################################################
 
-sub handle_loglevel_header ($) {
+sub handle_loglevel_header($) {
 
     my $c = shift;
 
@@ -1037,7 +1037,7 @@ sub handle_loglevel_header ($) {
     return $c;
 }
 
-sub handle_loglevel_re_filter ($) {
+sub handle_loglevel_re_filter($) {
 
     my $content = shift;
     my $c = $content;
@@ -1219,7 +1219,7 @@ sub handle_loglevel_re_filter ($) {
     return $content;
 }
 
-sub handle_loglevel_redirect ($) {
+sub handle_loglevel_redirect($) {
 
     my $c = shift;
 
@@ -1285,7 +1285,7 @@ sub handle_loglevel_redirect ($) {
     return $c;
 }
 
-sub handle_loglevel_gif_deanimate ($) {
+sub handle_loglevel_gif_deanimate($) {
 
     my $content = shift;
 
@@ -1331,7 +1331,7 @@ sub handle_loglevel_gif_deanimate ($) {
     return $content;
 }
 
-sub handle_loglevel_request ($) {
+sub handle_loglevel_request($) {
 
     my $content = shift;
 
@@ -1366,7 +1366,7 @@ sub handle_loglevel_request ($) {
     return $content;
 }
 
-sub handle_loglevel_crunch ($) {
+sub handle_loglevel_crunch($) {
 
     my $content = shift;
 
@@ -1390,7 +1390,7 @@ sub handle_loglevel_crunch ($) {
     return $content;
 }
 
-sub handle_loglevel_connect ($) {
+sub handle_loglevel_connect($) {
 
     my $c = shift;
 
@@ -1776,7 +1776,7 @@ sub handle_loglevel_connect ($) {
 }
 
 
-sub handle_loglevel_info ($) {
+sub handle_loglevel_info($) {
 
     my $c = shift;
 
@@ -1902,7 +1902,7 @@ sub handle_loglevel_info ($) {
     return $c;
 }
 
-sub handle_loglevel_cgi ($) {
+sub handle_loglevel_cgi($) {
 
     my $c = shift;
 
@@ -1924,7 +1924,7 @@ sub handle_loglevel_cgi ($) {
     return $c;
 }
 
-sub handle_loglevel_force ($) {
+sub handle_loglevel_force($) {
 
     my $c = shift;
 
@@ -1948,7 +1948,7 @@ sub handle_loglevel_force ($) {
     return $c;
 }
 
-sub handle_loglevel_error ($) {
+sub handle_loglevel_error($) {
 
     my $c = shift;
 
@@ -1976,11 +1976,11 @@ sub handle_loglevel_error ($) {
 }
 
 
-sub handle_loglevel_ignore ($) {
+sub handle_loglevel_ignore($) {
     return shift;
 }
 
-sub gather_loglevel_clf_stats ($) {
+sub gather_loglevel_clf_stats($) {
 
     my $content = shift;
     my ($method, $resource, $http_version, $status_code, $size);
@@ -2013,7 +2013,7 @@ sub gather_loglevel_clf_stats ($) {
     $stats{'status-code'}{$status_code}++;
 }
 
-sub gather_loglevel_request_stats ($$) {
+sub gather_loglevel_request_stats($$) {
     my $c = shift;
     my $thread = shift;
     our %stats;
@@ -2021,7 +2021,7 @@ sub gather_loglevel_request_stats ($$) {
     $stats{requests}++;
 }
 
-sub gather_loglevel_crunch_stats ($$) {
+sub gather_loglevel_crunch_stats($$) {
     my $c = shift;
     my $thread = shift;
     our %stats;
@@ -2047,7 +2047,7 @@ sub gather_loglevel_crunch_stats ($$) {
 }
 
 
-sub gather_loglevel_error_stats ($$) {
+sub gather_loglevel_error_stats($$) {
 
     my $c = shift;
     my $thread = shift;
@@ -2066,7 +2066,7 @@ sub gather_loglevel_error_stats ($$) {
     }
 }
 
-sub gather_loglevel_connect_stats ($$) {
+sub gather_loglevel_connect_stats($$) {
 
     my ($c, $thread) = @_;
     our %thread_data;
@@ -2108,7 +2108,7 @@ sub gather_loglevel_connect_stats ($$) {
     }
 }
 
-sub gather_loglevel_header_stats ($$) {
+sub gather_loglevel_header_stats($$) {
 
     my ($c, $thread) = @_;
     our %stats;
@@ -2123,7 +2123,7 @@ sub gather_loglevel_header_stats ($$) {
     }
 }
 
-sub init_stats () {
+sub init_stats() {
     our %stats = (
         requests => 0,
         crunches => 0,
@@ -2144,7 +2144,7 @@ sub init_stats () {
         $stats{'client-requests-on-connection'}{1} = 0;
 }
 
-sub get_percentage ($$) {
+sub get_percentage($$) {
     my $big = shift;
     my $small = shift;
 
@@ -2159,7 +2159,7 @@ sub get_percentage ($$) {
     return sprintf("%.2f%%", $small / $big * 100);
 }
 
-sub print_stats () {
+sub print_stats() {
 
     our %stats;
     our %cli_options;
@@ -2280,7 +2280,7 @@ sub print_stats () {
 # Functions that actually print stuff
 ################################################################################
 
-sub print_clf_message () {
+sub print_clf_message() {
 
     our ($ip, $timestamp, $request_line, $status_code, $size);
     my $output = '';
@@ -2302,7 +2302,7 @@ sub print_clf_message () {
     print $output;
 }
 
-sub print_non_clf_message ($) {
+sub print_non_clf_message($) {
 
     my $content = shift;
     my $msec_string = $no_msecs_mode ? '' : '.' . $req{$t}{'msecs'};
@@ -2327,7 +2327,7 @@ sub print_non_clf_message ($) {
         . $line_end;
 }
 
-sub shorten_thread_id ($) {
+sub shorten_thread_id($) {
 
     my $thread_id = shift;
 
@@ -2341,7 +2341,7 @@ sub shorten_thread_id ($) {
     return $short_thread_ids{$thread_id}
 }
 
-sub parse_loop () {
+sub parse_loop() {
 
     my ($day, $time_stamp, $thread, $log_level, $content, $c, $msecs);
     my $last_msecs  = 0;
@@ -2441,7 +2441,7 @@ sub parse_loop () {
     }
 }
 
-sub stats_loop () {
+sub stats_loop() {
 
     my ($day, $time_stamp, $msecs, $thread, $log_level, $content);
     my $strict_checks = cli_option_is_set('strict-checks');
@@ -2523,7 +2523,7 @@ sub VersionMessage {
     print $version_message;
 }
 
-sub get_cli_options () {
+sub get_cli_options() {
 
     our %cli_options = (
         'html-output'              => CLI_OPTION_DEFAULT_TO_HTML_OUTPUT,
@@ -2565,7 +2565,7 @@ sub get_cli_options () {
    $line_end = get_line_end();
 }
 
-sub help () {
+sub help() {
 
     our %cli_options;
 
@@ -2596,7 +2596,7 @@ see "perldoc $0" for more information
 ################################################################################
 # main
 ################################################################################
-sub main () {
+sub main() {
 
     get_cli_options();
     set_background(DEFAULT_BACKGROUND);
