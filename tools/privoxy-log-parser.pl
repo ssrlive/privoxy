@@ -2250,9 +2250,13 @@ sub print_stats() {
     } else {
         print "Method distribution unknown. No CLF message parsed yet. Is 'debug 512' enabled?\n";
     }
-    print "Client HTTP versions:\n";
-    foreach my $http_version (sort {$stats{'http-version'}{$b} <=> $stats{'http-version'}{$a}} keys %{$stats{'http-version'}}) {
-        printf "%8d : %-8s\n",  $stats{'http-version'}{$http_version}, $http_version;
+    if (exists $stats{'http-version'}) {
+        print "Client HTTP versions:\n";
+        foreach my $http_version (sort {$stats{'http-version'}{$b} <=> $stats{'http-version'}{$a}} keys %{$stats{'http-version'}}) {
+            printf "%8d : %-8s\n",  $stats{'http-version'}{$http_version}, $http_version;
+        }
+    } else {
+        print "HTTP version distribution unknown. No CLF message parsed yet. Is 'debug 512' enabled?\n";
     }
     if (exists $stats{'status-code'}) {
         print "HTTP status codes:\n";
