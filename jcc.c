@@ -485,8 +485,9 @@ static int client_protocol_is_unsupported(struct client_state *csp, char *req)
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
-         ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-            (const unsigned char *)response, strlen(response));
+         ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+            (const unsigned char *)response, strlen(response),
+            get_write_delay(csp));
       }
       else
 #endif
@@ -868,10 +869,12 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
-         if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                 (const unsigned char *)rsp->head, rsp->head_length) < 0)
-          || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                 (const unsigned char *)rsp->body, rsp->content_length) < 0))
+         if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                (const unsigned char *)rsp->head, rsp->head_length,
+                get_write_delay(csp)) < 0)
+          || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                (const unsigned char *)rsp->body, rsp->content_length,
+                get_write_delay(csp)) < 0))
          {
             /* There is nothing we can do about it. */
             log_error(LOG_LEVEL_CONNECT, "Couldn't deliver the error message "
@@ -2270,8 +2273,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
       /* XXX: Also used for JB_ERR_MEMORY */
       log_error(LOG_LEVEL_ERROR, "Failed to receive encrypted request: %s",
          jb_err_to_string(err));
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return err;
    }
 
@@ -2280,8 +2283,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    if (request_line == NULL)
    {
       log_error(LOG_LEVEL_ERROR, "Failed to get the encrypted request line");
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
    assert(*request_line != '\0');
@@ -2313,8 +2316,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    freez(request_line);
    if (JB_ERR_OK != err)
    {
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
       log_error(LOG_LEVEL_ERROR,
@@ -2348,8 +2351,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
        */
       log_error(LOG_LEVEL_ERROR,
          "Failed to get the encrypted request destination");
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
 
@@ -2386,8 +2389,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    err = sed_https(csp);
    if (JB_ERR_OK != err)
    {
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       log_error(LOG_LEVEL_ERROR, "Failed to parse client request from %s.",
          csp->ip_addr_str);
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
@@ -2961,11 +2964,12 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                            (const unsigned char *)hdr, strlen(hdr)) < 0)
-                        || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                     if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                              (const unsigned char *)hdr, strlen(hdr),
+                              get_write_delay(csp)) < 0)
+                        || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                               (const unsigned char *) ((p != NULL) ? p : csp->iob->cur),
-                              csp->content_length) < 0))
+                              csp->content_length, get_write_delay(csp)) < 0))
                      {
                         log_error(LOG_LEVEL_ERROR, "write modified content to "
                            "client over TLS/SSL failed");
@@ -3063,12 +3067,13 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                            (const unsigned char *)hdr, hdrlen) < 0)
+                     if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                             (const unsigned char *)hdr, hdrlen, get_write_delay(csp)) < 0)
                         || ((flushed = ssl_flush_socket(&(csp->mbedtls_client_attr.ssl),
                                 csp->iob)) < 0)
-                        || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                              (const unsigned char *)csp->receive_buffer, (size_t)len) < 0))
+                        || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                              (const unsigned char *)csp->receive_buffer, (size_t)len,
+                              get_write_delay(csp)) < 0))
                      {
                         log_error(LOG_LEVEL_CONNECT,
                            "Flush header and buffers to client failed");
@@ -3113,8 +3118,9 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ret = ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                     (const unsigned char *)csp->receive_buffer, (size_t)len);
+                  ret = ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                     (const unsigned char *)csp->receive_buffer, (size_t)len,
+                     get_write_delay(csp));
                   if (ret < 0)
                   {
                      log_error(LOG_LEVEL_ERROR,
@@ -3178,9 +3184,9 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                     ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                         (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                        strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                        strlen(INVALID_SERVER_HEADERS_RESPONSE), get_write_delay(csp));
                   }
                   else
 #endif /* def FEATURE_HTTPS_INSPECTION */
@@ -3272,9 +3278,10 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                     strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                     strlen(INVALID_SERVER_HEADERS_RESPONSE),
+                     get_write_delay(csp));
                }
                else
 #endif /* def FEATURE_HTTPS_INSPECTION */
@@ -3304,9 +3311,10 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                     strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                     strlen(INVALID_SERVER_HEADERS_RESPONSE),
+                     get_write_delay(csp));
                }
                else
 #endif
@@ -3373,8 +3381,9 @@ static void handle_established_connection(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
                if (client_use_ssl(csp))
                {
-                  if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                          (const unsigned char *)hdr, strlen(hdr)) < 0)
+                  if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                          (const unsigned char *)hdr, strlen(hdr),
+                          get_write_delay(csp)) < 0)
                      || (len = ssl_flush_socket(&(csp->mbedtls_client_attr.ssl),
                             csp->iob) < 0))
                   {
@@ -3434,9 +3443,10 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                     strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                     strlen(INVALID_SERVER_HEADERS_RESPONSE),
+                     get_write_delay(csp));
                }
                else
 #endif /* def FEATURE_HTTPS_INSPECTION */
