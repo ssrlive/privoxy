@@ -2010,6 +2010,7 @@ sub gather_loglevel_clf_stats ($) {
         $stats{'hosts'}{$1}++;
     }
     $stats{'content-size-total'} += $size;
+    $stats{'status-code'}{$status_code}++;
 }
 
 sub gather_loglevel_request_stats ($$) {
@@ -2237,6 +2238,14 @@ sub print_stats () {
     print "Client HTTP versions:\n";
     foreach my $http_version (sort {$stats{'http-version'}{$b} <=> $stats{'http-version'}{$a}} keys %{$stats{'http-version'}}) {
         printf "%d : %s\n",  $stats{'http-version'}{$http_version}, $http_version;
+    }
+    if (exists $stats{'status-code'}) {
+        print "HTTP status codes:\n";
+        foreach my $status_code (sort {$stats{'status-code'}{$b} <=> $stats{'status-code'}{$a}} keys %{$stats{'status-code'}}) {
+            printf "%8d : %-8d\n",  $stats{'status-code'}{$status_code}, $status_code;
+        }
+    } else {
+        print "Status code distribution unknown. No CLF message parsed yet. Is 'debug 512' enabled?\n";
     }
 
     if ($cli_options{'url-statistics-threshold'} == 0) {
