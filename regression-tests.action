@@ -1086,3 +1086,7 @@ redirect.example.net/
 # Redirected URL = http://redirect2.example.net/blafasel?x=http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
 # Redirect Destination = http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
 redirect2.example.net/
+
+{+delay-response{1}}
+# Fetch Test = http://config.privoxy.org/show-url-info?url=http%3A%2F%2Fwww.example.com%2Fprivoxy-test-delay-response
+config.privoxy.org/show-url-info\?url=http%3A%2F%2Fwww\.example\.com%2Fprivoxy-test-delay-response
