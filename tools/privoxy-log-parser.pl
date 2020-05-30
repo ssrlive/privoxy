@@ -2169,6 +2169,10 @@ sub print_stats() {
     my $outgoing_requests = $stats{requests} - $stats{crunches};
     my $client_requests_checksum = 0;
 
+    if ($stats{requests_clf} && $stats{requests}
+        && $stats{requests_clf} != $stats{requests}) {
+        print "Inconsistent request counts: " . $stats{requests} . "/" . $stats{requests_clf} . "\n";
+    }
     if ($stats{requests_clf} && $stats{requests} eq 0) {
         $stats{requests} = $stats{requests_clf};
     }
