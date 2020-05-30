@@ -1016,7 +1016,7 @@ actionsfile
     The available debug levels are:
    </para>
     <programlisting>
-  debug     1 # Log the destination for each request &my-app; let through. See also debug 1024.
+  debug     1 # Log the destination for each request. See also debug 1024.
   debug     2 # show each connection status
   debug     4 # show I/O status
   debug     8 # show header parsing
