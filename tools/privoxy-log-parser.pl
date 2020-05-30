@@ -2166,7 +2166,6 @@ sub print_stats() {
     our %stats;
     our %cli_options;
     my $new_connections = $stats{requests} - $stats{crunches} - $stats{'reused-connections'};
-    my $outgoing_requests = $stats{requests} - $stats{crunches};
     my $client_requests_checksum = 0;
 
     if ($stats{requests_clf} && $stats{requests}
@@ -2183,18 +2182,24 @@ sub print_stats() {
     }
 
     print "Client requests total: " . $stats{requests} . "\n";
-    print "Crunches: " . $stats{crunches} . " (" .
-        get_percentage($stats{requests}, $stats{crunches}) . ")\n";
-    print "Blocks: " . $stats{'blocked'} . " (" .
-        get_percentage($stats{requests}, $stats{'blocked'}) . ")\n";
-    print "Fast redirections: " . $stats{'fast-redirections'} . " (" .
-        get_percentage($stats{requests}, $stats{'fast-redirections'}) . ")\n";
-    print "Connection timeouts: " . $stats{'connection-timeout'} . " (" .
-        get_percentage($stats{requests}, $stats{'connection-timeout'}) . ")\n";
-    print "Connection failures: " . $stats{'connection-failure'} . " (" .
-        get_percentage($stats{requests}, $stats{'connection-failure'}) . ")\n";
-    print "Outgoing requests: " . $outgoing_requests . " (" .
-        get_percentage($stats{requests}, $outgoing_requests) . ")\n";
+    if ($stats{crunches}) {
+        my $outgoing_requests = $stats{requests} - $stats{crunches};
+        print "Crunches: " . $stats{crunches} . " (" .
+            get_percentage($stats{requests}, $stats{crunches}) . ")\n";
+        print "Blocks: " . $stats{'blocked'} . " (" .
+            get_percentage($stats{requests}, $stats{'blocked'}) . ")\n";
+        print "Fast redirections: " . $stats{'fast-redirections'} . " (" .
+            get_percentage($stats{requests}, $stats{'fast-redirections'}) . ")\n";
+        print "Connection timeouts: " . $stats{'connection-timeout'} . " (" .
+            get_percentage($stats{requests}, $stats{'connection-timeout'}) . ")\n";
+        print "Connection failures: " . $stats{'connection-failure'} . " (" .
+            get_percentage($stats{requests}, $stats{'connection-failure'}) . ")\n";
+        print "Outgoing requests: " . $outgoing_requests . " (" .
+            get_percentage($stats{requests}, $outgoing_requests) . ")\n";
+    } else {
+        print "No crunches detected. Is 'debug 1024' enabled?\n";
+    }
+
     print "Server keep-alive offers: " . $stats{'server-keep-alive'} . " (" .
         get_percentage($stats{requests}, $stats{'server-keep-alive'}) . ")\n";
     print "New outgoing connections: " . $new_connections . " (" .
