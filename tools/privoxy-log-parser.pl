@@ -2237,7 +2237,7 @@ sub print_stats () {
     }
     print "Client HTTP versions:\n";
     foreach my $http_version (sort {$stats{'http-version'}{$b} <=> $stats{'http-version'}{$a}} keys %{$stats{'http-version'}}) {
-        printf "%d : %s\n",  $stats{'http-version'}{$http_version}, $http_version;
+        printf "%8d : %-8s\n",  $stats{'http-version'}{$http_version}, $http_version;
     }
     if (exists $stats{'status-code'}) {
         print "HTTP status codes:\n";
