@@ -2148,6 +2148,9 @@ yandex.ru/.*&retpath=http
 disqus.com/
 # URL = http://www.youtube.com/embed/blafasel?feature=oembed&enablejsapi=1&origin=http://www.example.com&wmode=opaque
 .youtube.com/.*origin=http
+# URL = https://oss-fuzz.com/login?dest=https%3A%2F%2Foss-fuzz.com%2Ftestcase-detail%2F5727799779524608
+#MASTER# REMARKS: Only match based on the host so the test works even without https-inspection enabled.
+oss-fuzz.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
