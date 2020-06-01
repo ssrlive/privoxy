@@ -3759,7 +3759,7 @@ static void chat(struct client_state *csp)
          if (ret != 0)
          {
             log_error(LOG_LEVEL_ERROR,
-               "Can't open secure connection with client");
+               "Failed to open a secure connection with the client");
             close_client_ssl_connection(csp); /* XXX: Is this needed? */
             return;
          }
