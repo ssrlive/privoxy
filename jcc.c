@@ -3760,7 +3760,6 @@ static void chat(struct client_state *csp)
          {
             log_error(LOG_LEVEL_ERROR,
                "Failed to open a secure connection with the client");
-            close_client_ssl_connection(csp); /* XXX: Is this needed? */
             return;
          }
          if (JB_ERR_OK != process_encrypted_request(csp))
