@@ -54,6 +54,8 @@ extern int tunnel_established_successfully(const char *response, unsigned int re
 
 /* Functions for sending and receiving data over TLS/SSL connections */
 extern int  ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, size_t len);
+extern int ssl_send_data_delayed(mbedtls_ssl_context *ssl, const unsigned char *buf,
+                                 size_t len, unsigned int delay);
 extern int  ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t maxLen);
 extern long ssl_flush_socket(mbedtls_ssl_context *ssl, struct iob *iob);
 extern void ssl_send_certificate_error(struct client_state *csp);

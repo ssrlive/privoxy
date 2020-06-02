@@ -50,6 +50,7 @@
 #include "errlog.h"
 #include "jcc.h"
 #include "ssl.h"
+#include "encode.h"
 
 
 /*
@@ -162,7 +163,10 @@ extern int server_use_ssl(const struct client_state *csp)
  *
  * Function    :  is_ssl_pending
  *
- * Description :  Tests if there are some waiting data on ssl connection
+ * Description :  Tests if there are some waiting data on ssl connection.
+ *                Only considers data that has actually been received
+ *                locally and ignores data that is still on the fly
+ *                or has not yet been sent by the remote end.
  *
  * Parameters  :
  *          1  :  ssl = SSL context to test
@@ -253,6 +257,69 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
    }
 
    return (int)len;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  ssl_send_data_delayed
+ *
+ * Description :  Sends the contents of buf (for n bytes) to given SSL
+ *                connection, optionally delaying the operation.
+ *
+ * Parameters  :
+ *          1  :  ssl = SSL context to send data to
+ *          2  :  buf = Pointer to data to be sent
+ *          3  :  len = Length of data to be sent to the SSL context
+ *          4  :  delay = Delay in milliseconds.
+ *
+ * Returns     :  0 on success (entire buffer sent).
+ *                nonzero on error.
+ *
+ *********************************************************************/
+extern int ssl_send_data_delayed(mbedtls_ssl_context *ssl,
+                                 const unsigned char *buf, size_t len,
+                                 unsigned int delay)
+{
+   size_t i = 0;
+
+   if (delay == 0)
+   {
+      if (ssl_send_data(ssl, buf, len) < 0)
+      {
+         return -1;
+      }
+      else
+      {
+         return 0;
+      }
+   }
+
+   while (i < len)
+   {
+      size_t write_length;
+      enum { MAX_WRITE_LENGTH = 10 };
+
+      if ((i + MAX_WRITE_LENGTH) > len)
+      {
+         write_length = len - i;
+      }
+      else
+      {
+         write_length = MAX_WRITE_LENGTH;
+      }
+
+      privoxy_millisleep(delay);
+
+      if (ssl_send_data(ssl, buf + i, write_length) < 0)
+      {
+         return -1;
+      }
+      i += write_length;
+   }
+
+   return 0;
+
 }
 
 
@@ -648,7 +715,7 @@ static void free_client_ssl_structures(struct client_state *csp)
 {
    /*
    * We can't use function mbedtls_net_free, because this function
-   * inter alia close TCP connection on setted fd. Instead of this
+   * inter alia close TCP connection on set fd. Instead of this
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
@@ -828,6 +895,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
          {
             log_error(LOG_LEVEL_ERROR,
                "mbedtls_ssl_handshake with server failed: %s", err_buf);
+            free_certificate_chain(csp);
             ret = -1;
          }
          goto exit;
@@ -907,7 +975,7 @@ static void free_server_ssl_structures(struct client_state *csp)
 {
    /*
    * We can't use function mbedtls_net_free, because this function
-   * inter alia close TCP connection on setted fd. Instead of this
+   * inter alia close TCP connection on set fd. Instead of this
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
@@ -1992,7 +2060,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    int ret = 0;
    struct certs_chain *cert = NULL;
 
-   /* Header of message with certificate informations */
+   /* Header of message with certificate information */
    const char message_begin[] =
       "HTTP/1.1 200 OK\r\n"
       "Content-Type: text/html\r\n"
@@ -2017,7 +2085,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    {
       size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1;
 
-      message_len += strlen(cert->text_buf) + strlen("<pre></pre>\n")
+      message_len += strlen(cert->info_buf) + strlen("<pre></pre>\n")
                      +  base64_len + strlen("<a href=\"data:application"
                         "/x-x509-ca-cert;base64,\">Download certificate</a>");
       cert = cert->next;
@@ -2052,7 +2120,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
       }
 
       strlcat(message, "<pre>",        message_len);
-      strlcat(message, cert->text_buf, message_len);
+      strlcat(message, cert->info_buf, message_len);
       strlcat(message, "</pre>\n",     message_len);
 
       if (ret == 0)
@@ -2082,10 +2150,10 @@ extern void ssl_send_certificate_error(struct client_state *csp)
  * Function    :  ssl_verify_callback
  *
  * Description :  This is a callback function for certificate verification.
- *                It's called for all certificates in server certificate
- *                trusted chain and it's preparing information about this
- *                certificates. Prepared informations can be used to inform
- *                user about invalid certificates.
+ *                It's called once for each certificate in the server's
+ *                certificate trusted chain and prepares information about
+ *                the certificate. The information can be used to inform
+ *                the user about invalid certificates.
  *
  * Parameters  :
  *          1  :  csp_void = Current client state (buffers, headers, etc...)
@@ -2117,7 +2185,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
     */
    last->next = malloc_or_die(sizeof(struct certs_chain));
    last->next->next = NULL;
-   memset(last->next->text_buf, 0, sizeof(last->next->text_buf));
+   memset(last->next->info_buf, 0, sizeof(last->next->info_buf));
    memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
 
    /*
@@ -2127,14 +2195,27 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
       crt->raw.p, crt->raw.len, (unsigned char *)last->file_buf,
       sizeof(last->file_buf)-1, &olen)) != 0)
    {
+      char err_buf[ERROR_BUF_SIZE];
+
+      mbedtls_strerror(ret, err_buf, sizeof(err_buf));
+      log_error(LOG_LEVEL_ERROR, "mbedtls_pem_write_buffer() failed: %s",
+         err_buf);
+
       return(ret);
    }
 
    /*
     * Saving certificate information into buffer
     */
-   mbedtls_x509_crt_info(last->text_buf, sizeof(last->text_buf) - 1,
-      CERT_INFO_PREFIX, crt);
+   {
+      char buf[CERT_INFO_BUF_SIZE];
+      char *encoded_text;
+
+      mbedtls_x509_crt_info(buf, sizeof(buf), CERT_INFO_PREFIX, crt);
+      encoded_text = html_encode(buf);
+      strlcpy(last->info_buf, encoded_text, sizeof(last->info_buf));
+      freez(encoded_text);
+   }
 
    return 0;
 }
@@ -2145,7 +2226,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  * Function    :  free_certificate_chain
  *
  * Description :  Frees certificates linked list. This linked list is
- *                used to save informations about certificates in
+ *                used to save information about certificates in
  *                trusted chain.
  *
  * Parameters  :
@@ -2159,21 +2240,18 @@ static void free_certificate_chain(struct client_state *csp)
    struct certs_chain *cert = csp->server_certs_chain.next;
 
    /* Cleaning buffers */
-   memset(csp->server_certs_chain.text_buf, 0,
-      sizeof(csp->server_certs_chain.text_buf));
+   memset(csp->server_certs_chain.info_buf, 0,
+      sizeof(csp->server_certs_chain.info_buf));
    memset(csp->server_certs_chain.file_buf, 0,
       sizeof(csp->server_certs_chain.file_buf));
    csp->server_certs_chain.next = NULL;
 
    /* Freeing memory in whole linked list */
-   if (cert != NULL)
+   while (cert != NULL)
    {
-      do
-      {
-         struct certs_chain *cert_for_free = cert;
-         cert = cert->next;
-         freez(cert_for_free);
-      } while (cert != NULL);
+      struct certs_chain *cert_for_free = cert;
+      cert = cert->next;
+      freez(cert_for_free);
    }
 }
 
@@ -2251,7 +2329,7 @@ static int host_to_hash(struct client_state *csp)
  * Function    :  tunnel_established_successfully
  *
  * Description :  Check if parent proxy server response contains
- *                informations about successfully created connection with
+ *                information about successfully created connection with
  *                destination server. (HTTP/... 2xx ...)
  *
  * Parameters  :

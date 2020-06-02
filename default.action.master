@@ -21,14 +21,14 @@
 #                 and enhancements are better placed in user.action,
 #                 the match-all section has been moved to match-all.action.
 #
-#  Copyright   :  Written by and Copyright (C) 2001-2019 the
+#  Copyright   :  Written by and Copyright (C) 2001-2020 the
 #                 Privoxy team. https://www.privoxy.org/
 #
 # Feedback welcome, for details please have a look at:
 # https://www.privoxy.org/user-manual/contact.html
 #
-# The current development version of this file is located:
-# http://ijbswa.cvs.sourceforge.net/viewvc/ijbswa/current/default.action.master
+# The current development version of this file is located at:
+# https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=default.action.master;hb=HEAD
 #
 #############################################################################
 # Syntax
@@ -187,6 +187,7 @@
 #    Client-header filters predefined in the supplied default.filter include:
 #
 #     hide-tor-exit-notation: Removes the Tor exit node notation in Host and Referer headers.
+#     no-brotli-accepted:     Strips "br" from the Accept-Encoding header
 #     privoxy-control:        Removes X-Privoxy-Control headers.
 #
 # +client-header-tagger{string}
@@ -546,6 +547,7 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 #
 { \
 +change-x-forwarded-for{block} \
++client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -560,6 +562,7 @@ standard.Cautious
 #
 { \
 +change-x-forwarded-for{block} \
++client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -590,6 +593,7 @@ standard.Medium
 #
 { \
 +change-x-forwarded-for{block} \
++client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -2144,6 +2148,9 @@ yandex.ru/.*&retpath=http
 disqus.com/
 # URL = http://www.youtube.com/embed/blafasel?feature=oembed&enablejsapi=1&origin=http://www.example.com&wmode=opaque
 .youtube.com/.*origin=http
+# URL = https://oss-fuzz.com/login?dest=https%3A%2F%2Foss-fuzz.com%2Ftestcase-detail%2F5727799779524608
+#MASTER# REMARKS: Only match based on the host so the test works even without https-inspection enabled.
+oss-fuzz.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block

@@ -7,6 +7,7 @@
 #############################################################################
 { \
 +change-x-forwarded-for{block} \
++client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \

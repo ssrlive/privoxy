@@ -87,7 +87,7 @@ void free_http_request(struct http_request *http)
    freez(http->url);
    freez(http->hostport);
    freez(http->path);
-   freez(http->ver);
+   freez(http->version);
    freez(http->host_ip_addr_str);
 #ifndef FEATURE_EXTENDED_HOST_PATTERNS
    freez(http->dbuffer);
@@ -291,12 +291,17 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
          /*
           * Got a path.
           *
-          * NOTE: The following line ignores the path for HTTPS URLS.
-          * This means that you get consistent behaviour if you type a
-          * https URL in and it's parsed by the function.  (When the
-          * URL is actually retrieved, SSL hides the path part).
+          * If FEATURE_HTTPS_INSPECTION isn't available, ignore the
+          * path for https URLs so that we get consistent behaviour
+          * if a https URL is parsed. When the URL is actually
+          * retrieved, https hides the path part.
           */
-         http->path = strdup_or_die(http->ssl ? "/" : url_path);
+         http->path = strdup_or_die(
+#ifndef FEATURE_HTTPS_INSPECTION
+            http->ssl ? "/" :
+#endif
+            url_path
+         );
          *url_path = '\0';
          http->hostport = strdup_or_die(url_noproto);
       }
@@ -587,7 +592,7 @@ jb_err parse_http_request(const char *req, struct http_request *http)
     */
    http->cmd = strdup_or_die(req);
    http->gpc = strdup_or_die(v[0]);
-   http->ver = strdup_or_die(v[2]);
+   http->version = strdup_or_die(v[2]);
    http->ocmd = strdup_or_die(http->cmd);
 
    freez(buf);

@@ -4,7 +4,7 @@
 #
 #  Purpose     :  Rules to process the content of web pages
 #
-#  Copyright   :  Written by and Copyright (C) 2001-2018 the
+#  Copyright   :  Written by and Copyright (C) 2001-2020 the
 #                 Privoxy team. https://www.privoxy.org/
 #
 #                 This program is free software; you can redistribute it
@@ -742,6 +742,16 @@ s@^(Content-Type:)\s*(?:application|text)/(?:xhtml\+)?xml(;.*)?$@$1 text/html$2@
 CLIENT-HEADER-FILTER: hide-tor-exit-notation Removes the Tor exit node notation in Host and Referer headers.
 
 s@^((?:Referer|Host):\s*(?:https?://)?[^/]*)\.[^\./]*?\.exit@$1@i
+
+#################################################################################
+#
+# no-brotli-accepted: Strips "br" from the Accept-Encoding header as Privoxy
+#                     currently doesn't support Brotli.
+#
+#################################################################################
+CLIENT-HEADER-FILTER: no-brotli-accepted Strip "br" from Accept-Encoding header
+
+s@(^Accept-Encoding:.*?)(?:br, |, br|br)@$1@i
 
 #################################################################################
 #

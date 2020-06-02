@@ -116,7 +116,7 @@ Hal.
  It is not a substitute for the
  <ulink url="../user-manual/index.html"><citetitle>Privoxy User Manual</citetitle></ulink>.
 <!--
- This works, at least in some situtations:
+ This works, at least in some situations:
  Test: <ulink url="privoxy-user-manual.pdf"><citetitle>User Manual</citetitle></ulink>.
 -->
  </para>
@@ -2999,7 +2999,7 @@ browsing has slowed to a crawl. What gives? </title>
  this is not considered a Privoxy bug.
 </para>
 <para>
- To prevent the crashes you can rewrite your filter to use less ressources,
+ To prevent the crashes you can rewrite your filter to use less resources,
  increase the relevant memory limit or recompile pcre to use less stack space.
  For details please see the
  <ulink url="http://pcre.org/original/doc/html/pcrestack.html">pcrestack man page</ulink>

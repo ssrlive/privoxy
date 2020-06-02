@@ -304,8 +304,8 @@ static int gif_extract_image(struct binbuffer *src, struct binbuffer *dst)
  *                an (optional) image block and an arbitrary number
  *                of image extension blocks, produce an output GIF with
  *                only one image block that contains the last image
- *                (extenstion) block of the original.
- *                Also strip Comments, Application extenstions, etc.
+ *                (extension) block of the original.
+ *                Also strip Comments, Application extensions, etc.
  *
  * Parameters  :
  *          1  :  src = Pointer to the source binbuffer

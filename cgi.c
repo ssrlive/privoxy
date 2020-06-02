@@ -3,11 +3,11 @@
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.c,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
- *                html or gif answers, and to compose HTTP resonses.
+ *                html or gif answers, and to compose HTTP responses.
  *                This only contains the framework functions, the
  *                actual handler functions are declared elsewhere.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2017
+ * Copyright   :  Written by and Copyright (C) 2001-2020
  *                members of the Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -62,11 +62,16 @@
 #if defined(FEATURE_CGI_EDIT_ACTIONS) || defined(FEATURE_TOGGLE)
 #include "cgiedit.h"
 #endif /* defined(FEATURE_CGI_EDIT_ACTIONS) || defined (FEATURE_TOGGLE) */
+#ifdef FEATURE_HTTPS_INSPECTION
+#include "ssl.h"
+#endif
 
 /* loadcfg.h is for global_toggle_state only */
 #include "loadcfg.h"
 /* jcc.h is for mutex semaphore globals only */
 #include "jcc.h"
+
+static char *make_menu(const struct client_state *csp, const char *self);
 
 /*
  * List of CGI functions: name, handler, description
@@ -244,7 +249,7 @@ const char image_pattern_data[] =
    "\000\000\000\000\111\105\116\104\256\102\140\202";
 
 /*
- * 1x1 transparant PNG.
+ * 1x1 transparent PNG.
  */
 const char image_blank_data[] =
  "\211\120\116\107\015\012\032\012\000\000\000\015\111\110\104\122"
@@ -267,7 +272,7 @@ const char image_pattern_data[] =
    "\270\005\000\073";
 
 /*
- * 1x1 transparant GIF.
+ * 1x1 transparent GIF.
  */
 const char image_blank_data[] =
    "GIF89a\001\000\001\000\200\000\000\377\377\377\000\000"
@@ -401,8 +406,13 @@ struct http_response *dispatch_cgi(struct client_state *csp)
 static char *grep_cgi_referrer(const struct client_state *csp)
 {
    struct list_entry *p;
+   struct list_entry *first_header =
+#ifdef FEATURE_HTTPS_INSPECTION
+      client_use_ssl(csp) ? csp->https_headers->first :
+#endif
+      csp->headers->first;
 
-   for (p = csp->headers->first; p != NULL; p = p->next)
+   for (p = first_header; p != NULL; p = p->next)
    {
       if (p->str == NULL) continue;
       if (strncmpic(p->str, "Referer: ", 9) == 0)
@@ -434,6 +444,7 @@ static int referrer_is_safe(const struct client_state *csp)
 {
    char *referrer;
    static const char alternative_prefix[] = "http://" CGI_SITE_1_HOST "/";
+   static const char alt_prefix_https[] = "https://" CGI_SITE_1_HOST "/";
    const char *trusted_cgi_referrer = csp->config->trusted_cgi_referrer;
 
    referrer = grep_cgi_referrer(csp);
@@ -444,8 +455,12 @@ static int referrer_is_safe(const struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Denying access to %s. No referrer found.",
          csp->http->url);
    }
-   else if ((0 == strncmp(referrer, CGI_PREFIX, sizeof(CGI_PREFIX)-1)
-         || (0 == strncmp(referrer, alternative_prefix, strlen(alternative_prefix)))))
+   else if ((0 == strncmp(referrer, CGI_PREFIX, sizeof(CGI_PREFIX)-1))
+#ifdef FEATURE_HTTPS_INSPECTION
+         || (0 == strncmp(referrer, CGI_PREFIX_HTTPS, sizeof(CGI_PREFIX_HTTPS)-1))
+         || (0 == strncmp(referrer, alt_prefix_https, strlen(alt_prefix_https)))
+#endif
+         || (0 == strncmp(referrer, alternative_prefix, strlen(alternative_prefix))))
    {
       /* Trustworthy referrer */
       log_error(LOG_LEVEL_CGI, "Granting access to %s, referrer %s is trustworthy.",
@@ -735,22 +750,22 @@ char get_char_param(const struct map *parameters,
  *
  * Function    :  get_string_param
  *
- * Description :  Get a string paramater, to be used as an
- *                ACTION_STRING or ACTION_MULTI paramater.
+ * Description :  Get a string parameter, to be used as an
+ *                ACTION_STRING or ACTION_MULTI parameter.
  *                Validates the input to prevent stupid/malicious
  *                users from corrupting their action file.
  *
  * Parameters  :
  *          1  :  parameters = map of cgi parameters
  *          2  :  param_name = The name of the parameter to read
- *          3  :  pparam = destination for paramater.  Allocated as
+ *          3  :  pparam = destination for parameter.  Allocated as
  *                part of the map "parameters", so don't free it.
  *                Set to NULL if not specified.
  *
- * Returns     :  JB_ERR_OK         on success, or if the paramater
+ * Returns     :  JB_ERR_OK         on success, or if the parameter
  *                                  was not specified.
  *                JB_ERR_MEMORY     on out-of-memory.
- *                JB_ERR_CGI_PARAMS if the paramater is not valid.
+ *                JB_ERR_CGI_PARAMS if the parameter is not valid.
  *
  *********************************************************************/
 jb_err get_string_param(const struct map *parameters,
@@ -1225,7 +1240,7 @@ jb_err cgi_error_no_template(const struct client_state *csp,
  *                In this context, "unexpected" means "anything other
  *                than JB_ERR_MEMORY or JB_ERR_CGI_PARAMS" - CGIs are
  *                expected to handle all other errors internally,
- *                since they can give more relavent error messages
+ *                since they can give more relevant error messages
  *                that way.
  *
  *                Note this is not a true CGI, it takes an error
@@ -1605,7 +1620,7 @@ struct http_response *finish_http_response(struct client_state *csp, struct http
     * unless the client asked for HTTP/1.0.
     */
    snprintf(buf, sizeof(buf), "%s %s",
-      strcmpic(csp->http->ver, "HTTP/1.0") ? "HTTP/1.1" : "HTTP/1.0",
+      strcmpic(csp->http->version, "HTTP/1.0") ? "HTTP/1.1" : "HTTP/1.0",
       rsp->status ? rsp->status : "200 OK");
    err = enlist_first(rsp->headers, buf);
 
@@ -2194,8 +2209,15 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "my-hostname",   1, html_encode(hostname ? hostname : "unknown"), 0);
    freez(hostname);
    if (!err) err = map(exports, "homepage",      1, html_encode(HOME_PAGE_URL), 0);
-   if (!err) err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
-   if (!err) err = map(exports, "menu",          1, make_menu(caller, csp->config->feature_flags), 0);
+   if (!err)
+   {
+      err = map(exports, "default-cgi",   1, html_encode(
+#ifdef FEATURE_HTTPS_INSPECTION
+        client_use_ssl(csp) ? CGI_PREFIX_HTTPS :
+#endif
+        CGI_PREFIX), 0);
+   }
+   if (!err) err = map(exports, "menu",          1, make_menu(csp, caller), 0);
    if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
    if (!strncmpic(csp->config->usermanual, "file://", 7) ||
        !strncmpic(csp->config->usermanual, "http", 4))
@@ -2206,7 +2228,14 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    else
    {
       /* Manual is delivered by Privoxy. */
-      if (!err) err = map(exports, "user-manual", 1, html_encode(CGI_PREFIX"user-manual/"), 0);
+      if (!err)
+      {
+         err = map(exports, "user-manual", 1, html_encode(
+#ifdef FEATURE_HTTPS_INSPECTION
+           client_use_ssl(csp) ? CGI_PREFIX_HTTPS"user-manual/" :
+#endif
+           CGI_PREFIX"user-manual/"), 0);
+      }
    }
    if (!err) err = map(exports, "actions-help-prefix", 1, ACTIONS_HELP_PREFIX ,1);
 #ifdef FEATURE_TOGGLE
@@ -2383,15 +2412,14 @@ jb_err map_conditional(struct map *exports, const char *name, int choose_first)
  *                and the toggle CGI if toggling is disabled.
  *
  * Parameters  :
- *          1  :  self = name of CGI to leave out, can be NULL for
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  self = name of CGI to leave out, can be NULL for
  *                complete listing.
- *          2  :  feature_flags = feature bitmap from csp->config
- *
  *
  * Returns     :  menu string, or NULL on out-of-memory error.
  *
  *********************************************************************/
-char *make_menu(const char *self, const unsigned feature_flags)
+char *make_menu(const struct client_state *csp, const char *self)
 {
    const struct cgi_dispatcher *d;
    char *result = strdup("");
@@ -2406,7 +2434,7 @@ char *make_menu(const char *self, const unsigned feature_flags)
    {
 
 #ifdef FEATURE_TOGGLE
-      if (!(feature_flags & RUNTIME_FEATURE_CGI_TOGGLE) && !strcmp(d->name, "toggle"))
+      if (!(csp->config->feature_flags & RUNTIME_FEATURE_CGI_TOGGLE) && !strcmp(d->name, "toggle"))
       {
          /*
           * Suppress the toggle link if remote toggling is disabled.
@@ -2424,7 +2452,11 @@ char *make_menu(const char *self, const unsigned feature_flags)
           * the "blocked" template's JavaScript.
           */
          string_append(&result, "<li><a href=\"");
-         html_encoded_prefix = html_encode(CGI_PREFIX);
+         html_encoded_prefix = html_encode(
+#ifdef FEATURE_HTTPS_INSPECTION
+            client_use_ssl(csp) ? CGI_PREFIX_HTTPS :
+#endif
+            CGI_PREFIX);
          if (html_encoded_prefix == NULL)
          {
             return NULL;

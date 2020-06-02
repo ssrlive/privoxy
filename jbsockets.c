@@ -218,7 +218,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
 #endif
    int connect_failed;
    /*
-    * XXX: Initializeing it here is only necessary
+    * XXX: Initializing it here is only necessary
     *      because not all situations are properly
     *      covered yet.
     */
@@ -1323,7 +1323,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
 #endif
    jb_socket afd;
 #if defined(_WIN32) || defined(__OS2__)
-   /* Wierdness - fix a warning. */
+   /* Weirdness - fix a warning. */
    int c_length;
 #else
    socklen_t c_length;

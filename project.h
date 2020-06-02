@@ -175,7 +175,7 @@ typedef enum privoxy_err jb_err;
 /**
  * This macro is used to free a pointer that may be NULL.
  * It also sets the variable to NULL after it's been freed.
- * The paramater should be a simple variable without side effects.
+ * The parameter should be a simple variable without side effects.
  */
 #define freez(X)  { if(X) { free((void*)X); X = NULL ; } }
 
@@ -276,7 +276,7 @@ struct map_entry
 
 /**
  * A map from a string to another string.
- * This is used for the paramaters passed in a HTTP GET request, and
+ * This is used for the parameters passed in a HTTP GET request, and
  * to store the exports when the CGI interface is filling in a template.
  */
 struct map
@@ -319,7 +319,7 @@ struct http_request
    char *ocmd;     /**< Backup of original cmd for CLF logging */
    char *gpc;      /**< HTTP method: GET, POST, ... */
    char *url;      /**< The URL */
-   char *ver;      /**< Protocol version */
+   char *version;  /**< Protocol version */
    int status;     /**< HTTP Status */
 
    char *host;     /**< Host part of URL */
@@ -338,8 +338,8 @@ struct http_request
 #endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
 
 #ifdef FEATURE_HTTPS_INSPECTION
-   int client_ssl;                                                  /**< Flag if we should comunicate with slient over ssl   */
-   int server_ssl;                                                  /**< Flag if we should comunicate with server over ssl   */
+   int client_ssl;                                                  /**< Flag if we should communicate with client over ssl   */
+   int server_ssl;                                                  /**< Flag if we should communicate with server over ssl   */
    unsigned char hash_of_host_hex[(HASH_OF_HOST_BUF_SIZE * 2) + 1]; /**< chars for hash in hex string and one for '\0'       */
    unsigned char hash_of_host[HASH_OF_HOST_BUF_SIZE+1];             /**< chars for bytes of hash and one for '\0'            */
 #endif
@@ -351,7 +351,7 @@ struct http_request
  * Struct for linked list containing certificates
  */
 typedef struct certs_chain {
-   char text_buf[CERT_INFO_BUF_SIZE];    /* text info about properties of certificate               */
+   char info_buf[CERT_INFO_BUF_SIZE];    /* text info about properties of certificate               */
    char file_buf[CERT_FILE_BUF_SIZE];    /* buffer for whole certificate - format to save in file   */
    struct certs_chain *next;             /* next certificate in chain of trust                      */
 } certs_chain_t;
@@ -650,7 +650,7 @@ struct current_action_spec
    unsigned long flags;
 
    /**
-    * Paramaters for those actions that require them.
+    * Parameters for those actions that require them.
     * Each entry is valid if & only if the corresponding entry in "flags" is
     * set.
     */
@@ -922,7 +922,7 @@ struct reusable_connection
 #define CSP_FLAG_UNSUPPORTED_CLIENT_EXPECTATION     0x02000000U
 
 /**
- * Flag for csp->flags: Set if we answered the request ourselve.
+ * Flag for csp->flags: Set if we answered the request ourselves.
  */
 #define CSP_FLAG_CRUNCHED                           0x04000000U
 
@@ -1105,7 +1105,7 @@ struct client_state
 
    /*
     * Server certificate chain of trust including strings with certificates
-    * informations and string with whole certificate file
+    * information and string with whole certificate file
     */
    struct certs_chain server_certs_chain;
 #endif
@@ -1603,6 +1603,7 @@ struct configuration_spec
  * INCLUDES the trailing slash.
  */
 #define CGI_PREFIX  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
+#define CGI_PREFIX_HTTPS "https://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
 
 #endif /* ndef PROJECT_H_INCLUDED */
 

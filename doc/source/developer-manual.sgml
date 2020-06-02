@@ -2550,7 +2550,7 @@ for-privoxy-version=3.0.11
         The main compilation takes place with IBM Visual Age C++.
         Some ancillary work takes place with GNU tools, available from
         various sources like hobbes.nmsu.edu.
-        Specificially, you will need <filename>autoheader</filename>,
+        Specifically, you will need <filename>autoheader</filename>,
         <filename>autoconf</filename> and <filename>sh</filename> tools.
         The packaging takes place with WarpIN, available from various sources, including
         its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.

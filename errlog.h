@@ -37,8 +37,7 @@
 
 /* Debug level for errors */
 
-/* XXX: Should be renamed. */
-#define LOG_LEVEL_GPC        0x0001
+#define LOG_LEVEL_REQUEST    0x0001
 #define LOG_LEVEL_CONNECT    0x0002
 #define LOG_LEVEL_IO         0x0004
 #define LOG_LEVEL_HEADER     0x0008

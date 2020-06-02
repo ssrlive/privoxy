@@ -1,11 +1,25 @@
-privoxy (3.0.29~git6a358e-1) UNRELEASED; urgency=medium
+privoxy (3.0.29~gitec5b42-1) UNRELEASED; urgency=medium
 
   * New upstream developement version.
   * Update all patches to new version.
   * 36_trusted-cgi-referer-example and 37_ppedit-tests403 are now
     incorporated upstream.
+  * d/copyright: use ./ prefix to upstream filenames, because orig.tar.gz
+    is build with a ./ prefix.
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 30 Nov 2019 12:44:20 +0100
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 04 Apr 2020 14:46:51 +0200
+
+privoxy (3.0.28-3) unstable; urgency=medium
+
+  * Add buildlog to salsa-ci test pipeline.
+  * d/salsa-ci.yml stripped down using pipline-jobs.yml
+  * Build-depend on debhelper-compat (= 12) instead of using d/compat.
+  * Upgrade to Standards-Version 4.5.0 (no changes).
+  * Add upstream metadata.
+  * privoxy.service: run After=network-online.target, this fixes
+    LP#1870101.
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 02 Apr 2020 18:04:44 +0200
 
 privoxy (3.0.28-2) unstable; urgency=medium
 

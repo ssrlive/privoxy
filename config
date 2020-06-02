@@ -567,7 +567,7 @@ logfile logfile
 #
 #      The available debug levels are:
 #
-#        debug     1 # Log the destination for each request Privoxy let through. See also debug 1024.
+#        debug     1 # Log the destination for each request. See also debug 1024.
 #        debug     2 # show each connection status
 #        debug     4 # show I/O status
 #        debug     8 # show header parsing
@@ -609,7 +609,7 @@ logfile logfile
 #      you read the log messages, you may even be able to solve the
 #      problem on your own.
 #
-#debug     1 # Log the destination for each request Privoxy let through. See also debug 1024.
+#debug     1 # Log the destination for each request.
 #debug  1024 # Log the destination for requests Privoxy didn't let through, and the reason why.
 #debug  4096 # Startup banner and warnings
 #debug  8192 # Non-fatal errors
@@ -1000,7 +1000,7 @@ enforce-blocks 0
 #      whole destination part are optional.
 #
 #      If your system implements RFC 3493, then src_addr and dst_addr
-#      can be IPv6 addresses delimeted by brackets, port can be a
+#      can be IPv6 addresses delimited by brackets, port can be a
 #      number or a service name, and src_masklen and dst_masklen can
 #      be a number from 0 to 128.
 #
@@ -1986,13 +1986,13 @@ socket-timeout 300
 #  Notes:
 #
 #      Under high load incoming connection may queue up before
-#      Privoxy gets around to serve them. The queue length is
-#      limitted by the operating system. Once the queue is full,
-#      additional connections are dropped before Privoxy can accept
-#      and serve them.
+#      Privoxy gets around to serve them. The queue length is limited
+#      by the operating system. Once the queue is full, additional
+#      connections are dropped before Privoxy can accept and serve
+#      them.
 #
 #      Increasing the queue length allows Privoxy to accept more
-#      incomming connections that arrive roughly at the same time.
+#      incoming connections that arrive roughly at the same time.
 #
 #      Note that Privoxy can only request a certain queue length,
 #      whether or not the requested length is actually used depends

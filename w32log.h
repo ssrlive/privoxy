@@ -5,7 +5,7 @@
  * File        :  $Source: /cvsroot/ijbswa/current/w32log.h,v $
  *
  * Purpose     :  Functions for creating and destroying the log window,
- *                ouputting strings, processing messages and so on.
+ *                outputting strings, processing messages and so on.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2009 members of
  *                the Privoxy team.  https://www.privoxy.org/

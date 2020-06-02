@@ -1208,7 +1208,7 @@ jb_err sed_https(struct client_state *csp)
    struct list headers;
 
    /*
-    * Temporarly replace csp->headers with csp->https_headers
+    * Temporarily replace csp->headers with csp->https_headers
     * to trick sed() into filtering the https headers.
     */
    headers.first = csp->headers->first;
@@ -1217,7 +1217,7 @@ jb_err sed_https(struct client_state *csp)
    csp->headers->last  = csp->https_headers->last;
 
    /*
-    * Start with fresh tags. Already exising tags may
+    * Start with fresh tags. Already existing tags may
     * be set again. This is necessary to overrule
     * URL-based patterns.
     */
@@ -1225,11 +1225,17 @@ jb_err sed_https(struct client_state *csp)
 
    /*
     * We want client header filters and taggers
-    * so temporarly remove the flag.
+    * so temporarily remove the flag.
     */
    csp->flags &= ~CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
    err = sed(csp, FILTER_CLIENT_HEADERS);
    csp->flags |= CSP_FLAG_CLIENT_HEADER_PARSING_DONE;
+
+   /*
+    * Update the last header which may have changed
+    * due to header additions,
+    */
+   csp->https_headers->last = csp->headers->last;
 
    csp->headers->first = headers.first;
    csp->headers->last  = headers.last;
@@ -1952,7 +1958,7 @@ static jb_err client_connection(struct client_state *csp, char **header)
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
         && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
       {
-          if (!strcmpic(csp->http->ver, "HTTP/1.1"))
+          if (!strcmpic(csp->http->version, "HTTP/1.1"))
           {
              log_error(LOG_LEVEL_HEADER,
                 "Removing \'%s\' to imply keep-alive.", *header);
@@ -2453,7 +2459,7 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
  *
  * Description :  Remove the Content-Encoding header if the
  *                decompression was successful and the content
- *                has been modifed.
+ *                has been modified.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -3893,7 +3899,7 @@ static jb_err client_connection_header_adder(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
       && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
-      && !strcmpic(csp->http->ver, "HTTP/1.1"))
+      && !strcmpic(csp->http->version, "HTTP/1.1"))
    {
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return JB_ERR_OK;
@@ -4535,7 +4541,7 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
    string_append(&http->cmd, " ");
    string_append(&http->cmd, http->url);
    string_append(&http->cmd, " ");
-   string_append(&http->cmd, http->ver);
+   string_append(&http->cmd, http->version);
    if (http->cmd == NULL)
    {
       return JB_ERR_MEMORY;
@@ -4616,7 +4622,7 @@ jb_err get_destination_from_https_headers(const struct list *headers, struct htt
    string_append(&http->cmd, " ");
    string_append(&http->cmd, http->url);
    string_append(&http->cmd, " ");
-   string_append(&http->cmd, http->ver);
+   string_append(&http->cmd, http->version);
    if (http->cmd == NULL)
    {
       return JB_ERR_MEMORY;

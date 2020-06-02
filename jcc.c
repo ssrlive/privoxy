@@ -485,8 +485,9 @@ static int client_protocol_is_unsupported(struct client_state *csp, char *req)
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
-         ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-            (const unsigned char *)response, strlen(response));
+         ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+            (const unsigned char *)response, strlen(response),
+            get_write_delay(csp));
       }
       else
 #endif
@@ -848,18 +849,32 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
 
       /* Log that the request was crunched and why. */
       log_applied_actions(csp->action);
-      log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
-      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
-         csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
-
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp))
+      {
+         log_error(LOG_LEVEL_CRUNCH, "%s: https://%s%s", crunch_reason(rsp),
+            http->hostport, http->path);
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %llu",
+            csp->ip_addr_str, http->gpc, http->hostport, http->path,
+            http->version, status_code, rsp->content_length);
+      }
+      else
+#endif
+      {
+         log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
+            csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
+      }
       /* Write the answer to the client */
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
-         if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                 (const unsigned char *)rsp->head, rsp->head_length) < 0)
-          || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                 (const unsigned char *)rsp->body, rsp->content_length) < 0))
+         if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                (const unsigned char *)rsp->head, rsp->head_length,
+                get_write_delay(csp)) < 0)
+          || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                (const unsigned char *)rsp->body, rsp->content_length,
+                get_write_delay(csp)) < 0))
          {
             /* There is nothing we can do about it. */
             log_error(LOG_LEVEL_CONNECT, "Couldn't deliver the error message "
@@ -985,10 +1000,10 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
     * if +downgrade action applies.
     */
    if ((csp->action->flags & ACTION_DOWNGRADE)
-     && (!strcmpic(http->ver, "HTTP/1.1")))
+     && (!strcmpic(http->version, "HTTP/1.1")))
    {
-      freez(http->ver);
-      http->ver = strdup_or_die("HTTP/1.0");
+      freez(http->version);
+      http->version = strdup_or_die("HTTP/1.0");
    }
 
    /*
@@ -1007,7 +1022,7 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
       string_append(request_line, http->path);
    }
    string_append(request_line, " ");
-   string_append(request_line, http->ver);
+   string_append(request_line, http->version);
 
    if (*request_line == NULL)
    {
@@ -1607,7 +1622,7 @@ extern int fuzz_client_request(struct client_state *csp, char *fuzz_input_file)
    if (strcmp(fuzz_input_file, "-") != 0)
    {
       log_error(LOG_LEVEL_FATAL,
-         "Fuzzed client requests can currenty only be read from stdin (-).");
+         "Fuzzed client requests can currently only be read from stdin (-).");
    }
    err = receive_client_request(csp);
    if (err != JB_ERR_OK)
@@ -1898,7 +1913,7 @@ static jb_err parse_client_request(struct client_state *csp)
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_KEEP_ALIVE)
-    && (!strcmpic(csp->http->ver, "HTTP/1.1"))
+    && (!strcmpic(csp->http->version, "HTTP/1.1"))
     && (csp->http->ssl == 0))
    {
       /* Assume persistence until further notice */
@@ -2037,11 +2052,12 @@ static int send_http_request(struct client_state *csp)
  * Returns     :  0 on success, anything else is an error.
  *
  *********************************************************************/
-static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
+static int receive_and_send_encrypted_post_data(struct client_state *csp)
 {
    int content_length_known = csp->expected_client_content_length != 0;
 
-   while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl)))
+   while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl))
+      || (content_length_known && csp->expected_client_content_length != 0))
    {
       unsigned char buf[BUFFER_SIZE];
       int len;
@@ -2065,7 +2081,7 @@ static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
          /* XXX: Does this actually happen? */
          break;
       }
-      log_error(LOG_LEVEL_HEADER, "Forwarding %d bytes of encrypted POST data",
+      log_error(LOG_LEVEL_CONNECT, "Forwarding %d bytes of encrypted POST data",
          len);
       len = ssl_send_data(&(csp->mbedtls_server_attr.ssl), buf, (size_t)len);
       if (len == -1)
@@ -2080,13 +2096,13 @@ static jb_err receive_and_send_encrypted_post_data(struct client_state *csp)
          }
          if (csp->expected_client_content_length == 0)
          {
-            log_error(LOG_LEVEL_HEADER, "Forwarded the last %d bytes", len);
+            log_error(LOG_LEVEL_CONNECT, "Forwarded the last %d bytes", len);
             break;
          }
       }
    }
 
-   log_error(LOG_LEVEL_HEADER, "Done forwarding encrypted POST data");
+   log_error(LOG_LEVEL_CONNECT, "Done forwarding encrypted POST data");
 
    return 0;
 
@@ -2257,8 +2273,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
       /* XXX: Also used for JB_ERR_MEMORY */
       log_error(LOG_LEVEL_ERROR, "Failed to receive encrypted request: %s",
          jb_err_to_string(err));
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return err;
    }
 
@@ -2267,8 +2283,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    if (request_line == NULL)
    {
       log_error(LOG_LEVEL_ERROR, "Failed to get the encrypted request line");
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
    assert(*request_line != '\0');
@@ -2300,8 +2316,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    freez(request_line);
    if (JB_ERR_OK != err)
    {
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
       log_error(LOG_LEVEL_ERROR,
@@ -2335,8 +2351,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
        */
       log_error(LOG_LEVEL_ERROR,
          "Failed to get the encrypted request destination");
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
 
@@ -2373,8 +2389,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    err = sed_https(csp);
    if (JB_ERR_OK != err)
    {
-      ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-         (const unsigned char *)CHEADER, strlen(CHEADER));
+      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       log_error(LOG_LEVEL_ERROR, "Failed to parse client request from %s.",
          csp->ip_addr_str);
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
@@ -2384,10 +2400,39 @@ static jb_err process_encrypted_request(struct client_state *csp)
 
    log_error(LOG_LEVEL_HEADER, "Encrypted request processed");
    log_applied_actions(csp->action);
+   log_error(LOG_LEVEL_REQUEST, "https://%s%s", csp->http->hostport,
+      csp->http->path);
 
    return err;
 
 }
+
+/*********************************************************************
+ *
+ * Function    :  cgi_page_requested
+ *
+ * Description :  Checks if a request is for an internal CGI page.
+ *
+ * Parameters  :
+ *          1  :  host = The host requested by the client.
+ *
+ * Returns     :  1 if a CGI page has been requested, 0 otherwise
+ *
+ *********************************************************************/
+static int cgi_page_requested(const char *host)
+{
+   if ((0 == strcmpic(host, CGI_SITE_1_HOST))
+    || (0 == strcmpic(host, CGI_SITE_1_HOST "."))
+    || (0 == strcmpic(host, CGI_SITE_2_HOST))
+    || (0 == strcmpic(host, CGI_SITE_2_HOST ".")))
+   {
+      return 1;
+   }
+
+   return 0;
+
+}
+
 #endif
 
 
@@ -2666,35 +2711,10 @@ static void handle_established_connection(struct client_state *csp)
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 #ifdef FEATURE_HTTPS_INSPECTION
-         /*
-          * Reading data from standard or secured connection (HTTP/HTTPS)
-          */
          if (client_use_ssl(csp))
          {
-            /*
-             * Receiving HTTP request from client over TLS/SSL and sending
-             * it to server over TLS/SSL.
-             */
-            len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl),
-               (unsigned char *)csp->receive_buffer, (size_t)max_bytes_to_read);
-
-            if (len <= 0)
-            {
-               mark_server_socket_tainted(csp);
-               break;
-            }
-
-            ret = ssl_send_data(&(csp->mbedtls_server_attr.ssl),
-               (const unsigned char *)csp->receive_buffer, (size_t)len);
-
-            if (ret < 0)
-            {
-               log_error(LOG_LEVEL_ERROR,
-                  "Send request over TLS/SSL to: %s failed", http->host);
-               mark_server_socket_tainted(csp);
-               close_client_and_server_ssl_connections(csp);
-               return;
-            }
+            log_error(LOG_LEVEL_CONNECT, "Breaking with TLS/SSL.");
+            break;
          }
          else
 #endif /* def FEATURE_HTTPS_INSPECTION */
@@ -2944,11 +2964,12 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                            (const unsigned char *)hdr, strlen(hdr)) < 0)
-                        || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                     if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                              (const unsigned char *)hdr, strlen(hdr),
+                              get_write_delay(csp)) < 0)
+                        || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                               (const unsigned char *) ((p != NULL) ? p : csp->iob->cur),
-                              csp->content_length) < 0))
+                              csp->content_length, get_write_delay(csp)) < 0))
                      {
                         log_error(LOG_LEVEL_ERROR, "write modified content to "
                            "client over TLS/SSL failed");
@@ -3046,12 +3067,13 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                            (const unsigned char *)hdr, hdrlen) < 0)
+                     if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                             (const unsigned char *)hdr, hdrlen, get_write_delay(csp)) < 0)
                         || ((flushed = ssl_flush_socket(&(csp->mbedtls_client_attr.ssl),
                                 csp->iob)) < 0)
-                        || (ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                              (const unsigned char *)csp->receive_buffer, (size_t)len) < 0))
+                        || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                              (const unsigned char *)csp->receive_buffer, (size_t)len,
+                              get_write_delay(csp)) < 0))
                      {
                         log_error(LOG_LEVEL_CONNECT,
                            "Flush header and buffers to client failed");
@@ -3096,8 +3118,9 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ret = ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                     (const unsigned char *)csp->receive_buffer, (size_t)len);
+                  ret = ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                     (const unsigned char *)csp->receive_buffer, (size_t)len,
+                     get_write_delay(csp));
                   if (ret < 0)
                   {
                      log_error(LOG_LEVEL_ERROR,
@@ -3161,9 +3184,9 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                     ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                         (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                        strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                        strlen(INVALID_SERVER_HEADERS_RESPONSE), get_write_delay(csp));
                   }
                   else
 #endif /* def FEATURE_HTTPS_INSPECTION */
@@ -3255,9 +3278,10 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                     strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                     strlen(INVALID_SERVER_HEADERS_RESPONSE),
+                     get_write_delay(csp));
                }
                else
 #endif /* def FEATURE_HTTPS_INSPECTION */
@@ -3287,9 +3311,10 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                     strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                     strlen(INVALID_SERVER_HEADERS_RESPONSE),
+                     get_write_delay(csp));
                }
                else
 #endif
@@ -3356,8 +3381,9 @@ static void handle_established_connection(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
                if (client_use_ssl(csp))
                {
-                  if ((ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-                          (const unsigned char *)hdr, strlen(hdr)) < 0)
+                  if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                          (const unsigned char *)hdr, strlen(hdr),
+                          get_write_delay(csp)) < 0)
                      || (len = ssl_flush_socket(&(csp->mbedtls_client_attr.ssl),
                             csp->iob) < 0))
                   {
@@ -3417,9 +3443,10 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
-                     strlen(INVALID_SERVER_HEADERS_RESPONSE));
+                     strlen(INVALID_SERVER_HEADERS_RESPONSE),
+                     get_write_delay(csp));
                }
                else
 #endif /* def FEATURE_HTTPS_INSPECTION */
@@ -3465,9 +3492,19 @@ static void handle_established_connection(struct client_state *csp)
    }
 #endif
 
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %llu",
-      csp->ip_addr_str, http->ocmd, csp->content_length);
-
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp))
+   {
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %llu",
+         csp->ip_addr_str, http->gpc, http->hostport, http->path,
+         http->version, csp->content_length);
+   }
+   else
+#endif
+   {
+      log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 200 %llu",
+         csp->ip_addr_str, http->ocmd, csp->content_length);
+   }
    csp->server_connection.timestamp = time(NULL);
 }
 
@@ -3516,6 +3553,17 @@ static void chat(struct client_state *csp)
    {
       return;
    }
+#ifdef FEATURE_HTTPS_INSPECTION
+   /*
+    * Log the request unless we're https inspecting
+    * in which case we don't have the path yet and
+    * will log the request later.
+    */
+   if (!client_use_ssl(csp))
+#endif
+   {
+      log_error(LOG_LEVEL_REQUEST, "%s%s", http->hostport, http->path);
+   }
 
    /* decide how to route the HTTP request */
    fwd = forward_url(csp, http);
@@ -3531,7 +3579,8 @@ static void chat(struct client_state *csp)
     * Setting flags to use old solution with SSL tunnel and to disable
     * certificates verification.
     */
-   if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION))
+   if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION)
+      && !cgi_page_requested(csp->http->host))
    {
       use_ssl_tunnel = 1;
    }
@@ -3638,8 +3687,6 @@ static void chat(struct client_state *csp)
    }
 
    log_applied_actions(csp->action);
-   log_error(LOG_LEVEL_GPC, "%s%s", http->hostport, http->path);
-
    if (fwd->forward_host)
    {
       log_error(LOG_LEVEL_CONNECT, "via [%s]:%d to: %s",
@@ -3689,7 +3736,7 @@ static void chat(struct client_state *csp)
          int ret;
          /*
           * Creating an SSL proxy. If forwarding is disabled, we must send
-          * CSUCCEED mesage to client. Then TLS/SSL connection with client
+          * CSUCCEED message to client. Then TLS/SSL connection with client
           * is created.
           */
 

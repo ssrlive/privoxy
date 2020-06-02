@@ -218,6 +218,7 @@ void remember_connection(const struct reusable_connection *connection)
       return;
    }
 
+   assert(slot < SZ(reusable_connection));
    assert(NULL != connection->host);
    reusable_connection[slot].host = strdup_or_die(connection->host);
    reusable_connection[slot].sfd = connection->sfd;

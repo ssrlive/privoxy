@@ -6,7 +6,7 @@
 #                particular section in an actions file.
 #
 #
-# Copyright   :  Written by and Copyright (C) 2001-2014 the
+# Copyright   :  Written by and Copyright (C) 2001-2020 the
 #                Privoxy team. https://www.privoxy.org/
 #
 #                Original Author: Copyright (C) 2001 Jonathan Foster
@@ -957,6 +957,42 @@ function show_limit_connect_opts(tf)
         <input type="text" name="hide_user_agent_mode" size="40"
         value="@hide-user-agent-param@"></td>
     </tr>
+
+<!-- @if-https-inspection-start -->
+   <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="https_inspection" value="Y" @https-inspection-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="https_inspection" value="N" @https-inspection-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="https_inspection" value="X" @https-inspection-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@HTTPS-INSPECTION">https-inspection</a></td>
+      <td>
+       Enable content and header filtering for https requests.
+     </td>
+    </tr>
+
+   <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="ignore_certificate_errors" value="Y" @ignore-certificate-errors-y@
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="ignore_certificate_errors" value="N" @ignore-certificate-errors-n@
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="ignore_certificate_errors" value="X" @ignore-certificate-errors-x@
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@IGNORE-CERTIFICATE-ERRORS">ignore-certificate-errors</a></td>
+      <td>
+       Don't verify certificates when forwarding encrypted requests.
+     </td>
+    </tr>
+
+<!-- if-https-inspection-end@ -->
+
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="limit_connect" id="limit_connect_y" value="Y" @limit-connect-y@

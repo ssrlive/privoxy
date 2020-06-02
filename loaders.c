@@ -1211,7 +1211,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
 
          /*
           * If this is the first filter block, chain it
-          * to the file_list rather than its (nonexistant)
+          * to the file_list rather than its (nonexistent)
           * predecessor
           */
          if (fs->f == NULL)

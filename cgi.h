@@ -5,7 +5,7 @@
  * File        :  $Source: /cvsroot/ijbswa/current/cgi.h,v $
  *
  * Purpose     :  Declares functions to intercept request, generate
- *                html or gif answers, and to compose HTTP resonses.
+ *                html or gif answers, and to compose HTTP responses.
  *
  *                Functions declared include:
  *
@@ -110,7 +110,6 @@ extern char *compress_buffer(char *buffer, size_t *buffer_length, int compressio
  */
 extern void get_http_time(int time_offset, char *buf, size_t buffer_size);
 extern char *add_help_link(const char *item, struct configuration_spec *config);
-extern char *make_menu(const char *self, const unsigned feature_flags);
 extern char *dump_map(const struct map *the_map);
 
 /*

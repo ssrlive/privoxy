@@ -51,17 +51,6 @@ https://www.privoxy.org/faq/general.html#DONATE
 
 14) Allow to filter POST parameters.
 
-16) Filter SSL encrypted content as well.
-
-    At the beginning we could use a unencrypted connection between
-    client and Privoxy, and use an encrypted connection between
-    Privoxy and the server.
-
-    This should be good enough for most of the content the
-    user would want to filter.
-
-    Interested donors: 2.
-
 19) enable-forward-fallback. Syntax? Suggested by K.R.
 
 21) User Manual delivery doesn't accept multiple slashes. Should it?
@@ -135,10 +124,6 @@ https://www.privoxy.org/faq/general.html#DONATE
              are available at: https://lists.privoxy.org/
 
     Interested donors: 1.
-
-54) Move away from CVS to a more modern revision control system.
-    The move to git is work in progress:
-    https://sourceforge.net/p/ijbswa/mailman/message/34994343/
 
 58) Move more template strings from the code into the actual templates.
 
@@ -259,7 +244,7 @@ https://www.privoxy.org/faq/general.html#DONATE
     go through all filters and skip the filter types the caller isn't
     interested in.
 
-98) When showing action section on the CGI pages, properly escape
+98) When showing action sections on the CGI pages, properly escape
     line breaks so they can be copy&pasted into action files without
     adjustments.
 
@@ -340,9 +325,6 @@ https://www.privoxy.org/faq/general.html#DONATE
      Interested donors: 1.
 
 122) Allow customized log messages.
-
-123) Evaluate if the voluntarily-disclose-session-keys option in Firefox
-     (and other browsers) can be leveraged. Probably depends on #16.
 
 124) Add support for the "lightweight OS capability and sandbox framework"
      Capsicum. http://www.cl.cam.ac.uk/research/security/capsicum/
@@ -460,6 +442,9 @@ https://www.privoxy.org/faq/general.html#DONATE
      performance point of view, using a single thread should reduce Privoxy's
      memory footprint a bit which may be noticeable in case of multi-user setups
      with hundreds of idle connections.
+
+159) Support Brotli compression.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)

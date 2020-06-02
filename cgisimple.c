@@ -1365,7 +1365,7 @@ jb_err cgi_show_url_info(struct client_state *csp,
 
    if (url_param[0] == '\0')
    {
-      /* URL paramater not specified, display query form only. */
+      /* URL parameter not specified, display query form only. */
       free(url_param);
       if (map_block_killer(exports, "url-given")
         || map(exports, "url", 1, "", 1))
@@ -1438,11 +1438,14 @@ jb_err cgi_show_url_info(struct client_state *csp,
       }
 
       /*
-       * We have a warning about SSL paths.  Hide it for unencrypted sites.
+       * We have a warning about SSL paths. Hide it for unencrypted sites
+       * and unconditionally if https inspection is enabled.
        */
+#ifndef FEATURE_HTTPS_INSPECTION
       if (!url_to_query->ssl)
+#endif
       {
-         if (map_block_killer(exports, "https"))
+         if (map_block_killer(exports, "https-and-no-https-inspection"))
          {
             free_current_action(action);
             free_map(exports);
@@ -1714,7 +1717,7 @@ jb_err cgi_robots_txt(struct client_state *csp,
  *
  * Function    :  show_defines
  *
- * Description :  Add to a map the state od all conditional #defines
+ * Description :  Add to a map the state of all conditional #defines
  *                used when building
  *
  * Parameters  :
