@@ -2237,7 +2237,7 @@ sub print_stats() {
         ")\n";
     print "Client connections: " .  $stats{'closed-client-connections'} . "\n";
     if ($stats{'content-size-total'}) {
-        print "Bytes transfered excluding headers: " .  $stats{'content-size-total'} . "\n";
+        print "Bytes of content transfered to the client: " .  $stats{'content-size-total'} . "\n";
     }
     my $lines_printed = 0;
     print "Client requests per connection distribution:\n";
