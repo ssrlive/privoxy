@@ -1754,6 +1754,11 @@ sub handle_loglevel_connect($) {
         # Forwarding 1954 bytes of encrypted POST data
         $c =~ s@(?<=Forwarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Forwarded the last \d+ bytes/) {
+
+        # Forwarded the last 1954 bytes
+        $c =~ s@(?<=the last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
