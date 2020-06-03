@@ -1749,6 +1749,11 @@ sub handle_loglevel_connect($) {
         # Performing the TLS/SSL handshake with client. Hash of host: bab5296b25e256c7b06b92b17b56bcae
         $c = highlight_matched_host($c, '(?<=Hash of host: ).+');
 
+    } elsif ($c =~ m/^Forwarding \d+ bytes of encrypted POST data/) {
+
+        # Forwarding 1954 bytes of encrypted POST data
+        $c =~ s@(?<=Forwarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
