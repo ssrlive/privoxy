@@ -444,7 +444,9 @@ static int referrer_is_safe(const struct client_state *csp)
 {
    char *referrer;
    static const char alternative_prefix[] = "http://" CGI_SITE_1_HOST "/";
+#ifdef FEATURE_HTTPS_INSPECTION
    static const char alt_prefix_https[] = "https://" CGI_SITE_1_HOST "/";
+#endif
    const char *trusted_cgi_referrer = csp->config->trusted_cgi_referrer;
 
    referrer = grep_cgi_referrer(csp);
