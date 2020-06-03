@@ -371,6 +371,14 @@
 #      +hide-user-agent{Privoxy/1.0}
 #    (Don't change the version number from 1.0 - after all, why tell them?)
 #
+# +https-inspection
+#    Filter encrypted requests and responses.
+#    Requires FEATURE_HTTPS_INSPECTION.
+#
+# +ignore-certificate-errors
+#    Ignore certificate errors when the +https-inspection action
+#    is enabled. Requires FEATURE_HTTPS_INSPECTION.
+#
 # +limit-connect{portlist}
 #
 #    By default, i.e. if no limit-connect action applies, Privoxy
