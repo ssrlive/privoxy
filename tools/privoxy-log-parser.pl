@@ -1610,7 +1610,10 @@ sub handle_loglevel_connect($) {
 
         # Connection from 81.163.28.218 dropped due to ACL
         # Rejecting connection from 178.63.152.227. Maximum number of connections reached.
-        $c =~ s@(?<=onnection from )((?:\d+\.?){3}\d+)@$h{'Number'}$1$h{'Standard'}@;
+        # Connection from 192.168.2.1 on 127.0.1.1:8118 (socket 3) dropped due to ACL
+        $c = highlight_matched_host($c, '(?<=onnection from )[\d.:]+');
+        $c = highlight_matched_host($c, '(?<=on )[\d.:]+');
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^(?:Reusing|Closing) server socket / or
              $c =~ m/^No additional client request/) {
