@@ -2151,6 +2151,8 @@ disqus.com/
 # URL = https://oss-fuzz.com/login?dest=https%3A%2F%2Foss-fuzz.com%2Ftestcase-detail%2F5727799779524608
 #MASTER# REMARKS: Only match based on the host so the test works even without https-inspection enabled.
 oss-fuzz.com/
+# URL = https://sourcepoint.vice.com/mms/choice_select?choice_id=523912&requestUUID=a98ca09e-5c1f-4aa4-b28e-ab5b26150859-1591162630861&href=https%3A%2F%2Fwww.vice.com%2Fen_us%2Farticle%2F7kpb9a%2Fhow-to-protest-racist-violence-instead-of-posting-blackout-tuesday-square
+sourcepoint.vice.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
