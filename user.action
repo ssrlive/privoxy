@@ -196,7 +196,7 @@ www.example.com/nasty-ads/sponsor.gif
 
 ######### Examples for SSL actions #########
 # Following section enables TLS/SSL filtering for all sites defined by pattern and requested by HTTPS.
-# {+enable-https-filtering}
+# {+https-inspection}
 # privoxy.org
 
 # Following section turns off certificate verification for all sites defined by pattern.
