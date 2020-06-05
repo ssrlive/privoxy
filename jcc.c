@@ -3889,8 +3889,9 @@ static void chat(struct client_state *csp)
              */
             if (!tunnel_established_successfully(server_response, (unsigned int)len))
             {
-               log_error(LOG_LEVEL_ERROR, "Forwarder hasn't established "
-                  "connection with destination server.");
+               log_error(LOG_LEVEL_ERROR,
+                  "The forwarder %s failed to establish a connection with %s",
+                  fwd->forward_host, http->host);
                rsp = error_response(csp, "connect-failed");
                if (rsp)
                {
