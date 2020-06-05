@@ -3577,7 +3577,7 @@ static void chat(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Setting flags to use old solution with SSL tunnel and to disable
-    * certificates verification.
+    * certificate verification.
     */
    if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION)
       && !cgi_page_requested(csp->http->host))
@@ -3735,32 +3735,25 @@ static void chat(struct client_state *csp)
       {
          int ret;
          /*
-          * Creating an SSL proxy. If forwarding is disabled, we must send
-          * CSUCCEED message to client. Then TLS/SSL connection with client
-          * is created.
+          * Creating a SSL proxy.
+          *
+          * By sending the CSUCCEED message we're lying to the client as
+          * the connection hasn't actually been established yet. We don't
+          * establish the connection until we have seen and parsed the
+          * encrypted client headers.
           */
-
-         if (fwd->forward_host == NULL)
+         if (write_socket_delayed(csp->cfd, CSUCCEED,
+               strlen(CSUCCEED), get_write_delay(csp)) != 0)
          {
-            /*
-             * We're lying to the client as the connection hasn't actually
-             * been established yet. We don't establish the connection until
-             * we have seen and parsed the encrypted client headers.
-             */
-            if (write_socket_delayed(csp->cfd, CSUCCEED,
-                  strlen(CSUCCEED), get_write_delay(csp)) != 0)
-            {
-               log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
-               return;
-            }
+            log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
+            return;
          }
 
          ret = create_client_ssl_connection(csp);
          if (ret != 0)
          {
             log_error(LOG_LEVEL_ERROR,
-               "Can't open secure connection with client");
-            close_client_ssl_connection(csp); /* XXX: Is this needed? */
+               "Failed to open a secure connection with the client");
             return;
          }
          if (JB_ERR_OK != process_encrypted_request(csp))
@@ -3891,94 +3884,57 @@ static void chat(struct client_state *csp)
             }
 
             /*
-             * Test if connection with destination server was established
-             * successfully by parent proxy. Then we can send response to
-             * the client and continue or stop.
+             * Test if the connection to the destination server was
+             * established successfully by the parent proxy.
              */
             if (!tunnel_established_successfully(server_response, (unsigned int)len))
             {
-               log_error(LOG_LEVEL_ERROR, "Forwarder hasn't established "
-                  "connection with destination server.");
-
-               write_socket(csp->cfd, server_response, (size_t)len);
-               mark_server_socket_tainted(csp);
-               close_client_ssl_connection(csp);
-               return;
-            }
-
-            /*
-             * Parent proxy has established connection with destination server.
-             * Now we must create TLS/SSL connection with parent proxy.
-             */
-            ret = create_server_ssl_connection(csp);
-
-            /*
-            * If TLS/SSL connection wasn't created and invalid certificate
-            * wasn't detected, we can interrupt this function. Otherwise, we
-            * must inform the client about invalid server certificate.
-            */
-            if (ret != 0
-               && (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
-                  || csp->server_cert_verification_result == SSL_CERT_VALID))
-            {
+               log_error(LOG_LEVEL_ERROR,
+                  "The forwarder %s failed to establish a connection with %s",
+                  fwd->forward_host, http->host);
                rsp = error_response(csp, "connect-failed");
                if (rsp)
                {
                   send_crunch_response(csp, rsp);
                }
-               return;
-            }
-
-            /*
-             * TLS/SSL connection with parent proxy is established, we can
-             * inform client about success.
-             */
-            ret = write_socket(csp->cfd, server_response, (size_t)len);
-            if (ret != 0)
-            {
-               log_error(LOG_LEVEL_ERROR,
-                  "Sending parent proxy response to client failed");
                mark_server_socket_tainted(csp);
                close_client_ssl_connection(csp);
                return;
             }
-         }/* -END- if (fwd->forward_host != NULL) */
-         else
+         } /* -END- if (fwd->forward_host != NULL) */
+
+         /*
+          * We can now create the TLS/SSL connection with the destination server.
+          */
+         int ret = create_server_ssl_connection(csp);
+         if (ret != 0)
          {
-            /*
-             * Parent proxy is not used, we can just create TLS/SSL connection
-             * with destination server
-             */
-            int ret = create_server_ssl_connection(csp);
-            if (ret != 0)
+            if (csp->server_cert_verification_result != SSL_CERT_VALID &&
+                csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
             {
-               if (csp->server_cert_verification_result != SSL_CERT_VALID &&
-                   csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
+               /*
+                * If the server certificate is invalid, we must inform
+                * the client and then close connection to the client.
+                */
+               ssl_send_certificate_error(csp);
+               close_client_and_server_ssl_connections(csp);
+               return;
+            }
+            if (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
+             || csp->server_cert_verification_result == SSL_CERT_VALID)
+            {
+               /*
+                * The TLS/SSL connection wasn't created but an invalid
+                * certificate wasn't detected. Report it as connection
+                * failure.
+                */
+               rsp = error_response(csp, "connect-failed");
+               if (rsp)
                {
-                  /*
-                   * If the server certificate is invalid, we must inform
-                   * the client and then close connection to the client.
-                   */
-                  ssl_send_certificate_error(csp);
-                  close_client_and_server_ssl_connections(csp);
-                  return;
+                  send_crunch_response(csp, rsp);
                }
-               if (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
-                || csp->server_cert_verification_result == SSL_CERT_VALID)
-               {
-                  /*
-                   * The TLS/SSL connection wasn't created but an invalid
-                   * certificate wasn't detected. Report it as connection
-                   * failure.
-                   */
-                  rsp = error_response(csp, "connect-failed");
-                  if (rsp)
-                  {
-                     send_crunch_response(csp, rsp);
-                  }
-                  close_client_and_server_ssl_connections(csp);
-                  return;
-               }
+               close_client_and_server_ssl_connections(csp);
+               return;
             }
          }
       }/* -END- if (http->ssl) */

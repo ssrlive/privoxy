@@ -1,13 +1,16 @@
-privoxy (3.0.29~gitec5b42-1) UNRELEASED; urgency=medium
+privoxy (3.0.29~gitdbcfeb-1) UNRELEASED; urgency=medium
 
-  * New upstream developement version.
+  * New upstream development version.
   * Update all patches to new version.
   * 36_trusted-cgi-referer-example and 37_ppedit-tests403 are now
     incorporated upstream.
   * d/copyright: use ./ prefix to upstream filenames, because orig.tar.gz
     is build with a ./ prefix.
+  * Compile --with-mbedtls to allow https-inspection.
+  * Adapt TLS/SSL settings to Debian FHS.
+  * Generate dirs with correct permissions for https-inspection.
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 04 Apr 2020 14:46:51 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 05 Jun 2020 18:13:53 +0200
 
 privoxy (3.0.28-3) unstable; urgency=medium
 

@@ -1610,7 +1610,10 @@ sub handle_loglevel_connect($) {
 
         # Connection from 81.163.28.218 dropped due to ACL
         # Rejecting connection from 178.63.152.227. Maximum number of connections reached.
-        $c =~ s@(?<=onnection from )((?:\d+\.?){3}\d+)@$h{'Number'}$1$h{'Standard'}@;
+        # Connection from 192.168.2.1 on 127.0.1.1:8118 (socket 3) dropped due to ACL
+        $c = highlight_matched_host($c, '(?<=onnection from )[\d.:]+');
+        $c = highlight_matched_host($c, '(?<=on )[\d.:]+');
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^(?:Reusing|Closing) server socket / or
              $c =~ m/^No additional client request/) {
@@ -1745,6 +1748,16 @@ sub handle_loglevel_connect($) {
 
         # Performing the TLS/SSL handshake with client. Hash of host: bab5296b25e256c7b06b92b17b56bcae
         $c = highlight_matched_host($c, '(?<=Hash of host: ).+');
+
+    } elsif ($c =~ m/^Forwarding \d+ bytes of encrypted POST data/) {
+
+        # Forwarding 1954 bytes of encrypted POST data
+        $c =~ s@(?<=Forwarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Forwarded the last \d+ bytes/) {
+
+        # Forwarded the last 1954 bytes
+        $c =~ s@(?<=the last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
@@ -2178,60 +2191,66 @@ sub print_stats() {
     our %cli_options;
     my $new_connections = $stats{requests} - $stats{crunches} - $stats{'reused-connections'};
     my $client_requests_checksum = 0;
+    my $requests_total;
 
     if ($stats{requests_clf} && $stats{requests}
         && $stats{requests_clf} != $stats{requests}) {
         print "Inconsistent request counts: " . $stats{requests} . "/" . $stats{requests_clf} . "\n";
     }
-    if ($stats{requests_clf} && $stats{requests} eq 0) {
-        $stats{requests} = $stats{requests_clf};
-    }
 
-    if ($stats{requests} eq 0) {
+    # To get the total number of requests we can use either the number
+    # of Common-Log-Format lines or the number of "Request:" messages.
+    # We prefer the number of CLF lines if available because using
+    # it works when analysing old log files from Privoxy versions before 3.0.29.
+    # In Privoxy 3.0.28 and earlier "Request:" messages excluded
+    # crunched messages.
+    $requests_total = $stats{requests_clf} ? $stats{requests_clf} : $stats{requests};
+
+    if ($requests_total eq 0) {
         print "No requests yet.\n";
         return;
     }
 
-    print "Client requests total: " . $stats{requests} . "\n";
+    print "Client requests total: " . $requests_total . "\n";
     if ($stats{crunches}) {
-        my $outgoing_requests = $stats{requests} - $stats{crunches};
+        my $outgoing_requests = $requests_total - $stats{crunches};
         print "Crunches: " . $stats{crunches} . " (" .
-            get_percentage($stats{requests}, $stats{crunches}) . ")\n";
+            get_percentage($requests_total, $stats{crunches}) . ")\n";
         print "Blocks: " . $stats{'blocked'} . " (" .
-            get_percentage($stats{requests}, $stats{'blocked'}) . ")\n";
+            get_percentage($requests_total, $stats{'blocked'}) . ")\n";
         print "Fast redirections: " . $stats{'fast-redirections'} . " (" .
-            get_percentage($stats{requests}, $stats{'fast-redirections'}) . ")\n";
+            get_percentage($requests_total, $stats{'fast-redirections'}) . ")\n";
         print "Connection timeouts: " . $stats{'connection-timeout'} . " (" .
-            get_percentage($stats{requests}, $stats{'connection-timeout'}) . ")\n";
+            get_percentage($requests_total, $stats{'connection-timeout'}) . ")\n";
         print "Connection failures: " . $stats{'connection-failure'} . " (" .
-            get_percentage($stats{requests}, $stats{'connection-failure'}) . ")\n";
+            get_percentage($requests_total, $stats{'connection-failure'}) . ")\n";
         print "Outgoing requests: " . $outgoing_requests . " (" .
-            get_percentage($stats{requests}, $outgoing_requests) . ")\n";
+            get_percentage($requests_total, $outgoing_requests) . ")\n";
     } else {
         print "No crunches detected. Is 'debug 1024' enabled?\n";
     }
 
     print "Server keep-alive offers: " . $stats{'server-keep-alive'} . " (" .
-        get_percentage($stats{requests}, $stats{'server-keep-alive'}) . ")\n";
+        get_percentage($requests_total, $stats{'server-keep-alive'}) . ")\n";
     print "New outgoing connections: " . $new_connections . " (" .
-        get_percentage($stats{requests}, $new_connections) . ")\n";
+        get_percentage($requests_total, $new_connections) . ")\n";
     print "Reused connections: " . $stats{'reused-connections'} . " (" .
-        get_percentage($stats{requests}, $stats{'reused-connections'}) .
+        get_percentage($requests_total, $stats{'reused-connections'}) .
         "; server offers accepted: " .
         get_percentage($stats{'server-keep-alive'}, $stats{'reused-connections'}) . ")\n";
     print "Empty responses: " . $stats{'empty-responses'} . " (" .
-        get_percentage($stats{requests}, $stats{'empty-responses'}) . ")\n";
+        get_percentage($requests_total, $stats{'empty-responses'}) . ")\n";
     print "Empty responses on new connections: "
          . $stats{'empty-responses-on-new-connections'} . " (" .
-        get_percentage($stats{requests}, $stats{'empty-responses-on-new-connections'})
+        get_percentage($requests_total, $stats{'empty-responses-on-new-connections'})
         . ")\n";
     print "Empty responses on reused connections: " .
         $stats{'empty-responses-on-reused-connections'} . " (" .
-        get_percentage($stats{requests}, $stats{'empty-responses-on-reused-connections'}) .
+        get_percentage($requests_total, $stats{'empty-responses-on-reused-connections'}) .
         ")\n";
     print "Client connections: " .  $stats{'closed-client-connections'} . "\n";
     if ($stats{'content-size-total'}) {
-        print "Bytes transfered excluding headers: " .  $stats{'content-size-total'} . "\n";
+        print "Bytes of content transfered to the client: " .  $stats{'content-size-total'} . "\n";
     }
     my $lines_printed = 0;
     print "Client requests per connection distribution:\n";
@@ -2251,7 +2270,7 @@ sub print_stats() {
         printf "Enable --show-complete-request-distribution to get less common numbers as well.\n";
     }
     # Due to log rotation we may not have a complete picture for all the requests
-    printf "Improperly accounted requests: ~%d\n", abs($stats{requests} - $client_requests_checksum);
+    printf "Improperly accounted requests: ~%d\n", abs($requests_total - $client_requests_checksum);
 
     if (exists $stats{method}) {
         print "Method distribution:\n";

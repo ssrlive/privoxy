@@ -1,7 +1,9 @@
 etc/privoxy
+etc/privoxy/CA
 usr/bin
 usr/sbin
 usr/share/doc/privoxy
 usr/share/man/man1
 usr/share/privoxy
+var/lib/privoxy/certs
 var/log/privoxy
