@@ -3735,24 +3735,18 @@ static void chat(struct client_state *csp)
       {
          int ret;
          /*
-          * Creating an SSL proxy. If forwarding is disabled, we must send
-          * CSUCCEED message to client. Then TLS/SSL connection with client
-          * is created.
+          * Creating a SSL proxy.
+          *
+          * By sending the CSUCCEED message we're lying to the client as
+          * the connection hasn't actually been established yet. We don't
+          * establish the connection until we have seen and parsed the
+          * encrypted client headers.
           */
-
-         if (fwd->forward_host == NULL)
+         if (write_socket_delayed(csp->cfd, CSUCCEED,
+               strlen(CSUCCEED), get_write_delay(csp)) != 0)
          {
-            /*
-             * We're lying to the client as the connection hasn't actually
-             * been established yet. We don't establish the connection until
-             * we have seen and parsed the encrypted client headers.
-             */
-            if (write_socket_delayed(csp->cfd, CSUCCEED,
-                  strlen(CSUCCEED), get_write_delay(csp)) != 0)
-            {
-               log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
-               return;
-            }
+            log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
+            return;
          }
 
          ret = create_client_ssl_connection(csp);
@@ -3925,20 +3919,6 @@ static void chat(struct client_state *csp)
                {
                   send_crunch_response(csp, rsp);
                }
-               return;
-            }
-
-            /*
-             * TLS/SSL connection with parent proxy is established, we can
-             * inform client about success.
-             */
-            ret = write_socket(csp->cfd, server_response, (size_t)len);
-            if (ret != 0)
-            {
-               log_error(LOG_LEVEL_ERROR,
-                  "Sending parent proxy response to client failed");
-               mark_server_socket_tainted(csp);
-               close_client_ssl_connection(csp);
                return;
             }
          }/* -END- if (fwd->forward_host != NULL) */
