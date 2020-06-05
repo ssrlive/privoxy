@@ -3891,8 +3891,11 @@ static void chat(struct client_state *csp)
             {
                log_error(LOG_LEVEL_ERROR, "Forwarder hasn't established "
                   "connection with destination server.");
-
-               write_socket(csp->cfd, server_response, (size_t)len);
+               rsp = error_response(csp, "connect-failed");
+               if (rsp)
+               {
+                  send_crunch_response(csp, rsp);
+               }
                mark_server_socket_tainted(csp);
                close_client_ssl_connection(csp);
                return;
