@@ -551,7 +551,7 @@ warranty? Registration?</title>
 </para>
 <variablelist>
  <varlistentry>
-  <term>Gold (10000 EUR/year)</term>
+  <term>Gold (12000 USD/year)</term>
   <listitem>
    <para>
     Logo shown at the bottom of the
@@ -562,7 +562,7 @@ warranty? Registration?</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Silver (1000 EUR/year)</term>
+  <term>Silver (1200 USD/year)</term>
   <listitem>
    <para>
     Logo shown randomly at the bottom of the
@@ -573,7 +573,7 @@ warranty? Registration?</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Bronze (500 EUR/year)</term>
+  <term>Bronze (600 USD/year)</term>
   <listitem>
    <para>
     Logo and link on the <ulink url="https://www.privoxy.org/sponsors/">sponsor page</ulink>.
