@@ -40,6 +40,8 @@ case "$1" in
 	chown privoxy $CONFDIR/user.action $CONFDIR/trust
 	[ -f $CONFDIR/match-all.action ] \
 	    && chown privoxy $CONFDIR/match-all.action
+	chown privoxy:adm /var/lib/privoxy/certs
+	chmod 700 /var/lib/privoxy/certs
 
 	db_get privoxy/listen-address || true
 	perl -le '
