@@ -3906,10 +3906,10 @@ static void chat(struct client_state *csp)
             ret = create_server_ssl_connection(csp);
 
             /*
-            * If TLS/SSL connection wasn't created and invalid certificate
-            * wasn't detected, we can interrupt this function. Otherwise, we
-            * must inform the client about invalid server certificate.
-            */
+             * If TLS/SSL connection wasn't created and invalid certificate
+             * wasn't detected, we can interrupt this function. Otherwise, we
+             * must inform the client about invalid server certificate.
+             */
             if (ret != 0
                && (csp->server_cert_verification_result == SSL_CERT_NOT_VERIFIED
                   || csp->server_cert_verification_result == SSL_CERT_VALID))
