@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (c) 2002-2018 Roland Rosenfeld <roland@debian.org>
+# (c) 2002-2020 Roland Rosenfeld <roland@debian.org>
 #
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -23,6 +23,7 @@ override_dh_auto_configure:
 		--enable-zlib \
 		--enable-no-gifs \
 		--enable-external-filters \
+		--with-mbedtls \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 
 override_dh_auto_build:

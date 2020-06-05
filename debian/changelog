@@ -6,6 +6,7 @@ privoxy (3.0.29~gitdbcfeb-1) UNRELEASED; urgency=medium
     incorporated upstream.
   * d/copyright: use ./ prefix to upstream filenames, because orig.tar.gz
     is build with a ./ prefix.
+  * Compile --with-mbedtls to allow https-inspection.
 
  -- Roland Rosenfeld <roland@debian.org>  Sat, 04 Apr 2020 14:46:51 +0200
 
