@@ -3577,7 +3577,7 @@ static void chat(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Setting flags to use old solution with SSL tunnel and to disable
-    * certificates verification.
+    * certificate verification.
     */
    if (csp->http->ssl && !(csp->action->flags & ACTION_HTTPS_INSPECTION)
       && !cgi_page_requested(csp->http->host))
