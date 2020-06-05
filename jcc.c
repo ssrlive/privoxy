@@ -3884,9 +3884,8 @@ static void chat(struct client_state *csp)
             }
 
             /*
-             * Test if connection with destination server was established
-             * successfully by parent proxy. Then we can send response to
-             * the client and continue or stop.
+             * Test if the connection to the destination server was
+             * established successfully by the parent proxy.
              */
             if (!tunnel_established_successfully(server_response, (unsigned int)len))
             {
