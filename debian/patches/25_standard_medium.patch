@@ -5,7 +5,7 @@ Subject: Change the global default from standard.Cautious to standard.Medium,
 
 --- a/match-all.action
 +++ b/match-all.action
-@@ -10,7 +10,16 @@
+@@ -11,7 +11,16 @@
  +client-header-tagger{css-requests} \
  +client-header-tagger{image-requests} \
  +client-header-tagger{range-requests} \

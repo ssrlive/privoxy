@@ -4,7 +4,7 @@ Subject: Fix typo in man page privoxy-log-parser(1)
 
 --- a/tools/privoxy-log-parser.pl
 +++ b/tools/privoxy-log-parser.pl
-@@ -2628,7 +2628,7 @@ omitted, ANSI escape sequences are used
+@@ -2709,7 +2709,7 @@ omitted, ANSI escape sequences are used
  This option is only intended to make embedding log excerpts in web pages easier.
  It does not escape any input!
  
