@@ -115,10 +115,6 @@ Hal.
  <ulink url="https://www.privoxy.org/">Privoxy</ulink>.
  It is not a substitute for the
  <ulink url="../user-manual/index.html"><citetitle>Privoxy User Manual</citetitle></ulink>.
-<!--
- This works, at least in some situations:
- Test: <ulink url="privoxy-user-manual.pdf"><citetitle>User Manual</citetitle></ulink>.
--->
  </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
