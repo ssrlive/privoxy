@@ -2043,8 +2043,9 @@ ads used to be. Why?</title>
   for HTTPS.
 </para>
 <para>
-  Adding HTTP/2 support is on the TODO list but currently
-  nobody is known to work on it.
+  Adding HTTP/2 support is on the
+  <ulink url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=TODO;hb=HEAD">TODO</ulink>
+  list but currently nobody is known to work on it.
 </para>
 </sect2>
 
