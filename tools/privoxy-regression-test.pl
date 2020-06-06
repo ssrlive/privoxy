@@ -274,7 +274,7 @@ sub load_regression_tests_from_file ($) {
                 l(LL_FILE_LOADING, "Sticky actions: " . $sticky_actions);
                 $regression_tests[$si][$ri]{'sticky-actions'} = $sticky_actions;
             } else {
-                log_and_die("Sticky URL without Sticky Actions: $value");
+                log_and_die("Sticky URL without Sticky Actions in $action_file: $value");
             }
 
         } else {
@@ -654,7 +654,7 @@ sub load_action_files ($) {
                     l(LL_FILE_LOADING, "Sticky actions: " . $sticky_actions);
                     $regression_tests[$si][$ri]{'sticky-actions'} = $sticky_actions;
                 } else {
-                    log_and_die("Sticky URL without Sticky Actions: $value");
+                    log_and_die("Sticky URL without Sticky Actions in $actionfile: $value");
                 }
 
             } else {
