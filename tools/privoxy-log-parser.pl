@@ -1061,7 +1061,7 @@ sub handle_loglevel_re_filter($) {
                 return '';
         }
 
-        $c =~ s@(?<=\(size )(\d+)\)(?= with)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=\(size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=\(new size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=produced )(\d+)(?= hits)@$h{'Number'}$1$h{'Standard'}@;
 
