@@ -1341,7 +1341,8 @@ and thus avoid individual browser configuration?</title>
  amount of guesswork. It is not realistic to catch all of these short of
  disabling Javascript, which would break many sites. And lastly, if the
  cookies are embedded in a HTTPS/SSL secure session via Javascript, they are beyond
- <application>Privoxy's</application> reach.
+ <application>Privoxy's</application> reach unless you enable
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>.
 </para>
 <para>
  All in all, &my-app; can help manage cookies in general, can help minimize
@@ -1996,9 +1997,17 @@ ads used to be. Why?</title>
 <sect2 renderas="sect3" id="ssl">
 <title>How can Privoxy filter Secure (HTTPS) URLs?</title>
 <para>
- Since secure HTTP connections are encrypted SSL sessions between your browser
- and the secure site, and are meant to be reliably <emphasis>secure</emphasis>,
- there is little that <application>Privoxy</application> can do but hand the raw
+ If you enable
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>
+ <application>Privoxy</application> will impersonate the destination
+ server and can thus filter encrypted requests and responses as well.
+</para>
+<para>
+ Without
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>
+ secure HTTP connections are encrypted SSL sessions between your
+ browser and the secure site, and there is little
+ that <application>Privoxy</application> can do but hand the raw
  gibberish data though from one end to the other unprocessed.
 </para>
 <para>
