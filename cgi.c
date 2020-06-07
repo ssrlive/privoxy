@@ -1515,13 +1515,15 @@ static void get_locale_time(char *buf, size_t buffer_size)
 #elif defined(MUTEX_LOCKS_AVAILABLE)
    privoxy_mutex_lock(&localtime_mutex);
    timeptr = localtime(&current_time);
-   privoxy_mutex_unlock(&localtime_mutex);
 #else
    timeptr = localtime(&current_time);
 #endif
 
    strftime(buf, buffer_size, "%a %b %d %X %Z %Y", timeptr);
 
+#if !defined(HAVE_LOCALTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_unlock(&localtime_mutex);
+#endif
 }
 
 
