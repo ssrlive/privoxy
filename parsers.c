@@ -3403,9 +3403,7 @@ static jb_err client_host(struct client_state *csp, char **header)
 static jb_err client_if_modified_since(struct client_state *csp, char **header)
 {
    char newheader[50];
-#ifdef HAVE_GMTIME_R
    struct tm gmt;
-#endif
    struct tm *timeptr = NULL;
    time_t tm = 0;
    const char *newval;
@@ -3463,29 +3461,16 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                   *header);
             }
             tm += rtime * (negative_range ? -1 : 1);
-#ifdef HAVE_GMTIME_R
-            timeptr = gmtime_r(&tm, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-            privoxy_mutex_lock(&gmtime_mutex);
-            timeptr = gmtime(&tm);
-#else
-            timeptr = gmtime(&tm);
-#endif
+            timeptr = privoxy_gmtime_r(&tm, &gmt);
             if ((NULL == timeptr) || !strftime(newheader,
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
-#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
-               privoxy_mutex_unlock(&gmtime_mutex);
-#endif
                log_error(LOG_LEVEL_ERROR,
                   "Randomizing '%s' failed. Crunching the header without replacement.",
                   *header);
                freez(*header);
                return JB_ERR_OK;
             }
-#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
-            privoxy_mutex_unlock(&gmtime_mutex);
-#endif
             freez(*header);
             *header = strdup("If-Modified-Since: ");
             string_append(header, newheader);
