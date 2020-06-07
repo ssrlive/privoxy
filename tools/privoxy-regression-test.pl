@@ -1452,6 +1452,8 @@ sub get_page_with_curl ($) {
     $curl_line .= " --user-agent '" . PRT_VERSION . "' ";
     # We aren't too patient
     $curl_line .= " --max-time '" . get_cli_option('max-time') . "' ";
+    # We don't want curl to treat "[]", "{}" etc. special
+    $curl_line .= " --globoff ";
 
     $curl_line .= $parameters;
     # XXX: still necessary?
