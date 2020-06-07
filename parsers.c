@@ -2774,20 +2774,24 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
 #elif defined(MUTEX_LOCKS_AVAILABLE)
             privoxy_mutex_lock(&gmtime_mutex);
             timeptr = gmtime(&last_modified);
-            privoxy_mutex_unlock(&gmtime_mutex);
 #else
             timeptr = gmtime(&last_modified);
 #endif
             if ((NULL == timeptr) || !strftime(newheader,
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+               privoxy_mutex_unlock(&gmtime_mutex);
+#endif
                log_error(LOG_LEVEL_ERROR,
                   "Randomizing '%s' failed. Crunching the header without replacement.",
                   *header);
                freez(*header);
                return JB_ERR_OK;
             }
-
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+            privoxy_mutex_unlock(&gmtime_mutex);
+#endif
             freez(*header);
             *header = strdup("Last-Modified: ");
             string_append(header, newheader);
@@ -3478,20 +3482,24 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
 #elif defined(MUTEX_LOCKS_AVAILABLE)
             privoxy_mutex_lock(&gmtime_mutex);
             timeptr = gmtime(&tm);
-            privoxy_mutex_unlock(&gmtime_mutex);
 #else
             timeptr = gmtime(&tm);
 #endif
             if ((NULL == timeptr) || !strftime(newheader,
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+               privoxy_mutex_unlock(&gmtime_mutex);
+#endif
                log_error(LOG_LEVEL_ERROR,
                   "Randomizing '%s' failed. Crunching the header without replacement.",
                   *header);
                freez(*header);
                return JB_ERR_OK;
             }
-
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+            privoxy_mutex_unlock(&gmtime_mutex);
+#endif
             freez(*header);
             *header = strdup("If-Modified-Since: ");
             string_append(header, newheader);
@@ -4039,17 +4047,22 @@ static void add_cookie_expiry_date(char **cookie, time_t lifetime)
 #elif defined(MUTEX_LOCKS_AVAILABLE)
    privoxy_mutex_lock(&gmtime_mutex);
    timeptr = gmtime(&expiry_date);
-   privoxy_mutex_unlock(&gmtime_mutex);
 #else
    timeptr = gmtime(&expiry_date);
 #endif
 
    if (NULL == timeptr)
    {
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+      privoxy_mutex_unlock(&gmtime_mutex);
+#endif
       log_error(LOG_LEVEL_FATAL,
          "Failed to get the time in add_cooky_expiry_date()");
    }
    strftime(tmp, sizeof(tmp), "; expires=%a, %d-%b-%Y %H:%M:%S GMT", timeptr);
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_unlock(&gmtime_mutex);
+#endif
    if (JB_ERR_OK != string_append(cookie, tmp))
    {
       log_error(LOG_LEVEL_FATAL, "Out of memory in add_cooky_expiry()");
