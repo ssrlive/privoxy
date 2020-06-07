@@ -218,18 +218,18 @@ void *malloc_or_die(size_t buffer_size)
  *                Exits if the file can't be opened
  *
  * Parameters  :
- *          1  :  pidfile = Path of the pidfile that gets created.
+ *          1  :  pid_file = Path of the pid file that gets created.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void write_pid_file(const char *pidfile)
+void write_pid_file(const char *pid_file)
 {
    FILE   *fp;
 
-   if ((fp = fopen(pidfile, "w")) == NULL)
+   if ((fp = fopen(pid_file, "w")) == NULL)
    {
-      log_error(LOG_LEVEL_FATAL, "can't open pidfile '%s': %E", pidfile);
+      log_error(LOG_LEVEL_FATAL, "can't open pid file '%s': %E", pid_file);
    }
    else
    {
