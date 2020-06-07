@@ -92,6 +92,7 @@ size_t privoxy_strlcat(char *destination, const char *source, size_t size);
 #endif /* ndef HAVE_STRLCAT */
 
 extern int privoxy_millisleep(unsigned milliseconds);
+extern struct tm *privoxy_gmtime_r(const time_t *time_spec, struct tm *result);
 
 #if defined(__cplusplus)
 }

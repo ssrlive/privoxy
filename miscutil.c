@@ -61,6 +61,7 @@
 
 #include "project.h"
 #include "miscutil.h"
+#include "jcc.h"
 #include "errlog.h"
 
 /*********************************************************************
@@ -853,6 +854,53 @@ int privoxy_millisleep(unsigned milliseconds)
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  privoxy_gmtime_r
+ *
+ * Description :  Behave like gmtime_r() and convert a
+ *                time_t to a struct tm.
+ *
+ * Parameters  :
+ *          1  :  time_spec: The time to convert
+ *          2  :  result: The struct tm to use as storage
+ *
+ * Returns     :  Pointer to the result or NULL on error.
+ *
+ *********************************************************************/
+struct tm *privoxy_gmtime_r(const time_t *time_spec, struct tm *result)
+{
+   struct tm *timeptr;
+
+#ifdef HAVE_GMTIME_R
+   timeptr = gmtime_r(time_spec, result);
+#elif defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_lock(&gmtime_mutex);
+   timeptr = gmtime(time_spec);
+#else
+#warning Using unlocked gmtime()
+   timeptr = gmtime(time_spec);
+#endif
+
+   if (timeptr == NULL)
+   {
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+      privoxy_mutex_unlock(&gmtime_mutex);
+#endif
+      return NULL;
+   }
+
+#if !defined(HAVE_GMTIME_R)
+   *result = *timeptr;
+   timeptr = result;
+#ifdef MUTEX_LOCKS_AVAILABLE
+   privoxy_mutex_unlock(&gmtime_mutex);
+#endif
+#endif
+
+   return timeptr;
+}
 
 #if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 /*********************************************************************
