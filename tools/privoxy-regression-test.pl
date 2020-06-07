@@ -83,7 +83,7 @@ use constant {
     REDIRECT_TEST       =>108,
 };
 
-sub init_our_variables () {
+sub init_our_variables() {
 
     our $leading_log_time = LEADING_LOG_TIME;
     our $leading_log_date = LEADING_LOG_DATE;
@@ -91,7 +91,7 @@ sub init_our_variables () {
     our $log_level = get_default_log_level();
 }
 
-sub get_default_log_level () {
+sub get_default_log_level() {
     
     my $log_level = 0;
 
@@ -113,7 +113,7 @@ sub get_default_log_level () {
 #
 ############################################################################
 
-sub parse_tag ($) {
+sub parse_tag($) {
 
     my $tag = shift;
 
@@ -129,7 +129,7 @@ sub parse_tag ($) {
     return $tag;
 }
 
-sub check_for_forbidden_characters ($) {
+sub check_for_forbidden_characters($) {
 
     my $string = shift;
     my $allowed = '[-=\dA-Za-z~{}\[\]:./();\t ,+@"_%?&*^]';
@@ -152,7 +152,7 @@ sub load_regression_tests() {
 
 # XXX: Contains a lot of code duplicated from load_action_files()
 #      that should be factored out.
-sub load_regression_tests_from_file ($) {
+sub load_regression_tests_from_file($) {
     my $action_file = shift;
 
     # initialized here
@@ -297,7 +297,7 @@ sub load_regression_tests_from_file ($) {
 }
 
 
-sub load_regression_tests_through_privoxy () {
+sub load_regression_tests_through_privoxy() {
 
     our $privoxy_cgi_url;
     our @privoxy_config;
@@ -350,7 +350,7 @@ sub load_regression_tests_through_privoxy () {
     load_action_files(\@actionfiles);
 }
 
-sub token_starts_new_test ($) {
+sub token_starts_new_test($) {
 
     my $token = shift;
     my @new_test_directives = ('set header', 'fetch test',
@@ -364,7 +364,7 @@ sub token_starts_new_test ($) {
     return 0;
 }
 
-sub tokenize ($) {
+sub tokenize($) {
 
     my ($token, $value) = (undef, undef);
 
@@ -396,7 +396,7 @@ sub tokenize ($) {
     return ($token, $value);
 }
 
-sub enlist_new_test ($$$$$$) {
+sub enlist_new_test($$$$$$) {
 
     my ($regression_tests, $token, $value, $si, $ri, $number) = @_;
     my $type;
@@ -504,7 +504,7 @@ sub mark_matching_tests_for_skipping($) {
 
 # XXX: Shares a lot of code with load_regression_tests_from_file()
 #      that should be factored out.
-sub load_action_files ($) {
+sub load_action_files($) {
 
     # initialized here
     our %actions;
@@ -683,7 +683,7 @@ sub load_action_files ($) {
 ############################################################################
 
 # Fisher Yates shuffle from Perl's "How do I shuffle an array randomly?" FAQ
-sub fisher_yates_shuffle ($) {
+sub fisher_yates_shuffle($) {
     my $deck = shift;
     my $i = @$deck;
     while ($i--) {
@@ -692,7 +692,7 @@ sub fisher_yates_shuffle ($) {
     }
 }
 
-sub execute_regression_tests () {
+sub execute_regression_tests() {
 
     our @regression_tests;
     my $loops = get_cli_option('loops');
@@ -781,7 +781,7 @@ sub execute_regression_tests () {
     }
 }
 
-sub get_skip_reason ($) {
+sub get_skip_reason($) {
     my $test = shift;
     my $skip_reason = undef;
 
@@ -802,7 +802,7 @@ sub get_skip_reason ($) {
     return $skip_reason;
 }
 
-sub level_is_unacceptable ($) {
+sub level_is_unacceptable($) {
     my $level = shift;
     my $min_level = get_cli_option('min-level');
     my $max_level = get_cli_option('max-level');
@@ -831,7 +831,7 @@ sub level_is_unacceptable ($) {
     return $reason;
 }
 
-sub dependency_unsatisfied ($) {
+sub dependency_unsatisfied($) {
 
     my $level = shift;
     our %dependencies;
@@ -872,7 +872,7 @@ sub dependency_unsatisfied ($) {
     return $dependency_problem;
 }
 
-sub register_dependency ($$) {
+sub register_dependency($$) {
 
     my $level = shift;
     my $dependency = shift;
@@ -892,7 +892,7 @@ sub register_dependency ($$) {
     }
 }
 
-sub execute_method_test ($) {
+sub execute_method_test($) {
 
     my $test = shift;
     my $buffer_ref;
@@ -914,7 +914,7 @@ sub execute_method_test ($) {
     return check_status_code_result($status_code, $expected_status_code);
 }
 
-sub execute_redirect_test ($) {
+sub execute_redirect_test($) {
 
     my $test = shift;
     my $buffer_ref;
@@ -959,7 +959,7 @@ sub execute_redirect_test ($) {
     return $success;
 }
 
-sub execute_dumb_fetch_test ($) {
+sub execute_dumb_fetch_test($) {
 
     my $test = shift;
     my $buffer_ref;
@@ -983,7 +983,7 @@ sub execute_dumb_fetch_test ($) {
     return check_status_code_result($status_code, $expected_status_code);
 }
 
-sub execute_block_test ($) {
+sub execute_block_test($) {
 
     my $test = shift;
     my $url = $test->{'data'};
@@ -992,7 +992,7 @@ sub execute_block_test ($) {
     return defined $final_results->{'+block'};
 }
 
-sub execute_sticky_actions_test ($) {
+sub execute_sticky_actions_test($) {
 
     my $test = shift;
     my $url = $test->{'data'};
@@ -1023,7 +1023,7 @@ sub execute_sticky_actions_test ($) {
     return $verified_actions == @sticky_actions;
 }
 
-sub get_final_results ($) {
+sub get_final_results($) {
 
     my $url = shift;
     my $curl_parameters = '';
@@ -1068,7 +1068,7 @@ sub get_final_results ($) {
     return \%final_results;
 }
 
-sub check_status_code_result ($$) {
+sub check_status_code_result($$) {
 
     my $status_code = shift;
     my $expected_status_code = shift;
@@ -1100,7 +1100,7 @@ sub check_status_code_result ($$) {
     return $result;
 }
 
-sub execute_client_header_regression_test ($) {
+sub execute_client_header_regression_test($) {
 
     my $test = shift;
     my $buffer_ref;
@@ -1113,7 +1113,7 @@ sub execute_client_header_regression_test ($) {
     return check_header_result($test, $header);
 }
 
-sub execute_server_header_regression_test ($) {
+sub execute_server_header_regression_test($) {
 
     my $test = shift;
     my $buffer_ref;
@@ -1126,12 +1126,12 @@ sub execute_server_header_regression_test ($) {
     return check_header_result($test, $header);
 }
 
-sub interpret_result ($) {
+sub interpret_result($) {
     my $success = shift;
     return $success ? "Success" : "Failure";
 }
 
-sub check_header_result ($$) {
+sub check_header_result($$) {
 
     my $test = shift;
     my $header = shift;
@@ -1183,7 +1183,7 @@ sub check_header_result ($$) {
     return $success;
 }
 
-sub get_header_name ($) {
+sub get_header_name($) {
 
     my $header = shift;
 
@@ -1192,7 +1192,7 @@ sub get_header_name ($) {
     return $header;
 }
 
-sub get_header ($$) {
+sub get_header($$) {
 
     our $filtered_request = '';
 
@@ -1252,7 +1252,7 @@ sub get_header ($$) {
     return $header;
 }
 
-sub get_server_header ($$) {
+sub get_server_header($$) {
 
     my $buffer_ref = shift;
     my $test = shift;
@@ -1290,7 +1290,7 @@ sub get_server_header ($$) {
     return $header;
 }
 
-sub get_status_code ($) {
+sub get_status_code($) {
 
     my $buffer_ref = shift;
     my @buffer = @{$buffer_ref}; 
@@ -1310,12 +1310,12 @@ sub get_status_code ($) {
     }
 }
 
-sub get_test_keys () {
+sub get_test_keys() {
     return ('tag', 'data', 'expect-header', 'ignore');
 }
 
 # XXX: incomplete
-sub test_content_as_string ($) {
+sub test_content_as_string($) {
 
     my $test = shift;
 
@@ -1356,7 +1356,7 @@ sub fuzz_header($) {
 #
 ############################################################################
 
-sub get_cgi_page_or_else ($) {
+sub get_cgi_page_or_else($) {
 
     my $cgi_url = shift;
     my $content_ref = get_page_with_curl($cgi_url);
@@ -1383,7 +1383,7 @@ sub get_cgi_page_or_else ($) {
 }
 
 # XXX: misleading name
-sub get_show_request_with_curl ($) {
+sub get_show_request_with_curl($) {
 
     our $privoxy_cgi_url;
     my $test = shift;
@@ -1407,7 +1407,7 @@ sub get_show_request_with_curl ($) {
     return get_cgi_page_or_else($curl_parameters);
 }
 
-sub get_head_with_curl ($) {
+sub get_head_with_curl($) {
 
     our $fellatio_url = FELLATIO_URL;
     my $test = shift;
@@ -1426,7 +1426,7 @@ sub get_head_with_curl ($) {
     return get_page_with_curl($curl_parameters);
 }
 
-sub get_page_with_curl ($) {
+sub get_page_with_curl($) {
 
     our $proxy;
 
@@ -1487,7 +1487,7 @@ sub get_page_with_curl ($) {
 #
 ############################################################################
 
-sub array_as_string ($) {
+sub array_as_string($) {
     my $array_ref = shift;
     my $string = '';
 
@@ -1498,13 +1498,13 @@ sub array_as_string ($) {
     return $string;
 }
 
-sub show_test ($) {
+sub show_test($) {
     my $test = shift;
     log_message('Test is:' . test_content_as_string($test));
 }
 
 # Conditional log
-sub l ($$) {
+sub l($$) {
     our $log_level;
     my $this_level = shift;
     my $message = shift;
@@ -1512,14 +1512,14 @@ sub l ($$) {
     log_message($message) if ($log_level & $this_level);
 }
 
-sub log_and_die ($) {
+sub log_and_die($) {
     my $message = shift;
 
     log_message('Oh noes. ' . $message . ' Fatal error. Exiting.');
     exit;
 }
 
-sub log_message ($) {
+sub log_message($) {
 
     my $message = shift;
 
@@ -1550,7 +1550,7 @@ sub log_message ($) {
     printf("%s\n", $message);
 }
 
-sub log_result ($$) {
+sub log_result($$) {
 
     our $filtered_request;
 
@@ -1632,16 +1632,16 @@ sub log_result ($$) {
     log_message($message) if (!$result or cli_option_is_set('verbose'));
 }
 
-sub quote ($) {
+sub quote($) {
     my $s = shift;
     return '\'' . $s . '\'';
 }
 
-sub print_version () {
+sub print_version() {
     printf PRT_VERSION . "\n";
 }
 
-sub list_test_types () {
+sub list_test_types() {
     my %test_types = (
         'Client header test'  => CLIENT_HEADER_TEST,
         'Server header test'  =>  2,
@@ -1659,7 +1659,7 @@ sub list_test_types () {
     }
 }
 
-sub help () {
+sub help() {
 
     our %cli_options;
 
@@ -1702,7 +1702,7 @@ Try "perldoc $0" for more information
     exit(0);
 }
 
-sub init_cli_options () {
+sub init_cli_options() {
 
     our %cli_options;
     our $log_level;
@@ -1717,7 +1717,7 @@ sub init_cli_options () {
     $cli_options{'retries'}   = CLI_RETRIES;
 }
 
-sub parse_cli_options () {
+sub parse_cli_options() {
 
     our %cli_options;
     our $log_level;
@@ -1749,7 +1749,7 @@ sub parse_cli_options () {
     $log_level |= $cli_options{'debug'};
 }
 
-sub cli_option_is_set ($) {
+sub cli_option_is_set($) {
 
     our %cli_options;
     my $cli_option = shift;
@@ -1757,7 +1757,7 @@ sub cli_option_is_set ($) {
     return defined $cli_options{$cli_option};
 }
 
-sub get_cli_option ($) {
+sub get_cli_option($) {
 
     our %cli_options;
     my $cli_option = shift;
@@ -1798,7 +1798,7 @@ sub start_forks($) {
     }
 }
 
-sub main () {
+sub main() {
 
     init_our_variables();
     parse_cli_options();
