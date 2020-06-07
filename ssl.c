@@ -1336,33 +1336,17 @@ static int ssl_certificate_is_invalid(const char *cert_file)
 static int generate_certificate_valid_date(time_t time_spec, char *buffer,
                                            size_t buffer_size)
 {
-#ifdef HAVE_GMTIME_R
    struct tm valid_date;
-#endif
    struct tm *timeptr;
    size_t ret;
 
-#ifdef HAVE_GMTIME_R
-   timeptr = gmtime_r(&time_spec, &valid_date);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_lock(&gmtime_mutex);
-   timeptr = gmtime(&time_spec);
-#else
-#warning Using unlocked gmtime()
-   timeptr = gmtime(&time_spec);
-#endif
+   timeptr = privoxy_gmtime_r(&time_spec, &valid_date);
    if (NULL == timeptr)
    {
-#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
-      privoxy_mutex_unlock(&gmtime_mutex);
-#endif
       return 1;
    }
 
    ret = strftime(buffer, buffer_size, "%Y%m%d%H%M%S", timeptr);
-#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_unlock(&gmtime_mutex);
-#endif
    if (ret != 14)
    {
       return 1;
