@@ -4356,9 +4356,10 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
          {
             char recreated_date[100];
             struct tm *tm;
+            struct tm storage;
             time_t result2;
 
-            tm = gmtime(result);
+            tm = privoxy_gmtime_r(result, &storage);
             if (!strftime(recreated_date, sizeof(recreated_date),
                time_formats[i], tm))
             {
