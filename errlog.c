@@ -533,15 +533,7 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
    int tz_length = 0;
 
    time (&now);
-#ifdef HAVE_GMTIME_R
-   gmt = *gmtime_r(&now, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_lock(&gmtime_mutex);
-   gmt = *gmtime(&now);
-   privoxy_mutex_unlock(&gmtime_mutex);
-#else
-   gmt = *gmtime(&now);
-#endif
+   gmt = *privoxy_gmtime_r(&now, &gmt);
 #ifdef HAVE_LOCALTIME_R
    tm_now = localtime_r(&now, &dummy);
 #elif defined(MUTEX_LOCKS_AVAILABLE)
