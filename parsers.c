@@ -4040,29 +4040,15 @@ static void add_cookie_expiry_date(char **cookie, time_t lifetime)
    char tmp[50];
    struct tm *timeptr = NULL;
    time_t expiry_date = time(NULL) + lifetime;
-#ifdef HAVE_GMTIME_R
    struct tm gmt;
 
-   timeptr = gmtime_r(&expiry_date, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_lock(&gmtime_mutex);
-   timeptr = gmtime(&expiry_date);
-#else
-   timeptr = gmtime(&expiry_date);
-#endif
-
+   timeptr = privoxy_gmtime_r(&expiry_date, &gmt);
    if (NULL == timeptr)
    {
-#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
-      privoxy_mutex_unlock(&gmtime_mutex);
-#endif
       log_error(LOG_LEVEL_FATAL,
          "Failed to get the time in add_cooky_expiry_date()");
    }
    strftime(tmp, sizeof(tmp), "; expires=%a, %d-%b-%Y %H:%M:%S GMT", timeptr);
-#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_unlock(&gmtime_mutex);
-#endif
    if (JB_ERR_OK != string_append(cookie, tmp))
    {
       log_error(LOG_LEVEL_FATAL, "Out of memory in add_cooky_expiry()");
