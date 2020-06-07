@@ -132,7 +132,7 @@ sub parse_tag ($) {
 sub check_for_forbidden_characters ($) {
 
     my $string = shift;
-    my $allowed = '[-=\dA-Za-z~{}:./();\t ,+@"_%?&*^]';
+    my $allowed = '[-=\dA-Za-z~{}\[\]:./();\t ,+@"_%?&*^]';
 
     unless ($string =~ m/^$allowed*$/o) {
         my $forbidden = $string;
