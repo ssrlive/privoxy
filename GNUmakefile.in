@@ -736,6 +736,7 @@ ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
 urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 client-tags.@OBJEXT@: client-tags.c client-tags.h config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 fuzz.@OBJEXT@: fuzz.c config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
+ssl.@OBJEXT@: ssl.c ssl.h config.h $(PROJECT_H_DEPS) encode.h errlog.h jcc.h miscutil.h
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
