@@ -211,6 +211,28 @@ TAG:^add-header\{X-Custom-Header: yes, please\}$
 TAG:^client-header-filter\{hide-tor-exit-notation\}$
 
 #######################################################
+# Test client-header-filter{no-brotli-accepted}.
+#######################################################
+
+{+client-header-filter{no-brotli-accepted}}
+# Set Header    = Accept-Encoding: gzip, deflate, br
+# Expect Header = Accept-Encoding: gzip, deflate
+#
+# Set Header    = Accept-Encoding: gzip, br, deflate
+# Expect Header = Accept-Encoding: gzip, deflate
+#
+# Set Header    = Accept-Encoding: br, gzip, deflate
+# Expect Header = Accept-Encoding: gzip, deflate
+#
+# Set Header    = Accept-Encoding: br
+# Expect Header = Accept-Encoding:
+#
+# Set Header    = Accept-Encoding: gzip, deflate
+# Expect Header = NO CHANGE
+#
+TAG:^client-header-filter\{no-brotli-accepted\}$
+
+#######################################################
 # Test crunch-client-header{}.
 #######################################################
 
