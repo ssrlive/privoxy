@@ -1759,6 +1759,11 @@ sub handle_loglevel_connect($) {
         # Forwarded the last 1954 bytes
         $c =~ s@(?<=the last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Waiting for the next client connection. Currently active threads:/) {
+
+        # Waiting for the next client connection. Currently active threads: 30
+        $c =~ s@(?<=threads: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
