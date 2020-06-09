@@ -2017,14 +2017,19 @@ sub gather_loglevel_clf_stats($) {
     our %cli_options;
 
     # +0200] "GET https://www.youtube.com/watch?v=JmcA9LIIXWw HTTP/1.1" 200 68004
-    $content =~ m/^[+-]\d{4}\] "(\w+) (.+) (HTTP\/\d\.\d)" (\d+) (\d+)/;
+    # +0200] "VERSION-CONTROL http://p.p/ HTTP/1.1" 200 2787
+    $content =~ m/^[+-]\d{4}\] "([^ ]+) (.+) (HTTP\/\d\.\d)" (\d+) (\d+)/;
     $method       = $1;
     $resource     = $2;
     $http_version = $3;
     $status_code  = $4;
     $size         = $5;
 
+    $stats{requests_clf}++;
+
     unless (defined $method) {
+        # +0200] "Invalid request" 400 0
+        return if ($content =~ m/^[+-]\d{4}\] "Invalid request"/);
         print("Failed to parse: $content\n");
         return;
     }
@@ -2040,7 +2045,6 @@ sub gather_loglevel_clf_stats($) {
     }
     $stats{'content-size-total'} += $size;
     $stats{'status-code'}{$status_code}++;
-    $stats{requests_clf}++;
 }
 
 sub gather_loglevel_request_stats($$) {
