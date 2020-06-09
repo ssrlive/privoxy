@@ -2040,7 +2040,7 @@ sub gather_loglevel_clf_stats($) {
     $stats{'http-version'}{$http_version}++;
 
     if ($cli_options{'host-statistics-threshold'} != 0) {
-        $resource =~ m@(?:http[s]://)([^/]+)/?@;
+        $resource =~ m@(?:https?://)?([^/]+)/?@;
         $stats{'hosts'}{$1}++;
     }
     $stats{'content-size-total'} += $size;
