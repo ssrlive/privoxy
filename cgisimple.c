@@ -1762,6 +1762,14 @@ static jb_err show_defines(struct map *exports)
 #endif
       },
       {
+         "FEATURE_BROTLI",
+#ifdef FEATURE_BROTLI
+         1,
+#else
+         0,
+#endif
+      },
+      {
          "FEATURE_CGI_EDIT_ACTIONS",
 #ifdef FEATURE_CGI_EDIT_ACTIONS
          1,

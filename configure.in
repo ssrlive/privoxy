@@ -1162,6 +1162,29 @@ fi
 AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY)
 
 
+dnl ========================================================
+dnl Check for Brotli which can be used for decompression
+dnl ========================================================
+WITH_BROTLI=no
+AC_ARG_WITH(brotli,
+AC_HELP_STRING([--with-brotli], [Enable Brotli detection])
+AC_HELP_STRING([--without-brotli], [Disable Brotli detection]),
+  WITH_BROTLI=$withval)
+
+if test X"$WITH_BROTLI" != Xno; then
+
+  LIBS="$LIBS -lbrotlidec"
+
+  AC_CHECK_LIB(brotlidec, BrotliDecoderDecompress)
+
+  AC_CHECK_HEADERS(brotli/decode.h,
+    FEATURE_BROTLI=1
+    AC_DEFINE(FEATURE_BROTLI, 1, [If Brotli is used for decompression])
+    AC_SUBST(FEATURE_BROTLI, [1])
+  )
+fi
+
+
 dnl =================================================================
 dnl Final cleanup and output
 dnl =================================================================

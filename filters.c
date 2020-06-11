@@ -2166,7 +2166,11 @@ static jb_err prepare_for_filtering(struct client_state *csp)
     * If the body has a supported transfer-encoding,
     * decompress it, adjusting size and iob->eod.
     */
-   if (csp->content_type & (CT_GZIP|CT_DEFLATE))
+   if ((csp->content_type & (CT_GZIP|CT_DEFLATE))
+#ifdef FEATURE_BROTLI
+      || (csp->content_type & CT_BROTLI)
+#endif
+       )
    {
       if (0 == csp->iob->eod - csp->iob->cur)
       {
@@ -2184,11 +2188,14 @@ static jb_err prepare_for_filtering(struct client_state *csp)
       else
       {
          /*
-          * Unset CT_GZIP and CT_DEFLATE to remember not
-          * to modify the Content-Encoding header later.
+          * Unset content types to remember not to
+          * modify the Content-Encoding header later.
           */
          csp->content_type &= ~CT_GZIP;
          csp->content_type &= ~CT_DEFLATE;
+#ifdef FEATURE_BROTLI
+         csp->content_type &= ~CT_BROTLI;
+#endif
       }
    }
 #endif
