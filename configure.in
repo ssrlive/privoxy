@@ -1154,6 +1154,7 @@ if test X"$OPT_MBEDTLS" != Xno; then
     AC_MSG_NOTICE([Detected mbedTLS. Enabling https inspection.])
 
     LIBS="-lmbedtls -lmbedx509 -lmbedcrypto $LIBS"
+    old_CFLAGS_nospecial="-Imbedtls/include $old_CFLAGS_nospecial"
 
     FEATURE_HTTPS_INSPECTION_ONLY=
   fi
