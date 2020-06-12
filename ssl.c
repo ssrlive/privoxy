@@ -2064,7 +2064,8 @@ extern void ssl_send_certificate_error(struct client_state *csp)
       "HTTP/1.1 200 OK\r\n"
       "Content-Type: text/html\r\n"
       "Connection: close\r\n\r\n"
-      "<html><body><h1>Server certificate verification failed</h1>"
+      "<html><head><title>Server certificate verification failed</title></head>\n"
+      "<body><h1>Server certificate verification failed</h1>\n"
       "<p><a href=\"https://" CGI_SITE_2_HOST "/\">Privoxy</a> was unable "
       "to securely connnect to the destination server.</p>"
       "<p>Reason: ";
