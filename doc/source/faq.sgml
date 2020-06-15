@@ -25,7 +25,7 @@
 
  Purpose     :  FAQ
 
- Copyright (C) 2001-2018 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2020 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  Based partially on the Internet Junkbuster FAQ originally written by and
@@ -69,7 +69,7 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2018 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2020 by
  <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
@@ -115,10 +115,6 @@ Hal.
  <ulink url="https://www.privoxy.org/">Privoxy</ulink>.
  It is not a substitute for the
  <ulink url="../user-manual/index.html"><citetitle>Privoxy User Manual</citetitle></ulink>.
-<!--
- This works, at least in some situations:
- Test: <ulink url="privoxy-user-manual.pdf"><citetitle>User Manual</citetitle></ulink>.
--->
  </para>
 
 <!-- Include privoxy.sgml boilerplate: -->
@@ -551,7 +547,7 @@ warranty? Registration?</title>
 </para>
 <variablelist>
  <varlistentry>
-  <term>Gold (10000 EUR/year)</term>
+  <term>Gold (12000 USD/year)</term>
   <listitem>
    <para>
     Logo shown at the bottom of the
@@ -562,7 +558,7 @@ warranty? Registration?</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Silver (1000 EUR/year)</term>
+  <term>Silver (1200 USD/year)</term>
   <listitem>
    <para>
     Logo shown randomly at the bottom of the
@@ -573,7 +569,7 @@ warranty? Registration?</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Bronze (500 EUR/year)</term>
+  <term>Bronze (600 USD/year)</term>
   <listitem>
    <para>
     Logo and link on the <ulink url="https://www.privoxy.org/sponsors/">sponsor page</ulink>.
@@ -1341,7 +1337,8 @@ and thus avoid individual browser configuration?</title>
  amount of guesswork. It is not realistic to catch all of these short of
  disabling Javascript, which would break many sites. And lastly, if the
  cookies are embedded in a HTTPS/SSL secure session via Javascript, they are beyond
- <application>Privoxy's</application> reach.
+ <application>Privoxy's</application> reach unless you enable
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>.
 </para>
 <para>
  All in all, &my-app; can help manage cookies in general, can help minimize
@@ -1996,9 +1993,17 @@ ads used to be. Why?</title>
 <sect2 renderas="sect3" id="ssl">
 <title>How can Privoxy filter Secure (HTTPS) URLs?</title>
 <para>
- Since secure HTTP connections are encrypted SSL sessions between your browser
- and the secure site, and are meant to be reliably <emphasis>secure</emphasis>,
- there is little that <application>Privoxy</application> can do but hand the raw
+ If you enable
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>
+ <application>Privoxy</application> will impersonate the destination
+ server and can thus filter encrypted requests and responses as well.
+</para>
+<para>
+ Without
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>
+ secure HTTP connections are encrypted SSL sessions between your
+ browser and the secure site, and there is little
+ that <application>Privoxy</application> can do but hand the raw
  gibberish data though from one end to the other unprocessed.
 </para>
 <para>
@@ -2034,8 +2039,9 @@ ads used to be. Why?</title>
   for HTTPS.
 </para>
 <para>
-  Adding HTTP/2 support is on the TODO list but currently
-  nobody is known to work on it.
+  Adding HTTP/2 support is on the
+  <ulink url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=TODO;hb=HEAD">TODO</ulink>
+  list but currently nobody is known to work on it.
 </para>
 </sect2>
 

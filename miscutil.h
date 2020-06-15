@@ -50,7 +50,7 @@ extern char *strdup_or_die(const char *str);
 extern void *malloc_or_die(size_t buffer_size);
 
 #if defined(unix)
-extern void write_pid_file(const char *pidfile);
+extern void write_pid_file(const char *pid_file);
 #endif /* unix */
 
 extern unsigned int hash_string(const char* s);
@@ -92,6 +92,7 @@ size_t privoxy_strlcat(char *destination, const char *source, size_t size);
 #endif /* ndef HAVE_STRLCAT */
 
 extern int privoxy_millisleep(unsigned milliseconds);
+extern struct tm *privoxy_gmtime_r(const time_t *time_spec, struct tm *result);
 
 #if defined(__cplusplus)
 }

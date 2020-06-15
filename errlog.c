@@ -533,21 +533,12 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
    int tz_length = 0;
 
    time (&now);
-#ifdef HAVE_GMTIME_R
-   gmt = *gmtime_r(&now, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_lock(&gmtime_mutex);
-   gmt = *gmtime(&now);
-   privoxy_mutex_unlock(&gmtime_mutex);
-#else
-   gmt = *gmtime(&now);
-#endif
+   gmt = *privoxy_gmtime_r(&now, &gmt);
 #ifdef HAVE_LOCALTIME_R
    tm_now = localtime_r(&now, &dummy);
 #elif defined(MUTEX_LOCKS_AVAILABLE)
    privoxy_mutex_lock(&localtime_mutex);
    tm_now = localtime(&now);
-   privoxy_mutex_unlock(&localtime_mutex);
 #else
    tm_now = localtime(&now);
 #endif
@@ -556,6 +547,9 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
    mins = hrs * 60 + tm_now->tm_min - gmt.tm_min;
 
    length = strftime(buffer, buffer_size, "%d/%b/%Y:%H:%M:%S ", tm_now);
+#if !defined(HAVE_LOCALTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_unlock(&localtime_mutex);
+#endif
 
    if (length > (size_t)0)
    {

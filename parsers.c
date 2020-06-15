@@ -2748,9 +2748,8 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
          time_t now;
          struct tm *timeptr = NULL;
          long int rtime;
-#ifdef HAVE_GMTIME_R
          struct tm gmt;
-#endif
+
          now = time(NULL);
          rtime = (long int)difftime(now, last_modified);
          if (rtime)
@@ -2769,15 +2768,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
                rtime *= -1;
             }
             last_modified += rtime;
-#ifdef HAVE_GMTIME_R
-            timeptr = gmtime_r(&last_modified, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-            privoxy_mutex_lock(&gmtime_mutex);
-            timeptr = gmtime(&last_modified);
-            privoxy_mutex_unlock(&gmtime_mutex);
-#else
-            timeptr = gmtime(&last_modified);
-#endif
+            timeptr = privoxy_gmtime_r(&last_modified, &gmt);
             if ((NULL == timeptr) || !strftime(newheader,
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
@@ -2787,7 +2778,6 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
                freez(*header);
                return JB_ERR_OK;
             }
-
             freez(*header);
             *header = strdup("Last-Modified: ");
             string_append(header, newheader);
@@ -3413,9 +3403,7 @@ static jb_err client_host(struct client_state *csp, char **header)
 static jb_err client_if_modified_since(struct client_state *csp, char **header)
 {
    char newheader[50];
-#ifdef HAVE_GMTIME_R
    struct tm gmt;
-#endif
    struct tm *timeptr = NULL;
    time_t tm = 0;
    const char *newval;
@@ -3473,15 +3461,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                   *header);
             }
             tm += rtime * (negative_range ? -1 : 1);
-#ifdef HAVE_GMTIME_R
-            timeptr = gmtime_r(&tm, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-            privoxy_mutex_lock(&gmtime_mutex);
-            timeptr = gmtime(&tm);
-            privoxy_mutex_unlock(&gmtime_mutex);
-#else
-            timeptr = gmtime(&tm);
-#endif
+            timeptr = privoxy_gmtime_r(&tm, &gmt);
             if ((NULL == timeptr) || !strftime(newheader,
                   sizeof(newheader), "%a, %d %b %Y %H:%M:%S GMT", timeptr))
             {
@@ -3491,7 +3471,6 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
                freez(*header);
                return JB_ERR_OK;
             }
-
             freez(*header);
             *header = strdup("If-Modified-Since: ");
             string_append(header, newheader);
@@ -4032,18 +4011,9 @@ static void add_cookie_expiry_date(char **cookie, time_t lifetime)
    char tmp[50];
    struct tm *timeptr = NULL;
    time_t expiry_date = time(NULL) + lifetime;
-#ifdef HAVE_GMTIME_R
    struct tm gmt;
 
-   timeptr = gmtime_r(&expiry_date, &gmt);
-#elif defined(MUTEX_LOCKS_AVAILABLE)
-   privoxy_mutex_lock(&gmtime_mutex);
-   timeptr = gmtime(&expiry_date);
-   privoxy_mutex_unlock(&gmtime_mutex);
-#else
-   timeptr = gmtime(&expiry_date);
-#endif
-
+   timeptr = privoxy_gmtime_r(&expiry_date, &gmt);
    if (NULL == timeptr)
    {
       log_error(LOG_LEVEL_FATAL,
@@ -4386,9 +4356,10 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
          {
             char recreated_date[100];
             struct tm *tm;
+            struct tm storage;
             time_t result2;
 
-            tm = gmtime(result);
+            tm = privoxy_gmtime_r(result, &storage);
             if (!strftime(recreated_date, sizeof(recreated_date),
                time_formats[i], tm))
             {

@@ -961,6 +961,9 @@ stats./.*\.gif\?
 go.idmnet.bbelements.com/please/showit/
 # Blocked URL = http://gm-link.com/tm_image.asp?c=12345&x=0&u=email@address.tld&orc.gif
 gm-link.com/
+# Blocked URL = https://collector.githubapp.com/github/page_view?dimensions[page]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fblob%2F5ecdd0566b441ae0b99e73f410875e05dc0fa5b7%2Flib%2Flibc%2Finclude%2Fthread_private.h&dimensions[title]=src%2Fthread_private.h%20at%205ecdd0566b441ae0b99e73f410875e05dc0fa5b7%20%C2%B7%20openbsd%2Fsrc%20%C2%B7%20GitHub&dimensions[referrer]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fsearch%3Fq%3D_MUTEX_LOCK%26unscoped_q%3D_MUTEX_LOCK&dimensions[user_agent]=Mozilla%2F5.0%20(X11%3B%20ElectroBSD%20amd64%3B%20rv%3A68.0)%20Gecko%2F20100101%20Firefox%2F68.0&dimensions[screen_resolution]=1366x768&dimensions[pixel_ratio]=1&dimensions[browser_resolution]=1362x636&dimensions[tz_seconds]=7200&dimensions[timestamp]=1591515169218&dimensions[referrer]=&dimensions[request_id]=22CA%3AE6F6%3A271ED2A%3A3839C5D%3A5EDB8295&dimensions[visitor_id]=5184934927058829974&dimensions[region_edge]=ams&dimensions[region_render]=ams&dimensions[user_id]=929183&dimensions[user_login]=openbsd&dimensions[repository_id]=66966208&dimensions[repository_nwo]=openbsd%2Fsrc&dimensions[repository_public]=true&dimensions[repository_is_fork]=false&dimensions[repository_network_root_id]=66966208&dimensions[repository_network_root_nwo]=openbsd%2Fsrc&dimensions[repository_explore_github_marketplace_ci_cta_shown]=false&&measures[performance_timing]=1-172-172-13996-12735-12426-12394-3858-172-172-172--13996-0---172-3853-3412-0--&&&dimensions[cid]=268614077.1591515169
+collector.githubapp.com/
+
 
 #############################################################################
 # Site-specific block patterns;
@@ -2161,6 +2164,8 @@ disqus.com/
 oss-fuzz.com/
 # URL = https://sourcepoint.vice.com/mms/choice_select?choice_id=523912&requestUUID=a98ca09e-5c1f-4aa4-b28e-ab5b26150859-1591162630861&href=https%3A%2F%2Fwww.vice.com%2Fen_us%2Farticle%2F7kpb9a%2Fhow-to-protest-racist-violence-instead-of-posting-blackout-tuesday-square
 sourcepoint.vice.com/
+# URL = https://collector.githubapp.com/github/page_view?dimensions[page]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fblob%2F5ecdd0566b441ae0b99e73f410875e05dc0fa5b7%2Flib%2Flibc%2Finclude%2Fthread_private.h&dimensions[title]=src%2Fthread_private.h%20at%205ecdd0566b441ae0b99e73f410875e05dc0fa5b7%20%C2%B7%20openbsd%2Fsrc%20%C2%B7%20GitHub&dimensions[referrer]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fsearch%3Fq%3D_MUTEX_LOCK%26unscoped_q%3D_MUTEX_LOCK&dimensions[user_agent]=Mozilla%2F5.0%20(X11%3B%20ElectroBSD%20amd64%3B%20rv%3A68.0)%20Gecko%2F20100101%20Firefox%2F68.0&dimensions[screen_resolution]=1366x768&dimensions[pixel_ratio]=1&dimensions[browser_resolution]=1362x636&dimensions[tz_seconds]=7200&dimensions[timestamp]=1591515169218&dimensions[referrer]=&dimensions[request_id]=22CA%3AE6F6%3A271ED2A%3A3839C5D%3A5EDB8295&dimensions[visitor_id]=5184934927058829974&dimensions[region_edge]=ams&dimensions[region_render]=ams&dimensions[user_id]=929183&dimensions[user_login]=openbsd&dimensions[repository_id]=66966208&dimensions[repository_nwo]=openbsd%2Fsrc&dimensions[repository_public]=true&dimensions[repository_is_fork]=false&dimensions[repository_network_root_id]=66966208&dimensions[repository_network_root_nwo]=openbsd%2Fsrc&dimensions[repository_explore_github_marketplace_ci_cta_shown]=false&&measures[performance_timing]=1-172-172-13996-12735-12426-12394-3858-172-172-172--13996-0---172-3853-3412-0--&&&dimensions[cid]=268614077.1591515169
+collector.githubapp.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block

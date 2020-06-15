@@ -1337,17 +1337,16 @@ static int generate_certificate_valid_date(time_t time_spec, char *buffer,
                                            size_t buffer_size)
 {
    struct tm valid_date;
+   struct tm *timeptr;
    size_t ret;
 
-#ifndef HAVE_GMTIME_R
-#error HTTP inspection currently requires gmtime_r() which seems to be missing
-#endif
-   if (NULL == gmtime_r(&time_spec, &valid_date))
+   timeptr = privoxy_gmtime_r(&time_spec, &valid_date);
+   if (NULL == timeptr)
    {
       return 1;
    }
 
-   ret = strftime(buffer, buffer_size, "%Y%m%d%H%M%S", &valid_date);
+   ret = strftime(buffer, buffer_size, "%Y%m%d%H%M%S", timeptr);
    if (ret != 14)
    {
       return 1;

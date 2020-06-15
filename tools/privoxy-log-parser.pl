@@ -1061,7 +1061,7 @@ sub handle_loglevel_re_filter($) {
                 return '';
         }
 
-        $c =~ s@(?<=\(size )(\d+)\)(?= with)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=\(size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=\(new size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=produced )(\d+)(?= hits)@$h{'Number'}$1$h{'Standard'}@;
 
@@ -1759,6 +1759,11 @@ sub handle_loglevel_connect($) {
         # Forwarded the last 1954 bytes
         $c =~ s@(?<=the last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Waiting for the next client connection. Currently active threads:/) {
+
+        # Waiting for the next client connection. Currently active threads: 30
+        $c =~ s@(?<=threads: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
@@ -2012,14 +2017,19 @@ sub gather_loglevel_clf_stats($) {
     our %cli_options;
 
     # +0200] "GET https://www.youtube.com/watch?v=JmcA9LIIXWw HTTP/1.1" 200 68004
-    $content =~ m/^[+-]\d{4}\] "(\w+) (.+) (HTTP\/\d\.\d)" (\d+) (\d+)/;
+    # +0200] "VERSION-CONTROL http://p.p/ HTTP/1.1" 200 2787
+    $content =~ m/^[+-]\d{4}\] "([^ ]+) (.+) (HTTP\/\d\.\d)" (\d+) (\d+)/;
     $method       = $1;
     $resource     = $2;
     $http_version = $3;
     $status_code  = $4;
     $size         = $5;
 
+    $stats{requests_clf}++;
+
     unless (defined $method) {
+        # +0200] "Invalid request" 400 0
+        return if ($content =~ m/^[+-]\d{4}\] "Invalid request"/);
         print("Failed to parse: $content\n");
         return;
     }
@@ -2030,12 +2040,11 @@ sub gather_loglevel_clf_stats($) {
     $stats{'http-version'}{$http_version}++;
 
     if ($cli_options{'host-statistics-threshold'} != 0) {
-        $resource =~ m@(?:http[s]://)([^/]+)/?@;
+        $resource =~ m@(?:https?://)?([^/]+)/?@;
         $stats{'hosts'}{$1}++;
     }
     $stats{'content-size-total'} += $size;
     $stats{'status-code'}{$status_code}++;
-    $stats{requests_clf}++;
 }
 
 sub gather_loglevel_request_stats($$) {

@@ -7,7 +7,7 @@
  *                to deserve their own file but don't really fit in
  *                any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2018 the
+ * Copyright   :  Written by and Copyright (C) 2001-2020 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -61,6 +61,7 @@
 
 #include "project.h"
 #include "miscutil.h"
+#include "jcc.h"
 #include "errlog.h"
 
 /*********************************************************************
@@ -218,18 +219,18 @@ void *malloc_or_die(size_t buffer_size)
  *                Exits if the file can't be opened
  *
  * Parameters  :
- *          1  :  pidfile = Path of the pidfile that gets created.
+ *          1  :  pid_file = Path of the pid file that gets created.
  *
  * Returns     :  N/A
  *
  *********************************************************************/
-void write_pid_file(const char *pidfile)
+void write_pid_file(const char *pid_file)
 {
    FILE   *fp;
 
-   if ((fp = fopen(pidfile, "w")) == NULL)
+   if ((fp = fopen(pid_file, "w")) == NULL)
    {
-      log_error(LOG_LEVEL_FATAL, "can't open pidfile '%s': %E", pidfile);
+      log_error(LOG_LEVEL_FATAL, "can't open pid file '%s': %E", pid_file);
    }
    else
    {
@@ -853,6 +854,53 @@ int privoxy_millisleep(unsigned milliseconds)
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  privoxy_gmtime_r
+ *
+ * Description :  Behave like gmtime_r() and convert a
+ *                time_t to a struct tm.
+ *
+ * Parameters  :
+ *          1  :  time_spec: The time to convert
+ *          2  :  result: The struct tm to use as storage
+ *
+ * Returns     :  Pointer to the result or NULL on error.
+ *
+ *********************************************************************/
+struct tm *privoxy_gmtime_r(const time_t *time_spec, struct tm *result)
+{
+   struct tm *timeptr;
+
+#ifdef HAVE_GMTIME_R
+   timeptr = gmtime_r(time_spec, result);
+#elif defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_lock(&gmtime_mutex);
+   timeptr = gmtime(time_spec);
+#else
+#warning Using unlocked gmtime()
+   timeptr = gmtime(time_spec);
+#endif
+
+   if (timeptr == NULL)
+   {
+#if !defined(HAVE_GMTIME_R) && defined(MUTEX_LOCKS_AVAILABLE)
+      privoxy_mutex_unlock(&gmtime_mutex);
+#endif
+      return NULL;
+   }
+
+#if !defined(HAVE_GMTIME_R)
+   *result = *timeptr;
+   timeptr = result;
+#ifdef MUTEX_LOCKS_AVAILABLE
+   privoxy_mutex_unlock(&gmtime_mutex);
+#endif
+#endif
+
+   return timeptr;
+}
 
 #if !defined(HAVE_TIMEGM) && defined(HAVE_TZSET) && defined(HAVE_PUTENV)
 /*********************************************************************

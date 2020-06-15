@@ -3553,17 +3553,6 @@ static void chat(struct client_state *csp)
    {
       return;
    }
-#ifdef FEATURE_HTTPS_INSPECTION
-   /*
-    * Log the request unless we're https inspecting
-    * in which case we don't have the path yet and
-    * will log the request later.
-    */
-   if (!client_use_ssl(csp))
-#endif
-   {
-      log_error(LOG_LEVEL_REQUEST, "%s%s", http->hostport, http->path);
-   }
 
    /* decide how to route the HTTP request */
    fwd = forward_url(csp, http);
@@ -3647,6 +3636,18 @@ static void chat(struct client_state *csp)
       http->server_ssl = 0;
    }
 #endif
+
+#ifdef FEATURE_HTTPS_INSPECTION
+   /*
+    * Log the request unless we're https inspecting
+    * in which case we don't have the path yet and
+    * will log the request later.
+    */
+   if (!client_use_ssl(csp))
+#endif
+   {
+      log_error(LOG_LEVEL_REQUEST, "%s%s", http->hostport, http->path);
+   }
 
    if (http->ssl && connect_port_is_forbidden(csp))
    {
@@ -4240,7 +4241,7 @@ static void serve(struct client_state *csp)
          {
             log_error(LOG_LEVEL_CONNECT,
                "Closing server socket %d connected to %s. "
-               "Keep-alive %u. Tainted: %u. Socket alive %u. Timeout: %u.",
+               "Keep-alive: %u. Tainted: %u. Socket alive: %u. Timeout: %u.",
                csp->server_connection.sfd, csp->server_connection.host,
                0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
                0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
