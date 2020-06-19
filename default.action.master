@@ -2170,6 +2170,8 @@ sourcepoint.vice.com/
 collector.githubapp.com/
 # URL = https://consentmanager.mgr.consensu.org/delivery/pixel.php?id=11319&did=0&cfdid=0&t=pv&h=https%3A%2F%2Fsourceforge.net%2Fp%2Fijbswa%2Ffeature-requests%2F535%2F&o=1591880198219&l=EN&lv=0&d=0&ct=14&e=&e2=&e3=&i=&sv=0&dv=0
 .consensu.org/delivery/pixel\.php
+# URL = https://de.wikipedia.org/beacon/event?%7B%22event%22%3A%7B%22source_page_id%22%3A1501869%2C%22source_namespace%22%3A0%2C%22source_title%22%3A%22Primat%22%2C%22source_url%22%3A%22https%3A%2F%2Fde.wikipedia.org%2Fwiki%2FPrimat%22%2C%22page_title%22%3A%22Primaten%22%2C%22page_id%22%3A4022%2C%22page_namespace%22%3A0%7D%2C%22schema%22%3A%22VirtualPageView%22%2C%22webHost%22%3A%22de.wikipedia.org%22%2C%22wiki%22%3A%22dewiki%22%2C%22revision%22%3A17780078%7D;
+.wikipedia.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
