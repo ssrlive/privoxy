@@ -555,7 +555,6 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 #
 { \
 +change-x-forwarded-for{block} \
-+client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -570,7 +569,6 @@ standard.Cautious
 #
 { \
 +change-x-forwarded-for{block} \
-+client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -601,7 +599,6 @@ standard.Medium
 #
 { \
 +change-x-forwarded-for{block} \
-+client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
