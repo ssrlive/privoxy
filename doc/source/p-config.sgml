@@ -4164,7 +4164,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   <term>Specifies:</term>
   <listitem>
    <para>
-    Directory to safe generated keys and certificates.
+    Directory to save generated keys and certificates.
    </para>
   </listitem>
  </varlistentry>
