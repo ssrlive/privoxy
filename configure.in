@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl Written by and Copyright (C) 2001-2019 the
+dnl Written by and Copyright (C) 2001-2020 the
 dnl Privoxy team. https://www.privoxy.org/
 dnl
 dnl Based on the Internet Junkbuster originally written
@@ -1137,8 +1137,8 @@ dnl ========================================================
 FEATURE_HTTPS_INSPECTION_ONLY=#
 OPT_MBEDTLS=no
 AC_ARG_WITH(mbedtls,dnl
-AC_HELP_STRING([--with-mbedtls],[enable mbedTLS detection for https inspection.])
-AC_HELP_STRING([--without-mbedtls], [disable mbedTLS detection]),
+AC_HELP_STRING([--with-mbedtls], [Enable mbedTLS detection for https inspection.])
+AC_HELP_STRING([--without-mbedtls], [Disable mbedTLS detection]),
   OPT_MBEDTLS=$withval)
 
 if test X"$OPT_MBEDTLS" != Xno; then
@@ -1154,11 +1154,35 @@ if test X"$OPT_MBEDTLS" != Xno; then
     AC_MSG_NOTICE([Detected mbedTLS. Enabling https inspection.])
 
     LIBS="-lmbedtls -lmbedx509 -lmbedcrypto $LIBS"
+    old_CFLAGS_nospecial="-Imbedtls/include $old_CFLAGS_nospecial"
 
     FEATURE_HTTPS_INSPECTION_ONLY=
   fi
 fi
 AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY)
+
+
+dnl ========================================================
+dnl Check for Brotli which can be used for decompression
+dnl ========================================================
+WITH_BROTLI=no
+AC_ARG_WITH(brotli,
+AC_HELP_STRING([--with-brotli], [Enable Brotli detection])
+AC_HELP_STRING([--without-brotli], [Disable Brotli detection]),
+  WITH_BROTLI=$withval)
+
+if test X"$WITH_BROTLI" != Xno; then
+
+  LIBS="$LIBS -lbrotlidec"
+
+  AC_CHECK_LIB(brotlidec, BrotliDecoderDecompress)
+
+  AC_CHECK_HEADERS(brotli/decode.h,
+    FEATURE_BROTLI=1
+    AC_DEFINE(FEATURE_BROTLI, 1, [If Brotli is used for decompression])
+    AC_SUBST(FEATURE_BROTLI, [1])
+  )
+fi
 
 
 dnl =================================================================

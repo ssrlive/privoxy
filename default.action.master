@@ -555,7 +555,6 @@ allow-ads   = -block -filter{banners-by-size} -filter{banners-by-link}
 #
 { \
 +change-x-forwarded-for{block} \
-+client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -570,7 +569,6 @@ standard.Cautious
 #
 { \
 +change-x-forwarded-for{block} \
-+client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -601,7 +599,6 @@ standard.Medium
 #
 { \
 +change-x-forwarded-for{block} \
-+client-header-filter{no-brotli-accepted} \
 +client-header-tagger{css-requests} \
 +client-header-tagger{image-requests} \
 +client-header-tagger{range-requests} \
@@ -963,6 +960,8 @@ go.idmnet.bbelements.com/please/showit/
 gm-link.com/
 # Blocked URL = https://collector.githubapp.com/github/page_view?dimensions[page]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fblob%2F5ecdd0566b441ae0b99e73f410875e05dc0fa5b7%2Flib%2Flibc%2Finclude%2Fthread_private.h&dimensions[title]=src%2Fthread_private.h%20at%205ecdd0566b441ae0b99e73f410875e05dc0fa5b7%20%C2%B7%20openbsd%2Fsrc%20%C2%B7%20GitHub&dimensions[referrer]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fsearch%3Fq%3D_MUTEX_LOCK%26unscoped_q%3D_MUTEX_LOCK&dimensions[user_agent]=Mozilla%2F5.0%20(X11%3B%20ElectroBSD%20amd64%3B%20rv%3A68.0)%20Gecko%2F20100101%20Firefox%2F68.0&dimensions[screen_resolution]=1366x768&dimensions[pixel_ratio]=1&dimensions[browser_resolution]=1362x636&dimensions[tz_seconds]=7200&dimensions[timestamp]=1591515169218&dimensions[referrer]=&dimensions[request_id]=22CA%3AE6F6%3A271ED2A%3A3839C5D%3A5EDB8295&dimensions[visitor_id]=5184934927058829974&dimensions[region_edge]=ams&dimensions[region_render]=ams&dimensions[user_id]=929183&dimensions[user_login]=openbsd&dimensions[repository_id]=66966208&dimensions[repository_nwo]=openbsd%2Fsrc&dimensions[repository_public]=true&dimensions[repository_is_fork]=false&dimensions[repository_network_root_id]=66966208&dimensions[repository_network_root_nwo]=openbsd%2Fsrc&dimensions[repository_explore_github_marketplace_ci_cta_shown]=false&&measures[performance_timing]=1-172-172-13996-12735-12426-12394-3858-172-172-172--13996-0---172-3853-3412-0--&&&dimensions[cid]=268614077.1591515169
 collector.githubapp.com/
+# Blocked URL = https://consentmanager.mgr.consensu.org/delivery/pixel.php?id=11319&did=0&cfdid=0&t=pv&h=https%3A%2F%2Fsourceforge.net%2Fp%2Fijbswa%2Ffeature-requests%2F535%2F&o=1591880198219&l=EN&lv=0&d=0&ct=14&e=&e2=&e3=&i=&sv=0&dv=0
+.consensu.org/delivery/pixel\.php
 
 
 #############################################################################
@@ -2166,6 +2165,10 @@ oss-fuzz.com/
 sourcepoint.vice.com/
 # URL = https://collector.githubapp.com/github/page_view?dimensions[page]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fblob%2F5ecdd0566b441ae0b99e73f410875e05dc0fa5b7%2Flib%2Flibc%2Finclude%2Fthread_private.h&dimensions[title]=src%2Fthread_private.h%20at%205ecdd0566b441ae0b99e73f410875e05dc0fa5b7%20%C2%B7%20openbsd%2Fsrc%20%C2%B7%20GitHub&dimensions[referrer]=https%3A%2F%2Fgithub.com%2Fopenbsd%2Fsrc%2Fsearch%3Fq%3D_MUTEX_LOCK%26unscoped_q%3D_MUTEX_LOCK&dimensions[user_agent]=Mozilla%2F5.0%20(X11%3B%20ElectroBSD%20amd64%3B%20rv%3A68.0)%20Gecko%2F20100101%20Firefox%2F68.0&dimensions[screen_resolution]=1366x768&dimensions[pixel_ratio]=1&dimensions[browser_resolution]=1362x636&dimensions[tz_seconds]=7200&dimensions[timestamp]=1591515169218&dimensions[referrer]=&dimensions[request_id]=22CA%3AE6F6%3A271ED2A%3A3839C5D%3A5EDB8295&dimensions[visitor_id]=5184934927058829974&dimensions[region_edge]=ams&dimensions[region_render]=ams&dimensions[user_id]=929183&dimensions[user_login]=openbsd&dimensions[repository_id]=66966208&dimensions[repository_nwo]=openbsd%2Fsrc&dimensions[repository_public]=true&dimensions[repository_is_fork]=false&dimensions[repository_network_root_id]=66966208&dimensions[repository_network_root_nwo]=openbsd%2Fsrc&dimensions[repository_explore_github_marketplace_ci_cta_shown]=false&&measures[performance_timing]=1-172-172-13996-12735-12426-12394-3858-172-172-172--13996-0---172-3853-3412-0--&&&dimensions[cid]=268614077.1591515169
 collector.githubapp.com/
+# URL = https://consentmanager.mgr.consensu.org/delivery/pixel.php?id=11319&did=0&cfdid=0&t=pv&h=https%3A%2F%2Fsourceforge.net%2Fp%2Fijbswa%2Ffeature-requests%2F535%2F&o=1591880198219&l=EN&lv=0&d=0&ct=14&e=&e2=&e3=&i=&sv=0&dv=0
+.consensu.org/delivery/pixel\.php
+# URL = https://de.wikipedia.org/beacon/event?%7B%22event%22%3A%7B%22source_page_id%22%3A1501869%2C%22source_namespace%22%3A0%2C%22source_title%22%3A%22Primat%22%2C%22source_url%22%3A%22https%3A%2F%2Fde.wikipedia.org%2Fwiki%2FPrimat%22%2C%22page_title%22%3A%22Primaten%22%2C%22page_id%22%3A4022%2C%22page_namespace%22%3A0%7D%2C%22schema%22%3A%22VirtualPageView%22%2C%22webHost%22%3A%22de.wikipedia.org%22%2C%22wiki%22%3A%22dewiki%22%2C%22revision%22%3A17780078%7D;
+.wikipedia.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block

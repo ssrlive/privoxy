@@ -64,6 +64,9 @@
 #define GZIP_FLAG_COMMENT       0x10
 #define GZIP_FLAG_RESERVED_BITS 0xe0
 #endif
+#ifdef FEATURE_BROTLI
+#include <brotli/decode.h>
+#endif
 
 #if !defined(_WIN32) && !defined(__OS2__)
 #include <unistd.h>
@@ -390,6 +393,87 @@ void clear_iob(struct iob *iob)
 
 
 #ifdef FEATURE_ZLIB
+#ifdef FEATURE_BROTLI
+/*********************************************************************
+ *
+ * Function    :  decompress_iob_with_brotli
+ *
+ * Description :  Decompress buffered page using Brotli.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  JB_ERR_OK on success,
+ *                JB_ERR_MEMORY if out-of-memory limit reached, and
+ *                JB_ERR_COMPRESS if error decompressing buffer.
+ *
+ *********************************************************************/
+static jb_err decompress_iob_with_brotli(struct client_state *csp)
+{
+   BrotliDecoderResult result;
+   char *decoded_buffer;
+   size_t decoded_size;
+   size_t decoded_buffer_size;
+   size_t encoded_size;
+   enum { MAX_COMPRESSION_FACTOR = 15 };
+
+   encoded_size = (size_t)(csp->iob->eod - csp->iob->cur);
+   /*
+    * The BrotliDecoderDecompress() api is a bit unfortunate
+    * and requires the caller to reserve enough memory for
+    * the decompressed content. Hopefully reserving
+    * MAX_COMPRESSION_FACTOR times the original size is
+    * sufficient. If not, BrotliDecoderDecompress() will fail.
+    */
+   decoded_buffer_size = encoded_size * MAX_COMPRESSION_FACTOR;
+
+   if (decoded_buffer_size > csp->config->buffer_limit)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Buffer limit reached before decompressing iob with Brotli");
+      return JB_ERR_MEMORY;
+   }
+
+   decoded_buffer = malloc(decoded_buffer_size);
+   if (decoded_buffer == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to allocate %d bytes for Brotli decompression",
+         decoded_buffer_size);
+      return JB_ERR_MEMORY;
+   }
+
+   decoded_size = decoded_buffer_size;
+   result = BrotliDecoderDecompress(encoded_size,
+      (const uint8_t *)csp->iob->cur, &decoded_size,
+      (uint8_t *)decoded_buffer);
+   if (result == BROTLI_DECODER_RESULT_SUCCESS)
+   {
+      /*
+       * Update the iob, since the decompression was successful.
+       */
+      freez(csp->iob->buf);
+      csp->iob->buf  = decoded_buffer;
+      csp->iob->cur  = csp->iob->buf;
+      csp->iob->eod  = csp->iob->cur + decoded_size;
+      csp->iob->size = decoded_buffer_size;
+
+      log_error(LOG_LEVEL_RE_FILTER,
+         "Decompression successful. Old size: %d, new size: %d.",
+         encoded_size, decoded_size);
+
+      return JB_ERR_OK;
+   }
+   else
+   {
+      log_error(LOG_LEVEL_ERROR, "Failed to decompress buffer with Brotli");
+      freez(decoded_buffer);
+
+      return JB_ERR_COMPRESS;
+   }
+}
+#endif
+
 /*********************************************************************
  *
  * Function    :  decompress_iob
@@ -444,6 +528,13 @@ jb_err decompress_iob(struct client_state *csp)
          csp->iob->eod - csp->iob->cur);
       return JB_ERR_COMPRESS;
    }
+
+#ifdef FEATURE_BROTLI
+   if (csp->content_type & CT_BROTLI)
+   {
+      return decompress_iob_with_brotli(csp);
+   }
+#endif
 
    if (csp->content_type & CT_GZIP)
    {
@@ -2409,6 +2500,15 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
       /* Mark for zlib decompression */
       csp->content_type |= CT_DEFLATE;
    }
+   else if (strstr(*header, "br"))
+   {
+#ifdef FEATURE_BROTLI
+      /* Mark for Brotli decompression */
+      csp->content_type |= CT_BROTLI;
+#else
+      csp->content_type |= CT_TABOO;
+#endif
+   }
    else if (strstr(*header, "compress"))
    {
       /*
@@ -2475,7 +2575,12 @@ static jb_err server_content_encoding(struct client_state *csp, char **header)
 static jb_err server_adjust_content_encoding(struct client_state *csp, char **header)
 {
    if ((csp->flags & CSP_FLAG_MODIFIED)
-    && (csp->content_type & (CT_GZIP | CT_DEFLATE)))
+      && ((csp->content_type & (CT_GZIP | CT_DEFLATE))
+#ifdef FEATURE_BROTLI
+         || (csp->content_type & CT_BROTLI)
+#endif
+         )
+      )
    {
       /*
        * We successfully decompressed the content,

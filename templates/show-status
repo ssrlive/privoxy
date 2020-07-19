@@ -238,6 +238,11 @@
               <td>Allows the use of an ACL to control access to Privoxy by IP address.</td>
             </tr>
             <tr>
+              <td><code>FEATURE_BROTLI</code></td>
+              <td>@if-FEATURE_BROTLI-then@ Yes @else-not-FEATURE_BROTLI@ No @endif-FEATURE_BROTLI@</td>
+              <td>Allows to decompress content with Brotli before filtering it. Requires external brotli library.</td>
+            </tr>
+            <tr>
               <td><code>FEATURE_CGI_EDIT_ACTIONS</code></td>
               <td>@if-FEATURE_CGI_EDIT_ACTIONS-then@ Yes @else-not-FEATURE_CGI_EDIT_ACTIONS@ No @endif-FEATURE_CGI_EDIT_ACTIONS@</td>
               <td>Allows the use of the @if-FEATURE_CGI_EDIT_ACTIONS-then@<a
