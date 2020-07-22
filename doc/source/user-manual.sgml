@@ -5268,11 +5268,14 @@ www.example.com</screen>
     certificate.
    </para>
    <para>
-    If the certificate is invalid the connection is aborted.
+    If the certificate can't be validated by &my-app; the connection is aborted.
    </para>
    <para>
-    This action disabled the certificate check allowing requests to sites
-    with invalid certificates.
+    This action disables the certificate check so requests to sites
+    with certificates that can't be validated are allowed.
+   </para>
+   <para>
+    Note that enabling this action allows Man-in-the-middle attacks.
    </para>
    </listitem>
  </varlistentry>
