@@ -10,6 +10,7 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity GPLv2 SYSTEM "../../LICENSE">
+<!entity GPLv3 SYSTEM "../../LICENSE.GPLv3">
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity changelog SYSTEM "changelog.sgml">
@@ -7865,16 +7866,36 @@ Requests</title>
 
 <para>
  <application>Privoxy</application> is free software; you can
- redistribute it and/or modify it under the terms of the
- <citetitle>GNU General Public License</citetitle>, version 2,
- as published by the Free Software Foundation and included in
- the next section.
+ redistribute and/or modify its source code under the terms
+ of the <citetitle>GNU General Public License</citetitle>
+ as published by the Free Software Foundation, either version 2
+ of the license, or (at your option) any later version.
+</para>
+
+<para>
+ The same is true for <application>Privoxy</application> binaries
+ unless they are linked with
+ <ulink url="https://tls.mbed.org/">mbed TLS</ulink> in which
+ case you can redistribute them and/or modify them under the terms
+ of the <citetitle>GNU General Public License</citetitle>
+ as published by the Free Software Foundation, either version 3
+ of the license, or (at your option) any later version.
+</para>
+
+<para>
+ Both licenses are included in the next section.
 </para>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect2 id="license"><title>License</title>
 
+<sect3 id="gplv2"><title>GNU General Public License version 2</title>
  <screen><![ RCDATA [ &GPLv2; ]]></screen>
+</sect3>
+
+<sect3 id="gplv3"><title>GNU General Public License version 3</title>
+ <screen><![ RCDATA [ &GPLv3; ]]></screen>
+</sect3>
 
 </sect2>
 <!--  ~  End section  ~  -->
