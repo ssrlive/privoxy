@@ -2439,8 +2439,8 @@ socket-timeout 300
 #            receive-buffer-size 32768
 #
 #
-#  7. TLS/SSL
-#  ===========
+#  7. TLS/SSL INSPECTION
+#  ======================
 #
 #  7.1. ca-directory
 #  ==================
@@ -2585,7 +2585,7 @@ socket-timeout 300
 #
 #  Specifies:
 #
-#      Directory to safe generated keys and certificates.
+#      Directory to save generated keys and certificates.
 #
 #  Type of value:
 #

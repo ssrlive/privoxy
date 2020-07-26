@@ -305,8 +305,11 @@
             <tr>
               <td><code>FEATURE_FORCE_LOAD</code></td>
               <td>@if-FEATURE_FORCE_LOAD-then@ Yes @else-not-FEATURE_FORCE_LOAD@ No @endif-FEATURE_FORCE_LOAD@</td>
-              <td>Allows bypassing all filtering for a single page using the prefix
-                  <q><code>@force-prefix@</code></q>.</td>
+              <td>
+               Allows bypassing all blocking for a single page using the prefix
+               <q><code>@force-prefix@</code></q> provided blocks aren't enforced with the
+               <a href="@user-manual@config.html#ENFORCE-BLOCKS">enforce-blocks</a> directive.
+              </td>
             </tr>
             <tr>
               <td><code>FEATURE_GRACEFUL_TERMINATION</code></td>

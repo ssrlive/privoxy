@@ -28,6 +28,7 @@
  *
  *********************************************************************/
 
+#include <ctype.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -1519,6 +1520,53 @@ exit:
 
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  host_is_ip_address
+ *
+ * Description :  Checks whether or not a host is specified by
+ *                IP address. Does not actually validate the
+ *                address.
+ *
+ * Parameters  :
+ *          1  :  host = The host name to check
+ *
+ * Returns     :   1 => Yes
+ *                 0 => No
+ *
+ *********************************************************************/
+static int host_is_ip_address(const char *host)
+{
+   const char *p;
+
+   if (NULL != strstr(host, ":"))
+   {
+      /* Assume an IPv6 address. */
+      return 1;
+   }
+
+   for (p = host; *p; p++)
+   {
+      if (*p != '.')
+      {
+         if (!privoxy_isdigit(*p))
+         {
+            /* Not a dot or digit so it can't be an IPv4 address. */
+            return 0;
+         }
+      }
+   }
+
+   /*
+    * Host only consists of dots and digits so
+    * assume that is an IPv4 address.
+    */
+   return 1;
+
+}
+
+
 /*********************************************************************
  *
  * Function    :  generate_webpage_certificate
@@ -1894,7 +1942,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    }
 #endif /* MBEDTLS_SHA1_C */
 
-   if (set_subject_alternative_name(&cert, csp->http->host))
+   if (!host_is_ip_address(csp->http->host) &&
+      set_subject_alternative_name(&cert, csp->http->host))
    {
       /* Errors are already logged by set_subject_alternative_name() */
       ret = -1;

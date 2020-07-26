@@ -201,7 +201,7 @@ CONFIGS = 	config trust default.action match-all.action \
 CONFIG_FILES = $(CONFIGS) \
 		`find templates/ -type f | grep -v "CVS" | grep -v "\.\#" | grep -v ".*~" | grep -v ".cvsignore" | grep -v "TAGS" | sort`
 
-DOC_FILES = AUTHORS LICENSE README ChangeLog INSTALL \
+DOC_FILES = AUTHORS LICENSE LICENSE.GPLv3 README ChangeLog INSTALL \
 		`find doc/webserver/ -name "*.html" | grep -v "\(webserver\|team\)\/index\.html" | sort` \
 		`find doc/webserver/ -name "*.css" | sort` \
                 $(MAN_PAGE)
@@ -881,6 +881,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/privoxy-index.html $(DESTDIR)$$DOC/index.html;\
 		$(INSTALL) $(INSTALL_T) AUTHORS $(DESTDIR)$$DOC;\
 		$(INSTALL) $(INSTALL_T) LICENSE $(DESTDIR)$$DOC;\
+		$(INSTALL) $(INSTALL_T) LICENSE.GPLv3 $(DESTDIR)$$DOC;\
 		$(INSTALL) $(INSTALL_T) README $(DESTDIR)$$DOC;\
 		$(INSTALL) $(INSTALL_T) ChangeLog $(DESTDIR)$$DOC;\
 		$(INSTALL) $(INSTALL_T) $(DOK_WEB)/p_doc.css $(DESTDIR)$$DOC;\
