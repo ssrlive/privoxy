@@ -109,7 +109,7 @@ extern privoxy_mutex_t rand_mutex;
 
 #ifdef FEATURE_HTTPS_INSPECTION
 extern privoxy_mutex_t certificate_mutex;
-extern privoxy_mutex_t rng_mutex;
+extern privoxy_mutex_t ssl_init_mutex;
 #endif
 
 #endif /* FEATURE_PTHREAD */

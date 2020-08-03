@@ -195,7 +195,7 @@ privoxy_mutex_t connection_reuse_mutex;
 
 #ifdef FEATURE_HTTPS_INSPECTION
 privoxy_mutex_t certificate_mutex;
-privoxy_mutex_t rng_mutex;
+privoxy_mutex_t ssl_init_mutex;
 #endif
 
 #ifdef FEATURE_EXTERNAL_FILTERS
@@ -489,7 +489,7 @@ static int client_protocol_is_unsupported(struct client_state *csp, char *req)
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
-         ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         ssl_send_data_delayed(&(csp->ssl_client_attr),
             (const unsigned char *)response, strlen(response),
             get_write_delay(csp));
       }
@@ -871,10 +871,10 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp))
       {
-         if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+         if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
                 (const unsigned char *)rsp->head, rsp->head_length,
                 get_write_delay(csp)) < 0)
-          || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+          || (ssl_send_data_delayed(&(csp->ssl_client_attr),
                 (const unsigned char *)rsp->body, rsp->content_length,
                 get_write_delay(csp)) < 0))
          {
@@ -2058,7 +2058,7 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
 {
    int content_length_known = csp->expected_client_content_length != 0;
 
-   while (is_ssl_pending(&(csp->mbedtls_client_attr.ssl))
+   while (is_ssl_pending(&(csp->ssl_client_attr))
       || (content_length_known && csp->expected_client_content_length != 0))
    {
       unsigned char buf[BUFFER_SIZE];
@@ -2072,7 +2072,7 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
       log_error(LOG_LEVEL_CONNECT,
          "Waiting for up to %d bytes of POST data from the client.",
          max_bytes_to_read);
-      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl), buf,
+      len = ssl_recv_data(&(csp->ssl_client_attr), buf,
          (unsigned)max_bytes_to_read);
       if (len == -1)
       {
@@ -2085,7 +2085,7 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
       }
       log_error(LOG_LEVEL_CONNECT, "Forwarding %d bytes of encrypted POST data",
          len);
-      len = ssl_send_data(&(csp->mbedtls_server_attr.ssl), buf, (size_t)len);
+      len = ssl_send_data(&(csp->ssl_server_attr), buf, (size_t)len);
       if (len == -1)
       {
          return 1;
@@ -2142,7 +2142,7 @@ static int send_https_request(struct client_state *csp)
     * Write the client's (modified) header to the server
     * (along with anything else that may be in the buffer)
     */
-   ret = ssl_send_data(&(csp->mbedtls_server_attr.ssl),
+   ret = ssl_send_data(&(csp->ssl_server_attr),
       (const unsigned char *)hdr, strlen(hdr));
    freez(hdr);
 
@@ -2156,7 +2156,7 @@ static int send_https_request(struct client_state *csp)
    }
 
    if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
-      && ((flushed = ssl_flush_socket(&(csp->mbedtls_server_attr.ssl),
+      && ((flushed = ssl_flush_socket(&(csp->ssl_server_attr),
             csp->client_iob)) < 0))
    {
       log_error(LOG_LEVEL_CONNECT, "Failed sending request body to: %s: %E",
@@ -2222,14 +2222,14 @@ static jb_err receive_encrypted_request(struct client_state *csp)
    do
    {
       log_error(LOG_LEVEL_HEADER, "Reading encrypted headers");
-      if (!is_ssl_pending(&(csp->mbedtls_client_attr.ssl)) &&
+      if (!is_ssl_pending(&(csp->ssl_client_attr)) &&
           !data_is_available(csp->cfd, csp->config->socket_timeout))
       {
          log_error(LOG_LEVEL_CONNECT,
             "Socket %d timed out while waiting for client headers", csp->cfd);
          return JB_ERR_PARSE;
       }
-      len = ssl_recv_data(&(csp->mbedtls_client_attr.ssl),
+      len = ssl_recv_data(&(csp->ssl_client_attr),
          (unsigned char *)buf, sizeof(buf));
       if (len == -1)
       {
@@ -2276,7 +2276,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
       /* XXX: Also used for JB_ERR_MEMORY */
       log_error(LOG_LEVEL_ERROR, "Failed to receive encrypted request: %s",
          jb_err_to_string(err));
-      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+      ssl_send_data_delayed(&(csp->ssl_client_attr),
          (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return err;
    }
@@ -2286,7 +2286,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
    if (request_line == NULL)
    {
       log_error(LOG_LEVEL_ERROR, "Failed to get the encrypted request line");
-      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+      ssl_send_data_delayed(&(csp->ssl_client_attr),
          (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
@@ -2319,7 +2319,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
    freez(request_line);
    if (JB_ERR_OK != err)
    {
-      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+      ssl_send_data_delayed(&(csp->ssl_client_attr),
          (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"Invalid request\" 400 0", csp->ip_addr_str);
@@ -2354,7 +2354,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
        */
       log_error(LOG_LEVEL_ERROR,
          "Failed to get the encrypted request destination");
-      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+      ssl_send_data_delayed(&(csp->ssl_client_attr),
          (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
@@ -2390,7 +2390,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
    err = sed_https(csp);
    if (JB_ERR_OK != err)
    {
-      ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+      ssl_send_data_delayed(&(csp->ssl_client_attr),
          (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
       log_error(LOG_LEVEL_ERROR, "Failed to parse client request from %s.",
          csp->ip_addr_str);
@@ -2799,7 +2799,7 @@ static void handle_established_connection(struct client_state *csp)
           */
          if (server_use_ssl(csp))
          {
-            len = ssl_recv_data(&(csp->mbedtls_server_attr.ssl),
+            len = ssl_recv_data(&(csp->ssl_server_attr),
                (unsigned char *)csp->receive_buffer, csp->receive_buffer_size);
          }
          else
@@ -2965,10 +2965,10 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                     if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
                               (const unsigned char *)hdr, strlen(hdr),
                               get_write_delay(csp)) < 0)
-                        || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                        || (ssl_send_data_delayed(&(csp->ssl_client_attr),
                               (const unsigned char *) ((p != NULL) ? p : csp->iob->cur),
                               csp->content_length, get_write_delay(csp)) < 0))
                      {
@@ -3068,11 +3068,11 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                     if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
                              (const unsigned char *)hdr, hdrlen, get_write_delay(csp)) < 0)
-                        || ((flushed = ssl_flush_socket(&(csp->mbedtls_client_attr.ssl),
+                        || ((flushed = ssl_flush_socket(&(csp->ssl_client_attr),
                                 csp->iob)) < 0)
-                        || (ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                        || (ssl_send_data_delayed(&(csp->ssl_client_attr),
                               (const unsigned char *)csp->receive_buffer, (size_t)len,
                               get_write_delay(csp)) < 0))
                      {
@@ -3119,7 +3119,7 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ret = ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                  ret = ssl_send_data_delayed(&(csp->ssl_client_attr),
                      (const unsigned char *)csp->receive_buffer, (size_t)len,
                      get_write_delay(csp));
                   if (ret < 0)
@@ -3185,7 +3185,7 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                     ssl_send_data_delayed(&(csp->ssl_client_attr),
                         (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
                         strlen(INVALID_SERVER_HEADERS_RESPONSE), get_write_delay(csp));
                   }
@@ -3279,7 +3279,7 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->ssl_client_attr),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
                      strlen(INVALID_SERVER_HEADERS_RESPONSE),
                      get_write_delay(csp));
@@ -3312,7 +3312,7 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->ssl_client_attr),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
                      strlen(INVALID_SERVER_HEADERS_RESPONSE),
                      get_write_delay(csp));
@@ -3382,10 +3382,10 @@ static void handle_established_connection(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
                if (client_use_ssl(csp))
                {
-                  if ((ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                  if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
                           (const unsigned char *)hdr, strlen(hdr),
                           get_write_delay(csp)) < 0)
-                     || (len = ssl_flush_socket(&(csp->mbedtls_client_attr.ssl),
+                     || (len = ssl_flush_socket(&(csp->ssl_client_attr),
                             csp->iob) < 0))
                   {
                      log_error(LOG_LEVEL_CONNECT, "Write header to client failed");
@@ -3444,7 +3444,7 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (client_use_ssl(csp))
                {
-                  ssl_send_data_delayed(&(csp->mbedtls_client_attr.ssl),
+                  ssl_send_data_delayed(&(csp->ssl_client_attr),
                      (const unsigned char *)INVALID_SERVER_HEADERS_RESPONSE,
                      strlen(INVALID_SERVER_HEADERS_RESPONSE),
                      get_write_delay(csp));
@@ -4559,7 +4559,7 @@ static void initialize_mutexes(void)
 
 #ifdef FEATURE_HTTPS_INSPECTION
    privoxy_mutex_init(&certificate_mutex);
-   privoxy_mutex_init(&rng_mutex);
+   privoxy_mutex_init(&ssl_init_mutex);
 #endif
 
    privoxy_mutex_init(&log_mutex);
@@ -5603,11 +5603,7 @@ static void listen_loop(void)
 
 #ifdef FEATURE_HTTPS_INSPECTION
    /* Clean up.  Aim: free all memory (no leaks) */
-   if (rng_seeded == 1)
-   {
-      mbedtls_ctr_drbg_free(&ctr_drbg);
-      mbedtls_entropy_free(&entropy);
-   }
+   ssl_release();
 #endif
 
 #ifdef FEATURE_GRACEFUL_TERMINATION
