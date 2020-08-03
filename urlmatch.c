@@ -62,7 +62,10 @@ enum regex_anchoring
    RIGHT_ANCHORED,
    RIGHT_ANCHORED_HOST
 };
-static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pattern);
+static jb_err compile_vanilla_host_pattern(struct pattern_spec *url, const char *host_pattern);
+#ifdef FEATURE_EXTENDED_HOST_PATTERNS
+static jb_err compile_pcre_host_pattern(struct pattern_spec *url, const char *host_pattern);
+#endif
 
 /*********************************************************************
  *
@@ -89,15 +92,12 @@ void free_http_request(struct http_request *http)
    freez(http->path);
    freez(http->version);
    freez(http->host_ip_addr_str);
-#ifndef FEATURE_EXTENDED_HOST_PATTERNS
    freez(http->dbuffer);
    freez(http->dvec);
    http->dcount = 0;
-#endif
 }
 
 
-#ifndef FEATURE_EXTENDED_HOST_PATTERNS
 /*********************************************************************
  *
  * Function    :  init_domain_components
@@ -152,7 +152,6 @@ jb_err init_domain_components(struct http_request *http)
 
    return JB_ERR_OK;
 }
-#endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
 
 
 /*********************************************************************
@@ -408,12 +407,8 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
       freez(buf);
    }
 
-#ifdef FEATURE_EXTENDED_HOST_PATTERNS
-   return JB_ERR_OK;
-#else
    /* Split domain name so we can compare it against wildcards */
    return init_domain_components(http);
-#endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
 
 }
 
@@ -705,6 +700,20 @@ static jb_err compile_url_pattern(struct pattern_spec *url, char *buf)
 {
    char *p;
 
+#ifdef FEATURE_EXTENDED_HOST_PATTERNS
+   const size_t prefix_length = 18;
+   if (strncmpic(buf, "PCRE-HOST-PATTERN:", prefix_length) == 0)
+   {
+      url->pattern.url_spec.host_regex_type = EXTENDED_HOST_PATTERN;
+      /* Overwrite the "PCRE-HOST-PATTERN:" prefix */
+      memmove(buf, buf+prefix_length, strlen(buf+prefix_length)+1);
+   }
+   else
+   {
+      url->pattern.url_spec.host_regex_type = VANILLA_HOST_PATTERN;
+   }
+#endif
+
    p = strchr(buf, '/');
    if (NULL != p)
    {
@@ -766,7 +775,16 @@ static jb_err compile_url_pattern(struct pattern_spec *url, char *buf)
 
    if (buf[0] != '\0')
    {
-      return compile_host_pattern(url, buf);
+#ifdef FEATURE_EXTENDED_HOST_PATTERNS
+      if (url->pattern.url_spec.host_regex_type == EXTENDED_HOST_PATTERN)
+      {
+         return compile_pcre_host_pattern(url, buf);
+      }
+      else
+#endif
+      {
+         return compile_vanilla_host_pattern(url, buf);
+      }
    }
 
    return JB_ERR_OK;
@@ -777,9 +795,9 @@ static jb_err compile_url_pattern(struct pattern_spec *url, char *buf)
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
 /*********************************************************************
  *
- * Function    :  compile_host_pattern
+ * Function    :  compile_pcre_host_pattern
  *
- * Description :  Parses and compiles a host pattern.
+ * Description :  Parses and compiles a pcre host pattern.
  *
  * Parameters  :
  *          1  :  url = Target pattern_spec to be filled in.
@@ -790,16 +808,16 @@ static jb_err compile_url_pattern(struct pattern_spec *url, char *buf)
  *                JB_ERR_PARSE - Cannot parse regex
  *
  *********************************************************************/
-static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pattern)
+static jb_err compile_pcre_host_pattern(struct pattern_spec *url, const char *host_pattern)
 {
    return compile_pattern(host_pattern, RIGHT_ANCHORED_HOST, url, &url->pattern.url_spec.host_regex);
 }
+#endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
 
-#else
 
 /*********************************************************************
  *
- * Function    :  compile_host_pattern
+ * Function    :  compile_vanilla_host_pattern
  *
  * Description :  Parses and "compiles" an old-school host pattern.
  *
@@ -811,7 +829,7 @@ static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pa
  *                JB_ERR_PARSE - Cannot parse regex
  *
  *********************************************************************/
-static jb_err compile_host_pattern(struct pattern_spec *url, const char *host_pattern)
+static jb_err compile_vanilla_host_pattern(struct pattern_spec *url, const char *host_pattern)
 {
    char *v[150];
    size_t size;
@@ -1127,7 +1145,6 @@ static int domain_match(const struct pattern_spec *p, const struct http_request 
    }
 
 }
-#endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
 
 
 /*********************************************************************
@@ -1229,11 +1246,10 @@ void free_pattern_spec(struct pattern_spec *pattern)
       regfree(pattern->pattern.url_spec.host_regex);
       freez(pattern->pattern.url_spec.host_regex);
    }
-#else
+#endif /* def FEATURE_EXTENDED_HOST_PATTERNS */
    freez(pattern->pattern.url_spec.dbuffer);
    freez(pattern->pattern.url_spec.dvec);
    pattern->pattern.url_spec.dcount = 0;
-#endif /* ndef FEATURE_EXTENDED_HOST_PATTERNS */
    freez(pattern->pattern.url_spec.port_list);
    if (pattern->pattern.url_spec.preg)
    {
@@ -1285,11 +1301,13 @@ static int host_matches(const struct http_request *http,
 {
    assert(http->host != NULL);
 #ifdef FEATURE_EXTENDED_HOST_PATTERNS
-   return ((NULL == pattern->pattern.url_spec.host_regex)
-      || (0 == regexec(pattern->pattern.url_spec.host_regex, http->host, 0, NULL, 0)));
-#else
-   return ((NULL == pattern->pattern.url_spec.dbuffer) || (0 == domain_match(pattern, http)));
+   if (pattern->pattern.url_spec.host_regex_type == EXTENDED_HOST_PATTERN) {
+      return ((NULL == pattern->pattern.url_spec.host_regex)
+         || (0 == regexec(pattern->pattern.url_spec.host_regex,
+               http->host, 0, NULL, 0)));
+   }
 #endif
+   return ((NULL == pattern->pattern.url_spec.dbuffer) || (0 == domain_match(pattern, http)));
 }
 
 
