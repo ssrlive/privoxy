@@ -125,7 +125,7 @@
 /*
  * Allow PCRE syntax in host patterns.
  */
-#undef FEATURE_EXTENDED_HOST_PATTERNS
+#undef FEATURE_PCRE_HOST_PATTERNS
 
 /*
  * Allow filtering with scripts and programs.

@@ -394,10 +394,10 @@ struct http_response
 
 struct url_spec
 {
-#ifdef FEATURE_EXTENDED_HOST_PATTERNS
+#ifdef FEATURE_PCRE_HOST_PATTERNS
    regex_t *host_regex;/**< Regex for host matching                          */
-   enum host_regex_type { VANILLA_HOST_PATTERN, EXTENDED_HOST_PATTERN } host_regex_type;
-#endif /* defined FEATURE_EXTENDED_HOST_PATTERNS */
+   enum host_regex_type { VANILLA_HOST_PATTERN, PCRE_HOST_PATTERN } host_regex_type;
+#endif /* defined FEATURE_PCRE_HOST_PATTERNS */
    char  *dbuffer;     /**< Buffer with '\0'-delimited domain name, or NULL to match all hosts. */
    char **dvec;        /**< List of pointers to the strings in dbuffer.       */
    int    dcount;      /**< How many parts to this domain? (length of dvec)   */
