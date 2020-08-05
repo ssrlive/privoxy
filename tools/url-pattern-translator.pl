@@ -15,9 +15,6 @@
 #
 # url-pattern-translator.pl old.action > new.action 
 #
-# Only convert your files once, or, as RoboCop used to say,
-# there will be... trouble.
-#
 # Copyright (c) 2008 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
@@ -105,6 +102,10 @@ sub looks_interesting($) {
     } elsif (m@^\s*standard\.@) {
 
         $type_to_skip = "predefined settings";
+
+    } elsif (m@^\s*PCRE-HOST-PATTERN:@) {
+
+        $type_to_skip = "already converted pcre host patttern";
 
     }
 
