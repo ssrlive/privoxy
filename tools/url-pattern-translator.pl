@@ -91,6 +91,10 @@ sub looks_interesting($) {
 
         $type_to_skip = "whitespace";
 
+    } elsif (m@^\s*CLIENT-TAG:@) {
+
+        $type_to_skip = "client tag patttern";
+
     } elsif (m@^\s*TAG:@) {
 
         $type_to_skip = "tag patttern";
