@@ -2294,6 +2294,12 @@ for details.
  While flexible, this is not the sophistication of full regular expression based syntax.
 </para>
 
+<para>
+ When compiled with FEATURE_PCRE_HOST_PATTERNS patterns can be prefixed with
+ <quote>PCRE-HOST-PATTERN:</quote> in which case full regular expression
+ (PCRE) can be used for the host pattern as well.
+</para>
+
 </sect3>
 
 <!--  ~  End section  ~  -->
