@@ -72,6 +72,9 @@ sub convert_host_pattern ($) {
     # Match single character with a dot.
     $hp =~ s@(?<!\))\?@.@g;
 
+    # Add the prefix
+    $hp = "PCRE-HOST-PATTERN:" . $hp;
+
     return $hp;
 }
 
