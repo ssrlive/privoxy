@@ -91,11 +91,11 @@ sub looks_interesting($) {
 
         $type_to_skip = "whitespace";
 
-    } elsif (m@^\s*CLIENT-TAG:@) {
+    } elsif (m@^\s*CLIENT-TAG:@i) {
 
         $type_to_skip = "client tag patttern";
 
-    } elsif (m@^\s*TAG:@) {
+    } elsif (m@^\s*TAG:@i) {
 
         $type_to_skip = "tag patttern";
 
@@ -107,7 +107,7 @@ sub looks_interesting($) {
 
         $type_to_skip = "predefined settings";
 
-    } elsif (m@^\s*PCRE-HOST-PATTERN:@) {
+    } elsif (m@^\s*PCRE-HOST-PATTERN:@i) {
 
         $type_to_skip = "already converted pcre host patttern";
 
