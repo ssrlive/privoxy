@@ -128,6 +128,11 @@
 #undef FEATURE_PCRE_HOST_PATTERNS
 
 /*
+ * Gather extended statistics.
+ */
+#undef FEATURE_EXTENDED_STATISTICS
+
+/*
  * Allow filtering with scripts and programs.
  */
 #undef FEATURE_EXTERNAL_FILTERS

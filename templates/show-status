@@ -91,6 +91,11 @@
 #      The percentage of blocked requests
 #  have-no-stats:
 #    There haven't any statistics been collected yet
+#  extended-statistics:
+#    Privoxy was compiled with extended statistiscs support.
+#    In this case the following symbol is available:
+#    filter-statistics:
+#      Table content of content filter statistics.
 #  pcrs-support:
 #    Privoxy was compiled with pcrs support
 #  trust-support:
@@ -213,6 +218,17 @@
       </td>
     </tr>
 <!-- if-statistics-end@ -->
+
+<!-- @if-extended-statistics-start -->
+    <tr>
+      <td class="box">
+        <h2>Content Filter Statistics:</h2>
+        <table summary="Statistics for content filters" border="1">
+         <tr><th>Filter name</th><th>Executions</th><th>Pages modified</th><th>Hits</th></tr>
+@filter-statistics@        </table>
+      </td>
+    </tr>
+<!-- if-extended-statistics-end@ -->
 
     <tr>
       <td class="box">

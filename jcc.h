@@ -86,6 +86,10 @@ extern privoxy_mutex_t external_filter_mutex;
 extern privoxy_mutex_t client_tags_mutex;
 #endif
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+extern privoxy_mutex_t filter_statistics_mutex;
+#endif
+
 #ifndef HAVE_GMTIME_R
 extern privoxy_mutex_t gmtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */

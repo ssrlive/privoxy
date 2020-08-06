@@ -204,6 +204,9 @@ privoxy_mutex_t external_filter_mutex;
 #ifdef FEATURE_CLIENT_TAGS
 privoxy_mutex_t client_tags_mutex;
 #endif
+#ifdef FEATURE_EXTENDED_STATISTICS
+privoxy_mutex_t filter_statistics_mutex;
+#endif
 
 #if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
 privoxy_mutex_t resolver_mutex;
@@ -4566,6 +4569,9 @@ static void initialize_mutexes(void)
 #endif
 #ifdef FEATURE_CLIENT_TAGS
    privoxy_mutex_init(&client_tags_mutex);
+#endif
+#ifdef FEATURE_EXTENDED_STATISTICS
+   privoxy_mutex_init(&filter_statistics_mutex);
 #endif
 
    /*

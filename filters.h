@@ -104,6 +104,15 @@ extern char *gif_deanimate_response(struct client_state *csp);
 extern jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);
 #endif
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+extern void register_filter_for_statistics(const char *filter);
+extern void update_filter_statistics(const char *filter, int hits);
+extern void get_filter_statistics(const char *filter,
+                                  unsigned long long *executions,
+                                  unsigned long long *pages_modified,
+                                  unsigned long long *hits);
+#endif
+
 #endif /* ndef FILTERS_H_INCLUDED */
 
 /*

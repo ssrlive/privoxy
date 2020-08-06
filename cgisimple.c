@@ -1031,6 +1031,72 @@ jb_err cgi_send_user_manual(struct client_state *csp,
 }
 
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+/*********************************************************************
+ *
+ * Function    :  get_filter_statistics_table
+ *
+ * Description :  Produces the filter statistic table content.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Pointer to the HTML statistic table content or
+ *                NULL on out of memory
+ *
+ *********************************************************************/
+static char *get_filter_statistics_table(const struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
+   char *statistics;
+   int i;
+   struct file_list *fl;
+   struct re_filterfile_spec *b;
+   jb_err err = JB_ERR_OK;
+
+   statistics = strdup_or_die("");
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+     fl = csp->rlist[i];
+     if ((NULL == fl) || (NULL == fl->f))
+     {
+        /*
+         * Either there are no filter files left or this
+         * filter file just contains no valid filters.
+         *
+         * Continue to be sure we don't miss valid filter
+         * files that are chained after empty or invalid ones.
+         */
+        continue;
+     }
+
+     for (b = fl->f; b != NULL; b = b->next)
+     {
+        if (b->type == FT_CONTENT_FILTER)
+        {
+           unsigned long long executions;
+           unsigned long long pages_modified;
+           unsigned long long hits;
+
+           get_filter_statistics(b->name, &executions, &pages_modified, &hits);
+           snprintf(buf, sizeof(buf),
+              "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>"
+              "<td style=\"text-align: right\">%llu</td>"
+              "<td style=\"text-align: right\">%llu</td><tr>\n",
+              b->name, executions, pages_modified, hits);
+
+           if (!err) err = string_append(&statistics, buf);
+        }
+     }
+   }
+
+   return statistics;
+
+}
+#endif
+
+
 /*********************************************************************
  *
  * Function    :  cgi_show_status
@@ -1142,6 +1208,22 @@ jb_err cgi_show_status(struct client_state *csp,
 #else /* ndef FEATURE_STATISTICS */
    if (!err) err = map_block_killer(exports, "statistics");
 #endif /* ndef FEATURE_STATISTICS */
+
+#ifdef FEATURE_EXTENDED_STATISTICS
+   {
+      char *filter_statistics = get_filter_statistics_table(csp);
+      if (filter_statistics != NULL)
+      {
+         if (!err) err = map(exports, "filter-statistics", 1, filter_statistics, 0);
+      }
+      else
+      {
+         if (!err) err = map_block_killer(exports, "extended-statistics");
+      }
+   }
+#else /* ndef FEATURE_EXTENDED_STATISTICS */
+   if (!err) err = map_block_killer(exports, "extended-statistics");
+#endif /* def FEATURE_EXTENDED_STATISTICS */
 
    /*
     * List all action files in use, together with view and edit links,

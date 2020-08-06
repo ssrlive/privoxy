@@ -1654,7 +1654,9 @@ static char *pcrs_filter_response(struct client_state *csp)
       log_error(LOG_LEVEL_RE_FILTER,
          "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
          csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
-
+#ifdef FEATURE_EXTENDED_STATISTICS
+      update_filter_statistics(b->name, current_hits);
+#endif
       hits += current_hits;
    }
 
@@ -2750,6 +2752,152 @@ int filters_available(const struct client_state *csp)
    return FALSE;
 }
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+
+struct filter_statistics_entry
+{
+   char *filter;
+   unsigned long long executions;
+   unsigned long long pages_modified;
+   unsigned long long hits;
+
+   struct filter_statistics_entry *next;
+};
+
+static struct filter_statistics_entry *filter_statistics = NULL;
+
+
+/*********************************************************************
+ *
+ * Function    :  register_filter_for_statistics
+ *
+ * Description :  Registers a filter so we can gather statistics for
+ *                it unless the filter has already been registered
+ *                before.
+ *
+ * Parameters  :
+ *          1  :  filter = Name of the filter to register
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void register_filter_for_statistics(const char *filter)
+{
+   struct filter_statistics_entry *entry;
+
+   privoxy_mutex_lock(&filter_statistics_mutex);
+
+   if (filter_statistics == NULL)
+   {
+      filter_statistics = zalloc_or_die(sizeof(struct filter_statistics_entry));
+      entry = filter_statistics;
+      entry->filter = strdup_or_die(filter);
+      privoxy_mutex_unlock(&filter_statistics_mutex);
+      return;
+   }
+   entry = filter_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->filter, filter))
+      {
+         /* Already registered, nothing to do. */
+         break;
+      }
+      if (entry->next == NULL)
+      {
+         entry->next = zalloc_or_die(sizeof(struct filter_statistics_entry));
+         entry->next->filter = strdup_or_die(filter);
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  update_filter_statistics
+ *
+ * Description :  Updates the statistics for a filter.
+ *
+ * Parameters  :
+ *          1  :  filter = Name of the filter to update
+ *          2  :  hits = Hit count.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void update_filter_statistics(const char *filter, int hits)
+{
+   struct filter_statistics_entry *entry;
+
+   privoxy_mutex_lock(&filter_statistics_mutex);
+
+   entry = filter_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->filter, filter))
+      {
+         entry->executions++;
+         if (hits != 0)
+         {
+            entry->pages_modified++;
+            entry->hits += (unsigned)hits;
+         }
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_filter_statistics
+ *
+ * Description :  Gets the statistics for a filter.
+ *
+ * Parameters  :
+ *          1  :  filter = Name of the filter to get statistics for.
+ *          2  :  executions = Storage for the execution count.
+ *          3  :  pages_modified = Storage for the number of modified pages.
+ *          4  :  hits = Storage for the number of hits.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void get_filter_statistics(const char *filter, unsigned long long *executions,
+                           unsigned long long *pages_modified,
+                           unsigned long long *hits)
+{
+   struct filter_statistics_entry *entry;
+
+   privoxy_mutex_lock(&filter_statistics_mutex);
+
+   entry = filter_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->filter, filter))
+      {
+         *executions = entry->executions;
+         *pages_modified = entry->pages_modified;
+         *hits = entry->hits;
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+#endif /* def FEATURE_EXTENDED_STATISTICS */
 
 /*
   Local Variables:
