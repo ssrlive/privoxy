@@ -1238,7 +1238,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          /* Save the code as "pattern", but do not compile anything. */
          if (bl->patterns->first != NULL)
          {
-            log_error(LOG_LEVEL_FATAL, "External filter '%s' contains several jobss. "
+            log_error(LOG_LEVEL_FATAL, "External filter '%s' contains several jobs. "
                "Did you forget to escape a line break?",
                bl->name);
          }
