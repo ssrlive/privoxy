@@ -806,7 +806,7 @@ support./(.*/)?track
 #----------------------------------------------------------------------------
 # Misc Web-bugs, JS and just plain Junk. Images here aren't normal images.
 #----------------------------------------------------------------------------
-{+block{Might be a web-bug.} +handle-as-empty-document -handle-as-image}
+{+block{Might be a web-bug that isn't an image.} +handle-as-empty-document -handle-as-image}
 #MASTER# REMARKS: signature for user tracking nytimes, cnn.com,latimes.com and many others. 10/06/06
 /b/ss/.+
 #MASTER# BLOCK-REFERRER: http://www.thesun.co.uk/article/0,,11071-10784,00.html
@@ -921,7 +921,7 @@ oskar.tradera.com/
 # Blocked URL = http://www.adcash.com/script/java.php?option=rotateur&rotateur=146355
 .adcash.com/script/
 
-{+block{Might be a web-bug.} -handle-as-empty-document +handle-as-image}
+{+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
 /(.*/)?__utm.gif\?
 #MASTER# BLOCK-REFERRER: http://washingpost.com and others 10/25/06
