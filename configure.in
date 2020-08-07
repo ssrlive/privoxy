@@ -979,7 +979,7 @@ AC_ARG_ENABLE(graceful-termination,
 fi])
 
 AC_ARG_ENABLE(pcre-host-patterns,
-[  --enable-pcre-host-patterns Allow to use PCRE syntax in host patterns by prefixing the pattern with
+[  --enable-pcre-host-patterns     Allow to use PCRE syntax in host patterns by prefixing the pattern with
                                   "PCRE-HOST-PATTERN:". You can use tools/url-pattern-translator.pl to
                                   convert existing action files to use PCRE host patterns.],
 [if test $enableval = yes; then
