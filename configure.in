@@ -1021,7 +1021,7 @@ AC_SUBST(FEATURE_CLIENT_TAGS_ONLY)
 
 FUZZ_ONLY="#"
 AC_ARG_ENABLE(fuzz,
-[  --enable-fuzz                Enable code that makes fuzzing more convenient],
+[  --enable-fuzz                   Enable code that makes fuzzing more convenient],
 [if test $enableval = yes; then
   FUZZ_ONLY=""
   AC_DEFINE(FUZZ,1,[Define to make fuzzing more convenient.])
