@@ -87,6 +87,10 @@ static void apply_url_actions(struct current_action_spec *action,
 #endif
                               struct url_actions *b);
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+static void increment_block_reason_counter(const char *block_reason);
+#endif
+
 #ifdef FEATURE_ACL
 #ifdef HAVE_RFC2553
 /*********************************************************************
@@ -556,6 +560,13 @@ struct http_response *block_url(struct client_state *csp)
    {
       return cgi_error_memory();
    }
+
+#ifdef FEATURE_EXTENDED_STATISTICS
+   if (csp->action->string[ACTION_STRING_BLOCK] != NULL)
+   {
+      increment_block_reason_counter(csp->action->string[ACTION_STRING_BLOCK]);
+   }
+#endif
 
    /*
     * If it's an image-url, send back an image or redirect
@@ -2894,6 +2905,136 @@ void get_filter_statistics(const char *filter, unsigned long long *executions,
    }
 
    privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+
+struct block_statistics_entry
+{
+   char *block_reason;
+   unsigned long long count;
+
+   struct block_statistics_entry *next;
+};
+
+static struct block_statistics_entry *block_statistics = NULL;
+
+/*********************************************************************
+ *
+ * Function    :  register_block_reason_for_statistics
+ *
+ * Description :  Registers a block reason so we can gather statistics
+ *                for it unless the block reason has already been
+ *                registered before.
+ *
+ * Parameters  :
+ *          1  :  block_reason = Block reason to register
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void register_block_reason_for_statistics(const char *block_reason)
+{
+   struct block_statistics_entry *entry;
+
+   privoxy_mutex_lock(&block_statistics_mutex);
+
+   if (block_statistics == NULL)
+   {
+      block_statistics = zalloc_or_die(sizeof(struct block_statistics_entry));
+      entry = block_statistics;
+      entry->block_reason = strdup_or_die(block_reason);
+      privoxy_mutex_unlock(&block_statistics_mutex);
+      return;
+   }
+   entry = block_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->block_reason, block_reason))
+      {
+         /* Already registered, nothing to do. */
+         break;
+      }
+      if (entry->next == NULL)
+      {
+         entry->next = zalloc_or_die(sizeof(struct block_statistics_entry));
+         entry->next->block_reason = strdup_or_die(block_reason);
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&block_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  increment_block_reason_counter
+ *
+ * Description :  Updates the counter for a block reason.
+ *
+ * Parameters  :
+ *          1  :  block_reason = Block reason to count
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void increment_block_reason_counter(const char *block_reason)
+{
+   struct block_statistics_entry *entry;
+
+   privoxy_mutex_lock(&block_statistics_mutex);
+
+   entry = block_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->block_reason, block_reason))
+      {
+         entry->count++;
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&block_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_block_reason_count
+ *
+ * Description :  Gets number of times a block reason was used.
+ *
+ * Parameters  :
+ *          1  :  block_reason = Block reason to get statistics for.
+ *          2  :  count = Storage for the number of times the block
+ *                        reason was used.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void get_block_reason_count(const char *block_reason, unsigned long long *count)
+{
+   struct block_statistics_entry *entry;
+
+   privoxy_mutex_lock(&block_statistics_mutex);
+
+   entry = block_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->block_reason, block_reason))
+      {
+         *count = entry->count;
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&block_statistics_mutex);
 
 }
 

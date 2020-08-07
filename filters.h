@@ -111,6 +111,10 @@ extern void get_filter_statistics(const char *filter,
                                   unsigned long long *executions,
                                   unsigned long long *pages_modified,
                                   unsigned long long *hits);
+
+extern void register_block_reason_for_statistics(const char *block_reason);
+extern void get_block_reason_count(const char *block_reason,
+                                   unsigned long long *count);
 #endif
 
 #endif /* ndef FILTERS_H_INCLUDED */

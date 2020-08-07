@@ -1034,6 +1034,76 @@ jb_err cgi_send_user_manual(struct client_state *csp,
 #ifdef FEATURE_EXTENDED_STATISTICS
 /*********************************************************************
  *
+ * Function    :  get_block_reason_statistics_table
+ *
+ * Description :  Produces the block reason statistic table content.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Pointer to the HTML statistic table content or
+ *                NULL on out of memory
+ *
+ *********************************************************************/
+static char *get_block_reason_statistics_table(const struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
+   char *statistics;
+   int i;
+   struct file_list *fl;
+   jb_err err = JB_ERR_OK;
+
+   statistics = strdup_or_die("");
+
+   /* Run through all action files. */
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      struct url_actions *b;
+      struct action_spec *last_action = NULL;
+
+      if (((fl = csp->actions_list[i]) == NULL) || ((b = fl->f) == NULL))
+      {
+         /* Skip empty files */
+         continue;
+      }
+
+      /* Go through all the actions. */
+      for (b = b->next; NULL != b; b = b->next)
+      {
+         if (last_action == b->action)
+         {
+            continue;
+         }
+         if ((b->action->add & ACTION_BLOCK))
+         {
+            unsigned long long count;
+            const char *block_reason = b->action->string[ACTION_STRING_BLOCK];
+            const char *encoded_block_reason = html_encode(block_reason);
+
+            if (encoded_block_reason == NULL)
+            {
+               freez(statistics);
+               return NULL;
+            }
+            get_block_reason_count(block_reason, &count);
+            snprintf(buf, sizeof(buf),
+               "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>",
+               encoded_block_reason, count);
+            freez(encoded_block_reason);
+
+            if (!err) err = string_append(&statistics, buf);
+         }
+         last_action = b->action;
+      }
+   }
+
+   return statistics;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  get_filter_statistics_table
  *
  * Description :  Produces the filter statistic table content.
@@ -1094,7 +1164,7 @@ static char *get_filter_statistics_table(const struct client_state *csp)
    return statistics;
 
 }
-#endif
+#endif /* def FEATURE_EXTENDED_STATISTICS */
 
 
 /*********************************************************************
@@ -1210,6 +1280,17 @@ jb_err cgi_show_status(struct client_state *csp,
 #endif /* ndef FEATURE_STATISTICS */
 
 #ifdef FEATURE_EXTENDED_STATISTICS
+   {
+      char *block_reason_statistics = get_block_reason_statistics_table(csp);
+      if (block_reason_statistics != NULL)
+      {
+         if (!err) err = map(exports, "block-reason-statistics", 1, block_reason_statistics, 0);
+      }
+      else
+      {
+         if (!err) err = map_block_killer(exports, "extended-statistics");
+      }
+   }
    {
       char *filter_statistics = get_filter_statistics_table(csp);
       if (filter_statistics != NULL)

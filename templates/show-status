@@ -93,7 +93,9 @@
 #    There haven't any statistics been collected yet
 #  extended-statistics:
 #    Privoxy was compiled with extended statistiscs support.
-#    In this case the following symbol is available:
+#    In this case the following symbols are available:
+#    block-reason-statistics:
+#      Table content of block reasons and how often they were used.
 #    filter-statistics:
 #      Table content of content filter statistics.
 #  pcrs-support:
@@ -220,6 +222,14 @@
 <!-- if-statistics-end@ -->
 
 <!-- @if-extended-statistics-start -->
+    <tr>
+      <td class="box">
+        <h2>Block Reason Statistics:</h2>
+        <table summary="Statistics for block reasons" border="1">
+         <tr><th>Block reason</th><th>Count</th></tr>
+@block-reason-statistics@        </table>
+      </td>
+    </tr>
     <tr>
       <td class="box">
         <h2>Content Filter Statistics:</h2>
