@@ -93,15 +93,12 @@
 #      Table content of block reasons and how often they were used.
 #    filter-statistics:
 #      Table content of content filter statistics.
-#  pcrs-support:
-#    Privoxy was compiled with pcrs support
 #  trust-support:
 #    Privoxy was compiled with trust support
 #  actions-filenames:
 #    The path to the actions files.
 #  re-filter-filenames:
-#    The path to the re_filter files. Only available if
-#    pcrs-support is set
+#    The path to the re_filter files.
 #  trust-filename:
 #    The path to the trust file. Only available if
 #    trust-support is set
