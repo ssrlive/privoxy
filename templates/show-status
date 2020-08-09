@@ -44,9 +44,6 @@
 #  homepage:
 #    The URL of the Privoxy project, which maintains this software.
 #
-#  redirect-url:
-#    The URL to a script that will redirect to the Privoxy
-#    documentation for a given item
 #  invocation:
 #    The command line with which Privoxy was invoked
 #  options:
