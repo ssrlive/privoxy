@@ -1548,13 +1548,10 @@ static int host_is_ip_address(const char *host)
 
    for (p = host; *p; p++)
    {
-      if (*p != '.')
+      if ((*p != '.') && !privoxy_isdigit(*p))
       {
-         if (!privoxy_isdigit(*p))
-         {
-            /* Not a dot or digit so it can't be an IPv4 address. */
-            return 0;
-         }
+         /* Not a dot or digit so it can't be an IPv4 address. */
+         return 0;
       }
    }
 
