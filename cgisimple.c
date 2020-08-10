@@ -1087,7 +1087,7 @@ static char *get_block_reason_statistics_table(const struct client_state *csp)
             }
             get_block_reason_count(block_reason, &count);
             snprintf(buf, sizeof(buf),
-               "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>",
+               "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>\n",
                encoded_block_reason, count);
             freez(encoded_block_reason);
 
