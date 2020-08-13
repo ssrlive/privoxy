@@ -2536,55 +2536,6 @@ for-privoxy-version=3.0.11
       </para>
     </sect3>
 
-    <sect3 id="newrelease-os2"><title>OS/2</title>
-      <para>
-        First, <emphasis>make sure that you have freshly exported the right
-        version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then get the OS/2 Setup module:
-      </para>
-        <programlisting>
-  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co os2setup
-</programlisting>
-      <para>
-        You will need a mix of development tools.
-        The main compilation takes place with IBM Visual Age C++.
-        Some ancillary work takes place with GNU tools, available from
-        various sources like hobbes.nmsu.edu.
-        Specifically, you will need <filename>autoheader</filename>,
-        <filename>autoconf</filename> and <filename>sh</filename> tools.
-        The packaging takes place with WarpIN, available from various sources, including
-        its home page: <ulink url="http://www.xworkplace.org/">xworkplace</ulink>.
-      </para>
-      <para>
-        Change directory to the <filename>os2setup</filename> directory.
-        Edit the os2build.cmd file to set the final executable filename.
-        For example,
-      </para>
-        <programlisting>
-  installExeName='privoxyos2_setup_X.Y.Z.exe'
-</programlisting>
-      <para>
-        Next, edit the <filename>IJB.wis</filename> file so the release number matches
-        in the <filename>PACKAGEID</filename> section:
-      </para>
-        <programlisting>
-  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"
-</programlisting>
-      <para>
-        You're now ready to build.  Run:
-      </para>
-        <programlisting>
-  os2build
-</programlisting>
-      <para>
-         You will find the  WarpIN-installable executable in the
-        <filename>./files</filename> directory. Upload this anonymously to
-         <filename>uploads.sourceforge.net/incoming</filename>, create a release
-         for it, and you're done. Use the release notes and Change Log from the
-         source tarball package.
-      </para>
-    </sect3>
-
     <sect3 id="newrelease-solaris"><title>Solaris</title>
       <para>
         Login to Sourceforge's compilefarm via ssh:
