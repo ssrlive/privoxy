@@ -45,7 +45,7 @@
 #include <assert.h>
 #include <string.h>
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 #include <unistd.h>
 #endif
 

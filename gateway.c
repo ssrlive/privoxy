@@ -55,10 +55,6 @@
 #include <netdb.h>
 #endif /* def __BEOS__ */
 
-#ifdef __OS2__
-#include <utils.h>
-#endif /* def __OS2__ */
-
 #include "project.h"
 #include "jcc.h"
 #include "errlog.h"

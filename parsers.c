@@ -68,7 +68,7 @@
 #include <brotli/decode.h>
 #endif
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 #include <unistd.h>
 #endif
 

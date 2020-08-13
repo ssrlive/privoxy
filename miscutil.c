@@ -48,9 +48,9 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <stdlib.h>
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 #include <unistd.h>
-#endif /* #if !defined(_WIN32) && !defined(__OS2__) */
+#endif /* #if !defined(_WIN32) */
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -647,11 +647,11 @@ char * make_path(const char * dir, const char * file)
    }
 
    if ((dir == NULL) || (*dir == '\0') /* No directory specified */
-#if defined(_WIN32) || defined(__OS2__)
+#if defined(_WIN32)
       || (*file == '\\') || (file[1] == ':') /* Absolute path (DOS) */
-#else /* ifndef _WIN32 || __OS2__ */
+#else /* ifndef _WIN32 */
       || (*file == '/') /* Absolute path (U*ix) */
-#endif /* ifndef _WIN32 || __OS2__  */
+#endif /* ifndef _WIN32 */
       )
    {
       return strdup(file);
@@ -683,17 +683,17 @@ char * make_path(const char * dir, const char * file)
       }
 
       assert(NULL != path);
-#if defined(_WIN32) || defined(__OS2__)
+#if defined(_WIN32)
       if (path[strlen(path)-1] != '\\')
       {
          strlcat(path, "\\", path_size);
       }
-#else /* ifndef _WIN32 || __OS2__ */
+#else /* ifndef _WIN32 */
       if (path[strlen(path)-1] != '/')
       {
          strlcat(path, "/", path_size);
       }
-#endif /* ifndef _WIN32 || __OS2__ */
+#endif /* ifndef _WIN32 */
       strlcat(path, file, path_size);
 
       return path;
@@ -840,10 +840,6 @@ int privoxy_millisleep(unsigned milliseconds)
    return nanosleep(&rqtp, &rmtp);
 #elif defined (_WIN32)
    Sleep(milliseconds);
-
-   return 0;
-#elif defined(__OS2__)
-   DosSleep(milliseconds * 10);
 
    return 0;
 #else

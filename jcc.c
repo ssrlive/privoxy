@@ -62,10 +62,8 @@
 
 #else /* ifndef _WIN32 */
 
-# if !defined (__OS2__)
 # include <unistd.h>
 # include <sys/wait.h>
-# endif /* ndef __OS2__ */
 # include <sys/time.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -84,14 +82,6 @@
 # ifdef __BEOS__
 #  include <socket.h>  /* BeOS has select() for sockets only. */
 #  include <OS.h>      /* declarations for threads and stuff. */
-# endif
-
-# if defined(__EMX__) || defined(__OS2__)
-#  include <sys/select.h>  /* OS/2/EMX needs a little help with select */
-# endif
-# ifdef __OS2__
-#define INCL_DOS
-# include <os2.h>
 # endif
 
 #ifdef HAVE_POLL
@@ -143,7 +133,7 @@ int urls_rejected = 0;     /* total nr of urls rejected */
 int g_terminate = 0;
 #endif
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 static void sig_handler(int the_signal);
 #endif
 static int client_protocol_is_unsupported(struct client_state *csp, char *req);
@@ -175,10 +165,6 @@ static int32 server_thread(void *data);
 
 #ifdef _WIN32
 #define sleep(N)  Sleep(((N) * 1000))
-#endif
-
-#ifdef __OS2__
-#define sleep(N)  DosSleep(((N) * 100))
 #endif
 
 #ifdef FUZZ
@@ -347,7 +333,7 @@ static const struct cruncher crunchers_light[] = {
  *
  * here?
  */
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 /*********************************************************************
  *
  * Function    :  sig_handler
@@ -2631,15 +2617,7 @@ static void handle_established_connection(struct client_state *csp)
    for (;;)
    {
 #ifndef HAVE_POLL
-#ifdef __OS2__
-      /*
-       * FD_ZERO here seems to point to an errant macro which crashes.
-       * So do this by hand for now...
-       */
-      memset(&rfds,0x00,sizeof(fd_set));
-#else
       FD_ZERO(&rfds);
-#endif
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if (!watch_client_socket)
       {
@@ -5012,7 +4990,7 @@ int main(int argc, char **argv)
     * are handled when and where they occur without relying
     * on a signal.
     */
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 {
    int idx;
    const int catched_signals[] = { SIGTERM, SIGINT, SIGHUP };
@@ -5474,7 +5452,7 @@ static void listen_loop(void)
    for (;;)
 #endif
    {
-#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
+#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__)
       while (waitpid(-1, NULL, WNOHANG) > 0)
       {
          /* zombie children */
@@ -5615,15 +5593,6 @@ static void listen_loop(void)
 #define SELECTED_ONE_OPTION
          child_id = _beginthread(
             (void (*)(void *))serve,
-            64 * 1024,
-            csp);
-#endif
-
-#if defined(__OS2__) && !defined(SELECTED_ONE_OPTION)
-#define SELECTED_ONE_OPTION
-         child_id = _beginthread(
-            (void(* _Optlink)(void*))serve,
-            NULL,
             64 * 1024,
             csp);
 #endif

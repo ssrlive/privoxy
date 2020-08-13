@@ -487,12 +487,12 @@ extern char *make_certs_path(const char *conf_dir, const char *file_name,
       + strlen(file_name) + strlen(suffix) + 2;
 
    /* Setting delimiter and editing path length */
-#if defined(_WIN32) || defined(__OS2__)
+#if defined(_WIN32)
    char delim[] = "\\";
    path_size += 1;
-#else /* ifndef _WIN32 || __OS2__ */
+#else /* ifndef _WIN32 */
    char delim[] = "/";
-#endif /* ifndef _WIN32 || __OS2__ */
+#endif /* ifndef _WIN32 */
 
    /*
     * Building up path from many parts

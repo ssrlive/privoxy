@@ -42,17 +42,11 @@
 #include <assert.h>
 
 #ifndef _WIN32
-#ifndef __OS2__
 #include <unistd.h>
-#endif /* ndef __OS2__ */
 #include <netinet/in.h>
 #else
 #include <winsock2.h>
 #endif /* ndef _WIN32 */
-
-#ifdef __OS2__
-#include <utils.h>
-#endif /* def __OS2__ */
 
 #include "project.h"
 #include "filters.h"
