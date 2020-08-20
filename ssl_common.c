@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * File        :  $Source: /cvsroot/ijbswa/current/ssl.c,v $
+ * File        :  $Source: /cvsroot/ijbswa/current/ssl_common.c,v $
  *
  * Purpose     :  File with TLS/SSL extension. Contains methods for
  *                creating, using and closing TLS/SSL connections that do

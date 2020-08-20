@@ -2,7 +2,7 @@
 #define SSL_COMMON_H_INCLUDED
 /*********************************************************************
 *
-* File        :  $Source: /cvsroot/ijbswa/current/ssl.h,v $
+* File        :  $Source: /cvsroot/ijbswa/current/ssl_common.h,v $
 *
 * Purpose     :  File with TLS/SSL extension. Contains methods for
 *                creating, using and closing TLS/SSL connections that do
