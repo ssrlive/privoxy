@@ -626,7 +626,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    SSL* ssl;
 
    /*
-    * Initializing mbedtls structures for TLS/SSL connection
+    * Initializing OpenSSL structures for TLS/SSL connection
     */
    openssl_init();
 
