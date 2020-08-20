@@ -66,6 +66,11 @@ static void log_ssl_errors(int debuglevel, const char* fmt, ...) __attribute__((
 
 static int ssl_inited = 0;
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define X509_set1_notBefore X509_set_notBefore
+#define X509_set1_notAfter X509_set_notAfter
+#endif
+
 /*********************************************************************
  *
  * Function    :  openssl_init
