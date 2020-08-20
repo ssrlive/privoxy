@@ -1523,7 +1523,7 @@ static int ssl_certificate_is_invalid(const char *cert_file)
  *                 1 => It worked
  *
  *********************************************************************/
-static int set_x509_ext(X509 *cert, X509 *issuer, int nid, const char *value)
+static int set_x509_ext(X509 *cert, X509 *issuer, int nid, char *value)
 {
    X509_EXTENSION *ext = NULL;
    X509V3_CTX ctx;
