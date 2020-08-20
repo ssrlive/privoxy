@@ -143,7 +143,7 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
 {
    BIO *bio = ssl_attr->openssl_attr.bio;
    int ret = 0;
-   int pos                  = 0;  /* Position of unsent part in buffer */
+   int pos = 0; /* Position of unsent part in buffer */
 
    if (len == 0)
    {
@@ -290,7 +290,8 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    if (len > (sizeof(last->file_buf) - 1))
    {
       log_error(LOG_LEVEL_ERROR,
-                "X509 PEM cert len %d is larger then buffer len %s", len, sizeof(last->file_buf) - 1);
+         "X509 PEM cert len %d is larger then buffer len %s",
+         len, sizeof(last->file_buf) - 1);
       len = sizeof(last->file_buf) - 1;
    }
 
@@ -308,59 +309,79 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
     * Saving certificate information into buffer
     */
    l = X509_get_version(crt);
-   if (l >= 0 && l <= 2) {
-      if (BIO_printf(bio, "cert. version     : %ld\n", l + 1) <= 0) {
+   if (l >= 0 && l <= 2)
+   {
+      if (BIO_printf(bio, "cert. version     : %ld\n", l + 1) <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for version failed");
          ret = -1;
          goto exit;
       }
-   } else {
-      if (BIO_printf(bio, "cert. version     : Unknown (%ld)\n", l) <= 0) {
+   }
+   else
+   {
+      if (BIO_printf(bio, "cert. version     : Unknown (%ld)\n", l) <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for version failed");
          ret = -1;
          goto exit;
       }
    }
 
-   if (BIO_puts(bio, "serial number     : ") <= 0) {
+   if (BIO_puts(bio, "serial number     : ") <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_write() for serial failed");
       ret = -1;
       goto exit;
    }
    bs = X509_get0_serialNumber(crt);
-   if (bs->length <= (int)sizeof(long)) {
+   if (bs->length <= (int)sizeof(long))
+   {
       ERR_set_mark();
       l = ASN1_INTEGER_get(bs);
       ERR_pop_to_mark();
-   } else {
+   }
+   else
+   {
       l = -1;
    }
-   if (l != -1) {
+   if (l != -1)
+   {
       unsigned long ul;
       const char *neg;
-      if (bs->type == V_ASN1_NEG_INTEGER) {
+      if (bs->type == V_ASN1_NEG_INTEGER)
+      {
          ul = 0 - (unsigned long)l;
          neg = "-";
-      } else {
+      }
+      else
+      {
          ul = (unsigned long)l;
          neg = "";
       }
-      if (BIO_printf(bio, " %s%lu (%s0x%lx)\n", neg, ul, neg, ul) <= 0) {
+      if (BIO_printf(bio, " %s%lu (%s0x%lx)\n", neg, ul, neg, ul) <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for serial failed");
          ret = -1;
          goto exit;
       }
-   } else {
-      if (bs->type == V_ASN1_NEG_INTEGER) {
-         if (BIO_puts(bio, " (Negative)") < 0) {
+   }
+   else
+   {
+      if (bs->type == V_ASN1_NEG_INTEGER)
+      {
+         if (BIO_puts(bio, " (Negative)") < 0)
+         {
             log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for serial failed");
             ret = -1;
             goto exit;
          }
       }
-      for (int i = 0; i < bs->length; i++) {
+      for (int i = 0; i < bs->length; i++)
+      {
          if (BIO_printf(bio, "%02x%c", bs->data[i],
-                        ((i + 1 == bs->length) ? '\n' : ':')) <= 0) {
+               ((i + 1 == bs->length) ? '\n' : ':')) <= 0)
+         {
             log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for serial failed");
             ret = -1;
             goto exit;
@@ -368,18 +389,21 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
       }
    }
 
-   if (BIO_puts(bio, "issuer name       : ") <= 0) {
+   if (BIO_puts(bio, "issuer name       : ") <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for issuer failed");
       ret = -1;
       goto exit;
    }
-   if (X509_NAME_print_ex(bio, X509_get_issuer_name(crt), 0, 0) < 0) {
+   if (X509_NAME_print_ex(bio, X509_get_issuer_name(crt), 0, 0) < 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "X509_NAME_print_ex() for issuer failed");
       ret = -1;
       goto exit;
    }
 
-   if (BIO_puts(bio, "\nsubject name      : ") <= 0) {
+   if (BIO_puts(bio, "\nsubject name      : ") <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for sublect failed");
       ret = -1;
       goto exit;
@@ -390,74 +414,89 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
       goto exit;
    }
 
-   if (BIO_puts(bio, "\nissued  on        : ") <= 0) {
+   if (BIO_puts(bio, "\nissued  on        : ") <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for issued on failed");
       ret = -1;
       goto exit;
    }
-   if (!ASN1_TIME_print(bio, X509_get0_notBefore(crt))) {
+   if (!ASN1_TIME_print(bio, X509_get0_notBefore(crt)))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_TIME_print() for issued on failed");
       ret = -1;
       goto exit;
    }
 
-   if (BIO_puts(bio, "\nexpires on        : ") <= 0) {
+   if (BIO_puts(bio, "\nexpires on        : ") <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for expires on failed");
       ret = -1;
       goto exit;
    }
-   if (!ASN1_TIME_print(bio, X509_get0_notAfter(crt))) {
+   if (!ASN1_TIME_print(bio, X509_get0_notAfter(crt)))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_TIME_print() for expires on failed");
       ret = -1;
       goto exit;
    }
 
-   if (BIO_puts(bio, "\nsigned using      : ") <= 0) {
+   if (BIO_puts(bio, "\nsigned using      : ") <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for signed using failed");
       ret = -1;
       goto exit;
    }
    tsig_alg = X509_get0_tbs_sigalg(crt);
-   if (!i2a_ASN1_OBJECT(bio, tsig_alg->algorithm)) {
+   if (!i2a_ASN1_OBJECT(bio, tsig_alg->algorithm))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "i2a_ASN1_OBJECT() for signed using on failed");
       ret = -1;
       goto exit;
    }
    pkey = X509_get_pubkey(crt);
-   if (!pkey) {
+   if (!pkey)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "X509_get_pubkey() failed");
       ret = -1;
       goto exit;
    }
 #define BC              "18"
-   switch (EVP_PKEY_base_id(pkey)) {
-   case EVP_PKEY_RSA:
-      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "RSA key size", EVP_PKEY_bits(pkey));
-      break;
-   case EVP_PKEY_DSA:
-      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "DSA key size", EVP_PKEY_bits(pkey));
-      break;
-   default:
-      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "non-RSA/DSA key size", EVP_PKEY_bits(pkey));
-      break;
+   switch (EVP_PKEY_base_id(pkey))
+   {
+      case EVP_PKEY_RSA:
+         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "RSA key size", EVP_PKEY_bits(pkey));
+         break;
+      case EVP_PKEY_DSA:
+         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "DSA key size", EVP_PKEY_bits(pkey));
+         break;
+      default:
+         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "non-RSA/DSA key size", EVP_PKEY_bits(pkey));
+         break;
    }
-   if (ret <= 0) {
+   if (ret <= 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for key size failed");
       ret = -1;
       goto exit;
    }
 
    loc = X509_get_ext_by_NID(crt, NID_basic_constraints, -1);
-   if (loc != -1) {
+   if (loc != -1)
+   {
       X509_EXTENSION *ex = X509_get_ext(crt, loc);
-      if (BIO_puts(bio, "\nbasic constraints : ") <= 0) {
-         log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for basic constraints failed");
+      if (BIO_puts(bio, "\nbasic constraints : ") <= 0)
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "BIO_printf() for basic constraints failed");
          ret = -1;
          goto exit;
       }
-      if (!X509V3_EXT_print(bio, ex, 0, 0)) {
-         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253)) {
-            log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_STRING_print_ex() for basic constraints failed");
+      if (!X509V3_EXT_print(bio, ex, 0, 0))
+      {
+         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253))
+         {
+            log_ssl_errors(LOG_LEVEL_ERROR,
+               "ASN1_STRING_print_ex() for basic constraints failed");
             ret = -1;
             goto exit;
          }
@@ -465,16 +504,22 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    }
 
    loc = X509_get_ext_by_NID(crt, NID_subject_alt_name, -1);
-   if (loc != -1) {
+   if (loc != -1)
+   {
       X509_EXTENSION *ex = X509_get_ext(crt, loc);
-      if (BIO_puts(bio, "\nsubject alt name  : ") <= 0) {
+      if (BIO_puts(bio, "\nsubject alt name  : ") <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for alt name failed");
          ret = -1;
          goto exit;
       }
-      if (!X509V3_EXT_print(bio, ex, 0, 0)) {
-         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253)) {
-            log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_STRING_print_ex() for alt name failed");
+      if (!X509V3_EXT_print(bio, ex, 0, 0))
+      {
+         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
+               ASN1_STRFLGS_RFC2253))
+         {
+            log_ssl_errors(LOG_LEVEL_ERROR,
+               "ASN1_STRING_print_ex() for alt name failed");
             ret = -1;
             goto exit;
          }
@@ -482,16 +527,22 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    }
 
    loc = X509_get_ext_by_NID(crt, NID_netscape_cert_type, -1);
-   if (loc != -1) {
+   if (loc != -1)
+   {
       X509_EXTENSION *ex = X509_get_ext(crt, loc);
-      if (BIO_puts(bio, "\ncert. type        : ") <= 0) {
+      if (BIO_puts(bio, "\ncert. type        : ") <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for cert type failed");
          ret = -1;
          goto exit;
       }
-      if (!X509V3_EXT_print(bio, ex, 0, 0)) {
-         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253)) {
-            log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_STRING_print_ex() for cert type failed");
+      if (!X509V3_EXT_print(bio, ex, 0, 0))
+      {
+         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
+               ASN1_STRFLGS_RFC2253))
+         {
+            log_ssl_errors(LOG_LEVEL_ERROR,
+               "ASN1_STRING_print_ex() for cert type failed");
             ret = -1;
             goto exit;
          }
@@ -499,16 +550,22 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    }
 
    loc = X509_get_ext_by_NID(crt, NID_key_usage, -1);
-   if (loc != -1) {
+   if (loc != -1)
+   {
       X509_EXTENSION *ex = X509_get_ext(crt, loc);
-      if (BIO_puts(bio, "\nkey usage         : ") <= 0) {
+      if (BIO_puts(bio, "\nkey usage         : ") <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for key usage failed");
          ret = -1;
          goto exit;
       }
-      if (!X509V3_EXT_print(bio, ex, 0, 0)) {
-         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253)) {
-            log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_STRING_print_ex() for key usage failed");
+      if (!X509V3_EXT_print(bio, ex, 0, 0))
+      {
+         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
+               ASN1_STRFLGS_RFC2253))
+         {
+            log_ssl_errors(LOG_LEVEL_ERROR,
+               "ASN1_STRING_print_ex() for key usage failed");
             ret = -1;
             goto exit;
          }
@@ -518,14 +575,20 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    loc = X509_get_ext_by_NID(crt, NID_ext_key_usage, -1);
    if (loc != -1) {
       X509_EXTENSION *ex = X509_get_ext(crt, loc);
-      if (BIO_puts(bio, "\next key usage     : ") <= 0) {
-         log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for ext key usage failed");
+      if (BIO_puts(bio, "\next key usage     : ") <= 0)
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "BIO_printf() for ext key usage failed");
          ret = -1;
          goto exit;
       }
-      if (!X509V3_EXT_print(bio, ex, 0, 0)) {
-         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253)) {
-            log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_STRING_print_ex() for ext key usage failed");
+      if (!X509V3_EXT_print(bio, ex, 0, 0))
+      {
+         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
+               ASN1_STRFLGS_RFC2253))
+         {
+            log_ssl_errors(LOG_LEVEL_ERROR,
+               "ASN1_STRING_print_ex() for ext key usage failed");
             ret = -1;
             goto exit;
          }
@@ -533,16 +596,22 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    }
 
    loc = X509_get_ext_by_NID(crt, NID_certificate_policies, -1);
-   if (loc != -1) {
+   if (loc != -1)
+   {
       X509_EXTENSION *ex = X509_get_ext(crt, loc);
-      if (BIO_puts(bio, "\ncertificate policies : ") <= 0) {
+      if (BIO_puts(bio, "\ncertificate policies : ") <= 0)
+      {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for certificate policies failed");
          ret = -1;
          goto exit;
       }
-      if (!X509V3_EXT_print(bio, ex, 0, 0)) {
-         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex), ASN1_STRFLGS_RFC2253)) {
-            log_ssl_errors(LOG_LEVEL_ERROR, "ASN1_STRING_print_ex() for certificate policies failed");
+      if (!X509V3_EXT_print(bio, ex, 0, 0))
+      {
+         if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
+               ASN1_STRFLGS_RFC2253))
+         {
+            log_ssl_errors(LOG_LEVEL_ERROR,
+               "ASN1_STRING_print_ex() for certificate policies failed");
             ret = -1;
             goto exit;
          }
@@ -560,10 +629,17 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    ret = 0;
 
 exit:
-   if (bio) BIO_free(bio);
-   if (pkey) EVP_PKEY_free(pkey);
+   if (bio)
+   {
+      BIO_free(bio);
+   }
+   if (pkey)
+   {
+      EVP_PKEY_free(pkey);
+   }
    return ret;
 }
+
 
 /*********************************************************************
  *
@@ -601,6 +677,7 @@ static int host_to_hash(struct client_state *csp)
 
    return 0;
 }
+
 
 /*********************************************************************
  *
@@ -673,29 +750,36 @@ extern int create_client_ssl_connection(struct client_state *csp)
    }
    privoxy_mutex_unlock(&certificate_mutex);
 
-   if (!(ssl_attr->openssl_attr.ctx = SSL_CTX_new(SSLv23_server_method()))) {
+   if (!(ssl_attr->openssl_attr.ctx = SSL_CTX_new(SSLv23_server_method())))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "Unable to create SSL context");
       ret = -1;
       goto exit;
    }
 
-      /* Set the key and cert */
+   /* Set the key and cert */
    if (SSL_CTX_use_certificate_file(ssl_attr->openssl_attr.ctx,
-                                    cert_file, SSL_FILETYPE_PEM) != 1) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Loading webpage certificate %s failed", cert_file);
+         cert_file, SSL_FILETYPE_PEM) != 1)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Loading webpage certificate %s failed", cert_file);
       ret = -1;
       goto exit;
    }
 
-   if (SSL_CTX_use_PrivateKey_file(ssl_attr->openssl_attr.ctx, key_file, SSL_FILETYPE_PEM) != 1) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Loading webpage certificate private key %s failed", key_file);
+   if (SSL_CTX_use_PrivateKey_file(ssl_attr->openssl_attr.ctx,
+         key_file, SSL_FILETYPE_PEM) != 1)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Loading webpage certificate private key %s failed", key_file);
       ret = -1;
       goto exit;
    }
 
    SSL_CTX_set_options(ssl_attr->openssl_attr.ctx, SSL_OP_NO_SSLv3);
 
-   if (!(ssl_attr->openssl_attr.bio = BIO_new_ssl(ssl_attr->openssl_attr.ctx, 0))) {
+   if (!(ssl_attr->openssl_attr.bio = BIO_new_ssl(ssl_attr->openssl_attr.ctx, 0)))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "Unable to create BIO structure");
       ret = -1;
       goto exit;
@@ -708,7 +792,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   if(!SSL_set_fd(ssl, csp->cfd))
+   if (!SSL_set_fd(ssl, csp->cfd))
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "SSL_set_fd failed");
       ret = -1;
@@ -721,7 +805,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
    log_error(LOG_LEVEL_CONNECT,
       "Performing the TLS/SSL handshake with client. Hash of host: %s",
       csp->http->hash_of_host_hex);
-   if (BIO_do_handshake(ssl_attr->openssl_attr.bio) != 1) {
+   if (BIO_do_handshake(ssl_attr->openssl_attr.bio) != 1)
+   {
        log_ssl_errors(LOG_LEVEL_ERROR, "BIO_do_handshake failed");
        ret = -1;
        goto exit;
@@ -795,8 +880,14 @@ static void free_client_ssl_structures(struct client_state *csp)
 {
    struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
 
-   if (ssl_attr->openssl_attr.bio) BIO_free_all(ssl_attr->openssl_attr.bio);
-   if (ssl_attr->openssl_attr.ctx) SSL_CTX_free(ssl_attr->openssl_attr.ctx);
+   if (ssl_attr->openssl_attr.bio)
+   {
+      BIO_free_all(ssl_attr->openssl_attr.bio);
+   }
+   if (ssl_attr->openssl_attr.ctx)
+   {
+      SSL_CTX_free(ssl_attr->openssl_attr.ctx);
+   }
 }
 
 
@@ -858,7 +949,6 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /* Setting path to file with trusted CAs */
    trusted_cas_file = csp->config->trusted_cas_file;
 
-
    ssl_attrs->ctx = SSL_CTX_new(SSLv23_method());
    if (!ssl_attrs->ctx)
    {
@@ -870,7 +960,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /*
     * Loading file with trusted CAs
     */
-   if(!SSL_CTX_load_verify_locations(ssl_attrs->ctx, trusted_cas_file, NULL))
+   if (!SSL_CTX_load_verify_locations(ssl_attrs->ctx, trusted_cas_file, NULL))
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "Loading trusted CAs file %s failed",
          trusted_cas_file);
@@ -881,7 +971,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
    SSL_CTX_set_verify(ssl_attrs->ctx, SSL_VERIFY_NONE, NULL);
    SSL_CTX_set_options(ssl_attrs->ctx, SSL_OP_NO_SSLv3);
 
-   if (!(ssl_attrs->bio = BIO_new_ssl(ssl_attrs->ctx, 1))) {
+   if (!(ssl_attrs->bio = BIO_new_ssl(ssl_attrs->ctx, 1)))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "Unable to create BIO structure");
       ret = -1;
       goto exit;
@@ -933,9 +1024,12 @@ extern int create_server_ssl_connection(struct client_state *csp)
    }
 
    chain = SSL_get_peer_cert_chain(ssl);
-   if (chain) {
-      for (int i = 0; i < sk_X509_num(chain); i++) {
-         if (ssl_store_cert(csp, sk_X509_value(chain, i)) != 0) {
+   if (chain)
+   {
+      for (int i = 0; i < sk_X509_num(chain); i++)
+      {
+         if (ssl_store_cert(csp, sk_X509_value(chain, i)) != 0)
+         {
             log_error(LOG_LEVEL_ERROR, "ssl_store_cert failed");
             ret = -1;
             goto exit;
@@ -950,10 +1044,12 @@ extern int create_server_ssl_connection(struct client_state *csp)
       {
          ret = 0;
          csp->server_cert_verification_result = SSL_CERT_VALID;
-      } else {
+      }
+      else
+      {
          csp->server_cert_verification_result = verify_result;
          log_error(LOG_LEVEL_ERROR, "SSL_get_verify_result failed: %s",
-                    X509_verify_cert_error_string(verify_result));
+            X509_verify_cert_error_string(verify_result));
          ret = -1;
          goto exit;
       }
@@ -995,8 +1091,14 @@ static void free_server_ssl_structures(struct client_state *csp)
 {
    struct ssl_attr *ssl_attr = &csp->ssl_server_attr;
 
-   if (ssl_attr->openssl_attr.bio) BIO_free_all(ssl_attr->openssl_attr.bio);
-   if (ssl_attr->openssl_attr.ctx) SSL_CTX_free(ssl_attr->openssl_attr.ctx);
+   if (ssl_attr->openssl_attr.bio)
+   {
+      BIO_free_all(ssl_attr->openssl_attr.bio);
+   }
+   if (ssl_attr->openssl_attr.ctx)
+   {
+      SSL_CTX_free(ssl_attr->openssl_attr.ctx);
+   }
 }
 
 
@@ -1022,16 +1124,22 @@ static void log_ssl_errors(int debuglevel, const char* fmt, ...)
    vsnprintf(prefix, sizeof(prefix), fmt, args);
    int reported = 0;
 
-   while ((err_code = ERR_get_error())) {
+   while ((err_code = ERR_get_error()))
+   {
       char err_buf[ERROR_BUF_SIZE];
       reported = 1;
       ERR_error_string_n(err_code, err_buf, sizeof(err_buf));
       log_error(debuglevel, "%s: %s", prefix, err_buf);
    }
    va_end(args);
-   /* in case if called by mistake and there were no SSL errors let's report it to the log */
+   /*
+    * In case if called by mistake and there were
+    * no SSL errors let's report it to the log.
+    */
    if (!reported)
+   {
       log_error(debuglevel, "%s: no ssl errors detected", prefix);
+   }
 }
 
 
@@ -1052,11 +1160,13 @@ static void log_ssl_errors(int debuglevel, const char* fmt, ...)
  *
  *********************************************************************/
 extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
-                              const unsigned char *src, size_t slen )
+                             const unsigned char *src, size_t slen)
 {
-   *olen = 4 * ((slen/3)  + ((slen%3) ? 1 : 0)) + 1; 
+   *olen = 4 * ((slen/3)  + ((slen%3) ? 1 : 0)) + 1;
    if (*olen < dlen)
+   {
       return ENOBUFS;
+   }
    *olen = (size_t)EVP_EncodeBlock(dst, src, (int)slen) + 1;
    return 0;
 }
@@ -1075,9 +1185,12 @@ extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
  * Returns     :  N/A
  *
  *********************************************************************/
-static void close_file_stream(FILE *f, const char* path) {
-   if (fclose(f) != 0) {
-      log_error(LOG_LEVEL_ERROR, "Error closing file %s: %s", path, strerror(errno));
+static void close_file_stream(FILE *f, const char *path)
+{
+   if (fclose(f) != 0)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Error closing file %s: %s", path, strerror(errno));
    }
 }
 
@@ -1143,7 +1256,7 @@ static int write_certificate(X509 *crt, const char *output_file)
  *
  *********************************************************************/
 static int write_private_key(EVP_PKEY *key, char **ret_buf,
-   const char *key_file_path)
+                             const char *key_file_path)
 {
    size_t len = 0;                /* Length of created key    */
    FILE *f = NULL;                /* File to save certificate */
@@ -1151,7 +1264,8 @@ static int write_private_key(EVP_PKEY *key, char **ret_buf,
    BIO *bio_mem = BIO_new(BIO_s_mem());
    char *bio_mem_data = 0;
 
-   if (bio_mem == NULL) {
+   if (bio_mem == NULL)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "write_private_key memory allocation failure");
       return -1;
    }
@@ -1159,8 +1273,10 @@ static int write_private_key(EVP_PKEY *key, char **ret_buf,
    /*
     * Writing private key into PEM string
     */
-   if (!PEM_write_bio_PrivateKey(bio_mem, key, NULL, NULL, 0, NULL, NULL)) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Writing private key into PEM string failed");
+   if (!PEM_write_bio_PrivateKey(bio_mem, key, NULL, NULL, 0, NULL, NULL))
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Writing private key into PEM string failed");
       ret = -1;
       goto exit;
    }
@@ -1237,7 +1353,8 @@ static int generate_key(struct client_state *csp, char **key_buf)
    RSA *rsa = RSA_new();
    EVP_PKEY *key = EVP_PKEY_new();
 
-   if (exp == NULL || rsa == NULL || key == NULL) {
+   if (exp == NULL || rsa == NULL || key == NULL)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "RSA key memory allocation failure");
       ret = -1;
       goto exit;
@@ -1263,14 +1380,17 @@ static int generate_key(struct client_state *csp, char **key_buf)
    }
 
    ret = RSA_generate_key_ex(rsa, RSA_KEYSIZE, exp, NULL);
-   if (ret == 0) {
+   if (ret == 0)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "RSA key generation failure");
       ret = -1;
       goto exit;
    }
 
-   if (!EVP_PKEY_set1_RSA(key, rsa)) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Error assigning RSA key pair to PKEY structure");
+   if (!EVP_PKEY_set1_RSA(key, rsa))
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Error assigning RSA key pair to PKEY structure");
       ret = -1;
       goto exit;
    }
@@ -1290,13 +1410,23 @@ exit:
    /*
     * Freeing used variables
     */
-   if (exp) BN_free(exp);
-   if (rsa) RSA_free(rsa);
-   if (key) EVP_PKEY_free(key);
+   if (exp)
+   {
+      BN_free(exp);
+   }
+   if (rsa)
+   {
+      RSA_free(rsa);
+   }
+   if (key)
+   {
+      EVP_PKEY_free(key);
+   }
    freez(key_file_path);
 
    return ret;
 }
+
 
 /*********************************************************************
  *
@@ -1316,13 +1446,17 @@ static X509* ssl_certificate_load(const char *cert_path)
    X509 *cert = NULL;
    FILE *cert_f = NULL;
 
-   if (!(cert_f = fopen(cert_path, "r"))) {
-      log_error(LOG_LEVEL_ERROR, "Error opening certificate file %s: %s", cert_path, strerror(errno));
+   if (!(cert_f = fopen(cert_path, "r")))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Error opening certificate file %s: %s", cert_path, strerror(errno));
       return NULL;
    }
 
-   if (!(cert = PEM_read_X509(cert_f, NULL, NULL, NULL))) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Error reading certificate file %s", cert_path);
+   if (!(cert = PEM_read_X509(cert_f, NULL, NULL, NULL)))
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Error reading certificate file %s", cert_path);
    }
 
    close_file_stream(cert_f, cert_path);
@@ -1351,20 +1485,25 @@ static int ssl_certificate_is_invalid(const char *cert_file)
 
    X509 *cert = NULL;
 
-   if (!(cert = ssl_certificate_load(cert_file))) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Error reading certificate file %s", cert_file);
+   if (!(cert = ssl_certificate_load(cert_file)))
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Error reading certificate file %s", cert_file);
       return 1;
    }
 
    ret = X509_cmp_current_time(X509_get_notAfter(cert));
-   if (ret == 0) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Error checking certificate %s validity", cert_file);
+   if (ret == 0)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Error checking certificate %s validity", cert_file);
    }
 
    X509_free(cert);
 
    return ret == -1 ? 1 : 0;
 }
+
 
 /*********************************************************************
  *
@@ -1384,7 +1523,7 @@ static int ssl_certificate_is_invalid(const char *cert_file)
  *********************************************************************/
 static int set_x509_ext(X509 *cert, X509 *issuer, int nid, const char *value)
 {
-   X509_EXTENSION * ext = NULL;
+   X509_EXTENSION *ext = NULL;
    X509V3_CTX ctx;
    int ret = 0;
 
@@ -1404,7 +1543,10 @@ static int set_x509_ext(X509 *cert, X509 *issuer, int nid, const char *value)
 
    ret = 1;
 exit:
-   if (ext) X509_EXTENSION_free(ext);
+   if (ext)
+   {
+      X509_EXTENSION_free(ext);
+   }
    return ret;
 }
 
@@ -1429,7 +1571,8 @@ static int set_subject_alternative_name(X509 *cert, X509 *issuer, const char *ho
    size_t altname_len = strlen(hostname) + sizeof(CERTIFICATE_ALT_NAME_PREFIX);
    char alt_name_buf[altname_len];
 
-   snprintf(alt_name_buf, sizeof(alt_name_buf), CERTIFICATE_ALT_NAME_PREFIX"%s", hostname);
+   snprintf(alt_name_buf, sizeof(alt_name_buf),
+      CERTIFICATE_ALT_NAME_PREFIX"%s", hostname);
    return set_x509_ext(cert, issuer, NID_subject_alt_name, alt_name_buf);
 }
 
@@ -1455,14 +1598,14 @@ static int set_subject_alternative_name(X509 *cert, X509 *issuer, const char *ho
 static int generate_webpage_certificate(struct client_state *csp)
 {
    char *key_buf = NULL;    /* Buffer for created key */
-   X509* issuer_cert = NULL;
-   X509* cert = NULL;
-   BIO* pk_bio = NULL;
+   X509 *issuer_cert = NULL;
+   X509 *cert = NULL;
+   BIO *pk_bio = NULL;
    EVP_PKEY *loaded_subject_key = NULL;
    EVP_PKEY *loaded_issuer_key = NULL;
-   X509_NAME* issuer_name;
-   X509_NAME* subject_name = NULL;
-   ASN1_TIME* asn_time = NULL;
+   X509_NAME *issuer_name;
+   X509_NAME *subject_name = NULL;
+   ASN1_TIME *asn_time = NULL;
    ASN1_INTEGER *serial = NULL;
    BIGNUM *serial_num = NULL;
 
@@ -1576,35 +1719,39 @@ static int generate_webpage_certificate(struct client_state *csp)
       goto exit;
    }
 
-   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COMMON_NAME_FCODE, MBSTRING_ASC,
-                                    (void*)csp->http->host, -1, -1, 0))
+   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COMMON_NAME_FCODE,
+         MBSTRING_ASC, (void *)csp->http->host, -1, -1, 0))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "X509 subject name (code: %s, val: %s) error",
-                     CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "X509 subject name (code: %s, val: %s) error",
+         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
-   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORGANIZATION_FCODE, MBSTRING_ASC,
-                                    (void*)csp->http->host, -1, -1, 0))
+   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORGANIZATION_FCODE,
+         MBSTRING_ASC, (void *)csp->http->host, -1, -1, 0))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "X509 subject name (code: %s, val: %s) error",
-                     CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "X509 subject name (code: %s, val: %s) error",
+         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
-   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORG_UNIT_FCODE, MBSTRING_ASC,
-                                    (void*)csp->http->host, -1, -1, 0))
+   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORG_UNIT_FCODE,
+         MBSTRING_ASC, (void *)csp->http->host, -1, -1, 0))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "X509 subject name (code: %s, val: %s) error",
-                     CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "X509 subject name (code: %s, val: %s) error",
+         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
-   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COUNTRY_FCODE, MBSTRING_ASC,
-                                    (void*)CERT_PARAM_COUNTRY_CODE, -1, -1, 0))
+   if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COUNTRY_FCODE,
+         MBSTRING_ASC, (void *)CERT_PARAM_COUNTRY_CODE, -1, -1, 0))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "X509 subject name (code: %s, val: %s) error",
-                     CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "X509 subject name (code: %s, val: %s) error",
+         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
@@ -1612,20 +1759,22 @@ static int generate_webpage_certificate(struct client_state *csp)
    cert_opt.issuer_crt = csp->config->ca_cert_file;
    cert_opt.issuer_key = csp->config->ca_key_file;
 
-   if (get_certificate_valid_from_date(cert_valid_from, sizeof(cert_valid_from), VALID_DATETIME_FMT)
-    || get_certificate_valid_to_date(cert_valid_to, sizeof(cert_valid_to), VALID_DATETIME_FMT))
+   if (get_certificate_valid_from_date(cert_valid_from,
+         sizeof(cert_valid_from), VALID_DATETIME_FMT)
+    || get_certificate_valid_to_date(cert_valid_to,
+         sizeof(cert_valid_to), VALID_DATETIME_FMT))
    {
       log_error(LOG_LEVEL_ERROR, "Generating one of the validity dates failed");
       ret = -1;
       goto exit;
    }
 
-   cert_opt.subject_pwd   = CERT_SUBJECT_PASSWORD;
-   cert_opt.issuer_pwd    = csp->config->ca_password;
-   cert_opt.not_before    = cert_valid_from;
-   cert_opt.not_after     = cert_valid_to;
-   cert_opt.serial        = serial_num_text;
-   cert_opt.max_pathlen   = -1;
+   cert_opt.subject_pwd = CERT_SUBJECT_PASSWORD;
+   cert_opt.issuer_pwd  = csp->config->ca_password;
+   cert_opt.not_before  = cert_valid_from;
+   cert_opt.not_after   = cert_valid_to;
+   cert_opt.serial      = serial_num_text;
+   cert_opt.max_pathlen = -1;
 
    /*
     * Test if the private key was already created.
@@ -1667,7 +1816,8 @@ static int generate_webpage_certificate(struct client_state *csp)
     */
    if (!(issuer_cert = ssl_certificate_load(cert_opt.issuer_crt)))
    {
-      log_error(LOG_LEVEL_ERROR, "Loading issuer certificate %s failed", cert_opt.issuer_crt);
+      log_error(LOG_LEVEL_ERROR, "Loading issuer certificate %s failed",
+         cert_opt.issuer_crt);
       ret = -1;
       goto exit;
    }
@@ -1683,34 +1833,41 @@ static int generate_webpage_certificate(struct client_state *csp)
    }
    else if (!(pk_bio = BIO_new_file(cert_opt.subject_key, "r")))
    {
-         log_ssl_errors(LOG_LEVEL_ERROR, "Failure opening subject key %s BIO", cert_opt.subject_key);
-         ret = -1;
-         goto exit;
-   }
-
-   loaded_subject_key = PEM_read_bio_PrivateKey(pk_bio, NULL, NULL, (void*)cert_opt.subject_pwd);
-   if (!loaded_subject_key)
-   {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Parsing subject key %s failed", cert_opt.subject_key);
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Failure opening subject key %s BIO", cert_opt.subject_key);
       ret = -1;
       goto exit;
    }
 
-   if (!BIO_free(pk_bio)) {
+   loaded_subject_key = PEM_read_bio_PrivateKey(pk_bio, NULL, NULL,
+      (void *)cert_opt.subject_pwd);
+   if (!loaded_subject_key)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR, "Parsing subject key %s failed",
+         cert_opt.subject_key);
+      ret = -1;
+      goto exit;
+   }
+
+   if (!BIO_free(pk_bio))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "Error closing subject key BIO");
    }
 
    if (!(pk_bio = BIO_new_file(cert_opt.issuer_key, "r")))
    {
-         log_ssl_errors(LOG_LEVEL_ERROR, "Failure opening issuer key %s BIO", cert_opt.issuer_key);
-         ret = -1;
-         goto exit;
+      log_ssl_errors(LOG_LEVEL_ERROR, "Failure opening issuer key %s BIO",
+         cert_opt.issuer_key);
+      ret = -1;
+      goto exit;
    }
 
-   loaded_issuer_key = PEM_read_bio_PrivateKey(pk_bio, NULL, NULL, (void*)cert_opt.issuer_pwd);
+   loaded_issuer_key = PEM_read_bio_PrivateKey(pk_bio, NULL, NULL,
+      (void *)cert_opt.issuer_pwd);
    if (!loaded_issuer_key)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Parsing issuer key %s failed", cert_opt.subject_key);
+      log_ssl_errors(LOG_LEVEL_ERROR, "Parsing issuer key %s failed",
+         cert_opt.subject_key);
       ret = -1;
       goto exit;
    }
@@ -1733,41 +1890,48 @@ static int generate_webpage_certificate(struct client_state *csp)
    /*
     * Setting parameters of signed certificate
     */
-   if (!X509_set_pubkey(cert, loaded_subject_key)) {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting issuer name in signed certificate failed");
+   if (!X509_set_pubkey(cert, loaded_subject_key))
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting issuer name in signed certificate failed");
       ret = -1;
       goto exit;
    }
 
    if (!X509_set_subject_name(cert, subject_name))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting issuer name in signed certificate failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting issuer name in signed certificate failed");
       ret = -1;
       goto exit;
    }
 
    if (!X509_set_issuer_name(cert, issuer_name))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting issuer name in signed certificate failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting issuer name in signed certificate failed");
       ret = -1;
       goto exit;
    }
 
    if (!X509_set_serialNumber(cert, serial))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting serial number in signed certificate failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting serial number in signed certificate failed");
       ret = -1;
       goto exit;
    }
 
    asn_time = ASN1_TIME_new();
-   if (!asn_time) {
+   if (!asn_time)
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "ASN1 time memory allocation failure");
       ret = -1;
       goto exit;
    }
 
-   if (!ASN1_TIME_set_string(asn_time, cert_opt.not_after)) {
+   if (!ASN1_TIME_set_string(asn_time, cert_opt.not_after))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "ASN1 time [%s] encode error", cert_opt.not_after);
       ret = -1;
       goto exit;
@@ -1775,12 +1939,14 @@ static int generate_webpage_certificate(struct client_state *csp)
 
    if (!X509_set1_notAfter(cert, asn_time))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting valid not after in signed certificate failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting valid not after in signed certificate failed");
       ret = -1;
       goto exit;
    }
 
-   if (!ASN1_TIME_set_string(asn_time, cert_opt.not_before)) {
+   if (!ASN1_TIME_set_string(asn_time, cert_opt.not_before))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "ASN1 time encode error");
       ret = -1;
       goto exit;
@@ -1788,12 +1954,13 @@ static int generate_webpage_certificate(struct client_state *csp)
 
    if (!X509_set1_notBefore(cert, asn_time))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting valid not befre in signed certificate failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting valid not befre in signed certificate failed");
       ret = -1;
       goto exit;
    }
 
-   if(!set_x509_ext(cert, issuer_cert, NID_basic_constraints, CERTIFICATE_BASIC_CONSTRAINTS))
+   if (!set_x509_ext(cert, issuer_cert, NID_basic_constraints, CERTIFICATE_BASIC_CONSTRAINTS))
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "Setting the basicConstraints extension "
          "in signed certificate failed");
@@ -1803,14 +1970,16 @@ static int generate_webpage_certificate(struct client_state *csp)
 
    if (!set_x509_ext(cert, issuer_cert, NID_subject_key_identifier, CERTIFICATE_SUBJECT_KEY))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting the Subject Key Identifie extension failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting the Subject Key Identifie extension failed");
       ret = -1;
       goto exit;
    }
 
    if (!set_x509_ext(cert, issuer_cert, NID_authority_key_identifier, CERTIFICATE_AUTHORITY_KEY))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting the Authority Key Identifier extension failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting the Authority Key Identifier extension failed");
       ret = -1;
       goto exit;
    }
@@ -1846,17 +2015,42 @@ exit:
    /*
     * Freeing used structures
     */
-   if (issuer_cert) X509_free(issuer_cert);
-   if (cert) X509_free(cert);
-   if (pk_bio && !BIO_free(pk_bio)) {
+   if (issuer_cert)
+   {
+      X509_free(issuer_cert);
+   }
+   if (cert)
+   {
+      X509_free(cert);
+   }
+   if (pk_bio && !BIO_free(pk_bio))
+   {
       log_ssl_errors(LOG_LEVEL_ERROR, "Error closing pk BIO");
    }
-   if (loaded_subject_key) EVP_PKEY_free(loaded_subject_key);
-   if (loaded_issuer_key) EVP_PKEY_free(loaded_issuer_key);
-   if (subject_name) X509_NAME_free(subject_name);
-   if (asn_time) ASN1_TIME_free(asn_time);
-   if (serial_num) BN_free(serial_num);
-   if (serial) ASN1_INTEGER_free(serial);
+   if (loaded_subject_key)
+   {
+      EVP_PKEY_free(loaded_subject_key);
+   }
+   if (loaded_issuer_key)
+   {
+      EVP_PKEY_free(loaded_issuer_key);
+   }
+   if (subject_name)
+   {
+      X509_NAME_free(subject_name);
+   }
+   if (asn_time)
+   {
+      ASN1_TIME_free(asn_time);
+   }
+   if (serial_num)
+   {
+      BN_free(serial_num);
+   }
+   if (serial)
+   {
+      ASN1_INTEGER_free(serial);
+   }
    freez(cert_opt.subject_key);
    freez(cert_opt.output_file);
    freez(key_buf);
