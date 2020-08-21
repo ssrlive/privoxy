@@ -333,7 +333,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
       "<html><head><title>Server certificate verification failed</title></head>\n"
       "<body><h1>Server certificate verification failed</h1>\n"
       "<p><a href=\"https://" CGI_SITE_2_HOST "/\">Privoxy</a> was unable "
-      "to securely connnect to the destination server.</p>"
+      "to securely connect to the destination server.</p>"
       "<p>Reason: ";
    const char message_end[] = "</body></html>\r\n\r\n";
    char reason[INVALID_CERT_INFO_BUF_SIZE];
