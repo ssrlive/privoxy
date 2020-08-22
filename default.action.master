@@ -962,6 +962,8 @@ gm-link.com/
 collector.githubapp.com/
 # Blocked URL = https://consentmanager.mgr.consensu.org/delivery/pixel.php?id=11319&did=0&cfdid=0&t=pv&h=https%3A%2F%2Fsourceforge.net%2Fp%2Fijbswa%2Ffeature-requests%2F535%2F&o=1591880198219&l=EN&lv=0&d=0&ct=14&e=&e2=&e3=&i=&sv=0&dv=0
 .consensu.org/delivery/pixel\.php
+# Blocked URL = https://srv-2020-08-22-20.pixel.parsely.com/plogger/?rand=1598128327825&plid=94157330&idsite=theverge.com&url=https%3A%2F%2Fwww.theverge.com%2F2020%2F8%2F21%2F21396316%2Fapple-wordpress-in-app-purchase-tax-update-store&urlref=&screen=1366x768%7C1366x768%7C24&data=%7B%7D&sid=1&surl=https%3A%2F%2Fwww.theverge.com%2F2020%2F8%2F21%2F21396316%2Fapple-wordpress-in-app-purchase-tax-update-store&sref=&sts=1598128167510&slts=0&date=Sat+Aug+22+2020+22%3A32%3A07+GMT%2B0200+(CEST)&action=heartbeat&inc=6&tt=140923&pvid=91707838&u=pid%3D72b66a2ec3c73c8fbf8c925f679fcbd9
+.pixel.parsely.com/
 
 
 #############################################################################
