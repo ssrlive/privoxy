@@ -254,10 +254,10 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    {
       log_error(LOG_LEVEL_INFO,
          "Can not resolve %s: %s", host, gai_strerror(retval));
-      /* XXX: Should find a better way to propagate this error. */
-      errno = EINVAL;
       csp->error_message = strdup(gai_strerror(retval));
       csp->http->host_ip_addr_str = strdup("unknown");
+      /* XXX: Should find a better way to propagate this error. */
+      errno = EINVAL;
       return(JB_INVALID_SOCKET);
    }
 
