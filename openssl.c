@@ -1170,11 +1170,11 @@ static void log_ssl_errors(int debuglevel, const char* fmt, ...)
    va_end(args);
    /*
     * In case if called by mistake and there were
-    * no SSL errors let's report it to the log.
+    * no TLS/SSL errors let's report it to the log.
     */
    if (!reported)
    {
-      log_error(debuglevel, "%s: no ssl errors detected", prefix);
+      log_error(debuglevel, "%s: no TLS/SSL errors detected", prefix);
    }
 }
 
