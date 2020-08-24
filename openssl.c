@@ -1055,7 +1055,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
    if (BIO_do_handshake(ssl_attrs->bio) != 1)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_do_handshake failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "The TLS/SSL handshake with the server failed");
       ret = -1;
       goto exit;
    }
