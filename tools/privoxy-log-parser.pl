@@ -1210,6 +1210,12 @@ sub handle_loglevel_re_filter($) {
 
         return '' unless SHOW_FILTER_READIN_IN;
 
+    } elsif ($c =~ m/^Decompression didn't result/) {
+
+        # Decompression didn't result in any content.
+
+        # Nothing to highlight.
+
     } else {
 
         found_unknown_content($content);
