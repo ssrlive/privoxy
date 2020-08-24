@@ -821,7 +821,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
       csp->http->hash_of_host_hex);
    if (BIO_do_handshake(ssl_attr->openssl_attr.bio) != 1)
    {
-       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_do_handshake failed");
+       log_ssl_errors(LOG_LEVEL_ERROR,
+          "The TLS/SSL handshake with the client failed");
        ret = -1;
        goto exit;
    }
