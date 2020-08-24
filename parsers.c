@@ -826,8 +826,9 @@ jb_err decompress_iob(struct client_state *csp)
       }
       else
       {
-         /* zlib thinks this is OK, so lets do the same. */
-         log_error(LOG_LEVEL_INFO, "Decompression didn't result in any content.");
+         /* zlib thinks this is OK, so let's do the same. */
+         log_error(LOG_LEVEL_RE_FILTER,
+            "Decompression didn't result in any content.");
       }
    }
    else
