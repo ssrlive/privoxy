@@ -1050,7 +1050,7 @@ char *rewrite_url(char *old_url, const char *pcrs_command)
  *                the last URL found.
  *
  *********************************************************************/
-char *get_last_url(char *subject, const char *redirect_mode)
+static char *get_last_url(char *subject, const char *redirect_mode)
 {
    char *new_url = NULL;
    char *tmp;
