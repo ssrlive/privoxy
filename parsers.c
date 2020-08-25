@@ -381,8 +381,7 @@ jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
  * Parameters  :
  *          1  :  iob = I/O buffer to clear.
  *
- * Returns     :  JB_ERR_OK on success, JB_ERR_MEMORY if out-of-memory
- *                or buffer limit reached.
+ * Returns     :  N/A
  *
  *********************************************************************/
 void clear_iob(struct iob *iob)
