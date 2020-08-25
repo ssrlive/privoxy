@@ -488,13 +488,6 @@ struct iob
 };
 
 
-/**
- * Return the number of bytes in the I/O buffer associated with the passed
- * I/O buffer. May be zero.
- */
-#define IOB_PEEK(IOB) ((IOB->cur > IOB->eod) ? (IOB->eod - IOB->cur) : 0)
-
-
 /* Bits for csp->content_type bitmask: */
 #define CT_TEXT    0x0001U /**< Suitable for pcrs filtering. */
 #define CT_GIF     0x0002U /**< Suitable for GIF filtering.  */
