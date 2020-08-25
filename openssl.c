@@ -171,7 +171,7 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
        */
       while ((ret = BIO_write(bio,
          (const unsigned char *)(buf + pos),
-         send_len)) < 0)
+         send_len)) <= 0)
       {
          if (!BIO_should_retry(bio))
          {
