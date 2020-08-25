@@ -87,6 +87,9 @@
 #include "list.h"
 #include "actions.h"
 #include "filters.h"
+#ifdef FEATURE_HTTPS_INSPECTION
+#include "ssl.h"
+#endif
 
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
@@ -2047,7 +2050,11 @@ static jb_err client_connection(struct client_state *csp, char **header)
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
-        && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
+         && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+#ifdef FEATURE_HTTPS_INSPECTION
+         && !client_use_ssl(csp)
+#endif
+          )
       {
           if (!strcmpic(csp->http->version, "HTTP/1.1"))
           {
@@ -3933,7 +3940,12 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
     && !(csp->flags & CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET)
     && ((csp->flags & CSP_FLAG_SERVER_CONTENT_LENGTH_SET)
-       || (csp->flags & CSP_FLAG_CHUNKED)))
+       || (csp->flags & CSP_FLAG_CHUNKED))
+#ifdef FEATURE_HTTPS_INSPECTION
+    && !client_use_ssl(csp)
+    && !csp->http->ssl
+#endif
+       )
    {
       log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
       err = enlist(csp->headers, proxy_connection_header);

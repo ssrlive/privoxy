@@ -416,6 +416,11 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %u",
       csp->ip_addr_str, csp->http->gpc, csp->http->hostport, csp->http->path,
       csp->http->version, message_len-head_length);
+
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+   csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
+#endif
 }
 
 
