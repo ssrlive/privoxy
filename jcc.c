@@ -4053,7 +4053,7 @@ extern int fuzz_server_response(struct client_state *csp, char *fuzz_input_file)
 
    if (strcmp(fuzz_input_file, "-") == 0)
    {
-      /* XXX: Doesn'T work yet. */
+      /* XXX: Doesn't work yet. */
       csp->server_connection.sfd = 0;
    }
    else
