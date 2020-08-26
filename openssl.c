@@ -1009,13 +1009,35 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /*
     * Set the hostname to check against the received server certificate
     */
+#if OPENSSL_VERSION_NUMBER > 0x10100000L
    if (!SSL_set1_host(ssl, csp->http->host))
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "SSL_set1_host failed");
       ret = -1;
       goto exit;
    }
-
+#else
+   if (host_is_ip_address(csp->http->host))
+   {
+      if (X509_VERIFY_PARAM_set1_ip_asc(ssl->param,  csp->http->host) != 1)
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "X509_VERIFY_PARAM_set1_ip_asc() failed");
+         ret = -1;
+         goto exit;
+      }
+   }
+   else
+   {
+      if (X509_VERIFY_PARAM_set1_host(ssl->param,  csp->http->host, 0) != 1)
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "X509_VERIFY_PARAM_set1_host() failed");
+         ret = -1;
+         goto exit;
+      }
+   }
+#endif
    /* SNI extension */
    if (!SSL_set_tlsext_host_name(ssl, csp->http->host))
    {
