@@ -1835,7 +1835,7 @@ static int seed_rng(struct client_state *csp)
  *
  *********************************************************************/
 extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
-                              const unsigned char *src, size_t slen )
+                             const unsigned char *src, size_t slen)
 {
    return mbedtls_base64_encode(dst, dlen, olen, src, slen);
 }
