@@ -1726,6 +1726,12 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
 
       mbedtls_x509_crt_info(buf, sizeof(buf), CERT_INFO_PREFIX, crt);
       encoded_text = html_encode(buf);
+      if (encoded_text == NULL)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to HTML-encode the certificate information");
+         return -1;
+      }
       strlcpy(last->info_buf, encoded_text, sizeof(last->info_buf));
       freez(encoded_text);
    }
