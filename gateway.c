@@ -78,8 +78,8 @@
 #endif /* HAVE_POLL */
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
-static jb_socket socks4_connect(const struct forward_spec * fwd,
-                                const char * target_host,
+static jb_socket socks4_connect(const struct forward_spec *fwd,
+                                const char *target_host,
                                 int target_port,
                                 struct client_state *csp);
 
@@ -578,11 +578,11 @@ static int mark_connection_unused(const struct reusable_connection *connection)
  * Returns     :  JB_INVALID_SOCKET => failure, else it is the socket file descriptor.
  *
  *********************************************************************/
-jb_socket forwarded_connect(const struct forward_spec * fwd,
+jb_socket forwarded_connect(const struct forward_spec *fwd,
                             struct http_request *http,
                             struct client_state *csp)
 {
-   const char * dest_host;
+   const char *dest_host;
    int dest_port;
    jb_socket sfd = JB_INVALID_SOCKET;
 
@@ -713,8 +713,8 @@ extern jb_err socks_fuzz(struct client_state *csp)
  * Returns     :  JB_INVALID_SOCKET => failure, else a socket file descriptor.
  *
  *********************************************************************/
-static jb_socket socks4_connect(const struct forward_spec * fwd,
-                                const char * target_host,
+static jb_socket socks4_connect(const struct forward_spec *fwd,
+                                const char *target_host,
                                 int target_port,
                                 struct client_state *csp)
 {
