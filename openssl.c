@@ -638,6 +638,14 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
 
    len = BIO_get_mem_data(bio, &bio_mem_data);
    encoded_text = html_encode(bio_mem_data);
+   if (encoded_text == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to HTML-encode the certificate information");
+      ret = -1;
+      goto exit;
+   }
+
    strlcpy(last->info_buf, encoded_text, sizeof(last->info_buf));
    freez(encoded_text);
    ret = 0;
