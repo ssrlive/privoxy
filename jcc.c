@@ -1201,6 +1201,7 @@ void save_connection_destination(jb_socket sfd,
    }
    server_connection->forward_port = fwd->forward_port;
 }
+#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
@@ -1301,7 +1302,6 @@ static void verify_request_length(struct client_state *csp)
       log_error(LOG_LEVEL_CONNECT, "Complete client request received.");
    }
 }
-#endif /* FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
@@ -1922,6 +1922,7 @@ static jb_err parse_client_request(struct client_state *csp)
       /* Assume persistence until further notice */
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
    }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    if (csp->http->ssl == 0)
    {
@@ -1948,7 +1949,6 @@ static jb_err parse_client_request(struct client_state *csp)
       csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
    }
 #endif
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
    err = sed(csp, FILTER_CLIENT_HEADERS);
    if (JB_ERR_OK != err)

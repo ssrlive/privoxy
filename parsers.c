@@ -141,10 +141,10 @@ static jb_err server_save_content_length(struct client_state *csp, char **header
 static jb_err server_keep_alive(struct client_state *csp, char **header);
 static jb_err server_proxy_connection(struct client_state *csp, char **header);
 static jb_err client_keep_alive(struct client_state *csp, char **header);
-static jb_err client_save_content_length(struct client_state *csp, char **header);
 static jb_err client_proxy_connection(struct client_state *csp, char **header);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
+static jb_err client_save_content_length(struct client_state *csp, char **header);
 static jb_err client_host_adder       (struct client_state *csp);
 static jb_err client_xtra_adder       (struct client_state *csp);
 static jb_err client_x_forwarded_for_adder(struct client_state *csp);
@@ -188,9 +188,9 @@ static const struct parsers client_patterns[] = {
    { "TE:",                       3,   client_te },
    { "Host:",                     5,   client_host },
    { "if-modified-since:",       18,   client_if_modified_since },
+   { "Content-Length:",          15,   client_save_content_length },
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Keep-Alive:",              11,   client_keep_alive },
-   { "Content-Length:",          15,   client_save_content_length },
    { "Proxy-Connection:",        17,   client_proxy_connection },
 #else
    { "Keep-Alive:",              11,   crumble },
@@ -1850,6 +1850,7 @@ static jb_err server_proxy_connection(struct client_state *csp, char **header)
    csp->flags |= CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET;
    return JB_ERR_OK;
 }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
@@ -1882,6 +1883,7 @@ static jb_err proxy_authentication(struct client_state *csp, char **header)
 }
 
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  client_keep_alive
@@ -1948,6 +1950,7 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
 
    return JB_ERR_OK;
 }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
@@ -2020,8 +2023,6 @@ static jb_err client_save_content_length(struct client_state *csp, char **header
 
    return JB_ERR_OK;
 }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
-
 
 
 /*********************************************************************
@@ -4883,7 +4884,6 @@ static void create_content_length_header(unsigned long long content_length,
 }
 
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  get_expected_content_length
@@ -4915,7 +4915,7 @@ unsigned long long get_expected_content_length(struct list *headers)
 
    return content_length;
 }
-#endif
+
 
 /*
   Local Variables:
