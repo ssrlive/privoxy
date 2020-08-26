@@ -416,7 +416,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
 
    if (BIO_puts(bio, "\nsubject name      : ") <= 0)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for sublect failed");
+      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for subject failed");
       ret = -1;
       goto exit;
    }
