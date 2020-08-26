@@ -260,7 +260,9 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    char *encoded_text;
    long l;
    const ASN1_INTEGER *bs;
+#if OPENSSL_VERSION_NUMBER > 0x10100000L
    const X509_ALGOR *tsig_alg;
+#endif
    int loc;
 
    if (!bio)
@@ -450,6 +452,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
       goto exit;
    }
 
+#if OPENSSL_VERSION_NUMBER > 0x10100000L
    if (BIO_puts(bio, "\nsigned using      : ") <= 0)
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for signed using failed");
@@ -463,6 +466,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
       ret = -1;
       goto exit;
    }
+#endif
    pkey = X509_get_pubkey(crt);
    if (!pkey)
    {
