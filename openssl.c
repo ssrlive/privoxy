@@ -1093,8 +1093,9 @@ extern int create_server_ssl_connection(struct client_state *csp)
       else
       {
          csp->server_cert_verification_result = verify_result;
-         log_error(LOG_LEVEL_ERROR, "SSL_get_verify_result failed: %s",
-            X509_verify_cert_error_string(verify_result));
+         log_error(LOG_LEVEL_ERROR,
+            "X509 certificate verification for %s failed: %s",
+            csp->http->hostport, X509_verify_cert_error_string(verify_result));
          ret = -1;
          goto exit;
       }
