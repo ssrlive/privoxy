@@ -129,6 +129,9 @@ struct socks_reply {
 static const char socks_userid[] = "anonymous";
 
 #ifdef FEATURE_CONNECTION_SHARING
+#ifndef FEATURE_CONNECTION_KEEP_ALIVE
+#error Using FEATURE_CONNECTION_SHARING without FEATURE_CONNECTION_KEEP_ALIVE is impossible
+#endif
 
 #define MAX_REUSABLE_CONNECTIONS 100
 
