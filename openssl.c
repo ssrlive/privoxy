@@ -69,6 +69,9 @@ static int ssl_inited = 0;
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
 #define X509_set1_notBefore X509_set_notBefore
 #define X509_set1_notAfter X509_set_notAfter
+#define X509_get0_serialNumber X509_get_serialNumber
+#define X509_get0_notBefore X509_get_notBefore
+#define X509_get0_notAfter X509_get_notAfter
 #endif
 
 /*********************************************************************
