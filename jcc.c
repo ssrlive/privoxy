@@ -881,8 +881,8 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
          {
             /* There is nothing we can do about it. */
             log_error(LOG_LEVEL_CONNECT, "Couldn't deliver the error message "
-               "for %s through client socket %d using TLS/SSL",
-               http->url, csp->cfd);
+               "for https://%s%s through client socket %d using TLS/SSL",
+               http->hostport, http->url, csp->cfd);
          }
       }
       else
