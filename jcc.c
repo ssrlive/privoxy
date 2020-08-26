@@ -5608,7 +5608,7 @@ static void listen_loop(void)
 
 #ifdef FEATURE_GRACEFUL_TERMINATION
 
-   log_error(LOG_LEVEL_ERROR, "Graceful termination requested");
+   log_error(LOG_LEVEL_INFO, "Graceful termination requested");
 
    unload_current_config_file();
    unload_current_actions_file();
