@@ -236,15 +236,14 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
  *
  * Function    :  ssl_store_cert
  *
- * Description :  This is a callback function for certificate verification.
- *                It's called once for each certificate in the server's
- *                certificate trusted chain and prepares information about
- *                the certificate. The information can be used to inform
- *                the user about invalid certificates.
+ * Description : This function is called once for each certificate in the
+ *               server's certificate trusted chain and prepares
+ *               information about the certificate. The information can
+ *               be used to inform the user about invalid certificates.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
- *          2  :  crt   = certificate from trusted chain
+ *          2  :  crt = certificate from trusted chain
  *
  * Returns     :  0 on success and negative value on error
  *
