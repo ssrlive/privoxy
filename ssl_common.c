@@ -323,6 +323,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    size_t message_len = 0;
    int ret = 0;
    struct certs_chain *cert = NULL;
+   const size_t head_length = 63;
 
    /* Header of message with certificate information */
    const char message_begin[] =
@@ -409,6 +410,12 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    ssl_send_data(ssl_attr, (const unsigned char *)message, strlen(message));
 
    free_certificate_chain(csp);
+
+   log_error(LOG_LEVEL_CRUNCH, "Certificate error: %s: https://%s%s",
+      reason, csp->http->hostport, csp->http->path);
+   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %u",
+      csp->ip_addr_str, csp->http->gpc, csp->http->hostport, csp->http->path,
+      csp->http->version, message_len-head_length);
 }
 
 
