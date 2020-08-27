@@ -68,7 +68,7 @@ static int ssl_inited = 0;
  *
  * Function    :  openssl_init
  *
- * Description :  INitializes OpenSSL library once
+ * Description :  Initializes OpenSSL library once
  *
  * Parameters  :  N/A
  *
