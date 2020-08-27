@@ -1405,7 +1405,12 @@ static int generate_key(struct client_state *csp, char **key_buf)
       goto exit;
    }
 
-   BN_set_word(exp, RSA_KEY_PUBLIC_EXPONENT);
+   if (BN_set_word(exp, RSA_KEY_PUBLIC_EXPONENT) != 1)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR, "Setting RSA key exponent failed");
+      ret = -1;
+      goto exit;
+   }
 
    key_file_path = make_certs_path(csp->config->certificate_directory,
       (char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
