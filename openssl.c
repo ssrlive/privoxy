@@ -1783,7 +1783,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
-         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+         CERT_PARAM_ORGANIZATION_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
@@ -1792,7 +1792,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
-         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+         CERT_PARAM_ORG_UNIT_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
@@ -1801,7 +1801,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
-         CERT_PARAM_COMMON_NAME_FCODE, csp->http->host);
+         CERT_PARAM_COUNTRY_FCODE, csp->http->host);
       ret = -1;
       goto exit;
    }
@@ -1943,7 +1943,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    if (!X509_set_pubkey(cert, loaded_subject_key))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
-         "Setting issuer name in signed certificate failed");
+         "Setting public key in signed certificate failed");
       ret = -1;
       goto exit;
    }
@@ -1951,7 +1951,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    if (!X509_set_subject_name(cert, subject_name))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
-         "Setting issuer name in signed certificate failed");
+         "Setting subject name in signed certificate failed");
       ret = -1;
       goto exit;
    }
@@ -2005,7 +2005,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    if (!X509_set1_notBefore(cert, asn_time))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
-         "Setting valid not befre in signed certificate failed");
+         "Setting valid not before in signed certificate failed");
       ret = -1;
       goto exit;
    }
@@ -2021,7 +2021,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    if (!set_x509_ext(cert, issuer_cert, NID_subject_key_identifier, CERTIFICATE_SUBJECT_KEY))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
-         "Setting the Subject Key Identifie extension failed");
+         "Setting the Subject Key Identifier extension failed");
       ret = -1;
       goto exit;
    }
@@ -2037,7 +2037,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    if (!host_is_ip_address(csp->http->host) &&
        !set_subject_alternative_name(cert, issuer_cert, csp->http->host))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Setting the Subject Alt Nameextension failed");
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "Setting the Subject Alt Name extension failed");
       ret = -1;
       goto exit;
    }
