@@ -105,7 +105,7 @@ static int seed_rng(struct client_state *csp);
  *                or has not yet been sent by the remote end.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to test
+ *          1  :  ssl_attr = SSL context to test
  *
  * Returns     :   0 => No data are pending
  *                >0 => Pending data length
@@ -131,7 +131,7 @@ extern size_t is_ssl_pending(struct ssl_attr *ssl_attr)
  *                connection context.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to send data to
+ *          1  :  ssl_attr = SSL context to send data to
  *          2  :  buf = Pointer to data to be sent
  *          3  :  len = Length of data to be sent to the SSL context
  *
@@ -206,7 +206,7 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
  *                it into buffer.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to receive data from
+ *          1  :  ssl_attr = SSL context to receive data from
  *          2  :  buf = Pointer to buffer where data will be written
  *          3  :  max_length = Maximum number of bytes to read
  *

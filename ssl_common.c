@@ -91,7 +91,7 @@ extern int server_use_ssl(const struct client_state *csp)
  *                connection, optionally delaying the operation.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to send data to
+ *          1  :  ssl_attr = SSL context to send data to
  *          2  :  buf = Pointer to data to be sent
  *          3  :  len = Length of data to be sent to the SSL context
  *          4  :  delay = Delay in milliseconds.
@@ -154,7 +154,7 @@ extern int ssl_send_data_delayed(struct ssl_attr* ssl_attr,
  *                SSL connection. Alternative to function flush_socket.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to send buffer to
+ *          1  :  ssl_attr = SSL context to send buffer to
  *          2  :  iob = The I/O buffer to flush, usually csp->iob.
  *
  * Returns     :  On success, the number of bytes send are returned (zero
