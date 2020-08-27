@@ -341,7 +341,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
 
    if (BIO_puts(bio, "serial number     : ") <= 0)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_write() for serial failed");
+      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_puts() for serial failed");
       ret = -1;
       goto exit;
    }
@@ -461,7 +461,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    tsig_alg = X509_get0_tbs_sigalg(crt);
    if (!i2a_ASN1_OBJECT(bio, tsig_alg->algorithm))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "i2a_ASN1_OBJECT() for signed using on failed");
+      log_ssl_errors(LOG_LEVEL_ERROR, "i2a_ASN1_OBJECT() for signed using failed");
       ret = -1;
       goto exit;
    }
