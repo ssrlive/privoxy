@@ -5604,10 +5604,11 @@ static void listen_loop(void)
 #define SELECTED_ONE_OPTION
          {
             pthread_t the_thread;
+            int ret;
 
-            errno = pthread_create(&the_thread, &attrs,
+            ret = pthread_create(&the_thread, &attrs,
                (void * (*)(void *))serve, csp);
-            child_id = errno ? -1 : 0;
+            child_id = ret ? -1 : 0;
          }
 #endif
 
