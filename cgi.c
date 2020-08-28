@@ -537,7 +537,8 @@ static struct http_response *dispatch_known_cgi(struct client_state * csp,
       *query_args_start++ = '\0';
       param_list = new_map();
       err = map(param_list, "file", 1, url_decode(query_args_start), 0);
-      if (JB_ERR_OK != err) {
+      if (JB_ERR_OK != err)
+      {
          free(param_list);
          free(path_copy);
          return cgi_error_memory();
