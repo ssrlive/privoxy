@@ -3874,7 +3874,6 @@ static void chat(struct client_state *csp)
          }
          if (JB_ERR_OK != process_encrypted_request(csp))
          {
-            log_error(LOG_LEVEL_ERROR, "Failed to parse encrypted request.");
             close_client_ssl_connection(csp);
             return;
          }
