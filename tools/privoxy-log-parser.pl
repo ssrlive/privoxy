@@ -1770,6 +1770,12 @@ sub handle_loglevel_connect($) {
         # Waiting for the next client connection. Currently active threads: 30
         $c =~ s@(?<=threads: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Data arrived in time on client socket/) {
+
+        # Data arrived in time on client socket 6. Requests so far: 3
+        $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=Requests so far: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
