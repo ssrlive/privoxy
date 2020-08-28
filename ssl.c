@@ -254,34 +254,6 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
 
 /*********************************************************************
  *
- * Function    :  ssl_debug_callback
- *
- * Description :  Debug callback function for mbedtls library.
- *                Prints info into log file.
- *
- * Parameters  :
- *          1  :  ctx   = File to save log in
- *          2  :  level = Debug level
- *          3  :  file  = File calling debug message
- *          4  :  line  = Line calling debug message
- *          5  :  str   = Debug message
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void ssl_debug_callback(void *ctx, int level, const char *file, int line, const char *str)
-{
-   /*
-   ((void)level);
-   fprintf((FILE *)ctx, "%s:%04d: %s", file, line, str);
-   fflush((FILE *)ctx);
-   log_error(LOG_LEVEL_INFO, "SSL debug message: %s:%04d: %s", file, line, str);
-   */
-}
-
-
-/*********************************************************************
- *
  * Function    :  create_client_ssl_connection
  *
  * Description :  Creates TLS/SSL secured connection with client
@@ -422,8 +394,6 @@ extern int create_client_ssl_connection(struct client_state *csp)
 
    mbedtls_ssl_conf_rng(&(ssl_attr->mbedtls_attr.conf),
       mbedtls_ctr_drbg_random, &ctr_drbg);
-   mbedtls_ssl_conf_dbg(&(ssl_attr->mbedtls_attr.conf),
-      ssl_debug_callback, stdout);
 
 #if defined(MBEDTLS_SSL_CACHE_C)
    mbedtls_ssl_conf_session_cache(&(ssl_attr->mbedtls_attr.conf),
@@ -677,8 +647,6 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
    mbedtls_ssl_conf_rng(&(ssl_attr->mbedtls_attr.conf),
       mbedtls_ctr_drbg_random, &ctr_drbg);
-   mbedtls_ssl_conf_dbg(&(ssl_attr->mbedtls_attr.conf),
-      ssl_debug_callback, stdout);
 
    ret = mbedtls_ssl_setup(&(ssl_attr->mbedtls_attr.ssl),
       &(ssl_attr->mbedtls_attr.conf));
