@@ -1353,6 +1353,7 @@ jb_err cgi_show_status(struct client_state *csp,
    else
    {
       if (!err) err = map(exports, "actions-filenames", 1, "<tr><td>None specified</td></tr>", 1);
+      freez(s);
    }
 
    /*
