@@ -1380,6 +1380,7 @@ jb_err cgi_show_status(struct client_state *csp,
    {
       if (!err) err = map(exports, "re-filter-filenames", 1, "<tr><td>None specified</td></tr>", 1);
       if (!err) err = map_block_killer(exports, "have-filterfile");
+      freez(s);
    }
 
 #ifdef FEATURE_TRUST
