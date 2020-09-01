@@ -1203,7 +1203,6 @@ if test X"$OPT_OPENSSL" != Xno; then
     AC_MSG_NOTICE([Detected OpenSSL. Enabling https inspection.])
 
     LIBS="$LIBS -lssl -lcrypto"
-#    old_CFLAGS_nospecial="-Imbedtls/include $old_CFLAGS_nospecial"
     old_CFLAGS_nospecial="$old_CFLAGS_nospecial"
 
     FEATURE_HTTPS_INSPECTION_ONLY=
