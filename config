@@ -1797,7 +1797,7 @@ tolerate-pipelining 1
 #
 #      default-server-timeout 60
 #
-#default-server-timeout 60
+#default-server-timeout 5
 #
 #  6.7. connection-sharing
 #  ========================
@@ -2544,7 +2544,7 @@ socket-timeout 300
 #
 #      ca-key-file cakey.pem
 #
-#ca-key-file root.pem
+#ca-key-file cakey.pem
 #
 #  7.4. ca-password
 #  =================
