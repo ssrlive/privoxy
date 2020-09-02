@@ -87,6 +87,10 @@ static void apply_url_actions(struct current_action_spec *action,
 #endif
                               struct url_actions *b);
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+static void increment_block_reason_counter(const char *block_reason);
+#endif
+
 #ifdef FEATURE_ACL
 #ifdef HAVE_RFC2553
 /*********************************************************************
@@ -556,6 +560,13 @@ struct http_response *block_url(struct client_state *csp)
    {
       return cgi_error_memory();
    }
+
+#ifdef FEATURE_EXTENDED_STATISTICS
+   if (csp->action->string[ACTION_STRING_BLOCK] != NULL)
+   {
+      increment_block_reason_counter(csp->action->string[ACTION_STRING_BLOCK]);
+   }
+#endif
 
    /*
     * If it's an image-url, send back an image or redirect
@@ -1039,7 +1050,7 @@ char *rewrite_url(char *old_url, const char *pcrs_command)
  *                the last URL found.
  *
  *********************************************************************/
-char *get_last_url(char *subject, const char *redirect_mode)
+static char *get_last_url(char *subject, const char *redirect_mode)
 {
    char *new_url = NULL;
    char *tmp;
@@ -1654,7 +1665,9 @@ static char *pcrs_filter_response(struct client_state *csp)
       log_error(LOG_LEVEL_RE_FILTER,
          "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
          csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
-
+#ifdef FEATURE_EXTENDED_STATISTICS
+      update_filter_statistics(b->name, current_hits);
+#endif
       hits += current_hits;
    }
 
@@ -2307,20 +2320,7 @@ void get_url_actions(struct client_state *csp, struct http_request *http)
    struct url_actions *b;
    int i;
 
-#ifdef FEATURE_HTTPS_INSPECTION
-   if (!csp->http->client_ssl)
-#endif
-   {
-      /*
-       * When filtering TLS traffic this function gets called a
-       * second time after the encrypted headers have been received.
-       *
-       * Only initialize the first time. The second time we apply
-       * the newly set actions on top of the ones that were set
-       * the first time.
-       */
-      init_current_action(csp->action);
-   }
+   init_current_action(csp->action);
 
    for (i = 0; i < MAX_AF_FILES; i++)
    {
@@ -2750,6 +2750,282 @@ int filters_available(const struct client_state *csp)
    return FALSE;
 }
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+
+struct filter_statistics_entry
+{
+   char *filter;
+   unsigned long long executions;
+   unsigned long long pages_modified;
+   unsigned long long hits;
+
+   struct filter_statistics_entry *next;
+};
+
+static struct filter_statistics_entry *filter_statistics = NULL;
+
+
+/*********************************************************************
+ *
+ * Function    :  register_filter_for_statistics
+ *
+ * Description :  Registers a filter so we can gather statistics for
+ *                it unless the filter has already been registered
+ *                before.
+ *
+ * Parameters  :
+ *          1  :  filter = Name of the filter to register
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void register_filter_for_statistics(const char *filter)
+{
+   struct filter_statistics_entry *entry;
+
+   privoxy_mutex_lock(&filter_statistics_mutex);
+
+   if (filter_statistics == NULL)
+   {
+      filter_statistics = zalloc_or_die(sizeof(struct filter_statistics_entry));
+      entry = filter_statistics;
+      entry->filter = strdup_or_die(filter);
+      privoxy_mutex_unlock(&filter_statistics_mutex);
+      return;
+   }
+   entry = filter_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->filter, filter))
+      {
+         /* Already registered, nothing to do. */
+         break;
+      }
+      if (entry->next == NULL)
+      {
+         entry->next = zalloc_or_die(sizeof(struct filter_statistics_entry));
+         entry->next->filter = strdup_or_die(filter);
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  update_filter_statistics
+ *
+ * Description :  Updates the statistics for a filter.
+ *
+ * Parameters  :
+ *          1  :  filter = Name of the filter to update
+ *          2  :  hits = Hit count.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void update_filter_statistics(const char *filter, int hits)
+{
+   struct filter_statistics_entry *entry;
+
+   privoxy_mutex_lock(&filter_statistics_mutex);
+
+   entry = filter_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->filter, filter))
+      {
+         entry->executions++;
+         if (hits != 0)
+         {
+            entry->pages_modified++;
+            entry->hits += (unsigned)hits;
+         }
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_filter_statistics
+ *
+ * Description :  Gets the statistics for a filter.
+ *
+ * Parameters  :
+ *          1  :  filter = Name of the filter to get statistics for.
+ *          2  :  executions = Storage for the execution count.
+ *          3  :  pages_modified = Storage for the number of modified pages.
+ *          4  :  hits = Storage for the number of hits.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void get_filter_statistics(const char *filter, unsigned long long *executions,
+                           unsigned long long *pages_modified,
+                           unsigned long long *hits)
+{
+   struct filter_statistics_entry *entry;
+
+   privoxy_mutex_lock(&filter_statistics_mutex);
+
+   entry = filter_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->filter, filter))
+      {
+         *executions = entry->executions;
+         *pages_modified = entry->pages_modified;
+         *hits = entry->hits;
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&filter_statistics_mutex);
+
+}
+
+
+struct block_statistics_entry
+{
+   char *block_reason;
+   unsigned long long count;
+
+   struct block_statistics_entry *next;
+};
+
+static struct block_statistics_entry *block_statistics = NULL;
+
+/*********************************************************************
+ *
+ * Function    :  register_block_reason_for_statistics
+ *
+ * Description :  Registers a block reason so we can gather statistics
+ *                for it unless the block reason has already been
+ *                registered before.
+ *
+ * Parameters  :
+ *          1  :  block_reason = Block reason to register
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void register_block_reason_for_statistics(const char *block_reason)
+{
+   struct block_statistics_entry *entry;
+
+   privoxy_mutex_lock(&block_statistics_mutex);
+
+   if (block_statistics == NULL)
+   {
+      block_statistics = zalloc_or_die(sizeof(struct block_statistics_entry));
+      entry = block_statistics;
+      entry->block_reason = strdup_or_die(block_reason);
+      privoxy_mutex_unlock(&block_statistics_mutex);
+      return;
+   }
+   entry = block_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->block_reason, block_reason))
+      {
+         /* Already registered, nothing to do. */
+         break;
+      }
+      if (entry->next == NULL)
+      {
+         entry->next = zalloc_or_die(sizeof(struct block_statistics_entry));
+         entry->next->block_reason = strdup_or_die(block_reason);
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&block_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  increment_block_reason_counter
+ *
+ * Description :  Updates the counter for a block reason.
+ *
+ * Parameters  :
+ *          1  :  block_reason = Block reason to count
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+static void increment_block_reason_counter(const char *block_reason)
+{
+   struct block_statistics_entry *entry;
+
+   privoxy_mutex_lock(&block_statistics_mutex);
+
+   entry = block_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->block_reason, block_reason))
+      {
+         entry->count++;
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&block_statistics_mutex);
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_block_reason_count
+ *
+ * Description :  Gets number of times a block reason was used.
+ *
+ * Parameters  :
+ *          1  :  block_reason = Block reason to get statistics for.
+ *          2  :  count = Storage for the number of times the block
+ *                        reason was used.
+ *
+ * Returns     :  void
+ *
+ *********************************************************************/
+void get_block_reason_count(const char *block_reason, unsigned long long *count)
+{
+   struct block_statistics_entry *entry;
+
+   privoxy_mutex_lock(&block_statistics_mutex);
+
+   entry = block_statistics;
+   while (entry != NULL)
+   {
+      if (!strcmp(entry->block_reason, block_reason))
+      {
+         *count = entry->count;
+         break;
+      }
+      entry = entry->next;
+   }
+
+   privoxy_mutex_unlock(&block_statistics_mutex);
+
+}
+
+#endif /* def FEATURE_EXTENDED_STATISTICS */
 
 /*
   Local Variables:

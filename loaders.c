@@ -1226,7 +1226,9 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          bl = new_bl;
 
          log_error(LOG_LEVEL_RE_FILTER, "Reading in filter \"%s\" (\"%s\")", bl->name, bl->description);
-
+#ifdef FEATURE_EXTENDED_STATISTICS
+         register_filter_for_statistics(bl->name);
+#endif
          freez(buf);
          continue;
       }
@@ -1238,7 +1240,7 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          /* Save the code as "pattern", but do not compile anything. */
          if (bl->patterns->first != NULL)
          {
-            log_error(LOG_LEVEL_FATAL, "External filter '%s' contains several jobss. "
+            log_error(LOG_LEVEL_FATAL, "External filter '%s' contains several jobs. "
                "Did you forget to escape a line break?",
                bl->name);
          }

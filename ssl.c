@@ -28,7 +28,6 @@
  *
  *********************************************************************/
 
-#include <ctype.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -51,6 +50,7 @@
 #include "errlog.h"
 #include "jcc.h"
 #include "ssl.h"
+#include "ssl_common.h"
 #include "encode.h"
 
 
@@ -60,45 +60,19 @@
  */
 #define PEM_BEGIN_CRT     "-----BEGIN CERTIFICATE-----\n"
 #define PEM_END_CRT       "-----END CERTIFICATE-----\n"
+#define VALID_DATETIME_FMT    "%Y%m%d%H%M%S"
+#define VALID_DATETIME_BUFLEN 15
 
 /*
  * Macros for ssl.c
  */
-#define ERROR_BUF_SIZE                   1024              /* Size of buffer for error messages */
 #define CERTIFICATE_BUF_SIZE             16384             /* Size of buffer to save certificate. Value 4096 is mbedtls library buffer size for certificate in DER form */
 #define PRIVATE_KEY_BUF_SIZE             16000             /* Size of buffer to save private key. Value 16000 is taken from mbed TLS library examples. */
-#define RSA_KEY_PUBLIC_EXPONENT          65537             /* Public exponent for RSA private key generating */
-#define RSA_KEYSIZE                      2048              /* Size of generated RSA keys */
 #define CERT_SIGNATURE_ALGORITHM         MBEDTLS_MD_SHA256 /* The MD algorithm to use for the signature */
-#define CERT_SERIAL_NUM_LENGTH           4                 /* Bytes of hash to be used for creating serial number of certificate. Min=2 and max=16 */
-#define INVALID_CERT_INFO_BUF_SIZE       2048              /* Size of buffer for message with information about reason of certificate invalidity. Data after the end of buffer will not be saved */
-#define CERT_PARAM_COMMON_NAME           "CN="
-#define CERT_PARAM_ORGANIZATION          ",O="
-#define CERT_PARAM_ORG_UNIT              ",OU="
-#define CERT_PARAM_COUNTRY               ",C=CZ"
-#define KEY_FILE_TYPE                    ".pem"
-#define CERT_FILE_TYPE                   ".crt"
-#define CERT_SUBJECT_PASSWORD            ""
-#define CERT_INFO_PREFIX                 ""
-
-/*
- * Properties of cert for generating
- */
-typedef struct {
-   char       *issuer_crt;                         /* filename of the issuer certificate       */
-   char       *subject_key;                        /* filename of the subject key file         */
-   char       *issuer_key;                         /* filename of the issuer key file          */
-   const char *subject_pwd;                        /* password for the subject key file        */
-   const char *issuer_pwd;                         /* password for the issuer key file         */
-   char       *output_file;                        /* where to store the constructed key file  */
-   const char *subject_name;                       /* subject name for certificate             */
-   char       issuer_name[ISSUER_NAME_BUF_SIZE];   /* issuer name for certificate              */
-   const char *not_before;                         /* validity period not before               */
-   const char *not_after;                          /* validity period not after                */
-   const char *serial;                             /* serial number string                     */
-   int        is_ca;                               /* is a CA certificate                      */
-   int        max_pathlen;                         /* maximum CA path length                   */
-} cert_options;
+#define CERT_PARAM_COMMON_NAME           CERT_PARAM_COMMON_NAME_FCODE"="
+#define CERT_PARAM_ORGANIZATION          ","CERT_PARAM_ORGANIZATION_FCODE"="
+#define CERT_PARAM_ORG_UNIT              ","CERT_PARAM_ORG_UNIT_FCODE"="
+#define CERT_PARAM_COUNTRY               ","CERT_PARAM_COUNTRY_FCODE"="CERT_PARAM_COUNTRY_CODE
 
 /*
  * Properties of key for generating
@@ -109,56 +83,17 @@ typedef struct {
    char *key_file_path;      /* filename of the key file */
 } key_options;
 
+/* Variables for one common RNG for all SSL use */
+static mbedtls_ctr_drbg_context ctr_drbg;
+static mbedtls_entropy_context  entropy;
+static int rng_seeded;
+
 static int generate_webpage_certificate(struct client_state *csp);
-static char *make_certs_path(const char *conf_dir, const char *file_name, const char *suffix);
-static int file_exists(const char *path);
 static int host_to_hash(struct client_state *csp);
 static int ssl_verify_callback(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags);
-static void free_certificate_chain(struct client_state *csp);
-static unsigned long  get_certificate_serial(struct client_state *csp);
 static void free_client_ssl_structures(struct client_state *csp);
 static void free_server_ssl_structures(struct client_state *csp);
 static int seed_rng(struct client_state *csp);
-
-/*********************************************************************
- *
- * Function    :  client_use_ssl
- *
- * Description :  Tests if client in current client state structure
- *                should use SSL connection or standard connection.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  If client should use TLS/SSL connection, 1 is returned.
- *                Otherwise 0 is returned.
- *
- *********************************************************************/
-extern int client_use_ssl(const struct client_state *csp)
-{
-   return csp->http->client_ssl;
-}
-
-
-/*********************************************************************
- *
- * Function    :  server_use_ssl
- *
- * Description :  Tests if server in current client state structure
- *                should use SSL connection or standard connection.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  If server should use TLS/SSL connection, 1 is returned.
- *                Otherwise 0 is returned.
- *
- *********************************************************************/
-extern int server_use_ssl(const struct client_state *csp)
-{
-   return csp->http->server_ssl;
-}
-
 
 /*********************************************************************
  *
@@ -170,14 +105,15 @@ extern int server_use_ssl(const struct client_state *csp)
  *                or has not yet been sent by the remote end.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to test
+ *          1  :  ssl_attr = SSL context to test
  *
  * Returns     :   0 => No data are pending
  *                >0 => Pending data length
  *
  *********************************************************************/
-extern size_t is_ssl_pending(mbedtls_ssl_context *ssl)
+extern size_t is_ssl_pending(struct ssl_attr *ssl_attr)
 {
+   mbedtls_ssl_context *ssl = &ssl_attr->mbedtls_attr.ssl;
    if (ssl == NULL)
    {
       return 0;
@@ -195,15 +131,16 @@ extern size_t is_ssl_pending(mbedtls_ssl_context *ssl)
  *                connection context.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to send data to
+ *          1  :  ssl_attr = SSL context to send data to
  *          2  :  buf = Pointer to data to be sent
  *          3  :  len = Length of data to be sent to the SSL context
  *
  * Returns     :  Length of sent data or negative value on error.
  *
  *********************************************************************/
-extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, size_t len)
+extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, size_t len)
 {
+   mbedtls_ssl_context *ssl = &ssl_attr->mbedtls_attr.ssl;
    int ret = 0;
    size_t max_fragment_size = 0;  /* Maximal length of data in one SSL fragment*/
    int send_len             = 0;  /* length of one data part to send */
@@ -263,76 +200,13 @@ extern int ssl_send_data(mbedtls_ssl_context *ssl, const unsigned char *buf, siz
 
 /*********************************************************************
  *
- * Function    :  ssl_send_data_delayed
- *
- * Description :  Sends the contents of buf (for n bytes) to given SSL
- *                connection, optionally delaying the operation.
- *
- * Parameters  :
- *          1  :  ssl = SSL context to send data to
- *          2  :  buf = Pointer to data to be sent
- *          3  :  len = Length of data to be sent to the SSL context
- *          4  :  delay = Delay in milliseconds.
- *
- * Returns     :  0 on success (entire buffer sent).
- *                nonzero on error.
- *
- *********************************************************************/
-extern int ssl_send_data_delayed(mbedtls_ssl_context *ssl,
-                                 const unsigned char *buf, size_t len,
-                                 unsigned int delay)
-{
-   size_t i = 0;
-
-   if (delay == 0)
-   {
-      if (ssl_send_data(ssl, buf, len) < 0)
-      {
-         return -1;
-      }
-      else
-      {
-         return 0;
-      }
-   }
-
-   while (i < len)
-   {
-      size_t write_length;
-      enum { MAX_WRITE_LENGTH = 10 };
-
-      if ((i + MAX_WRITE_LENGTH) > len)
-      {
-         write_length = len - i;
-      }
-      else
-      {
-         write_length = MAX_WRITE_LENGTH;
-      }
-
-      privoxy_millisleep(delay);
-
-      if (ssl_send_data(ssl, buf + i, write_length) < 0)
-      {
-         return -1;
-      }
-      i += write_length;
-   }
-
-   return 0;
-
-}
-
-
-/*********************************************************************
- *
  * Function    :  ssl_recv_data
  *
  * Description :  Receives data from given SSL context and puts
  *                it into buffer.
  *
  * Parameters  :
- *          1  :  ssl = SSL context to receive data from
+ *          1  :  ssl_attr = SSL context to receive data from
  *          2  :  buf = Pointer to buffer where data will be written
  *          3  :  max_length = Maximum number of bytes to read
  *
@@ -340,8 +214,9 @@ extern int ssl_send_data_delayed(mbedtls_ssl_context *ssl,
  *                on error.
  *
  *********************************************************************/
-extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t max_length)
+extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t max_length)
 {
+   mbedtls_ssl_context *ssl = &ssl_attr->mbedtls_attr.ssl;
    int ret = 0;
    memset(buf, 0, max_length);
 
@@ -379,69 +254,6 @@ extern int ssl_recv_data(mbedtls_ssl_context *ssl, unsigned char *buf, size_t ma
 
 /*********************************************************************
  *
- * Function    :  ssl_flush_socket
- *
- * Description :  Send any pending "buffered" content with given
- *                SSL connection. Alternative to function flush_socket.
- *
- * Parameters  :
- *          1  :  ssl = SSL context to send buffer to
- *          2  :  iob = The I/O buffer to flush, usually csp->iob.
- *
- * Returns     :  On success, the number of bytes send are returned (zero
- *                indicates nothing was sent).  On error, -1 is returned.
- *
- *********************************************************************/
-extern long ssl_flush_socket(mbedtls_ssl_context *ssl, struct iob *iob)
-{
-   /* Computing length of buffer part to send */
-   long len = iob->eod - iob->cur;
-
-   if (len <= 0)
-   {
-      return(0);
-   }
-
-   /* Sending data to given SSl context */
-   if (ssl_send_data(ssl, (const unsigned char *)iob->cur, (size_t)len) < 0)
-   {
-      return -1;
-   }
-   iob->eod = iob->cur = iob->buf;
-   return(len);
-}
-
-
-/*********************************************************************
- *
- * Function    :  ssl_debug_callback
- *
- * Description :  Debug callback function for mbedtls library.
- *                Prints info into log file.
- *
- * Parameters  :
- *          1  :  ctx   = File to save log in
- *          2  :  level = Debug level
- *          3  :  file  = File calling debug message
- *          4  :  line  = Line calling debug message
- *          5  :  str   = Debug message
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void ssl_debug_callback(void *ctx, int level, const char *file, int line, const char *str)
-{
-   /*
-   ((void)level);
-   fprintf((FILE *)ctx, "%s:%04d: %s", file, line, str);
-   fflush((FILE *)ctx);
-   log_error(LOG_LEVEL_INFO, "SSL debug message: %s:%04d: %s", file, line, str);
-   */
-}
-
-
-/*********************************************************************
- *
  * Function    :  create_client_ssl_connection
  *
  * Description :  Creates TLS/SSL secured connection with client
@@ -455,6 +267,7 @@ static void ssl_debug_callback(void *ctx, int level, const char *file, int line,
  *********************************************************************/
 extern int create_client_ssl_connection(struct client_state *csp)
 {
+   struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
    /* Paths to certificates file and key file */
    char *key_file  = NULL;
    char *ca_file   = NULL;
@@ -465,13 +278,13 @@ extern int create_client_ssl_connection(struct client_state *csp)
    /*
     * Initializing mbedtls structures for TLS/SSL connection
     */
-   mbedtls_net_init(&(csp->mbedtls_client_attr.socket_fd));
-   mbedtls_ssl_init(&(csp->mbedtls_client_attr.ssl));
-   mbedtls_ssl_config_init(&(csp->mbedtls_client_attr.conf));
-   mbedtls_x509_crt_init(&(csp->mbedtls_client_attr.server_cert));
-   mbedtls_pk_init(&(csp->mbedtls_client_attr.prim_key));
+   mbedtls_net_init(&(ssl_attr->mbedtls_attr.socket_fd));
+   mbedtls_ssl_init(&(ssl_attr->mbedtls_attr.ssl));
+   mbedtls_ssl_config_init(&(ssl_attr->mbedtls_attr.conf));
+   mbedtls_x509_crt_init(&(ssl_attr->mbedtls_attr.server_cert));
+   mbedtls_pk_init(&(ssl_attr->mbedtls_attr.prim_key));
 #if defined(MBEDTLS_SSL_CACHE_C)
-   mbedtls_ssl_cache_init(&(csp->mbedtls_client_attr.cache));
+   mbedtls_ssl_cache_init(&(ssl_attr->mbedtls_attr.cache));
 #endif
 
    /*
@@ -530,7 +343,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    /*
     * Loading CA file, webpage certificate and key files
     */
-   ret = mbedtls_x509_crt_parse_file(&(csp->mbedtls_client_attr.server_cert),
+   ret = mbedtls_x509_crt_parse_file(&(ssl_attr->mbedtls_attr.server_cert),
       cert_file);
    if (ret != 0)
    {
@@ -541,7 +354,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   ret = mbedtls_x509_crt_parse_file(&(csp->mbedtls_client_attr.server_cert),
+   ret = mbedtls_x509_crt_parse_file(&(ssl_attr->mbedtls_attr.server_cert),
       ca_file);
    if (ret != 0)
    {
@@ -552,7 +365,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   ret = mbedtls_pk_parse_keyfile(&(csp->mbedtls_client_attr.prim_key),
+   ret = mbedtls_pk_parse_keyfile(&(ssl_attr->mbedtls_attr.prim_key),
       key_file, NULL);
    if (ret != 0)
    {
@@ -567,7 +380,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    /*
     * Setting SSL parameters
     */
-   ret = mbedtls_ssl_config_defaults(&(csp->mbedtls_client_attr.conf),
+   ret = mbedtls_ssl_config_defaults(&(ssl_attr->mbedtls_attr.conf),
       MBEDTLS_SSL_IS_SERVER, MBEDTLS_SSL_TRANSPORT_STREAM,
       MBEDTLS_SSL_PRESET_DEFAULT);
    if (ret != 0)
@@ -579,23 +392,21 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   mbedtls_ssl_conf_rng(&(csp->mbedtls_client_attr.conf),
+   mbedtls_ssl_conf_rng(&(ssl_attr->mbedtls_attr.conf),
       mbedtls_ctr_drbg_random, &ctr_drbg);
-   mbedtls_ssl_conf_dbg(&(csp->mbedtls_client_attr.conf),
-      ssl_debug_callback, stdout);
 
 #if defined(MBEDTLS_SSL_CACHE_C)
-   mbedtls_ssl_conf_session_cache(&(csp->mbedtls_client_attr.conf),
-      &(csp->mbedtls_client_attr.cache), mbedtls_ssl_cache_get,
+   mbedtls_ssl_conf_session_cache(&(ssl_attr->mbedtls_attr.conf),
+      &(ssl_attr->mbedtls_attr.cache), mbedtls_ssl_cache_get,
       mbedtls_ssl_cache_set);
 #endif
 
    /*
     * Setting certificates
     */
-   ret = mbedtls_ssl_conf_own_cert(&(csp->mbedtls_client_attr.conf),
-      &(csp->mbedtls_client_attr.server_cert),
-      &(csp->mbedtls_client_attr.prim_key));
+   ret = mbedtls_ssl_conf_own_cert(&(ssl_attr->mbedtls_attr.conf),
+      &(ssl_attr->mbedtls_attr.server_cert),
+      &(ssl_attr->mbedtls_attr.prim_key));
    if (ret != 0)
    {
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
@@ -605,8 +416,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   ret = mbedtls_ssl_setup(&(csp->mbedtls_client_attr.ssl),
-      &(csp->mbedtls_client_attr.conf));
+   ret = mbedtls_ssl_setup(&(ssl_attr->mbedtls_attr.ssl),
+      &(ssl_attr->mbedtls_attr.conf));
    if (ret != 0)
    {
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
@@ -615,17 +426,17 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   mbedtls_ssl_set_bio(&(csp->mbedtls_client_attr.ssl),
-      &(csp->mbedtls_client_attr.socket_fd), mbedtls_net_send,
+   mbedtls_ssl_set_bio(&(ssl_attr->mbedtls_attr.ssl),
+      &(ssl_attr->mbedtls_attr.socket_fd), mbedtls_net_send,
       mbedtls_net_recv, NULL);
-   mbedtls_ssl_session_reset(&(csp->mbedtls_client_attr.ssl));
+   mbedtls_ssl_session_reset(&(ssl_attr->mbedtls_attr.ssl));
 
    /*
     * Setting socket fd in mbedtls_net_context structure. This structure
     * can't be set by mbedtls functions, because we already have created
     * a TCP connection when this function is called.
     */
-   csp->mbedtls_client_attr.socket_fd.fd = csp->cfd;
+   ssl_attr->mbedtls_attr.socket_fd.fd = csp->cfd;
 
    /*
     *  Handshake with client
@@ -633,7 +444,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    log_error(LOG_LEVEL_CONNECT,
       "Performing the TLS/SSL handshake with client. Hash of host: %s",
       csp->http->hash_of_host_hex);
-   while ((ret = mbedtls_ssl_handshake(&(csp->mbedtls_client_attr.ssl))) != 0)
+   while ((ret = mbedtls_ssl_handshake(&(ssl_attr->mbedtls_attr.ssl))) != 0)
    {
       if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
           ret != MBEDTLS_ERR_SSL_WANT_WRITE)
@@ -680,6 +491,7 @@ exit:
  *********************************************************************/
 extern void close_client_ssl_connection(struct client_state *csp)
 {
+   struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
    int ret = 0;
 
    if (csp->ssl_with_client_is_opened == 0)
@@ -691,7 +503,7 @@ extern void close_client_ssl_connection(struct client_state *csp)
     * Notifying the peer that the connection is being closed.
     */
    do {
-      ret = mbedtls_ssl_close_notify(&(csp->mbedtls_client_attr.ssl));
+      ret = mbedtls_ssl_close_notify(&(ssl_attr->mbedtls_attr.ssl));
    } while (ret == MBEDTLS_ERR_SSL_WANT_WRITE);
 
    free_client_ssl_structures(csp);
@@ -714,21 +526,22 @@ extern void close_client_ssl_connection(struct client_state *csp)
  *********************************************************************/
 static void free_client_ssl_structures(struct client_state *csp)
 {
+   struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
    /*
    * We can't use function mbedtls_net_free, because this function
    * inter alia close TCP connection on set fd. Instead of this
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
-   csp->mbedtls_client_attr.socket_fd.fd = -1;
+   ssl_attr->mbedtls_attr.socket_fd.fd = -1;
 
    /* Freeing mbedtls structures */
-   mbedtls_x509_crt_free(&(csp->mbedtls_client_attr.server_cert));
-   mbedtls_pk_free(&(csp->mbedtls_client_attr.prim_key));
-   mbedtls_ssl_free(&(csp->mbedtls_client_attr.ssl));
-   mbedtls_ssl_config_free(&(csp->mbedtls_client_attr.conf));
+   mbedtls_x509_crt_free(&(ssl_attr->mbedtls_attr.server_cert));
+   mbedtls_pk_free(&(ssl_attr->mbedtls_attr.prim_key));
+   mbedtls_ssl_free(&(ssl_attr->mbedtls_attr.ssl));
+   mbedtls_ssl_config_free(&(ssl_attr->mbedtls_attr.conf));
 #if defined(MBEDTLS_SSL_CACHE_C)
-   mbedtls_ssl_cache_free(&(csp->mbedtls_client_attr.cache));
+   mbedtls_ssl_cache_free(&(ssl_attr->mbedtls_attr.cache));
 #endif
 }
 
@@ -748,6 +561,7 @@ static void free_client_ssl_structures(struct client_state *csp)
  *********************************************************************/
 extern int create_server_ssl_connection(struct client_state *csp)
 {
+   struct ssl_attr *ssl_attr = &csp->ssl_server_attr;
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
    char *trusted_cas_file = NULL;
@@ -762,17 +576,17 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /*
     * Initializing mbedtls structures for TLS/SSL connection
     */
-   mbedtls_net_init(&(csp->mbedtls_server_attr.socket_fd));
-   mbedtls_ssl_init(&(csp->mbedtls_server_attr.ssl));
-   mbedtls_ssl_config_init(&(csp->mbedtls_server_attr.conf));
-   mbedtls_x509_crt_init(&(csp->mbedtls_server_attr.ca_cert));
+   mbedtls_net_init(&(ssl_attr->mbedtls_attr.socket_fd));
+   mbedtls_ssl_init(&(ssl_attr->mbedtls_attr.ssl));
+   mbedtls_ssl_config_init(&(ssl_attr->mbedtls_attr.conf));
+   mbedtls_x509_crt_init(&(ssl_attr->mbedtls_attr.ca_cert));
 
    /*
    * Setting socket fd in mbedtls_net_context structure. This structure
    * can't be set by mbedtls functions, because we already have created
    * TCP connection when calling this function.
    */
-   csp->mbedtls_server_attr.socket_fd.fd = csp->server_connection.sfd;
+   ssl_attr->mbedtls_attr.socket_fd.fd = csp->server_connection.sfd;
 
    /*
     * Seed the RNG
@@ -787,7 +601,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /*
     * Loading file with trusted CAs
     */
-   ret = mbedtls_x509_crt_parse_file(&(csp->mbedtls_server_attr.ca_cert),
+   ret = mbedtls_x509_crt_parse_file(&(ssl_attr->mbedtls_attr.ca_cert),
       trusted_cas_file);
    if (ret < 0)
    {
@@ -801,7 +615,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /*
     * Set TLS/SSL options
     */
-   ret = mbedtls_ssl_config_defaults(&(csp->mbedtls_server_attr.conf),
+   ret = mbedtls_ssl_config_defaults(&(ssl_attr->mbedtls_attr.conf),
       MBEDTLS_SSL_IS_CLIENT,
       MBEDTLS_SSL_TRANSPORT_STREAM,
       MBEDTLS_SSL_PRESET_DEFAULT);
@@ -823,21 +637,19 @@ extern int create_server_ssl_connection(struct client_state *csp)
       auth_mode = MBEDTLS_SSL_VERIFY_NONE;
    }
 
-   mbedtls_ssl_conf_authmode(&(csp->mbedtls_server_attr.conf), auth_mode);
-   mbedtls_ssl_conf_ca_chain(&(csp->mbedtls_server_attr.conf),
-      &(csp->mbedtls_server_attr.ca_cert), NULL);
+   mbedtls_ssl_conf_authmode(&(ssl_attr->mbedtls_attr.conf), auth_mode);
+   mbedtls_ssl_conf_ca_chain(&(ssl_attr->mbedtls_attr.conf),
+      &(ssl_attr->mbedtls_attr.ca_cert), NULL);
 
    /* Setting callback function for certificates verification */
-   mbedtls_ssl_conf_verify(&(csp->mbedtls_server_attr.conf),
+   mbedtls_ssl_conf_verify(&(ssl_attr->mbedtls_attr.conf),
       ssl_verify_callback, (void *)csp);
 
-   mbedtls_ssl_conf_rng(&(csp->mbedtls_server_attr.conf),
+   mbedtls_ssl_conf_rng(&(ssl_attr->mbedtls_attr.conf),
       mbedtls_ctr_drbg_random, &ctr_drbg);
-   mbedtls_ssl_conf_dbg(&(csp->mbedtls_server_attr.conf),
-      ssl_debug_callback, stdout);
 
-   ret = mbedtls_ssl_setup(&(csp->mbedtls_server_attr.ssl),
-      &(csp->mbedtls_server_attr.conf));
+   ret = mbedtls_ssl_setup(&(ssl_attr->mbedtls_attr.ssl),
+      &(ssl_attr->mbedtls_attr.conf));
    if (ret != 0)
    {
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
@@ -849,7 +661,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    /*
     * Set the hostname to check against the received server certificate
     */
-   ret = mbedtls_ssl_set_hostname(&(csp->mbedtls_server_attr.ssl),
+   ret = mbedtls_ssl_set_hostname(&(ssl_attr->mbedtls_attr.ssl),
       csp->http->host);
    if (ret != 0)
    {
@@ -860,8 +672,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
-   mbedtls_ssl_set_bio(&(csp->mbedtls_server_attr.ssl),
-      &(csp->mbedtls_server_attr.socket_fd), mbedtls_net_send,
+   mbedtls_ssl_set_bio(&(ssl_attr->mbedtls_attr.ssl),
+      &(ssl_attr->mbedtls_attr.socket_fd), mbedtls_net_send,
       mbedtls_net_recv, NULL);
 
    /*
@@ -870,7 +682,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    log_error(LOG_LEVEL_CONNECT,
       "Performing the TLS/SSL handshake with the server");
 
-   while ((ret = mbedtls_ssl_handshake(&(csp->mbedtls_server_attr.ssl))) != 0)
+   while ((ret = mbedtls_ssl_handshake(&(ssl_attr->mbedtls_attr.ssl))) != 0)
    {
       if (ret != MBEDTLS_ERR_SSL_WANT_READ
        && ret != MBEDTLS_ERR_SSL_WANT_WRITE)
@@ -882,7 +694,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
             char reason[INVALID_CERT_INFO_BUF_SIZE];
 
             csp->server_cert_verification_result =
-               mbedtls_ssl_get_verify_result(&(csp->mbedtls_server_attr.ssl));
+               mbedtls_ssl_get_verify_result(&(ssl_attr->mbedtls_attr.ssl));
             mbedtls_x509_crt_verify_info(reason, sizeof(reason), "",
                csp->server_cert_verification_result);
 
@@ -913,7 +725,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
    csp->ssl_with_server_is_opened = 1;
    csp->server_cert_verification_result =
-      mbedtls_ssl_get_verify_result(&(csp->mbedtls_server_attr.ssl));
+      mbedtls_ssl_get_verify_result(&(ssl_attr->mbedtls_attr.ssl));
 
 exit:
    /* Freeing structures if connection wasn't created successfully */
@@ -939,8 +751,9 @@ exit:
  * Returns     :  N/A
  *
  *********************************************************************/
-static void close_server_ssl_connection(struct client_state *csp)
+extern void close_server_ssl_connection(struct client_state *csp)
 {
+   struct ssl_attr *ssl_attr = &csp->ssl_server_attr;
    int ret = 0;
 
    if (csp->ssl_with_server_is_opened == 0)
@@ -952,7 +765,7 @@ static void close_server_ssl_connection(struct client_state *csp)
    * Notifying the peer that the connection is being closed.
    */
    do {
-      ret = mbedtls_ssl_close_notify(&(csp->mbedtls_server_attr.ssl));
+      ret = mbedtls_ssl_close_notify(&(ssl_attr->mbedtls_attr.ssl));
    } while (ret == MBEDTLS_ERR_SSL_WANT_WRITE);
 
    free_server_ssl_structures(csp);
@@ -974,44 +787,20 @@ static void close_server_ssl_connection(struct client_state *csp)
  *********************************************************************/
 static void free_server_ssl_structures(struct client_state *csp)
 {
+   struct ssl_attr *ssl_attr = &csp->ssl_server_attr;
    /*
    * We can't use function mbedtls_net_free, because this function
    * inter alia close TCP connection on set fd. Instead of this
    * function, we change fd to -1, which is the same what does
    * rest of mbedtls_net_free function.
    */
-   csp->mbedtls_server_attr.socket_fd.fd = -1;
+   ssl_attr->mbedtls_attr.socket_fd.fd = -1;
 
-   mbedtls_x509_crt_free(&(csp->mbedtls_server_attr.ca_cert));
-   mbedtls_ssl_free(&(csp->mbedtls_server_attr.ssl));
-   mbedtls_ssl_config_free(&(csp->mbedtls_server_attr.conf));
+   mbedtls_x509_crt_free(&(ssl_attr->mbedtls_attr.ca_cert));
+   mbedtls_ssl_free(&(ssl_attr->mbedtls_attr.ssl));
+   mbedtls_ssl_config_free(&(ssl_attr->mbedtls_attr.conf));
 }
 
-
-/*********************************************************************
- *
- * Function    :  close_client_and_server_ssl_connections
- *
- * Description :  Checks if client or server should use secured
- *                connection over SSL and if so, closes all of them.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-extern void close_client_and_server_ssl_connections(struct client_state *csp)
-{
-   if (client_use_ssl(csp) == 1)
-   {
-      close_client_ssl_connection(csp);
-   }
-   if (server_use_ssl(csp) == 1)
-   {
-      close_server_ssl_connection(csp);
-   }
-}
 
 /*====================== Certificates ======================*/
 
@@ -1321,101 +1110,6 @@ static int ssl_certificate_is_invalid(const char *cert_file)
 
 /*********************************************************************
  *
- * Function    :  generate_certificate_valid_date
- *
- * Description :  Turns a time_t into the format expected by mbedTLS.
- *
- * Parameters  :
- *          1  :  time_spec = The timestamp to convert
- *          2  :  buffer = The buffer to write the date to
- *          3  :  buffer_size = The size of the buffer
- *
- * Returns     :   0 => The conversion worked
- *                 1 => The conversion failed
- *
- *********************************************************************/
-static int generate_certificate_valid_date(time_t time_spec, char *buffer,
-                                           size_t buffer_size)
-{
-   struct tm valid_date;
-   struct tm *timeptr;
-   size_t ret;
-
-   timeptr = privoxy_gmtime_r(&time_spec, &valid_date);
-   if (NULL == timeptr)
-   {
-      return 1;
-   }
-
-   ret = strftime(buffer, buffer_size, "%Y%m%d%H%M%S", timeptr);
-   if (ret != 14)
-   {
-      return 1;
-   }
-
-   return 0;
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_certificate_valid_from_date
- *
- * Description :  Generates a "valid from" date in the format
- *                expected by mbedTLS.
- *
- * Parameters  :
- *          1  :  buffer = The buffer to write the date to
- *          2  :  buffer_size = The size of the buffer
- *
- * Returns     :   0 => The generation worked
- *                 1 => The generation failed
- *
- *********************************************************************/
-static int get_certificate_valid_from_date(char *buffer, size_t buffer_size)
-{
-   time_t time_spec;
-
-   time_spec = time(NULL);
-   /* 1 month in the past */
-   time_spec -= 30 * 24 * 60 * 60;
-
-   return generate_certificate_valid_date(time_spec, buffer, buffer_size);
-
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_certificate_valid_to_date
- *
- * Description :  Generates a "valid to" date in the format
- *                expected by mbedTLS.
- *
- * Parameters  :
- *          1  :  buffer = The buffer to write the date to
- *          2  :  buffer_size = The size of the buffer
- *
- * Returns     :   0 => The generation worked
- *                 1 => The generation failed
- *
- *********************************************************************/
-static int get_certificate_valid_to_date(char *buffer, size_t buffer_size)
-{
-   time_t time_spec;
-
-   time_spec = time(NULL);
-   /* Three months in the future */
-   time_spec += 90 * 24 * 60 * 60;
-
-   return generate_certificate_valid_date(time_spec, buffer, buffer_size);
-
-}
-
-
-/*********************************************************************
- *
  * Function    :  set_subject_alternative_name
  *
  * Description :  Sets the Subject Alternative Name extension to a cert
@@ -1523,49 +1217,6 @@ exit:
 
 /*********************************************************************
  *
- * Function    :  host_is_ip_address
- *
- * Description :  Checks whether or not a host is specified by
- *                IP address. Does not actually validate the
- *                address.
- *
- * Parameters  :
- *          1  :  host = The host name to check
- *
- * Returns     :   1 => Yes
- *                 0 => No
- *
- *********************************************************************/
-static int host_is_ip_address(const char *host)
-{
-   const char *p;
-
-   if (NULL != strstr(host, ":"))
-   {
-      /* Assume an IPv6 address. */
-      return 1;
-   }
-
-   for (p = host; *p; p++)
-   {
-      if ((*p != '.') && !privoxy_isdigit(*p))
-      {
-         /* Not a dot or digit so it can't be an IPv4 address. */
-         return 0;
-      }
-   }
-
-   /*
-    * Host only consists of dots and digits so
-    * assume that is an IPv4 address.
-    */
-   return 1;
-
-}
-
-
-/*********************************************************************
- *
  * Function    :  generate_webpage_certificate
  *
  * Description :  Creates certificate file in presetted directory.
@@ -1596,8 +1247,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    int ret = 0;
    char err_buf[ERROR_BUF_SIZE];
    cert_options cert_opt;
-   char cert_valid_from[15];
-   char cert_valid_to[15];
+   char cert_valid_from[VALID_DATETIME_BUFLEN];
+   char cert_valid_to[VALID_DATETIME_BUFLEN];
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -1728,8 +1379,8 @@ static int generate_webpage_certificate(struct client_state *csp)
    cert_opt.issuer_crt = csp->config->ca_cert_file;
    cert_opt.issuer_key = csp->config->ca_key_file;
 
-   if (get_certificate_valid_from_date(cert_valid_from, sizeof(cert_valid_from))
-    || get_certificate_valid_to_date(cert_valid_to, sizeof(cert_valid_to)))
+   if (get_certificate_valid_from_date(cert_valid_from, sizeof(cert_valid_from), VALID_DATETIME_FMT)
+    || get_certificate_valid_to_date(cert_valid_to, sizeof(cert_valid_to), VALID_DATETIME_FMT))
    {
       log_error(LOG_LEVEL_ERROR, "Generating one of the validity dates failed");
       ret = -1;
@@ -1975,226 +1626,6 @@ exit:
    return ret;
 }
 
-
-/*********************************************************************
- *
- * Function    :  make_certs_path
- *
- * Description : Creates path to file from three pieces. This function
- *               takes parameters and puts them in one new mallocated
- *               char * in correct order. Returned variable must be freed
- *               by caller. This function is mainly used for creating
- *               paths of certificates and keys files.
- *
- * Parameters  :
- *          1  :  conf_dir  = Name/path of directory where is the file.
- *                            '.' can be used for current directory.
- *          2  :  file_name = Name of file in conf_dir without suffix.
- *          3  :  suffix    = Suffix of given file_name.
- *
- * Returns     :  path => Path was built up successfully
- *                NULL => Path can't be built up
- *
- *********************************************************************/
-static char *make_certs_path(const char *conf_dir, const char *file_name,
-   const char *suffix)
-{
-   /* Test if all given parameters are valid */
-   if (conf_dir == NULL || *conf_dir == '\0' || file_name == NULL ||
-      *file_name == '\0' || suffix == NULL || *suffix == '\0')
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "make_certs_path failed: bad input parameters");
-      return NULL;
-   }
-
-   char *path = NULL;
-   size_t path_size = strlen(conf_dir)
-      + strlen(file_name) + strlen(suffix) + 2;
-
-   /* Setting delimiter and editing path length */
-#if defined(_WIN32) || defined(__OS2__)
-   char delim[] = "\\";
-   path_size += 1;
-#else /* ifndef _WIN32 || __OS2__ */
-   char delim[] = "/";
-#endif /* ifndef _WIN32 || __OS2__ */
-
-   /*
-    * Building up path from many parts
-    */
-#if defined(unix)
-   if (*conf_dir != '/' && basedir && *basedir)
-   {
-      /*
-       * Replacing conf_dir with basedir. This new variable contains
-       * absolute path to cwd.
-       */
-      path_size += strlen(basedir) + 2;
-      path = zalloc_or_die(path_size);
-
-      strlcpy(path, basedir,   path_size);
-      strlcat(path, delim,     path_size);
-      strlcat(path, conf_dir,  path_size);
-      strlcat(path, delim,     path_size);
-      strlcat(path, file_name, path_size);
-      strlcat(path, suffix,    path_size);
-   }
-   else
-#endif /* defined unix */
-   {
-      path = zalloc_or_die(path_size);
-
-      strlcpy(path, conf_dir,  path_size);
-      strlcat(path, delim,     path_size);
-      strlcat(path, file_name, path_size);
-      strlcat(path, suffix,    path_size);
-   }
-
-   return path;
-}
-
-
-/*********************************************************************
- *
- * Function    :  get_certificate_serial
- *
- * Description :  Computes serial number for new certificate from host
- *                name hash. This hash must be already saved in csp
- *                structure.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  Serial number for new certificate
- *
- *********************************************************************/
-static unsigned long get_certificate_serial(struct client_state *csp)
-{
-   unsigned long exp    = 1;
-   unsigned long serial = 0;
-
-   int i = CERT_SERIAL_NUM_LENGTH;
-
-   for (; i >= 0; i--)
-   {
-      serial += exp * (unsigned)csp->http->hash_of_host[i];
-      exp *= 256;
-   }
-   return serial;
-}
-
-
-/*********************************************************************
- *
- * Function    :  ssl_send_certificate_error
- *
- * Description :  Sends info about invalid server certificate to client.
- *                Sent message is including all trusted chain certificates,
- *                that can be downloaded in web browser.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-extern void ssl_send_certificate_error(struct client_state *csp)
-{
-   size_t message_len = 0;
-   int ret = 0;
-   struct certs_chain *cert = NULL;
-
-   /* Header of message with certificate information */
-   const char message_begin[] =
-      "HTTP/1.1 200 OK\r\n"
-      "Content-Type: text/html\r\n"
-      "Connection: close\r\n\r\n"
-      "<!DOCTYPE html>\n"
-      "<html><head><title>Server certificate verification failed</title></head>\n"
-      "<body><h1>Server certificate verification failed</h1>\n"
-      "<p><a href=\"https://" CGI_SITE_2_HOST "/\">Privoxy</a> was unable "
-      "to securely connnect to the destination server.</p>"
-      "<p>Reason: ";
-   const char message_end[] = "</body></html>\r\n\r\n";
-   char reason[INVALID_CERT_INFO_BUF_SIZE];
-   memset(reason, 0, sizeof(reason));
-
-   /* Get verification message from verification return code */
-   mbedtls_x509_crt_verify_info(reason, sizeof(reason), " ",
-      csp->server_cert_verification_result);
-
-   /*
-    * Computing total length of message with all certificates inside
-    */
-   message_len = strlen(message_begin) + strlen(message_end)
-                 + strlen(reason) + strlen("</p>") + 1;
-
-   cert = &(csp->server_certs_chain);
-   while (cert->next != NULL)
-   {
-      size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1;
-
-      message_len += strlen(cert->info_buf) + strlen("<pre></pre>\n")
-                     +  base64_len + strlen("<a href=\"data:application"
-                        "/x-x509-ca-cert;base64,\">Download certificate</a>");
-      cert = cert->next;
-   }
-
-   /*
-    * Joining all blocks in one long message
-    */
-   char message[message_len];
-   memset(message, 0, message_len);
-
-   strlcpy(message, message_begin, message_len);
-   strlcat(message, reason       , message_len);
-   strlcat(message, "</p>"       , message_len);
-
-   cert = &(csp->server_certs_chain);
-   while (cert->next != NULL)
-   {
-      size_t olen = 0;
-      size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1; /* +1 for terminating null*/
-      char base64_buf[base64_len];
-      memset(base64_buf, 0, base64_len);
-
-      /* Encoding certificate into base64 code */
-      ret = mbedtls_base64_encode((unsigned char*)base64_buf,
-               base64_len, &olen, (const unsigned char*)cert->file_buf,
-               strlen(cert->file_buf));
-      if (ret != 0)
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "Encoding to base64 failed, buffer is to small");
-      }
-
-      strlcat(message, "<pre>",        message_len);
-      strlcat(message, cert->info_buf, message_len);
-      strlcat(message, "</pre>\n",     message_len);
-
-      if (ret == 0)
-      {
-         strlcat(message, "<a href=\"data:application/x-x509-ca-cert;base64,",
-            message_len);
-         strlcat(message, base64_buf, message_len);
-         strlcat(message, "\">Download certificate</a>", message_len);
-      }
-
-      cert = cert->next;
-   }
-   strlcat(message, message_end, message_len);
-
-   /*
-    * Sending final message to client
-    */
-   ssl_send_data(&(csp->mbedtls_client_attr.ssl),
-      (const unsigned char *)message, strlen(message));
-
-   free_certificate_chain(csp);
-}
-
-
 /*********************************************************************
  *
  * Function    :  ssl_verify_callback
@@ -2263,69 +1694,14 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
 
       mbedtls_x509_crt_info(buf, sizeof(buf), CERT_INFO_PREFIX, crt);
       encoded_text = html_encode(buf);
+      if (encoded_text == NULL)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to HTML-encode the certificate information");
+         return -1;
+      }
       strlcpy(last->info_buf, encoded_text, sizeof(last->info_buf));
       freez(encoded_text);
-   }
-
-   return 0;
-}
-
-
-/*********************************************************************
- *
- * Function    :  free_certificate_chain
- *
- * Description :  Frees certificates linked list. This linked list is
- *                used to save information about certificates in
- *                trusted chain.
- *
- * Parameters  :
- *          1  :  csp = Current client state (buffers, headers, etc...)
- *
- * Returns     :  N/A
- *
- *********************************************************************/
-static void free_certificate_chain(struct client_state *csp)
-{
-   struct certs_chain *cert = csp->server_certs_chain.next;
-
-   /* Cleaning buffers */
-   memset(csp->server_certs_chain.info_buf, 0,
-      sizeof(csp->server_certs_chain.info_buf));
-   memset(csp->server_certs_chain.file_buf, 0,
-      sizeof(csp->server_certs_chain.file_buf));
-   csp->server_certs_chain.next = NULL;
-
-   /* Freeing memory in whole linked list */
-   while (cert != NULL)
-   {
-      struct certs_chain *cert_for_free = cert;
-      cert = cert->next;
-      freez(cert_for_free);
-   }
-}
-
-
-/*********************************************************************
- *
- * Function    :  file_exists
- *
- * Description :  Tests if file exists and is readable.
- *
- * Parameters  :
- *          1  :  path = Path to tested file.
- *
- * Returns     :  1 => File exists and is readable.
- *                0 => File doesn't exist or is not readable.
- *
- *********************************************************************/
-static int file_exists(const char *path)
-{
-   FILE *f;
-   if ((f = fopen(path, "r")) != NULL)
-   {
-      fclose(f);
-      return 1;
    }
 
    return 0;
@@ -2373,68 +1749,6 @@ static int host_to_hash(struct client_state *csp)
 #endif /* MBEDTLS_MD5_C */
 }
 
-
-/*********************************************************************
- *
- * Function    :  tunnel_established_successfully
- *
- * Description :  Check if parent proxy server response contains
- *                information about successfully created connection with
- *                destination server. (HTTP/... 2xx ...)
- *
- * Parameters  :
- *          1  :  server_response = Buffer with parent proxy server response
- *          2  :  response_len = Length of server_response
- *
- * Returns     :  1 => Connection created successfully
- *                0 => Connection wasn't created successfully
- *
- *********************************************************************/
-extern int tunnel_established_successfully(const char *server_response,
-   unsigned int response_len)
-{
-   unsigned int pos = 0;
-
-   if (server_response == NULL)
-   {
-      return 0;
-   }
-
-   /* Tests if "HTTP/" string is at the begin of received response */
-   if (strncmp(server_response, "HTTP/", 5) != 0)
-   {
-      return 0;
-   }
-
-   for (pos = 0; pos < response_len; pos++)
-   {
-      if (server_response[pos] == ' ')
-      {
-         break;
-      }
-   }
-
-   /*
-    * response_len -3 because of buffer end, response structure and 200 code.
-    * There must be at least 3 chars after space.
-    * End of buffer: ... 2xx'\0'
-    *             pos = |
-    */
-   if (pos >= (response_len - 3))
-   {
-      return 0;
-   }
-
-   /* Test HTTP status code */
-   if (server_response[pos + 1] != '2')
-   {
-      return 0;
-   }
-
-   return 1;
-}
-
-
 /*********************************************************************
  *
  * Function    :  seed_rng
@@ -2455,7 +1769,7 @@ static int seed_rng(struct client_state *csp)
 
    if (rng_seeded == 0)
    {
-      privoxy_mutex_lock(&rng_mutex);
+      privoxy_mutex_lock(&ssl_init_mutex);
       if (rng_seeded == 0)
       {
          mbedtls_ctr_drbg_init(&ctr_drbg);
@@ -2467,12 +1781,77 @@ static int seed_rng(struct client_state *csp)
             mbedtls_strerror(ret, err_buf, sizeof(err_buf));
             log_error(LOG_LEVEL_ERROR,
                "mbedtls_ctr_drbg_seed failed: %s", err_buf);
-            privoxy_mutex_unlock(&rng_mutex);
+            privoxy_mutex_unlock(&ssl_init_mutex);
             return -1;
          }
          rng_seeded = 1;
       }
-      privoxy_mutex_unlock(&rng_mutex);
+      privoxy_mutex_unlock(&ssl_init_mutex);
    }
    return 0;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  ssl_base64_encode
+ *
+ * Description :  Encode a buffer into base64 format.
+ *
+ * Parameters  :
+ *          1  :  dst = Destination buffer
+ *          2  :  dlen = Destination buffer length
+ *          3  :  olen = Number of bytes written
+ *          4  :  src = Source buffer
+ *          5  :  slen = Amount of data to be encoded
+ *
+ * Returns     :  0 on success, error code othervise
+ *
+ *********************************************************************/
+extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
+                             const unsigned char *src, size_t slen)
+{
+   return mbedtls_base64_encode(dst, dlen, olen, src, slen);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  ssl_crt_verify_info
+ *
+ * Description :  Returns an informational string about the verification
+ *                status of a certificate.
+ *
+ * Parameters  :
+ *          1  :  buf = Buffer to write to
+ *          2  :  size = Maximum size of buffer
+ *          3  :  csp = client state
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+extern void ssl_crt_verify_info(char *buf, size_t size, struct client_state *csp)
+{
+   mbedtls_x509_crt_verify_info(buf, size, " ", csp->server_cert_verification_result);
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  ssl_release
+ *
+ * Description :  Release all SSL resources
+ *
+ * Parameters  :
+ *
+ * Returns     :  N/A
+ *
+ *********************************************************************/
+extern void ssl_release(void)
+{
+   if (rng_seeded == 1)
+   {
+      mbedtls_ctr_drbg_free(&ctr_drbg);
+      mbedtls_entropy_free(&entropy);
+   }
 }

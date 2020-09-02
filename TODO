@@ -147,8 +147,7 @@ https://www.privoxy.org/faq/general.html#DONATE
 
 66) Stop hard-coding the number of action and filter files.
 
-67) Clean up source code directory layout. Depends on 54 so
-    we don't lose the revision history.
+67) Clean up source code directory layout.
 
 68) Use standard make syntax so we don't depend on GNU make.
 
@@ -424,8 +423,6 @@ https://www.privoxy.org/faq/general.html#DONATE
      memory footprint a bit which may be noticeable in case of multi-user setups
      with hundreds of idle connections.
 
-160) Add keep-alive support with +https-inspection.
-
 ##########################################################################
 
 Hosting wish list (relevant for #53)
@@ -436,8 +433,7 @@ What we need:
 - Mailinglists (Mailman with public archives preferred)
 - Webspace (on a Unix-like OS that works with the webserver targets
   in GNUMakefile)
-- Source code repositories (currently CVS, but migrating away
-  from it is TODO #54 anyway and shouldn't be too much trouble)
+- Git repositories
 - Commit mails (preferably with unified diffs)
 
 (Unsorted) details to look at when evaluating hosters:

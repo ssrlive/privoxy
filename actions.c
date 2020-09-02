@@ -547,6 +547,12 @@ jb_err get_actions(char *line,
                         return JB_ERR_PARSE;
                      }
                   }
+#ifdef FEATURE_EXTENDED_STATISTICS
+                  if (0 == strcmpic(action->name, "+block"))
+                  {
+                     register_block_reason_for_statistics(value);
+                  }
+#endif
                   /* FIXME: should validate option string here */
                   freez (cur_action->string[action->index]);
                   cur_action->string[action->index] = strdup(value);

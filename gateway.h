@@ -40,7 +40,7 @@ struct forward_spec;
 struct http_request;
 struct client_state;
 
-extern jb_socket forwarded_connect(const struct forward_spec * fwd,
+extern jb_socket forwarded_connect(const struct forward_spec *fwd,
                                    struct http_request *http,
                                    struct client_state *csp);
 

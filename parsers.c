@@ -87,6 +87,9 @@
 #include "list.h"
 #include "actions.h"
 #include "filters.h"
+#ifdef FEATURE_HTTPS_INSPECTION
+#include "ssl.h"
+#endif
 
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
@@ -138,10 +141,10 @@ static jb_err server_save_content_length(struct client_state *csp, char **header
 static jb_err server_keep_alive(struct client_state *csp, char **header);
 static jb_err server_proxy_connection(struct client_state *csp, char **header);
 static jb_err client_keep_alive(struct client_state *csp, char **header);
-static jb_err client_save_content_length(struct client_state *csp, char **header);
 static jb_err client_proxy_connection(struct client_state *csp, char **header);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
+static jb_err client_save_content_length(struct client_state *csp, char **header);
 static jb_err client_host_adder       (struct client_state *csp);
 static jb_err client_xtra_adder       (struct client_state *csp);
 static jb_err client_x_forwarded_for_adder(struct client_state *csp);
@@ -185,9 +188,9 @@ static const struct parsers client_patterns[] = {
    { "TE:",                       3,   client_te },
    { "Host:",                     5,   client_host },
    { "if-modified-since:",       18,   client_if_modified_since },
+   { "Content-Length:",          15,   client_save_content_length },
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    { "Keep-Alive:",              11,   client_keep_alive },
-   { "Content-Length:",          15,   client_save_content_length },
    { "Proxy-Connection:",        17,   client_proxy_connection },
 #else
    { "Keep-Alive:",              11,   crumble },
@@ -381,8 +384,7 @@ jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
  * Parameters  :
  *          1  :  iob = I/O buffer to clear.
  *
- * Returns     :  JB_ERR_OK on success, JB_ERR_MEMORY if out-of-memory
- *                or buffer limit reached.
+ * Returns     :  N/A
  *
  *********************************************************************/
 void clear_iob(struct iob *iob)
@@ -826,8 +828,9 @@ jb_err decompress_iob(struct client_state *csp)
       }
       else
       {
-         /* zlib thinks this is OK, so lets do the same. */
-         log_error(LOG_LEVEL_INFO, "Decompression didn't result in any content.");
+         /* zlib thinks this is OK, so let's do the same. */
+         log_error(LOG_LEVEL_RE_FILTER,
+            "Decompression didn't result in any content.");
       }
    }
    else
@@ -1847,6 +1850,7 @@ static jb_err server_proxy_connection(struct client_state *csp, char **header)
    csp->flags |= CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET;
    return JB_ERR_OK;
 }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
@@ -1879,6 +1883,7 @@ static jb_err proxy_authentication(struct client_state *csp, char **header)
 }
 
 
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  client_keep_alive
@@ -1945,6 +1950,7 @@ static jb_err client_keep_alive(struct client_state *csp, char **header)
 
    return JB_ERR_OK;
 }
+#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
 
 /*********************************************************************
@@ -2017,8 +2023,6 @@ static jb_err client_save_content_length(struct client_state *csp, char **header
 
    return JB_ERR_OK;
 }
-#endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
-
 
 
 /*********************************************************************
@@ -2047,7 +2051,11 @@ static jb_err client_connection(struct client_state *csp, char **header)
    {
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if ((csp->config->feature_flags & RUNTIME_FEATURE_CONNECTION_SHARING)
-        && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED))
+         && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
+#ifdef FEATURE_HTTPS_INSPECTION
+         && !client_use_ssl(csp)
+#endif
+          )
       {
           if (!strcmpic(csp->http->version, "HTTP/1.1"))
           {
@@ -3933,7 +3941,12 @@ static jb_err server_proxy_connection_adder(struct client_state *csp)
     && !(csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED)
     && !(csp->flags & CSP_FLAG_SERVER_PROXY_CONNECTION_HEADER_SET)
     && ((csp->flags & CSP_FLAG_SERVER_CONTENT_LENGTH_SET)
-       || (csp->flags & CSP_FLAG_CHUNKED)))
+       || (csp->flags & CSP_FLAG_CHUNKED))
+#ifdef FEATURE_HTTPS_INSPECTION
+    && !client_use_ssl(csp)
+    && !csp->http->ssl
+#endif
+       )
    {
       log_error(LOG_LEVEL_HEADER, "Adding: %s", proxy_connection_header);
       err = enlist(csp->headers, proxy_connection_header);
@@ -4871,7 +4884,6 @@ static void create_content_length_header(unsigned long long content_length,
 }
 
 
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
  * Function    :  get_expected_content_length
@@ -4903,7 +4915,7 @@ unsigned long long get_expected_content_length(struct list *headers)
 
    return content_length;
 }
-#endif
+
 
 /*
   Local Variables:

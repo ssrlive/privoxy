@@ -86,6 +86,11 @@ extern privoxy_mutex_t external_filter_mutex;
 extern privoxy_mutex_t client_tags_mutex;
 #endif
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+extern privoxy_mutex_t filter_statistics_mutex;
+extern privoxy_mutex_t block_statistics_mutex;
+#endif
+
 #ifndef HAVE_GMTIME_R
 extern privoxy_mutex_t gmtime_mutex;
 #endif /* ndef HAVE_GMTIME_R */
@@ -104,7 +109,7 @@ extern privoxy_mutex_t rand_mutex;
 
 #ifdef FEATURE_HTTPS_INSPECTION
 extern privoxy_mutex_t certificate_mutex;
-extern privoxy_mutex_t rng_mutex;
+extern privoxy_mutex_t ssl_init_mutex;
 #endif
 
 #endif /* FEATURE_PTHREAD */

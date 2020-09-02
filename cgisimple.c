@@ -5,7 +5,7 @@
  * Purpose     :  Simple CGIs to get information about Privoxy's
  *                status.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2017 the
+ * Copyright   :  Written by and Copyright (C) 2001-2020 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1031,6 +1031,142 @@ jb_err cgi_send_user_manual(struct client_state *csp,
 }
 
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+/*********************************************************************
+ *
+ * Function    :  get_block_reason_statistics_table
+ *
+ * Description :  Produces the block reason statistic table content.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Pointer to the HTML statistic table content or
+ *                NULL on out of memory
+ *
+ *********************************************************************/
+static char *get_block_reason_statistics_table(const struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
+   char *statistics;
+   int i;
+   struct file_list *fl;
+   jb_err err = JB_ERR_OK;
+
+   statistics = strdup_or_die("");
+
+   /* Run through all action files. */
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+      struct url_actions *b;
+      struct action_spec *last_action = NULL;
+
+      if (((fl = csp->actions_list[i]) == NULL) || ((b = fl->f) == NULL))
+      {
+         /* Skip empty files */
+         continue;
+      }
+
+      /* Go through all the actions. */
+      for (b = b->next; NULL != b; b = b->next)
+      {
+         if (last_action == b->action)
+         {
+            continue;
+         }
+         if ((b->action->add & ACTION_BLOCK))
+         {
+            unsigned long long count;
+            const char *block_reason = b->action->string[ACTION_STRING_BLOCK];
+            const char *encoded_block_reason = html_encode(block_reason);
+
+            if (encoded_block_reason == NULL)
+            {
+               freez(statistics);
+               return NULL;
+            }
+            get_block_reason_count(block_reason, &count);
+            snprintf(buf, sizeof(buf),
+               "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>\n",
+               encoded_block_reason, count);
+            freez(encoded_block_reason);
+
+            if (!err) err = string_append(&statistics, buf);
+         }
+         last_action = b->action;
+      }
+   }
+
+   return statistics;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_filter_statistics_table
+ *
+ * Description :  Produces the filter statistic table content.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Pointer to the HTML statistic table content or
+ *                NULL on out of memory
+ *
+ *********************************************************************/
+static char *get_filter_statistics_table(const struct client_state *csp)
+{
+   char buf[BUFFER_SIZE];
+   char *statistics;
+   int i;
+   struct file_list *fl;
+   struct re_filterfile_spec *b;
+   jb_err err = JB_ERR_OK;
+
+   statistics = strdup_or_die("");
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+     fl = csp->rlist[i];
+     if ((NULL == fl) || (NULL == fl->f))
+     {
+        /*
+         * Either there are no filter files left or this
+         * filter file just contains no valid filters.
+         *
+         * Continue to be sure we don't miss valid filter
+         * files that are chained after empty or invalid ones.
+         */
+        continue;
+     }
+
+     for (b = fl->f; b != NULL; b = b->next)
+     {
+        if (b->type == FT_CONTENT_FILTER)
+        {
+           unsigned long long executions;
+           unsigned long long pages_modified;
+           unsigned long long hits;
+
+           get_filter_statistics(b->name, &executions, &pages_modified, &hits);
+           snprintf(buf, sizeof(buf),
+              "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>"
+              "<td style=\"text-align: right\">%llu</td>"
+              "<td style=\"text-align: right\">%llu</td><tr>\n",
+              b->name, executions, pages_modified, hits);
+
+           if (!err) err = string_append(&statistics, buf);
+        }
+     }
+   }
+
+   return statistics;
+
+}
+#endif /* def FEATURE_EXTENDED_STATISTICS */
+
+
 /*********************************************************************
  *
  * Function    :  cgi_show_status
@@ -1143,6 +1279,33 @@ jb_err cgi_show_status(struct client_state *csp,
    if (!err) err = map_block_killer(exports, "statistics");
 #endif /* ndef FEATURE_STATISTICS */
 
+#ifdef FEATURE_EXTENDED_STATISTICS
+   {
+      char *block_reason_statistics = get_block_reason_statistics_table(csp);
+      if (block_reason_statistics != NULL)
+      {
+         if (!err) err = map(exports, "block-reason-statistics", 1, block_reason_statistics, 0);
+      }
+      else
+      {
+         if (!err) err = map_block_killer(exports, "extended-statistics");
+      }
+   }
+   {
+      char *filter_statistics = get_filter_statistics_table(csp);
+      if (filter_statistics != NULL)
+      {
+         if (!err) err = map(exports, "filter-statistics", 1, filter_statistics, 0);
+      }
+      else
+      {
+         if (!err) err = map_block_killer(exports, "extended-statistics");
+      }
+   }
+#else /* ndef FEATURE_EXTENDED_STATISTICS */
+   if (!err) err = map_block_killer(exports, "extended-statistics");
+#endif /* def FEATURE_EXTENDED_STATISTICS */
+
    /*
     * List all action files in use, together with view and edit links,
     * except for standard.action, which should only be viewable. (Not
@@ -1190,6 +1353,7 @@ jb_err cgi_show_status(struct client_state *csp,
    else
    {
       if (!err) err = map(exports, "actions-filenames", 1, "<tr><td>None specified</td></tr>", 1);
+      freez(s);
    }
 
    /*
@@ -1217,6 +1381,7 @@ jb_err cgi_show_status(struct client_state *csp,
    {
       if (!err) err = map(exports, "re-filter-filenames", 1, "<tr><td>None specified</td></tr>", 1);
       if (!err) err = map_block_killer(exports, "have-filterfile");
+      freez(s);
    }
 
 #ifdef FEATURE_TRUST
