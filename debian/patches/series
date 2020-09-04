@@ -1,4 +1,3 @@
-05_defaut_action.patch
 14_config.patch
 15_mansection8.patch
 17_502_no_such_domain.patch
@@ -8,3 +7,4 @@
 33_manpage_hyphen.patch
 34_system-docbook2man.patch
 35_man-spelling.patch
+38_SOURCE_DATE_EPOCH.patch

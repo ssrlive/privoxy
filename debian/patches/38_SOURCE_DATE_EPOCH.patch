@@ -1,0 +1,17 @@
+From: Roland Rosenfeld <roland@debian.org>
+Date: Fri, 04 Sep 2020 16:30:48 +0200
+Subject: Remove hardcoded SOURCE_DATE_EPOCH from configure.in but use the date
+ from debian/changelog.
+Forwarded: not-necessary
+
+--- a/configure.in
++++ b/configure.in
+@@ -81,7 +81,7 @@ CODE_STATUS="stable"
+ 
+ dnl Timestamp (date +%s) used by the mtree-spec target.
+ dnl Should be updated before releases but forgetting it isn't critical.
+-SOURCE_DATE_EPOCH=1545411710
++dnl SOURCE_DATE_EPOCH=1545411710
+ 
+ dnl CODE_STATUS can be "alpha", "beta", "stable" or "UNRELEASED",
+ dnl and will be used for CGI output. Increment version number and

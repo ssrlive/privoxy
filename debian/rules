@@ -33,6 +33,7 @@ override_dh_auto_build:
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) dok
 	rm -f doc/webserver/user-manual/*.bak
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) man
+	env -u LANG LC_ALL=C.UTF-8 $(MAKE) man2html
 
 override_dh_auto_clean:
 #	restore auto build documentation from source package:
