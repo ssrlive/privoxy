@@ -226,7 +226,7 @@
       <td class="box">
         <h2>Content Filter Statistics:</h2>
         <table summary="Statistics for content filters" border="1">
-         <tr><th>Filter name</th><th>Executions</th><th>Pages modified</th><th>Hits</th></tr>
+         <tr><th>Filter name</th><th>Executions</th><th>Response bodies modified</th><th>Hits</th></tr>
 @filter-statistics@        </table>
       </td>
     </tr>
