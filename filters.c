@@ -2750,7 +2750,7 @@ struct filter_statistics_entry
 {
    char *filter;
    unsigned long long executions;
-   unsigned long long pages_modified;
+   unsigned long long response_bodies_modified;
    unsigned long long hits;
 
    struct filter_statistics_entry *next;
@@ -2836,7 +2836,7 @@ void update_filter_statistics(const char *filter, int hits)
          entry->executions++;
          if (hits != 0)
          {
-            entry->pages_modified++;
+            entry->response_bodies_modified++;
             entry->hits += (unsigned)hits;
          }
          break;
@@ -2858,14 +2858,15 @@ void update_filter_statistics(const char *filter, int hits)
  * Parameters  :
  *          1  :  filter = Name of the filter to get statistics for.
  *          2  :  executions = Storage for the execution count.
- *          3  :  pages_modified = Storage for the number of modified pages.
+ *          3  :  response_bodies_modified = Storage for the number
+ *                of modified response bodies.
  *          4  :  hits = Storage for the number of hits.
  *
  * Returns     :  void
  *
  *********************************************************************/
 void get_filter_statistics(const char *filter, unsigned long long *executions,
-                           unsigned long long *pages_modified,
+                           unsigned long long *response_bodies_modified,
                            unsigned long long *hits)
 {
    struct filter_statistics_entry *entry;
@@ -2878,7 +2879,7 @@ void get_filter_statistics(const char *filter, unsigned long long *executions,
       if (!strcmp(entry->filter, filter))
       {
          *executions = entry->executions;
-         *pages_modified = entry->pages_modified;
+         *response_bodies_modified = entry->response_bodies_modified;
          *hits = entry->hits;
          break;
       }
