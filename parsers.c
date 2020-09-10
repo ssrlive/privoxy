@@ -727,6 +727,7 @@ jb_err decompress_iob(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
          freez(buf);
+         inflateEnd(&zstr);
          return JB_ERR_MEMORY;
       }
 
@@ -745,6 +746,7 @@ jb_err decompress_iob(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob");
          freez(buf);
+         inflateEnd(&zstr);
          return JB_ERR_MEMORY;
       }
       else
