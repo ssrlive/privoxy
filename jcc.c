@@ -2528,6 +2528,7 @@ static void continue_https_chat(struct client_state *csp)
          csp->cfd);
       return;
    }
+   csp->server_connection.requests_sent_total++;
    handle_established_connection(csp);
    freez(csp->receive_buffer);
 }
