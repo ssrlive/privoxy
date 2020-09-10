@@ -766,6 +766,9 @@ struct reusable_connection
    enum forwarder_type forwarder_type;
    char *gateway_host;
    int  gateway_port;
+   char *auth_username;
+   char *auth_password;
+
    char *forward_host;
    int  forward_port;
 };

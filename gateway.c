@@ -287,6 +287,8 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    closed_connection->forwarder_type = SOCKS_NONE;
    freez(closed_connection->gateway_host);
    closed_connection->gateway_port = 0;
+   freez(closed_connection->auth_username);
+   freez(closed_connection->auth_password);
    freez(closed_connection->forward_host);
    closed_connection->forward_port = 0;
 }
@@ -406,6 +408,24 @@ int connection_destination_matches(const struct reusable_connection *connection,
          "Gateway mismatch. Previous gateway: %s. Current gateway: %s",
          connection->gateway_host != NULL ? connection->gateway_host : "none",
          fwd->gateway_host != NULL ? fwd->gateway_host : "none");
+      return FALSE;
+   }
+
+   if (!connection_detail_matches(connection->auth_username, fwd->auth_username))
+   {
+      log_error(LOG_LEVEL_CONNECT, "Socks user name mismatch. "
+         "Previous user name: %s. Current user name: %s",
+         connection->auth_username != NULL ? connection->auth_username : "none",
+         fwd->auth_username != NULL ? fwd->auth_username : "none");
+      return FALSE;
+   }
+
+   if (!connection_detail_matches(connection->auth_password, fwd->auth_password))
+   {
+      log_error(LOG_LEVEL_CONNECT, "Socks user name mismatch. "
+         "Previous password: %s. Current password: %s",
+         connection->auth_password != NULL ? connection->auth_password : "none",
+         fwd->auth_password != NULL ?  fwd->auth_password : "none");
       return FALSE;
    }
 

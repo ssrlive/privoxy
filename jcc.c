@@ -1176,6 +1176,22 @@ void save_connection_destination(jb_socket sfd,
       server_connection->gateway_host = NULL;
    }
    server_connection->gateway_port = fwd->gateway_port;
+   if (NULL != fwd->auth_username)
+   {
+      server_connection->auth_username = strdup_or_die(fwd->auth_username);
+   }
+   else
+   {
+      server_connection->auth_username = NULL;
+   }
+   if (NULL != fwd->auth_password)
+   {
+      server_connection->auth_password = strdup_or_die(fwd->auth_password);
+   }
+   else
+   {
+      server_connection->auth_password = NULL;
+   }
 
    if (NULL != fwd->forward_host)
    {
