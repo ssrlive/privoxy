@@ -231,6 +231,8 @@ void remember_connection(const struct reusable_connection *connection)
 
    assert(reusable_connection[slot].gateway_host == NULL);
    assert(reusable_connection[slot].gateway_port == 0);
+   assert(reusable_connection[slot].auth_username == NULL);
+   assert(reusable_connection[slot].auth_password == NULL);
    assert(reusable_connection[slot].forwarder_type == SOCKS_NONE);
    assert(reusable_connection[slot].forward_host == NULL);
    assert(reusable_connection[slot].forward_port == 0);
@@ -245,6 +247,22 @@ void remember_connection(const struct reusable_connection *connection)
       reusable_connection[slot].gateway_host = NULL;
    }
    reusable_connection[slot].gateway_port = connection->gateway_port;
+   if (NULL != connection->auth_username)
+   {
+      reusable_connection[slot].auth_username = strdup_or_die(connection->auth_username);
+   }
+   else
+   {
+      reusable_connection[slot].auth_username = NULL;
+   }
+   if (NULL != connection->auth_password)
+   {
+      reusable_connection[slot].auth_password = strdup_or_die(connection->auth_password);
+   }
+   else
+   {
+      reusable_connection[slot].auth_password = NULL;
+   }
 
    if (NULL != connection->forward_host)
    {
