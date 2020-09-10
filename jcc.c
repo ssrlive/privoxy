@@ -2472,14 +2472,13 @@ static int cgi_page_requested(const char *host)
  *                failures etc.
  *
  *                If a connection to the server has already been
- *                opened it is reused unless the request is blocked.
+ *                opened it is reused unless the request is blocked
+ *                or the forwarder changed.
  *
  *                If a connection to the server has not yet been
- *                opened (because the previous request was crunched)
- *                the connection is dropped so that the client retries
- *                on a fresh one.
- *
- *                XXX: Forwarding settings are currently ignored.
+ *                opened (because the previous request was crunched),
+ *                or the forwarder changed, the connection is dropped
+ *                so that the client retries on a fresh one.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2489,6 +2488,8 @@ static int cgi_page_requested(const char *host)
  *********************************************************************/
 static void continue_https_chat(struct client_state *csp)
 {
+   const struct forward_spec *fwd;
+
    if (JB_ERR_OK != process_encrypted_request(csp))
    {
       return;
@@ -2515,6 +2516,24 @@ static void continue_https_chat(struct client_state *csp)
       csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return;
    }
+   assert(csp->server_connection.sfd != JB_INVALID_SOCKET);
+
+   fwd = forward_url(csp, csp->http);
+   if (!connection_destination_matches(&csp->server_connection, csp->http, fwd))
+   {
+      log_error(LOG_LEVEL_CONNECT,
+         "Dropping the client connection on socket %d with "
+         "server socket %d connected to %s. The forwarder has changed.",
+         csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
+      csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+      return;
+   }
+
+   log_error(LOG_LEVEL_CONNECT,
+      "Reusing server socket %d connected to %s. Requests already sent: %u.",
+      csp->server_connection.sfd, csp->server_connection.host,
+      csp->server_connection.requests_sent_total);
+
    if (send_https_request(csp))
    {
       /*
