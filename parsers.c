@@ -825,7 +825,7 @@ jb_err decompress_iob(struct client_state *csp)
       if (new_size > (size_t)0)
       {
          log_error(LOG_LEVEL_RE_FILTER,
-            "Decompression successful. Old size: %d, new size: %d.",
+            "Decompression successful. Old size: %lu, new size: %lu.",
             old_size, new_size);
       }
       else
