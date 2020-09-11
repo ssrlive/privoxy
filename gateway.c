@@ -338,6 +338,42 @@ void forget_connection(jb_socket sfd)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
+ * Function    :  connection_detail_matches
+ *
+ * Description :  Helper function for connection_destination_matches().
+ *                Compares strings which can be NULL.
+ *
+ * Parameters  :
+ *          1  :  connection_detail = The connection detail to compare.
+ *          2  :  fowarder_detail = The forwarder detail to compare.
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+static int connection_detail_matches(const char *connection_detail,
+                                     const char *forwarder_detail)
+{
+   if (connection_detail == NULL && forwarder_detail == NULL)
+   {
+      /* Both details are unset. */
+      return TRUE;
+   }
+
+   if ((connection_detail == NULL && forwarder_detail != NULL)
+    || (connection_detail != NULL && forwarder_detail == NULL))
+   {
+      /* Only one detail isn't set. */
+      return FALSE;
+   }
+
+   /* Both details are set, but do they match? */
+   return(!strcmpic(connection_detail, forwarder_detail));
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  connection_destination_matches
  *
  * Description :  Determines whether a remembered connection can
@@ -364,25 +400,21 @@ int connection_destination_matches(const struct reusable_connection *connection,
       return FALSE;
    }
 
-   if ((    (NULL != connection->gateway_host)
-         && (NULL != fwd->gateway_host)
-         && strcmpic(connection->gateway_host, fwd->gateway_host))
-       && (connection->gateway_host != fwd->gateway_host))
+   if (!connection_detail_matches(connection->gateway_host, fwd->gateway_host))
    {
       log_error(LOG_LEVEL_CONNECT,
          "Gateway mismatch. Previous gateway: %s. Current gateway: %s",
-         connection->gateway_host, fwd->gateway_host);
+         connection->gateway_host != NULL ? connection->gateway_host : "none",
+         fwd->gateway_host != NULL ? fwd->gateway_host : "none");
       return FALSE;
    }
 
-   if ((    (NULL != connection->forward_host)
-         && (NULL != fwd->forward_host)
-         && strcmpic(connection->forward_host, fwd->forward_host))
-      && (connection->forward_host != fwd->forward_host))
+   if (!connection_detail_matches(connection->forward_host, fwd->forward_host))
    {
       log_error(LOG_LEVEL_CONNECT,
          "Forwarding proxy mismatch. Previous proxy: %s. Current proxy: %s",
-         connection->forward_host, fwd->forward_host);
+         connection->forward_host != NULL ? connection->forward_host : "none",
+         fwd->forward_host != NULL ? fwd->forward_host : "none");
       return FALSE;
    }
 
