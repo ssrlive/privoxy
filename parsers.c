@@ -817,7 +817,7 @@ jb_err decompress_iob(struct client_state *csp)
     * Make sure the new uncompressed iob obeys some minimal
     * consistency conditions.
     */
-   if ((csp->iob->buf <=  csp->iob->cur)
+   if ((csp->iob->buf <= csp->iob->cur)
     && (csp->iob->cur <= csp->iob->eod)
     && (csp->iob->eod <= csp->iob->buf + csp->iob->size))
    {
