@@ -1193,7 +1193,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       header_length= strlen(client_headers);
 
       log_error(LOG_LEVEL_CONNECT,
-         "Optimistically sending %d bytes of client headers intended for %s",
+         "Optimistically sending %lu bytes of client headers intended for %s",
          header_length, csp->http->hostport);
 
       if (write_socket(sfd, client_headers, header_length))
