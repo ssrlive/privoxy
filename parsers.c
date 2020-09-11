@@ -1667,7 +1667,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
          continue;
       }
 
-      log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %d) with \'%s\' ...",
+      log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %lu) with \'%s\' ...",
          *header, size, b->name);
 
       /* Apply all jobs from the joblist */
@@ -1701,7 +1701,8 @@ static jb_err filter_header(struct client_state *csp, char **header)
 
       if (b->dynamic) pcrs_free_joblist(joblist);
 
-      log_error(LOG_LEVEL_RE_FILTER, "... produced %d hits (new size %d).", current_hits, size);
+      log_error(LOG_LEVEL_RE_FILTER,
+         "... produced %d hits (new size %lu).", current_hits, size);
       hits += current_hits;
    }
 
