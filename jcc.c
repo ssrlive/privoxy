@@ -843,7 +843,7 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
       {
          log_error(LOG_LEVEL_CRUNCH, "%s: https://%s%s", crunch_reason(rsp),
             http->hostport, http->path);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %llu",
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %lu",
             csp->ip_addr_str, http->gpc, http->hostport, http->path,
             http->version, status_code, rsp->content_length);
       }
@@ -851,7 +851,7 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
 #endif
       {
          log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %lu",
             csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
       }
       /* Write the answer to the client */
