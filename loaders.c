@@ -1325,7 +1325,8 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
       }
       else
       {
-         log_error(LOG_LEVEL_ERROR, "Ignoring job %s outside filter block in %s, line %d",
+         log_error(LOG_LEVEL_ERROR,
+            "Ignoring job %s outside filter block in %s, line %lu",
             buf, csp->config->re_filterfile[fileid], linenum);
       }
       freez(buf);
