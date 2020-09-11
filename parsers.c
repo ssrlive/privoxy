@@ -2907,7 +2907,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
             seconds = rtime % 60;
 
             log_error(LOG_LEVEL_HEADER,
-               "Randomized:  %s (added %d da%s %d hou%s %d minut%s %d second%s",
+               "Randomized:  %s (added %ld da%s %ld hou%s %ld minut%s %ld second%s",
                *header, days, (days == 1) ? "y" : "ys", hours, (hours == 1) ? "r" : "rs",
                minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
          }
