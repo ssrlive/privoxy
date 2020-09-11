@@ -1657,7 +1657,7 @@ static char *pcrs_filter_response(struct client_state *csp)
       if (b->dynamic) pcrs_free_joblist(joblist);
 
       log_error(LOG_LEVEL_RE_FILTER,
-         "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
+         "filtering %s%s (size %lu) with \'%s\' produced %d hits (new size %lu).",
          csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
 #ifdef FEATURE_EXTENDED_STATISTICS
       update_filter_statistics(b->name, current_hits);
