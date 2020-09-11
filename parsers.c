@@ -526,7 +526,7 @@ jb_err decompress_iob(struct client_state *csp)
        * but it should(?) be valid for deflated data also.
        */
       log_error(LOG_LEVEL_ERROR,
-         "Insufficient data to start decompression. Bytes in buffer: %d",
+         "Insufficient data to start decompression. Bytes in buffer: %ld",
          csp->iob->eod - csp->iob->cur);
       return JB_ERR_COMPRESS;
    }
