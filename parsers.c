@@ -3559,7 +3559,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
 
             if (rtime)
             {
-               log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %d minut%s)",
+               log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %ld minut%s)",
                   *header, rtime, (rtime == 1 || rtime == -1) ? "e": "es");
                if (negative_range)
                {
@@ -3599,7 +3599,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
             seconds = rtime % 60;
 
             log_error(LOG_LEVEL_HEADER,
-               "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
+               "Randomized:  %s (%s %ld hou%s %ld minut%s %ld second%s",
                *header, (negative_range) ? "subtracted" : "added", hours,
                (hours == 1) ? "r" : "rs", minutes, (minutes == 1) ? "e" : "es",
                seconds, (seconds == 1) ? ")" : "s)");
