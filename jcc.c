@@ -5512,7 +5512,7 @@ static void listen_loop(void)
       csp = &csp_list->csp;
 
       log_error(LOG_LEVEL_CONNECT,
-         "Waiting for the next client connection. Currently active threads: %d",
+         "Waiting for the next client connection. Currently active threads: %u",
          active_threads);
 
       /*
@@ -5729,7 +5729,7 @@ static void listen_loop(void)
              * XXX: If you assume ...
              */
             log_error(LOG_LEVEL_ERROR,
-               "Unable to take any additional connections: %E. Active threads: %d",
+               "Unable to take any additional connections: %E. Active threads: %u",
                active_threads);
             write_socket_delayed(csp->cfd, TOO_MANY_CONNECTIONS_RESPONSE,
                strlen(TOO_MANY_CONNECTIONS_RESPONSE), get_write_delay(csp));
