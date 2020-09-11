@@ -301,7 +301,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    if (len > (sizeof(last->file_buf) - 1))
    {
       log_error(LOG_LEVEL_ERROR,
-         "X509 PEM cert len %d is larger than buffer len %d",
+         "X509 PEM cert len %ld is larger than buffer len %lu",
          len, sizeof(last->file_buf) - 1);
       len = sizeof(last->file_buf) - 1;
    }
