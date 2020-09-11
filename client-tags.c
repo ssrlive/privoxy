@@ -568,7 +568,7 @@ jb_err enable_client_specific_tag(struct client_state *csp,
    {
       add_tag_for_client(csp->client_address, tag_name, time_to_live);
       log_error(LOG_LEVEL_INFO,
-         "Tag '%s' enabled for client '%s'. TTL: %d.",
+         "Tag '%s' enabled for client '%s'. TTL: %ld.",
          tag->name, csp->client_address, time_to_live);
    }
 
