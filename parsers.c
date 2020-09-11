@@ -838,10 +838,7 @@ jb_err decompress_iob(struct client_state *csp)
    else
    {
       /* It seems that zlib did something weird. */
-      log_error(LOG_LEVEL_ERROR,
-         "Unexpected error decompressing the buffer (iob): %d==%d, %d>%d, %d<%d",
-         csp->iob->cur, csp->iob->buf + skip_size, csp->iob->eod, csp->iob->buf,
-         csp->iob->eod, csp->iob->buf + csp->iob->size);
+      log_error(LOG_LEVEL_ERROR, "Inconsistent buffer after decompression");
       return JB_ERR_COMPRESS;
    }
 
