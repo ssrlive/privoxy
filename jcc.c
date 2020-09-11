@@ -1548,7 +1548,7 @@ static jb_err receive_chunked_client_request_body(struct client_state *csp)
       return JB_ERR_PARSE;
    }
    log_error(LOG_LEVEL_CONNECT,
-      "Chunked client body completely read. Length: %d", body_length);
+      "Chunked client body completely read. Length: %lu", body_length);
    csp->expected_client_content_length = body_length;
 
    return JB_ERR_OK;
