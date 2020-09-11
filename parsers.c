@@ -4497,7 +4497,7 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
             if (*result != result2)
             {
                log_error(LOG_LEVEL_ERROR, "strftime() and strptime() disagree. "
-                  "Format: '%s'. In: '%s', out: '%s'. %d != %d. Rejecting.",
+                  "Format: '%s'. In: '%s', out: '%s'. %ld != %ld. Rejecting.",
                   time_formats[i], header_time, recreated_date, *result, result2);
                continue;
             }
