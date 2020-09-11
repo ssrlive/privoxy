@@ -425,7 +425,7 @@ int close_unusable_connections(void)
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d timed out. "
-               "Closing socket %d. Timeout is: %d. Assumed latency: %d.",
+               "Closing socket %d. Timeout is: %d. Assumed latency: %ld.",
                reusable_connection[slot].host,
                reusable_connection[slot].port, slot,
                reusable_connection[slot].sfd,
