@@ -3570,8 +3570,8 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
             }
             else
             {
-               log_error(LOG_LEVEL_ERROR, "Random range is 0. Assuming time transformation test.",
-                  *header);
+               log_error(LOG_LEVEL_ERROR,
+                  "Random range is 0. Assuming time transformation test.");
             }
             tm += rtime * (negative_range ? -1 : 1);
             timeptr = privoxy_gmtime_r(&tm, &gmt);
