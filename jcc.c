@@ -4253,7 +4253,7 @@ static void prepare_csp_for_next_request(struct client_state *csp)
       assert(bytes_to_shift > 0);
       assert(data_length > 0);
 
-      log_error(LOG_LEVEL_CONNECT, "Shifting %d pipelined bytes by %d bytes",
+      log_error(LOG_LEVEL_CONNECT, "Shifting %lu pipelined bytes by %ld bytes",
          data_length, bytes_to_shift);
       memmove(csp->client_iob->buf, csp->client_iob->cur, data_length);
       csp->client_iob->cur = csp->client_iob->buf;
