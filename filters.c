@@ -1823,7 +1823,7 @@ static char *execute_external_filter(const struct client_state *csp,
     */
    if ((*size != 0) && fwrite(content, *size, 1, fp) != 1)
    {
-      log_error(LOG_LEVEL_ERROR, "fwrite(..., %d, 1, ..) failed: %E", *size);
+      log_error(LOG_LEVEL_ERROR, "fwrite(..., %lu, 1, ..) failed: %E", *size);
       unlink(file_name);
       fclose(fp);
       return NULL;
@@ -1899,7 +1899,7 @@ static char *execute_external_filter(const struct client_state *csp,
    {
       log_error(LOG_LEVEL_RE_FILTER,
          "Executing '%s' resulted in return value %d. "
-         "Read %d of up to %d bytes.", name, (ret >> 8), new_size, *size);
+         "Read %lu of up to %lu bytes.", name, (ret >> 8), new_size, *size);
    }
 
    unlink(file_name);
