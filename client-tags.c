@@ -234,7 +234,7 @@ void get_tag_list_for_client(struct list *tag_list,
       {
          struct client_specific_tag *next_tag = enabled_tags->next;
          log_error(LOG_LEVEL_INFO,
-            "Tag '%s' for client %s expired %u seconds ago. Deleting it.",
+            "Tag '%s' for client %s expired %ld seconds ago. Deleting it.",
             enabled_tags->name, client_address,
             (now - enabled_tags->end_of_life));
          remove_tag_for_client(client_address, enabled_tags->name);
