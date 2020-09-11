@@ -3665,12 +3665,6 @@ static void chat(struct client_state *csp)
 
    /* decide how to route the HTTP request */
    fwd = forward_url(csp, http);
-   if (NULL == fwd)
-   {
-      log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
-      /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      return;
-   }
 
 #ifdef FEATURE_HTTPS_INSPECTION
    /*
