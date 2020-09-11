@@ -2159,14 +2159,14 @@ static int send_https_request(struct client_state *csp)
          if (csp->expected_client_content_length < flushed)
          {
             log_error(LOG_LEVEL_ERROR,
-               "Flushed %d bytes of request body while only expecting %llu",
+               "Flushed %ld bytes of request body while only expecting %llu",
                flushed, csp->expected_client_content_length);
             csp->expected_client_content_length = 0;
          }
          else
          {
             log_error(LOG_LEVEL_CONNECT,
-               "Flushed %d bytes of request body while expecting %llu",
+               "Flushed %ld bytes of request body while expecting %llu",
                flushed, csp->expected_client_content_length);
             csp->expected_client_content_length -= (unsigned)flushed;
             if (receive_and_send_encrypted_post_data(csp))
@@ -2178,7 +2178,7 @@ static int send_https_request(struct client_state *csp)
       else
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Flushed %d bytes of request body", flushed);
+            "Flushed %ld bytes of request body", flushed);
       }
    }
 
