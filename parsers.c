@@ -326,7 +326,7 @@ jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
    if (need > buffer_limit)
    {
       log_error(LOG_LEVEL_INFO,
-         "Buffer limit reached while extending the buffer (iob). Needed: %d. Limit: %d",
+         "Buffer limit reached while extending the buffer (iob). Needed: %lu. Limit: %lu",
          need, buffer_limit);
       return JB_ERR_MEMORY;
    }
