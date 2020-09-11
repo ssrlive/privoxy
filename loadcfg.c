@@ -1591,7 +1591,7 @@ struct configuration_spec * load_config(void)
             if (config->receive_buffer_size < BUFFER_SIZE)
             {
                log_error(LOG_LEVEL_INFO,
-                  "receive-buffer-size %d seems low and may cause problems."
+                  "receive-buffer-size %lu seems low and may cause problems."
                   "Consider setting it to at least %d.",
                   config->receive_buffer_size, BUFFER_SIZE);
             }
