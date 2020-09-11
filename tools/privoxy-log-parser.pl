@@ -1633,6 +1633,7 @@ sub handle_loglevel_connect($) {
         # Reusing server socket 7 connected to www.privoxy.org. Total requests: 2.
         # Closing server socket 6 connected to d.asset.soup.io. Keep-alive: 0.\
         #  Tainted: 1. Socket alive: 1. Timeout: 60. Configuration file change detected: 0.
+        # Reusing server socket 35 connected to nl.wikipedia.org. Requests already sent: 5.
 
         $c =~ s@(?<= socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.)');
@@ -1640,6 +1641,7 @@ sub handle_loglevel_connect($) {
         for my $number_pattern ('requests', 'Keep-alive', 'Tainted', ' alive', 'Timeout', 'detected') {
             $c = highlight_matched_pattern($c, 'Number', '(?<='. $number_pattern . ': )\d+');
         }
+        $c =~ s@(?<=already sent: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Connected to /) {
 
