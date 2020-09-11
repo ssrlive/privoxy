@@ -2066,8 +2066,8 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
       {
          log_error(LOG_LEVEL_ERROR,
             "Chunk size %u exceeds buffered data left. "
-            "Already digested %u of %u buffered bytes.",
-            chunksize, (unsigned int)newsize, (unsigned int)*size);
+            "Already digested %lu of %lu buffered bytes.",
+            chunksize, newsize, *size);
          return JB_ERR_PARSE;
       }
 
@@ -2121,7 +2121,8 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
    }
 
    /* XXX: Should get its own loglevel. */
-   log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", *size, newsize);
+   log_error(LOG_LEVEL_RE_FILTER,
+      "De-chunking successful. Shrunk from %lu to %lu", *size, newsize);
 
    *size = newsize;
 
