@@ -2676,14 +2676,14 @@ static void handle_established_connection(struct client_state *csp)
          {
             log_error(LOG_LEVEL_CONNECT,
                "Done reading from server. Content length: %llu as expected. "
-               "Bytes most recently read: %d.",
+               "Bytes most recently read: %ld.",
                byte_count, len);
          }
          else
          {
             log_error(LOG_LEVEL_CONNECT,
                "Done reading from server. Expected content length: %llu. "
-               "Actual content length: %llu. Bytes most recently read: %d.",
+               "Actual content length: %llu. Bytes most recently read: %ld.",
                csp->expected_content_length, byte_count, len);
          }
          len = 0;
@@ -2846,7 +2846,7 @@ static void handle_established_connection(struct client_state *csp)
                csp->expected_client_content_length -= (unsigned)len;
                log_error(LOG_LEVEL_CONNECT,
                   "Expected client content length set to %llu "
-                  "after reading %d bytes.",
+                  "after reading %ld bytes.",
                   csp->expected_client_content_length, len);
                if (csp->expected_client_content_length == 0)
                {
@@ -3320,7 +3320,7 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   log_error(LOG_LEVEL_CONNECT,
                      "Continuing buffering server headers from socket %d. "
-                     "Bytes most recently read: %d.", csp->cfd, len);
+                     "Bytes most recently read: %ld.", csp->cfd, len);
                   continue;
                }
             }
