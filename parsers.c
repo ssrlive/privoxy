@@ -440,7 +440,7 @@ static jb_err decompress_iob_with_brotli(struct client_state *csp)
    if (decoded_buffer == NULL)
    {
       log_error(LOG_LEVEL_ERROR,
-         "Failed to allocate %d bytes for Brotli decompression",
+         "Failed to allocate %lu bytes for Brotli decompression",
          decoded_buffer_size);
       return JB_ERR_MEMORY;
    }
@@ -461,7 +461,7 @@ static jb_err decompress_iob_with_brotli(struct client_state *csp)
       csp->iob->size = decoded_buffer_size;
 
       log_error(LOG_LEVEL_RE_FILTER,
-         "Decompression successful. Old size: %d, new size: %d.",
+         "Decompression successful. Old size: %lu, new size: %lu.",
          encoded_size, decoded_size);
 
       return JB_ERR_OK;
