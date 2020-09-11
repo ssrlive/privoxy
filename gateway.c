@@ -358,6 +358,26 @@ void forget_connection(jb_socket sfd)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
+ * Function    :  string_or_none
+ *
+ * Description :  Returns a given string or "none" if a NULL pointer
+ *                is given.
+ *                Helper function for connection_destination_matches().
+ *
+ * Parameters  :
+ *          1  :  string = The string to check.
+ *
+ * Returns     :  The string if non-NULL, "none" otherwise.
+ *
+ *********************************************************************/
+static const char *string_or_none(const char *string)
+{
+   return(string != NULL ? string : "none");
+}
+
+
+/*********************************************************************
+ *
  * Function    :  connection_detail_matches
  *
  * Description :  Helper function for connection_destination_matches().
@@ -424,8 +444,8 @@ int connection_destination_matches(const struct reusable_connection *connection,
    {
       log_error(LOG_LEVEL_CONNECT,
          "Gateway mismatch. Previous gateway: %s. Current gateway: %s",
-         connection->gateway_host != NULL ? connection->gateway_host : "none",
-         fwd->gateway_host != NULL ? fwd->gateway_host : "none");
+         string_or_none(connection->gateway_host),
+         string_or_none(fwd->gateway_host));
       return FALSE;
    }
 
@@ -433,8 +453,8 @@ int connection_destination_matches(const struct reusable_connection *connection,
    {
       log_error(LOG_LEVEL_CONNECT, "Socks user name mismatch. "
          "Previous user name: %s. Current user name: %s",
-         connection->auth_username != NULL ? connection->auth_username : "none",
-         fwd->auth_username != NULL ? fwd->auth_username : "none");
+         string_or_none(connection->auth_username),
+         string_or_none(fwd->auth_username));
       return FALSE;
    }
 
@@ -442,8 +462,8 @@ int connection_destination_matches(const struct reusable_connection *connection,
    {
       log_error(LOG_LEVEL_CONNECT, "Socks user name mismatch. "
          "Previous password: %s. Current password: %s",
-         connection->auth_password != NULL ? connection->auth_password : "none",
-         fwd->auth_password != NULL ?  fwd->auth_password : "none");
+         string_or_none(connection->auth_password),
+         string_or_none(fwd->auth_password));
       return FALSE;
    }
 
@@ -451,8 +471,8 @@ int connection_destination_matches(const struct reusable_connection *connection,
    {
       log_error(LOG_LEVEL_CONNECT,
          "Forwarding proxy mismatch. Previous proxy: %s. Current proxy: %s",
-         connection->forward_host != NULL ? connection->forward_host : "none",
-         fwd->forward_host != NULL ? fwd->forward_host : "none");
+         string_or_none(connection->forward_host),
+         string_or_none(fwd->forward_host));
       return FALSE;
    }
 
