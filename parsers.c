@@ -1516,7 +1516,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                assert(NULL != header);
                log_error(LOG_LEVEL_ERROR,
                   "Problems with tagger \'%s\' and header \'%s\': %s",
-                  b->name, *header, pcrs_strerror(hits));
+                  b->name, header, pcrs_strerror(hits));
             }
             freez(modified_tag);
          }
@@ -1547,7 +1547,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                log_error(LOG_LEVEL_ERROR,
                   "Insufficient memory to add tag \'%s\', "
                   "based on tagger \'%s\' and header \'%s\'",
-                  tag, b->name, *header);
+                  tag, b->name, header);
             }
             else
             {
