@@ -1959,7 +1959,8 @@ static char *gif_deanimate_response(struct client_state *csp)
       }
       else
       {
-         log_error(LOG_LEVEL_DEANIMATE, "Success! GIF shrunk from %d bytes to %d.", size, out->offset);
+         log_error(LOG_LEVEL_DEANIMATE,
+            "Success! GIF shrunk from %lu bytes to %lu.", size, out->offset);
       }
       csp->content_length = out->offset;
       csp->flags |= CSP_FLAG_MODIFIED;
