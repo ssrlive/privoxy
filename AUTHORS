@@ -176,9 +176,8 @@ Privoxy heavily relies on Philip Hazel's PCRE.
 The code to filter compressed content makes use of zlib which is written by
 Jean-loup Gailly and Mark Adler.
 
-On systems that lack snprintf(), Privoxy is using a version written by Mark
-Martinec. On systems that lack strptime(), Privoxy is using the one from the
-GNU C Library written by Ulrich Drepper.
+On systems that lack strptime(), Privoxy is using the one from the GNU C
+Library written by Ulrich Drepper.
 
 If we've missed you off this list, please let us know!
 
