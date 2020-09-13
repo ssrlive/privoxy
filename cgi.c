@@ -106,7 +106,7 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
     */
    { "client-tags",
          cgi_show_client_tags,
-         "View or toggle the tags that can be set based on the clients address",
+         "View or toggle the tags that can be set based on the client&#39;s address",
          TRUE },
 #endif
    { "show-request",
