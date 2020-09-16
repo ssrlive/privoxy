@@ -732,6 +732,10 @@ ada*.
 # Blocked URL = http://bilder.augsburger-allgemeine.de/img/incoming/orig30444932/2560007661/DigiAd-Zeopexx-03072014.gif
 # Blocked URL = http://bilder.augsburger-allgemeine.de/img/incoming/orig30463337/9180008457/DigiAd-AugenblickOptik-04072014.gif
 /.*DigiAd
+# Blocked URL = http://web-t.9gag.com/piwik.php?e_c=PostImpression&e_a=ViewPostForOneSecond&e_n=Hot&e_v=1&idsite=7&rec=1&r=438977&h=14&m=13&s=9&url=https%3A%2F%2F9gag.com%2F&_id=780f7a6cf105beed&_idts=1600003135&_idvc=3&_idn=0&_refts=0&_viewts=1600255370&send_image=0&pdf=1&qt=0&realp=0&wma=0&dir=0&fla=0&java=0&gears=0&ag=0&cookie=1&res=1366x768&e_cvar=%7B%221%22%3A%5B%22PostKey%22%2C%22aR72ZBQ%22%5D%2C%222%22%3A%5B%22TriggeredPage%22%2C%22PostList%22%5D%2C%223%22%3A%5B%22TriggeredPageKey%22%2C%22Hot%22%5D%2C%224%22%3A%5B%22Position%22%2C%22343%22%5D%7D&_cvar=%7B%221%22%3A%5B%22AppVersion%22%2C%2200000%22%5D%7D&gt_ms=222
+# Blocked URL = http://piwik.peta.de/piwik.php?idsite=2
+# Blocked URL = http://www.attac.de/piwik/piwik.php?idsite=1
+/(.*/)?piwik\.php
 
 #############################################################################
 # Generic unblockers by path:
