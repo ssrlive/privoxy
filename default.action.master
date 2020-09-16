@@ -920,6 +920,8 @@ oskar.tradera.com/
 #MASTER# BLOCK-REFERRER: http://www12.zippyshare.com/v/64444425/file.html
 # Blocked URL = http://www.adcash.com/script/java.php?option=rotateur&rotateur=146355
 .adcash.com/script/
+# Blocked URL = http://t.9gag.com/img.gif?a=unique-viewed&v=v&ref=&lbl=&lblv=&p=d&e=aD4X2GG&u=&w=l&url=https%3A%2F%2F9gag.com%2F&referrer=&t=1600253599&
+t.9gag.com/img\.gif
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
