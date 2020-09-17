@@ -226,7 +226,7 @@
       <td class="box">
         <h2>Content Filter Statistics:</h2>
         <table summary="Statistics for content filters" border="1">
-         <tr><th>Filter name</th><th>Executions</th><th>Pages modified</th><th>Hits</th></tr>
+         <tr><th>Filter name</th><th>Executions</th><th>Response bodies modified</th><th>Hits</th></tr>
 @filter-statistics@        </table>
       </td>
     </tr>
@@ -386,7 +386,7 @@
               <td><code>FEATURE_ZLIB</code></td>
               <td>@if-FEATURE_ZLIB-then@ Yes @else-not-FEATURE_ZLIB@ No @endif-FEATURE_ZLIB@</td>
               <td>Allows to decompress gzip and zlib compressed documents for filtering.
-                Requires external zlib library and hasn't been tested on all platforms.</td>
+                Requires external zlib library.</td>
             </tr>
           </table>
       </td>

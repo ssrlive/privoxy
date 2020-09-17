@@ -62,10 +62,8 @@
 
 #else /* ifndef _WIN32 */
 
-# if !defined (__OS2__)
 # include <unistd.h>
 # include <sys/wait.h>
-# endif /* ndef __OS2__ */
 # include <sys/time.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -84,14 +82,6 @@
 # ifdef __BEOS__
 #  include <socket.h>  /* BeOS has select() for sockets only. */
 #  include <OS.h>      /* declarations for threads and stuff. */
-# endif
-
-# if defined(__EMX__) || defined(__OS2__)
-#  include <sys/select.h>  /* OS/2/EMX needs a little help with select */
-# endif
-# ifdef __OS2__
-#define INCL_DOS
-# include <os2.h>
 # endif
 
 #ifdef HAVE_POLL
@@ -143,7 +133,7 @@ int urls_rejected = 0;     /* total nr of urls rejected */
 int g_terminate = 0;
 #endif
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 static void sig_handler(int the_signal);
 #endif
 static int client_protocol_is_unsupported(struct client_state *csp, char *req);
@@ -175,10 +165,6 @@ static int32 server_thread(void *data);
 
 #ifdef _WIN32
 #define sleep(N)  Sleep(((N) * 1000))
-#endif
-
-#ifdef __OS2__
-#define sleep(N)  DosSleep(((N) * 100))
 #endif
 
 #ifdef FUZZ
@@ -347,7 +333,7 @@ static const struct cruncher crunchers_light[] = {
  *
  * here?
  */
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 /*********************************************************************
  *
  * Function    :  sig_handler
@@ -857,7 +843,7 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
       {
          log_error(LOG_LEVEL_CRUNCH, "%s: https://%s%s", crunch_reason(rsp),
             http->hostport, http->path);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %llu",
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" %s %lu",
             csp->ip_addr_str, http->gpc, http->hostport, http->path,
             http->version, status_code, rsp->content_length);
       }
@@ -865,7 +851,7 @@ static void send_crunch_response(struct client_state *csp, struct http_response 
 #endif
       {
          log_error(LOG_LEVEL_CRUNCH, "%s: %s", crunch_reason(rsp), http->url);
-         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %u",
+         log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" %s %lu",
             csp->ip_addr_str, http->ocmd, status_code, rsp->content_length);
       }
       /* Write the answer to the client */
@@ -1562,7 +1548,7 @@ static jb_err receive_chunked_client_request_body(struct client_state *csp)
       return JB_ERR_PARSE;
    }
    log_error(LOG_LEVEL_CONNECT,
-      "Chunked client body completely read. Length: %d", body_length);
+      "Chunked client body completely read. Length: %lu", body_length);
    csp->expected_client_content_length = body_length;
 
    return JB_ERR_OK;
@@ -2173,14 +2159,14 @@ static int send_https_request(struct client_state *csp)
          if (csp->expected_client_content_length < flushed)
          {
             log_error(LOG_LEVEL_ERROR,
-               "Flushed %d bytes of request body while only expecting %llu",
+               "Flushed %ld bytes of request body while only expecting %llu",
                flushed, csp->expected_client_content_length);
             csp->expected_client_content_length = 0;
          }
          else
          {
             log_error(LOG_LEVEL_CONNECT,
-               "Flushed %d bytes of request body while expecting %llu",
+               "Flushed %ld bytes of request body while expecting %llu",
                flushed, csp->expected_client_content_length);
             csp->expected_client_content_length -= (unsigned)flushed;
             if (receive_and_send_encrypted_post_data(csp))
@@ -2192,7 +2178,7 @@ static int send_https_request(struct client_state *csp)
       else
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Flushed %d bytes of request body", flushed);
+            "Flushed %ld bytes of request body", flushed);
       }
    }
 
@@ -2486,14 +2472,13 @@ static int cgi_page_requested(const char *host)
  *                failures etc.
  *
  *                If a connection to the server has already been
- *                opened it is reused unless the request is blocked.
+ *                opened it is reused unless the request is blocked
+ *                or the forwarder changed.
  *
  *                If a connection to the server has not yet been
- *                opened (because the previous request was crunched)
- *                the connection is dropped so that the client retries
- *                on a fresh one.
- *
- *                XXX: Forwarding settings are currently ignored.
+ *                opened (because the previous request was crunched),
+ *                or the forwarder changed, the connection is dropped
+ *                so that the client retries on a fresh one.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2503,6 +2488,8 @@ static int cgi_page_requested(const char *host)
  *********************************************************************/
 static void continue_https_chat(struct client_state *csp)
 {
+   const struct forward_spec *fwd;
+
    if (JB_ERR_OK != process_encrypted_request(csp))
    {
       return;
@@ -2529,6 +2516,24 @@ static void continue_https_chat(struct client_state *csp)
       csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return;
    }
+   assert(csp->server_connection.sfd != JB_INVALID_SOCKET);
+
+   fwd = forward_url(csp, csp->http);
+   if (!connection_destination_matches(&csp->server_connection, csp->http, fwd))
+   {
+      log_error(LOG_LEVEL_CONNECT,
+         "Dropping the client connection on socket %d with "
+         "server socket %d connected to %s. The forwarder has changed.",
+         csp->cfd, csp->server_connection.sfd, csp->server_connection.host);
+      csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+      return;
+   }
+
+   log_error(LOG_LEVEL_CONNECT,
+      "Reusing server socket %d connected to %s. Requests already sent: %u.",
+      csp->server_connection.sfd, csp->server_connection.host,
+      csp->server_connection.requests_sent_total);
+
    if (send_https_request(csp))
    {
       /*
@@ -2542,6 +2547,7 @@ static void continue_https_chat(struct client_state *csp)
          csp->cfd);
       return;
    }
+   csp->server_connection.requests_sent_total++;
    handle_established_connection(csp);
    freez(csp->receive_buffer);
 }
@@ -2631,15 +2637,7 @@ static void handle_established_connection(struct client_state *csp)
    for (;;)
    {
 #ifndef HAVE_POLL
-#ifdef __OS2__
-      /*
-       * FD_ZERO here seems to point to an errant macro which crashes.
-       * So do this by hand for now...
-       */
-      memset(&rfds,0x00,sizeof(fd_set));
-#else
       FD_ZERO(&rfds);
-#endif
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
       if (!watch_client_socket)
       {
@@ -2678,14 +2676,14 @@ static void handle_established_connection(struct client_state *csp)
          {
             log_error(LOG_LEVEL_CONNECT,
                "Done reading from server. Content length: %llu as expected. "
-               "Bytes most recently read: %d.",
+               "Bytes most recently read: %ld.",
                byte_count, len);
          }
          else
          {
             log_error(LOG_LEVEL_CONNECT,
                "Done reading from server. Expected content length: %llu. "
-               "Actual content length: %llu. Bytes most recently read: %d.",
+               "Actual content length: %llu. Bytes most recently read: %ld.",
                csp->expected_content_length, byte_count, len);
          }
          len = 0;
@@ -2848,7 +2846,7 @@ static void handle_established_connection(struct client_state *csp)
                csp->expected_client_content_length -= (unsigned)len;
                log_error(LOG_LEVEL_CONNECT,
                   "Expected client content length set to %llu "
-                  "after reading %d bytes.",
+                  "after reading %ld bytes.",
                   csp->expected_client_content_length, len);
                if (csp->expected_client_content_length == 0)
                {
@@ -3322,7 +3320,7 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   log_error(LOG_LEVEL_CONNECT,
                      "Continuing buffering server headers from socket %d. "
-                     "Bytes most recently read: %d.", csp->cfd, len);
+                     "Bytes most recently read: %ld.", csp->cfd, len);
                   continue;
                }
             }
@@ -3667,12 +3665,6 @@ static void chat(struct client_state *csp)
 
    /* decide how to route the HTTP request */
    fwd = forward_url(csp, http);
-   if (NULL == fwd)
-   {
-      log_error(LOG_LEVEL_FATAL, "gateway spec is NULL!?!?  This can't happen!");
-      /* Never get here - LOG_LEVEL_FATAL causes program exit */
-      return;
-   }
 
 #ifdef FEATURE_HTTPS_INSPECTION
    /*
@@ -4261,7 +4253,7 @@ static void prepare_csp_for_next_request(struct client_state *csp)
       assert(bytes_to_shift > 0);
       assert(data_length > 0);
 
-      log_error(LOG_LEVEL_CONNECT, "Shifting %d pipelined bytes by %d bytes",
+      log_error(LOG_LEVEL_CONNECT, "Shifting %lu pipelined bytes by %ld bytes",
          data_length, bytes_to_shift);
       memmove(csp->client_iob->buf, csp->client_iob->cur, data_length);
       csp->client_iob->cur = csp->client_iob->buf;
@@ -5012,7 +5004,7 @@ int main(int argc, char **argv)
     * are handled when and where they occur without relying
     * on a signal.
     */
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 {
    int idx;
    const int catched_signals[] = { SIGTERM, SIGINT, SIGHUP };
@@ -5474,7 +5466,7 @@ static void listen_loop(void)
    for (;;)
 #endif
    {
-#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__) && !defined(__OS2__)
+#if !defined(FEATURE_PTHREAD) && !defined(_WIN32) && !defined(__BEOS__)
       while (waitpid(-1, NULL, WNOHANG) > 0)
       {
          /* zombie children */
@@ -5615,15 +5607,6 @@ static void listen_loop(void)
 #define SELECTED_ONE_OPTION
          child_id = _beginthread(
             (void (*)(void *))serve,
-            64 * 1024,
-            csp);
-#endif
-
-#if defined(__OS2__) && !defined(SELECTED_ONE_OPTION)
-#define SELECTED_ONE_OPTION
-         child_id = _beginthread(
-            (void(* _Optlink)(void*))serve,
-            NULL,
             64 * 1024,
             csp);
 #endif

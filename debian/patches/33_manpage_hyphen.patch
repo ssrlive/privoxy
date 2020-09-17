@@ -1,10 +1,11 @@
 From: Roland Rosenfeld <roland@debian.org>
 Date: Thu, 24 Jan 2013 17:40:51 +0100
 Subject: Replace all -- in man page by \-\- to make lintian happy.
+Forwarded: not-needed
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -537,8 +537,7 @@ man: dok-release
+@@ -544,8 +544,7 @@ man: dok-release
  	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" $(MAN_PAGE); \
  	perl -pi.bak -e "s/ö/\\\\[:o]/g" $(MAN_PAGE); \
  	perl -pi.bak -e 's/([ {])-([a-z])/$$1\\-$$2/g' $(MAN_PAGE); \

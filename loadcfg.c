@@ -62,10 +62,8 @@
 
 #else /* ifndef _WIN32 */
 
-#ifndef __OS2__
 # include <unistd.h>
 # include <sys/wait.h>
-#endif
 # include <sys/time.h>
 # include <sys/stat.h>
 # include <signal.h>
@@ -1488,8 +1486,6 @@ struct configuration_spec * load_config(void)
              *
              * On platforms were we use poll() we don't have to enforce
              * an upper connection limit either.
-             *
-             * XXX: Do OS/2 etc. belong here as well?
              */
             if (max_client_connections < 1)
             {
@@ -1595,7 +1591,7 @@ struct configuration_spec * load_config(void)
             if (config->receive_buffer_size < BUFFER_SIZE)
             {
                log_error(LOG_LEVEL_INFO,
-                  "receive-buffer-size %d seems low and may cause problems."
+                  "receive-buffer-size %lu seems low and may cause problems."
                   "Consider setting it to at least %d.",
                   config->receive_buffer_size, BUFFER_SIZE);
             }

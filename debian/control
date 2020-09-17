@@ -3,7 +3,7 @@ Section: web
 Priority: optional
 Maintainer: Roland Rosenfeld <roland@debian.org>
 Build-Depends: autoconf,
-               debhelper-compat (= 12),
+               debhelper-compat (= 13),
                docbook,
                docbook-dsssl,
                docbook-utils,

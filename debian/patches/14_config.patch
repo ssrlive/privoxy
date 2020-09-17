@@ -1,6 +1,7 @@
 From: Roland Rosenfeld <roland@debian.org>
 Date: Fri, 05 Jun 2020 15:51:09 +0200
 Subject: Several Debian specific changes to config file
+Forwarded: not-needed
 
 --- a/config
 +++ b/config

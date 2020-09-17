@@ -1146,15 +1146,15 @@ static char *get_filter_statistics_table(const struct client_state *csp)
         if (b->type == FT_CONTENT_FILTER)
         {
            unsigned long long executions;
-           unsigned long long pages_modified;
+           unsigned long long response_bodies_modified;
            unsigned long long hits;
 
-           get_filter_statistics(b->name, &executions, &pages_modified, &hits);
+           get_filter_statistics(b->name, &executions, &response_bodies_modified, &hits);
            snprintf(buf, sizeof(buf),
               "<tr><td>%s</td><td style=\"text-align: right\">%llu</td>"
               "<td style=\"text-align: right\">%llu</td>"
               "<td style=\"text-align: right\">%llu</td><tr>\n",
-              b->name, executions, pages_modified, hits);
+              b->name, executions, response_bodies_modified, hits);
 
            if (!err) err = string_append(&statistics, buf);
         }

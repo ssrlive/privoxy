@@ -421,55 +421,7 @@ for-privoxy-version=3.0.11</pre>
         the source tarball package.</p>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="NEWRELEASE-OS2" id="NEWRELEASE-OS2">6.3.4. OS/2</a></h3>
-        <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
-        into an empty directory</i></span>. (See "Building and releasing packages" above). Then get the OS/2 Setup
-        module:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class=
-              "PROGRAMLISTING">  cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co os2setup</pre>
-            </td>
-          </tr>
-        </table>
-        <p>You will need a mix of development tools. The main compilation takes place with IBM Visual Age C++. Some
-        ancillary work takes place with GNU tools, available from various sources like hobbes.nmsu.edu. Specifically,
-        you will need <tt class="FILENAME">autoheader</tt>, <tt class="FILENAME">autoconf</tt> and <tt class=
-        "FILENAME">sh</tt> tools. The packaging takes place with WarpIN, available from various sources, including its
-        home page: <a href="http://www.xworkplace.org/" target="_top">xworkplace</a>.</p>
-        <p>Change directory to the <tt class="FILENAME">os2setup</tt> directory. Edit the os2build.cmd file to set the
-        final executable filename. For example,</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">  installExeName='privoxyos2_setup_X.Y.Z.exe'</pre>
-            </td>
-          </tr>
-        </table>
-        <p>Next, edit the <tt class="FILENAME">IJB.wis</tt> file so the release number matches in the <tt class=
-        "FILENAME">PACKAGEID</tt> section:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">  PACKAGEID="Privoxy Team\Privoxy\Privoxy Package\X\Y\Z"</pre>
-            </td>
-          </tr>
-        </table>
-        <p>You're now ready to build. Run:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">  os2build</pre>
-            </td>
-          </tr>
-        </table>
-        <p>You will find the WarpIN-installable executable in the <tt class="FILENAME">./files</tt> directory. Upload
-        this anonymously to <tt class="FILENAME">uploads.sourceforge.net/incoming</tt>, create a release for it, and
-        you're done. Use the release notes and Change Log from the source tarball package.</p>
-      </div>
-      <div class="SECT3">
-        <h3 class="SECT3"><a name="NEWRELEASE-SOLARIS" id="NEWRELEASE-SOLARIS">6.3.5. Solaris</a></h3>
+        <h3 class="SECT3"><a name="NEWRELEASE-SOLARIS" id="NEWRELEASE-SOLARIS">6.3.4. Solaris</a></h3>
         <p>Login to Sourceforge's compilefarm via ssh:</p>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
@@ -502,7 +454,7 @@ for-privoxy-version=3.0.11</pre>
         release the file publicly. Use the release notes and Change Log from the source tarball package.</p>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="NEWRELEASE-WINDOWS" id="NEWRELEASE-WINDOWS">6.3.6. Windows</a></h3>
+        <h3 class="SECT3"><a name="NEWRELEASE-WINDOWS" id="NEWRELEASE-WINDOWS">6.3.5. Windows</a></h3>
         <p>Note that the docbook generated files might need some hand editing, so the Windows build makefile does not
         rebuild the docs.</p>
         <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
@@ -535,7 +487,7 @@ for-privoxy-version=3.0.11</pre>
         package.</p>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="NEWRELEASE-DEBIAN" id="NEWRELEASE-DEBIAN">6.3.7. Debian</a></h3>
+        <h3 class="SECT3"><a name="NEWRELEASE-DEBIAN" id="NEWRELEASE-DEBIAN">6.3.6. Debian</a></h3>
         <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
         into an empty directory</i></span>. (See "Building and releasing packages" above). Then add a log entry to
         <tt class="FILENAME">debian/changelog</tt>, if it is not already there, for example by running:</p>
@@ -565,13 +517,13 @@ for-privoxy-version=3.0.11</pre>
         </table>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="NEWRELEASE-MACOSX" id="NEWRELEASE-MACOSX">6.3.8. Mac OS X</a></h3>
+        <h3 class="SECT3"><a name="NEWRELEASE-MACOSX" id="NEWRELEASE-MACOSX">6.3.7. Mac OS X</a></h3>
         <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
         into an empty directory</i></span>. (See "Building and releasing packages" above).</p>
         <p>There are three modules available in the Git repository for use on Mac OS X, though technically only two of
         them generate a release (the other can be used to install from source).</p>
         <div class="SECT4">
-          <h4 class="SECT4"><a name="OS-X-OSXPACKAGEBUILDER-MODULE" id="OS-X-OSXPACKAGEBUILDER-MODULE">6.3.8.1.
+          <h4 class="SECT4"><a name="OS-X-OSXPACKAGEBUILDER-MODULE" id="OS-X-OSXPACKAGEBUILDER-MODULE">6.3.7.1.
           OSXPackageBuilder module</a></h4>
           <p>The OSXPackageBuilder module generates OS X installer packages supporting all Macs running OS X 10.4 and
           above. Obtain it from Git as follows into a folder parallel to the exported privoxy source:</p>
@@ -591,7 +543,7 @@ for-privoxy-version=3.0.11</pre>
           makes it clear which package is for whichversion of OS X.</p>
         </div>
         <div class="SECT4">
-          <h4 class="SECT4"><a name="OS-X-OSXSETUP-MODULE" id="OS-X-OSXSETUP-MODULE">6.3.8.2. osxsetup module
+          <h4 class="SECT4"><a name="OS-X-OSXSETUP-MODULE" id="OS-X-OSXSETUP-MODULE">6.3.7.2. osxsetup module
           (DEPRECATED)</a></h4>
           <p><span class="emphasis"><i class="EMPHASIS">This module is deprecated since the installer it generates
           places all Privoxy files in one folder in a non-standard location, and supports only Intel Macs running OS X
@@ -633,7 +585,7 @@ for-privoxy-version=3.0.11</pre>
           package supports.</p>
         </div>
         <div class="SECT4">
-          <h4 class="SECT4"><a name="OS-X-MACSETUP-MODULE" id="OS-X-MACSETUP-MODULE">6.3.8.3. macsetup module</a></h4>
+          <h4 class="SECT4"><a name="OS-X-MACSETUP-MODULE" id="OS-X-MACSETUP-MODULE">6.3.7.3. macsetup module</a></h4>
           <p>The macsetup module is ideal if you wish to build and install Privoxy from source on a single machine.</p>
           <p>Check out the module from Git as follows into a folder parallel to the exported privoxy source:</p>
           <table border="0" bgcolor="#E0E0E0" width="100%">
@@ -649,7 +601,7 @@ for-privoxy-version=3.0.11</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="NEWRELEASE-FREEBSD" id="NEWRELEASE-FREEBSD">6.3.9. FreeBSD</a></h3>
+        <h3 class="SECT3"><a name="NEWRELEASE-FREEBSD" id="NEWRELEASE-FREEBSD">6.3.8. FreeBSD</a></h3>
         <p>Update the www/privoxy port and submit a diff upstream. For details see the <a href=
         "https://www.freebsd.org/doc/en_US.ISO8859-1/books/porters-handbook/" target="_top">FreeBSD Porter's
         Handbook</a>.</p>

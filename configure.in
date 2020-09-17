@@ -163,7 +163,7 @@ dnl Check for user and group validity
 dnl =================================================================
 
 
-if test "$EMXOS2" = yes || test "$host_os" = haiku; then
+if test "$host_os" = haiku; then
   echo "Skipping user and group validity stuff.";
 
 else

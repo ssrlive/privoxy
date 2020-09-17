@@ -1,4 +1,4 @@
-privoxy (3.0.29~gitdbcfeb-1) UNRELEASED; urgency=medium
+privoxy (3.0.29~gitc62254-1) UNRELEASED; urgency=medium
 
   * New upstream development version.
   * Update all patches to new version.
@@ -6,11 +6,17 @@ privoxy (3.0.29~gitdbcfeb-1) UNRELEASED; urgency=medium
     incorporated upstream.
   * d/copyright: use ./ prefix to upstream filenames, because orig.tar.gz
     is build with a ./ prefix.
+  * Upgrade to debhelper v13.
+  * Rebuild privoxy-man-page.html.
+  * 38_SOURCE_DATE_EPOCH: Remove hardcoded SOURCE_DATE_EPOCH from
+    configure.in but use the date from debian/changelog.
+  * Remove 05_defaut_action since this is no longer needed.
+  * Tag all patches with Forwarded header.
   * Compile --with-mbedtls to allow https-inspection.
   * Adapt TLS/SSL settings to Debian FHS.
   * Generate dirs with correct permissions for https-inspection.
 
- -- Roland Rosenfeld <roland@debian.org>  Fri, 05 Jun 2020 18:13:53 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 04 Sep 2020 15:13:08 +0200
 
 privoxy (3.0.28-3) unstable; urgency=medium
 

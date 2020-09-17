@@ -413,7 +413,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
 
    log_error(LOG_LEVEL_CRUNCH, "Certificate error: %s: https://%s%s",
       reason, csp->http->hostport, csp->http->path);
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %u",
+   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %lu",
       csp->ip_addr_str, csp->http->gpc, csp->http->hostport, csp->http->path,
       csp->http->version, message_len-head_length);
 
@@ -487,12 +487,12 @@ extern char *make_certs_path(const char *conf_dir, const char *file_name,
       + strlen(file_name) + strlen(suffix) + 2;
 
    /* Setting delimiter and editing path length */
-#if defined(_WIN32) || defined(__OS2__)
+#if defined(_WIN32)
    char delim[] = "\\";
    path_size += 1;
-#else /* ifndef _WIN32 || __OS2__ */
+#else /* ifndef _WIN32 */
    char delim[] = "/";
-#endif /* ifndef _WIN32 || __OS2__ */
+#endif /* ifndef _WIN32 */
 
    /*
     * Building up path from many parts

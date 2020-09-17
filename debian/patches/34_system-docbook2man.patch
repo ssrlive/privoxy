@@ -2,10 +2,11 @@ From: Roland Rosenfeld <roland@debian.org>
 Date: Sat, 19 Sep 2015 15:05:41 +0200
 Subject: Use Debian docbook2man-spec.pl (from docbook-utils) instead of local
  copy, to make package reproducible.
+Forwarded: not-needed
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -532,7 +532,7 @@ dok-man:
+@@ -539,7 +539,7 @@ dok-man:
  # target for man page generation!
  man: dok-release
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\

@@ -68,7 +68,7 @@
 #include <brotli/decode.h>
 #endif
 
-#if !defined(_WIN32) && !defined(__OS2__)
+#if !defined(_WIN32)
 #include <unistd.h>
 #endif
 
@@ -326,7 +326,7 @@ jb_err add_to_iob(struct iob *iob, const size_t buffer_limit, char *src, long n)
    if (need > buffer_limit)
    {
       log_error(LOG_LEVEL_INFO,
-         "Buffer limit reached while extending the buffer (iob). Needed: %d. Limit: %d",
+         "Buffer limit reached while extending the buffer (iob). Needed: %lu. Limit: %lu",
          need, buffer_limit);
       return JB_ERR_MEMORY;
    }
@@ -440,7 +440,7 @@ static jb_err decompress_iob_with_brotli(struct client_state *csp)
    if (decoded_buffer == NULL)
    {
       log_error(LOG_LEVEL_ERROR,
-         "Failed to allocate %d bytes for Brotli decompression",
+         "Failed to allocate %lu bytes for Brotli decompression",
          decoded_buffer_size);
       return JB_ERR_MEMORY;
    }
@@ -461,7 +461,7 @@ static jb_err decompress_iob_with_brotli(struct client_state *csp)
       csp->iob->size = decoded_buffer_size;
 
       log_error(LOG_LEVEL_RE_FILTER,
-         "Decompression successful. Old size: %d, new size: %d.",
+         "Decompression successful. Old size: %lu, new size: %lu.",
          encoded_size, decoded_size);
 
       return JB_ERR_OK;
@@ -526,7 +526,7 @@ jb_err decompress_iob(struct client_state *csp)
        * but it should(?) be valid for deflated data also.
        */
       log_error(LOG_LEVEL_ERROR,
-         "Insufficient data to start decompression. Bytes in buffer: %d",
+         "Insufficient data to start decompression. Bytes in buffer: %ld",
          csp->iob->eod - csp->iob->cur);
       return JB_ERR_COMPRESS;
    }
@@ -727,6 +727,7 @@ jb_err decompress_iob(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
          freez(buf);
+         inflateEnd(&zstr);
          return JB_ERR_MEMORY;
       }
 
@@ -745,6 +746,7 @@ jb_err decompress_iob(struct client_state *csp)
       {
          log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob");
          freez(buf);
+         inflateEnd(&zstr);
          return JB_ERR_MEMORY;
       }
       else
@@ -815,7 +817,7 @@ jb_err decompress_iob(struct client_state *csp)
     * Make sure the new uncompressed iob obeys some minimal
     * consistency conditions.
     */
-   if ((csp->iob->buf <=  csp->iob->cur)
+   if ((csp->iob->buf <= csp->iob->cur)
     && (csp->iob->cur <= csp->iob->eod)
     && (csp->iob->eod <= csp->iob->buf + csp->iob->size))
    {
@@ -823,7 +825,7 @@ jb_err decompress_iob(struct client_state *csp)
       if (new_size > (size_t)0)
       {
          log_error(LOG_LEVEL_RE_FILTER,
-            "Decompression successful. Old size: %d, new size: %d.",
+            "Decompression successful. Old size: %lu, new size: %lu.",
             old_size, new_size);
       }
       else
@@ -836,10 +838,7 @@ jb_err decompress_iob(struct client_state *csp)
    else
    {
       /* It seems that zlib did something weird. */
-      log_error(LOG_LEVEL_ERROR,
-         "Unexpected error decompressing the buffer (iob): %d==%d, %d>%d, %d<%d",
-         csp->iob->cur, csp->iob->buf + skip_size, csp->iob->eod, csp->iob->buf,
-         csp->iob->eod, csp->iob->buf + csp->iob->size);
+      log_error(LOG_LEVEL_ERROR, "Inconsistent buffer after decompression");
       return JB_ERR_COMPRESS;
    }
 
@@ -1517,7 +1516,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                assert(NULL != header);
                log_error(LOG_LEVEL_ERROR,
                   "Problems with tagger \'%s\' and header \'%s\': %s",
-                  b->name, *header, pcrs_strerror(hits));
+                  b->name, header, pcrs_strerror(hits));
             }
             freez(modified_tag);
          }
@@ -1548,7 +1547,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                log_error(LOG_LEVEL_ERROR,
                   "Insufficient memory to add tag \'%s\', "
                   "based on tagger \'%s\' and header \'%s\'",
-                  tag, b->name, *header);
+                  tag, b->name, header);
             }
             else
             {
@@ -1668,7 +1667,7 @@ static jb_err filter_header(struct client_state *csp, char **header)
          continue;
       }
 
-      log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %d) with \'%s\' ...",
+      log_error(LOG_LEVEL_RE_FILTER, "filtering \'%s\' (size %lu) with \'%s\' ...",
          *header, size, b->name);
 
       /* Apply all jobs from the joblist */
@@ -1702,7 +1701,8 @@ static jb_err filter_header(struct client_state *csp, char **header)
 
       if (b->dynamic) pcrs_free_joblist(joblist);
 
-      log_error(LOG_LEVEL_RE_FILTER, "... produced %d hits (new size %d).", current_hits, size);
+      log_error(LOG_LEVEL_RE_FILTER,
+         "... produced %d hits (new size %lu).", current_hits, size);
       hits += current_hits;
    }
 
@@ -2907,7 +2907,7 @@ static jb_err server_last_modified(struct client_state *csp, char **header)
             seconds = rtime % 60;
 
             log_error(LOG_LEVEL_HEADER,
-               "Randomized:  %s (added %d da%s %d hou%s %d minut%s %d second%s",
+               "Randomized:  %s (added %ld da%s %ld hou%s %ld minut%s %ld second%s",
                *header, days, (days == 1) ? "y" : "ys", hours, (hours == 1) ? "r" : "rs",
                minutes, (minutes == 1) ? "e" : "es", seconds, (seconds == 1) ? ")" : "s)");
          }
@@ -3559,7 +3559,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
 
             if (rtime)
             {
-               log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %d minut%s)",
+               log_error(LOG_LEVEL_HEADER, "Randomizing: %s (random range: %ld minut%s)",
                   *header, rtime, (rtime == 1 || rtime == -1) ? "e": "es");
                if (negative_range)
                {
@@ -3570,8 +3570,8 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
             }
             else
             {
-               log_error(LOG_LEVEL_ERROR, "Random range is 0. Assuming time transformation test.",
-                  *header);
+               log_error(LOG_LEVEL_ERROR,
+                  "Random range is 0. Assuming time transformation test.");
             }
             tm += rtime * (negative_range ? -1 : 1);
             timeptr = privoxy_gmtime_r(&tm, &gmt);
@@ -3599,7 +3599,7 @@ static jb_err client_if_modified_since(struct client_state *csp, char **header)
             seconds = rtime % 60;
 
             log_error(LOG_LEVEL_HEADER,
-               "Randomized:  %s (%s %d hou%s %d minut%s %d second%s",
+               "Randomized:  %s (%s %ld hou%s %ld minut%s %ld second%s",
                *header, (negative_range) ? "subtracted" : "added", hours,
                (hours == 1) ? "r" : "rs", minutes, (minutes == 1) ? "e" : "es",
                seconds, (seconds == 1) ? ")" : "s)");
@@ -4497,7 +4497,7 @@ static jb_err parse_header_time(const char *header_time, time_t *result)
             if (*result != result2)
             {
                log_error(LOG_LEVEL_ERROR, "strftime() and strptime() disagree. "
-                  "Format: '%s'. In: '%s', out: '%s'. %d != %d. Rejecting.",
+                  "Format: '%s'. In: '%s', out: '%s'. %ld != %ld. Rejecting.",
                   time_formats[i], header_time, recreated_date, *result, result2);
                continue;
             }

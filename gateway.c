@@ -55,10 +55,6 @@
 #include <netdb.h>
 #endif /* def __BEOS__ */
 
-#ifdef __OS2__
-#include <utils.h>
-#endif /* def __OS2__ */
-
 #include "project.h"
 #include "jcc.h"
 #include "errlog.h"
@@ -429,7 +425,7 @@ int close_unusable_connections(void)
          {
             log_error(LOG_LEVEL_CONNECT,
                "The connection to %s:%d in slot %d timed out. "
-               "Closing socket %d. Timeout is: %d. Assumed latency: %d.",
+               "Closing socket %d. Timeout is: %d. Assumed latency: %ld.",
                reusable_connection[slot].host,
                reusable_connection[slot].port, slot,
                reusable_connection[slot].sfd,
@@ -497,7 +493,7 @@ static jb_socket get_reusable_connection(const struct http_request *http,
             reusable_connection[slot].in_use = TRUE;
             sfd = reusable_connection[slot].sfd;
             log_error(LOG_LEVEL_CONNECT,
-               "Found reusable socket %d for %s:%d in slot %d. Timestamp made %d "
+               "Found reusable socket %d for %s:%d in slot %d. Timestamp made %ld "
                "seconds ago. Timeout: %d. Latency: %d. Requests served: %d",
                sfd, reusable_connection[slot].host, reusable_connection[slot].port,
                slot, time(NULL) - reusable_connection[slot].timestamp,
@@ -1197,7 +1193,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       header_length= strlen(client_headers);
 
       log_error(LOG_LEVEL_CONNECT,
-         "Optimistically sending %d bytes of client headers intended for %s",
+         "Optimistically sending %lu bytes of client headers intended for %s",
          header_length, csp->http->hostport);
 
       if (write_socket(sfd, client_headers, header_length))

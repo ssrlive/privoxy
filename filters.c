@@ -42,17 +42,11 @@
 #include <assert.h>
 
 #ifndef _WIN32
-#ifndef __OS2__
 #include <unistd.h>
-#endif /* ndef __OS2__ */
 #include <netinet/in.h>
 #else
 #include <winsock2.h>
 #endif /* ndef _WIN32 */
-
-#ifdef __OS2__
-#include <utils.h>
-#endif /* def __OS2__ */
 
 #include "project.h"
 #include "filters.h"
@@ -1663,7 +1657,7 @@ static char *pcrs_filter_response(struct client_state *csp)
       if (b->dynamic) pcrs_free_joblist(joblist);
 
       log_error(LOG_LEVEL_RE_FILTER,
-         "filtering %s%s (size %d) with \'%s\' produced %d hits (new size %d).",
+         "filtering %s%s (size %lu) with \'%s\' produced %d hits (new size %lu).",
          csp->http->hostport, csp->http->path, prev_size, b->name, current_hits, size);
 #ifdef FEATURE_EXTENDED_STATISTICS
       update_filter_statistics(b->name, current_hits);
@@ -1829,7 +1823,7 @@ static char *execute_external_filter(const struct client_state *csp,
     */
    if ((*size != 0) && fwrite(content, *size, 1, fp) != 1)
    {
-      log_error(LOG_LEVEL_ERROR, "fwrite(..., %d, 1, ..) failed: %E", *size);
+      log_error(LOG_LEVEL_ERROR, "fwrite(..., %lu, 1, ..) failed: %E", *size);
       unlink(file_name);
       fclose(fp);
       return NULL;
@@ -1905,7 +1899,7 @@ static char *execute_external_filter(const struct client_state *csp,
    {
       log_error(LOG_LEVEL_RE_FILTER,
          "Executing '%s' resulted in return value %d. "
-         "Read %d of up to %d bytes.", name, (ret >> 8), new_size, *size);
+         "Read %lu of up to %lu bytes.", name, (ret >> 8), new_size, *size);
    }
 
    unlink(file_name);
@@ -1965,7 +1959,8 @@ static char *gif_deanimate_response(struct client_state *csp)
       }
       else
       {
-         log_error(LOG_LEVEL_DEANIMATE, "Success! GIF shrunk from %d bytes to %d.", size, out->offset);
+         log_error(LOG_LEVEL_DEANIMATE,
+            "Success! GIF shrunk from %lu bytes to %lu.", size, out->offset);
       }
       csp->content_length = out->offset;
       csp->flags |= CSP_FLAG_MODIFIED;
@@ -2071,8 +2066,8 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
       {
          log_error(LOG_LEVEL_ERROR,
             "Chunk size %u exceeds buffered data left. "
-            "Already digested %u of %u buffered bytes.",
-            chunksize, (unsigned int)newsize, (unsigned int)*size);
+            "Already digested %lu of %lu buffered bytes.",
+            chunksize, newsize, *size);
          return JB_ERR_PARSE;
       }
 
@@ -2126,7 +2121,8 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
    }
 
    /* XXX: Should get its own loglevel. */
-   log_error(LOG_LEVEL_RE_FILTER, "De-chunking successful. Shrunk from %d to %d", *size, newsize);
+   log_error(LOG_LEVEL_RE_FILTER,
+      "De-chunking successful. Shrunk from %lu to %lu", *size, newsize);
 
    *size = newsize;
 
@@ -2756,7 +2752,7 @@ struct filter_statistics_entry
 {
    char *filter;
    unsigned long long executions;
-   unsigned long long pages_modified;
+   unsigned long long response_bodies_modified;
    unsigned long long hits;
 
    struct filter_statistics_entry *next;
@@ -2842,7 +2838,7 @@ void update_filter_statistics(const char *filter, int hits)
          entry->executions++;
          if (hits != 0)
          {
-            entry->pages_modified++;
+            entry->response_bodies_modified++;
             entry->hits += (unsigned)hits;
          }
          break;
@@ -2864,14 +2860,15 @@ void update_filter_statistics(const char *filter, int hits)
  * Parameters  :
  *          1  :  filter = Name of the filter to get statistics for.
  *          2  :  executions = Storage for the execution count.
- *          3  :  pages_modified = Storage for the number of modified pages.
+ *          3  :  response_bodies_modified = Storage for the number
+ *                of modified response bodies.
  *          4  :  hits = Storage for the number of hits.
  *
  * Returns     :  void
  *
  *********************************************************************/
 void get_filter_statistics(const char *filter, unsigned long long *executions,
-                           unsigned long long *pages_modified,
+                           unsigned long long *response_bodies_modified,
                            unsigned long long *hits)
 {
    struct filter_statistics_entry *entry;
@@ -2884,7 +2881,7 @@ void get_filter_statistics(const char *filter, unsigned long long *executions,
       if (!strcmp(entry->filter, filter))
       {
          *executions = entry->executions;
-         *pages_modified = entry->pages_modified;
+         *response_bodies_modified = entry->response_bodies_modified;
          *hits = entry->hits;
          break;
       }
