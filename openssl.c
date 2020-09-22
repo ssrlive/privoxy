@@ -721,7 +721,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    char *ca_file   = NULL;
    char *cert_file = NULL;
    int ret = 0;
-   SSL* ssl;
+   SSL *ssl;
 
    /*
     * Initializing OpenSSL structures for TLS/SSL connection
