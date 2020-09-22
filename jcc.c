@@ -4503,6 +4503,20 @@ static void serve(struct client_state *csp)
    chat(csp);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
+   if (csp->cfd != JB_INVALID_SOCKET)
+   {
+      log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
+         "Keep-alive: %u. Socket alive: %u. Data available: %u. "
+         "Configuration file change detected: %u. Requests received: %u.",
+         csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
+         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
+         config_file_change_detected, csp->requests_received_total);
+#ifdef FEATURE_HTTPS_INSPECTION
+      close_client_ssl_connection(csp);
+#endif
+      drain_and_close_socket(csp->cfd);
+   }
+
    if (csp->server_connection.sfd != JB_INVALID_SOCKET)
    {
 #ifdef FEATURE_CONNECTION_SHARING
@@ -4522,20 +4536,6 @@ static void serve(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    mark_connection_closed(&csp->server_connection);
 #endif
-
-   if (csp->cfd != JB_INVALID_SOCKET)
-   {
-      log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
-         "Keep-alive: %u. Socket alive: %u. Data available: %u. "
-         "Configuration file change detected: %u. Requests received: %u.",
-         csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
-         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
-         config_file_change_detected, csp->requests_received_total);
-#ifdef FEATURE_HTTPS_INSPECTION
-      close_client_ssl_connection(csp);
-#endif
-      drain_and_close_socket(csp->cfd);
-   }
 
    free_csp_resources(csp);
 
