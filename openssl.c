@@ -870,6 +870,7 @@ exit:
 extern void close_client_ssl_connection(struct client_state *csp)
 {
    struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
+   SSL *ssl;
 
    if (csp->ssl_with_client_is_opened == 0)
    {
@@ -880,6 +881,20 @@ extern void close_client_ssl_connection(struct client_state *csp)
     * Notifying the peer that the connection is being closed.
     */
    BIO_ssl_shutdown(ssl_attr->openssl_attr.bio);
+   if (BIO_get_ssl(ssl_attr->openssl_attr.bio, &ssl) != 1)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "BIO_get_ssl() failed in close_client_ssl_connection()");
+   }
+   else
+   {
+      /*
+       * Pretend we received a shutdown alert so
+       * the BIO_free_all() call later on returns
+       * quickly.
+       */
+      SSL_set_shutdown(ssl, SSL_RECEIVED_SHUTDOWN);
+   }
    free_client_ssl_structures(csp);
    csp->ssl_with_client_is_opened = 0;
 }
