@@ -1778,6 +1778,11 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Requests so far: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Dropping the client connection on socket/) {
+
+        # Dropping the client connection on socket 71. The server connection has not been established yet.
+        $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
