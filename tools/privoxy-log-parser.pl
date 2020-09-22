@@ -1783,6 +1783,12 @@ sub handle_loglevel_connect($) {
         # Dropping the client connection on socket 71. The server connection has not been established yet.
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^The client socket \d+ has become unusable while the server/) {
+
+        # The client socket 16 has become unusable while the server socket 24 is still open.
+        $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
