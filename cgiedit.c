@@ -2942,6 +2942,51 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 
 /*********************************************************************
  *
+ * Function    :  get_number_of_filters
+ *
+ * Description :  Counts the number of filter available.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  Number of filters available.
+ *
+ *********************************************************************/
+static int get_number_of_filters(const struct client_state *csp)
+{
+   int i;
+   struct re_filterfile_spec *b;
+   struct file_list *fl;
+   int number_of_filters = 0;
+
+   for (i = 0; i < MAX_AF_FILES; i++)
+   {
+     fl = csp->rlist[i];
+     if ((NULL == fl) || (NULL == fl->f))
+     {
+        /*
+         * Either there are no filter files left or this
+         * filter file just contains no valid filters.
+         *
+         * Continue to be sure we don't miss valid filter
+         * files that are chained after empty or invalid ones.
+         */
+        continue;
+     }
+
+     for (b = fl->f; b != NULL; b = b->next)
+     {
+        number_of_filters++;
+     }
+   }
+
+   return number_of_filters;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  cgi_edit_actions_submit
  *
  * Description :  CGI function that actually edits the Actions list.
@@ -2978,6 +3023,7 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
    const char * action_set_name;
    struct file_list * fl;
    struct url_actions * b;
+   int number_of_filters;
 
    if (0 == (csp->config->feature_flags & RUNTIME_FEATURE_CGI_EDIT_ACTIONS))
    {
@@ -3066,7 +3112,9 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
       }
    }
 
-   for (filter_identifier = 0; !err; filter_identifier++)
+   number_of_filters = get_number_of_filters(csp);
+
+   for (filter_identifier = 0; filter_identifier < number_of_filters && !err; filter_identifier++)
    {
       char key_value[30];
       char key_name[30];
@@ -3095,8 +3143,8 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
 
       if (name == NULL)
       {
-         /* End of list */
-         break;
+         /* The filter identifier isn't present. Try the next one. */
+         continue;
       }
 
       type = get_char_param(parameters, key_type);
