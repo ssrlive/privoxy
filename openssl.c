@@ -55,7 +55,7 @@
 #define CERTIFICATE_AUTHORITY_KEY                "keyid:always"
 #define CERTIFICATE_ALT_NAME_PREFIX              "DNS:"
 #define CERTIFICATE_VERSION                      2
-#define VALID_DATETIME_FMT                       "%Y%m%d%H%M%SZ"
+#define VALID_DATETIME_FMT                       "%y%m%d%H%M%SZ"
 #define VALID_DATETIME_BUFLEN                    16
 
 static int generate_webpage_certificate(struct client_state *csp);
