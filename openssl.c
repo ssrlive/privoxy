@@ -1578,6 +1578,7 @@ static int ssl_certificate_is_invalid(const char *cert_file)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "Error checking certificate %s validity", cert_file);
+      ret = -1;
    }
 
    X509_free(cert);
