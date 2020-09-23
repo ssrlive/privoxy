@@ -2178,12 +2178,14 @@ extern void ssl_release(void)
 {
    if (ssl_inited == 1)
    {
+#ifndef OPENSSL_NO_COMP
       SSL_COMP_free_compression_methods();
-
+#endif
       CONF_modules_free();
       CONF_modules_unload(1);
-
+#ifndef OPENSSL_NO_COMP
       COMP_zlib_cleanup();
+#endif
 
       ERR_free_strings();
       EVP_cleanup();
