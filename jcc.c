@@ -4118,10 +4118,12 @@ static void chat(struct client_state *csp)
       else
       {
          /*
-          * If server certificate is invalid, we must inform client and then
-          * close connection with client.
+          * If server certificate has been verified and is invalid,
+          * we must inform the client and then close the connection
+          * with client and server.
           */
-         if (csp->server_cert_verification_result != SSL_CERT_VALID)
+         if (csp->server_cert_verification_result != SSL_CERT_VALID &&
+             csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
          {
             ssl_send_certificate_error(csp);
             close_client_and_server_ssl_connections(csp);
