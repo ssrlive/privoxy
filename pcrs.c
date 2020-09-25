@@ -995,7 +995,7 @@ static int is_hex_sequence(const char *sequence)
  *                FALSE
  *
  *********************************************************************/
-int pcrs_job_is_dynamic (char *job)
+int pcrs_job_is_dynamic(char *job)
 {
    const char delimiter = job[1];
    const size_t length = strlen(job);
