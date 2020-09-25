@@ -1166,14 +1166,14 @@ if test X"$OPT_MBEDTLS" != Xno; then
 fi
 AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY_MBEDTLS)
 
-dnl ========================================================
-dnl check for OpenSSL which is required for https inspection
-dnl ========================================================
+dnl =================================================================
+dnl check for OpenSSL/LibreSSL which is required for https inspection
+dnl =================================================================
 FEATURE_HTTPS_INSPECTION_ONLY_OPENSSL=#
 OPT_OPENSSL=no
 AC_ARG_WITH(openssl,dnl
-AC_HELP_STRING([--with-openssl], [Enable OpenSSL detection for https inspection.])
-AC_HELP_STRING([--without-openssl], [Disable OpenSSL detection]),
+AC_HELP_STRING([--with-openssl], [Enable OpenSSL/LibreSSL detection for https inspection.])
+AC_HELP_STRING([--without-openssl], [Disable OpenSSL/LibreSSL detection]),
   OPT_OPENSSL=$withval)
 
 if test X"$OPT_OPENSSL" != Xno; then
