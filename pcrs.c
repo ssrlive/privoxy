@@ -471,7 +471,14 @@ pcrs_job *pcrs_free_job(pcrs_job *job)
    {
       next = job->next;
       if (job->pattern != NULL) free(job->pattern);
-      if (job->hints != NULL) free(job->hints);
+      if (job->hints != NULL)
+      {
+#ifdef PCRE_CONFIG_JIT
+         pcre_free_study(job->hints);
+#else
+         free(job->hints);
+#endif
+      }
       if (job->substitute != NULL)
       {
          if (job->substitute->text != NULL) free(job->substitute->text);
@@ -621,6 +628,7 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
    int flags;
    int capturecount;
    const char *error;
+   int pcre_study_options = 0;
 
    *errptr = 0;
 
@@ -660,11 +668,15 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
    }
 
 
+#ifdef PCRE_STUDY_JIT_COMPILE
+   pcre_study_options = PCRE_STUDY_JIT_COMPILE;
+#endif
+
    /*
     * Generate hints. This has little overhead, since the
     * hints will be NULL for a boring pattern anyway.
     */
-   newjob->hints = pcre_study(newjob->pattern, 0, &error);
+   newjob->hints = pcre_study(newjob->pattern, pcre_study_options, &error);
    if (error != NULL)
    {
       *errptr = PCRS_ERR_STUDY;
