@@ -920,8 +920,6 @@ oskar.tradera.com/
 #MASTER# BLOCK-REFERRER: http://www12.zippyshare.com/v/64444425/file.html
 # Blocked URL = http://www.adcash.com/script/java.php?option=rotateur&rotateur=146355
 .adcash.com/script/
-# Blocked URL = http://t.9gag.com/img.gif?a=unique-viewed&v=v&ref=&lbl=&lblv=&p=d&e=aD4X2GG&u=&w=l&url=https%3A%2F%2F9gag.com%2F&referrer=&t=1600253599&
-t.9gag.com/img\.gif
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
@@ -966,6 +964,8 @@ collector.githubapp.com/
 .consensu.org/delivery/pixel\.php
 # Blocked URL = https://srv-2020-08-22-20.pixel.parsely.com/plogger/?rand=1598128327825&plid=94157330&idsite=theverge.com&url=https%3A%2F%2Fwww.theverge.com%2F2020%2F8%2F21%2F21396316%2Fapple-wordpress-in-app-purchase-tax-update-store&urlref=&screen=1366x768%7C1366x768%7C24&data=%7B%7D&sid=1&surl=https%3A%2F%2Fwww.theverge.com%2F2020%2F8%2F21%2F21396316%2Fapple-wordpress-in-app-purchase-tax-update-store&sref=&sts=1598128167510&slts=0&date=Sat+Aug+22+2020+22%3A32%3A07+GMT%2B0200+(CEST)&action=heartbeat&inc=6&tt=140923&pvid=91707838&u=pid%3D72b66a2ec3c73c8fbf8c925f679fcbd9
 .pixel.parsely.com/
+# Blocked URL = http://t.9gag.com/img.gif?a=unique-viewed&v=v&ref=&lbl=&lblv=&p=d&e=aD4X2GG&u=&w=l&url=https%3A%2F%2F9gag.com%2F&referrer=&t=1600253599&
+t.9gag.com/img\.gif
 
 
 #############################################################################
