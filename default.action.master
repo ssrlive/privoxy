@@ -920,6 +920,10 @@ oskar.tradera.com/
 #MASTER# BLOCK-REFERRER: http://www12.zippyshare.com/v/64444425/file.html
 # Blocked URL = http://www.adcash.com/script/java.php?option=rotateur&rotateur=146355
 .adcash.com/script/
+#MASTER# BLOCK-REFERRER: https://www.tagesschau.de/inland/wolfgang-clement-103.html
+# Blocked URL = http://de.ioam.de/tx.io?st=tagessch&cp=tagesschstat&pt=CP&ps=lin&er=N22&rf=&r2=&ur=www.tagesschau.de&xy=1366x768x24&lo=FR%2Fn.a.&cb=001e&i2=001e3e01eacf383955f7084ae&ep=1632541316&vr=416&id=7wvnfq&i3=nocookie&n1=27&dntt=0&lt=1601209524382&ev=&cs=oegxy9&mo=1&sr=71
+# Blocked URL = http://script.ioam.de/iam.js
+.ioam.de/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
