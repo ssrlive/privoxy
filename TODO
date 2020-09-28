@@ -292,8 +292,6 @@ https://www.privoxy.org/faq/general.html#DONATE
 118) There should be "escaped" dynamic variables that are guaranteed
      not to break filters.
 
-119) Evaluate using pcre's jit mode.
-
 120) Add an option to limit pcre's recursion limit below the default.
      On some platforms the recursion limit doesn't prevent pcre from
      running out of stack space, causing the kernel to kill Privoxy
