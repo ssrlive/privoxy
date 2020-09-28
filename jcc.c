@@ -2168,7 +2168,7 @@ static int send_https_request(struct client_state *csp)
          csp->http->hostport);
       return 1;
    }
-   if (flushed != 0)
+   if (flushed != 0 || csp->expected_client_content_length != 0)
    {
       if (csp->expected_client_content_length != 0)
       {
