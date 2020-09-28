@@ -926,6 +926,8 @@ oskar.tradera.com/
 .ioam.de/
 # Blocked URL = http://t.vi-serve.com/?event=ERROR&page_url=https%3A%2F%2F9gag.com%2F&pub_id=576566800037402&channel_id=5ea98ccc02abaa4068798df6&placement_id=pltlhqRgj1oCSlyn51S&ad_unit_type=2&session_id=e4xr60mlvsol&focus=false&player=playerVI&pageLanguage=en&placement_w=0&placement_h=0&time_delta=20700&error_msg=script%20tag%20placed%20in%20non-displayed%20Element&playlist_pos=1&mobile=false&floating=false&cb=f43f
 t.vi-serve.com/
+# Blocked URL = http://pixel.inforsea.com/server/log
+pixel.inforsea.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
