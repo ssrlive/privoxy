@@ -2292,7 +2292,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    err = receive_encrypted_request(csp);
    if (err != JB_ERR_OK)
    {
-      if (csp->client_iob->cur == NULL)
+      if (csp->client_iob->cur == NULL ||
+          csp->client_iob->cur == csp->client_iob->eod)
       {
          /*
           * We did not receive any data, most likely because the
