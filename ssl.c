@@ -235,18 +235,21 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
 
       if (ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY)
       {
-         log_error(LOG_LEVEL_CONNECT,
-            "The peer notified us that the connection is going to be closed");
+         log_error(LOG_LEVEL_CONNECT, "The peer notified us that "
+            "the connection on socket %d is going to be closed",
+            ssl_attr->mbedtls_attr.socket_fd.fd);
          return 0;
       }
       mbedtls_strerror(ret, err_buf, sizeof(err_buf));
       log_error(LOG_LEVEL_ERROR,
-         "Receiving data over TLS/SSL failed: %s", err_buf);
+         "Receiving data on socket %d over TLS/SSL failed: %s",
+         ssl_attr->mbedtls_attr.socket_fd.fd, err_buf);
 
       return -1;
    }
 
-   log_error(LOG_LEVEL_RECEIVED, "TLS: %N", ret, buf);
+   log_error(LOG_LEVEL_RECEIVED, "TLS from socket %d: %N",
+      ssl_attr->mbedtls_attr.socket_fd.fd, ret, buf);
 
    return ret;
 }
