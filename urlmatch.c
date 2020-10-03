@@ -302,7 +302,7 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
             url_path
          );
          *url_path = '\0';
-         http->hostport = strdup_or_die(url_noproto);
+         http->hostport = string_tolower(url_noproto);
       }
       else
       {
@@ -311,10 +311,15 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
           * or CONNECT requests
           */
          http->path = strdup_or_die("/");
-         http->hostport = strdup_or_die(url_noproto);
+         http->hostport = string_tolower(url_noproto);
       }
 
       freez(buf);
+
+      if (http->hostport == NULL)
+      {
+         return JB_ERR_PARSE;
+      }
    }
 
    if (!host_available)

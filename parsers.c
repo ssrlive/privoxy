@@ -4587,7 +4587,11 @@ jb_err get_destination_from_headers(const struct list *headers, struct http_requ
       return JB_ERR_PARSE;
    }
 
-   p = strdup_or_die(host);
+   p = string_tolower(host);
+   if (p == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
    chomp(p);
    q = strdup_or_die(p);
 
@@ -4674,7 +4678,11 @@ jb_err get_destination_from_https_headers(const struct list *headers, struct htt
       return JB_ERR_PARSE;
    }
 
-   p = strdup_or_die(host);
+   p = string_tolower(host);
+   if (p == NULL)
+   {
+      return JB_ERR_MEMORY;
+   }
    chomp(p);
    q = strdup_or_die(p);
 
