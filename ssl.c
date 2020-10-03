@@ -170,7 +170,8 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
          send_len = (int)max_fragment_size;
       }
 
-      log_error(LOG_LEVEL_WRITING, "TLS: %N", send_len, buf+pos);
+      log_error(LOG_LEVEL_WRITING, "TLS on socket %d: %N",
+         ssl_attr->mbedtls_attr.socket_fd.fd, send_len, buf+pos);
 
       /*
        * Sending one part of the buffer
@@ -186,7 +187,8 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
 
             mbedtls_strerror(ret, err_buf, sizeof(err_buf));
             log_error(LOG_LEVEL_ERROR,
-               "Sending data over TLS/SSL failed: %s", err_buf);
+               "Sending data on socket %d over TLS/SSL failed: %s",
+               ssl_attr->mbedtls_attr.socket_fd.fd, err_buf);
             return -1;
          }
       }
