@@ -4067,7 +4067,8 @@ static jb_err server_http(struct client_state *csp, char **header)
       return JB_ERR_PARSE;
    }
 
-   if (csp->http->status == 206)
+   if (csp->http->status == 101 ||
+       csp->http->status == 206)
    {
       csp->content_type = CT_TABOO;
    }
