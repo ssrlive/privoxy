@@ -207,7 +207,10 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
 extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t max_length)
 {
    BIO *bio = ssl_attr->openssl_attr.bio;
+   SSL *ssl;
    int ret = 0;
+   int fd = -1;
+
    memset(buf, 0, max_length);
 
    /*
@@ -221,12 +224,18 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
    if (ret < 0)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
-         "Receiving data over TLS/SSL failed");
+         "Receiving data on socket %d over TLS/SSL failed", fd);
 
       return -1;
    }
 
-   log_error(LOG_LEVEL_RECEIVED, "TLS: %N", ret, buf);
+   if (BIO_get_ssl(bio, &ssl) == 1)
+   {
+      fd = SSL_get_fd(ssl);
+   }
+
+   log_error(LOG_LEVEL_RECEIVED, "TLS from socket %d: %N",
+      fd, ret, buf);
 
    return ret;
 }
