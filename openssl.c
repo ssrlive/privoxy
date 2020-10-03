@@ -152,19 +152,27 @@ extern size_t is_ssl_pending(struct ssl_attr *ssl_attr)
 extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, size_t len)
 {
    BIO *bio = ssl_attr->openssl_attr.bio;
+   SSL *ssl;
    int ret = 0;
    int pos = 0; /* Position of unsent part in buffer */
+   int fd = -1;
 
    if (len == 0)
    {
       return 0;
    }
 
+   if (BIO_get_ssl(bio, &ssl) == 1)
+   {
+      fd = SSL_get_fd(ssl);
+   }
+
    while (pos < len)
    {
       int send_len = (int)len - pos;
 
-      log_error(LOG_LEVEL_WRITING, "TLS: %N", send_len, buf+pos);
+      log_error(LOG_LEVEL_WRITING, "TLS on socket %d: %N",
+         fd, send_len, buf+pos);
 
       /*
        * Sending one part of the buffer
@@ -176,7 +184,7 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
          if (!BIO_should_retry(bio))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
-               "Sending data over TLS/SSL failed");
+               "Sending data on socket %d over TLS/SSL failed", fd);
             return -1;
          }
       }
