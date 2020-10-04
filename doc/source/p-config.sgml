@@ -4206,7 +4206,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     and the <ulink url="#CA-CERT-KEY">ca-cert-key</ulink>.
    </para>
    <para>
-    The permissions should only let &my-app; and the  &my-app;
+    The permissions should only let &my-app; and the &my-app;
     admin access the directory.
    </para>
   </listitem>
