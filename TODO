@@ -425,6 +425,10 @@ https://www.privoxy.org/faq/general.html#DONATE
 
 161) Properly support requests with chunked transfer-encoding with https inspection.
 
+162) When https inspecting, delete generated keys and certificates if
+     the connection to the destination could not be established.
+     Makes silly DoS attacks slightly more complicated.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
