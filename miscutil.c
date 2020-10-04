@@ -562,6 +562,43 @@ char *string_toupper(const char *string)
 
 /*********************************************************************
  *
+ * Function    :  string_tolower
+ *
+ * Description :  Produce a copy of string with all convertible
+ *                characters converted to lowercase.
+ *
+ * Parameters  :
+ *          1  :  string = string to convert
+ *
+ * Returns     :  Lowercase copy of string if possible,
+ *                NULL on out-of-memory or if string was NULL.
+ *
+ *********************************************************************/
+char *string_tolower(const char *string)
+{
+   char *result, *p;
+   const char *q;
+
+   if (!string || ((result = (char *)zalloc(strlen(string) + 1)) == NULL))
+   {
+      return NULL;
+   }
+
+   q = string;
+   p = result;
+
+   while (*q != '\0')
+   {
+      *p++ = (char)privoxy_tolower(*q++);
+   }
+
+   return result;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  string_move
  *
  * Description :  memmove wrapper to move the last part of a string
