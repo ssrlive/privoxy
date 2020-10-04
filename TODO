@@ -429,6 +429,9 @@ https://www.privoxy.org/faq/general.html#DONATE
      the connection to the destination could not be established.
      Makes silly DoS attacks slightly more complicated.
 
+163) Use subdirectories in the certificate-directory to lower the number
+     of files per directory.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
