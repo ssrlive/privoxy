@@ -2439,8 +2439,8 @@ socket-timeout 300
 #            receive-buffer-size 32768
 #
 #
-#  7. TLS/SSL INSPECTION
-#  ======================
+#  7. TLS/SSL INSPECTION (EXPERIMENTAL)
+#  =====================================
 #
 #  7.1. ca-directory
 #  ==================
@@ -2611,6 +2611,19 @@ socket-timeout 300
 #      The permissions should only let Privoxy and the Privoxy admin
 #      access the directory.
 #
+#      +-----------------------------------------------------+
+#      |                       Warning                       |
+#      |-----------------------------------------------------|
+#      |Privoxy currently does not garbage-collect obsolete  |
+#      |keys and certificates and does not keep track of how |
+#      |may keys and certificates exist.                     |
+#      |                                                     |
+#      |Privoxy admins should monitor the size of the        |
+#      |directory and/or make sure there is sufficient space |
+#      |available. A cron job to limit the number of keys and|
+#      |certificates to a certain number may be worth        |
+#      |considering.                                         |
+#      +-----------------------------------------------------+
 #  Examples:
 #
 #      certificate-directory /usr/local/var/privoxy/certs
