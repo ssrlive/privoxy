@@ -2185,6 +2185,8 @@ collector.githubapp.com/
 .wikipedia.org/
 # URL = http://platform.twitter.com/widgets/widget_iframe.2d7d9a6d04538bf11c7b23641e75738c.html?origin=https%3A%2F%2F9gag.com
 .twitter.com/.*origin=http
+# URL = http://issue.freebsdfoundation.org/html5_viewer/index.html?issue_id=673890&publication_id=&parentUrl=https%3A%2F%2Fissue.freebsdfoundation.org%2Fpublication%2F%3Fi%3D673890
+issue.freebsdfoundation.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
