@@ -4209,6 +4209,19 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     The permissions should only let &my-app; and the &my-app;
     admin access the directory.
    </para>
+   <warning>
+    <para>
+     &my-app; currently does not garbage-collect obsolete keys
+     and certificates and does not keep track of how may keys
+     and certificates exist.
+    </para>
+    <para>
+     &my-app; admins should monitor the size of the directory
+     and/or make sure there is sufficient space available.
+     A cron job to limit the number of keys and certificates
+     to a certain number may be worth considering.
+    </para>
+   </warning>
   </listitem>
  </varlistentry>
  <varlistentry>
