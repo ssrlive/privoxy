@@ -323,7 +323,7 @@ typedef struct {
  * Struct of attributes necessary for TLS/SSL connection
  */
 typedef struct {
-   SSL_CTX* ctx;
+   SSL_CTX *ctx;
    BIO *bio;
 } openssl_connection_attr;
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
