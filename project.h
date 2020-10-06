@@ -311,6 +311,7 @@ typedef struct {
    mbedtls_x509_crt         server_cert;
    mbedtls_x509_crt         ca_cert;
    mbedtls_pk_context       prim_key;
+   int                     *ciphersuites_list;
 
    #if defined(MBEDTLS_SSL_CACHE_C)
       mbedtls_ssl_cache_context cache;
@@ -1587,6 +1588,9 @@ struct configuration_spec
 
    /** Directory for saving certificates and keys for each webpage **/
    char *certificate_directory;
+
+   /** Cipher list to use **/
+   char *cipher_list;
 
    /** Filename of trusted CAs certificates **/
    char * trusted_cas_file;

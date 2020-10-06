@@ -5,7 +5,7 @@
  * Purpose     :  File with TLS/SSL extension. Contains methods for
  *                creating, using and closing TLS/SSL connections.
  *
- * Copyright   :  Written by and Copyright (c) 2017 Vaclav Svec. FIT CVUT.
+ * Copyright   :  Written by and Copyright (c) 2017-2020 Vaclav Svec. FIT CVUT.
  *                Copyright (C) 2018-2020 by Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
@@ -94,6 +94,7 @@ static int ssl_verify_callback(void *data, mbedtls_x509_crt *crt, int depth, uin
 static void free_client_ssl_structures(struct client_state *csp);
 static void free_server_ssl_structures(struct client_state *csp);
 static int seed_rng(struct client_state *csp);
+static int *get_ciphersuites_from_string(const char *ciphersuites_string);
 
 /*********************************************************************
  *
@@ -421,6 +422,22 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
+   if (csp->config->cipher_list != NULL)
+   {
+      ssl_attr->mbedtls_attr.ciphersuites_list =
+         get_ciphersuites_from_string(csp->config->cipher_list);
+      if (ssl_attr->mbedtls_attr.ciphersuites_list == NULL)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the client connection failed",
+            csp->config->cipher_list);
+         ret = -1;
+         goto exit;
+      }
+      mbedtls_ssl_conf_ciphersuites(&(ssl_attr->mbedtls_attr.conf),
+         ssl_attr->mbedtls_attr.ciphersuites_list);
+   }
+
    ret = mbedtls_ssl_setup(&(ssl_attr->mbedtls_attr.ssl),
       &(ssl_attr->mbedtls_attr.conf));
    if (ret != 0)
@@ -544,6 +561,7 @@ static void free_client_ssl_structures(struct client_state *csp)
    mbedtls_x509_crt_free(&(ssl_attr->mbedtls_attr.server_cert));
    mbedtls_pk_free(&(ssl_attr->mbedtls_attr.prim_key));
    mbedtls_ssl_free(&(ssl_attr->mbedtls_attr.ssl));
+   freez(ssl_attr->mbedtls_attr.ciphersuites_list);
    mbedtls_ssl_config_free(&(ssl_attr->mbedtls_attr.conf));
 #if defined(MBEDTLS_SSL_CACHE_C)
    mbedtls_ssl_cache_free(&(ssl_attr->mbedtls_attr.cache));
@@ -652,6 +670,22 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
    mbedtls_ssl_conf_rng(&(ssl_attr->mbedtls_attr.conf),
       mbedtls_ctr_drbg_random, &ctr_drbg);
+
+   if (csp->config->cipher_list != NULL)
+   {
+      ssl_attr->mbedtls_attr.ciphersuites_list =
+         get_ciphersuites_from_string(csp->config->cipher_list);
+      if (ssl_attr->mbedtls_attr.ciphersuites_list == NULL)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the server connection failed",
+            csp->config->cipher_list);
+         ret = -1;
+         goto exit;
+      }
+      mbedtls_ssl_conf_ciphersuites(&(ssl_attr->mbedtls_attr.conf),
+         ssl_attr->mbedtls_attr.ciphersuites_list);
+   }
 
    ret = mbedtls_ssl_setup(&(ssl_attr->mbedtls_attr.ssl),
       &(ssl_attr->mbedtls_attr.conf));
@@ -803,6 +837,7 @@ static void free_server_ssl_structures(struct client_state *csp)
 
    mbedtls_x509_crt_free(&(ssl_attr->mbedtls_attr.ca_cert));
    mbedtls_ssl_free(&(ssl_attr->mbedtls_attr.ssl));
+   freez(ssl_attr->mbedtls_attr.ciphersuites_list);
    mbedtls_ssl_config_free(&(ssl_attr->mbedtls_attr.conf));
 }
 
@@ -1859,4 +1894,74 @@ extern void ssl_release(void)
       mbedtls_ctr_drbg_free(&ctr_drbg);
       mbedtls_entropy_free(&entropy);
    }
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_ciphersuites_from_string
+ *
+ * Description :  Converts a string of ciphersuite names to
+ *                an array of ciphersuite ids.
+ *
+ * Parameters  :
+ *          1  :  ciphersuites_string = String containing allowed
+ *                ciphersuites.
+ *
+ * Returns     :  Array of ciphersuite ids
+ *
+ *********************************************************************/
+static int *get_ciphersuites_from_string(const char *parameter_string)
+{
+   char *ciphersuites_index;
+   char *item_end;
+   char *ciphersuites_string;
+   int *ciphersuite_ids;
+   size_t count = 2;
+   int index = 0;
+   const char separator = ':';
+   size_t parameter_len = strlen(parameter_string);
+
+   ciphersuites_string = zalloc_or_die(parameter_len + 1);
+   strncpy(ciphersuites_string, parameter_string, parameter_len);
+   ciphersuites_index = ciphersuites_string;
+
+   while (*ciphersuites_index)
+   {
+      if (*ciphersuites_index++ == separator)
+      {
+         ++count;
+      }
+   }
+
+   ciphersuite_ids = zalloc_or_die(count * sizeof(int));
+
+   ciphersuites_index = ciphersuites_string;
+   do
+   {
+      item_end = strchr(ciphersuites_index, separator);
+      if (item_end != NULL)
+      {
+         *item_end = '\0';
+      }
+
+      ciphersuite_ids[index] =
+         mbedtls_ssl_get_ciphersuite_id(ciphersuites_index);
+      if (ciphersuite_ids[index] == 0)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to get ciphersuite id for %s", ciphersuites_index);
+         freez(ciphersuite_ids);
+         freez(ciphersuites_string);
+         return NULL;
+      }
+      ciphersuites_index = item_end + 1;
+      index++;
+   } while (item_end != NULL);
+
+   ciphersuite_ids[index] = 0;
+   freez(ciphersuites_string);
+
+   return ciphersuite_ids;
+
 }

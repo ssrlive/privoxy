@@ -837,6 +837,18 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
+   if (csp->config->cipher_list != NULL)
+   {
+      if (!SSL_set_cipher_list(ssl, csp->config->cipher_list))
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the client connection failed",
+            csp->config->cipher_list);
+         ret = -1;
+         goto exit;
+      }
+   }
+
    /*
     *  Handshake with client
     */
@@ -1059,6 +1071,18 @@ extern int create_server_ssl_connection(struct client_state *csp)
       log_ssl_errors(LOG_LEVEL_ERROR, "SSL_set_fd failed");
       ret = -1;
       goto exit;
+   }
+
+   if (csp->config->cipher_list != NULL)
+   {
+      if (!SSL_set_cipher_list(ssl, csp->config->cipher_list))
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the server connection failed",
+            csp->config->cipher_list);
+         ret = -1;
+         goto exit;
+      }
    }
 
    /*
