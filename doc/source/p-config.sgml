@@ -4240,6 +4240,131 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
+<sect3 renderas="sect4" id="cipher-list"><title>cipher-list</title>
+<variablelist>
+ <varlistentry>
+  <term>Specifies:</term>
+  <listitem>
+   <para>
+    A list of ciphers to use in TLS handshakes
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Type of value:</term>
+  <listitem>
+   <para>
+    Text
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Default value:</term>
+  <listitem>
+   <para>None</para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Effect if unset:</term>
+  <listitem>
+   <para>
+    A default value is inherited from the TLS library.
+   </para>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    This directive allows to specify a non-default list of ciphers to use
+    in TLS handshakes with clients and servers.
+   </para>
+   <para>
+    Ciphers are separated by colons. Which ciphers are supported
+    depends on the TLS library. When using OpenSSL, unsupported ciphers
+    are skipped. When using MbedTLS they are rejected.
+   </para>
+   <warning>
+    <para>
+     Specifying an unusual cipher list makes fingerprinting easier.
+     Note that the default list provided by the TLS library may
+     be unusual when compared to the one used by modern browsers
+     as well.
+    </para>
+   </warning>
+  </listitem>
+ </varlistentry>
+ <varlistentry>
+  <term>Examples:</term>
+  <listitem>
+   <screen>
+    # Explicitly set a couple of ciphers with names used by MbedTLS
+    cipher-list cipher-list TLS-ECDHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+TLS-ECDHE-ECDSA-WITH-CHACHA20-POLY1305-SHA256:\
+TLS-DHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDHE-ECDSA-WITH-AES-256-CCM:\
+TLS-ECDHE-ECDSA-WITH-AES-256-CCM-8:\
+TLS-ECDHE-ECDSA-WITH-AES-128-CCM:\
+TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8:\
+TLS-ECDHE-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDHE-ECDSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:\
+TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:\
+TLS-DHE-RSA-WITH-AES-256-CCM:\
+TLS-DHE-RSA-WITH-AES-256-CCM-8:\
+TLS-DHE-RSA-WITH-AES-128-CCM:\
+TLS-DHE-RSA-WITH-AES-128-CCM-8:\
+TLS-DHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-DHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-ECDH-RSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDH-RSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDH-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDH-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-ECDH-ECDSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDH-ECDSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDH-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDH-ECDSA-WITH-CAMELLIA-256-GCM-SHA384
+   </screen>
+   <screen>
+    # Explicitly set a couple of ciphers with names used by OpenSSL
+cipher-list ECDHE-RSA-AES256-GCM-SHA384:\
+ECDHE-ECDSA-AES256-GCM-SHA384:\
+DH-DSS-AES256-GCM-SHA384:\
+DHE-DSS-AES256-GCM-SHA384:\
+DH-RSA-AES256-GCM-SHA384:\
+DHE-RSA-AES256-GCM-SHA384:\
+ECDH-RSA-AES256-GCM-SHA384:\
+ECDH-ECDSA-AES256-GCM-SHA384:\
+ECDHE-RSA-AES128-GCM-SHA256:\
+ECDHE-ECDSA-AES128-GCM-SHA256:\
+DH-DSS-AES128-GCM-SHA256:\
+DHE-DSS-AES128-GCM-SHA256:\
+DH-RSA-AES128-GCM-SHA256:\
+DHE-RSA-AES128-GCM-SHA256:\
+ECDH-RSA-AES128-GCM-SHA256:\
+ECDH-ECDSA-AES128-GCM-SHA256:\
+ECDHE-RSA-AES256-GCM-SHA384:\
+AES128-SHA
+   </screen>
+   <screen>
+    # Use keywords instead of explicity naming the ciphers (Does not work with MbedTLS)
+    cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+   </screen>
+  </listitem>
+ </varlistentry>
+</variablelist>
+</sect3>
+
+<!--  ~  End section  ~  -->
+
+<!--   ~~~~~       New section      ~~~~~     -->
+
 <sect3 renderas="sect4" id="trusted-cas-file"><title>trusted-cas-file</title>
 <variablelist>
  <varlistentry>
