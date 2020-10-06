@@ -975,7 +975,7 @@ enable-edit-actions 0
 #      link. If the user adds the force prefix by hand, it will not
 #      be accepted and the circumvention attempt is logged.
 #
-#  Examples:
+#  Example:
 #
 #      enforce-blocks 1
 #
@@ -1515,7 +1515,7 @@ enable-proxy-authentication-forwarding 0
 #      logfile from time to time, to see how many retries are usually
 #      needed.
 #
-#  Examples:
+#  Example:
 #
 #      forwarded-connect-retries 1
 #
@@ -1564,7 +1564,7 @@ forwarded-connect-retries  0
 #      the CGI templates to make sure they don't reference content
 #      from config.privoxy.org.
 #
-#  Examples:
+#  Example:
 #
 #      accept-intercepted-requests 1
 #
@@ -1601,7 +1601,7 @@ accept-intercepted-requests 0
 #      Don't enable this option unless you're sure that you really
 #      need it.
 #
-#  Examples:
+#  Example:
 #
 #      allow-cgi-request-crunching 1
 #
@@ -1643,7 +1643,7 @@ allow-cgi-request-crunching 0
 #      to enable this option, but if one of the submit buttons
 #      appears to be broken, you should give it a try.
 #
-#  Examples:
+#  Example:
 #
 #      split-large-forms 1
 #
@@ -1699,7 +1699,7 @@ split-large-forms 0
 #      seconds or even more if you think your browser can handle it.
 #      If your browser appears to be hanging, it probably can't.
 #
-#  Examples:
+#  Example:
 #
 #      keep-alive-timeout 300
 #
@@ -1742,7 +1742,7 @@ keep-alive-timeout 5
 #      If you are seeing problems with pages not properly loading,
 #      disabling this option could work around the problem.
 #
-#  Examples:
+#  Example:
 #
 #      tolerate-pipelining 1
 #
@@ -1793,7 +1793,7 @@ tolerate-pipelining 1
 #      This option has no effect if Privoxy has been compiled without
 #      keep-alive support.
 #
-#  Examples:
+#  Example:
 #
 #      default-server-timeout 60
 #
@@ -1863,7 +1863,7 @@ tolerate-pipelining 1
 #      This option should only be used by experienced users who
 #      understand the risks and can weight them against the benefits.
 #
-#  Examples:
+#  Example:
 #
 #      connection-sharing 1
 #
@@ -1895,7 +1895,7 @@ tolerate-pipelining 1
 #      If you aren't using an occasionally slow proxy like Tor,
 #      reducing it to a few seconds should be fine.
 #
-#  Examples:
+#  Example:
 #
 #      socket-timeout 300
 #
@@ -1957,7 +1957,7 @@ socket-timeout 300
 #      limit can't be increased without recompiling Privoxy with a
 #      different FD_SETSIZE limit.
 #
-#  Examples:
+#  Example:
 #
 #      max-client-connections 256
 #
@@ -2011,7 +2011,7 @@ socket-timeout 300
 #      the system configuration as well. On FreeBSD-based system the
 #      limit is controlled by the kern.ipc.soacceptqueue sysctl.
 #
-#  Examples:
+#  Example:
 #
 #      listen-backlog 4096
 #
@@ -2053,7 +2053,7 @@ socket-timeout 300
 #      systems. Check the accf_http(9) man page to learn how to
 #      enable the support in the operating system.
 #
-#  Examples:
+#  Example:
 #
 #      enable-accept-filter 1
 #
@@ -2331,7 +2331,7 @@ socket-timeout 300
 #      it is used, the tag will be set until the client-tag-lifetime
 #      is over.
 #
-#  Examples:
+#  Example:
 #
 #            # Increase the time to life for temporarily enabled tags to 3 minutes
 #            client-tag-lifetime 180
@@ -2385,7 +2385,7 @@ socket-timeout 300
 #      registering lots of client tag settings for clients that don't
 #      exist.
 #
-#  Examples:
+#  Example:
 #
 #            # Allow systems that can reach Privoxy to provide the client
 #            # IP address with a X-Forwarded-For header.
@@ -2433,7 +2433,7 @@ socket-timeout 300
 #      cleared before using it, a buffer that is too large can
 #      actually reduce the throughput.
 #
-#  Examples:
+#  Example:
 #
 #            # Increase the receive buffer size
 #            receive-buffer-size 32768
@@ -2470,7 +2470,7 @@ socket-timeout 300
 #      The permissions should only let Privoxy and the Privoxy admin
 #      access the directory.
 #
-#  Examples:
+#  Example:
 #
 #      ca-directory /usr/local/etc/privoxy/CA
 #
@@ -2510,7 +2510,7 @@ socket-timeout 300
 #      The file can be generated with: openssl req -new -x509
 #      -extensions v3_ca -keyout cakey.pem -out cacert.crt -days 3650
 #
-#  Examples:
+#  Example:
 #
 #      ca-cert-file root.crt
 #
@@ -2540,7 +2540,7 @@ socket-timeout 300
 #      This directive specifies the name of the CA key file in ".pem"
 #      format. See the ca-cert-file for a command to generate it.
 #
-#  Examples:
+#  Example:
 #
 #      ca-key-file cakey.pem
 #
@@ -2574,7 +2574,7 @@ socket-timeout 300
 #      Note that the password is shown on the CGI page so don't reuse
 #      an important one.
 #
-#  Examples:
+#  Example:
 #
 #      ca-password blafasel
 #
@@ -2624,13 +2624,111 @@ socket-timeout 300
 #      |certificates to a certain number may be worth        |
 #      |considering.                                         |
 #      +-----------------------------------------------------+
-#  Examples:
+#  Example:
 #
 #      certificate-directory /usr/local/var/privoxy/certs
 #
 #certificate-directory /usr/local/var/privoxy/certs
 #
-#  7.6. trusted-cas-file
+#  7.6. cipher-list
+#  =================
+#
+#  Specifies:
+#
+#      A list of ciphers to use in TLS handshakes
+#
+#  Type of value:
+#
+#      Text
+#
+#  Default value:
+#
+#      None
+#
+#  Effect if unset:
+#
+#      A default value is inherited from the TLS library.
+#
+#  Notes:
+#
+#      This directive allows to specify a non-default list of ciphers
+#      to use in TLS handshakes with clients and servers.
+#
+#      Ciphers are separated by colons. Which ciphers are supported
+#      depends on the TLS library. When using OpenSSL, unsupported
+#      ciphers are skipped. When using MbedTLS they are rejected.
+#
+#      +-----------------------------------------------------+
+#      |                       Warning                       |
+#      |-----------------------------------------------------|
+#      |Specifying an unusual cipher list makes              |
+#      |fingerprinting easier. Note that the default list    |
+#      |provided by the TLS library may be unusual when      |
+#      |compared to the one used by modern browsers as well. |
+#      +-----------------------------------------------------+
+#  Examples:
+#
+#          # Explicitly set a couple of ciphers with names used by MbedTLS
+#          cipher-list cipher-list TLS-ECDHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+#          TLS-ECDHE-ECDSA-WITH-CHACHA20-POLY1305-SHA256:\
+#          TLS-DHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+#          TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:\
+#          TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:\
+#          TLS-ECDHE-ECDSA-WITH-AES-256-CCM:\
+#          TLS-ECDHE-ECDSA-WITH-AES-256-CCM-8:\
+#          TLS-ECDHE-ECDSA-WITH-AES-128-CCM:\
+#          TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8:\
+#          TLS-ECDHE-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+#          TLS-ECDHE-ECDSA-WITH-CAMELLIA-256-GCM-SHA384:\
+#          TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256:\
+#          TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:\
+#          TLS-ECDHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+#          TLS-ECDHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+#          TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:\
+#          TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:\
+#          TLS-DHE-RSA-WITH-AES-256-CCM:\
+#          TLS-DHE-RSA-WITH-AES-256-CCM-8:\
+#          TLS-DHE-RSA-WITH-AES-128-CCM:\
+#          TLS-DHE-RSA-WITH-AES-128-CCM-8:\
+#          TLS-DHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+#          TLS-DHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+#          TLS-ECDH-RSA-WITH-AES-128-GCM-SHA256:\
+#          TLS-ECDH-RSA-WITH-AES-256-GCM-SHA384:\
+#          TLS-ECDH-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+#          TLS-ECDH-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+#          TLS-ECDH-ECDSA-WITH-AES-128-GCM-SHA256:\
+#          TLS-ECDH-ECDSA-WITH-AES-256-GCM-SHA384:\
+#          TLS-ECDH-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+#          TLS-ECDH-ECDSA-WITH-CAMELLIA-256-GCM-SHA384
+#
+#
+#          # Explicitly set a couple of ciphers with names used by OpenSSL
+#          cipher-list ECDHE-RSA-AES256-GCM-SHA384:\
+#          ECDHE-ECDSA-AES256-GCM-SHA384:\
+#          DH-DSS-AES256-GCM-SHA384:\
+#          DHE-DSS-AES256-GCM-SHA384:\
+#          DH-RSA-AES256-GCM-SHA384:\
+#          DHE-RSA-AES256-GCM-SHA384:\
+#          ECDH-RSA-AES256-GCM-SHA384:\
+#          ECDH-ECDSA-AES256-GCM-SHA384:\
+#          ECDHE-RSA-AES128-GCM-SHA256:\
+#          ECDHE-ECDSA-AES128-GCM-SHA256:\
+#          DH-DSS-AES128-GCM-SHA256:\
+#          DHE-DSS-AES128-GCM-SHA256:\
+#          DH-RSA-AES128-GCM-SHA256:\
+#          DHE-RSA-AES128-GCM-SHA256:\
+#          ECDH-RSA-AES128-GCM-SHA256:\
+#          ECDH-ECDSA-AES128-GCM-SHA256:\
+#          ECDHE-RSA-AES256-GCM-SHA384:\
+#          AES128-SHA
+#
+#
+#          # Use keywords instead of explicity naming the ciphers (Does not work with MbedTLS)
+#          cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+#
+#
+#
+#  7.7. trusted-cas-file
 #  ======================
 #
 #  Specifies:
@@ -2657,7 +2755,7 @@ socket-timeout 300
 #      An example file can be downloaded from https://curl.haxx.se/ca
 #      /cacert.pem.
 #
-#  Examples:
+#  Example:
 #
 #      trusted-cas-file trusted_cas_file.pem
 #
