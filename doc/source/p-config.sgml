@@ -1630,7 +1630,7 @@ actionsfile
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     enforce-blocks 1
@@ -2508,7 +2508,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     forwarded-connect-retries 1
@@ -2585,7 +2585,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     accept-intercepted-requests 1
@@ -2643,7 +2643,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     allow-cgi-request-crunching 1
@@ -2710,7 +2710,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     split-large-forms 1
@@ -2793,7 +2793,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     keep-alive-timeout 300
@@ -2862,7 +2862,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     tolerate-pipelining 1
@@ -2943,7 +2943,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     default-server-timeout 60
@@ -3042,7 +3042,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     connection-sharing 1
@@ -3098,7 +3098,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     socket-timeout 300
@@ -3186,7 +3186,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     max-client-connections 256
@@ -3265,7 +3265,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     listen-backlog 4096
@@ -3336,7 +3336,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     enable-accept-filter 1
@@ -3739,7 +3739,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
     <screen>
       # Increase the time to life for temporarily enabled tags to 3 minutes
@@ -3811,7 +3811,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
     <screen>
       # Allow systems that can reach Privoxy to provide the client
@@ -3884,7 +3884,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
     <screen>
       # Increase the receive buffer size
@@ -3952,7 +3952,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     ca-directory /usr/local/etc/privoxy/CA
@@ -4023,7 +4023,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     ca-cert-file root.crt
@@ -4081,7 +4081,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     ca-key-file cakey.pem
@@ -4143,7 +4143,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     ca-password blafasel
@@ -4225,7 +4225,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     certificate-directory /usr/local/var/privoxy/certs
@@ -4286,7 +4286,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Examples:</term>
+  <term>Example:</term>
   <listitem>
    <para>
     trusted-cas-file trusted_cas_file.pem
