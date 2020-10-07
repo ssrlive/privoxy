@@ -2189,6 +2189,8 @@ collector.githubapp.com/
 .twitter.com/.*origin=http
 # URL = http://issue.freebsdfoundation.org/html5_viewer/index.html?issue_id=673890&publication_id=&parentUrl=https%3A%2F%2Fissue.freebsdfoundation.org%2Fpublication%2F%3Fi%3D673890
 issue.freebsdfoundation.org/
+# URL = http://ltfl.librarything.com//forlibraries/widget_response.php?id=1477&isbns=9780062279194&divs=ltfl_tagbrowse%2Cltfl_related%2Cltfl_similars%2Cltfl_series%2Cltfl_awards&lccn=&oclc=&t=1602093207304&systype=zones&pagetype=full&catalog_url=https%3A%2F%2Fkatalog.stbib-koeln.de%2Falswww2.dll%2FAPS_PRESENT_BIB%3FStyle%3DPortal3%26SubStyle%3D%26Lang%3DGER%26ResponseEncoding%3Dutf-8%26no%3DT011006751%26Via%3DZ3950%26View%3DAnnotated%26Parent%3DObj_482831602093137%26SearchBrowseList%3DObj_482831602093137%26SearchBrowseListItem%3D71831%26BrowseList%3DObj_482831602093137%3FStyle%3DPortal3%26SubStyle%3D%26Lang%3DGER%26ResponseEncoding%3Dutf-8%26BrowseListItem%3D71831%26QueryObject%3DObj_482811602093136&title=Think%20like%20a%20freak&author=Levitt%2C%20Steven%20D.&accession=T011006751&locations=&widget_response_loaded_after=764&container_widthAAS={%22body%22:{%22cw%22:1350,%22ch%22:946},%22ltfl_tagbrowse%22:{%22cw%22:614,%22ch%22:0},%22ltfl_related%22:{%22cw%22:614,%22ch%22:0},%22ltfl_similars%22:{%22cw%22:614,%22ch%22:0},%22ltfl_series%22:{%22cw%22:614,%22ch%22:0},%22ltfl_awards%22:{%22cw%22:614,%22ch%22:0}}
+.librarything.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
