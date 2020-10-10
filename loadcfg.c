@@ -120,9 +120,8 @@ static struct file_list *current_configfile = NULL;
  * This takes the "cryptic" hash of each keyword and aliases them to
  * something a little more readable.  This also makes changing the
  * hash values easier if they should change or the hash algorithm changes.
- * Use the included "hash" program to find out what the hash will be
- * for any string supplied on the command line.  (Or just put it in the
- * config file and read the number from the error message in the log).
+ * To find out the hash for a new directive put it in the config file
+ * and read the number from the error message in the log).
  *
  * Please keep this list sorted alphabetically (but with the Windows
  * console and GUI specific options last).
