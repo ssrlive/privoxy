@@ -649,8 +649,10 @@ struct iob
 #define ACTION_MULTI_SERVER_HEADER_TAGGER    5
 /** Number of multi-string actions. */
 #define ACTION_MULTI_EXTERNAL_FILTER         6
+/** Index into current_action_spec::multi[] for tags to suppress. */
+#define ACTION_MULTI_SUPPRESS_TAG            7
 /** Number of multi-string actions. */
-#define ACTION_MULTI_COUNT                   7
+#define ACTION_MULTI_COUNT                   8
 
 
 /**
@@ -1303,13 +1305,14 @@ enum filter_type
 #ifdef FEATURE_EXTERNAL_FILTERS
    FT_EXTERNAL_CONTENT_FILTER = 5,
 #endif
+   FT_SUPPRESS_TAG = 6,
    FT_INVALID_FILTER       = 42,
 };
 
 #ifdef FEATURE_EXTERNAL_FILTERS
-#define MAX_FILTER_TYPES        6
+#define MAX_FILTER_TYPES        7
 #else
-#define MAX_FILTER_TYPES        5
+#define MAX_FILTER_TYPES        6
 #endif
 
 /**

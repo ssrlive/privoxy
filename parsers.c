@@ -1540,6 +1540,15 @@ static jb_err header_tagger(struct client_state *csp, char *header)
             continue;
          }
 
+         if (list_contains_item(csp->action->multi[ACTION_MULTI_SUPPRESS_TAG], tag))
+         {
+            log_error(LOG_LEVEL_HEADER,
+               "Tagger \'%s\' didn't add tag \'%s\': suppressed",
+               b->name, tag);
+            freez(tag);
+            continue;
+         }
+
          if (!list_contains_item(csp->tags, tag))
          {
             if (JB_ERR_OK != enlist(csp->tags, tag))

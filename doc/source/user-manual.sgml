@@ -5937,6 +5937,63 @@ TAG:^image/
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="suppress-tag">
+<title>suppress-tag</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Suppress client or server tag.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Server or client tags to which this action applies are not added to the request,
+    thus making all actions that are specific to these request tags inactive.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The result tag of a server-header or client-header tagger, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+     <screen>
+# Suppress tag produced by range-requests client-header tagger for requests coming from address 10.0.0.1
+{+suppress-tag{RANGE-REQUEST}}
+TAG:^IP-ADDRESS: 10\.0\.0\.1$
+</screen>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="session-cookies-only">
 <title>session-cookies-only</title>
 
