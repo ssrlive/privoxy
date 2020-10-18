@@ -1534,6 +1534,8 @@ b.collective-media.net/
 #MASTER# BLOCK-REFERRER: http://www.heise.de/
 # Blocked URL = http://heise.ivwbox.de/2004/01/survey.js
 .ivwbox.de/
+# Blocked URL = https://pixel.wp.com/g.gif?v=ext&j=1%3A7.8&blog=44083982&post=2542&tz=1&srv=www.geeklan.co.uk&host=www.geeklan.co.uk&ref=&fcp=0&rand=0.34473017357614855
+pixel.wp.com/
 
 #----------------------------------------------------------------------------
 # Specific counters (see above for generic patterns)
