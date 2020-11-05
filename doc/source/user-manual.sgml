@@ -7851,10 +7851,11 @@ Requests</title>
 
 <para>
  The same is true for <application>Privoxy</application> binaries
- unless they are linked with
- <ulink url="https://tls.mbed.org/">mbed TLS</ulink> in which
- case you can redistribute them and/or modify them under the terms
- of the <citetitle>GNU General Public License</citetitle>
+ unless they are linked with a
+ <ulink url="https://tls.mbed.org/">mbed TLS</ulink> version
+ that is licensed under the Apache 2.0 license in which
+ case you can redistribute and/or modify the <application>Privoxy</application>
+ binaries under the terms of the <citetitle>GNU General Public License</citetitle>
  as published by the Free Software Foundation, either version 3
  of the license, or (at your option) any later version.
 </para>
