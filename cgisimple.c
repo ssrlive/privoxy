@@ -1348,9 +1348,9 @@ jb_err cgi_show_status(struct client_state *csp,
          if (!err) err = string_append(&s, "</td></tr>\n");
       }
    }
-   if (*s != '\0')
+   if (!err && *s != '\0')
    {
-      if (!err) err = map(exports, "actions-filenames", 1, s, 0);
+      err = map(exports, "actions-filenames", 1, s, 0);
    }
    else
    {
