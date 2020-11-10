@@ -1280,26 +1280,28 @@ jb_err cgi_show_status(struct client_state *csp,
 #endif /* ndef FEATURE_STATISTICS */
 
 #ifdef FEATURE_EXTENDED_STATISTICS
+   if (!err)
    {
       char *block_reason_statistics = get_block_reason_statistics_table(csp);
       if (block_reason_statistics != NULL)
       {
-         if (!err) err = map(exports, "block-reason-statistics", 1, block_reason_statistics, 0);
+         err = map(exports, "block-reason-statistics", 1, block_reason_statistics, 0);
       }
       else
       {
-         if (!err) err = map_block_killer(exports, "extended-statistics");
+         err = map_block_killer(exports, "extended-statistics");
       }
    }
+   if (!err)
    {
       char *filter_statistics = get_filter_statistics_table(csp);
       if (filter_statistics != NULL)
       {
-         if (!err) err = map(exports, "filter-statistics", 1, filter_statistics, 0);
+         err = map(exports, "filter-statistics", 1, filter_statistics, 0);
       }
       else
       {
-         if (!err) err = map_block_killer(exports, "extended-statistics");
+         err = map_block_killer(exports, "extended-statistics");
       }
    }
 #else /* ndef FEATURE_EXTENDED_STATISTICS */
