@@ -407,7 +407,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    /*
     * Sending final message to client
     */
-   ssl_send_data(ssl_attr, (const unsigned char *)message, strlen(message));
+   (void)ssl_send_data(ssl_attr, (const unsigned char *)message, strlen(message));
 
    free_certificate_chain(csp);
 
