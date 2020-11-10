@@ -404,6 +404,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
       snprintf(buf, sizeof(buf), "%u", csp->config->client_tag_lifetime);
       if (map(exports, "refresh-delay", 1, buf, 1))
       {
+         freez(client_tag_status);
          free_map(exports);
          return JB_ERR_MEMORY;
       }
@@ -413,6 +414,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
       err = map_block_killer(exports, "tags-expire");
       if (err != JB_ERR_OK)
       {
+         freez(client_tag_status);
          return err;
       }
    }
