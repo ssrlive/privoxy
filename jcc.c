@@ -559,8 +559,6 @@ static int client_has_unsupported_expectations(const struct client_state *csp)
  *********************************************************************/
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers)
 {
-   char *req;
-
    if (!(csp->config->feature_flags & RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS))
    {
       log_error(LOG_LEVEL_ERROR, "%s's request: \'%s\' is invalid."
@@ -587,15 +585,12 @@ static jb_err get_request_destination_elsewhere(struct client_state *csp, struct
    {
       /* We can't work without destination. Go spread the news.*/
 
-      req = list_to_text(headers);
-      chomp(req);
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
          csp->ip_addr_str, csp->http->cmd);
       log_error(LOG_LEVEL_ERROR,
-         "Privoxy was unable to get the destination for %s's request:\n%s\n%s",
-         csp->ip_addr_str, csp->http->cmd, req);
-      freez(req);
+         "Privoxy was unable to get the destination for %s's request: %s",
+         csp->ip_addr_str, csp->http->cmd);
 
       write_socket_delayed(csp->cfd, MISSING_DESTINATION_RESPONSE,
          strlen(MISSING_DESTINATION_RESPONSE), get_write_delay(csp));
