@@ -42,7 +42,7 @@ CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
 SNAPVERSION   = $(VERSION)-$(shell date "+%Y%m%d")
 
-SOURCE_DATE_EPOCH = @SOURCE_DATE_EPOCH@
+SOURCE_DATE_EPOCH ?= @SOURCE_DATE_EPOCH@
 MTREE_SPEC_FILE = privoxy-$(VERSION)-$(CODE_STATUS).spec
 
 #############################################################################
