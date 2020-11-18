@@ -1201,6 +1201,7 @@ if test X"$OPT_OPENSSL" != Xno; then
 
   if test "x$FEATURE_HTTPS_INSPECTION_OPENSSL" = "xyes"; then
     AC_MSG_NOTICE([Detected OpenSSL. Enabling https inspection.])
+    AC_MSG_WARN([If you intend to redistribute Privoxy, please make sure the "special exception" from section 3 of the GPLv2 applies.])
 
     LIBS="$LIBS -lssl -lcrypto"
     old_CFLAGS_nospecial="$old_CFLAGS_nospecial"
