@@ -5167,7 +5167,7 @@ new action
    </para>
    <para>
     Before this works the directives in the
-    <literal><ulink url="config.html#TLS">TLS section</ulink></literal>
+    <literal><ulink url="config.html#HTTPS-INSPECTION-DIRECTIVES">HTTPS inspection section</ulink></literal>
     of the config file have to be configured.
    </para>
    <para>
