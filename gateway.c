@@ -6,7 +6,7 @@
  *                using a "forwarder" (i.e. HTTP proxy and/or a SOCKS4
  *                or SOCKS5 proxy).
  *
- * Copyright   :  Written by and Copyright (C) 2001-2017 the
+ * Copyright   :  Written by and Copyright (C) 2001-2020 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -231,6 +231,8 @@ void remember_connection(const struct reusable_connection *connection)
 
    assert(reusable_connection[slot].gateway_host == NULL);
    assert(reusable_connection[slot].gateway_port == 0);
+   assert(reusable_connection[slot].auth_username == NULL);
+   assert(reusable_connection[slot].auth_password == NULL);
    assert(reusable_connection[slot].forwarder_type == SOCKS_NONE);
    assert(reusable_connection[slot].forward_host == NULL);
    assert(reusable_connection[slot].forward_port == 0);
@@ -245,6 +247,22 @@ void remember_connection(const struct reusable_connection *connection)
       reusable_connection[slot].gateway_host = NULL;
    }
    reusable_connection[slot].gateway_port = connection->gateway_port;
+   if (NULL != connection->auth_username)
+   {
+      reusable_connection[slot].auth_username = strdup_or_die(connection->auth_username);
+   }
+   else
+   {
+      reusable_connection[slot].auth_username = NULL;
+   }
+   if (NULL != connection->auth_password)
+   {
+      reusable_connection[slot].auth_password = strdup_or_die(connection->auth_password);
+   }
+   else
+   {
+      reusable_connection[slot].auth_password = NULL;
+   }
 
    if (NULL != connection->forward_host)
    {
@@ -287,6 +305,8 @@ void mark_connection_closed(struct reusable_connection *closed_connection)
    closed_connection->forwarder_type = SOCKS_NONE;
    freez(closed_connection->gateway_host);
    closed_connection->gateway_port = 0;
+   freez(closed_connection->auth_username);
+   freez(closed_connection->auth_password);
    freez(closed_connection->forward_host);
    closed_connection->forward_port = 0;
 }
@@ -338,6 +358,62 @@ void forget_connection(jb_socket sfd)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
 /*********************************************************************
  *
+ * Function    :  string_or_none
+ *
+ * Description :  Returns a given string or "none" if a NULL pointer
+ *                is given.
+ *                Helper function for connection_destination_matches().
+ *
+ * Parameters  :
+ *          1  :  string = The string to check.
+ *
+ * Returns     :  The string if non-NULL, "none" otherwise.
+ *
+ *********************************************************************/
+static const char *string_or_none(const char *string)
+{
+   return(string != NULL ? string : "none");
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  connection_detail_matches
+ *
+ * Description :  Helper function for connection_destination_matches().
+ *                Compares strings which can be NULL.
+ *
+ * Parameters  :
+ *          1  :  connection_detail = The connection detail to compare.
+ *          2  :  fowarder_detail = The forwarder detail to compare.
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+static int connection_detail_matches(const char *connection_detail,
+                                     const char *forwarder_detail)
+{
+   if (connection_detail == NULL && forwarder_detail == NULL)
+   {
+      /* Both details are unset. */
+      return TRUE;
+   }
+
+   if ((connection_detail == NULL && forwarder_detail != NULL)
+    || (connection_detail != NULL && forwarder_detail == NULL))
+   {
+      /* Only one detail isn't set. */
+      return FALSE;
+   }
+
+   /* Both details are set, but do they match? */
+   return(!strcmpic(connection_detail, forwarder_detail));
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  connection_destination_matches
  *
  * Description :  Determines whether a remembered connection can
@@ -364,25 +440,39 @@ int connection_destination_matches(const struct reusable_connection *connection,
       return FALSE;
    }
 
-   if ((    (NULL != connection->gateway_host)
-         && (NULL != fwd->gateway_host)
-         && strcmpic(connection->gateway_host, fwd->gateway_host))
-       && (connection->gateway_host != fwd->gateway_host))
+   if (!connection_detail_matches(connection->gateway_host, fwd->gateway_host))
    {
       log_error(LOG_LEVEL_CONNECT,
          "Gateway mismatch. Previous gateway: %s. Current gateway: %s",
-         connection->gateway_host, fwd->gateway_host);
+         string_or_none(connection->gateway_host),
+         string_or_none(fwd->gateway_host));
       return FALSE;
    }
 
-   if ((    (NULL != connection->forward_host)
-         && (NULL != fwd->forward_host)
-         && strcmpic(connection->forward_host, fwd->forward_host))
-      && (connection->forward_host != fwd->forward_host))
+   if (!connection_detail_matches(connection->auth_username, fwd->auth_username))
+   {
+      log_error(LOG_LEVEL_CONNECT, "Socks user name mismatch. "
+         "Previous user name: %s. Current user name: %s",
+         string_or_none(connection->auth_username),
+         string_or_none(fwd->auth_username));
+      return FALSE;
+   }
+
+   if (!connection_detail_matches(connection->auth_password, fwd->auth_password))
+   {
+      log_error(LOG_LEVEL_CONNECT, "Socks user name mismatch. "
+         "Previous password: %s. Current password: %s",
+         string_or_none(connection->auth_password),
+         string_or_none(fwd->auth_password));
+      return FALSE;
+   }
+
+   if (!connection_detail_matches(connection->forward_host, fwd->forward_host))
    {
       log_error(LOG_LEVEL_CONNECT,
          "Forwarding proxy mismatch. Previous proxy: %s. Current proxy: %s",
-         connection->forward_host, fwd->forward_host);
+         string_or_none(connection->forward_host),
+         string_or_none(fwd->forward_host));
       return FALSE;
    }
 

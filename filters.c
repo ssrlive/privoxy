@@ -1671,6 +1671,10 @@ static char *pcrs_filter_response(struct client_state *csp)
     */
    if (!hits)
    {
+      if (old != csp->iob->cur && old != new)
+      {
+         freez(old);
+      }
       freez(new);
       return(NULL);
    }

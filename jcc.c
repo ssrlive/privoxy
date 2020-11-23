@@ -559,8 +559,6 @@ static int client_has_unsupported_expectations(const struct client_state *csp)
  *********************************************************************/
 static jb_err get_request_destination_elsewhere(struct client_state *csp, struct list *headers)
 {
-   char *req;
-
    if (!(csp->config->feature_flags & RUNTIME_FEATURE_ACCEPT_INTERCEPTED_REQUESTS))
    {
       log_error(LOG_LEVEL_ERROR, "%s's request: \'%s\' is invalid."
@@ -587,15 +585,12 @@ static jb_err get_request_destination_elsewhere(struct client_state *csp, struct
    {
       /* We can't work without destination. Go spread the news.*/
 
-      req = list_to_text(headers);
-      chomp(req);
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s\" 400 0",
          csp->ip_addr_str, csp->http->cmd);
       log_error(LOG_LEVEL_ERROR,
-         "Privoxy was unable to get the destination for %s's request:\n%s\n%s",
-         csp->ip_addr_str, csp->http->cmd, req);
-      freez(req);
+         "Privoxy was unable to get the destination for %s's request: %s",
+         csp->ip_addr_str, csp->http->cmd);
 
       write_socket_delayed(csp->cfd, MISSING_DESTINATION_RESPONSE,
          strlen(MISSING_DESTINATION_RESPONSE), get_write_delay(csp));
@@ -1176,6 +1171,22 @@ void save_connection_destination(jb_socket sfd,
       server_connection->gateway_host = NULL;
    }
    server_connection->gateway_port = fwd->gateway_port;
+   if (NULL != fwd->auth_username)
+   {
+      server_connection->auth_username = strdup_or_die(fwd->auth_username);
+   }
+   else
+   {
+      server_connection->auth_username = NULL;
+   }
+   if (NULL != fwd->auth_password)
+   {
+      server_connection->auth_password = strdup_or_die(fwd->auth_password);
+   }
+   else
+   {
+      server_connection->auth_password = NULL;
+   }
 
    if (NULL != fwd->forward_host)
    {
@@ -2152,7 +2163,7 @@ static int send_https_request(struct client_state *csp)
          csp->http->hostport);
       return 1;
    }
-   if (flushed != 0)
+   if (flushed != 0 || csp->expected_client_content_length != 0)
    {
       if (csp->expected_client_content_length != 0)
       {
@@ -2276,7 +2287,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
    err = receive_encrypted_request(csp);
    if (err != JB_ERR_OK)
    {
-      if (csp->client_iob->cur == NULL)
+      if (csp->client_iob->cur == NULL ||
+          csp->client_iob->cur == csp->client_iob->eod)
       {
          /*
           * We did not receive any data, most likely because the
@@ -2824,6 +2836,37 @@ static void handle_established_connection(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
          if (client_use_ssl(csp))
          {
+            if (csp->http->status == 101)
+            {
+               len = ssl_recv_data(&(csp->ssl_client_attr),
+                  (unsigned char *)csp->receive_buffer,
+                  (size_t)max_bytes_to_read);
+               if (len == -1)
+               {
+                  log_error(LOG_LEVEL_ERROR, "Failed to receive data "
+                     "on client socket %d for an upgraded connection",
+                     csp->cfd);
+                  break;
+               }
+               if (len == 0)
+               {
+                  log_error(LOG_LEVEL_CONNECT, "Done receiving data "
+                     "on client socket %d for an upgraded connection",
+                     csp->cfd);
+                  break;
+               }
+               byte_count += (unsigned long long)len;
+               len = ssl_send_data(&(csp->ssl_server_attr),
+                  (unsigned char *)csp->receive_buffer, (size_t)len);
+               if (len == -1)
+               {
+                  log_error(LOG_LEVEL_ERROR, "Failed to send data "
+                     "on server socket %d for an upgraded connection",
+                     csp->server_connection.sfd);
+                  break;
+               }
+               continue;
+            }
             log_error(LOG_LEVEL_CONNECT, "Breaking with TLS/SSL.");
             break;
          }
@@ -4102,10 +4145,12 @@ static void chat(struct client_state *csp)
       else
       {
          /*
-          * If server certificate is invalid, we must inform client and then
-          * close connection with client.
+          * If server certificate has been verified and is invalid,
+          * we must inform the client and then close the connection
+          * with client and server.
           */
-         if (csp->server_cert_verification_result != SSL_CERT_VALID)
+         if (csp->server_cert_verification_result != SSL_CERT_VALID &&
+             csp->server_cert_verification_result != SSL_CERT_NOT_VERIFIED)
          {
             ssl_send_certificate_error(csp);
             close_client_and_server_ssl_connections(csp);
@@ -4487,6 +4532,20 @@ static void serve(struct client_state *csp)
    chat(csp);
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 
+   if (csp->cfd != JB_INVALID_SOCKET)
+   {
+      log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
+         "Keep-alive: %u. Socket alive: %u. Data available: %u. "
+         "Configuration file change detected: %u. Requests received: %u.",
+         csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
+         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
+         config_file_change_detected, csp->requests_received_total);
+#ifdef FEATURE_HTTPS_INSPECTION
+      close_client_ssl_connection(csp);
+#endif
+      drain_and_close_socket(csp->cfd);
+   }
+
    if (csp->server_connection.sfd != JB_INVALID_SOCKET)
    {
 #ifdef FEATURE_CONNECTION_SHARING
@@ -4506,20 +4565,6 @@ static void serve(struct client_state *csp)
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
    mark_connection_closed(&csp->server_connection);
 #endif
-
-   if (csp->cfd != JB_INVALID_SOCKET)
-   {
-      log_error(LOG_LEVEL_CONNECT, "Closing client socket %d. "
-         "Keep-alive: %u. Socket alive: %u. Data available: %u. "
-         "Configuration file change detected: %u. Requests received: %u.",
-         csp->cfd, 0 != (csp->flags & CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE),
-         socket_is_still_alive(csp->cfd), data_is_available(csp->cfd, 0),
-         config_file_change_detected, csp->requests_received_total);
-#ifdef FEATURE_HTTPS_INSPECTION
-      close_client_ssl_connection(csp);
-#endif
-      drain_and_close_socket(csp->cfd);
-   }
 
    free_csp_resources(csp);
 
@@ -5496,7 +5541,7 @@ static void listen_loop(void)
       csp = &csp_list->csp;
 
       log_error(LOG_LEVEL_CONNECT,
-         "Waiting for the next client connection. Currently active threads: %d",
+         "Waiting for the next client connection. Currently active threads: %u",
          active_threads);
 
       /*
@@ -5713,7 +5758,7 @@ static void listen_loop(void)
              * XXX: If you assume ...
              */
             log_error(LOG_LEVEL_ERROR,
-               "Unable to take any additional connections: %E. Active threads: %d",
+               "Unable to take any additional connections: %E. Active threads: %u",
                active_threads);
             write_socket_delayed(csp->cfd, TOO_MANY_CONNECTIONS_RESPONSE,
                strlen(TOO_MANY_CONNECTIONS_RESPONSE), get_write_delay(csp));

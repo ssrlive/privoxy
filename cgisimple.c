@@ -404,6 +404,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
       snprintf(buf, sizeof(buf), "%u", csp->config->client_tag_lifetime);
       if (map(exports, "refresh-delay", 1, buf, 1))
       {
+         freez(client_tag_status);
          free_map(exports);
          return JB_ERR_MEMORY;
       }
@@ -413,6 +414,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
       err = map_block_killer(exports, "tags-expire");
       if (err != JB_ERR_OK)
       {
+         freez(client_tag_status);
          return err;
       }
    }
@@ -1280,26 +1282,28 @@ jb_err cgi_show_status(struct client_state *csp,
 #endif /* ndef FEATURE_STATISTICS */
 
 #ifdef FEATURE_EXTENDED_STATISTICS
+   if (!err)
    {
       char *block_reason_statistics = get_block_reason_statistics_table(csp);
       if (block_reason_statistics != NULL)
       {
-         if (!err) err = map(exports, "block-reason-statistics", 1, block_reason_statistics, 0);
+         err = map(exports, "block-reason-statistics", 1, block_reason_statistics, 0);
       }
       else
       {
-         if (!err) err = map_block_killer(exports, "extended-statistics");
+         err = map_block_killer(exports, "extended-statistics");
       }
    }
+   if (!err)
    {
       char *filter_statistics = get_filter_statistics_table(csp);
       if (filter_statistics != NULL)
       {
-         if (!err) err = map(exports, "filter-statistics", 1, filter_statistics, 0);
+         err = map(exports, "filter-statistics", 1, filter_statistics, 0);
       }
       else
       {
-         if (!err) err = map_block_killer(exports, "extended-statistics");
+         err = map_block_killer(exports, "extended-statistics");
       }
    }
 #else /* ndef FEATURE_EXTENDED_STATISTICS */
@@ -1346,9 +1350,9 @@ jb_err cgi_show_status(struct client_state *csp,
          if (!err) err = string_append(&s, "</td></tr>\n");
       }
    }
-   if (*s != '\0')
+   if (!err && *s != '\0')
    {
-      if (!err) err = map(exports, "actions-filenames", 1, s, 0);
+      err = map(exports, "actions-filenames", 1, s, 0);
    }
    else
    {
@@ -1373,9 +1377,9 @@ jb_err cgi_show_status(struct client_state *csp,
          if (!err) err = string_append(&s, "</td></tr>\n");
       }
    }
-   if (*s != '\0')
+   if (!err && *s != '\0')
    {
-      if (!err) err = map(exports, "re-filter-filenames", 1, s, 0);
+      err = map(exports, "re-filter-filenames", 1, s, 0);
    }
    else
    {

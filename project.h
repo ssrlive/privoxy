@@ -75,6 +75,11 @@
 #endif /* FEATURE_HTTPS_INSPECTION_MBEDTLS */
 
 #ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
+#ifdef _WIN32
+#include <wincrypt.h>
+#undef X509_NAME
+#undef X509_EXTENSIONS
+#endif
 #include <openssl/ssl.h>
 #include <openssl/bio.h>
 #include <openssl/err.h>
@@ -306,6 +311,7 @@ typedef struct {
    mbedtls_x509_crt         server_cert;
    mbedtls_x509_crt         ca_cert;
    mbedtls_pk_context       prim_key;
+   int                     *ciphersuites_list;
 
    #if defined(MBEDTLS_SSL_CACHE_C)
       mbedtls_ssl_cache_context cache;
@@ -318,7 +324,7 @@ typedef struct {
  * Struct of attributes necessary for TLS/SSL connection
  */
 typedef struct {
-   SSL_CTX* ctx;
+   SSL_CTX *ctx;
    BIO *bio;
 } openssl_connection_attr;
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
@@ -766,6 +772,9 @@ struct reusable_connection
    enum forwarder_type forwarder_type;
    char *gateway_host;
    int  gateway_port;
+   char *auth_username;
+   char *auth_password;
+
    char *forward_host;
    int  forward_port;
 };
@@ -1579,6 +1588,9 @@ struct configuration_spec
 
    /** Directory for saving certificates and keys for each webpage **/
    char *certificate_directory;
+
+   /** Cipher list to use **/
+   char *cipher_list;
 
    /** Filename of trusted CAs certificates **/
    char * trusted_cas_file;

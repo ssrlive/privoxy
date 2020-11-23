@@ -55,7 +55,7 @@
 #define CERTIFICATE_AUTHORITY_KEY                "keyid:always"
 #define CERTIFICATE_ALT_NAME_PREFIX              "DNS:"
 #define CERTIFICATE_VERSION                      2
-#define VALID_DATETIME_FMT                       "%Y%m%d%H%M%SZ"
+#define VALID_DATETIME_FMT                       "%y%m%d%H%M%SZ"
 #define VALID_DATETIME_BUFLEN                    16
 
 static int generate_webpage_certificate(struct client_state *csp);
@@ -152,19 +152,27 @@ extern size_t is_ssl_pending(struct ssl_attr *ssl_attr)
 extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, size_t len)
 {
    BIO *bio = ssl_attr->openssl_attr.bio;
+   SSL *ssl;
    int ret = 0;
    int pos = 0; /* Position of unsent part in buffer */
+   int fd = -1;
 
    if (len == 0)
    {
       return 0;
    }
 
+   if (BIO_get_ssl(bio, &ssl) == 1)
+   {
+      fd = SSL_get_fd(ssl);
+   }
+
    while (pos < len)
    {
       int send_len = (int)len - pos;
 
-      log_error(LOG_LEVEL_WRITING, "TLS: %N", send_len, buf+pos);
+      log_error(LOG_LEVEL_WRITING, "TLS on socket %d: %N",
+         fd, send_len, buf+pos);
 
       /*
        * Sending one part of the buffer
@@ -176,7 +184,7 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
          if (!BIO_should_retry(bio))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
-               "Sending data over TLS/SSL failed");
+               "Sending data on socket %d over TLS/SSL failed", fd);
             return -1;
          }
       }
@@ -207,7 +215,10 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
 extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t max_length)
 {
    BIO *bio = ssl_attr->openssl_attr.bio;
+   SSL *ssl;
    int ret = 0;
+   int fd = -1;
+
    memset(buf, 0, max_length);
 
    /*
@@ -221,12 +232,18 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
    if (ret < 0)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
-         "Receiving data over TLS/SSL failed");
+         "Receiving data on socket %d over TLS/SSL failed", fd);
 
       return -1;
    }
 
-   log_error(LOG_LEVEL_RECEIVED, "TLS: %N", ret, buf);
+   if (BIO_get_ssl(bio, &ssl) == 1)
+   {
+      fd = SSL_get_fd(ssl);
+   }
+
+   log_error(LOG_LEVEL_RECEIVED, "TLS from socket %d: %N",
+      fd, ret, buf);
 
    return ret;
 }
@@ -721,7 +738,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    char *ca_file   = NULL;
    char *cert_file = NULL;
    int ret = 0;
-   SSL* ssl;
+   SSL *ssl;
 
    /*
     * Initializing OpenSSL structures for TLS/SSL connection
@@ -820,6 +837,18 @@ extern int create_client_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
+   if (csp->config->cipher_list != NULL)
+   {
+      if (!SSL_set_cipher_list(ssl, csp->config->cipher_list))
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the client connection failed",
+            csp->config->cipher_list);
+         ret = -1;
+         goto exit;
+      }
+   }
+
    /*
     *  Handshake with client
     */
@@ -870,6 +899,7 @@ exit:
 extern void close_client_ssl_connection(struct client_state *csp)
 {
    struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
+   SSL *ssl;
 
    if (csp->ssl_with_client_is_opened == 0)
    {
@@ -880,6 +910,20 @@ extern void close_client_ssl_connection(struct client_state *csp)
     * Notifying the peer that the connection is being closed.
     */
    BIO_ssl_shutdown(ssl_attr->openssl_attr.bio);
+   if (BIO_get_ssl(ssl_attr->openssl_attr.bio, &ssl) != 1)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "BIO_get_ssl() failed in close_client_ssl_connection()");
+   }
+   else
+   {
+      /*
+       * Pretend we received a shutdown alert so
+       * the BIO_free_all() call later on returns
+       * quickly.
+       */
+      SSL_set_shutdown(ssl, SSL_RECEIVED_SHUTDOWN);
+   }
    free_client_ssl_structures(csp);
    csp->ssl_with_client_is_opened = 0;
 }
@@ -929,6 +973,7 @@ static void free_client_ssl_structures(struct client_state *csp)
 extern void close_server_ssl_connection(struct client_state *csp)
 {
    struct ssl_attr *ssl_attr = &csp->ssl_server_attr;
+   SSL *ssl;
 
    if (csp->ssl_with_server_is_opened == 0)
    {
@@ -939,6 +984,20 @@ extern void close_server_ssl_connection(struct client_state *csp)
    * Notifying the peer that the connection is being closed.
    */
    BIO_ssl_shutdown(ssl_attr->openssl_attr.bio);
+   if (BIO_get_ssl(ssl_attr->openssl_attr.bio, &ssl) != 1)
+   {
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "BIO_get_ssl() failed in close_server_ssl_connection()");
+   }
+   else
+   {
+      /*
+       * Pretend we received a shutdown alert so
+       * the BIO_free_all() call later on returns
+       * quickly.
+       */
+      SSL_set_shutdown(ssl, SSL_RECEIVED_SHUTDOWN);
+   }
    free_server_ssl_structures(csp);
    csp->ssl_with_server_is_opened = 0;
 }
@@ -1012,6 +1071,18 @@ extern int create_server_ssl_connection(struct client_state *csp)
       log_ssl_errors(LOG_LEVEL_ERROR, "SSL_set_fd failed");
       ret = -1;
       goto exit;
+   }
+
+   if (csp->config->cipher_list != NULL)
+   {
+      if (!SSL_set_cipher_list(ssl, csp->config->cipher_list))
+      {
+         log_ssl_errors(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the server connection failed",
+            csp->config->cipher_list);
+         ret = -1;
+         goto exit;
+      }
    }
 
    /*
@@ -1548,6 +1619,7 @@ static int ssl_certificate_is_invalid(const char *cert_file)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "Error checking certificate %s validity", cert_file);
+      ret = -1;
    }
 
    X509_free(cert);
@@ -2148,12 +2220,14 @@ extern void ssl_release(void)
 {
    if (ssl_inited == 1)
    {
+#ifndef OPENSSL_NO_COMP
       SSL_COMP_free_compression_methods();
-
+#endif
       CONF_modules_free();
       CONF_modules_unload(1);
-
+#ifndef OPENSSL_NO_COMP
       COMP_zlib_cleanup();
+#endif
 
       ERR_free_strings();
       EVP_cleanup();

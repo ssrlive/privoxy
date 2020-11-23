@@ -1483,7 +1483,7 @@ for details.
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-status">View & change the current configuration</ulink>
  </member>
  <member>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/client-tags">View or toggle the tags that can be set based on the clients address</ulink>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/client-tags">View or toggle the tags that can be set based on the client's address</ulink>
  </member>
  <member>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&squf;&nbsp;&nbsp;<ulink url="http://config.privoxy.org/show-request">View the request headers.</ulink>
@@ -5176,6 +5176,9 @@ new action
     a pattern with path doesn't work as the path is only seen
     by &my-app; if the action is already enabled.
    </para>
+   <para>
+    This is an experimental feature.
+   </para>
   </listitem>
  </varlistentry>
 
@@ -7848,10 +7851,11 @@ Requests</title>
 
 <para>
  The same is true for <application>Privoxy</application> binaries
- unless they are linked with
- <ulink url="https://tls.mbed.org/">mbed TLS</ulink> in which
- case you can redistribute them and/or modify them under the terms
- of the <citetitle>GNU General Public License</citetitle>
+ unless they are linked with a
+ <ulink url="https://tls.mbed.org/">mbed TLS</ulink> version
+ that is licensed under the Apache 2.0 license in which
+ case you can redistribute and/or modify the <application>Privoxy</application>
+ binaries under the terms of the <citetitle>GNU General Public License</citetitle>
  as published by the Free Software Foundation, either version 3
  of the license, or (at your option) any later version.
 </para>

@@ -120,9 +120,8 @@ static struct file_list *current_configfile = NULL;
  * This takes the "cryptic" hash of each keyword and aliases them to
  * something a little more readable.  This also makes changing the
  * hash values easier if they should change or the hash algorithm changes.
- * Use the included "hash" program to find out what the hash will be
- * for any string supplied on the command line.  (Or just put it in the
- * config file and read the number from the error message in the log).
+ * To find out the hash for a new directive put it in the config file
+ * and read the number from the error message in the log).
  *
  * Please keep this list sorted alphabetically (but with the Windows
  * console and GUI specific options last).
@@ -138,6 +137,7 @@ static struct file_list *current_configfile = NULL;
 #define hash_ca_key_file                 1184187891U /* "ca-key-file" */
 #define hash_ca_password                 1184543320U /* "ca-password" */
 #define hash_certificate_directory       1367994217U /* "certificate-directory" */
+#define hash_cipher_list                 1225729316U /* "cipher-list" */
 #define hash_client_header_order         2701453514U /* "client-header-order" */
 #define hash_client_specific_tag         3353703383U /* "client-specific-tag" */
 #define hash_client_tag_lifetime          647957580U /* "client-tag-lifetime" */
@@ -281,6 +281,7 @@ static void unload_configfile (void * data)
    freez(config->ca_cert_file);
    freez(config->ca_key_file);
    freez(config->certificate_directory);
+   freez(config->cipher_list);
    freez(config->trusted_cas_file);
 #endif
 
@@ -1793,6 +1794,15 @@ struct configuration_spec * load_config(void)
                log_error(LOG_LEVEL_FATAL,
                   "Out of memory while creating certificate directory path");
             }
+
+            break;
+
+/* *************************************************************************
+ * cipher-list list-of-ciphers
+ * *************************************************************************/
+         case hash_cipher_list:
+            freez(config->cipher_list);
+            config->cipher_list = strdup_or_die(arg);
 
             break;
 

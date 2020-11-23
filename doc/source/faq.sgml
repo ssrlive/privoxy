@@ -509,31 +509,6 @@ warranty? Registration?</title>
 </para>
 
 <para>
- You can also donate to Privoxy using a bank account or a "Paypal" address:
-</para>
-<literallayout>
- Name on account: <ulink url="https://www.zwiebelfreunde.de/">Zwiebelfreunde e.V.</ulink>
- IBAN: DE95430609671126825604
- BIC: GENODEM1GLS
- Bank: GLS Bank
-</literallayout>
-<literallayout>
- "Paypal" address: privoxy@zwiebelfreunde.de
-</literallayout>
-<para>
- Donations made through Zwiebelfreunde e.V. are tax-deductible in Germany
- and other countries that recognize German charitable clubs. Feel free to
- use the Subject field to provide a name to be credited and a list of TODO
- list items you are interested in the most. For example: Max Mustermann: #16, #1, #14.
-</para>
-
-<para>
- Note that donations made through Zwiebelfreunde e.V. currently can't be checked
- automatically so you may not get credited right away. The credits currently
- reflect donations received before 2016-01-14.
-</para>
-
-<para>
  If you have any questions regarding donations please mail to either the
  public user mailing list or, if it's a private matter, to
  <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink> (Privoxy's SPI liaison)

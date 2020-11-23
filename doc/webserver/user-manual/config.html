@@ -918,7 +918,7 @@
               hides the <span class="QUOTE">"go there anyway"</span> link. If the user adds the force prefix by hand,
               it will not be accepted and the circumvention attempt is logged.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>enforce-blocks 1</p>
             </dd>
@@ -1547,7 +1547,7 @@
               you try again manually. Start with a small value and check Privoxy's logfile from time to time, to see
               how many retries are usually needed.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>forwarded-connect-retries 1</p>
             </dd>
@@ -1592,7 +1592,7 @@
               you may want to adjust the CGI templates to make sure they don't reference content from
               config.privoxy.org.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>accept-intercepted-requests 1</p>
             </dd>
@@ -1629,7 +1629,7 @@
               done without care.</p>
               <p>Don't enable this option unless you're sure that you really need it.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>allow-cgi-request-crunching 1</p>
             </dd>
@@ -1667,7 +1667,7 @@
               <p>If you don't notice any editing problems, there is no reason to enable this option, but if one of the
               submit buttons appears to be broken, you should give it a try.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>split-large-forms 1</p>
             </dd>
@@ -1714,7 +1714,7 @@
               increasing it to 300 seconds or even more if you think your browser can handle it. If your browser
               appears to be hanging, it probably can't.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>keep-alive-timeout 300</p>
             </dd>
@@ -1754,7 +1754,7 @@
               <p>If you are seeing problems with pages not properly loading, disabling this option could work around
               the problem.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>tolerate-pipelining 1</p>
             </dd>
@@ -1799,7 +1799,7 @@
               <p>This option has no effect if <span class="APPLICATION">Privoxy</span> has been compiled without
               keep-alive support.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>default-server-timeout 60</p>
             </dd>
@@ -1855,7 +1855,7 @@
               <p>This option should only be used by experienced users who understand the risks and can weight them
               against the benefits.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>connection-sharing 1</p>
             </dd>
@@ -1887,7 +1887,7 @@
               <p>The default is quite high and you probably want to reduce it. If you aren't using an occasionally slow
               proxy like Tor, reducing it to a few seconds should be fine.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>socket-timeout 300</p>
             </dd>
@@ -1940,7 +1940,7 @@
               reached. This will likely change in a future version, but currently this limit can't be increased without
               recompiling <span class="APPLICATION">Privoxy</span> with a different FD_SETSIZE limit.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>max-client-connections 256</p>
             </dd>
@@ -1982,7 +1982,7 @@
               <p>Effectively using a value above 128 usually requires changing the system configuration as well. On
               FreeBSD-based system the limit is controlled by the kern.ipc.soacceptqueue sysctl.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>listen-backlog 4096</p>
             </dd>
@@ -2022,7 +2022,7 @@
               "https://www.freebsd.org/cgi/man.cgi?query=accf_http" target="_top">accf_http(9) man page</a> to learn
               how to enable the support in the operating system.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>enable-accept-filter 1</p>
             </dd>
@@ -2286,7 +2286,7 @@
               "_top">http://config.privoxy.org/client-tags</a> therefore provides a "enable this tag temporarily"
               option. If it is used, the tag will be set until the client-tag-lifetime is over.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
@@ -2343,7 +2343,7 @@
               change the client tags for other clients or increase Privoxy's memory requirements by registering lots of
               client tag settings for clients that don't exist.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
@@ -2390,7 +2390,7 @@
               memory is (currently) cleared before using it, a buffer that is too large can actually reduce the
               throughput.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
@@ -2406,7 +2406,7 @@
       </div>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="TLS" id="TLS">7.7. TLS/SSL Inspection</a></h2>
+      <h2 class="SECT2"><a name="TLS" id="TLS">7.7. TLS/SSL Inspection (Experimental)</a></h2>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CA-DIRECTORY" id="CA-DIRECTORY">7.7.1. ca-directory</a></h4>
         <div class="VARIABLELIST">
@@ -2434,7 +2434,7 @@
               <p>The permissions should only let <span class="APPLICATION">Privoxy</span> and the <span class=
               "APPLICATION">Privoxy</span> admin access the directory.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>ca-directory /usr/local/etc/privoxy/CA</p>
             </dd>
@@ -2472,7 +2472,7 @@
               <p>The file can be generated with: openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out
               cacert.crt -days 3650</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>ca-cert-file root.crt</p>
             </dd>
@@ -2504,7 +2504,7 @@
               <p>This directive specifies the name of the CA key file in ".pem" format. See the <a href="#CA-CERT-FILE"
               target="_top">ca-cert-file</a> for a command to generate it.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>ca-key-file cakey.pem</p>
             </dd>
@@ -2537,7 +2537,7 @@
               certificates for intercepted requests.</p>
               <p>Note that the password is shown on the CGI page so don't reuse an important one.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>ca-password blafasel</p>
             </dd>
@@ -2575,8 +2575,24 @@
               "_top">ca-cert-key</a>.</p>
               <p>The permissions should only let <span class="APPLICATION">Privoxy</span> and the <span class=
               "APPLICATION">Privoxy</span> admin access the directory.</p>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <p><span class="APPLICATION">Privoxy</span> currently does not garbage-collect obsolete keys and
+                      certificates and does not keep track of how may keys and certificates exist.</p>
+                      <p><span class="APPLICATION">Privoxy</span> admins should monitor the size of the directory
+                      and/or make sure there is sufficient space available. A cron job to limit the number of keys and
+                      certificates to a certain number may be worth considering.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>certificate-directory /usr/local/var/privoxy/certs</p>
             </dd>
@@ -2584,7 +2600,129 @@
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="TRUSTED-CAS-FILE" id="TRUSTED-CAS-FILE">7.7.6. trusted-cas-file</a></h4>
+        <h4 class="SECT3"><a name="CIPHER-LIST" id="CIPHER-LIST">7.7.6. cipher-list</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Specifies:</dt>
+            <dd>
+              <p>A list of ciphers to use in TLS handshakes</p>
+            </dd>
+            <dt>Type of value:</dt>
+            <dd>
+              <p>Text</p>
+            </dd>
+            <dt>Default value:</dt>
+            <dd>
+              <p>None</p>
+            </dd>
+            <dt>Effect if unset:</dt>
+            <dd>
+              <p>A default value is inherited from the TLS library.</p>
+            </dd>
+            <dt>Notes:</dt>
+            <dd>
+              <p>This directive allows to specify a non-default list of ciphers to use in TLS handshakes with clients
+              and servers.</p>
+              <p>Ciphers are separated by colons. Which ciphers are supported depends on the TLS library. When using
+              OpenSSL, unsupported ciphers are skipped. When using MbedTLS they are rejected.</p>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <p>Specifying an unusual cipher list makes fingerprinting easier. Note that the default list
+                      provided by the TLS library may be unusual when compared to the one used by modern browsers as
+                      well.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </dd>
+            <dt>Examples:</dt>
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">    # Explicitly set a couple of ciphers with names used by MbedTLS
+    cipher-list cipher-list TLS-ECDHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+TLS-ECDHE-ECDSA-WITH-CHACHA20-POLY1305-SHA256:\
+TLS-DHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDHE-ECDSA-WITH-AES-256-CCM:\
+TLS-ECDHE-ECDSA-WITH-AES-256-CCM-8:\
+TLS-ECDHE-ECDSA-WITH-AES-128-CCM:\
+TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8:\
+TLS-ECDHE-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDHE-ECDSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:\
+TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:\
+TLS-DHE-RSA-WITH-AES-256-CCM:\
+TLS-DHE-RSA-WITH-AES-256-CCM-8:\
+TLS-DHE-RSA-WITH-AES-128-CCM:\
+TLS-DHE-RSA-WITH-AES-128-CCM-8:\
+TLS-DHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-DHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-ECDH-RSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDH-RSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDH-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDH-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+TLS-ECDH-ECDSA-WITH-AES-128-GCM-SHA256:\
+TLS-ECDH-ECDSA-WITH-AES-256-GCM-SHA384:\
+TLS-ECDH-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+TLS-ECDH-ECDSA-WITH-CAMELLIA-256-GCM-SHA384
+   </pre>
+                  </td>
+                </tr>
+              </table>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class="SCREEN">    # Explicitly set a couple of ciphers with names used by OpenSSL
+cipher-list ECDHE-RSA-AES256-GCM-SHA384:\
+ECDHE-ECDSA-AES256-GCM-SHA384:\
+DH-DSS-AES256-GCM-SHA384:\
+DHE-DSS-AES256-GCM-SHA384:\
+DH-RSA-AES256-GCM-SHA384:\
+DHE-RSA-AES256-GCM-SHA384:\
+ECDH-RSA-AES256-GCM-SHA384:\
+ECDH-ECDSA-AES256-GCM-SHA384:\
+ECDHE-RSA-AES128-GCM-SHA256:\
+ECDHE-ECDSA-AES128-GCM-SHA256:\
+DH-DSS-AES128-GCM-SHA256:\
+DHE-DSS-AES128-GCM-SHA256:\
+DH-RSA-AES128-GCM-SHA256:\
+DHE-RSA-AES128-GCM-SHA256:\
+ECDH-RSA-AES128-GCM-SHA256:\
+ECDH-ECDSA-AES128-GCM-SHA256:\
+ECDHE-RSA-AES256-GCM-SHA384:\
+AES128-SHA
+   </pre>
+                  </td>
+                </tr>
+              </table>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class=
+                    "SCREEN">    # Use keywords instead of explicity naming the ciphers (Does not work with MbedTLS)
+    cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+   </pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="TRUSTED-CAS-FILE" id="TRUSTED-CAS-FILE">7.7.7. trusted-cas-file</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Specifies:</dt>
@@ -2610,7 +2748,7 @@
               <p>An example file can be downloaded from <a href="https://curl.haxx.se/ca/cacert.pem" target=
               "_top">https://curl.haxx.se/ca/cacert.pem</a>.</p>
             </dd>
-            <dt>Examples:</dt>
+            <dt>Example:</dt>
             <dd>
               <p>trusted-cas-file trusted_cas_file.pem</p>
             </dd>

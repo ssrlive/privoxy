@@ -42,7 +42,7 @@ CODE_STATUS   = @CODE_STATUS@
 VERSION       = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_POINT)
 SNAPVERSION   = $(VERSION)-$(shell date "+%Y%m%d")
 
-SOURCE_DATE_EPOCH = @SOURCE_DATE_EPOCH@
+SOURCE_DATE_EPOCH ?= @SOURCE_DATE_EPOCH@
 MTREE_SPEC_FILE = privoxy-$(VERSION)-$(CODE_STATUS).spec
 
 #############################################################################
@@ -743,7 +743,9 @@ ssplit.@OBJEXT@:    ssplit.c    ssplit.h    config.h miscutil.h
 urlmatch.@OBJEXT@:  urlmatch.c  urlmatch.h  config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 client-tags.@OBJEXT@: client-tags.c client-tags.h config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
 fuzz.@OBJEXT@: fuzz.c config.h $(PROJECT_H_DEPS) errlog.h miscutil.h ssplit.h
-ssl.@OBJEXT@: ssl.c ssl.h config.h $(PROJECT_H_DEPS) encode.h errlog.h jcc.h miscutil.h
+ssl.@OBJEXT@: ssl.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) encode.h errlog.h jcc.h miscutil.h
+openssl.@OBJEXT@: openssl.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) encode.h errlog.h jcc.h miscutil.h
+ssl_common.@OBJEXT@: ssl_common.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) errlog.h miscutil.h
 
 # GNU regex
 gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h

@@ -70,6 +70,7 @@
 #define PCRS_GLOBAL          1      /* Job should be applied globally, as with perl's g option */
 #define PCRS_TRIVIAL         2      /* Backreferences in the substitute are ignored */
 #define PCRS_SUCCESS         4      /* Job did previously match */
+#define PCRS_DYNAMIC         8      /* Job is dynamic (used to disable JIT compilation) */
 
 
 /*

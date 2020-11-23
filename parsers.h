@@ -12,7 +12,7 @@
  *                   `client_x_forwarded_adder', `client_xtra_adder',
  *                   `content_type', `crumble', `destroy_list', `enlist',
  *                   `flush_socket', `free_http_request', `get_header',
- *                   `list_to_text', `parse_http_request', `sed',
+ *                   `parse_http_request', `sed',
  *                   and `server_set_cookie'.
  *
  * Copyright   :  Written by and Copyright (C) 2001 members of the

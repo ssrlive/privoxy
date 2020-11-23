@@ -52,6 +52,7 @@ use constant {
 
     CLI_OPTION_DEFAULT_TO_HTML_OUTPUT => 0,
     CLI_OPTION_TITLE => 'Privoxy-Log-Parser in da house',
+    CLI_OPTION_KEEP_DATE => 0,
     CLI_OPTION_NO_EMBEDDED_CSS => 0,
     CLI_OPTION_NO_MSECS => 0,
     CLI_OPTION_NO_SYNTAX_HIGHLIGHTING => 0,
@@ -107,6 +108,7 @@ my %h_colours;
 my $header_highlight_regex = '';
 
 my $html_output_mode;
+my $keep_date_mode;
 my $no_msecs_mode; # XXX: should probably be removed
 my $shorten_thread_ids;
 my $line_end;
@@ -1633,6 +1635,7 @@ sub handle_loglevel_connect($) {
         # Reusing server socket 7 connected to www.privoxy.org. Total requests: 2.
         # Closing server socket 6 connected to d.asset.soup.io. Keep-alive: 0.\
         #  Tainted: 1. Socket alive: 1. Timeout: 60. Configuration file change detected: 0.
+        # Reusing server socket 35 connected to nl.wikipedia.org. Requests already sent: 5.
 
         $c =~ s@(?<= socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=for )[^\s]+(?=\.)');
@@ -1640,6 +1643,7 @@ sub handle_loglevel_connect($) {
         for my $number_pattern ('requests', 'Keep-alive', 'Tainted', ' alive', 'Timeout', 'detected') {
             $c = highlight_matched_pattern($c, 'Number', '(?<='. $number_pattern . ': )\d+');
         }
+        $c =~ s@(?<=already sent: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Connected to /) {
 
@@ -1775,6 +1779,17 @@ sub handle_loglevel_connect($) {
         # Data arrived in time on client socket 6. Requests so far: 3
         $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=Requests so far: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Dropping the client connection on socket/) {
+
+        # Dropping the client connection on socket 71. The server connection has not been established yet.
+        $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^The client socket \d+ has become unusable while the server/) {
+
+        # The client socket 16 has become unusable while the server socket 24 is still open.
+        $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
@@ -2375,12 +2390,14 @@ sub print_clf_message() {
 sub print_non_clf_message($) {
 
     my $content = shift;
+    my $date_string = $keep_date_mode ? $req{$t}{'day'} . ' ' : '';
     my $msec_string = $no_msecs_mode ? '' : '.' . $req{$t}{'msecs'};
     my $line_start = $html_output_mode ? '' : $h{"Standard"};
 
     return if DEBUG_SUPPRESS_LOG_MESSAGES;
 
     print $line_start
+        . $date_string
         . $time_colours[$time_colour_index % 2]
         . $req{$t}{'time-stamp'}
         . $msec_string
@@ -2598,6 +2615,7 @@ sub get_cli_options() {
     our %cli_options = (
         'html-output'              => CLI_OPTION_DEFAULT_TO_HTML_OUTPUT,
         'title'                    => CLI_OPTION_TITLE,
+        'keep-date'                => CLI_OPTION_KEEP_DATE,
         'no-syntax-highlighting'   => CLI_OPTION_NO_SYNTAX_HIGHLIGHTING,
         'no-embedded-css'          => CLI_OPTION_NO_EMBEDDED_CSS,
         'no-msecs'                 => CLI_OPTION_NO_MSECS,
@@ -2614,6 +2632,7 @@ sub get_cli_options() {
     GetOptions (
         'html-output'              => \$cli_options{'html-output'},
         'title'                    => \$cli_options{'title'},
+        'keep-date'                => \$cli_options{'keep-date'},
         'no-syntax-highlighting'   => \$cli_options{'no-syntax-highlighting'},
         'no-embedded-css'          => \$cli_options{'no-embedded-css'},
         'no-msecs'                 => \$cli_options{'no-msecs'},
@@ -2631,6 +2650,7 @@ sub get_cli_options() {
 
    $html_output_mode = cli_option_is_set('html-output');
    $no_msecs_mode = cli_option_is_set('no-msecs');
+   $keep_date_mode = cli_option_is_set('keep-date');
    $shorten_thread_ids = cli_option_is_set('shorten-thread-ids');
    $line_end = get_line_end();
 }
@@ -2729,6 +2749,9 @@ statistics are disabled.
 omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is active.
 This option is only intended to make embedding log excerpts in web pages easier.
 It does not escape any input!
+
+[B<--keep-date>] Don't remove the date when printing highlighted log messages.
+Useful when parsing multiple log files at once.
 
 [B<--no-msecs>] Don't expect milisecond resolution
 

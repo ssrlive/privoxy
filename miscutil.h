@@ -61,6 +61,7 @@ extern int strncmpic(const char *s1, const char *s2, size_t n);
 extern jb_err string_append(char **target_string, const char *text_to_append);
 extern jb_err string_join  (char **target_string,       char *text_to_append);
 extern char *string_toupper(const char *string);
+extern char *string_tolower(const char *string);
 extern void string_move(char *dst, char *src);
 
 extern char *chomp(char *string);

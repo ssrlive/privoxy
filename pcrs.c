@@ -168,6 +168,7 @@ static int pcrs_parse_perl_options(const char *optstring, int *flags)
          case 'o': break;
          case 's': rc |= PCRE_DOTALL; break;
          case 'x': rc |= PCRE_EXTENDED; break;
+         case 'D': *flags |= PCRS_DYNAMIC; break;
          case 'U': rc |= PCRE_UNGREEDY; break;
          case 'T': *flags |= PCRS_TRIVIAL; break;
          default: break;
@@ -471,7 +472,14 @@ pcrs_job *pcrs_free_job(pcrs_job *job)
    {
       next = job->next;
       if (job->pattern != NULL) free(job->pattern);
-      if (job->hints != NULL) free(job->hints);
+      if (job->hints != NULL)
+      {
+#ifdef PCRE_CONFIG_JIT
+         pcre_free_study(job->hints);
+#else
+         free(job->hints);
+#endif
+      }
       if (job->substitute != NULL)
       {
          if (job->substitute->text != NULL) free(job->substitute->text);
@@ -621,6 +629,7 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
    int flags;
    int capturecount;
    const char *error;
+   int pcre_study_options = 0;
 
    *errptr = 0;
 
@@ -660,11 +669,18 @@ pcrs_job *pcrs_compile(const char *pattern, const char *substitute, const char *
    }
 
 
+#ifdef PCRE_STUDY_JIT_COMPILE
+   if (!(flags & PCRS_DYNAMIC))
+   {
+      pcre_study_options = PCRE_STUDY_JIT_COMPILE;
+   }
+#endif
+
    /*
     * Generate hints. This has little overhead, since the
     * hints will be NULL for a boring pattern anyway.
     */
-   newjob->hints = pcre_study(newjob->pattern, 0, &error);
+   newjob->hints = pcre_study(newjob->pattern, pcre_study_options, &error);
    if (error != NULL)
    {
       *errptr = PCRS_ERR_STUDY;
@@ -995,7 +1011,7 @@ static int is_hex_sequence(const char *sequence)
  *                FALSE
  *
  *********************************************************************/
-int pcrs_job_is_dynamic (char *job)
+int pcrs_job_is_dynamic(char *job)
 {
    const char delimiter = job[1];
    const size_t length = strlen(job);
@@ -1106,7 +1122,6 @@ char *pcrs_execute_single_command(const char *subject, const char *pcrs_command,
 }
 
 
-static const char warning[] = "... [too long, truncated]";
 /*********************************************************************
  *
  * Function    :  pcrs_compile_dynamic_command
@@ -1163,7 +1178,7 @@ pcrs_job *pcrs_compile_dynamic_command(char *pcrs_command, const struct pcrs_var
        */
       assert(NULL == strchr(v->name, d));
 
-      ret = snprintf(buf, sizeof(buf), "s%c\\$%s%c%s%cgT", d, v->name, d, v->value, d);
+      ret = snprintf(buf, sizeof(buf), "s%c\\$%s%c%s%cDgT", d, v->name, d, v->value, d);
       assert(ret >= 0);
       if (ret >= sizeof(buf))
       {
@@ -1173,10 +1188,11 @@ pcrs_job *pcrs_compile_dynamic_command(char *pcrs_command, const struct pcrs_var
           * with a truncation message and close the pattern
           * properly.
           */
-         const size_t trailer_size = sizeof(warning) + 3; /* 3 for d + "gT" */
+         static const char warning[] = "... [too long, truncated]";
+         const size_t trailer_size = sizeof(warning) + 4; /* 4 for d + "DgT" */
          char *trailer_start = buf + sizeof(buf) - trailer_size;
 
-         ret = snprintf(trailer_start, trailer_size, "%s%cgT", warning, d);
+         ret = snprintf(trailer_start, trailer_size, "%s%cDgT", warning, d);
          assert(ret == trailer_size - 1);
          assert(sizeof(buf) == strlen(buf) + 1);
          truncation = 1;
