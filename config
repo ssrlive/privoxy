@@ -15,7 +15,7 @@
 #        4. ACCESS CONTROL AND SECURITY                             #
 #        5. FORWARDING                                              #
 #        6. MISCELLANEOUS                                           #
-#        7. TLS                                                     #
+#        7. HTTPS INSPECTION (EXPERIMENTAL)                         #
 #        8. WINDOWS GUI OPTIONS                                     #
 #                                                                   #
 #####################################################################
@@ -2439,8 +2439,13 @@ socket-timeout 300
 #            receive-buffer-size 32768
 #
 #
-#  7. TLS/SSL INSPECTION (EXPERIMENTAL)
-#  =====================================
+#  7. HTTPS INSPECTION (EXPERIMENTAL)
+#  ===================================
+#
+#  HTTPS inspection allows to filter encrypted requests. This is only
+#  supported when Privoxy has been built with
+#  FEATURE_HTTPS_INSPECTION.
+#
 #
 #  7.1. ca-directory
 #  ==================
