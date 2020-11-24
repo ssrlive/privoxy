@@ -2728,7 +2728,7 @@ socket-timeout 300
 #          AES128-SHA
 #
 #
-#          # Use keywords instead of explicity naming the ciphers (Does not work with MbedTLS)
+#          # Use keywords instead of explicitly naming the ciphers (Does not work with MbedTLS)
 #          cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
 #
 #
