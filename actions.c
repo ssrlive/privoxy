@@ -1832,7 +1832,7 @@ char * actions_to_html(const struct client_state *csp,
  *
  * Function    :  current_actions_to_html
  *
- * Description :  Converts a curren action spec to a <br> separated HTML
+ * Description :  Converts a current action spec to a <br> separated HTML
  *                text in which each action is linked to its chapter in
  *                the user manual.
  *
