@@ -242,7 +242,7 @@ void write_pid_file(const char *pid_file)
  *
  * Function    :  hash_string
  *
- * Description :  Take a string and compute a (hopefuly) unique numeric
+ * Description :  Take a string and compute a (hopefully) unique numeric
  *                integer value. This is useful to "switch" a string.
  *
  * Parameters  :
@@ -633,7 +633,7 @@ void string_move(char *dst, char *src)
  *          1  :  string = string to be duplicated
  *          2  :  len = number of bytes to duplicate
  *
- * Returns     :  pointer to copy, or NULL if failiure
+ * Returns     :  pointer to copy, or NULL if failure
  *
  *********************************************************************/
 char *bindup(const char *string, size_t len)
