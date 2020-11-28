@@ -24,328 +24,408 @@
 -->
 
 <para>
-  <application>Privoxy 3.0.27</application> stable scales better
-  in multi-user environments and brings a couple of tuning directives.
-  <application>Privoxy 3.0.28</application> stable fixes two regressions
-  introduced in 3.0.27.
+  <application>Privoxy 3.0.29</application> fixes a couple of memory
+  leaks and introduces https inspection which allows to filter encrypted
+  requests and responses.
 </para>
  <para>
-  Changes in <application>Privoxy 3.0.28</application> stable:
+  Changes in <application>Privoxy 3.0.29</application> stable:
  </para>
  <itemizedlist>
-   <listitem>
+  <listitem>
    <para>
-    Bug fixes for regressions in 3.0.27:
+    Security/Reliability:
     <itemizedlist>
     <listitem>
      <para>
-      Fixed misplaced parentheses.
-      Reported by David Binderman.
+      Fixed memory leaks when a response is buffered and the buffer
+      limit is reached or Privoxy is running out of memory.
+      Commits bbd53f1010b and 4490d451f9b. OVE-20201118-0001.
+      Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Changed two regression tests to depend on config directive
-      enable-remote-toggle instead of FEATURE_TOGGLE.
+      Fixed a memory leak in the show-status CGI handler when
+      no action files are configured. Commit c62254a686.
+      OVE-20201118-0002.
+      Sponsored by: Robert Klemme
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fixed a memory leak in the show-status CGI handler when
+      no filter files are configured. Commit 1b1370f7a8a.
+      OVE-20201118-0003.
+      Sponsored by: Robert Klemme
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fixes a memory leak when client tags are active.
+      Commit 245e1cf32. OVE-20201118-0004.
+      Sponsored by: Robert Klemme
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fixed a memory leak if multiple filters are executed
+      and the last one is skipped due to a pcre error.
+      Commit 5cfb7bc8fe. OVE-20201118-0005.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Prevent an unlikely dereference of a NULL-pointer that
+      could result in a crash if accept-intercepted-requests
+      was enabled, Privoxy failed to get the request destination
+      from the Host header and a memory allocation failed.
+      Commit 7530132349. CID 267165. OVE-20201118-0006.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fixed memory leaks in the client-tags CGI handler when
+      client tags are configured and memory allocations fail.
+      Commit cf5640eb2a. CID 267168. OVE-20201118-0007.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fixed memory leaks in the show-status CGI handler when memory
+      allocations fail. Commit 064eac5fd0 and commit fdee85c0bf3.
+      CID 305233. OVE-20201118-0008.
      </para>
      </listitem>
     </itemizedlist>
    </para>
   </listitem>
- </itemizedlist>
- <para>
-  Changes in <application>Privoxy 3.0.27</application> stable:
- </para>
- <itemizedlist>
   <listitem>
    <para>
     General improvements:
     <itemizedlist>
     <listitem>
      <para>
-      Add a receive-buffer-size directive which can be used to
-      set the size of the previously statically allocated buffer
-      in handle_established_connection().
-      Increasing the buffer size increases Privoxy's memory usage but
-      can lower the number of context switches and thereby reduce the
-      CPU usage and potentially increase the throughput.
-      This is mostly relevant for fast network connections and
-      large downloads that don't require filtering.
+      Added experimental https inspection support which allows to filter
+      https traffic. To enable it, install MbedTLS and configure with
+      --with-mbedtls, or install OpenSSL or LibreSSL and configure
+      with --with-openssl.
+      Afterwards configure the directives in section 7 of the
+      config file and enable the +https-inspection action.
+      Initial MbedTLS-based code contributed by Vaclav Svec,
+      initial OpenSSL support contributed by Maxim Antonov.
+      With help from Nedzad Hrnjica and Ho+ Ho+ Ho+.
+      Integration and improvements sponsored by Robert Klemme.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      pcrs: Request JIT compilation if it's supported and
+      the filter isn't dynamic. This can speed up filtering.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Added support for Brotli decompression.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a listen-backlog directive which specifies the backlog
-      value passed to listen().
+      Added FEATURE_EXTENDED_STATISTICS to gather statistics for
+      block reasons and filter executions. To enable it, configure
+      with --enable-extended-statistics and visit
+      http://config.privoxy.org/show-status.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Add an enable-accept-filter directive which allows to
-      toggle accept filter support at run time when compiled
-      with FEATURE_ACCEPT_FILTER support.
-      It makes testing more convenient and now that it's
-      optional we can emit an error message if enabling
-      the accept filter fails.
+      Use the IP_FREEBIND socket option, if defined. This allows
+      Privoxy to bind to not-yet assigned IP addresses which is
+      useful in failover environments.
+      Patch by Sam Varshavchik.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Allow to use extended host patterns and vanilla host patterns
+      at the same time by prefixing extended host patterns with
+      "PCRE-HOST-PATTERN:". To enable this, configure with
+      --enable-pcre-host-patterns.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a delay-response{} action.
-      This is useful to tar pit JavaScript requests that
-      are endlessly retried in case of blocks. It can also
-      be used to simulate a slow Internet connection.
+      Added "Cross-origin resource sharing" (CORS) support.
+      This allows to access Privoxy's CGI interface via JavaScript from
+      another domain (white-listed with the new cors-allowed-origin directive).
+      Based on a patch by Nedzad Hrnjica.
+      Sponsored by: Robert Klemme.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add SOCKS5 username/password support.
+      Based on a patch by Sam, improved by Ivan Romanov.
+      Closes Patch#141 and solves TODO#105.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Bump the maximum number of action and filter files
+      to 100 each.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a 'trusted-cgi-referrer' directive.
-      It allows to configure another page or site that can be used
-      to reach sensitive CGI resources.
+      Fixed handling of filters with "split-large-forms 1"
+      when using the CGI editor.
+      Reported by withoutname in #921.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Better detect a mismatch of connection details when
+      figuring out whether or not a connection can be reused.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Don't send a "Connection failure" message instead of the
+      "DNS failure" message.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a --fuzz mode which exposes Privoxy internals to input
-      from files or stdout.
-      Mainly tested with American Fuzzy Lop. For details see:
-      https://www.fabiankeil.de/talks/fuzzing-on-freebsd/
-      This work was partially funded with donations and done
-      as part of the Privoxy month in 2015.
+      Let LOG_LEVEL_REQUEST log all requests. Previously unencrypted
+      requests were only logged with LOG_LEVEL_REQUEST when they weren't
+      crunched (in which case they were logged with LOG_LEVEL_CRUNCH).
+      This was documented behaviour, but logging all requests seems more useful.
      </para>
     </listitem>
     <listitem>
      <para>
-      Consistently use the U(ngreedy) flag in the 'img-reorder' filter.
+      Fixed locking around localtime() and gmtime().
      </para>
     </listitem>
     <listitem>
      <para>
-      listen_loop(): Reuse a single thread attribute object
-      The object doesn't change and creating a new one for
-      every thread is a waste of (CPU) time.
+      Removed OS/2 support. We haven't provided OS/2 packages in years,
+      it complicated the code and it depended on a fallback snprintf()
+      implementation which is GPLv2 only.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove the fallback snprintf() implementation
+      Now that OS/2 support is gone we no longer need it.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fixed a bunch of format specifiers log messages.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Added a missing apostrophe in the 'More Privoxy' menu.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Explicitly prevent use of FEATURE_CONNECTION_SHARING
+      without FEATURE_CONNECTION_KEEP_ALIVE. It makes no sense
+      and does not compile anyway.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Free csp resources in the thread that belongs to the csp instead
-      of the main thread which has enough on its plate already.
+      Fix build without FEATURE_CONNECTION_KEEP_ALIVE.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Improve 'socket timeout reached' message.
-      Log the timeout that was triggered and downgrade the
-      log level to LOG_LEVEL_CONNECT to reduce the log noise
-      with common debug settings.
-      The timeout isn't necessary the result of an error and
-      usually merely indicates that Privoxy's socket timeout
-      is lower than the relevant timeouts used by client and
-      server.
+      Downgrade the 'Graceful termination requested' message
+      to LOG_LEVEL_INFO as it isn't an error.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Explicitly taint the server socket in case of CONNECT requests.
-      This doesn't fix any known problems, but makes
-      some log messages less confusing.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Let write_pid_file() terminate if the pid file can't be opened.
-      Logging the issue at info level is unlikely to help.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      log_error(): Reduce the mutex-protected area by not using a
-      heap-allocated buffer that is shared between all threads.
-      This increases performance and reduces the latency with
-      verbose debug settings and multiple concurrent connections.
+      decompress_iob(): Downgrade the no-content message to LOG_LEVEL_RE_FILTER
+      While at it, fix a typo in a comment.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Let zalloc() use calloc() if it's available.
-      In some situations using calloc() can be faster than
-      malloc() + memset() and it should never be slower.
-      In the real world the impact of this change is not
-      expected to be noticeable.
-      Sponsored by: Robert Klemme
+      Fixed a couple of cppcheck warnings.
      </para>
     </listitem>
     <listitem>
      <para>
-      Never use select() when poll() is available.
-      On most platforms select() is limited by FD_SETSIZE while
-      poll() is not. This was a scaling issue for multi-user setups.
-      Using poll() has no downside other than the usual risk
-      that code modifications may introduce new bugs that have
-      yet to be found and fixed.
-      At least in theory this commit could also reduce the latency
-      when there are lots of connections and select() would use
-      "bit fields in arrays of integers" to store file descriptors.
-      Another side effect is that Privoxy no longer has to stop
-      monitoring the client sockets when pipelined requests are
-      waiting but can't be read yet.
-      This code keeps the select()-based code behind ifdefs for
-      now but hopefully it can be removed soonish to make the
-      code more readable.
-      Sponsored by: Robert Klemme
+      Rename LOG_LEVEL_GPC to LOG_LEVEL_REQUEST.
+      Only the shadow knows what "GPC" is supposed to stand for.
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a 'reproducible-tarball-dist' target.
-      It's currently separate from the "tarball-dist" target
-      because it requires a tar implementation with mtree spec
-      support.
-      It's far from being perfect and does not enforce a
-      reproducible mode, but it's better than nothing.
+      Remove SourceForge references in copyright headers.
      </para>
     </listitem>
     <listitem>
      <para>
-      Use arc4random() if it's available.
-      While Privoxy doesn't need high quality pseudo-random numbers
-      there's no reason not to use them when we can and this silences
-      a warning emitted by code checkers that can't tell whether or not
-      the quality matters.
+      Upgrade a bunch of links to the homepage to https://.
      </para>
     </listitem>
     <listitem>
      <para>
-      Show the FEATURE_EXTERNAL_FILTERS status on the status page.
-      Better late than never. Previously a couple of tests weren't
-      executed as Privoxy-Regression-Test couldn't detect that the
-      FEATURE_EXTERNAL_FILTERS dependency was satisfied.
+      Add 'no-brotli-accepted' filter which prevents the
+      use of Brotli compression.
      </para>
     </listitem>
     <listitem>
      <para>
-      Ditch FEATURE_IMAGE_DETECT_MSIE.
-      It's an obsolete workaround we inherited from Junkbuster
-      and was already disabled by default.
-      Users that feel the urge to work around issues with
-      image requests coming from an Internet Explorer version
-      from more than 15 years ago can still do this using tags.
+      Changed license for pcrs to GPLv2+ after getting the
+      permission from Andreas. This allows to redistribute
+      Privoxy under the GPLv3 which is required when linking
+      to future mbedTLS versions which are expected to be
+      licensed under the Apache 2.0 license only.
      </para>
     </listitem>
     <listitem>
      <para>
-      Consistently use strdup_or_die() instead of strdup() in
-      cases where allocation failures aren't expected.
-      Using strdup_or_die() allows to remove a couple of explicit
-      error checks which slightly reduces the size of the binary.
+      Updated a bunch of tests that have to expect status code 403
+      now after r1.168/070e904afa5.
      </para>
     </listitem>
     <listitem>
      <para>
-      Insert a refresh tag into the /client-tags CGI page when
-      serving it while a client-specific tag is temporarily enabled.
-      This makes it less likely that the user ends up
-      looking at tag state that is out of date.
+      Lowercase the host name in the request line.
      </para>
     </listitem>
     <listitem>
      <para>
-      Use absolute URLs in the client-tag forms.
-      It's more consistent with the rest of the CGI page
-      URLs and makes it more convenient to copy the forms
-      to external pages.
+      Only set SOURCE_DATE_EPOCH if it's not already set so
+      distributions can overwrite it through the environment.
      </para>
-    </listitem>
-    <listitem>
-     <para>
-      cgi_error_disabled(): Use status code 403 and an appropriate response line
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Use a dedicated CGI handler to deal with tag-toggle requests
-      As a result the /client-tags page is now safe to reach without
-      trusted Referer header which makes bookmarking or linking to
-      it more convenient.
-      Finally, refreshing the /client-tags page to show the
-      current state can no longer unintentionally repeat the
-      previous toggle request.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Don't add a "Connection" header for CONNECT requests.
-      Explicitly sending "Connection: close" is not necessary and
-      apparently it causes problems with some forwarding proxies
-      that will close the connection prematurely.
-      Reported by Marc Thomas.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Fix compiler warnings.
-     </para>
-    </listitem>
+     </listitem>
     </itemizedlist>
    </para>
   </listitem>
   <listitem>
    <para>
-    Bug fixes:
+    Documentation changes:
     <itemizedlist>
     <listitem>
      <para>
-      rfc2553_connect_to(): Properly detect and log when poll()
-      reached the time out. Previously this was logged as:
-      Could not connect to [...]: No error: 0.
-      which isn't very helpful.
+      Explain that Privoxy has to be distributed under the
+      GPLv3 (or later) when linked with an MbedTLS version
+      that is licensed under the Apache 2.0 license.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Import the GNU GPLv3 and include it the user manual.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Clarify FEATURE_FORCE_LOAD's description. It allows to bypass
+      blocking not filtering and only does it if blocks aren't enforced.
+      Reported by: Robert Klemme
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      FAQ: Remove Zwiebelfreunde e.V. from the list of fiduciary sponsors
+      As of 2021 they no longer handle donations for foreign organisations
+      due to lack of resources.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      FAQ: Remove an obsolete comment with a link to the long-gone PDF manual.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      FAQ: Add a link to the TODO list.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      FAQ: Change the sponsor amounts to USD slightly rounding the
+      converted amounts up to get simple numbers.
+      Receiving USD is apparently easier for SPI and SPI is
+      preferred by sponsors as they can send invoices.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Advertise the client-tags CGI page in the user manual.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Stop advertising the show-version CGI page which no longer exists.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add yet another reason why +prevent-compression may cause problems.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Don't claim that contributors need ssh. It's only needed for committers.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Replace obsolete CVS instructions with Git instructions.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove an obsolete comment
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Config file changes:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Change the suggested default-server-timeout to 5 to match the
+      suggested keep-alive-timeout. Otherwise using the defaults would
+      result in Privoxy reducing the default-server-timeout and logging
+      an error message.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      add_tag_for_client(): Set time_to_live properly.
-      Previously the time_to_live was always set for the first tag.
-      Attempts to temporarily enable a tag would result in enabling
-      it permanently unless no tag was enabled already.
+      Update the 'debug 1' description.
      </para>
     </listitem>
     <listitem>
      <para>
-      Revert r1.165 which didn't perform as advertised.
-      While the idea was to use "https:// when creating links
-      for the user manual on the website", the actual effect
-      was to use "https://" when Privoxy was supposed to serve
-      the user manual itself.
-      Reported by Yossi Zahn on Privoxy-devel@.
+      Add a missing 'client-specific-tag' directive.
      </para>
     </listitem>
     <listitem>
      <para>
-      socks5_connect(): Fail in case of unsupported address types.
-      Previously they would not be detected right away and
-      Privoxy would fail later on with an error message that
-      didn't make it obvious that the problem was socks-related.
-      So far, no such problems have actually been reported.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      socks5_connect(): Properly deal with socks replies that
-      contain IPv6 addresses.
-      Previously parts of the reply were left unread and
-      later on treated as invalid HTTP response data.
-      Fixes #904 reported by Danny Goossen who also provided
-      the initial version of this patch.
+      Comment out trusted-cgi-referer pointing to example.org.
      </para>
      </listitem>
     </itemizedlist>
@@ -357,52 +437,134 @@
     <itemizedlist>
     <listitem>
      <para>
-      Unblock 'msdn.microsoft.com/'.
-      It (presumably) isn't used to serve the kind of ads Privoxy should
-      block by default but happens to serve lots of pages with URLs that
-      are likely to result in false positives.
-      Reported by bugreporter1694 in AF#939.
+      Block requests to /(.*/)?piwik\.php
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable gif deanimation for requests tagged with CSS-REQUEST.
-      The action will ignore content that isn't considered text
-      anyway and explicitly disabling it makes this more obvious
-      if "action" debugging (debug 65536) is enabled while
-      "gif deanimation" debugging (debug 256) isn't.
+      Block requests to .connectaserver.de/
      </para>
     </listitem>
     <listitem>
      <para>
-      Explicitly disable HTML filters for requests with CSS-REQUEST tag.
-      The filters are unlikely to break CSS files but executing
-      them without (intentionally) getting any hits is a waste of
-      cpu time and makes the log more noisy when running with
-      "debug 64".
+      Block requests to pixel.inforsea.com/
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock 'adventofcode.com/'.
-      Reported by Clint Adams in Debian bug #848211.
-      Fixes Roland's AF#937.
+      Block requests to t.vi-serve.com/
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock 'adlibris.com'.
-      Reported by Wyrex in #935
+      Block requests to .ioam.de/
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock .golang.org/
+      Block requests to t.9gag.com/img.gif
      </para>
     </listitem>
     <listitem>
      <para>
-      Add fast-redirects exception for '.youtube.com/.*origin=http'
+      Block requests to .pixel.parsely.com/ as image
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Block requests to pixel.wp.com/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable fast-redirects for .librarything.com/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable fast-redirects for issue.freebsdfoundation.org/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable fast-redirects for .twitter.com/.*origin=http
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock belco24.de/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add fast-redirects exception for .wikipedia.org/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add fast-redirects exception for oss-fuzz.com/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable fast-redirects for .consensu.org/delivery/pixel\.php
+      and block the requests as image instead
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock .adbinstaller.com/
+      Reported by lvm in #942.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock .adbshell.com
+      Reported by lvm in #942.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock .tagesschau.de/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Disable fast-redirects for collector.githubapp.com/
+      and block requests to it as image instead
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock 'ada*.'
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Add fast-redirects{} exception for sourcepoint.vice.com/
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Unblock adaway.org/
+      Reported by DRS David Soft in AF#945.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Change two block reasons that previously were the same.
+      Sponsored by: Robert Klemme
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Added a +delay-response{} test.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Updated the location of the development version
+      of default.action.master.
      </para>
      </listitem>
     </itemizedlist>
@@ -414,239 +576,152 @@
     <itemizedlist>
     <listitem>
      <para>
-      Don't gather host and resource statistics if they aren't requested.
-      While the performance impact seems negligible this significantly
-      reduces the memory usage if there are lots of requests.
+      Added a --keep-date option to keep the date in highlighted messages.
      </para>
     </listitem>
     <listitem>
      <para>
-      Bump version as the behaviour (slightly) changed.
+      Highlight new log messages.
      </para>
     </listitem>
     <listitem>
      <para>
-      Count connection failures as well in statistics mode.
+      Make gather_loglevel_clf_stats() more tolerant. While at it,
+      count all CLF messages as requests, even if the request is invalid.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Only show HTTP version distribution if at least one version has been detected.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Only show crunch statistics if crunches were detected.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Warn if the request counts differ.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Generate statistics if the log only contains LOG_LEVEL_CLF messages
+      so it can be used with vanilla webserver logs.
+      Previously Privoxy-specific "Request:" messages were required.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Align the client-HTTP-version distribution like other distributions
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Bump version to 0.9.1
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Include status code distribution in the stats.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Let the statistics include the size of the content Privoxy
+      transferred excluding HTTP headers.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Get with the program and expect all requests to be logged with LOG_LEVEL_REQUEST.
+      It's no longer necessary to count both LOG_LEVEL_REQUEST and
+      LOG_LEVEL_CRUNCH messages to get the total number of requests.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Leverage the LOG_LEVEL_CLF message to gather statistics that where
+      previously taken from LOG_LEVEL_HEADER lines. This results in less
+      confusing results if https inspection is enabled in which case there
+      are two LOG_LEVEL_HEADER lines with request lines.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Count connection timeouts as well in statistics mode.
+      Properly highlight the filter results message. Previously a brace got lost.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Prefer the number of CLF lines to get the total number of requests
+      as it works with older Privoxy versions as well.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    Privoxy-Regression-Test:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Turn curl's globbing mode off so we can allow more characters in URLs.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Allow '[' and ']' in URLs.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Include the action file when complaining about missing Sticky Actions.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fix a sentence in the documentation.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Bump version to 0.7.1
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    url-pattern-translator:
+    <itemizedlist>
+    <listitem>
+     <para>
+      Detect a couple of pattern prefixes case-insensitively.
       Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Fix an 'uninitialized value' warning when generating
-      statistics for a log file without response headers.
-      While privoxy-log-parser was supposed to detect this already,
-      the check was flawed and the message the user didn't see was
-      somewhat confusing anyway.
-      Now the message is less confusing, more helpful and actually printed.
-      Reported by: Robert Klemme
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Documentation improvements:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Refer to the git sources instead of CVS.
+      Skip CLIENT-TAG patterns.
+      Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Use GNU/Linux when referring to the OS instead of the kernel.
+      Skip patterns that have already been converted.
+      It should now be safe to "convert" a file multiple times.
+      Sponsored by: Robert Klemme
      </para>
     </listitem>
     <listitem>
      <para>
-      Add FAQ entry for what to do if editing the config file is access denied.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add brief HTTP/2 FAQ.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add a small fuzzing section to the developer documentation.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add a client-header-tagger{client-ip-address} example.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Stop suggesting that Privoxy is an anonymizing proxy.
-      The term could lead to Privoxy users overestimating
-      what it can do on its own (without Tor).
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Make it more obvious that SPI accepts Paypal, too.
-      Currently most donations are made through the Paypal account
-      managed by Zwiebelfreunde e.V. and a more even distribution
-      would be useful.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Suggest to log applying actions as well when reproducing problems.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Explicitly mention that Privoxy binaries are built by individuals
-      on their own systems. Buyer beware!
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Mention the release feed on the homepage.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove a mysterious comment with a GNU FDL link as it isn't
-      useful and could confuse license scanners.
-      In May 2002 it was briefly claimed that "this document" was covered
-      by the GNU FDL. The commit message (r1.5) doesn't explain the motivation
-      or whether all copyright holders were actually asked and agreed to the
-      declared license change.
-      It's thus hard to tell whether or not the license change was legit,
-      but luckily two days later the "doc license" was "put" "back to GPL"
-      anyway (r1.6).
-      At the same time the offending comment with a link to the FDL
-      (not the GPL) was added for no obvious reason.
-      Now it's gone again.
-     </para>
-    </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Regression tests:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Bump for-privoxy-version to 3.0.27 as we now rely on untrusted
-      CGI request being rejected with status code 403 (instead of 200).
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Update test for /send-stylesheet and add another one
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Templates:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Consistently use https:// when linking to the Privoxy website.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove SourceForge references in Copyright header.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove a couple of SourceForge references in a comment.
-      While at it, fix the grammar.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Move the site-specific documentation block before the generic one.
-      While most Privoxy installations don't have a site-specific
-      documentation block, in cases were it exists it's likely to
-      be more relevant than the generic one.
-      Showing it first makes it less likely that users stop reading
-      before they reach it, especially on pages that don't fit on
-      the screen.
-     </para>
-     </listitem>
-    </itemizedlist>
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    Build system improvements:
-    <itemizedlist>
-    <listitem>
-     <para>
-      Prefer openjade to jade. On some systems Jade produces
-      HTML with unescaped ampersands in URLs.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Prefer OpenSP to SP to be consistent.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Have Docbook generated HTML files be straight ASCII.
-      Dealing with a mixture of ISO-8859 and UTF-8 files is problematic.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Echo the filename to stderr for 'make dok-tidy'.
-      Make it a bit easier to find errors in docbook generated HTML.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Warn when still using select().
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Warn when compiling without calloc().
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Make it more obvious that the --with-fdsetsize configure switch
-      is pointless if poll() is available.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove support for AmigaOS.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Update windows build system to use supported software.
-      The cygwin gcc -mno-cygwin option is no longer supported, so
-      convert the windows build system to use the cygwin cross-compiler
-      to build "native" code.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Add --enable-static-linking option for configure
-      does the same thing as LDFLAGS=-static; ./configure
-      but nicer than mixing evars and configure options.
+      Add the new 'PCRE-HOST-PATTERN:' prefix.
+      Sponsored by: Robert Klemme
      </para>
      </listitem>
     </itemizedlist>

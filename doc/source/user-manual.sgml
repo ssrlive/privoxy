@@ -15,10 +15,10 @@
 <!entity config SYSTEM "p-config.sgml">
 <!entity changelog SYSTEM "changelog.sgml">
 <!entity p-version "3.0.29">
-<!entity p-status "UNRELEASED">
+<!entity p-status "stable">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -5167,7 +5167,7 @@ new action
    </para>
    <para>
     Before this works the directives in the
-    <literal><ulink url="config.html#TLS">TLS section</ulink></literal>
+    <literal><ulink url="config.html#HTTPS-INSPECTION-DIRECTIVES">HTTPS inspection section</ulink></literal>
     of the config file have to be configured.
    </para>
    <para>

@@ -73,7 +73,7 @@
         <p>The default profiles, and their associated actions, as pre-defined in <tt class=
         "FILENAME">default.action</tt> are:</p>
         <div class="TABLE">
-          <a name="AEN3124" id="AEN3124"></a>
+          <a name="AEN3180" id="AEN3180"></a>
           <p><b>Table 1. Default Configurations</b></p>
           <table border="1" frame="border" rules="all" class="CALSTABLE">
             <col width="1*" title="C1">
@@ -2526,8 +2526,9 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
               <p>This action allows <span class="APPLICATION">Privoxy</span> to filter encrypted requests and
               responses. For this to work <span class="APPLICATION">Privoxy</span> has to generate a certificate and
               send it to the client which has to accept it.</p>
-              <p>Before this works the directives in the <tt class="LITERAL"><a href="config.html#TLS" target=
-              "_top">TLS section</a></tt> of the config file have to be configured.</p>
+              <p>Before this works the directives in the <tt class="LITERAL"><a href=
+              "config.html#HTTPS-INSPECTION-DIRECTIVES" target="_top">HTTPS inspection section</a></tt> of the config
+              file have to be configured.</p>
               <p>Note that the action has to be enabled based on the CONNECT request which doesn't contain a path.
               Enabling it based on a pattern with path doesn't work as the path is only seen by <span class=
               "APPLICATION">Privoxy</span> if the action is already enabled.</p>

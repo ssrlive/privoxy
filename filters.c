@@ -2675,7 +2675,7 @@ int content_requires_filtering(struct client_state *csp)
        * The server didn't bother to declare a MIME-Type.
        * Assume it's text that can be filtered.
        *
-       * This also regulary happens with 304 responses,
+       * This also regularly happens with 304 responses,
        * therefore logging anything here would cause
        * too much noise.
        */

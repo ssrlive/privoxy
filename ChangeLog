@@ -1,6 +1,243 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.29 stable ***
+
+- Security/Reliability:
+  - Fixed memory leaks when a response is buffered and the buffer
+    limit is reached or Privoxy is running out of memory.
+    Commits bbd53f1010b and 4490d451f9b. OVE-20201118-0001.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak in the show-status CGI handler when
+    no action files are configured. Commit c62254a686.
+    OVE-20201118-0002.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak in the show-status CGI handler when
+    no filter files are configured. Commit 1b1370f7a8a.
+    OVE-20201118-0003.
+    Sponsored by: Robert Klemme
+  - Fixes a memory leak when client tags are active.
+    Commit 245e1cf32. OVE-20201118-0004.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak if multiple filters are executed
+    and the last one is skipped due to a pcre error.
+    Commit 5cfb7bc8fe. OVE-20201118-0005.
+  - Prevent an unlikely dereference of a NULL-pointer that
+    could result in a crash if accept-intercepted-requests
+    was enabled, Privoxy failed to get the request destination
+    from the Host header and a memory allocation failed.
+    Commit 7530132349. CID 267165. OVE-20201118-0006.
+  - Fixed memory leaks in the client-tags CGI handler when
+    client tags are configured and memory allocations fail.
+    Commit cf5640eb2a. CID 267168. OVE-20201118-0007.
+  - Fixed memory leaks in the show-status CGI handler when memory
+    allocations fail. Commit 064eac5fd0 and commit fdee85c0bf3.
+    CID 305233. OVE-20201118-0008.
+
+- General improvements:
+  - Added experimental https inspection support which allows to filter
+    https traffic. To enable it, install MbedTLS and configure with
+    --with-mbedtls, or install OpenSSL or LibreSSL and configure
+    with --with-openssl.
+    Afterwards configure the directives in section 7 of the
+    config file and enable the +https-inspection action.
+    Initial MbedTLS-based code contributed by Vaclav Svec,
+    initial OpenSSL support contributed by Maxim Antonov.
+    With help from Nedzad Hrnjica and Ho+ Ho+ Ho+.
+    Integration and improvements sponsored by Robert Klemme.
+  - pcrs: Request JIT compilation if it's supported and
+    the filter isn't dynamic. This can speed up filtering.
+  - Added support for Brotli decompression.
+    Sponsored by: Robert Klemme
+  - Added FEATURE_EXTENDED_STATISTICS to gather statistics for
+    block reasons and filter executions. To enable it, configure
+    with --enable-extended-statistics and visit
+    http://config.privoxy.org/show-status.
+    Sponsored by: Robert Klemme
+  - Use the IP_FREEBIND socket option, if defined. This allows
+    Privoxy to bind to not-yet assigned IP addresses which is
+    useful in failover environments.
+    Patch by Sam Varshavchik.
+  - Allow to use extended host patterns and vanilla host patterns
+    at the same time by prefixing extended host patterns with
+    "PCRE-HOST-PATTERN:". To enable this, configure with
+    --enable-pcre-host-patterns.
+    Sponsored by: Robert Klemme
+  - Added "Cross-origin resource sharing" (CORS) support.
+    This allows to access Privoxy's CGI interface via JavaScript from
+    another domain (white-listed with the new cors-allowed-origin directive).
+    Based on a patch by Nedzad Hrnjica.
+    Sponsored by: Robert Klemme.
+  - Add SOCKS5 username/password support.
+    Based on a patch by Sam, improved by Ivan Romanov.
+    Closes Patch#141 and solves TODO#105.
+  - Bump the maximum number of action and filter files
+    to 100 each.
+    Sponsored by: Robert Klemme
+  - Fixed handling of filters with "split-large-forms 1"
+    when using the CGI editor.
+    Reported by withoutname in #921.
+  - Better detect a mismatch of connection details when
+    figuring out whether or not a connection can be reused.
+  - Don't send a "Connection failure" message instead of the
+    "DNS failure" message.
+    Sponsored by: Robert Klemme
+  - Let LOG_LEVEL_REQUEST log all requests. Previously unencrypted
+    requests were only logged with LOG_LEVEL_REQUEST when they weren't
+    crunched (in which case they were logged with LOG_LEVEL_CRUNCH).
+    This was documented behaviour, but logging all requests seems more useful.
+  - Fixed locking around localtime() and gmtime().
+  - Removed OS/2 support. We haven't provided OS/2 packages in years,
+    it complicated the code and it depended on a fallback snprintf()
+    implementation which is GPLv2 only.
+  - Remove the fallback snprintf() implementation
+    Now that OS/2 support is gone we no longer need it.
+  - Fixed a bunch of format specifiers log messages.
+  - Added a missing apostrophe in the 'More Privoxy' menu.
+  - Explicitly prevent use of FEATURE_CONNECTION_SHARING
+    without FEATURE_CONNECTION_KEEP_ALIVE. It makes no sense
+    and does not compile anyway.
+    Sponsored by: Robert Klemme
+  - Fix build without FEATURE_CONNECTION_KEEP_ALIVE.
+    Sponsored by: Robert Klemme
+  - Downgrade the 'Graceful termination requested' message
+    to LOG_LEVEL_INFO as it isn't an error.
+    Sponsored by: Robert Klemme
+  - decompress_iob(): Downgrade the no-content message to LOG_LEVEL_RE_FILTER
+    While at it, fix a typo in a comment.
+    Sponsored by: Robert Klemme
+  - Fixed a couple of cppcheck warnings.
+  - Rename LOG_LEVEL_GPC to LOG_LEVEL_REQUEST.
+    Only the shadow knows what "GPC" is supposed to stand for.
+  - Remove SourceForge references in copyright headers.
+  - Upgrade a bunch of links to the homepage to https://.
+  - Add 'no-brotli-accepted' filter which prevents the
+    use of Brotli compression.
+  - Changed license for pcrs to GPLv2+ after getting the
+    permission from Andreas. This allows to redistribute
+    Privoxy under the GPLv3 which is required when linking
+    to future mbedTLS versions which are expected to be
+    licensed under the Apache 2.0 license only.
+  - Updated a bunch of tests that have to expect status code 403
+    now after r1.168/070e904afa5.
+  - Lowercase the host name in the request line.
+  - Only set SOURCE_DATE_EPOCH if it's not already set so
+    distributions can overwrite it through the environment.
+
+- Documentation changes:
+  - Explain that Privoxy has to be distributed under the
+    GPLv3 (or later) when linked with an MbedTLS version
+    that is licensed under the Apache 2.0 license.
+  - Import the GNU GPLv3 and include it the user manual.
+  - Clarify FEATURE_FORCE_LOAD's description. It allows to bypass
+    blocking not filtering and only does it if blocks aren't enforced.
+    Reported by: Robert Klemme
+  - FAQ: Remove Zwiebelfreunde e.V. from the list of fiduciary sponsors
+    As of 2021 they no longer handle donations for foreign organisations
+    due to lack of resources.
+  - FAQ: Remove an obsolete comment with a link to the long-gone PDF manual.
+  - FAQ: Add a link to the TODO list.
+  - FAQ: Change the sponsor amounts to USD slightly rounding the
+    converted amounts up to get simple numbers.
+    Receiving USD is apparently easier for SPI and SPI is
+    preferred by sponsors as they can send invoices.
+  - Advertise the client-tags CGI page in the user manual.
+  - Stop advertising the show-version CGI page which no longer exists.
+  - Add yet another reason why +prevent-compression may cause problems.
+  - Don't claim that contributors need ssh. It's only needed for committers.
+  - Replace obsolete CVS instructions with Git instructions.
+  - Remove an obsolete comment
+
+- Config file changes:
+  - Change the suggested default-server-timeout to 5 to match the
+    suggested keep-alive-timeout. Otherwise using the defaults would
+    result in Privoxy reducing the default-server-timeout and logging
+    an error message.
+    Sponsored by: Robert Klemme
+  - Update the 'debug 1' description.
+  - Add a missing 'client-specific-tag' directive.
+  - Comment out trusted-cgi-referer pointing to example.org.
+
+- Action file improvements:
+  - Block requests to /(.*/)?piwik\.php
+  - Block requests to .connectaserver.de/
+  - Block requests to pixel.inforsea.com/
+  - Block requests to t.vi-serve.com/
+  - Block requests to .ioam.de/
+  - Block requests to t.9gag.com/img.gif
+  - Block requests to .pixel.parsely.com/ as image
+  - Block requests to pixel.wp.com/
+  - Disable fast-redirects for .librarything.com/
+  - Disable fast-redirects for issue.freebsdfoundation.org/
+  - Disable fast-redirects for .twitter.com/.*origin=http
+  - Unblock belco24.de/
+  - Add fast-redirects exception for .wikipedia.org/
+  - Add fast-redirects exception for oss-fuzz.com/
+  - Disable fast-redirects for .consensu.org/delivery/pixel\.php
+    and block the requests as image instead
+  - Unblock .adbinstaller.com/
+    Reported by lvm in #942.
+  - Unblock .adbshell.com
+    Reported by lvm in #942.
+  - Unblock .tagesschau.de/
+  - Disable fast-redirects for collector.githubapp.com/
+    and block requests to it as image instead
+  - Unblock 'ada*.'
+  - Add fast-redirects{} exception for sourcepoint.vice.com/
+  - Unblock adaway.org/
+    Reported by DRS David Soft in AF#945.
+  - Change two block reasons that previously were the same.
+    Sponsored by: Robert Klemme
+  - Added a +delay-response{} test.
+  - Updated the location of the development version
+    of default.action.master.
+
+- Privoxy-Log-Parser:
+  - Added a --keep-date option to keep the date in highlighted messages.
+  - Highlight new log messages.
+  - Make gather_loglevel_clf_stats() more tolerant. While at it,
+    count all CLF messages as requests, even if the request is invalid.
+  - Only show HTTP version distribution if at least one version has been detected.
+  - Only show crunch statistics if crunches were detected.
+  - Warn if the request counts differ.
+  - Generate statistics if the log only contains LOG_LEVEL_CLF messages
+    so it can be used with vanilla webserver logs.
+    Previously Privoxy-specific "Request:" messages were required.
+  - Align the client-HTTP-version distribution like other distributions
+  - Bump version to 0.9.1
+  - Include status code distribution in the stats.
+  - Let the statistics include the size of the content Privoxy
+    transferred excluding HTTP headers.
+  - Get with the program and expect all requests to be logged with LOG_LEVEL_REQUEST.
+    It's no longer necessary to count both LOG_LEVEL_REQUEST and
+    LOG_LEVEL_CRUNCH messages to get the total number of requests.
+  - Leverage the LOG_LEVEL_CLF message to gather statistics that where
+    previously taken from LOG_LEVEL_HEADER lines. This results in less
+    confusing results if https inspection is enabled in which case there
+    are two LOG_LEVEL_HEADER lines with request lines.
+    Sponsored by: Robert Klemme
+  - Properly highlight the filter results message. Previously a brace got lost.
+  - Prefer the number of CLF lines to get the total number of requests
+    as it works with older Privoxy versions as well.
+
+- Privoxy-Regression-Test:
+  - Turn curl's globbing mode off so we can allow more characters in URLs.
+  - Allow '[' and ']' in URLs.
+  - Include the action file when complaining about missing Sticky Actions.
+  - Fix a sentence in the documentation.
+  - Bump version to 0.7.1
+
+- url-pattern-translator:
+  - Detect a couple of pattern prefixes case-insensitively.
+    Sponsored by: Robert Klemme
+  - Skip CLIENT-TAG patterns.
+    Sponsored by: Robert Klemme
+  - Skip patterns that have already been converted.
+    It should now be safe to "convert" a file multiple times.
+    Sponsored by: Robert Klemme
+  - Add the new 'PCRE-HOST-PATTERN:' prefix.
+    Sponsored by: Robert Klemme
+
 *** Version 3.0.28 stable ***
 
 - Bug fixes for regressions in 3.0.27:
@@ -2520,7 +2757,7 @@ being a mix of "U.S. English", "U.K. English" and "Irish English".
 
 
 ----------------------------------------------------------------------
-Copyright   :  Written by and Copyright (C) 2001-2018 the
+Copyright   :  Written by and Copyright (C) 2001-2020 the
                Privoxy team. https://www.privoxy.org/
 
                Based on the Internet Junkbuster originally written

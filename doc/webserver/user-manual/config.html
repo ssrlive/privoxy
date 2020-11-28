@@ -2406,7 +2406,10 @@
       </div>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="TLS" id="TLS">7.7. TLS/SSL Inspection (Experimental)</a></h2>
+      <h2 class="SECT2"><a name="HTTPS-INSPECTION-DIRECTIVES" id="HTTPS-INSPECTION-DIRECTIVES">7.7. HTTPS Inspection
+      (Experimental)</a></h2>
+      <p>HTTPS inspection allows to filter encrypted requests. This is only supported when <span class=
+      "APPLICATION">Privoxy</span> has been built with FEATURE_HTTPS_INSPECTION.</p>
       <div class="SECT3">
         <h4 class="SECT3"><a name="CA-DIRECTORY" id="CA-DIRECTORY">7.7.1. ca-directory</a></h4>
         <div class="VARIABLELIST">
@@ -2711,7 +2714,7 @@ AES128-SHA
                 <tr>
                   <td>
                     <pre class=
-                    "SCREEN">    # Use keywords instead of explicity naming the ciphers (Does not work with MbedTLS)
+                    "SCREEN">    # Use keywords instead of explicitly naming the ciphers (Does not work with MbedTLS)
     cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
    </pre>
                   </td>
