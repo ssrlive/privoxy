@@ -25,7 +25,7 @@
 #    bug first. If you are using your own custom configuration, please
 #    try the stock configs to see if the problem is a configuration
 #    related bug. And if not using the latest development snapshot,
-#    please try the latest one. Or even better, CVS sources.
+#    please try the latest one. Or even better, git sources.
 #  * Submit feature requests only thru our feature request tracker:
 #    http://sourceforge.net/tracker/?atid=361118&group_id=11118&func=browse
 #      
