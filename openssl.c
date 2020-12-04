@@ -735,7 +735,6 @@ extern int create_client_ssl_connection(struct client_state *csp)
    struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
    /* Paths to certificates file and key file */
    char *key_file  = NULL;
-   char *ca_file   = NULL;
    char *cert_file = NULL;
    int ret = 0;
    SSL *ssl;
@@ -759,7 +758,6 @@ extern int create_client_ssl_connection(struct client_state *csp)
    /*
     * Preparing paths to certificates files and key file
     */
-   ca_file   = csp->config->ca_cert_file;
    cert_file = make_certs_path(csp->config->certificate_directory,
       (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
    key_file  = make_certs_path(csp->config->certificate_directory,
