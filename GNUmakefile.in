@@ -445,7 +445,8 @@ tarball-dist: dist-check clean clobber
 
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" -o -path "*.git/*" \) | sort`; do \
+	-name "PACKAGERS" -o -path "*.git/*" \
+	-o -path "*/doc/webserver/feeds*" \) | sort`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) -cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
@@ -461,7 +462,8 @@ mtree-spec:
 	$(ECHO) "#mtree 2.0" > $(MTREE_SPEC_FILE)
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" -o -path "*.git/*" -o -name "*.spec" \) | env -i sort`; do \
+	-name "PACKAGERS" -o -path "*.git/*" -o -name "*.spec" \
+	-o -path "*/doc/webserver/feeds*" \) | env -i sort`; do \
 	   $(ECHO) "privoxy-$(VERSION)-$(CODE_STATUS)/$$i time=$(SOURCE_DATE_EPOCH) type=file uname=privoxy gname=privoxy mode=0555"; \
 	done >> $(MTREE_SPEC_FILE)
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
