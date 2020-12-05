@@ -989,6 +989,9 @@ collector.githubapp.com/
 t.9gag.com/img\.gif
 # Blocked URL = http://t.lto.connectaserver.de/t.php?ht=e&in=Verweildauer%7C%7CTimeOnPage%7C%7C1m%2030s&pp=https%3A%2F%2Fwww.lto.de%2Frecht%2Fhintergruende%2Fh%2Feugh-c62317-vorratsdatenspeicherung-internet-telefon-eu-staaten-sicherheit-terrorismus-datenschutz-speichern-deutschland-kinderpornographie%2F&sr=1366x768&vp=1362x676&cid=602d486b-9a75-4ea2-99d3-ebfb063e1be8&dt=Vorratsdatenspeicherung:%20Was%20bedeutet%20das%20EuGH-Urteil?&rf=&z=1602062648454
 .connectaserver.de/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://analytics.slashdotmedia.com/sf.php?action_name=Privoxy%20download%20%7C%20SourceForge.net&idsite=39&rec=1&r=151583&h=15&m=33&s=42&url=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&urlref=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&_id=a1e65404b0c0c572&_idts=1607178131&_idvc=1&_idn=0&_refts=0&_viewts=1607178131&send_image=1&cookie=1&res=1366x768&dimension1=ijbswa&dimension2=pg_project&dimension3=1&gt_ms=357&pv_id=PDkFUz
+analytics.slashdotmedia.com/
 
 
 #############################################################################
