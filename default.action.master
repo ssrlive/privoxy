@@ -992,6 +992,9 @@ t.9gag.com/img\.gif
 #MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
 # Blocked URL = https://analytics.slashdotmedia.com/sf.php?action_name=Privoxy%20download%20%7C%20SourceForge.net&idsite=39&rec=1&r=151583&h=15&m=33&s=42&url=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&urlref=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&_id=a1e65404b0c0c572&_idts=1607178131&_idvc=1&_idn=0&_refts=0&_viewts=1607178131&send_image=1&cookie=1&res=1366x768&dimension1=ijbswa&dimension2=pg_project&dimension3=1&gt_ms=357&pv_id=PDkFUz
 analytics.slashdotmedia.com/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://tag.crsspxl.com/s2.html?d=2396&t=Privoxy%20download%20%7C%20SourceForge.net&u=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&b2=%20CategoriesWWW%2FHTTP%2C%20Firewalls%20LicenseGNU%20General%20Public%20License%20version%202.0%20(GPLv2)%2C%20ISC%20License%20%20%20%20%20%20%20
+tag.crsspxl.com/
 
 
 #############################################################################
