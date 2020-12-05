@@ -932,6 +932,9 @@ oskar.tradera.com/
 t.vi-serve.com/
 # Blocked URL = http://pixel.inforsea.com/server/log
 pixel.inforsea.com/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://fastlane.rubiconproject.com/a/api/fastlane.json?account_id=15680&site_id=103240&zone_id=610848%3B798260%3B798260&size_id=43&p_pos=atf%3B%3B&rf=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&tk_flint=pbjs_lite_v4.17.0&x_source.tid=40522aa9-945e-4ba8-afdb-eb311922e0c2%3B0ef5f4c2-e76b-485f-ae9a-63d0cbde6c70%3B597ee091-a937-48e9-9d4e-a7e352438484&p_screen_res=1366x768&rp_floor=0.01&rp_secure=1&slots=3&rand=0.25171689494748506
+fastlane.rubiconproject.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
