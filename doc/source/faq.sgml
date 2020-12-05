@@ -2688,7 +2688,7 @@ Why?</title>
 <para>
  Upgrading <application>Privoxy</application>, or going to the most recent
  <filename>default.action</filename> file available from <ulink
- url="https://sourceforge.net/project/showfiles.php?group_id=11118">SourceForge</ulink>
+ url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=default.action.master;hb=HEAD">git</ulink>
  might be worth a try, too.
 </para>
 </sect2>
