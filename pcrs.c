@@ -281,7 +281,7 @@ static pcrs_substitute *pcrs_compile_replacement(const char *replacement, int tr
     */
    if (trivialflag)
    {
-      text = strncpy(text, replacement, length + 1);
+      strlcpy(text, replacement, length + 1);
       k = (int)length;
    }
 
