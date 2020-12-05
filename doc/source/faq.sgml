@@ -1176,17 +1176,11 @@ instead of the checkerboard image. Why and how do I get rid of this?</title>
 <title>Can Privoxy run as a service
 on Win2K/NT/XP?</title>
 <para>
-<![%p-newstuff;[
- Yes. Version 3.0.5 introduces full <application>Windows</application> service
- functionality. See <ulink url="../user-manual/installation.html#INSTALLATION-PACK-WIN">
+ Yes. Full <application>Windows</application> service
+ functionality was introduced in <application>Privoxy</application> 3.0.5.
+ See <ulink url="../user-manual/installation.html#INSTALLATION-PACK-WIN">
  the <citetitle>User Manual</citetitle></ulink> for details on how to install and configure
  <application>Privoxy</application> as a service.
-</para>
-<para>
- Earlier ]]>3.x versions could run as a system service using <command>srvany.exe</command>.
- See the discussion at <ulink
- url="https://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118">https://sourceforge.net/tracker/?func=detail&#38;atid=361118&#38;aid=485617&#38;group_id=11118</ulink>,
- for details, and a sample configuration.
 </para>
 </sect2>
 
