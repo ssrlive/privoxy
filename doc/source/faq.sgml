@@ -843,10 +843,9 @@ the differences?</title>
 <sect2 renderas="sect3" id="getupdates"><title>Where can I get updated Actions Files?</title>
  <para>
   Based on your feedback and the continuing development, updates of
-  <filename>default.action</filename> will be
-  made available from time to time on the <ulink
-  url="https://sourceforge.net/project/showfiles.php?group_id=11118">files section</ulink> of
-  our <ulink url="https://sourceforge.net/projects/ijbswa/">project page</ulink>.
+  <filename>default.action</filename> are available from
+  <ulink
+  url="https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob_plain;f=default.action.master;hb=HEAD">git</ulink>.
  </para>
 
  <para>
