@@ -358,17 +358,17 @@
               </td>
             </tr>
             <tr>
+              <td><code>FEATURE_NO_GIFS</code></td>
+              <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
+              <td>Use PNG instead of GIF for the built-in images.</td>
+            </tr>
+            <tr>
               <td><code>FEATURE_PCRE_HOST_PATTERNS</code></td>
               <td>@if-FEATURE_PCRE_HOST_PATTERNS-then@ Yes @else-not-FEATURE_PCRE_HOST_PATTERNS@ No @endif-FEATURE_PCRE_HOST_PATTERNS@</td>
               <td>Allow to use extended host patterns and vanilla host patterns
                at the same time by prefixing extended host patterns with
                "PCRE-HOST-PATTERN:".
               </td>
-            </tr>
-            <tr>
-              <td><code>FEATURE_NO_GIFS</code></td>
-              <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
-              <td>Use PNG instead of GIF for the built-in images.</td>
             </tr>
             <tr>
               <td><code>FEATURE_PTHREAD</code></td>
