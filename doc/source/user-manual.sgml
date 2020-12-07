@@ -5752,6 +5752,10 @@ example.com/.*toChange=(?!bar)
 # Redirect Destination = https://www.illumos.org/issues/4974
 i[0-9][0-9][0-9][0-9]*/
 
+# Redirect requests for the old Tor Hidden Service of the Privoxy website to the new one
+{+redirect{s@^http://jvauzb4sb3bwlsnc.onion/@http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/@}}
+jvauzb4sb3bwlsnc.onion/
+
 # Redirect remote requests for this manual
 # to the local version delivered by Privoxy
 {+redirect{s@^http://www@http://config@}}
