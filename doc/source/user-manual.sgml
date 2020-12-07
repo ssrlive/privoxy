@@ -1037,13 +1037,13 @@ MAKENSIS = ./nsis/makensis.exe
 
  <!-- image of Mozilla Proxy configuration -->
   <figure pgwide="0" float="0"><title>Proxy Configuration Showing
-  Mozilla/Netscape HTTP and HTTPS (SSL) Settings</title>
+  Mozilla Firefox HTTP and HTTPS (SSL) Settings</title>
    <mediaobject>
      <imageobject>
       <imagedata  fileref="proxy_setup.jpg" format="jpg">
        </imageobject>
        <textobject>
-        <phrase>[ Screenshot of Mozilla Proxy Configuration ]</phrase>
+        <phrase>[ Screenshot of Mozilla Firefox Proxy Configuration ]</phrase>
       </textobject>
    </mediaobject>
   </figure>
