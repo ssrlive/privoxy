@@ -1759,7 +1759,7 @@ for details.
     The default profiles, and their associated actions, as pre-defined in
     <filename>default.action</filename> are:
    </para>
-    <table frame=all><title>Default Configurations</title>
+    <table frame=all id="default-configurations"><title>Default Configurations</title>
     <tgroup cols=4 align=left colsep=1 rowsep=1>
     <colspec colname=c1>
     <colspec colname=c2>
