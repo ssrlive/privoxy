@@ -835,7 +835,7 @@ way to do this?</title>
 </sect2>
 
 
-<sect2 renderas="sect3">
+<sect2 renderas="sect3" id="actionfile-differences">
 <title>There are several different <quote>actions</quote> files. What are
 the differences?</title>
 <para>
@@ -3052,7 +3052,7 @@ C:\Privoxy></screen>
   </para>
 
  <!--   ~~~~~       New section      ~~~~~     -->
- <sect2><title>License</title>
+ <sect2 id="privoxy-license"><title>License</title>
  <!-- Include copyright.sgml: -->
   &license;
  <!-- end copyright -->
@@ -3060,7 +3060,7 @@ C:\Privoxy></screen>
  <!--  ~  End section  ~  -->
 
  <!--   ~~~~~       New section      ~~~~~     -->
- <sect2><title>History</title>
+ <sect2 id="history"><title>History</title>
  <!-- Include history.sgml -->
   &history;
  <!-- end -->
