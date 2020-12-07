@@ -747,9 +747,6 @@ ssl.@OBJEXT@: ssl.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) encode.h errlo
 openssl.@OBJEXT@: openssl.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) encode.h errlog.h jcc.h miscutil.h
 ssl_common.@OBJEXT@: ssl_common.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) errlog.h miscutil.h
 
-# GNU regex
-gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
-
 # PCRS
 pcrs.@OBJEXT@: pcrs.c pcrs.h config.h @STATIC_PCRE_ONLY@pcre/pcre.h
 
