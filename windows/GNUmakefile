@@ -177,6 +177,7 @@ $(DEST)/doc/developer-manual: $(DEST)/doc $(SOURCE)/doc/webserver/developer-manu
 $(DEST)/doc/user-manual: $(DEST)/doc $(SOURCE)/doc/webserver/user-manual/index.html
 	test -d $(DEST)/doc/user-manual      || mkdir $(DEST)/doc/user-manual
 	cp    $(SOURCE)/doc/webserver/user-manual/*.html $(DEST)/doc/user-manual/
+	cp    $(SOURCE)/doc/webserver/user-manual/*.jpg  $(DEST)/doc/user-manual/
 
 $(DEST)/doc/faq: $(DEST)/doc $(SOURCE)/doc/webserver/faq/index.html
 	test -d $(DEST)/doc/faq              || mkdir $(DEST)/doc/faq
