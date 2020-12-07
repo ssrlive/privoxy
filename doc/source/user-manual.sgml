@@ -133,7 +133,7 @@ Hal.
 <para>
  In addition to the core
  features of ad blocking and
- <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookie</ulink> management,
+ <ulink url="https://en.wikipedia.org/wiki/Browser_cookie">cookie</ulink> management,
  <application>Privoxy</application> provides many supplemental
  features<![%p-not-stable;[, some of them currently under development]]>,
  that give the end-user more control, more privacy and more freedom:
@@ -659,7 +659,7 @@ MAKENSIS = ./nsis/makensis.exe
  <listitem>
   <para>
    Set your browser to use <application>Privoxy</application> as HTTP and
-   HTTPS (SSL)  <ulink url="http://en.wikipedia.org/wiki/Proxy_server">proxy</ulink>
+   HTTPS (SSL)  <ulink url="https://en.wikipedia.org/wiki/Proxy_server">proxy</ulink>
    by setting the proxy configuration for address of
    <literal>127.0.0.1</literal> and port <literal>8118</literal>.
    <emphasis>DO NOT</emphasis> activate proxying for <literal>FTP</literal> or
@@ -672,7 +672,7 @@ MAKENSIS = ./nsis/makensis.exe
   <para>
     Flush your browser's disk and memory caches, to remove any cached ad images.
     If using <application>Privoxy</application> to manage
-    <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>,
+    <ulink url="https://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>,
     you should remove any currently stored cookies too.
   </para>
  </listitem>
@@ -1025,7 +1025,7 @@ MAKENSIS = ./nsis/makensis.exe
  Before launching <application>Privoxy</application> for the first time, you
  will want to configure your browser(s) to use
  <application>Privoxy</application> as a HTTP and HTTPS (SSL)
- <ulink url="http://en.wikipedia.org/wiki/Proxy_server">proxy</ulink>. The default is
+ <ulink url="https://en.wikipedia.org/wiki/Proxy_server">proxy</ulink>. The default is
  127.0.0.1 (or localhost) for the proxy address, and port 8118 (earlier versions
  used port 8000). This is the one configuration step <emphasis>that must be done
 </emphasis>!
@@ -1111,7 +1111,7 @@ MAKENSIS = ./nsis/makensis.exe
 <para>
  After doing this, flush your browser's disk and memory caches to force a
  re-reading of all pages and to get rid of any ads that may be cached. Remove
- any <ulink url="http://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>,
+ any <ulink url="https://en.wikipedia.org/wiki/Browser_cookie">cookies</ulink>,
  if you want <application>Privoxy</application> to manage that. You are now
  ready to start enjoying the benefits of using
  <application>Privoxy</application>!
@@ -2045,7 +2045,7 @@ for details.
  The pattern matching syntax is different for the host and path parts of
  the URL. The host part uses a simple globbing type matching technique,
  while the path part uses more flexible
- <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+ <ulink url="https://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
   Expressions</quote></ulink> (POSIX 1003.2).
 </para>
 <para>
@@ -2207,7 +2207,7 @@ for details.
  themselves. These work similarly to shell globbing type wild-cards:
  <quote>*</quote> represents zero or more arbitrary characters (this is
  equivalent to the
- <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+ <ulink url="https://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
  Expression</quote></ulink> based syntax of <quote>.*</quote>),
  <quote>?</quote>  represents any single character (this is equivalent to the
  regular expression syntax of a simple <quote>.</quote>), and you can define
@@ -2275,7 +2275,7 @@ for details.
 
 <para>
  <application>Privoxy</application> uses <quote>modern</quote> POSIX 1003.2
-  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+  <ulink url="https://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
   Expressions</quote></ulink> for matching the path portion (after the slash),
   and is thus more flexible.
 </para>
@@ -4054,9 +4054,9 @@ problem-host.example.com</screen>
    <para>
    <quote>Rolling your own</quote>
     filters requires a knowledge of
-     <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+     <ulink url="https://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
      Expressions</quote></ulink> and
-      <ulink url="http://en.wikipedia.org/wiki/Html"><quote>HTML</quote></ulink>.
+      <ulink url="https://en.wikipedia.org/wiki/Html"><quote>HTML</quote></ulink>.
     This is very powerful feature, and potentially very intrusive.
     Filters should be used with caution, and where an equivalent
     <quote>action</quote> is not available.
@@ -5104,7 +5104,7 @@ new action
      More information on known user-agent strings can be found at
      <ulink url="http://www.user-agents.org/">http://www.user-agents.org/</ulink>
      and
-     <ulink url="http://en.wikipedia.org/wiki/User_agent">http://en.wikipedia.org/wiki/User_agent</ulink>.
+     <ulink url="https://en.wikipedia.org/wiki/User_agent">http://en.wikipedia.org/wiki/User_agent</ulink>.
    </para>
    </listitem>
  </varlistentry>
@@ -6960,7 +6960,7 @@ stupid-server.example.com/</screen>
 
 <para>
  If you are new to
-  <ulink url="http://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
+  <ulink url="https://en.wikipedia.org/wiki/Regular_expressions"><quote>Regular
   Expressions</quote></ulink>, you might want to take a look at
  the <link linkend="regex">Appendix on regular expressions</link>, and
  see the <ulink url="http://perldoc.perl.org/perlre.html">Perl
