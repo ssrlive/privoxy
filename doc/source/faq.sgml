@@ -402,7 +402,7 @@ Privoxy. Why should I use Privoxy at all?</title>
 warranty? Registration?</title>
  <para>
   <application>Privoxy</application> is free software and licensed under the <ulink
-  url="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License (GPL) version 2</ulink>.
+  url="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License (GPL) version 2</ulink>.
   It is free to use, copy, modify or distribute as you wish under the terms of this
   license.  Please see the <link linkend="copyright">Copyright</link> section for more
   information on the license and copyright. Or the <filename>LICENSE</filename> file
