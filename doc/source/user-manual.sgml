@@ -1054,7 +1054,7 @@ MAKENSIS = ./nsis/makensis.exe
 </para>
 
 <literallayout>
- <guibutton>Tools</guibutton> -> <guibutton>Options</guibutton> ->  <guibutton>Advanced</guibutton> -> <guibutton>Network</guibutton> -><guibutton>Connection</guibutton> -> <guibutton>Settings</guibutton>
+ <guibutton>Edit</guibutton> -> <guibutton>Preferences</guibutton> ->  <guibutton>Network Settings</guibutton> -> <guibutton>Settings</guibutton>
 </literallayout>
 
 <para>
