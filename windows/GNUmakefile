@@ -159,7 +159,7 @@ $(DEST)/templates/%: $(SOURCE)/templates/% $(DEST)/templates
 
 doc: $(DEST)/AUTHORS.txt $(DEST)/README.txt $(DEST)/LICENSE.txt
 
-webdoc: $(DEST)/doc/developer-manual $(DEST)/doc/faq $(DEST)/doc/images $(DEST)/doc/user-manual
+webdoc: $(DEST)/doc/developer-manual $(DEST)/doc/faq $(DEST)/doc/user-manual
 	cp $(SOURCE)/doc/webserver/p_doc.css $(DEST)/doc
 	cp $(SOURCE)/doc/webserver/p_doc.css $(DEST)/doc/user-manual/
 
@@ -182,9 +182,6 @@ $(DEST)/doc/user-manual: $(DEST)/doc $(SOURCE)/doc/webserver/user-manual/index.h
 $(DEST)/doc/faq: $(DEST)/doc $(SOURCE)/doc/webserver/faq/index.html
 	test -d $(DEST)/doc/faq              || mkdir $(DEST)/doc/faq
 	cp    $(SOURCE)/doc/webserver/faq/*.html $(DEST)/doc/faq/
-
-$(DEST)/doc/images: $(DEST)/doc
-	cp -r $(SOURCE)/doc/webserver/images/ $(DEST)/doc
 
 ##########################################################################
 # That's all, folks!
