@@ -558,6 +558,10 @@ warranty? Registration?</title>
  the links are being used.
 </para>
 <para>
+ Link targets are without path (<quote>https://www.example.org/</quote>
+ not <quote>https://www.example.org/seo/keyword/spam/</quote>).
+</para>
+<para>
  The details may change over time but changes will only affect new sponsors
  (or existing sponsors that explicitly agreed to the changes).
 </para>
