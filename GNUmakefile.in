@@ -876,7 +876,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		DOC=$(prefix)/doc/privoxy ;\
 	fi;\
 	$(MKDIR) $(DESTDIR)$$DOC $(DESTDIR)$$DOC/user-manual $(DESTDIR)$$DOC/faq $(DESTDIR)$$DOC/developer-manual \
-	     $(DESTDIR)$$DOC/man-page $(DESTDIR)$$DOC/images $(DESTDIR)$(MAN_DEST) ;\
+	     $(DESTDIR)$$DOC/man-page $(DESTDIR)$(MAN_DEST) ;\
 	if [ -d "$(DOK_WEB)" ]; then \
 		$(ECHO) Installing FAQ, Manual, and other docs to $(DESTDIR)$$DOC;\
           for i in user-manual developer-manual faq; do \
