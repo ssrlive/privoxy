@@ -2048,8 +2048,9 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
 
     <para>
         The following programs are required to follow this process:
-        <filename>ncftpput</filename> (ncftp), <filename>scp, ssh</filename> (ssh),
-        <filename>gmake</filename> (GNU's version of make), autoconf, cvs.
+        <filename>ssh</filename>,
+        <filename>gmake</filename> (GNU's version of make), autoconf, git,
+        a web browser.
     </para>
 
     <sect2 id="versionnumbers">
