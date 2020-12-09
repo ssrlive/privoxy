@@ -324,7 +324,7 @@ Hal.
   <para>
     All formal documents are maintained in Docbook SGML and located in the
     <computeroutput>doc/source/*</computeroutput> directory. You will need
-    <ulink url="http://www.docbook.org">Docbook</ulink>, the Docbook
+    <ulink url="https://www.docbook.org/">Docbook</ulink>, the Docbook
     DTD's and the Docbook modular stylesheets (or comparable alternatives),
     and either <application>jade</application> or
     <application>openjade</application> (recommended) installed in order to
