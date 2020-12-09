@@ -2067,7 +2067,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
               X, the version major, is rarely ever changed. It is increased by one if
               turning a development branch into stable substantially changes the functionality,
               user interface or configuration syntax. Majors 1 and 2 were
-              <application>Junkbuster</application>, and 3 will be the first stable
+              <application>Junkbuster</application>, and 3 is the first stable
               <application>Privoxy</application> release.
             </para>
           </listitem>
