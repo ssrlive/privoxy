@@ -2267,7 +2267,7 @@ for-privoxy-version=3.0.11
          (this is in addition to the main <citetitle>User Manual</citetitle>
          link from the main page since we need to keep manuals for various
          versions available). The CGI pages will link to something like
-         <literal>http://privoxy.org/$(VERSION)/user-manual/</literal>. This
+         <literal>https://www.privoxy.org/$(VERSION)/user-manual/</literal>. This
          will need to be updated for each new release. There is no Makefile
          target for this at this time!!! It needs to be done manually.
        </para>
