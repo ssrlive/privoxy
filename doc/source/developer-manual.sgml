@@ -128,9 +128,9 @@ Hal.
    <para>
     The first step is to join the <ulink
       url="https://lists.privoxy.org/mailman/listinfo/privoxy-devel">privoxy-devel mailing list</ulink>.
-    You can submit your ideas or, even better, patches. Patches are best
-    submitted to the Sourceforge tracker set up for this purpose, but
-    can be sent to the list for review too.
+    You can submit your ideas or, even better, patches.
+    Patches can also be submitted to the
+    <ulink url="https://sourceforge.net/p/ijbswa/patches/">Sourceforge patch tracker</ulink>.
    </para>
     <para>
      You will also need to have a git package installed,
