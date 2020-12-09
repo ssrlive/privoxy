@@ -2653,10 +2653,10 @@ for-privoxy-version=3.0.11
         can be used to install from source).
       </para>
       <sect4 id="OS-X-OSXPackageBuilder-module">
-      <title>OSXPackageBuilder module</title>
+      <title>OSXPackageBuilder module (Documentation out of date)</title>
         <para>
           The OSXPackageBuilder module generates OS X installer packages
-          supporting all Macs running OS X 10.4 and above. Obtain it from Git as
+          supporting all Macs running OS X 10.4 and above. Obtain it from CVS as
           follows into a folder parallel to the exported privoxy source:
         </para>
           <programlisting>
@@ -2676,14 +2676,14 @@ for-privoxy-version=3.0.11
         </para>
       </sect4>
       <sect4 id="OS-X-osxsetup-module">
-      <title>osxsetup module (DEPRECATED)</title>
+      <title>osxsetup module (DEPRECATED) (Documentation out of date)</title>
         <para>
           <emphasis>This module is deprecated since the installer it generates
           places all Privoxy files in one folder in a non-standard location, and
           supports only Intel Macs running OS X 10.6 or higher.</emphasis>
         </para>
         <para>
-          Check out the module from Git as follows into a folder parallel to the
+          Check out the module from CVS as follows into a folder parallel to the
           exported privoxy source:
         </para>
           <programlisting>
@@ -2721,13 +2721,13 @@ for-privoxy-version=3.0.11
         </para>
       </sect4>
       <sect4 id="OS-X-macsetup-module">
-      <title>macsetup module</title>
+      <title>macsetup module (Documentation out of date)</title>
         <para>
           The macsetup module is ideal if you wish to build and install Privoxy
           from source on a single machine.
         </para>
         <para>
-          Check out the module from Git as follows into a folder parallel to the
+          Check out the module from CVS as follows into a folder parallel to the
           exported privoxy source:
         </para>
           <programlisting>
