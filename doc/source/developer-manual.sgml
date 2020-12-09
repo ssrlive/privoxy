@@ -2892,9 +2892,9 @@ for-privoxy-version=3.0.11
   make webserver
 </programlisting>
    <para>
-    This will do the upload to <ulink url="https://www.privoxy.org/">the
-    webserver</ulink> (www.privoxy.org) and ensure all files and directories
-    there are group writable.
+    This will do the upload to the SourceForge webserver (which is manually
+    syncronized with <ulink url="https://www.privoxy.org/">www.privoxy.org</ulink>)
+    and ensure all files and directories there are group writable.
    </para>
    <para>
     Please do <emphasis>NOT</emphasis> use any other means of transferring
