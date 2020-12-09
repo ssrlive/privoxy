@@ -350,10 +350,6 @@ Hal.
      process requires going from SGML to HTML to text to special formatting
      required for the embedded comments. Some of this does not survive so
      well. Especially some of the examples that are longer than 80 characters.
-     The build process for this file outputs to <filename>config.new</filename>,
-     which should be reviewed for errors and mis-formatting. Once satisfied
-     that it is correct, then it should be hand copied to
-     <filename>config</filename>.
     </para>
     <para>
      Other, less formal documents (e.g. <filename>LICENSE</filename>) are
