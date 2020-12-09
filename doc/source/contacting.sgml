@@ -185,7 +185,7 @@ debug 65536 # Log applying actions</literallayout>
 
 <para>
  If you are new to reporting problems, you might be interested in
-  <ulink url="http://www.chiark.greenend.org.uk/~sgtatham/bugs.html"
+  <ulink url="https://www.chiark.greenend.org.uk/~sgtatham/bugs.html"
   >How to Report Bugs Effectively</ulink>.
 </para>
 
