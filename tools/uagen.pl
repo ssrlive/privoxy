@@ -16,7 +16,7 @@
 # Mozilla/5.0 (X11; U; OpenBSD sparc64; pl-PL; rv:1.8.0.2) Gecko/20060429 Firefox/1.5.0.2
 # Mozilla/5.0 (X11; U; Linux i686; en-CA; rv:1.8.0.2) Gecko/20060413 Firefox/1.5.0.2
 #
-# Copyright (c) 2006-2011 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2006-2020 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -323,7 +323,7 @@ sub write_prefs_file() {
 }
 
 sub VersionMessage() {
-    printf UAGEN_VERSION . "\n" . 'Copyright (C) 2006-2011 Fabian Keil <fk@fabiankeil.de> ' .
+    printf UAGEN_VERSION . "\n" . 'Copyright (C) 2006-2020 Fabian Keil <fk@fabiankeil.de> ' .
         "\nhttps://www.fabiankeil.de/sourcecode/uagen/\n";
 }
 
