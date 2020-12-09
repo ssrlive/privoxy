@@ -2648,7 +2648,7 @@ for-privoxy-version=3.0.11
         packages" above).
       </para>
       <para>
-        There are three modules available in the Git repository for use on Mac
+        There are three modules available in the CVS repository backups for use on Mac
         OS X, though technically only two of them generate a release (the other
         can be used to install from source).
       </para>
