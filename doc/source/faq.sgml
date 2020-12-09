@@ -2879,6 +2879,11 @@ browsing has slowed to a crawl. What gives? </title>
  section, and add <quote>127.0.0.1:0</quote> in the <quote>No Proxy for:</quote>
  field.
 </para>
+<para>
+ You can also prevent the problem by enabling
+ <ulink url="../user-manual/actions-file.html#HTTPS-INSPECTION">https-inspection</ulink>
+ in which case Privoxy's error messages are delivered encrypted.
+</para>
 </sect2>
 
 
