@@ -789,7 +789,7 @@ clean-editor-files:
 
 clobber: clean-editor-files
 	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile \
-              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl config.new
+              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl
 	$(RM) -r autom4te.cache
 
 #
