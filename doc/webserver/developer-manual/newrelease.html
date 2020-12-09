@@ -31,9 +31,8 @@
     important that great care is taken to ensure that everything runs fine, and not to introduce problems in the very
     last minute.</p>
     <p>So when releasing a new version, please adhere exactly to the procedure outlined in this chapter.</p>
-    <p>The following programs are required to follow this process: <tt class="FILENAME">ncftpput</tt> (ncftp),
-    <tt class="FILENAME">scp, ssh</tt> (ssh), <tt class="FILENAME">gmake</tt> (GNU's version of make), autoconf,
-    cvs.</p>
+    <p>The following programs are required to follow this process: <tt class="FILENAME">ssh</tt>, <tt class=
+    "FILENAME">gmake</tt> (GNU's version of make), autoconf, git, a web browser.</p>
     <div class="SECT2">
       <h2 class="SECT2"><a name="VERSIONNUMBERS" id="VERSIONNUMBERS">6.1. Version numbers</a></h2>
       <p>First you need to determine which version number the release will have. <span class=
@@ -43,7 +42,7 @@
         <li>
           <p>X, the version major, is rarely ever changed. It is increased by one if turning a development branch into
           stable substantially changes the functionality, user interface or configuration syntax. Majors 1 and 2 were
-          <span class="APPLICATION">Junkbuster</span>, and 3 will be the first stable <span class=
+          <span class="APPLICATION">Junkbuster</span>, and 3 is the first stable <span class=
           "APPLICATION">Privoxy</span> release.</p>
         </li>
         <li>
@@ -198,9 +197,9 @@ for-privoxy-version=3.0.11</pre>
           is version sensitive, so that the user will get appropriate help for his/her release. So with each release a
           fresh version should be uploaded to the webserver (this is in addition to the main <i class="CITETITLE">User
           Manual</i> link from the main page since we need to keep manuals for various versions available). The CGI
-          pages will link to something like <tt class="LITERAL">http://privoxy.org/$(VERSION)/user-manual/</tt>. This
-          will need to be updated for each new release. There is no Makefile target for this at this time!!! It needs
-          to be done manually.</p>
+          pages will link to something like <tt class="LITERAL">https://www.privoxy.org/$(VERSION)/user-manual/</tt>.
+          This will need to be updated for each new release. There is no Makefile target for this at this time!!! It
+          needs to be done manually.</p>
         </li>
         <li>
           <p>Tag all files in Git with the version number with <span class="QUOTE">"<b class="COMMAND">git tag
@@ -520,13 +519,13 @@ for-privoxy-version=3.0.11</pre>
         <h3 class="SECT3"><a name="NEWRELEASE-MACOSX" id="NEWRELEASE-MACOSX">6.3.7. Mac OS X</a></h3>
         <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
         into an empty directory</i></span>. (See "Building and releasing packages" above).</p>
-        <p>There are three modules available in the Git repository for use on Mac OS X, though technically only two of
-        them generate a release (the other can be used to install from source).</p>
+        <p>There are three modules available in the CVS repository backups for use on Mac OS X, though technically only
+        two of them generate a release (the other can be used to install from source).</p>
         <div class="SECT4">
           <h4 class="SECT4"><a name="OS-X-OSXPACKAGEBUILDER-MODULE" id="OS-X-OSXPACKAGEBUILDER-MODULE">6.3.7.1.
-          OSXPackageBuilder module</a></h4>
+          OSXPackageBuilder module (Documentation out of date)</a></h4>
           <p>The OSXPackageBuilder module generates OS X installer packages supporting all Macs running OS X 10.4 and
-          above. Obtain it from Git as follows into a folder parallel to the exported privoxy source:</p>
+          above. Obtain it from CVS as follows into a folder parallel to the exported privoxy source:</p>
           <table border="0" bgcolor="#E0E0E0" width="100%">
             <tr>
               <td>
@@ -544,11 +543,11 @@ for-privoxy-version=3.0.11</pre>
         </div>
         <div class="SECT4">
           <h4 class="SECT4"><a name="OS-X-OSXSETUP-MODULE" id="OS-X-OSXSETUP-MODULE">6.3.7.2. osxsetup module
-          (DEPRECATED)</a></h4>
+          (DEPRECATED) (Documentation out of date)</a></h4>
           <p><span class="emphasis"><i class="EMPHASIS">This module is deprecated since the installer it generates
           places all Privoxy files in one folder in a non-standard location, and supports only Intel Macs running OS X
           10.6 or higher.</i></span></p>
-          <p>Check out the module from Git as follows into a folder parallel to the exported privoxy source:</p>
+          <p>Check out the module from CVS as follows into a folder parallel to the exported privoxy source:</p>
           <table border="0" bgcolor="#E0E0E0" width="100%">
             <tr>
               <td>
@@ -585,9 +584,10 @@ for-privoxy-version=3.0.11</pre>
           package supports.</p>
         </div>
         <div class="SECT4">
-          <h4 class="SECT4"><a name="OS-X-MACSETUP-MODULE" id="OS-X-MACSETUP-MODULE">6.3.7.3. macsetup module</a></h4>
+          <h4 class="SECT4"><a name="OS-X-MACSETUP-MODULE" id="OS-X-MACSETUP-MODULE">6.3.7.3. macsetup module
+          (Documentation out of date)</a></h4>
           <p>The macsetup module is ideal if you wish to build and install Privoxy from source on a single machine.</p>
-          <p>Check out the module from Git as follows into a folder parallel to the exported privoxy source:</p>
+          <p>Check out the module from CVS as follows into a folder parallel to the exported privoxy source:</p>
           <table border="0" bgcolor="#E0E0E0" width="100%">
             <tr>
               <td>

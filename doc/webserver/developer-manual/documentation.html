@@ -27,7 +27,7 @@
   <div class="SECT1">
     <h1 class="SECT1"><a name="DOCUMENTATION" id="DOCUMENTATION">3. Documentation Guidelines</a></h1>
     <p>All formal documents are maintained in Docbook SGML and located in the <samp class=
-    "COMPUTEROUTPUT">doc/source/*</samp> directory. You will need <a href="http://www.docbook.org" target=
+    "COMPUTEROUTPUT">doc/source/*</samp> directory. You will need <a href="https://www.docbook.org/" target=
     "_top">Docbook</a>, the Docbook DTD's and the Docbook modular stylesheets (or comparable alternatives), and either
     <span class="APPLICATION">jade</span> or <span class="APPLICATION">openjade</span> (recommended) installed in order
     to build docs from source. Currently there is <a href="../user-manual/index.html" target="_top"><i class=
@@ -42,9 +42,7 @@
     <p><tt class="FILENAME">config</tt> requires some special handling. The reason it is maintained this way is so that
     the extensive comments in the file mirror those in <i class="CITETITLE">user-manual</i>. But the conversion process
     requires going from SGML to HTML to text to special formatting required for the embedded comments. Some of this
-    does not survive so well. Especially some of the examples that are longer than 80 characters. The build process for
-    this file outputs to <tt class="FILENAME">config.new</tt>, which should be reviewed for errors and mis-formatting.
-    Once satisfied that it is correct, then it should be hand copied to <tt class="FILENAME">config</tt>.</p>
+    does not survive so well. Especially some of the examples that are longer than 80 characters.</p>
     <p>Other, less formal documents (e.g. <tt class="FILENAME">LICENSE</tt>) are maintained as plain text files in the
     top-level source directory.</p>
     <p>Packagers are encouraged to include this documentation. For those without the ability to build the docs locally,
@@ -63,7 +61,7 @@
       </li>
       <li>
         <p>Run <samp class="COMPUTEROUTPUT">make webserver</samp> which copies all files from <samp class=
-        "COMPUTEROUTPUT">doc/webserver</samp> to the sourceforge webserver via scp.</p>
+        "COMPUTEROUTPUT">doc/webserver</samp> to the sourceforge webserver via ssh.</p>
       </li>
     </ol>
     <p>Finished docs should be occasionally submitted to Git (<tt class="FILENAME">doc/webserver/*/*.html</tt>) so that
@@ -209,7 +207,7 @@
       </ul>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AEN206" id="AEN206">3.3. Privoxy Custom Entities</a></h2>
+      <h2 class="SECT2"><a name="AEN205" id="AEN205">3.3. Privoxy Custom Entities</a></h2>
       <p><span class="APPLICATION">Privoxy</span> documentation is using a number of customized <span class=
       "QUOTE">"entities"</span> to facilitate documentation maintenance.</p>
       <p>We are using a set of <span class="QUOTE">"boilerplate"</span> files with generic text, that is used by
