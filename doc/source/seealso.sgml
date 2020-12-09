@@ -82,7 +82,7 @@
  </simplelist>
  <simplelist>
   <member>
-   <ulink url="http://www.pps.univ-paris-diderot.fr/~jch/software/polipo/">http://www.pps.univ-paris-diderot.fr/~jch/software/polipo/</ulink>,
+   <ulink url="https://www.irif.fr/~jch/software/polipo/">https://www.irif.fr/~jch/software/polipo/</ulink>,
    <application>Polipo</application> is a caching proxy with advanced features
    like pipelining, multiplexing and caching of partial instances. In many setups
    it can be used as <application>Squid</application> replacement.
