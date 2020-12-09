@@ -583,10 +583,8 @@ could look like this one:
 
 =head1 CAVEATS
 
-If the browser opens an encrypted connection, Privoxy can't inspect
-the content and the browser's headers reach the server unmodified.
-It is the user's job to use Privoxy's limit-connect action to make sure
-there are no encrypted connections to untrusted sites.
+Use the https-inspection action to make sure Privoxy can modify
+the browser's headers for encrypted traffic as well.
 
 Mozilla users can alter the browser's User-Agent with the
 B<--prefs-file> option. But note that the preference file is only read
