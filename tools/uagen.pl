@@ -128,6 +128,12 @@ sub generate_language_settings() {
 sub generate_platform_and_os() {
 
     my %os_data = (
+        ElectroBSD => {
+            karma             => 1,
+            platform          => 'X11',
+            architectures     => [ 'i386', 'amd64' ],
+            order_is_inversed => 0,
+        },
         FreeBSD => {
             karma             => 1,
             platform          => 'X11',
