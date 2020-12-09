@@ -1223,7 +1223,7 @@ and thus avoid individual browser configuration?</title>
  The whole idea of Privoxy is to modify client requests
  and server responses in all sorts of ways and therefore
  it's not a transparent proxy as described in
- <ulink url="http://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
+ <ulink url="https://tools.ietf.org/html/rfc2616">RFC 2616</ulink>.
 </para>
 <para>
  However, some people say <quote>transparent proxy</quote> when they
@@ -1915,7 +1915,7 @@ speed up web browsing?</title>
 <para>
  No, it does not have this ability at all. You want something like
  <ulink url="http://www.squid-cache.org/">Squid</ulink> or
- <ulink url="http://www.pps.jussieu.fr/~jch/software/polipo/">Polipo</ulink> for this.
+ <ulink url="https://www.irif.fr/~jch//software/polipo/">Polipo</ulink> for this.
  And, yes, before you ask, <application>Privoxy</application> can co-exist
  with other kinds of proxies like <application>Squid</application>.
  See the <ulink url="../user-manual/config.html#FORWARDING">forwarding
@@ -2986,7 +2986,7 @@ browsing has slowed to a crawl. What gives? </title>
  To prevent the crashes you can rewrite your filter to use less resources,
  increase the relevant memory limit or recompile pcre to use less stack space.
  For details please see the
- <ulink url="http://pcre.org/original/doc/html/pcrestack.html">pcrestack man page</ulink>
+ <ulink url="https://pcre.org/original/doc/html/pcrestack.html">pcrestack man page</ulink>
  and the documentation of your operating system.
 </para>
 </sect2>
