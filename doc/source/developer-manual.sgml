@@ -385,7 +385,7 @@ Hal.
       <listitem><para>
         Run <computeroutput>make webserver</computeroutput> which copies all
         files from <computeroutput>doc/webserver</computeroutput> to the
-        sourceforge webserver via scp.
+        sourceforge webserver via ssh.
       </para></listitem>
      </orderedlist>
 
