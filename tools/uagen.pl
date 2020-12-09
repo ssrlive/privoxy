@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 ##############################################################################################
-# uagen (http://www.fabiankeil.de/sourcecode/uagen/)
+# uagen (https://www.fabiankeil.de/sourcecode/uagen/)
 #
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
@@ -50,7 +50,7 @@ use constant {
    SLEEPING_TIME       =>  5,
 
    # As of Firefox 4, the "Gecko token" has been frozen
-   # http://hacks.mozilla.org/2010/09/final-user-agent-string-for-firefox-4/
+   # https://hacks.mozilla.org/2010/09/final-user-agent-string-for-firefox-4/
    RANDOMIZE_RELEASE_DATE => 0,
 
    # These variables belong together. If you only change one of them, the generated
@@ -324,7 +324,7 @@ sub write_prefs_file() {
 
 sub VersionMessage() {
     printf UAGEN_VERSION . "\n" . 'Copyright (C) 2006-2011 Fabian Keil <fk@fabiankeil.de> ' .
-        "\nhttp://www.fabiankeil.de/sourcecode/uagen/\n";
+        "\nhttps://www.fabiankeil.de/sourcecode/uagen/\n";
 }
 
 sub help() {
@@ -608,9 +608,9 @@ privoxy(1)
 
 Fabian Keil <fk@fabiankeil.de>
 
-http://www.fabiankeil.de/sourcecode/uagen/
+https://www.fabiankeil.de/sourcecode/uagen/
 
-http://www.fabiankeil.de/blog-surrogat/2006/01/26/firefox-user-agent-generator.html (German)
+https://www.fabiankeil.de/blog-surrogat/2006/01/26/firefox-user-agent-generator.html (German)
 
 =cut
 
