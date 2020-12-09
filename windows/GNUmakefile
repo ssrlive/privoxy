@@ -164,9 +164,6 @@ webdoc: $(DEST)/doc/developer-manual $(DEST)/doc/faq $(DEST)/doc/user-manual
 	cp $(SOURCE)/doc/webserver/p_doc.css $(DEST)/doc/user-manual/
 
 
-$(DEST)/doc/gpl.html: $(SOURCE)/doc/gpl.html $(DEST)/doc
-	$(DOSFILTER) < $< > $@ 
-
 $(DEST)/doc/%.txt : $(SOURCE)/doc/text/%.txt $(DEST)/doc
 	$(DOSFILTER) < $< > $@ 
 
