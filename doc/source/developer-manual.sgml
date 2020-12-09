@@ -157,8 +157,8 @@ Hal.
 
     <sect2 id="gitaccess"><title>Access to Git</title>
       <para>
-        The project's Git repository is hosted at the
-        <ulink url="https://privoxy.org/">Privoxy website</ulink>.
+        The project's Git repository is hosted on the
+        <ulink url="https://www.privoxy.org/">Privoxy webserver</ulink>.
         For Privoxy team members with push privileges the Git repository URL is
         <literal>ssh://git@git.privoxy.org:23/git/privoxy.git</literal>.
       </para>
