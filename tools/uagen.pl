@@ -6,15 +6,16 @@
 # Generates a pseudo-random Firefox user agent and writes it into a Privoxy action file
 # and optionally into a Mozilla prefs file. For documentation see 'perldoc uagen(.pl)'.
 #
-# Examples (created with v1.0):
+# Examples (created with v1.2.2):
 #
-# Mozilla/5.0 (X11; U; NetBSD i386; en-US; rv:1.8.0.2) Gecko/20060421 Firefox/1.5.0.2
-# Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-CA; rv:1.8.0.2) Gecko/20060425 Firefox/1.5.0.2
-# Mozilla/5.0 (X11; U; SunOS i86pc; no-NO; rv:1.8.0.2) Gecko/20060420 Firefox/1.5.0.2
-# Mozilla/5.0 (X11; U; Linux x86_64; de-AT; rv:1.8.0.2) Gecko/20060422 Firefox/1.5.0.2
-# Mozilla/5.0 (X11; U; NetBSD i386; en-US; rv:1.8.0.2) Gecko/20060415 Firefox/1.5.0.2
-# Mozilla/5.0 (X11; U; OpenBSD sparc64; pl-PL; rv:1.8.0.2) Gecko/20060429 Firefox/1.5.0.2
-# Mozilla/5.0 (X11; U; Linux i686; en-CA; rv:1.8.0.2) Gecko/20060413 Firefox/1.5.0.2
+# Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (Macintosh; PPC Mac OS X; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (X11; NetBSD i386; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (X11; OpenBSD alpha; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (X11; FreeBSD amd64; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (X11; ElectroBSD amd64; rv:78.0) Gecko/20100101 Firefox/78.0
+# Mozilla/5.0 (X11; FreeBSD i386; rv:78.0) Gecko/20100101 Firefox/78.0
 #
 # Copyright (c) 2006-2020 Fabian Keil <fk@fabiankeil.de>
 #
