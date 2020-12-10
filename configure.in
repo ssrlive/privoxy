@@ -482,27 +482,6 @@ fi
 AC_SUBST(PTHREAD_ONLY)
 
 dnl =================================================================
-dnl On most platforms select() does not support fd numbers above
-dnl FD_SETSIZE, as a result Privoxy can't handle more than
-dnl approximately FD_SETSIZE/2 client connections.
-dnl On some platforms the value can be changed at compile time,
-dnl on others it's hardcoded and requires recompilation of the OS.
-dnl Only relevant if select() is actually being used.
-dnl =================================================================
-AC_ARG_WITH(fdsetsize,
- [  --with-fdsetsize=n  Optimistically redefine FD_SETSIZE with the intend to change the number of connections Privoxy can handle. Dangerous if the platform doesn't support this. Pointless if Privoxy can use poll() instead of select().],
- [
-   if test "x$withval" != "xyes"; then
-     AC_DEFINE_UNQUOTED(FD_SETSIZE,$with_fdsetsize,[Relevant for select(). Not honoured by all OS.])
-     echo "Redefining FD_SETSIZE to $with_fdsetsize."
-     AC_MSG_WARN(On platforms that don't support FD_SETSIZE redefinition it may cause memory corruption.)
-   else
-     AC_MSG_ERROR(--with-fdsetsize used without value)
-   fi
-   ]
-)
-
-dnl =================================================================
 dnl Support for thread-safe versions of gethostbyaddr, gethostbyname,
 dnl gmtime and localtime
 dnl =================================================================
