@@ -2216,6 +2216,8 @@ issue.freebsdfoundation.org/
 .librarything.com/
 # URL = https://secure.gravatar.com/avatar/9032194c044d0e96c3bdabba35aff1e9?r=pg&d=https%3A%2F%2Fa.fsdn.com%2Fallura%2Fnf%2F1607031117%2F_ew_%2Ftheme%2Fsftheme%2Fimages%2Fsandiego%2Ficons%2Fdefault-avatar.png
 secure.gravatar.com/
+# URL = https://cas.fsf.org/login?service=https%3A%2F%2Fdirectory.fsf.org%2Fwiki%3Ftitle%3DSpecial%3AUserLogin%26returnto%3DPrivoxy
+.fsf.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
