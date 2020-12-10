@@ -571,6 +571,16 @@ s@(<a(?:rea)?[^>]*?)\sping=(['"]?)([^"'>]+)\2([>\s]?)@\
 
 #################################################################################
 #
+# allow-autocompletion: Changes autocomplete="off" on form and input fields
+#                       to "on" to allow autocompletion.
+#
+#################################################################################
+FILTER: allow-autocompletion Changes autocomplete="off" on form and input fields to "on" to allow autocompletion.
+
+s@(<(?:input|form|select|textarea)\s[^>]+autocomplete=)(['"]?)(?:off|0)\2@$1$2on$2@igsU
+
+#################################################################################
+#
 # google: CSS-based block for Google text ads. Also removes
 #         a width limitation and the toolbar advertisement.
 #
