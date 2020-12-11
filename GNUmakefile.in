@@ -589,7 +589,7 @@ dok-webserver:
 	s/\.\d\. //;\
 	s/__copy/&copy;/;\
 	s@(<SUB)@<p style="text-align: center">\1@; s@(</SUB)@\1></p@;\
-	s@(Privoxy is a non-caching)@<img src="images/privoxy.png" align="right">\n\1@;' \
+	s@(Privoxy is a non-caching)@<img src="images/privoxy.png" align="right" alt="Privoxy logo">\n\1@;' \
      doc/webserver/index.html && $(RM) doc/webserver/*.bak
 
 # privoxy-index.html for local documentation:
