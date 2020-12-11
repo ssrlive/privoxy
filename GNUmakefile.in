@@ -586,7 +586,8 @@ dok-webserver:
 	s/<\/HEAD/\n<meta name=\"description\" content=\"Privoxy helps users to protect their privacy.\"><\/HEAD/;\
 	s/\.\d\. //;\
 	s/__copy/&copy;/;\
-	s@(<SUB)@<p style="text-align: center">\1@; s@(</SUB)@\1></p@' \
+	s@(<SUB)@<p style="text-align: center">\1@; s@(</SUB)@\1></p@;\
+	s@(Privoxy is a non-caching)@<img src="images/privoxy.png" align="right">\n\1@;' \
      doc/webserver/index.html && $(RM) doc/webserver/*.bak
 
 # privoxy-index.html for local documentation:
@@ -747,9 +748,6 @@ ssl.@OBJEXT@: ssl.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) encode.h errlo
 openssl.@OBJEXT@: openssl.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) encode.h errlog.h jcc.h miscutil.h
 ssl_common.@OBJEXT@: ssl_common.c ssl.h ssl_common.h config.h $(PROJECT_H_DEPS) errlog.h miscutil.h
 
-# GNU regex
-gnu_regex.@OBJEXT@: gnu_regex.c gnu_regex.h config.h
-
 # PCRS
 pcrs.@OBJEXT@: pcrs.c pcrs.h config.h @STATIC_PCRE_ONLY@pcre/pcre.h
 
@@ -792,7 +790,7 @@ clean-editor-files:
 
 clobber: clean-editor-files
 	$(RM) GNUmakefile configure config.h.in config.h config.cache config.status config.log logfile \
-              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl config.new
+              privoxy.log core *.tar.gz *.tar privoxy-cl.spec doc/source/ldp.dsl
 	$(RM) -r autom4te.cache
 
 #
@@ -876,7 +874,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 		DOC=$(prefix)/doc/privoxy ;\
 	fi;\
 	$(MKDIR) $(DESTDIR)$$DOC $(DESTDIR)$$DOC/user-manual $(DESTDIR)$$DOC/faq $(DESTDIR)$$DOC/developer-manual \
-	     $(DESTDIR)$$DOC/man-page $(DESTDIR)$$DOC/images $(DESTDIR)$(MAN_DEST) ;\
+	     $(DESTDIR)$$DOC/man-page $(DESTDIR)$(MAN_DEST) ;\
 	if [ -d "$(DOK_WEB)" ]; then \
 		$(ECHO) Installing FAQ, Manual, and other docs to $(DESTDIR)$$DOC;\
           for i in user-manual developer-manual faq; do \

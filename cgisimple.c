@@ -2097,6 +2097,22 @@ static jb_err show_defines(struct map *exports)
 #else
          0,
 #endif
+      },
+      {
+         "FEATURE_EXTENDED_STATISTICS",
+#ifdef FEATURE_EXTENDED_STATISTICS
+         1,
+#else
+         0,
+#endif
+      },
+      {
+         "FEATURE_PCRE_HOST_PATTERNS",
+#ifdef FEATURE_PCRE_HOST_PATTERNS
+         1,
+#else
+         0,
+#endif
       }
    };
 

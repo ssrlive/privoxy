@@ -1277,7 +1277,7 @@ jb_err cgi_error_unknown(const struct client_state *csp,
    static const char body_suffix[] =
       "</b></p>\n"
       "<p>Please "
-      "<a href=\"http://sourceforge.net/tracker/?group_id=11118&amp;atid=111118\">"
+      "<a href=\"https://sourceforge.net/p/ijbswa/bugs/\">"
       "file a bug report</a>.</p>\n"
       "</body>\n"
       "</html>\n";

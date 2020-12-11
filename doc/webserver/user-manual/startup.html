@@ -29,23 +29,22 @@
     <h1 class="SECT1"><a name="STARTUP" id="STARTUP">5. Starting Privoxy</a></h1>
     <p>Before launching <span class="APPLICATION">Privoxy</span> for the first time, you will want to configure your
     browser(s) to use <span class="APPLICATION">Privoxy</span> as a HTTP and HTTPS (SSL) <a href=
-    "http://en.wikipedia.org/wiki/Proxy_server" target="_top">proxy</a>. The default is 127.0.0.1 (or localhost) for
+    "https://en.wikipedia.org/wiki/Proxy_server" target="_top">proxy</a>. The default is 127.0.0.1 (or localhost) for
     the proxy address, and port 8118 (earlier versions used port 8000). This is the one configuration step <span class=
     "emphasis"><i class="EMPHASIS">that must be done</i></span>!</p>
     <p>Please note that <span class="APPLICATION">Privoxy</span> can only proxy HTTP and HTTPS traffic. It will not
     work with FTP or other protocols.</p>
     <div class="FIGURE">
       <a name="AEN773" id="AEN773"></a>
-      <p><b>Figure 2. Proxy Configuration Showing Mozilla/Netscape HTTP and HTTPS (SSL) Settings</b></p>
+      <p><b>Figure 2. Proxy Configuration Showing Mozilla Firefox HTTP and HTTPS (SSL) Settings</b></p>
       <div class="MEDIAOBJECT">
         <p><img src="proxy_setup.jpg"></p>
       </div>
     </div>
     <p>With <span class="APPLICATION">Firefox</span>, this is typically set under:</p>
-    <p class="LITERALLAYOUT">&nbsp;<span class="GUIBUTTON">Tools</span>&nbsp;-&#62;&nbsp;<span class=
-    "GUIBUTTON">Options</span>&nbsp;-&#62;&nbsp;&nbsp;<span class=
-    "GUIBUTTON">Advanced</span>&nbsp;-&#62;&nbsp;<span class="GUIBUTTON">Network</span>&nbsp;-&#62;<span class=
-    "GUIBUTTON">Connection</span>&nbsp;-&#62;&nbsp;<span class="GUIBUTTON">Settings</span></p>
+    <p class="LITERALLAYOUT">&nbsp;<span class="GUIBUTTON">Edit</span>&nbsp;-&#62;&nbsp;<span class=
+    "GUIBUTTON">Preferences</span>&nbsp;-&#62;&nbsp;&nbsp;<span class="GUIBUTTON">Network
+    Settings</span>&nbsp;-&#62;&nbsp;<span class="GUIBUTTON">Settings</span></p>
     <p>Or optionally on some platforms:</p>
     <p class="LITERALLAYOUT">&nbsp;<span class="GUIBUTTON">Edit</span>&nbsp;-&#62;&nbsp;<span class=
     "GUIBUTTON">Preferences</span>&nbsp;-&#62;&nbsp;<span class=
@@ -67,14 +66,14 @@
     protocols"</span> is <span class="emphasis"><i class="EMPHASIS">UNCHECKED</i></span>. You want only HTTP and HTTPS
     (SSL)!</p>
     <div class="FIGURE">
-      <a name="AEN817" id="AEN817"></a>
+      <a name="AEN815" id="AEN815"></a>
       <p><b>Figure 3. Proxy Configuration Showing Internet Explorer HTTP and HTTPS (Secure) Settings</b></p>
       <div class="MEDIAOBJECT">
         <p><img src="proxy2.jpg"></p>
       </div>
     </div>
     <p>After doing this, flush your browser's disk and memory caches to force a re-reading of all pages and to get rid
-    of any ads that may be cached. Remove any <a href="http://en.wikipedia.org/wiki/Browser_cookie" target=
+    of any ads that may be cached. Remove any <a href="https://en.wikipedia.org/wiki/Browser_cookie" target=
     "_top">cookies</a>, if you want <span class="APPLICATION">Privoxy</span> to manage that. You are now ready to start
     enjoying the benefits of using <span class="APPLICATION">Privoxy</span>!</p>
     <p><span class="APPLICATION">Privoxy</span> itself is typically started by specifying the main configuration file

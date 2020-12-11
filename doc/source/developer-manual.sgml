@@ -128,9 +128,9 @@ Hal.
    <para>
     The first step is to join the <ulink
       url="https://lists.privoxy.org/mailman/listinfo/privoxy-devel">privoxy-devel mailing list</ulink>.
-    You can submit your ideas or, even better, patches. Patches are best
-    submitted to the Sourceforge tracker set up for this purpose, but
-    can be sent to the list for review too.
+    You can submit your ideas or, even better, patches.
+    Patches can also be submitted to the
+    <ulink url="https://sourceforge.net/p/ijbswa/patches/">Sourceforge patch tracker</ulink>.
    </para>
     <para>
      You will also need to have a git package installed,
@@ -157,8 +157,8 @@ Hal.
 
     <sect2 id="gitaccess"><title>Access to Git</title>
       <para>
-        The project's Git repository is hosted at the
-        <ulink url="https://privoxy.org/">Privoxy website</ulink>.
+        The project's Git repository is hosted on the
+        <ulink url="https://www.privoxy.org/">Privoxy webserver</ulink>.
         For Privoxy team members with push privileges the Git repository URL is
         <literal>ssh://git@git.privoxy.org:23/git/privoxy.git</literal>.
       </para>
@@ -265,7 +265,7 @@ Hal.
            <para>
             Note that near a major public release, we get more cautious.
             There is always the possibility to submit a patch to the <ulink
-            url="https://sourceforge.net/tracker/?atid=311118&amp;group_id=11118&amp;func=browse">patch
+            url="https://sourceforge.net/p/ijbswa/patches/">patch
             tracker</ulink> instead.
           </para>
          </listitem>
@@ -301,8 +301,8 @@ Hal.
           Alternately, proposed changes can be submitted as patches output by
           <literal>git format-patch</literal> to the privoxy-devel mailing list
           or alternatively to the patch tracker on Sourceforge:
-          <ulink url="https://sourceforge.net/tracker/?group_id=11118&#38;atid=311118">
-                      https://sourceforge.net/tracker/?group_id=11118&#38;atid=311118</ulink>.
+          <ulink url="https://sourceforge.net/p/ijbswa/patches/">
+                      https://sourceforge.net/p/ijbswa/patches/</ulink>.
           Then ask for peer review.
         </para>
        </listitem>
@@ -324,7 +324,7 @@ Hal.
   <para>
     All formal documents are maintained in Docbook SGML and located in the
     <computeroutput>doc/source/*</computeroutput> directory. You will need
-    <ulink url="http://www.docbook.org">Docbook</ulink>, the Docbook
+    <ulink url="https://www.docbook.org/">Docbook</ulink>, the Docbook
     DTD's and the Docbook modular stylesheets (or comparable alternatives),
     and either <application>jade</application> or
     <application>openjade</application> (recommended) installed in order to
@@ -350,10 +350,6 @@ Hal.
      process requires going from SGML to HTML to text to special formatting
      required for the embedded comments. Some of this does not survive so
      well. Especially some of the examples that are longer than 80 characters.
-     The build process for this file outputs to <filename>config.new</filename>,
-     which should be reviewed for errors and mis-formatting. Once satisfied
-     that it is correct, then it should be hand copied to
-     <filename>config</filename>.
     </para>
     <para>
      Other, less formal documents (e.g. <filename>LICENSE</filename>) are
@@ -389,7 +385,7 @@ Hal.
       <listitem><para>
         Run <computeroutput>make webserver</computeroutput> which copies all
         files from <computeroutput>doc/webserver</computeroutput> to the
-        sourceforge webserver via scp.
+        sourceforge webserver via ssh.
       </para></listitem>
      </orderedlist>
 
@@ -2052,8 +2048,9 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
 
     <para>
         The following programs are required to follow this process:
-        <filename>ncftpput</filename> (ncftp), <filename>scp, ssh</filename> (ssh),
-        <filename>gmake</filename> (GNU's version of make), autoconf, cvs.
+        <filename>ssh</filename>,
+        <filename>gmake</filename> (GNU's version of make), autoconf, git,
+        a web browser.
     </para>
 
     <sect2 id="versionnumbers">
@@ -2070,7 +2067,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
               X, the version major, is rarely ever changed. It is increased by one if
               turning a development branch into stable substantially changes the functionality,
               user interface or configuration syntax. Majors 1 and 2 were
-              <application>Junkbuster</application>, and 3 will be the first stable
+              <application>Junkbuster</application>, and 3 is the first stable
               <application>Privoxy</application> release.
             </para>
           </listitem>
@@ -2270,7 +2267,7 @@ for-privoxy-version=3.0.11
          (this is in addition to the main <citetitle>User Manual</citetitle>
          link from the main page since we need to keep manuals for various
          versions available). The CGI pages will link to something like
-         <literal>http://privoxy.org/$(VERSION)/user-manual/</literal>. This
+         <literal>https://www.privoxy.org/$(VERSION)/user-manual/</literal>. This
          will need to be updated for each new release. There is no Makefile
          target for this at this time!!! It needs to be done manually.
        </para>
@@ -2505,7 +2502,7 @@ for-privoxy-version=3.0.11
         be reset to one if this is the first RPM for
         <replaceable class="parameter">dist</replaceable> which is built from version
         X.Y.Z. Check the
-        <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">file
+        <ulink url="https://sourceforge.net/projects/ijbswa/files/">file
         list</ulink> if unsure. Else, it must be set to the highest already available RPM
         release number for that version plus one.
       </para>
@@ -2651,15 +2648,15 @@ for-privoxy-version=3.0.11
         packages" above).
       </para>
       <para>
-        There are three modules available in the Git repository for use on Mac
+        There are three modules available in the CVS repository backups for use on Mac
         OS X, though technically only two of them generate a release (the other
         can be used to install from source).
       </para>
       <sect4 id="OS-X-OSXPackageBuilder-module">
-      <title>OSXPackageBuilder module</title>
+      <title>OSXPackageBuilder module (Documentation out of date)</title>
         <para>
           The OSXPackageBuilder module generates OS X installer packages
-          supporting all Macs running OS X 10.4 and above. Obtain it from Git as
+          supporting all Macs running OS X 10.4 and above. Obtain it from CVS as
           follows into a folder parallel to the exported privoxy source:
         </para>
           <programlisting>
@@ -2679,14 +2676,14 @@ for-privoxy-version=3.0.11
         </para>
       </sect4>
       <sect4 id="OS-X-osxsetup-module">
-      <title>osxsetup module (DEPRECATED)</title>
+      <title>osxsetup module (DEPRECATED) (Documentation out of date)</title>
         <para>
           <emphasis>This module is deprecated since the installer it generates
           places all Privoxy files in one folder in a non-standard location, and
           supports only Intel Macs running OS X 10.6 or higher.</emphasis>
         </para>
         <para>
-          Check out the module from Git as follows into a folder parallel to the
+          Check out the module from CVS as follows into a folder parallel to the
           exported privoxy source:
         </para>
           <programlisting>
@@ -2724,13 +2721,13 @@ for-privoxy-version=3.0.11
         </para>
       </sect4>
       <sect4 id="OS-X-macsetup-module">
-      <title>macsetup module</title>
+      <title>macsetup module (Documentation out of date)</title>
         <para>
           The macsetup module is ideal if you wish to build and install Privoxy
           from source on a single machine.
         </para>
         <para>
-          Check out the module from Git as follows into a folder parallel to the
+          Check out the module from CVS as follows into a folder parallel to the
           exported privoxy source:
         </para>
           <programlisting>
@@ -2816,7 +2813,7 @@ for-privoxy-version=3.0.11
       <ulink url="mailto:privoxy-announce@lists.privoxy.org">announce mailing
       list</ulink>, Subject: "Version X.Y.Z available for download". Be sure to
       include the
-      <ulink url="https://sourceforge.net/project/showfiles.php?group_id=11118">
+      <ulink url="https://sourceforge.net/projects/ijbswa/files/">
       download location</ulink>, the release notes and the Changelog. Also, post an
       updated News item on the project page Sourceforge, and update the Home
       page and docs linked from the Home page (see below). Other news sites
@@ -2895,9 +2892,9 @@ for-privoxy-version=3.0.11
   make webserver
 </programlisting>
    <para>
-    This will do the upload to <ulink url="https://www.privoxy.org/">the
-    webserver</ulink> (www.privoxy.org) and ensure all files and directories
-    there are group writable.
+    This will do the upload to the SourceForge webserver (which is manually
+    syncronized with <ulink url="https://www.privoxy.org/">www.privoxy.org</ulink>)
+    and ensure all files and directories there are group writable.
    </para>
    <para>
     Please do <emphasis>NOT</emphasis> use any other means of transferring

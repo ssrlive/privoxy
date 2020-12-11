@@ -299,6 +299,19 @@
               </td>
             </tr>
             <tr>
+              <td><code>FEATURE_DYNAMIC_PCRE</code></td>
+              <td>@if-FEATURE_DYNAMIC_PCRE-then@ Yes @else-not-FEATURE_DYNAMIC_PCRE@ No @endif-FEATURE_DYNAMIC_PCRE@</td>
+              <td>Dynamically link to the PCRE library. This is set automatically
+               by <code>./configure</code> if you do not have libpcre installed.
+               Dynamically linking to an external libpcre is recommended as the one that is distributed
+               with Privoxy itself is outdated and lacks various features and bug-fixes you may be interested in.</td>
+            </tr>
+            <tr>
+              <td><code>FEATURE_EXTENDED_STATISTICS</code></td>
+              <td>@if-FEATURE_EXTENDED_STATISTICS-then@ Yes @else-not-FEATURE_EXTENDED_STATISTICS@ No @endif-FEATURE_EXTENDED_STATISTICS@</td>
+              <td>Gather statistics for block reasons and filter executions.</td>
+            </tr>
+            <tr>
               <td><code>FEATURE_EXTERNAL_FILTERS</code></td>
               <td>@if-FEATURE_EXTERNAL_FILTERS-then@ Yes @else-not-FEATURE_EXTERNAL_FILTERS@ No @endif-FEATURE_EXTERNAL_FILTERS@</td>
               <td>
@@ -306,14 +319,6 @@
                with external scripts and programs</a> written in any language the system Privoxy
                runs on supports.
               </td>
-            </tr>
-            <tr>
-              <td><code>FEATURE_DYNAMIC_PCRE</code></td>
-              <td>@if-FEATURE_DYNAMIC_PCRE-then@ Yes @else-not-FEATURE_DYNAMIC_PCRE@ No @endif-FEATURE_DYNAMIC_PCRE@</td>
-              <td>Dynamically link to the PCRE library. This is set automatically
-               by <code>./configure</code> if you do not have libpcre installed.
-               Dynamically linking to an external libpcre is recommended as the one that is distributed
-               with Privoxy itself is outdated and lacks various features and bug-fixes you may be interested in.</td>
             </tr>
             <tr>
               <td><code>FEATURE_FAST_REDIRECTS</code></td>
@@ -356,6 +361,14 @@
               <td><code>FEATURE_NO_GIFS</code></td>
               <td>@if-FEATURE_NO_GIFS-then@ Yes @else-not-FEATURE_NO_GIFS@ No @endif-FEATURE_NO_GIFS@</td>
               <td>Use PNG instead of GIF for the built-in images.</td>
+            </tr>
+            <tr>
+              <td><code>FEATURE_PCRE_HOST_PATTERNS</code></td>
+              <td>@if-FEATURE_PCRE_HOST_PATTERNS-then@ Yes @else-not-FEATURE_PCRE_HOST_PATTERNS@ No @endif-FEATURE_PCRE_HOST_PATTERNS@</td>
+              <td>Allow to use extended host patterns and vanilla host patterns
+               at the same time by prefixing extended host patterns with
+               "PCRE-HOST-PATTERN:".
+              </td>
             </tr>
             <tr>
               <td><code>FEATURE_PTHREAD</code></td>

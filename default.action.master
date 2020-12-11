@@ -932,6 +932,15 @@ oskar.tradera.com/
 t.vi-serve.com/
 # Blocked URL = http://pixel.inforsea.com/server/log
 pixel.inforsea.com/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://fastlane.rubiconproject.com/a/api/fastlane.json?account_id=15680&site_id=103240&zone_id=610848%3B798260%3B798260&size_id=43&p_pos=atf%3B%3B&rf=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&tk_flint=pbjs_lite_v4.17.0&x_source.tid=40522aa9-945e-4ba8-afdb-eb311922e0c2%3B0ef5f4c2-e76b-485f-ae9a-63d0cbde6c70%3B597ee091-a937-48e9-9d4e-a7e352438484&p_screen_res=1366x768&rp_floor=0.01&rp_secure=1&slots=3&rand=0.25171689494748506
+fastlane.rubiconproject.com/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://d.adroll.com/pixel/3QEU55AVURGVNFYKGPRLHU/EPGGWMNOENDCJMRYE2IIFV?adroll_fpc=7716c28221770b6a1ca7a1edb9ea0d6e-1607178137583&arrfrr=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&xid_ch=f&pv=98946957920.17203&cookie=&adroll_s_ref=https%3A//sourceforge.net/projects/ijbswa/&keyw=
+.adroll.com/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://ml314.com/utsync.ashx?pub=&adv=&et=0&eid=771&ct=js&pi=&fp=&clid=&if=1&ps=&cl=&mlt=&data=&&cp=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&pv=1607178655249_inq1swkkq&bl=en-ca&cb=1438340&return=&ht=&d=&dc=&si=1607178395284_aog287pmk&cid=&s=1366x768&rp=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F
+ml314.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
@@ -980,6 +989,12 @@ collector.githubapp.com/
 t.9gag.com/img\.gif
 # Blocked URL = http://t.lto.connectaserver.de/t.php?ht=e&in=Verweildauer%7C%7CTimeOnPage%7C%7C1m%2030s&pp=https%3A%2F%2Fwww.lto.de%2Frecht%2Fhintergruende%2Fh%2Feugh-c62317-vorratsdatenspeicherung-internet-telefon-eu-staaten-sicherheit-terrorismus-datenschutz-speichern-deutschland-kinderpornographie%2F&sr=1366x768&vp=1362x676&cid=602d486b-9a75-4ea2-99d3-ebfb063e1be8&dt=Vorratsdatenspeicherung:%20Was%20bedeutet%20das%20EuGH-Urteil?&rf=&z=1602062648454
 .connectaserver.de/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://analytics.slashdotmedia.com/sf.php?action_name=Privoxy%20download%20%7C%20SourceForge.net&idsite=39&rec=1&r=151583&h=15&m=33&s=42&url=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&urlref=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&_id=a1e65404b0c0c572&_idts=1607178131&_idvc=1&_idn=0&_refts=0&_viewts=1607178131&send_image=1&cookie=1&res=1366x768&dimension1=ijbswa&dimension2=pg_project&dimension3=1&gt_ms=357&pv_id=PDkFUz
+analytics.slashdotmedia.com/
+#MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
+# Blocked URL = https://tag.crsspxl.com/s2.html?d=2396&t=Privoxy%20download%20%7C%20SourceForge.net&u=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&b2=%20CategoriesWWW%2FHTTP%2C%20Firewalls%20LicenseGNU%20General%20Public%20License%20version%202.0%20(GPLv2)%2C%20ISC%20License%20%20%20%20%20%20%20
+tag.crsspxl.com/
 
 
 #############################################################################
@@ -2199,6 +2214,10 @@ collector.githubapp.com/
 issue.freebsdfoundation.org/
 # URL = http://ltfl.librarything.com//forlibraries/widget_response.php?id=1477&isbns=9780062279194&divs=ltfl_tagbrowse%2Cltfl_related%2Cltfl_similars%2Cltfl_series%2Cltfl_awards&lccn=&oclc=&t=1602093207304&systype=zones&pagetype=full&catalog_url=https%3A%2F%2Fkatalog.stbib-koeln.de%2Falswww2.dll%2FAPS_PRESENT_BIB%3FStyle%3DPortal3%26SubStyle%3D%26Lang%3DGER%26ResponseEncoding%3Dutf-8%26no%3DT011006751%26Via%3DZ3950%26View%3DAnnotated%26Parent%3DObj_482831602093137%26SearchBrowseList%3DObj_482831602093137%26SearchBrowseListItem%3D71831%26BrowseList%3DObj_482831602093137%3FStyle%3DPortal3%26SubStyle%3D%26Lang%3DGER%26ResponseEncoding%3Dutf-8%26BrowseListItem%3D71831%26QueryObject%3DObj_482811602093136&title=Think%20like%20a%20freak&author=Levitt%2C%20Steven%20D.&accession=T011006751&locations=&widget_response_loaded_after=764&container_widthAAS={%22body%22:{%22cw%22:1350,%22ch%22:946},%22ltfl_tagbrowse%22:{%22cw%22:614,%22ch%22:0},%22ltfl_related%22:{%22cw%22:614,%22ch%22:0},%22ltfl_similars%22:{%22cw%22:614,%22ch%22:0},%22ltfl_series%22:{%22cw%22:614,%22ch%22:0},%22ltfl_awards%22:{%22cw%22:614,%22ch%22:0}}
 .librarything.com/
+# URL = https://secure.gravatar.com/avatar/9032194c044d0e96c3bdabba35aff1e9?r=pg&d=https%3A%2F%2Fa.fsdn.com%2Fallura%2Fnf%2F1607031117%2F_ew_%2Ftheme%2Fsftheme%2Fimages%2Fsandiego%2Ficons%2Fdefault-avatar.png
+secure.gravatar.com/
+# URL = https://cas.fsf.org/login?service=https%3A%2F%2Fdirectory.fsf.org%2Fwiki%3Ftitle%3DSpecial%3AUserLogin%26returnto%3DPrivoxy
+.fsf.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
