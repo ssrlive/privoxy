@@ -5112,7 +5112,7 @@ new action
  <varlistentry>
   <term>Example usage:</term>
   <listitem>
-     <screen>+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}</screen>
+     <screen>+hide-user-agent{Mozilla/5.0 (X11; ElectroBSD i386; rv:78.0) Gecko/20100101 Firefox/78.0}</screen>
   </listitem>
  </varlistentry>
 </variablelist>
