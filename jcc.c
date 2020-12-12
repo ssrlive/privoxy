@@ -3670,7 +3670,7 @@ static void chat(struct client_state *csp)
       use_ssl_tunnel = 1;
    }
 
-   if (http->ssl && csp->action->flags & ACTION_IGNORE_CERTIFICATE_ERRORS)
+   if (http->ssl && (csp->action->flags & ACTION_IGNORE_CERTIFICATE_ERRORS))
    {
       csp->dont_verify_certificate = 1;
    }
