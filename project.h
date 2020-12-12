@@ -1645,8 +1645,13 @@ struct configuration_spec
  * The prefix for CGI pages.  Written out in generated HTML.
  * INCLUDES the trailing slash.
  */
+#ifdef FEATURE_HTTPS_INSPECTION
+#define CGI_PREFIX  "//" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
+#define CGI_PREFIX_HTTPS "https:" CGI_PREFIX
+#else
 #define CGI_PREFIX  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
-#define CGI_PREFIX_HTTPS "https://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
+#endif
+#define CGI_PREFIX_HTTP  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
 
 #endif /* ndef PROJECT_H_INCLUDED */
 

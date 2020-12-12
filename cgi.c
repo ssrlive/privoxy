@@ -457,7 +457,7 @@ static int referrer_is_safe(const struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Denying access to %s. No referrer found.",
          csp->http->url);
    }
-   else if ((0 == strncmp(referrer, CGI_PREFIX, sizeof(CGI_PREFIX)-1))
+   else if ((0 == strncmp(referrer, CGI_PREFIX_HTTP, sizeof(CGI_PREFIX_HTTP)-1))
 #ifdef FEATURE_HTTPS_INSPECTION
          || (0 == strncmp(referrer, CGI_PREFIX_HTTPS, sizeof(CGI_PREFIX_HTTPS)-1))
          || (0 == strncmp(referrer, alt_prefix_https, strlen(alt_prefix_https)))
