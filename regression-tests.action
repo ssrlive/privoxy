@@ -25,7 +25,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.27
+for-privoxy-version=3.0.29
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
@@ -47,6 +47,7 @@ for-privoxy-version=3.0.27
 # Level 23 needs = config line enable-proxy-authentication-forwarding\s+1
 # Level 24 needs = feature status FEATURE_CLIENT_TAGS Yes
 # Level 25 needs = feature status FEATURE_HTTPS_INSPECTION No
+# Level 26 needs = feature status FEATURE_PCRE_HOST_PATTERNS Yes
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -1112,3 +1113,11 @@ redirect2.example.net/
 {+delay-response{1}}
 # Fetch Test = http://config.privoxy.org/show-url-info?url=http%3A%2F%2Fwww.example.com%2Fprivoxy-test-delay-response
 config.privoxy.org/show-url-info\?url=http%3A%2F%2Fwww\.example\.com%2Fprivoxy-test-delay-response
+
+{+block{Block with pcre host pattern}}
+# Blocked URL = http://aaa.example.org/
+# Level = 26
+PCRE-HOST-PATTERN:^a{3}\.example\.org$
+# Blocked URL = http://bbb.example.org/
+# Level = 26
+PCRE-HOST-PATTERN:^(bbb|ccc|ddd)\.example\.org$
