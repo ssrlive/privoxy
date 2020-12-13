@@ -386,7 +386,7 @@ Hal.
      <orderedlist numeration="arabic">
       <listitem><para>
         First, build the docs by running <computeroutput>make
-        dok</computeroutput>.
+        dok dok-tidy</computeroutput>.
       </para></listitem>
       <listitem><para>
         Run <computeroutput>make webserver</computeroutput> which copies all
