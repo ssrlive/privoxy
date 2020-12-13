@@ -606,6 +606,11 @@ TAG:^Connection: close$
 TAG:^connection-sharing disabled$
 
 {}
+# XXX: This test is expected to fail when using "https://p.p/"
+#      as CGI prefix with https inspection enabled but can't
+#      yet be automatically skipped. By design connections aren't
+#      shared when using "https://" so Privoxy does not remove the
+#      header.
 # Set Header    = Connection: close
 # Expect Header = REMOVAL
 # Level = 16
