@@ -1299,9 +1299,19 @@ sub get_server_header($$) {
 sub get_status_code($) {
 
     my $buffer_ref = shift;
+    our $privoxy_cgi_url;
+
+    my $skip_connection_established_response = $privoxy_cgi_url =~ m@^https://@;
     my @buffer = @{$buffer_ref}; 
 
     foreach (@buffer) {
+
+        if ($skip_connection_established_response) {
+
+            next if (m@^HTTP/1\.1 200 Connection established@);
+            next if (m@^\r\n$@);
+            $skip_connection_established_response = 0;
+        }
 
         if (/^HTTP\/\d\.\d (\d{3})/) {
 
