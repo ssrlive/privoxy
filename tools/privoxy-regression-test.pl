@@ -1370,7 +1370,7 @@ sub get_cgi_page_or_else($) {
 
     if (200 != $status_code) {
 
-        my $log_message = "Failed to fetch Privoxy CGI Page. " .
+        my $log_message = "Failed to fetch Privoxy CGI page '$cgi_url'. " .
                           "Received status code ". $status_code .
                           " while only 200 is acceptable.";
 
