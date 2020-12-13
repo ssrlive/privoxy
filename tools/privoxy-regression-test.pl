@@ -1668,6 +1668,7 @@ sub list_test_types() {
 sub help() {
 
     our %cli_options;
+    our $privoxy_cgi_url;
 
     print_version();
 
@@ -1687,6 +1688,7 @@ Options and their default values if they have any:
     [--max-time $cli_options{'max-time'}]
     [--min-level $cli_options{'min-level'}]
     [--privoxy-address]
+    [--privoxy-cgi-prefix $privoxy_cgi_url]
     [--retries $cli_options{'retries'}]
     [--show-skipped-tests]
     [--shuffle-tests]
@@ -1727,6 +1729,7 @@ sub parse_cli_options() {
 
     our %cli_options;
     our $log_level;
+    our $privoxy_cgi_url;
 
     init_cli_options();
 
@@ -1744,6 +1747,7 @@ sub parse_cli_options() {
         'max-time=i'         => \$cli_options{'max-time'},
         'min-level=i'        => \$cli_options{'min-level'},
         'privoxy-address=s'  => \$cli_options{'privoxy-address'},
+        'privoxy-cgi-prefix=s' => \$privoxy_cgi_url, # XXX: Should use cli_options()
         'retries=i'          => \$cli_options{'retries'},
         'shuffle-tests'      => \$cli_options{'shuffle-tests'},
         'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
@@ -1827,7 +1831,7 @@ B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
 [B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
 [B<--local-test-file testfile>] [B<--loops count>] [B<--max-level max-level>]
 [B<--max-time max-time>] [B<--min-level min-level>] B<--privoxy-address proxy-address>
-[B<--retries retries>] [B<--test-number test-number>]
+B<--privoxy-cgi-prefix cgi-prefix> [B<--retries retries>] [B<--test-number test-number>]
 [B<--show-skipped-tests>] [B<--sleep-time> seconds] [B<--verbose>]
 [B<--version>]
 
@@ -2025,6 +2029,20 @@ B<--privoxy-address proxy-address> Privoxy's listening address.
 If it's not set, the value of the environment variable http_proxy
 will be used. B<proxy-address> has to be specified in http_proxy
 syntax.
+
+B<--privoxy-cgi-prefix privoxy-cgi-prefix> The prefix to use when
+building URLs that are supposed to reach Privoxy's CGI interface.
+If it's not set, B<http://p.p/> is used, which is supposed to work
+with the default Privoxy configuration.
+If Privoxy has been built with B<FEATURE_HTTPS_INSPECTION> enabled,
+and if https inspection is activated with the B<+https-inspection>
+action, this option can be used with
+B<https://p.p/> provided the system running Privoxy-Regression-Test
+has been configured to trust the certificate used by Privoxy.
+Note that there are currently two tests in the official
+B<regression-tests.action> file that are expected to fail when
+using a B<privoxy-cgi-prefix> with B<https://> and aren't automatically
+skipped.
 
 B<--retries retries> Retry B<retries> times.
 
