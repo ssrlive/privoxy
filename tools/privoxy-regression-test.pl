@@ -47,7 +47,8 @@ use constant {
     CLI_LOOPS     => 1,
     CLI_MAX_TIME  => 5,
     CLI_MIN_LEVEL => 0,
-    # XXX: why limit at all?
+    # The reason for a maximum test level is explained in the
+    # perldoc section TEST LEVELS near the end of this file.
     CLI_MAX_LEVEL => 100,
     CLI_FORKS     => 0,
     CLI_SLEEP_TIME => 0,
