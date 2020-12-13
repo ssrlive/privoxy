@@ -1973,6 +1973,19 @@ Install the rpm. Any error messages?
     <!-- XXX: Document how to write test reports and where to send them -->
 
     <!--   ~~~~~       New section      ~~~~~     -->
+    <sect2 id="privoxy-regression-test"><title>Testing with <application>Privoxy-Regression-Test</application></title>
+     <para>
+       If you compiled, packaged or merely installed Privoxy, it is recommended to run
+       <application>Privoxy-Regression-Test</application> to verify that at least
+       the tested parts of <application>Privoxy</application> are working as expected.
+     </para>
+     <para>
+       This is actually pretty easy. For details, please see
+       <command>perldoc privoxy-regression-test.pl</command>.
+     </para>
+    </sect2>
+
+    <!--   ~~~~~       New section      ~~~~~     -->
     <sect2 id="fuzzing"><title>Fuzzing Privoxy</title>
      <para>
        To make fuzzing more convenient, Privoxy can be configured
