@@ -617,7 +617,7 @@ Hal.
 
  <!--   ~~~~~       New section      ~~~~~     -->
 
- <sect2><title>Privoxy Custom Entities</title>
+ <sect2 id="custom-entities"><title>Privoxy Custom Entities</title>
  <para>
   <application>Privoxy</application> documentation is using
   a number of customized <quote>entities</quote> to facilitate
