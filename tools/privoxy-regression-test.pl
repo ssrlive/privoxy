@@ -895,6 +895,8 @@ sub register_dependency($$) {
 sub execute_method_test($) {
 
     my $test = shift;
+    our $privoxy_cgi_url;
+
     my $buffer_ref;
     my $status_code;
     my $method = $test->{'data'};
@@ -906,7 +908,7 @@ sub execute_method_test($) {
     # Don't complain about the 'missing' body
     $curl_parameters .= '--head ' if ($method =~ /^HEAD$/i);
 
-    $curl_parameters .= PRIVOXY_CGI_URL;
+    $curl_parameters .= $privoxy_cgi_url;
 
     $buffer_ref = get_page_with_curl($curl_parameters);
     $status_code = get_status_code($buffer_ref);
@@ -962,6 +964,8 @@ sub execute_redirect_test($) {
 sub execute_dumb_fetch_test($) {
 
     my $test = shift;
+    our $privoxy_cgi_url;
+
     my $buffer_ref;
     my $status_code;
 
@@ -972,7 +976,7 @@ sub execute_dumb_fetch_test($) {
         $curl_parameters .= '--request ' . quote($test->{method}) . ' ';
     }
     if ($test->{type} == TRUSTED_CGI_REQUEST) {
-        $curl_parameters .= '--referer ' . quote(PRIVOXY_CGI_URL) . ' ';
+        $curl_parameters .= '--referer ' . quote($privoxy_cgi_url) . ' ';
     }
 
     $curl_parameters .= quote($test->{'data'});
@@ -1026,6 +1030,8 @@ sub execute_sticky_actions_test($) {
 sub get_final_results($) {
 
     my $url = shift;
+    our $privoxy_cgi_url;
+
     my $curl_parameters = '';
     my %final_results = ();
     my $final_results_reached = 0;
@@ -1038,7 +1044,7 @@ sub get_final_results($) {
     $url =~ s@:@%3A@g;
     $url =~ s@/@%2F@g;
 
-    $curl_parameters .= quote(PRIVOXY_CGI_URL . 'show-url-info?url=' . $url);
+    $curl_parameters .= quote($privoxy_cgi_url . 'show-url-info?url=' . $url);
 
     foreach (@{get_cgi_page_or_else($curl_parameters)}) {
 
