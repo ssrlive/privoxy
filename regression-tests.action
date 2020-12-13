@@ -1,7 +1,8 @@
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
-# (included in the source tarball's tools directory).
+# (included in the source tarball's tools directory and available at
+# https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob;f=tools/privoxy-regression-test.pl;hb=HEAD).
 #
 # After referencing it in your Privoxy configuration both Privoxy and
 # Privoxy-Regression-Test should be good to go.
