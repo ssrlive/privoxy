@@ -110,8 +110,8 @@ Hal.
  -->
     <para>
      <application>Privoxy</application>, as an heir to
-     <application>Junkbuster</application>, is a Free Software project
-     and the code is licensed under the GNU General Public License version 2.
+     <application>Junkbuster</application>, is a <ulink
+      url="https://www.privoxy.org/user-manual/copyright.html">Free Software</ulink> project.
      As such, <application>Privoxy</application> development is potentially open
      to anyone who has the time, knowledge, and desire to contribute
      in any capacity. Our goals are simply to continue the mission,
