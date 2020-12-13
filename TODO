@@ -447,6 +447,10 @@ https://www.privoxy.org/faq/general.html#DONATE
 170) Serve the ca-cert-file through the CGI interface so client's
      can conveniently import it (insecurely).
 
+171) Create a "view page using Privoxy" website where users can input
+     an URL and get a screenshot of a browser fetching the URL
+     through Privoxy.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
