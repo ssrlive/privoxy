@@ -5,10 +5,10 @@
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
-<!entity p-version "3.0.29">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-version "3.0.30">
+<!entity p-status "UNRELEASED">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % seealso-extra "INCLUDE"> <!-- extra stuff from seealso.sgml    -->
