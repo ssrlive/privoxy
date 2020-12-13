@@ -629,6 +629,15 @@ TAG:^connection-sharing enabled$
 TAG:^No Host header$
 
 {}
+# XXX: This test is expected to fail when using "https://p.p/"
+#      as CGI prefix with https inspection enabled but can't
+#      yet be automatically skipped. The reason for the test
+#      failure is that Privoxy-Regression-Test only modifies
+#      the Host header for the CONNECT request, not for the
+#      actual request that follows. Changing that would not
+#      fix the test though as a modified Host header in the
+#      actual request would result in Privoxy attempting to
+#      connect to it.
 # Set Header    = Host: whatever.example.org
 # Expect Header = NO CHANGE
 TAG:^Host header other than the target host$
