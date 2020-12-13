@@ -188,6 +188,10 @@ Hal.
        such changes are fully tested ought they be pushed back to the central
        repository master branch.
      </para>
+     <para>
+       Before pushing stuff, please rebase it on a current master so we get
+       an uncomplicated commit history. Avoid merges where possible.
+     </para>
      <!--
      <para>
        Branches are used to fork a sub-development path from the main trunk.
