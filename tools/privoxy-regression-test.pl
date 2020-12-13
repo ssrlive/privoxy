@@ -1403,8 +1403,13 @@ sub get_show_request_with_curl($) {
 
     # Enable the action to test
     $curl_parameters .= '-H \'X-Privoxy-Control: ' . $test->{'tag'} . '\' ';
-    # The header to filter
-    $curl_parameters .= '-H \'' . $header . '\' ';
+
+    # Add the header to filter
+    if ($privoxy_cgi_url =~ m@^https://@ and $header =~ m@^Host:@) {
+        $curl_parameters .= '--proxy-header \'' . $header . '\' ';
+    } else {
+        $curl_parameters .= '-H \'' . $header . '\' ';
+    }
 
     $curl_parameters .= ' ';
     $curl_parameters .= $privoxy_cgi_url;
