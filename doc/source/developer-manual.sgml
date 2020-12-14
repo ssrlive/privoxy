@@ -1983,6 +1983,35 @@ Install the rpm. Any error messages?
        This is actually pretty easy. For details, please see
        <command>perldoc privoxy-regression-test.pl</command>.
      </para>
+     <para>
+      Here is an example of what <application>Privoxy-Regression-Test</application> can do for you:
+     </para>
+     <programlisting>
+# Run all the tests
+fk@t520 ~ $privoxy-regression-test.pl
+2020-12-14 12:16:32: Asking Privoxy for the number of action files available ...
+2020-12-14 12:16:32: Gathering regression tests from 9 action file(s) delivered by Privoxy 3.0.30.
+2020-12-14 12:16:32: Executing regression tests ...
+2020-12-14 12:16:41: Ooops. Expected removal but: 'Referer: https://p.p/' is still there.
+2020-12-14 12:16:41: Failure for test 785. Header 'Referer: https://p.p/' and tag 'hide-referrer{conditional-block}'
+2020-12-14 12:16:41: Ooops. Got: 'Referer: https://p.p/' while expecting: 'Referer: http://p.p/'
+2020-12-14 12:16:41: Failure for test 791. Header 'Referer: https://p.p/' and tag 'hide-referrer{conditional-forge}'
+2020-12-14 12:16:44: Executed 1087 regression tests. Skipped 115. 1085 successes, 2 failures.
+# Repeat on of the failing tests and get a curl command to quickly reproduce the problem
+# without causing too much log noise.
+fk@t520 ~ $privoxy-regression-test.pl --test-number 785 --verbose --debug 39
+2020-12-14 12:17:55: Asking Privoxy for the number of action files available ...
+[...]
+2020-12-14 12:17:56: Executing regression tests ...
+2020-12-14 12:17:56: Executing: curl --include  -H 'Proxy-Connection:'  -H 'Connection: close'  -s  -S  --user-agent 'Privoxy-Regression-Test 0.7.2'  --max-time '5'  --globoff  -H 'X-Privoxy-Control: hide-referrer{conditional-block}' -H 'Referer: https://p.p/'  http://p.p/show-request 2>&1
+2020-12-14 12:17:56: Ooops. Expected removal but: 'Referer: https://p.p/' is still there.
+2020-12-14 12:17:56: Failure for test 785 (0/13/5). Header 'Referer: https://p.p/' and tag 'hide-referrer{conditional-block}'
+2020-12-14 12:17:56: Executed 1 regression tests. Skipped 1201. 0 successes, 1 failures.
+     </programlisting>
+     <para>
+      Use the if the <command>--privoxy-address</command> option if the
+      http_proxy environment variable isn't configured.
+     </para>
     </sect2>
 
     <!--   ~~~~~       New section      ~~~~~     -->
