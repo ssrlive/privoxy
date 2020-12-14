@@ -1997,7 +1997,7 @@ fk@t520 ~ $privoxy-regression-test.pl
 2020-12-14 12:16:41: Ooops. Got: 'Referer: https://p.p/' while expecting: 'Referer: http://p.p/'
 2020-12-14 12:16:41: Failure for test 791. Header 'Referer: https://p.p/' and tag 'hide-referrer{conditional-forge}'
 2020-12-14 12:16:44: Executed 1087 regression tests. Skipped 115. 1085 successes, 2 failures.
-# Repeat on of the failing tests and get a curl command to quickly reproduce the problem
+# Repeat one of the failing tests and get a curl command to quickly reproduce the problem
 # without causing too much log noise.
 fk@t520 ~ $privoxy-regression-test.pl --test-number 785 --verbose --debug 39
 2020-12-14 12:17:55: Asking Privoxy for the number of action files available ...
