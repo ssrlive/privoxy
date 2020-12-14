@@ -995,6 +995,9 @@ analytics.slashdotmedia.com/
 #MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
 # Blocked URL = https://tag.crsspxl.com/s2.html?d=2396&t=Privoxy%20download%20%7C%20SourceForge.net&u=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&b2=%20CategoriesWWW%2FHTTP%2C%20Firewalls%20LicenseGNU%20General%20Public%20License%20version%202.0%20(GPLv2)%2C%20ISC%20License%20%20%20%20%20%20%20
 tag.crsspxl.com/
+#MASTER# BLOCK-REFERRER: https://www.heise.de/news/Komplettausfall-Youtube-Gmail-und-andere-Google-Dienste-nicht-erreichbar-4989007.html
+# Blocked URL = https://eu-tlp03.kameleoon.com/visit.gif?lp=1&spt=1607679917743&p=c2l0...kNvdW50PTA%3D
+eu-tlp03.kameleoon.com/
 
 
 #############################################################################
