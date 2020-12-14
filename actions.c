@@ -1111,14 +1111,16 @@ static const char *filter_type_to_string(enum filter_type filter_type)
       return "client-header tagger";
    case FT_SERVER_HEADER_TAGGER:
       return "server-header tagger";
-#ifdef FEATURE_EXTERNAL_FILTERS
-   case FT_EXTERNAL_CONTENT_FILTER:
-      return "external content filter";
-#endif
    case FT_SUPPRESS_TAG:
       return "suppress tag filter";
    case FT_CLIENT_BODY_FILTER:
       return "client body filter";
+   case FT_ADD_HEADER:
+      return "add-header action";
+#ifdef FEATURE_EXTERNAL_FILTERS
+   case FT_EXTERNAL_CONTENT_FILTER:
+      return "external content filter";
+#endif
    case FT_INVALID_FILTER:
       return "invalid filter type";
    }

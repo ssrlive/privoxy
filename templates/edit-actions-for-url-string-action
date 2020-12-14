@@ -18,23 +18,23 @@
 ##############################################################################
 
 <tr class="bg1" align="left" valign="top">
-  <td class="en1" align="center" valign="middle"><input type="radio" name="string_filter_r@index@" value="Y" @this-filter-y@></td>
-  <td class="dis1" align="center" valign="middle"><input type="radio" name="string_filter_r@index@" value="N" @this-filter-n@></td>
-  <td class="noc1" align="center" valign="middle"><input type="radio" name="string_filter_r@index@" value="X"></td>
+  <td class="en1" align="center" valign="middle"><input type="radio" name="string_action_@abbr-action-type@_r@index@" value="Y" @this-filter-y@></td>
+  <td class="dis1" align="center" valign="middle"><input type="radio" name="string_action_@abbr-action-type@_r@index@" value="N" @this-filter-n@></td>
+  <td class="noc1" align="center" valign="middle"><input type="radio" name="string_action_@abbr-action-type@_r@index@" value="X"></td>
   <td class="action">
-    <input type="hidden" name="string_filter_t@index@" value="@abbr-filter-type@">
-    <input type="hidden" name="string_filter_c@index@" value="@code@">
-    <input type="hidden" name="string_filter_o@index@" value="@name@">
+    <input type="hidden" name="string_action_@abbr-action-type@_t@index@" value="@abbr-action-type@">
+    <input type="hidden" name="string_action_@abbr-action-type@_c@index@" value="@code@">
+    <input type="hidden" name="string_action_@abbr-action-type@_o@index@" value="@name@">
     <a href="@user-manual@@actions-help-prefix@@anchor@">@filter-type@</a> @name@
   </td>
-  <td>Suppress tag</td>
+  <td>@desc@.</td>
 </tr>
-<tr class="bg1" align="left" valign="top" id="string_filter@index@_opts">
+<tr class="bg1" align="left" valign="top" id="string_action_@abbr-action-type@_@index@_opts">
   <td class="en1">&nbsp;</td>
   <td class="dis1">&nbsp;</td>
   <td class="noc1">&nbsp;</td>
   <td>&nbsp;</td>
-  <td>Tag to suppress:<br>
-  <input type="text" name="string_filter_n@index@" size="40" value="@name@">
+  <td>@input_desc@:<br>
+  <input type="text" name="string_action_@abbr-action-type@_n@index@" size="40" value="@name@">
   </td>
 </tr>
