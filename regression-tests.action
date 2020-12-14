@@ -108,7 +108,7 @@ TAG:^hide-accept-language\{block\}$
 # Set Header    = Referer: http://
 # Expect Header = REMOVAL
 #
-# Set Header    = Referer: https://p.p/
+# Set Header    = Referer: https://www.privoxy.org/
 # Expect Header = REMOVAL
 TAG:^hide-referrer\{conditional-block\}$
 
