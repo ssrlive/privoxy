@@ -110,6 +110,9 @@ TAG:^hide-accept-language\{block\}$
 #
 # Set Header    = Referer: https://www.privoxy.org/
 # Expect Header = REMOVAL
+#
+# Set Header    = Referer: http://www.privoxy.org/
+# Expect Header = REMOVAL
 TAG:^hide-referrer\{conditional-block\}$
 
 {+hide-referrer{conditional-forge}}
