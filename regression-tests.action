@@ -128,7 +128,7 @@ TAG:^hide-referrer\{conditional-block\}$
 # Set Header    = Referer: http://
 # Expect Header = Referer: http://p.p/
 #
-# Set Header    = Referer: https://p.p/
+# Set Header    = Referer: https://www.privoxy.org/
 # Expect Header = Referer: http://p.p/
 TAG:^hide-referrer\{conditional-forge\}$
 
