@@ -4852,6 +4852,10 @@ static jb_err handle_conditional_hide_referrer_parameter(char **header,
       referer[hostlength+17] = '\0';
    }
    referer_url = strstr(referer, "http://");
+   if (NULL == referer_url)
+   {
+      referer_url = strstr(referer, "https://");
+   }
    if ((NULL == referer_url) || (NULL == strstr(referer_url, host)))
    {
       /* Host has changed, Referer is invalid or a https URL. */
