@@ -196,7 +196,12 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    char service[6];
    int retval;
    jb_socket fd;
+#ifdef HAVE_POLL
    struct pollfd poll_fd[1];
+#else
+   fd_set wfds;
+   struct timeval timeout;
+#endif
 #if !defined(_WIN32) && !defined(__BEOS__)
    int   flags;
 #endif
@@ -280,6 +285,20 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          continue;
       }
 
+#ifndef HAVE_POLL
+#ifndef _WIN32
+      if (fd >= FD_SETSIZE)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Server socket number too high to use select(): %d >= %d",
+            fd, FD_SETSIZE);
+         close_socket(fd);
+         freeaddrinfo(result);
+         return JB_INVALID_SOCKET;
+      }
+#endif
+#endif
+
 #ifdef FEATURE_EXTERNAL_FILTERS
       mark_socket_for_close_on_execute(fd);
 #endif
@@ -327,6 +346,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
       }
 #endif /* !defined(_WIN32) && !defined(__BEOS__) */
 
+#ifdef HAVE_POLL
       poll_fd[0].fd = fd;
       poll_fd[0].events = POLLOUT;
 
@@ -350,6 +370,18 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
          }
       }
       else if (retval > 0)
+#else
+      /* wait for connection to complete */
+      FD_ZERO(&wfds);
+      FD_SET(fd, &wfds);
+
+      memset(&timeout, 0, sizeof(timeout));
+      timeout.tv_sec  = 30;
+
+      /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Weird! */
+      if ((select((int)fd + 1, NULL, &wfds, NULL, &timeout) > 0)
+         && FD_ISSET(fd, &wfds))
+#endif
       {
          socklen_t optlen = sizeof(socket_error);
          if (!getsockopt(fd, SOL_SOCKET, SO_ERROR, &socket_error, &optlen))
@@ -407,7 +439,12 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    struct sockaddr_in inaddr;
    jb_socket fd;
    unsigned int addr;
+#ifdef HAVE_POLL
    struct pollfd poll_fd[1];
+#else
+   fd_set wfds;
+   struct timeval tv[1];
+#endif
 #if !defined(_WIN32) && !defined(__BEOS__)
    int   flags;
 #endif
@@ -465,6 +502,19 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
       return(JB_INVALID_SOCKET);
    }
 
+#ifndef HAVE_POLL
+#ifndef _WIN32
+   if (fd >= FD_SETSIZE)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Server socket number too high to use select(): %d >= %d",
+         fd, FD_SETSIZE);
+      close_socket(fd);
+      return JB_INVALID_SOCKET;
+   }
+#endif
+#endif
+
    set_no_delay_flag(fd);
 
 #if !defined(_WIN32) && !defined(__BEOS__)
@@ -504,10 +554,22 @@ static jb_socket no_rfc2553_connect_to(const char *host, int portnum, struct cli
    }
 #endif /* !defined(_WIN32) && !defined(__BEOS__) */
 
+#ifdef HAVE_POLL
    poll_fd[0].fd = fd;
    poll_fd[0].events = POLLOUT;
 
    if (poll(poll_fd, 1, 30000) <= 0)
+#else
+   /* wait for connection to complete */
+   FD_ZERO(&wfds);
+   FD_SET(fd, &wfds);
+
+   tv->tv_sec  = 30;
+   tv->tv_usec = 0;
+
+   /* MS Windows uses int, not SOCKET, for the 1st arg of select(). Weird! */
+   if (select((int)fd + 1, NULL, &wfds, NULL, tv) <= 0)
+#endif
    {
       close_socket(fd);
       return(JB_INVALID_SOCKET);
@@ -684,12 +746,25 @@ int data_is_available(jb_socket fd, int seconds_to_wait)
 {
    int n;
    char buf[10];
+#ifdef HAVE_POLL
    struct pollfd poll_fd[1];
 
    poll_fd[0].fd = fd;
    poll_fd[0].events = POLLIN;
 
    n = poll(poll_fd, 1, seconds_to_wait * 1000);
+#else
+   fd_set rfds;
+   struct timeval timeout;
+
+   memset(&timeout, 0, sizeof(timeout));
+   timeout.tv_sec = seconds_to_wait;
+
+   FD_ZERO(&rfds);
+   FD_SET(fd, &rfds);
+
+   n = select(fd+1, &rfds, NULL, NULL, &timeout);
+#endif
 
    /*
     * XXX: Do we care about the different error conditions?
@@ -1199,24 +1274,41 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    int retval;
    int i;
    int max_selected_socket;
+#ifdef HAVE_POLL
    struct pollfd poll_fds[MAX_LISTENING_SOCKETS];
    nfds_t polled_sockets;
+#else
+   fd_set selected_fds;
+#endif
    jb_socket fd;
    const char *host_addr;
    size_t listen_addr_size;
 
    c_length = sizeof(client);
 
+#ifdef HAVE_POLL
    memset(poll_fds, 0, sizeof(poll_fds));
    polled_sockets = 0;
+#else
+   /*
+    * Wait for a connection on any socket.
+    * Return immediately if no socket is listening.
+    * XXX: Why not treat this as fatal error?
+    */
+   FD_ZERO(&selected_fds);
+#endif
    max_selected_socket = 0;
    for (i = 0; i < MAX_LISTENING_SOCKETS; i++)
    {
       if (JB_INVALID_SOCKET != fds[i])
       {
+#ifdef HAVE_POLL
          poll_fds[i].fd = fds[i];
          poll_fds[i].events = POLLIN;
          polled_sockets++;
+#else
+         FD_SET(fds[i], &selected_fds);
+#endif
          if (max_selected_socket < fds[i] + 1)
          {
             max_selected_socket = fds[i] + 1;
@@ -1229,29 +1321,38 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    }
    do
    {
+#ifdef HAVE_POLL
       retval = poll(poll_fds, polled_sockets, -1);
+#else
+      retval = select(max_selected_socket, &selected_fds, NULL, NULL, NULL);
+#endif
    } while (retval < 0 && errno == EINTR);
    if (retval <= 0)
    {
       if (0 == retval)
       {
          log_error(LOG_LEVEL_ERROR,
-            "Waiting on new client failed because poll(2) returned 0."
+            "Waiting on new client failed because select(2) returned 0."
             " This should not happen.");
       }
       else
       {
          log_error(LOG_LEVEL_ERROR,
-            "Waiting on new client failed because of problems in poll(2): "
+            "Waiting on new client failed because of problems in select(2): "
             "%s.", strerror(errno));
       }
       return 0;
    }
+#ifdef HAVE_POLL
    for (i = 0; i < MAX_LISTENING_SOCKETS && (poll_fds[i].revents == 0); i++);
+#else
+   for (i = 0; i < MAX_LISTENING_SOCKETS && !FD_ISSET(fds[i], &selected_fds);
+         i++);
+#endif
    if (i >= MAX_LISTENING_SOCKETS)
    {
       log_error(LOG_LEVEL_ERROR,
-         "poll(2) reported connected clients (number = %u, "
+         "select(2) reported connected clients (number = %u, "
          "descriptor boundary = %u), but none found.",
          retval, max_selected_socket);
       return 0;
@@ -1286,6 +1387,19 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
          log_error(LOG_LEVEL_ERROR, "Setting SO_LINGER on socket %d failed.", afd);
       }
    }
+#endif
+
+#ifndef HAVE_POLL
+#ifndef _WIN32
+   if (afd >= FD_SETSIZE)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Client socket number too high to use select(): %d >= %d",
+         afd, FD_SETSIZE);
+      close_socket(afd);
+      return 0;
+   }
+#endif
 #endif
 
 #ifdef FEATURE_EXTERNAL_FILTERS
@@ -1468,6 +1582,7 @@ int socket_is_still_alive(jb_socket sfd)
 {
    char buf[10];
    int no_data_waiting;
+#ifdef HAVE_POLL
    int poll_result;
    struct pollfd poll_fd[1];
 
@@ -1483,6 +1598,23 @@ int socket_is_still_alive(jb_socket sfd)
       return FALSE;
    }
    no_data_waiting = !(poll_fd[0].revents & POLLIN);
+#else
+   fd_set readable_fds;
+   struct timeval timeout;
+   int ret;
+
+   memset(&timeout, '\0', sizeof(timeout));
+   FD_ZERO(&readable_fds);
+   FD_SET(sfd, &readable_fds);
+
+   ret = select((int)sfd+1, &readable_fds, NULL, NULL, &timeout);
+   if (ret < 0)
+   {
+      log_error(LOG_LEVEL_CONNECT, "select() on socket %d failed: %E", sfd);
+      return FALSE;
+   }
+   no_data_waiting = !FD_ISSET(sfd, &readable_fds);
+#endif /* def HAVE_POLL */
 
    return (no_data_waiting || (1 == recv(sfd, buf, 1, MSG_PEEK)));
 }
