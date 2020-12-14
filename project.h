@@ -59,6 +59,10 @@
    typedef pthread_mutex_t privoxy_mutex_t;
 #else
 #  ifdef _WIN32
+#     include <winsock2.h>
+      /* without winsock2.h I get lots of compiler warnings about
+       * #warning Please include winsock2.h before windows.h
+       */
 #     include <windows.h>
 #  endif
    typedef CRITICAL_SECTION privoxy_mutex_t;
