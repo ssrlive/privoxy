@@ -4,7 +4,7 @@
 <head>
   <title>Actions Files</title>
   <meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.29 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.30 User Manual" href="index.html">
   <link rel="PREVIOUS" title="The Main Configuration File" href="config.html">
   <link rel="NEXT" title="Filter Files" href="filter-file.html">
   <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
@@ -15,7 +15,7 @@
   <div class="NAVHEADER">
     <table summary="Header navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.29 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.30 User Manual</th>
       </tr>
       <tr>
         <td width="10%" align="left" valign="bottom"><a href="config.html" accesskey="P">Prev</a></td>
@@ -2493,7 +2493,8 @@ nasty-banner-server.example.com/junk.cgi\?output=trash</pre>
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class="SCREEN">+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}</pre>
+                    <pre class=
+                    "SCREEN">+hide-user-agent{Mozilla/5.0 (X11; ElectroBSD i386; rv:78.0) Gecko/20100101 Firefox/78.0}</pre>
                   </td>
                 </tr>
               </table>
@@ -3037,7 +3038,45 @@ TAG:^image/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SESSION-COOKIES-ONLY" id="SESSION-COOKIES-ONLY">8.5.37.
+        <h4 class="SECT3"><a name="SUPPRESS-TAG" id="SUPPRESS-TAG">8.5.37. suppress-tag</a></h4>
+        <div class="VARIABLELIST">
+          <dl>
+            <dt>Typical use:</dt>
+            <dd>
+              <p>Suppress client or server tag.</p>
+            </dd>
+            <dt>Effect:</dt>
+            <dd>
+              <p>Server or client tags to which this action applies are not added to the request, thus making all
+              actions that are specific to these request tags inactive.</p>
+            </dd>
+            <dt>Type:</dt>
+            <dd>
+              <p>Multi-value.</p>
+            </dd>
+            <dt>Parameter:</dt>
+            <dd>
+              <p>The result tag of a server-header or client-header tagger, as defined in one of the <a href=
+              "filter-file.html">filter files</a>.</p>
+            </dd>
+            <dt>Example usage (section):</dt>
+            <dd>
+              <table border="0" bgcolor="#E0E0E0" width="90%">
+                <tr>
+                  <td>
+                    <pre class=
+                    "SCREEN"># Suppress tag produced by range-requests client-header tagger for requests coming from address 10.0.0.1
+{+suppress-tag{RANGE-REQUEST}}
+TAG:^IP-ADDRESS: 10\.0\.0\.1$</pre>
+                  </td>
+                </tr>
+              </table>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h4 class="SECT3"><a name="SESSION-COOKIES-ONLY" id="SESSION-COOKIES-ONLY">8.5.38.
         session-cookies-only</a></h4>
         <div class="VARIABLELIST">
           <dl>
@@ -3099,7 +3138,7 @@ TAG:^image/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h4 class="SECT3"><a name="SET-IMAGE-BLOCKER" id="SET-IMAGE-BLOCKER">8.5.38. set-image-blocker</a></h4>
+        <h4 class="SECT3"><a name="SET-IMAGE-BLOCKER" id="SET-IMAGE-BLOCKER">8.5.39. set-image-blocker</a></h4>
         <div class="VARIABLELIST">
           <dl>
             <dt>Typical use:</dt>
@@ -3188,7 +3227,7 @@ TAG:^image/</pre>
         </div>
       </div>
       <div class="SECT3">
-        <h3 class="SECT3"><a name="SUMMARY" id="SUMMARY">8.5.39. Summary</a></h3>
+        <h3 class="SECT3"><a name="SUMMARY" id="SUMMARY">8.5.40. Summary</a></h3>
         <p>Note that many of these actions have the potential to cause a page to misbehave, possibly even not to
         display at all. There are many ways a site designer may choose to design his site, and what HTTP header
         content, and other criteria, he may depend on. There is no way to have hard and fast rules for all sites. See

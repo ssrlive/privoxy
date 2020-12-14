@@ -5,10 +5,10 @@
 <!entity p-intro SYSTEM "privoxy.sgml">
 <!entity history SYSTEM "history.sgml">
 <!entity seealso SYSTEM "seealso.sgml">
-<!entity p-version "3.0.29">
-<!entity p-status "stable">
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity p-version "3.0.30">
+<!entity p-status "UNRELEASED">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % seealso-extra "INCLUDE"> <!-- extra stuff from seealso.sgml    -->
@@ -110,8 +110,8 @@ Hal.
  -->
     <para>
      <application>Privoxy</application>, as an heir to
-     <application>Junkbuster</application>, is a Free Software project
-     and the code is licensed under the GNU General Public License version 2.
+     <application>Junkbuster</application>, is a <ulink
+      url="https://www.privoxy.org/user-manual/copyright.html">Free Software</ulink> project.
      As such, <application>Privoxy</application> development is potentially open
      to anyone who has the time, knowledge, and desire to contribute
      in any capacity. Our goals are simply to continue the mission,
@@ -187,6 +187,10 @@ Hal.
        develop features, fixes, or update the target-dependent tools. Only once
        such changes are fully tested ought they be pushed back to the central
        repository master branch.
+     </para>
+     <para>
+       Before pushing stuff, please rebase it on a current master so we get
+       an uncomplicated commit history. Avoid merges where possible.
      </para>
      <!--
      <para>
@@ -266,7 +270,9 @@ Hal.
             Note that near a major public release, we get more cautious.
             There is always the possibility to submit a patch to the <ulink
             url="https://sourceforge.net/p/ijbswa/patches/">patch
-            tracker</ulink> instead.
+            tracker</ulink> or the <ulink
+             url="https://lists.privoxy.org/mailman/listinfo/privoxy-devel">privoxy-devel mailing list</ulink>
+            instead.
           </para>
          </listitem>
         </itemizedlist>
@@ -380,7 +386,7 @@ Hal.
      <orderedlist numeration="arabic">
       <listitem><para>
         First, build the docs by running <computeroutput>make
-        dok</computeroutput>.
+        dok dok-tidy</computeroutput>.
       </para></listitem>
       <listitem><para>
         Run <computeroutput>make webserver</computeroutput> which copies all
@@ -611,7 +617,7 @@ Hal.
 
  <!--   ~~~~~       New section      ~~~~~     -->
 
- <sect2><title>Privoxy Custom Entities</title>
+ <sect2 id="custom-entities"><title>Privoxy Custom Entities</title>
  <para>
   <application>Privoxy</application> documentation is using
   a number of customized <quote>entities</quote> to facilitate
@@ -1965,6 +1971,19 @@ Install the rpm. Any error messages?
         </orderedlist>
     </sect2>
     <!-- XXX: Document how to write test reports and where to send them -->
+
+    <!--   ~~~~~       New section      ~~~~~     -->
+    <sect2 id="privoxy-regression-test"><title>Testing with <application>Privoxy-Regression-Test</application></title>
+     <para>
+       If you compiled, packaged or merely installed Privoxy, it is recommended to run
+       <application>Privoxy-Regression-Test</application> to verify that at least
+       the tested parts of <application>Privoxy</application> are working as expected.
+     </para>
+     <para>
+       This is actually pretty easy. For details, please see
+       <command>perldoc privoxy-regression-test.pl</command>.
+     </para>
+    </sect2>
 
     <!--   ~~~~~       New section      ~~~~~     -->
     <sect2 id="fuzzing"><title>Fuzzing Privoxy</title>

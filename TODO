@@ -12,7 +12,7 @@ https://www.privoxy.org/faq/general.html#DONATE
     (variables too). Could probably reuse large parts of Privoxy-Filter-Test.
     Note that there is currently work in progress to leverage curl's
     test suite, patches have been submitted upstream:
-    http://curl.haxx.se/mail/lib-2014-06/0070.html
+    https://curl.se/mail/lib-2014-06/0070.html
 
 3)  Fix some more XXX: comments.
 
@@ -440,6 +440,18 @@ https://www.privoxy.org/faq/general.html#DONATE
 167) Set up a public Privoxy-Filter-Test instance.
 
 168) Add a privacy policy.
+
+169) Preserve all relevant copyright and license statements in binary
+     packages we distribute.
+
+170) Serve the ca-cert-file through the CGI interface so client's
+     can conveniently import it (insecurely).
+
+171) Create a "view page using Privoxy" website where users can input
+     an URL and get a screenshot of a browser fetching the URL
+     through Privoxy.
+
+172) Create a public git repository for Privoxy-Filter-Test.
 
 ##########################################################################
 

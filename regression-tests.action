@@ -1,9 +1,10 @@
 #############################################################################
 #
 # This is a configuration file for Privoxy-Regression-Test
-# (included in the source tarball's tools directory).
+# (included in the source tarball's tools directory and available at
+# https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob;f=tools/privoxy-regression-test.pl;hb=HEAD).
 #
-# After referencing it in your Privoxy configuration both Privoxy and
+# After referencing this file in your Privoxy configuration both Privoxy and
 # Privoxy-Regression-Test should be good to go.
 #
 #############################################################################
@@ -25,7 +26,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.27
+for-privoxy-version=3.0.29
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
@@ -47,6 +48,7 @@ for-privoxy-version=3.0.27
 # Level 23 needs = config line enable-proxy-authentication-forwarding\s+1
 # Level 24 needs = feature status FEATURE_CLIENT_TAGS Yes
 # Level 25 needs = feature status FEATURE_HTTPS_INSPECTION No
+# Level 26 needs = feature status FEATURE_PCRE_HOST_PATTERNS Yes
 
 #######################################################
 # Enable taggers to activate the tests on demand
@@ -604,6 +606,11 @@ TAG:^Connection: close$
 TAG:^connection-sharing disabled$
 
 {}
+# XXX: This test is expected to fail when using "https://p.p/"
+#      as CGI prefix with https inspection enabled but can't
+#      yet be automatically skipped. By design connections aren't
+#      shared when using "https://" so Privoxy does not remove the
+#      header.
 # Set Header    = Connection: close
 # Expect Header = REMOVAL
 # Level = 16
@@ -622,6 +629,15 @@ TAG:^connection-sharing enabled$
 TAG:^No Host header$
 
 {}
+# XXX: This test is expected to fail when using "https://p.p/"
+#      as CGI prefix with https inspection enabled but can't
+#      yet be automatically skipped. The reason for the test
+#      failure is that Privoxy-Regression-Test only modifies
+#      the Host header for the CONNECT request, not for the
+#      actual request that follows. Changing that would not
+#      fix the test though as a modified Host header in the
+#      actual request would result in Privoxy attempting to
+#      connect to it.
 # Set Header    = Host: whatever.example.org
 # Expect Header = NO CHANGE
 TAG:^Host header other than the target host$
@@ -1112,3 +1128,11 @@ redirect2.example.net/
 {+delay-response{1}}
 # Fetch Test = http://config.privoxy.org/show-url-info?url=http%3A%2F%2Fwww.example.com%2Fprivoxy-test-delay-response
 config.privoxy.org/show-url-info\?url=http%3A%2F%2Fwww\.example\.com%2Fprivoxy-test-delay-response
+
+{+block{Block with pcre host pattern}}
+# Blocked URL = http://aaa.example.org/
+# Level = 26
+PCRE-HOST-PATTERN:^a{3}\.example\.org$
+# Blocked URL = http://bbb.example.org/
+# Level = 26
+PCRE-HOST-PATTERN:^(bbb|ccc|ddd)\.example\.org$

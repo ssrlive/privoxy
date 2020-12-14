@@ -70,7 +70,16 @@
       </ol>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="FUZZING" id="FUZZING">5.2. Fuzzing Privoxy</a></h2>
+      <h2 class="SECT2"><a name="PRIVOXY-REGRESSION-TEST" id="PRIVOXY-REGRESSION-TEST">5.2. Testing with <span class=
+      "APPLICATION">Privoxy-Regression-Test</span></a></h2>
+      <p>If you compiled, packaged or merely installed Privoxy, it is recommended to run <span class=
+      "APPLICATION">Privoxy-Regression-Test</span> to verify that at least the tested parts of <span class=
+      "APPLICATION">Privoxy</span> are working as expected.</p>
+      <p>This is actually pretty easy. For details, please see <b class="COMMAND">perldoc
+      privoxy-regression-test.pl</b>.</p>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="FUZZING" id="FUZZING">5.3. Fuzzing Privoxy</a></h2>
       <p>To make fuzzing more convenient, Privoxy can be configured with --enable-fuzz which will result in the --fuzz
       option becoming available.</p>
       <p>Example (tested on ElectroBSD):</p>

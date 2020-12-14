@@ -457,7 +457,7 @@ static int referrer_is_safe(const struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Denying access to %s. No referrer found.",
          csp->http->url);
    }
-   else if ((0 == strncmp(referrer, CGI_PREFIX, sizeof(CGI_PREFIX)-1))
+   else if ((0 == strncmp(referrer, CGI_PREFIX_HTTP, sizeof(CGI_PREFIX_HTTP)-1))
 #ifdef FEATURE_HTTPS_INSPECTION
          || (0 == strncmp(referrer, CGI_PREFIX_HTTPS, sizeof(CGI_PREFIX_HTTPS)-1))
          || (0 == strncmp(referrer, alt_prefix_https, strlen(alt_prefix_https)))
@@ -2216,11 +2216,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
    if (!err) err = map(exports, "homepage",      1, html_encode(HOME_PAGE_URL), 0);
    if (!err)
    {
-      err = map(exports, "default-cgi",   1, html_encode(
-#ifdef FEATURE_HTTPS_INSPECTION
-        client_use_ssl(csp) ? CGI_PREFIX_HTTPS :
-#endif
-        CGI_PREFIX), 0);
+      err = map(exports, "default-cgi",   1, html_encode(CGI_PREFIX), 0);
    }
    if (!err) err = map(exports, "menu",          1, make_menu(csp, caller), 0);
    if (!err) err = map(exports, "code-status",   1, CODE_STATUS, 1);
@@ -2235,11 +2231,7 @@ struct map *default_exports(const struct client_state *csp, const char *caller)
       /* Manual is delivered by Privoxy. */
       if (!err)
       {
-         err = map(exports, "user-manual", 1, html_encode(
-#ifdef FEATURE_HTTPS_INSPECTION
-           client_use_ssl(csp) ? CGI_PREFIX_HTTPS"user-manual/" :
-#endif
-           CGI_PREFIX"user-manual/"), 0);
+         err = map(exports, "user-manual", 1, html_encode(CGI_PREFIX"user-manual/"), 0);
       }
    }
    if (!err) err = map(exports, "actions-help-prefix", 1, ACTIONS_HELP_PREFIX ,1);
@@ -2457,11 +2449,7 @@ char *make_menu(const struct client_state *csp, const char *self)
           * the "blocked" template's JavaScript.
           */
          string_append(&result, "<li><a href=\"");
-         html_encoded_prefix = html_encode(
-#ifdef FEATURE_HTTPS_INSPECTION
-            client_use_ssl(csp) ? CGI_PREFIX_HTTPS :
-#endif
-            CGI_PREFIX);
+         html_encoded_prefix = html_encode(CGI_PREFIX);
          if (html_encoded_prefix == NULL)
          {
             return NULL;

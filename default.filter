@@ -457,37 +457,37 @@ FILTER: crude-parental Crude parental filtering. Note that this filter doesn't w
 # (Note #2: Is 'sex' a rude word?!)
 
 s%^.*(?<!middle)(?<!sus)(?<!es)sex.*$%<html><head><title>Blocked</title></head><body>\
-<h3>Blocked by Privoxy's crude-parental filter due to possible adult content.</h3></body></html>%is
+<h3>Blocked by <a href="http://p.p/">Privoxy's</a> crude-parental filter due to possible adult content.</h3></body></html>%is
 
 s+^.*warez.*$+<html><head><title>No Warez</title></head><body><h3>You're not searching for illegal stuff, are you?</h3></body></html>+is
 
 # Remove by description
-s/^.*\
+s@^.*\
 (?:(suck|lick|tongue|rub|fuck|fingering|finger|chicks?)\s*)?\
 (?:(her|your|my|hard|with|big|wet|tight|pink|hot|moist|young|teen)\s*)+\
 (dicks?|penis|cocks?|balls?|tits?|pussy|cunt|clit|ass|mouth).*$\
-/This page has been blocked by Privoxy's crude-parental content filter\
-/is
+@This page has been blocked by <a href="http://p.p/">Privoxy's</a> crude-parental content filter\
+@is
 
 #Remove by link text
-s/^.*\
+s@^.*\
 (download|broadband|view|watch|free|get|extreem)?\s*\
 (sex|xxx|porn|cumshot|fuck(ing|s)?|anal|ass|asian|adult|Amateur|org(y|ies)|close ups?|hand?job|nail(ed)?)+\s*\
 (movies?|pics?|videos?|dvds?|dvd's|links?).*$\
-/This page has been blocked by Privoxy's crude-parental content filter\
-/is
+@This page has been blocked by <a href="http://p.p/">Privoxy's</a> crude-parental content filter\
+@is
 
 #Remove by age disclaimer
-s/^.*\
+s@^.*\
 (models?|chicks?|girls?|women|persons)\s*\
 (who|are|were)+ (over|at least) (16|18|21) years (old|of age).*$\
-/This page has been blocked by Privoxy's crude-parental content filter\
-/is
+@This page has been blocked by <a href="http://p.p/">Privoxy's</a> crude-parental content filter\
+@is
 
 #Remove by regulations
-s/^.*(Section 2257|18 U.?S.?C.? 2257).*$\
-/This page has been blocked by Privoxy's crude-parental content filter\
-/is
+s@^.*(Section 2257|18 U.?S.?C.? 2257).*$\
+@This page has been blocked by <a href="http://p.p/">Privoxy's</a> crude-parental content filter\
+@is
 
 
 #################################################################################

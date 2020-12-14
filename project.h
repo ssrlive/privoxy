@@ -649,8 +649,10 @@ struct iob
 #define ACTION_MULTI_SERVER_HEADER_TAGGER    5
 /** Number of multi-string actions. */
 #define ACTION_MULTI_EXTERNAL_FILTER         6
+/** Index into current_action_spec::multi[] for tags to suppress. */
+#define ACTION_MULTI_SUPPRESS_TAG            7
 /** Number of multi-string actions. */
-#define ACTION_MULTI_COUNT                   7
+#define ACTION_MULTI_COUNT                   8
 
 
 /**
@@ -1303,13 +1305,14 @@ enum filter_type
 #ifdef FEATURE_EXTERNAL_FILTERS
    FT_EXTERNAL_CONTENT_FILTER = 5,
 #endif
+   FT_SUPPRESS_TAG = 6,
    FT_INVALID_FILTER       = 42,
 };
 
 #ifdef FEATURE_EXTERNAL_FILTERS
-#define MAX_FILTER_TYPES        6
+#define MAX_FILTER_TYPES        7
 #else
-#define MAX_FILTER_TYPES        5
+#define MAX_FILTER_TYPES        6
 #endif
 
 /**
@@ -1645,8 +1648,13 @@ struct configuration_spec
  * The prefix for CGI pages.  Written out in generated HTML.
  * INCLUDES the trailing slash.
  */
+#ifdef FEATURE_HTTPS_INSPECTION
+#define CGI_PREFIX  "//" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
+#define CGI_PREFIX_HTTPS "https:" CGI_PREFIX
+#else
 #define CGI_PREFIX  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
-#define CGI_PREFIX_HTTPS "https://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
+#endif
+#define CGI_PREFIX_HTTP  "http://" CGI_SITE_2_HOST CGI_SITE_2_PATH "/"
 
 #endif /* ndef PROJECT_H_INCLUDED */
 

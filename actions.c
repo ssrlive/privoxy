@@ -1115,6 +1115,8 @@ static const char *filter_type_to_string(enum filter_type filter_type)
    case FT_EXTERNAL_CONTENT_FILTER:
       return "external content filter";
 #endif
+   case FT_SUPPRESS_TAG:
+      return "suppress tag filter";
    case FT_INVALID_FILTER:
       return "invalid filter type";
    }

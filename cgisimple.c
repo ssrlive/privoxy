@@ -260,7 +260,13 @@ jb_err cgi_show_request(struct client_state *csp,
    }
 
    if (map(exports, "processed-request", 1,
-         html_encode_and_free_original(list_to_text(csp->headers)), 0))
+         html_encode_and_free_original(
+#ifdef FEATURE_HTTPS_INSPECTION
+                                       csp->http->ssl ?
+                                       list_to_text(csp->https_headers) :
+#endif
+                                       list_to_text(csp->headers)
+                                       ), 0))
    {
       free_map(exports);
       return JB_ERR_MEMORY;

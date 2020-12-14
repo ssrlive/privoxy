@@ -1,6 +1,6 @@
 # Note:  GNUmakefile is built automatically from GNUmakefile.in
 #
-# Written by and Copyright (C) 2001-2018 members of the
+# Written by and Copyright (C) 2001-2020 members of the
 # Privoxy team. https://www.privoxy.org/
 #
 # Based on the Internet Junkbuster originally written
@@ -445,7 +445,8 @@ tarball-dist: dist-check clean clobber
 
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" -o -path "*.git/*" \) | sort`; do \
+	-name "PACKAGERS" -o -path "*.git/*" \
+	-o -path "*/doc/webserver/feeds*" \) | sort`; do \
 	   files="$$files privoxy-$(VERSION)-$(CODE_STATUS)/$$i"; \
 	done &&  \
 	cd .. && $(TAR) -cvhf privoxy-$(VERSION)-$(CODE_STATUS)-src.tar $$files ; \
@@ -461,7 +462,8 @@ mtree-spec:
 	$(ECHO) "#mtree 2.0" > $(MTREE_SPEC_FILE)
 	for i in `find . -type f -a -not \( -path "*/CVS*" -o -name ".*" \
 	-o -path "*/debian/*" -o -path "*/actions/*" -o -name "*.php" -o \
-	-name "PACKAGERS" -o -path "*.git/*" -o -name "*.spec" \) | env -i sort`; do \
+	-name "PACKAGERS" -o -path "*.git/*" -o -name "*.spec" \
+	-o -path "*/doc/webserver/feeds*" \) | env -i sort`; do \
 	   $(ECHO) "privoxy-$(VERSION)-$(CODE_STATUS)/$$i time=$(SOURCE_DATE_EPOCH) type=file uname=privoxy gname=privoxy mode=0555"; \
 	done >> $(MTREE_SPEC_FILE)
 	$(RM) ../privoxy-$(VERSION)-$(CODE_STATUS)
@@ -587,7 +589,7 @@ dok-webserver:
 	s/\.\d\. //;\
 	s/__copy/&copy;/;\
 	s@(<SUB)@<p style="text-align: center">\1@; s@(</SUB)@\1></p@;\
-	s@(Privoxy is a non-caching)@<img src="images/privoxy.png" align="right">\n\1@;' \
+	s@(Privoxy is a non-caching)@<img src="images/privoxy.png" align="right" alt="Privoxy logo">\n\1@;' \
      doc/webserver/index.html && $(RM) doc/webserver/*.bak
 
 # privoxy-index.html for local documentation:

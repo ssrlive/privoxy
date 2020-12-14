@@ -1142,6 +1142,30 @@ function show_limit_connect_opts(tf)
         you can enable or disable the taggers individually below.</td>
     </tr>
 @server-header-tagger-params@
+@suppress-tag-params@
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1" align="center" valign="middle"><input type="radio"
+        name="new_string_filter_r0" value="Y"
+        ></td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="new_string_filter_r0" value="N"
+        ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="new_string_filter_r0" value="X" checked
+        ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@SUPPRESS-TAG">suppress-tag</a></td>
+      <td>Suppress tag.</td>
+    </tr>
+    <tr class="bg1" align="left" valign="top" id="suppress-tag_opts">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1">&nbsp;</td>
+      <td class="noc1">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>Tag to suppress:<br>
+        <input type="hidden" name="new_string_filter_t0" value="U">
+        <input type="text" name="new_string_filter_n0" size="40" value="">
+      </td>
+    </tr>
     <tr class="bg1" align="left" valign="top">
       <td class="en1" align="center" valign="middle"><input type="radio"
         name="session_cookies_only" value="Y" @session-cookies-only-y@

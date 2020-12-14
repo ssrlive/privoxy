@@ -248,6 +248,12 @@ static const struct filter_type_info filter_type_info[] =
       "E", "EXTERNAL-CONTENT-FILTER"
    },
 #endif
+   {
+      ACTION_MULTI_SUPPRESS_TAG,
+      "suppress-tag-params", "suppress-tag",
+      "suppress-tag-all", "suppress_tag_all",
+      "U", "SUPPRESS-TAG"
+   },
 };
 
 /* FIXME: Following non-static functions should be prototyped in .h or made static */
@@ -306,6 +312,10 @@ static jb_err actions_to_radio(struct map * exports,
                                const struct action_spec *action);
 static jb_err actions_from_radio(const struct map * parameters,
                                  struct action_spec *action);
+static jb_err action_render_string_filters_template(struct map * exports,
+                                       const struct action_spec *action,
+                                       const char* flter_template,
+                                       const struct filter_type_info *type);
 
 
 static jb_err map_copy_parameter_html(struct map *out,
@@ -2685,6 +2695,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                                 const struct map *parameters)
 {
    struct map * exports;
+   char *filter_template;
    unsigned sectionid;
    struct editable_file * file;
    struct file_line * cur_line;
@@ -2734,11 +2745,23 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       return JB_ERR_MEMORY;
    }
 
+   err = template_load(csp, &filter_template, "edit-actions-for-url-string-filter", 0);
+   if (err)
+   {
+       edit_free_file(file);
+       free_map(exports);
+       return cgi_error_no_template(csp, rsp, "edit-actions-for-url-string-filter");
+   }
+
    err = map(exports, "f", 1, stringify(file->identifier), 0);
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "s", 1, url_encode(lookup(parameters, "s")), 0);
 
    if (!err) err = actions_to_radio(exports, cur_line->data.action);
+
+   if (!err) err = action_render_string_filters_template(exports, cur_line->data.action, filter_template,
+                                               &filter_type_info[FT_SUPPRESS_TAG]);
+   freez(filter_template);
 
    /*
     * XXX: Some browsers (at least IE6 and IE7) have an artificial URL
@@ -2802,7 +2825,6 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
       /*
        * List available filters and their settings.
        */
-      char *filter_template;
       int filter_identifier = 0;
       char *prepared_templates[MAX_FILTER_TYPES];
 
@@ -2893,7 +2915,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                      if (filter_line == NULL) err = JB_ERR_MEMORY;
                   }
                   if (!err) err = template_fill(&filter_line, line_exports);
-                  string_join(&prepared_templates[type], filter_line);
+                  if (!err) err = string_join(&prepared_templates[type], filter_line);
 
                   free_map(line_exports);
                }
@@ -3193,6 +3215,133 @@ jb_err cgi_edit_actions_submit(struct client_state *csp,
          list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
          list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
       }
+   }
+
+   /* process existing suppress tag */
+   for (filter_identifier = 0; !err; filter_identifier++)
+   {
+      char key_value[30];
+      char key_name[30];
+      char old_name[30];
+      char key_type[30];
+      const char *name, *new_name;
+      char value; /*
+                   * Filter state. Valid states are: 'Y' (active),
+                   * 'N' (inactive) and 'X' (no change).
+                   * XXX: bad name.
+                   */
+      char type;  /*
+                   * Abbreviated filter type. Valid types are: 'U' (suppress tag).
+                   */
+      int multi_action_index = 0;
+
+      /* Generate the keys */
+      snprintf(key_value, sizeof(key_value), "string_filter_r%x", filter_identifier);
+      snprintf(key_name, sizeof(key_name), "string_filter_n%x", filter_identifier);
+      snprintf(old_name, sizeof(old_name), "string_filter_o%x", filter_identifier);
+      snprintf(key_type, sizeof(key_type), "string_filter_t%x", filter_identifier);
+
+      err = get_string_param(parameters, old_name, &name);
+      if (err) break;
+
+      if (name == NULL)
+      {
+         /* The filter identifier isn't present: we're done! */
+         break;
+      }
+
+      err = get_string_param(parameters, key_name, &new_name);
+      if (err) break;
+      if (new_name == NULL) new_name = name;
+
+      type = get_char_param(parameters, key_type);
+      switch (type)
+      {
+         case 'U':
+            multi_action_index = ACTION_MULTI_SUPPRESS_TAG;
+            break;
+         default:
+            log_error(LOG_LEVEL_ERROR,
+               "Unknown filter type: %c for filter %s. Filter ignored.", type, name);
+            continue;
+      }
+      assert(multi_action_index);
+
+      value = get_char_param(parameters, key_value);
+      if (value == 'X' || value == 'Y' || value == 'N')
+      {
+         list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
+         list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
+      }
+
+      if (value == 'Y')
+      {
+         err = enlist(cur_line->data.action->multi_add[multi_action_index], new_name);
+      }
+      else if (value == 'N')
+      {
+         err = enlist(cur_line->data.action->multi_remove[multi_action_index], new_name);
+      }
+   }
+
+   /* process new string filters */
+   for (filter_identifier = 0; !err; filter_identifier++)
+   {
+      char key_value[30];
+      char key_name[30];
+      char key_type[30];
+      const char *name;
+      char value; /*
+                   * Filter state. Valid states are: 'Y' (active),
+                   * 'N' (inactive) and 'X' (no change).
+                   * XXX: bad name.
+                   */
+      char type;  /*
+                   * Abbreviated filter type. Valid types are: 'U' (suppress tag).
+                   */
+      int multi_action_index = 0;
+
+      /* Generate the keys */
+      snprintf(key_value, sizeof(key_value), "new_string_filter_r%x", filter_identifier);
+      snprintf(key_name, sizeof(key_name), "new_string_filter_n%x", filter_identifier);
+      snprintf(key_type, sizeof(key_type), "new_string_filter_t%x", filter_identifier);
+
+      err = get_string_param(parameters, key_name, &name);
+      if (err) break;
+
+      if (name == NULL)
+      {
+         /* The filter identifier isn't present: we've done! */
+         break;
+      }
+
+      type = get_char_param(parameters, key_type);
+      switch (type)
+      {
+         case 'U':
+            multi_action_index = ACTION_MULTI_SUPPRESS_TAG;
+            break;
+         default:
+            log_error(LOG_LEVEL_ERROR,
+               "Unknown filter type: %c for filter %s. Filter ignored.", type, name);
+            continue;
+      }
+      assert(multi_action_index);
+
+      value = get_char_param(parameters, key_value);
+      if (value == 'Y')
+      {
+         list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
+         if (!err) err = enlist(cur_line->data.action->multi_add[multi_action_index], name);
+         list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
+      }
+      else if (value == 'N')
+      {
+         list_remove_item(cur_line->data.action->multi_add[multi_action_index], name);
+         list_remove_item(cur_line->data.action->multi_remove[multi_action_index], name);
+         if (!err) err = enlist(cur_line->data.action->multi_remove[multi_action_index], name);
+      }
+      /* nothing to do if the value is 'X' */
    }
 
    if (err)
@@ -4248,6 +4397,84 @@ static jb_err actions_to_radio(struct map * exports,
    return JB_ERR_OK;
 }
 
+/*********************************************************************
+ *
+ * Function    :  action_render_string_filters_template
+ *
+ * Description :  Converts a actionsfile entry into HTML template for actions with string
+ *                filters (currently SUPPRESS-TAG actions only)
+ *
+ * Parameters  :
+ *          1  :  exports = List of substitutions to add to.
+ *          2  :  action  = Action to read
+ *          3  :  filter_template  = template to fill
+ *          4  :  type  = filter type info for rendered values/macro name
+ *
+ * Returns     :  JB_ERR_OK     on success
+ *                JB_ERR_MEMORY on out-of-memory
+ *
+ *********************************************************************/
+static jb_err action_render_string_filters_template(struct map * exports,
+                                       const struct action_spec *action,
+                                       const char* filter_template,
+                                       const struct filter_type_info *type)
+{
+   jb_err err = JB_ERR_OK;
+   int filter_identifier = 0;
+   char *prepared_template = strdup("");
+
+   struct action_multi {
+       char radio;
+       struct list_entry *list;
+   };
+
+   struct action_multi desc[] = {
+       { 'y', action->multi_add[type->multi_action_index][0].first },
+       { 'n', action->multi_remove[type->multi_action_index][0].first }
+   };
+
+   for (int i=0; i < SZ(desc); ++i)
+   {
+      const char radio = desc[i].radio;
+      struct list_entry *entry = desc[i].list;
+      for (;(!err) && (entry != NULL); entry = entry->next)
+      {
+         char number[20];
+         struct map *line_exports;
+
+         /* Generate a unique serial number */
+         snprintf(number, sizeof(number), "%x", filter_identifier++);
+
+         line_exports = new_map();
+         if (line_exports == NULL)
+         {
+            err = JB_ERR_MEMORY;
+         }
+         else
+         {
+            char *filter_line;
+            if (!err) err = map(line_exports, "index", 1, number, 1);
+            if (!err) err = map(line_exports, "name",  1, entry->str, 1);
+            if (!err) err = map_radio(line_exports, "this-filter", "ynx", radio);
+            if (!err) err = map(line_exports, "filter-type", 1, type->type, 1);
+            if (!err) err = map(line_exports, "abbr-filter-type", 1, type->abbr_type, 1);
+            if (!err) err = map(line_exports, "anchor", 1, type->anchor, 1);
+            if (!err)
+            {
+               filter_line = strdup(filter_template);
+               if (filter_line == NULL) err = JB_ERR_MEMORY;
+            }
+            if (!err) err = template_fill(&filter_line, line_exports);
+            if (!err) err = string_join(&prepared_template, filter_line);
+
+            free_map(line_exports);
+        }
+      }
+   }
+   if (!err) map(exports, type->macro_name, 1, prepared_template, 1);
+   freez(prepared_template);
+   return err;
+}
 
 /*********************************************************************
  *

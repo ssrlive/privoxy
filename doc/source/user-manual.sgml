@@ -14,11 +14,11 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity changelog SYSTEM "changelog.sgml">
-<!entity p-version "3.0.29">
-<!entity p-status "stable">
+<!entity p-version "3.0.30">
+<!entity p-status "UNRELEASED">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
-<!entity % p-not-stable "IGNORE">
-<!entity % p-stable "INCLUDE">
+<!entity % p-not-stable "INCLUDE">
+<!entity % p-stable "IGNORE">
 <!entity % p-text "IGNORE">        <!-- define we are not a text only doc -->
 <!entity % p-doc "INCLUDE">        <!-- and we are a formal doc           -->
 <!entity % p-readme "IGNORE">
@@ -5112,7 +5112,7 @@ new action
  <varlistentry>
   <term>Example usage:</term>
   <listitem>
-     <screen>+hide-user-agent{Netscape 6.1 (X11; I; Linux 2.4.18 i686)}</screen>
+     <screen>+hide-user-agent{Mozilla/5.0 (X11; ElectroBSD i386; rv:78.0) Gecko/20100101 Firefox/78.0}</screen>
   </listitem>
  </varlistentry>
 </variablelist>
@@ -5928,6 +5928,63 @@ example.org/instance-that-is-delivered-as-xml-but-is-not
 # <literal><link linkend="external-filter-syntax">silly example</link></literal>.
 {+external-filter{rotate-image} +force-text-mode}
 TAG:^image/
+</screen>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="suppress-tag">
+<title>suppress-tag</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Suppress client or server tag.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Server or client tags to which this action applies are not added to the request,
+    thus making all actions that are specific to these request tags inactive.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The result tag of a server-header or client-header tagger, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+     <screen>
+# Suppress tag produced by range-requests client-header tagger for requests coming from address 10.0.0.1
+{+suppress-tag{RANGE-REQUEST}}
+TAG:^IP-ADDRESS: 10\.0\.0\.1$
 </screen>
   </listitem>
  </varlistentry>

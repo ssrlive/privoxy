@@ -48,6 +48,8 @@
       <p>Whilst the central repository contains only the master branch, developers are of course free to create
       branches in their local repositories as they develop features, fixes, or update the target-dependent tools. Only
       once such changes are fully tested ought they be pushed back to the central repository master branch.</p>
+      <p>Before pushing stuff, please rebase it on a current master so we get an uncomplicated commit history. Avoid
+      merges where possible.</p>
       <p>At one time there were two distinct branches: stable and unstable. The more drastic changes were to be in the
       unstable branch. These branches have now been merged to minimize time and effort of maintaining two branches.</p>
     </div>
@@ -81,7 +83,9 @@
         </li>
         <li>
           <p>Note that near a major public release, we get more cautious. There is always the possibility to submit a
-          patch to the <a href="https://sourceforge.net/p/ijbswa/patches/" target="_top">patch tracker</a> instead.</p>
+          patch to the <a href="https://sourceforge.net/p/ijbswa/patches/" target="_top">patch tracker</a> or the
+          <a href="https://lists.privoxy.org/mailman/listinfo/privoxy-devel" target="_top">privoxy-devel mailing
+          list</a> instead.</p>
         </li>
       </ul>
     </div>

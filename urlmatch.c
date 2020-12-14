@@ -704,9 +704,9 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
 static jb_err compile_url_pattern(struct pattern_spec *url, char *buf)
 {
    char *p;
+   const size_t prefix_length = 18;
 
 #ifdef FEATURE_PCRE_HOST_PATTERNS
-   const size_t prefix_length = 18;
    if (strncmpic(buf, "PCRE-HOST-PATTERN:", prefix_length) == 0)
    {
       url->pattern.url_spec.host_regex_type = PCRE_HOST_PATTERN;
@@ -716,6 +716,22 @@ static jb_err compile_url_pattern(struct pattern_spec *url, char *buf)
    else
    {
       url->pattern.url_spec.host_regex_type = VANILLA_HOST_PATTERN;
+   }
+#else
+   if (strncmpic(buf, "PCRE-HOST-PATTERN:", prefix_length) == 0)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "PCRE-HOST-PATTERN detected while Privoxy has been compiled "
+         "without FEATURE_PCRE_HOST_PATTERNS: %s",
+         buf);
+      /* Overwrite the "PCRE-HOST-PATTERN:" prefix */
+      memmove(buf, buf+prefix_length, strlen(buf+prefix_length)+1);
+      /*
+       * The pattern will probably not work as expected.
+       * We don't simply return JB_ERR_PARSE here so the
+       * regression tests can be loaded with and without
+       * FEATURE_PCRE_HOST_PATTERNS.
+       */
    }
 #endif
 

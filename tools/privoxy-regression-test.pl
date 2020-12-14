@@ -38,7 +38,7 @@ use strict;
 use Getopt::Long;
 
 use constant {
-    PRT_VERSION => 'Privoxy-Regression-Test 0.7.1',
+    PRT_VERSION => 'Privoxy-Regression-Test 0.7.2',
  
     CURL => 'curl',
 
@@ -47,7 +47,8 @@ use constant {
     CLI_LOOPS     => 1,
     CLI_MAX_TIME  => 5,
     CLI_MIN_LEVEL => 0,
-    # XXX: why limit at all?
+    # The reason for a maximum test level is explained in the
+    # perldoc section TEST LEVELS near the end of this file.
     CLI_MAX_LEVEL => 100,
     CLI_FORKS     => 0,
     CLI_SLEEP_TIME => 0,
@@ -132,7 +133,7 @@ sub parse_tag($) {
 sub check_for_forbidden_characters($) {
 
     my $string = shift;
-    my $allowed = '[-=\dA-Za-z~{}\[\]:./();\t ,+@"_%?&*^]';
+    my $allowed = '[-=\dA-Za-z~{}\[\]:./();\t ,+@"_%?&*^|]';
 
     unless ($string =~ m/^$allowed*$/o) {
         my $forbidden = $string;
@@ -895,6 +896,8 @@ sub register_dependency($$) {
 sub execute_method_test($) {
 
     my $test = shift;
+    our $privoxy_cgi_url;
+
     my $buffer_ref;
     my $status_code;
     my $method = $test->{'data'};
@@ -906,7 +909,7 @@ sub execute_method_test($) {
     # Don't complain about the 'missing' body
     $curl_parameters .= '--head ' if ($method =~ /^HEAD$/i);
 
-    $curl_parameters .= PRIVOXY_CGI_URL;
+    $curl_parameters .= $privoxy_cgi_url;
 
     $buffer_ref = get_page_with_curl($curl_parameters);
     $status_code = get_status_code($buffer_ref);
@@ -962,6 +965,8 @@ sub execute_redirect_test($) {
 sub execute_dumb_fetch_test($) {
 
     my $test = shift;
+    our $privoxy_cgi_url;
+
     my $buffer_ref;
     my $status_code;
 
@@ -972,7 +977,7 @@ sub execute_dumb_fetch_test($) {
         $curl_parameters .= '--request ' . quote($test->{method}) . ' ';
     }
     if ($test->{type} == TRUSTED_CGI_REQUEST) {
-        $curl_parameters .= '--referer ' . quote(PRIVOXY_CGI_URL) . ' ';
+        $curl_parameters .= '--referer ' . quote($privoxy_cgi_url) . ' ';
     }
 
     $curl_parameters .= quote($test->{'data'});
@@ -1026,6 +1031,8 @@ sub execute_sticky_actions_test($) {
 sub get_final_results($) {
 
     my $url = shift;
+    our $privoxy_cgi_url;
+
     my $curl_parameters = '';
     my %final_results = ();
     my $final_results_reached = 0;
@@ -1038,7 +1045,7 @@ sub get_final_results($) {
     $url =~ s@:@%3A@g;
     $url =~ s@/@%2F@g;
 
-    $curl_parameters .= quote(PRIVOXY_CGI_URL . 'show-url-info?url=' . $url);
+    $curl_parameters .= quote($privoxy_cgi_url . 'show-url-info?url=' . $url);
 
     foreach (@{get_cgi_page_or_else($curl_parameters)}) {
 
@@ -1293,9 +1300,19 @@ sub get_server_header($$) {
 sub get_status_code($) {
 
     my $buffer_ref = shift;
+    our $privoxy_cgi_url;
+
+    my $skip_connection_established_response = $privoxy_cgi_url =~ m@^https://@;
     my @buffer = @{$buffer_ref}; 
 
     foreach (@buffer) {
+
+        if ($skip_connection_established_response) {
+
+            next if (m@^HTTP/1\.1 200 Connection established@);
+            next if (m@^\r\n$@);
+            $skip_connection_established_response = 0;
+        }
 
         if (/^HTTP\/\d\.\d (\d{3})/) {
 
@@ -1364,7 +1381,7 @@ sub get_cgi_page_or_else($) {
 
     if (200 != $status_code) {
 
-        my $log_message = "Failed to fetch Privoxy CGI Page. " .
+        my $log_message = "Failed to fetch Privoxy CGI page '$cgi_url'. " .
                           "Received status code ". $status_code .
                           " while only 200 is acceptable.";
 
@@ -1397,8 +1414,13 @@ sub get_show_request_with_curl($) {
 
     # Enable the action to test
     $curl_parameters .= '-H \'X-Privoxy-Control: ' . $test->{'tag'} . '\' ';
-    # The header to filter
-    $curl_parameters .= '-H \'' . $header . '\' ';
+
+    # Add the header to filter
+    if ($privoxy_cgi_url =~ m@^https://@ and $header =~ m@^Host:@) {
+        $curl_parameters .= '--proxy-header \'' . $header . '\' ';
+    } else {
+        $curl_parameters .= '-H \'' . $header . '\' ';
+    }
 
     $curl_parameters .= ' ';
     $curl_parameters .= $privoxy_cgi_url;
@@ -1662,6 +1684,7 @@ sub list_test_types() {
 sub help() {
 
     our %cli_options;
+    our $privoxy_cgi_url;
 
     print_version();
 
@@ -1681,6 +1704,7 @@ Options and their default values if they have any:
     [--max-time $cli_options{'max-time'}]
     [--min-level $cli_options{'min-level'}]
     [--privoxy-address]
+    [--privoxy-cgi-prefix $privoxy_cgi_url]
     [--retries $cli_options{'retries'}]
     [--show-skipped-tests]
     [--shuffle-tests]
@@ -1721,6 +1745,7 @@ sub parse_cli_options() {
 
     our %cli_options;
     our $log_level;
+    our $privoxy_cgi_url;
 
     init_cli_options();
 
@@ -1738,6 +1763,7 @@ sub parse_cli_options() {
         'max-time=i'         => \$cli_options{'max-time'},
         'min-level=i'        => \$cli_options{'min-level'},
         'privoxy-address=s'  => \$cli_options{'privoxy-address'},
+        'privoxy-cgi-prefix=s' => \$privoxy_cgi_url, # XXX: Should use cli_options()
         'retries=i'          => \$cli_options{'retries'},
         'shuffle-tests'      => \$cli_options{'shuffle-tests'},
         'show-skipped-tests' => \$cli_options{'show-skipped-tests'},
@@ -1821,7 +1847,7 @@ B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
 [B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
 [B<--local-test-file testfile>] [B<--loops count>] [B<--max-level max-level>]
 [B<--max-time max-time>] [B<--min-level min-level>] B<--privoxy-address proxy-address>
-[B<--retries retries>] [B<--test-number test-number>]
+B<--privoxy-cgi-prefix cgi-prefix> [B<--retries retries>] [B<--test-number test-number>]
 [B<--show-skipped-tests>] [B<--sleep-time> seconds] [B<--verbose>]
 [B<--version>]
 
@@ -2019,6 +2045,20 @@ B<--privoxy-address proxy-address> Privoxy's listening address.
 If it's not set, the value of the environment variable http_proxy
 will be used. B<proxy-address> has to be specified in http_proxy
 syntax.
+
+B<--privoxy-cgi-prefix privoxy-cgi-prefix> The prefix to use when
+building URLs that are supposed to reach Privoxy's CGI interface.
+If it's not set, B<http://p.p/> is used, which is supposed to work
+with the default Privoxy configuration.
+If Privoxy has been built with B<FEATURE_HTTPS_INSPECTION> enabled,
+and if https inspection is activated with the B<+https-inspection>
+action, this option can be used with
+B<https://p.p/> provided the system running Privoxy-Regression-Test
+has been configured to trust the certificate used by Privoxy.
+Note that there are currently two tests in the official
+B<regression-tests.action> file that are expected to fail when
+using a B<privoxy-cgi-prefix> with B<https://> and aren't automatically
+skipped.
 
 B<--retries retries> Retry B<retries> times.
 
