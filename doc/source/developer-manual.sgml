@@ -2295,7 +2295,7 @@ for-privoxy-version=3.0.11
        <programlisting>
   $ git tag
   #   to see the tags
-  $ git log [last release tag]..HEAD &gt; /tmp/log
+  $ git log [last release tag]..master &gt; /tmp/log
   #   get the commit log since the last release
   $ utils/makeChangeLog /tmp/log &gt; /tmp/change.log
   #   reformat the commit log
