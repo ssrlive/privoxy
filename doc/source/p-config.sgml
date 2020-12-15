@@ -4412,7 +4412,7 @@ AES128-SHA
    </para>
    <para>
     An example file can be downloaded from
-    <ulink url="https://curl.haxx.se/ca/cacert.pem">https://curl.haxx.se/ca/cacert.pem</ulink>.
+    <ulink url="https://curl.se/ca/cacert.pem">https://curl.se/ca/cacert.pem</ulink>.
    </para>
   </listitem>
  </varlistentry>
