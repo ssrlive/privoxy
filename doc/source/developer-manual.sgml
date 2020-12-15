@@ -2520,7 +2520,8 @@ for-privoxy-version=3.0.11
       </listitem>
       <listitem>
        <para>
-        Other configuration files (<filename>default.action</filename> and
+        Other configuration files (<filename>default.action</filename>,
+        <filename>regression-tests.action</filename> and
         <filename>default.filter</filename>) should be installed as the new
         defaults, but all previously installed configuration files should be
         preserved as backups. This is just good manners :-) These files are
