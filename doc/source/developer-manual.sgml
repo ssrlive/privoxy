@@ -2822,38 +2822,10 @@ for-privoxy-version=3.0.11
    <title>Uploading and Releasing Your Package</title>
     <para>
       After the package is ready, it is time to upload it
-      to SourceForge, and go through the release steps. The upload
-      is done via FTP:
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-        Upload to: <ulink url="ftp://upload.sourceforge.net/incoming">ftp://upload.sourceforge.net/incoming</ulink>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       user: <literal>anonymous</literal>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       password: <literal>ijbswa-developers@lists.sourceforge.net</literal>
-      </para>
-     </listitem>
-    </itemizedlist>
-    <para>
-     Or use the <command>make</command> targets as described above.
-    </para>
-    <para>
-     Once this done go to
-     <ulink url="https://sourceforge.net/project/admin/editpackages.php?group_id=11118">
-                 https://sourceforge.net/project/admin/editpackages.php?group_id=11118</ulink>,
-     making sure you are logged in. Find your target platform in the
-     second column, and click <literal>Add Release</literal>. You will
-     then need to create a new release for your package, using the format
-     of <literal>$VERSION ($CODE_STATUS)</literal>, e.g. <emphasis>&p-version;
-     (beta)</emphasis>.
+      and go through the release steps. The upload
+      is done at
+      <ulink url="https://sourceforge.net/projects/ijbswa/upload/">SourceForge</ulink>
+      after logging in.
     </para>
     <para>
      Now just follow the prompts. Be sure to add any appropriate Release
