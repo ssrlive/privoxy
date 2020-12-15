@@ -3904,7 +3904,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
 <title>HTTPS Inspection (Experimental)</title>
 
 <para>
-  HTTPS inspection allows to filter encrypted requests.
+  HTTPS inspection allows to filter encrypted requests and responses.
   This is only supported when <application>Privoxy</application>
   has been built with FEATURE_HTTPS_INSPECTION.
   If you aren't sure if your version supports it, have a look at
