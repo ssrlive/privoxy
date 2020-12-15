@@ -4413,6 +4413,8 @@ AES128-SHA
    <para>
     An example file can be downloaded from
     <ulink url="https://curl.se/ca/cacert.pem">https://curl.se/ca/cacert.pem</ulink>.
+    If you want to create the file yourself, please see:
+    <ulink url="https://curl.se/docs/caextract.html">https://curl.se/docs/caextract.html</ulink>.
    </para>
   </listitem>
  </varlistentry>
