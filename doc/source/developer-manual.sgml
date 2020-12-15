@@ -2556,10 +2556,9 @@ for-privoxy-version=3.0.11
       <para>
         First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then run:
+        packages" above). Then run from that directory:
       </para>
         <programlisting>
-  cd current
   autoheader && autoconf && ./configure
 </programlisting>
       <para>
