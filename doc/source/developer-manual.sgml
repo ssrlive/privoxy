@@ -2490,9 +2490,7 @@ for-privoxy-version=3.0.11
           Also suggested: <filename>Developer Manual</filename>
           (doc/webserver/developer-manual) and <filename>ChangeLog</filename>
           (top-level directory). <filename>FAQ</filename> and the manuals are
-          HTML docs. There are also text versions in
-          <filename>doc/text/</filename> which could conceivably also be
-          included.
+          HTML docs.
         </para>
         <para>
          The documentation has been designed such that the manuals are linked
