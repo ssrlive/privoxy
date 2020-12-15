@@ -130,6 +130,7 @@ sub prepare_our_stuff() {
         'Re-Filter'     => 'purple',
         Connect         => 'brown',
         Request         => 'light_cyan',
+        Tagging         => 'purple',
         CGI             => 'light_green',
         Redirect        => 'cyan',
         Error           => 'light_red',
