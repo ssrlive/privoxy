@@ -66,6 +66,9 @@
 #ifdef FEATURE_CLIENT_TAGS
 #include "client-tags.h"
 #endif
+#ifdef FEATURE_HTTPS_INSPECTION
+#include "ssl.h"
+#endif
 
 #ifdef _WIN32
 #include "win32.h"
@@ -1220,8 +1223,33 @@ struct http_response *redirect_url(struct client_state *csp)
 
       if (*redirection_string == 's')
       {
-         old_url = csp->http->url;
+#ifdef FEATURE_HTTPS_INSPECTION
+         if (client_use_ssl(csp))
+         {
+            jb_err err;
+
+            old_url = strdup_or_die("https://");
+            err = string_append(&old_url, csp->http->hostport);
+            if (!err) err = string_append(&old_url, csp->http->path);
+            if (err)
+            {
+               log_error(LOG_LEVEL_FATAL,
+                  "Failed to rebuild URL 'https://%s%s'",
+                  csp->http->hostport, csp->http->path);
+            }
+         }
+         else
+#endif
+         {
+            old_url = csp->http->url;
+         }
          new_url = rewrite_url(old_url, redirection_string);
+#ifdef FEATURE_HTTPS_INSPECTION
+         if (client_use_ssl(csp))
+         {
+            freez(old_url);
+         }
+#endif
       }
       else
       {
