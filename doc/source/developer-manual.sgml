@@ -2569,43 +2569,6 @@ for-privoxy-version=3.0.11
 </programlisting>
     </sect3>
 
-    <sect3 id="newrelease-rpm"><title>SuSE, Conectiva or Red Hat RPM</title>
-      <para>
-        In following text, replace <replaceable class="parameter">dist</replaceable>
-        with either <quote>rh</quote> for Red Hat or <quote>suse</quote> for SuSE.
-      </para>
-      <para>
-        First, <emphasis>make sure that you have freshly exported the right
-        version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above).
-      </para>
-      <para>
-        As the only exception to not changing anything after export from Git,
-        now examine the file <filename>privoxy-</filename><replaceable class="parameter">dist</replaceable><filename>.spec</filename>
-        and make sure that the version information and the RPM release number are
-        correct. The RPM release numbers for each version start at one. Hence it must
-        be reset to one if this is the first RPM for
-        <replaceable class="parameter">dist</replaceable> which is built from version
-        X.Y.Z. Check the
-        <ulink url="https://sourceforge.net/projects/ijbswa/files/">file
-        list</ulink> if unsure. Else, it must be set to the highest already available RPM
-        release number for that version plus one.
-      </para>
-      <para>
-        Then run:
-      </para>
-        <programlisting>
-  cd current
-  autoheader && autoconf && ./configure
-</programlisting>
-      <para>
-        Then do
-      </para>
-        <programlisting>
-  make <replaceable class="parameter">dist</replaceable>-dist
-</programlisting>
-    </sect3>
-
     <sect3 id="NEWRELEASE-WINDOWS"><title>Windows</title>
     <!-- so annoying: docbook generated ids are UPPERCASE so
                 links to "whatever.html#idtag" DO NOT WORK!!
