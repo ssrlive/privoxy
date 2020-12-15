@@ -2852,7 +2852,7 @@ for-privoxy-version=3.0.11
       When all (or: most of the) packages have been uploaded and made available,
       send an email to the
       <ulink url="mailto:privoxy-announce@lists.privoxy.org">announce mailing
-      list</ulink>, Subject: "Version X.Y.Z available for download". Be sure to
+      list</ulink>, Subject: "Announcing Privoxy X.Y.Z $CODE_STATUS". Be sure to
       include the
       <ulink url="https://sourceforge.net/projects/ijbswa/files/">
       download location</ulink>, the release notes and the Changelog. Also, post an
