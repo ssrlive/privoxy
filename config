@@ -1,4 +1,4 @@
-#        Sample Configuration File for Privoxy 3.0.29
+#        Sample Configuration File for Privoxy 3.0.30
 #
 # Copyright (C) 2001-2020 Privoxy Developers https://www.privoxy.org/
 #
@@ -569,7 +569,7 @@ logfile logfile
 #
 #        debug     1 # Log the destination for each request. See also debug 1024.
 #        debug     2 # show each connection status
-#        debug     4 # show I/O status
+#        debug     4 # show tagging-related messages
 #        debug     8 # show header parsing
 #        debug    16 # log all data written to the network
 #        debug    32 # debug force feature
@@ -2442,9 +2442,10 @@ socket-timeout 300
 #  7. HTTPS INSPECTION (EXPERIMENTAL)
 #  ===================================
 #
-#  HTTPS inspection allows to filter encrypted requests. This is only
-#  supported when Privoxy has been built with
-#  FEATURE_HTTPS_INSPECTION.
+#  HTTPS inspection allows to filter encrypted requests and
+#  responses. This is only supported when Privoxy has been built with
+#  FEATURE_HTTPS_INSPECTION. If you aren't sure if your version
+#  supports it, have a look at http://config.privoxy.org/show-status.
 #
 #
 #  7.1. ca-directory
@@ -2543,7 +2544,8 @@ socket-timeout 300
 #  Notes:
 #
 #      This directive specifies the name of the CA key file in ".pem"
-#      format. See the ca-cert-file for a command to generate it.
+#      format. The ca-cert-file section contains a command to
+#      generate it.
 #
 #  Example:
 #
@@ -2757,8 +2759,9 @@ socket-timeout 300
 #      This directive specifies the trusted CAs file that is used
 #      when validating certificates for intercepted TLS/SSL requests.
 #
-#      An example file can be downloaded from https://curl.haxx.se/ca
-#      /cacert.pem.
+#      An example file can be downloaded from https://curl.se/ca/cacert.pem.
+#      If you want to create the file yourself, please
+#      see: https://curl.se/docs/caextract.html.
 #
 #  Example:
 #
