@@ -1488,7 +1488,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
 
       if (NULL == joblist)
       {
-         log_error(LOG_LEVEL_RE_FILTER,
+         log_error(LOG_LEVEL_TAGGING,
             "Tagger %s has empty joblist. Nothing to do.", b->name);
          continue;
       }
@@ -1535,14 +1535,14 @@ static jb_err header_tagger(struct client_state *csp, char *header)
              * no one would do it intentionally.
              */
             freez(tag);
-            log_error(LOG_LEVEL_INFO,
+            log_error(LOG_LEVEL_TAGGING,
                "Tagger \'%s\' created an empty tag. Ignored.", b->name);
             continue;
          }
 
          if (list_contains_item(csp->action->multi[ACTION_MULTI_SUPPRESS_TAG], tag))
          {
-            log_error(LOG_LEVEL_HEADER,
+            log_error(LOG_LEVEL_TAGGING,
                "Tagger \'%s\' didn't add tag \'%s\': suppressed",
                b->name, tag);
             freez(tag);
@@ -1575,7 +1575,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
                   action_message = "No action bits update necessary.";
                }
 
-               log_error(LOG_LEVEL_HEADER,
+               log_error(LOG_LEVEL_TAGGING,
                   "Tagger \'%s\' added tag \'%s\'. %s",
                   b->name, tag, action_message);
             }
@@ -1583,7 +1583,7 @@ static jb_err header_tagger(struct client_state *csp, char *header)
          else
          {
             /* XXX: Is this log-worthy? */
-            log_error(LOG_LEVEL_HEADER,
+            log_error(LOG_LEVEL_TAGGING,
                "Tagger \'%s\' didn't add tag \'%s\'. Tag already present",
                b->name, tag);
          }
