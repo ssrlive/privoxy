@@ -2567,17 +2567,6 @@ for-privoxy-version=3.0.11
         <programlisting>
   make tarball-dist
 </programlisting>
-      <para>
-        To upload the package to Sourceforge, simply issue
-      </para>
-        <programlisting>
-  make tarball-upload
-</programlisting>
-      <para>
-        Go to the displayed URL and release the file publicly on Sourceforge.
-        For the change log field, use the relevant section of the
-        <filename>ChangeLog</filename> file.
-      </para>
     </sect3>
 
     <sect3 id="newrelease-rpm"><title>SuSE, Conectiva or Red Hat RPM</title>
@@ -2615,18 +2604,6 @@ for-privoxy-version=3.0.11
         <programlisting>
   make <replaceable class="parameter">dist</replaceable>-dist
 </programlisting>
-      <para>
-        To upload the package to Sourceforge, simply issue
-      </para>
-        <programlisting>
-  make <replaceable class="parameter">dist</replaceable>-upload <replaceable class="parameter">rpm_packagerev</replaceable>
-</programlisting>
-      <para>
-        where <replaceable class="parameter">rpm_packagerev</replaceable> is the
-        RPM release number as determined above.
-        Go to the displayed URL and release the file publicly on Sourceforge.
-        Use the release notes and change log from the source tarball package.
-      </para>
     </sect3>
 
     <sect3 id="newrelease-solaris"><title>Solaris</title>
@@ -2729,12 +2706,8 @@ for-privoxy-version=3.0.11
       <para>
         This will create
         <filename>../privoxy_&p-version;-&p-status;-1_i386.deb</filename>
-        which can be uploaded.  To upload the package to Sourceforge, simply
-        issue
+        which can be uploaded.
       </para>
-        <programlisting>
-  make debian-upload
-</programlisting>
     </sect3>
 
     <sect3 id="newrelease-macosx"><title>Mac OS X</title>
