@@ -2606,38 +2606,6 @@ for-privoxy-version=3.0.11
 </programlisting>
     </sect3>
 
-    <sect3 id="newrelease-solaris"><title>Solaris</title>
-      <para>
-        Login to Sourceforge's compilefarm via ssh:
-      </para>
-        <programlisting>
-  ssh cf.sourceforge.net
-</programlisting>
-      <para>
-        Choose the right operating system (not the Debian one).
-        When logged in, <emphasis>make sure that you have freshly exported the right
-        version into an empty directory</emphasis>. (See "Building and releasing
-        packages" above). Then run:
-      </para>
-        <programlisting>
-  cd current
-  autoheader && autoconf && ./configure
-</programlisting>
-      <para>
-        Then run
-      </para>
-        <programlisting>
-  gmake solaris-dist
-</programlisting>
-      <para>
-        which creates a gzip'ed tar archive. Sadly, you cannot use <command>make
-        solaris-upload</command> on the Sourceforge machine (no ncftpput). You now have
-        to manually upload the archive to Sourceforge's ftp server and release
-        the file publicly. Use the release notes and Change Log from the
-        source tarball package.
-      </para>
-    </sect3>
-
     <sect3 id="NEWRELEASE-WINDOWS"><title>Windows</title>
     <!-- so annoying: docbook generated ids are UPPERCASE so
                 links to "whatever.html#idtag" DO NOT WORK!!
