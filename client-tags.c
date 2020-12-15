@@ -233,7 +233,7 @@ void get_tag_list_for_client(struct list *tag_list,
       if (enabled_tags->end_of_life && (enabled_tags->end_of_life < now))
       {
          struct client_specific_tag *next_tag = enabled_tags->next;
-         log_error(LOG_LEVEL_INFO,
+         log_error(LOG_LEVEL_TAGGING,
             "Tag '%s' for client %s expired %ld seconds ago. Deleting it.",
             enabled_tags->name, client_address,
             (now - enabled_tags->end_of_life));
@@ -243,6 +243,8 @@ void get_tag_list_for_client(struct list *tag_list,
       }
       else
       {
+         log_error(LOG_LEVEL_TAGGING, "Enlisting tag '%s' for client %s",
+            enabled_tags->name, client_address);
          enlist(tag_list, enabled_tags->name);
       }
       enabled_tags = enabled_tags->next;
@@ -276,7 +278,8 @@ time_t get_next_tag_timeout_for_client(const char *client_address)
    enabled_tags = get_tags_for_client(client_address);
    while (enabled_tags != NULL)
    {
-      log_error(LOG_LEVEL_CGI, "Evaluating tag '%s' for client %s. End of life %ld",
+      log_error(LOG_LEVEL_TAGGING,
+         "Evaluating tag '%s' for client %s. End of life %ld",
          enabled_tags->name, client_address, enabled_tags->end_of_life);
       if (enabled_tags->end_of_life)
       {
@@ -561,13 +564,13 @@ jb_err enable_client_specific_tag(struct client_state *csp,
 
    if (client_has_requested_tag(csp->client_address, tag_name))
    {
-      log_error(LOG_LEVEL_ERROR,
+      log_error(LOG_LEVEL_TAGGING,
          "Tag '%s' already enabled for client '%s'", tag->name, csp->client_address);
    }
    else
    {
       add_tag_for_client(csp->client_address, tag_name, time_to_live);
-      log_error(LOG_LEVEL_INFO,
+      log_error(LOG_LEVEL_TAGGING,
          "Tag '%s' enabled for client '%s'. TTL: %ld.",
          tag->name, csp->client_address, time_to_live);
    }
@@ -607,12 +610,12 @@ jb_err disable_client_specific_tag(struct client_state *csp, const char *tag_nam
    if (client_has_requested_tag(csp->client_address, tag_name))
    {
       remove_tag_for_client(csp->client_address, tag_name);
-      log_error(LOG_LEVEL_INFO,
+      log_error(LOG_LEVEL_TAGGING,
          "Tag '%s' disabled for client '%s'", tag->name, csp->client_address);
    }
    else
    {
-      log_error(LOG_LEVEL_ERROR,
+      log_error(LOG_LEVEL_TAGGING,
          "Tag '%s' currently not set for client '%s'",
          tag->name, csp->client_address);
    }
@@ -656,6 +659,7 @@ int client_tag_match(const struct pattern_spec *pattern,
    {
       if (0 == regexec(pattern->pattern.tag_regex, tag->str, 0, NULL, 0))
       {
+         log_error(LOG_LEVEL_TAGGING, "Tag '%s' matches", tag->str);
          return 1;
       }
    }
