@@ -2373,7 +2373,7 @@ for-privoxy-version=3.0.11
       <listitem>
        <para>
         Tag all files in Git with the version number with
-        <quote><command>git tag v_X_Y_Z</command></quote>.
+        <quote><command>git tag -s v_X_Y_Z</command></quote>.
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </para>
       </listitem>
