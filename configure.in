@@ -73,6 +73,10 @@ DB2HTML=$withval
 dnl =================================================================
 dnl Application version number
 dnl =================================================================
+dnl CODE_STATUS can be "alpha", "beta", "stable" or "UNRELEASED",
+dnl and will be used for CGI output. Increment version number and
+dnl set status to "UNRELEASED" whenever git differs from the last
+dnl release and no new release is near.
 
 VERSION_MAJOR=3
 VERSION_MINOR=0
@@ -82,11 +86,6 @@ CODE_STATUS="UNRELEASED"
 dnl Timestamp (date +%s) used by the mtree-spec target.
 dnl Should be updated before releases but forgetting it isn't critical.
 SOURCE_DATE_EPOCH=1605695571
-
-dnl CODE_STATUS can be "alpha", "beta", "stable" or "UNRELEASED",
-dnl and will be used for CGI output. Increment version number and
-dnl set status to "UNRELEASED" whenever git differs from the last
-dnl release and no new release is near.
 
 dnl =================================================================
 dnl Substitute the version numbers
