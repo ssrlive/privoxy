@@ -3632,12 +3632,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Notes:</term>
   <listitem>
-   <warning>
-   <para>
-    This is an experimental feature. The syntax is likely to change
-    in future versions.
-   </para>
-   </warning>
    <para>
     Client-specific tags allow Privoxy admins to create different
     profiles and let the users chose which one they want without
@@ -3718,12 +3712,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Notes:</term>
   <listitem>
-   <warning>
-   <para>
-    This is an experimental feature. The syntax is likely to change
-    in future versions.
-   </para>
-   </warning>
    <para>
     In case of some tags users may not want to enable them permanently,
     but only for a short amount of time, for example to circumvent a block
@@ -3779,12 +3767,6 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
  <varlistentry>
   <term>Notes:</term>
   <listitem>
-   <warning>
-   <para>
-    This is an experimental feature. The syntax is likely to change
-    in future versions.
-   </para>
-   </warning>
    <para>
     If clients reach Privoxy through another proxy, for example a load
     balancer, Privoxy can't tell the client's IP address from the connection.
