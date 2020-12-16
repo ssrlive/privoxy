@@ -50,6 +50,7 @@ https://www.privoxy.org/donate
 12) Support pipelining for outgoing connections.
 
 14) Allow to filter POST parameters.
+    Work in progress: https://sourceforge.net/p/ijbswa/patches/145/
 
 19) enable-forward-fallback. Syntax? Suggested by K.R.
 
