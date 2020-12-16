@@ -3677,6 +3677,11 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     # that are enabled based on CLIENT-TAG patterns.
     client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
     client-specific-tag disable-content-filters Disable content-filters but do not affect other actions
+    client-specific-tag overrule-redirects Overrule redirect sections
+    client-specific-tag allow-cookies Do not crunch cookies in either direction
+    client-specific-tag change-tor-socks-port Change forward-socks5 settings to use a different Tor socks port (and circuits)
+    client-specific-tag no-https-inspection Disable HTTPS inspection
+    client-specific-tag no-tls-verification Don't verify certificates when http-inspection is enabled
 </screen>
   </listitem>
  </varlistentry>
