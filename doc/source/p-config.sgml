@@ -1269,7 +1269,7 @@ actionsfile
     They can only be used if <application>Privoxy</application> has
     been compiled with IPv6 support. If you aren't sure if your version
     supports it, have a look at
-    <literal>http://config.privoxy.org/show-status</literal>.
+    <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>.
    </para>
    <para>
     Some operating systems will prefer IPv6 to IPv4 addresses even if the
