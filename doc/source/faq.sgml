@@ -568,7 +568,9 @@ warranty? Registration?</title>
  If you want to become a sponsor, please contact
  <ulink url="mailto:fk@fabiankeil.de">Fabian Keil</ulink>
  and include the link target in the mail.
- New sponsors are only accepted if no developer objects.
+ New sponsors are only accepted if no
+ <ulink url="../user-manual/copyright.html#AUTHORS">Privoxy team</ulink>
+ member objects.
 </para>
 
 </sect2>
