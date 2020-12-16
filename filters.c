@@ -1197,7 +1197,6 @@ struct http_response *redirect_url(struct client_state *csp)
     */
    char * redirect_mode;
 #endif /* def FEATURE_FAST_REDIRECTS */
-   char *old_url = NULL;
    char *new_url = NULL;
    char *redirection_string;
 
@@ -1223,14 +1222,16 @@ struct http_response *redirect_url(struct client_state *csp)
 
       if (*redirection_string == 's')
       {
+         char *requested_url;
+
 #ifdef FEATURE_HTTPS_INSPECTION
          if (client_use_ssl(csp))
          {
             jb_err err;
 
-            old_url = strdup_or_die("https://");
-            err = string_append(&old_url, csp->http->hostport);
-            if (!err) err = string_append(&old_url, csp->http->path);
+            requested_url = strdup_or_die("https://");
+            err = string_append(&requested_url, csp->http->hostport);
+            if (!err) err = string_append(&requested_url, csp->http->path);
             if (err)
             {
                log_error(LOG_LEVEL_FATAL,
@@ -1241,13 +1242,13 @@ struct http_response *redirect_url(struct client_state *csp)
          else
 #endif
          {
-            old_url = csp->http->url;
+            requested_url = csp->http->url;
          }
-         new_url = rewrite_url(old_url, redirection_string);
+         new_url = rewrite_url(requested_url, redirection_string);
 #ifdef FEATURE_HTTPS_INSPECTION
          if (client_use_ssl(csp))
          {
-            freez(old_url);
+            freez(requested_url);
          }
 #endif
       }
@@ -1263,6 +1264,8 @@ struct http_response *redirect_url(struct client_state *csp)
 #ifdef FEATURE_FAST_REDIRECTS
    if ((csp->action->flags & ACTION_FAST_REDIRECTS))
    {
+      char *old_url;
+
       redirect_mode = csp->action->string[ACTION_STRING_FAST_REDIRECTS];
 
       /*
