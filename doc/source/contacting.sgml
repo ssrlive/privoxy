@@ -184,12 +184,6 @@ debug 65536 # Log applying actions</literallayout>
 </para>
 
 <para>
- If you are new to reporting problems, you might be interested in
-  <ulink url="https://www.chiark.greenend.org.uk/~sgtatham/bugs.html"
-  >How to Report Bugs Effectively</ulink>.
-</para>
-
-<para>
   The <ulink url="https://www.privoxy.org/user-manual/appendix.html#ACTIONSANAT">appendix
   of the Privoxy User Manual</ulink> also has helpful information
   on understanding <literal>actions</literal>, and <literal>action</literal> debugging.
