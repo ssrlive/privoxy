@@ -3665,7 +3665,7 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     Clients can request tags to be set by using the CGI interface <ulink
      url="http://config.privoxy.org/client-tags">http://config.privoxy.org/client-tags</ulink>.
     The specific tag description is only used on the web page and should
-    be phrased in away that the user understand the effect of the tag.
+    be phrased in away that the user understands the effect of the tag.
    </para>
   </listitem>
  </varlistentry>
