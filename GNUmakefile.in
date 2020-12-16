@@ -574,6 +574,7 @@ groff2html:
 dok-readme: dok-release
 	cd doc/source && $(DB_TXT)-notoc -V nochunks readme.sgml > tmp.html &&\
 	$(W3M_DUMP) tmp.html > ../../README ;\
+	$(PERL) -pi'' -e 's@doc/source/readme\.sgml@README@' ../../README;  \
 	$(DB_TXT)-notoc -V nochunks install.sgml > tmp.html &&\
 	$(W3M_DUMP) tmp.html > ../../INSTALL ;\
 	$(RM) tmp.*
