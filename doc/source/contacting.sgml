@@ -129,7 +129,7 @@
     <literallayout>debug     1 # Log the destination for each request Privoxy let through.
             #   See also debug 1024.
 debug     2 # show each connection status
-debug     4 # show I/O status
+debug     4 # show tagging-related messages
 debug     8 # show header parsing
 debug   128 # debug redirects
 debug   256 # debug GIF de-animation
