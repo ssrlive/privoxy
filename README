@@ -1,8 +1,8 @@
 /*********************************************************************
  *
- * File        :  doc/source/readme.sgml
+ * File        :  README
  *
- * Purpose     :  README file to give a short intro.
+ * Purpose     :  Give a short intro about Privoxy.
  *
  * Copyright   :  Written by and Copyright (C) 2001-2020 the
  *                Privoxy team. https://www.privoxy.org/
@@ -169,8 +169,8 @@ requesting support:
   * The URL where the problem occurred, or some way for us to duplicate the
     problem (e.g. http://somesite.example.com/?somethingelse=123).
 
-  * Whether your version of Privoxy is one supplied by the Privoxy developers
-    via SourceForge, or if you got your copy somewhere else.
+  * Whether your version of Privoxy is one supplied by the Privoxy developers,
+    or if you got your copy somewhere else.
 
   * Whether you are using Privoxy together with another proxy such as Tor. If
     so, please temporary disable the other proxy to see if the symptoms change.
@@ -187,7 +187,7 @@ requesting support:
     debug     1 # Log the destination for each request Privoxy let through.
                 #   See also debug 1024.
     debug     2 # show each connection status
-    debug     4 # show I/O status
+    debug     4 # show tagging-related messages
     debug     8 # show header parsing
     debug   128 # debug redirects
     debug   256 # debug GIF de-animation
@@ -229,9 +229,6 @@ we may request additional information. If you use a SF id, you should
 automatically get a mail when someone responds to your request. Please don't
 bother to add an email address when using the tracker. If you prefer to
 communicate through email, just use one of the mailing lists directly.
-
-If you are new to reporting problems, you might be interested in How to Report
-Bugs Effectively.
 
 The appendix of the Privoxy User Manual also has helpful information on
 understanding actions, and action debugging.
