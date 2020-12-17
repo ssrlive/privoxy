@@ -385,6 +385,7 @@ logdir .
 actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.
 actionsfile default.action   # Main actions file
 actionsfile user.action      # User customizations
+#regression-tests.action     # Tests for privoxy-regression-test
 #
 #  2.6. filterfile
 #  ================
@@ -2252,13 +2253,6 @@ socket-timeout 300
 #
 #  Notes:
 #
-#      +-----------------------------------------------------+
-#      |                       Warning                       |
-#      |-----------------------------------------------------|
-#      |This is an experimental feature. The syntax is likely|
-#      |to change in future versions.                        |
-#      +-----------------------------------------------------+
-#
 #      Client-specific tags allow Privoxy admins to create different
 #      profiles and let the users chose which one they want without
 #      impacting other users.
@@ -2287,7 +2281,7 @@ socket-timeout 300
 #      Clients can request tags to be set by using the CGI interface
 #      http://config.privoxy.org/client-tags. The specific tag
 #      description is only used on the web page and should be phrased
-#      in away that the user understand the effect of the tag.
+#      in away that the user understands the effect of the tag.
 #
 #  Examples:
 #
@@ -2295,6 +2289,11 @@ socket-timeout 300
 #          # that are enabled based on CLIENT-TAG patterns.
 #          client-specific-tag circumvent-blocks Overrule blocks but do not affect other actions
 #          client-specific-tag disable-content-filters Disable content-filters but do not affect other actions
+#          client-specific-tag overrule-redirects Overrule redirect sections
+#          client-specific-tag allow-cookies Do not crunch cookies in either direction
+#          client-specific-tag change-tor-socks-port Change forward-socks5 settings to use a different Tor socks port (and circuits)
+#          client-specific-tag no-https-inspection Disable HTTPS inspection
+#          client-specific-tag no-tls-verification Don't verify certificates when http-inspection is enabled
 #
 #
 #  6.17. client-tag-lifetime
@@ -2313,13 +2312,6 @@ socket-timeout 300
 #      60
 #
 #  Notes:
-#
-#      +-----------------------------------------------------+
-#      |                       Warning                       |
-#      |-----------------------------------------------------|
-#      |This is an experimental feature. The syntax is likely|
-#      |to change in future versions.                        |
-#      +-----------------------------------------------------+
 #
 #      In case of some tags users may not want to enable them
 #      permanently, but only for a short amount of time, for example
@@ -2355,13 +2347,6 @@ socket-timeout 300
 #      0
 #
 #  Notes:
-#
-#      +-----------------------------------------------------+
-#      |                       Warning                       |
-#      |-----------------------------------------------------|
-#      |This is an experimental feature. The syntax is likely|
-#      |to change in future versions.                        |
-#      +-----------------------------------------------------+
 #
 #      If clients reach Privoxy through another proxy, for example a
 #      load balancer, Privoxy can't tell the client's IP address from
@@ -2546,6 +2531,8 @@ socket-timeout 300
 #      This directive specifies the name of the CA key file in ".pem"
 #      format. The ca-cert-file section contains a command to
 #      generate it.
+#
+#      Access to the key should be limited to Privoxy.
 #
 #  Example:
 #
