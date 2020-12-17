@@ -5182,7 +5182,10 @@ int main(int argc, char **argv)
       }
 #endif
 
-      chdir("/");
+      if (chdir("/") != 0)
+      {
+         log_error(LOG_LEVEL_FATAL, "Failed to cd into '/': %E");
+      }
 
    } /* -END- if (daemon_mode) */
 
