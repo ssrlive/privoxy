@@ -1019,7 +1019,6 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 	@$(ECHO) Starting Privoxy uninstallation
 	@# KILL privoxy if running
-	@# XXX: the chkconfig line may need a DESTDIR prefix.
 	-@test -f $(DESTDIR)$(PID_DEST)/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
          $(KILL) `$(CAT) $(DESTDIR)$(PID_DEST)/privoxy.pid` || :
 	-@test -f $(DESTDIR)/var/run/privoxy.pid && $(ECHO) Stopping $(PROGRAM) &&\
