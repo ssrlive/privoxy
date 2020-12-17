@@ -84,6 +84,7 @@ extern const struct forward_spec *forward_url(struct client_state *csp,
  * Content modification
  */
 extern char *execute_content_filters(struct client_state *csp);
+extern char *execute_client_body_filters(struct client_state *csp, size_t *filtered_data_len);
 extern char *execute_single_pcrs_command(char *subject, const char *pcrs_command, int *hits);
 extern char *rewrite_url(char *old_url, const char *pcrs_command);
 
@@ -91,6 +92,7 @@ extern pcrs_job *compile_dynamic_pcrs_job_list(const struct client_state *csp, c
 
 extern int content_requires_filtering(struct client_state *csp);
 extern int content_filters_enabled(const struct current_action_spec *action);
+extern int client_body_filters_enabled(const struct current_action_spec *action);
 extern int filters_available(const struct client_state *csp);
 
 /*

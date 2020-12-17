@@ -1164,6 +1164,10 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
          new_filter = FT_EXTERNAL_CONTENT_FILTER;
       }
 #endif
+      else if (strncmp(buf, "CLIENT-BODY-FILTER:", 19) == 0)
+      {
+         new_filter = FT_CLIENT_BODY_FILTER;
+      }
 
       /*
        * If this is the head of a new filter block, make it a
@@ -1182,6 +1186,10 @@ int load_one_re_filterfile(struct client_state *csp, int fileid)
             new_bl->name = chomp(buf + 16);
          }
 #endif
+         else if (new_filter == FT_CLIENT_BODY_FILTER)
+         {
+            new_bl->name = chomp(buf + 19);
+         }
          else
          {
             new_bl->name = chomp(buf + 21);

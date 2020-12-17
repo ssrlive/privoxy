@@ -1117,6 +1117,8 @@ static const char *filter_type_to_string(enum filter_type filter_type)
 #endif
    case FT_SUPPRESS_TAG:
       return "suppress tag filter";
+   case FT_CLIENT_BODY_FILTER:
+      return "client body filter";
    case FT_INVALID_FILTER:
       return "invalid filter type";
    }
@@ -1187,7 +1189,8 @@ static int action_spec_is_valid(struct client_state *csp, const struct action_sp
       {ACTION_MULTI_CLIENT_HEADER_FILTER, FT_CLIENT_HEADER_FILTER},
       {ACTION_MULTI_SERVER_HEADER_FILTER, FT_SERVER_HEADER_FILTER},
       {ACTION_MULTI_CLIENT_HEADER_TAGGER, FT_CLIENT_HEADER_TAGGER},
-      {ACTION_MULTI_SERVER_HEADER_TAGGER, FT_SERVER_HEADER_TAGGER}
+      {ACTION_MULTI_SERVER_HEADER_TAGGER, FT_SERVER_HEADER_TAGGER},
+      {ACTION_MULTI_CLIENT_BODY_FILTER, FT_CLIENT_BODY_FILTER}
    };
    int errors = 0;
    int i;

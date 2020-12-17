@@ -2955,6 +2955,83 @@ example.org/blocked-example-page</screen>
 </variablelist>
 </sect3>
 
+<!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="client-body-filter">
+<title>client-body-filter</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+   Rewrite or remove client request body.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    All request bodies to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of a client-body filter, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Please refer to the <link linkend="filter-file">filter file chapter</link>
+    to learn how to create your own client-body filters.
+   </para>
+   <para>
+    The distribution <filename>default.filter</filename> file contains a selection of
+    client-body filters for example purposes.
+   </para>
+   <para>
+    The amount of data that can be filtered is limited by the
+    <literal><link linkend="buffer-limit">buffer-limit</link></literal>
+    option in the main <link linkend="config">config file</link>. The
+    default is 4096 KB (4 Megs). Once this limit is exceeded, the whole
+    request body is passed through unfiltered.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+     <screen>
+# Remove "test" everywhere in the request body
+{+client-body-filter{remove-test}}
+/
+</screen>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="client-header-tagger">
@@ -4062,7 +4139,7 @@ problem-host.example.com</screen>
     <quote>action</quote> is not available.
    </para>
    <para>
-    The amount of data that can be filtered is limited to the
+    The amount of data that can be filtered is limited by the
     <literal><link linkend="buffer-limit">buffer-limit</link></literal>
     option in the main <link linkend="config">config file</link>. The
     default is 4096 KB (4 Megs). Once this limit is exceeded, the buffered
@@ -6889,9 +6966,11 @@ stupid-server.example.com/</screen>
  <literal><link linkend="filter">filter</link></literal> to
  rewrite the content that is send to the client,
  <literal><link linkend="client-header-filter">client-header-filter</link></literal>
- to rewrite headers that are send by the client, and
+ to rewrite headers that are send by the client,
  <literal><link linkend="server-header-filter">server-header-filter</link></literal>
- to rewrite headers that are send by the server.
+ to rewrite headers that are send by the server, and
+ <literal><link linkend="client-body-filter">client-body-filter</link></literal>
+ to rewrite client request body.
 </para>
 
 <para>
@@ -6950,7 +7029,8 @@ stupid-server.example.com/</screen>
  filter file is organized in sections, which are called <emphasis>filters</emphasis>
  here. Each filter consists of a heading line, that starts with one of the
  <emphasis>keywords</emphasis> <literal>FILTER:</literal>,
- <literal>CLIENT-HEADER-FILTER:</literal> or <literal>SERVER-HEADER-FILTER:</literal>
+ <literal>CLIENT-HEADER-FILTER:</literal>, <literal>SERVER-HEADER-FILTER:</literal> or
+ <literal>CLIENT-BODY-FILTER:</literal>
  followed by the filter's <emphasis>name</emphasis>, and a short (one line)
  <emphasis>description</emphasis> of what it does. Below that line
  come the <emphasis>jobs</emphasis>, i.e. lines that define the actual

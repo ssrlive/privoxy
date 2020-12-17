@@ -357,6 +357,19 @@ function show_limit_connect_opts(tf)
     <tr class="bg1" align="left" valign="top">
       <td class="en1">&nbsp;</td>
       <td class="dis1" align="center" valign="middle"><input type="radio"
+        name="client_body_filter_all" id="client_body_filter_all_n" value="N" @client-body-filter-all-n@ ></td>
+      <td class="noc1" align="center" valign="middle"><input type="radio"
+        name="client_body_filter_all" id="client_body_filter_all_x" value="X" @client-body-filter-all-x@ ></td>
+      <td class="action"><a href="@user-manual@@actions-help-prefix@CLIENT-BODY-FILTER">client-body-filter</a> *</td>
+      <td>Filter the client request body.
+        You can use the radio buttons on this line to disable
+        all client-body filters applied by previous rules, and/or
+        you can enable or disable the filters individually below.</td>
+    </tr>
+@client-body-filter-params@
+    <tr class="bg1" align="left" valign="top">
+      <td class="en1">&nbsp;</td>
+      <td class="dis1" align="center" valign="middle"><input type="radio"
         name="client_header_filter_all" id="client_header_filter_all_n" value="N" @client-header-filter-all-n@ ></td>
       <td class="noc1" align="center" valign="middle"><input type="radio"
         name="client_header_filter_all" id="client_header_filter_all_x" value="X" @client-header-filter-all-x@ ></td>

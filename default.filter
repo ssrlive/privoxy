@@ -906,3 +906,17 @@ s@^X-Privoxy-Control:\s*@@i
 SERVER-HEADER-FILTER: privoxy-control Removes X-Privoxy-Control headers.
 
 s@^X-Privoxy-Control:.*@@i
+
+#################################################################################
+#
+# client-body: Modify client request body
+#
+#################################################################################
+CLIENT-BODY-FILTER: remove-first-byte Removes the first byte from the request body
+s@^.@@
+
+CLIENT-BODY-FILTER: remove-test Removes "test" everywhere in the request body
+s@test@@g
+
+CLIENT-BODY-FILTER: overwrite-test-value Overwrites the value of the "test" variable with blafasel
+s@(test=)[^&\s]*@$1blafasel@g
