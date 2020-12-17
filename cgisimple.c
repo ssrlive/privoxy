@@ -362,7 +362,7 @@ jb_err cgi_show_client_tags(struct client_state *csp,
    this_tag = csp->config->client_tags;
    if (this_tag->name == NULL)
    {
-      client_tag_status = strdup_or_die("<p>No tags available.</p>\n");
+      client_tag_status = strdup_or_die("<p>No tags have been configured.</p>\n");
    }
    else
    {
