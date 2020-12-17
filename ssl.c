@@ -1348,6 +1348,25 @@ static int generate_webpage_certificate(struct client_state *csp)
       }
    }
 
+   if (file_exists(cert_opt.output_file) == 0 &&
+       file_exists(cert_opt.subject_key) == 1)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "A website key already exists but there's no matching certificate. "
+         "Removing %s before creating a new key and certificate.",
+         cert_opt.subject_key);
+      if (unlink(cert_opt.subject_key))
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
+            cert_opt.subject_key);
+
+         freez(cert_opt.output_file);
+         freez(cert_opt.subject_key);
+
+         return -1;
+      }
+   }
+
    /*
     * Create key for requested host
     */
