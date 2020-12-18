@@ -464,6 +464,9 @@ https://www.privoxy.org/donate
 
 177) Support https-inspection for intercepted requests.
 
+178) Warn on http://config.privoxy.org/client-tags if a Tag name
+     has't at least one matching action section.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
