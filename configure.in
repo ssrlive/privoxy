@@ -1075,7 +1075,7 @@ if test $have_pcre = "yes"; then
   LIBS="$LIBS -lpcre -lpcreposix"
 else
   AC_MSG_WARN([You are using the static PCRE code which is out of date and scheduled for removal, for details see:
-    http://sourceforge.net/mailarchive/forum.php?thread_name=20080511195555.2dc6cfdc%40fabiankeil.de&forum_name=ijbswa-developers])
+    https://sourceforge.net/p/ijbswa/mailman/ijbswa-developers/thread/20080511195555.2dc6cfdc@fabiankeil.de/])
   pcre_dyn=no
   # STATIC_PCRE is a name pcre needs to statically link on Windows.
   # Privoxy itself no longer uses it.
