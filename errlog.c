@@ -92,19 +92,19 @@ static char *w32_socket_strerr(int errcode, char *tmp_buf);
 #endif
 
 #ifdef MUTEX_LOCKS_AVAILABLE
-static inline void lock_logfile(void)
+static void lock_logfile(void)
 {
    privoxy_mutex_lock(&log_mutex);
 }
-static inline void unlock_logfile(void)
+static void unlock_logfile(void)
 {
    privoxy_mutex_unlock(&log_mutex);
 }
-static inline void lock_loginit(void)
+static void lock_loginit(void)
 {
    privoxy_mutex_lock(&log_init_mutex);
 }
-static inline void unlock_loginit(void)
+static void unlock_loginit(void)
 {
    privoxy_mutex_unlock(&log_init_mutex);
 }
@@ -114,10 +114,10 @@ static inline void unlock_loginit(void)
  * The locking/unlocking functions below should be
  * fleshed out for non-pthread implementations.
  */
-static inline void lock_logfile() {}
-static inline void unlock_logfile() {}
-static inline void lock_loginit() {}
-static inline void unlock_loginit() {}
+static void lock_logfile() {}
+static void unlock_logfile() {}
+static void lock_loginit() {}
+static void unlock_loginit() {}
 #endif
 
 /*********************************************************************
@@ -444,7 +444,7 @@ static long get_thread_id(void)
  * Returns     :  Number of written characters or 0 for error.
  *
  *********************************************************************/
-static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
+static size_t get_log_timestamp(char *buffer, size_t buffer_size)
 {
    size_t length;
    time_t now;
@@ -498,7 +498,7 @@ static inline size_t get_log_timestamp(char *buffer, size_t buffer_size)
  * Returns     :  Number of written characters or 0 for error.
  *
  *********************************************************************/
-static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
+static size_t get_clf_timestamp(char *buffer, size_t buffer_size)
 {
    /*
     * Complex because not all OSs have tm_gmtoff or
@@ -563,7 +563,7 @@ static inline size_t get_clf_timestamp(char *buffer, size_t buffer_size)
  * Returns     :  Log level string.
  *
  *********************************************************************/
-static inline const char *get_log_level_string(int loglevel)
+static const char *get_log_level_string(int loglevel)
 {
    char *log_level_string = NULL;
 
