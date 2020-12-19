@@ -1141,7 +1141,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
    chain = SSL_get_peer_cert_chain(ssl);
    if (chain)
    {
-      for (int i = 0; i < sk_X509_num(chain); i++)
+      int i;
+      for (i = 0; i < sk_X509_num(chain); i++)
       {
          if (ssl_store_cert(csp, sk_X509_value(chain, i)) != 0)
          {
