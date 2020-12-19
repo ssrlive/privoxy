@@ -4421,6 +4421,7 @@ static jb_err action_render_string_filters_template(struct map * exports,
 {
    jb_err err = JB_ERR_OK;
    int filter_identifier = 0;
+   int i;
    char *prepared_template = strdup("");
 
    struct action_multi {
@@ -4433,7 +4434,7 @@ static jb_err action_render_string_filters_template(struct map * exports,
        { 'n', action->multi_remove[type->multi_action_index][0].first }
    };
 
-   for (int i=0; i < SZ(desc); ++i)
+   for (i = 0; i < SZ(desc); ++i)
    {
       const char radio = desc[i].radio;
       struct list_entry *entry = desc[i].list;
