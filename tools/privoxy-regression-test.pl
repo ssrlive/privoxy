@@ -53,6 +53,7 @@ use constant {
     CLI_FORKS     => 0,
     CLI_SLEEP_TIME => 0,
 
+    PRIVOXY_ADDRESS  => 'http://127.0.0.1:8118/',
     PRIVOXY_CGI_URL  => 'http://p.p/',
     FELLATIO_URL     => 'http://127.0.0.1:8080/',
     LEADING_LOG_DATE => 1,
@@ -90,6 +91,7 @@ sub init_our_variables() {
     our $leading_log_date = LEADING_LOG_DATE;
     our $privoxy_cgi_url  = PRIVOXY_CGI_URL;
     our $log_level = get_default_log_level();
+    our $proxy = defined $ENV{'http_proxy'} ? $ENV{'http_proxy'} : PRIVOXY_ADDRESS;
 }
 
 sub get_default_log_level() {
@@ -1703,7 +1705,7 @@ Options and their default values if they have any:
     [--max-level $cli_options{'max-level'}]
     [--max-time $cli_options{'max-time'}]
     [--min-level $cli_options{'min-level'}]
-    [--privoxy-address]
+    [--privoxy-address $cli_options{'privoxy-address'}]
     [--privoxy-cgi-prefix $privoxy_cgi_url]
     [--retries $cli_options{'retries'}]
     [--show-skipped-tests]
@@ -1730,6 +1732,7 @@ sub init_cli_options() {
 
     our %cli_options;
     our $log_level;
+    our $proxy;
 
     $cli_options{'debug'}     = $log_level;
     $cli_options{'forks'}     = CLI_FORKS;
@@ -1739,6 +1742,7 @@ sub init_cli_options() {
     $cli_options{'min-level'} = CLI_MIN_LEVEL;
     $cli_options{'sleep-time'}= CLI_SLEEP_TIME;
     $cli_options{'retries'}   = CLI_RETRIES;
+    $cli_options{'privoxy-address'} = $proxy;
 }
 
 sub parse_cli_options() {
@@ -2043,8 +2047,9 @@ above or equal to the numerical B<min-level>.
 
 B<--privoxy-address proxy-address> Privoxy's listening address.
 If it's not set, the value of the environment variable http_proxy
-will be used. B<proxy-address> has to be specified in http_proxy
-syntax.
+will be used unless the variable isn't set in which case
+http://127.0.0.1:8118/ will be used. B<proxy-address> has to
+be specified in http_proxy syntax.
 
 B<--privoxy-cgi-prefix privoxy-cgi-prefix> The prefix to use when
 building URLs that are supposed to reach Privoxy's CGI interface.
