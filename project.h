@@ -54,20 +54,6 @@
 #define HASH_OF_HOST_BUF_SIZE      16
 #endif /* FEATURE_HTTPS_INSPECTION */
 
-#ifdef FEATURE_PTHREAD
-#  include <pthread.h>
-   typedef pthread_mutex_t privoxy_mutex_t;
-#else
-#  ifdef _WIN32
-#     include <winsock2.h>
-      /* without winsock2.h I get lots of compiler warnings about
-       * #warning Please include winsock2.h before windows.h
-       */
-#     include <windows.h>
-#  endif
-   typedef CRITICAL_SECTION privoxy_mutex_t;
-#endif
-
 #ifdef FEATURE_HTTPS_INSPECTION_MBEDTLS
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/entropy.h"
