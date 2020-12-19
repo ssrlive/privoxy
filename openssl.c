@@ -396,6 +396,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    }
    else
    {
+      int i;
       if (bs->type == V_ASN1_NEG_INTEGER)
       {
          if (BIO_puts(bio, " (Negative)") < 0)
@@ -405,7 +406,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
             goto exit;
          }
       }
-      for (int i = 0; i < bs->length; i++)
+      for (i = 0; i < bs->length; i++)
       {
          if (BIO_printf(bio, "%02x%c", bs->data[i],
                ((i + 1 == bs->length) ? '\n' : ':')) <= 0)
