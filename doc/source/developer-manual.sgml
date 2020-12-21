@@ -2060,7 +2060,8 @@ fk@t520 ~ $privoxy-regression-test.pl --test-number 785 --verbose --debug 4
      </programlisting>
      <para>
       Use the if the <command>--privoxy-address</command> option if the
-      http_proxy environment variable isn't configured.
+      http_proxy environment variable isn't configured and you don't want
+      to use the default (http://127.0.0.1:8118/).
      </para>
     </sect2>
 
