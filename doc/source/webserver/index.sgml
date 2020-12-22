@@ -179,7 +179,11 @@
 <![%p-homepage;[
 <para>
  <subscript>
-  Hosting and development is funded in part by sponsors.
+  Hosting and development is funded in part by:
+ </subscript>
+ <subscript>
+  <!-- The GNUMakefile will turn this marker into an image link -->
+  www.lalal.ai
  </subscript>
 </para>
 <para>
