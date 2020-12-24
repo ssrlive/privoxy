@@ -263,7 +263,9 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
       else if (strncmpic(url_noproto, "https://", 8) == 0)
       {
          /*
-          * Should only happen when called from cgi_show_url_info().
+          * Should only happen when called from cgi_show_url_info()
+          * or when the request was https-inspected and the request
+          * line got rewritten.
           */
          url_noproto += 8;
          http->ssl = 1;
