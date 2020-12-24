@@ -472,6 +472,9 @@ https://www.privoxy.org/donate
 
 180) Add support for GnuTLS.
 
+181) Allow to upgrade an http request to https behind the
+     client's back using a client-header filter.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
