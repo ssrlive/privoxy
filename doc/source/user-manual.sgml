@@ -6962,7 +6962,7 @@ stupid-server.example.com/</screen>
 </para>
 
 <para>
- &my-app; supports three different pcrs-based filter actions:
+ &my-app; supports four different pcrs-based filter actions:
  <literal><link linkend="filter">filter</link></literal> to
  rewrite the content that is send to the client,
  <literal><link linkend="client-header-filter">client-header-filter</link></literal>
