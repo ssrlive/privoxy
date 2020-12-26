@@ -1305,6 +1305,12 @@ sub handle_loglevel_redirect($) {
         # Percent-encoding redirect URL: http://www.example.org/\x02
         $c = highlight_matched_url($c, '(?<=redirect URL: ).*');
 
+    } elsif ($c =~ m/^Rewrite detected:/) {
+
+        # Rewrite detected: GET http://10.0.0.2:88/blah.txt HTTP/1.1
+        # Rewrite detected: GET https://www.electrobsd.org/CommonJS/ajax/libs/jquery/3.4.1/jquery.min.js HTTP/1.1
+        $c = highlight_matched_request_line($c, '(?<=^Rewrite detected: ).*');
+
     } else {
 
         found_unknown_content($c);
