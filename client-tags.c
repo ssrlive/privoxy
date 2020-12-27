@@ -659,7 +659,7 @@ int client_tag_match(const struct pattern_spec *pattern,
    {
       if (0 == regexec(pattern->pattern.tag_regex, tag->str, 0, NULL, 0))
       {
-         log_error(LOG_LEVEL_TAGGING, "Tag '%s' matches", tag->str);
+         log_error(LOG_LEVEL_TAGGING, "Client tag '%s' matches", tag->str);
          return 1;
       }
    }
