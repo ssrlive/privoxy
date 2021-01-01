@@ -179,6 +179,7 @@ sub prepare_our_stuff() {
         'pcrs-delimiter'     => 'light_red',
         'ignored'            => 'light_red',
         'action-bits-update' => 'light_red',
+        'http-downgrade'     => 'light_red',
         'configuration-line' => 'red',
         'content-type'       => 'yellow',
         'HOST'               => HEADER_DEFAULT_COLOUR,
@@ -1310,6 +1311,11 @@ sub handle_loglevel_redirect($) {
         # Rewrite detected: GET http://10.0.0.2:88/blah.txt HTTP/1.1
         # Rewrite detected: GET https://www.electrobsd.org/CommonJS/ajax/libs/jquery/3.4.1/jquery.min.js HTTP/1.1
         $c = highlight_matched_request_line($c, '(?<=^Rewrite detected: ).*');
+
+    } elsif ($c =~ m/^Rewritten request line results in downgrade to http/) {
+
+        # Rewritten request line results in downgrade to http
+        $c =~ s@(downgrade)@$h{'http-downgrade'}$1$h{'Standard'}@;
 
     } else {
 
