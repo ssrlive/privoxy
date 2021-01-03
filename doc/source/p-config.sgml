@@ -3583,7 +3583,10 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
    </para>
    <para>
      Note that sorting headers in an uncommon way will make fingerprinting
-     actually easier. Encrypted headers are not affected by this directive.
+     actually easier.
+     Encrypted headers are not affected by this directive unless
+     <literal><ulink url="actions-file.html#HTTPS-INSPECTION">https-inspection</ulink></literal>
+     is enabled.
    </para>
   </listitem>
  </varlistentry>
