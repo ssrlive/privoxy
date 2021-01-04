@@ -1,6 +1,6 @@
 #        Sample Configuration File for Privoxy 3.0.30
 #
-# Copyright (C) 2001-2020 Privoxy Developers https://www.privoxy.org/
+# Copyright (C) 2001-2021 Privoxy Developers https://www.privoxy.org/
 #
 #####################################################################
 #                                                                   #
@@ -2217,7 +2217,7 @@ socket-timeout 300
 #
 #      Note that sorting headers in an uncommon way will make
 #      fingerprinting actually easier. Encrypted headers are not
-#      affected by this directive.
+#      affected by this directive unless https-inspection is enabled.
 #
 #client-header-order Host \
 #   User-Agent \
@@ -2228,11 +2228,13 @@ socket-timeout 300
 #   Referer \
 #   Cookie \
 #   DNT \
+#   Connection \
+#   Upgrade-Insecure-Requests \
 #   If-Modified-Since \
 #   Cache-Control \
 #   Content-Length \
+#   Origin \
 #   Content-Type
-#
 #
 #  6.16. client-specific-tag
 #  ==========================
