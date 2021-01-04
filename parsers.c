@@ -1211,8 +1211,8 @@ static void enforce_header_order(struct list *headers, const struct list *ordere
    }
 
    list_remove_all(headers);
-   list_duplicate(headers, new_headers);
-   list_remove_all(new_headers);
+   headers->first = new_headers->first;
+   headers->last  = new_headers->last;
 
    return;
 }
