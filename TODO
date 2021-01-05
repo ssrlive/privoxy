@@ -470,6 +470,10 @@ https://www.privoxy.org/donate
 181) Allow to upgrade an http request to https behind the
      client's back using a client-header filter.
 
+182) Before enforcing the client-header-order, check that the
+     client headers actually need sorting. Should reduce log
+     messages and memory allocations.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
