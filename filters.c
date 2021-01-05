@@ -1246,8 +1246,9 @@ struct http_response *redirect_url(struct client_state *csp)
          }
          new_url = rewrite_url(requested_url, redirection_string);
 #ifdef FEATURE_HTTPS_INSPECTION
-         if (client_use_ssl(csp))
+         if (requested_url != csp->http->url)
          {
+            assert(client_use_ssl(csp));
             freez(requested_url);
          }
 #endif
