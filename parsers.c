@@ -1291,7 +1291,9 @@ jb_err sed(struct client_state *csp, int filter_server_headers)
       f++;
    }
 
-   if (!filter_server_headers && !list_is_empty(csp->config->ordered_client_headers))
+   if (!filter_server_headers &&
+       !list_is_empty(csp->config->ordered_client_headers) &&
+       csp->headers->first->str != NULL)
    {
       enforce_header_order(csp->headers, csp->config->ordered_client_headers);
    }
