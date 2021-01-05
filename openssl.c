@@ -654,6 +654,13 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    BIO_write(bio, &zero, 1);
 
    len = BIO_get_mem_data(bio, &bio_mem_data);
+   if (len <= 0)
+   {
+      log_error(LOG_LEVEL_ERROR, "BIO_get_mem_data() returned %d "
+         "while gathering certificate information", len);
+      ret = -1;
+      goto exit;
+   }
    encoded_text = html_encode(bio_mem_data);
    if (encoded_text == NULL)
    {
