@@ -4256,7 +4256,7 @@ static void chat(struct client_state *csp)
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
 #ifdef FEATURE_HTTPS_INSPECTION
-      if (http->ssl && !use_ssl_tunnel)
+      if (client_use_ssl(csp) && !use_ssl_tunnel)
       {
          int ret;
          /*
