@@ -2556,6 +2556,7 @@ static jb_err change_encrypted_request_destination(struct client_state *csp)
 {
    jb_err err;
    char *original_host = csp->http->host;
+   int original_port = csp->http->port;
 
    log_error(LOG_LEVEL_REDIRECTS, "Rewrite detected: %s",
       csp->https_headers->first->str);
@@ -2572,22 +2573,32 @@ static jb_err change_encrypted_request_destination(struct client_state *csp)
 
    if (csp->http->host == NULL)
    {
+      char port_string[10];
       /*
        * The rewritten request line did not specify a host
        * which means we can use the original host specified
        * by the client.
        */
       csp->http->host = original_host;
+      csp->http->port = original_port;
       log_error(LOG_LEVEL_REDIRECTS, "Keeping the original host: %s",
          csp->http->host);
       /*
        * If the rewritten request line didn't contain a host
        * it also didn't contain a port so we can reuse the host
-       * and set the port to 443.
+       * port.
        */
       freez(csp->http->hostport);
       csp->http->hostport = strdup_or_die(csp->http->host);
-      csp->http->port = 443;
+      snprintf(port_string, sizeof(port_string), ":%d", original_port);
+      err = string_append(&csp->http->hostport, port_string);
+      if (err != JB_ERR_OK)
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to rebuild hostport: %s.",
+            jb_err_to_string(err));
+         return err;
+      }
+
       /*
        * While the request line didn't mention it,
        * we're https-inspecting and want to speak TLS
