@@ -2566,6 +2566,7 @@ static jb_err change_encrypted_request_destination(struct client_state *csp)
    {
       log_error(LOG_LEVEL_ERROR, "Couldn't parse rewritten request: %s.",
          jb_err_to_string(err));
+      freez(original_host);
       return err;
    }
 
