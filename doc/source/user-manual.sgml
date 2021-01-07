@@ -2938,6 +2938,12 @@ example.org/blocked-example-page</screen>
     requests a protocol and host has to be added to the URI.
    </para>
    <para>
+    If <link linkend="HTTPS-INSPECTION">https inspection</link>
+    is enabled, the protocol can be downgraded from https to http
+    but upgrading a request from http to https is currently not
+    supported.
+   </para>
+   <para>
     Please refer to the <link linkend="filter-file">filter file chapter</link>
     to learn which client-header filters are available by default, and how to
     create your own.
