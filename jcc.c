@@ -1044,6 +1044,16 @@ static jb_err change_request_destination(struct client_state *csp)
       log_error(LOG_LEVEL_ERROR, "Couldn't parse rewritten request: %s.",
          jb_err_to_string(err));
    }
+   if (http->ssl && strcmpic(csp->http->gpc, "CONNECT"))
+   {
+      /*
+       * A client header filter changed the request URL from
+       * http:// to https:// which we currently don't support.
+       */
+      log_error(LOG_LEVEL_ERROR, "Changing the request destination from http "
+         "to https behind the client's back currently isn't supported.");
+      return JB_ERR_PARSE;
+   }
 
    return err;
 }
