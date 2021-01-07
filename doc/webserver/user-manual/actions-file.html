@@ -825,6 +825,13 @@ example.org/blocked-example-page</pre>
               <p>If the request URI gets changed, <span class="APPLICATION">Privoxy</span> will detect that and use the
               new one. This can be used to rewrite the request destination behind the client's back, for example to
               specify a Tor exit relay for certain requests.</p>
+              <p>Note that to change the destination host for <a href=
+              "actions-file.html#HTTPS-INSPECTION">https-inspected</a> requests a protocol and host has to be added to
+              the URI.</p>
+              <p>If <a href="actions-file.html#HTTPS-INSPECTION">https inspection</a> is enabled, the protocol can be
+              downgraded from https to http but upgrading a request from http to https is currently not supported.</p>
+              <p>After detecting a rewrite, <span class="APPLICATION">Privoxy</span> does not update the actions used
+              for the request based on the new host.</p>
               <p>Please refer to the <a href="filter-file.html">filter file chapter</a> to learn which client-header
               filters are available by default, and how to create your own.</p>
             </dd>
