@@ -2815,7 +2815,8 @@ static jb_err process_encrypted_request(struct client_state *csp)
       log_error(LOG_LEVEL_ERROR,
          "Failed to get the request destination in the rewritten headers");
       ssl_send_data_delayed(&(csp->ssl_client_attr),
-         (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
+         (const unsigned char *)MESSED_UP_REQUEST_RESPONSE,
+         strlen(MESSED_UP_REQUEST_RESPONSE), get_write_delay(csp));
       return JB_ERR_PARSE;
    }
 
