@@ -477,6 +477,8 @@ https://www.privoxy.org/donate
 183) Properly deal with proxy responses that arrive in multiple pieces
      when https inspecting while using a forwarding proxy.
 
+184) Add support for wolfSSL.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
