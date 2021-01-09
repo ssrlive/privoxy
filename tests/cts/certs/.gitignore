@@ -1,0 +1,3 @@
+# Ignore the certificates and keys in this directory
+*.crt
+*.pem
