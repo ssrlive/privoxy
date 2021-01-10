@@ -1981,7 +1981,7 @@ static jb_err parse_client_request(struct client_state *csp)
          strlen(MESSED_UP_REQUEST_RESPONSE), get_write_delay(csp));
       /* XXX: Use correct size */
       log_error(LOG_LEVEL_CLF,
-         "%s - - [%T] \"Invalid request generated\" 500 0", csp->ip_addr_str);
+         "%s - - [%T] \"Invalid request generated\" 400 0", csp->ip_addr_str);
       log_error(LOG_LEVEL_ERROR,
          "Invalid request line after applying header filters.");
       free_http_request(http);
