@@ -1697,7 +1697,8 @@ static jb_err filter_header(struct client_state *csp, char **header)
 
       if (NULL == joblist)
       {
-         log_error(LOG_LEVEL_RE_FILTER, "Filter %s has empty joblist. Nothing to do.", b->name);
+         log_error(LOG_LEVEL_RE_FILTER,
+            "Filter %s has empty joblist. Nothing to do.", b->name);
          continue;
       }
 
@@ -1711,7 +1712,8 @@ static jb_err filter_header(struct client_state *csp, char **header)
          if (0 < matches)
          {
             current_hits += matches;
-            log_error(LOG_LEVEL_HEADER, "Transforming \"%s\" to \"%s\"", *header, newheader);
+            log_error(LOG_LEVEL_HEADER,
+               "Transforming \"%s\" to \"%s\"", *header, newheader);
             freez(*header);
             *header = newheader;
          }
@@ -1723,7 +1725,8 @@ static jb_err filter_header(struct client_state *csp, char **header)
          else
          {
             /* RegEx failure */
-            log_error(LOG_LEVEL_ERROR, "Filtering \'%s\' with \'%s\' didn't work out: %s",
+            log_error(LOG_LEVEL_ERROR,
+               "Filtering \'%s\' with \'%s\' didn't work out: %s",
                *header, b->name, pcrs_strerror(matches));
             if (newheader != NULL)
             {
