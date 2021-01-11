@@ -947,6 +947,9 @@ pp.lp4.io/
 #MASTER# BLOCK-REFERRER: https://www.ksta.de/ratgeber/digital/plattform-moodle-streikt-viele-schueler-koennen-nicht-arbeiten---gebauer-weiss-von-nichts-37913640
 # Blocked URL = https://ih.adscale.de/map?ssl=1&format=video&gdpr=0&nut&uu=ace89aa78df247b3bb362c35ecfd6024
 ih.adscale.de/
+#MASTER# BLOCK-REFERRER: https://www.ksta.de/ratgeber/digital/plattform-moodle-streikt-viele-schueler-koennen-nicht-arbeiten---gebauer-weiss-von-nichts-37913640
+# Blocked URL = https://api.theadex.com/collector/v1/d/285/5184/cmframe/Lw0EHAiwAxA2GAIUhAK0AXaMBA?c=4248866896491805402
+api.theadex.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
