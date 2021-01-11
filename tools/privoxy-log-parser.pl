@@ -2090,7 +2090,12 @@ sub gather_loglevel_clf_stats($) {
     unless (defined $method) {
         # +0200] "Invalid request" 400 0
         return if ($content =~ m/^[+-]\d{4}\] "Invalid request"/);
-        print("Failed to parse: $content\n");
+        # +0100] "GET https://securepubads.g.doubleclick.net/gampad/ads?gd[...]... [too long, truncated]
+        if ($content =~ m/\[too long, truncated\]$/) {
+            print("Skipped LOG_LEVEL_CLF message that got truncated by Privoxy. Statistics will be inprecise.\n");
+        } else {
+            print("Failed to parse: $content\n");
+        }
         return;
     }
     $stats{'method'}{$method}++;
