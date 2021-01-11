@@ -941,6 +941,9 @@ fastlane.rubiconproject.com/
 #MASTER# BLOCK-REFERRER: https://sourceforge.net/projects/ijbswa/
 # Blocked URL = https://ml314.com/utsync.ashx?pub=&adv=&et=0&eid=771&ct=js&pi=&fp=&clid=&if=1&ps=&cl=&mlt=&data=&&cp=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F&pv=1607178655249_inq1swkkq&bl=en-ca&cb=1438340&return=&ht=&d=&dc=&si=1607178395284_aog287pmk&cid=&s=1366x768&rp=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fijbswa%2F
 ml314.com/
+#MASTER# BLOCK-REFERRER: https://www.ksta.de/ratgeber/digital/plattform-moodle-streikt-viele-schueler-koennen-nicht-arbeiten---gebauer-weiss-von-nichts-37913640
+# Blocked URL = https://pp.lp4.io/pl?i=512735e9d9d93e5a24000000&ct=11.384&rt=1.012&pt=12.396&pvr=0&p=https%3A%2F%2Fwww.ksta.de%2Fratgeber%2Fdigital%2Fplattform-moodle-streikt-viele-schueler-koennen-nicht-arbeiten---gebauer-weiss-von-nichts-37913640&c=desktop&t=article&s=undefined&_r=1610366562920:4.7.6:20190614-142003
+pp.lp4.io/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
