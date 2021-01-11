@@ -64,6 +64,7 @@ use constant {
     CLI_OPTION_STRICT_CHECKS => 0,
     CLI_OPTION_UNBREAK_LINES_ONLY => 0,
     CLI_OPTION_URL_STATISTICS_THRESHOLD => 0,
+    CLI_OPTION_PASSED_REQUEST_STATISTICS_THRESHOLD => 0,
     CLI_OPTION_HOST_STATISTICS_THRESHOLD => 0,
     CLI_OPTION_SHOW_COMPLETE_REQUEST_DISTRIBUTION => 0,
 
@@ -2206,17 +2207,25 @@ sub gather_loglevel_clf_stats($) {
 }
 
 sub gather_loglevel_request_stats($$) {
-    my $c = shift;
+    my $request_url = shift;
     my $thread = shift;
     our %stats;
+    our %cli_options;
 
     $stats{requests}++;
+    if ($cli_options{'passed-request-statistics-threshold'} != 0) {
+        # If the request get blocked we'll decrement
+        # in gather_loglevel_crunch_stats()
+        chomp $request_url;
+        $stats{'passed-request-url'}{$request_url}++;
+    }
 }
 
 sub gather_loglevel_crunch_stats($$) {
     my $c = shift;
     my $thread = shift;
     our %stats;
+    our %cli_options;
 
     $stats{crunches}++;
 
@@ -2235,6 +2244,15 @@ sub gather_loglevel_crunch_stats($$) {
     } elsif ($c =~ m/^Connection failure:/) {
         # Connection failure: http://127.0.0.1:8080/
         $stats{'connection-failure'}++;
+    }
+    if ($cli_options{'passed-request-statistics-threshold'} != 0) {
+        $c =~ m/^[^:]+: (.*)/;
+        if ($stats{'passed-request-url'}{$1}) {
+            $stats{'passed-request-url'}{$1}-- ;
+            if ($stats{'passed-request-url'}{$1} == 0) {
+                delete($stats{'passed-request-url'}{$1});
+            }
+        }
     }
 }
 
@@ -2477,6 +2495,19 @@ sub print_stats() {
         }
     }
 
+    if ($cli_options{'passed-request-statistics-threshold'} == 0) {
+        print "Passed request statistics are disabled. Increase --passed-request-statistics-threshold to enable them.\n";
+    } else {
+        print "Requested requests that were passed:\n";
+        foreach my $passed_url (sort {$stats{'passed-request-url'}{$b} <=> $stats{'passed-request-url'}{$a}}
+                                keys %{$stats{'passed-request-url'}}) {
+            if ($stats{'passed-request-url'}{$passed_url} < $cli_options{'passed-request-statistics-threshold'}) {
+                print "Skipped statistics for passed URLs below the treshold.\n";
+                last;
+            }
+            printf "%d : %s\n", $stats{'passed-request-url'}{$passed_url}, $passed_url;
+        }
+    }
     if ($cli_options{'host-statistics-threshold'} == 0) {
         print "Host statistics are disabled. Increase --host-statistics-threshold to enable them.\n";
     } else {
@@ -2822,6 +2853,7 @@ sub get_cli_options() {
         'url-statistics-threshold' => CLI_OPTION_URL_STATISTICS_THRESHOLD,
         'unbreak-lines-only'       => CLI_OPTION_UNBREAK_LINES_ONLY,
         'host-statistics-threshold'=> CLI_OPTION_HOST_STATISTICS_THRESHOLD,
+        'passed-request-statistics-threshold' => CLI_OPTION_PASSED_REQUEST_STATISTICS_THRESHOLD,
         'show-complete-request-distribution' => CLI_OPTION_SHOW_COMPLETE_REQUEST_DISTRIBUTION,
     );
 
@@ -2841,6 +2873,7 @@ sub get_cli_options() {
         'unbreak-lines-only'       => \$cli_options{'unbreak-lines-only'},
         'url-statistics-threshold=i'=> \$cli_options{'url-statistics-threshold'},
         'host-statistics-threshold=i'=> \$cli_options{'host-statistics-threshold'},
+        'passed-request-statistics-threshold=i' => \$cli_options{'passed-request-statistics-threshold'},
         'show-complete-request-distribution' => \$cli_options{'show-complete-request-distribution'},
         'version'                  => sub { VersionMessage && exit(0) },
         'help'                     => \&help,
@@ -2875,6 +2908,7 @@ Options and their default values if they have any:
     [--statistics]
     [--unbreak-lines-only]
     [--url-statistics-threshold $cli_options{'url-statistics-threshold'}]
+    [--passed-request-statistics-threshold $cli_options{'passed-request-statistics-threshold'}]
     [--title $cli_options{'title'}]
     [--version]
 see "perldoc $0" for more information
@@ -2966,6 +3000,10 @@ Useful when parsing multiple log files at once.
 the filtered output is piped into less in which case the ANSI control
 codes don't work, or if the terminal itself doesn't support the control
 codes.
+
+[B<--passed-request-statistics-threshold>] Only show the request count for
+a passed requests if it's above or equal to the given threshold. If the
+threshold is 0, passed request statistics are disabled.
 
 [B<--shorten-thread-ids>] Shorten the thread ids to a three-digit decimal number.
 Note that the mapping from thread ids to shortened ids is created at run-time
