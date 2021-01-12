@@ -13,6 +13,7 @@ https://www.privoxy.org/donate
     Note that there is currently work in progress to leverage curl's
     test suite, patches have been submitted upstream:
     https://curl.se/mail/lib-2014-06/0070.html
+    https://curl.se/mail/lib-2021-01/0068.html
 
 3)  Fix some more XXX: comments.
 
