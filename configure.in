@@ -677,17 +677,6 @@ AC_EGREP_HEADER(socklen_t, sys/socket.h, AC_MSG_RESULT([yes]),
 fi
 
 dnl =================================================================
-dnl OS/2 specific
-dnl =================================================================
-
-case "$host" in
-*-os2-emx*) SOCKET_LIB=-lsocket
-;;
-esac
-
-AC_SUBST(SOCKET_LIB)
-
-dnl =================================================================
 dnl Mac OSX specific
 dnl =================================================================
 
