@@ -1165,6 +1165,10 @@ AC_HELP_STRING([--without-openssl], [Disable OpenSSL/LibreSSL detection]),
   OPT_OPENSSL=$withval)
 
 if test X"$OPT_OPENSSL" != Xno; then
+   if test X"$OPT_MBEDTLS" != Xno; then
+      AC_MSG_ERROR([OpenSSL and mbedTLS support can't be enabled at the same time])
+   fi
+
   if test "$PORTNAME" != "win32"; then
      AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
      FOUND_SSL_LIB="no"
