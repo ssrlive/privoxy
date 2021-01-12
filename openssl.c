@@ -1647,7 +1647,7 @@ static int ssl_certificate_is_invalid(const char *cert_file)
  *          3  :  nid = OpenSSL NID
  *          4  :  value = extension value
  *
- * Returns     :   0 => Error while setting extensuon data
+ * Returns     :   0 => Error while setting extension data
  *                 1 => It worked
  *
  *********************************************************************/
