@@ -1123,7 +1123,7 @@ AC_SUBST(STATIC_PCRS_ONLY)
 
 FEATURE_HTTPS_INSPECTION_ONLY=#
 dnl ========================================================
-dnl check for mbedTLS which is required for https inspection
+dnl check for mbedTLS which can be used for https inspection
 dnl ========================================================
 FEATURE_HTTPS_INSPECTION_ONLY_MBEDTLS=#
 OPT_MBEDTLS=no
@@ -1155,7 +1155,7 @@ fi
 AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY_MBEDTLS)
 
 dnl =================================================================
-dnl check for OpenSSL/LibreSSL which is required for https inspection
+dnl check for OpenSSL/LibreSSL which can be used for https inspection
 dnl =================================================================
 FEATURE_HTTPS_INSPECTION_ONLY_OPENSSL=#
 OPT_OPENSSL=no
