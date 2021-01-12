@@ -1829,6 +1829,11 @@ sub handle_loglevel_connect($) {
         # The last 12078 bytes of the request body have been read
         $c =~ s@(?<=The last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Flushed \d+ bytes of request body/) {
+
+        # Flushed 3153 bytes of request body
+        $c =~ s@(?<=Flushed )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
