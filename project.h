@@ -78,6 +78,11 @@
 #include <openssl/err.h>
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
 
+#ifdef FEATURE_HTTPS_INSPECTION_WOLFSSL
+#include <wolfssl/options.h>
+#include <wolfssl/ssl.h>
+#endif /* FEATURE_HTTPS_INSPECTION_WOLFSSL */
+
 /* Need for struct sockaddr_storage */
 #ifdef HAVE_RFC2553
 #  ifndef _WIN32
@@ -337,6 +342,17 @@ typedef struct {
    BIO *bio;
 } openssl_connection_attr;
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
+
+#ifdef FEATURE_HTTPS_INSPECTION_WOLFSSL
+/*
+ * Struct of attributes necessary for TLS/SSL connection
+ */
+typedef struct {
+   WOLFSSL_CTX *ctx;
+   WOLFSSL *ssl;
+} wolfssl_connection_attr;
+#endif /* def FEATURE_HTTPS_INSPECTION_WOLFSSL */
+
 /**
  * A HTTP request.  This includes the method (GET, POST) and
  * the parsed URL.
@@ -1008,6 +1024,9 @@ struct ssl_attr {
 #ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
    openssl_connection_attr  openssl_attr; /* OpenSSL atrrs */
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
+#ifdef FEATURE_HTTPS_INSPECTION_WOLFSSL
+   wolfssl_connection_attr wolfssl_attr; /* wolfSSL atrrs */
+#endif /* FEATURE_HTTPS_INSPECTION_WOLFSSL */
 };
 /**
  * The state of a Privoxy processing thread.
@@ -1149,7 +1168,7 @@ struct client_state
 #define SSL_CERT_NOT_VERIFIED   0xFFFFFFFF
    uint32_t server_cert_verification_result;
 #endif /* FEATURE_HTTPS_INSPECTION_MBEDTLS */
-#ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
+#if defined(FEATURE_HTTPS_INSPECTION_OPENSSL) || defined(FEATURE_HTTPS_INSPECTION_WOLFSSL)
 #define SSL_CERT_NOT_VERIFIED    ~0L
    long server_cert_verification_result;
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
