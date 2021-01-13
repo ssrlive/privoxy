@@ -1616,8 +1616,6 @@ static int ssl_certificate_is_invalid(const char *cert_file)
 
    if (!(cert = ssl_certificate_load(cert_file)))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR,
-         "Error reading certificate file %s", cert_file);
       return 1;
    }
 
