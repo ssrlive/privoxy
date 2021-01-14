@@ -1287,7 +1287,7 @@ extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
                              const unsigned char *src, size_t slen)
 {
    *olen = 4 * ((slen/3)  + ((slen%3) ? 1 : 0)) + 1;
-   if (*olen < dlen)
+   if (*olen > dlen)
    {
       return ENOBUFS;
    }
