@@ -308,7 +308,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
     */
    if (!PEM_write_bio_X509(bio, crt))
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "PEM_write_X509() failed");
+      log_ssl_errors(LOG_LEVEL_ERROR, "PEM_write_bio_X509() failed");
       ret = -1;
       goto exit;
    }
