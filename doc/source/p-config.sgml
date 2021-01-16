@@ -4082,6 +4082,9 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
     a command to generate it.
    </para>
    <para>
+    The CA key is used by &my-app; to sign generated certificates.
+   </para>
+   <para>
     Access to the key should be limited to Privoxy.
    </para>
   </listitem>
