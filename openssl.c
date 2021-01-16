@@ -1764,6 +1764,15 @@ static int generate_host_certificate(struct client_state *csp)
       return -1;
    }
 
+   if (enforce_sane_certificate_state(cert_opt.output_file,
+         cert_opt.subject_key))
+   {
+      freez(cert_opt.output_file);
+      freez(cert_opt.subject_key);
+
+      return -1;
+   }
+
    if (file_exists(cert_opt.output_file) == 1)
    {
       /* The file exists, but is it valid? */
@@ -1799,25 +1808,6 @@ static int generate_host_certificate(struct client_state *csp)
          freez(cert_opt.subject_key);
 
          return 0;
-      }
-   }
-
-   if (file_exists(cert_opt.output_file) == 0 &&
-       file_exists(cert_opt.subject_key) == 1)
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "A website key already exists but there's no matching certificate. "
-         "Removing %s before creating a new key and certificate.",
-         cert_opt.subject_key);
-      if (unlink(cert_opt.subject_key))
-      {
-         log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E",
-            cert_opt.subject_key);
-
-         freez(cert_opt.output_file);
-         freez(cert_opt.subject_key);
-
-         return -1;
       }
    }
 

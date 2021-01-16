@@ -31,6 +31,7 @@
 #include <string.h>
 
 #include <ctype.h>
+#include <unistd.h>
 #include "config.h"
 #include "project.h"
 #include "miscutil.h"
@@ -696,5 +697,39 @@ extern int host_is_ip_address(const char *host)
     * assume that is an IPv4 address.
     */
    return 1;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  enforce_sane_certificate_state
+ *
+ * Description :  Makes sure the certificate state is sane.
+ *
+ * Parameters  :
+ *          1  :  certificate = Path to the potentionally existing certifcate.
+ *          2  :  key = Path to the potentionally existing key.
+ *
+ * Returns     :   -1 => Error
+ *                 0 => Certificate state is sane
+ *
+ *********************************************************************/
+extern int enforce_sane_certificate_state(const char *certificate, const char *key)
+{
+   if (file_exists(certificate) == 0 && file_exists(key) == 1)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "A website key already exists but there's no matching certificate. "
+         "Removing %s before creating a new key and certificate.", key);
+      if (unlink(key))
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E", key);
+
+         return -1;
+      }
+   }
+
+   return 0;
 
 }
