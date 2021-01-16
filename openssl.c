@@ -1472,11 +1472,30 @@ exit:
 static int generate_key(struct client_state *csp, char **key_buf)
 {
    int ret = 0;
-   char* key_file_path = NULL;
-   BIGNUM *exp = BN_new();
-   RSA *rsa = RSA_new();
-   EVP_PKEY *key = EVP_PKEY_new();
+   char* key_file_path;
+   BIGNUM *exp;
+   RSA *rsa;
+   EVP_PKEY *key;
 
+   key_file_path = make_certs_path(csp->config->certificate_directory,
+      (char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
+   if (key_file_path == NULL)
+   {
+      return -1;
+   }
+
+   /*
+    * Test if key already exists. If so, we don't have to create it again.
+    */
+   if (file_exists(key_file_path) == 1)
+   {
+      freez(key_file_path);
+      return 0;
+   }
+
+   exp = BN_new();
+   rsa = RSA_new();
+   key = EVP_PKEY_new();
    if (exp == NULL || rsa == NULL || key == NULL)
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "RSA key memory allocation failure");
@@ -1488,23 +1507,6 @@ static int generate_key(struct client_state *csp, char **key_buf)
    {
       log_ssl_errors(LOG_LEVEL_ERROR, "Setting RSA key exponent failed");
       ret = -1;
-      goto exit;
-   }
-
-   key_file_path = make_certs_path(csp->config->certificate_directory,
-      (char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
-   if (key_file_path == NULL)
-   {
-      ret = -1;
-      goto exit;
-   }
-
-   /*
-    * Test if key already exists. If so, we don't have to create it again.
-    */
-   if (file_exists(key_file_path) == 1)
-   {
-      ret = 0;
       goto exit;
    }
 
