@@ -2229,6 +2229,7 @@ socket-timeout 300
 #   Cookie \
 #   DNT \
 #   Connection \
+#   Pragma \
 #   Upgrade-Insecure-Requests \
 #   If-Modified-Since \
 #   Cache-Control \
@@ -2533,6 +2534,8 @@ socket-timeout 300
 #      This directive specifies the name of the CA key file in ".pem"
 #      format. The ca-cert-file section contains a command to
 #      generate it.
+#
+#      The CA key is used by Privoxy to sign generated certificates.
 #
 #      Access to the key should be limited to Privoxy.
 #
