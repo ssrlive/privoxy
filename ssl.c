@@ -88,7 +88,7 @@ static mbedtls_ctr_drbg_context ctr_drbg;
 static mbedtls_entropy_context  entropy;
 static int rng_seeded;
 
-static int generate_webpage_certificate(struct client_state *csp);
+static int generate_host_certificate(struct client_state *csp);
 static int host_to_hash(struct client_state *csp);
 static int ssl_verify_callback(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags);
 static void free_client_ssl_structures(struct client_state *csp);
@@ -325,11 +325,11 @@ extern int create_client_ssl_connection(struct client_state *csp)
     */
    privoxy_mutex_lock(&certificate_mutex);
 
-   ret = generate_webpage_certificate(csp);
+   ret = generate_host_certificate(csp);
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
-         "Generate_webpage_certificate failed: %d", ret);
+         "generate_host_certificate failed: %d", ret);
       privoxy_mutex_unlock(&certificate_mutex);
       ret = -1;
       goto exit;
@@ -1257,7 +1257,7 @@ exit:
 
 /*********************************************************************
  *
- * Function    :  generate_webpage_certificate
+ * Function    :  generate_host_certificate
  *
  * Description :  Creates certificate file in presetted directory.
  *                If certificate already exists, no other certificate
@@ -1273,7 +1273,7 @@ exit:
  *                >0 => Length of created certificate.
  *
  *********************************************************************/
-static int generate_webpage_certificate(struct client_state *csp)
+static int generate_host_certificate(struct client_state *csp)
 {
    mbedtls_x509_crt issuer_cert;
    mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
