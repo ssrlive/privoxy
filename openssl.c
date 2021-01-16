@@ -58,7 +58,7 @@
 #define VALID_DATETIME_FMT                       "%y%m%d%H%M%SZ"
 #define VALID_DATETIME_BUFLEN                    16
 
-static int generate_webpage_certificate(struct client_state *csp);
+static int generate_host_certificate(struct client_state *csp);
 static void free_client_ssl_structures(struct client_state *csp);
 static void free_server_ssl_structures(struct client_state *csp);
 static int ssl_store_cert(struct client_state *csp, X509* crt);
@@ -783,11 +783,11 @@ extern int create_client_ssl_connection(struct client_state *csp)
     */
    privoxy_mutex_lock(&certificate_mutex);
 
-   ret = generate_webpage_certificate(csp);
+   ret = generate_host_certificate(csp);
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
-         "Generate_webpage_certificate failed: %d", ret);
+         "generate_host_certificate failed: %d", ret);
       privoxy_mutex_unlock(&certificate_mutex);
       ret = -1;
       goto exit;
@@ -1709,7 +1709,7 @@ static int set_subject_alternative_name(X509 *cert, X509 *issuer, const char *ho
 
 /*********************************************************************
  *
- * Function    :  generate_webpage_certificate
+ * Function    :  generate_host_certificate
  *
  * Description :  Creates certificate file in presetted directory.
  *                If certificate already exists, no other certificate
@@ -1725,7 +1725,7 @@ static int set_subject_alternative_name(X509 *cert, X509 *issuer, const char *ho
  *                 1 => Certificate created
  *
  *********************************************************************/
-static int generate_webpage_certificate(struct client_state *csp)
+static int generate_host_certificate(struct client_state *csp)
 {
    char *key_buf = NULL;    /* Buffer for created key */
    X509 *issuer_cert = NULL;
@@ -1942,7 +1942,7 @@ static int generate_webpage_certificate(struct client_state *csp)
    serial_num = BN_new();
    if (!serial_num)
    {
-      log_error(LOG_LEVEL_ERROR, "generate_webpage_certificate: memory error");
+      log_error(LOG_LEVEL_ERROR, "generate_host_certificate: memory error");
       ret = -1;
       goto exit;
    }
