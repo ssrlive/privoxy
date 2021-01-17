@@ -7,5 +7,3 @@
 33_manpage_hyphen.patch
 34_system-docbook2man.patch
 35_man-spelling.patch
-39_show-status.patch
-40_redirect-ssl.patch

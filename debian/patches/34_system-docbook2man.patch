@@ -6,7 +6,7 @@ Forwarded: not-needed
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -539,7 +539,7 @@ dok-man:
+@@ -541,7 +541,7 @@ dok-man:
  # target for man page generation!
  man: dok-release
  	mkdir -p doc/source/temp && cd doc/source/temp && $(RM) * ;\

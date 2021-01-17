@@ -1,3 +1,11 @@
+privoxy (3.0.30~git-snapshot-1) UNRELEASED; urgency=medium
+
+  * Git Snapshot.
+  * Update all patches to new version.
+  * 39_show-status and 40_redirect-ssl are now incorporated upstream.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 17 Jan 2021 15:15:58 +0100
+
 privoxy (3.0.29-2) unstable; urgency=medium
 
   * Use --enable-extended-statistics and --enable-pcre-host-patterns.

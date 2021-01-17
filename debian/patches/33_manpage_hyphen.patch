@@ -5,7 +5,7 @@ Forwarded: not-needed
 
 --- a/GNUmakefile.in
 +++ b/GNUmakefile.in
-@@ -544,8 +544,7 @@ man: dok-release
+@@ -546,8 +546,7 @@ man: dok-release
  	perl -pi.bak -e "s/\[ /\[/g;s/á/\\\\['a]/g;s/é/\\\\['e]/g" $(MAN_PAGE); \
  	perl -pi.bak -e "s/ö/\\\\[:o]/g" $(MAN_PAGE); \
  	perl -pi.bak -e 's/([ {])-([a-z])/$$1\\-$$2/g' $(MAN_PAGE); \
