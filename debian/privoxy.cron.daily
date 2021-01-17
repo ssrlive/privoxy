@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Expire https inspection certificates
+
+set -e
+
+CERTDIR=/var/lib/privoxy/certs
+EXPIREDAYS=90
+
+if [ -d $CERTDIR ]; then
+    find $CERTDIR -type f -mtime +$EXPIREDAYS | xargs -r rm -f
+fi

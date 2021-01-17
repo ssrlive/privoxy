@@ -5,9 +5,9 @@ Forwarded: not-needed
 
 --- a/tools/privoxy-log-parser.pl
 +++ b/tools/privoxy-log-parser.pl
-@@ -2730,7 +2730,7 @@ omitted, ANSI escape sequences are used
- This option is only intended to make embedding log excerpts in web pages easier.
- It does not escape any input!
+@@ -2753,7 +2753,7 @@ It does not escape any input!
+ [B<--keep-date>] Don't remove the date when printing highlighted log messages.
+ Useful when parsing multiple log files at once.
  
 -[B<--no-msecs>] Don't expect milisecond resolution
 +[B<--no-msecs>] Don't expect millisecond resolution

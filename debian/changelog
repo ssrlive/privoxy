@@ -1,9 +1,10 @@
-privoxy (3.0.29~gitc62254-1) UNRELEASED; urgency=medium
+privoxy (3.0.29-1) unstable; urgency=medium
 
-  * New upstream development version.
+  * New upstream release 3.0.29.
   * Update all patches to new version.
   * 36_trusted-cgi-referer-example and 37_ppedit-tests403 are now
     incorporated upstream.
+  * d/copyright: Update to new upstream version.
   * d/copyright: use ./ prefix to upstream filenames, because orig.tar.gz
     is build with a ./ prefix.
   * Upgrade to debhelper v13.
@@ -12,11 +13,15 @@ privoxy (3.0.29~gitc62254-1) UNRELEASED; urgency=medium
     configure.in but use the date from debian/changelog.
   * Remove 05_defaut_action since this is no longer needed.
   * Tag all patches with Forwarded header.
+  * debian/watch: Cleanup and update to version 4.
   * Compile --with-mbedtls to allow https-inspection.
   * Adapt TLS/SSL settings to Debian FHS.
   * Generate dirs with correct permissions for https-inspection.
+  * Delete https-inspection certs on purge.
+  * Expire https-inspection certs after 90 days.
+  * Compile --with-brotli to enable support for brotli decompression.
 
- -- Roland Rosenfeld <roland@debian.org>  Fri, 04 Sep 2020 15:13:08 +0200
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 29 Nov 2020 14:22:27 +0100
 
 privoxy (3.0.28-3) unstable; urgency=medium
 

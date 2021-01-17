@@ -5,22 +5,42 @@ Source: https://sourceforge.net/projects/ijbswa/files/Sources/
 
 Files: *
 Copyright:
- Copyright (C) 2001-2018 by the Privoxy team. http://www.privoxy.org/
+ Copyright (C) 2001-2020 by the Privoxy team. https://www.privoxy.org/
+ Copyright (C) 2001-2020 by Privoxy Developers <privoxy-devel@lists.privoxy.org>
+ Parts Copyright (c) 1997 by Anonymous Coders and Junkbusters, Inc.
  Parts Copyright (C) 1999 Adam Lock <locka@iol.ie>
+ Parts Copyright (C) 1998-1999 Steve Cheng <steve@ggi-project.org>
+ Parts Copyright (C) 2000-2002 Greg Ferguson <gferg@metalab.unc.edu>
+ Parts Copyright (C) 2001 Jonathan Foster http://www.jon-foster.co.uk/
  Parts Copyright (C) 2003 Ian Cummings <ian_a_c@hotmail.com>
- Parts Copyright (C) 2000, 2001 by Andreas S. Oesterhelt <andreas@oesterhelt.org>
- Parts Copyright (C) 2006-2018 Fabian Keil <fk@fabiankeil.de>
+ Parts Copyright (C) 2000-2003 by Andreas S. Oesterhelt <andreas@oesterhelt.org>
+ Parts Copyright (C) 2006-2020 Fabian Keil <fk@fabiankeil.de>
+ Parts Copyright (c) 2020 Maxim Antonov <mantonov@gmail.com>
+ Parts Copyright (C) 2017-2020 Vaclav Svec. FIT CVUT.
 Comment:
- Based on the Internet Junkbuster originally written
- by and Copyright (C) 1997 Anonymous Coders and
- Junkbusters Corporation.  http://www.junkbusters.com
+ Some source code is based on code Copyright (c) 1997 by Anonymous
+ Coders and Junkbusters, Inc. and licensed under the GNU General
+ Public License.
+ .
+ Privoxy is free software; you can redistribute and/or modify its
+ source code under the terms of the GNU General Public License as
+ published by the Free Software Foundation, either version 2 of the
+ license, or (at your option) any later version.
+ .
+ The same is true for Privoxy binaries unless they are linked with a
+ mbed TLS version that is licensed under the Apache 2.0 license in
+ which case you can redistribute and/or modify the Privoxy binaries
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the license, or (at
+ your option) any later version.
 License: GPL-2+
 
-Files: ./regression-tests.action ./tools/uagen.pl ./tools/privoxy-regression-test.pl
- ./tools/privoxy-log-parser.pl ./tools/url-pattern-translator.pl ./utils/changelog2doc.pl
+Files: ./regression-tests.action ./tools/uagen.pl
+ ./tools/privoxy-regression-test.pl ./tools/privoxy-log-parser.pl
+ ./tools/url-pattern-translator.pl ./utils/changelog2doc.pl
  ./utils/create-package-feed.pl
 Copyright:
- Copyright (c) 2006-2017 Fabian Keil <fk@fabiankeil.de>
+ Copyright (c) 2006-2020 Fabian Keil <fk@fabiankeil.de>
 License: ISC
 
 Files: ./strptime.h
@@ -31,9 +51,14 @@ Comment:
  Contributed by Ulrich Drepper <drepper@cygnus.com>, 1996.
 License: GPL-2+
 
+Files: ./config.guess ./config.sub
+Copyright:
+  1992-2013, Free Software Foundation, Inc.
+License: GPL-2+
+
 Files: debian/*
 Copyright:
- 2002-2018  Roland Rosenfeld <roland@debian.org>
+ 2002-2020  Roland Rosenfeld <roland@debian.org>
 License: GPL-2+
 
 Files: ./pcre/*

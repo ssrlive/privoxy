@@ -32,7 +32,7 @@ Forwarded: not-needed
  #
  #  2.5. actionsfile
  #  =================
-@@ -2474,7 +2474,7 @@ socket-timeout 300
+@@ -2479,7 +2479,7 @@ socket-timeout 300
  #
  #      ca-directory /usr/local/etc/privoxy/CA
  #
@@ -41,16 +41,16 @@ Forwarded: not-needed
  #
  #  7.2. ca-cert-file
  #  ==================
-@@ -2615,7 +2615,7 @@ socket-timeout 300
+@@ -2633,7 +2633,7 @@ socket-timeout 300
  #
  #      certificate-directory /usr/local/var/privoxy/certs
  #
 -#certificate-directory /usr/local/var/privoxy/certs
 +#certificate-directory /var/lib/privoxy/certs
  #
- #  7.6. trusted-cas-file
- #  ======================
-@@ -2648,7 +2648,7 @@ socket-timeout 300
+ #  7.6. cipher-list
+ #  =================
+@@ -2764,7 +2764,7 @@ socket-timeout 300
  #
  #      trusted-cas-file trusted_cas_file.pem
  #

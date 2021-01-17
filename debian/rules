@@ -24,6 +24,7 @@ override_dh_auto_configure:
 		--enable-no-gifs \
 		--enable-external-filters \
 		--with-mbedtls \
+		--with-brotli \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 
 override_dh_auto_build:

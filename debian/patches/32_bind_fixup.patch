@@ -6,7 +6,7 @@ Forwarded: not-needed
 
 --- a/jbsockets.c
 +++ b/jbsockets.c
-@@ -975,20 +975,7 @@ int bind_port(const char *hostnam, int p
+@@ -918,20 +918,7 @@ int bind_port(const char *hostnam, int p
     }
  
     memset(&hints, 0, sizeof(struct addrinfo));

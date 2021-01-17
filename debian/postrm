@@ -32,6 +32,10 @@ case "$1" in
             . /usr/share/debconf/confmodule
             db_purge
         fi
+	# Remove https inspection certificates on purge:
+	if [ -d /var/lib/privoxy/certs ]; then
+	    rm -rf /var/lib/privoxy/certs
+	fi
         ;;
 
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
