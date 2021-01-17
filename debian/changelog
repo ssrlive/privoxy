@@ -1,3 +1,14 @@
+privoxy (3.0.29-2) unstable; urgency=medium
+
+  * Use --enable-extended-statistics and --enable-pcre-host-patterns.
+  * 39_show-status: Add new features to show-status page.
+  * Remove 38_SOURCE_DATE_EPOCH, since upstream honors it when set.
+  * Upgrade to Standards-Version 4.5.1 (no changes).
+  * 40_redirect-ssl: Check the actual URL when https inspecting requests.
+  * Add apparmor profile usr.sbin.privoxy.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 17 Jan 2021 13:10:33 +0100
+
 privoxy (3.0.29-1) unstable; urgency=medium
 
   * New upstream release 3.0.29.

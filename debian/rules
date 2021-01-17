@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (c) 2002-2020 Roland Rosenfeld <roland@debian.org>
+# (c) 2002-2021 Roland Rosenfeld <roland@debian.org>
 #
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -23,6 +23,8 @@ override_dh_auto_configure:
 		--enable-zlib \
 		--enable-no-gifs \
 		--enable-external-filters \
+		--enable-extended-statistics \
+		--enable-pcre-host-patterns \
 		--with-mbedtls \
 		--with-brotli \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
@@ -85,6 +87,12 @@ override_dh_auto_install:
 	    sed -e 's/  *$$//' < $$f > $$f.new; \
 	    mv -f $$f.new $$f; \
 	done
+
+override_dh_install:
+	dh_install
+	install -m0644 debian/apparmor/usr.sbin.privoxy \
+		$(DEBDIR)/etc/apparmor.d/
+	dh_apparmor --profile-name=usr.sbin.privoxy
 
 override_dh_installdocs:
 	dh_installdocs

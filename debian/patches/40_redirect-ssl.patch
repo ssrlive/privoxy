@@ -1,0 +1,66 @@
+Origin: https://www.privoxy.org/gitweb/?p=privoxy.git;h=89da1910
+Author: Fabian Keil <fk@fabiankeil.de>
+Date: Tue Dec 15 19:00:00 2020 +0100
+Bug: https://sourceforge.net/p/ijbswa/support-requests/1736/
+Forwarded: not needed, comes from upstream
+Subject: Check the actual URL when https inspecting requests
+    redirect_url(): Check the actual URL when https inspecting requests
+    
+    Previously we would only check the path which resulted
+    in rewrite results being rejected as invalid URLs.
+    
+    Before:
+    19:37:29.494 014 Error: pcrs command "s@/test@/@" changed "/test" to "/" (1 hit), but the result doesn't look like a valid URL and will be ignored.
+    
+    After:
+    19:40:57.857 002 Redirect: pcrs command s@/test@/@ changed https://www.electrobsd.org/test to https://www.electrobsd.org/ (1 hit).
+    
+    Reported by withoutname in #1736.
+
+--- a/filters.c
++++ b/filters.c
+@@ -66,6 +66,9 @@
+ #ifdef FEATURE_CLIENT_TAGS
+ #include "client-tags.h"
+ #endif
++#ifdef FEATURE_HTTPS_INSPECTION
++#include "ssl.h"
++#endif
+ 
+ #ifdef _WIN32
+ #include "win32.h"
+@@ -1220,8 +1223,33 @@ struct http_response *redirect_url(struc
+ 
+       if (*redirection_string == 's')
+       {
+-         old_url = csp->http->url;
++#ifdef FEATURE_HTTPS_INSPECTION
++         if (client_use_ssl(csp))
++         {
++            jb_err err;
++
++            old_url = strdup_or_die("https://");
++            err = string_append(&old_url, csp->http->hostport);
++            if (!err) err = string_append(&old_url, csp->http->path);
++            if (err)
++            {
++               log_error(LOG_LEVEL_FATAL,
++                  "Failed to rebuild URL 'https://%s%s'",
++                  csp->http->hostport, csp->http->path);
++            }
++         }
++         else
++#endif
++         {
++            old_url = csp->http->url;
++         }
+          new_url = rewrite_url(old_url, redirection_string);
++#ifdef FEATURE_HTTPS_INSPECTION
++         if (client_use_ssl(csp))
++         {
++            freez(old_url);
++         }
++#endif
+       }
+       else
+       {

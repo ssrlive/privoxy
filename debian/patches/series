@@ -7,4 +7,5 @@
 33_manpage_hyphen.patch
 34_system-docbook2man.patch
 35_man-spelling.patch
-38_SOURCE_DATE_EPOCH.patch
+39_show-status.patch
+40_redirect-ssl.patch
