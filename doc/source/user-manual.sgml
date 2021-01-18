@@ -4299,6 +4299,10 @@ problem-host.example.com</screen>
    </para>
     <screen>+filter{no-ping}             # Removes non-standard ping attributes in &lt;a&gt; and &lt;area&gt; tags.</screen>
    <para>
+    <anchor id="filter-github">
+   </para>
+    <screen>+filter{github}              # Removes the annoying "Sign-Up" banner and the Cookie disclaimer.</screen>
+   <para>
     <anchor id="filter-google">
    </para>
     <screen>+filter{google}              # CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.</screen>
