@@ -4318,6 +4318,10 @@ problem-host.example.com</screen>
     <anchor id="filter-blogspot">
    </para>
     <screen>+filter{blogspot}            # Cleans up some Blogspot blogs. Read the fine print before using this.</screen>
+   <para>
+    <anchor id="filter-sourceforge">
+   </para>
+    <screen>+filter{sourceforge}         # Reduces the amount of ads for proprietary software on SourceForge.</screen>
   </listitem>
  </varlistentry>
 </variablelist>
