@@ -2072,6 +2072,12 @@ sub handle_loglevel_error($) {
 
         # Didn't receive data in time: a.fsdn.com:443
         $c =~ s@(?<=in time: )(.*)@$h{'destination'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Sending data on socket \d+ over TLS/) {
+
+        # Sending data on socket 33 over TLS/SSL failed: no TLS/SSL errors detected
+        $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     }
 
     # XXX: There are probably more messages that deserve highlighting.
