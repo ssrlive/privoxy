@@ -480,6 +480,10 @@ https://www.privoxy.org/donate
 
 184) Add support for wolfSSL. Work in progress.
 
+185) The mbedTLS and OpenSSL version of generate_host_certificate()
+     should only be called when necessary and the check should be
+     done without holding the certificate mutex.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
