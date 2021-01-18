@@ -422,6 +422,214 @@ for-privoxy-version=3.0.11</pre>
         </table>
         <p>This will create <tt class="FILENAME">../privoxy_3.0.30-UNRELEASED-1_i386.deb</tt> which can be
         uploaded.</p>
+        <p>Using git-buildpackage we start with a clone of the last Debian version:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        gbp clone https://salsa.debian.org/debian/privoxy.git
+        cd privoxy
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>or if the repository is already there</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        cd privoxy
+        gbp pull
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Now import the newly released upstream tarball via debian/watch file:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        gbp import-orig --uscan
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Next update all Debian quilt patches to the new version:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        while quilt push; do quilt refresh; done
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>If some patch is no longer required (because it is already merged upstream), it can be removed using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        quilt delete XX_patchname.patch
+        git rm debian/patches/XX_patchname.patch
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>If the patch needs modification, you can apply, edit and update it with</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        quilt push -f
+        quilt edit some_file
+        quilt refresh
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>until</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        while quilt push; do quilt refresh; done
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>succeeds. Then you can</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        quilt pop -a
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Now add a new entry to the debian/changelog representing the new version:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        dch -v 3.0.30-1
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>and describe what you did before and don't forget to git commit all changes.</p>
+        <p>Now you can build the package on the local machine using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        gbp buildpackage -us -uc
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>You should check for warnings using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        lintian -iI ../build-area/privoxy_3.0.30-1_amd64.changes
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Maybe rebuild the package in different defined cowbuilder environments like</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class=
+              "PROGRAMLISTING">        sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.30-1.dsc
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>And try to run autopackage testing suite on the result:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class=
+              "PROGRAMLISTING">        autopkgtest /var/cache/pbuilder/result/privoxy_3.0.30-1_amd64.changes -s -- schroot sid
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Or just push the changes to salsa.debian.org, where a CI pipeline is defined for the package, that builds
+        and tests it.</p>
+        <p>If everything is okay, run cowbuilder with i386 and amd64 environments for current Debian stable release and
+        build privoxy_3.0.30-1_i386.deb and privoxy_3.0.30-1_amd64.deb. Then sign both files:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        gpg --detach-sign --armor privoxy_3.0.30-1_i386.deb
+        gpg --detach-sign --armor privoxy_3.0.30-1_amd64.deb
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Create a README file containing the recent block from debian/changelog and upload the two packages, the two
+        signatures and the README to a freshly created folder below
+        https://sourceforge.net/projects/ijbswa/files/Debian/</p>
+        <p>For building just a git snapshot build the following workflow may be useful. First create a build
+        environment, for this you may have to run the following commands:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        sudo apt install build-essential devscripts
+        sudo apt-get build-dep privoxy
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>After this enter the checked out privoxy git tree and check that all (new) build dependencies are met:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        dpkg-checkbuilddeps
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>If something is missing, just add it using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        sudo apt install foobar
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>Now you may update debian/changelog, especially the version number using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        dch
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>and finally build the package:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        debuild -us -uc -b
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>If everything went okay, you may find the resulting Debian package in the parent directory.</p>
+        <p>You may want to clean up the build tree using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        debian/rules clean
+      </pre>
+            </td>
+          </tr>
+        </table>
+        <p>And maybe repair some artefacts using one or both of the following commands:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">        git reset --hard
+        git clean -fd
+      </pre>
+            </td>
+          </tr>
+        </table>
       </div>
       <div class="SECT3">
         <h3 class="SECT3"><a name="NEWRELEASE-MACOSX" id="NEWRELEASE-MACOSX">6.3.5. Mac OS X</a></h3>
