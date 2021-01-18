@@ -328,7 +328,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
 
    /* Header of message with certificate information */
    const char message_begin[] =
-      "HTTP/1.1 200 OK\r\n"
+      "HTTP/1.1 403 Certificate validation failed\r\n"
       "Content-Type: text/html\r\n"
       "Connection: close\r\n\r\n"
       "<!DOCTYPE html>\n"
