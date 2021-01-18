@@ -581,6 +581,16 @@ s@(<(?:input|form|select|textarea)\s[^>]+autocomplete=)(['"]?)(?:off|0)\2@$1$2on
 
 #################################################################################
 #
+# github: Removes the annoying "Sign-Up" banner and the Cookie disclaimer.
+#
+#################################################################################
+FILTER: github Removes the annoying "Sign-Up" banner and the Cookie disclaimer.
+
+s@<signup-prompt.*</signup-prompt>@@Uis
+s@(<div) (class="hx_cookie-banner)@$1 style="display:none;" $2@
+
+#################################################################################
+#
 # google: CSS-based block for Google text ads. Also removes
 #         a width limitation and the toolbar advertisement.
 #
