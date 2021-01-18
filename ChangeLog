@@ -16,6 +16,12 @@ ChangeLog for Privoxy
   - Make CGI_PREFIX protocol-relative when building with FEATURE_HTTPS_INSPECTION.
     This unbreaks (at least) https://config.privoxy.org/client-tags whose
     buttons would previously use a http:// URL resulting in browser warnings.
+  - Support using https-inspection and client-header-order at the same time.
+    Privously Privoxy would crash.
+    Reported by: Kai Raven
+  - Properly reject rewrites from http to https as they currently
+    aren't supported. Previously Privoxy would wait for the client
+    to establish an encrypted connection which obviously would not happen.
 
 - General improvements:
   - Allow to rewrite the request destination for https-intercepted
@@ -61,23 +67,49 @@ ChangeLog for Privoxy
   - Add new FEATURES to the show-status page and resort list.
   - OpenSSL create_client_ssl_connection(): Remove unused variable.
   - Update bug tracker URL in cgi_error_unknown().
+  - Properly deal with host certificates without keys and keys without
+    host certificate which may be left over from a previous Privoxy run
+    with incorrect configuration.
+  - Saved a couple of memory allocations when sorting client headers.
+  - Improved a couple of error messages.
+  - Saved memory allocations when using OpenSSL and checking if a
+    key already exists.
+  - The configure script will bail out if OpenSSL and mbedTLS are
+    enabled at the same time.
 
 - Action file improvements:
   - Block requests to eu-tlp03.kameleoon.com/.
   - Unblock metrics.sr.ht/.
   - Disable fast-redirects for .fsf.org/.
+  - Disable fast-redirects for .gravater.com/.
+  - Disable fast-redirects for .ksta.de/
   - Block requests to tag.crsspxl.com/.
   - Block requests to analytics.slashdotmedia.com/.
   - Block requests to ml314.com/.
-  - Disable fast-redirects for secure.gravatar.com/.
   - Block requests to .adroll.com/.
   - Block requests to fastlane.rubiconproject.com/.
+  - Block requests to api.theadex.com/
+  - Block requests to ih.adscale.de/
+  - Block requests to .s400.meetrics.net/
+  - Block requests for pp.lp4.io/
+
+- Filter file improvements:
+  - Added new 'allow-autocompletion' filter which changes
+    autocomplete="off" to "on" on input fields to allow autocompletion.
+    Requested by Jamie Zawinski in #370.
+    Filter based on a submission by Aaron Linville.
 
 - privoxy-log-parser:
   - Highlight 'Rewritten request line results in downgrade to http'.
   - Highlight 'Rewrite detected: ...' messages again.
   - Add a handler for tagging messages.
   - Bump version to 0.9.2.
+  - Properly deal with 'Certificate error' crunches
+    Previously the error description was highlighted as 'host'.
+  - Highlight: 'Flushed 3153 bytes of request body'
+  - Highlight 'The last 12078 bytes of the request body have been read'
+  - Log truncated LOG_LEVEL_CLF messages more gracefully
+    and note that the statistics will be inprecise.
 
 - privoxy-regression-test:
   - Use http://127.0.0.1:8118/ as default privoxy address
@@ -170,10 +202,16 @@ ChangeLog for Privoxy
   - Explicitly mention in the config file that access to the
     ca key should be limited to Privoxy.
   - List more client-specific-tag examples for inspiration.
+  - Add additional headers to the client-header-order example.
+  - Note that actions aren't updated after rewrites.
+  - Explicitly mention that upgrading from http to https with
+    a client-header filter is not supported
+  - Note that protocol and host have to be added when rewriting
+    the destination host for https-inspected requests.
+  - Explicitly mention that the CA key is used to sign certificates.
 
 - Developer Manual:
-  - Mention the directory from which to execute the commands to
-    create Debian packages.
+  - Flesh out the build instructions for Debian.
   - Remove the packaging instructions for RPM-based systems.
     They don't work and we don't release RPM packages anymore anyway.
   - Remove the packaging instructions for Solaris.
