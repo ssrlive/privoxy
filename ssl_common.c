@@ -717,7 +717,10 @@ extern int host_is_ip_address(const char *host)
  *********************************************************************/
 extern int enforce_sane_certificate_state(const char *certificate, const char *key)
 {
-   if (file_exists(certificate) == 0 && file_exists(key) == 1)
+   const int certificate_exists = file_exists(certificate);
+   const int key_exists = file_exists(key);
+
+   if (!certificate_exists && key_exists)
    {
       log_error(LOG_LEVEL_ERROR,
          "A website key already exists but there's no matching certificate. "
@@ -725,6 +728,18 @@ extern int enforce_sane_certificate_state(const char *certificate, const char *k
       if (unlink(key))
       {
          log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E", key);
+
+         return -1;
+      }
+   }
+   if (certificate_exists && !key_exists)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "A certificate exists but there's no matching key. "
+         "Removing %s before creating a new key and certificate.", certificate);
+      if (unlink(certificate))
+      {
+         log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E", certificate);
 
          return -1;
       }
