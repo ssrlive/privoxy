@@ -45,7 +45,6 @@
 #define CERT_PARAM_COUNTRY_FCODE          "C"
 #define CERT_PARAM_COUNTRY_CODE           "CZ"
 #define CERT_SUBJECT_PASSWORD            ""
-#define CERT_INFO_PREFIX                 ""
 
 /*
  * Properties of cert for generating

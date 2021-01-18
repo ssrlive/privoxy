@@ -1740,6 +1740,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
    {
       char buf[CERT_INFO_BUF_SIZE];
       char *encoded_text;
+#define CERT_INFO_PREFIX                 ""
 
       mbedtls_x509_crt_info(buf, sizeof(buf), CERT_INFO_PREFIX, crt);
       encoded_text = html_encode(buf);
