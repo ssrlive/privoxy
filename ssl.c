@@ -1881,7 +1881,16 @@ extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
  *********************************************************************/
 extern void ssl_crt_verify_info(char *buf, size_t size, struct client_state *csp)
 {
-   mbedtls_x509_crt_verify_info(buf, size, " ", csp->server_cert_verification_result);
+   char *last_byte;
+
+   mbedtls_x509_crt_verify_info(buf, size, "",
+      csp->server_cert_verification_result);
+   last_byte = buf + strlen(buf)-1;
+   if (*last_byte == '\n')
+   {
+      /* Overwrite trailing new line character */
+      *last_byte = '\0';
+   }
 }
 
 
