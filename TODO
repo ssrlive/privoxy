@@ -478,7 +478,8 @@ https://www.privoxy.org/donate
 183) Properly deal with proxy responses that arrive in multiple pieces
      when https inspecting while using a forwarding proxy.
 
-184) Add support for wolfSSL. Work in progress.
+184) Add support for wolfSSL. Work in progress, expected to be
+     committed after the 3.0.30 release.
 
 185) The mbedTLS and OpenSSL version of generate_host_certificate()
      should only be called when necessary and the check should be
