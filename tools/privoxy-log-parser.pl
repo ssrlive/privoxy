@@ -1422,6 +1422,11 @@ sub handle_loglevel_crunch($) {
         #  [...]&filter... [too long, truncated]
         $content = highlight_matched_pattern($content, 'request_', '^.*(?=\.\.\. \[too long, truncated\]$)');
 
+    } elsif ($content =~ m/Certificate error:/) {
+
+        # Certificate error: ASN date error, current date after: https://expired.badssl.com/
+        $content = highlight_matched_pattern($content, 'request_', 'https://.*');
+
     } else {
 
         # Blocked: http://ads.example.org/
