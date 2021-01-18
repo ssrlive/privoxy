@@ -785,7 +785,7 @@ clean:
 	$(RM) a.out $(OBJS) $(W32_FILES) $(W32_INIS) $(PROGRAM) default.action \
 		config.base config.tmp \
 		`find . \( -name TAGS -o -name tags \) -a -not -path "./.git/*"` \
-		`find . -name "*.orig" -a -not -name rc.privoxy.orig -a -not -path "./.git/*"`
+		`find . -name "*.orig" -a -not -path "./.git/*"`
 
 clean-editor-files:
 	$(RM) `find . -name "*~"`
@@ -994,7 +994,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 	$(CHMOD) $(RWD_MODE) $(DESTDIR)$(LOG_DEST)/logfile || exit 1 ;\
 	if [ "$(prefix)" = "/usr/local" ] || [ "$(prefix)" = "/usr" ]; then \
 		if [ -f /etc/slackware-version ] && [ -d /etc/rc.d/ ] && [ -w /etc/rc.d/ ] ; then \
-               $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.orig | \
+               $(SED) 's+%PROGRAM%+$(PROGRAM)+' slackware/rc.privoxy.in | \
                $(SED) 's+%SBIN_DEST%+$(SBIN_DEST)+' | \
                $(SED) 's+%CONF_DEST%+$(CONF_DEST)+' | \
                $(SED) 's+%USER%+$(USER)+' | \
