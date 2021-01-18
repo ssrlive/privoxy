@@ -4307,6 +4307,10 @@ problem-host.example.com</screen>
    </para>
     <screen>+filter{google}              # CSS-based block for Google text ads. Also removes a width limitation and the toolbar advertisement.</screen>
    <para>
+    <anchor id="filter-imdb">
+   </para>
+    <screen>+filter{imdb}                # Removes some ads on IMDb.</screen>
+   <para>
     <anchor id="filter-yahoo">
    </para>
     <screen>+filter{yahoo}               # CSS-based block for Yahoo text ads. Also removes a width limitation.</screen>
