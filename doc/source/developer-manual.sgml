@@ -2640,6 +2640,170 @@ for-privoxy-version=3.0.11
         <filename>../privoxy_&p-version;-&p-status;-1_i386.deb</filename>
         which can be uploaded.
       </para>
+      <para>
+       Using git-buildpackage we start with a clone of the last Debian version:
+      </para>
+      <programlisting>
+        gbp clone https://salsa.debian.org/debian/privoxy.git
+        cd privoxy
+      </programlisting>
+      <para>
+       or if the repository is already there
+      </para>
+      <programlisting>
+        cd privoxy
+        gbp pull
+      </programlisting>
+      <para>
+       Now import the newly released upstream tarball via debian/watch file:
+      </para>
+      <programlisting>
+        gbp import-orig --uscan
+      </programlisting>
+      <para>
+       Next update all Debian quilt patches to the new version:
+      </para>
+      <programlisting>
+        while quilt push; do quilt refresh; done
+      </programlisting>
+      <para>
+       If some patch is no longer required (because it is already merged
+       upstream), it can be removed using
+      </para>
+      <programlisting>
+        quilt delete XX_patchname.patch
+        git rm debian/patches/XX_patchname.patch
+      </programlisting>
+      <para>
+       If the patch needs modification, you can apply, edit and update it with
+      </para>
+      <programlisting>
+        quilt push -f
+        quilt edit some_file
+        quilt refresh
+      </programlisting>
+      <para>
+       until
+      </para>
+      <programlisting>
+        while quilt push; do quilt refresh; done
+      </programlisting>
+      <para>
+       succeeds. Then you can
+      </para>
+      <programlisting>
+        quilt pop -a
+      </programlisting>
+      <para>
+       Now add a new entry to the debian/changelog representing the new
+       version:
+      </para>
+      <programlisting>
+        dch -v &p-version;-1
+      </programlisting>
+      <para>
+       and describe what you did before and don't forget to git commit all
+       changes.
+      </para>
+      <para>
+       Now you can build the package on the local machine using
+      </para>
+      <programlisting>
+        gbp buildpackage -us -uc
+      </programlisting>
+      <para>
+       You should check for warnings using
+      </para>
+      <programlisting>
+        lintian -iI ../build-area/privoxy_&p-version;-1_amd64.changes
+      </programlisting>
+      <para>
+       Maybe rebuild the package in different defined cowbuilder environments
+       like
+      </para>
+      <programlisting>
+        sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_&p-version;-1.dsc
+      </programlisting>
+      <para>
+       And try to run autopackage testing suite on the result:
+      </para>
+      <programlisting>
+        autopkgtest /var/cache/pbuilder/result/privoxy_&p-version;-1_amd64.changes -s -- schroot sid
+      </programlisting>
+      <para>
+       Or just push the changes to salsa.debian.org, where a CI pipeline is
+       defined for the package, that builds and tests it.
+      </para>
+      <para>
+       If everything is okay, run cowbuilder with i386 and amd64 environments
+       for current Debian stable release and build
+       privoxy_&p-version;-1_i386.deb and privoxy_&p-version;-1_amd64.deb.
+       Then sign both files:
+      </para>
+      <programlisting>
+        gpg --detach-sign --armor privoxy_&p-version;-1_i386.deb
+        gpg --detach-sign --armor privoxy_&p-version;-1_amd64.deb
+      </programlisting>
+      <para>
+       Create a README file containing the recent block from debian/changelog
+       and upload the two packages, the two signatures and the README to a
+       freshly created folder below
+       https://sourceforge.net/projects/ijbswa/files/Debian/
+      </para>
+      <para>
+       For building just a git snapshot build the following workflow may be
+       useful.  First create a build environment, for this you may have to
+       run the following commands:
+      </para>
+      <programlisting>
+        sudo apt install build-essential devscripts
+        sudo apt-get build-dep privoxy
+      </programlisting>
+      <para>
+       After this enter the checked out privoxy git tree and check that all
+       (new) build dependencies are met:
+      </para>
+      <programlisting>
+        dpkg-checkbuilddeps
+      </programlisting>
+      <para>
+       If something is missing, just add it using
+      </para>
+      <programlisting>
+        sudo apt install foobar
+      </programlisting>
+      <para>
+       Now you may update debian/changelog, especially the version number
+       using
+      </para>
+      <programlisting>
+        dch
+      </programlisting>
+      <para>
+       and finally build the package:
+      </para>
+      <programlisting>
+        debuild -us -uc -b
+      </programlisting>
+      <para>
+       If everything went okay, you may find the resulting Debian package in
+       the parent directory.
+      </para>
+      <para>
+       You may want to clean up the build tree using
+      </para>
+      <programlisting>
+        debian/rules clean
+      </programlisting>
+      <para>
+       And maybe repair some artefacts using one or both of the following
+       commands:
+      </para>
+      <programlisting>
+        git reset --hard
+        git clean -fd
+      </programlisting>
+
     </sect3>
 
     <sect3 id="newrelease-macosx"><title>Mac OS X</title>
