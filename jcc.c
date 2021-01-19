@@ -1860,7 +1860,7 @@ static jb_err receive_client_request(struct client_state *csp)
           * elsewhere failed or Privoxy is configured
           * to only accept proxy requests.
           *
-          * An error response has already been send
+          * An error response has already been sent
           * and we're done here.
           */
          return JB_ERR_PARSE;
