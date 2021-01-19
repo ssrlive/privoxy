@@ -6219,6 +6219,8 @@ static void listen_loop(void)
    freez(basedir);
 #endif
 
+   log_error(LOG_LEVEL_INFO, "Exiting gracefully.");
+
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /* Cleanup - remove taskbar icon etc. */
    TermLogWindow();
