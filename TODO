@@ -485,6 +485,8 @@ https://www.privoxy.org/donate
      should only be called when necessary and the check should be
      done without holding the certificate mutex.
 
+186) Privoxy should handle "OPTIONS *" requests properly.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
