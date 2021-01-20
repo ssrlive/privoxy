@@ -390,7 +390,7 @@ Successfully rebased and updated refs/heads/local-branch.
     course this, the <citetitle>developer-manual</citetitle> in this format.
     The <citetitle>README</citetitle>, <citetitle>AUTHORS</citetitle>,
     <citetitle>INSTALL</citetitle>,
-    <citetitle>privoxy.1</citetitle> (man page), and
+    <citetitle>privoxy.8</citetitle> (man page), and
     <citetitle>config</citetitle> files are also now maintained as Docbook
     SGML. These files, when built, in the top-level source directory are
     generated files! Also, the <application>Privoxy</application> <filename>index.html</filename> (and a
