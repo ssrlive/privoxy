@@ -487,6 +487,9 @@ https://www.privoxy.org/donate
 
 186) Privoxy should handle "OPTIONS *" requests properly.
 
+187) There should be a convenient way to see the versions of
+     the libraries Privoxy is using.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
