@@ -5,7 +5,7 @@ Forwarded: not-needed
 
 --- a/tools/privoxy-log-parser.pl
 +++ b/tools/privoxy-log-parser.pl
-@@ -2793,7 +2793,7 @@ It does not escape any input!
+@@ -2814,7 +2814,7 @@ It does not escape any input!
  [B<--keep-date>] Don't remove the date when printing highlighted log messages.
  Useful when parsing multiple log files at once.
  
