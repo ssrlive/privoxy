@@ -32,7 +32,7 @@ override_dh_auto_configure:
 override_dh_auto_build:
 	$(MAKE)
 # 	preserve auto build documentation from source package:
-	tar cf debian/doc.tar README INSTALL AUTHORS doc/source doc/webserver
+	tar cf debian/doc.tar README INSTALL AUTHORS doc/webserver
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) dok
 	rm -f doc/webserver/user-manual/*.bak
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) man
