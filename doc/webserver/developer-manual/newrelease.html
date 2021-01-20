@@ -401,34 +401,12 @@ for-privoxy-version=3.0.11</pre>
       </div>
       <div class="SECT3">
         <h3 class="SECT3"><a name="NEWRELEASE-DEBIAN" id="NEWRELEASE-DEBIAN">6.3.4. Debian</a></h3>
-        <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
-        into an empty directory</i></span>. (See "Building and releasing packages" above). Then add a log entry to
-        <tt class="FILENAME">debian/changelog</tt>, if it is not already there, for example by running (from the debian
-        directory):</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">  debchange -v 3.0.30-UNRELEASED-1 "New upstream version"</pre>
-            </td>
-          </tr>
-        </table>
-        <p>Then, run (from the root directory):</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">  dpkg-buildpackage -rfakeroot -us -uc -b</pre>
-            </td>
-          </tr>
-        </table>
-        <p>This will create <tt class="FILENAME">../privoxy_3.0.30-UNRELEASED-1_i386.deb</tt> which can be
-        uploaded.</p>
         <p>Using git-buildpackage we start with a clone of the last Debian version:</p>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        gbp clone https://salsa.debian.org/debian/privoxy.git
-        cd privoxy
-      </pre>
+              <pre class="PROGRAMLISTING">  gbp clone https://salsa.debian.org/debian/privoxy.git
+  cd privoxy</pre>
             </td>
           </tr>
         </table>
@@ -436,9 +414,8 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        cd privoxy
-        gbp pull
-      </pre>
+              <pre class="PROGRAMLISTING">  cd privoxy
+  gbp pull</pre>
             </td>
           </tr>
         </table>
@@ -446,8 +423,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        gbp import-orig --uscan
-      </pre>
+              <pre class="PROGRAMLISTING">  gbp import-orig --uscan</pre>
             </td>
           </tr>
         </table>
@@ -455,8 +431,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        while quilt push; do quilt refresh; done
-      </pre>
+              <pre class="PROGRAMLISTING">  while quilt push; do quilt refresh; done</pre>
             </td>
           </tr>
         </table>
@@ -464,9 +439,8 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        quilt delete XX_patchname.patch
-        git rm debian/patches/XX_patchname.patch
-      </pre>
+              <pre class="PROGRAMLISTING">  quilt delete XX_patchname.patch
+  git rm debian/patches/XX_patchname.patch</pre>
             </td>
           </tr>
         </table>
@@ -474,10 +448,9 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        quilt push -f
-        quilt edit some_file
-        quilt refresh
-      </pre>
+              <pre class="PROGRAMLISTING">  quilt push -f
+  quilt edit some_file
+  quilt refresh</pre>
             </td>
           </tr>
         </table>
@@ -485,8 +458,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        while quilt push; do quilt refresh; done
-      </pre>
+              <pre class="PROGRAMLISTING">  while quilt push; do quilt refresh; done</pre>
             </td>
           </tr>
         </table>
@@ -494,8 +466,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        quilt pop -a
-      </pre>
+              <pre class="PROGRAMLISTING">  quilt pop -a</pre>
             </td>
           </tr>
         </table>
@@ -503,8 +474,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        dch -v 3.0.30-1
-      </pre>
+              <pre class="PROGRAMLISTING">  dch -v 3.0.30-1</pre>
             </td>
           </tr>
         </table>
@@ -513,8 +483,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        gbp buildpackage -us -uc
-      </pre>
+              <pre class="PROGRAMLISTING">  gbp buildpackage -us -uc</pre>
             </td>
           </tr>
         </table>
@@ -522,8 +491,7 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        lintian -iI ../build-area/privoxy_3.0.30-1_amd64.changes
-      </pre>
+              <pre class="PROGRAMLISTING">  lintian -iI ../build-area/privoxy_3.0.30-1_amd64.changes</pre>
             </td>
           </tr>
         </table>
@@ -532,8 +500,7 @@ for-privoxy-version=3.0.11</pre>
           <tr>
             <td>
               <pre class=
-              "PROGRAMLISTING">        sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.30-1.dsc
-      </pre>
+              "PROGRAMLISTING">  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.30-1.dsc</pre>
             </td>
           </tr>
         </table>
@@ -542,8 +509,7 @@ for-privoxy-version=3.0.11</pre>
           <tr>
             <td>
               <pre class=
-              "PROGRAMLISTING">        autopkgtest /var/cache/pbuilder/result/privoxy_3.0.30-1_amd64.changes -s -- schroot sid
-      </pre>
+              "PROGRAMLISTING">  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.30-1_amd64.changes -s -- schroot sid</pre>
             </td>
           </tr>
         </table>
@@ -554,82 +520,77 @@ for-privoxy-version=3.0.11</pre>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">        gpg --detach-sign --armor privoxy_3.0.30-1_i386.deb
-        gpg --detach-sign --armor privoxy_3.0.30-1_amd64.deb
-      </pre>
+              <pre class="PROGRAMLISTING">  gpg --detach-sign --armor privoxy_3.0.30-1_i386.deb
+  gpg --detach-sign --armor privoxy_3.0.30-1_amd64.deb</pre>
             </td>
           </tr>
         </table>
         <p>Create a README file containing the recent block from debian/changelog and upload the two packages, the two
         signatures and the README to a freshly created folder below
         https://sourceforge.net/projects/ijbswa/files/Debian/</p>
-        <p>For building just a git snapshot build the following workflow may be useful. First create a build
-        environment, for this you may have to run the following commands:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        sudo apt install build-essential devscripts
-        sudo apt-get build-dep privoxy
-      </pre>
-            </td>
-          </tr>
-        </table>
-        <p>After this enter the checked out privoxy git tree and check that all (new) build dependencies are met:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        dpkg-checkbuilddeps
-      </pre>
-            </td>
-          </tr>
-        </table>
-        <p>If something is missing, just add it using</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        sudo apt install foobar
-      </pre>
-            </td>
-          </tr>
-        </table>
-        <p>Now you may update debian/changelog, especially the version number using</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        dch
-      </pre>
-            </td>
-          </tr>
-        </table>
-        <p>and finally build the package:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        debuild -us -uc -b
-      </pre>
-            </td>
-          </tr>
-        </table>
-        <p>If everything went okay, you may find the resulting Debian package in the parent directory.</p>
-        <p>You may want to clean up the build tree using</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        debian/rules clean
-      </pre>
-            </td>
-          </tr>
-        </table>
-        <p>And maybe repair some artefacts using one or both of the following commands:</p>
-        <table border="0" bgcolor="#E0E0E0" width="100%">
-          <tr>
-            <td>
-              <pre class="PROGRAMLISTING">        git reset --hard
-        git clean -fd
-      </pre>
-            </td>
-          </tr>
-        </table>
+        <div class="SECT4">
+          <h4 class="SECT4"><a name="SNAPSHOT-DEBIAN" id="SNAPSHOT-DEBIAN">6.3.4.1. Debian GIT Snapshot</a></h4>
+          <p>For building just a git snapshot build the following workflow may be useful. First create a build
+          environment, for this you may have to run the following commands:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  sudo apt install build-essential devscripts
+  sudo apt-get build-dep privoxy</pre>
+              </td>
+            </tr>
+          </table>
+          <p>After this enter the checked out privoxy git tree and check that all (new) build dependencies are met:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  dpkg-checkbuilddeps</pre>
+              </td>
+            </tr>
+          </table>
+          <p>If something is missing, just add it using</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  sudo apt install foobar</pre>
+              </td>
+            </tr>
+          </table>
+          <p>Now you may update debian/changelog, especially the version number using</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  dch</pre>
+              </td>
+            </tr>
+          </table>
+          <p>and finally build the package:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  debuild -us -uc -b</pre>
+              </td>
+            </tr>
+          </table>
+          <p>If everything went okay, you may find the resulting Debian package in the parent directory.</p>
+          <p>You may want to clean up the build tree using</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  debian/rules clean</pre>
+              </td>
+            </tr>
+          </table>
+          <p>And maybe repair some artefacts using one or both of the following commands:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  git reset --hard
+  git clean -fd</pre>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
       <div class="SECT3">
         <h3 class="SECT3"><a name="NEWRELEASE-MACOSX" id="NEWRELEASE-MACOSX">6.3.5. Mac OS X</a></h3>
