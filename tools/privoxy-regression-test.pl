@@ -2135,7 +2135,7 @@ Privoxy-Regression-Test in a meaningful way.
 
 =head1 SEE ALSO
 
-privoxy(1) curl(1)
+privoxy(8) curl(1)
 
 =head1 AUTHOR
 
