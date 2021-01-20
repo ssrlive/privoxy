@@ -2903,7 +2903,7 @@ Many settings can't be controlled through command line options yet.
 
 =head1 SEE ALSO
 
-privoxy(1)
+privoxy(8)
 
 =head1 AUTHOR
 
