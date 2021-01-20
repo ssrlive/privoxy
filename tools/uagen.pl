@@ -601,7 +601,7 @@ Some parameters can't be specified at the command line.
 
 =head1 SEE ALSO
 
-privoxy(1)
+privoxy(8)
 
 =head1 AUTHOR
 
