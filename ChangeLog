@@ -76,6 +76,7 @@ ChangeLog for Privoxy
     key already exists.
   - The configure script will bail out if OpenSSL and mbedTLS are
     enabled at the same time.
+  - Log a message right before exiting gracefully.
 
 - Action file improvements:
   - Block requests to eu-tlp03.kameleoon.com/.
@@ -98,6 +99,11 @@ ChangeLog for Privoxy
     autocomplete="off" to "on" on input fields to allow autocompletion.
     Requested by Jamie Zawinski in #370.
     Filter based on a submission by Aaron Linville.
+  - Added an imdb filter.
+  - Added a sourceforge filter that reduces the amount of ads
+    for proprietary software.
+  - Added a github filter that removes the annoying "Sign-Up"
+    banner and the Cookie disclaimer.
 
 - privoxy-log-parser:
   - Highlight 'Rewritten request line results in downgrade to http'.
@@ -108,6 +114,7 @@ ChangeLog for Privoxy
     Previously the error description was highlighted as 'host'.
   - Highlight: 'Flushed 3153 bytes of request body'
   - Highlight 'The last 12078 bytes of the request body have been read'
+  - Highlight 'Sending data on socket 33 over TLS/SSL failed: ...'
   - Log truncated LOG_LEVEL_CLF messages more gracefully
     and note that the statistics will be inprecise.
 
