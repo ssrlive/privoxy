@@ -1358,7 +1358,7 @@ struct access_control_list
    struct access_control_addr src[1];  /**< Client IP address */
    struct access_control_addr dst[1];  /**< Website or parent proxy IP address */
 #ifdef HAVE_RFC2553
-   int wildcard_dst;                   /** < dst address is wildcard */
+   short wildcard_dst;                 /** < dst address is wildcard */
 #endif
 
    short action;                       /**< ACL_PERMIT or ACL_DENY */
