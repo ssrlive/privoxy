@@ -335,11 +335,10 @@ struct http_request
    char *version;  /**< Protocol version */
    int status;     /**< HTTP Status */
 
-   char *host;     /**< Host part of URL */
    int   port;     /**< Port of URL or 80 (default) */
+   char *host;     /**< Host part of URL */
    char *path;     /**< Path of URL */
    char *hostport; /**< host[:port] */
-   int   ssl;      /**< Flag if protocol is https */
 
    char *host_ip_addr_str; /**< String with dotted decimal representation
                                 of host's IP. NULL before connect_to() */
@@ -354,6 +353,7 @@ struct http_request
    unsigned char hash_of_host_hex[(HASH_OF_HOST_BUF_SIZE * 2) + 1]; /**< chars for hash in hex string and one for '\0'       */
    unsigned char hash_of_host[HASH_OF_HOST_BUF_SIZE+1];             /**< chars for bytes of hash and one for '\0'            */
 #endif
+   short int   ssl;      /**< Flag if protocol is https */
 };
 
 
