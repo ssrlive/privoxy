@@ -1435,6 +1435,9 @@ struct configuration_spec
    /** Bitmask of features that can be controlled through the config file. */
    unsigned feature_flags;
 
+   /** Nonzero if we need to bind() to the new port. */
+   int need_bind;
+
    /** The log file name. */
    const char *logfile;
 
@@ -1565,9 +1568,6 @@ struct configuration_spec
 
    /** List of loaders */
    int (*loaders[NLOADERS])(struct client_state *);
-
-   /** Nonzero if we need to bind() to the new port. */
-   int need_bind;
 
 #ifdef FEATURE_HTTPS_INSPECTION
    /** Password for proxy ca file **/
