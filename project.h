@@ -411,9 +411,9 @@ struct url_spec
    regex_t *host_regex;/**< Regex for host matching                          */
    enum host_regex_type { VANILLA_HOST_PATTERN, PCRE_HOST_PATTERN } host_regex_type;
 #endif /* defined FEATURE_PCRE_HOST_PATTERNS */
+   int    dcount;      /**< How many parts to this domain? (length of dvec)   */
    char  *dbuffer;     /**< Buffer with '\0'-delimited domain name, or NULL to match all hosts. */
    char **dvec;        /**< List of pointers to the strings in dbuffer.       */
-   int    dcount;      /**< How many parts to this domain? (length of dvec)   */
    int    unanchored;  /**< Bitmap - flags are ANCHOR_LEFT and ANCHOR_RIGHT.  */
 
    char  *port_list;   /**< List of acceptable ports, or NULL to match all ports */
