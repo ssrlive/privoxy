@@ -32,7 +32,7 @@ override_dh_auto_configure:
 override_dh_auto_build:
 	$(MAKE)
 # 	preserve auto build documentation from source package:
-	tar cf debian/doc.tar README INSTALL AUTHORS doc/webserver
+	tar cf debian/doc.tar README INSTALL AUTHORS doc/webserver privoxy.8
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) dok
 	rm -f doc/webserver/user-manual/*.bak
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) man
@@ -46,7 +46,6 @@ override_dh_auto_clean:
 	[ ! -f GNUmakefile ] || $(MAKE) clean
 	[ ! -f GNUmakefile ] || $(MAKE) distclean
 	rm -f configure config.h GNUmakefile
-	rm -f privoxy.8
 	rm -rf obj
 	rm -f ActivityConsole.jar
 	rm -f src/java/org/privoxy/activityconsole/*.class
