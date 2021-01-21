@@ -764,13 +764,14 @@ struct reusable_connection
    char *host;
    int  port;
    enum forwarder_type forwarder_type;
-   char *gateway_host;
+   char *forward_host;
+   int  forward_port;
+
    int  gateway_port;
+   char *gateway_host;
    char *auth_username;
    char *auth_password;
 
-   char *forward_host;
-   int  forward_port;
 };
 
 
