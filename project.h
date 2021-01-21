@@ -1263,11 +1263,11 @@ struct forward_spec
    /** Connection type.  Must be SOCKS_NONE, SOCKS_4, SOCKS_4A or SOCKS_5. */
    enum forwarder_type type;
 
-   /** SOCKS server hostname.  Only valid if "type" is SOCKS_4 or SOCKS_4A. */
-   char *gateway_host;
-
    /** SOCKS server port. */
    int   gateway_port;
+
+   /** SOCKS server hostname.  Only valid if "type" is SOCKS_4 or SOCKS_4A. */
+   char *gateway_host;
 
    /** SOCKS5 username. */
    char *auth_username;
