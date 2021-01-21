@@ -1005,6 +1005,9 @@ struct client_state
    /** Multi-purpose flag container, see CSP_FLAG_* above */
    unsigned int flags;
 
+   /** MIME-Type key, see CT_* above */
+   unsigned int content_type;
+
    /** Client PC's IP address, as reported by the accept() function.
        As a string. */
    char *ip_addr_str;
@@ -1070,9 +1073,6 @@ struct client_state
    char *client_address;
 #endif
 
-   /** MIME-Type key, see CT_* above */
-   unsigned int content_type;
-
    /** Actions files associated with this client */
    struct file_list *actions_list[MAX_AF_FILES];
 
@@ -1135,8 +1135,8 @@ struct client_state
     * Thanks to this flags, we can call function to close both connections
     * and we don't have to care about more details.
     */
-   int ssl_with_server_is_opened;
-   int ssl_with_client_is_opened;
+   short int ssl_with_server_is_opened;
+   short int ssl_with_client_is_opened;
 
    /*
     * Server certificate chain of trust including strings with certificates
