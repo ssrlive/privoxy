@@ -697,7 +697,7 @@ exit:
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  1 => Error while creating hash
+ * Returns     : -1 => Error while creating hash
  *                0 => Hash created successfully
  *
  *********************************************************************/

@@ -1768,7 +1768,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  1 => Error while creating hash
+ * Returns     : -1 => Error while creating hash
  *                0 => Hash created successfully
  *
  *********************************************************************/
