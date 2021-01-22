@@ -6205,7 +6205,8 @@ static void listen_loop(void)
 
       if (i <= 0)
       {
-         log_error(LOG_LEVEL_ERROR, "Graceful termination failed - still some live clients after 1 minute wait.");
+         log_error(LOG_LEVEL_ERROR, "Graceful termination failed "
+            "- still some live clients after 1 minute wait.");
       }
    }
    sweep();
