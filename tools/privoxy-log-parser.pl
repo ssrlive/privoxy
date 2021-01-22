@@ -1253,6 +1253,12 @@ sub handle_loglevel_tagging($) {
         $c =~ s@(?<=tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '[^\s]+(?=\.$)');
 
+    } elsif ($c =~ /^Client tag/) {
+
+        # Client tag 'forward-directly' matches
+
+        $c =~ s@(?<=tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
+
     }
 
     return $c;
