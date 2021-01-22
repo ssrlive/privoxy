@@ -376,7 +376,8 @@ static void sig_handler(int the_signal)
           * We shouldn't be here, unless we catch signals
           * in main() that we can't handle here!
           */
-         log_error(LOG_LEVEL_FATAL, "sig_handler: exiting on unexpected signal %d", the_signal);
+         log_error(LOG_LEVEL_FATAL,
+            "sig_handler: exiting on unexpected signal %d", the_signal);
    }
    return;
 
