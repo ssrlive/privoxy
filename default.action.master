@@ -1226,6 +1226,8 @@ static.criteo.com/
 static.*.criteo.net/
 cas.*.criteo.com/
 cas.criteo.com/
+# Blocked URL = https://trc-events.taboola.com/1301520/log/3/unip?en=pre_d_eng_tb&tos=382558&scd=49&ssd=1&est=1611317562537&ver=27&isls=true&src=i&invt=192000&tim=1611317945096&mrir=tto&vi=1611317562534&ref=https%3A%2F%2Fhtml.duckduckgo.com%2F&cv=20201217-8-RELEASE&item-url=https%3A%2F%2Fgenius.com%2FLords-of-acid-pussy-lyrics
+trc-events.taboola.com/
 
 
 #----------------------------------------------------------------------------
