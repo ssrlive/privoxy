@@ -6183,11 +6183,6 @@ static void listen_loop(void)
 
    /* NOTREACHED unless FEATURE_GRACEFUL_TERMINATION is defined */
 
-#ifdef FEATURE_HTTPS_INSPECTION
-   /* Clean up.  Aim: free all memory (no leaks) */
-   ssl_release();
-#endif
-
 #ifdef FEATURE_GRACEFUL_TERMINATION
 
    log_error(LOG_LEVEL_INFO, "Graceful termination requested.");
@@ -6218,6 +6213,17 @@ static void listen_loop(void)
 
 #if defined(unix)
    freez(basedir);
+#endif
+
+#ifdef FEATURE_HTTPS_INSPECTION
+   /*
+    * Only release TLS backed resources if there
+    * are no active connections left.
+    */
+   if (clients->next == NULL)
+   {
+      ssl_release();
+   }
 #endif
 
    log_error(LOG_LEVEL_INFO, "Exiting gracefully.");
