@@ -1780,8 +1780,15 @@ static int host_to_hash(struct client_state *csp)
 #error mbedTLS needs to be compiled with md5 support
 #else
    memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
-   mbedtls_md5((unsigned char *)csp->http->host, strlen(csp->http->host),
-      csp->http->hash_of_host);
+   ret = mbedtls_md5_ret((unsigned char *)csp->http->host,
+      strlen(csp->http->host), csp->http->hash_of_host);
+   if (ret != 0)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to generate md5 hash of host %s: %d",
+         csp->http->host, ret);
+      return -1;
+   }
 
    /* Converting hash into string with hex */
    size_t i = 0;
