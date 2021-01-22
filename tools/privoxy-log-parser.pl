@@ -1245,7 +1245,16 @@ sub handle_loglevel_tagging($) {
         $c =~ s@(?<=^Tagger \')([^\']*)@$h{'tagger'}$1$h{'Standard'}@;
         $c =~ s@(?<=added tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
         $c =~ s@(?<=Action bits )(updated)@$h{'action-bits-update'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ /^Enlisting tag/) {
+
+        # Enlisting tag 'forward-directly' for client 127.0.0.1.
+
+        $c =~ s@(?<=tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
+        $c = highlight_matched_host($c, '[^\s]+(?=\.$)');
+
     }
+
     return $c;
 }
 
