@@ -1553,7 +1553,8 @@ static jb_err receive_chunked_client_request_body(struct client_state *csp)
       len = read_socket(csp->cfd, buf, sizeof(buf) - 1);
       if (len <= 0)
       {
-         log_error(LOG_LEVEL_ERROR, "Read the client body failed: %E");
+         log_error(LOG_LEVEL_ERROR,
+            "Reading the client body failed: %E");
          break;
       }
       if (add_to_iob(csp->client_iob, csp->config->buffer_limit, buf, len))
