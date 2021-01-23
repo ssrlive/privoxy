@@ -1078,6 +1078,17 @@ sub handle_loglevel_re_filter($) {
         $c .= $req{$t}{'content_size_change'} . $h{'Standard'} . ")";
         $content = $c;
 
+    } elsif ($c =~ m/^filtering request body from client /) {
+
+        # filtering request body from client 127.0.0.1 (size 958) with 'null-filter' produced 0 hits (new size 958).
+
+        $c =~ s@(?<=from client )([^\s]+)@$h{'ip-address'}$1$h{'Standard'}@;
+        $c =~ s@(?<=\(size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@([^\s]+?)(\'? produced)@$h{'filter'}$1$h{'Standard'}$2@;
+        $c =~ s@(?<=\(new size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=produced )(\d+)(?= hits)@$h{'Number'}$1$h{'Standard'}@;
+        $content = $c;
+
   } elsif ($c =~ /\.{3}$/
         and $c =~ m/^(?:re_)?filtering \'?(.*?)\'? \(size (\d*)\) with (?:filter )?\'?([^\s]*?)\'? ?\.{3}$/) {
 
