@@ -2104,6 +2104,13 @@ sub handle_loglevel_error($) {
         # Sending data on socket 33 over TLS/SSL failed: no TLS/SSL errors detected
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Chunk size \d+ exceeds buffered data left/) {
+
+        # Chunk size 291 exceeds buffered data left. Already digested 69894 of 69957 buffered bytes.
+        $c =~ s@(?<=size )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=digested )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=of )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     }
 
     # XXX: There are probably more messages that deserve highlighting.
