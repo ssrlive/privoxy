@@ -1705,8 +1705,8 @@ static char *pcrs_filter_impl(const struct client_state *csp, int filter_respons
       }
       else
       {
-         log_error(LOG_LEVEL_RE_FILTER,
-            "filtering client %s request body (size %lu) with \'%s\' produced %d hits (new size %lu).",
+         log_error(LOG_LEVEL_RE_FILTER, "filtering request body from client %s "
+            "(size %lu) with \'%s\' produced %d hits (new size %lu).",
             csp->ip_addr_str, prev_size, b->name, current_hits, size);
       }
 #ifdef FEATURE_EXTENDED_STATISTICS
