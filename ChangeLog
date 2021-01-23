@@ -22,6 +22,11 @@ ChangeLog for Privoxy
   - Properly reject rewrites from http to https as they currently
     aren't supported. Previously Privoxy would wait for the client
     to establish an encrypted connection which obviously would not happen.
+  - When HTTPS inspection is enabled and Privoxy has been compiled with
+    FEATURE_GRACEFUL_TERMINATION (not recommended for production builds),
+    the the TLS backend resources are free'd later on and only if no active
+    connections are left. Prevents crashes when exiting "gracefully" at the
+    wrong time.
 
 - General improvements:
   - Allow to rewrite the request destination for https-intercepted
@@ -77,22 +82,34 @@ ChangeLog for Privoxy
   - The configure script will bail out if OpenSSL and mbedTLS are
     enabled at the same time.
   - Log a message right before exiting gracefully.
+  - A couple of structure have been rearranged to require slightly
+    less memory.
+  - When HTTPs inspection is enabled and the certificate is invalid
+    the error message is now sent with status code 403 instead of 200.
+  - The Slackware rc script template has been renamed to
+    slackware/rc.privoxy.in to silence complaints when building
+    Debian packages.
+  - When building with MbedTLS support, mbedtls_md5_ret() is used
+    instead of mbedtls_md5() which is deprecated and causes a warning
+    on Debian GNU/Linux.
+  - The man page has been moved from section 1 to man section 8.
 
 - Action file improvements:
   - Block requests to eu-tlp03.kameleoon.com/.
   - Unblock metrics.sr.ht/.
   - Disable fast-redirects for .fsf.org/.
   - Disable fast-redirects for .gravater.com/.
-  - Disable fast-redirects for .ksta.de/
+  - Disable fast-redirects for .ksta.de/.
   - Block requests to tag.crsspxl.com/.
   - Block requests to analytics.slashdotmedia.com/.
   - Block requests to ml314.com/.
   - Block requests to .adroll.com/.
   - Block requests to fastlane.rubiconproject.com/.
-  - Block requests to api.theadex.com/
-  - Block requests to ih.adscale.de/
-  - Block requests to .s400.meetrics.net/
-  - Block requests for pp.lp4.io/
+  - Block requests to api.theadex.com/.
+  - Block requests to ih.adscale.de/.
+  - Block requests to .s400.meetrics.net/.
+  - Block requests for pp.lp4.io/.
+  - Block requests for trc-events.taboola.com/.
 
 - Filter file improvements:
   - Added new 'allow-autocompletion' filter which changes
@@ -104,19 +121,19 @@ ChangeLog for Privoxy
     for proprietary software.
   - Added a github filter that removes the annoying "Sign-Up"
     banner and the Cookie disclaimer.
+  - Removed a duplicated pcrs command from the js-annoyances filter.
+  - The crude-parental filter provides a short reason when blocking
+    add inserts a new line at the end of the block page.
 
 - privoxy-log-parser:
-  - Highlight 'Rewritten request line results in downgrade to http'.
-  - Highlight 'Rewrite detected: ...' messages again.
+  - Highlight a few more messages.
   - Add a handler for tagging messages.
   - Bump version to 0.9.2.
   - Properly deal with 'Certificate error' crunches
     Previously the error description was highlighted as 'host'.
-  - Highlight: 'Flushed 3153 bytes of request body'
-  - Highlight 'The last 12078 bytes of the request body have been read'
-  - Highlight 'Sending data on socket 33 over TLS/SSL failed: ...'
   - Log truncated LOG_LEVEL_CLF messages more gracefully
     and note that the statistics will be inprecise.
+  - Fixed perldoc typo.
 
 - privoxy-regression-test:
   - Use http://127.0.0.1:8118/ as default privoxy address
