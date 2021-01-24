@@ -1754,6 +1754,7 @@ sub parse_cli_options() {
     init_cli_options();
 
     GetOptions (
+        'check-bad-ssl'      => \$cli_options{'check-bad-ssl'},
         'debug=i'            => \$cli_options{'debug'},
         'forks=i'            => \$cli_options{'forks'},
         'fuzzer-address=s'   => \$cli_options{'fuzzer-address'},
@@ -1828,11 +1829,55 @@ sub start_forks($) {
     }
 }
 
+sub check_bad_ssl() {
+    my $failures = 0;
+    my @bad_ssl_urls_to_check = (
+        "https://expired.badssl.com/",
+        "https://wrong.host.badssl.com/",
+        "https://self-signed.badssl.com/",
+        "https://untrusted-root.badssl.com/",
+        "https://no-common-name.badssl.com/", # XXX: Certificate has expired ...
+        "https://no-subject.badssl.com/", # XXX: Certificate has expired ...
+        "https://incomplete-chain.badssl.com/",
+        );
+    # This is needed for get_status_code() to skip the
+    # status code from the "HTTP/1.1 200 Connection established"
+    # reply.
+    our $privoxy_cgi_url = "https://p.p/";
+
+    log_message("Requesting pages from badssl.com with various " .
+        "certificate problems. This will only work if Privoxy " .
+        "has been configured properly and can reach the Internet.");
+
+    foreach my $url_to_check (@bad_ssl_urls_to_check) {
+        my ($buffer_ref, $status_code);
+        log_message("Requesting $url_to_check");
+
+        $buffer_ref = get_page_with_curl($url_to_check);
+        $status_code = get_status_code($buffer_ref);
+
+        if (!check_status_code_result($status_code, "403")) {
+            $failures++;
+        }
+
+    }
+    if ($failures == 0) {
+        log_message("All requests resulted in status code 403 as expected.");
+    } else {
+        log_message("There were $failures requests that did not result in status code 403!");
+    }
+
+    return $failures;
+}
+
 sub main() {
 
     init_our_variables();
     parse_cli_options();
     init_proxy_settings('vanilla-proxy');
+    if (cli_option_is_set('check-bad-ssl')) {
+        exit check_bad_ssl();
+    }
     load_regression_tests();
     init_proxy_settings('fuzz-proxy');
     start_forks(get_cli_option('forks')) if cli_option_is_set('forks');
@@ -1847,7 +1892,7 @@ B<privoxy-regression-test> - A regression test "framework" for Privoxy.
 
 =head1 SYNOPSIS
 
-B<privoxy-regression-test> [B<--debug bitmask>] [B<--forks> forks]
+B<privoxy-regression-test> [B<--check-bad-ssl>] [B<--debug bitmask>] [B<--forks> forks]
 [B<--fuzzer-feeding>] [B<--fuzzer-feeding>] [B<--help>] [B<--level level>]
 [B<--local-test-file testfile>] [B<--loops count>] [B<--max-level max-level>]
 [B<--max-time max-time>] [B<--min-level min-level>] B<--privoxy-address proxy-address>
@@ -1996,6 +2041,13 @@ directive is to make it more convenient to skip similar tests in
 a given file without having to remove or disable the tests completely.
 
 =head1 OPTIONS
+
+B<--check-bad-ssl> Instead of running the regression tests
+as described above, request pages from badssl.com with bad
+certificates to verify that Privoxy is detecting the
+certificate issues. Only works if Privoxy has been compiled
+with FEATURE_HTTPS_INSPECTION, has been configured properly
+and can reach the Internet.
 
 B<--debug bitmask> Add the bitmask provided as integer
 to the debug settings.
