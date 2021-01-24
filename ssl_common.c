@@ -414,7 +414,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
 
    log_error(LOG_LEVEL_CRUNCH, "Certificate error: %s: https://%s%s",
       reason, csp->http->hostport, csp->http->path);
-   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 200 %lu",
+   log_error(LOG_LEVEL_CLF, "%s - - [%T] \"%s https://%s%s %s\" 403 %lu",
       csp->ip_addr_str, csp->http->gpc, csp->http->hostport, csp->http->path,
       csp->http->version, message_len-head_length);
 
