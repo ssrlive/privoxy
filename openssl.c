@@ -2236,8 +2236,12 @@ extern void ssl_release(void)
 {
    if (ssl_inited == 1)
    {
+#if OPENSSL_VERSION_NUMBER >= 0x1000200fL
+#ifndef LIBRESSL_VERSION_NUMBER
 #ifndef OPENSSL_NO_COMP
       SSL_COMP_free_compression_methods();
+#endif
+#endif
 #endif
       CONF_modules_free();
       CONF_modules_unload(1);
