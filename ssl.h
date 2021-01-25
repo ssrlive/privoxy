@@ -56,6 +56,9 @@ extern void close_client_ssl_connection(struct client_state *csp);
 extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
                              const unsigned char *src, size_t slen );
 extern void ssl_crt_verify_info(char *buf, size_t size, struct client_state *csp);
+
+#ifdef FEATURE_GRACEFUL_TERMINATION
 extern void ssl_release(void);
+#endif
 
 #endif /* ndef SSL_H_INCLUDED */

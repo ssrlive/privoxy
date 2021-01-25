@@ -1902,6 +1902,7 @@ extern void ssl_crt_verify_info(char *buf, size_t size, struct client_state *csp
 }
 
 
+#ifdef FEATURE_GRACEFUL_TERMINATION
 /*********************************************************************
  *
  * Function    :  ssl_release
@@ -1921,6 +1922,7 @@ extern void ssl_release(void)
       mbedtls_entropy_free(&entropy);
    }
 }
+#endif /* def FEATURE_GRACEFUL_TERMINATION */
 
 
 /*********************************************************************
