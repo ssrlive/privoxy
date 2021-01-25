@@ -733,7 +733,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Expect Status Code = 404
 # Level = 18
 # Fetch Test = http://p.p/die
-# Expect Status Code = 200
+# Expect Status Code = 403
 # Level = 19
 # Fetch Test = http://p.p/show-status
 # Fetch Test = http://config.privoxy.org/show-status?file=actions&index=0
