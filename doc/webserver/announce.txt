@@ -317,9 +317,9 @@ Privoxy is Free Software and licensed under the GNU GPLv2.
 
 Our TODO list is rather long. Helping hands and donations are welcome:
 
-  * https://www.privoxy.org/faq/general.html#PARTICIPATE
+  * https://www.privoxy.org/participate
 
-  * https://www.privoxy.org/faq/general.html#DONATE
+  * https://www.privoxy.org/donate
 
 At present, Privoxy is known to run on Windows 95 and later versions
 (98, ME, 2000, XP, Vista, Windows 7 etc.), GNU/Linux (RedHat, SuSE,
