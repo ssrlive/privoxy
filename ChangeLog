@@ -1,7 +1,7 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
-*** Version 3.0.30 UNRELEASED ***
+*** Version 3.0.30 stable ***
 
 - Bug fixes:
   - Check the actual URL for redirects when https inspecting requests.
@@ -78,9 +78,9 @@ ChangeLog for Privoxy
   - The configure script will bail out if OpenSSL and mbedTLS are
     enabled at the same time.
   - Log a message right before exiting gracefully.
-  - A couple of structure have been rearranged to require slightly
+  - A couple of structures have been rearranged to require slightly
     less memory.
-  - When HTTPS inspection is enabled and the certificate is invalid
+  - When https inspection is enabled and the certificate is invalid
     the error message is now sent with status code 403 instead of 200.
   - The Slackware rc script template has been renamed to
     slackware/rc.privoxy.in to silence complaints when building
@@ -88,7 +88,6 @@ ChangeLog for Privoxy
   - When building with MbedTLS support, mbedtls_md5_ret() is used
     instead of mbedtls_md5() which is deprecated and causes a warning
     on Debian GNU/Linux.
-  - The man page has been moved from section 1 to man section 8.
 
 - Action file improvements:
   - Block requests to eu-tlp03.kameleoon.com/.
@@ -122,17 +121,17 @@ ChangeLog for Privoxy
     inserts a link to Privoxy's webinterface and adds a new line at
     the end of the generated page.
 
-- privoxy-log-parser:
+- Privoxy-Log-Parser:
   - Highlight a few more messages.
   - Add a handler for tagging messages.
-  - Bump version to 0.9.2.
   - Properly deal with 'Certificate error' crunches
     Previously the error description was highlighted as 'host'.
   - Log truncated LOG_LEVEL_CLF messages more gracefully
     and note that the statistics will be imprecise.
   - Fixed perldoc typo.
+  - Bump version to 0.9.2.
 
-- privoxy-regression-test:
+- Privoxy-Regression-Test:
   - Use http://127.0.0.1:8118/ as default Privoxy address
     unless http_proxy is set through the environment.
   - Add a --privoxy-cgi-prefix option that specifies the prefix
@@ -157,6 +156,9 @@ ChangeLog for Privoxy
     "TAG:^(application|text)/(x-)?javascript$".
   - When get_cgi_page_or_else() fails, include the URL of the
     requested page in the log message.
+  - Added a --check-bad-ssl option that can be used to verify that
+    Privoxy detects certificate problems when accessing the test
+    sites from badssl.com.
   - Bumped version to 0.7.2
 
 - uagen:
@@ -167,7 +169,7 @@ ChangeLog for Privoxy
   - Bumped generated Firefox version to 78 (ESR).
   - Bumped version to 1.2.2.
 
- - User Documentation:
+ - User documentation:
   - Remove reference to 'How to Report Bugs Effectively'.
     It was only rendered as text without URL in the README anyway
     and there's no indication that users read it ...
@@ -221,7 +223,7 @@ ChangeLog for Privoxy
   - Replace CVS reference with git.
   - Mention regression-tests.action in the config file.
   - Explicitly mention in the config file that access to the
-    ca key should be limited to Privoxy.
+    CA key should be limited to Privoxy.
   - List more client-specific-tag examples for inspiration.
   - Add additional headers to the client-header-order example.
   - Note that actions aren't updated after rewrites.
@@ -230,8 +232,10 @@ ChangeLog for Privoxy
   - Note that protocol and host have to be added when rewriting
     the destination host for https-inspected requests.
   - Explicitly mention that the CA key is used to sign certificates.
+  - Put openssl command in 'command' tags.
+  - The man page has been moved from section 1 to man section 8.
 
-- Developer Manual:
+- Developer manual:
   - Flesh out the build instructions for Debian.
   - Remove the packaging instructions for RPM-based systems.
     They don't work and we don't release RPM packages anymore anyway.
@@ -267,7 +271,6 @@ ChangeLog for Privoxy
     They are not actually available through git (yet).
   - Don't speak of Privoxy version 3 in the past tense.
   - Update the list of programs required for the release process.
-  - Put openssl command in 'command' tags.
   - Update description of the webserver target which uses ssh, not scp.
   - Remove obsolete reference to config.new.
 
@@ -286,7 +289,7 @@ ChangeLog for Privoxy
     in case it isn't packaged.
   - Add regression tests for pcre host patterns.
 
-- Privoxy Infrastructure:
+- Privoxy infrastructure:
   - Import a Privoxy logo for the website.
   - Update Tor onion service to HiddenServiceVersion 3.
   - Display the "model" photos in a single row and remove placeholder images.
