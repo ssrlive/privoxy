@@ -1039,8 +1039,8 @@ uninstall: CONF_DEST LOG_DEST PID_DEST check_doc
 		done ;\
 	fi
 	@$(ECHO) Removing $(PROGRAM) config files
-	-@for i in $(DESTDIR)$(CONFIGS); do \
-		test -f $(CONF_DEST)/$$i && $(ECHO) Removing $$i ;\
+	-@for i in $(CONFIGS); do \
+		test -f $(DESTDIR)$(CONF_DEST)/$$i && $(ECHO) Removing $$i ;\
 		$(RM) $(DESTDIR)$(CONF_DEST)/$$i $(DESTDIR)$(CONF_DEST)/$$i~ $(DESTDIR)$(CONF_DEST)/$$i.new ;\
 	done
 	-@test -d $(DESTDIR)$(CONF_DEST)/templates && $(RM) -r $(DESTDIR)$(CONF_DEST)/templates &&\
