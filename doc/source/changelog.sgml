@@ -87,6 +87,12 @@
       wrong time.
      </para>
      </listitem>
+    <listitem>
+     <para>
+      Let the uninstall target remove the config file even if DESTDIR
+      is set and properly announce the deletion of the configuration files.
+     </para>
+     </listitem>
     </itemizedlist>
    </para>
   </listitem>
@@ -968,7 +974,13 @@
      <para>
       Add regression tests for pcre host patterns.
      </para>
-     </listitem>
+    </listitem>
+    <listitem>
+     <para>
+      Fixed a regression test that is executed when
+      FEATURE_GRACEFUL_TERMINATION is enabled.
+     </para>
+    </listitem>
     </itemizedlist>
    </para>
   </listitem>
