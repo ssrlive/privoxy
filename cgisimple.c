@@ -980,7 +980,8 @@ jb_err cgi_send_user_manual(struct client_state *csp,
    assert(rsp);
    assert(parameters);
 
-   if (0 == strncmpic(csp->config->usermanual, "http://", 7))
+   if (0 == strncmpic(csp->config->usermanual, "http://", 7) ||
+       0 == strncmpic(csp->config->usermanual, "https://", 8))
    {
       log_error(LOG_LEVEL_CGI, "Request for local user-manual "
          "received while user-manual delivery is disabled.");
