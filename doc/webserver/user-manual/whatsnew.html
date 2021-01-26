@@ -64,6 +64,10 @@
             recommended for production builds), the TLS backend resources are free'd later on and only if no active
             connections are left. Prevents crashes when exiting "gracefully" at the wrong time.</p>
           </li>
+          <li>
+            <p>Let the uninstall target remove the config file even if DESTDIR is set and properly announce the
+            deletion of the configuration files.</p>
+          </li>
         </ul>
       </li>
       <li>
@@ -588,6 +592,9 @@
           </li>
           <li>
             <p>Add regression tests for pcre host patterns.</p>
+          </li>
+          <li>
+            <p>Fixed a regression test that is executed when FEATURE_GRACEFUL_TERMINATION is enabled.</p>
           </li>
         </ul>
       </li>
