@@ -32,6 +32,8 @@ ChangeLog for Privoxy 3.0.30
     the TLS backend resources are free'd later on and only if no active
     connections are left. Prevents crashes when exiting "gracefully" at the
     wrong time.
+  - Let the uninstall target remove the config file even if DESTDIR
+    is set and properly announce the deletion of the configuration files.
 
 - General improvements:
   - Allow to rewrite the request destination for https-inspected
@@ -293,6 +295,8 @@ ChangeLog for Privoxy 3.0.30
   - Add a link to Privoxy-Regression-Test to regression-tests.action
     in case it isn't packaged.
   - Add regression tests for pcre host patterns.
+  - Fixed a regression test that is executed when
+    FEATURE_GRACEFUL_TERMINATION is enabled.
 
 - Privoxy infrastructure:
   - Import a Privoxy logo for the website.
