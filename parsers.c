@@ -540,7 +540,7 @@ jb_err decompress_iob(struct client_state *csp)
 
    cur = csp->iob->cur;
 
-   if (bufsize < (size_t)10)
+   if (old_size < (size_t)10)
    {
       /*
        * This is to protect the parsing of gzipped data,
