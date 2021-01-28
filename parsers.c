@@ -818,6 +818,7 @@ jb_err decompress_iob(struct client_state *csp)
       log_error(LOG_LEVEL_ERROR,
          "Unexpected error while decompressing to the buffer (iob): %s",
          zstr.msg);
+      freez(buf);
       return JB_ERR_COMPRESS;
    }
 
