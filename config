@@ -385,7 +385,7 @@ logdir .
 actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.
 actionsfile default.action   # Main actions file
 actionsfile user.action      # User customizations
-#regression-tests.action     # Tests for privoxy-regression-test
+#actionsfile regression-tests.action     # Tests for privoxy-regression-test
 #
 #  2.6. filterfile
 #  ================
