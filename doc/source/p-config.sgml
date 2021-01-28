@@ -738,7 +738,7 @@ actionsfile
  fk 2007-11-07
 -->
 <![%config-file;[<literallayout>@@actionsfile user.action      # User customizations</literallayout>]]>
-<![%config-file;[<literallayout>@@#regression-tests.action     # Tests for privoxy-regression-test</literallayout>]]>
+<![%config-file;[<literallayout>@@#actionsfile regression-tests.action     # Tests for privoxy-regression-test</literallayout>]]>
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
