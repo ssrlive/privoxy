@@ -577,7 +577,8 @@ jb_err decompress_iob(struct client_state *csp)
        || ((*cur++ & 0xff) != GZIP_IDENTIFIER_2)
        || (*cur++ != Z_DEFLATED))
       {
-         log_error(LOG_LEVEL_ERROR, "Invalid gzip header when decompressing");
+         log_error(LOG_LEVEL_ERROR,
+            "Invalid gzip header when decompressing.");
          return JB_ERR_COMPRESS;
       }
       else
@@ -586,7 +587,8 @@ jb_err decompress_iob(struct client_state *csp)
          if (flags & GZIP_FLAG_RESERVED_BITS)
          {
             /* The gzip header has reserved bits set; bail out. */
-            log_error(LOG_LEVEL_ERROR, "Invalid gzip header flags when decompressing");
+            log_error(LOG_LEVEL_ERROR,
+               "Invalid gzip header flags when decompressing.");
             return JB_ERR_COMPRESS;
          }
 
@@ -616,12 +618,14 @@ jb_err decompress_iob(struct client_state *csp)
             if ((skip_bytes < 0) || (skip_bytes >= (csp->iob->eod - cur)))
             {
                log_error(LOG_LEVEL_ERROR,
-                  "Unreasonable amount of bytes to skip (%d). Stopping decompression",
+                  "Unreasonable amount of bytes to skip (%d). "
+                  "Stopping decompression.",
                   skip_bytes);
                return JB_ERR_COMPRESS;
             }
             log_error(LOG_LEVEL_INFO,
-               "Skipping %d bytes for gzip compression. Does this sound right?",
+               "Skipping %d bytes for gzip compression. "
+               "Does this sound right?",
                skip_bytes);
             cur += skip_bytes;
          }
@@ -681,7 +685,7 @@ jb_err decompress_iob(struct client_state *csp)
    else
    {
       log_error(LOG_LEVEL_ERROR,
-         "Unable to determine compression format for decompression");
+         "Unable to determine compression format for decompression.");
       return JB_ERR_COMPRESS;
    }
 
@@ -698,7 +702,7 @@ jb_err decompress_iob(struct client_state *csp)
     */
    if (inflateInit2(&zstr, -MAX_WBITS) != Z_OK)
    {
-      log_error(LOG_LEVEL_ERROR, "Error initializing decompression");
+      log_error(LOG_LEVEL_ERROR, "Error initializing decompression.");
       return JB_ERR_COMPRESS;
    }
 
@@ -710,7 +714,7 @@ jb_err decompress_iob(struct client_state *csp)
    buf = zalloc(bufsize);
    if (NULL == buf)
    {
-      log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob");
+      log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob.");
       return JB_ERR_MEMORY;
    }
 
@@ -746,7 +750,8 @@ jb_err decompress_iob(struct client_state *csp)
        */
       if (bufsize >= csp->config->buffer_limit)
       {
-         log_error(LOG_LEVEL_ERROR, "Buffer limit reached while decompressing iob");
+         log_error(LOG_LEVEL_ERROR,
+            "Buffer limit reached while decompressing iob.");
          freez(buf);
          inflateEnd(&zstr);
          return JB_ERR_MEMORY;
@@ -765,7 +770,8 @@ jb_err decompress_iob(struct client_state *csp)
       tmpbuf = realloc(buf, bufsize);
       if (NULL == tmpbuf)
       {
-         log_error(LOG_LEVEL_ERROR, "Out of memory decompressing iob");
+         log_error(LOG_LEVEL_ERROR,
+            "Out of memory decompressing iob.");
          freez(buf);
          inflateEnd(&zstr);
          return JB_ERR_MEMORY;
@@ -860,7 +866,8 @@ jb_err decompress_iob(struct client_state *csp)
    else
    {
       /* It seems that zlib did something weird. */
-      log_error(LOG_LEVEL_ERROR, "Inconsistent buffer after decompression");
+      log_error(LOG_LEVEL_ERROR,
+         "Inconsistent buffer after decompression.");
       return JB_ERR_COMPRESS;
    }
 
