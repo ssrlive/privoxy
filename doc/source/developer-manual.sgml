@@ -2378,6 +2378,12 @@ for-privoxy-version=3.0.11
         Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
        </para>
       </listitem>
+      <listitem>
+       <para>
+        Push the tag to the remote with
+        <quote><command>git push origin v_X_Y_Z</command></quote>.
+       </para>
+      </listitem>
      <listitem>
        <para>
         On the webserver, copy the user manual to a new top-level directory
