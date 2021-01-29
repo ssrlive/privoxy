@@ -1,4 +1,10 @@
-privoxy (3.0.30-1~pp+1) unstable; urgency=medium
+privoxy (3.0.31~gitsnapshot-1) UNRELEASED; urgency=medium
+
+  * Support nodoc build option.
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 29 Jan 2021 14:55:54 +0100
+
+privoxy (3.0.30-1) unstable; urgency=medium
 
   * New upstream release 3.0.30.
   * Update all patches to new version.
@@ -6,7 +12,7 @@ privoxy (3.0.30-1~pp+1) unstable; urgency=medium
     are now incorporated upstream.
   * Optimize debian/rules clean to restore pristine state.
 
- -- Roland Rosenfeld <roland@debian.org>  Thu, 28 Jan 2021 21:55:12 +0100
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 28 Jan 2021 22:00:05 +0100
 
 privoxy (3.0.29-2) unstable; urgency=medium
 

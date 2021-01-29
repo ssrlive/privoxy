@@ -31,17 +31,22 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	$(MAKE)
+
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
 # 	preserve auto build documentation from source package:
 	tar cf debian/doc.tar README INSTALL AUTHORS doc/webserver privoxy.8
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) dok
 	rm -f doc/webserver/user-manual/*.bak
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) man
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) man2html
+endif
 
 override_dh_auto_clean:
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
 #	restore auto build documentation from source package:
 	[ ! -f debian/doc.tar ] || tar xf debian/doc.tar
 	rm -f debian/doc.tar
+endif
 	find doc/source -name \*.html | xargs -r rm -f
 	[ ! -f GNUmakefile ] || $(MAKE) clean
 	[ ! -f GNUmakefile ] || $(MAKE) distclean
@@ -57,6 +62,13 @@ override_dh_auto_install:
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy
 	sed -e 's/\(Sample Configuration File for Privoxy\).*/\1/;' < config \
 	    > $(DEBDIR)/usr/share/privoxy/config
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
+	echo "with doc"
+else
+#	use remote user-manual (default) on nodoc configuration:
+	sed -i 's/^user-manual/#user-manual/' \
+		$(DEBDIR)/usr/share/privoxy/config
+endif
 	install -m 0644 default.action $(DEBDIR)/etc/privoxy/default.action
 	install -m 0644 match-all.action $(DEBDIR)/etc/privoxy/match-all.action
 	install -m 0644 user.action $(DEBDIR)/etc/privoxy/user.action
@@ -95,9 +107,11 @@ override_dh_install:
 
 override_dh_installdocs:
 	dh_installdocs
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
 	(cd $(DEBDIR)/usr/share/doc/privoxy/; \
 	 mv privoxy-index.html index.html)
 	(cd $(DEBDIR)/usr/share/doc/privoxy/user-manual; ln -s '../p_doc.css')
+endif
 
 override_dh_perl:
 #	We only need perl-base:
