@@ -709,7 +709,7 @@ jb_err decompress_iob(struct client_state *csp)
    /*
     * Next, we allocate new storage for the inflated data.
     * We don't modify the existing iob yet, so in case there
-    * is error in decompression we can recover gracefully.
+    * is an error in decompression we can recover gracefully.
     */
    buf = zalloc(bufsize);
    if (NULL == buf)
