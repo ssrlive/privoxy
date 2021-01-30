@@ -490,6 +490,12 @@ https://www.privoxy.org/donate
 187) There should be a convenient way to see the versions of
      the libraries Privoxy is using.
 
+188) In the windows config.txt file, add the line
+       user-manual ./doc/user-manual/
+     right after
+       # Copyright ...
+       #
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
