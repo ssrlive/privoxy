@@ -5,7 +5,7 @@
 <!entity history SYSTEM "history.sgml">
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
-<!entity p-version "3.0.30">
+<!entity p-version "3.0.31">
 <!entity p-status "stable">
 <!entity % p-not-stable "IGNORE">
 <!entity % p-stable "INCLUDE">
