@@ -80,7 +80,7 @@ dnl release and no new release is near.
 
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_POINT=30
+VERSION_POINT=31
 CODE_STATUS="stable"
 
 dnl Timestamp (date +%s) used by the mtree-spec target.
