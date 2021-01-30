@@ -663,16 +663,7 @@ static struct map *parse_cgi_parameters(char *argstring)
     *      The same hack is used in get_last_url() so it looks like
     *      a real solution is needed.
     */
-   size_t max_segments = strlen(argstring) / 2;
-   if (max_segments == 0)
-   {
-      /*
-       * XXX: If the argstring is empty, there's really
-       *      no point in creating a param list, but currently
-       *      other parts of Privoxy depend on the list's existence.
-       */
-      max_segments = 1;
-   }
+   size_t max_segments = strlen(argstring) / 2 + 1;
    vector = malloc_or_die(max_segments * sizeof(char *));
 
    cgi_params = new_map();
