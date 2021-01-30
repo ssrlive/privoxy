@@ -4,7 +4,7 @@
 <head>
   <title>What's New in this Release</title>
   <meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy 3.0.30 User Manual" href="index.html">
+  <link rel="HOME" title="Privoxy 3.0.31 User Manual" href="index.html">
   <link rel="PREVIOUS" title="Installation" href="installation.html">
   <link rel="NEXT" title="Quickstart to Using Privoxy" href="quickstart.html">
   <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
@@ -15,7 +15,7 @@
   <div class="NAVHEADER">
     <table summary="Header navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <th colspan="3" align="center">Privoxy 3.0.30 User Manual</th>
+        <th colspan="3" align="center">Privoxy 3.0.31 User Manual</th>
       </tr>
       <tr>
         <td width="10%" align="left" valign="bottom"><a href="installation.html" accesskey="P">Prev</a></td>
@@ -27,7 +27,33 @@
   </div>
   <div class="SECT1">
     <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this Release</a></h1>
-    <p><span class="APPLICATION">Privoxy 3.0.30</span> fixes a couple of bugs and introduces a few new features.</p>
+    <p><span class="APPLICATION">Privoxy 3.0.31</span> fixes two security issues that were discovered while preparing
+    the 3.0.30 release. The issues also affect earlier Privoxy releases.</p>
+    <p>Changes in <span class="APPLICATION">Privoxy 3.0.31</span> stable:</p>
+    <ul>
+      <li>
+        <p>Security/Reliability:</p>
+        <ul>
+          <li>
+            <p>Prevent an assertion from getting triggered by a crafted CGI request. Commit 5bba5b89193fa.
+            OVE-20210130-0001. Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>Fixed a memory leak when decompression fails "unexpectedly". Commit f431d61740cc0.
+            OVE-20210128-0001.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Bug fixes:</p>
+        <ul>
+          <li>
+            <p>Fixed detection of insufficient data for decompression. Previously Privoxy could try to decompress a
+            partly uninitialized buffer.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
     <p>Changes in <span class="APPLICATION">Privoxy 3.0.30</span> stable:</p>
     <ul>
       <li>
