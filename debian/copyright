@@ -5,8 +5,8 @@ Source: https://sourceforge.net/projects/ijbswa/files/Sources/
 
 Files: *
 Copyright:
- Copyright (C) 2001-2020 by the Privoxy team. https://www.privoxy.org/
- Copyright (C) 2001-2020 by Privoxy Developers <privoxy-devel@lists.privoxy.org>
+ Copyright (C) 2001-2021 by the Privoxy team. https://www.privoxy.org/
+ Copyright (C) 2001-2021 by Privoxy Developers <privoxy-devel@lists.privoxy.org>
  Parts Copyright (c) 1997 by Anonymous Coders and Junkbusters, Inc.
  Parts Copyright (C) 1999 Adam Lock <locka@iol.ie>
  Parts Copyright (C) 1998-1999 Steve Cheng <steve@ggi-project.org>
@@ -14,7 +14,7 @@ Copyright:
  Parts Copyright (C) 2001 Jonathan Foster http://www.jon-foster.co.uk/
  Parts Copyright (C) 2003 Ian Cummings <ian_a_c@hotmail.com>
  Parts Copyright (C) 2000-2003 by Andreas S. Oesterhelt <andreas@oesterhelt.org>
- Parts Copyright (C) 2006-2020 Fabian Keil <fk@fabiankeil.de>
+ Parts Copyright (C) 2006-2021 Fabian Keil <fk@fabiankeil.de>
  Parts Copyright (c) 2020 Maxim Antonov <mantonov@gmail.com>
  Parts Copyright (C) 2017-2020 Vaclav Svec. FIT CVUT.
 Comment:
@@ -40,7 +40,7 @@ Files: ./regression-tests.action ./tools/uagen.pl
  ./tools/url-pattern-translator.pl ./utils/changelog2doc.pl
  ./utils/create-package-feed.pl
 Copyright:
- Copyright (c) 2006-2020 Fabian Keil <fk@fabiankeil.de>
+ Copyright (c) 2006-2021 Fabian Keil <fk@fabiankeil.de>
 License: ISC
 
 Files: ./strptime.h
@@ -58,7 +58,7 @@ License: GPL-2+
 
 Files: debian/*
 Copyright:
- 2002-2020  Roland Rosenfeld <roland@debian.org>
+ 2002-2021  Roland Rosenfeld <roland@debian.org>
 License: GPL-2+
 
 Files: ./pcre/*
