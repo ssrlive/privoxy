@@ -2907,6 +2907,7 @@ static void continue_https_chat(struct client_state *csp)
 
    if (JB_ERR_OK != process_encrypted_request(csp))
    {
+      csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return;
    }
 
