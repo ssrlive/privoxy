@@ -157,6 +157,11 @@ AC_ARG_WITH(debug,
         ]
 )
 
+AC_ARG_WITH(assertions, [  --with-assertions       Enable assertions])
+if test "x$with_assertions" != "xyes"; then
+    CFLAGS="$CFLAGS -DNDEBUG"
+fi
+
 dnl =================================================================
 dnl Check for user and group validity
 dnl =================================================================
