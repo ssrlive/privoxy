@@ -778,8 +778,9 @@ jb_err decompress_iob(struct client_state *csp)
       }
       else
       {
+#ifndef NDEBUG
          char *oldnext_out = (char *)zstr.next_out;
-
+#endif
          /*
           * Update the fields for inflate() to use the new
           * buffer, which may be in a location different from
