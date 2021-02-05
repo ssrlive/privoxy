@@ -644,7 +644,7 @@ sub highlight_request_line($) {
     my ($method, $url, $http_version);
 
     #GET http://images.sourceforge.net/sfx/icon_warning.gif HTTP/1.1
-    if ($rl =~ m/Invalid request/) {
+    if ($rl =~ m/Invalid request/ or $rl =~ m/Failed reading chunked client body/) {
 
         $rl = h('invalid-request') . $rl . h('Standard');
 
