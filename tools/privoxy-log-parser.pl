@@ -2149,6 +2149,8 @@ sub gather_loglevel_clf_stats($) {
     unless (defined $method) {
         # +0200] "Invalid request" 400 0
         return if ($content =~ m/^[+-]\d{4}\] "Invalid request"/);
+        # +0100] "Failed reading chunked client body" 400 0
+        return if ($content =~ m/^[+-]\d{4}\] "Failed reading chunked client body"/);
         # +0100] "GET https://securepubads.g.doubleclick.net/gampad/ads?gd[...]... [too long, truncated]
         if ($content =~ m/\[too long, truncated\]$/) {
             print("Skipped LOG_LEVEL_CLF message that got truncated by Privoxy. Statistics will be inprecise.\n");
