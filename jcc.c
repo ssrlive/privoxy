@@ -1503,6 +1503,12 @@ static enum chunk_status chunked_body_is_complete(struct iob *iob, size_t *lengt
       /* Move beyond the chunkdata. */
       p += 2 + chunksize;
 
+      /* Make sure we're still within the buffer and have two bytes left */
+      if (p + 2 > iob->eod)
+      {
+         return CHUNK_STATUS_MISSING_DATA;
+      }
+
       /* There should be another "\r\n" to skip */
       if (memcmp(p, "\r\n", 2))
       {
