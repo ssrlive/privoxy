@@ -609,7 +609,7 @@ jb_err decompress_iob(struct client_state *csp)
              */
             int skip_bytes;
             skip_bytes = *cur++;
-            skip_bytes += *cur++ << 8;
+            skip_bytes += (unsigned char)*cur++ << 8;
 
             /*
              * The number of bytes to skip should be positive
