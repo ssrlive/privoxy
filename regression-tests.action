@@ -899,6 +899,9 @@ TAG:^Proxy-Authorization header forwarding$
 # Level = 12
 # Trusted CGI Request = http://p.p/send-stylesheet
 
+# CVE-2021-20217
+# Fetch Test = http://config.privoxy.org/?1&0
+
 # The following tests depend on Privoxy being configured to deliver the user manual
 
 # Fetch Test = http://p.p/user-manual
