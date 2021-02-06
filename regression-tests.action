@@ -901,6 +901,8 @@ TAG:^Proxy-Authorization header forwarding$
 
 # CVE-2021-20217
 # Fetch Test = http://config.privoxy.org/?1&0
+# OVE-20210203-0001
+# Fetch Test = http://config.privoxy.org/show-url-info?url=0%%0A0
 
 # The following tests depend on Privoxy being configured to deliver the user manual
 
