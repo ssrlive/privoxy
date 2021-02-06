@@ -168,6 +168,12 @@ if test "x$with_asan" = "xyes"; then
     LDFLAGS="$LDFLAGS -fsanitize=address"
 fi
 
+AC_ARG_WITH(asan, [  --with-msan       Enable MemorySanitizer. Requires compiler support.])
+if test "x$with_msan" = "xyes"; then
+    CFLAGS="$CFLAGS -fsanitize=memory"
+    LDFLAGS="$LDFLAGS -fsanitize=memory"
+fi
+
 AC_ARG_WITH(usan, [  --with-usan       Enable UndefinedBehaviorSanitizer. Requires compiler support.])
 if test "x$with_usan" = "xyes"; then
     CFLAGS="$CFLAGS -fsanitize=undefined"
