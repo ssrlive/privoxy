@@ -383,9 +383,11 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_im
       switch(buf_getbyte(src, 0))
       {
          /*
-          *  End-of-GIF Marker: Append current image and return
+          * End-of-GIF Marker: Append current image if we got
+          * one and return.
           */
       case 0x3b:
+         if (image->size == 0) goto failed;
          goto write;
 
          /*
