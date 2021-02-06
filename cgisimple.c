@@ -526,8 +526,8 @@ jb_err cgi_toggle_client_tag(struct client_state *csp,
  *          3  :  parameters = map of cgi parameters
  *
  * CGI Parameters :
- *           type : Selects the type of banner between "trans", "logo",
- *                  and "auto". Defaults to "logo" if absent or invalid.
+ *           type : Selects the type of banner between "trans", "pattern",
+ *                  and "auto". Defaults to "pattern" if absent or invalid.
  *                  "auto" means to select as if we were image-blocking.
  *                  (Only the first character really counts; b and t are
  *                  equivalent).
