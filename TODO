@@ -439,7 +439,7 @@ https://www.privoxy.org/donate
 169) Preserve all relevant copyright and license statements in binary
      packages we distribute.
 
-170) Serve the ca-cert-file through the CGI interface so client's
+170) Serve the ca-cert-file through the CGI interface so clients
      can conveniently import it (insecurely).
 
 171) Create a "view page using Privoxy" website where users can input
