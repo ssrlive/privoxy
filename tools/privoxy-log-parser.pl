@@ -1865,6 +1865,11 @@ sub handle_loglevel_connect($) {
         # Flushed 3153 bytes of request body
         $c =~ s@(?<=Flushed )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Complete client request followed by/) {
+
+        # Complete client request followed by 59 bytes of pipelined data received.
+        $c =~ s@(?<=followed by )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
