@@ -542,6 +542,14 @@ jb_err cgi_send_banner(struct client_state *csp,
 {
    char imagetype = lookup(parameters, "type")[0];
 
+   if (imagetype != 'a' && imagetype != 'b' &&
+       imagetype != 'p' && imagetype != 't')
+   {
+      log_error(LOG_LEVEL_ERROR, "Overruling invalid image type '%c'.",
+         imagetype);
+      imagetype = 'p';
+   }
+
    /*
     * If type is auto, then determine the right thing
     * to do from the set-image-blocker action
