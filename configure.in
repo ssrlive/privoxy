@@ -168,6 +168,12 @@ if test "x$with_asan" = "xyes"; then
     LDFLAGS="$LDFLAGS -fsanitize=address"
 fi
 
+AC_ARG_WITH(usan, [  --with-usan       Enable UndefinedBehaviorSanitizer. Requires compiler support.])
+if test "x$with_usan" = "xyes"; then
+    CFLAGS="$CFLAGS -fsanitize=undefined"
+    LDFLAGS="$LDFLAGS -fsanitize=undefined"
+fi
+
 dnl =================================================================
 dnl Check for user and group validity
 dnl =================================================================
