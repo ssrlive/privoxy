@@ -131,6 +131,14 @@ static int buf_extend(struct binbuffer *buf, size_t length)
  *********************************************************************/
 static int buf_copy(struct binbuffer *src, struct binbuffer *dst, size_t length)
 {
+   /*
+    * Sanity check: Make sure the source buffer contains
+    * data and there's work to be done.
+    */
+   if (src->buffer == NULL || src->size == 0 || length == 0)
+   {
+      return 1;
+   }
 
    /*
     * Sanity check: Can't copy more data than we have
