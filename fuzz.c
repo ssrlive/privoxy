@@ -520,7 +520,7 @@ int fuzz_server_header(struct client_state *csp, char *fuzz_input_file)
 
    /* XXX: Enable more actions. */
 
-   return(sed(csp, FILTER_SERVER_HEADERS));
+   return(JB_ERR_OK == sed(csp, FILTER_SERVER_HEADERS));
 }
 
 /*********************************************************************
