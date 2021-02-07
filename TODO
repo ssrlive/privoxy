@@ -496,6 +496,11 @@ https://www.privoxy.org/donate
        # Copyright ...
        #
 
+189) Bring back binary packages for macOS, preferably for both Intel and M1.
+     The first step would be getting at least one build system, either
+     donated or bought with donations earmarked for this.
+     Interested donors: 0.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
