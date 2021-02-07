@@ -608,6 +608,14 @@ jb_err decompress_iob(struct client_state *csp)
              * XXX: this code is untested and should probably be removed.
              */
             int skip_bytes;
+
+            if (cur + 2 >= csp->iob->eod)
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "gzip extra field flag set but insufficient data available.");
+               return JB_ERR_COMPRESS;
+            }
+
             skip_bytes = *cur++;
             skip_bytes += (unsigned char)*cur++ << 8;
 
