@@ -501,6 +501,10 @@ https://www.privoxy.org/donate
      donated or bought with donations earmarked for this.
      Interested donors: 0.
 
+190) The socks5 authentication code should send user name an password
+     seperately or we should increase the cbuf size to allow longer
+     user names and passwords.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
