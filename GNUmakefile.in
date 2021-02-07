@@ -980,7 +980,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
                $(SED) 's+%GROUP%+$(GROUP_T)+' >slackware/rc.privoxy ;\
 			$(INSTALL) $(INSTALL_P) slackware/rc.privoxy $(DESTDIR)/etc/rc.d/ ;\
                $(ECHO) "Installing for Slackware." ;\
-               $(ECHO) "Dont forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
+               $(ECHO) "Don't forget to add the rc.privoxy to rc.local if you want it started at every boot" ;\
 		elif [ -d $(DESTDIR)/etc/init.d ] && [ -w $(DESTDIR)/etc/init.d ] ; then \
 			$(ECHO) "Installing generic init script to $(DESTDIR)/etc/init.d/privoxy" ;\
 			$(ECHO) "Please check that the PATHs are correct, and edit if needed." ;\
