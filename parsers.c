@@ -634,14 +634,14 @@ jb_err decompress_iob(struct client_state *csp)
          if (flags & GZIP_FLAG_FILE_NAME)
          {
             /* A null-terminated string is supposed to follow. */
-            while (*cur++ && (cur < csp->iob->eod));
+            while ((cur < csp->iob->eod) && *cur++);
          }
 
          /* Skip the comment if necessary. */
          if (flags & GZIP_FLAG_COMMENT)
          {
             /* A null-terminated string is supposed to follow. */
-            while (*cur++ && (cur < csp->iob->eod));
+            while ((cur < csp->iob->eod) && *cur++);
          }
 
          /* Skip the CRC if necessary. */
