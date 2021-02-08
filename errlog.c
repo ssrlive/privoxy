@@ -683,6 +683,10 @@ void log_error(int loglevel, const char *fmt, ...)
 #ifdef FUZZ
       if (debug == LOG_LEVEL_STFU)
       {
+         if (loglevel == LOG_LEVEL_FATAL)
+         {
+            exit(1);
+         }
          return;
       }
 #endif
