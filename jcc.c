@@ -2034,7 +2034,7 @@ static int read_http_request_body(struct client_state *csp)
       size_t max_bytes_to_read = to_read < sizeof(buf) ? to_read : sizeof(buf);
 
       log_error(LOG_LEVEL_CONNECT,
-         "Waiting for up to %d bytes of request body from the client.",
+         "Waiting for up to %lu bytes of request body from the client.",
          max_bytes_to_read);
       len = read_socket(csp->cfd, buf, (int)max_bytes_to_read);
       if (len <= -1)
@@ -2051,11 +2051,11 @@ static int read_http_request_body(struct client_state *csp)
 
    if (to_read != 0)
    {
-      log_error(LOG_LEVEL_CONNECT, "Not enough request body has been read: expected %d more bytes",
+      log_error(LOG_LEVEL_CONNECT, "Not enough request body has been read: expected %llu more bytes",
          csp->expected_client_content_length);
       return 1;
    }
-   log_error(LOG_LEVEL_CONNECT, "The last %d bytes of the request body have been read",
+   log_error(LOG_LEVEL_CONNECT, "The last %llu bytes of the request body have been read",
       csp->expected_client_content_length);
    return 0;
 }
@@ -2128,8 +2128,8 @@ static int can_filter_request_body(const struct client_state *csp)
                        csp->expected_client_content_length))
    {
       log_error(LOG_LEVEL_INFO,
-         "Not filtering request body from %s: buffer limit %d will be exceeded "
-         "(content length %d)", csp->ip_addr_str, csp->config->buffer_limit,
+         "Not filtering request body from %s: buffer limit %lu will be exceeded "
+         "(content length %lluu)", csp->ip_addr_str, csp->config->buffer_limit,
          csp->expected_client_content_length);
       return FALSE;
    }
@@ -2261,7 +2261,7 @@ static int read_https_request_body(struct client_state *csp)
       size_t max_bytes_to_read = to_read < sizeof(buf) ? to_read : sizeof(buf);
 
       log_error(LOG_LEVEL_CONNECT,
-         "Waiting for up to %d bytes of request body from the client.",
+         "Waiting for up to %lu bytes of request body from the client.",
          max_bytes_to_read);
       len = ssl_recv_data(&(csp->ssl_client_attr), buf,
          (unsigned)max_bytes_to_read);
@@ -2279,11 +2279,14 @@ static int read_https_request_body(struct client_state *csp)
 
    if (to_read != 0)
    {
-      log_error(LOG_LEVEL_CONNECT, "Not enough request body has been read: expected %d more bytes", to_read);
+      log_error(LOG_LEVEL_CONNECT,
+         "Not enough request body has been read: expected %lu more bytes",
+         to_read);
       return 1;
    }
 
-   log_error(LOG_LEVEL_CONNECT, "The last %d bytes of the request body have been read",
+   log_error(LOG_LEVEL_CONNECT,
+      "The last %llu bytes of the request body have been read",
       csp->expected_client_content_length);
    return 0;
 }
