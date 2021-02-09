@@ -228,64 +228,64 @@ static const char CHEADER[] =
    "HTTP/1.1 400 Invalid header received from client\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Invalid header received from client.\r\n";
+   "Invalid header received from client.\n";
 
 static const char FTP_RESPONSE[] =
    "HTTP/1.1 400 Invalid request received from client\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Invalid request. Privoxy doesn't support FTP.\r\n";
+   "Invalid request. Privoxy doesn't support FTP.\n";
 
 static const char GOPHER_RESPONSE[] =
    "HTTP/1.1 400 Invalid request received from client\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Invalid request. Privoxy doesn't support gopher.\r\n";
+   "Invalid request. Privoxy doesn't support gopher.\n";
 
 /* XXX: should be a template */
 static const char MISSING_DESTINATION_RESPONSE[] =
    "HTTP/1.1 400 Bad request received from client\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Bad request. Privoxy was unable to extract the destination.\r\n";
+   "Bad request. Privoxy was unable to extract the destination.\n";
 
 /* XXX: should be a template */
 static const char INVALID_SERVER_HEADERS_RESPONSE[] =
    "HTTP/1.1 502 Server or forwarder response invalid\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Bad response. The server or forwarder response doesn't look like HTTP.\r\n";
+   "Bad response. The server or forwarder response doesn't look like HTTP.\n";
 
 /* XXX: should be a template */
 static const char MESSED_UP_REQUEST_RESPONSE[] =
    "HTTP/1.1 400 Malformed request after rewriting\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Bad request. Messed up with header filters.\r\n";
+   "Bad request. Messed up with header filters.\n";
 
 static const char TOO_MANY_CONNECTIONS_RESPONSE[] =
    "HTTP/1.1 503 Too many open connections\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Maximum number of open connections reached.\r\n";
+   "Maximum number of open connections reached.\n";
 
 static const char CLIENT_CONNECTION_TIMEOUT_RESPONSE[] =
    "HTTP/1.1 504 Connection timeout\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "The connection timed out because the client request didn't arrive in time.\r\n";
+   "The connection timed out because the client request didn't arrive in time.\n";
 
 static const char CLIENT_BODY_PARSE_ERROR_RESPONSE[] =
    "HTTP/1.1 400 Failed reading client body\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Failed parsing or buffering the chunk-encoded client body.\r\n";
+   "Failed parsing or buffering the chunk-encoded client body.\n";
 
 static const char UNSUPPORTED_CLIENT_EXPECTATION_ERROR_RESPONSE[] =
    "HTTP/1.1 417 Expecting too much\r\n"
    "Content-Type: text/plain\r\n"
    "Connection: close\r\n\r\n"
-   "Privoxy detected an unsupported Expect header value.\r\n";
+   "Privoxy detected an unsupported Expect header value.\n";
 
 /* A function to crunch a response */
 typedef struct http_response *(*crunch_func_ptr)(struct client_state *);
