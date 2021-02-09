@@ -333,6 +333,10 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_im
    {
       return 1;
    }
+   if (src->size <= 10)
+   {
+      return 1;
+   }
 
    c = buf_getbyte(src, 10);
 
