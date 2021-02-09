@@ -656,7 +656,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    len = BIO_get_mem_data(bio, &bio_mem_data);
    if (len <= 0)
    {
-      log_error(LOG_LEVEL_ERROR, "BIO_get_mem_data() returned %d "
+      log_error(LOG_LEVEL_ERROR, "BIO_get_mem_data() returned %ld "
          "while gathering certificate information", len);
       ret = -1;
       goto exit;
