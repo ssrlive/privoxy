@@ -6,7 +6,7 @@
  *                fly.  High-level functions include:
  *                  - Deanimation of GIF images
  *
- * Copyright   :  Written by and Copyright (C) 2001 - 2004, 2006 by the
+ * Copyright   :  Written by and Copyright (C) 2001-2021 by the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the GIF file format specification (see
