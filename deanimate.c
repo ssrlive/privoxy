@@ -10,7 +10,7 @@
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the GIF file format specification (see
- *                http://tronche.com/computer-graphics/gif/gif89a.html)
+ *                https://tronche.com/computer-graphics/gif/gif89a.html)
  *                and ideas from the Image::DeAnim Perl module by
  *                Ken MacFarlane, <ksm+cpan@universal.dca.net>
  *
