@@ -383,9 +383,9 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_im
     * Parse the GIF block by block and copy the relevant
     * parts to dst
     */
-   while(src->offset < src->size)
+   while (src->offset < src->size)
    {
-      switch(buf_getbyte(src, 0))
+      switch (buf_getbyte(src, 0))
       {
          /*
           * End-of-GIF Marker: Append current image if we got
