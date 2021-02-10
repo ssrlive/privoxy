@@ -405,6 +405,16 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    }
    strlcat(message, message_end, message_len);
 
+   if (0 == strcmpic(csp->http->gpc, "HEAD"))
+   {
+      /* Cut off body */
+      char *header_end = strstr(message, "\r\n\r\n");
+      if (header_end != NULL)
+      {
+         header_end[3] = '\0';
+      }
+   }
+
    /*
     * Sending final message to client
     */
