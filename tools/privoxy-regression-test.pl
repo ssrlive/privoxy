@@ -1693,6 +1693,7 @@ sub help() {
     print << "    EOF"
 
 Options and their default values if they have any:
+    [--check-bad-ssl]
     [--debug $cli_options{'debug'}]
     [--forks $cli_options{'forks'}]
     [--fuzzer-address]
