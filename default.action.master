@@ -2240,6 +2240,8 @@ issue.freebsdfoundation.org/
 .fsf.org/
 # URL = https://consent2.ksta.de/wrapper/tcfv2/v1/gdpr/native-message?requestUUID=56b465b7-5da2-44f0-83aa-aa50687d364f&hasCsp=true&env=prod&consentLanguage=browserDefault&body=%7B%22accountId%22%3A995%2C%22requestUUID%22%3A%2256b465b7-5da2-44f0-83aa-aa50687d364f%22%2C%22propertyHref%22%3A%22https%3A%2F%2Fwww.ksta.de%2Fhtml%2Fdumont-consent%2Findex.html%3Fparam%3DeyJyZWRpcmVjdFVybCI6Ii9yYXRnZWJlci9kaWdpdGFsL3BsYXR0Zm9ybS1tb29kbGUtc3RyZWlrdC11bnphZWhsaWdlLXNjaHVlbGVyLWluLW5ydy1rb2VubmVuLWFtLW1vbnRhZy1uaWNodC1hcmJlaXRlbi0zNzkxMzY0MD9jYj0xNjEwMzY1Njc4NjY3IiwicmVmZXJyZXIiOiIifQ%3D%3D%22%2C%22euconsent%22%3Anull%2C%22meta%22%3A%22%7B%5C%22mmsCookies%5C%22%3A%5B%5C%22_sp_enable_dfp_personalized_ads%3Dfalse%3B%5C%22%5D%2C%5C%22resolved%5C%22%3Anull%7D%22%2C%22clientMMSOrigin%22%3A%22https%3A%2F%2Fconsent2.ksta.de%22%2C%22targetingParams%22%3A%22%7B%5C%22mode%5C%22%3A%5C%22dumont-consent-message%5C%22%7D%22%2C%22campaignEnv%22%3A%22prod%22%2C%22pubData%22%3A%7B%7D%7D
 .ksta.de/
+# URL = https://www.linkedin.com/authwall?trk=bf&trkInfo=bf&originalReferer=https://www.linkedin.com/in/blafasel&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2blafasel
+.linkedin.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
