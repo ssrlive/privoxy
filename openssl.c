@@ -283,7 +283,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
 
    if (!bio)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_new_mem_buf() failed");
+      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_new() failed");
       return -1;
    }
 
@@ -328,7 +328,7 @@ static int ssl_store_cert(struct client_state *csp, X509* crt)
    bio = BIO_new(BIO_s_mem());
    if (!bio)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_new_mem_buf() failed");
+      log_ssl_errors(LOG_LEVEL_ERROR, "BIO_new() failed");
       ret = -1;
       goto exit;
    }
