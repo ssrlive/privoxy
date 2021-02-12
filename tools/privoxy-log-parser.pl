@@ -1272,6 +1272,14 @@ sub handle_loglevel_tagging($) {
         $c =~ s@(?<=expired )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_host($c, '(?<=client )[^\s]+');
 
+    } elsif ($c =~ /^Evaluating/) {
+
+        # Evaluating tag 'change-tor-socks-port' for client 127.0.0.1. End of life 1613162302.
+
+        $c =~ s@(?<=tag \')([^\']*)@$h{'tag'}$1$h{'Standard'}@;
+        $c = highlight_matched_host($c, '(?<=client )[^\s]+(?=\.)');
+        $c =~ s@(?<=life )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ /^Client tag/) {
 
         # Client tag 'forward-directly' matches
