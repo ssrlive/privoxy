@@ -505,6 +505,9 @@ https://www.privoxy.org/donate
      seperately or we should increase the cbuf size to allow longer
      user names and passwords.
 
+191) The cipher-list directive should be split into cipher-list-server
+     and cipher-list-client.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
