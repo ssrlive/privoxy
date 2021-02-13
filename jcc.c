@@ -6276,6 +6276,8 @@ static void listen_loop(void)
 
    log_error(LOG_LEVEL_INFO, "Graceful termination requested.");
 
+   close_ports_helper(bfds);
+
    unload_current_config_file();
    unload_current_actions_file();
    unload_current_re_filterfile();
