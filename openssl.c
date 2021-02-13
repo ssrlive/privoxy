@@ -869,7 +869,9 @@ extern int create_client_ssl_connection(struct client_state *csp)
        goto exit;
    }
 
-   log_error(LOG_LEVEL_CONNECT, "Client successfully connected over TLS/SSL");
+   log_error(LOG_LEVEL_CONNECT, "Client successfully connected over %s (%s).",
+      SSL_get_version(ssl), SSL_get_cipher_name(ssl));
+
    csp->ssl_with_client_is_opened = 1;
    ret = 0;
 
@@ -1179,7 +1181,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
       }
    }
 
-   log_error(LOG_LEVEL_CONNECT, "Server successfully connected over TLS/SSL");
+   log_error(LOG_LEVEL_CONNECT, "Server successfully connected over %s (%s).",
+     SSL_get_version(ssl), SSL_get_cipher_name(ssl));
 
    /*
     * Server certificate chain is valid, so we can clean
