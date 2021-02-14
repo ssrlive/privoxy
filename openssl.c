@@ -61,7 +61,7 @@
 static int generate_host_certificate(struct client_state *csp);
 static void free_client_ssl_structures(struct client_state *csp);
 static void free_server_ssl_structures(struct client_state *csp);
-static int ssl_store_cert(struct client_state *csp, X509* crt);
+static int ssl_store_cert(struct client_state *csp, X509 *crt);
 static void log_ssl_errors(int debuglevel, const char* fmt, ...) __attribute__((format(printf, 2, 3)));
 
 static int ssl_inited = 0;
@@ -265,7 +265,7 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
  * Returns     :  0 on success and negative value on error
  *
  *********************************************************************/
-static int ssl_store_cert(struct client_state *csp, X509* crt)
+static int ssl_store_cert(struct client_state *csp, X509 *crt)
 {
    long len = 0;
    struct certs_chain  *last = &(csp->server_certs_chain);
@@ -1575,7 +1575,7 @@ exit:
  *                   pointer to certificate instance otherwise
  *
  *********************************************************************/
-static X509* ssl_certificate_load(const char *cert_path)
+static X509 *ssl_certificate_load(const char *cert_path)
 {
    X509 *cert = NULL;
    FILE *cert_f = NULL;
