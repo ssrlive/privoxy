@@ -268,7 +268,7 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
  *********************************************************************/
 static int ssl_store_cert(struct client_state *csp, X509 *crt)
 {
-   long len = 0;
+   long len;
    struct certs_chain  *last = &(csp->server_certs_chain);
    int ret = 0;
    BIO *bio = BIO_new(BIO_s_mem());
