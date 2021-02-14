@@ -273,7 +273,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
    int ret = 0;
    BIO *bio = BIO_new(BIO_s_mem());
    EVP_PKEY *pkey = NULL;
-   char *bio_mem_data = 0;
+   char *bio_mem_data = NULL;
    char *encoded_text;
    long l;
    const ASN1_INTEGER *bs;
