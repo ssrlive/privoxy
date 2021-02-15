@@ -501,8 +501,12 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       case EVP_PKEY_DSA:
          ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "DSA key size", EVP_PKEY_bits(pkey));
          break;
+      case EVP_PKEY_EC:
+         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "EC key size", EVP_PKEY_bits(pkey));
+         break;
       default:
-         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "non-RSA/DSA key size", EVP_PKEY_bits(pkey));
+         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "non-RSA/DSA/EC key size",
+            EVP_PKEY_bits(pkey));
          break;
    }
    if (ret <= 0)
