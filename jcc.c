@@ -4811,7 +4811,8 @@ static void serve(struct client_state *csp)
             log_error(LOG_LEVEL_CONNECT,
                "Closing server socket %d connected to %s. "
                "Keep-alive: %u. Tainted: %u. Socket alive: %u. Timeout: %u.",
-               csp->server_connection.sfd, csp->server_connection.host,
+               csp->server_connection.sfd, (csp->server_connection.host != NULL) ?
+               csp->server_connection.host : csp->http->host,
                0 != (csp->flags & CSP_FLAG_SERVER_CONNECTION_KEEP_ALIVE),
                0 != (csp->flags & CSP_FLAG_SERVER_SOCKET_TAINTED),
                socket_is_still_alive(csp->server_connection.sfd),
