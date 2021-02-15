@@ -1153,10 +1153,10 @@ static void wait_for_alive_connections(void)
  * Returns     : void
  *
  *********************************************************************/
-void save_connection_destination(jb_socket sfd,
-                                 const struct http_request *http,
-                                 const struct forward_spec *fwd,
-                                 struct reusable_connection *server_connection)
+static void save_connection_destination(jb_socket sfd,
+                                        const struct http_request *http,
+                                        const struct forward_spec *fwd,
+                                        struct reusable_connection *server_connection)
 {
    assert(sfd != JB_INVALID_SOCKET);
    assert(NULL != http->host);
