@@ -1863,7 +1863,11 @@ sub handle_loglevel_connect($) {
     } elsif ($c =~ m/^Dropping the client connection on socket/) {
 
         # Dropping the client connection on socket 71. The server connection has not been established yet.
+        # Dropping the client connection on socket 23 with server socket 24 connected to \
+        #  www.reddit.com. The forwarder has changed.
         $c =~ s@(?<=on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=server socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = highlight_matched_host($c, '(?<=connected to )[^ ]+(?=\.)');
 
     } elsif ($c =~ m/^The client socket \d+ has become unusable while the server/) {
 
