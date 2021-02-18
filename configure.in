@@ -422,7 +422,7 @@ fi])
 
 AC_ARG_ENABLE(static-linking,
 [  --enable-static-linking         Use static linking instead of dynamic linking (ie. LDFLAGS=-static)],
-[ if test $enableval = yes; then LDFLAGS="$LDFLAGS -static"; fi ])
+[ if test $enableval = yes; then LDFLAGS="$LDFLAGS -static"; use_static_pcre="yes"; fi ])
 
 dnl Save old CFLAGS so we can restore them later, then add SPECIAL_CFLAGS
 old_CFLAGS_nospecial=$CFLAGS
@@ -1079,10 +1079,24 @@ fi
 #
 if test $have_pcre = "yes"; then
   echo "using libpcre"
-  pcre_dyn=yes
-  AC_DEFINE(FEATURE_DYNAMIC_PCRE,1,[Define to dynamically link to pcre.])
   STATIC_PCRE_ONLY=#
   LIBS="$LIBS -lpcre -lpcreposix"
+  if test "$use_static_pcre" = "yes"; then
+    pcre_dyn=no
+    AC_DEFINE(PCRE_STATIC,1,[Define to statically link to pcre library on Windows.])
+#     see /usr/i686-w64-mingw32/sys-root/mingw/include/pcre.h line 54
+#       #if defined(_WIN32) && !defined(PCRE_STATIC)
+#       #  ifndef PCRE_EXP_DECL
+#       #    define PCRE_EXP_DECL  extern __declspec(dllimport)
+#       #  endif
+#     If you want to statically link a program against a PCRE library in the form of
+#     a non-dll .a file, you must define PCRE_STATIC before including pcre.h or
+#     pcrecpp.h, otherwise the pcre_malloc() and pcre_free() exported functions will
+#     be declared __declspec(dllimport), with unwanted results.
+  else
+    pcre_dyn=yes
+    AC_DEFINE(FEATURE_DYNAMIC_PCRE,1,[Define to dynamically link to pcre.])
+  fi
 else
   AC_MSG_WARN([You are using the static PCRE code which is out of date and scheduled for removal, for details see:
     https://sourceforge.net/p/ijbswa/mailman/ijbswa-developers/thread/20080511195555.2dc6cfdc@fabiankeil.de/])
