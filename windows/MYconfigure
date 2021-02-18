@@ -123,6 +123,14 @@ CFLAGS="${CFLAGS} -Wshadow"
 # using const in declarations and prototypes.
 # >>> Otherwise, it is just a nuisance. <<<  -- this, very much this
 
+# why does the mingw library _not_ include .a files for libpcre?
+# *sigh* build my own pcre so I can do static linking
+# Get the 8.x PCRE library from  https://ftp.pcre.org/pub/pcre/
+inc="/source/pcre-8.44/"
+lib="/source/pcre-8.44/.libs"
+CPPFLAGS="${CPPFLAGS} -I${inc}"
+LDFLAGS="${LDFLAGS} -L${lib}"
+
 echo "CFLAGS=${CFLAGS}"
 echo "CPPFLAGS=${CPPFLAGS}"
 echo "LDFLAGS=${LDFLAGS}"
@@ -136,7 +144,6 @@ echo "LDFLAGS=${LDFLAGS}"
              --enable-static-linking \
              --enable-strptime-sanity-checks \
              --disable-pthread  \
-             --disable-dynamic-pcre \
              --enable-extended-statistics \
              --enable-pcre-host-patterns \
              --with-docbook=yes
