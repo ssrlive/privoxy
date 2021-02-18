@@ -508,6 +508,9 @@ https://www.privoxy.org/donate
 191) The cipher-list directive should be split into cipher-list-server
      and cipher-list-client.
 
+192) The client TLS contexts should probably be shared among threads
+     to spend less time and memory loading the root certificates.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
