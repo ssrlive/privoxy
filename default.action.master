@@ -2245,6 +2245,8 @@ issue.freebsdfoundation.org/
 .ksta.de/
 # URL = https://www.linkedin.com/authwall?trk=bf&trkInfo=bf&originalReferer=https://www.linkedin.com/in/blafasel&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2blafasel
 .linkedin.com/
+# URL = https://www.golem.de/sonstiges/zustimmung/auswahl.html?from=https%3A%2F%2Fwww.golem.de%2Fnews%2Flinux-rust-wandert-ins-system-2102-154041.html
+.golem.de/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
