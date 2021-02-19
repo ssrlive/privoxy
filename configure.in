@@ -1105,6 +1105,7 @@ if test $have_pcre = "yes"; then
 else
   AC_MSG_WARN([You are using the static PCRE code which is out of date and scheduled for removal, for details see:
     https://sourceforge.net/p/ijbswa/mailman/ijbswa-developers/thread/20080511195555.2dc6cfdc@fabiankeil.de/])
+  AC_MSG_WARN([The removal will likely occur before the 3.0.33 release.])
   pcre_dyn=no
   # STATIC_PCRE is a name pcre needs to statically link on Windows.
   # Privoxy itself no longer uses it.
