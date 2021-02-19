@@ -514,6 +514,9 @@ https://www.privoxy.org/donate
 193) Use SHA256 instead of MD5 for the host hash used when generating file
      names for host certificates and keys.
 
+194) There should be a way to force gif deanimation if the server does not
+     declare the content as gif.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
