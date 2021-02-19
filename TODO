@@ -511,6 +511,9 @@ https://www.privoxy.org/donate
 192) The client TLS contexts should probably be shared among threads
      to spend less time and memory loading the root certificates.
 
+193) Use SHA256 instead of MD5 for the host hash used when generating file
+     names for host certificates and keys.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
