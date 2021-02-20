@@ -518,6 +518,8 @@ https://www.privoxy.org/donate
 194) There should be a way to force gif deanimation if the server does not
      declare the content as gif.
 
+195) We should probably cache the server TLS contexts.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
