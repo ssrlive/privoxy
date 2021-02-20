@@ -520,6 +520,10 @@ https://www.privoxy.org/donate
 
 195) We should probably cache the server TLS contexts.
 
+196) Investigate if it's worth adding an optional mutex for the CGI handler.
+     Could reduce memory use and increase performance on single core systems
+     for some tests.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
