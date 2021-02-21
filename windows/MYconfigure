@@ -131,6 +131,14 @@ lib="/source/pcre-8.44/.libs"
 CPPFLAGS="${CPPFLAGS} -I${inc}"
 LDFLAGS="${LDFLAGS} -L${lib}"
 
+# mbedtls
+# Get the 2.16.x mbedtls library from  https://github.com/ARMmbed/mbedtls/tags
+inc="/source/mbedtls-2.16.9/include"
+lib="/source/mbedtls-2.16.9/library"
+MITMOPT="--with-mbedtls"
+CPPFLAGS="${CPPFLAGS} -I${inc}"
+LDFLAGS="${LDFLAGS} -L${lib}"
+
 echo "CFLAGS=${CFLAGS}"
 echo "CPPFLAGS=${CPPFLAGS}"
 echo "LDFLAGS=${LDFLAGS}"
