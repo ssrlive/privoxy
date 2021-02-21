@@ -1232,6 +1232,10 @@ AC_HELP_STRING([--without-brotli], [Disable Brotli detection]),
 if test X"$WITH_BROTLI" != Xno; then
 
   LIBS="$LIBS -lbrotlidec"
+  if test $target_type = mingw; then
+    # XXX: why does just the mingw build need this???
+    LIBS="$LIBS -lbrotlicommon -lbrotlienc"
+  fi
 
   AC_CHECK_LIB(brotlidec, BrotliDecoderDecompress)
 
