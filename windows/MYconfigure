@@ -139,6 +139,15 @@ MITMOPT="--with-mbedtls"
 CPPFLAGS="${CPPFLAGS} -I${inc}"
 LDFLAGS="${LDFLAGS} -L${lib}"
 
+# brotli
+# Get the brotli library from  https://github.com/google/brotli/releases
+inc="/source/brotli-1.0.9/c/include"
+lib="/source/brotli-1.0.9/.libs"
+BROTLIOPT="--with-brotli"
+CPPFLAGS="${CPPFLAGS} -I${inc}"
+LDFLAGS="${LDFLAGS} -L${lib}"
+
+###
 echo "CFLAGS=${CFLAGS}"
 echo "CPPFLAGS=${CPPFLAGS}"
 echo "LDFLAGS=${LDFLAGS}"
@@ -154,6 +163,8 @@ echo "LDFLAGS=${LDFLAGS}"
              --disable-pthread  \
              --enable-extended-statistics \
              --enable-pcre-host-patterns \
+             --with-brotli  \
+             --with-mbedtls \
              --with-docbook=yes
 
 #  -- done --
