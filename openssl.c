@@ -387,7 +387,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
          ul = (unsigned long)l;
          neg = "";
       }
-      if (BIO_printf(bio, " %s%lu (%s0x%lx)\n", neg, ul, neg, ul) <= 0)
+      if (BIO_printf(bio, "%s%lu (%s0x%lx)\n", neg, ul, neg, ul) <= 0)
       {
          log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for serial failed");
          ret = -1;
