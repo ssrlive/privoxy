@@ -524,6 +524,9 @@ https://www.privoxy.org/donate
      Could reduce memory use and increase performance on single core systems
      for some tests.
 
+197) Investigate if parts of Privoxy should get optional replacements
+     written in Rust.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
