@@ -2389,7 +2389,7 @@ sub print_stats() {
         get_percentage($requests_total, $stats{'server-keep-alive'}) . ")\n";
     print "New outgoing connections: " . $new_connections . " (" .
         get_percentage($requests_total, $new_connections) . ")\n";
-    print "Reused connections: " . $stats{'reused-connections'} . " (" .
+    print "Reused server connections: " . $stats{'reused-connections'} . " (" .
         get_percentage($requests_total, $stats{'reused-connections'}) .
         "; server offers accepted: " .
         get_percentage($stats{'server-keep-alive'}, $stats{'reused-connections'}) . ")\n";
