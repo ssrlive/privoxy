@@ -2333,6 +2333,11 @@ for-privoxy-version=3.0.11
       </listitem>
       <listitem>
        <para>
+        Update the announcement at <filename>doc/webserver/announce.txt</filename>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
         All documentation should be rebuilt:
        <programlisting>
   $ make man
