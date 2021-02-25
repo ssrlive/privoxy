@@ -1,8 +1,15 @@
-privoxy (3.0.32~gitsnapshot-1) UNRELEASED; urgency=medium
+privoxy (3.0.33~gitsnapshot-1) UNRELEASED; urgency=medium
 
   * Unreleased GIT snapshot.
 
- -- Roland Rosenfeld <roland@debian.org>  Sat, 30 Jan 2021 22:03:32 +0100
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 25 Feb 2021 22:29:55 +0100
+
+privoxy (3.0.32-1) unstable; urgency=medium
+
+  * New upstream release 3.0.32.
+  * Adapt all patches to new version.
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 25 Feb 2021 22:18:54 +0100
 
 privoxy (3.0.31-1) unstable; urgency=medium
 
