@@ -8043,6 +8043,28 @@ Requests</title>
  <screen><![ RCDATA [ &GPLv3; ]]></screen>
 </sect3>
 
+<sect3 id="third-party-licenses"><title>Third-party licenses and copyrights</title>
+<para>
+ Privoxy depends on a couple of third-party libraries which have seperate licenses.
+ Please refer to the third-party websites for up-to-date license and copyright
+ information.
+</para>
+<para>
+ Privoxy depends on <ulink url="https://pcre.org/">pcre</ulink>.
+</para>
+<para>
+ When compiled with FEATURE_BROTLI (optional), Privoxy depends on
+ <ulink url="https://www.brotli.org/">brotli</ulink>.
+</para>
+<para>
+ When compiled with FEATURE_HTTPS_INSPECTION (optional),
+ Privoxy depends on a TLS library. The supported libraries are
+ <ulink url="https://www.openssl.org/">LibreSSL</ulink>,
+ <ulink url="https://tls.mbed.org/">mbed TLS</ulink> and
+ <ulink url="https://www.openssl.org/">OpenSSL</ulink>.
+</para>
+</sect3>
+
 </sect2>
 <!--  ~  End section  ~  -->
 
