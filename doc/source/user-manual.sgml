@@ -8063,6 +8063,10 @@ Requests</title>
  <ulink url="https://tls.mbed.org/">mbed TLS</ulink> and
  <ulink url="https://www.openssl.org/">OpenSSL</ulink>.
 </para>
+<para>
+ When compiled with FEATURE_ZLIB (optional),
+ Privoxy depends on <ulink url="https://zlib.net/">zlib</ulink>.
+</para>
 </sect3>
 
 </sect2>
