@@ -527,6 +527,9 @@ https://www.privoxy.org/donate
 197) Investigate if parts of Privoxy should get optional replacements
      written in Rust.
 
+198) Add a config directive that prevent's IP addresses from being logged
+     (when logging is enabled).
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
