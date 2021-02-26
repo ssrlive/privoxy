@@ -530,6 +530,9 @@ https://www.privoxy.org/donate
 198) Add a config directive that prevent's IP addresses from being logged
      (when logging is enabled).
 
+199) In actions.c the "#define DEFINE_ACTION_ALIAS 0" lines should probably
+     be changed to "#undef DEFINE_ACTION_ALIAS" or removed.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
