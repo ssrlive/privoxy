@@ -3865,6 +3865,18 @@ static void handle_established_connection(struct client_state *csp)
             }
 
             /*
+             * Disable redirect checkers, so that they will be only run
+             * again if the user also enables them through tags.
+             *
+             * From a performance point of view it doesn't matter,
+             * but it prevents duplicated log messages.
+             */
+#ifdef FEATURE_FAST_REDIRECTS
+            csp->action->flags &= ~ACTION_FAST_REDIRECTS;
+#endif
+            csp->action->flags &= ~ACTION_REDIRECT;
+
+            /*
              * We have now received the entire server header,
              * filter it and send the result to the client
              */
