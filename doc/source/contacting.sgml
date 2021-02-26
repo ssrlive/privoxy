@@ -159,6 +159,9 @@ debug 65536 # Log applying actions</literallayout>
     submit any logfiles you didn't read first. You can mask sensitive information
     as long as it's clear that you removed something.
    </para>
+   <para>
+    Please clear the browser cache before reproducing the problem.
+   </para>
   </listitem>
 
 </itemizedlist>
