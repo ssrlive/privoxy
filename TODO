@@ -533,6 +533,9 @@ https://www.privoxy.org/donate
 199) In actions.c the "#define DEFINE_ACTION_ALIAS 0" lines should probably
      be changed to "#undef DEFINE_ACTION_ALIAS" or removed.
 
+200) Add a config directive that causes Privoxy to remove all
+     host certificates before exiting.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
