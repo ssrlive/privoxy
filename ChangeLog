@@ -59,7 +59,7 @@ ChangeLog for Privoxy
     fail to open a local file.
 
 - General improvements:
-  - Log the TLS version and the the cipher when debug 2 is enabled..
+  - Log the TLS version and the the cipher when debug 2 is enabled.
   - ssl_send_certificate_error(): Respect HEAD requests by not sending a body.
   - ssl_send_certificate_error(): End the body with a single new line.
   - serve(): Increase the chances that the host is logged when closing
