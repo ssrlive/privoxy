@@ -74,7 +74,7 @@
       Obsolete pcre: Prevent invalid memory accesses with an invalid
       pattern passed to pcre_compile(). Note that the obsolete pcre code
       is scheduled to be removed before the 3.0.33 release. There has been
-      a warning since since 2008 already.
+      a warning since 2008 already.
       Commit 28512e5b624. OVE-20210222-0001.
       Reported by: Joshua Rogers (Opera)
      </para>
@@ -180,7 +180,7 @@
     <itemizedlist>
     <listitem>
      <para>
-      Log the TLS version and the the cipher when debug 2 is enabled..
+      Log the TLS version and the the cipher when debug 2 is enabled.
      </para>
     </listitem>
     <listitem>
