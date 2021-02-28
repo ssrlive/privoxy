@@ -2247,6 +2247,8 @@ issue.freebsdfoundation.org/
 .linkedin.com/
 # URL = https://www.golem.de/sonstiges/zustimmung/auswahl.html?from=https%3A%2F%2Fwww.golem.de%2Fnews%2Flinux-rust-wandert-ins-system-2102-154041.html
 .golem.de/
+# URL = https://idp.springer.com/authorize?response_type=cookie&client_id=springerlink&redirect_uri=http%3A%2F%2Flink.springer.com%2Fchapter%2F10.1007%2F978-3-319-00948-3_4
+idp.springer.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
