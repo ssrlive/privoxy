@@ -221,6 +221,9 @@ static const struct cgi_dispatcher cgi_dispatchers[] = {
    { "user-manual",
           cgi_send_user_manual,
           NULL, TRUE /* Send user-manual */ },
+   { "wpad.dat",
+         cgi_send_wpad,
+         NULL, TRUE /* Send wpad.dat proxy autoconfiguration file */ },
    { NULL, /* NULL Indicates end of list and default page */
          cgi_error_404,
          NULL, TRUE /* Unknown CGI page */ }

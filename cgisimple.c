@@ -872,6 +872,50 @@ jb_err cgi_send_stylesheet(struct client_state *csp,
 
 /*********************************************************************
  *
+ * Function    :  cgi_send_wpad
+ *
+ * Description :  CGI function that sends a Proxy Auto-Configuration
+ *                (PAC) file.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  rsp = http_response data structure for output
+ *          3  :  parameters = map of cgi parameters
+ *
+ * CGI Parameters : None
+ *
+ * Returns     :  JB_ERR_OK on success
+ *                JB_ERR_MEMORY on out-of-memory error.
+ *
+ *********************************************************************/
+jb_err cgi_send_wpad(struct client_state *csp,
+                     struct http_response *rsp,
+                     const struct map *parameters)
+{
+   struct map *exports;
+
+   assert(csp);
+   assert(rsp);
+   assert(parameters);
+
+   if (NULL == (exports = default_exports(csp, NULL)))
+   {
+      return JB_ERR_MEMORY;
+   }
+
+   if (enlist(rsp->headers, "Content-Type: application/x-ns-proxy-autoconfig"))
+   {
+      free_map(exports);
+      return JB_ERR_MEMORY;
+   }
+
+   return template_fill_for_cgi(csp, "wpad.dat", exports, rsp);
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  cgi_send_url_info_osd
  *
  * Description :  CGI function that sends the OpenSearch Description
