@@ -554,7 +554,10 @@ warranty? Registration?</title>
 <para>
  The logo sizes depend on the sponsor level. Logos are served from
  our server, no requests are made to the sponsor website unless
- the links are being used.
+ the links are being used. Note that Privoxy comes with a
+ <ulink url="https://www.privoxy.org/user-manual/actions-file.html#HIDE-REFERRER">hide-referrer</ulink>
+ action so Privoxy users following links to sponsor websites
+ may not necessarily send requests with a Referer header set.
 </para>
 <para>
  Link targets are without path (<quote>https://www.example.org/</quote>
