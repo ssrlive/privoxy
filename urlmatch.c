@@ -1206,9 +1206,9 @@ jb_err create_pattern_spec(struct pattern_spec *pattern, char *buf)
       const unsigned flag;
    } tag_pattern[] = {
       { "TAG:",              4, PATTERN_SPEC_TAG_PATTERN},
- #ifdef FEATURE_CLIENT_TAGS
+#ifdef FEATURE_CLIENT_TAGS
       { "CLIENT-TAG:",      11, PATTERN_SPEC_CLIENT_TAG_PATTERN},
- #endif
+#endif
       { "NO-REQUEST-TAG:",  15, PATTERN_SPEC_NO_REQUEST_TAG_PATTERN},
       { "NO-RESPONSE-TAG:", 16, PATTERN_SPEC_NO_RESPONSE_TAG_PATTERN}
    };
