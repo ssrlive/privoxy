@@ -1263,6 +1263,17 @@ void free_pattern_spec(struct pattern_spec *pattern)
    if (pattern == NULL) return;
 
    freez(pattern->spec);
+
+   if (!(pattern->flags & PATTERN_SPEC_URL_PATTERN))
+   {
+      if (pattern->pattern.tag_regex)
+      {
+         regfree(pattern->pattern.tag_regex);
+         freez(pattern->pattern.tag_regex);
+      }
+      return;
+   }
+
 #ifdef FEATURE_PCRE_HOST_PATTERNS
    if (pattern->pattern.url_spec.host_regex)
    {
@@ -1278,11 +1289,6 @@ void free_pattern_spec(struct pattern_spec *pattern)
    {
       regfree(pattern->pattern.url_spec.preg);
       freez(pattern->pattern.url_spec.preg);
-   }
-   if (pattern->pattern.tag_regex)
-   {
-      regfree(pattern->pattern.tag_regex);
-      freez(pattern->pattern.tag_regex);
    }
 }
 
