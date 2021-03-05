@@ -3,7 +3,8 @@
  * File        :  $Source: /cvsroot/ijbswa/current/openssl.c,v $
  *
  * Purpose     :  File with TLS/SSL extension. Contains methods for
- *                creating, using and closing TLS/SSL connections.
+ *                creating, using and closing TLS/SSL connections
+ *                using OpenSSL (or LibreSSL).
  *
  * Copyright   :  Written by and Copyright (c) 2020 Maxim Antonov <mantonov@gmail.com>
  *                Copyright (C) 2017 Vaclav Svec. FIT CVUT.

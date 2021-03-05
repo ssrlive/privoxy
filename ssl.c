@@ -3,7 +3,8 @@
  * File        :  $Source: /cvsroot/ijbswa/current/ssl.c,v $
  *
  * Purpose     :  File with TLS/SSL extension. Contains methods for
- *                creating, using and closing TLS/SSL connections.
+ *                creating, using and closing TLS/SSL connections
+ *                using mbedTLS.
  *
  * Copyright   :  Written by and Copyright (c) 2017-2020 Vaclav Svec. FIT CVUT.
  *                Copyright (C) 2018-2020 by Fabian Keil <fk@fabiankeil.de>
