@@ -3539,8 +3539,8 @@ static void handle_established_connection(struct client_state *csp)
                               (const unsigned char *) ((p != NULL) ? p : csp->iob->cur),
                               csp->content_length, get_write_delay(csp)) < 0))
                      {
-                        log_error(LOG_LEVEL_ERROR, "write modified content to "
-                           "client over TLS/SSL failed");
+                        log_error(LOG_LEVEL_ERROR,
+                           "Failed to send the modified content to the client over TLS");
                         freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
