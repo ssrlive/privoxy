@@ -995,12 +995,35 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
     * Rebuild the request line.
     */
    freez(*request_line);
-   *request_line = strdup(http->gpc);
-   string_append(request_line, " ");
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (fwd != NULL && fwd->forward_host &&
+       fwd->type != FORWARD_WEBSERVER && client_use_ssl(csp))
+   {
+      *request_line = strdup("CONNECT ");
+   }
+   else
+#endif
+   {
+      *request_line = strdup(http->gpc);
+      string_append(request_line, " ");
+   }
 
    if (fwd != NULL && fwd->forward_host && fwd->type != FORWARD_WEBSERVER)
    {
-      string_append(request_line, http->url);
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp))
+      {
+         char port_string[10];
+
+         string_append(request_line, http->host);
+         snprintf(port_string, sizeof(port_string), ":%d", http->port);
+         string_append(request_line, port_string);
+      }
+      else
+#endif
+      {
+         string_append(request_line, http->url);
+      }
    }
    else
    {
@@ -4132,9 +4155,6 @@ static void chat(struct client_state *csp)
       return;
    }
 
-   /* decide how to route the HTTP request */
-   fwd = forward_url(csp, http);
-
 #ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Setting flags to use old solution with SSL tunnel and to disable
@@ -4237,10 +4257,6 @@ static void chat(struct client_state *csp)
 #endif
    }
 
-
-   freez(csp->headers->first->str);
-   build_request_line(csp, fwd, &csp->headers->first->str);
-
    /*
     * We have a request. Check if one of the crunchers wants it
     * unless the client wants to use TLS/SSL in which case we
@@ -4258,6 +4274,58 @@ static void chat(struct client_state *csp)
        */
       return;
    }
+
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp) && !use_ssl_tunnel)
+   {
+      int ret;
+      /*
+       * Creating a SSL proxy.
+       *
+       * By sending the CSUCCEED message we're lying to the client as
+       * the connection hasn't actually been established yet. We don't
+       * establish the connection until we have seen and parsed the
+       * encrypted client headers.
+       */
+      if (write_socket_delayed(csp->cfd, CSUCCEED,
+            strlen(CSUCCEED), get_write_delay(csp)) != 0)
+      {
+         log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
+         return;
+      }
+
+      ret = create_client_ssl_connection(csp);
+      if (ret != 0)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to open a secure connection with the client");
+         return;
+      }
+      if (JB_ERR_OK != process_encrypted_request(csp))
+      {
+         close_client_ssl_connection(csp);
+         return;
+      }
+      /*
+       * We have an encrypted request. Check if one of the crunchers now
+       * wants it (for example because the previously invisible path was
+       * required to match).
+       */
+      if (crunch_response_triggered(csp, crunchers_all))
+      {
+         /*
+          * Yes. The client got the crunch response and we're done here.
+          */
+         return;
+      }
+   }
+#endif
+
+   /* decide how to route the HTTP request */
+   fwd = forward_url(csp, http);
+
+   freez(csp->headers->first->str);
+   build_request_line(csp, fwd, &csp->headers->first->str);
 
    log_applied_actions(csp->action);
    if (fwd->forward_host)
@@ -4307,51 +4375,7 @@ static void chat(struct client_state *csp)
          mark_connection_closed(&csp->server_connection);
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
-#ifdef FEATURE_HTTPS_INSPECTION
-      if (client_use_ssl(csp) && !use_ssl_tunnel)
-      {
-         int ret;
-         /*
-          * Creating a SSL proxy.
-          *
-          * By sending the CSUCCEED message we're lying to the client as
-          * the connection hasn't actually been established yet. We don't
-          * establish the connection until we have seen and parsed the
-          * encrypted client headers.
-          */
-         if (write_socket_delayed(csp->cfd, CSUCCEED,
-               strlen(CSUCCEED), get_write_delay(csp)) != 0)
-         {
-            log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
-            return;
-         }
 
-         ret = create_client_ssl_connection(csp);
-         if (ret != 0)
-         {
-            log_error(LOG_LEVEL_ERROR,
-               "Failed to open a secure connection with the client");
-            return;
-         }
-         if (JB_ERR_OK != process_encrypted_request(csp))
-         {
-            close_client_ssl_connection(csp);
-            return;
-         }
-         /*
-          * We have an encrypted request. Check if one of the crunchers now
-          * wants it (for example because the previously invisible path was
-          * required to match).
-          */
-         if (crunch_response_triggered(csp, crunchers_all))
-         {
-            /*
-             * Yes. The client got the crunch response and we're done here.
-             */
-            return;
-         }
-      }
-#endif
       /*
        * Connecting to destination server
        */
