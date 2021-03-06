@@ -4847,6 +4847,22 @@ static void serve(struct client_state *csp)
 #endif
             close_socket(csp->server_connection.sfd);
             mark_connection_closed(&csp->server_connection);
+#ifdef FEATURE_HTTPS_INSPECTION
+            if (continue_chatting && client_use_ssl(csp))
+            {
+               /*
+                * Close the client socket as well as Privoxy currently
+                * can't establish a new server connection when the client
+                * socket is reused and would drop the connection in
+                * continue_https_chat() anyway.
+                */
+               continue_chatting = 0;
+               csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+               log_error(LOG_LEVEL_CONNECT,
+                  "Client socket %d is no longer usable. "
+                  "The server socket has been closed.", csp->cfd);
+            }
+#endif
          }
       }
 
