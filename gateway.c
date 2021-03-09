@@ -1102,10 +1102,11 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 {
 #define SIZE_SOCKS5_REPLY_IPV4 10
 #define SIZE_SOCKS5_REPLY_IPV6 22
+#define SIZE_SOCKS5_REPLY_DOMAIN 300
 #define SOCKS5_REPLY_DIFFERENCE (SIZE_SOCKS5_REPLY_IPV6 - SIZE_SOCKS5_REPLY_IPV4)
    int err = 0;
    char cbuf[300];
-   char sbuf[SIZE_SOCKS5_REPLY_IPV6];
+   char sbuf[SIZE_SOCKS5_REPLY_DOMAIN];
    size_t client_pos = 0;
    int server_size = 0;
    size_t hostlen = 0;
@@ -1423,6 +1424,29 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
             if (server_size != SOCKS5_REPLY_DIFFERENCE)
             {
                errstr = "SOCKS5 negotiation read failed (IPv6 address)";
+            }
+         }
+         else if (sbuf[3] == '\x03')
+         {
+            /*
+             * The address field contains a domain name
+             * which means we didn't get the whole reply
+             * yet. Read and discard the rest of it to make
+             * sure it isn't treated as HTTP data later on.
+             */
+            unsigned domain_length = (unsigned)sbuf[4];
+            int bytes_left_to_read = 5 + (int)domain_length + 2 - SIZE_SOCKS5_REPLY_IPV4;
+            if (bytes_left_to_read <= 0 || sizeof(sbuf) < bytes_left_to_read)
+            {
+               errstr = "SOCKS5 negotiation read failed (Invalid domain length)";
+            }
+            else
+            {
+               server_size = read_socket(sfd, sbuf, bytes_left_to_read);
+               if (server_size != bytes_left_to_read)
+               {
+                  errstr = "SOCKS5 negotiation read failed (Domain name)";
+               }
             }
          }
          else if (sbuf[3] != '\x01')
