@@ -675,49 +675,6 @@ extern int get_certificate_valid_to_date(char *buffer, size_t buffer_size, const
 
 /*********************************************************************
  *
- * Function    :  host_is_ip_address
- *
- * Description :  Checks whether or not a host is specified by
- *                IP address. Does not actually validate the
- *                address.
- *
- * Parameters  :
- *          1  :  host = The host name to check
- *
- * Returns     :   1 => Yes
- *                 0 => No
- *
- *********************************************************************/
-extern int host_is_ip_address(const char *host)
-{
-   const char *p;
-
-   if (NULL != strstr(host, ":"))
-   {
-      /* Assume an IPv6 address. */
-      return 1;
-   }
-
-   for (p = host; *p; p++)
-   {
-      if ((*p != '.') && !privoxy_isdigit(*p))
-      {
-         /* Not a dot or digit so it can't be an IPv4 address. */
-         return 0;
-      }
-   }
-
-   /*
-    * Host only consists of dots and digits so
-    * assume that is an IPv4 address.
-    */
-   return 1;
-
-}
-
-
-/*********************************************************************
- *
  * Function    :  enforce_sane_certificate_state
  *
  * Description :  Makes sure the certificate state is sane.
