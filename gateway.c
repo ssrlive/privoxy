@@ -1031,6 +1031,53 @@ static const char *translate_socks5_error(int socks_error)
 
 /*********************************************************************
  *
+ * Function    :  convert_ipv4_address_to_bytes
+ *
+ * Description :  Converts an IPv4 address from string to bytes.
+ *
+ * Parameters  :
+ *          1  :  address = The IPv4 address string to convert.
+ *          2  :  buf = The buffer to write the bytes to.
+ *                      Must be at least four bytes long.
+ *
+ * Returns     :  JB_ERR_OK on success, JB_ERR_PARSE otherwise.
+ *
+ *********************************************************************/
+static jb_err convert_ipv4_address_to_bytes(const char *address, char *buf)
+{
+   int i;
+   const char *p = address;
+
+   for (i = 0; i < 4; i++)
+   {
+      unsigned byte;
+      if (1 != sscanf(p, "%u", &byte))
+      {
+         return JB_ERR_PARSE;
+      }
+      if (byte > 255)
+      {
+         return JB_ERR_PARSE;
+      }
+      buf[i] = (char)byte;
+      if (i < 3)
+      {
+         p = strstr(p, ".");
+         if (p == NULL)
+         {
+            return JB_ERR_PARSE;
+         }
+         p++;
+      }
+   }
+
+   return JB_ERR_OK;
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  socks5_connect
  *
  * Description :  Connect to the SOCKS server, and connect through
@@ -1251,12 +1298,32 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    cbuf[client_pos++] = '\x05'; /* Version */
    cbuf[client_pos++] = '\x01'; /* TCP connect */
    cbuf[client_pos++] = '\x00'; /* Reserved, must be 0x00 */
-   cbuf[client_pos++] = '\x03'; /* Address is domain name */
-   cbuf[client_pos++] = (char)(hostlen & 0xffu);
-   assert(sizeof(cbuf) - client_pos > (size_t)255);
-   /* Using strncpy because we really want the nul byte padding. */
-   strncpy(cbuf + client_pos, target_host, sizeof(cbuf) - client_pos - 1);
-   client_pos += (hostlen & 0xffu);
+   if (host_is_ip_address(target_host) && NULL == strstr(target_host, ":"))
+   {
+      cbuf[client_pos++] = '\x01'; /* Address is IPv4 address. */
+      if (JB_ERR_OK != convert_ipv4_address_to_bytes(target_host, &cbuf[client_pos]))
+      {
+         errstr = "SOCKS5 error. Failed to convert target address to IP address";
+         csp->error_message = strdup(errstr);
+         log_error(LOG_LEVEL_CONNECT, "%s", errstr);
+         close_socket(sfd);
+         errno = EINVAL;
+         return(JB_INVALID_SOCKET);
+      }
+      client_pos += 4;
+   }
+   else
+   {
+      /*
+       * XXX: This branch is currently also used for IPv6 addresses
+       */
+      cbuf[client_pos++] = '\x03'; /* Address is domain name. */
+      cbuf[client_pos++] = (char)(hostlen & 0xffu);
+      assert(sizeof(cbuf) - client_pos > (size_t)255);
+      /* Using strncpy because we really want the nul byte padding. */
+      strncpy(cbuf + client_pos, target_host, sizeof(cbuf) - client_pos - 1);
+      client_pos += (hostlen & 0xffu);
+   }
    cbuf[client_pos++] = (char)((target_port >> 8) & 0xff);
    cbuf[client_pos++] = (char)((target_port     ) & 0xff);
 
