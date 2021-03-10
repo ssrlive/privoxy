@@ -3171,7 +3171,7 @@ static void handle_established_connection(struct client_state *csp)
       n = select((int)maxfd + 1, &rfds, NULL, NULL, &timeout);
 #endif /* def HAVE_POLL */
 
-      /*server or client not responding in timeout */
+      /* Server or client not responding in timeout */
       if (n == 0)
       {
          log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
