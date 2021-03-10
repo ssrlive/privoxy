@@ -1078,6 +1078,54 @@ static jb_err convert_ipv4_address_to_bytes(const char *address, char *buf)
 
 /*********************************************************************
  *
+ * Function    :  read_socks_reply
+ *
+ * Description :  Read from a socket connected to a socks server.
+ *
+ * Parameters  :
+ *          1  :  sfd = file descriptor of the socket to read
+ *          2  :  buf = pointer to buffer where data will be written
+ *                Must be >= len bytes long.
+ *          3  :  len = maximum number of bytes to read
+ *          4  :  timeout = Number of seconds to wait.
+ *
+ * Returns     :  On success, the number of bytes read is returned (zero
+ *                indicates end of file), and the file position is advanced
+ *                by this number.  It is not an error if this number is
+ *                smaller than the number of bytes requested; this may hap-
+ *                pen for example because fewer bytes are actually available
+ *                right now (maybe because we were close to end-of-file, or
+ *                because we are reading from a pipe, or from a terminal,
+ *                or because read() was interrupted by a signal).  On error,
+ *                -1 is returned, and errno is set appropriately.  In this
+ *                case it is left unspecified whether the file position (if
+ *                any) changes.
+ *
+ *********************************************************************/
+static int read_socks_reply(jb_socket sfd, char *buf, int len, int timeout)
+{
+   if (!data_is_available(sfd, timeout))
+   {
+      if (socket_is_still_alive(sfd))
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "The socks connection timed out after %d seconds.", timeout);
+      }
+      else
+      {
+         log_error(LOG_LEVEL_ERROR, "The socks server hung "
+            "up the connection without sending a response.");
+      }
+      return -1;
+   }
+
+   return read_socket(sfd, buf, len);
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  socks5_connect
  *
  * Description :  Connect to the SOCKS server, and connect through
@@ -1194,20 +1242,8 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
       close_socket(sfd);
       return(JB_INVALID_SOCKET);
    }
-   if (!data_is_available(sfd, csp->config->socket_timeout))
-   {
-      if (socket_is_still_alive(sfd))
-      {
-         errstr = "SOCKS5 negotiation timed out";
-      }
-      else
-      {
-         errstr = "SOCKS5 negotiation got aborted by the server";
-      }
-      err = 1;
-   }
-
-   if (!err && read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
+   if (read_socks_reply(sfd, sbuf, sizeof(sbuf),
+         csp->config->socket_timeout) != 2)
 #endif
    {
       errstr = "SOCKS5 negotiation read failed";
@@ -1266,7 +1302,8 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
             return(JB_INVALID_SOCKET);
          }
 
-         if (read_socket(sfd, sbuf, sizeof(sbuf)) != 2)
+         if (read_socks_reply(sfd, sbuf, sizeof(sbuf),
+               csp->config->socket_timeout) != 2)
          {
             errstr = "SOCKS5 negotiation auth read failed";
             err = 1;
@@ -1391,7 +1428,8 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
    }
 #endif
 
-   server_size = read_socket(sfd, sbuf, SIZE_SOCKS5_REPLY_IPV4);
+   server_size = read_socks_reply(sfd, sbuf, SIZE_SOCKS5_REPLY_IPV4,
+      csp->config->socket_timeout);
    if (server_size != SIZE_SOCKS5_REPLY_IPV4)
    {
       errstr = "SOCKS5 negotiation read failed";
@@ -1420,7 +1458,8 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
              * yet. Read and discard the rest of it to make
              * sure it isn't treated as HTTP data later on.
              */
-            server_size = read_socket(sfd, sbuf, SOCKS5_REPLY_DIFFERENCE);
+            server_size = read_socks_reply(sfd, sbuf, SOCKS5_REPLY_DIFFERENCE,
+               csp->config->socket_timeout);
             if (server_size != SOCKS5_REPLY_DIFFERENCE)
             {
                errstr = "SOCKS5 negotiation read failed (IPv6 address)";
@@ -1442,7 +1481,8 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
             }
             else
             {
-               server_size = read_socket(sfd, sbuf, bytes_left_to_read);
+               server_size = read_socks_reply(sfd, sbuf, bytes_left_to_read,
+                  csp->config->socket_timeout);
                if (server_size != bytes_left_to_read)
                {
                   errstr = "SOCKS5 negotiation read failed (Domain name)";
