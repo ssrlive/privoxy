@@ -3085,6 +3085,18 @@ static void handle_established_connection(struct client_state *csp)
 
    for (;;)
    {
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (server_use_ssl(csp) && is_ssl_pending(&(csp->ssl_server_attr)))
+      {
+         /*
+          * It's possible that the TLS library already consumed all the
+          * data the server intends to send. If that happens poll() and
+          * select() will no longer see the data as available so we have
+          * to skip the calls.
+          */
+         goto server_wants_to_talk;
+      }
+#endif
 #ifndef HAVE_POLL
       FD_ZERO(&rfds);
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
@@ -3358,6 +3370,9 @@ static void handle_established_connection(struct client_state *csp)
       if (FD_ISSET(csp->server_connection.sfd, &rfds))
 #endif /* HAVE_POLL */
       {
+#ifdef FEATURE_HTTPS_INSPECTION
+         server_wants_to_talk:
+#endif
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          /*
           * If we are buffering content, we don't want to eat up to
