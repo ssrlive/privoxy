@@ -710,6 +710,8 @@ adlibris.
 ada*.
 # URL = https://www.adrianschmutzler.net/
 adri*.
+# URL = https://adguard.com/
+adguard.com/
 
 #############################################################################
 # Generic block patterns by path:
