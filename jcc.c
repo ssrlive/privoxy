@@ -995,12 +995,35 @@ static void build_request_line(struct client_state *csp, const struct forward_sp
     * Rebuild the request line.
     */
    freez(*request_line);
-   *request_line = strdup(http->gpc);
-   string_append(request_line, " ");
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (fwd != NULL && fwd->forward_host &&
+       fwd->type != FORWARD_WEBSERVER && client_use_ssl(csp))
+   {
+      *request_line = strdup("CONNECT ");
+   }
+   else
+#endif
+   {
+      *request_line = strdup(http->gpc);
+      string_append(request_line, " ");
+   }
 
    if (fwd != NULL && fwd->forward_host && fwd->type != FORWARD_WEBSERVER)
    {
-      string_append(request_line, http->url);
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp))
+      {
+         char port_string[10];
+
+         string_append(request_line, http->host);
+         snprintf(port_string, sizeof(port_string), ":%d", http->port);
+         string_append(request_line, port_string);
+      }
+      else
+#endif
+      {
+         string_append(request_line, http->url);
+      }
    }
    else
    {
@@ -2972,6 +2995,7 @@ static void continue_https_chat(struct client_state *csp)
          csp->cfd);
       return;
    }
+   csp->server_connection.request_sent = time(NULL);
    csp->server_connection.requests_sent_total++;
    handle_established_connection(csp);
    freez(csp->receive_buffer);
@@ -3061,6 +3085,18 @@ static void handle_established_connection(struct client_state *csp)
 
    for (;;)
    {
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (server_use_ssl(csp) && is_ssl_pending(&(csp->ssl_server_attr)))
+      {
+         /*
+          * It's possible that the TLS library already consumed all the
+          * data the server intends to send. If that happens poll() and
+          * select() will no longer see the data as available so we have
+          * to skip the calls.
+          */
+         goto server_wants_to_talk;
+      }
+#endif
 #ifndef HAVE_POLL
       FD_ZERO(&rfds);
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
@@ -3147,7 +3183,7 @@ static void handle_established_connection(struct client_state *csp)
       n = select((int)maxfd + 1, &rfds, NULL, NULL, &timeout);
 #endif /* def HAVE_POLL */
 
-      /*server or client not responding in timeout */
+      /* Server or client not responding in timeout */
       if (n == 0)
       {
          log_error(LOG_LEVEL_CONNECT, "Socket timeout %d reached: %s",
@@ -3334,6 +3370,9 @@ static void handle_established_connection(struct client_state *csp)
       if (FD_ISSET(csp->server_connection.sfd, &rfds))
 #endif /* HAVE_POLL */
       {
+#ifdef FEATURE_HTTPS_INSPECTION
+         server_wants_to_talk:
+#endif
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          /*
           * If we are buffering content, we don't want to eat up to
@@ -3538,8 +3577,8 @@ static void handle_established_connection(struct client_state *csp)
                               (const unsigned char *) ((p != NULL) ? p : csp->iob->cur),
                               csp->content_length, get_write_delay(csp)) < 0))
                      {
-                        log_error(LOG_LEVEL_ERROR, "write modified content to "
-                           "client over TLS/SSL failed");
+                        log_error(LOG_LEVEL_ERROR,
+                           "Failed to send the modified content to the client over TLS");
                         freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
@@ -3570,8 +3609,8 @@ static void handle_established_connection(struct client_state *csp)
             }
 
             /*
-             * This is NOT the body, so
-             * Let's pretend the server just sent us a blank line.
+             * This is not the body, so let's pretend the server just sent
+             * us a blank line.
              */
             snprintf(csp->receive_buffer, csp->receive_buffer_size, "\r\n");
             len = (int)strlen(csp->receive_buffer);
@@ -3865,6 +3904,18 @@ static void handle_established_connection(struct client_state *csp)
             }
 
             /*
+             * Disable redirect checkers, so that they will be only run
+             * again if the user also enables them through tags.
+             *
+             * From a performance point of view it doesn't matter,
+             * but it prevents duplicated log messages.
+             */
+#ifdef FEATURE_FAST_REDIRECTS
+            csp->action->flags &= ~ACTION_FAST_REDIRECTS;
+#endif
+            csp->action->flags &= ~ACTION_REDIRECT;
+
+            /*
              * We have now received the entire server header,
              * filter it and send the result to the client
              */
@@ -4119,9 +4170,6 @@ static void chat(struct client_state *csp)
       return;
    }
 
-   /* decide how to route the HTTP request */
-   fwd = forward_url(csp, http);
-
 #ifdef FEATURE_HTTPS_INSPECTION
    /*
     * Setting flags to use old solution with SSL tunnel and to disable
@@ -4224,10 +4272,6 @@ static void chat(struct client_state *csp)
 #endif
    }
 
-
-   freez(csp->headers->first->str);
-   build_request_line(csp, fwd, &csp->headers->first->str);
-
    /*
     * We have a request. Check if one of the crunchers wants it
     * unless the client wants to use TLS/SSL in which case we
@@ -4245,6 +4289,58 @@ static void chat(struct client_state *csp)
        */
       return;
    }
+
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp) && !use_ssl_tunnel)
+   {
+      int ret;
+      /*
+       * Creating a SSL proxy.
+       *
+       * By sending the CSUCCEED message we're lying to the client as
+       * the connection hasn't actually been established yet. We don't
+       * establish the connection until we have seen and parsed the
+       * encrypted client headers.
+       */
+      if (write_socket_delayed(csp->cfd, CSUCCEED,
+            strlen(CSUCCEED), get_write_delay(csp)) != 0)
+      {
+         log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
+         return;
+      }
+
+      ret = create_client_ssl_connection(csp);
+      if (ret != 0)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to open a secure connection with the client");
+         return;
+      }
+      if (JB_ERR_OK != process_encrypted_request(csp))
+      {
+         close_client_ssl_connection(csp);
+         return;
+      }
+      /*
+       * We have an encrypted request. Check if one of the crunchers now
+       * wants it (for example because the previously invisible path was
+       * required to match).
+       */
+      if (crunch_response_triggered(csp, crunchers_all))
+      {
+         /*
+          * Yes. The client got the crunch response and we're done here.
+          */
+         return;
+      }
+   }
+#endif
+
+   /* decide how to route the HTTP request */
+   fwd = forward_url(csp, http);
+
+   freez(csp->headers->first->str);
+   build_request_line(csp, fwd, &csp->headers->first->str);
 
    log_applied_actions(csp->action);
    if (fwd->forward_host)
@@ -4294,51 +4390,7 @@ static void chat(struct client_state *csp)
          mark_connection_closed(&csp->server_connection);
       }
 #endif /* def FEATURE_CONNECTION_KEEP_ALIVE */
-#ifdef FEATURE_HTTPS_INSPECTION
-      if (client_use_ssl(csp) && !use_ssl_tunnel)
-      {
-         int ret;
-         /*
-          * Creating a SSL proxy.
-          *
-          * By sending the CSUCCEED message we're lying to the client as
-          * the connection hasn't actually been established yet. We don't
-          * establish the connection until we have seen and parsed the
-          * encrypted client headers.
-          */
-         if (write_socket_delayed(csp->cfd, CSUCCEED,
-               strlen(CSUCCEED), get_write_delay(csp)) != 0)
-         {
-            log_error(LOG_LEVEL_ERROR, "Sending SUCCEED to client failed");
-            return;
-         }
 
-         ret = create_client_ssl_connection(csp);
-         if (ret != 0)
-         {
-            log_error(LOG_LEVEL_ERROR,
-               "Failed to open a secure connection with the client");
-            return;
-         }
-         if (JB_ERR_OK != process_encrypted_request(csp))
-         {
-            close_client_ssl_connection(csp);
-            return;
-         }
-         /*
-          * We have an encrypted request. Check if one of the crunchers now
-          * wants it (for example because the previously invisible path was
-          * required to match).
-          */
-         if (crunch_response_triggered(csp, crunchers_all))
-         {
-            /*
-             * Yes. The client got the crunch response and we're done here.
-             */
-            return;
-         }
-      }
-#endif
       /*
        * Connecting to destination server
        */
@@ -4834,6 +4886,22 @@ static void serve(struct client_state *csp)
 #endif
             close_socket(csp->server_connection.sfd);
             mark_connection_closed(&csp->server_connection);
+#ifdef FEATURE_HTTPS_INSPECTION
+            if (continue_chatting && client_use_ssl(csp))
+            {
+               /*
+                * Close the client socket as well as Privoxy currently
+                * can't establish a new server connection when the client
+                * socket is reused and would drop the connection in
+                * continue_https_chat() anyway.
+                */
+               continue_chatting = 0;
+               csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+               log_error(LOG_LEVEL_CONNECT,
+                  "Client socket %d is no longer usable. "
+                  "The server socket has been closed.", csp->cfd);
+            }
+#endif
          }
       }
 
