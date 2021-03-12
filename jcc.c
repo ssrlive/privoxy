@@ -3609,8 +3609,8 @@ static void handle_established_connection(struct client_state *csp)
             }
 
             /*
-             * This is NOT the body, so
-             * Let's pretend the server just sent us a blank line.
+             * This is not the body, so let's pretend the server just sent
+             * us a blank line.
              */
             snprintf(csp->receive_buffer, csp->receive_buffer_size, "\r\n");
             len = (int)strlen(csp->receive_buffer);
