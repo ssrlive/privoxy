@@ -26,7 +26,7 @@
 #############################################################################
 
 {{settings}}
-for-privoxy-version=3.0.29
+for-privoxy-version=3.0.33
 
 # Some dependencies Privoxy-Regression-Test should know about:
 #
@@ -853,6 +853,7 @@ TAG:^Proxy-Authorization header forwarding$
 # Fetch Test = http://p.p/toggle-client-tag
 # Expect Status Code = 403
 # Level = 24
+# Fetch Test = http://p.p/wpad.dat
 
 # Trusted CGI Request = http://p.p/edit-actions
 # Expect Status Code = 302
