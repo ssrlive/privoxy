@@ -430,10 +430,6 @@ https://www.privoxy.org/donate
 
 165) Add a max-connections-per-client directive.
 
-166) Figure out how to ship Windows binaries with external libraries
-     like pcre and MbedTLS. Required for #142. Somewhat related:
-     https://lists.privoxy.org/pipermail/privoxy-devel/2020-November/000400.html
-
 167) Set up a public Privoxy-Filter-Test instance.
 
 168) Add a privacy policy.
