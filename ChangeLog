@@ -1,6 +1,67 @@
 --------------------------------------------------------------------
 ChangeLog for Privoxy
 --------------------------------------------------------------------
+*** Version 3.0.33 UNRELEASED ***
+
+- Bug fixes:
+  - handle_established_connection(): Skip the poll()/select() calls
+    if TLS data is pending on the server socket. The TLS library may
+    have already consumed all the data from the server response in
+    which case poll() and select() will not detect that data is
+    available to be read.
+    Fixes SF bug #926 reported by Wen Yue.
+  - continue_https_chat(): Update csp->server_connection.request_sent
+    after sending the request to make sure the latency is calculated
+    correctly. Previously https connections were not reused after
+    timeout seconds after the first request made on the connection.
+  - free_pattern_spec(): Don't try to free an invalid pointer
+    when unloading an action file with a TAG pattern while
+    Privoxy has been compiled without FEATURE_PCRE_HOST_PATTERNS.
+    Closes: SF patch request #147. Patch by Maxim Antonov.
+  - Establish the TLS connection with the client earlier and decide
+    how to route the request afterwards. This allows to change the
+    forwarding settings based on information from the https-inspected
+    request, for example the path.
+    Adjust build_request_line() to create a CONNECT request line when
+    https-inspecting and forwarding to a HTTP proxy.
+    Fixes SF bug #925 reported by Wen Yue.
+  - load_config(): Add a space that was missing in a log message.
+
+- General improvements:
+  - serve(): Close the client socket as well if the server socket
+    for an inspected connection has been closed. Privoxy currently
+    can't establish a new server connection when the client socket
+    is reused and would drop the connection in continue_https_chat()
+    anyway.
+  - Don't disable redirect checkers in redirect_url()
+    Disable them in handle_established_connection() instead.
+    Doing it in redirect_url() prevented the +redirect{} and
+    +fast-redirects{} actions from being logged with LOG_LEVEL_ACTIONS.
+  - handle_established_connection(): Slightly improve a comment
+  - handle_established_connection(): Fix a comment
+  - socks5_connect(): Fix indentation.
+  - handle_established_connection(): Improve an error message
+  - create_pattern_spec(): Fix ifdef indentation
+  - Fix comment typos
+
+- Action file improvements:
+  - Disable fast-redirects for .microsoftonline.com/.
+  - Disable fast-redirects for idp.springer.com/.
+
+- Privoxy-Regression-Test:
+  - Remove duplicated word in a comment.
+
+- Documentation:
+  - contacting: Remove obsolete reference to announce.sgml.
+  - contacting: Request that the browser cache is cleared before
+    producing a log file for submission.
+  - Sponsor FAQ: Note that Privoxy users may follow sponsor links
+    without Referer header set.
+  - newfeatures: Clarify that https inspection also allows to
+    filter https responses.
+  - developer-manual: Mention that announce.txt should be updated
+    when doing a release.
+
 *** Version 3.0.32 stable ***
 
 - Security/Reliability:
