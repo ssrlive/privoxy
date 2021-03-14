@@ -356,8 +356,6 @@ https://www.privoxy.org/donate
      probably shouldn't be affected (such as actions like
      forward-override). Investigate and fix or document.
 
-142) Remove or update the "internal" pcre version.
-
 143) Add support for OpenBSD's pledge feature once it's stablelized.
      This should be a lot less work then #124.
 
