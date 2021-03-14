@@ -3009,7 +3009,8 @@ static void continue_https_chat(struct client_state *csp)
  * Function    :  handle_established_connection
  *
  * Description :  Shuffle data between client and server once the
- *                connection has been established.
+ *                connection has been established and the request
+ *                has been sent.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
