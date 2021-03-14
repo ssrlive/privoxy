@@ -475,7 +475,7 @@ https://www.privoxy.org/donate
      when https inspecting while using a forwarding proxy.
 
 184) Add support for wolfSSL. Work in progress, expected to be
-     committed after the 3.0.32 release. Funded with donations
+     committed after the 3.0.33 release. Funded with donations
      made to the Privoxy project.
 
 185) The mbedTLS and OpenSSL versions of generate_host_certificate()
