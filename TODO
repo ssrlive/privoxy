@@ -165,7 +165,9 @@ https://www.privoxy.org/donate
 
 75) Create a tool that creates Privoxy action (and filter?) files
     out of adblock files. Could be implemented as option for
-    url-pattern-translator.pl.
+    url-pattern-translator.pl. Before doing that, the already
+    existing solutions should probably be evaluated to see if
+    they do the job already or could be improved.
 
 76) Cache DNS responses. Note that this has been requested
     several times by users, but is not a developer priority.
