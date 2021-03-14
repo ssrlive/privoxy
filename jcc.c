@@ -2871,7 +2871,6 @@ static jb_err process_encrypted_request(struct client_state *csp)
    }
 
    log_error(LOG_LEVEL_HEADER, "Encrypted request processed");
-   log_applied_actions(csp->action);
    log_error(LOG_LEVEL_REQUEST, "https://%s%s", csp->http->hostport,
       csp->http->path);
 
@@ -2976,6 +2975,8 @@ static void continue_https_chat(struct client_state *csp)
       csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return;
    }
+
+   log_applied_actions(csp->action);
 
    log_error(LOG_LEVEL_CONNECT,
       "Reusing server socket %d connected to %s. Requests already sent: %u.",
