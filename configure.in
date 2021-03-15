@@ -761,8 +761,6 @@ AC_CHECK_HEADERS([ \
 ])
 
 dnl Checks for library functions.
-dnl bcopy is for PCRE
-AC_CHECK_FUNCS([bcopy])
 AC_PROG_GCC_TRADITIONAL
 AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([ \
@@ -1103,14 +1101,7 @@ if test $have_pcre = "yes"; then
     AC_DEFINE(FEATURE_DYNAMIC_PCRE,1,[Define to dynamically link to pcre.])
   fi
 else
-  AC_MSG_WARN([You are using the static PCRE code which is out of date and scheduled for removal, for details see:
-    https://sourceforge.net/p/ijbswa/mailman/ijbswa-developers/thread/20080511195555.2dc6cfdc@fabiankeil.de/])
-  AC_MSG_WARN([The removal will likely occur before the 3.0.33 release.])
-  pcre_dyn=no
-  # STATIC_PCRE is a name pcre needs to statically link on Windows.
-  # Privoxy itself no longer uses it.
-  AC_DEFINE(STATIC_PCRE,1,[Define to statically link to internal outdated pcre on Windows.])
-  STATIC_PCRE_ONLY=
+  AC_MSG_ERROR(pcre library not detected.)
 fi
 
 AC_DEFINE(FEATURE_CONNECTION_KEEP_ALIVE)

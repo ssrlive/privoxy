@@ -710,6 +710,8 @@ adlibris.
 ada*.
 # URL = https://www.adrianschmutzler.net/
 adri*.
+# URL = https://adguard.com/
+adguard.com/
 
 #############################################################################
 # Generic block patterns by path:
@@ -2030,6 +2032,8 @@ belco24.de/
 .tagesschau.de/
 # URL = https://metrics.sr.ht/graph
 metrics.sr.ht/
+# URL = https://nlnet.nl/logo/banner.png
+nlnet.nl/
 
 
 #############################################################################
