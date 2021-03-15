@@ -1751,6 +1751,8 @@ static int generate_host_certificate(struct client_state *csp)
    cert_options cert_opt;
    char cert_valid_from[VALID_DATETIME_BUFLEN];
    char cert_valid_to[VALID_DATETIME_BUFLEN];
+   const char *common_name;
+   enum { CERT_PARAM_COMMON_NAME_MAX = 64 };
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -1866,8 +1868,15 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
 
+   /*
+    * Make sure OpenSSL doesn't reject the common name due to its length.
+    * The clients should only care about the Subject Alternative Name anyway
+    * and we always use the real host name for that.
+    */
+   common_name = (strlen(csp->http->host) > CERT_PARAM_COMMON_NAME_MAX) ?
+      CGI_SITE_2_HOST : csp->http->host;
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COMMON_NAME_FCODE,
-         MBSTRING_ASC, (void *)csp->http->host, -1, -1, 0))
+         MBSTRING_ASC, (void *)common_name, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
@@ -1876,7 +1885,7 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORGANIZATION_FCODE,
-         MBSTRING_ASC, (void *)csp->http->host, -1, -1, 0))
+         MBSTRING_ASC, (void *)common_name, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
@@ -1885,7 +1894,7 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORG_UNIT_FCODE,
-         MBSTRING_ASC, (void *)csp->http->host, -1, -1, 0))
+         MBSTRING_ASC, (void *)common_name, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
