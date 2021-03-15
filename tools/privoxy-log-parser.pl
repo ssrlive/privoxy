@@ -1890,6 +1890,11 @@ sub handle_loglevel_connect($) {
         # Complete client request followed by 59 bytes of pipelined data received.
         $c =~ s@(?<=followed by )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^The peer notified us that the connection on socket/) {
+
+        # The peer notified us that the connection on socket 11 is going to be closed
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
