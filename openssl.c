@@ -1861,7 +1861,7 @@ static int generate_host_certificate(struct client_state *csp)
    subject_name = X509_NAME_new();
    if (!subject_name)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "RSA key memory allocation failure");
+      log_ssl_errors(LOG_LEVEL_ERROR, "X509 memory allocation failure");
       ret = -1;
       goto exit;
    }
@@ -1898,7 +1898,7 @@ static int generate_host_certificate(struct client_state *csp)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
-         CERT_PARAM_COUNTRY_FCODE, csp->http->host);
+         CERT_PARAM_COUNTRY_FCODE, CERT_PARAM_COUNTRY_CODE);
       ret = -1;
       goto exit;
    }
