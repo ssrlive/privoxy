@@ -222,13 +222,13 @@ unsigned int sweep(void)
       {
          last_active->next = client_list->next;
 
-#ifdef FEATURE_STATISTICS
+#if defined(FEATURE_STATISTICS) && !defined(MUTEX_LOCKS_AVAILABLE)
          urls_read++;
          if (csp->flags & CSP_FLAG_REJECTED)
          {
             urls_rejected++;
          }
-#endif /* def FEATURE_STATISTICS */
+#endif /* defined(FEATURE_STATISTICS) && !defined(MUTEX_LOCKS_AVAILABLE) */
 
          freez(client_list);
 

@@ -127,6 +127,10 @@ struct file_list     files[1];
 #ifdef FEATURE_STATISTICS
 int urls_read     = 0;     /* total nr of urls read inc rejected */
 int urls_rejected = 0;     /* total nr of urls rejected */
+#ifdef MUTEX_LOCKS_AVAILABLE
+unsigned long long number_of_requests_received = 0;
+unsigned long long number_of_requests_blocked = 0;
+#endif
 #endif /* def FEATURE_STATISTICS */
 
 #ifdef FEATURE_GRACEFUL_TERMINATION
@@ -190,6 +194,9 @@ privoxy_mutex_t external_filter_mutex;
 #endif
 #ifdef FEATURE_CLIENT_TAGS
 privoxy_mutex_t client_tags_mutex;
+#endif
+#ifdef FEATURE_STATISTICS
+privoxy_mutex_t block_statistics_mutex;
 #endif
 #ifdef FEATURE_EXTENDED_STATISTICS
 privoxy_mutex_t filter_statistics_mutex;
@@ -945,6 +952,11 @@ static int crunch_response_triggered(struct client_state *csp, const struct crun
 #ifdef FEATURE_STATISTICS
             if (c->flags & CF_COUNT_AS_REJECT)
             {
+#ifdef MUTEX_LOCKS_AVAILABLE
+               privoxy_mutex_lock(&block_statistics_mutex);
+               number_of_requests_blocked++;
+               privoxy_mutex_unlock(&block_statistics_mutex);
+#endif
                csp->flags |= CSP_FLAG_REJECTED;
             }
 #endif /* def FEATURE_STATISTICS */
@@ -2966,6 +2978,12 @@ static void continue_https_chat(struct client_state *csp)
       return;
    }
 
+#if defined(FEATURE_STATISTICS) && defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_lock(&block_statistics_mutex);
+   number_of_requests_received++;
+   privoxy_mutex_unlock(&block_statistics_mutex);
+#endif
+
    csp->requests_received_total++;
 
    /*
@@ -4207,6 +4225,13 @@ static void chat(struct client_state *csp)
    {
       return;
    }
+
+#if defined(FEATURE_STATISTICS) && defined(MUTEX_LOCKS_AVAILABLE)
+   privoxy_mutex_lock(&block_statistics_mutex);
+   number_of_requests_received++;
+   privoxy_mutex_unlock(&block_statistics_mutex);
+#endif
+
    if (parse_client_request(csp) != JB_ERR_OK)
    {
       return;
@@ -5280,6 +5305,9 @@ static void initialize_mutexes(void)
 #endif
 #ifdef FEATURE_CLIENT_TAGS
    privoxy_mutex_init(&client_tags_mutex);
+#endif
+#ifdef FEATURE_STATISTICS
+   privoxy_mutex_init(&block_statistics_mutex);
 #endif
 #ifdef FEATURE_EXTENDED_STATISTICS
    privoxy_mutex_init(&filter_statistics_mutex);
