@@ -49,7 +49,6 @@
 * Macros for SSL structures
 */
 #define CERT_INFO_BUF_SIZE         4096
-#define CERT_FILE_BUF_SIZE         16384
 #define ISSUER_NAME_BUF_SIZE       2048
 #define HASH_OF_HOST_BUF_SIZE      16
 #endif /* FEATURE_HTTPS_INSPECTION */
@@ -363,7 +362,7 @@ struct http_request
  */
 typedef struct certs_chain {
    char info_buf[CERT_INFO_BUF_SIZE];    /* text info about properties of certificate               */
-   char file_buf[CERT_FILE_BUF_SIZE];    /* buffer for whole certificate - format to save in file   */
+   char *file_buf;                       /* buffer for whole certificate - format to save in file   */
    struct certs_chain *next;             /* next certificate in chain of trust                      */
 } certs_chain_t;
 #endif

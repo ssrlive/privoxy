@@ -302,7 +302,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
    last->next = malloc_or_die(sizeof(struct certs_chain));
    last->next->next = NULL;
    memset(last->next->info_buf, 0, sizeof(last->next->info_buf));
-   memset(last->next->file_buf, 0, sizeof(last->next->file_buf));
+   last->next->file_buf = NULL;
 
    /*
     * Saving certificate file into buffer
@@ -316,15 +316,18 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
 
    len = BIO_get_mem_data(bio, &bio_mem_data);
 
-   if (len > (sizeof(last->file_buf) - 1))
+   last->file_buf = malloc((size_t)len + 1);
+   if (last->file_buf == NULL)
    {
       log_error(LOG_LEVEL_ERROR,
-         "X509 PEM cert len %ld is larger than buffer len %lu",
-         len, sizeof(last->file_buf) - 1);
-      len = sizeof(last->file_buf) - 1;
+         "Failed to allocate %lu bytes to store the X509 PEM certificate",
+         len + 1);
+      ret = -1;
+      goto exit;
    }
 
    strncpy(last->file_buf, bio_mem_data, (size_t)len);
+   last->file_buf[len] = '\0';
    BIO_free(bio);
    bio = BIO_new(BIO_s_mem());
    if (!bio)
