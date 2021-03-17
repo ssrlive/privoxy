@@ -73,6 +73,11 @@
 #undef FEATURE_DYNAMIC_PCRE
 
 /*
+ * Should pcrs use pcre JIT compilation if it's supported?
+ */
+#undef DISABLE_PCRE_JIT_COMPILATION
+
+/*
  * Should pcrs be statically built in instead of linkling with libpcrs?
  * (This is determined by configure depending on the availiability of
  * libpcrs and user preferences).

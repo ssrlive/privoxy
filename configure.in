@@ -973,6 +973,12 @@ AC_ARG_ENABLE(pcre-host-patterns,
   AC_DEFINE(FEATURE_PCRE_HOST_PATTERNS)
 fi])
 
+AC_ARG_ENABLE(pcre-jit-compilation,
+[  --disable-pcre-jit-compilation     Don't let pcrs use pcre JIT compilation even if pcre supports it.],
+[if test $enableval != yes; then
+  AC_DEFINE(DISABLE_PCRE_JIT_COMPILATION)
+fi])
+
 AC_ARG_ENABLE(external-filters,
 [  --enable-external-filters       Allow to filter content with scripts and programs. Experimental.],
 [if test $enableval = yes; then
