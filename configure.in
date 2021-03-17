@@ -343,16 +343,6 @@ fi
 AC_SUBST(W3M)
 AC_SUBST(DB2HTML)
 
-dnl If we use rpm, we need to check where %_topdir is
-AC_CHECK_PROGS(RPMBIN,rpm,false)
-if test $RPMBIN != false; then
-		RPM_BASE=`rpm --eval "%{_topdir}"`
-		if test "$RPM_BASE" = ""; then
-			RPM_BASE=/usr/src/redhat
-		fi
-fi
-AC_SUBST(RPM_BASE)
-
 dnl prefer openjade to jade
 dnl Check for jade, so we can build the documentation
 AC_CHECK_PROGS(JADEBIN,openjade jade,false)
