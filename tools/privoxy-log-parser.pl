@@ -50,8 +50,10 @@ use constant {
     HEADER_DEFAULT_COLOUR => 'yellow',
     REGISTER_HEADERS_WITH_THE_SAME_COLOUR => 1,
 
+    CLI_OPTION_DETECT_INACTIVITY => 0,
     CLI_OPTION_DEFAULT_TO_HTML_OUTPUT => 0,
     CLI_OPTION_TITLE => 'Privoxy-Log-Parser in da house',
+    CLI_OPTION_INACTIVITY_THRESHOLD => 100,
     CLI_OPTION_KEEP_DATE => 0,
     CLI_OPTION_NO_EMBEDDED_CSS => 0,
     CLI_OPTION_NO_MSECS => 0,
@@ -2708,6 +2710,67 @@ sub stats_loop() {
 
 }
 
+# Convert a timestamp like 18:07:28.733 into miliseconds
+sub time_stamp_to_msecs($) {
+    my $time_stamp = shift;
+
+    if ($time_stamp =~ /(\d\d):(\d\d):(\d\d)\.(\d{3})/) {
+        my ($hours, $minutes, $seconds, $msecs) = ($1, $2, $3, $4);
+
+        $msecs += $seconds * 1000;
+        $msecs += $minutes * 1000 * 60;
+        $msecs += $hours   * 1000 * 60 * 60;
+
+        return $msecs;
+    }
+    return undef;
+}
+
+sub inactivity_detection_loop() {
+
+    our %cli_options;
+    my ($time_stamp, $thread, $log_level, $content);
+    my ($msecs, $previous_msecs, $inactivity);
+    my $inactivity_threshold = $cli_options{'inactivity-threshold'};
+    my $previous_message;
+    my $log_message_out_of_order = 0;
+
+    while (<>) {
+        (undef, $time_stamp, $thread, $log_level, $content) = split(/ /, $_, 5);
+
+        next if (not defined($log_level));
+        next if ($time_stamp eq "-");
+        $msecs = time_stamp_to_msecs($time_stamp);
+        unless (defined $msecs) {
+            print "Failed to convert $time_stamp into miliseconds\n";
+            next;
+        }
+        unless (defined $previous_msecs) {
+            $previous_msecs = $msecs;
+            next;
+        }
+        $inactivity = $msecs - $previous_msecs;
+        if ($inactivity < 0) {
+            # This can happen if there's a high load in which case
+            # a Privoxy thread may be moved off schedule between
+            # getting the timestamp for the log message and actually
+            # writing it.
+            $log_message_out_of_order++;
+        }
+        if ($inactivity > $inactivity_threshold) {
+            #print "$previous_message";
+            print "Detected inactivity: $inactivity msecs\n";
+        }
+        print "$_";
+        $previous_msecs = $msecs;
+        $previous_message = $_;
+    }
+    if ($log_message_out_of_order) {
+        print "At least $log_message_out_of_order messages were written out of the chronological order.\n";
+        print "This can result in false positives. Consider sorting the log first.\n";
+    }
+}
+
 sub unbreak_lines_only_loop() {
     my $log_messages_reached = 0;
     while (<>) {
@@ -2744,6 +2807,8 @@ sub VersionMessage {
 sub get_cli_options() {
 
     our %cli_options = (
+        'detect-inactivity'        => CLI_OPTION_DETECT_INACTIVITY,
+        'inactivity-threshold'     => CLI_OPTION_INACTIVITY_THRESHOLD,
         'html-output'              => CLI_OPTION_DEFAULT_TO_HTML_OUTPUT,
         'title'                    => CLI_OPTION_TITLE,
         'keep-date'                => CLI_OPTION_KEEP_DATE,
@@ -2761,6 +2826,8 @@ sub get_cli_options() {
     );
 
     GetOptions (
+        'detect-inactivity'        => \$cli_options{'detect-inactivity'},
+        'inactivity-threshold=i'   => \$cli_options{'inactivity-threshold'},
         'html-output'              => \$cli_options{'html-output'},
         'title'                    => \$cli_options{'title'},
         'keep-date'                => \$cli_options{'keep-date'},
@@ -2795,6 +2862,8 @@ sub help() {
     print << "    EOF"
 
 Options and their default values if they have any:
+    [--detect-innactivity]
+    [--inactivity-threshold $cli_options{'inactivity-threshold'}]
     [--host-statistics-threshold $cli_options{'host-statistics-threshold'}]
     [--html-output]
     [--no-embedded-css]
@@ -2828,6 +2897,8 @@ sub main() {
         unbreak_lines_only_loop();
     } elsif (cli_option_is_set('statistics')) {
         stats_loop();
+    } elsif (cli_option_is_set('detect-inactivity')) {
+        inactivity_detection_loop();
     } else {
         print_intro();
         parse_loop();
@@ -2843,7 +2914,8 @@ B<privoxy-log-parser> - A parser and syntax-highlighter for Privoxy log messages
 
 =head1 SYNOPSIS
 
-B<privoxy-log-parser> [B<--html-output>]
+B<privoxy-log-parser> [B<--detect-inactivity>] [B<--inactivity-threshold msecs>]
+[B<--html-output>]
 [B<--no-msecs>] [B<--no-syntax-higlighting>] [B<--statistics>]
 [B<--shorten-thread-ids>] [B<--show-ineffective-filters>]
 [B<--url-statistics-threshold>] [B<--version>]
@@ -2870,6 +2942,9 @@ will hide the "filter foo caused 0 hits" message.
 
 =head1 OPTIONS
 
+[B<--detect-inactivity>] Instead of syntax highlighting, detect inactivities
+of more than B<inactivity-threshold> miliseconds. Mainly useful for debugging.
+
 [B<--host-statistics-threshold>] Only show the request count for a host
 if it's above or equal to the given threshold. If the threshold is 0, host
 statistics are disabled.
@@ -2878,6 +2953,9 @@ statistics are disabled.
 omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is active.
 This option is only intended to make embedding log excerpts in web pages easier.
 It does not escape any input!
+
+[B<--inactivity-threshold>] Specifies the number of miliseconds between log
+messages to consider inactivity when running in [B<--detect-inactivity>] mode.
 
 [B<--keep-date>] Don't remove the date when printing highlighted log messages.
 Useful when parsing multiple log files at once.
