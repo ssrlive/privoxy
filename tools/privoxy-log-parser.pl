@@ -2655,7 +2655,7 @@ sub parse_loop() {
 
 sub stats_loop() {
 
-    my ($day, $time_stamp, $msecs, $thread, $log_level, $content);
+    my ($day, $time_stamp, $thread, $log_level, $content);
     my $strict_checks = cli_option_is_set('strict-checks');
     my %log_level_handlers = (
          'Connect:'           => \&gather_loglevel_connect_stats,
