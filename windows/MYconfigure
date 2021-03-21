@@ -76,6 +76,10 @@ LDFLAGS="${LDFLAGS} -fstack-protector-strong"
 LDFLAGS="${LDFLAGS} -Wl,--nxcompat"
 # https://en.wikipedia.org/wiki/Data_Execution_Prevention
 #   Enable DEP with -Wl,--nxcompat
+# also called NX or nxcompat for "no execute"  see: https://en.wikipedia.org/wiki/NX_bit
+#   $ peflags -v privoxy.exe
+#   privoxy.exe: coff(0x0106[+executable_image,+line_nums_stripped,+32bit_machine]) pe(0x0140[+dynamicbase,+nxcompat])
+
 
 LDFLAGS="${LDFLAGS} -Wl,--dynamicbase,--export-all-symbols"
 # https://en.wikipedia.org/wiki/Address_space_layout_randomization
