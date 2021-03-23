@@ -189,7 +189,7 @@ https://www.privoxy.org/donate
 86) Add a server-body-tagger action. This is trivial as as all the
     functionality required to do it already exists.
 
-87) Add a client-body-tagger action. This, too, is trivial.
+87) Add a client-body-tagger action. Work in progress.
 
 88) Investigate if there's a Perl module that Privoxy-Regression-Test
     could optionally use to keep connections alive, preferably while
