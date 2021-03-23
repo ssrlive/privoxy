@@ -1602,7 +1602,7 @@ struct configuration_spec * load_config(void)
  * single-threaded 0|1
  * *************************************************************************/
          case hash_single_threaded :
-            config->multi_threaded =  0 == parse_toggle_state(cmd, arg);
+            config->multi_threaded = 0 == parse_toggle_state(cmd, arg);
             break;
 
 /* *************************************************************************
