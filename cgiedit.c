@@ -4509,7 +4509,7 @@ static jb_err action_render_string_actions_template(struct map * exports,
    int filter_identifier = 0;
    int i;
    char *prepared_template = strdup("");
-   const struct action_type_info* type = &action_type_info[string_action_type->action_type];
+   const struct action_type_info *type = &action_type_info[string_action_type->action_type];
 
    struct action_multi {
        char radio;
