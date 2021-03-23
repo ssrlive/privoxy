@@ -3124,7 +3124,7 @@ static jb_err cgi_edit_process_string_action(struct client_state *csp,
             break;
          default:
             log_error(LOG_LEVEL_ERROR,
-               "Unknown filter type: %c for filter %s. Filter ignored.", type, name);
+               "Unknown action type: %c for action %s. Action ignored.", type, name);
             continue;
       }
 
