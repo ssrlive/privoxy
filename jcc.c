@@ -2173,7 +2173,7 @@ static int update_client_headers(struct client_state *csp, size_t new_content_le
 
 /*********************************************************************
  *
- * Function    : can_filter_request_body
+ * Function    : can_buffer_request_body
  *
  * Description : Checks if the current request body can be stored in
  *               the client_iob without hitting buffer limit.
@@ -2185,7 +2185,7 @@ static int update_client_headers(struct client_state *csp, size_t new_content_le
  *               FALSE otherwise.
  *
  *********************************************************************/
-static int can_filter_request_body(const struct client_state *csp)
+static int can_buffer_request_body(const struct client_state *csp)
 {
    if (!can_add_to_iob(csp->client_iob, csp->config->buffer_limit,
                        csp->expected_client_content_length))
@@ -2210,7 +2210,7 @@ static int can_filter_request_body(const struct client_state *csp)
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *
- * Returns     :  0 on success, anything else is an error.
+ * Returns     :  0 on success, 1 on error, 2 if the request got crunched.
  *
  *********************************************************************/
 static int send_http_request(struct client_state *csp)
@@ -2939,27 +2939,41 @@ static void continue_https_chat(struct client_state *csp)
    assert(csp->server_connection.sfd != JB_INVALID_SOCKET);
 
    if (csp->expected_client_content_length != 0 &&
-      client_body_filters_enabled(csp->action) &&
-      can_filter_request_body(csp))
+      (client_body_filters_enabled(csp->action) ||
+       client_body_taggers_enabled(csp->action)) &&
+      can_buffer_request_body(csp))
    {
       int content_modified;
-      size_t buffered_content_length;
 
       if (read_https_request_body(csp))
       {
          /* XXX: handle */
          return;
       }
-      buffered_content_length = csp->expected_client_content_length;
-      content_modified  = execute_client_body_filters(csp, &buffered_content_length);
-      if ((content_modified == 1) &&
-         (buffered_content_length != csp->expected_client_content_length) &&
-         update_client_headers(csp, buffered_content_length))
+      if (client_body_taggers_enabled(csp->action))
       {
-         log_error(LOG_LEVEL_HEADER, "Failed to update client headers "
-            "after filtering the encrypted client body");
-         /* XXX: handle */
-         return;
+         execute_client_body_taggers(csp, csp->expected_client_content_length);
+         if (crunch_response_triggered(csp, crunchers_all))
+         {
+            /*
+             * Yes. The client got the crunch response and we're done here.
+             */
+            return;
+         }
+      }
+      if (client_body_filters_enabled(csp->action))
+      {
+         size_t modified_content_length = csp->expected_client_content_length;
+         content_modified = execute_client_body_filters(csp,
+            &modified_content_length);
+         if ((content_modified == 1) &&
+            (modified_content_length != csp->expected_client_content_length) &&
+            update_client_headers(csp, modified_content_length))
+         {
+            /* XXX: Send error response */
+            log_error(LOG_LEVEL_HEADER, "Error updating client headers");
+            return;
+         }
       }
       csp->expected_client_content_length = 0;
    }
@@ -4362,7 +4376,9 @@ static void chat(struct client_state *csp)
 
    /* If we need to apply client body filters, buffer the whole request now. */
    if (csp->expected_client_content_length != 0 &&
-      client_body_filters_enabled(csp->action) && can_filter_request_body(csp))
+      (client_body_filters_enabled(csp->action) ||
+         client_body_taggers_enabled(csp->action)) &&
+      can_buffer_request_body(csp))
    {
       int content_modified;
       size_t modified_content_length;
@@ -4370,8 +4386,8 @@ static void chat(struct client_state *csp)
 #ifdef FEATURE_HTTPS_INSPECTION
       if (client_use_ssl(csp) && read_https_request_body(csp))
       {
-         log_error(LOG_LEVEL_ERROR,
-            "Failed to buffer the encrypted request body to apply filters");
+         log_error(LOG_LEVEL_ERROR, "Failed to buffer the encrypted "
+            "request body to apply filters or taggers.");
          log_error(LOG_LEVEL_CLF,
             "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, csp->http->cmd);
 
@@ -4387,7 +4403,7 @@ static void chat(struct client_state *csp)
       if (read_http_request_body(csp))
       {
          log_error(LOG_LEVEL_ERROR,
-            "Failed to buffer the request body to apply filters");
+            "Failed to buffer the request body to apply filters or taggers,");
          log_error(LOG_LEVEL_CLF,
             "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, csp->http->cmd);
 
@@ -4396,16 +4412,30 @@ static void chat(struct client_state *csp)
 
          return;
       }
-      modified_content_length = csp->expected_client_content_length;
-      content_modified = execute_client_body_filters(csp,
-         &modified_content_length);
-      if ((content_modified == 1) &&
-         (modified_content_length != csp->expected_client_content_length) &&
-         update_client_headers(csp, modified_content_length))
+      if (client_body_taggers_enabled(csp->action))
       {
-         /* XXX: Send error response */
-         log_error(LOG_LEVEL_HEADER, "Error updating client headers");
-         return;
+         execute_client_body_taggers(csp, csp->expected_client_content_length);
+         if (crunch_response_triggered(csp, crunchers_all))
+         {
+            /*
+             * Yes. The client got the crunch response and we're done here.
+             */
+            return;
+         }
+      }
+      if (client_body_filters_enabled(csp->action))
+      {
+         modified_content_length = csp->expected_client_content_length;
+         content_modified = execute_client_body_filters(csp,
+            &modified_content_length);
+         if ((content_modified == 1) &&
+            (modified_content_length != csp->expected_client_content_length) &&
+            update_client_headers(csp, modified_content_length))
+         {
+            /* XXX: Send error response */
+            log_error(LOG_LEVEL_HEADER, "Error updating client headers");
+            return;
+         }
       }
       csp->expected_client_content_length = 0;
    }
@@ -4650,7 +4680,13 @@ static void chat(struct client_state *csp)
 #endif
            ))
    {
-      if (send_http_request(csp))
+      int status = send_http_request(csp);
+      if (status == 2)
+      {
+         /* The request got crunched, a response has been delivered. */
+         return;
+      }
+      if (status != 0)
       {
          rsp = error_response(csp, "connect-failed");
          if (rsp)

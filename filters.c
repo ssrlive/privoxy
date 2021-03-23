@@ -2450,6 +2450,177 @@ int execute_client_body_filters(struct client_state *csp, size_t *content_length
 
 /*********************************************************************
  *
+ * Function    :  execute_client_body_taggers
+ *
+ * Description :  Executes client body taggers for the request that is
+ *                buffered in the client_iob.
+ *                XXX: Lots of code shared with header_tagger
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *          2  :  content_length = content length.
+ *
+ * Returns     :  XXX
+ *
+ *********************************************************************/
+jb_err execute_client_body_taggers(struct client_state *csp, size_t content_length)
+{
+   enum filter_type wanted_filter_type = FT_CLIENT_BODY_TAGGER;
+   int multi_action_index = ACTION_MULTI_CLIENT_BODY_TAGGER;
+   pcrs_job *job;
+
+   struct re_filterfile_spec *b;
+   struct list_entry *tag_name;
+
+   assert(client_body_taggers_enabled(csp->action));
+
+   if (content_length == 0)
+   {
+      /*
+       * No content, no tagging necessary.
+       */
+      return JB_ERR_OK;
+   }
+
+   log_error(LOG_LEVEL_INFO, "Got to execute tagger on %N",
+      content_length, csp->client_iob->cur);
+
+   if (list_is_empty(csp->action->multi[multi_action_index])
+      || filters_available(csp) == FALSE)
+   {
+      /* Return early if no taggers apply or if none are available. */
+      return JB_ERR_OK;
+   }
+
+   /* Execute all applying taggers */
+   for (tag_name = csp->action->multi[multi_action_index]->first;
+        NULL != tag_name; tag_name = tag_name->next)
+   {
+      char *modified_tag = NULL;
+      char *tag = csp->client_iob->cur;
+      size_t size = content_length;
+      pcrs_job *joblist;
+
+      b = get_filter(csp, tag_name->str, wanted_filter_type);
+      if (b == NULL)
+      {
+         continue;
+      }
+
+      joblist = b->joblist;
+
+      if (b->dynamic) joblist = compile_dynamic_pcrs_job_list(csp, b);
+
+      if (NULL == joblist)
+      {
+         log_error(LOG_LEVEL_TAGGING,
+            "Tagger %s has empty joblist. Nothing to do.", b->name);
+         continue;
+      }
+
+      /* execute their pcrs_joblist on the body. */
+      for (job = joblist; NULL != job; job = job->next)
+      {
+         const int hits = pcrs_execute(job, tag, size, &modified_tag, &size);
+
+         if (0 < hits)
+         {
+            /* Success, continue with the modified version. */
+            if (tag != csp->client_iob->cur)
+            {
+               freez(tag);
+            }
+            tag = modified_tag;
+         }
+         else
+         {
+            /* Tagger doesn't match */
+            if (0 > hits)
+            {
+               /* Regex failure, log it but continue anyway. */
+               log_error(LOG_LEVEL_ERROR,
+                  "Problems with tagger \'%s\': %s",
+                  b->name, pcrs_strerror(hits));
+            }
+            freez(modified_tag);
+         }
+      }
+
+      if (b->dynamic) pcrs_free_joblist(joblist);
+
+      /* If this tagger matched */
+      if (tag != csp->client_iob->cur)
+      {
+         if (0 == size)
+         {
+            /*
+             * There is no technical limitation which makes
+             * it impossible to use empty tags, but I assume
+             * no one would do it intentionally.
+             */
+            freez(tag);
+            log_error(LOG_LEVEL_TAGGING,
+               "Tagger \'%s\' created an empty tag. Ignored.", b->name);
+            continue;
+         }
+
+         if (list_contains_item(csp->action->multi[ACTION_MULTI_SUPPRESS_TAG], tag))
+         {
+            log_error(LOG_LEVEL_TAGGING,
+               "Tagger \'%s\' didn't add tag \'%s\': suppressed",
+               b->name, tag);
+            freez(tag);
+            continue;
+         }
+
+         if (!list_contains_item(csp->tags, tag))
+         {
+            if (JB_ERR_OK != enlist(csp->tags, tag))
+            {
+               log_error(LOG_LEVEL_ERROR,
+                  "Insufficient memory to add tag \'%s\', "
+                  "based on tagger \'%s\'",
+                  tag, b->name);
+            }
+            else
+            {
+               char *action_message;
+               /*
+                * update the action bits right away, to make
+                * tagging based on tags set by earlier taggers
+                * of the same kind possible.
+                */
+               if (update_action_bits_for_tag(csp, tag))
+               {
+                  action_message = "Action bits updated accordingly.";
+               }
+               else
+               {
+                  action_message = "No action bits update necessary.";
+               }
+
+               log_error(LOG_LEVEL_TAGGING,
+                  "Tagger \'%s\' added tag \'%s\'. %s",
+                  b->name, tag, action_message);
+            }
+         }
+         else
+         {
+            /* XXX: Is this log-worthy? */
+            log_error(LOG_LEVEL_TAGGING,
+               "Tagger \'%s\' didn't add tag \'%s\'. Tag already present",
+               b->name, tag);
+         }
+         freez(tag);
+      }
+   }
+
+   return JB_ERR_OK;
+}
+
+
+/*********************************************************************
+ *
  * Function    :  get_url_actions
  *
  * Description :  Gets the actions for this URL.
@@ -2889,6 +3060,24 @@ int client_body_filters_enabled(const struct current_action_spec *action)
    return !list_is_empty(action->multi[ACTION_MULTI_CLIENT_BODY_FILTER]);
 }
 
+
+/*********************************************************************
+ *
+ * Function    :  client_body_taggers_enabled
+ *
+ * Description :  Checks whether there are any client body taggers
+ *                enabled for the current request.
+ *
+ * Parameters  :
+ *          1  :  action = Action spec to check.
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise
+ *
+ *********************************************************************/
+int client_body_taggers_enabled(const struct current_action_spec *action)
+{
+   return !list_is_empty(action->multi[ACTION_MULTI_CLIENT_BODY_TAGGER]);
+}
 
 /*********************************************************************
  *
