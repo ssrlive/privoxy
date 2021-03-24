@@ -2449,7 +2449,7 @@ sub print_stats() {
         print "HTTP version distribution unknown. No CLF message parsed yet. Is 'debug 512' enabled?\n";
     }
     if (exists $stats{'status-code'}) {
-        print "HTTP status codes:\n";
+        print "HTTP status codes according to 'debug 512' (status codes sent by the server may differ):\n";
         foreach my $status_code (sort {$stats{'status-code'}{$b} <=> $stats{'status-code'}{$a}} keys %{$stats{'status-code'}}) {
             printf "%8d : %-8d\n",  $stats{'status-code'}{$status_code}, $status_code;
         }
