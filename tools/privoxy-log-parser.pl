@@ -2760,24 +2760,27 @@ sub time_stamp_to_msecs($) {
 sub inactivity_detection_loop() {
 
     our %cli_options;
-    my ($time_stamp, $thread, $log_level, $content);
+    my ($date, $time_stamp, $thread, $log_level, $content);
     my ($msecs, $previous_msecs, $inactivity);
     my $inactivity_threshold = $cli_options{'inactivity-threshold'};
-    my $previous_message;
-    my $log_message_out_of_order = 0;
+    my $previous_date;
+    my $log_messages_out_of_order = 0;
 
     while (<>) {
-        (undef, $time_stamp, $thread, $log_level, $content) = split(/ /, $_, 5);
+        ($date, $time_stamp, $thread, $log_level, $content) = split(/ /, $_, 5);
 
         next if (not defined($log_level));
         next if ($time_stamp eq "-");
         $msecs = time_stamp_to_msecs($time_stamp);
         unless (defined $msecs) {
             print "Failed to convert $time_stamp into miliseconds\n";
+            print "$_";
             next;
         }
         unless (defined $previous_msecs) {
             $previous_msecs = $msecs;
+            $previous_date = $date;
+            print "$_";
             next;
         }
         $inactivity = $msecs - $previous_msecs;
@@ -2786,18 +2789,23 @@ sub inactivity_detection_loop() {
             # a Privoxy thread may be moved off schedule between
             # getting the timestamp for the log message and actually
             # writing it.
-            $log_message_out_of_order++;
+            $log_messages_out_of_order++;
         }
         if ($inactivity > $inactivity_threshold) {
-            #print "$previous_message";
-            print "Detected inactivity: $inactivity msecs\n";
+            if ($previous_date eq $date) {
+                print "Detected inactivity: $inactivity msecs\n";
+            } else {
+                # While we could include the date in the timestamp
+                # we currently don't.
+                print "Detected date change. Timestamp difference ignored.\n";
+            }
         }
         print "$_";
         $previous_msecs = $msecs;
-        $previous_message = $_;
+        $previous_date = $date;
     }
-    if ($log_message_out_of_order) {
-        print "At least $log_message_out_of_order messages were written out of the chronological order.\n";
+    if ($log_messages_out_of_order) {
+        print "At least $log_messages_out_of_order messages were written out of the chronological order.\n";
         print "This can result in false positives. Consider sorting the log first.\n";
     }
 }
