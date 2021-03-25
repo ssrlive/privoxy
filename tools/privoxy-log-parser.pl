@@ -2984,8 +2984,9 @@ will hide the "filter foo caused 0 hits" message.
 
 =head1 OPTIONS
 
-[B<--detect-inactivity>] Instead of syntax highlighting, detect inactivities
-of more than B<inactivity-threshold> miliseconds. Mainly useful for debugging.
+[B<--detect-inactivity>] Instead of syntax highlighting, detect periods
+of log inactivity of more than the amount of miliseconds specified with
+the B<--inactivity-threshold> option. Mainly useful for debugging.
 
 [B<--host-statistics-threshold>] Only show the request count for a host
 if it's above or equal to the given threshold. If the threshold is 0, host
@@ -2996,8 +2997,9 @@ omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is ac
 This option is only intended to make embedding log excerpts in web pages easier.
 It does not escape any input!
 
-[B<--inactivity-threshold>] Specifies the number of miliseconds between log
-messages to consider inactivity when running in [B<--detect-inactivity>] mode.
+[B<--inactivity-threshold msecs>] Specifies the number of miliseconds between
+log messages to consider inactivity when running in [B<--detect-inactivity>]
+mode.
 
 [B<--keep-date>] Don't remove the date when printing highlighted log messages.
 Useful when parsing multiple log files at once.
