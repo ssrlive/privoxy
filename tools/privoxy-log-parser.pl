@@ -2823,18 +2823,16 @@ sub main() {
     set_background(DEFAULT_BACKGROUND);
     prepare_our_stuff();
 
-    print_intro();
-
     # XXX: should explicitly reject incompatible argument combinations
     if (cli_option_is_set('unbreak-lines-only')) {
         unbreak_lines_only_loop();
     } elsif (cli_option_is_set('statistics')) {
         stats_loop();
     } else {
+        print_intro();
         parse_loop();
+        print_outro();
     }
-
-    print_outro();
 }
 
 main();
