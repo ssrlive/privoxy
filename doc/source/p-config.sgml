@@ -3098,6 +3098,14 @@ forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010
     If you aren't using an occasionally slow proxy like Tor, reducing
     it to a few seconds should be fine.
    </para>
+   <warning>
+    <para>
+     When a TLS library is being used to read or write data from a socket with
+     <literal><ulink url="actions-file.html#HTTPS-INSPECTION">https-inspection</ulink></literal>
+     enabled the socket-timeout currently isn't applied and the timeout
+     used depends on the library (which may not even use a timeout).
+    </para>
+   </warning>
   </listitem>
  </varlistentry>
  <varlistentry>
