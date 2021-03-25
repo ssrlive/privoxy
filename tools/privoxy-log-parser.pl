@@ -2876,7 +2876,7 @@ will hide the "filter foo caused 0 hits" message.
 if it's above or equal to the given threshold. If the threshold is 0, host
 statistics are disabled.
 
-[B<--html-output>] Use HTML and CSS for the syntax highlighting. If this option is
+[B<--html-output>] Use HTML and CSS when syntax highlighting. If this option is
 omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is active.
 This option is only intended to make embedding log excerpts in web pages easier.
 It does not escape any input!
