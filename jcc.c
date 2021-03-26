@@ -2873,7 +2873,7 @@ static jb_err process_encrypted_request_headers(struct client_state *csp)
       return JB_ERR_PARSE;
    }
 
-   log_error(LOG_LEVEL_HEADER, "Encrypted request processed");
+   log_error(LOG_LEVEL_HEADER, "Encrypted request headers processed");
    log_error(LOG_LEVEL_REQUEST, "https://%s%s", csp->http->hostport,
       csp->http->path);
 
