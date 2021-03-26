@@ -2322,13 +2322,15 @@ static int read_https_request_body(struct client_state *csp)
       size_t max_bytes_to_read = to_read < sizeof(buf) ? to_read : sizeof(buf);
 
       log_error(LOG_LEVEL_CONNECT,
-         "Waiting for up to %lu bytes of request body from the client.",
+         "Buffering encrypted client body. Prepared to read up to %lu bytes.",
          max_bytes_to_read);
       len = ssl_recv_data(&(csp->ssl_client_attr), buf,
          (unsigned)max_bytes_to_read);
       if (len <= 0)
       {
-         log_error(LOG_LEVEL_CONNECT, "Failed receiving request body from %s", csp->ip_addr_str);
+         log_error(LOG_LEVEL_CONNECT,
+            "Did not receive the whole encrypted request body from %s",
+            csp->ip_addr_str);
          return 1;
       }
       if (add_to_iob(csp->client_iob, csp->config->buffer_limit, (char *)buf, len))
@@ -2341,13 +2343,13 @@ static int read_https_request_body(struct client_state *csp)
    if (to_read != 0)
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Not enough request body has been read: expected %lu more bytes",
+         "Not enough encrypted request body has been read: expected %lu more bytes",
          to_read);
       return 1;
    }
 
    log_error(LOG_LEVEL_CONNECT,
-      "The last %llu bytes of the request body have been read",
+      "The last %llu bytes of the encrypted request body have been read",
       csp->expected_client_content_length);
    return 0;
 }
