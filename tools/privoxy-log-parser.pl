@@ -1895,6 +1895,11 @@ sub handle_loglevel_connect($) {
         # The peer notified us that the connection on socket 11 is going to be closed
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Client socket \d is no longer usable/) {
+
+        # Client socket 7 is no longer usable. The server socket has been closed.
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
