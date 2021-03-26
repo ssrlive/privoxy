@@ -2385,7 +2385,7 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
          max_bytes_to_read = (int)csp->expected_client_content_length;
       }
       log_error(LOG_LEVEL_CONNECT,
-         "Waiting for up to %d bytes of request body from the client.",
+         "Prepared to read up to %d bytes of encrypted request body from the client.",
          max_bytes_to_read);
       len = ssl_recv_data(&(csp->ssl_client_attr), buf,
          (unsigned)max_bytes_to_read);
