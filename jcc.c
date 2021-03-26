@@ -1835,7 +1835,8 @@ static jb_err receive_client_request(struct client_state *csp)
          if (!data_is_available(csp->cfd, csp->config->socket_timeout))
          {
             log_error(LOG_LEVEL_ERROR,
-               "Stopped grabbing the client headers.");
+               "Client headers did not arrive in time. Timeout: %d",
+               csp->config->socket_timeout);
             destroy_list(headers);
             return JB_ERR_PARSE;
          }
