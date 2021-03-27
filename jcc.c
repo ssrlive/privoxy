@@ -2676,9 +2676,10 @@ static jb_err change_encrypted_request_destination(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  process_encrypted_request
+ * Function    :  process_encrypted_request_headers
  *
- * Description :  Receives and parses an encrypted request.
+ * Description :  Receives and parses the encrypted headers send
+ *                by the client when https-inspecting.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2687,7 +2688,7 @@ static jb_err change_encrypted_request_destination(struct client_state *csp)
  *                JB_ERR_PARSE or JB_ERR_MEMORY otherwise
  *
  *********************************************************************/
-static jb_err process_encrypted_request(struct client_state *csp)
+static jb_err process_encrypted_request_headers(struct client_state *csp)
 {
    char *p;
    char *request_line;
@@ -2937,7 +2938,7 @@ static void continue_https_chat(struct client_state *csp)
 {
    const struct forward_spec *fwd;
 
-   if (JB_ERR_OK != process_encrypted_request(csp))
+   if (JB_ERR_OK != process_encrypted_request_headers(csp))
    {
       csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return;
@@ -4319,7 +4320,7 @@ static void chat(struct client_state *csp)
             "Failed to open a secure connection with the client");
          return;
       }
-      if (JB_ERR_OK != process_encrypted_request(csp))
+      if (JB_ERR_OK != process_encrypted_request_headers(csp))
       {
          close_client_ssl_connection(csp);
          return;
