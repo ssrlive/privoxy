@@ -2520,9 +2520,10 @@ static int send_https_request(struct client_state *csp)
 
 /*********************************************************************
  *
- * Function    :  receive_encrypted_request
+ * Function    :  receive_encrypted_request_headers
  *
- * Description :  Receives an encrypted request.
+ * Description :  Receives the encrypted request headers when
+ *                https-inspecting.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -2531,7 +2532,7 @@ static int send_https_request(struct client_state *csp)
  *                JB_ERR_PARSE or JB_ERR_MEMORY otherwise
  *
  *********************************************************************/
-static jb_err receive_encrypted_request(struct client_state *csp)
+static jb_err receive_encrypted_request_headers(struct client_state *csp)
 {
    char buf[BUFFER_SIZE];
    int len;
@@ -2703,7 +2704,7 @@ static jb_err process_encrypted_request(struct client_state *csp)
       csp->flags |= CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
    }
 #endif
-   err = receive_encrypted_request(csp);
+   err = receive_encrypted_request_headers(csp);
    if (err != JB_ERR_OK)
    {
       if (csp->client_iob->cur == NULL ||
