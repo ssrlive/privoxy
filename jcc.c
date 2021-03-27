@@ -4340,13 +4340,14 @@ static void chat(struct client_state *csp)
    }
 #endif
 
+   log_applied_actions(csp->action);
+
    /* decide how to route the HTTP request */
    fwd = forward_url(csp, http);
 
    freez(csp->headers->first->str);
    build_request_line(csp, fwd, &csp->headers->first->str);
 
-   log_applied_actions(csp->action);
    if (fwd->forward_host)
    {
       log_error(LOG_LEVEL_CONNECT, "via [%s]:%d to: %s",
