@@ -2080,12 +2080,13 @@ static int read_http_request_body(struct client_state *csp)
 
    if (to_read != 0)
    {
-      log_error(LOG_LEVEL_CONNECT, "Not enough request body has been read: expected %llu more bytes",
-         csp->expected_client_content_length);
+      log_error(LOG_LEVEL_CONNECT,
+         "Not enough request body has been read: expected %lu more bytes",
+         to_read);
       return 1;
    }
-   log_error(LOG_LEVEL_CONNECT, "The last %llu bytes of the request body have been read",
-      csp->expected_client_content_length);
+   log_error(LOG_LEVEL_CONNECT,
+      "The last %d bytes of the request body have been read", len);
    return 0;
 }
 
