@@ -2407,21 +2407,20 @@ char *execute_content_filters(struct client_state *csp)
  * Function    :  execute_client_body_filters
  *
  * Description :  Executes client body filters for the request that is buffered
- *                in the client_iob. Upon success moves client_iob cur pointer
- *                to the end of the processed data.
+ *                in the client_iob. The client_iob is updated with the filtered
+ *                content.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
  *          2  :  content_length = content length. Upon successful filtering
  *                the passed value is updated with the new content length.
  *
- * Returns     :  Pointer to the modified buffer, or
- *                NULL if filtering failed or wasn't necessary.
+ * Returns     :  1 if the content has been filterd. 0 if it hasn't.
  *
  *********************************************************************/
-char *execute_client_body_filters(struct client_state *csp, size_t *content_length)
+int execute_client_body_filters(struct client_state *csp, size_t *content_length)
 {
-   char *ret;
+   char *filtered_content;
 
    assert(client_body_filters_enabled(csp->action));
 
@@ -2430,15 +2429,22 @@ char *execute_client_body_filters(struct client_state *csp, size_t *content_leng
       /*
        * No content, no filtering necessary.
        */
-      return NULL;
+      return 0;
    }
 
-   ret = pcrs_filter_request_body(csp, csp->client_iob->cur, content_length);
-   if (ret != NULL)
+   filtered_content = pcrs_filter_request_body(csp, csp->client_iob->cur, content_length);
+   if (filtered_content != NULL)
    {
-      csp->client_iob->cur = csp->client_iob->eod;
+      freez(csp->client_iob->buf);
+      csp->client_iob->buf  = filtered_content;
+      csp->client_iob->cur  = csp->client_iob->buf;
+      csp->client_iob->eod  = csp->client_iob->cur + *content_length;
+      csp->client_iob->size = *content_length;
+
+      return 1;
    }
-   return ret;
+   
+   return 0;
 }
 
 

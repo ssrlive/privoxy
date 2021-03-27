@@ -288,6 +288,13 @@ static const char CLIENT_BODY_PARSE_ERROR_RESPONSE[] =
    "Connection: close\r\n\r\n"
    "Failed parsing or buffering the chunk-encoded client body.\n";
 
+static const char CLIENT_BODY_BUFFER_ERROR_RESPONSE[] =
+   "HTTP/1.1 400 Failed reading client body\r\n"
+   "Content-Type: text/plain\r\n"
+   "Connection: close\r\n\r\n"
+   "Failed to buffer the client body to apply content filters.\n"
+   "Could be caused by a socket timeout\n";
+
 static const char UNSUPPORTED_CLIENT_EXPECTATION_ERROR_RESPONSE[] =
    "HTTP/1.1 417 Expecting too much\r\n"
    "Content-Type: text/plain\r\n"
@@ -2210,33 +2217,6 @@ static int send_http_request(struct client_state *csp)
 {
    char *hdr;
    int write_failure;
-   const char *to_send;
-   size_t to_send_len;
-   int filter_client_body = csp->expected_client_content_length != 0 &&
-      client_body_filters_enabled(csp->action) && can_filter_request_body(csp);
-
-   if (filter_client_body)
-   {
-      if (read_http_request_body(csp))
-      {
-         return 1;
-      }
-      to_send_len = csp->expected_client_content_length;
-      to_send = execute_client_body_filters(csp, &to_send_len);
-      if (to_send == NULL)
-      {
-         /* just flush client_iob */
-         filter_client_body = FALSE;
-      }
-      else if (to_send_len != csp->expected_client_content_length &&
-         update_client_headers(csp, to_send_len))
-      {
-         log_error(LOG_LEVEL_HEADER, "Error updating client headers");
-         freez(to_send);
-         return 1;
-      }
-      csp->expected_client_content_length = 0;
-   }
 
    hdr = list_to_text(csp->headers);
    if (hdr == NULL)
@@ -2257,25 +2237,10 @@ static int send_http_request(struct client_state *csp)
    {
       log_error(LOG_LEVEL_CONNECT, "Failed sending request headers to: %s: %E",
          csp->http->hostport);
-      if (filter_client_body)
-      {
-         freez(to_send);
-      }
       return 1;
    }
 
-   if (filter_client_body)
-   {
-      write_failure = 0 != write_socket(csp->server_connection.sfd, to_send, to_send_len);
-      freez(to_send);
-      if (write_failure)
-      {
-         log_error(LOG_LEVEL_CONNECT, "Failed sending filtered request body to: %s: %E",
-            csp->http->hostport);
-         return 1;
-      }
-   }
-
+   /* XXX: Filtered data is not sent if there's a pipelined request? */
    if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
       && (flush_iob(csp->server_connection.sfd, csp->client_iob, 0) < 0))
    {
@@ -2444,32 +2409,6 @@ static int send_https_request(struct client_state *csp)
    char *hdr;
    int ret;
    long flushed = 0;
-   const char *to_send;
-   size_t to_send_len;
-   int filter_client_body = csp->expected_client_content_length != 0 &&
-      client_body_filters_enabled(csp->action) && can_filter_request_body(csp);
-
-   if (filter_client_body)
-   {
-      if (read_https_request_body(csp))
-      {
-         return 1;
-      }
-      to_send_len = csp->expected_client_content_length;
-      to_send = execute_client_body_filters(csp, &to_send_len);
-      if (to_send == NULL)
-      {
-         /* just flush client_iob */
-         filter_client_body = FALSE;
-      }
-      else if (to_send_len != csp->expected_client_content_length &&
-         update_client_headers(csp, to_send_len))
-      {
-         log_error(LOG_LEVEL_HEADER, "Error updating client headers");
-         return 1;
-      }
-      csp->expected_client_content_length = 0;
-   }
 
    hdr = list_to_text(csp->https_headers);
    if (hdr == NULL)
@@ -2496,18 +2435,7 @@ static int send_https_request(struct client_state *csp)
       return 1;
    }
 
-   if (filter_client_body)
-   {
-      ret = ssl_send_data(&(csp->ssl_server_attr), (const unsigned char *)to_send, to_send_len);
-      freez(to_send);
-      if (ret < 0)
-      {
-         log_error(LOG_LEVEL_CONNECT, "Failed sending filtered request body to: %s",
-            csp->http->hostport);
-         return 1;
-      }
-   }
-
+   /* XXX: Client body isn't sent if there's pipelined data? */
    if (((csp->flags & CSP_FLAG_PIPELINED_REQUEST_WAITING) == 0)
       && ((flushed = ssl_flush_socket(&(csp->ssl_server_attr),
             csp->client_iob)) < 0))
@@ -3009,6 +2937,32 @@ static void continue_https_chat(struct client_state *csp)
       return;
    }
    assert(csp->server_connection.sfd != JB_INVALID_SOCKET);
+
+   if (csp->expected_client_content_length != 0 &&
+      client_body_filters_enabled(csp->action) &&
+      can_filter_request_body(csp))
+   {
+      int content_modified;
+      size_t buffered_content_length;
+
+      if (read_https_request_body(csp))
+      {
+         /* XXX: handle */
+         return;
+      }
+      buffered_content_length = csp->expected_client_content_length;
+      content_modified  = execute_client_body_filters(csp, &buffered_content_length);
+      if ((content_modified == 1) &&
+         (buffered_content_length != csp->expected_client_content_length) &&
+         update_client_headers(csp, buffered_content_length))
+      {
+         log_error(LOG_LEVEL_HEADER, "Failed to update client headers "
+            "after filtering the encrypted client body");
+         /* XXX: handle */
+         return;
+      }
+      csp->expected_client_content_length = 0;
+   }
 
    fwd = forward_url(csp, csp->http);
    if (!connection_destination_matches(&csp->server_connection, csp->http, fwd))
@@ -4405,6 +4359,56 @@ static void chat(struct client_state *csp)
       }
    }
 #endif
+
+   /* If we need to apply client body filters, buffer the whole request now. */
+   if (csp->expected_client_content_length != 0 &&
+      client_body_filters_enabled(csp->action) && can_filter_request_body(csp))
+   {
+      int content_modified;
+      size_t modified_content_length;
+
+#ifdef FEATURE_HTTPS_INSPECTION
+      if (client_use_ssl(csp) && read_https_request_body(csp))
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to buffer the encrypted request body to apply filters");
+         log_error(LOG_LEVEL_CLF,
+            "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, csp->http->cmd);
+
+         ssl_send_data_delayed(&(csp->ssl_client_attr),
+            (const unsigned char *)CLIENT_BODY_BUFFER_ERROR_RESPONSE,
+            strlen(CLIENT_BODY_BUFFER_ERROR_RESPONSE),
+            get_write_delay(csp));
+
+         return;
+      }
+      else
+#endif
+      if (read_http_request_body(csp))
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to buffer the request body to apply filters");
+         log_error(LOG_LEVEL_CLF,
+            "%s - - [%T] \"%s\" 400 0", csp->ip_addr_str, csp->http->cmd);
+
+         write_socket_delayed(csp->cfd, CLIENT_BODY_BUFFER_ERROR_RESPONSE,
+            strlen(CLIENT_BODY_BUFFER_ERROR_RESPONSE), get_write_delay(csp));
+
+         return;
+      }
+      modified_content_length = csp->expected_client_content_length;
+      content_modified = execute_client_body_filters(csp,
+         &modified_content_length);
+      if ((content_modified == 1) &&
+         (modified_content_length != csp->expected_client_content_length) &&
+         update_client_headers(csp, modified_content_length))
+      {
+         /* XXX: Send error response */
+         log_error(LOG_LEVEL_HEADER, "Error updating client headers");
+         return;
+      }
+      csp->expected_client_content_length = 0;
+   }
 
    log_applied_actions(csp->action);
 
