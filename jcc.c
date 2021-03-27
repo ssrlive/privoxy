@@ -3109,6 +3109,16 @@ static void handle_established_connection(struct client_state *csp)
           */
          goto server_wants_to_talk;
       }
+      if (watch_client_socket && client_use_ssl(csp) &&
+         is_ssl_pending(&(csp->ssl_client_attr)))
+      {
+         /*
+          * The TLS libray may also consume all of the remaining data
+          * from the client when we're shuffling the data from an
+          * unbuffered request body to the server.
+          */
+         goto client_wants_to_talk;
+      }
 #endif
 #ifndef HAVE_POLL
       FD_ZERO(&rfds);
@@ -3250,7 +3260,13 @@ static void handle_established_connection(struct client_state *csp)
       if (FD_ISSET(csp->cfd, &rfds))
 #endif /* def HAVE_POLL*/
       {
-         int max_bytes_to_read = (int)csp->receive_buffer_size;
+         int max_bytes_to_read;
+
+#ifdef FEATURE_HTTPS_INSPECTION
+         client_wants_to_talk:
+#endif
+
+         max_bytes_to_read = (int)csp->receive_buffer_size;
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
          if ((csp->flags & CSP_FLAG_CLIENT_REQUEST_COMPLETELY_READ))
