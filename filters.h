@@ -102,6 +102,9 @@ extern int filters_available(const struct client_state *csp);
  */
 extern struct http_response *direct_response(struct client_state *csp);
 
+extern int get_bytes_missing_from_chunked_data(char *buffer, size_t size, size_t offset);
+extern int chunked_data_is_complete(char *buffer, size_t size, size_t offset);
+
 #ifdef FUZZ
 extern char *gif_deanimate_response(struct client_state *csp);
 extern jb_err remove_chunked_transfer_coding(char *buffer, size_t *size);

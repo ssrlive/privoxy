@@ -2115,6 +2115,172 @@ static filter_function_ptr get_filter_function(const struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  get_bytes_to_next_chunk_start
+ *
+ * Description :  Returns the number of bytes to the start of the
+ *                next chunk in the buffer.
+ *
+ * Parameters  :
+ *          1  :  buffer = Pointer to the text buffer
+ *          2  :  size = Number of bytes in the buffer.
+ *          3  :  offset = Where to expect the beginning of the next chunk.
+ *
+ * Returns     :  -1 if the size can't be determined or data is missing,
+ *                otherwise the number of bytes to the start of the next chunk
+ *                or 0 if the last chunk has been fully buffered.
+ *
+ *********************************************************************/
+static int get_bytes_to_next_chunk_start(char *buffer, size_t size, size_t offset)
+{
+   char *chunk_start;
+   char *p;
+   unsigned int chunk_size = 0;
+   int bytes_to_skip;
+
+   if (size <= offset || size < 5)
+   {
+      /*
+       * Not enough bytes bufferd to figure
+       * out the size of the next chunk.
+       */
+      return -1;
+   }
+
+   chunk_start = buffer + offset;
+
+   p = strstr(chunk_start, "\r\n");
+   if (NULL == p)
+   {
+      /*
+       * The line with the chunk-size hasn't been completely received
+       * yet (or is invalid).
+       */
+      log_error(LOG_LEVEL_RE_FILTER,
+         "Not enough or invalid data in buffer in chunk size line.");
+      return -1;
+   }
+
+   if (sscanf(chunk_start, "%x", &chunk_size) != 1)
+   {
+      /* XXX: Write test case to trigger this. */
+      log_error(LOG_LEVEL_ERROR, "Failed to parse chunk size. "
+         "Size: %lu, offset: %lu. Chunk size start: %N", size, offset,
+         (size - offset), chunk_start);
+      return -1;
+   }
+
+   /*
+    * To get to the start of the next chunk size we have to skip
+    * the line with the current chunk size followed by "\r\n" followd
+    * by the actual data and another "\r\n" following the data.
+    */
+   bytes_to_skip = (int)(p - chunk_start) + 2 + (int)chunk_size + 2;
+
+   if (bytes_to_skip <= 0)
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Failed to figure out chunk offset. %u and %d seem dubious.",
+         chunk_size, bytes_to_skip);
+      return -1;
+   }
+   if (chunk_size == 0)
+   {
+      if (bytes_to_skip <= (size - offset))
+      {
+         return 0;
+      }
+      else
+      {
+         log_error(LOG_LEVEL_INFO,
+            "Last chunk detected but we're still missing data.");
+         return -1;
+      }
+   }
+
+   return bytes_to_skip;
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  get_bytes_missing_from_chunked_data
+ *
+ * Description :  Figures out how many bytes of data we need to get
+ *                to the start of the next chunk of data (XXX: terminology).
+ *                Due to the nature of chunk-encoded data we can only see
+ *                how many data is missing according to the last chunk size
+ *                buffered.
+ *
+ * Parameters  :
+ *          1  :  buffer = Pointer to the text buffer
+ *          2  :  size = Number of bytes in the buffer.
+ *          3  :  offset = Where to expect the beginning of the next chunk.
+ *
+ * Returns     :  -1 if the data can't be parsed (yet),
+ *                 0 if the buffer is complete or a
+ *                 number of bytes that is missing.
+ *
+ *********************************************************************/
+int get_bytes_missing_from_chunked_data(char *buffer, size_t size, size_t offset)
+{
+   int ret = -1;
+   int last_valid_offset = -1;
+
+   if (size < offset || size < 5)
+   {
+      /* Not enough data buffered yet */
+      return -1;
+   }
+
+   do
+   {
+      ret = get_bytes_to_next_chunk_start(buffer, size, offset);
+      if (ret == -1)
+      {
+         return last_valid_offset;
+      }
+      if (ret == 0)
+      {
+         return 0;
+      }
+      if (offset != 0)
+      {
+         last_valid_offset = (int)offset;
+      }
+      offset += (size_t)ret;
+   } while (offset < size);
+
+   return (int)offset;
+
+}
+
+
+/*********************************************************************
+ *
+ * Function    :  chunked_data_is_complete
+ *
+ * Description :  Detects if a buffer with chunk-encoded data looks
+ *                complete.
+ *
+ * Parameters  :
+ *          1  :  buffer = Pointer to the text buffer
+ *          2  :  size = Number of bytes in the buffer.
+ *          3  :  offset = Where to expect the beginning of the
+ *                         first complete chunk.
+ *
+ * Returns     :  TRUE if it looks like the data is complete,
+ *                FALSE otherwise.
+ *
+ *********************************************************************/
+int chunked_data_is_complete(char *buffer, size_t size, size_t offset)
+{
+   return (0 == get_bytes_missing_from_chunked_data(buffer, size, offset));
+
+}
+
+
+/*********************************************************************
+ *
  * Function    :  remove_chunked_transfer_coding
  *
  * Description :  In-situ remove the "chunked" transfer coding as defined
@@ -2350,8 +2516,10 @@ char *execute_content_filters(struct client_state *csp)
    if (JB_ERR_OK != prepare_for_filtering(csp))
    {
       /*
-       * failed to de-chunk or decompress.
+       * We failed to de-chunk or decompress, don't accept
+       * another request on the client connection.
        */
+      csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
       return NULL;
    }
 

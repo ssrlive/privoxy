@@ -1653,6 +1653,14 @@ extern int fuzz_chunked_transfer_encoding(struct client_state *csp, char *fuzz_i
    {
       log_error(LOG_LEVEL_INFO, "Chunked body is incomplete or invalid");
    }
+   if (get_bytes_missing_from_chunked_data(csp->iob->cur, size, 0) == 0)
+   {
+      if (CHUNK_STATUS_BODY_COMPLETE != status)
+      {
+         log_error(LOG_LEVEL_ERROR,
+            "There's disagreement about whether or not the chunked body is complete.");
+      }
+   }
 
    return (JB_ERR_OK == remove_chunked_transfer_coding(csp->iob->cur, &size));
 
@@ -3051,6 +3059,7 @@ static void handle_established_connection(struct client_state *csp)
    long len = 0; /* for buffer sizes (and negative error codes) */
    int buffer_and_filter_content = 0;
    unsigned int write_delay;
+   size_t chunk_offset = 0;
 #ifdef FEATURE_HTTPS_INSPECTION
    int ret = 0;
    int use_ssl_tunnel = 0;
@@ -3139,23 +3148,6 @@ static void handle_established_connection(struct client_state *csp)
 #endif /* ndef HAVE_POLL */
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-      if ((csp->flags & CSP_FLAG_CHUNKED)
-         && !(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET)
-         && ((csp->iob->eod - csp->iob->cur) >= 5)
-         && !memcmp(csp->iob->eod-5, "0\r\n\r\n", 5))
-      {
-         /*
-          * XXX: This check should be obsolete now,
-          *      but let's wait a while to be sure.
-          */
-         log_error(LOG_LEVEL_CONNECT,
-            "Looks like we got the last chunk together with "
-            "the server headers but didn't detect it earlier. "
-            "We better stop reading.");
-         byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
-         csp->expected_content_length = byte_count;
-         csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
-      }
       if (server_body && server_response_is_complete(csp, byte_count))
       {
          if (csp->expected_content_length == byte_count)
@@ -3489,18 +3481,6 @@ static void handle_established_connection(struct client_state *csp)
          }
 
 #ifdef FEATURE_CONNECTION_KEEP_ALIVE
-         if (csp->flags & CSP_FLAG_CHUNKED)
-         {
-            if ((len >= 5) && !memcmp(csp->receive_buffer+len-5, "0\r\n\r\n", 5))
-            {
-               /* XXX: this is a temporary hack */
-               log_error(LOG_LEVEL_CONNECT,
-                  "Looks like we reached the end of the last chunk. "
-                  "We better stop reading.");
-               csp->expected_content_length = byte_count + (unsigned long long)len;
-               csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
-            }
-         }
          reading_done:
 #endif  /* FEATURE_CONNECTION_KEEP_ALIVE */
 
@@ -3743,6 +3723,27 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   byte_count = (unsigned long long)flushed;
                   freez(hdr);
+                  if ((csp->flags & CSP_FLAG_CHUNKED) && (chunk_offset != 0))
+                  {
+                     log_error(LOG_LEVEL_CONNECT,
+                        "Reducing chunk offset %lu by %ld to %lu.", chunk_offset, flushed,
+                        (chunk_offset - (unsigned)flushed));
+                     assert(chunk_offset >= flushed); /* XXX: Reachable with malicious input? */
+                     chunk_offset -= (unsigned)flushed;
+
+                     /* Make room in the iob. */
+                     csp->iob->cur = csp->iob->eod = csp->iob->buf;
+
+                     if (add_to_iob(csp->iob, csp->config->buffer_limit,
+                           csp->receive_buffer, len))
+                     {
+                        /* This is not supposed to happen but ... */
+                        csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+                        log_error(LOG_LEVEL_ERROR, "Failed to buffer %ld bytes of "
+                           "chunk-encoded data after resetting the buffer.", len);
+                        return;
+                     }
+                  }
                   buffer_and_filter_content = 0;
                   server_body = 1;
                }
@@ -3778,8 +3779,66 @@ static void handle_established_connection(struct client_state *csp)
                      return;
                   }
                }
+               if (csp->flags & CSP_FLAG_CHUNKED)
+               {
+                  /*
+                   * While we don't need the data to filter it, put it in the
+                   * buffer so we can keep track of the offset to the start of
+                   * the next chunk and detect when the response is finished.
+                   */
+                  size_t encoded_bytes = (size_t)(csp->iob->eod - csp->iob->cur);
+
+                  if (csp->config->buffer_limit / 4 < encoded_bytes)
+                  {
+                     /*
+                      * Reset the buffer to reduce the memory footprint.
+                      */
+                     log_error(LOG_LEVEL_CONNECT,
+                        "Reducing the chunk offset from %lu to %lu after "
+                        "discarding %lu bytes to make room in the buffer.",
+                        chunk_offset, (chunk_offset - encoded_bytes),
+                        encoded_bytes);
+                     chunk_offset -= encoded_bytes;
+                     csp->iob->cur = csp->iob->eod = csp->iob->buf;
+                  }
+                  if (add_to_iob(csp->iob, csp->config->buffer_limit,
+                     csp->receive_buffer, len))
+                  {
+                     /* This is not supposed to happen but ... */
+                     csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
+                     log_error(LOG_LEVEL_ERROR,
+                        "Failed to buffer %ld bytes of chunk-encoded data.",
+                        len);
+                     return;
+                  }
+               }
             }
             byte_count += (unsigned long long)len;
+
+            if (csp->flags & CSP_FLAG_CHUNKED)
+            {
+               int rc;
+               size_t encoded_bytes = (size_t)(csp->iob->eod - csp->iob->cur);
+
+               rc = get_bytes_missing_from_chunked_data(csp->iob->cur, encoded_bytes,
+                  chunk_offset);
+               if (rc >= 0)
+               {
+                  if (rc != 0)
+                  {
+                     chunk_offset = (size_t)rc;
+                  }
+
+                  if (chunked_data_is_complete(csp->iob->cur, encoded_bytes, chunk_offset))
+                  {
+                     log_error(LOG_LEVEL_CONNECT,
+                        "We buffered the last chunk of the response.");
+                     csp->expected_content_length = byte_count;
+                     csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
+                  }
+               }
+            }
+
             continue;
          }
          else
@@ -3986,18 +4045,30 @@ static void handle_established_connection(struct client_state *csp)
             }
 
             if ((csp->flags & CSP_FLAG_CHUNKED)
-               && !(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET)
-               && ((csp->iob->eod - csp->iob->cur) >= 5)
-               && !memcmp(csp->iob->eod-5, "0\r\n\r\n", 5))
+               && !(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET))
             {
-               log_error(LOG_LEVEL_CONNECT,
-                  "Looks like we got the last chunk together with "
-                  "the server headers. We better stop reading.");
-               byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
-               csp->expected_content_length = byte_count;
-               csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
-            }
+               int rc;
+               size_t encoded_size = (size_t)(csp->iob->eod - csp->iob->cur);
 
+               rc = get_bytes_missing_from_chunked_data(csp->iob->cur, encoded_size,
+                  chunk_offset);
+               if (rc >= 0)
+               {
+                  if (rc != 0)
+                  {
+                     chunk_offset = (size_t)rc;
+                  }
+                  if (chunked_data_is_complete(csp->iob->cur, encoded_size, chunk_offset))
+                  {
+                     log_error(LOG_LEVEL_CONNECT,
+                        "Looks like we got the last chunk together with "
+                        "the server headers. We better stop reading.");
+                     byte_count = (unsigned long long)(csp->iob->eod - csp->iob->cur);
+                     csp->expected_content_length = byte_count;
+                     csp->flags |= CSP_FLAG_CONTENT_LENGTH_SET;
+                  }
+               }
+            }
             csp->server_connection.response_received = time(NULL);
 
             if (crunch_response_triggered(csp, crunchers_light))
@@ -4065,6 +4136,32 @@ static void handle_established_connection(struct client_state *csp)
                      freez(hdr);
                      mark_server_socket_tainted(csp);
                      return;
+                  }
+               }
+               if (csp->flags & CSP_FLAG_CHUNKED &&
+                 !(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET))
+               {
+                  /*
+                   * In case of valid data we shouldn't flush more
+                   * data than chunk_offset but the data may be invalid.
+                   */
+                  if (chunk_offset >= len)
+                  {
+                     log_error(LOG_LEVEL_CONNECT,
+                        "Reducing chunk offset from %lu to %lu after flushing %ld bytes",
+                        chunk_offset, (chunk_offset - (unsigned)len), len);
+                     chunk_offset = chunk_offset - (unsigned)len;
+                  }
+                  else
+                  {
+                     log_error(LOG_LEVEL_CONNECT,
+                        "Keeping chunk offset at %lu despite flushing %ld bytes",
+                        chunk_offset, len);
+                     /*
+                      * If we can't parse the chunk-encoded data we should
+                      * not reuse the server connection.
+                      */
+                     mark_server_socket_tainted(csp);
                   }
                }
 				}
