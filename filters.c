@@ -2180,7 +2180,9 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
        */
       if (NULL == (from_p = strstr(from_p, "\r\n")))
       {
-         log_error(LOG_LEVEL_ERROR, "Parse error while stripping \"chunked\" transfer coding");
+         log_error(LOG_LEVEL_ERROR,
+            "Failed to strip \"chunked\" transfer coding. "
+            "Line with chunk size doesn't seem to end properly.");
          return JB_ERR_PARSE;
       }
       from_p += 2;
@@ -2195,7 +2197,8 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
       if (from_p + chunksize >= end_of_buffer)
       {
          log_error(LOG_LEVEL_ERROR,
-            "End of chunk is beyond the end of the buffer.");
+            "Failed to decode content for filtering. "
+            "One chunk end is beyond the end of the buffer.");
          return JB_ERR_PARSE;
       }
 
