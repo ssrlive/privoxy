@@ -2317,6 +2317,18 @@ static jb_err remove_chunked_transfer_coding(char *buffer, size_t *size)
    assert(buffer);
    from_p = to_p = buffer;
 
+#ifndef FUZZ
+   /*
+    * Refuse to de-chunk invalid or incomplete data unless we're fuzzing.
+    */
+   if (!chunked_data_is_complete(buffer, *size, 0))
+   {
+      log_error(LOG_LEVEL_ERROR,
+         "Chunk-encoding appears to be invalid. Content can't be filtered.");
+      return JB_ERR_PARSE;
+   }
+#endif
+
    if (sscanf(buffer, "%x", &chunksize) != 1)
    {
       log_error(LOG_LEVEL_ERROR, "Invalid first chunksize while stripping \"chunked\" transfer coding");
