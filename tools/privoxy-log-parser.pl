@@ -1625,9 +1625,10 @@ sub handle_loglevel_connect($) {
         $c = highlight_matched_host($c, '(?<=for )[^\s]+');
         $c =~ s@(?<=in slot )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Socket/) {
+    } elsif ($c =~ m/^Socket \d+ (already|closed)/) {
 
         # Socket 16 already forgotten or never remembered.
+        # Socket 9 closed while waiting for client headers
         $c =~ s@(?<=Socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^The connection to/) {
@@ -1902,6 +1903,12 @@ sub handle_loglevel_connect($) {
 
         # Client socket 7 is no longer usable. The server socket has been closed.
         $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Socket timeout \d+ reached/) {
+
+        # Socket timeout 3 reached: http://127.0.0.1:20000/no-filter/chunked-content/36
+        $c =~ s@(?<=timeout )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c = highlight_matched_url($c, "(?<=reached: ).*")
 
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
