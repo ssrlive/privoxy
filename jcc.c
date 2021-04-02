@@ -2539,7 +2539,7 @@ static jb_err receive_encrypted_request(struct client_state *csp)
 
    do
    {
-      log_error(LOG_LEVEL_HEADER, "Reading encrypted headers");
+      log_error(LOG_LEVEL_HEADER, "Waiting for encrypted client headers");
       if (!is_ssl_pending(&(csp->ssl_client_attr)) &&
           !data_is_available(csp->cfd, csp->config->socket_timeout))
       {
