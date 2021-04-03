@@ -3028,6 +3028,67 @@ static void continue_https_chat(struct client_state *csp)
 
 /*********************************************************************
  *
+ * Function    :  send_server_headers
+ *
+ * Description :  Sends the server headers to the client.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     :  0 on succes, -1 on error.
+ *
+ *********************************************************************/
+static int send_server_headers(struct client_state *csp)
+{
+   char *server_headers;
+   int ret;
+
+   server_headers = list_to_text(csp->headers);
+   if (server_headers == NULL)
+   {
+      /*
+       * Memory is too tight to even generate the header.
+       * Send our static "Out-of-memory" page.
+       */
+      log_error(LOG_LEVEL_ERROR,
+         "Out of memory while trying to send server headers.");
+      send_crunch_response(csp, cgi_error_memory());
+      mark_server_socket_tainted(csp);
+#ifdef FEATURE_HTTPS_INSPECTION
+      close_client_and_server_ssl_connections(csp);
+#endif
+      return -1;
+   }
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp))
+   {
+      ret = ssl_send_data_delayed(&(csp->ssl_client_attr),
+         (const unsigned char *)server_headers, strlen(server_headers),
+         get_write_delay(csp));
+   }
+   else
+#endif
+   {
+      ret = write_socket_delayed(csp->cfd, server_headers, strlen(server_headers),
+         get_write_delay(csp));
+   }
+   freez(server_headers);
+   if (ret < 0)
+   {
+      log_error(LOG_LEVEL_ERROR, "Failed to send server headers to the client.");
+      mark_server_socket_tainted(csp);
+#ifdef FEATURE_HTTPS_INSPECTION
+      close_client_and_server_ssl_connections(csp);
+#endif
+      return -1;
+   }
+
+   return 0;
+
+}
+
+/*********************************************************************
+ *
  * Function    :  handle_established_connection
  *
  * Description :  Shuffle data between client and server once the
@@ -3042,7 +3103,6 @@ static void continue_https_chat(struct client_state *csp)
  *********************************************************************/
 static void handle_established_connection(struct client_state *csp)
 {
-   char *hdr;
    char *p;
    int n;
 #ifdef HAVE_POLL
@@ -3384,8 +3444,6 @@ static void handle_established_connection(struct client_state *csp)
 
       /*
        * The server wants to talk. It could be the header or the body.
-       * If `hdr' is null, then it's the header otherwise it's the body.
-       * FIXME: Does `hdr' really mean `host'? No.
        */
 #ifdef HAVE_POLL
       if (poll_fds[1].revents != 0)
@@ -3568,11 +3626,9 @@ static void handle_established_connection(struct client_state *csp)
                         "Failed to update server headers. after filtering.");
                   }
 
-                  hdr = list_to_text(csp->headers);
-                  if (hdr == NULL)
+                  if (send_server_headers(csp))
                   {
-                     /* FIXME Should handle error properly */
-                     log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
+                     return;
                   }
 
 #ifdef FEATURE_HTTPS_INSPECTION
@@ -3581,16 +3637,12 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
-                              (const unsigned char *)hdr, strlen(hdr),
-                              get_write_delay(csp)) < 0)
-                        || (ssl_send_data_delayed(&(csp->ssl_client_attr),
+                     if (ssl_send_data_delayed(&(csp->ssl_client_attr),
                               (const unsigned char *) ((p != NULL) ? p : csp->iob->cur),
-                              csp->content_length, get_write_delay(csp)) < 0))
+                              csp->content_length, get_write_delay(csp)) < 0)
                      {
                         log_error(LOG_LEVEL_ERROR,
                            "Failed to send the modified content to the client over TLS");
-                        freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
                         close_client_and_server_ssl_connections(csp);
@@ -3600,19 +3652,16 @@ static void handle_established_connection(struct client_state *csp)
                   else
 #endif /* def FEATURE_HTTPS_INSPECTION */
                   {
-                     if (write_socket_delayed(csp->cfd, hdr, strlen(hdr), write_delay)
-                      || write_socket_delayed(csp->cfd, ((p != NULL) ? p : csp->iob->cur),
+                     if (write_socket_delayed(csp->cfd, ((p != NULL) ? p : csp->iob->cur),
                          (size_t)csp->content_length, write_delay))
                      {
                         log_error(LOG_LEVEL_ERROR, "write modified content to client failed: %E");
-                        freez(hdr);
                         freez(p);
                         mark_server_socket_tainted(csp);
                         return;
                      }
                   }
 
-                  freez(hdr);
                   freez(p);
                }
 
@@ -3654,29 +3703,15 @@ static void handle_established_connection(struct client_state *csp)
                 */
                if (add_to_iob(csp->iob, csp->config->buffer_limit, csp->receive_buffer, len))
                {
-                  size_t hdrlen;
                   long flushed;
 
                   log_error(LOG_LEVEL_INFO,
                      "Flushing header and buffers. Stepping back from filtering.");
 
-                  hdr = list_to_text(csp->headers);
-                  if (hdr == NULL)
+                  if (send_server_headers(csp))
                   {
-                     /*
-                      * Memory is too tight to even generate the header.
-                      * Send our static "Out-of-memory" page.
-                      */
-                     log_error(LOG_LEVEL_ERROR, "Out of memory while trying to flush.");
-                     rsp = cgi_error_memory();
-                     send_crunch_response(csp, rsp);
-                     mark_server_socket_tainted(csp);
-#ifdef FEATURE_HTTPS_INSPECTION
-                     close_client_and_server_ssl_connections(csp);
-#endif
                      return;
                   }
-                  hdrlen = strlen(hdr);
 
 #ifdef FEATURE_HTTPS_INSPECTION
                   /*
@@ -3684,9 +3719,7 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (client_use_ssl(csp))
                   {
-                     if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
-                             (const unsigned char *)hdr, hdrlen, get_write_delay(csp)) < 0)
-                        || ((flushed = ssl_flush_socket(&(csp->ssl_client_attr),
+                     if (((flushed = ssl_flush_socket(&(csp->ssl_client_attr),
                                 csp->iob)) < 0)
                         || (ssl_send_data_delayed(&(csp->ssl_client_attr),
                               (const unsigned char *)csp->receive_buffer, (size_t)len,
@@ -3694,7 +3727,6 @@ static void handle_established_connection(struct client_state *csp)
                      {
                         log_error(LOG_LEVEL_CONNECT,
                            "Flush header and buffers to client failed");
-                        freez(hdr);
                         mark_server_socket_tainted(csp);
                         close_client_and_server_ssl_connections(csp);
                         return;
@@ -3703,26 +3735,22 @@ static void handle_established_connection(struct client_state *csp)
                   else
 #endif /* def FEATURE_HTTPS_INSPECTION */
                   {
-                     if (write_socket_delayed(csp->cfd, hdr, hdrlen, write_delay)
-                      || ((flushed = flush_iob(csp->cfd, csp->iob, write_delay)) < 0)
+                     if (((flushed = flush_iob(csp->cfd, csp->iob, write_delay)) < 0)
                       || write_socket_delayed(csp->cfd, csp->receive_buffer, (size_t)len,
                             write_delay))
                      {
                         log_error(LOG_LEVEL_CONNECT,
                            "Flush header and buffers to client failed: %E");
-                        freez(hdr);
                         mark_server_socket_tainted(csp);
                         return;
                      }
                   }
 
                   /*
-                   * Reset the byte_count to the amount of bytes
-                   * we just flushed. len will be added a few lines below,
-                   * hdrlen doesn't matter for LOG_LEVEL_CLF.
+                   * Reset the byte_count to the amount of bytes we just
+                   * flushed. len will be added a few lines below.
                    */
                   byte_count = (unsigned long long)flushed;
-                  freez(hdr);
                   if ((csp->flags & CSP_FLAG_CHUNKED) && (chunk_offset != 0))
                   {
                      log_error(LOG_LEVEL_CONNECT,
@@ -4037,12 +4065,6 @@ static void handle_established_connection(struct client_state *csp)
 #endif
                return;
             }
-            hdr = list_to_text(csp->headers);
-            if (hdr == NULL)
-            {
-               /* FIXME Should handle error properly */
-               log_error(LOG_LEVEL_FATAL, "Out of memory parsing server header");
-            }
 
             if ((csp->flags & CSP_FLAG_CHUNKED)
                && !(csp->flags & CSP_FLAG_CONTENT_LENGTH_SET))
@@ -4079,7 +4101,6 @@ static void handle_established_connection(struct client_state *csp)
                 * delivered the crunch response to the client
                 * and are done here after cleaning up.
                 */
-               freez(hdr);
                mark_server_socket_tainted(csp);
 #ifdef FEATURE_HTTPS_INSPECTION
                close_client_and_server_ssl_connections(csp);
@@ -4098,22 +4119,23 @@ static void handle_established_connection(struct client_state *csp)
                 * may be in the buffer). Use standard or secured
                 * connection.
                 */
+               if (send_server_headers(csp))
+               {
+                  return;
+               }
 #ifdef FEATURE_HTTPS_INSPECTION
                if (client_use_ssl(csp))
                {
-                  if ((ssl_send_data_delayed(&(csp->ssl_client_attr),
-                          (const unsigned char *)hdr, strlen(hdr),
-                          get_write_delay(csp)) < 0)
-                     || ((len = ssl_flush_socket(&(csp->ssl_client_attr),
-                            csp->iob)) < 0))
+                  if ((len = ssl_flush_socket(&(csp->ssl_client_attr),
+                           csp->iob)) < 0)
                   {
-                     log_error(LOG_LEVEL_CONNECT, "Write header to client failed");
+                     log_error(LOG_LEVEL_CONNECT,
+                        "Sending buffered bytes to the client failed");
 
                      /*
                       * The write failed, so don't bother mentioning it
                       * to the client... it probably can't hear us anyway.
                       */
-                     freez(hdr);
                      mark_server_socket_tainted(csp);
 #ifdef FEATURE_HTTPS_INSPECTION
                      close_client_and_server_ssl_connections(csp);
@@ -4124,16 +4146,14 @@ static void handle_established_connection(struct client_state *csp)
                else
 #endif /* def FEATURE_HTTPS_INSPECTION */
                {
-                  if (write_socket_delayed(csp->cfd, hdr, strlen(hdr), write_delay)
-                     || ((len = flush_iob(csp->cfd, csp->iob, write_delay)) < 0))
+                  if ((len = flush_iob(csp->cfd, csp->iob, write_delay)) < 0)
                   {
                      log_error(LOG_LEVEL_ERROR,
-                        "write header to client failed");
+                        "Sending buffered bytes to the client failed.");
                      /*
                       * The write failed, so don't bother mentioning it
                       * to the client... it probably can't hear us anyway.
                       */
-                     freez(hdr);
                      mark_server_socket_tainted(csp);
                      return;
                   }
@@ -4168,7 +4188,6 @@ static void handle_established_connection(struct client_state *csp)
 
             /* we're finished with the server's header */
 
-            freez(hdr);
             server_body = 1;
 
             /*
