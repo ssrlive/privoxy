@@ -8116,11 +8116,11 @@ Requests</title>
 <sect2 id="license"><title>License</title>
 
 <sect3 id="gplv2"><title>GNU General Public License version 2</title>
- <screen><![ RCDATA [ &GPLv2; ]]></screen>
+ <literallayout class="Monospaced"><![ RCDATA [ &GPLv2; ]]></literallayout>
 </sect3>
 
 <sect3 id="gplv3"><title>GNU General Public License version 3</title>
- <screen><![ RCDATA [ &GPLv3; ]]></screen>
+ <literallayout class="Monospaced"><![ RCDATA [ &GPLv3; ]]></literallayout>
 </sect3>
 
 <sect3 id="third-party-licenses"><title>Third-party licenses and copyrights</title>
