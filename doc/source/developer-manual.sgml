@@ -2257,7 +2257,7 @@ $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.
       </listitem>
       <listitem>
        <para>
-         Update the code status (CODE_STATUS="xxx") in configure.in to one of
+         Update the code status (CODE_STATUS="xxx") in <filename>configure.in</filename> to one of
          "alpha", "beta" or "stable".
        </para>
       </listitem>
@@ -2280,7 +2280,7 @@ $ ./configure                # rebuild GNUmakefile
        <para>
         If action file processing has changed and is not backward-compatible,
         make sure the "for-privoxy-version=x.y.z" minimum version number in
-        default.action.master has been updated:
+        <filename>default.action.master</filename> has been updated:
        </para>
         <programlisting>
 {{settings}}

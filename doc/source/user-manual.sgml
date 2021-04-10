@@ -399,7 +399,8 @@ How to install the binary packages depends on your operating system:
         <ulink url="https://sourceforge.net/projects/nsis/files/NSIS%203/">
                     https://sourceforge.net/projects/nsis/files/NSIS%203/</ulink>
         and extract the NSIS directory to <literal>privoxy/windows</literal>.
-        Then edit the windows/GNUmakefile to set the location of the NSIS executable - eg:
+        Then edit the <filename>windows/GNUmakefile</filename> to set the location
+        of the NSIS executable - eg:
       </para>
       <screen>
 # Path to NSIS
