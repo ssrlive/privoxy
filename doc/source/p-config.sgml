@@ -1295,8 +1295,8 @@ debug 65536 # Log the applying actions
     (ACL's, see below), and/or a firewall.
    </para>
    <para>
-    If you open <application>Privoxy</application> to untrusted users, you will
-    also want to make sure that the following actions are disabled:  <literal><link
+    If you open <application>Privoxy</application> to untrusted users, you should
+    also make sure that the following actions are disabled:  <literal><link
     linkend="enable-edit-actions">enable-edit-actions</link></literal> and
     <literal><link linkend="enable-remote-toggle">enable-remote-toggle</link></literal>
    </para>
@@ -3008,9 +3008,9 @@ forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010
     There are also a few privacy implications you should be aware of.
    </para>
    <para>
-    If this option is effective, outgoing connections are shared between
+    If this option is enabled, outgoing connections are shared between
     clients (if there are more than one) and closing the browser that initiated
-    the outgoing connection does no longer affect the connection between &my-app;
+    the outgoing connection does not affect the connection between &my-app;
     and the server unless the client's request hasn't been completed yet.
    </para>
    <para>
