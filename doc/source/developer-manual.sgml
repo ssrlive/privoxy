@@ -2596,8 +2596,6 @@ make tarball-dist
         First, <emphasis>make sure that you have freshly exported the right
         version into an empty directory</emphasis>. (See "Building and releasing
         packages" above).
-        <!-- XXX  ??? are we still basing releases off a tarball???
-          -->
       </para>
 
       <para>
