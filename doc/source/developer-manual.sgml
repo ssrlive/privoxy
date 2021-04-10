@@ -2834,6 +2834,7 @@ git clean -fd
           <programlisting>
 cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co OSXPackageBuilder
 </programlisting>
+<!-- FIXME  cvs is no more!!! -->
         <para>
           The module contains complete instructions on its usage in the file
           <filename>OS X Package Builder HOWTO.txt</filename>.
@@ -2861,6 +2862,7 @@ cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co OSXPa
           <programlisting>
 cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co osxsetup
 </programlisting>
+<!--  FIXME  cvs is no more -->
         <para>
           Then run:
         </para>
@@ -2905,6 +2907,7 @@ zip -r privoxyosx_setup_x.y.z.zip Privoxy.pkg
           <programlisting>
 cvs -z3 -d:pserver:anonymous@ijbswa.cvs.sourceforge.net:/cvsroot/ijbswa co macsetup
 </programlisting>
+<!-- FIXME  cvs is no more -->
         <para>
           The module contains complete instructions on its usage in its
           <filename>README</filename> file. The end result will be the
