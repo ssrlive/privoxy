@@ -3136,16 +3136,11 @@ forward-socks4, forward-socks4a, forward-socks5 and forward-socks5t</title>
   </listitem>
  </varlistentry>
  <varlistentry>
-  <term>Effect if unset:</term>
+  <term>Notes:</term>
   <listitem>
    <para>
     Connections are served until a resource limit is reached.
    </para>
-  </listitem>
- </varlistentry>
- <varlistentry>
-  <term>Notes:</term>
-  <listitem>
    <para>
     &my-app; creates one thread (or process) for every incoming client
     connection that isn't rejected based on the access control settings.
