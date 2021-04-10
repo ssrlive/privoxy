@@ -2599,6 +2599,23 @@ make tarball-dist
         <!-- XXX  ??? are we still basing releases off a tarball???
           -->
       </para>
+
+      <para>
+        Check that you have the current versions of the
+        <ulink url="https://sourceforge.net/projects/nsis/files/NSIS%203/">
+                    NSIS installer</ulink>,
+        <ulink url="https://ftp.pcre.org/pub/pcre/">PCRE library</ulink>,
+        <ulink url="https://tls.mbed.org/download">MBED TLS library</ulink>,
+        <ulink url="https://github.com/google/brotli/releases">
+                    Brotli library</ulink>,
+        and that the <emphasis>MAKENSIS</emphasis> evar in
+        <filename>windows/GNUMakefile</filename>
+        points to the NSIS installer program.  (See the
+        <ulink url="../user-manual/installation.html#WINBUILD-CYGWIN">
+        <emphasis>Building from Source / Windows</emphasis></ulink>
+        section of the User Manual for details.)
+      </para>
+
       <para>
         Then you can build the package.  This is fully automated, and is
         controlled by <filename>windows/GNUmakefile</filename>.
