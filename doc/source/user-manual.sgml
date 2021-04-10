@@ -5357,8 +5357,8 @@ new action
   <listitem>
    <para>
     This action allows &my-app; to filter encrypted requests and responses.
-    For this to work &my-app; has to generate a certificate and send it
-    to the client which has to accept it.
+    For this to work &my-app; has to generate a certificate for the web site
+    and send it to the client which has to accept it.
    </para>
    <para>
     Before this works the directives in the
