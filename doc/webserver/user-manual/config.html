@@ -573,7 +573,7 @@
               <p>A debug level of 1 is informative because it will show you each request as it happens. <span class=
               "emphasis"><i class="EMPHASIS">1, 1024, 4096 and 8192 are recommended</i></span> so that you will notice
               when things go wrong. The other levels are probably only of interest if you are hunting down a specific
-              problem. They can produce a hell of an output (especially 16).</p>
+              problem. They can produce a lot of output (especially 16).</p>
               <p>If you are used to the more verbose settings, simply enable the debug lines below again.</p>
               <p>If you want to use pure CLF (Common Log Format), you should set <span class="QUOTE">"debug 512"</span>
               <span class="emphasis"><i class="EMPHASIS">ONLY</i></span> and not enable anything else.</p>
@@ -708,8 +708,8 @@
               behaves differently.</p>
               <p>If you configure <span class="APPLICATION">Privoxy</span> to be reachable from the network, consider
               using <a href="config.html#ACLS">access control lists</a> (ACL's, see below), and/or a firewall.</p>
-              <p>If you open <span class="APPLICATION">Privoxy</span> to untrusted users, you will also want to make
-              sure that the following actions are disabled: <tt class="LITERAL"><a href=
+              <p>If you open <span class="APPLICATION">Privoxy</span> to untrusted users, you should also make sure
+              that the following actions are disabled: <tt class="LITERAL"><a href=
               "config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</a></tt> and <tt class="LITERAL"><a href=
               "config.html#ENABLE-REMOTE-TOGGLE">enable-remote-toggle</a></tt></p>
             </dd>
@@ -1438,7 +1438,7 @@
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class="SCREEN"> forward           localhost/     .</pre>
+                    <pre class="SCREEN">  forward           localhost/     .</pre>
                   </td>
                 </tr>
               </table>
@@ -1837,8 +1837,8 @@
             <dd>
               <p>Note that reusing connections doesn't necessary cause speedups. There are also a few privacy
               implications you should be aware of.</p>
-              <p>If this option is effective, outgoing connections are shared between clients (if there are more than
-              one) and closing the browser that initiated the outgoing connection does no longer affect the connection
+              <p>If this option is enabled, outgoing connections are shared between clients (if there are more than
+              one) and closing the browser that initiated the outgoing connection does not affect the connection
               between <span class="APPLICATION">Privoxy</span> and the server unless the client's request hasn't been
               completed yet.</p>
               <p>If the outgoing connection is idle, it will not be closed until either <span class=
@@ -1912,12 +1912,9 @@
             <dd>
               <p>128</p>
             </dd>
-            <dt>Effect if unset:</dt>
-            <dd>
-              <p>Connections are served until a resource limit is reached.</p>
-            </dd>
             <dt>Notes:</dt>
             <dd>
+              <p>Connections are served until a resource limit is reached.</p>
               <p><span class="APPLICATION">Privoxy</span> creates one thread (or process) for every incoming client
               connection that isn't rejected based on the access control settings.</p>
               <p>If the system is powerful enough, <span class="APPLICATION">Privoxy</span> can theoretically deal with
@@ -2134,18 +2131,18 @@
               <table border="0" bgcolor="#E0E0E0" width="90%">
                 <tr>
                   <td>
-                    <pre class="SCREEN">    # Best speed (compared to the other levels)
-    compression-level 1
+                    <pre class="SCREEN">  # Best speed (compared to the other levels)
+  compression-level 1
 
-    # Best compression
-    compression-level 9
+  # Best compression
+  compression-level 9
 
-    # No compression. Only useful for testing as the added header
-    # slightly increases the amount of data that has to be sent.
-    # If your benchmark shows that using this compression level
-    # is superior to using no compression at all, the benchmark
-    # is likely to be flawed.
-    compression-level 0</pre>
+  # No compression. Only useful for testing as the added header
+  # slightly increases the amount of data that has to be sent.
+  # If your benchmark shows that using this compression level
+  # is superior to using no compression at all, the benchmark
+  # is likely to be flawed.
+  compression-level 0</pre>
                   </td>
                 </tr>
               </table>
@@ -2624,38 +2621,37 @@
                 <tr>
                   <td>
                     <pre class="SCREEN">    # Explicitly set a couple of ciphers with names used by MbedTLS
-    cipher-list cipher-list TLS-ECDHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
-TLS-ECDHE-ECDSA-WITH-CHACHA20-POLY1305-SHA256:\
-TLS-DHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
-TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:\
-TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:\
-TLS-ECDHE-ECDSA-WITH-AES-256-CCM:\
-TLS-ECDHE-ECDSA-WITH-AES-256-CCM-8:\
-TLS-ECDHE-ECDSA-WITH-AES-128-CCM:\
-TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8:\
-TLS-ECDHE-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
-TLS-ECDHE-ECDSA-WITH-CAMELLIA-256-GCM-SHA384:\
-TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256:\
-TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:\
-TLS-ECDHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
-TLS-ECDHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
-TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:\
-TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:\
-TLS-DHE-RSA-WITH-AES-256-CCM:\
-TLS-DHE-RSA-WITH-AES-256-CCM-8:\
-TLS-DHE-RSA-WITH-AES-128-CCM:\
-TLS-DHE-RSA-WITH-AES-128-CCM-8:\
-TLS-DHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
-TLS-DHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
-TLS-ECDH-RSA-WITH-AES-128-GCM-SHA256:\
-TLS-ECDH-RSA-WITH-AES-256-GCM-SHA384:\
-TLS-ECDH-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
-TLS-ECDH-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
-TLS-ECDH-ECDSA-WITH-AES-128-GCM-SHA256:\
-TLS-ECDH-ECDSA-WITH-AES-256-GCM-SHA384:\
-TLS-ECDH-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
-TLS-ECDH-ECDSA-WITH-CAMELLIA-256-GCM-SHA384
-   </pre>
+  cipher-list cipher-list TLS-ECDHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+  TLS-ECDHE-ECDSA-WITH-CHACHA20-POLY1305-SHA256:\
+  TLS-DHE-RSA-WITH-CHACHA20-POLY1305-SHA256:\
+  TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:\
+  TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:\
+  TLS-ECDHE-ECDSA-WITH-AES-256-CCM:\
+  TLS-ECDHE-ECDSA-WITH-AES-256-CCM-8:\
+  TLS-ECDHE-ECDSA-WITH-AES-128-CCM:\
+  TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8:\
+  TLS-ECDHE-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+  TLS-ECDHE-ECDSA-WITH-CAMELLIA-256-GCM-SHA384:\
+  TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256:\
+  TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:\
+  TLS-ECDHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+  TLS-ECDHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+  TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:\
+  TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:\
+  TLS-DHE-RSA-WITH-AES-256-CCM:\
+  TLS-DHE-RSA-WITH-AES-256-CCM-8:\
+  TLS-DHE-RSA-WITH-AES-128-CCM:\
+  TLS-DHE-RSA-WITH-AES-128-CCM-8:\
+  TLS-DHE-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+  TLS-DHE-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+  TLS-ECDH-RSA-WITH-AES-128-GCM-SHA256:\
+  TLS-ECDH-RSA-WITH-AES-256-GCM-SHA384:\
+  TLS-ECDH-RSA-WITH-CAMELLIA-128-GCM-SHA256:\
+  TLS-ECDH-RSA-WITH-CAMELLIA-256-GCM-SHA384:\
+  TLS-ECDH-ECDSA-WITH-AES-128-GCM-SHA256:\
+  TLS-ECDH-ECDSA-WITH-AES-256-GCM-SHA384:\
+  TLS-ECDH-ECDSA-WITH-CAMELLIA-128-GCM-SHA256:\
+  TLS-ECDH-ECDSA-WITH-CAMELLIA-256-GCM-SHA384</pre>
                   </td>
                 </tr>
               </table>
@@ -2663,25 +2659,24 @@ TLS-ECDH-ECDSA-WITH-CAMELLIA-256-GCM-SHA384
                 <tr>
                   <td>
                     <pre class="SCREEN">    # Explicitly set a couple of ciphers with names used by OpenSSL
-cipher-list ECDHE-RSA-AES256-GCM-SHA384:\
-ECDHE-ECDSA-AES256-GCM-SHA384:\
-DH-DSS-AES256-GCM-SHA384:\
-DHE-DSS-AES256-GCM-SHA384:\
-DH-RSA-AES256-GCM-SHA384:\
-DHE-RSA-AES256-GCM-SHA384:\
-ECDH-RSA-AES256-GCM-SHA384:\
-ECDH-ECDSA-AES256-GCM-SHA384:\
-ECDHE-RSA-AES128-GCM-SHA256:\
-ECDHE-ECDSA-AES128-GCM-SHA256:\
-DH-DSS-AES128-GCM-SHA256:\
-DHE-DSS-AES128-GCM-SHA256:\
-DH-RSA-AES128-GCM-SHA256:\
-DHE-RSA-AES128-GCM-SHA256:\
-ECDH-RSA-AES128-GCM-SHA256:\
-ECDH-ECDSA-AES128-GCM-SHA256:\
-ECDHE-RSA-AES256-GCM-SHA384:\
-AES128-SHA
-   </pre>
+  cipher-list ECDHE-RSA-AES256-GCM-SHA384:\
+  ECDHE-ECDSA-AES256-GCM-SHA384:\
+  DH-DSS-AES256-GCM-SHA384:\
+  DHE-DSS-AES256-GCM-SHA384:\
+  DH-RSA-AES256-GCM-SHA384:\
+  DHE-RSA-AES256-GCM-SHA384:\
+  ECDH-RSA-AES256-GCM-SHA384:\
+  ECDH-ECDSA-AES256-GCM-SHA384:\
+  ECDHE-RSA-AES128-GCM-SHA256:\
+  ECDHE-ECDSA-AES128-GCM-SHA256:\
+  DH-DSS-AES128-GCM-SHA256:\
+  DHE-DSS-AES128-GCM-SHA256:\
+  DH-RSA-AES128-GCM-SHA256:\
+  DHE-RSA-AES128-GCM-SHA256:\
+  ECDH-RSA-AES128-GCM-SHA256:\
+  ECDH-ECDSA-AES128-GCM-SHA256:\
+  ECDHE-RSA-AES256-GCM-SHA384:\
+  AES128-SHA</pre>
                   </td>
                 </tr>
               </table>
@@ -2690,8 +2685,7 @@ AES128-SHA
                   <td>
                     <pre class=
                     "SCREEN">    # Use keywords instead of explicitly naming the ciphers (Does not work with MbedTLS)
-    cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
-   </pre>
+  cipher-list ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH</pre>
                   </td>
                 </tr>
               </table>
