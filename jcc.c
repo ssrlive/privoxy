@@ -6099,7 +6099,7 @@ static void listen_loop(void)
       if ((0 != config->max_client_connections)
          && (active_threads >= config->max_client_connections))
       {
-         log_error(LOG_LEVEL_CONNECT,
+         log_error(LOG_LEVEL_ERROR,
             "Rejecting connection from %s. Maximum number of connections reached.",
             csp->ip_addr_str);
          write_socket_delayed(csp->cfd, TOO_MANY_CONNECTIONS_RESPONSE,
