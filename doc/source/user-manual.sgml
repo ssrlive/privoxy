@@ -398,14 +398,92 @@ How to install the binary packages depends on your operating system:
             <!-- FIXME:  which version(s) are known to work? -->
         <ulink url="https://sourceforge.net/projects/nsis/files/NSIS%203/">
                     https://sourceforge.net/projects/nsis/files/NSIS%203/</ulink>
-        and extract the NSIS directory to <literal>privoxy/windows</literal>.
+        and extract the NSIS directory to <literal>/&lt;root-dir>/nsis/</literal>.
         Then edit the <filename>windows/GNUmakefile</filename> to set the location
         of the NSIS executable - eg:
       </para>
       <screen>
 # Path to NSIS
-MAKENSIS = ./nsis/makensis.exe
+MAKENSIS = /&lt;root-dir>/nsis/makensis.exe
 </screen>
+
+      <para>
+        Get the latest 8.x PCRE code from
+        <ulink url="https://ftp.pcre.org/pub/pcre/">PCRE
+                    https://ftp.pcre.org/pub/pcre/</ulink>
+        and build the static PCRE libraries with
+
+        <screen>
+export CFLAGS="-O2 -fstack-protector-strong -D_FORTIFY_SOURCE=2"
+export LDFLAGS="-fstack-protector-strong"
+export CPPFLAGS="-DPCRE_STATIC"
+
+./configure  --host=i686-w64-mingw32 \
+             --prefix=/usr/local/i686-w64-mingw32 \
+             --enable-utf  --enable-unicode-properties \
+             --enable-jit \
+             --enable-newline-is-anycrlf \
+             --enable-pcre16 \
+             --enable-pcre32 \
+             --disable-pcregrep-libbz2 \
+             --disable-pcregrep-libz \
+             --disable-pcretest-libreadline \
+             --disable-stack-for-recursion  \
+             --enable-static --disable-shared \
+  &&  make
+</screen>
+      </para>
+
+
+      <para>
+        If you want to be able to have Privoxy do TLS Inspection, get the latest
+        2.16.x MBED-TLS library source code from
+        <ulink url="https://github.com/ARMmbed/mbedtls/tags">
+                    https://github.com/ARMmbed/mbedtls/tags</ulink>,
+        extract the tar file into <literal>&lt;root-dir&gt;</literal>
+        and build the static libraries with
+        <programlisting>
+export WINDOWS_BUILD=1
+#  build for a Windows platform
+
+unset DEBUG
+
+export CC=i686-w64-mingw32-gcc
+export LD=i686-w64-mingw32-gcc
+export CFLAGS="-O2 -fstack-protector-strong -D_FORTIFY_SOURCE=2"
+export LDFLAGS="${LDFLAGS} -fstack-protector-strong"
+
+make lib
+#  build the libraries
+</programlisting>
+      </para>
+
+
+      <para>
+        Get the brotli library from
+        <ulink url="https://github.com/google/brotli/releases">
+                    https://github.com/google/brotli/releases</ulink>
+        and build the static libraries with
+        <programlisting>
+./bootstrap
+#  to create the GNU autotools files
+
+autoconf
+
+export CFLAGS="-O2 -fstack-protector-strong -D_FORTIFY_SOURCE=2"
+export LDFLAGS="${LDFLAGS} -fstack-protector-strong"
+
+./configure  --host=i686-w64-mingw32 \
+             --prefix=/usr/local/i686-w64-mingw32 \
+             --enable-static   \
+             --disable-shared  \
+             --with-gnu-ld     \
+             --disable-silent-rules \
+  && make
+</programlisting>
+      </para>
+
+
 
       </sect4>
 
@@ -440,7 +518,8 @@ MAKENSIS = ./nsis/makensis.exe
   --enable-zlib
   --enable-static-linking
   --disable-pthread
-  --disable-dynamic-pcre
+  --with-brotli
+  --with-mbedtls
 </literallayout>
 
       <para>
