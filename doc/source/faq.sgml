@@ -922,11 +922,13 @@ the differences?</title>
   url="../user-manual/actions-file.html#ALIASES">alias</ulink> just for such
   sticky situations:
  </para>
-  <screen># Gmail is a _fragile_ site:
+ <screen>
+# Gmail is a _fragile_ site:
 #
 { <literal>fragile</literal> }
- # Gmail is ...
- mail.google.com</screen>
+# Gmail is ...
+mail.google.com
+</screen>
  <para>
   Be sure to flush your browser's caches whenever making these kinds of
   changes, just to make sure the changes <quote>take</quote>.
@@ -1078,7 +1080,7 @@ with a browser? Does that not raise security issues?</title>
 </para>
 
  <screen>
-  listen-address  192.168.1.1:8118</screen>
+listen-address  192.168.1.1:8118</screen>
 
 <para>
  Save the file, and restart <application>Privoxy</application>. Configure
@@ -1091,7 +1093,7 @@ with a browser? Does that not raise security issues?</title>
 </para>
 
  <screen>
-  listen-address    :8118</screen>
+listen-address    :8118</screen>
 
 <para>
  And then use <application>Privoxy's</application>
@@ -1361,8 +1363,9 @@ and thus avoid individual browser configuration?</title>
   both in and out, for <literal>example.com</literal>:
 </para>
  <screen>
- { -crunch-incoming-cookies -crunch-outgoing-cookies -session-cookies-only -filter{content-cookies} }
-  .example.com</screen>
+{ -crunch-incoming-cookies -crunch-outgoing-cookies -session-cookies-only -filter{content-cookies} }
+.example.com
+</screen>
 <para>
  Place the above in <filename>user.action</filename>. Note that some of these may
  be off by default anyway, so this might be redundant, but there is no harm
@@ -1398,19 +1401,20 @@ and thus avoid individual browser configuration?</title>
  Here's one real easy one:
 </para>
  <screen>
- ############################################################
- # Blacklist
- ############################################################
- { <ulink url="../user-manual/actions-file.html#BLOCK">+block</ulink> }
- / # Block *all* URLs
+############################################################
+# Blacklist
+############################################################
+{ <ulink url="../user-manual/actions-file.html#BLOCK">+block</ulink> }
+/ # Block *all* URLs
 
- ############################################################
- # Whitelist
- ############################################################
- { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
-  kids.example.com
-  toys.example.com
-  games.example.com</screen>
+############################################################
+# Whitelist
+############################################################
+{ <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
+kids.example.com
+toys.example.com
+games.example.com
+</screen>
 <para>
  This allows access to only those three sites by first blocking all URLs, and
  then subsequently allowing three specific exceptions.
@@ -1454,20 +1458,22 @@ and thus avoid individual browser configuration?</title>
  following very simple rule in your <filename>user.action</filename>:
  </para>
  <screen>
- # Unblock everybody, everywhere
- { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
- / # UN-Block *all* URLs</screen>
+# Unblock everybody, everywhere
+{ <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> }
+/ # UN-Block *all* URLs
+</screen>
 <para>
  Or even a more comprehensive reversing of various ad related actions:
 </para>
  <screen>
- # Unblock everybody, everywhere, and turn off appropriate filtering, etc
- { <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> \
+# Unblock everybody, everywhere, and turn off appropriate filtering, etc
+{ <ulink url="../user-manual/actions-file.html#BLOCK">-block</ulink> \
   <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-SIZE">-filter{banners-by-size}</ulink> \
   <ulink url="../user-manual/actions-file.html#FILTER-BANNERS-BY-LINK">-filter{banners-by-link}</ulink> \
   <literal>allow-popups</literal> \
- }
- / # UN-Block *all* URLs and allow ads</screen>
+}
+/ # UN-Block *all* URLs and allow ads
+</screen>
 <para>
  This last <quote>action</quote> in this compound statement,
  <literal>allow-popups</literal>, is an <ulink
@@ -1508,8 +1514,9 @@ the <emphasis>BLOCKED</emphasis> page?</title>
  available as compile-time options. You should
  <command>configure</command> the sources as follows:
 </para>
- <screen>
- ./configure  --disable-toggle  --disable-editor  --disable-force</screen>
+<screen>
+./configure  --disable-toggle  --disable-editor  --disable-force
+</screen>
 <para>
  This will create an executable with hard-coded security features so that
  &my-app; does not allow easy bypassing of blocked sites, or changing the
@@ -2200,11 +2207,12 @@ altered it! Yikes, what is wrong!</title>
  configuration, consider adding your list to your <filename>user.action</filename> file:
 </para>
  <screen>
-  { +block }
-   www.ad.example1.com
-   ad.example2.com
-   ads.galore.example.com
-   etc.example.com</screen>
+{ +block }
+www.ad.example1.com
+ad.example2.com
+ads.galore.example.com
+etc.example.com
+</screen>
 </sect2>
 
 <sect2 renderas="sect3" id="seealso">
