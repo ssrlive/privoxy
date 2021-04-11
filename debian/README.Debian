@@ -27,4 +27,15 @@ privoxy for Debian
   to change the owner of default.action to "privoxy" and the file is
   editable again.
 
+- Debian package comes with an apparmor profile
+  /etc/apparmor.d/usr.sbin.privoxy, which restricts access to the
+  default paths.  If you change something like the access rights of
+  default.action above, you may have to adapt the apparmor profile
+  accordingly and reload the new profile using
+   apparmor_parser -r /etc/apparmor.d/usr.sbin.privoxy
+  If you intend to run multiple instances of privoxy, you should place
+  all configuration in /etc/privoxy and use something matching
+  /run/privoxy*.pid as your PID file.
+
+
 Roland Rosenfeld <roland@debian.org>

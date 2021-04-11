@@ -10,7 +10,7 @@
   /etc/privoxy/** r,
   owner /etc/privoxy/match-all.action rw,
   owner /etc/privoxy/user.action rw,
-  /run/privoxy.pid rw,
+  /run/privoxy*.pid rw,
   /usr/share/doc/privoxy/user-manual/** r,
   /usr/share/doc/privoxy/p_doc.css r,
   owner /var/lib/privoxy/** rw,

@@ -4,6 +4,14 @@ privoxy (3.0.33~gitsnapshot-1) UNRELEASED; urgency=medium
 
  -- Roland Rosenfeld <roland@debian.org>  Thu, 25 Feb 2021 22:29:55 +0100
 
+privoxy (3.0.32-2) unstable; urgency=medium
+
+  * Work around apparmor failure in testsuite (Closes: #986258).
+  * apparmor: Allow multiple instances using /run/privoxy*.pid
+  * README.Debian: add information about apparmor.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 03 Apr 2021 11:17:39 +0200
+
 privoxy (3.0.32-1) unstable; urgency=medium
 
   * New upstream release 3.0.32.

@@ -3,7 +3,7 @@
 # Run privoxy-regression-test.pl on a configuration extended by
 # regression-tests.action.
 #
-# (c) 2018 Roland Rosenfeld <roland@debian.org>
+# (c) 2018-2021 Roland Rosenfeld <roland@debian.org>
 
 PORT=8119
 
@@ -15,6 +15,8 @@ trap "rm -rf $AUTOPKGTEST_TMP" EXIT
 
 CONFIG=$AUTOPKGTEST_TMP/config
 PIDFILE=$AUTOPKGTEST_TMP/privoxy.pid
+PRIVOXY=$AUTOPKGTEST_TMP/privoxy
+
 sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
     -e "s%^logdir.*%logdir $AUTOPKGTEST_TMP%" \
     -e "s/^enable-edit-actions.*/enable-edit-actions 1/" \
@@ -23,8 +25,10 @@ sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
     < /usr/share/privoxy/config > $CONFIG
 echo "actionsfile regression-tests.action" >> $CONFIG
 
+cp /usr/sbin/privoxy $PRIVOXY
+
 echo "Starting privoxy on port $PORT"
-/usr/sbin/privoxy --pidfile $PIDFILE $CONFIG
+$PRIVOXY --pidfile $PIDFILE $CONFIG
 
 http_proxy=http://127.0.0.1:$PORT/
 export http_proxy
