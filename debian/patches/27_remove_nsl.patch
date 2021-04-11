@@ -5,7 +5,7 @@ Forwarded: not-needed
 
 --- a/configure.in
 +++ b/configure.in
-@@ -512,7 +512,7 @@ dnl gmtime and localtime
+@@ -521,7 +521,7 @@ dnl gmtime and localtime
  dnl =================================================================
  
  dnl Next line needed to find the gethost*_r functions on Solaris
