@@ -125,7 +125,7 @@
     url="../user-manual/config.html#DEBUG">debug options</ulink> are enabled
     (all of them):
    </para>
-    <literallayout>debug     1 # Log the destination for each request Privoxy let through.
+    <literallayout>debug     1 # Log the destination for each request. See also debug 1024.
             #   See also debug 1024.
 debug     2 # show each connection status
 debug     4 # show tagging-related messages
