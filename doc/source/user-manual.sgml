@@ -3136,6 +3136,85 @@ adserver.example.net/.*\.js$
 
 
 <!--   ~~~~~       New section      ~~~~~     -->
+<sect3 renderas="sect4" id="client-body-tagger">
+<title>client-body-tagger</title>
+
+<variablelist>
+ <varlistentry>
+  <term>Typical use:</term>
+  <listitem>
+   <para>
+    Block requests based on the content of the body data.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Effect:</term>
+  <listitem>
+   <para>
+    Client request bodies to which this action applies are filtered on-the-fly through
+    the specified regular expression based substitutions, the result is used as tag.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Type:</term>
+  <!-- boolean, parameterized, Multi-value -->
+  <listitem>
+   <para>Multi-value.</para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Parameter:</term>
+  <listitem>
+   <para>
+    The name of a client-body tagger, as defined in one of the
+    <link linkend="filter-file">filter files</link>.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Notes:</term>
+  <listitem>
+   <para>
+    Please refer to the <link linkend="filter-file">filter file chapter</link>
+    to learn how to create your own client-body tagger.
+   </para>
+   <para>
+    Client-body taggers are applied to each request body on its own,
+    and as the body isn't modified, each tagger "sees" the original.
+   </para>
+   <para>
+    Chunk-encoded request bodies currently can't be tagged.
+    Request bodies larger than the buffer-limit can't be tagged either.
+   </para>
+  </listitem>
+ </varlistentry>
+
+ <varlistentry>
+  <term>Example usage (section):</term>
+  <listitem>
+     <screen>
+# Apply blafasel tagger.
+{+client-body-tagger{blafasel}}
+/
+
+# Block request based on the tag created by the blafasel tagger.
+{+block{Request body contains blafasel}}
+TAG:^content contains blafasel$
+</screen>
+  </listitem>
+ </varlistentry>
+
+</variablelist>
+</sect3>
+
+
+<!--   ~~~~~       New section      ~~~~~     -->
 <sect3 renderas="sect4" id="client-header-tagger">
 <title>client-header-tagger</title>
 
@@ -7107,8 +7186,9 @@ webmail.example.com
 </para>
 
 <para>
- &my-app; also supports two tagger actions:
- <literal><link linkend="client-header-tagger">client-header-tagger</link></literal>
+ &my-app; also supports three tagger actions:
+ <literal><link linkend="client-header-tagger">client-header-tagger</link></literal>,
+ <literal><link linkend="client-body-tagger">client-body-tagger</link></literal>
  and
  <literal><link linkend="server-header-tagger">server-header-tagger</link></literal>.
  Taggers and filters use the same syntax in the filter files, the difference
