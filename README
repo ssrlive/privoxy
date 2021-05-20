@@ -184,7 +184,7 @@ requesting support:
     directive is being used and the following debug options are enabled (all of
     them):
 
-    debug     1 # Log the destination for each request Privoxy let through.
+    debug     1 # Log the destination for each request. See also debug 1024.
                 #   See also debug 1024.
     debug     2 # show each connection status
     debug     4 # show tagging-related messages
