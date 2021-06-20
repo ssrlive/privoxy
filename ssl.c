@@ -1297,6 +1297,11 @@ static int generate_host_certificate(struct client_state *csp)
    char cert_valid_to[VALID_DATETIME_BUFLEN];
    char *cert_params = NULL;
    char *serial_num_text = NULL;
+   int subject_key_len;
+   size_t cert_params_len;
+   unsigned long certificate_serial;
+   unsigned long certificate_serial_time;
+   int serial_num_size;
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -1368,7 +1373,7 @@ static int generate_host_certificate(struct client_state *csp)
    /*
     * Create key for requested host
     */
-   int subject_key_len = generate_key(csp, &key_buf);
+   subject_key_len = generate_key(csp, &key_buf);
    if (subject_key_len < 0)
    {
       freez(cert_opt.output_file);
@@ -1391,7 +1396,7 @@ static int generate_host_certificate(struct client_state *csp)
     * Presetting parameters for certificate. We must compute total length
     * of parameters.
     */
-   size_t cert_params_len = strlen(CERT_PARAM_COMMON_NAME) +
+   cert_params_len = strlen(CERT_PARAM_COMMON_NAME) +
       strlen(CERT_PARAM_ORGANIZATION) + strlen(CERT_PARAM_COUNTRY) +
       strlen(CERT_PARAM_ORG_UNIT) +
       3 * strlen(csp->http->host) + 1;
@@ -1402,9 +1407,9 @@ static int generate_host_certificate(struct client_state *csp)
     * Converting unsigned long serial number to char * serial number.
     * We must compute length of serial number in string + terminating null.
     */
-   unsigned long certificate_serial = get_certificate_serial(csp);
-   unsigned long certificate_serial_time = (unsigned long)time(NULL);
-   int serial_num_size = snprintf(NULL, 0, "%lu%lu",
+   certificate_serial = get_certificate_serial(csp);
+   certificate_serial_time = (unsigned long)time(NULL);
+   serial_num_size = snprintf(NULL, 0, "%lu%lu",
       certificate_serial_time, certificate_serial) + 1;
    if (serial_num_size <= 0)
    {
@@ -1806,6 +1811,7 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
 static int host_to_hash(struct client_state *csp)
 {
    int ret = 0;
+   size_t i;
 
 #if !defined(MBEDTLS_MD5_C)
 #error mbedTLS needs to be compiled with md5 support
@@ -1822,7 +1828,7 @@ static int host_to_hash(struct client_state *csp)
    }
 
    /* Converting hash into string with hex */
-   size_t i = 0;
+   i = 0;
    for (; i < 16; i++)
    {
       if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",

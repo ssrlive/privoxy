@@ -3039,6 +3039,13 @@ static void handle_established_connection(struct client_state *csp)
    long len = 0; /* for buffer sizes (and negative error codes) */
    int buffer_and_filter_content = 0;
    unsigned int write_delay;
+
+   /* Skeleton for HTTP response, if we should intercept the request */
+   struct http_response *rsp;
+#ifdef FEATURE_CONNECTION_KEEP_ALIVE
+   int watch_client_socket;
+#endif
+
 #ifdef FEATURE_HTTPS_INSPECTION
    int ret = 0;
    int use_ssl_tunnel = 0;
@@ -3049,12 +3056,6 @@ static void handle_established_connection(struct client_state *csp)
       /* Pass encrypted content without filtering. */
       use_ssl_tunnel = 1;
    }
-#endif
-
-   /* Skeleton for HTTP response, if we should intercept the request */
-   struct http_response *rsp;
-#ifdef FEATURE_CONNECTION_KEEP_ALIVE
-   int watch_client_socket;
 #endif
 
    csp->receive_buffer_size = csp->config->receive_buffer_size;
@@ -4450,6 +4451,7 @@ static void chat(struct client_state *csp)
        */
       if (http->ssl && !use_ssl_tunnel)
       {
+         int ret;
          if (fwd->forward_host != NULL)
          {
             char server_response[BUFFER_SIZE];
@@ -4523,7 +4525,7 @@ static void chat(struct client_state *csp)
          /*
           * We can now create the TLS/SSL connection with the destination server.
           */
-         int ret = create_server_ssl_connection(csp);
+         ret = create_server_ssl_connection(csp);
          if (ret != 0)
          {
             if (csp->server_cert_verification_result != SSL_CERT_VALID &&

@@ -494,6 +494,17 @@ extern int file_exists(const char *path)
 extern char *make_certs_path(const char *conf_dir, const char *file_name,
    const char *suffix)
 {
+   char *path;
+   size_t path_size;
+
+   /* Setting delimiter and editing path length */
+#if defined(_WIN32)
+   char delim[] = "\\";
+   path_size += 1;
+#else /* ifndef _WIN32 */
+   char delim[] = "/";
+#endif /* ifndef _WIN32 */
+
    /* Test if all given parameters are valid */
    if (conf_dir == NULL || *conf_dir == '\0' || file_name == NULL ||
       *file_name == '\0' || suffix == NULL || *suffix == '\0')
@@ -503,17 +514,9 @@ extern char *make_certs_path(const char *conf_dir, const char *file_name,
       return NULL;
    }
 
-   char *path = NULL;
-   size_t path_size = strlen(conf_dir)
+   path = NULL;
+   path_size = strlen(conf_dir)
       + strlen(file_name) + strlen(suffix) + 2;
-
-   /* Setting delimiter and editing path length */
-#if defined(_WIN32)
-   char delim[] = "\\";
-   path_size += 1;
-#else /* ifndef _WIN32 */
-   char delim[] = "/";
-#endif /* ifndef _WIN32 */
 
    /*
     * Building up path from many parts

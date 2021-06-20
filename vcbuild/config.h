@@ -44,6 +44,9 @@
 //not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in mingw
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
+
+#include <stdio.h>
+#define snprintf _snprintf
 #endif
 
 int gettimeofday(struct timeval *tp, struct timezone *tzp);
