@@ -153,6 +153,7 @@ static void serve(struct client_state *csp);
 static void usage(const char *myname);
 #endif
 static void initialize_mutexes(void);
+static void release_mutexes(void);
 static jb_socket bind_port_helper(const char *haddr, int hport, int backlog);
 static void bind_ports_helper(struct configuration_spec *config, jb_socket sockets[]);
 static void close_ports_helper(jb_socket sockets[]);
@@ -5206,6 +5207,16 @@ static void privoxy_mutex_init(privoxy_mutex_t *mutex)
    InitializeCriticalSection(mutex);
 #endif /* def FEATURE_PTHREAD */
 }
+
+static void privoxy_mutex_release(privoxy_mutex_t* mutex)
+{
+#ifdef FEATURE_PTHREAD
+    pthread_mutex_destroy(mutex);
+#else
+    DeleteCriticalSection(mutex);
+#endif /* def FEATURE_PTHREAD */
+}
+
 #endif /* def MUTEX_LOCKS_AVAILABLE */
 
 /*********************************************************************
@@ -5270,6 +5281,47 @@ static void initialize_mutexes(void)
 
 #if !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM)
    privoxy_mutex_init(&rand_mutex);
+#endif /* !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM) */
+
+#endif /* def MUTEX_LOCKS_AVAILABLE */
+}
+
+static void release_mutexes(void)
+{
+#ifdef MUTEX_LOCKS_AVAILABLE
+    /*
+     * Prepare global mutex semaphores
+     */
+
+#ifdef FEATURE_HTTPS_INSPECTION
+    privoxy_mutex_release(&certificate_mutex);
+    privoxy_mutex_release(&ssl_init_mutex);
+#endif
+
+    privoxy_mutex_release(&log_mutex);
+    privoxy_mutex_release(&log_init_mutex);
+    privoxy_mutex_release(&connection_reuse_mutex);
+#ifdef FEATURE_EXTERNAL_FILTERS
+    privoxy_mutex_release(&external_filter_mutex);
+#endif
+#ifdef FEATURE_CLIENT_TAGS
+    privoxy_mutex_release(&client_tags_mutex);
+#endif
+
+#if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R)
+    privoxy_mutex_release(&resolver_mutex);
+#endif /* !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_GETHOSTBYNAME_R) */
+
+#ifndef HAVE_GMTIME_R
+    privoxy_mutex_release(&gmtime_mutex);
+#endif /* ndef HAVE_GMTIME_R */
+
+#ifndef HAVE_LOCALTIME_R
+    privoxy_mutex_release(&localtime_mutex);
+#endif /* ndef HAVE_GMTIME_R */
+
+#if !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM)
+    privoxy_mutex_release(&rand_mutex);
 #endif /* !defined(HAVE_ARC4RANDOM) && !defined(HAVE_RANDOM) */
 
 #endif /* def MUTEX_LOCKS_AVAILABLE */
@@ -5781,6 +5833,8 @@ int main(int argc, char **argv)
 #endif /* def _WIN32 */
 
    listen_loop();
+
+   release_mutexes();
 
    /* NOTREACHED */
    return(-1);
