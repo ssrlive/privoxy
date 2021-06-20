@@ -1295,6 +1295,8 @@ static int generate_host_certificate(struct client_state *csp)
    cert_options cert_opt;
    char cert_valid_from[VALID_DATETIME_BUFLEN];
    char cert_valid_to[VALID_DATETIME_BUFLEN];
+   char *cert_params = NULL;
+   char *serial_num_text = NULL;
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -1393,7 +1395,7 @@ static int generate_host_certificate(struct client_state *csp)
       strlen(CERT_PARAM_ORGANIZATION) + strlen(CERT_PARAM_COUNTRY) +
       strlen(CERT_PARAM_ORG_UNIT) +
       3 * strlen(csp->http->host) + 1;
-   char cert_params[cert_params_len];
+   cert_params = (char*) malloc(cert_params_len);
    memset(cert_params, 0, cert_params_len);
 
    /*
@@ -1409,7 +1411,7 @@ static int generate_host_certificate(struct client_state *csp)
       serial_num_size = 1;
    }
 
-   char serial_num_text[serial_num_size];  /* Buffer for serial number */
+   serial_num_text = (char*) malloc(serial_num_size);  /* Buffer for serial number */
    ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu%lu",
       certificate_serial_time, certificate_serial);
    if (ret < 0 || ret >= serial_num_size)
@@ -1677,6 +1679,9 @@ exit:
    freez(cert_opt.subject_key);
    freez(cert_opt.output_file);
    freez(key_buf);
+
+   free(cert_params);
+   free(serial_num_text);
 
    return ret;
 }

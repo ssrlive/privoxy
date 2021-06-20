@@ -330,6 +330,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    int ret = 0;
    struct certs_chain *cert = NULL;
    const size_t head_length = 63;
+   char *message = NULL;
 
    /* Header of message with certificate information */
    const char message_begin[] =
@@ -369,7 +370,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    /*
     * Joining all blocks in one long message
     */
-   char message[message_len];
+   message = (char*) malloc(message_len);
    memset(message, 0, message_len);
 
    strlcpy(message, message_begin, message_len);
@@ -381,7 +382,7 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    {
       size_t olen = 0;
       size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1; /* +1 for terminating null*/
-      char base64_buf[base64_len];
+      char *base64_buf = (char*) malloc(base64_len);
       memset(base64_buf, 0, base64_len);
 
       /* Encoding certificate into base64 code */
@@ -405,6 +406,8 @@ extern void ssl_send_certificate_error(struct client_state *csp)
          strlcat(message, base64_buf, message_len);
          strlcat(message, "\">Download certificate</a>", message_len);
       }
+
+      free(base64_buf);
 
       cert = cert->next;
    }
@@ -437,6 +440,8 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    csp->flags &= ~CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE;
    csp->flags |= CSP_FLAG_SERVER_SOCKET_TAINTED;
 #endif
+
+   free(message);
 }
 
 
