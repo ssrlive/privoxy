@@ -1,0 +1,7 @@
+; LIBRARY privoxyexports
+
+EXPORTS
+
+privoxy_main_entry
+privoxy_shutdown
+
