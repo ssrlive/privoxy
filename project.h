@@ -980,6 +980,7 @@ struct ssl_attr {
 #ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
    openssl_connection_attr  openssl_attr; /* OpenSSL atrrs */
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
+   int dummy;
 };
 /**
  * The state of a Privoxy processing thread.
