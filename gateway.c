@@ -1358,6 +1358,15 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
                errstr = "SOCKS5 negotiation read failed (IPv6 address)";
             }
          }
+         else if (sbuf[3] == '\x03')
+         {
+            int remain_size = (4 + 1 + (int)sbuf[4] + 2) - SIZE_SOCKS5_REPLY_IPV4;
+            char* domain = (char*)zalloc(remain_size);
+            if (read_socket(sfd, domain, remain_size) != remain_size) {
+               errstr = "SOCKS5 negotiation read failed (Domain name)";
+            }
+            freez(domain);
+         }
          else if (sbuf[3] != '\x01')
          {
             errstr = "SOCKS5 reply contains unsupported address type";
