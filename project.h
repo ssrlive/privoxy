@@ -65,6 +65,7 @@
 
 #ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
 #ifdef _WIN32
+#include <winsock2.h>
 #include <wincrypt.h>
 #undef X509_NAME
 #undef X509_EXTENSIONS

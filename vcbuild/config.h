@@ -47,9 +47,12 @@
 
 #include <stdio.h>
 #define snprintf _snprintf
-#endif
+
+#define __attribute__(x)
 
 int gettimeofday(struct timeval *tp, struct timezone *tzp);
+
+#endif
 
 /* On Unix systems config.in is converted by configure into config.h. PCRE is
 written in Standard C, but there are a few non-standard things it can cope

@@ -1710,11 +1710,14 @@ exit:
 static int set_subject_alternative_name(X509 *cert, X509 *issuer, const char *hostname)
 {
    size_t altname_len = strlen(hostname) + sizeof(CERTIFICATE_ALT_NAME_PREFIX);
-   char alt_name_buf[altname_len];
+   char *alt_name_buf = (char*) malloc(altname_len);
+   int result = 0;
 
    snprintf(alt_name_buf, sizeof(alt_name_buf),
       CERTIFICATE_ALT_NAME_PREFIX"%s", hostname);
-   return set_x509_ext(cert, issuer, NID_subject_alt_name, alt_name_buf);
+   result = set_x509_ext(cert, issuer, NID_subject_alt_name, alt_name_buf);
+   free(alt_name_buf);
+   return result;
 }
 
 
@@ -1749,6 +1752,7 @@ static int generate_host_certificate(struct client_state *csp)
    ASN1_TIME *asn_time = NULL;
    ASN1_INTEGER *serial = NULL;
    BIGNUM *serial_num = NULL;
+   char *serial_num_text = NULL;
 
    int ret = 0;
    cert_options cert_opt;
@@ -1849,7 +1853,7 @@ static int generate_host_certificate(struct client_state *csp)
       serial_num_size = 1;
    }
 
-   char serial_num_text[serial_num_size];  /* Buffer for serial number */
+   serial_num_text = (char*) malloc(serial_num_size);  /* Buffer for serial number */
    ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu%lu",
       certificate_serial_time, certificate_serial);
    if (ret < 0 || ret >= serial_num_size)
@@ -2214,6 +2218,7 @@ exit:
    freez(cert_opt.subject_key);
    freez(cert_opt.output_file);
    freez(key_buf);
+   free(serial_num_text);
 
    return ret;
 }
