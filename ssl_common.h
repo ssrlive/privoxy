@@ -46,6 +46,7 @@
 #define CERT_PARAM_COUNTRY_CODE           "CZ"
 #define CERT_SUBJECT_PASSWORD            ""
 
+#ifdef FEATURE_HTTPS_INSPECTION
 /*
  * Properties of cert for generating
  */
@@ -64,6 +65,7 @@ typedef struct {
    int        is_ca;                               /* is a CA certificate                      */
    int        max_pathlen;                         /* maximum CA path length                   */
 } cert_options;
+#endif /* FEATURE_HTTPS_INSPECTION */
 
 extern void free_certificate_chain(struct client_state *csp);
 extern int file_exists(const char *path);

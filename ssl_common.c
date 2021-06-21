@@ -39,6 +39,8 @@
 #include "ssl.h"
 #include "ssl_common.h"
 
+#ifdef FEATURE_HTTPS_INSPECTION
+
 /*
  * Macros for ssl_common.c
  */
@@ -771,3 +773,5 @@ extern int enforce_sane_certificate_state(const char *certificate, const char *k
    return 0;
 
 }
+
+#endif /* FEATURE_HTTPS_INSPECTION */
