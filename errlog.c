@@ -85,7 +85,7 @@
 static FILE *logfp = NULL;
 
 /* logging detail level. XXX: stupid name. */
-static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR);
+static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
 
 /* static functions */
 static void fatal_error(const char * error_message);
