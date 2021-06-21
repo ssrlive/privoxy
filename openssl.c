@@ -48,6 +48,8 @@
 #include "ssl.h"
 #include "ssl_common.h"
 
+#ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
+
 /*
  * Macros for openssl.c
  */
@@ -2282,3 +2284,5 @@ extern void ssl_release(void)
    }
 }
 #endif /* def FEATURE_GRACEFUL_TERMINATION */
+
+#endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */

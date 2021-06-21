@@ -32,6 +32,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifdef FEATURE_HTTPS_INSPECTION_MBEDTLS
+
 #if !defined(MBEDTLS_CONFIG_FILE)
 #  include "mbedtls/config.h"
 #else
@@ -2030,3 +2032,5 @@ static int *get_ciphersuites_from_string(const char *parameter_string)
    return ciphersuite_ids;
 
 }
+
+#endif /* FEATURE_HTTPS_INSPECTION_MBEDTLS */
