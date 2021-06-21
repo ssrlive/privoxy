@@ -212,12 +212,7 @@
     <ClCompile Include="..\loadcfg.c" />
     <ClCompile Include="..\loaders.c" />
     <ClCompile Include="..\miscutil.c" />
-    <ClCompile Include="..\openssl.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\openssl.c" />
     <ClCompile Include="..\parsers.c" />
     <ClCompile Include="..\pcrs.c" />
     <ClCompile Include="..\privoxyexports.c" />
