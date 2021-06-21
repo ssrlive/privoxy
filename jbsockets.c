@@ -195,7 +195,7 @@ static jb_socket rfc2553_connect_to(const char *host, int portnum, struct client
    struct addrinfo hints, *result, *rp;
    char service[6];
    int retval;
-   jb_socket fd;
+   jb_socket fd = JB_INVALID_SOCKET;
 #ifdef HAVE_POLL
    struct pollfd poll_fd[1];
 #else
@@ -900,7 +900,7 @@ int bind_port(const char *hostnam, int portnum, int backlog, jb_socket *pfd)
 #else
    struct sockaddr_in inaddr;
 #endif /* def HAVE_RFC2553 */
-   jb_socket fd;
+   jb_socket fd = JB_INVALID_SOCKET;
 #ifndef _WIN32
    int one = 1;
 #endif /* ndef _WIN32 */

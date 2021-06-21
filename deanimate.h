@@ -8,7 +8,7 @@
  *                fly.  High-level functions include:
  *                  - Deanimation of GIF images
  *
- *                Functions declared include: gif_deanimate and buf_free.
+ *                Functions declared include: gif_deanimate and buf_free_x.
  *
  *
  * Copyright   :  Written by and Copyright (C) 2001 - 2004 by the the
@@ -57,7 +57,7 @@ struct binbuffer
  * Function prototypes
  */
 extern int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_image);
-extern void buf_free(struct binbuffer *buf);
+extern void buf_free_x(struct binbuffer *buf);
 
 
 #endif /* ndef DEANIMATE_H_INCLUDED */

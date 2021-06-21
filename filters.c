@@ -74,7 +74,7 @@
 #include "win32.h"
 #endif
 
-typedef char *(*filter_function_ptr)();
+typedef char *(*filter_function_ptr)(struct client_state *csp);
 static filter_function_ptr get_filter_function(const struct client_state *csp);
 static jb_err prepare_for_filtering(struct client_state *csp);
 static void apply_url_actions(struct current_action_spec *action,
@@ -2050,7 +2050,7 @@ static char *gif_deanimate_response(struct client_state *csp)
    {
       log_error(LOG_LEVEL_DEANIMATE, "failed! (gif parsing)");
       freez(in);
-      buf_free(out);
+      buf_free_x(out);
       return(NULL);
    }
    else

@@ -47,7 +47,7 @@
 
 /*********************************************************************
  *
- * Function    :  buf_free
+ * Function    :  buf_free_x
  *
  * Description :  Safely frees a struct binbuffer
  *
@@ -57,7 +57,7 @@
  * Returns     :  N/A
  *
  *********************************************************************/
-void buf_free(struct binbuffer *buf)
+void buf_free_x(struct binbuffer *buf)
 {
    if (buf == NULL) return;
 
@@ -465,7 +465,7 @@ int gif_deanimate(struct binbuffer *src, struct binbuffer *dst, int get_first_im
     */
 
 failed:
-   buf_free(image);
+   buf_free_x(image);
    return 1;
 
    /*
@@ -476,7 +476,7 @@ write:
    if (buf_copy(image, dst, image->size)) goto failed;
    if (buf_extend(dst, 1)) goto failed;
    *(dst->buffer + dst->offset++) = 0x3b;
-   buf_free(image);
+   buf_free_x(image);
    return 0;
 
 }
