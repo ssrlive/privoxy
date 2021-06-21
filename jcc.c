@@ -5806,8 +5806,10 @@ int main(int argc, char **argv)
 #ifdef _WIN32
    /* This will be FALSE unless the command line specified --service
     */
+   daemon_mode = 0;
    if (bRunAsService)
    {
+      daemon_mode = 1;
       /* Yup, so now we must attempt to establish a connection
        * with the service dispatcher. This will only work if this
        * process was launched by the service control manager to
