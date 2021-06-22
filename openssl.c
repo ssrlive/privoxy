@@ -658,11 +658,11 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
          }
       }
    }
-
+   {
    /* make valgrind happy */
    static const char zero = 0;
    BIO_write(bio, &zero, 1);
-
+   }
    len = BIO_get_mem_data(bio, &bio_mem_data);
    if (len <= 0)
    {
@@ -714,13 +714,13 @@ exit:
 static int host_to_hash(struct client_state *csp)
 {
    int ret = 0;
+   size_t i = 0;
 
    memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
    MD5((unsigned char *)csp->http->host, strlen(csp->http->host),
       csp->http->hash_of_host);
 
    /* Converting hash into string with hex */
-   size_t i = 0;
    for (; i < 16; i++)
    {
       if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
@@ -1254,12 +1254,12 @@ static void free_server_ssl_structures(struct client_state *csp)
  *********************************************************************/
 static void log_ssl_errors(int debuglevel, const char* fmt, ...)
 {
+   int reported = 0;
    unsigned long err_code;
    char prefix[ERROR_BUF_SIZE];
    va_list args;
    va_start(args, fmt);
    vsnprintf(prefix, sizeof(prefix), fmt, args);
-   int reported = 0;
 
    while ((err_code = ERR_get_error()))
    {
@@ -1762,6 +1762,10 @@ static int generate_host_certificate(struct client_state *csp)
    char cert_valid_to[VALID_DATETIME_BUFLEN];
    const char *common_name;
    enum { CERT_PARAM_COMMON_NAME_MAX = 64 };
+   int subject_key_len;
+   unsigned long certificate_serial;
+   unsigned long certificate_serial_time;
+   int serial_num_size;
 
    /* Paths to keys and certificates needed to create certificate */
    cert_opt.issuer_key  = NULL;
@@ -1833,7 +1837,7 @@ static int generate_host_certificate(struct client_state *csp)
    /*
     * Create key for requested host
     */
-   int subject_key_len = generate_key(csp, &key_buf);
+   subject_key_len = generate_key(csp, &key_buf);
    if (subject_key_len < 0)
    {
       freez(cert_opt.output_file);
@@ -1846,9 +1850,9 @@ static int generate_host_certificate(struct client_state *csp)
     * Converting unsigned long serial number to char * serial number.
     * We must compute length of serial number in string + terminating null.
     */
-   unsigned long certificate_serial = get_certificate_serial(csp);
-   unsigned long certificate_serial_time = (unsigned long)time(NULL);
-   int serial_num_size = snprintf(NULL, 0, "%lu%lu",
+   certificate_serial = get_certificate_serial(csp);
+   certificate_serial_time = (unsigned long)time(NULL);
+   serial_num_size = snprintf(NULL, 0, "%lu%lu",
       certificate_serial_time, certificate_serial) + 1;
    if (serial_num_size <= 0)
    {
