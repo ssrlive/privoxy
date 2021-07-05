@@ -1990,7 +1990,7 @@ static int *get_ciphersuites_from_string(const char *parameter_string)
    size_t parameter_len = strlen(parameter_string);
 
    ciphersuites_string = zalloc_or_die(parameter_len + 1);
-   strncpy(ciphersuites_string, parameter_string, parameter_len);
+   strlcpy(ciphersuites_string, parameter_string, parameter_len + 1);
    ciphersuites_index = ciphersuites_string;
 
    while (*ciphersuites_index)
