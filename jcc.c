@@ -5821,15 +5821,18 @@ static jb_socket bind_port_helper(const char *haddr, int hport, int backlog)
                "can't bind to %s:%d: There may be another Privoxy "
                "or some other proxy running on port %d",
                bind_address, hport, hport);
+            exit(-1);
 
          case -2:
             log_error(LOG_LEVEL_FATAL,
                "can't bind to %s:%d: The hostname is not resolvable",
                bind_address, hport);
+            exit(-1);
 
          default:
             log_error(LOG_LEVEL_FATAL, "can't bind to %s:%d: %E",
                bind_address, hport);
+            exit(-1);
       }
 
       /* shouldn't get here */
