@@ -7,7 +7,7 @@
  *                This only contains the framework functions, the
  *                actual handler functions are declared elsewhere.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2020
+ * Copyright   :  Written by and Copyright (C) 2001-2021
  *                members of the Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
