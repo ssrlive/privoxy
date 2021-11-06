@@ -4162,10 +4162,17 @@ compression-level 0
     that is used when Privoxy generates certificates for intercepted
     requests.
    </para>
+   <warning>
    <para>
      Note that the password is shown on the CGI page so don't
      reuse an important one.
    </para>
+   <para>
+     If disclosure of the password is a compliance issue consider blocking
+     the relevant CGI requests after enabling the <link linkend="enforce-blocks">enforce-blocks</link>
+     and <link linkend="allow-cgi-request-crunching">allow-cgi-request-crunching</link>.
+   </para>
+   </warning>
   </listitem>
  </varlistentry>
  <varlistentry>
