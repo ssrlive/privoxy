@@ -712,6 +712,8 @@ ada*.
 adri*.
 # URL = https://adguard.com/
 adguard.com/
+# URL = https://adv-archiv.dfn-cert.de/adv/2021-2222/
+adv-archiv.dfn-cert.de/
 
 #############################################################################
 # Generic block patterns by path:
