@@ -130,8 +130,8 @@ CFLAGS="${CFLAGS} -Wshadow"
 # why does the mingw library _not_ include .a files for libpcre?
 # *sigh* build my own pcre so I can do static linking
 # Get the 8.x PCRE library from  https://ftp.pcre.org/pub/pcre/
-inc="/source/pcre-8.44/"
-lib="/source/pcre-8.44/.libs"
+inc="/source/pcre-8.45/"
+lib="/source/pcre-8.45/.libs"
 CPPFLAGS="${CPPFLAGS} -I${inc}"
 LDFLAGS="${LDFLAGS} -L${lib}"
 
