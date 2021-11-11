@@ -162,11 +162,11 @@ echo "LDFLAGS=${LDFLAGS}"
 #    --target: only used to build a cross-compiling toolchain.
 
 ./configure  --host=i686-w64-mingw32  --enable-mingw32  --enable-zlib \
+             --enable-extended-statistics \
+             --enable-pcre-host-patterns \
              --enable-static-linking \
              --enable-strptime-sanity-checks \
              --disable-pthread  \
-             --enable-extended-statistics \
-             --enable-pcre-host-patterns \
              --with-brotli  \
              --with-mbedtls \
              --with-docbook=yes
