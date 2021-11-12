@@ -2263,6 +2263,8 @@ issue.freebsdfoundation.org/
 idp.springer.com/
 # URL = https://login.microsoftonline.com/common/oauth2/authorize?client_id=00000006-0000-0ff1-ce00-000000000000&response_mode=form_post&response_type=code%20id_token&scope=openid%20profile&state=OpenIdConnect.AuthenticationProperties%3DPVPUdMPDQIWzMIsGOsfeSSwP9nHxMVzXDpwiEjukrVUCKS8OhdDdPhwWoL-M6sb8ft25tA0k8CUQIi-GyfgdmiNoSPRaGCiGLfB8TnvS5OR-1ri16BlPJrQzzv9yBIv_IkuFid0AvW5PYlXFpg1kgByUkEkVfnMK1_bOTPU7CpI&nonce=637504532331900462.Y2Y0YzJhYjEtYTdkMS00NTI1LTgxNDMtYjBhY2NmNWQ4MDg4NWQ5ODY4ZjItMzBjZi00Nzk5LTgzMDAtOGNmMjg5ZThhZmM1&redirect_uri=https%3A%2F%2Fportal.microsoft.com%2Flanding&ui_locales=pl-PL&mkt=pl-PL&client-request-id=843ff515-5e48-4fa8-a22b-edd72858073a&x-client-SKU=ID_NET45&x-client-ver=6.6.0.0
 .microsoftonline.com/
+# URL = https://www.zeit.de/zustimmung?url=https%3A%2F%2Fwww.zeit.de%2F2021%2F46%2Fchristian-drosten-coronavirus-virologie-pandemie-wissenschaft-impfung%2Fseite-4
+.zeit.de/zustimmung
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
