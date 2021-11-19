@@ -2206,6 +2206,7 @@ static int send_http_request(struct client_state *csp)
          update_client_headers(csp, to_send_len))
       {
          log_error(LOG_LEVEL_HEADER, "Error updating client headers");
+         freez(to_send);
          return 1;
       }
       csp->expected_client_content_length = 0;
@@ -2230,6 +2231,10 @@ static int send_http_request(struct client_state *csp)
    {
       log_error(LOG_LEVEL_CONNECT, "Failed sending request headers to: %s: %E",
          csp->http->hostport);
+      if (filter_client_body)
+      {
+         freez(to_send);
+      }
       return 1;
    }
 
