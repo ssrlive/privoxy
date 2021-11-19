@@ -2806,6 +2806,8 @@ static jb_err process_encrypted_request_headers(struct client_state *csp)
          "Failed to get the encrypted request destination");
       ssl_send_data_delayed(&(csp->ssl_client_attr),
          (const unsigned char *)CHEADER, strlen(CHEADER), get_write_delay(csp));
+      destroy_list(headers);
+
       return JB_ERR_PARSE;
    }
 
