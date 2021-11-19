@@ -1899,12 +1899,12 @@ static jb_err get_url_spec_param(struct client_state *csp,
    }
    err = create_pattern_spec(compiled, s);
    free(s);
+   free_pattern_spec(compiled);
    if (err)
    {
       free(param);
       return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
    }
-   free_pattern_spec(compiled);
 
    if (param[strlen(param) - 1] == '\\')
    {
@@ -1935,12 +1935,12 @@ static jb_err get_url_spec_param(struct client_state *csp,
       }
       err = create_pattern_spec(compiled, s);
       free(s);
+      free_pattern_spec(compiled);
       if (err)
       {
          free(param);
          return (err == JB_ERR_MEMORY) ? JB_ERR_MEMORY : JB_ERR_CGI_PARAMS;
       }
-      free_pattern_spec(compiled);
    }
 
    *pvalue = param;
