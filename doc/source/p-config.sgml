@@ -1068,9 +1068,16 @@ debug 65536 # Log the applying actions
 </variablelist>
 
 <![%config-file;[<literallayout>@@#debug     1 # Log the destination for each request. See also debug 1024.</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     2 # show each connection status</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     4 # show tagging-related messages</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     8 # show header parsing</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   128 # debug redirects</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   256 # debug GIF de-animation</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   512 # Common Log Format</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  1024 # Log the destination for requests &my-app; didn't let through, and the reason why.</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  4096 # Startup banner and warnings</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  8192 # Non-fatal errors</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug 65536 # Log applying actions</literallayout>]]>
 </sect3>
 
 
