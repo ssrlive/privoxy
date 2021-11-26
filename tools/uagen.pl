@@ -60,7 +60,7 @@ use constant {
    # see in the "Help/About Mozilla Firefox" menu.
 
    BROWSER_VERSION                   => "91.0",
-   BROWSER_REVISION                  => '71.0',
+   BROWSER_REVISION                  => '91.0',
    BROWSER_RELEASE_DATE              => '20100101',
 };
 
