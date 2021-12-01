@@ -2,8 +2,8 @@
 <!entity % dummy "IGNORE">
 <!entity config SYSTEM "p-config.sgml">
 <!entity p-version "3.0.33">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
 <!entity % user-man "IGNORE">
 <!entity % config-file "IGNORE">
 <!entity  my-app "<application>Privoxy</application>">
