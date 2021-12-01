@@ -1887,6 +1887,21 @@
             <dd>
               <p>The default is quite high and you probably want to reduce it. If you aren't using an occasionally slow
               proxy like Tor, reducing it to a few seconds should be fine.</p>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <p>When a TLS library is being used to read or write data from a socket with <tt class=
+                      "LITERAL"><a href="actions-file.html#HTTPS-INSPECTION" target="_top">https-inspection</a></tt>
+                      enabled the socket-timeout currently isn't applied and the timeout used depends on the library
+                      (which may not even use a timeout).</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </dd>
             <dt>Example:</dt>
             <dd>
@@ -1934,9 +1949,13 @@
               <p>Obviously using this option only makes sense if you choose a limit below the one enforced by the
               operating system.</p>
               <p>One most POSIX-compliant systems <span class="APPLICATION">Privoxy</span> can't properly deal with
-              more than FD_SETSIZE file descriptors at the same time and has to reject connections if the limit is
-              reached. This will likely change in a future version, but currently this limit can't be increased without
-              recompiling <span class="APPLICATION">Privoxy</span> with a different FD_SETSIZE limit.</p>
+              more than FD_SETSIZE file descriptors if <span class="APPLICATION">Privoxy</span> has been configured to
+              use select() and has to reject connections if the limit is reached. When using select() this limit
+              therefore can't be increased without recompiling <span class="APPLICATION">Privoxy</span> with a
+              different FD_SETSIZE limit unless <span class="APPLICATION">Privoxy</span> is running on Windows with
+              _WIN32 defined.</p>
+              <p>When <span class="APPLICATION">Privoxy</span> has been configured to use poll() the FD_SETSIZE limit
+              does not apply.</p>
             </dd>
             <dt>Example:</dt>
             <dd>
@@ -2510,7 +2529,21 @@
             <dd>
               <p>This directive specifies the password for the CA keyfile that is used when Privoxy generates
               certificates for intercepted requests.</p>
-              <p>Note that the password is shown on the CGI page so don't reuse an important one.</p>
+              <div class="WARNING">
+                <table class="WARNING" border="1" width="90%">
+                  <tr>
+                    <td align="center"><b>Warning</b></td>
+                  </tr>
+                  <tr>
+                    <td align="left">
+                      <p>Note that the password is shown on the CGI page so don't reuse an important one.</p>
+                      <p>If disclosure of the password is a compliance issue consider blocking the relevant CGI
+                      requests after enabling the <a href="config.html#ENFORCE-BLOCKS">enforce-blocks</a> and <a href=
+                      "config.html#ALLOW-CGI-REQUEST-CRUNCHING">allow-cgi-request-crunching</a>.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </dd>
             <dt>Example:</dt>
             <dd>
