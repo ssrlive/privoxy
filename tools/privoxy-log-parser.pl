@@ -2748,7 +2748,7 @@ sub stats_loop() {
 
 }
 
-# Convert a timestamp like 18:07:28.733 into miliseconds
+# Convert a timestamp like 18:07:28.733 into milliseconds
 sub time_stamp_to_msecs($) {
     my $time_stamp = shift;
 
@@ -2780,7 +2780,7 @@ sub inactivity_detection_loop() {
         next if ($time_stamp eq "-");
         $msecs = time_stamp_to_msecs($time_stamp);
         unless (defined $msecs) {
-            print "Failed to convert $time_stamp into miliseconds\n";
+            print "Failed to convert $time_stamp into milliseconds\n";
             print "$_";
             next;
         }
@@ -2992,7 +2992,7 @@ will hide the "filter foo caused 0 hits" message.
 =head1 OPTIONS
 
 [B<--detect-inactivity>] Instead of syntax highlighting, detect periods
-of log inactivity of more than the amount of miliseconds specified with
+of log inactivity of more than the amount of milliseconds specified with
 the B<--inactivity-threshold> option. Mainly useful for debugging.
 
 [B<--host-statistics-threshold>] Only show the request count for a host
@@ -3004,7 +3004,7 @@ omitted, ANSI escape sequences are used unless B<--no-syntax-highlighting> is ac
 This option is only intended to make embedding log excerpts in web pages easier.
 It does not escape any input!
 
-[B<--inactivity-threshold msecs>] Specifies the number of miliseconds between
+[B<--inactivity-threshold msecs>] Specifies the number of milliseconds between
 log messages to consider inactivity when running in [B<--detect-inactivity>]
 mode.
 
