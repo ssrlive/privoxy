@@ -712,8 +712,6 @@ ada*.
 adri*.
 # URL = https://adguard.com/
 adguard.com/
-# URL = https://adv-archiv.dfn-cert.de/adv/2021-2222/
-adv-archiv.dfn-cert.de/
 
 #############################################################################
 # Generic block patterns by path:
@@ -2042,6 +2040,8 @@ belco24.de/
 metrics.sr.ht/
 # URL = https://nlnet.nl/logo/banner.png
 nlnet.nl/
+# URL = https://adv-archiv.dfn-cert.de/adv/2021-2222/
+adv-archiv.dfn-cert.de/
 
 
 #############################################################################
