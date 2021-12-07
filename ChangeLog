@@ -2,6 +2,23 @@
 ChangeLog for Privoxy
 --------------------------------------------------------------------
 *** Version 3.0.33 stable ***
+- Security/Reliability:
+  - cgi_error_no_template(): Encode the template name to prevent
+    XSS (cross-side scripting) when Privoxy is configured to servce
+    the user-manual itself.
+    Commit 0e668e9409c. OVE-20211102-0001. CVE-2021-44543.
+    Reported by: Artem Ivanov
+  - get_url_spec_param(): Free memory of compiled pattern spec
+    before bailing.
+    Reported by Joshua Rogers (Opera) who also provided the fix.
+    Commit 652b4b7cb0. OVE-20211201-0003. CVE-2021-44540.
+  - process_encrypted_request_headers(): Free header memory when
+    failing to get the request destination.
+    Reported by Joshua Rogers (Opera) who also provided the fix.
+    Commit 0509c58045. OVE-20211201-0002. CVE-2021-44541.
+  - send_http_request(): Prevent memory leaks when handling errors
+    Reported by Joshua Rogers (Opera) who also provided the fix.
+    Commit c48d1d6d08. OVE-20211201-0001. CVE-2021-44542.
 
 - Bug fixes:
   - handle_established_connection(): Skip the poll()/select() calls
