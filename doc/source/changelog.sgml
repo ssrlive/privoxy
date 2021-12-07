@@ -37,6 +37,45 @@
  <itemizedlist>
   <listitem>
    <para>
+    Security/Reliability:
+    <itemizedlist>
+    <listitem>
+     <para>
+      cgi_error_no_template(): Encode the template name to prevent
+      XSS (cross-side scripting) when Privoxy is configured to servce
+      the user-manual itself.
+      Commit 0e668e9409c. OVE-20211102-0001. CVE-2021-44543.
+      Reported by: Artem Ivanov
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      get_url_spec_param(): Free memory of compiled pattern spec
+      before bailing.
+      Reported by Joshua Rogers (Opera) who also provided the fix.
+      Commit 652b4b7cb0. OVE-20211201-0003. CVE-2021-44540.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      process_encrypted_request_headers(): Free header memory when
+      failing to get the request destination.
+      Reported by Joshua Rogers (Opera) who also provided the fix.
+      Commit 0509c58045. OVE-20211201-0002. CVE-2021-44541.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      send_http_request(): Prevent memory leaks when handling errors
+      Reported by Joshua Rogers (Opera) who also provided the fix.
+      Commit c48d1d6d08. OVE-20211201-0001. CVE-2021-44542.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
     Bug fixes:
     <itemizedlist>
     <listitem>
@@ -67,14 +106,6 @@
     </listitem>
     <listitem>
      <para>
-      Establish the TLS connection with the client earlier and decide
-      how to route the request afterwards. This allows to change the
-      forwarding settings based on information from the https-inspected
-      request, for example the path.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
       Adjust build_request_line() to create a CONNECT request line when
       https-inspecting and forwarding to a HTTP proxy.
       Fixes SF bug #925 reported by Wen Yue.
@@ -83,6 +114,19 @@
     <listitem>
      <para>
       load_config(): Add a space that was missing in a log message.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      read_http_request_body(): Fix two error messages that used an
+      incorrect variable.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      If the the response is chunk-encoded, ignore the Content-Length
+      header sent by the server.
+      Allows to load https://redmine.lighttpd.net/ with filtering enabled.
      </para>
      </listitem>
     </itemizedlist>
@@ -94,49 +138,9 @@
     <itemizedlist>
     <listitem>
      <para>
-      serve(): Close the client socket as well if the server socket
-      for an inspected connection has been closed. Privoxy currently
-      can't establish a new server connection when the client socket
-      is reused and would drop the connection in continue_https_chat()
-      anyway.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Don't disable redirect checkers in redirect_url()
-      Disable them in handle_established_connection() instead.
-      Doing it in redirect_url() prevented the +redirect{} and
-      +fast-redirects{} actions from being logged with LOG_LEVEL_ACTIONS.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      handle_established_connection(): Slightly improve a comment
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      handle_established_connection(): Fix a comment
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      socks5_connect(): Fix indentation.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      handle_established_connection(): Improve an error message
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      create_pattern_spec(): Fix ifdef indentation
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Fix comment typos
+      Allow to edit the add-header action through the CGI editor by
+      generalizing the code that got added with the suppress-tag action.
+      Closes SF patch request #146. Patch by Maxim Antonov.
      </para>
     </listitem>
     <listitem>
@@ -148,82 +152,6 @@
       For example with the dnsmasq option:
       dhcp-option=252,http://config.privoxy.org/wpad.dat
       Initial patch by Richard Schneidt.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      listen_loop(): When shutting down gracefully, close listening ports
-      before waiting for the threads to exit.
-      Allows to start a second Privoxy with the same config file
-      while the first Privoxy is still running.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Allow to edit the add-header action through the CGI editor by
-      generalizing the code that got added with the suppress-tag action.
-      Closes SF patch request #146. Patch by Maxim Antonov.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      process_encrypted_request(): Improve a log message
-      The function only processes request headers and there
-      may still be unread request body data left to process.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      read_http_request_body(): Fix two error messages that used an incorrect variable.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      chat(): Log the applied actions before deciding how to forward the request.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      parse_time_header(): Silence a coverity complaint when building without assertions.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      receive_encrypted_request_headers(): Improve a log message
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      mbedTLS get_ciphersuites_from_string(): Use strlcpy() instead of strncpy().
-      Previously the terminating NUL wasn't copied which resulted
-      in a compiler warning. This didn't cause actual problems as
-      the target buffer was initialized by zalloc_or_die() so the
-      last byte of the target buffer was NUL already.
-      Actually copying the terminating NUL seems clearer, though.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Remove compiler warnings. "log_error(LOG_LEVEL_FATAL, ..." doesn't return
-      but apparently the compiler doesn't know that.
-      Get rid of several "this statement may fall through [-Wimplicit-fallthrough=]" warnings.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      If the the response is chunk-encoded, ignore the Content-Length
-      header sent by the server.
-      Allows to load https://redmine.lighttpd.net/ with filtering enabled.
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      Store the PEM certificate in a dynamically allocated buffer
-      when https-inspecting. Should prevent errors like:
-      2021-03-16 22:36:19.148 7f47bbfff700 Error: X509 PEM cert len 16694 is larger than buffer len 16383
-      As a bonus it should slightly reduce the memory usage as most
-      certificates are smaller than the previously used fixed buffer.
-      Reported by: Wen Yue
      </para>
     </listitem>
     <listitem>
@@ -241,6 +169,119 @@
       Clients should only care about the Subject Alternative Name
       anyway and we can continue to use the real host name for it.
       Reported by Miles Wen on privoxy-users@.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Establish the TLS connection with the client earlier and decide
+      how to route the request afterwards. This allows to change the
+      forwarding settings based on information from the https-inspected
+      request, for example the path.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      listen_loop(): When shutting down gracefully, close listening ports
+      before waiting for the threads to exit. Allows to start a second
+      Privoxy with the same config file while the first Privoxy is still
+      running.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      serve(): Close the client socket as well if the server socket
+      for an inspected connection has been closed. Privoxy currently
+      can't establish a new server connection when the client socket
+      is reused and would drop the connection in continue_https_chat()
+      anyway.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Don't disable redirect checkers in redirect_url().
+      Disable them in handle_established_connection() instead.
+      Doing it in redirect_url() prevented the +redirect{} and
+      +fast-redirects{} actions from being logged with LOG_LEVEL_ACTIONS.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      handle_established_connection(): Slightly improve a comment.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      handle_established_connection(): Fix a comment.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      socks5_connect(): Fix indentation.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      handle_established_connection(): Improve an error message.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      create_pattern_spec(): Fix ifdef indentation.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Fix comment typos.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      process_encrypted_request(): Improve a log message.
+      The function only processes request headers and there
+      may still be unread request body data left to process.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      chat(): Log the applied actions before deciding how to forward the request.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      parse_time_header(): Silence a coverity complaint when building without assertions.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      receive_encrypted_request_headers(): Improve a log message.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      mbedTLS get_ciphersuites_from_string(): Use strlcpy() instead of strncpy().
+      Previously the terminating NUL wasn't copied which resulted
+      in a compiler warning. This didn't cause actual problems as
+      the target buffer was initialized by zalloc_or_die() so the
+      last byte of the target buffer was NUL already.
+      Actually copying the terminating NUL seems clearer, though.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Remove compiler warnings. "log_error(LOG_LEVEL_FATAL, ..."
+      doesn't return but apparently the compiler doesn't know that.
+      Get rid of several "this statement may fall through
+      [-Wimplicit-fallthrough=]" warnings.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Store the PEM certificate in a dynamically allocated buffer
+      when https-inspecting. Should prevent errors like:
+      2021-03-16 22:36:19.148 7f47bbfff700 Error: X509 PEM cert len 16694 is larger than buffer len 16383
+      As a bonus it should slightly reduce the memory usage as most
+      certificates are smaller than the previously used fixed buffer.
+      Reported by: Wen Yue
      </para>
     </listitem>
     <listitem>
@@ -287,22 +328,22 @@
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects for .zeit.de/zustimmung
+      Disable fast-redirects for .zeit.de/zustimmung.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock adv-archiv.dfn-cert.de/
+      Unblock adv-archiv.dfn-cert.de/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Block requests to eu-tlp01.kameleoon.eu/
+      Block requests to eu-tlp01.kameleoon.eu/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Block requests to fpa-events.arstechnica.com/
+      Block requests to fpa-events.arstechnica.com/.
      </para>
     </listitem>
     <listitem>
@@ -324,73 +365,72 @@
     <itemizedlist>
     <listitem>
      <para>
-      Highlight 'Socket timeout 3 reached: http://127.0.0.1:20000/no-filter/chunked-content/36'
+      Highlight 'Socket timeout 3 reached: http://127.0.0.1:20000/no-filter/chunked-content/36'.
      </para>
     </listitem>
     <listitem>
      <para>
-      Improve documentation for inactivity-detection mode
+      Improve documentation for inactivity-detection mode.
      </para>
     </listitem>
     <listitem>
      <para>
-      Detect date changes when looking for inactivity
+      Detect date changes when looking for inactivity.
      </para>
     </listitem>
     <listitem>
      <para>
       Add a --passed-request-statistics-threshold option
-      That can be set to get statistics for requests that
+      that can be set to get statistics for requests that
       were passed.
      </para>
     </listitem>
     <listitem>
      <para>
-      Add a "inactivity detection" mode
-      Which can be useful for debugging purposes.
+      Add a "inactivity detection" mode which can be useful
+      for debugging purposes.
      </para>
     </listitem>
     <listitem>
      <para>
-      Bump version to 0.9.4
+      Bump version to 0.9.4.
      </para>
     </listitem>
     <listitem>
      <para>
-      Only run print_intro() and print_outro() when syntax highlighting
+      Only run print_intro() and print_outro() when syntax highlighting.
      </para>
     </listitem>
     <listitem>
      <para>
-      Rephrase a sentence in the documentation
+      Rephrase a sentence in the documentation.
      </para>
     </listitem>
     <listitem>
      <para>
-      Highlight 'Client socket 7 is no longer usable. The server socket has been closed.'
+      Highlight 'Client socket 7 is no longer usable. The server socket has been closed.'.
      </para>
     </listitem>
     <listitem>
      <para>
-      Clarify --statistics output
-      by explicitly mentioning that the status codes
-      sent by the server may differ from the ones in
-      "debug 512" messages.
+      Clarify --statistics output by explicitly mentioning that
+      the status codes sent by the server may differ from the ones
+      in "debug 512" messages.
      </para>
     </listitem>
     <listitem>
      <para>
-      Fix typo in the --statistics output
+      Fix typo in the --statistics output.
      </para>
     </listitem>
     <listitem>
      <para>
-      Remove an unused variable
+      Remove an unused variable.
      </para>
     </listitem>
     <listitem>
      <para>
-      Highlight 'The peer notified us that the connection on socket 11 is going to be closed'
+      Highlight 'The peer notified us that the connection on socket 11 is going to be closed'.
      </para>
      </listitem>
     </itemizedlist>
@@ -446,17 +486,17 @@
     <itemizedlist>
     <listitem>
      <para>
-      Bump generated Firefox version to 91 (ESR)
+      Bump generated Firefox version to 91 (ESR).
      </para>
     </listitem>
     <listitem>
      <para>
-      Bump version to 1.2.3
+      Bump version to 1.2.3.
      </para>
     </listitem>
     <listitem>
      <para>
-      Bump copyright
+      Bump copyright.
      </para>
      </listitem>
     </itemizedlist>
@@ -478,8 +518,8 @@
     </listitem>
     <listitem>
      <para>
-      configure: Add another warning in case --disable-pthread is used
-      while POSIX threads are available.
+      configure: Add another warning in case --disable-pthread
+      is used while POSIX threads are available.
       Various features don't even compile when not using threads.
      </para>
     </listitem>
@@ -500,7 +540,7 @@
     </listitem>
     <listitem>
      <para>
-      Bump copyright
+      Bump copyright.
      </para>
     </listitem>
     <listitem>
@@ -515,7 +555,7 @@
     </listitem>
     <listitem>
      <para>
-      configure: Remove obsolete RPM_BASE check
+      configure: Remove obsolete RPM_BASE check.
      </para>
      </listitem>
     </itemizedlist>
@@ -538,6 +578,19 @@
     <listitem>
      <para>
       Put all the '--enable-xxx' options in the configure call together.
+     </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    macOS build system:
+    <itemizedlist>
+    <listitem>
+     <para>
+      The OSXPackageBuilder repository has been updated and
+      can be used to create macOS packages again.
      </para>
      </listitem>
     </itemizedlist>
@@ -595,7 +648,7 @@
     <listitem>
      <para>
       Update TODO list item #184 to note that WolfSSL support will
-      (hopefully) appear after the 3.0.34 release
+      (hopefully) appear after the 3.0.34 release.
      </para>
     </listitem>
     <listitem>
@@ -609,7 +662,7 @@
     <listitem>
      <para>
       Add a warning that the socket-timeout does not apply
-      to operations done by TLS libraries
+      to operations done by TLS libraries.
      </para>
     </listitem>
     <listitem>
