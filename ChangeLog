@@ -166,6 +166,10 @@ ChangeLog for Privoxy
   - Update build script to use the final 8.45 pcre library.
   - Put all the '--enable-xxx' options in the configure call together.
 
+- macOS build system:
+  - The OSXPackageBuilder repository has been updated and
+    can be used to create macOS packages.
+
 - Documentation:
   - contacting: Remove obsolete reference to announce.sgml.
   - contacting: Request that the browser cache is cleared before
