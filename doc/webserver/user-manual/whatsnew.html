@@ -29,14 +29,14 @@
     <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this Release</a></h1>
     <p><span class="APPLICATION">Privoxy 3.0.33</span> fixes an XSS issue and multiple DoS issues and a couple of other
     bugs. The issues also affect earlier Privoxy releases. <span class="APPLICATION">Privoxy 3.0.33</span> also comes
-    with a couple of general improvements an new features.</p>
+    with a couple of general improvements and new features.</p>
     <p>Changes in <span class="APPLICATION">Privoxy 3.0.33</span> stable:</p>
     <ul>
       <li>
         <p>Security/Reliability:</p>
         <ul>
           <li>
-            <p>cgi_error_no_template(): Encode the template name to prevent XSS (cross-side scripting) when Privoxy is
+            <p>cgi_error_no_template(): Encode the template name to prevent XSS (cross-site scripting) when Privoxy is
             configured to servce the user-manual itself. Commit 0e668e9409c. OVE-20211102-0001. CVE-2021-44543.
             Reported by: Artem Ivanov</p>
           </li>
