@@ -1,10 +1,17 @@
-privoxy (3.0.33~gitsnapshot-1) UNRELEASED; urgency=medium
+privoxy (3.0.34~gitsnapshot-1) UNRELEASED; urgency=medium
 
   * Unreleased GIT snapshot.
-  * Adapt Debian patches to GIT changes.
+
+ -- Roland Rosenfeld <roland@debian.org>  Thu, 09 Dec 2021 16:35:46 +0100
+
+privoxy (3.0.33-1) unstable; urgency=medium
+
+  * New upstream version 3.0.33.
+  * Adapt all patches to new version.
+  * Remove pcre dir from copyright and debian/source/lintian-overrides.
   * Undo lintian override for bug 992465.
 
- -- Roland Rosenfeld <roland@debian.org>  Thu, 02 Dec 2021 09:04:45 +0100
+ -- Roland Rosenfeld <roland@debian.org>  Wed, 08 Dec 2021 16:29:31 +0100
 
 privoxy (3.0.32-3) unstable; urgency=medium
 
