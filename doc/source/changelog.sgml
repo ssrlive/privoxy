@@ -42,7 +42,7 @@
     <listitem>
      <para>
       cgi_error_no_template(): Encode the template name to prevent
-      XSS (cross-side scripting) when Privoxy is configured to servce
+      XSS (cross-site scripting) when Privoxy is configured to servce
       the user-manual itself.
       Commit 0e668e9409c. OVE-20211102-0001. CVE-2021-44543.
       Reported by: Artem Ivanov
