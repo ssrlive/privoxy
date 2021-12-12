@@ -13,12 +13,12 @@ Build-Depends: autoconf,
                libmbedtls-dev,
                libpcre3-dev,
                man2html <!nodoc>,
-               opensp <!nodoc>,
+               opensp:native <!nodoc>,
                po-debconf,
                sgmlspl <!nodoc>,
                w3m <!nodoc>,
                zlib1g-dev
-Standards-Version: 4.5.1
+Standards-Version: 4.6.0
 Homepage: https://www.privoxy.org/
 Vcs-Git: https://salsa.debian.org/debian/privoxy.git
 Vcs-Browser: https://salsa.debian.org/debian/privoxy

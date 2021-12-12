@@ -1068,9 +1068,16 @@ debug 65536 # Log the applying actions
 </variablelist>
 
 <![%config-file;[<literallayout>@@#debug     1 # Log the destination for each request. See also debug 1024.</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     2 # show each connection status</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     4 # show tagging-related messages</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug     8 # show header parsing</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   128 # debug redirects</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   256 # debug GIF de-animation</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug   512 # Common Log Format</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  1024 # Log the destination for requests &my-app; didn't let through, and the reason why.</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  4096 # Startup banner and warnings</literallayout>]]>
 <![%config-file;[<literallayout>@@#debug  8192 # Non-fatal errors</literallayout>]]>
+<![%config-file;[<literallayout>@@#debug 65536 # Log applying actions</literallayout>]]>
 </sect3>
 
 
@@ -3098,6 +3105,14 @@ forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010
     If you aren't using an occasionally slow proxy like Tor, reducing
     it to a few seconds should be fine.
    </para>
+   <warning>
+    <para>
+     When a TLS library is being used to read or write data from a socket with
+     <literal><ulink url="actions-file.html#HTTPS-INSPECTION">https-inspection</ulink></literal>
+     enabled the socket-timeout currently isn't applied and the timeout
+     used depends on the library (which may not even use a timeout).
+    </para>
+   </warning>
   </listitem>
  </varlistentry>
  <varlistentry>
@@ -3176,10 +3191,15 @@ forward   /.*\.(exe|com|dll|zip)$    antivir.example.com:8010
    </para>
    <para>
     One most POSIX-compliant systems &my-app; can't properly deal with
-    more than FD_SETSIZE file descriptors at the same time and has to reject
-    connections if the limit is reached. This will likely change in a
-    future version, but currently this limit can't be increased without
-    recompiling &my-app; with a different FD_SETSIZE limit.
+    more than FD_SETSIZE file descriptors if &my-app; has been configured
+    to use select() and has to reject connections if the limit is reached.
+    When using select() this limit therefore can't be increased without
+    recompiling &my-app; with a different FD_SETSIZE limit unless &my-app;
+    is running on Windows with _WIN32 defined.
+   </para>
+   <para>
+    When &my-app; has been configured to use poll() the FD_SETSIZE limit
+    does not apply.
    </para>
   </listitem>
  </varlistentry>
@@ -4142,10 +4162,17 @@ compression-level 0
     that is used when Privoxy generates certificates for intercepted
     requests.
    </para>
+   <warning>
    <para>
      Note that the password is shown on the CGI page so don't
      reuse an important one.
    </para>
+   <para>
+     If disclosure of the password is a compliance issue consider blocking
+     the relevant CGI requests after enabling the <link linkend="enforce-blocks">enforce-blocks</link>
+     and <link linkend="allow-cgi-request-crunching">allow-cgi-request-crunching</link>.
+   </para>
+   </warning>
   </listitem>
  </varlistentry>
  <varlistentry>

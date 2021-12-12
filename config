@@ -610,10 +610,17 @@ logfile logfile
 #      you read the log messages, you may even be able to solve the
 #      problem on your own.
 #
-#debug     1 # Log the destination for each request.
+#debug     1 # Log the destination for each request. See also debug 1024.
+#debug     2 # show each connection status
+#debug     4 # show tagging-related messages
+#debug     8 # show header parsing
+#debug   128 # debug redirects
+#debug   256 # debug GIF de-animation
+#debug   512 # Common Log Format
 #debug  1024 # Log the destination for requests Privoxy didn't let through, and the reason why.
 #debug  4096 # Startup banner and warnings
 #debug  8192 # Non-fatal errors
+#debug 65536 # Log applying actions
 #
 #  3.2. single-threaded
 #  =====================
@@ -1896,6 +1903,15 @@ tolerate-pipelining 1
 #      If you aren't using an occasionally slow proxy like Tor,
 #      reducing it to a few seconds should be fine.
 #
+#      +-----------------------------------------------------+
+#      |                       Warning                       |
+#      |-----------------------------------------------------|
+#      |When a TLS library is being used to read or write    |
+#      |data from a socket with https-inspection enabled the |
+#      |socket-timeout currently isn't applied and the       |
+#      |timeout used depends on the library (which may not   |
+#      |even use a timeout).                                 |
+#      +-----------------------------------------------------+
 #  Example:
 #
 #      socket-timeout 300
@@ -1950,11 +1966,15 @@ socket-timeout 300
 #      limit below the one enforced by the operating system.
 #
 #      One most POSIX-compliant systems Privoxy can't properly deal
-#      with more than FD_SETSIZE file descriptors at the same time
-#      and has to reject connections if the limit is reached. This
-#      will likely change in a future version, but currently this
-#      limit can't be increased without recompiling Privoxy with a
-#      different FD_SETSIZE limit.
+#      with more than FD_SETSIZE file descriptors if Privoxy has been
+#      configured to use select() and has to reject connections if
+#      the limit is reached. When using select() this limit therefore
+#      can't be increased without recompiling Privoxy with a
+#      different FD_SETSIZE limit unless Privoxy is running on
+#      Windows with _WIN32 defined.
+#
+#      When Privoxy has been configured to use poll() the FD_SETSIZE
+#      limit does not apply.
 #
 #  Example:
 #
@@ -2565,9 +2585,17 @@ socket-timeout 300
 #      is used when Privoxy generates certificates for intercepted
 #      requests.
 #
-#      Note that the password is shown on the CGI page so don't reuse
-#      an important one.
-#
+#      +-----------------------------------------------------+
+#      |                       Warning                       |
+#      |-----------------------------------------------------|
+#      |Note that the password is shown on the CGI page so   |
+#      |don't reuse an important one.                        |
+#      |                                                     |
+#      |If disclosure of the password is a compliance issue  |
+#      |consider blocking the relevant CGI requests after    |
+#      |enabling the enforce-blocks and                      |
+#      |allow-cgi-request-crunching.                         |
+#      +-----------------------------------------------------+
 #  Example:
 #
 #      ca-password blafasel

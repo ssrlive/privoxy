@@ -1,1 +1,3 @@
+rm_conffile /etc/privoxy/global.action 3.0.11-1~ privoxy
+rm_conffile /etc/privoxy/standard.action 3.0.11-1~ privoxy
 rm_conffile /etc/privoxy/templates/show-version 3.0.28-2~ privoxy

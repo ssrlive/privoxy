@@ -8,7 +8,7 @@
  *                project.  Does not define any variables or functions
  *                (though it does declare some macros).
  *
- * Copyright   :  Written by and Copyright (C) 2001-2014 the
+ * Copyright   :  Written by and Copyright (C) 2001-2021 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1310,16 +1310,17 @@ enum filter_type
    FT_SERVER_HEADER_TAGGER = 4,
    FT_SUPPRESS_TAG = 5,
    FT_CLIENT_BODY_FILTER = 6,
+   FT_ADD_HEADER = 7,
 #ifdef FEATURE_EXTERNAL_FILTERS
-   FT_EXTERNAL_CONTENT_FILTER = 7,
+   FT_EXTERNAL_CONTENT_FILTER = 8,
 #endif
    FT_INVALID_FILTER       = 42,
 };
 
 #ifdef FEATURE_EXTERNAL_FILTERS
-#define MAX_FILTER_TYPES        8
+#define MAX_FILTER_TYPES        9
 #else
-#define MAX_FILTER_TYPES        7
+#define MAX_FILTER_TYPES        8
 #endif
 
 /**
