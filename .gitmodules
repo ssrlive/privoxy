@@ -1,0 +1,12 @@
+[submodule "depends/mbedtls"]
+	path = depends/mbedtls
+	url = https://github.com/ShadowsocksR-Live/mbedtls.git
+	branch = master
+[submodule "depends/pcre"]
+	path = depends/pcre
+	url = https://github.com/ssrlive/pcre.git
+	branch = v1
+[submodule "depends/zlib"]
+	path = depends/zlib
+	url = https://github.com/ShadowsocksR-Live/zlib.git
+	branch = master

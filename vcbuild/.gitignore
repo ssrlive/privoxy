@@ -2,6 +2,8 @@ Debug/
 Release/
 ipch/
 .vs/
+.vscode/
+*.opensdf
 *.sdf
 *.suo
 *.vcxproj.user
