@@ -2265,6 +2265,8 @@ idp.springer.com/
 .microsoftonline.com/
 # URL = https://www.zeit.de/zustimmung?url=https%3A%2F%2Fwww.zeit.de%2F2021%2F46%2Fchristian-drosten-coronavirus-virologie-pandemie-wissenschaft-impfung%2Fseite-4
 .zeit.de/zustimmung
+# URL = https://07.hagalil.com/www/delivery/ajs.php?zoneid=14&cb=35782002576&charset=UTF-8&loc=https%3A//www.hagalil.com/2021/12/rechtes-von-a-z-5/
+.hagalil.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
