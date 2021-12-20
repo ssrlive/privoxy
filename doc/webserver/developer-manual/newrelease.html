@@ -491,7 +491,7 @@
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  dch -v 3.0.33-1</pre>
+              <pre class="PROGRAMLISTING">  dch -v 3.0.34-1</pre>
             </td>
           </tr>
         </table>
@@ -508,7 +508,7 @@
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  lintian -iI ../build-area/privoxy_3.0.33-1_amd64.changes</pre>
+              <pre class="PROGRAMLISTING">  lintian -iI ../build-area/privoxy_3.0.34-1_amd64.changes</pre>
             </td>
           </tr>
         </table>
@@ -517,7 +517,7 @@
           <tr>
             <td>
               <pre class=
-              "PROGRAMLISTING">  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.33-1.dsc</pre>
+              "PROGRAMLISTING">  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.34-1.dsc</pre>
             </td>
           </tr>
         </table>
@@ -526,19 +526,19 @@
           <tr>
             <td>
               <pre class=
-              "PROGRAMLISTING">  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.33-1_amd64.changes -s -- schroot sid</pre>
+              "PROGRAMLISTING">  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.34-1_amd64.changes -s -- schroot sid</pre>
             </td>
           </tr>
         </table>
         <p>Or just push the changes to salsa.debian.org, where a CI pipeline is defined for the package, that builds
         and tests it.</p>
         <p>If everything is okay, run cowbuilder with i386 and amd64 environments for current Debian stable release and
-        build privoxy_3.0.33-1_i386.deb and privoxy_3.0.33-1_amd64.deb. Then sign both files:</p>
+        build privoxy_3.0.34-1_i386.deb and privoxy_3.0.34-1_amd64.deb. Then sign both files:</p>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  gpg --detach-sign --armor privoxy_3.0.33-1_i386.deb
-  gpg --detach-sign --armor privoxy_3.0.33-1_amd64.deb</pre>
+              <pre class="PROGRAMLISTING">  gpg --detach-sign --armor privoxy_3.0.34-1_i386.deb
+  gpg --detach-sign --armor privoxy_3.0.34-1_amd64.deb</pre>
             </td>
           </tr>
         </table>
