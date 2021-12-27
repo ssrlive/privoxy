@@ -1,87 +1,204 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-  <title>Testing Guidelines</title>
-  <meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79">
-  <link rel="HOME" title="Privoxy Developer Manual" href="index.html">
-  <link rel="PREVIOUS" title="Coding Guidelines" href="coding.html">
-  <link rel="NEXT" title="Releasing a New Version" href="newrelease.html">
-  <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-<body class="SECT1" bgcolor="#EEEEEE" text="#000000" link="#0000FF" vlink="#840084" alink="#0000FF">
-  <div class="NAVHEADER">
-    <table summary="Header navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <th colspan="3" align="center">Privoxy Developer Manual</th>
-      </tr>
-      <tr>
-        <td width="10%" align="left" valign="bottom"><a href="coding.html" accesskey="P">Prev</a></td>
-        <td width="80%" align="center" valign="bottom"></td>
-        <td width="10%" align="right" valign="bottom"><a href="newrelease.html" accesskey="N">Next</a></td>
-      </tr>
-    </table>
-    <hr align="left" width="100%">
-  </div>
-  <div class="SECT1">
-    <h1 class="SECT1"><a name="TESTING" id="TESTING">5. Testing Guidelines</a></h1>
-    <p>To be filled.</p>
-    <div class="SECT2">
-      <h2 class="SECT2"><a name="TESTING-PLAN" id="TESTING-PLAN">5.1. Testplan for releases</a></h2>
-      <p>Explain release numbers. major, minor. developer releases. etc.</p>
-      <ol type="1">
-        <li>
-          <p>Remove any existing rpm with rpm -e</p>
-        </li>
-        <li>
-          <p>Remove any file that was left over. This includes (but is not limited to)</p>
-          <ul>
-            <li>
-              <p>/var/log/privoxy</p>
-            </li>
-            <li>
-              <p>/etc/privoxy</p>
-            </li>
-            <li>
-              <p>/usr/sbin/privoxy</p>
-            </li>
-            <li>
-              <p>/etc/init.d/privoxy</p>
-            </li>
-            <li>
-              <p>/usr/doc/privoxy*</p>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <p>Install the rpm. Any error messages?</p>
-        </li>
-        <li>
-          <p>start,stop,status <span class="APPLICATION">Privoxy</span> with the specific script (e.g.
-          /etc/rc.d/init/privoxy stop). Reboot your machine. Does autostart work?</p>
-        </li>
-        <li>
-          <p>Start browsing. Does <span class="APPLICATION">Privoxy</span> work? Logfile written?</p>
-        </li>
-        <li>
-          <p>Remove the rpm. Any error messages? All files removed?</p>
-        </li>
-      </ol>
-    </div>
-    <div class="SECT2">
-      <h2 class="SECT2"><a name="PRIVOXY-REGRESSION-TEST" id="PRIVOXY-REGRESSION-TEST">5.2. Testing with <span class=
-      "APPLICATION">Privoxy-Regression-Test</span></a></h2>
-      <p>If you compiled, packaged or merely installed Privoxy, it is recommended to run <span class=
-      "APPLICATION">Privoxy-Regression-Test</span> to verify that at least the tested parts of <span class=
-      "APPLICATION">Privoxy</span> are working as expected.</p>
-      <p>This is actually pretty easy. For details, please see <b class="COMMAND">perldoc
-      privoxy-regression-test.pl</b>.</p>
-      <p>Here is an example of what <span class="APPLICATION">Privoxy-Regression-Test</span> can do for you:</p>
-      <table border="0" bgcolor="#E0E0E0" width="100%">
-        <tr>
-          <td>
-            <pre class="PROGRAMLISTING">  # Run all the tests
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Testing Guidelines</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Privoxy Developer Manual"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Coding Guidelines"
+HREF="coding.html"><LINK
+REL="NEXT"
+TITLE="Releasing a New Version"
+HREF="newrelease.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="../p_doc.css"><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html;
+charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#EEEEEE"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Privoxy Developer Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="coding.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="newrelease.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="TESTING"
+>5. Testing Guidelines</A
+></H1
+><P
+>To be filled.</P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="TESTING-PLAN"
+>5.1. Testplan for releases</A
+></H2
+><P
+>       Explain release numbers. major, minor. developer releases. etc.
+      </P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Remove any existing rpm with rpm -e</P
+></LI
+><LI
+><P
+>Remove any file that was left over. This includes (but is not limited to)
+          </P
+><P
+></P
+><UL
+><LI
+><P
+>/var/log/privoxy</P
+></LI
+><LI
+><P
+>/etc/privoxy</P
+></LI
+><LI
+><P
+>/usr/sbin/privoxy</P
+></LI
+><LI
+><P
+>/etc/init.d/privoxy</P
+></LI
+><LI
+><P
+>/usr/doc/privoxy*</P
+></LI
+></UL
+></LI
+><LI
+><P
+>Install the rpm. Any error messages?</P
+></LI
+><LI
+><P
+>start,stop,status <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> with the specific script
+      (e.g. /etc/rc.d/init/privoxy stop). Reboot your machine. Does
+      autostart work?</P
+></LI
+><LI
+><P
+>Start browsing. Does <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> work? Logfile written?</P
+></LI
+><LI
+><P
+>Remove the rpm. Any error messages? All files removed?</P
+></LI
+></OL
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="PRIVOXY-REGRESSION-TEST"
+>5.2. Testing with <SPAN
+CLASS="APPLICATION"
+>Privoxy-Regression-Test</SPAN
+></A
+></H2
+><P
+>       If you compiled, packaged or merely installed Privoxy, it is recommended to run
+       <SPAN
+CLASS="APPLICATION"
+>Privoxy-Regression-Test</SPAN
+> to verify that at least
+       the tested parts of <SPAN
+CLASS="APPLICATION"
+>Privoxy</SPAN
+> are working as expected.
+     </P
+><P
+>       This is actually pretty easy. For details, please see
+       <B
+CLASS="COMMAND"
+>perldoc privoxy-regression-test.pl</B
+>.
+     </P
+><P
+>      Here is an example of what <SPAN
+CLASS="APPLICATION"
+>Privoxy-Regression-Test</SPAN
+> can do for you:
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  # Run all the tests
   fk@t520 ~ $privoxy-regression-test.pl
   2020-12-14 12:16:32: Asking Privoxy for the number of action files available ...
   2020-12-14 12:16:32: Gathering regression tests from 9 action file(s) delivered by Privoxy 3.0.30.
@@ -100,22 +217,44 @@
   2020-12-14 12:17:56: Executing: curl --include  -H 'Proxy-Connection:'  -H 'Connection: close'  -s  -S  --user-agent 'Privoxy-Regression-Test 0.7.2'  --max-time '5'  --globoff  -H 'X-Privoxy-Control: hide-referrer{conditional-block}' -H 'Referer: https://p.p/'  http://p.p/show-request 2&#62;&#38;1
   2020-12-14 12:17:56: Ooops. Expected removal but: 'Referer: https://p.p/' is still there.
   2020-12-14 12:17:56: Failure for test 785 (0/13/5). Header 'Referer: https://p.p/' and tag 'hide-referrer{conditional-block}'
-  2020-12-14 12:17:56: Executed 1 regression tests. Skipped 1201. 0 successes, 1 failures.</pre>
-          </td>
-        </tr>
-      </table>
-      <p>Use the if the <b class="COMMAND">--privoxy-address</b> option if the http_proxy environment variable isn't
-      configured and you don't want to use the default (http://127.0.0.1:8118/).</p>
-    </div>
-    <div class="SECT2">
-      <h2 class="SECT2"><a name="FUZZING" id="FUZZING">5.3. Fuzzing Privoxy</a></h2>
-      <p>To make fuzzing more convenient, Privoxy can be configured with --enable-fuzz which will result in the --fuzz
-      option becoming available.</p>
-      <p>Example (tested on ElectroBSD):</p>
-      <table border="0" bgcolor="#E0E0E0" width="100%">
-        <tr>
-          <td>
-            <pre class="PROGRAMLISTING">  # Compile Privoxy with instrumentation for afl
+  2020-12-14 12:17:56: Executed 1 regression tests. Skipped 1201. 0 successes, 1 failures.</PRE
+></TD
+></TR
+></TABLE
+><P
+>      Use the if the <B
+CLASS="COMMAND"
+>--privoxy-address</B
+> option if the
+      http_proxy environment variable isn't configured and you don't want
+      to use the default (http://127.0.0.1:8118/).
+     </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="FUZZING"
+>5.3. Fuzzing Privoxy</A
+></H2
+><P
+>       To make fuzzing more convenient, Privoxy can be configured
+       with --enable-fuzz which will result in the --fuzz option
+       becoming available.
+     </P
+><P
+>      Example (tested on ElectroBSD):
+     </P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  # Compile Privoxy with instrumentation for afl
   $ export CC=afl-clang
   $ export CFLAGS="-fsanitize=address -ggdb"
   $ export CPPFLAGS=-I/usr/local/include/
@@ -164,26 +303,70 @@
   FILTER: bla fasel
   s@(.{1})[432](\d+)@$1$2$hostname@UgisT
 
-  $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.filter --stfu</pre>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <div class="NAVFOOTER">
-    <hr align="left" width="100%">
-    <table summary="Footer navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td width="33%" align="left" valign="top"><a href="coding.html" accesskey="P">Prev</a></td>
-        <td width="34%" align="center" valign="top"><a href="index.html" accesskey="H">Home</a></td>
-        <td width="33%" align="right" valign="top"><a href="newrelease.html" accesskey="N">Next</a></td>
-      </tr>
-      <tr>
-        <td width="33%" align="left" valign="top">Coding Guidelines</td>
-        <td width="34%" align="center" valign="top">&nbsp;</td>
-        <td width="33%" align="right" valign="top">Releasing a New Version</td>
-      </tr>
-    </table>
-  </div>
-</body>
-</html>
+  $ afl-fuzz -i input/ -o output/ -f bla.filter -m none privoxy --fuzz filter bla.filter --stfu</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="coding.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="newrelease.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Coding Guidelines</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Releasing a New Version</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
