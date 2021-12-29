@@ -1,368 +1,150 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<HTML
-><HEAD
-><TITLE
->Releasing a New Version</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
-REL="HOME"
-TITLE="Privoxy Developer Manual"
-HREF="index.html"><LINK
-REL="PREVIOUS"
-TITLE="Testing Guidelines"
-HREF="testing.html"><LINK
-REL="NEXT"
-TITLE="Update the Webserver"
-HREF="webserver-update.html"><LINK
-REL="STYLESHEET"
-TYPE="text/css"
-HREF="../p_doc.css"><META
-HTTP-EQUIV="Content-Type"
-CONTENT="text/html;
-charset=ISO-8859-1"></HEAD
-><BODY
-CLASS="SECT1"
-BGCOLOR="#EEEEEE"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="NAVHEADER"
-><TABLE
-SUMMARY="Header navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TH
-COLSPAN="3"
-ALIGN="center"
->Privoxy Developer Manual</TH
-></TR
-><TR
-><TD
-WIDTH="10%"
-ALIGN="left"
-VALIGN="bottom"
-><A
-HREF="testing.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="80%"
-ALIGN="center"
-VALIGN="bottom"
-></TD
-><TD
-WIDTH="10%"
-ALIGN="right"
-VALIGN="bottom"
-><A
-HREF="webserver-update.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-></TABLE
-><HR
-ALIGN="LEFT"
-WIDTH="100%"></DIV
-><DIV
-CLASS="SECT1"
-><H1
-CLASS="SECT1"
-><A
-NAME="NEWRELEASE"
->6. Releasing a New Version</A
-></H1
-><P
->        When we release versions of <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
->,
-        our work leaves our cozy secret lab and has to work in the cold
-        RealWorld[tm]. Once it is released, there is no way to call it
-        back, so it is very important that great care is taken to ensure
-        that everything runs fine, and not to introduce problems in the
-        very last minute.
-    </P
-><P
->        So when releasing a new version, please adhere exactly to the
-        procedure outlined in this chapter.
-    </P
-><P
->        The following programs are required to follow this process:
-        <TT
-CLASS="FILENAME"
->ssh</TT
->,
-        <TT
-CLASS="FILENAME"
->gmake</TT
-> (GNU's version of make), autoconf, git,
-        a web browser.
-    </P
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="VERSIONNUMBERS"
->6.1. Version numbers</A
-></H2
-><P
->      First you need to determine which version number the release will have.
-      <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> version numbers consist of three numbers,
-      separated by dots, like in X.Y.Z (e.g. 3.0.0), where:
-    </P
-><P
-></P
-><UL
-><LI
-><P
->              X, the version major, is rarely ever changed. It is increased by one if
-              turning a development branch into stable substantially changes the functionality,
-              user interface or configuration syntax. Majors 1 and 2 were
-              <SPAN
-CLASS="APPLICATION"
->Junkbuster</SPAN
->, and 3 is the first stable
-              <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> release.
-            </P
-></LI
-><LI
-><P
->
-              Y, the version minor, represents the branch within the major version.
-              At any point in time, there are two branches being maintained:
-              The stable branch, with an even minor, say, 2N, in which no functionality is
-              being added and only bug-fixes are made, and 2N+1, the development branch, in
-              which the further development of <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> takes
-              place.
-              This enables us to turn the code upside down and inside out, while at the same time
-              providing and maintaining a stable version.
-              The minor is reset to zero (and one) when the major is incremented. When a development
-              branch has matured to the point where it can be turned into stable, the old stable branch
-              2N is given up (i.e. no longer maintained), the former development branch 2N+1 becomes the
-              new stable branch 2N+2, and a new development branch 2N+3 is opened.
-            </P
-></LI
-><LI
-><P
->              Z, the point or sub version, represents a release of the software within a branch.
-              It is therefore incremented immediately after each software release.
-
-              The point version is reset to zero when the minor changes.
-            </P
-><P
->              Stable branches work a little differently, since there should be
-              little to no development happening in such branches. Remember,
-              only bugfixes, which presumably should have had some testing
-              before being committed. Stable branches will then have their
-              version reported as <TT
-CLASS="LITERAL"
->0.0.0</TT
->, during that period
-              between releases when changes are being added. This is to denote
-              that this code is <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->not for release</I
-></SPAN
->. Then
-              as the release nears, the version is bumped according: e.g.
-              <TT
-CLASS="LITERAL"
->3.0.1 -&#62; 0.0.0 -&#62; 3.0.2</TT
->.
-            </P
-></LI
-></UL
-><P
->     In summary, the main Git trunk is the development branch where new
-     features are being worked on for the next stable series. This should
-     almost always be where the most activity takes place. There is always at
-     least one stable branch from the trunk, e.g now it is
-     <TT
-CLASS="LITERAL"
->3.0</TT
->, which is only used to release stable versions.
-     Once the initial *.0 release of the stable branch has been done, then as a
-     rule, only bugfixes that have had prior testing should be committed to
-     the stable branch. Once there are enough bugfixes to justify a new
-     release, the version of this branch is again incremented Example: 3.0.0
-     -&#62; 3.0.1 -&#62; 3.0.2, etc are all stable releases from within the stable
-     branch. 3.1.x is currently the main trunk, and where work on 3.2.x is
-     taking place. If any questions, please post to the devel list
-     <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->before</I
-></SPAN
-> committing to a stable branch!
-    </P
-><P
->     Developers should remember too that if they commit a bugfix to the stable
-     branch, this will more than likely require a separate submission to the
-     main trunk, since these are separate development trees within Git. If you
-     are working on both, then this would require at least two separate check
-     outs (i.e main trunk, <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->and</I
-></SPAN
-> the stable release branch,
-     which is <TT
-CLASS="LITERAL"
->v_3_0_branch</TT
-> at the moment).
-    </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="BEFORERELEASE"
->6.2. Before the Release</A
-></H2
-><P
->       The following <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->must be done by one of the
-       developers</I
-></SPAN
-> prior to each new release.
-     </P
-><P
-></P
-><UL
-><LI
-><P
->         Make sure that everybody who has worked on the code in the last
-         couple of days has had a chance to yell <SPAN
-CLASS="QUOTE"
->"no!"</SPAN
-> in case
-         they have pending changes/fixes in their pipelines. Announce the
-         freeze so that nobody will interfere with last minute changes.
-       </P
-></LI
-><LI
-><P
->         Update the code status (CODE_STATUS="xxx") in <TT
-CLASS="FILENAME"
->configure.in</TT
-> to one of
-         "alpha", "beta" or "stable".
-       </P
-></LI
-><LI
-><P
->         Rebuild configure and GNUMakefile to make sure the updated values are being used.
-       </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  $ autoheader &#38;&#38; autoconf     # rebuild configure
-  $ ./configure                # rebuild GNUmakefile</PRE
-></TD
-></TR
-></TABLE
-></LI
-><LI
-><P
->        <B
-CLASS="COMMAND"
->make dok-release</B
-> to update the sgml documentation source files.
-       </P
-></LI
-><LI
-><P
->        If action file processing has changed and is not backward-compatible,
-        make sure the "for-privoxy-version=x.y.z" minimum version number in
-        <TT
-CLASS="FILENAME"
->default.action.master</TT
-> has been updated:
-       </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  {{settings}}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Releasing a New Version</title>
+  <meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79">
+  <link rel="HOME" title="Privoxy Developer Manual" href="index.html">
+  <link rel="PREVIOUS" title="Testing Guidelines" href="testing.html">
+  <link rel="NEXT" title="Update the Webserver" href="webserver-update.html">
+  <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body class="SECT1" bgcolor="#EEEEEE" text="#000000" link="#0000FF" vlink="#840084" alink="#0000FF">
+  <div class="NAVHEADER">
+    <table summary="Header navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <th colspan="3" align="center">Privoxy Developer Manual</th>
+      </tr>
+      <tr>
+        <td width="10%" align="left" valign="bottom"><a href="testing.html" accesskey="P">Prev</a></td>
+        <td width="80%" align="center" valign="bottom"></td>
+        <td width="10%" align="right" valign="bottom"><a href="webserver-update.html" accesskey="N">Next</a></td>
+      </tr>
+    </table>
+    <hr align="left" width="100%">
+  </div>
+  <div class="SECT1">
+    <h1 class="SECT1"><a name="NEWRELEASE" id="NEWRELEASE">6. Releasing a New Version</a></h1>
+    <p>When we release versions of <span class="APPLICATION">Privoxy</span>, our work leaves our cozy secret lab and
+    has to work in the cold RealWorld[tm]. Once it is released, there is no way to call it back, so it is very
+    important that great care is taken to ensure that everything runs fine, and not to introduce problems in the very
+    last minute.</p>
+    <p>So when releasing a new version, please adhere exactly to the procedure outlined in this chapter.</p>
+    <p>The following programs are required to follow this process: <tt class="FILENAME">ssh</tt>, <tt class=
+    "FILENAME">gmake</tt> (GNU's version of make), autoconf, git, a web browser.</p>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="VERSIONNUMBERS" id="VERSIONNUMBERS">6.1. Version numbers</a></h2>
+      <p>First you need to determine which version number the release will have. <span class=
+      "APPLICATION">Privoxy</span> version numbers consist of three numbers, separated by dots, like in X.Y.Z (e.g.
+      3.0.0), where:</p>
+      <ul>
+        <li>
+          <p>X, the version major, is rarely ever changed. It is increased by one if turning a development branch into
+          stable substantially changes the functionality, user interface or configuration syntax. Majors 1 and 2 were
+          <span class="APPLICATION">Junkbuster</span>, and 3 is the first stable <span class=
+          "APPLICATION">Privoxy</span> release.</p>
+        </li>
+        <li>
+          <p>Y, the version minor, represents the branch within the major version. At any point in time, there are two
+          branches being maintained: The stable branch, with an even minor, say, 2N, in which no functionality is being
+          added and only bug-fixes are made, and 2N+1, the development branch, in which the further development of
+          <span class="APPLICATION">Privoxy</span> takes place. This enables us to turn the code upside down and inside
+          out, while at the same time providing and maintaining a stable version. The minor is reset to zero (and one)
+          when the major is incremented. When a development branch has matured to the point where it can be turned into
+          stable, the old stable branch 2N is given up (i.e. no longer maintained), the former development branch 2N+1
+          becomes the new stable branch 2N+2, and a new development branch 2N+3 is opened.</p>
+        </li>
+        <li>
+          <p>Z, the point or sub version, represents a release of the software within a branch. It is therefore
+          incremented immediately after each software release. The point version is reset to zero when the minor
+          changes.</p>
+          <p>Stable branches work a little differently, since there should be little to no development happening in
+          such branches. Remember, only bugfixes, which presumably should have had some testing before being committed.
+          Stable branches will then have their version reported as <tt class="LITERAL">0.0.0</tt>, during that period
+          between releases when changes are being added. This is to denote that this code is <span class=
+          "emphasis"><i class="EMPHASIS">not for release</i></span>. Then as the release nears, the version is bumped
+          according: e.g. <tt class="LITERAL">3.0.1 -&#62; 0.0.0 -&#62; 3.0.2</tt>.</p>
+        </li>
+      </ul>
+      <p>In summary, the main Git trunk is the development branch where new features are being worked on for the next
+      stable series. This should almost always be where the most activity takes place. There is always at least one
+      stable branch from the trunk, e.g now it is <tt class="LITERAL">3.0</tt>, which is only used to release stable
+      versions. Once the initial *.0 release of the stable branch has been done, then as a rule, only bugfixes that
+      have had prior testing should be committed to the stable branch. Once there are enough bugfixes to justify a new
+      release, the version of this branch is again incremented Example: 3.0.0 -&#62; 3.0.1 -&#62; 3.0.2, etc are all
+      stable releases from within the stable branch. 3.1.x is currently the main trunk, and where work on 3.2.x is
+      taking place. If any questions, please post to the devel list <span class="emphasis"><i class=
+      "EMPHASIS">before</i></span> committing to a stable branch!</p>
+      <p>Developers should remember too that if they commit a bugfix to the stable branch, this will more than likely
+      require a separate submission to the main trunk, since these are separate development trees within Git. If you
+      are working on both, then this would require at least two separate check outs (i.e main trunk, <span class=
+      "emphasis"><i class="EMPHASIS">and</i></span> the stable release branch, which is <tt class=
+      "LITERAL">v_3_0_branch</tt> at the moment).</p>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="BEFORERELEASE" id="BEFORERELEASE">6.2. Before the Release</a></h2>
+      <p>The following <span class="emphasis"><i class="EMPHASIS">must be done by one of the developers</i></span>
+      prior to each new release.</p>
+      <ul>
+        <li>
+          <p>Make sure that everybody who has worked on the code in the last couple of days has had a chance to yell
+          <span class="QUOTE">"no!"</span> in case they have pending changes/fixes in their pipelines. Announce the
+          freeze so that nobody will interfere with last minute changes.</p>
+        </li>
+        <li>
+          <p>Update the code status (CODE_STATUS="xxx") in <tt class="FILENAME">configure.in</tt> to one of "alpha",
+          "beta" or "stable".</p>
+        </li>
+        <li>
+          <p>Rebuild configure and GNUMakefile to make sure the updated values are being used.</p>
+          <table border="0" bgcolor="#E0E0E0" width="90%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  $ autoheader &#38;&#38; autoconf     # rebuild configure
+  $ ./configure                # rebuild GNUmakefile</pre>
+              </td>
+            </tr>
+          </table>
+        </li>
+        <li>
+          <p><b class="COMMAND">make dok-release</b> to update the sgml documentation source files.</p>
+        </li>
+        <li>
+          <p>If action file processing has changed and is not backward-compatible, make sure the
+          "for-privoxy-version=x.y.z" minimum version number in <tt class="FILENAME">default.action.master</tt> has
+          been updated:</p>
+          <table border="0" bgcolor="#E0E0E0" width="90%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  {{settings}}
   #############################################################################
   #MASTER# COMMENT: The minimum Privoxy version:
-  for-privoxy-version=3.0.11</PRE
-></TD
-></TR
-></TABLE
-></LI
-><LI
-><P
->        Create the change log:
-       </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  $ git tag
+  for-privoxy-version=3.0.11</pre>
+              </td>
+            </tr>
+          </table>
+        </li>
+        <li>
+          <p>Create the change log:</p>
+          <table border="0" bgcolor="#E0E0E0" width="90%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  $ git tag
   #   to see the tags
   $ git log [last release tag]..master &gt; /tmp/log
   #   get the commit log since the last release
   $ utils/makeChangeLog /tmp/log &gt; /tmp/change.log
-  #   reformat the commit log</PRE
-></TD
-></TR
-></TABLE
-><P
->        Edit <TT
-CLASS="FILENAME"
->/tmp/change.log</TT
-> to remove trivial
-        changes and group the changes under general headings like:
-       </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  - Bug fixes:
+  #   reformat the commit log</pre>
+              </td>
+            </tr>
+          </table>
+          <p>Edit <tt class="FILENAME">/tmp/change.log</tt> to remove trivial changes and group the changes under
+          general headings like:</p>
+          <table border="0" bgcolor="#E0E0E0" width="90%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  - Bug fixes:
   - Action file improvements:
   - Filter file improvements:
   - General improvements:
@@ -370,1358 +152,546 @@ CLASS="PROGRAMLISTING"
   - Build system improvements:
   - Code cleanups:
   - Privoxy-Log-Parser:
-  - Privoxy-Regression-Test:</PRE
-></TD
-></TR
-></TABLE
-><P
->        Add the contents of <TT
-CLASS="FILENAME"
->/tmp/change.log</TT
-> to the
-        start of <TT
-CLASS="FILENAME"
->ChangeLog</TT
-> and re-create
-        <TT
-CLASS="FILENAME"
->doc/source/changelog.sgml</TT
->:
-       </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  $ utils/changelog2doc.pl /tmp/change.log &gt;| doc/source/changelog.sgml</PRE
-></TD
-></TR
-></TABLE
-></LI
-><LI
-><P
->        All developers should look at the <TT
-CLASS="FILENAME"
->ChangeLog</TT
-> and
-        make sure noteworthy changes are referenced.
-       </P
-></LI
-><LI
-><P
->        Update the announcement at <TT
-CLASS="FILENAME"
->doc/webserver/announce.txt</TT
->.
-       </P
-></LI
-><LI
-><P
->        All documentation should be rebuilt:
-       <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="90%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  $ make man
+  - Privoxy-Regression-Test:</pre>
+              </td>
+            </tr>
+          </table>
+          <p>Add the contents of <tt class="FILENAME">/tmp/change.log</tt> to the start of <tt class=
+          "FILENAME">ChangeLog</tt> and re-create <tt class="FILENAME">doc/source/changelog.sgml</tt>:</p>
+          <table border="0" bgcolor="#E0E0E0" width="90%">
+            <tr>
+              <td>
+                <pre class=
+                "PROGRAMLISTING">  $ utils/changelog2doc.pl /tmp/change.log &gt;| doc/source/changelog.sgml</pre>
+              </td>
+            </tr>
+          </table>
+        </li>
+        <li>
+          <p>All developers should look at the <tt class="FILENAME">ChangeLog</tt> and make sure noteworthy changes are
+          referenced.</p>
+        </li>
+        <li>
+          <p>Update the announcement at <tt class="FILENAME">doc/webserver/announce.txt</tt>.</p>
+        </li>
+        <li>
+          <p>All documentation should be rebuilt:</p>
+          <table border="0" bgcolor="#E0E0E0" width="90%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  $ make man
   $ make dok
   $ make dok-man
   $ make dok-tidy
-  $ make config-file</PRE
-></TD
-></TR
-></TABLE
->
-        Finished docs should be then be committed to Git (for those
-        without the ability to build these). Some docs may require
-        rather obscure processing tools. <TT
-CLASS="FILENAME"
->config</TT
->,
-        the man page (and the html version of the man page)
-        fall in this category. README, the man page, AUTHORS, and config
-        should all also be committed to Git for other packagers. The
-        formal docs should be uploaded to the webserver. See the section
-        <A
-HREF="webserver-update.html"
-TARGET="_top"
->"Updating the webserver"</A
->
-        in this manual for details.
-       </P
-></LI
-><LI
-><P
->        <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Commit all files that were changed in the above steps!</I
-></SPAN
->
-       </P
-></LI
-><LI
-><P
->         The <I
-CLASS="CITETITLE"
->User Manual</I
-> is also used for context
-         sensitive help for the CGI editor. This is version sensitive, so that
-         the user will get appropriate help for his/her release. So with
-         each release a fresh version should be uploaded to the webserver
-         (this is in addition to the main <I
-CLASS="CITETITLE"
->User Manual</I
->
-         link from the main page since we need to keep manuals for various
-         versions available). The CGI pages will link to something like
-         <TT
-CLASS="LITERAL"
->https://www.privoxy.org/$(VERSION)/user-manual/</TT
->. This
-         needs to be updated for each new release and is done with the
-         <SPAN
-CLASS="QUOTE"
->"webserver"</SPAN
-> target.
-       </P
-></LI
-><LI
-><P
->        Tag all files in Git with the version number with
-        <SPAN
-CLASS="QUOTE"
->"<B
-CLASS="COMMAND"
->git tag -s v_X_Y_Z</B
->"</SPAN
->.
-        Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.
-       </P
-></LI
-><LI
-><P
->        Push the tag to the remote with
-        <SPAN
-CLASS="QUOTE"
->"<B
-CLASS="COMMAND"
->git push origin v_X_Y_Z</B
->"</SPAN
->.
-       </P
-></LI
-><LI
-><P
->        On the webserver, copy the user manual to a new top-level directory
-        called <TT
-CLASS="FILENAME"
->X.Y.Z</TT
->. This ensures that help links from the CGI
-        pages, which have the version as a prefix, will go into the right version of the manual.
-        If this is a development branch release, also symlink <TT
-CLASS="FILENAME"
->X.Y.(Z-1)</TT
->
-        to <TT
-CLASS="FILENAME"
->X.Y.Z</TT
-> and <TT
-CLASS="FILENAME"
->X.Y.(Z+1)</TT
-> to
-        <TT
-CLASS="FILENAME"
->.</TT
-> (i.e. dot).
-       </P
-></LI
-></UL
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="THERELEASE"
->6.3. Building and Releasing the Packages</A
-></H2
-><P
->      Now the individual packages can be built and released. Note that for
-      GPL reasons the first package to be released is always the source tarball.
-     </P
-><P
->      For <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->all</I
-></SPAN
-> types of packages, including the source tarball,
-      <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->you must make sure that you build from clean sources by exporting
-      the right version from Git into an empty directory</I
-></SPAN
-> (just press return when
-      asked for a password):
-     </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  mkdir dist # delete or choose different name if it already exists
+  $ make config-file</pre>
+              </td>
+            </tr>
+          </table>Finished docs should be then be committed to Git (for those without the ability to build these). Some
+          docs may require rather obscure processing tools. <tt class="FILENAME">config</tt>, the man page (and the
+          html version of the man page) fall in this category. README, the man page, AUTHORS, and config should all
+          also be committed to Git for other packagers. The formal docs should be uploaded to the webserver. See the
+          section <a href="webserver-update.html" target="_top">"Updating the webserver"</a> in this manual for
+          details.
+        </li>
+        <li>
+          <p><span class="emphasis"><i class="EMPHASIS">Commit all files that were changed in the above
+          steps!</i></span></p>
+        </li>
+        <li>
+          <p>The <i class="CITETITLE">User Manual</i> is also used for context sensitive help for the CGI editor. This
+          is version sensitive, so that the user will get appropriate help for his/her release. So with each release a
+          fresh version should be uploaded to the webserver (this is in addition to the main <i class="CITETITLE">User
+          Manual</i> link from the main page since we need to keep manuals for various versions available). The CGI
+          pages will link to something like <tt class="LITERAL">https://www.privoxy.org/$(VERSION)/user-manual/</tt>.
+          This needs to be updated for each new release and is done with the <span class="QUOTE">"webserver"</span>
+          target.</p>
+        </li>
+        <li>
+          <p>Tag all files in Git with the version number with <span class="QUOTE">"<b class="COMMAND">git tag -s
+          v_X_Y_Z</b>"</span>. Don't use vX_Y_Z, ver_X_Y_Z, v_X.Y.Z (won't work) etc.</p>
+        </li>
+        <li>
+          <p>Push the tag to the remote with <span class="QUOTE">"<b class="COMMAND">git push origin
+          v_X_Y_Z</b>"</span>.</p>
+        </li>
+        <li>
+          <p>On the webserver, copy the user manual to a new top-level directory called <tt class=
+          "FILENAME">X.Y.Z</tt>. This ensures that help links from the CGI pages, which have the version as a prefix,
+          will go into the right version of the manual. If this is a development branch release, also symlink
+          <tt class="FILENAME">X.Y.(Z-1)</tt> to <tt class="FILENAME">X.Y.Z</tt> and <tt class=
+          "FILENAME">X.Y.(Z+1)</tt> to <tt class="FILENAME">.</tt> (i.e. dot).</p>
+        </li>
+      </ul>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="THERELEASE" id="THERELEASE">6.3. Building and Releasing the Packages</a></h2>
+      <p>Now the individual packages can be built and released. Note that for GPL reasons the first package to be
+      released is always the source tarball.</p>
+      <p>For <span class="emphasis"><i class="EMPHASIS">all</i></span> types of packages, including the source tarball,
+      <span class="emphasis"><i class="EMPHASIS">you must make sure that you build from clean sources by exporting the
+      right version from Git into an empty directory</i></span> (just press return when asked for a password):</p>
+      <table border="0" bgcolor="#E0E0E0" width="100%">
+        <tr>
+          <td>
+            <pre class="PROGRAMLISTING">  mkdir dist # delete or choose different name if it already exists
   cd dist
   git clone https://www.privoxy.org/git/privoxy.git
   cd privoxy
-  git checkout v_X_Y_Z</PRE
-></TD
-></TR
-></TABLE
-><P
->     <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Do NOT change</I
-></SPAN
-> a single bit, including, but not limited to
-     version information after export from Git. This is to make sure that
-     all release packages, and with them, all future bug reports, are based
-     on exactly the same code.
-    </P
-><DIV
-CLASS="WARNING"
-><P
-></P
-><TABLE
-CLASS="WARNING"
-BORDER="1"
-WIDTH="100%"
-><TR
-><TD
-ALIGN="CENTER"
-><B
->Warning</B
-></TD
-></TR
-><TR
-><TD
-ALIGN="LEFT"
-><P
->      Every significant release of Privoxy has included at least one
-      package that either had incorrect versions of files, missing files,
-      or incidental leftovers from a previous build process that gave
-      unknown numbers of users headaches to try to figure out what was
-      wrong. PLEASE, make sure you are using pristene sources, and are
-      following the prescribed process!
-     </P
-></TD
-></TR
-></TABLE
-></DIV
-><P
->     Please find additional instructions for the source tarball and the
-     individual platform dependent binary packages below. And details
-     on the Sourceforge release process below that.
-    </P
-><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
-><A
-NAME="PACK-GUIDELINES"
->6.3.1. Note on Privoxy Packaging</A
-></H3
-><P
->      Please keep these general guidelines in mind when putting together
-      your package. These apply to <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->all</I
-></SPAN
-> platforms!
-     </P
-><P
-></P
-><UL
-><LI
-><P
->          <SPAN
-CLASS="APPLICATION"
->Privoxy</SPAN
-> <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->requires</I
-></SPAN
->
-          write access to: all <TT
-CLASS="FILENAME"
->*.action</TT
-> files, all
-          logfiles, and the <TT
-CLASS="FILENAME"
->trust</TT
-> file. You will
-          need to determine the best way to do this for your platform.
-        </P
-></LI
-><LI
-><P
->          Please include up to date documentation. At a bare minimum:
-        </P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->          <TT
-CLASS="FILENAME"
->LICENSE</TT
-> (top-level directory)
-         </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->          <TT
-CLASS="FILENAME"
->README</TT
-> (top-level directory)
-         </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->          <TT
-CLASS="FILENAME"
->AUTHORS</TT
-> (top-level directory)
-         </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->          <TT
-CLASS="FILENAME"
->man page</TT
-> (top-level directory, Unix-like
-          platforms only)
-         </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->          <TT
-CLASS="FILENAME"
->The User Manual</TT
-> (doc/webserver/user-manual/)
-         </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
-></P
-><TABLE
-BORDER="0"
-><TBODY
-><TR
-><TD
->          <TT
-CLASS="FILENAME"
->FAQ</TT
-> (doc/webserver/faq/)
-         </TD
-></TR
-></TBODY
-></TABLE
-><P
-></P
-><P
->          Also suggested: <TT
-CLASS="FILENAME"
->Developer Manual</TT
->
-          (doc/webserver/developer-manual) and <TT
-CLASS="FILENAME"
->ChangeLog</TT
->
-          (top-level directory). <TT
-CLASS="FILENAME"
->FAQ</TT
-> and the manuals are
-          HTML docs.
-        </P
-><P
->         The documentation has been designed such that the manuals are linked
-         to each other from parallel directories, and should be packaged
-         that way. <TT
-CLASS="FILENAME"
->privoxy-index.html</TT
-> can also be
-         included and can serve as a focal point for docs and other links of
-         interest (and possibly renamed to <TT
-CLASS="FILENAME"
->index.html</TT
->).
-         This should be one level up from the manuals. There is a link also
-         on this page to an HTMLized version of the man page. To avoid 404 for
-         this, it is in Git as
-         <TT
-CLASS="FILENAME"
->doc/webserver/man-page/privoxy-man-page.html</TT
->,
-         and should be included along with the manuals. There is also a
-         css stylesheets that can be included for better presentation:
-         <TT
-CLASS="FILENAME"
->p_doc.css</TT
->. This should be in the same directory
-         with <TT
-CLASS="FILENAME"
->privoxy-index.html</TT
->, (i.e. one level up from
-         the manual directories).
-        </P
-></LI
-><LI
-><P
->        <TT
-CLASS="FILENAME"
->user.action</TT
-> and <TT
-CLASS="FILENAME"
->user.filter</TT
->
-        are designed for local preferences. Make sure these do not get overwritten!
-        <TT
-CLASS="FILENAME"
->config</TT
-> should not be overwritten either. This
-        has especially important configuration data in it.
-        <TT
-CLASS="FILENAME"
->trust</TT
-> should be left in tact as well.
-       </P
-></LI
-><LI
-><P
->        Other configuration files (<TT
-CLASS="FILENAME"
->default.action</TT
->,
-        <TT
-CLASS="FILENAME"
->regression-tests.action</TT
-> and
-        <TT
-CLASS="FILENAME"
->default.filter</TT
->) should be installed as the new
-        defaults, but all previously installed configuration files should be
-        preserved as backups. This is just good manners :-) These files are
-        likely to change between releases and contain important new features
-        and bug fixes.
-       </P
-></LI
-><LI
-><P
->       Please check platform specific notes in this doc, if you haven't
-       done <SPAN
-CLASS="QUOTE"
->"Privoxy"</SPAN
-> packaging before for other platform
-       specific issues. Conversely, please add any notes that you know
-       are important for your platform (or contact one of the doc
-       maintainers to do this if you can't).
-      </P
-></LI
-><LI
-><P
->       Packagers should do a <SPAN
-CLASS="QUOTE"
->"clean"</SPAN
-> install of their
-       package after building it. So any previous installs should be
-       removed first to ensure the integrity of the newly built package.
-       Then run the package for a while to make sure there are no
-       obvious problems, before uploading.
-     </P
-></LI
-></UL
-></DIV
-><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
-><A
-NAME="NEWRELEASE-TARBALL"
->6.3.2. Source Tarball</A
-></H3
-><P
->        First, <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->make sure that you have freshly exported the right
-        version into an empty directory</I
-></SPAN
->. (See "Building and releasing
-        packages" above). Then run from that directory:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  autoheader &#38;&#38; autoconf &#38;&#38; ./configure</PRE
-></TD
-></TR
-></TABLE
-><P
->        Then do:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  make tarball-dist</PRE
-></TD
-></TR
-></TABLE
-></DIV
-><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
-><A
-NAME="NEWRELEASE-WINDOWS"
->6.3.3. Windows</A
-></H3
-><P
->        Note that the docbook generated files might need some hand editing,
-        so the Windows build makefile does not rebuild the docs.
-      </P
-><P
->        First, <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->make sure that you have freshly exported the right
-        version into an empty directory</I
-></SPAN
->. (See "Building and releasing
-        packages" above).
-      </P
-><P
->        Check that you have the current versions of the
-        <A
-HREF="https://sourceforge.net/projects/nsis/files/NSIS%203/"
-TARGET="_top"
->                    NSIS installer</A
->,
-        <A
-HREF="https://ftp.pcre.org/pub/pcre/"
-TARGET="_top"
->PCRE library</A
->,
-        <A
-HREF="https://tls.mbed.org/download"
-TARGET="_top"
->MBED TLS library</A
->,
-        <A
-HREF="https://github.com/google/brotli/releases"
-TARGET="_top"
->                    Brotli library</A
->,
-        and that the <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->MAKENSIS</I
-></SPAN
-> evar in
-        <TT
-CLASS="FILENAME"
->windows/GNUMakefile</TT
->
-        points to the NSIS installer program.  (See the
-        <A
-HREF="../user-manual/installation.html#WINBUILD-CYGWIN"
-TARGET="_top"
->        <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->Building from Source / Windows</I
-></SPAN
-></A
->
-        section of the User Manual for details.)
-      </P
-><P
->        Then you can build the package.  This is fully automated, and is
-        controlled by <TT
-CLASS="FILENAME"
->windows/GNUmakefile</TT
->.
-        All you need to do is:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  cd windows
-  make</PRE
-></TD
-></TR
-></TABLE
-><P
->        Now you can manually rename <TT
-CLASS="FILENAME"
->privoxy_setup.exe</TT
-> to
-        <TT
-CLASS="FILENAME"
->privoxy_setup_X.Y.Z.exe</TT
->, and the <TT
-CLASS="FILENAME"
->build</TT
->
-        directory to <TT
-CLASS="FILENAME"
->privoxy_X.Y.Z</TT
->.
-        Create a .zip file of the newly renamed <TT
-CLASS="FILENAME"
->privoxy_X.Y.Z</TT
-> directory,
-        GPG sign the installer and zip file,
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  gpg --armor --detach --sign <TT
-CLASS="FILENAME"
->privoxy_setup_X.Y.Z.exe</TT
->
-  gpg --armor --detach --sign <TT
-CLASS="FILENAME"
->privoxy_X.Y.Z.zip</TT
-></PRE
-></TD
-></TR
-></TABLE
-><P
->        and upload the files to SourceForge.
-      </P
-><P
->        When releasing the package on SourceForge, use the release notes
-        and Change Log from the source tarball package.
-      </P
-></DIV
-><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
-><A
-NAME="NEWRELEASE-DEBIAN"
->6.3.4. Debian</A
-></H3
-><P
->       Using git-buildpackage we start with a clone of the last Debian version:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  gbp clone https://salsa.debian.org/debian/privoxy.git
-  cd privoxy</PRE
-></TD
-></TR
-></TABLE
-><P
->       or if the repository is already there
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  cd privoxy
-  gbp pull</PRE
-></TD
-></TR
-></TABLE
-><P
->       Now import the newly released upstream tarball via debian/watch file:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  gbp import-orig --uscan</PRE
-></TD
-></TR
-></TABLE
-><P
->       Next update all Debian quilt patches to the new version:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  while quilt push; do quilt refresh; done</PRE
-></TD
-></TR
-></TABLE
-><P
->       If some patch is no longer required (because it is already merged
-       upstream), it can be removed using
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  quilt delete XX_patchname.patch
-  git rm debian/patches/XX_patchname.patch</PRE
-></TD
-></TR
-></TABLE
-><P
->       If the patch needs modification, you can apply, edit and update it with
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  quilt push -f
+  git checkout v_X_Y_Z</pre>
+          </td>
+        </tr>
+      </table>
+      <p><span class="emphasis"><i class="EMPHASIS">Do NOT change</i></span> a single bit, including, but not limited
+      to version information after export from Git. This is to make sure that all release packages, and with them, all
+      future bug reports, are based on exactly the same code.</p>
+      <div class="WARNING">
+        <table class="WARNING" border="1" width="100%">
+          <tr>
+            <td align="center"><b>Warning</b></td>
+          </tr>
+          <tr>
+            <td align="left">
+              <p>Every significant release of Privoxy has included at least one package that either had incorrect
+              versions of files, missing files, or incidental leftovers from a previous build process that gave unknown
+              numbers of users headaches to try to figure out what was wrong. PLEASE, make sure you are using pristene
+              sources, and are following the prescribed process!</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <p>Please find additional instructions for the source tarball and the individual platform dependent binary
+      packages below. And details on the Sourceforge release process below that.</p>
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="PACK-GUIDELINES" id="PACK-GUIDELINES">6.3.1. Note on Privoxy Packaging</a></h3>
+        <p>Please keep these general guidelines in mind when putting together your package. These apply to <span class=
+        "emphasis"><i class="EMPHASIS">all</i></span> platforms!</p>
+        <ul>
+          <li>
+            <p><span class="APPLICATION">Privoxy</span> <span class="emphasis"><i class="EMPHASIS">requires</i></span>
+            write access to: all <tt class="FILENAME">*.action</tt> files, all logfiles, and the <tt class=
+            "FILENAME">trust</tt> file. You will need to determine the best way to do this for your platform.</p>
+          </li>
+          <li>
+            <p>Please include up to date documentation. At a bare minimum:</p>
+            <table border="0">
+              <tbody>
+                <tr>
+                  <td><tt class="FILENAME">LICENSE</tt> (top-level directory)</td>
+                </tr>
+              </tbody>
+            </table>
+            <table border="0">
+              <tbody>
+                <tr>
+                  <td><tt class="FILENAME">README</tt> (top-level directory)</td>
+                </tr>
+              </tbody>
+            </table>
+            <table border="0">
+              <tbody>
+                <tr>
+                  <td><tt class="FILENAME">AUTHORS</tt> (top-level directory)</td>
+                </tr>
+              </tbody>
+            </table>
+            <table border="0">
+              <tbody>
+                <tr>
+                  <td><tt class="FILENAME">man page</tt> (top-level directory, Unix-like platforms only)</td>
+                </tr>
+              </tbody>
+            </table>
+            <table border="0">
+              <tbody>
+                <tr>
+                  <td><tt class="FILENAME">The User Manual</tt> (doc/webserver/user-manual/)</td>
+                </tr>
+              </tbody>
+            </table>
+            <table border="0">
+              <tbody>
+                <tr>
+                  <td><tt class="FILENAME">FAQ</tt> (doc/webserver/faq/)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Also suggested: <tt class="FILENAME">Developer Manual</tt> (doc/webserver/developer-manual) and
+            <tt class="FILENAME">ChangeLog</tt> (top-level directory). <tt class="FILENAME">FAQ</tt> and the manuals
+            are HTML docs.</p>
+            <p>The documentation has been designed such that the manuals are linked to each other from parallel
+            directories, and should be packaged that way. <tt class="FILENAME">privoxy-index.html</tt> can also be
+            included and can serve as a focal point for docs and other links of interest (and possibly renamed to
+            <tt class="FILENAME">index.html</tt>). This should be one level up from the manuals. There is a link also
+            on this page to an HTMLized version of the man page. To avoid 404 for this, it is in Git as <tt class=
+            "FILENAME">doc/webserver/man-page/privoxy-man-page.html</tt>, and should be included along with the
+            manuals. There is also a css stylesheets that can be included for better presentation: <tt class=
+            "FILENAME">p_doc.css</tt>. This should be in the same directory with <tt class=
+            "FILENAME">privoxy-index.html</tt>, (i.e. one level up from the manual directories).</p>
+          </li>
+          <li>
+            <p><tt class="FILENAME">user.action</tt> and <tt class="FILENAME">user.filter</tt> are designed for local
+            preferences. Make sure these do not get overwritten! <tt class="FILENAME">config</tt> should not be
+            overwritten either. This has especially important configuration data in it. <tt class="FILENAME">trust</tt>
+            should be left in tact as well.</p>
+          </li>
+          <li>
+            <p>Other configuration files (<tt class="FILENAME">default.action</tt>, <tt class=
+            "FILENAME">regression-tests.action</tt> and <tt class="FILENAME">default.filter</tt>) should be installed
+            as the new defaults, but all previously installed configuration files should be preserved as backups. This
+            is just good manners :-) These files are likely to change between releases and contain important new
+            features and bug fixes.</p>
+          </li>
+          <li>
+            <p>Please check platform specific notes in this doc, if you haven't done <span class=
+            "QUOTE">"Privoxy"</span> packaging before for other platform specific issues. Conversely, please add any
+            notes that you know are important for your platform (or contact one of the doc maintainers to do this if
+            you can't).</p>
+          </li>
+          <li>
+            <p>Packagers should do a <span class="QUOTE">"clean"</span> install of their package after building it. So
+            any previous installs should be removed first to ensure the integrity of the newly built package. Then run
+            the package for a while to make sure there are no obvious problems, before uploading.</p>
+          </li>
+        </ul>
+      </div>
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="NEWRELEASE-TARBALL" id="NEWRELEASE-TARBALL">6.3.2. Source Tarball</a></h3>
+        <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
+        into an empty directory</i></span>. (See "Building and releasing packages" above). Then run from that
+        directory:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  autoheader &#38;&#38; autoconf &#38;&#38; ./configure</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Then do:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  make tarball-dist</pre>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="NEWRELEASE-WINDOWS" id="NEWRELEASE-WINDOWS">6.3.3. Windows</a></h3>
+        <p>Note that the docbook generated files might need some hand editing, so the Windows build makefile does not
+        rebuild the docs.</p>
+        <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
+        into an empty directory</i></span>. (See "Building and releasing packages" above).</p>
+        <p>Check that you have the current versions of the <a href=
+        "https://sourceforge.net/projects/nsis/files/NSIS%203/" target="_top">NSIS installer</a>, <a href=
+        "https://ftp.pcre.org/pub/pcre/" target="_top">PCRE library</a>, <a href="https://tls.mbed.org/download"
+        target="_top">MBED TLS library</a>, <a href="https://github.com/google/brotli/releases" target="_top">Brotli
+        library</a>, and that the <span class="emphasis"><i class="EMPHASIS">MAKENSIS</i></span> evar in <tt class=
+        "FILENAME">windows/GNUMakefile</tt> points to the NSIS installer program. (See the <a href=
+        "../user-manual/installation.html#WINBUILD-CYGWIN" target="_top"><span class="emphasis"><i class=
+        "EMPHASIS">Building from Source / Windows</i></span></a> section of the User Manual for details.)</p>
+        <p>Then you can build the package. This is fully automated, and is controlled by <tt class=
+        "FILENAME">windows/GNUmakefile</tt>. All you need to do is:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  cd windows
+  make</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Now you can manually rename <tt class="FILENAME">privoxy_setup.exe</tt> to <tt class=
+        "FILENAME">privoxy_setup_X.Y.Z.exe</tt>, and the <tt class="FILENAME">build</tt> directory to <tt class=
+        "FILENAME">privoxy_X.Y.Z</tt>. Create a .zip file of the newly renamed <tt class="FILENAME">privoxy_X.Y.Z</tt>
+        directory, GPG sign the installer and zip file,</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  gpg --armor --detach --sign <tt class=
+              "FILENAME">privoxy_setup_X.Y.Z.exe</tt>
+  gpg --armor --detach --sign <tt class="FILENAME">privoxy_X.Y.Z.zip</tt></pre>
+            </td>
+          </tr>
+        </table>
+        <p>and upload the files to SourceForge.</p>
+        <p>When releasing the package on SourceForge, use the release notes and Change Log from the source tarball
+        package.</p>
+      </div>
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="NEWRELEASE-DEBIAN" id="NEWRELEASE-DEBIAN">6.3.4. Debian</a></h3>
+        <p>Using git-buildpackage we start with a clone of the last Debian version:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  gbp clone https://salsa.debian.org/debian/privoxy.git
+  cd privoxy</pre>
+            </td>
+          </tr>
+        </table>
+        <p>or if the repository is already there</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  cd privoxy
+  gbp pull</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Now import the newly released upstream tarball via debian/watch file:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  gbp import-orig --uscan</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Next update all Debian quilt patches to the new version:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  while quilt push; do quilt refresh; done</pre>
+            </td>
+          </tr>
+        </table>
+        <p>If some patch is no longer required (because it is already merged upstream), it can be removed using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  quilt delete XX_patchname.patch
+  git rm debian/patches/XX_patchname.patch</pre>
+            </td>
+          </tr>
+        </table>
+        <p>If the patch needs modification, you can apply, edit and update it with</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  quilt push -f
   quilt edit some_file
-  quilt refresh</PRE
-></TD
-></TR
-></TABLE
-><P
->       until
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  while quilt push; do quilt refresh; done</PRE
-></TD
-></TR
-></TABLE
-><P
->       succeeds. Then you can
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  quilt pop -a</PRE
-></TD
-></TR
-></TABLE
-><P
->       Now add a new entry to the debian/changelog representing the new
-       version:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  dch -v 3.0.34-1</PRE
-></TD
-></TR
-></TABLE
-><P
->       and describe what you did before and don't forget to git commit all
-       changes.
-      </P
-><P
->       Now you can build the package on the local machine using
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  gbp buildpackage -us -uc</PRE
-></TD
-></TR
-></TABLE
-><P
->       You should check for warnings using
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  lintian -iI ../build-area/privoxy_3.0.34-1_amd64.changes</PRE
-></TD
-></TR
-></TABLE
-><P
->       Maybe rebuild the package in different defined cowbuilder environments
-       like
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.34-1.dsc</PRE
-></TD
-></TR
-></TABLE
-><P
->       And try to run autopackage testing suite on the result:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.34-1_amd64.changes -s -- schroot sid</PRE
-></TD
-></TR
-></TABLE
-><P
->       Or just push the changes to salsa.debian.org, where a CI pipeline is
-       defined for the package, that builds and tests it.
-      </P
-><P
->       If everything is okay, run cowbuilder with i386 and amd64 environments
-       for current Debian stable release and build
-       privoxy_3.0.34-1_i386.deb and privoxy_3.0.34-1_amd64.deb.
-       Then sign both files:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  gpg --detach-sign --armor privoxy_3.0.34-1_i386.deb
-  gpg --detach-sign --armor privoxy_3.0.34-1_amd64.deb</PRE
-></TD
-></TR
-></TABLE
-><P
->       Create a README file containing the recent block from debian/changelog
-       and upload the two packages, the two signatures and the README to a
-       freshly created folder below
-       https://sourceforge.net/projects/ijbswa/files/Debian/
-      </P
-><DIV
-CLASS="SECT4"
-><H4
-CLASS="SECT4"
-><A
-NAME="SNAPSHOT-DEBIAN"
->6.3.4.1. Debian GIT Snapshot</A
-></H4
-><P
->       For building just a git snapshot build the following workflow may be
-       useful.  First create a build environment, for this you may have to
-       run the following commands:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  sudo apt install build-essential devscripts
-  sudo apt-get build-dep privoxy</PRE
-></TD
-></TR
-></TABLE
-><P
->       After this enter the checked out privoxy git tree and check that all
-       (new) build dependencies are met:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  dpkg-checkbuilddeps</PRE
-></TD
-></TR
-></TABLE
-><P
->       If something is missing, just add it using
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  sudo apt install foobar</PRE
-></TD
-></TR
-></TABLE
-><P
->       Now you may update debian/changelog, especially the version number
-       using
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  dch</PRE
-></TD
-></TR
-></TABLE
-><P
->       and finally build the package:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  debuild -us -uc -b</PRE
-></TD
-></TR
-></TABLE
-><P
->       If everything went okay, you may find the resulting Debian package in
-       the parent directory.
-      </P
-><P
->       You may want to clean up the build tree using
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  debian/rules clean</PRE
-></TD
-></TR
-></TABLE
-><P
->       And maybe repair some artefacts using one or both of the following
-       commands:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  git reset --hard
-  git clean -fd</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></DIV
-><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
-><A
-NAME="NEWRELEASE-MACOSX"
->6.3.5. macOS / OS X</A
-></H3
-><P
->        First, <SPAN
-CLASS="emphasis"
-><I
-CLASS="EMPHASIS"
->make sure that you have freshly exported the right
-        version into an empty directory</I
-></SPAN
->. (See "Building and releasing
-        packages" above).
-      </P
-><P
->        The OSXPackageBuilder module generates OS X installer packages
-        supporting all Macs running OS X 10.4 and above. Obtain it from Git as
-        follows into a folder parallel to the exported privoxy source:
-      </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="PROGRAMLISTING"
->  git clone ssh://git@git.privoxy.org:23/git/OSXPackageBuilder.git</PRE
-></TD
-></TR
-></TABLE
-><P
->        The module contains complete instructions on its usage in the file
-        <TT
-CLASS="FILENAME"
->OS X Package Builder HOWTO.txt</TT
->.
-      </P
-><P
->        Once the package(s) have been generated, you can then upload them
-        directly to the Files section of the Sourceforge project in the
-        Macintosh (OS X) folder. Each new version release of Privoxy should
-        have a new subfolder created in which to store its files. Please
-        ensure that the folder contains a readme file that makes it clear
-        which package is for which version of OS X.
-      </P
-></DIV
-><DIV
-CLASS="SECT3"
-><H3
-CLASS="SECT3"
-><A
-NAME="NEWRELEASE-FREEBSD"
->6.3.6. FreeBSD</A
-></H3
-><P
->        Update the www/privoxy port and submit a diff upstream.
-        For details see the <A
-HREF="https://www.freebsd.org/doc/en_US.ISO8859-1/books/porters-handbook/"
-TARGET="_top"
->FreeBSD Porter's Handbook</A
->.
-      </P
-></DIV
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="RELEASING"
->6.4. Uploading and Releasing Your Package</A
-></H2
-><P
->      After the package is ready, it is time to upload it
-      and go through the release steps. The upload
-      is done at
-      <A
-HREF="https://sourceforge.net/projects/ijbswa/upload/"
-TARGET="_top"
->SourceForge</A
->
-      after logging in.
-    </P
-><P
->     Now just follow the prompts. Be sure to add any appropriate Release
-     notes. You should see your freshly uploaded packages in
-     <SPAN
-CLASS="QUOTE"
->"Step 2. Add Files To This Release"</SPAN
->. Check the
-     appropriate box(es). Remember at each step to hit the
-     <SPAN
-CLASS="QUOTE"
->"Refresh/Submit"</SPAN
-> buttons! You should now see your
-     file(s) listed in Step 3. Fill out the forms with the appropriate
-     information for your platform, being sure to hit <SPAN
-CLASS="QUOTE"
->"Update"</SPAN
->
-     for each file. If anyone is monitoring your platform, check the
-     <SPAN
-CLASS="QUOTE"
->"email"</SPAN
-> box at the very bottom to notify them of
-     the new package. This should do it!
-    </P
-><P
->     If you have made errors, or need to make changes, you can go through
-     essentially the same steps, but select <TT
-CLASS="LITERAL"
->Edit Release</TT
->,
-     instead of <TT
-CLASS="LITERAL"
->Add Release</TT
->.
-    </P
-></DIV
-><DIV
-CLASS="SECT2"
-><H2
-CLASS="SECT2"
-><A
-NAME="AFTERRELEASE"
->6.5. After the Release</A
-></H2
-><P
->      When all (or: most of the) packages have been uploaded and made available,
-      send an email to the
-      <A
-HREF="mailto:privoxy-announce@lists.privoxy.org"
-TARGET="_top"
->announce mailing
-      list</A
->, Subject: "Announcing Privoxy X.Y.Z $CODE_STATUS". Be sure to
-      include the
-      <A
-HREF="https://sourceforge.net/projects/ijbswa/files/"
-TARGET="_top"
->      download location</A
->, the release notes and the Changelog. Also, post an
-      updated News item on the project page Sourceforge, and update the Home
-      page and docs linked from the Home page (see below). Other news sites
-      and release oriented sites, such as Freshmeat, should also be notified.
-     </P
-><P
->      Then update the source code for the next version to be released:
-     </P
-><P
-></P
-><UL
-><LI
-><P
->        Increment the version number and change the code status to "UNRELEASED"
-        in <TT
-CLASS="FILENAME"
->configure.in</TT
->
-       </P
-></LI
-><LI
-><P
->        Rebuild configure (<SPAN
-CLASS="QUOTE"
->"<B
-CLASS="COMMAND"
->autoheader &#38;&#38; autoconf</B
->"</SPAN
->)
-        and GNUMakefile (<SPAN
-CLASS="QUOTE"
->"<B
-CLASS="COMMAND"
->./configure</B
->"</SPAN
->)
-       </P
-></LI
-><LI
-><P
->        <SPAN
-CLASS="QUOTE"
->"<B
-CLASS="COMMAND"
->make dok-release</B
->"</SPAN
-> to update the sgml documentation source files.
-       </P
-></LI
-><LI
-><P
->        Commit all your changes.
-       </P
-></LI
-></UL
-></DIV
-></DIV
-><DIV
-CLASS="NAVFOOTER"
-><HR
-ALIGN="LEFT"
-WIDTH="100%"><TABLE
-SUMMARY="Footer navigation table"
-WIDTH="100%"
-BORDER="0"
-CELLPADDING="0"
-CELLSPACING="0"
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
-><A
-HREF="testing.html"
-ACCESSKEY="P"
->Prev</A
-></TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
-><A
-HREF="index.html"
-ACCESSKEY="H"
->Home</A
-></TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
-><A
-HREF="webserver-update.html"
-ACCESSKEY="N"
->Next</A
-></TD
-></TR
-><TR
-><TD
-WIDTH="33%"
-ALIGN="left"
-VALIGN="top"
->Testing Guidelines</TD
-><TD
-WIDTH="34%"
-ALIGN="center"
-VALIGN="top"
->&nbsp;</TD
-><TD
-WIDTH="33%"
-ALIGN="right"
-VALIGN="top"
->Update the Webserver</TD
-></TR
-></TABLE
-></DIV
-></BODY
-></HTML
->
+  quilt refresh</pre>
+            </td>
+          </tr>
+        </table>
+        <p>until</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  while quilt push; do quilt refresh; done</pre>
+            </td>
+          </tr>
+        </table>
+        <p>succeeds. Then you can</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  quilt pop -a</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Now add a new entry to the debian/changelog representing the new version:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  dch -v 3.0.34-1</pre>
+            </td>
+          </tr>
+        </table>
+        <p>and describe what you did before and don't forget to git commit all changes.</p>
+        <p>Now you can build the package on the local machine using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  gbp buildpackage -us -uc</pre>
+            </td>
+          </tr>
+        </table>
+        <p>You should check for warnings using</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  lintian -iI ../build-area/privoxy_3.0.34-1_amd64.changes</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Maybe rebuild the package in different defined cowbuilder environments like</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class=
+              "PROGRAMLISTING">  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.34-1.dsc</pre>
+            </td>
+          </tr>
+        </table>
+        <p>And try to run autopackage testing suite on the result:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class=
+              "PROGRAMLISTING">  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.34-1_amd64.changes -s -- schroot sid</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Or just push the changes to salsa.debian.org, where a CI pipeline is defined for the package, that builds
+        and tests it.</p>
+        <p>If everything is okay, run cowbuilder with i386 and amd64 environments for current Debian stable release and
+        build privoxy_3.0.34-1_i386.deb and privoxy_3.0.34-1_amd64.deb. Then sign both files:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  gpg --detach-sign --armor privoxy_3.0.34-1_i386.deb
+  gpg --detach-sign --armor privoxy_3.0.34-1_amd64.deb</pre>
+            </td>
+          </tr>
+        </table>
+        <p>Create a README file containing the recent block from debian/changelog and upload the two packages, the two
+        signatures and the README to a freshly created folder below
+        https://sourceforge.net/projects/ijbswa/files/Debian/</p>
+        <div class="SECT4">
+          <h4 class="SECT4"><a name="SNAPSHOT-DEBIAN" id="SNAPSHOT-DEBIAN">6.3.4.1. Debian GIT Snapshot</a></h4>
+          <p>For building just a git snapshot build the following workflow may be useful. First create a build
+          environment, for this you may have to run the following commands:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  sudo apt install build-essential devscripts
+  sudo apt-get build-dep privoxy</pre>
+              </td>
+            </tr>
+          </table>
+          <p>After this enter the checked out privoxy git tree and check that all (new) build dependencies are met:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  dpkg-checkbuilddeps</pre>
+              </td>
+            </tr>
+          </table>
+          <p>If something is missing, just add it using</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  sudo apt install foobar</pre>
+              </td>
+            </tr>
+          </table>
+          <p>Now you may update debian/changelog, especially the version number using</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  dch</pre>
+              </td>
+            </tr>
+          </table>
+          <p>and finally build the package:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  debuild -us -uc -b</pre>
+              </td>
+            </tr>
+          </table>
+          <p>If everything went okay, you may find the resulting Debian package in the parent directory.</p>
+          <p>You may want to clean up the build tree using</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  debian/rules clean</pre>
+              </td>
+            </tr>
+          </table>
+          <p>And maybe repair some artefacts using one or both of the following commands:</p>
+          <table border="0" bgcolor="#E0E0E0" width="100%">
+            <tr>
+              <td>
+                <pre class="PROGRAMLISTING">  git reset --hard
+  git clean -fd</pre>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="NEWRELEASE-MACOSX" id="NEWRELEASE-MACOSX">6.3.5. macOS / OS X</a></h3>
+        <p>First, <span class="emphasis"><i class="EMPHASIS">make sure that you have freshly exported the right version
+        into an empty directory</i></span>. (See "Building and releasing packages" above).</p>
+        <p>The OSXPackageBuilder module generates OS X installer packages supporting all Macs running OS X 10.4 and
+        above. Obtain it from Git as follows into a folder parallel to the exported privoxy source:</p>
+        <table border="0" bgcolor="#E0E0E0" width="100%">
+          <tr>
+            <td>
+              <pre class="PROGRAMLISTING">  git clone ssh://git@git.privoxy.org:23/git/OSXPackageBuilder.git</pre>
+            </td>
+          </tr>
+        </table>
+        <p>The module contains complete instructions on its usage in the file <tt class="FILENAME">OS X Package Builder
+        HOWTO.txt</tt>.</p>
+        <p>Once the package(s) have been generated, you can then upload them directly to the Files section of the
+        Sourceforge project in the Macintosh (OS X) folder. Each new version release of Privoxy should have a new
+        subfolder created in which to store its files. Please ensure that the folder contains a readme file that makes
+        it clear which package is for which version of OS X.</p>
+      </div>
+      <div class="SECT3">
+        <h3 class="SECT3"><a name="NEWRELEASE-FREEBSD" id="NEWRELEASE-FREEBSD">6.3.6. FreeBSD</a></h3>
+        <p>Update the www/privoxy port and submit a diff upstream. For details see the <a href=
+        "https://www.freebsd.org/doc/en_US.ISO8859-1/books/porters-handbook/" target="_top">FreeBSD Porter's
+        Handbook</a>.</p>
+      </div>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="RELEASING" id="RELEASING">6.4. Uploading and Releasing Your Package</a></h2>
+      <p>After the package is ready, it is time to upload it and go through the release steps. The upload is done at
+      <a href="https://sourceforge.net/projects/ijbswa/upload/" target="_top">SourceForge</a> after logging in.</p>
+      <p>Now just follow the prompts. Be sure to add any appropriate Release notes. You should see your freshly
+      uploaded packages in <span class="QUOTE">"Step 2. Add Files To This Release"</span>. Check the appropriate
+      box(es). Remember at each step to hit the <span class="QUOTE">"Refresh/Submit"</span> buttons! You should now see
+      your file(s) listed in Step 3. Fill out the forms with the appropriate information for your platform, being sure
+      to hit <span class="QUOTE">"Update"</span> for each file. If anyone is monitoring your platform, check the
+      <span class="QUOTE">"email"</span> box at the very bottom to notify them of the new package. This should do
+      it!</p>
+      <p>If you have made errors, or need to make changes, you can go through essentially the same steps, but select
+      <tt class="LITERAL">Edit Release</tt>, instead of <tt class="LITERAL">Add Release</tt>.</p>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="AFTERRELEASE" id="AFTERRELEASE">6.5. After the Release</a></h2>
+      <p>When all (or: most of the) packages have been uploaded and made available, send an email to the <a href=
+      "mailto:privoxy-announce@lists.privoxy.org" target="_top">announce mailing list</a>, Subject: "Announcing Privoxy
+      X.Y.Z $CODE_STATUS". Be sure to include the <a href="https://sourceforge.net/projects/ijbswa/files/" target=
+      "_top">download location</a>, the release notes and the Changelog. Also, post an updated News item on the project
+      page Sourceforge, and update the Home page and docs linked from the Home page (see below). Other news sites and
+      release oriented sites, such as Freshmeat, should also be notified.</p>
+      <p>Then update the source code for the next version to be released:</p>
+      <ul>
+        <li>
+          <p>Increment the version number and change the code status to "UNRELEASED" in <tt class=
+          "FILENAME">configure.in</tt></p>
+        </li>
+        <li>
+          <p>Rebuild configure (<span class="QUOTE">"<b class="COMMAND">autoheader &#38;&#38; autoconf</b>"</span>) and
+          GNUMakefile (<span class="QUOTE">"<b class="COMMAND">./configure</b>"</span>)</p>
+        </li>
+        <li>
+          <p><span class="QUOTE">"<b class="COMMAND">make dok-release</b>"</span> to update the sgml documentation
+          source files.</p>
+        </li>
+        <li>
+          <p>Commit all your changes.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="NAVFOOTER">
+    <hr align="left" width="100%">
+    <table summary="Footer navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="33%" align="left" valign="top"><a href="testing.html" accesskey="P">Prev</a></td>
+        <td width="34%" align="center" valign="top"><a href="index.html" accesskey="H">Home</a></td>
+        <td width="33%" align="right" valign="top"><a href="webserver-update.html" accesskey="N">Next</a></td>
+      </tr>
+      <tr>
+        <td width="33%" align="left" valign="top">Testing Guidelines</td>
+        <td width="34%" align="center" valign="top">&nbsp;</td>
+        <td width="33%" align="right" valign="top">Update the Webserver</td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
