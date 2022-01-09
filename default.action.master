@@ -2269,6 +2269,8 @@ idp.springer.com/
 .zeit.de/zustimmung
 # URL = https://07.hagalil.com/www/delivery/ajs.php?zoneid=14&cb=35782002576&charset=UTF-8&loc=https%3A//www.hagalil.com/2021/12/rechtes-von-a-z-5/
 .hagalil.com/
+# URL = https://twitter.com/mariowitte/status/1479481418887663624?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1479481418887663624%7Ctwgr%5E%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Ffuturezone.at%2Fprodukte%2Fcanon-toner-kopierschutz-gefaelscht-chips-chipmangel%2F401865218
+twitter.com/.*/status/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
