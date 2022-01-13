@@ -2820,7 +2820,7 @@ git clean -fd
         packages" above).
       </para>
       <para>
-        The OSXPackageBuilder module generates OS X installer packages
+        The OSXPackageBuilder module can generate OS X installer packages
         supporting all Macs running OS X 10.4 and above. Obtain it from Git as
         follows into a folder parallel to the exported privoxy source:
       </para>
