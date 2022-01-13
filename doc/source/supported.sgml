@@ -35,7 +35,10 @@
 
 <para>
  The binaries provided by members of the Privoxy team have the following
- testing platforms, earliest supported OS versions and processor architectures. Be aware that down-level versions of Privoxy contain known security issues. <emphasis>It is preferable to build the latest code to target earlier OS releases than use an earlier Privoxy release</emphasis>:
+ testing platforms, earliest supported OS versions and processor architectures.
+ Be aware that down-level versions of Privoxy contain known security issues.
+ <emphasis>It is preferable to build the latest code to target earlier OS releases
+ than use an earlier Privoxy release</emphasis>:
 
  <table frame='all'><title>Operating system support for binaries provided by Privoxy team members</title>
  <tgroup cols='5' align='left' colsep='1' rowsep='1'>
