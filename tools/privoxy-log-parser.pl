@@ -1645,7 +1645,7 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=Assumed latency: )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Stopped waiting for the request line/ or
-             $c =~ m/^No request line on socket \d received in time/ or
+             $c =~ m/^No request line on socket \d+ received in time/ or
              $c =~ m/^The client side of the connection on socket \d/) {
 
         # Stopped waiting for the request line. Timeout: 121.
