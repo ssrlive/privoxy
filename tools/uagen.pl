@@ -39,7 +39,7 @@ use Getopt::Long;
 
 use constant {
 
-   UAGEN_VERSION       => 'uagen 1.2.3',
+   UAGEN_VERSION       => 'uagen 1.2.4',
 
    UAGEN_LOGFILE       => '/var/log/uagen.log',
    ACTION_FILE         => '/etc/privoxy/user-agent.action',
@@ -138,13 +138,13 @@ sub generate_platform_and_os() {
         FreeBSD => {
             karma             => 1,
             platform          => 'X11',
-            architectures     => [ 'i386', 'amd64', 'sparc64' ],
+            architectures     => [ 'i386', 'amd64' ],
             order_is_inversed => 0,
         },
         OpenBSD => {
             karma             => 1,
             platform          => 'X11',
-            architectures     => [ 'i386', 'amd64', 'sparc64', 'alpha' ],
+            architectures     => [ 'arm64', 'i386', 'amd64', 'sparc64', 'alpha' ],
             order_is_inversed => 0,
         },
         NetBSD => {

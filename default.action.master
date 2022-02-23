@@ -21,7 +21,7 @@
 #                 and enhancements are better placed in user.action,
 #                 the match-all section has been moved to match-all.action.
 #
-#  Copyright   :  Written by and Copyright (C) 2001-2021 the
+#  Copyright   :  Written by and Copyright (C) 2001-2022 the
 #                 Privoxy team. https://www.privoxy.org/
 #
 # Feedback welcome, for details please have a look at:
@@ -2042,6 +2042,8 @@ metrics.sr.ht/
 nlnet.nl/
 # URL = https://adv-archiv.dfn-cert.de/adv/2021-2222/
 adv-archiv.dfn-cert.de/
+# URL = https://pinkstinks.de/werbung-ohne-diskriminierung/
+pinkstinks.de/
 
 
 #############################################################################
@@ -2265,6 +2267,15 @@ idp.springer.com/
 .microsoftonline.com/
 # URL = https://www.zeit.de/zustimmung?url=https%3A%2F%2Fwww.zeit.de%2F2021%2F46%2Fchristian-drosten-coronavirus-virologie-pandemie-wissenschaft-impfung%2Fseite-4
 .zeit.de/zustimmung
+# URL = https://07.hagalil.com/www/delivery/ajs.php?zoneid=14&cb=35782002576&charset=UTF-8&loc=https%3A//www.hagalil.com/2021/12/rechtes-von-a-z-5/
+.hagalil.com/
+# URL = https://twitter.com/mariowitte/status/1479481418887663624?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1479481418887663624%7Ctwgr%5E%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Ffuturezone.at%2Fprodukte%2Fcanon-toner-kopierschutz-gefaelscht-chips-chipmangel%2F401865218
+twitter.com/.*/status/
+#MASTER# REMARKS: There are lots of Nitter instances with onion addresses ...
+# URL = http://vfaomgh4jxphpbdfizkm5gbtjahmei234giqj4facbwhrfjtcldauqad.onion/mariowitte/status/1479481418887663624?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1479481418887663624%7Ctwgr%5E%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Ffuturezone.at%2Fprodukte%2Fcanon-toner-kopierschutz-gefaelscht-chips-chipmangel%2F401865218
+.onion/.*/status/
+# URL = https://admin.gandi.net/dashboard/api/v5/login?redirect=https%3A%2F%2Fadmin.gandi.net%2Fdashboard%3Flocale%3Dde
+.gandi.net/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block

@@ -2160,7 +2160,7 @@ static int can_filter_request_body(const struct client_state *csp)
    {
       log_error(LOG_LEVEL_INFO,
          "Not filtering request body from %s: buffer limit %lu will be exceeded "
-         "(content length %lluu)", csp->ip_addr_str, csp->config->buffer_limit,
+         "(content length %llu)", csp->ip_addr_str, csp->config->buffer_limit,
          csp->expected_client_content_length);
       return FALSE;
    }
