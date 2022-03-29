@@ -2454,6 +2454,8 @@ kggp.de/
 # Sticky Actions = -filter{banners-by-link}
 # URL = http://www.encyclopediadramatica.com/Advertisement
 .encyclopediadramatica.com/
+# URL = https://www.eff.org/deeplinks/2022/03/eff-investigation-mystery-gps-tracker-supporters-car
+.eff.org/
 
 #----------------------------------------------------------------------------
 # These don't work without the referrer information:
