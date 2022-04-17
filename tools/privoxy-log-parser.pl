@@ -2156,6 +2156,10 @@ sub handle_loglevel_error($) {
         $c =~ s@(?<=digested )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=of )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^The socks connection timed out after/) {
+
+        # The socks connection timed out after 60 seconds.
+        $c =~ s@(?<=after )(\d+)@$h{'Number'}$1$h{'Standard'}@;
     }
 
     # XXX: There are probably more messages that deserve highlighting.
