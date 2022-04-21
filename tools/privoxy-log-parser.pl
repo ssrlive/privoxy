@@ -1910,6 +1910,11 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=timeout )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_url($c, "(?<=reached: ).*")
 
+    } elsif ($c =~ m/^Prepared to read up to /) {
+
+        # Prepared to read up to 157 bytes of encrypted request body from the client.
+        $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
