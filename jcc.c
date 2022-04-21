@@ -2371,7 +2371,7 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
          /* XXX: Does this actually happen? */
          break;
       }
-      log_error(LOG_LEVEL_CONNECT, "Forwarding %d bytes of encrypted request body",
+      log_error(LOG_LEVEL_CONNECT, "Forwarding %d bytes of encrypted request body.",
          len);
       len = ssl_send_data(&(csp->ssl_server_attr), buf, (size_t)len);
       if (len == -1)
@@ -2386,13 +2386,13 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
          }
          if (csp->expected_client_content_length == 0)
          {
-            log_error(LOG_LEVEL_CONNECT, "Forwarded the last %d bytes", len);
+            log_error(LOG_LEVEL_CONNECT, "Forwarded the last %d bytes.", len);
             break;
          }
       }
    }
 
-   log_error(LOG_LEVEL_CONNECT, "Done forwarding encrypted request body");
+   log_error(LOG_LEVEL_CONNECT, "Done forwarding encrypted request body.");
 
    return 0;
 
