@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Check http://config.privoxy.org/show-status for Conditional #defines enabled
+# This wrapper starts privoxy on port 8119 and runs conditional-defines.pl
+#
+# (c) 2022 Roland Rosenfeld <roland@debian.org>
+
+PORT=8119
+
+TESTSDIR=$(dirname "$0")
+
+if [ -z "$AUTOPKGTEST_TMP" ]; then
+    AUTOPKGTEST_TMP=$(mktemp -d)
+fi
+
+trap 'rm -rf "$AUTOPKGTEST_TMP"' EXIT
+
+CONFIG=$AUTOPKGTEST_TMP/config
+PIDFILE=$AUTOPKGTEST_TMP/privoxy.pid
+PRIVOXY=$AUTOPKGTEST_TMP/privoxy
+
+sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
+    -e "s%^logdir.*%logdir $AUTOPKGTEST_TMP%" \
+    < /usr/share/privoxy/config > "$CONFIG"
+
+cp /usr/sbin/privoxy "$PRIVOXY"
+
+echo "Starting privoxy on port $PORT"
+$PRIVOXY --pidfile "$PIDFILE" "$CONFIG"
+
+http_proxy=http://127.0.0.1:$PORT/
+export http_proxy
+
+"$TESTSDIR"/conditional-defines.pl
+EXITVAL=$?
+
+echo "Stopping privoxy on port $PORT"
+# shellcheck disable=SC2046
+kill $(cat "$PIDFILE")
+
+exit $EXITVAL
