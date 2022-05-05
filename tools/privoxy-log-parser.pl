@@ -1925,6 +1925,11 @@ sub handle_loglevel_connect($) {
         # Buffering encrypted client body. Prepared to read up to 2236 bytes.
         $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^The last \d+ bytes of the encrypted request body have been read/) {
+
+        # The last 6945 bytes of the encrypted request body have been read.
+        $c =~ s@(?<=The last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
