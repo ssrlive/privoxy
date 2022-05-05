@@ -2302,7 +2302,7 @@ static int read_https_request_body(struct client_state *csp)
       if (len <= 0)
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Did not receive the whole encrypted request body from %s",
+            "Did not receive the whole encrypted request body from %s.",
             csp->ip_addr_str);
          return 1;
       }
@@ -2316,13 +2316,13 @@ static int read_https_request_body(struct client_state *csp)
    if (to_read != 0)
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Not enough encrypted request body has been read: expected %lu more bytes",
+         "Not enough encrypted request body has been read: expected %lu more bytes.",
          to_read);
       return 1;
    }
 
    log_error(LOG_LEVEL_CONNECT,
-      "The last %llu bytes of the encrypted request body have been read",
+      "The last %llu bytes of the encrypted request body have been read.",
       csp->expected_client_content_length);
    return 0;
 }
