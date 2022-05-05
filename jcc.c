@@ -2122,12 +2122,12 @@ static int read_http_request_body(struct client_state *csp)
    if (to_read != 0)
    {
       log_error(LOG_LEVEL_CONNECT,
-         "Not enough request body has been read: expected %lu more bytes",
+         "Not enough request body has been read: expected %lu more bytes.",
          to_read);
       return 1;
    }
    log_error(LOG_LEVEL_CONNECT,
-      "The last %d bytes of the request body have been read", len);
+      "The last %d bytes of the request body have been read.", len);
    return 0;
 }
 
