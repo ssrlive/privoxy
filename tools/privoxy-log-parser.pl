@@ -1920,6 +1920,11 @@ sub handle_loglevel_connect($) {
         # Forwarding 157 bytes of encrypted request body.
         $c =~ s@(?<=Forwarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Buffering encrypted client body/) {
+
+        # Buffering encrypted client body. Prepared to read up to 2236 bytes.
+        $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
