@@ -1930,6 +1930,13 @@ sub handle_loglevel_connect($) {
         # The last 6945 bytes of the encrypted request body have been read.
         $c =~ s@(?<=The last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Reducing the chunk offset from/) {
+
+        # Reducing the chunk offset from 1096654 to 32704 after discarding 1063950 bytes to make room in the buffer.
+        $c =~ s@(?<=\d to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=offset from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=after discarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
