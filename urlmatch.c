@@ -245,7 +245,7 @@ jb_err parse_http_url(const char *url, struct http_request *http, int require_pr
 
 
    /*
-    * Split URL into protocol,hostport,path.
+    * Split URL into protocol, hostport, path.
     */
    {
       char *buf;
