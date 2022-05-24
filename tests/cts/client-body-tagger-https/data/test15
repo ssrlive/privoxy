@@ -40,8 +40,11 @@ Two requests to the same URL. The second one is a POST request with an offending
 proxy
 </features>
 <command>
--s --write-out '%{stderr}%{response_code}\n' --insecure https://%HOSTIP:%HTTPSPORT/%TESTNUMBER --next -d "blafasel%repeat[20000 x padding]%" -s --write-out '%{stderr}%{response_code}\n' --insecure https://%HOSTIP:%HTTPSPORT/%TESTNUMBER
+-s --write-out '%{stderr}%{response_code}\n' --insecure https://%HOSTIP:%HTTPSPORT/%TESTNUMBER --next -d @log/post-data-%TESTNUMBER -s --write-out '%{stderr}%{response_code}\n' --insecure https://%HOSTIP:%HTTPSPORT/%TESTNUMBER
 </command>
+<file name="log/post-data-%TESTNUMBER">
+blafasel%repeat[20000 x padding]%
+</file>
 </client>
 
 <verify>

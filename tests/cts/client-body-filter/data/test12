@@ -39,8 +39,11 @@ proxy
 # Sending the first request to appease the test framework.
 # We mainly care about the second request which is too large for Privoxy to buffer it.
 <command>
-http://%HOSTIP:%HTTPPORT/first-request/%TESTNUMBER --next -d "blafasel%repeat[20000 x padding]%" http://%HOSTIP:%HTTPPORT/second-request/%TESTNUMBER
+http://%HOSTIP:%HTTPPORT/first-request/%TESTNUMBER --next -d @log/post-data-%TESTNUMBER http://%HOSTIP:%HTTPPORT/second-request/%TESTNUMBER
 </command>
+<file name="log/post-data-%TESTNUMBER">
+blafasel%repeat[20000 x padding]%
+</file>
 </client>
 
 <verify>
