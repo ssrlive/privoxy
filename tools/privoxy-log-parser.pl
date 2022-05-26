@@ -1933,9 +1933,11 @@ sub handle_loglevel_connect($) {
     } elsif ($c =~ m/^Reducing the chunk offset from/) {
 
         # Reducing the chunk offset from 1096654 to 32704 after discarding 1063950 bytes to make room in the buffer.
+        # Reducing the chunk offset from 16219 to 128 after flushing 16091 bytes.
         $c =~ s@(?<=\d to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=offset from )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=after discarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=after flushing )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
