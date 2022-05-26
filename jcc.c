@@ -4167,8 +4167,8 @@ static void handle_established_connection(struct client_state *csp)
                    */
                   if (chunk_offset >= len)
                   {
-                     log_error(LOG_LEVEL_CONNECT,
-                        "Reducing chunk offset from %lu to %lu after flushing %ld bytes",
+                     log_error(LOG_LEVEL_CONNECT, "Reducing the chunk offset "
+                        "from %lu to %lu after flushing %ld bytes.",
                         chunk_offset, (chunk_offset - (unsigned)len), len);
                      chunk_offset = chunk_offset - (unsigned)len;
                   }
