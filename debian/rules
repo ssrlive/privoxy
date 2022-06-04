@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (c) 2002-2021 Roland Rosenfeld <roland@debian.org>
+# (c) 2002-2022 Roland Rosenfeld <roland@debian.org>
 #
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -25,6 +25,7 @@ override_dh_auto_configure:
 		--enable-external-filters \
 		--enable-extended-statistics \
 		--enable-pcre-host-patterns \
+		--enable-compression \
 		--with-mbedtls \
 		--with-brotli \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
