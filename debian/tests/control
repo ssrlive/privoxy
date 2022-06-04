@@ -1,2 +1,5 @@
 Tests: privoxy-regression-test
 Depends: curl, @
+
+Tests: conditional-defines
+Depends: privoxy, libwww-perl, libhtml-tree-perl

@@ -1910,6 +1910,26 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=timeout )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c = highlight_matched_url($c, "(?<=reached: ).*")
 
+    } elsif ($c =~ m/^Prepared to read up to /) {
+
+        # Prepared to read up to 157 bytes of encrypted request body from the client.
+        $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Forwarding \d+ bytes /) {
+
+        # Forwarding 157 bytes of encrypted request body.
+        $c =~ s@(?<=Forwarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^Buffering encrypted client body/) {
+
+        # Buffering encrypted client body. Prepared to read up to 2236 bytes.
+        $c =~ s@(?<=up to )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^The last \d+ bytes of the encrypted request body have been read/) {
+
+        # The last 6945 bytes of the encrypted request body have been read.
+        $c =~ s@(?<=The last )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
@@ -2156,6 +2176,10 @@ sub handle_loglevel_error($) {
         $c =~ s@(?<=digested )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=of )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^The socks connection timed out after/) {
+
+        # The socks connection timed out after 60 seconds.
+        $c =~ s@(?<=after )(\d+)@$h{'Number'}$1$h{'Standard'}@;
     }
 
     # XXX: There are probably more messages that deserve highlighting.

@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- Copyright (C) 2001-2021 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2022 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
@@ -96,6 +96,7 @@ Current Privoxy Team:
  Andrew J. Caines
  Clifford Caoile
  Edward Carrel
+ Celejar
  Pak Chan
  Wan-Teh Chang
  Sam Chen
@@ -200,6 +201,7 @@ Current Privoxy Team:
  Andreas Rutkauskas
  Sam
  Saperski
+ Andrew Savchenko
  Bart Schelstraete
  Richard Schneidt
  Gregory Seidman

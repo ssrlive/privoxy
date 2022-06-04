@@ -36,8 +36,9 @@
     "actions-file.html#SERVER-HEADER-FILTER">server-header-filter</a></tt> to rewrite headers that are send by the
     server, and <tt class="LITERAL"><a href="actions-file.html#CLIENT-BODY-FILTER">client-body-filter</a></tt> to
     rewrite client request body.</p>
-    <p><span class="APPLICATION">Privoxy</span> also supports two tagger actions: <tt class="LITERAL"><a href=
-    "actions-file.html#CLIENT-HEADER-TAGGER">client-header-tagger</a></tt> and <tt class="LITERAL"><a href=
+    <p><span class="APPLICATION">Privoxy</span> also supports three tagger actions: <tt class="LITERAL"><a href=
+    "actions-file.html#CLIENT-HEADER-TAGGER">client-header-tagger</a></tt>, <tt class="LITERAL"><a href=
+    "actions-file.html#CLIENT-BODY-TAGGER">client-body-tagger</a></tt> and <tt class="LITERAL"><a href=
     "actions-file.html#SERVER-HEADER-TAGGER">server-header-tagger</a></tt>. Taggers and filters use the same syntax in
     the filter files, the difference is that taggers don't modify the text they are filtering, but use a rewritten
     version of the filtered text as tag. The tags can then be used to change the applying actions through sections with

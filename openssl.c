@@ -1157,6 +1157,11 @@ extern int create_server_ssl_connection(struct client_state *csp)
       goto exit;
    }
 
+   /*
+    * XXX: Do we really have to do this always?
+    *      Probably it's sufficient to do if the verification fails
+    *      in which case we're sending the certificates to the client.
+    */
    chain = SSL_get_peer_cert_chain(ssl);
    if (chain)
    {
