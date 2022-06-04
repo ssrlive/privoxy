@@ -393,35 +393,12 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    cert = &(csp->server_certs_chain);
    while (cert->next != NULL)
    {
-<<<<<<< HEAD
-      size_t olen = 0;
-      size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1; /* +1 for terminating null*/
-      char *base64_buf = (char*) malloc(base64_len);
-      memset(base64_buf, 0, base64_len);
-
-      /* Encoding certificate into base64 code */
-      ret = ssl_base64_encode((unsigned char*)base64_buf,
-               base64_len, &olen, (const unsigned char*)cert->file_buf,
-               strlen(cert->file_buf));
-      if (ret != 0)
-      {
-         log_error(LOG_LEVEL_ERROR,
-            "Encoding to base64 failed, buffer is to small");
-      }
-
-      strlcat(message, "<pre>",        message_len);
-      strlcat(message, cert->info_buf, message_len);
-      strlcat(message, "</pre>\n",     message_len);
-
-      if (ret == 0)
-=======
       if (cert->file_buf != NULL)
->>>>>>> 94c8b5dfb65b18ef408c81527bd71fb63e04437d
       {
                                                        /* +1 for terminating null */
          size_t base64_len = base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1;
          size_t olen = 0;
-         char base64_buf[base64_len];
+         char *base64_buf = (char*) malloc(base64_len);
 
          memset(base64_buf, 0, base64_len);
 
@@ -446,9 +423,8 @@ extern void ssl_send_certificate_error(struct client_state *csp)
             strlcat(message, base64_buf, message_len);
             strlcat(message, "\">Download certificate</a>", message_len);
          }
+         free(base64_buf);
       }
-
-      free(base64_buf);
 
       cert = cert->next;
    }
