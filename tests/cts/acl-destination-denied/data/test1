@@ -1,0 +1,25 @@
+<testcase>
+<info>
+<keywords>
+HTTP
+HTTP GET
+</keywords>
+</info>
+
+<client>
+<server>
+none
+</server>
+<name>
+Request to denied destination IP address
+</name>
+<command>
+http://%HOSTIP/%TESTNUMBER
+</command>
+</client>
+<verify>
+<errorcode>
+56
+</errorcode>
+</verify>
+</testcase>
