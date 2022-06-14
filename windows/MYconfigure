@@ -52,7 +52,7 @@ LDFLAGS="${LDFLAGS} -fstack-protector-strong"
 # -D_FORTIFY_SOURCE:  detect some buffer overflow errors
 #     ***>> requires compiler optimization level 1 or above <<***
 # see : https://gcc.gnu.org/legacy-ml/gcc-patches/2004-09/msg02055.html
-#   The diffence between -D_FORTIFY_SOURCE=1 and -D_FORTIFY_SOURCE=2 is e.g. for
+#   The difference between -D_FORTIFY_SOURCE=1 and -D_FORTIFY_SOURCE=2 is e.g. for
 #     struct S { struct T { char buf[5]; int x; } t; char buf[20]; } var;
 #   With -D_FORTIFY_SOURCE=1,
 #     strcpy (&var.t.buf[1], "abcdefg");
