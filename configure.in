@@ -216,7 +216,7 @@ else
         ],
         [
           if test $ID = no ; then
-            AC_MSG_ERROR(There is no 'id' programm on this system)
+            AC_MSG_ERROR(There is no 'id' program on this system)
           else
             AC_MSG_RESULT(none specified)
             USER=$with_user
@@ -255,7 +255,7 @@ else
         ],
         [
           if test $BGROUPS = no ; then
-            AC_MSG_ERROR(There is no 'groups' programm on this system)
+            AC_MSG_ERROR(There is no 'groups' program on this system)
           else
             AC_MSG_RESULT(none specified)
             GROUP=$with_group;
