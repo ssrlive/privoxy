@@ -1939,6 +1939,11 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=after discarding )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=after flushing )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Client socket \d+ is no longer usable/) {
+
+        # Client socket 21 is no longer usable. The server socket has been closed.
+        $c =~ s@(?<=Client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
