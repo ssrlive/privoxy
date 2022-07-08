@@ -712,6 +712,8 @@ ada*.
 adri*.
 # URL = https://adguard.com/
 adguard.com/
+# URL = https://adfd.org/austausch/
+adfd.org/
 
 #############################################################################
 # Generic block patterns by path:
