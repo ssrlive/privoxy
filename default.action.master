@@ -773,9 +773,6 @@ support./(.*/)?track
 .gov
 .hs-*.de
 .fh-*.de
-#MASTER# REMARKS: Try to avoid harmless names in non-commercial organizations. Added 10/24/06
-# URL = http://www.gnu.org/graphics/gnu-head-banner.png
-.org/.*(image|banner)
 
 #############################################################################
 # Catch-all for false-positives that are just TOO obvious to let go
