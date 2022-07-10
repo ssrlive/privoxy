@@ -1946,9 +1946,10 @@ sub handle_loglevel_connect($) {
         # Client socket 21 is no longer usable. The server socket has been closed.
         $c =~ s@(?<=Client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
-    } elsif ($c =~ m/^Server successfully connected over/) {
+    } elsif ($c =~ m/^(Client|Server) successfully connected over/) {
 
         # Server successfully connected over TLSv1.3 (TLS_AES_256_GCM_SHA384).
+        # Client successfully connected over TLSv1.3 (TLS_AES_128_GCM_SHA256).
         $c =~ s@(?<=connected over )(TLSv\d\.\d)@$h{'tls-version'}$1$h{'Standard'}@;
         $c =~ s@(?<=\()([^)]+)@$h{'cipher-suite'}$1$h{'Standard'}@;
 
