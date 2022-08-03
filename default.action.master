@@ -2279,6 +2279,8 @@ twitter.com/.*/status/
 .onion/.*/status/
 # URL = https://admin.gandi.net/dashboard/api/v5/login?redirect=https%3A%2F%2Fadmin.gandi.net%2Fdashboard%3Flocale%3Dde
 .gandi.net/
+# URL = https://launchpad.net/+openid-callback?starting_url=https%3A%2F%2Fanswers.launchpad.net%2Fdvdbackup%2F%2Bquestion%2F702512&janrain_nonce=2022-08-03T13%3A11%3A13ZnhmdLK...
+launchpad.net/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
