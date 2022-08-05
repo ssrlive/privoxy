@@ -324,7 +324,7 @@ sub write_prefs_file() {
 }
 
 sub VersionMessage() {
-    printf UAGEN_VERSION . "\n" . 'Copyright (C) 2006-2022 Fabian Keil <fk@fabiankeil.de> ' .
+    printf UAGEN_VERSION . "\n" . 'Copyright (c) 2006-2022 Fabian Keil <fk@fabiankeil.de> ' .
         "\nhttps://www.fabiankeil.de/sourcecode/uagen/\n";
 }
 
