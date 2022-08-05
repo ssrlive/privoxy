@@ -1460,7 +1460,8 @@ sub handle_loglevel_crunch($) {
 
     # Highlight crunch reason
     foreach my $reason (keys %reason_colours) {
-        $content =~ s@($reason)@$reason_colours{$reason}$1$h{'Standard'}@g;
+        # Crunch: Blocked: https://capture.condenastdigital.com/track?_o=cne&[...]&dim2=%7B%22adBlocked%[...]
+        $content =~ s@($reason)@$reason_colours{$reason}$1$h{'Standard'}@;
     }
 
     if ($content =~ m/\[too long, truncated\]$/) {
