@@ -487,7 +487,9 @@ nor cares if all actions are present. Garbage in, garbage out.
 
 B<--browser-release-date> I<browser_release_date> Date to use.
 The format is YYYYMMDD. Some sanity checks are done, but you
-shouldn't rely on them.
+shouldn't rely on them. Note that the Mozilla project has frozen
+the "Gecko token" starting with Firefox 4 so using a different
+one than the default is somewhat suspicious.
 
 B<--browser-revision> I<browser_revision> Use a custom revision.
 B<uagen> will use it without any sanity checks.
