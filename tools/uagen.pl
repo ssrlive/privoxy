@@ -156,7 +156,7 @@ sub generate_platform_and_os() {
         Linux => {
             karma             => 1,
             platform          => 'X11',
-            architectures     => [ 'i586', 'i686', 'x86_64' ],
+            architectures     => [ 'aarch64', 'i586', 'i686', 'x86_64' ],
             order_is_inversed => 0,
         },
         SunOS => {
