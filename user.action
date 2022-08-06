@@ -5,6 +5,9 @@
 #  Purpose     :  User-maintained actions file, see
 #                 https://www.privoxy.org/user-manual/actions-file.html
 #
+#  Copyright   :  Written by and Copyright (C) 2002-2022 the
+#                 Privoxy team. https://www.privoxy.org/
+#
 ######################################################################
 
 # This is the place to add your personal exceptions and additions to
