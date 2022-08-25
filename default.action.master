@@ -2285,6 +2285,8 @@ twitter.com/.*/status/
 .gandi.net/
 # URL = https://launchpad.net/+openid-callback?starting_url=https%3A%2F%2Fanswers.launchpad.net%2Fdvdbackup%2F%2Bquestion%2F702512&janrain_nonce=2022-08-03T13%3A11%3A13ZnhmdLK...
 launchpad.net/
+# URL = https://consent.youtube.com/m?continue=https%3A%2F%2Fwww.youtube.com%2Fplaylist%3Flist%3DPLeF8ZihVdpFfttOtsot131byFrDVztt8T%26cbrd%3D1%26cbrd%3D1&gl=AT&m=0&pc=yt&hl=en&src=1
+consent.youtube.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
