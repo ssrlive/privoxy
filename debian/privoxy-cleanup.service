@@ -1,0 +1,14 @@
+[Unit]
+Description=privoxy certificate cleanup
+Documentation=man:privoxy(8) https://www.privoxy.org/user-manual/
+ConditionACPower=true
+
+[Service]
+Type=oneshot
+ExecStart=/etc/cron.daily/privoxy systemd-timer
+
+# performance options
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+

@@ -45,8 +45,13 @@ foreach my $tr ($table->look_down('_tag' => 'tr')) {
    my $value = $td2->detach_content;
    if ($value !~ /Yes/) {
       # feature disabled, check whitelist
-      if (! defined $disabled_features{$feature}) {
-         printf STDERR "%s is disabled, but should be enabled\n", $feature;
+      if ($feature eq 'FEATURE_64_BIT_TIME_T') {
+         # See https://en.wikipedia.org/wiki/Year_2038_problem
+         # On Linux >= 5.6 time_t should be 64bit, too.
+         printf "%s is disabled, which is ok on 32bit systems", $feature;
+         $disabled_ok++;
+      } elsif (! defined $disabled_features{$feature}) {
+         printf "%s is disabled, but should be enabled\n", $feature;
          $exitcode = 1;
          $disabled_nok++;
       } else {
