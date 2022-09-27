@@ -168,9 +168,9 @@ static int match_sockaddr(const struct sockaddr_storage *network,
                           const struct sockaddr_storage *netmask,
                           const struct sockaddr_storage *address)
 {
-   uint8_t *network_addr, *netmask_addr, *address_addr;
-   unsigned int addr_len;
-   in_port_t *network_port, *netmask_port, *address_port;
+   uint8_t *network_addr=NULL, *netmask_addr=NULL, *address_addr=NULL;
+   unsigned int addr_len=0;
+   in_port_t *network_port=NULL, *netmask_port=NULL, *address_port=NULL;
    int i;
 
    if (network->ss_family != netmask->ss_family)
@@ -325,9 +325,9 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    int i, masklength;
 #ifdef HAVE_RFC2553
    struct addrinfo hints, *result;
-   uint8_t *mask_data;
-   in_port_t *mask_port;
-   unsigned int addr_len;
+   uint8_t *mask_data=NULL;
+   in_port_t *mask_port=NULL;
+   unsigned int addr_len=0;
 #else
    long port;
 #endif /* def HAVE_RFC2553 */
