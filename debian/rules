@@ -117,3 +117,7 @@ endif
 override_dh_perl:
 #	We only need perl-base:
 	dh_perl -d
+
+override_dh_installsystemd:
+	dh_installsystemd
+	dh_installsystemd --name privoxy-cleanup

@@ -957,6 +957,8 @@ api.theadex.com/
 odb.outbrain.com/
 # Blocked URL = https://elsa.memoinsights.com/t?pid=62012a7a19351c07620394e0&url=https%3A%2F%2Farstechnica.com%2Ftech-policy%2F2022%2F08%2Fthe-women-calling-out-apples-handling-of-misconduct-claims%2F&author%5B%5D=Financial%20Times&title=The%20women%20calling%20out%20Apple%E2%80%99s%20handling%20of%20misconduct%20claims&date=2022-08-04T13%3A39%3A42Z&referrer=&ref_url=&page_url=https%3A%2F%2Farstechnica.com%2Ftech-policy%2F2022%2F08%2Fthe-women-calling-out-apples-handling-of-misconduct-claims%2F%3Fcomments%3D1&cb=MEMO.API.callbacks.cbakynzcplf&v=v3.0.6&t=5000&e=5000&s=7362
 elsa.memoinsights.com/t
+# Blocked URL = https://ups.xplosion.de/ctx?event_id=ctx_json&_sid=24141&hostSiteUrl=https://www.presseportal.de/blaulicht/pm/12415/5302821&referrer=&userAgent=Mozilla/5.0%20(X11;%20FreeBSD%20amd64;%20rv:91.0)%20Gecko/20100101%20Firefox/91.0&userLang=en-CA&gdpr=1&gdpr_consent=[...]
+ups.xplosion.de/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
@@ -2283,6 +2285,8 @@ twitter.com/.*/status/
 .gandi.net/
 # URL = https://launchpad.net/+openid-callback?starting_url=https%3A%2F%2Fanswers.launchpad.net%2Fdvdbackup%2F%2Bquestion%2F702512&janrain_nonce=2022-08-03T13%3A11%3A13ZnhmdLK...
 launchpad.net/
+# URL = https://consent.youtube.com/m?continue=https%3A%2F%2Fwww.youtube.com%2Fplaylist%3Flist%3DPLeF8ZihVdpFfttOtsot131byFrDVztt8T%26cbrd%3D1%26cbrd%3D1&gl=AT&m=0&pc=yt&hl=en&src=1
+consent.youtube.com/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
