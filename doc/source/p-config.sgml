@@ -3946,7 +3946,7 @@ compression-level 0
  <varlistentry>
   <term>Default value:</term>
   <listitem>
-   <para><emphasis>Empty string</emphasis></para>
+   <para><emphasis>./CA</emphasis></para>
   </listitem>
  </varlistentry>
  <varlistentry>
