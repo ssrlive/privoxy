@@ -2458,6 +2458,8 @@ kggp.de/
 .plasmaservice.de/
 # URL = http://www.black-mosquito.org/index.php/kein-mensch-ist-illegal-fight-racism-now-40-aufkleber.html
 .black-mosquito.org/
+# URL = https://freebsdfoundation.org/about-us/board-of-directors/
+freebsdfoundation.org/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
