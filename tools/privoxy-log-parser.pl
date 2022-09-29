@@ -2211,6 +2211,23 @@ sub handle_loglevel_error($) {
     return $c;
 }
 
+sub handle_loglevel_received($) {
+
+    my $c = shift;
+
+    if ($c =~ m/^TLS from socket/) {
+        # TLS from socket 3: \x16\xda\xe2\xa2;\x0d\x0a
+
+        $c =~ s@(?<=TLS from socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^from socket/) {
+        # from socket 3: HEAD http://p.p/ HTTP/1.1\x0d\x0aHost: p.p\x0d\x0aUser-Agent: curl/7.85.0\x0d\x0aAccept: */*\x0d\x0aProxy-Connection: Keep-Alive\x0d\x0a\x0d\x0a
+
+        $c =~ s@(?<=from socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+    }
+
+    return $c;
+}
 
 sub handle_loglevel_ignore($) {
     return shift;
@@ -2670,7 +2687,7 @@ sub parse_loop() {
         'Error'             => \&handle_loglevel_error,
         'Fatal error'       => \&handle_loglevel_ignore,
         'Writing'           => \&handle_loglevel_ignore,
-        'Received'          => \&handle_loglevel_ignore,
+        'Received'          => \&handle_loglevel_received,
         'Tagging'           => \&handle_loglevel_tagging,
         'Actions'           => \&handle_loglevel_ignore,
         'Unknown log level' => \&handle_loglevel_ignore,
