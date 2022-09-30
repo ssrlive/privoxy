@@ -2229,6 +2229,24 @@ sub handle_loglevel_received($) {
     return $c;
 }
 
+sub handle_loglevel_writing($) {
+
+    my $c = shift;
+
+    if ($c =~ m/^to socket/) {
+        # to socket 11: HTTP/1.1 200 Connection established\x0d\x0a\x0d\x0a
+
+        $c =~ s@(?<=to socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
+    } elsif ($c =~ m/^TLS on socket /) {
+        # TLS on socket 9: o~\xfcS[\xfa\x8f\xd6\x96\xe6_\xc7$\x1b[...]
+
+        $c =~ s@(?<=TLS on socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+    }
+
+    return $c;
+}
+
 sub handle_loglevel_ignore($) {
     return shift;
 }
@@ -2686,7 +2704,7 @@ sub parse_loop() {
         'Force'             => \&handle_loglevel_force,
         'Error'             => \&handle_loglevel_error,
         'Fatal error'       => \&handle_loglevel_ignore,
-        'Writing'           => \&handle_loglevel_ignore,
+        'Writing'           => \&handle_loglevel_writing,
         'Received'          => \&handle_loglevel_received,
         'Tagging'           => \&handle_loglevel_tagging,
         'Actions'           => \&handle_loglevel_ignore,
