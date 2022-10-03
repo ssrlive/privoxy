@@ -2460,6 +2460,8 @@ kggp.de/
 .black-mosquito.org/
 # URL = https://freebsdfoundation.org/about-us/board-of-directors/
 freebsdfoundation.org/
+# URL = https://freiheitsfoo.de/2022/10/03/wahlplakat-show-nds-ltw-2022/
+.freiheitsfoo.de/
 
 {-filter{banners-by-link}}
 # Sticky Actions = -filter{banners-by-link}
