@@ -1439,7 +1439,7 @@ int accept_connection(struct client_state * csp, jb_socket fds[])
    if ((-1 == retval) || listen_addr_size <= retval)
    {
       log_error(LOG_LEVEL_ERROR,
-         "Server name (%s) and port number (%d) ASCII decimal representation"
+         "Server name (%s) and port number (%d) ASCII decimal representation "
          "don't fit into %lu bytes",
          host_addr, csp->config->hport[i], listen_addr_size);
       return 0;
