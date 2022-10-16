@@ -850,7 +850,7 @@ void drain_and_close_socket(jb_socket fd)
             bytes_drained_total += bytes_drained;
             if (bytes_drained_total > ARBITRARY_DRAIN_LIMIT)
             {
-               log_error(LOG_LEVEL_CONNECT, "Giving up draining socket %d", fd);
+               log_error(LOG_LEVEL_CONNECT, "Giving up draining socket %d.", fd);
                break;
             }
          }
@@ -858,7 +858,7 @@ void drain_and_close_socket(jb_socket fd)
       if (bytes_drained_total != 0)
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Drained %d bytes before closing socket %d", bytes_drained_total, fd);
+            "Drained %d bytes before closing socket %d.", bytes_drained_total, fd);
       }
    }
 
