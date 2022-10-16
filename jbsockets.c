@@ -912,7 +912,7 @@ int bind_port(const char *hostnam, int portnum, int backlog, jb_socket *pfd)
    if ((-1 == retval) || (sizeof(servnam) <= retval))
    {
       log_error(LOG_LEVEL_ERROR,
-         "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes",
+         "Port number (%d) ASCII decimal representation doesn't fit into 6 bytes.",
          portnum);
       return -1;
    }
