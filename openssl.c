@@ -8,7 +8,7 @@
  *
  * Copyright   :  Written by and Copyright (c) 2020 Maxim Antonov <mantonov@gmail.com>
  *                Copyright (C) 2017 Vaclav Svec. FIT CVUT.
- *                Copyright (C) 2018-2020 by Fabian Keil <fk@fabiankeil.de>
+ *                Copyright (C) 2018-2022 by Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -1996,7 +1996,7 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
 
-   issuer_name = X509_get_issuer_name(issuer_cert);
+   issuer_name = X509_get_subject_name(issuer_cert);
 
    /*
     * Loading keys from file or from buffer

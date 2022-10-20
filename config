@@ -1,6 +1,6 @@
-#        Sample Configuration File for Privoxy 3.0.33
+#        Sample Configuration File for Privoxy 3.0.34
 #
-# Copyright (C) 2001-2021 Privoxy Developers https://www.privoxy.org/
+# Copyright (C) 2001-2022 Privoxy Developers https://www.privoxy.org/
 #
 #####################################################################
 #                                                                   #
@@ -2465,7 +2465,7 @@ socket-timeout 300
 #
 #  Default value:
 #
-#      Empty string
+#      ./CA
 #
 #  Effect if unset:
 #

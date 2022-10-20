@@ -7,7 +7,7 @@
  *                to deserve their own file but don't really fit in
  *                any other file.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2020 the
+ * Copyright   :  Written by and Copyright (C) 2001-2022 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -700,8 +700,7 @@ char * make_path(const char * dir, const char * file)
           * Relative path, so start with the base directory.
           */
          path_size += strlen(basedir) + 1; /* +1 for the slash */
-         path = malloc(path_size);
-         if (!path) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+         path = malloc_or_die(path_size);
          strlcpy(path, basedir, path_size);
          strlcat(path, "/", path_size);
          strlcat(path, dir, path_size);
@@ -709,8 +708,7 @@ char * make_path(const char * dir, const char * file)
       else
 #endif /* defined unix */
       {
-         path = malloc(path_size);
-         if (!path) log_error(LOG_LEVEL_FATAL, "malloc failed!");
+         path = malloc_or_die(path_size);
          strlcpy(path, dir, path_size);
       }
 
