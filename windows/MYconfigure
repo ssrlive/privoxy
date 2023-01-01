@@ -136,9 +136,15 @@ CPPFLAGS="${CPPFLAGS} -I${inc}"
 LDFLAGS="${LDFLAGS} -L${lib}"
 
 # mbedtls
-# Get the 2.16.x mbedtls library from  https://github.com/ARMmbed/mbedtls/tags
-inc="/source/mbedtls-2.16.11/include"
-lib="/source/mbedtls-2.16.11/library"
+## https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.16.12
+##   This is the last release of the 2.16 long-time support branch.
+##   Users who want a long-time branch should move to mbedtls-2.28,
+##   which is backward-compatible and will be supported for at least
+##   3 years.
+# Get the 2.28.x mbedtls library from  https://github.com/Mbed-TLS/mbedtls/tags
+inc="/source/mbedtls-2.28.2/include"
+lib="/source/mbedtls-2.28.2/library"
+
 MITMOPT="--with-mbedtls"
 CPPFLAGS="${CPPFLAGS} -I${inc}"
 LDFLAGS="${LDFLAGS} -L${lib}"
