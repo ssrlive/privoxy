@@ -107,7 +107,7 @@ Copyright (C) 2001-2022 Privoxy Developers https://www.privoxy.org/
       4. ACCESS CONTROL AND SECURITY                             #
       5. FORWARDING                                              #
       6. MISCELLANEOUS                                           #
-      7. HTTPS INSPECTION (EXPERIMENTAL)                         #
+      7. HTTPS INSPECTION                                        #
       8. WINDOWS GUI OPTIONS                                     #
                                                                  #
 ##################################################################
@@ -3913,7 +3913,7 @@ compression-level 0
 
 
 <sect2 id="https-inspection-directives">
-<title>HTTPS Inspection (Experimental)</title>
+<title>HTTPS Inspection</title>
 
 <para>
   HTTPS inspection allows to filter encrypted requests and responses.
