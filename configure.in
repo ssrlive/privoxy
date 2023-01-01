@@ -85,7 +85,7 @@ CODE_STATUS="stable"
 
 dnl Timestamp (date +%s) used by the mtree-spec target.
 dnl Should be updated before releases but forgetting it isn't critical.
-SOURCE_DATE_EPOCH=1636218132
+SOURCE_DATE_EPOCH=1672586827
 
 dnl =================================================================
 dnl Substitute the version numbers
