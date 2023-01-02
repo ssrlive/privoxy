@@ -2602,7 +2602,7 @@ make tarball-dist
         Check that you have the current versions of the
         <ulink url="https://sourceforge.net/projects/nsis/files/NSIS%203/">
                     NSIS installer</ulink>,
-        <ulink url="https://ftp.pcre.org/pub/pcre/">PCRE library</ulink>,
+        <ulink url="https://sourceforge.net/projects/pcre/files/pcre/">PCRE library</ulink>,
         <ulink url="https://tls.mbed.org/download">MBED TLS library</ulink>,
         <ulink url="https://github.com/google/brotli/releases">
                     Brotli library</ulink>,

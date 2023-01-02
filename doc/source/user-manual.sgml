@@ -409,8 +409,8 @@ MAKENSIS = /&lt;root-dir>/nsis/makensis.exe
 
       <para>
         Get the latest 8.x PCRE code from
-        <ulink url="https://ftp.pcre.org/pub/pcre/">PCRE
-                    https://ftp.pcre.org/pub/pcre/</ulink>
+        <ulink url="https://sourceforge.net/projects/pcre/files/pcre/">PCRE
+                    https://sourceforge.net/projects/pcre/files/pcre/</ulink>
         and build the static PCRE libraries with
 
         <screen>
