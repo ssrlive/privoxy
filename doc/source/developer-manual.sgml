@@ -2603,7 +2603,7 @@ make tarball-dist
         <ulink url="https://sourceforge.net/projects/nsis/files/NSIS%203/">
                     NSIS installer</ulink>,
         <ulink url="https://sourceforge.net/projects/pcre/files/pcre/">PCRE library</ulink>,
-        <ulink url="https://tls.mbed.org/download">MBED TLS library</ulink>,
+        <ulink url="https://github.com/Mbed-TLS/mbedtls/tags">MBED TLS library</ulink>,
         <ulink url="https://github.com/google/brotli/releases">
                     Brotli library</ulink>,
         and that the <emphasis>MAKENSIS</emphasis> evar in

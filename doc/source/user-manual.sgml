@@ -437,9 +437,9 @@ export CPPFLAGS="-DPCRE_STATIC"
 
       <para>
         If you want to be able to have Privoxy do TLS Inspection, get the latest
-        2.16.x MBED-TLS library source code from
-        <ulink url="https://github.com/ARMmbed/mbedtls/tags">
-                    https://github.com/ARMmbed/mbedtls/tags</ulink>,
+        2.28.x MBED-TLS library source code from
+        <ulink url="https://github.com/Mbed-TLS/mbedtls/tags">
+                    https://github.com/Mbed-TLS/mbedtls/tags</ulink>,
         extract the tar file into <literal>&lt;root-dir&gt;</literal>
         and build the static libraries with
         <programlisting>
@@ -8210,7 +8210,7 @@ Requests</title>
 <para>
  The same is true for <application>Privoxy</application> binaries
  unless they are linked with a
- <ulink url="https://tls.mbed.org/">mbed TLS</ulink> version
+ <ulink url="https://www.trustedfirmware.org/projects/mbed-tls/">mbed TLS</ulink> version
  that is licensed under the Apache 2.0 license in which
  case you can redistribute and/or modify the <application>Privoxy</application>
  binaries under the terms of the <citetitle>GNU General Public License</citetitle>
@@ -8250,7 +8250,7 @@ Requests</title>
  When compiled with FEATURE_HTTPS_INSPECTION (optional),
  Privoxy depends on a TLS library. The supported libraries are
  <ulink url="https://www.openssl.org/">LibreSSL</ulink>,
- <ulink url="https://tls.mbed.org/">mbed TLS</ulink> and
+ <ulink url="https://github.com/Mbed-TLS/mbedtls/tags">mbed TLS 2.28.x</ulink> and
  <ulink url="https://www.openssl.org/">OpenSSL</ulink>.
 </para>
 <para>
