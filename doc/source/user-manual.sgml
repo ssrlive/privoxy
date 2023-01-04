@@ -7717,9 +7717,9 @@ pre-defined filters for your convenience:
   <term><emphasis>banners-by-link</emphasis></term>
   <listitem>
    <para>
-    This is an experimental filter that attempts to kill any banners if
-    their URLs seem to point to known or suspected click trackers. It is currently
-    not of much value and is not recommended for use by default.
+    This filter attempts to kill any banners if their URLs seem to point
+    to known or suspected click trackers. It is currently not of much value
+    and is not recommended for use by default.
    </para>
   </listitem>
  </varlistentry>
