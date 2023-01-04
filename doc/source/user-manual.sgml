@@ -2536,12 +2536,6 @@ media.example.com/.*banners
 <!-- XXX: This section contains duplicates content from the
           client-specific-tag documentation. -->
 
-<warning>
-<para>
- This is an experimental feature. The syntax is likely to change in future versions.
-</para>
-</warning>
-
 <para>
  Client tag patterns are not set based on HTTP headers but based on
  the client's IP address. Users can enable them themselves, but the
