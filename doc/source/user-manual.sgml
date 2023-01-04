@@ -5454,9 +5454,6 @@ new action
     a pattern with path doesn't work as the path is only seen
     by &my-app; if the action is already enabled.
    </para>
-   <para>
-    This is an experimental feature.
-   </para>
   </listitem>
  </varlistentry>
 
