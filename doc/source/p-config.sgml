@@ -336,7 +336,7 @@ II. FORMAT OF THE CONFIGURATION FILE
   <term>Notes:</term>
   <listitem>
    <para>
-    The value of this option only matters if the experimental trust mechanism has been
+    The value of this option only matters if the trust mechanism has been
     activated. (See <link linkend="trustfile"><emphasis>trustfile</emphasis></link> below.)
    </para>
    <para>

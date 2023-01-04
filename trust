@@ -2,9 +2,8 @@
 # 
 #  File        :  trust
 # 
-#  Purpose     :  Trustfiles are an experimental feature and can be used
-#                 to build "whitelists" (versus the usual "blacklists"
-#                 techniques).
+#  Purpose     :  Trustfiles can be used to build "whitelists"
+#                 (versus the usual "blacklists" techniques).
 # 
 #  Copyright   :  Written by and Copyright
 #                 Privoxy team. https://www.privoxy.org/
