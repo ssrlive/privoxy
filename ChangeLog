@@ -48,10 +48,6 @@ ChangeLog for Privoxy
     Makes it less likely that the server connection times out
     and we don't open a connection if the buffering fails anyway.
     Sponsored by: Robert Klemme
-  - receive_and_send_encrypted_post_data(): Additionally check for data
-    being available. Previously we relied on the TLS library reading more data
-    from the wire than we read in which case the is_ssl_pending() check worked.
-    Sponsored by: Robert Klemme
   - Add periods to a couple of log messages.
   - accept_connection(): Add missing space to a log message.
   - Initialize ca-related defaults with strdup_or_die() so errors
