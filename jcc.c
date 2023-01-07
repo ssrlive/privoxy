@@ -2345,9 +2345,8 @@ static int receive_and_send_encrypted_post_data(struct client_state *csp)
 {
    int content_length_known = csp->expected_client_content_length != 0;
 
-   while ((content_length_known && csp->expected_client_content_length != 0) ||
-      (is_ssl_pending(&(csp->ssl_client_attr)) ||
-            data_is_available(csp->cfd, csp->config->socket_timeout)))
+   while (is_ssl_pending(&(csp->ssl_client_attr))
+      || (content_length_known && csp->expected_client_content_length != 0))
    {
       unsigned char buf[BUFFER_SIZE];
       int len;
