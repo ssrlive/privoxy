@@ -116,6 +116,9 @@ ChangeLog for Privoxy
   - configure: Fix --with-msan option.
     Also (probably) reported by Andrew Savchenko.
 
+- macOS build system:
+	- Add HTTPS inspection support using OpenSSL 3.0.7
+
 - Documentation:
   - Add OpenSSL to the list of libraries that may be licensed under the
     Apache 2.0 license in which case the linked Privoxy binary has to be
