@@ -499,18 +499,6 @@
       </div>
       <div class="SECT3">
         <h3 class="SECT3"><a name="CLIENT-TAG-PATTERN" id="CLIENT-TAG-PATTERN">8.4.5. The Client Tag Pattern</a></h3>
-        <div class="WARNING">
-          <table class="WARNING" border="1" width="100%">
-            <tr>
-              <td align="center"><b>Warning</b></td>
-            </tr>
-            <tr>
-              <td align="left">
-                <p>This is an experimental feature. The syntax is likely to change in future versions.</p>
-              </td>
-            </tr>
-          </table>
-        </div>
         <p>Client tag patterns are not set based on HTTP headers but based on the client's IP address. Users can enable
         them themselves, but the Privoxy admin controls which tags are available and what their effect is.</p>
         <p>After a client-specific tag has been defined with the <a href=
@@ -2675,7 +2663,6 @@
               <p>Note that the action has to be enabled based on the CONNECT request which doesn't contain a path.
               Enabling it based on a pattern with path doesn't work as the path is only seen by <span class=
               "APPLICATION">Privoxy</span> if the action is already enabled.</p>
-              <p>This is an experimental feature.</p>
             </dd>
             <dt>Example usage (section):</dt>
             <dd>
