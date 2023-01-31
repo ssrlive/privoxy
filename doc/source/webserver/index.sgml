@@ -6,9 +6,9 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity p-version "3.0.34">
-<!entity p-status "UNRELEASED">
-<!entity % p-not-stable "INCLUDE">
-<!entity % p-stable "IGNORE">
+<!entity p-status "stable">
+<!entity % p-not-stable "IGNORE">
+<!entity % p-stable "INCLUDE">
 <!entity  my-copy "&copy;">        <!-- kludge for docbook2man            -->
 <!entity % p-homepage "IGNORE">    <!-- toggle for webserver index.html   -->
 <!entity % p-index "IGNORE">       <!-- toggle for local doc index        -->
