@@ -117,7 +117,8 @@ ChangeLog for Privoxy
     Also (probably) reported by Andrew Savchenko.
 
 - macOS build system:
-	- Add HTTPS inspection support using OpenSSL 3.0.7
+  - HTTPS inspection is enabled when building the macOS binary
+    using OpenSSL as TLS library.
 
 - Documentation:
   - Add OpenSSL to the list of libraries that may be licensed under the
