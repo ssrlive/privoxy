@@ -39,7 +39,7 @@
             properly keeping track of where the various chunks are supposed to start and end. Previously Privoxy would
             merely check the last bytes received to see if they looked like the last-chunk. This failed to work if the
             last-chunk wasn't received in one read and could also result in actual data being misdetected as
-            last-chunk. Should fix: SF support request #1739 Reported by: withoutname</p>
+            last-chunk. Should fix: SF support request #1739. Reported by: withoutname.</p>
           </li>
           <li>
             <p>remove_chunked_transfer_coding(): Refuse to de-chunk invalid data Previously the data could get
@@ -62,7 +62,7 @@
             <p>handle_established_connection(): Check for pending TLS data from the client before checking if data is
             available on the connection. The TLS library may have already consumed all the data from the client
             response in which case poll() and select() will not detect that data is available to be read. Sponsored by:
-            Robert Klemme</p>
+            Robert Klemme.</p>
           </li>
           <li>
             <p>ssl_send_certificate_error(): Don't crash if there's no certificate information available. This is only
@@ -80,12 +80,12 @@
         <ul>
           <li>
             <p>Add a client-body-tagger action which creates tags based on the content of the request body. Sponsored
-            by: Robert Klemme</p>
+            by: Robert Klemme.</p>
           </li>
           <li>
             <p>When client-body filters are enabled, buffer the whole request before opening a connection to the
             server. Makes it less likely that the server connection times out and we don't open a connection if the
-            buffering fails anyway. Sponsored by: Robert Klemme</p>
+            buffering fails anyway. Sponsored by: Robert Klemme.</p>
           </li>
           <li>
             <p>Add periods to a couple of log messages.</p>
@@ -118,7 +118,7 @@
             <p>socks5_connect(): Deal with domain names in the socks reply</p>
           </li>
           <li>
-            <p>Add a filter for bundeswehr.de</p>
+            <p>Add a filter for bundeswehr.de that hides the cookie and privacy info banner.</p>
           </li>
         </ul>
       </li>
@@ -126,55 +126,56 @@
         <p>Action file improvements:</p>
         <ul>
           <li>
-            <p>Disable filter{banners-by-size} for .freiheitsfoo.de/</p>
+            <p>Disable filter{banners-by-size} for .freiheitsfoo.de/.</p>
           </li>
           <li>
-            <p>Disable filter{banners-by-size} for freebsdfoundation.org/</p>
+            <p>Disable filter{banners-by-size} for freebsdfoundation.org/.</p>
           </li>
           <li>
-            <p>Disable fast-redirects for consent.youtube.com/</p>
+            <p>Disable fast-redirects for consent.youtube.com/.</p>
           </li>
           <li>
-            <p>Block requests to ups.xplosion.de/</p>
+            <p>Block requests to ups.xplosion.de/.</p>
           </li>
           <li>
-            <p>Block requests for elsa.memoinsights.com/t</p>
+            <p>Block requests for elsa.memoinsights.com/t.</p>
           </li>
           <li>
             <p>Fix a typo in a test.</p>
           </li>
           <li>
-            <p>Disable fast-redirects for launchpad.net/</p>
+            <p>Disable fast-redirects for launchpad.net/.</p>
           </li>
           <li>
-            <p>Unblock .eff.org/</p>
+            <p>Unblock .eff.org/.</p>
           </li>
           <li>
-            <p>Stop unblocking .org/.*(image|banner) which appears to be too generous.</p>
+            <p>Stop unblocking .org/.*(image|banner) which appears to be too generous The example URL
+            http://www.gnu.org/graphics/gnu-head-banner.png is already unblocked due to .gnu.org being unblocked.</p>
           </li>
           <li>
-            <p>Unblock adfd.org/</p>
+            <p>Unblock adfd.org/.</p>
           </li>
           <li>
-            <p>Disable filter{banners-by-link} for .eff.org/</p>
+            <p>Disable filter{banners-by-link} for .eff.org/.</p>
           </li>
           <li>
-            <p>Block requests to odb.outbrain.com/</p>
+            <p>Block requests to odb.outbrain.com/.</p>
           </li>
           <li>
-            <p>Disable fast-redirects for .gandi.net/</p>
+            <p>Disable fast-redirects for .gandi.net/.</p>
           </li>
           <li>
-            <p>Disable fast-redirects{} for .onion/.*/status/</p>
+            <p>Disable fast-redirects{} for .onion/.*/status/.</p>
           </li>
           <li>
-            <p>Disable fast-redirects{} for twitter.com/.*/status/</p>
+            <p>Disable fast-redirects{} for twitter.com/.*/status/.</p>
           </li>
           <li>
-            <p>Unblock pinkstinks.de/</p>
+            <p>Unblock pinkstinks.de/.</p>
           </li>
           <li>
-            <p>Disable fast-redirects for .hagalil.com/</p>
+            <p>Disable fast-redirects for .hagalil.com/.</p>
           </li>
         </ul>
       </li>
@@ -199,6 +200,9 @@
         <p>uagen:</p>
         <ul>
           <li>
+            <p>Bump version to 1.2.4.</p>
+          </li>
+          <li>
             <p>Update BROWSER_VERSION and BROWSER_REVISION to 102.0 to match the User-Agent of the current Firefox
             ESR.</p>
           </li>
@@ -220,9 +224,6 @@
           <li>
             <p>Stop using sparc64 as FreeBSD architecture. It hasn't been supported for a while now.</p>
           </li>
-          <li>
-            <p>Bump version.</p>
-          </li>
         </ul>
       </li>
       <li>
@@ -241,7 +242,7 @@
         <p>macOS build system:</p>
         <ul>
           <li>
-            <p>HTTPS inspection is enabled when building the macOS binary using OpenSSL as TLS library.</p>
+            <p>Enable HTTPS inspection when building the macOS binary (using OpenSSL as TLS library).</p>
           </li>
         </ul>
       </li>
@@ -253,10 +254,10 @@
             linked Privoxy binary has to be distributed under the GPLv3 or later.</p>
           </li>
           <li>
-            <p>config: Fix the documented ca-directory default value Reported by avoidr.</p>
+            <p>config: Fix the documented ca-directory default value. Reported by avoidr.</p>
           </li>
           <li>
-            <p>Rebuild developer-manual and tidy with 'HTML Tidy for FreeBSD version 5.8.0'</p>
+            <p>Rebuild developer-manual and tidy with 'HTML Tidy for FreeBSD version 5.8.0'.</p>
           </li>
           <li>
             <p>Update developer manual with new macOS packaging instructions.</p>
