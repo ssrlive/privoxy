@@ -302,7 +302,7 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-freebsd"><title>FreeBSD</title>
+<sect3 id="installation-freebsd"><title>FreeBSD and ElectroBSD</title>
 
 <para>
  Privoxy is part of FreeBSD's Ports Collection, you can build and install
