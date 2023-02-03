@@ -46,8 +46,8 @@
       last-chunk. This failed to work if the last-chunk wasn't received in one
       read and could also result in actual data being misdetected
       as last-chunk.
-      Should fix: SF support request #1739
-      Reported by: withoutname
+      Should fix: SF support request #1739.
+      Reported by: withoutname.
      </para>
     </listitem>
     <listitem>
@@ -86,7 +86,7 @@
       The TLS library may have already consumed all the data from the client
       response in which case poll() and select() will not detect that data is
       available to be read.
-      Sponsored by: Robert Klemme
+      Sponsored by: Robert Klemme.
      </para>
     </listitem>
     <listitem>
@@ -114,7 +114,7 @@
      <para>
       Add a client-body-tagger action which creates tags based on
       the content of the request body.
-      Sponsored by: Robert Klemme
+      Sponsored by: Robert Klemme.
      </para>
     </listitem>
     <listitem>
@@ -123,7 +123,7 @@
       before opening a connection to the server.
       Makes it less likely that the server connection times out
       and we don't open a connection if the buffering fails anyway.
-      Sponsored by: Robert Klemme
+      Sponsored by: Robert Klemme.
      </para>
     </listitem>
     <listitem>
@@ -178,7 +178,8 @@
     </listitem>
     <listitem>
      <para>
-      Add a filter for bundeswehr.de
+      Add a filter for bundeswehr.de that hides the cookie and
+      privacy info banner.
      </para>
      </listitem>
     </itemizedlist>
@@ -190,27 +191,27 @@
     <itemizedlist>
     <listitem>
      <para>
-      Disable filter{banners-by-size} for .freiheitsfoo.de/
+      Disable filter{banners-by-size} for .freiheitsfoo.de/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable filter{banners-by-size} for freebsdfoundation.org/
+      Disable filter{banners-by-size} for freebsdfoundation.org/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects for consent.youtube.com/
+      Disable fast-redirects for consent.youtube.com/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Block requests to ups.xplosion.de/
+      Block requests to ups.xplosion.de/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Block requests for elsa.memoinsights.com/t
+      Block requests for elsa.memoinsights.com/t.
      </para>
     </listitem>
     <listitem>
@@ -220,57 +221,59 @@
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects for launchpad.net/
+      Disable fast-redirects for launchpad.net/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock .eff.org/
+      Unblock .eff.org/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Stop unblocking .org/.*(image|banner) which appears to be too generous.
+      Stop unblocking .org/.*(image|banner) which appears to be too generous
+      The example URL http://www.gnu.org/graphics/gnu-head-banner.png is
+      already unblocked due to .gnu.org being unblocked.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock adfd.org/
+      Unblock adfd.org/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable filter{banners-by-link} for .eff.org/
+      Disable filter{banners-by-link} for .eff.org/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Block requests to odb.outbrain.com/
+      Block requests to odb.outbrain.com/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects for .gandi.net/
+      Disable fast-redirects for .gandi.net/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects{} for .onion/.*/status/
+      Disable fast-redirects{} for .onion/.*/status/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects{} for twitter.com/.*/status/
+      Disable fast-redirects{} for twitter.com/.*/status/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Unblock pinkstinks.de/
+      Unblock pinkstinks.de/.
      </para>
     </listitem>
     <listitem>
      <para>
-      Disable fast-redirects for .hagalil.com/
+      Disable fast-redirects for .hagalil.com/.
      </para>
      </listitem>
     </itemizedlist>
@@ -308,6 +311,11 @@
     <itemizedlist>
     <listitem>
      <para>
+      Bump version to 1.2.4.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
       Update BROWSER_VERSION and BROWSER_REVISION to 102.0
       to match the User-Agent of the current Firefox ESR.
      </para>
@@ -342,11 +350,6 @@
       Stop using sparc64 as FreeBSD architecture.
       It hasn't been supported for a while now.
      </para>
-    </listitem>
-    <listitem>
-     <para>
-      Bump version.
-     </para>
      </listitem>
     </itemizedlist>
    </para>
@@ -377,8 +380,8 @@
     <itemizedlist>
     <listitem>
      <para>
-      HTTPS inspection is enabled when building the macOS binary
-      using OpenSSL as TLS library.
+      Enable HTTPS inspection when building the macOS binary
+      (using OpenSSL as TLS library).
      </para>
      </listitem>
     </itemizedlist>
@@ -397,13 +400,13 @@
     </listitem>
     <listitem>
      <para>
-      config: Fix the documented ca-directory default value
+      config: Fix the documented ca-directory default value.
       Reported by avoidr.
      </para>
     </listitem>
     <listitem>
      <para>
-      Rebuild developer-manual and tidy with 'HTML Tidy for FreeBSD version 5.8.0'
+      Rebuild developer-manual and tidy with 'HTML Tidy for FreeBSD version 5.8.0'.
      </para>
     </listitem>
     <listitem>
