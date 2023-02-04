@@ -413,6 +413,18 @@
      <para>
       Update developer manual with new macOS packaging instructions.
      </para>
+    </listitem>
+    <listitem>
+     <para>
+      Note that the FreeBSD installation instructions work for
+      ElectroBSD as well.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Note that FreeBSD/ElectroBSD users can try to install Privoxy
+      as binary package using 'pkg'.
+     </para>
      </listitem>
     </itemizedlist>
    </para>
