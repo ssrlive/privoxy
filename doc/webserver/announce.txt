@@ -156,7 +156,7 @@ flexible configuration and can be customized to suit individual needs and
 tastes. It has application for both stand-alone systems and multi-user
 networks.
 
-Privoxy is Free Software and licensed under the GNU GPLv2.
+Privoxy is Free Software and licensed under the GNU GPLv2 or later.
 
 Our TODO list is rather long. Helping hands and donations are welcome:
 
