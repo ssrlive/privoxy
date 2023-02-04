@@ -4,6 +4,13 @@
 Privoxy 3.0.34 fixes a few minor bugs and comes with a couple of
 general improvements and new features.
 
+Please note that Google started to bounce messages from the Privoxy
+mailing lists a couple of months ago. As a result gmail users have
+been unsubscribed by Mailman. If you are affected by this, please
+resubscribe with a different mail address. The Privoxy project has
+limited resources and limited time to investigate an issue that
+only affects gmail addresses.
+
 --------------------------------------------------------------------
 ChangeLog for Privoxy 3.0.34
 --------------------------------------------------------------------
