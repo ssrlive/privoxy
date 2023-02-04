@@ -129,6 +129,10 @@ ChangeLog for Privoxy
     Reported by avoidr.
   - Rebuild developer-manual and tidy with 'HTML Tidy for FreeBSD version 5.8.0'.
   - Update developer manual with new macOS packaging instructions.
+  - Note that the FreeBSD installation instructions work for
+    ElectroBSD as well.
+  - Note that FreeBSD/ElectroBSD users can try to install Privoxy
+    as binary package using 'pkg'.
 
 *** Version 3.0.33 stable ***
 - Security/Reliability:
