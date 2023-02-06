@@ -2877,6 +2877,31 @@ git clone ssh://git@git.privoxy.org:23/git/OSXPackageBuilder.git
     </para>
    </sect2>
 
+   <sect2 id="update-rss-feed">
+    <title>Updating the RSS feed</title>
+    <para>
+     Once the packages are uploaded to SourceForge they should be
+     mirrored on the Privoxy websites
+     (<ulink url="https://www.privoxy.org/">https://www.privoxy.org/</ulink>
+      and
+      <ulink url="http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/">http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/</ulink>).
+     This is usually done by Fabian who uses a couple of shell functions
+     for this that aren't documented or published yet.
+    </para>
+    <para>
+     Once the packages are uploaded to the mirror the RSS feed has to
+     be regenerated with a command like:
+    </para>
+    <programlisting>
+     fk@t520 ~/git/privoxy $utils/create-package-feed.pl /tank/backups/sourceforge/frs/project/ijbswa/ doc/webserver/feeds/privoxy-releases.xm
+    </programlisting>
+    <para>
+     The updated RSS feed then has to be uploaded to the SourceForge webserver
+     and mirrored on the Privoxy websites again. This, too, is usually done
+     by Fabian with undocumented and unpublished shell functions.
+    </para>
+   </sect2>
+
     <sect2 id="afterrelease">
     <title>After the Release</title>
      <para>
