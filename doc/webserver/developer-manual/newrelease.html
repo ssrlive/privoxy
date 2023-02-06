@@ -652,7 +652,27 @@
       <tt class="LITERAL">Edit Release</tt>, instead of <tt class="LITERAL">Add Release</tt>.</p>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AFTERRELEASE" id="AFTERRELEASE">6.5. After the Release</a></h2>
+      <h2 class="SECT2"><a name="UPDATE-RSS-FEED" id="UPDATE-RSS-FEED">6.5. Updating the RSS feed</a></h2>
+      <p>Once the packages are uploaded to SourceForge they should be mirrored on the Privoxy websites (<a href=
+      "https://www.privoxy.org/" target="_top">https://www.privoxy.org/</a> and <a href=
+      "http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/" target=
+      "_top">http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/</a>). This is usually done by
+      Fabian who uses a couple of shell functions for this that aren't documented or published yet.</p>
+      <p>Once the packages are uploaded to the mirror the RSS feed has to be regenerated with a command like:</p>
+      <table border="0" bgcolor="#E0E0E0" width="100%">
+        <tr>
+          <td>
+            <pre class=
+            "PROGRAMLISTING">       fk@t520 ~/git/privoxy $utils/create-package-feed.pl /tank/backups/sourceforge/frs/project/ijbswa/ doc/webserver/feeds/privoxy-releases.xm
+      </pre>
+          </td>
+        </tr>
+      </table>
+      <p>The updated RSS feed then has to be uploaded to the SourceForge webserver and mirrored on the Privoxy websites
+      again. This, too, is usually done by Fabian with undocumented and unpublished shell functions.</p>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="AFTERRELEASE" id="AFTERRELEASE">6.6. After the Release</a></h2>
       <p>When all (or: most of the) packages have been uploaded and made available, send an email to the <a href=
       "mailto:privoxy-announce@lists.privoxy.org" target="_top">announce mailing list</a>, Subject: "Announcing Privoxy
       X.Y.Z $CODE_STATUS". Be sure to include the <a href="https://sourceforge.net/projects/ijbswa/files/" target=
