@@ -4103,6 +4103,12 @@ problem-host.example.com</screen>
     linkend="external-filter-syntax">syntax</link></literal>
     may change in the future.
    </para>
+   <para>
+    If you want to apply external filters to images or other content
+    that isn't text-based, enable the
+    <literal><link linkend="force-text-mode">force-text-mode</link></literal>
+    action as well.
+   </para>
 
   </listitem>
  </varlistentry>
