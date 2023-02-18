@@ -377,7 +377,7 @@ https://www.privoxy.org/donate
      currently can result in client requests to config.privoxy.org on the
      Internet which may not be desirable.
 
-150) Add blacklistd support.
+150) Add blocklistd support (https://man.netbsd.org/blocklistd.8).
 
 151) Let the dok-tidy target work cross-platform without introducing
      a ton of white-space changes that hide the content changes.
