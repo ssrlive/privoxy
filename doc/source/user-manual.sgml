@@ -8307,6 +8307,7 @@ configure: Detected mbedTLS. Enabling https inspection.
  <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
  again.
 </para>
+</sect3>
 
 <sect3 id="h2-hi-config"><title>Configuring HTTPS inspection in Privoxy
 </title>
