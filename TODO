@@ -539,6 +539,9 @@ https://www.privoxy.org/donate
      for given domains instead of accepting all that are specified with
      the trusted-cas-file directive.
 
+202) Allow to use multiple log files with different debug settings.
+     Suggested by Jonathan Marten in FR#607.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
