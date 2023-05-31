@@ -659,11 +659,11 @@ void log_error(int loglevel, const char *fmt, ...)
 
 #if defined(_WIN32) && !defined(_WIN_CONSOLE)
    /*
-    * Irrespective of debug setting, a GET/POST/CONNECT makes
-    * the taskbar icon animate.  (There is an option to disable
-    * this but checking that is handled inside LogShowActivity()).
+    * Irrespective of debug setting, a request makes the taskbar icon
+    * animate. (There is an option to disable this but checking that is
+    * handled inside LogShowActivity()).
     */
-   if ((loglevel == LOG_LEVEL_REQUEST) || (loglevel == LOG_LEVEL_CRUNCH))
+   if (loglevel == LOG_LEVEL_REQUEST)
    {
       LogShowActivity();
    }
