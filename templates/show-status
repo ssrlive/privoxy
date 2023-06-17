@@ -298,10 +298,7 @@
             <tr>
               <td><code>FEATURE_DYNAMIC_PCRE</code></td>
               <td>@if-FEATURE_DYNAMIC_PCRE-then@ Yes @else-not-FEATURE_DYNAMIC_PCRE@ No @endif-FEATURE_DYNAMIC_PCRE@</td>
-              <td>Dynamically link to the PCRE library. This is set automatically
-               by <code>./configure</code> if you do not have libpcre installed.
-               Dynamically linking to an external libpcre is recommended as the one that is distributed
-               with Privoxy itself is outdated and lacks various features and bug-fixes you may be interested in.</td>
+              <td>Dynamically link to the PCRE(2) library (recommended).</td>
             </tr>
             <tr>
               <td><code>FEATURE_EXTENDED_STATISTICS</code></td>

@@ -43,6 +43,7 @@
 #include "miscutil.h"
 #include "errlog.h"
 #include "parsers.h"
+#include "urlmatch.h"
 
 struct client_specific_tag
 {
@@ -658,7 +659,11 @@ int client_tag_match(const struct pattern_spec *pattern,
 
    for (tag = tags->first; tag != NULL; tag = tag->next)
    {
+#ifdef HAVE_PCRE2
+      if (pcre2_pattern_matches(pattern->pattern.tag_regex, tag->str))
+#else
       if (0 == regexec(pattern->pattern.tag_regex, tag->str, 0, NULL, 0))
+#endif
       {
          log_error(LOG_LEVEL_TAGGING, "Client tag '%s' matches.", tag->str);
          return 1;

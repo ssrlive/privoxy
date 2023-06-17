@@ -50,6 +50,10 @@ extern int url_requires_percent_encoding(const char *url);
 extern int url_match(const struct pattern_spec *pattern,
                      const struct http_request *http);
 
+#ifdef HAVE_PCRE2
+extern int pcre2_pattern_matches(const pcre2_code *pattern, const char *string);
+#endif
+
 extern jb_err create_pattern_spec(struct pattern_spec *url, char *buf);
 extern void free_pattern_spec(struct pattern_spec *url);
 extern int match_portlist(const char *portlist, int port);

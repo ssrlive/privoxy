@@ -316,6 +316,9 @@ void TermLogWindow(void)
 void LogCreatePatternMatchingBuffers(void)
 {
    int i;
+#ifdef HAVE_PCRE2
+#warning The win32 build of Privoxy is expected to crash when compiled with pcre2 support.
+#endif
    for (i = 0; patterns_to_highlight[i].str != NULL; i++)
    {
       regcomp(&patterns_to_highlight[i].buffer, patterns_to_highlight[i].str, REG_ICASE);

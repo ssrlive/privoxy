@@ -94,12 +94,38 @@
  */
 
 #ifdef STATIC_PCRE
-#  include "pcre.h"
+#ifdef HAVE_PCRE2
+#  include "pcre2.h"
+#  include "pcre2posix.h"
 #else
-#  ifdef PCRE_H_IN_SUBDIR
-#    include <pcre/pcre.h>
+#  include "pcre.h"
+#  include "pcreposix.h"
+#endif
+#else
+#  ifdef HAVE_PCRE2
+#    ifdef PCRE2_H_IN_SUBDIR
+#      define PCRE2_CODE_UNIT_WIDTH 8
+#      include <pcre2/pcre2.h>
+#    else
+#      define PCRE2_CODE_UNIT_WIDTH 8
+#      include <pcre2.h>
+#    endif
+#    ifdef PCRE2POSIX_H_IN_SUBDIR
+#        include <pcre2/pcre2posix.h>
+#    else
+#        include <pcre2posix.h>
+#    endif
 #  else
-#    include <pcre.h>
+#    ifdef PCRE_H_IN_SUBDIR
+#      include <pcre/pcre.h>
+#    else
+#      include <pcre.h>
+#    endif
+#    ifdef PCREPOSIX_H_IN_SUBDIR
+#        include <pcre/pcreposix.h>
+#    else
+#        include <pcreposix.h>
+#    endif
 #  endif
 #endif
 
@@ -107,16 +133,6 @@
 #  include "pcrs.h"
 #else
 #  include <pcrs.h>
-#endif
-
-#ifdef STATIC_PCRE
-#  include "pcreposix.h"
-#else
-#  ifdef PCRE_H_IN_SUBDIR
-#    include <pcre/pcreposix.h>
-#  else
-#    include <pcreposix.h>
-#  endif
 #endif
 
 #ifdef _WIN32
@@ -404,10 +420,16 @@ struct http_response
   enum crunch_reason crunch_reason; /**< Why the response was generated in the first place. */
 };
 
+#ifdef HAVE_PCRE2
+#define REGEX_TYPE pcre2_code
+#else
+#define REGEX_TYPE regex_t
+#endif
+
 struct url_spec
 {
 #ifdef FEATURE_PCRE_HOST_PATTERNS
-   regex_t *host_regex;/**< Regex for host matching                          */
+   REGEX_TYPE *host_regex;/**< Regex for host matching                          */
    enum host_regex_type { VANILLA_HOST_PATTERN, PCRE_HOST_PATTERN } host_regex_type;
 #endif /* defined FEATURE_PCRE_HOST_PATTERNS */
    int    dcount;      /**< How many parts to this domain? (length of dvec)   */
@@ -417,7 +439,7 @@ struct url_spec
 
    char  *port_list;   /**< List of acceptable ports, or NULL to match all ports */
 
-   regex_t *preg;      /**< Regex for matching path part                      */
+  REGEX_TYPE *preg;    /**< Regex for matching path part                      */
 };
 
 /**
@@ -432,7 +454,7 @@ struct pattern_spec
    union
    {
       struct url_spec url_spec;
-      regex_t *tag_regex;
+      REGEX_TYPE *tag_regex;
    } pattern;
 
    unsigned int flags; /**< Bitmap with various pattern properties. */
