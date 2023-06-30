@@ -1141,6 +1141,11 @@ redirect.example.net/
 # Redirect Destination = http://redirected.example.net/&parameter1=part-of-the-redirected-url1&parameter2=part-of-the-redirected-url1
 redirect2.example.net/
 
+# Redirected URL = http://redirect3.example.net/01-02-03-04-05-06-07-08-09
+# Redirect Destination = http://redirect3.example.net/09-08-07-06-05-04-03-02-01
+{+redirect{s@/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)@/$9-$8-$7-$6-$5-$4-$3-$2-$1@}}
+redirect3.example.net/01-02-03-04-05-06-07-08-09
+
 {+delay-response{1}}
 # Fetch Test = http://config.privoxy.org/show-url-info?url=http%3A%2F%2Fwww.example.com%2Fprivoxy-test-delay-response
 config.privoxy.org/show-url-info\?url=http%3A%2F%2Fwww\.example\.com%2Fprivoxy-test-delay-response
