@@ -961,6 +961,8 @@ elsa.memoinsights.com/t
 ups.xplosion.de/
 # Blocked URL = https://s.cpx.to/fire.js?pid=13058&ref=https%3A%2F%2Fexplosm.net%2Fcomics%2Fnewyears-2008&url=https%3A%2F%2Fexplosm.net%2Fcomics%2Fdave-shortnew-8%23comic&hn_ver=57&fid=715e92a0-477c-4ef4-b655-6ed9edc0e94b&gcv=CPuOj0APuOj0AAKAvAENDFCsAP_AAH_AAAwIJbtX_H__bW9r8f5_aft0eY1P9_j77uQzDhfNk-4F3L_W_JwX52E7NF36tq4KmR4Eu3LBIUNlHNHUTVmwaokVryHsak2cpTNKJ6BEkHMRO2dYGF5umxtjeQKY5_p_d3fx2D-t_dv-39z3z81Xn3dZf-_0-PCdU5_9Dfn9fRfb-9IL9_78v8v8_9_rk2_eX_3_79_7_H9-f_84JcAEmGrcQBdmUODNoGEUCIEYVhARQKACCgGFogIAHBwU7IwCfWESAFAKAIwIgQ4AoyIBAAAJAEhEAEgRYIAAABAIAAQAIBEIAGBgEFABYCAQAAgOgYohQACBIQJEREQpgQFQJBAS2VCCUF0hphAFWWAFAIjYKABEEgIrAAEBYOAYIkBKxYIEmINogAGAFAKJUK1FJ6aAhYzMAAAA.YAAAAAAAAAAA
 s.cpx.to/
+# Blocked URL = https://track.venatusmedia.com/dual/track_enc
+track.venatusmedia.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
