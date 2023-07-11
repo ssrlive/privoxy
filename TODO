@@ -538,6 +538,8 @@ https://www.privoxy.org/donate
 202) Allow to use multiple log files with different debug settings.
      Suggested by Jonathan Marten in FR#607.
 
+203) Add HTTP/2 support.
+
 ##########################################################################
 
 Hosting wish list (relevant for #53)
