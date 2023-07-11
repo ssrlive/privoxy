@@ -828,12 +828,8 @@ int update_action_bits_for_tag(struct client_state *csp, const char *tag)
             continue;
          }
 
-#ifdef HAVE_PCRE2
-         if (pcre2_pattern_matches(b->url->pattern.tag_regex, tag))
-#else
          /* and check if one of the tag patterns matches the tag, */
-         if (0 == regexec(b->url->pattern.tag_regex, tag, 0, NULL, 0))
-#endif
+         if (regex_matches(b->url->pattern.tag_regex, tag))
          {
             /* if it does, update the action bit map, */
             if (merge_current_action(csp->action, b->action))
@@ -888,11 +884,7 @@ jb_err check_negative_tag_patterns(struct client_state *csp, unsigned int flag)
          }
          for (tag = csp->tags->first; NULL != tag; tag = tag->next)
          {
-#ifdef HAVE_PCRE2
-            if (pcre2_pattern_matches(b->url->pattern.tag_regex, tag->str))
-#else
-            if (0 == regexec(b->url->pattern.tag_regex, tag->str, 0, NULL, 0))
-#endif
+            if (regex_matches(b->url->pattern.tag_regex, tag->str))
             {
                /*
                 * The pattern matches at least one tag, thus the action

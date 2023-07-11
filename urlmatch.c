@@ -1160,7 +1160,7 @@ static int simplematch(const char *pattern, const char *text)
  * Returns     :  TRUE for yes, FALSE otherwise.
  *
  *********************************************************************/
-int pcre2_pattern_matches(const pcre2_code *pattern, const char *string)
+static int pcre2_pattern_matches(const pcre2_code *pattern, const char *string)
 {
    PCRE2_SIZE offset;
    int ret;
@@ -1188,6 +1188,29 @@ int pcre2_pattern_matches(const pcre2_code *pattern, const char *string)
 }
 #endif
 
+
+/*********************************************************************
+ *
+ * Function    :  regex_matches
+ *
+ * Description :  Checks if a compiled regex pattern matches a string
+ *                using either pcre2 or pcre1 code.
+ *
+ * Parameters  :
+ *          1  :  pattern = The compiled pattern
+ *          2  :  string = The string to check
+ *
+ * Returns     :  TRUE for yes, FALSE otherwise.
+ *
+ *********************************************************************/
+int regex_matches(const REGEX_TYPE *pattern, const char *string)
+{
+#ifdef HAVE_PCRE2
+   return pcre2_pattern_matches(pattern, string);
+#else
+   return (0 == regexec(pattern, string, 0, NULL, 0));
+#endif
+}
 
 /*********************************************************************
  *
@@ -1483,13 +1506,7 @@ static int host_matches(const struct http_request *http,
    if (pattern->pattern.url_spec.host_regex_type == PCRE_HOST_PATTERN)
    {
       return ((NULL == pattern->pattern.url_spec.host_regex)
-#ifdef HAVE_PCRE2
-         || pcre2_pattern_matches(pattern->pattern.url_spec.host_regex,
-               http->host));
-#else
-         || (0 == regexec(pattern->pattern.url_spec.host_regex,
-               http->host, 0, NULL, 0)));
-#endif
+         || regex_matches(pattern->pattern.url_spec.host_regex, http->host));
    }
 #endif
    return ((NULL == pattern->pattern.url_spec.dbuffer) || (0 == domain_match(pattern, http)));
@@ -1512,11 +1529,7 @@ static int host_matches(const struct http_request *http,
 static int path_matches(const char *path, const struct pattern_spec *pattern)
 {
    return ((NULL == pattern->pattern.url_spec.preg)
-#ifdef HAVE_PCRE2
-      || (pcre2_pattern_matches(pattern->pattern.url_spec.preg, path)));
-#else
-      || (0 == regexec(pattern->pattern.url_spec.preg, path, 0, NULL, 0)));
-#endif
+      || regex_matches(pattern->pattern.url_spec.preg, path));
 }
 
 
