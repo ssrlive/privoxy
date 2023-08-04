@@ -20,6 +20,7 @@ fi
 # --enable-mingw32                Use mingw32 for a Windows GUI
 # --enable-static-linking         Use static linking instead of dynamic linking (and not have
 #                                 to put all the .DLLs in the path or the same dir as Privoxy)
+# --disable-pcre2                 Don't try to use the pcre2 library even if it's available
 # --disable-pthread               Use native threads instead of POSIX pthreads library
 # --disable-dynamic-pcre          Use the built-in, static pcre, even if libpcre is available
 # --with-docbook=yes              Enable docbook documentation creation
@@ -80,7 +81,6 @@ LDFLAGS="${LDFLAGS} -Wl,--nxcompat"
 #   $ peflags -v privoxy.exe
 #   privoxy.exe: coff(0x0106[+executable_image,+line_nums_stripped,+32bit_machine]) pe(0x0140[+dynamicbase,+nxcompat])
 
-
 LDFLAGS="${LDFLAGS} -Wl,--dynamicbase,--export-all-symbols"
 # https://en.wikipedia.org/wiki/Address_space_layout_randomization
 # https://stackoverflow.com/questions/24283918/how-can-i-enable-aslr-dep-and-safeseh-on-an-exe-in-codeblocks-using-mingw
@@ -129,8 +129,24 @@ CFLAGS="${CFLAGS} -Wshadow"
 # *sigh* build my own pcre so I can do static linking
 # Get the 8.x PCRE library from
 #   https://sourceforge.net/projects/pcre/files/pcre/
-inc="/source/pcre-8.45/"
-lib="/source/pcre-8.45/.libs"
+# Get the 10.x PCRE2 library from
+#   https://github.com/PCRE2Project/pcre2/releases
+#
+#
+usepcre2=yes
+#
+#
+if [ "$usepcre2" = "yes" ]; then
+    PCREOPT=""
+    inc="/source/pcre2-10.42/src/"
+      # need pcre2.h
+    lib="/source/pcre2-10.42/.libs"
+      # need libpcre2-8.a & libpcre2-posix.a
+else
+    PCREOPT="--disable-pcre2"
+    inc="/source/pcre-8.45/"
+    lib="/source/pcre-8.45/.libs"
+fi
 CPPFLAGS="${CPPFLAGS} -I${inc}"
 LDFLAGS="${LDFLAGS} -L${lib}"
 
@@ -169,6 +185,7 @@ echo "LDFLAGS=${LDFLAGS}"
 
 ./configure  --host=i686-w64-mingw32  --enable-mingw32  --enable-zlib \
              --enable-extended-statistics \
+             ${PCREOPT} \
              --enable-pcre-host-patterns \
              --enable-static-linking \
              --enable-strptime-sanity-checks \

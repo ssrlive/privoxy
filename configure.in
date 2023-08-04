@@ -1140,16 +1140,18 @@ if test $have_pcre2 = "yes"; then
   LIBS="$LIBS -lpcre2-8 -lpcre2-posix"
   if test "$use_static_pcre" = "yes"; then
     pcre_dyn=no
-    AC_DEFINE(PCRE_STATIC,1,[Define to statically link to pcre library on Windows.])
-#     see /usr/i686-w64-mingw32/sys-root/mingw/include/pcre.h line 54
-#       #if defined(_WIN32) && !defined(PCRE_STATIC)
-#       #  ifndef PCRE_EXP_DECL
-#       #    define PCRE_EXP_DECL  extern __declspec(dllimport)
+    AC_DEFINE(PCRE2_STATIC,1,[Define to statically link to the pcre2 library on Windows.])
+#     see pcre2-10.42/src/pcre2.h line 54
+#       #if defined(_WIN32) && !defined(PCRE2_STATIC)
+#       #  ifndef PCRE2_EXP_DECL
+#       #    define PCRE2_EXP_DECL  extern __declspec(dllimport)
 #       #  endif
-#     If you want to statically link a program against a PCRE library in the form of
-#     a non-dll .a file, you must define PCRE_STATIC before including pcre.h or
-#     pcrecpp.h, otherwise the pcre_malloc() and pcre_free() exported functions will
-#     be declared __declspec(dllimport), with unwanted results.
+#       #endif
+#     If you want to statically link a program against a PCRE2 library in the form of
+#     a non-dll .a file, you must define PCRE2_STATIC before including src/pcre2.h.
+#     Otherwise the exported functions will be declared __declspec(dllimport),
+#     with unwanted results.  eg: build failures with error messages like
+#       undefined reference to `_imp__pcre2_compile_8'
   else
     pcre_dyn=yes
     AC_DEFINE(FEATURE_DYNAMIC_PCRE,1,[Define to dynamically link to pcre.])
