@@ -1185,8 +1185,6 @@ char *pcrs_execute_single_command(const char *subject, const char *pcrs_command,
    if (NULL != job)
    {
       *hits = pcrs_execute(job, subject, buffer_size, &result, &new_size);
-      buffer_size = new_size;
-
       if (*hits < 0)
       {
          freez(result);
