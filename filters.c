@@ -173,6 +173,14 @@ static int match_sockaddr(const struct sockaddr_storage *network,
    in_port_t *network_port, *netmask_port, *address_port;
    int i;
 
+   network_addr = NULL;
+   netmask_addr = NULL;
+   address_addr = NULL;
+   addr_len = 0;
+   network_port = NULL;
+   netmask_port = NULL;
+   address_port = NULL;
+
    if (network->ss_family != netmask->ss_family)
    {
       /* This should never happen */
