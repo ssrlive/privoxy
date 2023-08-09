@@ -392,8 +392,8 @@ extern void ssl_send_certificate_error(struct client_state *csp)
    {
       if (cert->file_buf != NULL)
       {
-                                                       /* +1 for terminating null */
-         size_t base64_len = base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1;
+                                           /* +1 for terminating null */
+         size_t base64_len = 4 * ((strlen(cert->file_buf) + 2) / 3) + 1;
          size_t olen = 0;
          char base64_buf[base64_len];
 
