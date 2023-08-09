@@ -38,6 +38,13 @@
 #include <openssl/pem.h>
 #include <openssl/md5.h>
 #include <openssl/x509v3.h>
+#ifdef _WIN32
+/* https://www.openssl.org/docs/faq.html
+   I’ve compiled a program under Windows and it crashes: Why?
+   tl,dr: because it needs this include:
+*/
+#include <openssl/applink.c>
+#endif /* _WIN32 */
 
 #include "config.h"
 #include "project.h"
