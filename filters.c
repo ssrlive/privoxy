@@ -342,6 +342,10 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
    char *p;
    char *acl_spec = NULL;
 
+   mask_data = NULL;
+   mask_port = NULL;
+   addr_len = 0;
+
 #ifdef HAVE_RFC2553
    /* XXX: Depend on ai_family */
    masklength = 128;
