@@ -39,6 +39,11 @@ export LDFLAGS=""
 # start with initially empty flags
 
 
+CFLAGS="${CFLAGS} -fdiagnostics-color=always"
+# Have gcc diagnostics be in color even if stderr is not going to a terminal.
+# It's nice having warnings in color even if I run a script that does
+#   'make 2>&1 | tee log.make'
+
 CFLAGS="${CFLAGS} -fstack-protector-strong -D_FORTIFY_SOURCE=2"
 LDFLAGS="${LDFLAGS} -fstack-protector-strong"
 # -fstack-protector-strong:  enable stack checking.
