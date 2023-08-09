@@ -108,6 +108,9 @@ CFLAGS="${CFLAGS} -Wno-unused-parameter -Wno-unused-but-set-variable"
 #-no-# CFLAGS="${CFLAGS} -Wconversion"
 #   way too many warnings for things that don't look like a problem
 
+CFLAGS="${CFLAGS} -Wno-deprecated-declarations"
+#   way too many warnings in openssl.c about RSA deprecated-declarations
+
 #-no-# CFLAGS="${CFLAGS} -Werror"
 # Turn all warnings into errors.
 #   Privoxy still has a few warnings that are not a problem
@@ -163,12 +166,14 @@ LDFLAGS="${LDFLAGS} -L${lib}"
 ##   3 years.
 # Get the 2.28.x mbedtls library from  https://github.com/Mbed-TLS/mbedtls/tags
 # Release Notes: https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.4
-inc="/source/mbedtls-2.28.4/include"
-lib="/source/mbedtls-2.28.4/library"
 
-MITMOPT="--with-mbedtls"
-CPPFLAGS="${CPPFLAGS} -I${inc}"
-LDFLAGS="${LDFLAGS} -L${lib}"
+##MITMOPT="--with-mbedtls"
+##inc="/source/mbedtls-2.28.4/include"
+##lib="/source/mbedtls-2.28.4/library"
+##CPPFLAGS="${CPPFLAGS} -I${inc}"
+##LDFLAGS="${LDFLAGS} -L${lib}"
+
+MITMOPT="--with-openssl"
 
 # brotli
 # Get the brotli library from  https://github.com/google/brotli/releases
@@ -196,7 +201,7 @@ echo "LDFLAGS=${LDFLAGS}"
              --enable-strptime-sanity-checks \
              --disable-pthread  \
              --with-brotli  \
-             --with-mbedtls \
+             ${MITMOPT} \
              --with-docbook=yes
 
 #  -- done --
