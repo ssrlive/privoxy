@@ -2293,6 +2293,8 @@ twitter.com/.*/status/
 launchpad.net/
 # URL = https://consent.youtube.com/m?continue=https%3A%2F%2Fwww.youtube.com%2Fplaylist%3Flist%3DPLeF8ZihVdpFfttOtsot131byFrDVztt8T%26cbrd%3D1%26cbrd%3D1&gl=AT&m=0&pc=yt&hl=en&src=1
 consent.youtube.com/
+# URL = https://services.akteneinsichtsportal.de/oauth/authorize?client_id=ae-portal&redirect_uri=https%3A%2F%2Fwww.akteneinsichtsportal.de%2Fweb%2Fguest%2Faktenuebersicht&response_type=code&scope=read&state=0yT8EN
+services.akteneinsichtsportal.de/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
