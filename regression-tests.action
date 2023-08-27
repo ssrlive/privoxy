@@ -1157,3 +1157,8 @@ PCRE-HOST-PATTERN:^a{3}\.example\.org$
 # Blocked URL = http://bbb.example.org/
 # Level = 26
 PCRE-HOST-PATTERN:^(bbb|ccc|ddd)\.example\.org$
+
+{+block{Block should not apply because the path pattern is left-anchored}}
+# Sticky Actions = -block
+# URL = http://www.example.org/tralala/blafasel
+www.example.org/blafasel
