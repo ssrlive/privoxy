@@ -872,6 +872,7 @@ if test $enableval2 = yes; then
 else
   AC_MSG_WARN([Ignoring pcre2 even if it's available])
   try_pcre2=no
+  have_pcre2=no
 fi
 
 if test $try_pcre2 != no; then
