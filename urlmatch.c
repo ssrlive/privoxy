@@ -666,7 +666,7 @@ static jb_err compile_pattern(const char *pattern, enum regex_anchoring anchorin
 
    snprintf(rebuf, rebuf_size, fmt, pattern);
 
-   *regex = pcre2_compile((const unsigned char *)pattern,
+   *regex = pcre2_compile((const unsigned char *)rebuf,
       PCRE2_ZERO_TERMINATED, PCRE2_CASELESS, &errcode,
       &error_offset, NULL);
    if (*regex == NULL)
