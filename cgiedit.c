@@ -4518,6 +4518,8 @@ static jb_err action_render_string_actions_template(struct map *exports,
        struct list_entry *list;
    };
 
+   assert(type->multi_action_index < ACTION_MULTI_COUNT);
+
    struct action_multi desc[] = {
        { 'y', action->multi_add[type->multi_action_index][0].first },
        { 'n', action->multi_remove[type->multi_action_index][0].first }
