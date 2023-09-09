@@ -4500,9 +4500,9 @@ static jb_err actions_to_radio(struct map * exports,
  *                JB_ERR_MEMORY on out-of-memory
  *
  *********************************************************************/
-static jb_err action_render_string_actions_template(struct map * exports,
+static jb_err action_render_string_actions_template(struct map *exports,
                                        const struct action_spec *action,
-                                       const char* action_template,
+                                       const char *action_template,
                                        const struct string_action_type_info *string_action_type)
 {
    jb_err err = JB_ERR_OK;
