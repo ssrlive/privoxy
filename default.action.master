@@ -963,6 +963,8 @@ ups.xplosion.de/
 s.cpx.to/
 # Blocked URL = https://track.venatusmedia.com/dual/track_enc
 track.venatusmedia.com/
+# Blocked URL = https://o2.mouseflow.com/init?v=17.96&p=bd33e8bf-4f45-437f-9bda...&s=a6ac920f1ba63b3...&page=090...2f0d2&ret=0&u=62...fa1&href=https%3A%2F%2Fauth.leaseweb.com%2FloginCustomer&url=auth.leaseweb.com%2Flogincustomer&ref=https%3A%2F%2Fsecure.leaseweb.com%2F&title=Leaseweb%20Authorization%20Server&res=1366x768&tz=-60&to=0&dnt=1&ori=&dw=1362&dh=621&time=727&pxr=1&gdpr=1
+o2.mouseflow.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
