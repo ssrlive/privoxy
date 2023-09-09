@@ -2797,8 +2797,8 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 
    for (i = 0; !err && i < SZ(string_action_type_info); i++)
    {
-      err = action_render_string_actions_template(exports, cur_line->data.action, filter_template,
-                                                  &string_action_type_info[i]);
+      err = action_render_string_actions_template(exports,
+         cur_line->data.action, filter_template, &string_action_type_info[i]);
    }
    freez(filter_template);
 
