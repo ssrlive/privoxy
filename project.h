@@ -1333,9 +1333,9 @@ enum filter_type
 };
 
 #ifdef FEATURE_EXTERNAL_FILTERS
-#define MAX_FILTER_TYPES        9
+#define MAX_FILTER_TYPES        10
 #else
-#define MAX_FILTER_TYPES        8
+#define MAX_FILTER_TYPES        9
 #endif
 
 /**
