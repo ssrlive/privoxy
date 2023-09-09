@@ -4487,8 +4487,9 @@ static jb_err actions_to_radio(struct map * exports,
  *
  * Function    :  action_render_string_actions_template
  *
- * Description :  Converts a actionsfile entry into HTML template for actions with string
- *                filters (currently SUPPRESS-TAG actions only)
+ * Description : Converts an actionsfile entry into HTML template for
+ *               actions with string filters (currently SUPPRESS-TAG
+ *               actions only)
  *
  * Parameters  :
  *          1  :  exports = List of substitutions to add to.
