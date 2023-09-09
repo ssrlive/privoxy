@@ -2901,6 +2901,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                const int multi_action_index = action_type_info[type].multi_action_index;
 
                assert(type < MAX_FILTER_TYPES);
+               assert(multi_action_index < ACTION_MULTI_COUNT);
 
                filter_name = cur_line->data.action->multi_add[multi_action_index]->first;
                while ((filter_name != NULL)
