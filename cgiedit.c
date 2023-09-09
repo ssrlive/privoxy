@@ -2891,7 +2891,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
          if ((csp->rlist[i] != NULL) && (csp->rlist[i]->f != NULL))
          {
             filter_group = csp->rlist[i]->f;
-            for (;(!err) && (filter_group != NULL); filter_group = filter_group->next)
+            for (; (!err) && (filter_group != NULL); filter_group = filter_group->next)
             {
                char current_mode = 'x';
                char number[20];
