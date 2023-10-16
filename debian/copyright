@@ -6,7 +6,7 @@ Source: https://sourceforge.net/projects/ijbswa/files/Sources/
 Files: *
 Copyright:
  Copyright (C) 2001-2021 by the Privoxy team. https://www.privoxy.org/
- Copyright (C) 2001-2021 by Privoxy Developers <privoxy-devel@lists.privoxy.org>
+ Copyright (C) 2001-2023 by Privoxy Developers <privoxy-devel@lists.privoxy.org>
  Parts Copyright (c) 1997 by Anonymous Coders and Junkbusters, Inc.
  Parts Copyright (C) 1999 Adam Lock <locka@iol.ie>
  Parts Copyright (C) 1998-1999 Steve Cheng <steve@ggi-project.org>
@@ -58,7 +58,7 @@ License: GPL-2+
 
 Files: debian/*
 Copyright:
- 2002-2021  Roland Rosenfeld <roland@debian.org>
+ 2002-2023  Roland Rosenfeld <roland@debian.org>
 License: GPL-2+
 
 License: GPL-2+

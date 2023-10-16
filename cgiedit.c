@@ -253,6 +253,12 @@ static const struct action_type_info action_type_info[] =
       "P", "CLIENT-BODY-FILTER"
    },
    {
+      ACTION_MULTI_CLIENT_BODY_TAGGER,
+      "client-body-tagger-params", "client-body-tagger",
+      "client-body-tagger-all", "client_body_tagger_all",
+      "Q", "CLIENT-BODY-TAGGER"
+   },
+   {
       ACTION_MULTI_ADD_HEADER,
       "add-header-params", "add-header",
       "add-header-all", "add_header_all",
@@ -2797,8 +2803,8 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
 
    for (i = 0; !err && i < SZ(string_action_type_info); i++)
    {
-      err = action_render_string_actions_template(exports, cur_line->data.action, filter_template,
-                                                  &string_action_type_info[i]);
+      err = action_render_string_actions_template(exports,
+         cur_line->data.action, filter_template, &string_action_type_info[i]);
    }
    freez(filter_template);
 
@@ -2891,7 +2897,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
          if ((csp->rlist[i] != NULL) && (csp->rlist[i]->f != NULL))
          {
             filter_group = csp->rlist[i]->f;
-            for (;(!err) && (filter_group != NULL); filter_group = filter_group->next)
+            for (; (!err) && (filter_group != NULL); filter_group = filter_group->next)
             {
                char current_mode = 'x';
                char number[20];
@@ -2901,6 +2907,7 @@ jb_err cgi_edit_actions_for_url(struct client_state *csp,
                const int multi_action_index = action_type_info[type].multi_action_index;
 
                assert(type < MAX_FILTER_TYPES);
+               assert(multi_action_index < ACTION_MULTI_COUNT);
 
                filter_name = cur_line->data.action->multi_add[multi_action_index]->first;
                while ((filter_name != NULL)
@@ -4487,8 +4494,9 @@ static jb_err actions_to_radio(struct map * exports,
  *
  * Function    :  action_render_string_actions_template
  *
- * Description :  Converts a actionsfile entry into HTML template for actions with string
- *                filters (currently SUPPRESS-TAG actions only)
+ * Description : Converts an actionsfile entry into HTML template for
+ *               actions with string filters (currently SUPPRESS-TAG
+ *               actions only)
  *
  * Parameters  :
  *          1  :  exports = List of substitutions to add to.
@@ -4500,9 +4508,9 @@ static jb_err actions_to_radio(struct map * exports,
  *                JB_ERR_MEMORY on out-of-memory
  *
  *********************************************************************/
-static jb_err action_render_string_actions_template(struct map * exports,
+static jb_err action_render_string_actions_template(struct map *exports,
                                        const struct action_spec *action,
-                                       const char* action_template,
+                                       const char *action_template,
                                        const struct string_action_type_info *string_action_type)
 {
    jb_err err = JB_ERR_OK;
@@ -4520,6 +4528,8 @@ static jb_err action_render_string_actions_template(struct map * exports,
        { 'y', action->multi_add[type->multi_action_index][0].first },
        { 'n', action->multi_remove[type->multi_action_index][0].first }
    };
+
+   assert(type->multi_action_index < ACTION_MULTI_COUNT);
 
    for (i = 0; i < SZ(desc); ++i)
    {

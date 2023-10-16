@@ -4,10 +4,10 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#define VERSION "3.0.32"
+#define VERSION "3.0.34"
 #define VERSION_MAJOR 3
 #define VERSION_MINOR 0
-#define VERSION_POINT 32
+#define VERSION_POINT 34
 #define CODE_STATUS "stable"
 
 //#define SIZEOF_LONG_LONG (sizeof(long long))

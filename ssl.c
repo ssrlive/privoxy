@@ -327,17 +327,16 @@ extern int create_client_ssl_connection(struct client_state *csp)
     * certificate and key inconsistence must be locked.
     */
    privoxy_mutex_lock(&certificate_mutex);
-
    ret = generate_host_certificate(csp);
+   privoxy_mutex_unlock(&certificate_mutex);
+
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
          "generate_host_certificate failed: %d", ret);
-      privoxy_mutex_unlock(&certificate_mutex);
       ret = -1;
       goto exit;
    }
-   privoxy_mutex_unlock(&certificate_mutex);
 
    /*
     * Seed the RNG

@@ -17,7 +17,7 @@
 # - Document magic Expect Header values
 # - Internal fuzz support?
 #
-# Copyright (c) 2007-2021 Fabian Keil <fk@fabiankeil.de>
+# Copyright (c) 2007-2023 Fabian Keil <fk@fabiankeil.de>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -38,7 +38,7 @@ use strict;
 use Getopt::Long;
 
 use constant {
-    PRT_VERSION => 'Privoxy-Regression-Test 0.7.3',
+    PRT_VERSION => 'Privoxy-Regression-Test 0.7.4',
  
     CURL => 'curl',
 
@@ -1779,6 +1779,11 @@ sub parse_cli_options() {
         'version'            => sub {print_version && exit(0)}
     ) or exit(1);
     $log_level |= $cli_options{'debug'};
+
+    if ($cli_options{'min-level'} > $cli_options{'max-level'}) {
+        log_message("Increasing --max-level to --min-level " . $cli_options{'min-level'});
+        $cli_options{'max-level'} = $cli_options{'min-level'};
+    }
 }
 
 sub cli_option_is_set($) {
@@ -2097,6 +2102,8 @@ a fuzzer.
 
 B<--min-level min-level> Only execute tests with a B<level>
 above or equal to the numerical B<min-level>.
+If the B<min-level> is larger than the B<max-level>,
+the B<max-level> is set to the B<min-level>.
 
 B<--privoxy-address proxy-address> Privoxy's listening address.
 If it's not set, the value of the environment variable http_proxy

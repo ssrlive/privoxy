@@ -14,7 +14,7 @@
 <!entity p-authors SYSTEM "p-authors.sgml">
 <!entity config SYSTEM "p-config.sgml">
 <!entity changelog SYSTEM "changelog.sgml">
-<!entity p-version "3.0.34">
+<!entity p-version "3.0.35">
 <!entity p-status "UNRELEASED">
 <!entity % p-authors-formal "INCLUDE"> <!-- include additional text, etc  -->
 <!entity % p-not-stable "INCLUDE">
@@ -35,7 +35,7 @@
 
  Purpose     :  user manual
 
- Copyright (C) 2001-2022 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2023 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -54,7 +54,7 @@
  <subscript>
 <!-- Completely the wrong markup, but very little is allowed  -->
 <!-- in this part of an article. FIXME -->
- <link linkend="copyright">Copyright</link> &my-copy; 2001-2022 by
+ <link linkend="copyright">Copyright</link> &my-copy; 2001-2023 by
  <ulink url="https://www.privoxy.org/">Privoxy Developers</ulink>
  </subscript>
 </pubdate>
@@ -302,11 +302,15 @@ How to install the binary packages depends on your operating system:
 </sect3>
 
 <!--   ~~~~~       New section      ~~~~~     -->
-<sect3 id="installation-freebsd"><title>FreeBSD</title>
+<sect3 id="installation-freebsd"><title>FreeBSD and ElectroBSD</title>
 
 <para>
  Privoxy is part of FreeBSD's Ports Collection, you can build and install
  it with <literal>cd /usr/ports/www/privoxy; make install clean</literal>.
+</para>
+<para>
+ If your system is configured to install binary packages you can
+ try to install &my-app; with <literal>pkg install privoxy</literal>.
 </para>
 </sect3>
 
@@ -409,8 +413,8 @@ MAKENSIS = /&lt;root-dir>/nsis/makensis.exe
 
       <para>
         Get the latest 8.x PCRE code from
-        <ulink url="https://ftp.pcre.org/pub/pcre/">PCRE
-                    https://ftp.pcre.org/pub/pcre/</ulink>
+        <ulink url="https://sourceforge.net/projects/pcre/files/pcre/">PCRE
+                    https://sourceforge.net/projects/pcre/files/pcre/</ulink>
         and build the static PCRE libraries with
 
         <screen>
@@ -437,9 +441,9 @@ export CPPFLAGS="-DPCRE_STATIC"
 
       <para>
         If you want to be able to have Privoxy do TLS Inspection, get the latest
-        2.16.x MBED-TLS library source code from
-        <ulink url="https://github.com/ARMmbed/mbedtls/tags">
-                    https://github.com/ARMmbed/mbedtls/tags</ulink>,
+        2.28.x MBED-TLS library source code from
+        <ulink url="https://github.com/Mbed-TLS/mbedtls/tags">
+                    https://github.com/Mbed-TLS/mbedtls/tags</ulink>,
         extract the tar file into <literal>&lt;root-dir&gt;</literal>
         and build the static libraries with
         <programlisting>
@@ -2536,12 +2540,6 @@ media.example.com/.*banners
 <!-- XXX: This section contains duplicates content from the
           client-specific-tag documentation. -->
 
-<warning>
-<para>
- This is an experimental feature. The syntax is likely to change in future versions.
-</para>
-</warning>
-
 <para>
  Client tag patterns are not set based on HTTP headers but based on
  the client's IP address. Users can enable them themselves, but the
@@ -4105,6 +4103,12 @@ problem-host.example.com</screen>
     linkend="external-filter-syntax">syntax</link></literal>
     may change in the future.
    </para>
+   <para>
+    If you want to apply external filters to images or other content
+    that isn't text-based, enable the
+    <literal><link linkend="force-text-mode">force-text-mode</link></literal>
+    action as well.
+   </para>
 
   </listitem>
  </varlistentry>
@@ -5453,9 +5457,6 @@ new action
     request which doesn't contain a path. Enabling it based on
     a pattern with path doesn't work as the path is only seen
     by &my-app; if the action is already enabled.
-   </para>
-   <para>
-    This is an experimental feature.
    </para>
   </listitem>
  </varlistentry>
@@ -7726,9 +7727,9 @@ pre-defined filters for your convenience:
   <term><emphasis>banners-by-link</emphasis></term>
   <listitem>
    <para>
-    This is an experimental filter that attempts to kill any banners if
-    their URLs seem to point to known or suspected click trackers. It is currently
-    not of much value and is not recommended for use by default.
+    This filter attempts to kill any banners if their URLs seem to point
+    to known or suspected click trackers. It is currently not of much value
+    and is not recommended for use by default.
    </para>
   </listitem>
  </varlistentry>
@@ -8177,6 +8178,340 @@ EXTERNAL-FILTER: citation-needed Adds a "[citation needed]" tag to an image. The
 <!--  ~  End section  ~  -->
 
 
+<!--   ~~~~~       New section      ~~~~~     -->
+
+<sect1 id="howto"><title>HOWTOs</title>
+
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
+<sect2 id="h2-https-inspection"><title>HTTPS-Inspection HOWTO</title>
+<sect3 id="h2-hi-tls"><title>How TLS Certificates for websites work
+</title>
+<para>
+ The website owner generates a (private) TLS key and a Certificate
+ Signing Request (CSR).
+</para>
+<para>
+ The CSR is then sent to a Certification Authority (CA), which
+ verifies that the owner is the actual owner of the website.  This can
+ be done by proving that the owner has technical write access to the
+ site or the site's DNS, or by verifying the identity of the
+ organization running the site using telephone and public databases.
+</para>
+<para>
+ If the verification is successful, the CA signs the CSR and creates a
+ certificate that certifies that the private TLS key actually belongs
+ to the website name and/or organization that owns the domain.
+</para>
+<para>
+ This TLS certificate is then added to the web server configuration,
+ and when a browser accesses the website, it verifies that the TLS
+ certificate presented to the browser is valid for that domain.
+</para>
+<para>
+ To do this, each browser has the certificates of multiple CAs in its
+ trust store.  Only if the certificate of the CA, that signed the web
+ server is in the trust store, the browser will accept the
+ certificate, otherwise the browser will complain about a broken
+ certificate.
+</para>
+<para>
+ If this check passes, the browser sends a random number encrypted
+ with the server's public key to the server, and both compute a shared
+ secret using the Diffie-Hellman key exchange algorithm.  Now server
+ and browser can communicate, but no one else can break that
+ communication because it's encrypted between them.
+</para>
+</sect3>
+
+<sect3 id="h2-hi-works"><title>How HTTPS inspection works</title>
+<para>
+ When we try to inspect HTTPS traffic, we have to break the TLS
+ encryption between browser and web server without being the browser
+ or the web server.  This is exactly what TLS tries to avoid, as it's
+ a man-in-the-middle-attack.
+</para>
+<para>
+ To do this, Privoxy uses it's own (private) CA (let's call it
+ "Privoxy CA"), which has to be added to the trust store of every
+ single browser that should be used with Privoxy and HTTPS inspection.
+</para>
+<para>
+ Now Privoxy breaks the connection between browser and webserver by
+ acting as a browser/client when talking to the webserver (including
+ checking the webserver's TLS certificate against it's own trust
+ store).  Now Privoxy can read and modify the traffic from the
+ webserver.
+</para>
+<para>
+ On the other hand, Privoxy itself encrypts the traffic it sends to
+ the browser using an on the fly self-created TLS server certificate
+ that is signed by Privoxy CA.
+</para>
+</sect3>
+
+<sect3 id="h2-hi-invalid-cert"><title>What happens, if the original
+ certificate is invalid?</title>
+<para>
+ If Privoxy detects, that a TLS certificate is not valid, because the
+ certificate is expired, doesn't match the hostname, is self signed or
+ similar, Privoxy blocks the requests and returns an error message
+ explaining the problem to avoid that the user/browser communicates
+ over an insecure communication channel.
+</para>
+<para>
+ To check this behavior, simply go to
+ <ulink url="https://badssl.com/">https://badssl.com/</ulink>
+</para>
+</sect3>
+
+<sect3 id="h2-hi-prerequisites"><title>HTTPS inspection prerequisites
+</title>
+<para>
+ HTTPS inspection in Privoxy can only be used, if Privoxy is built
+ with FEATURE_HTTPS_INSPECTION.  You can check if this feature
+ is enabled at
+ <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
+ in the "Conditional #defines" section.
+</para>
+<para>
+ If the feature is not enabled, you may need to
+ <link linkend="installation-source">build Privoxy from source</link>
+ to enable it.  You can use either
+ <ulink url="https://www.trustedfirmware.org/projects/mbed-tls/">MbedTLS</ulink>
+ or <ulink url="https://www.openssl.org/">OpenSSL</ulink>.  It's up to
+ you, which one to use, they both behave the same for HTTPS inspection.
+</para>
+<para>
+ After installing the development libraries for either OpenSSL or
+ MbedTLS, you can run <command>./configure</command> with
+ either the <command>--with-openssl</command> or
+ <command>--with-mbedtls</command> option.
+</para>
+<para>
+ Check the output of <command>./configure</command>, it must contain
+ one of these the following two lines, otherwise HTTPS inspection will
+ not work:
+</para>
+ <screen>
+configure: Detected OpenSSL. Enabling https inspection.
+configure: Detected mbedTLS. Enabling https inspection.
+</screen>
+<para>
+ If you do not find any of these lines, the output of
+ <command>./configure</command> will tell you what went wrong.
+</para>
+<para>
+ You should then proceed with the
+ <link linkend="installation-source">source install</link>.
+ Finally, check the FEATURE_HTTPS_INSPECTION status in
+ <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
+ again.
+</para>
+</sect3>
+
+<sect3 id="h2-hi-config"><title>Configuring HTTPS inspection in Privoxy
+</title>
+<para>
+ First, you need to create the private key and certificate for the
+ "Privoxy CA".  This can be done using openssl with the following
+ command:
+ <screen>
+openssl req -new -x509 -extensions v3_ca -keyout privoxy.pem -out privoxy.crt -days 3650
+</screen>
+</para>
+<para>
+ Here we have defined a CA validity of 10 years (3650 days).  You
+ should decide for yourself what is a good validity.  A shorter
+ validity makes your system more secure (it doesn't hurt that long if
+ the key gets lost to an attacker), but if the certificate expires
+ before you have replaced it with a new one in Privoxy and in all
+ browsers, the communication will fail.
+</para>
+<para>
+ During the key generation you will be asked for a "pass phrase".
+ This pass phrase will appear in the Privoxy config CGI, so don't
+ reuse it elsewhere!
+</para>
+<para>
+ Then you will be asked for Country Name, State/Province, Locality,
+ Orginzation Name, Common Name, and Email Address.  You should add
+ some useful data here, because these entries are shown by the browser
+ as "Issuer Name" when you inspect a certificate from an
+ https-inspection site.  Especially the "Common Name" will be shown as
+ the name of your CA, so it's good if you (and other users of your
+ Privoxy instance) are able to identify this CA.
+</para>
+<para>
+ Copy the private key (<filename>privoxy.pem</filename>) and the CA
+ certificate (<filename>privoxy.crt</filename>) into
+ the <link linkend="ca-directory">ca-directory</link> (defined
+ in <link linkend="config">config</link>).
+</para>
+<para>
+ Make sure that the private key (<filename>privoxy.pem</filename> in
+ the above example) is only accessible to the user running Privoxy
+ (usually named "privoxy"):
+</para>
+ <screen>
+chmod 600 privoxy.pem
+chown privoxy privoxy.pem
+</screen>
+<para>
+ Now adjust your Privoxy <link linkend="config">configuration</link>:
+</para>
+ <screen>
+<link linkend="ca-directory">ca-directory</link> /etc/privoxy/CA # read-only
+<link linkend="ca-cert-file">ca-cert-file</link> privoxy.crt     # in ca-directory
+<link linkend="ca-key-file">ca-key-file</link> privoxy.pem      # in ca-directory
+<link linkend="ca-password">ca-password</link> passphrasefromabove
+<link linkend="certificate-directory">certificate-directory</link> /var/lib/privoxy/certs
+<link linkend="trusted-cas-file">trusted-cas-file</link> /etc/ssl/certs/ca-certificates.crt
+</screen>
+<para>
+ <link linkend="certificate-directory">certificate-directory</link>
+ contains the (on the fly) created webserver keys and certificates.
+ It should only be readable by the privoxy user only:
+</para>
+ <screen>
+chown privoxy /var/lib/privoxy/certs
+chmod 700 /var/lib/privoxy/certs.
+</screen>
+<para>
+ <link linkend="trusted-cas-file">trusted-cas-file</link> is the trust
+ store containing the certificates of all CAs that should be accepted.
+ Each browser comes with it's own trust store.  Most Unix systems also
+ ship with a truststore.  Debian ships it's truststore
+ in <filename>/etc/ssl/certs/ca-certificates.crt</filename>, which is
+ installed by the ca-certificates package and can be updated using
+ update-ca-certificates(8).  Alternatively, such a file (extracted
+ from Mozilla) can be downloaded
+ from <ulink url="https://curl.se/docs/caextract.html">https://curl.se/docs/caextract.html</ulink>.
+</para>
+</sect3>
+
+<sect3 id="h2-hi-browser"><title>Browser configuration</title>
+<para>
+ As written above, each browser you use must now trust the newly
+ created Privoxy CA certificate (<filename>privoxy.crt</filename>).
+</para>
+<para>
+ In Firefox you can do this by opening the preferences "Edit" ->
+ "Settings" -> "Privacy & Security" or by typing
+ <ulink url="about:preferences#privacy">about:preferences#privacy</ulink>
+ in the URL.  Then go down to the "Certificates" section and click on
+ "View Certificates". Click on the "Authorities" tab and "Import..."
+ your <filename>privoxy.crt</filename>.  In the "CA certificate trust
+ settings" select "This certificate can identify websites".
+</para>
+<para>
+ In Chrome based browsers, go to the settings and select "Privacy and
+ security"
+ (<ulink url="chrome://settings/privacy">chrome://settings/privacy</ulink>).
+ Click on "Security" and on the opened sub-page on "Manage
+ certificates".  Now go to the "Authorities" tab and
+ import <filename>privoxy.crt</filename> and configure that you trust
+ the certificate for website identification.
+</para>
+</sect3>
+
+<sect3 id="h2-hi-enable"><title>Enabeling HTTPS inspection</title>
+<para>
+ Currently no pages use HTTPS inspection, you need to enable this for
+ some (or all) domains first
+ using <link linkend="user-action">user.action</link> (either by editing
+ the file by hand or via the CGI (this requires
+ <link linkend="enable-edit-actions">enable-edit-actions</link>
+ to be enabled in config) at
+ <ulink url="http://config.privoxy.org/show-status">http://config.privoxy.org/show-status</ulink>
+ (click on user.action Edit button).
+</para>
+<para>
+ Here you can enable HTTPS inspection for individual sites:
+</para>
+ <screen>
+{+<link linkend="https-inspection">https-inspection</link>}
+.badssl.com
+clienttest.ssllabs.com
+</screen>
+<para>
+ You can add more individual sites or wildcards (one per line).
+</para>
+<para>
+ Alternatively, you can use a client-tag to dynamically enable/disable
+ this feature via the browser, as described in the next chapter.
+</para>
+</sect3>
+
+</sect2>
+
+<!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
+<sect2 id="h2-client-tags"><title>Client Tags HOWTO</title>
+<para>
+ Client-Tags are a mechanism to dynamically/temporarily enable/disable
+ features in Privoxy per browser.
+</para>
+<para>
+ In our example, we use this for the following two use cases:
+ <itemizedlist>
+  <listitem><para>Enable TOR anonymous proxy</para></listitem>
+  <listitem><para>Enable https-inspection</para></listitem>
+ </itemizedlist>
+</para>
+<para>
+ To use this feature, you must first define a tag name and a tag
+ description for each client-tag in <link linkend="config">config</link>,
+ like this:
+</para>
+ <screen>
+<link linkend="client-specific-tag">client-specific-tag</link> tor Use Tor anonymous proxy
+<link linkend="client-specific-tag">client-specific-tag</link> https-inspection Enable https-inspection
+</screen>
+<para>
+ Now you can open <ulink
+ url="http://config.privoxy.org/client-tags">http://config.privoxy.org/client-tags</ulink>
+ or <ulink url="http://p.p/client-tags">http://p.p/client-tags</ulink>
+ and can enable/disable the tag there (you may want to add a bookmark
+ for this in your browser for quick access, but it's also available as
+ a link at <ulink url="http://p.p">http://p.p</ulink>).
+</para>
+<para>
+ It's also possible to temporarily enable a tag, which by default
+ means 3 minutes (=180 seconds) (and can be changed via the
+ <link linkend="client-tag-lifetime">client-tag-lifetime</link> option
+ in <link linkend="config">config</link>).
+</para>
+<para>
+ But before this has any effect, you have to use the client tag in
+ your <link linkend="user-action">user.action</link> like this:
+</para>
+ <screen>
+{+<link linkend="forward-override">forward-override</link>{<link linkend="socks">forward-socks5t</link> 127.0.0.1:9050 .} }
+<link linkend="client-tag-pattern">CLIENT-TAG</link>:^tor$
+</screen>
+<para>
+ This means, that if the "tor" client tag is enabled, all traffic is
+ forwarded by Privoxy through socks5t to a locally installed tor proxy
+ listening on port 9050.
+</para>
+<para>
+ Similarly, you can specify to use the https-inspection client tag to
+ enable https-inspection:
+</para>
+ <screen>
+{+<link linkend="https-inspection">https-inspection</link>}
+<link linkend="client-tag-pattern">CLIENT-TAG</link>:^https-inspection$
+</screen>
+<para>
+ The tag will be set for all requests coming from clients that have
+ requested it to be set.  Note that "clients" are distinguished by IP
+ address, if the IP address changes, the tag must be requested again.
+</para>
+</sect2>
+
+</sect1>
+
+<!--  ~  End section  ~  -->
+
 
 <!--   ~~~~~       New section      ~~~~~     -->
 
@@ -8210,7 +8545,7 @@ Requests</title>
 <para>
  The same is true for <application>Privoxy</application> binaries
  unless they are linked with a
- <ulink url="https://tls.mbed.org/">mbed TLS</ulink> version
+ <ulink url="https://www.trustedfirmware.org/projects/mbed-tls/">mbed TLS</ulink> version
  that is licensed under the Apache 2.0 license in which
  case you can redistribute and/or modify the <application>Privoxy</application>
  binaries under the terms of the <citetitle>GNU General Public License</citetitle>
@@ -8250,7 +8585,7 @@ Requests</title>
  When compiled with FEATURE_HTTPS_INSPECTION (optional),
  Privoxy depends on a TLS library. The supported libraries are
  <ulink url="https://www.openssl.org/">LibreSSL</ulink>,
- <ulink url="https://tls.mbed.org/">mbed TLS</ulink> and
+ <ulink url="https://github.com/Mbed-TLS/mbedtls/tags">mbed TLS 2.28.x</ulink> and
  <ulink url="https://www.openssl.org/">OpenSSL</ulink>.
 </para>
 <para>

@@ -21,7 +21,7 @@
 #                 and enhancements are better placed in user.action,
 #                 the match-all section has been moved to match-all.action.
 #
-#  Copyright   :  Written by and Copyright (C) 2001-2022 the
+#  Copyright   :  Written by and Copyright (C) 2001-2023 the
 #                 Privoxy team. https://www.privoxy.org/
 #
 # Feedback welcome, for details please have a look at:
@@ -959,6 +959,14 @@ odb.outbrain.com/
 elsa.memoinsights.com/t
 # Blocked URL = https://ups.xplosion.de/ctx?event_id=ctx_json&_sid=24141&hostSiteUrl=https://www.presseportal.de/blaulicht/pm/12415/5302821&referrer=&userAgent=Mozilla/5.0%20(X11;%20FreeBSD%20amd64;%20rv:91.0)%20Gecko/20100101%20Firefox/91.0&userLang=en-CA&gdpr=1&gdpr_consent=[...]
 ups.xplosion.de/
+# Blocked URL = https://s.cpx.to/fire.js?pid=13058&ref=https%3A%2F%2Fexplosm.net%2Fcomics%2Fnewyears-2008&url=https%3A%2F%2Fexplosm.net%2Fcomics%2Fdave-shortnew-8%23comic&hn_ver=57&fid=715e92a0-477c-4ef4-b655-6ed9edc0e94b&gcv=CPuOj0APuOj0AAKAvAENDFCsAP_AAH_AAAwIJbtX_H__bW9r8f5_aft0eY1P9_j77uQzDhfNk-4F3L_W_JwX52E7NF36tq4KmR4Eu3LBIUNlHNHUTVmwaokVryHsak2cpTNKJ6BEkHMRO2dYGF5umxtjeQKY5_p_d3fx2D-t_dv-39z3z81Xn3dZf-_0-PCdU5_9Dfn9fRfb-9IL9_78v8v8_9_rk2_eX_3_79_7_H9-f_84JcAEmGrcQBdmUODNoGEUCIEYVhARQKACCgGFogIAHBwU7IwCfWESAFAKAIwIgQ4AoyIBAAAJAEhEAEgRYIAAABAIAAQAIBEIAGBgEFABYCAQAAgOgYohQACBIQJEREQpgQFQJBAS2VCCUF0hphAFWWAFAIjYKABEEgIrAAEBYOAYIkBKxYIEmINogAGAFAKJUK1FJ6aAhYzMAAAA.YAAAAAAAAAAA
+s.cpx.to/
+# Blocked URL = https://track.venatusmedia.com/dual/track_enc
+track.venatusmedia.com/
+# Blocked URL = https://o2.mouseflow.com/init?v=17.96&p=bd33e8bf-4f45-437f-9bda...&s=a6ac920f1ba63b3...&page=090...2f0d2&ret=0&u=62...fa1&href=https%3A%2F%2Fauth.leaseweb.com%2FloginCustomer&url=auth.leaseweb.com%2Flogincustomer&ref=https%3A%2F%2Fsecure.leaseweb.com%2F&title=Leaseweb%20Authorization%20Server&res=1366x768&tz=-60&to=0&dnt=1&ori=&dw=1362&dh=621&time=727&pxr=1&gdpr=1
+o2.mouseflow.com/
+# Blocked URL = https://secure-eu.nmrodam.com/cgi-bin/gn?prd=dcr&ci=de-910483&ch=de-910483_b01__vermischtes__P&asn=_vermischtes_&fp_id=&fp_cr_tm=&fp_acc_tm=&fp_emm_tm=&ve_id=&sessionId=vu0qoho115ipzkihhkxsztnvalijv1695918791&prv=1&c6=vc,b01&ca=NA&c13=asid,PE3FB63C1-D0BE-4D42-95B5-7B383C43C5F8&c32=segA,a_vermischtes_article&c33=segB,CPI&c34=segC,Firefox%20102&c15=apn,&sup=1&segment2=&segment1=&forward=0&plugv=&playerv=&ad=0&cr=D&c9=devid,&enc=true&c1=nuid,999&at=timer&rt=text&c16=sdkv,bj.6.0.0&c27=cln,30&crs=&lat=&lon=&c29=plid,16959187913574064&c30=bldv,6.0.0.673&st=dcragf&c7=osgrp,&c8=devgrp,&c10=plt,&c40=adbid,&c14=osver,NA&c26=dmap,1&dd=&hrd=&wkd=&c35=adrsid,&c36=cref1,&c37=cref2,&c11=agg,1&c12=apv,&c51=adl,0&c52=noad,0&pc=NA&c53=fef,n&c54=oad,&c55=cref3,&c57=adldf,2&ai=247660590&c3=st,c&c64=starttm,1695918795&adid=247660590&c58=isLive,false&c59=sesid,&c61=createtm,1695918850&c63=pipMode,&uoo=&c68=bndlid,&nodeTM=&logTM=&c73=phtype,&c74=dvcnm,&c76=adbsnid,&c44=progen,&davty=2&si=https%3A%2F%2Fwww.welt.de%2Fvermischtes%2Farticle247660590%2FBerlin-Mann-traegt-islamische-Muetze-als-Mode-Accessoire-und-wird-attackiert.html%3Fsource%3Dpuerto-reco-2_ABC-V32.7.C_already_read&c66=mediaurl,&sdd=&c62=sendTime,1695918850&rnd=889711
+secure-eu.nmrodam.com/
 
 {+block{Might be a web-bug that is an image.} -handle-as-empty-document +handle-as-image}
 #MASTER# BLOCK-REFERRER: http://versiontracker.com and many others. 10/20/06
@@ -1025,6 +1033,8 @@ eu-tlp01.kameleoon.eu/
 #MASTER# BLOCK-REFERRER: https://arstechnica.com/gadgets/2021/04/xinuos-finishes-picking-up-scos-mantle-by-suing-red-hat-and-ibm/
 # Blocked URL = https://fpa-events.arstechnica.com/plogger/?rand=1617351238373&plid=36453403&idsite=arstechnica.com&url=https%3A%2F%2Farstechnica.com%2Fgadgets%2F2021%2F04%2Fxinuos-finishes-picking-up-scos-mantle-by-suing-red-hat-and-ibm%2F&urlref=&screen=1366x768%7C1366x768%7C24&data=%7B%7D&sid=1&surl=https%3A%2F%2Farstechnica.com%2Fgadgets%2F2021%2F04%2Fxinuos-finishes-picking-up-scos-mantle-by-suing-red-hat-and-ibm%2F&sref=&sts=1617351085989&slts=0&date=Fri+Apr+02+2021+10%3A13%3A58+GMT%2B0200+(CEST)&action=heartbeat&inc=4&tt=4371&pvid=50890683&u=pid%3Df5e180d3fca67aa29521f1510e59850b
 fpa-events.arstechnica.com/
+# Blocked URL = https://i.clean.gg/1a
+i.clean.gg/
 
 
 #############################################################################
@@ -2287,6 +2297,10 @@ twitter.com/.*/status/
 launchpad.net/
 # URL = https://consent.youtube.com/m?continue=https%3A%2F%2Fwww.youtube.com%2Fplaylist%3Flist%3DPLeF8ZihVdpFfttOtsot131byFrDVztt8T%26cbrd%3D1%26cbrd%3D1&gl=AT&m=0&pc=yt&hl=en&src=1
 consent.youtube.com/
+# URL = https://services.akteneinsichtsportal.de/oauth/authorize?client_id=ae-portal&redirect_uri=https%3A%2F%2Fwww.akteneinsichtsportal.de%2Fweb%2Fguest%2Faktenuebersicht&response_type=code&scope=read&state=0yT8EN
+services.akteneinsichtsportal.de/
+# URL = https://bpe-online.de/wp-content/plugins/pdf-viewer-for-elementor/assets/pdfjs/web/viewer.html?file=https://bpe-online.de/wp-content/uploads/2020/11/HarmReductionLeitfadenzumrisikoarmenAbsetzenvonPsychopharmaka2EdOnline.pdf&embedded=true
+/wp-content/plugins/pdf-viewer-for-elementor
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block

@@ -38,6 +38,13 @@
 #include <openssl/pem.h>
 #include <openssl/md5.h>
 #include <openssl/x509v3.h>
+#ifdef _WIN32
+/* https://www.openssl.org/docs/faq.html
+   I’ve compiled a program under Windows and it crashes: Why?
+   tl,dr: because it needs this include:
+*/
+#include <openssl/applink.c>
+#endif /* _WIN32 */
 
 #include "config.h"
 #include "project.h"
@@ -792,17 +799,16 @@ extern int create_client_ssl_connection(struct client_state *csp)
     * certificate and key inconsistence must be locked.
     */
    privoxy_mutex_lock(&certificate_mutex);
-
    ret = generate_host_certificate(csp);
+   privoxy_mutex_unlock(&certificate_mutex);
+
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
          "generate_host_certificate failed: %d", ret);
-      privoxy_mutex_unlock(&certificate_mutex);
       ret = -1;
       goto exit;
    }
-   privoxy_mutex_unlock(&certificate_mutex);
 
    if (!(ssl_attr->openssl_attr.ctx = SSL_CTX_new(SSLv23_server_method())))
    {

@@ -38,7 +38,7 @@
 <!entity copyright SYSTEM "copyright.sgml">
 <!entity license SYSTEM "license.sgml">
 <!entity authors SYSTEM "p-authors.sgml">
-<!entity p-version "3.0.34">
+<!entity p-version "3.0.35">
 <!entity p-status "UNRELEASED">
 <!entity % p-not-stable "INCLUDE">
 <!entity % p-stable "IGNORE">

@@ -1391,13 +1391,13 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
 
       if (client_headers == NULL)
       {
-         log_error(LOG_LEVEL_FATAL, "Out of memory rebuilding client headers");
+         log_error(LOG_LEVEL_FATAL, "Out of memory rebuilding client headers.");
       }
       list_remove_all(csp->headers);
       header_length= strlen(client_headers);
 
       log_error(LOG_LEVEL_CONNECT,
-         "Optimistically sending %lu bytes of client headers intended for %s",
+         "Optimistically sending %lu bytes of client headers intended for %s.",
          header_length, csp->http->hostport);
 
       if (write_socket(sfd, client_headers, header_length))
@@ -1413,7 +1413,7 @@ static jb_socket socks5_connect(const struct forward_spec *fwd,
          unsigned long long buffered_request_bytes =
             (unsigned long long)(csp->client_iob->eod - csp->client_iob->cur);
          log_error(LOG_LEVEL_CONNECT,
-            "Optimistically sending %llu bytes of client body. Expected %llu",
+            "Optimistically sending %llu bytes of client body. Expected %llu.",
             csp->expected_client_content_length, buffered_request_bytes);
          assert(csp->expected_client_content_length == buffered_request_bytes);
          if (write_socket(sfd, csp->client_iob->cur, buffered_request_bytes))

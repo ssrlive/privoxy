@@ -173,6 +173,14 @@ static int match_sockaddr(const struct sockaddr_storage *network,
    in_port_t *network_port=NULL, *netmask_port=NULL, *address_port=NULL;
    int i;
 
+   network_addr = NULL;
+   netmask_addr = NULL;
+   address_addr = NULL;
+   addr_len = 0;
+   network_port = NULL;
+   netmask_port = NULL;
+   address_port = NULL;
+
    if (network->ss_family != netmask->ss_family)
    {
       /* This should never happen */
@@ -333,6 +341,10 @@ int acl_addr(const char *aspec, struct access_control_addr *aca)
 #endif /* def HAVE_RFC2553 */
    char *p;
    char *acl_spec = NULL;
+
+   mask_data = NULL;
+   mask_port = NULL;
+   addr_len = 0;
 
 #ifdef HAVE_RFC2553
    /* XXX: Depend on ai_family */

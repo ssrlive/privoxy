@@ -383,12 +383,13 @@
         into an empty directory</i></span>. (See "Building and releasing packages" above).</p>
         <p>Check that you have the current versions of the <a href=
         "https://sourceforge.net/projects/nsis/files/NSIS%203/" target="_top">NSIS installer</a>, <a href=
-        "https://ftp.pcre.org/pub/pcre/" target="_top">PCRE library</a>, <a href="https://tls.mbed.org/download"
-        target="_top">MBED TLS library</a>, <a href="https://github.com/google/brotli/releases" target="_top">Brotli
-        library</a>, and that the <span class="emphasis"><i class="EMPHASIS">MAKENSIS</i></span> evar in <tt class=
-        "FILENAME">windows/GNUMakefile</tt> points to the NSIS installer program. (See the <a href=
-        "../user-manual/installation.html#WINBUILD-CYGWIN" target="_top"><span class="emphasis"><i class=
-        "EMPHASIS">Building from Source / Windows</i></span></a> section of the User Manual for details.)</p>
+        "https://sourceforge.net/projects/pcre/files/pcre/" target="_top">PCRE library</a>, <a href=
+        "https://github.com/Mbed-TLS/mbedtls/tags" target="_top">MBED TLS library</a>, <a href=
+        "https://github.com/google/brotli/releases" target="_top">Brotli library</a>, and that the <span class=
+        "emphasis"><i class="EMPHASIS">MAKENSIS</i></span> evar in <tt class="FILENAME">windows/GNUMakefile</tt> points
+        to the NSIS installer program. (See the <a href="../user-manual/installation.html#WINBUILD-CYGWIN" target=
+        "_top"><span class="emphasis"><i class="EMPHASIS">Building from Source / Windows</i></span></a> section of the
+        User Manual for details.)</p>
         <p>Then you can build the package. This is fully automated, and is controlled by <tt class=
         "FILENAME">windows/GNUmakefile</tt>. All you need to do is:</p>
         <table border="0" bgcolor="#E0E0E0" width="100%">
@@ -491,7 +492,7 @@
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  dch -v 3.0.34-1</pre>
+              <pre class="PROGRAMLISTING">  dch -v 3.0.35-1</pre>
             </td>
           </tr>
         </table>
@@ -508,7 +509,7 @@
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  lintian -iI ../build-area/privoxy_3.0.34-1_amd64.changes</pre>
+              <pre class="PROGRAMLISTING">  lintian -iI ../build-area/privoxy_3.0.35-1_amd64.changes</pre>
             </td>
           </tr>
         </table>
@@ -517,7 +518,7 @@
           <tr>
             <td>
               <pre class=
-              "PROGRAMLISTING">  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.34-1.dsc</pre>
+              "PROGRAMLISTING">  sudo cowbuilder --build --basepath /var/cache/pbuilder/base.cow ../build-area/privoxy_3.0.35-1.dsc</pre>
             </td>
           </tr>
         </table>
@@ -526,19 +527,19 @@
           <tr>
             <td>
               <pre class=
-              "PROGRAMLISTING">  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.34-1_amd64.changes -s -- schroot sid</pre>
+              "PROGRAMLISTING">  autopkgtest /var/cache/pbuilder/result/privoxy_3.0.35-1_amd64.changes -s -- schroot sid</pre>
             </td>
           </tr>
         </table>
         <p>Or just push the changes to salsa.debian.org, where a CI pipeline is defined for the package, that builds
         and tests it.</p>
         <p>If everything is okay, run cowbuilder with i386 and amd64 environments for current Debian stable release and
-        build privoxy_3.0.34-1_i386.deb and privoxy_3.0.34-1_amd64.deb. Then sign both files:</p>
+        build privoxy_3.0.35-1_i386.deb and privoxy_3.0.35-1_amd64.deb. Then sign both files:</p>
         <table border="0" bgcolor="#E0E0E0" width="100%">
           <tr>
             <td>
-              <pre class="PROGRAMLISTING">  gpg --detach-sign --armor privoxy_3.0.34-1_i386.deb
-  gpg --detach-sign --armor privoxy_3.0.34-1_amd64.deb</pre>
+              <pre class="PROGRAMLISTING">  gpg --detach-sign --armor privoxy_3.0.35-1_i386.deb
+  gpg --detach-sign --armor privoxy_3.0.35-1_amd64.deb</pre>
             </td>
           </tr>
         </table>
@@ -651,7 +652,27 @@
       <tt class="LITERAL">Edit Release</tt>, instead of <tt class="LITERAL">Add Release</tt>.</p>
     </div>
     <div class="SECT2">
-      <h2 class="SECT2"><a name="AFTERRELEASE" id="AFTERRELEASE">6.5. After the Release</a></h2>
+      <h2 class="SECT2"><a name="UPDATE-RSS-FEED" id="UPDATE-RSS-FEED">6.5. Updating the RSS feed</a></h2>
+      <p>Once the packages are uploaded to SourceForge they should be mirrored on the Privoxy websites (<a href=
+      "https://www.privoxy.org/" target="_top">https://www.privoxy.org/</a> and <a href=
+      "http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/" target=
+      "_top">http://l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion/</a>). This is usually done by
+      Fabian who uses a couple of shell functions for this that aren't documented or published yet.</p>
+      <p>Once the packages are uploaded to the mirror the RSS feed has to be regenerated with a command like:</p>
+      <table border="0" bgcolor="#E0E0E0" width="100%">
+        <tr>
+          <td>
+            <pre class=
+            "PROGRAMLISTING">       fk@t520 ~/git/privoxy $utils/create-package-feed.pl /tank/backups/sourceforge/frs/project/ijbswa/ doc/webserver/feeds/privoxy-releases.xm
+      </pre>
+          </td>
+        </tr>
+      </table>
+      <p>The updated RSS feed then has to be uploaded to the SourceForge webserver and mirrored on the Privoxy websites
+      again. This, too, is usually done by Fabian with undocumented and unpublished shell functions.</p>
+    </div>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="AFTERRELEASE" id="AFTERRELEASE">6.6. After the Release</a></h2>
       <p>When all (or: most of the) packages have been uploaded and made available, send an email to the <a href=
       "mailto:privoxy-announce@lists.privoxy.org" target="_top">announce mailing list</a>, Subject: "Announcing Privoxy
       X.Y.Z $CODE_STATUS". Be sure to include the <a href="https://sourceforge.net/projects/ijbswa/files/" target=
