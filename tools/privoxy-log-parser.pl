@@ -1574,6 +1574,11 @@ sub handle_loglevel_connect($) {
 
         $c =~ s@(?<=accept failed: )(.*)@$h{'Error'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Failed to accept\(\) incoming connection:/) {
+
+        # Failed to accept() incoming connection: Software caused connection abort
+        $c =~ s@(?<=connection: )(.*)@$h{'Error'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Overriding forwarding settings/) {
 
         # Overriding forwarding settings based on 'forward 10.0.0.1:8123'
