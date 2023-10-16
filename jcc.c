@@ -6269,7 +6269,8 @@ static void listen_loop(void)
 
       if (!accept_connection(csp, bfds))
       {
-         log_error(LOG_LEVEL_CONNECT, "accept failed: %E");
+         log_error(LOG_LEVEL_CONNECT,
+            "Failed to accept() incoming connection: %E");
          freez(csp_list);
          continue;
       }
