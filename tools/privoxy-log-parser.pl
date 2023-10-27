@@ -1964,6 +1964,12 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=connected over )(TLSv\d\.\d)@$h{'tls-version'}$1$h{'Standard'}@;
         $c =~ s@(?<=\()([^)]+)@$h{'cipher-suite'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Couldn't deliver the error message for/) {
+
+        # Couldn't deliver the error message for https://m.media-amazon.com/[...] through client socket 18 using TLS/SSL
+        $c = highlight_matched_url($c, "(?<=error message for )[^ ]*");
+        $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
