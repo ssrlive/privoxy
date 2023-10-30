@@ -803,7 +803,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
-         "generate_host_certificate failed: %d", ret);
+         "generate_host_certificate() failed: %d", ret);
       ret = -1;
       goto exit;
    }
