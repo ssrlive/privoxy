@@ -837,7 +837,13 @@ static jb_socket socks4_connect(const struct forward_spec *fwd,
 
    /* build a socks request for connection to the web server */
 
-   strlcpy(&(c->userid), socks_userid, sizeof(buf) - sizeof(struct socks_op));
+   /*
+    * The more straightforward &(c->userid) destination pointer can
+    * cause some gcc versions to misidentify the size of the destination
+    * buffer, tripping the runtime check of glibc's source fortification.
+    */
+   strlcpy(buf + offsetof(struct socks_op, userid), socks_userid,
+      sizeof(buf) - sizeof(struct socks_op));
 
    csiz = sizeof(*c) + sizeof(socks_userid) - sizeof(c->userid) - sizeof(c->padding);
 
