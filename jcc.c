@@ -2510,12 +2510,12 @@ static jb_err receive_encrypted_request_headers(struct client_state *csp)
 
    do
    {
-      log_error(LOG_LEVEL_HEADER, "Waiting for encrypted client headers");
+      log_error(LOG_LEVEL_HEADER, "Waiting for encrypted client headers.");
       if (!is_ssl_pending(&(csp->ssl_client_attr)) &&
           !data_is_available(csp->cfd, csp->config->socket_timeout))
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Socket %d timed out while waiting for client headers", csp->cfd);
+            "Socket %d timed out while waiting for client headers.", csp->cfd);
          return JB_ERR_PARSE;
       }
       len = ssl_recv_data(&(csp->ssl_client_attr),
@@ -2523,7 +2523,7 @@ static jb_err receive_encrypted_request_headers(struct client_state *csp)
       if (len == 0)
       {
          log_error(LOG_LEVEL_CONNECT,
-            "Socket %d closed while waiting for client headers", csp->cfd);
+            "Socket %d closed while waiting for client headers.", csp->cfd);
          return JB_ERR_PARSE;
       }
       if (len == -1)
@@ -2537,7 +2537,7 @@ static jb_err receive_encrypted_request_headers(struct client_state *csp)
       p = strstr(csp->client_iob->cur, "\r\n\r\n");
    } while (p == NULL);
 
-   log_error(LOG_LEVEL_HEADER, "Encrypted headers received completely");
+   log_error(LOG_LEVEL_HEADER, "Encrypted headers received completely.");
 
    return JB_ERR_OK;
 }
