@@ -615,9 +615,9 @@ AC_CHECK_FUNC(gmtime_r, [
   AC_TRY_COMPILE([
 #   include <time.h>
   ], [
-    struct time *t;
-    struct tm *tm;
-    (void) gmtime_r(t, tm)
+    time_t t;
+    struct tm tm;
+    (void) gmtime_r(&t, &tm)
   ], [
     AC_MSG_RESULT(ok)
     AC_DEFINE(HAVE_GMTIME_R)
@@ -633,9 +633,9 @@ AC_CHECK_FUNC(localtime_r, [
   AC_TRY_COMPILE([
 #   include <time.h>
   ], [
-    struct time *t;
-    struct tm *tm;
-    (void) localtime_r(t, tm)
+    time_t t;
+    struct tm tm;
+    (void) localtime_r(&t, &tm)
   ], [
     AC_MSG_RESULT(ok)
     AC_DEFINE(HAVE_LOCALTIME_R)
