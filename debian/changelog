@@ -1,8 +1,26 @@
 privoxy (3.0.35~gitsnapshot-1) UNRELEASED; urgency=medium
 
   * Unreleased GIT snapshot.
+  * The following patches are now incorporated upstream: 35_pcre2-support,
+    36_pcre2-patternfix.
 
  -- Roland Rosenfeld <roland@debian.org>  Sun, 05 Feb 2023 10:58:57 +0100
+
+privoxy (3.0.34-3) unstable; urgency=medium
+
+  * 35_pcre2-support: Update patch based on upstream GIT.
+  * 36_pcre2-patternfix: Fix using anchored pattern in pcre2.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sun, 27 Aug 2023 16:20:57 +0200
+
+privoxy (3.0.34-2) unstable; urgency=medium
+
+  * Add ro debconf translation.  Thanks to Remus-Gabriel Chelu
+    (Closes: #1033443).
+  * 35_pcre2-support: Build with libpcre2-dev instead of obsolete pcre3
+    (Closes: #999981).
+
+ -- Roland Rosenfeld <roland@debian.org>  Fri, 30 Jun 2023 09:28:22 +0200
 
 privoxy (3.0.34-1) unstable; urgency=medium
 
