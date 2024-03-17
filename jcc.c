@@ -4174,7 +4174,7 @@ static void handle_established_connection(struct client_state *csp)
                   else
                   {
                      log_error(LOG_LEVEL_CONNECT,
-                        "Keeping chunk offset at %lu despite flushing %ld bytes",
+                        "Keeping chunk offset at %lu despite flushing %ld bytes.",
                         chunk_offset, len);
                      /*
                       * If we can't parse the chunk-encoded data we should
