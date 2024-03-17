@@ -1970,6 +1970,12 @@ sub handle_loglevel_connect($) {
         $c = highlight_matched_url($c, "(?<=error message for )[^ ]*");
         $c =~ s@(?<=client socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Keeping chunk offset at/) {
+
+        # Keeping chunk offset at 0 despite flushing 31 bytes.
+        $c =~ s@(?<=offset at )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+        $c =~ s@(?<=flushing )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
