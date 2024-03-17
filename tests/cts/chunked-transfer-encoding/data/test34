@@ -4,6 +4,8 @@
 HTTP
 HTTP GET
 chunked transfer encoding
+# XXX: Test requires "writesize" support that hasn't been upstreamed yet.
+skip
 </keywords>
 </info>
 
