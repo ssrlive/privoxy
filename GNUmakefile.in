@@ -927,6 +927,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
 					$(ECHO)  "*******************************************************************" ;\
+					GROUP_T=$(GROUP) ;\
 				fi ;\
 			else \
 				GROUP_T=$(GROUP) ;\
