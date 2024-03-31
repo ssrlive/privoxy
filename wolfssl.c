@@ -66,7 +66,7 @@ static int wolfssl_initialized = 0;
  * doesn't matter because we only use it with
  * the certificate_mutex locked.
  */
-static RNG wolfssl_rng;
+static WC_RNG wolfssl_rng;
 
 #ifndef WOLFSSL_ALT_CERT_CHAINS
 /*
