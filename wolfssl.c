@@ -1200,7 +1200,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    {
       long verify_result = wolfSSL_get_error(ssl, connect_ret);
 
-      if (verify_result == X509_V_OK)
+      if (verify_result == WOLFSSL_X509_V_OK)
       {
          ret = 0;
          csp->server_cert_verification_result = SSL_CERT_VALID;
