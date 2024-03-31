@@ -6,7 +6,7 @@
  *                creating, using and closing TLS/SSL connections
  *                using wolfSSL.
  *
- * Copyright   :  Copyright (C) 2018-2021 by Fabian Keil <fk@fabiankeil.de>
+ * Copyright   :  Copyright (C) 2018-2024 by Fabian Keil <fk@fabiankeil.de>
  *                Copyright (C) 2020 Maxim Antonov <mantonov@gmail.com>
  *                Copyright (C) 2017 Vaclav Svec. FIT CVUT.
  *
