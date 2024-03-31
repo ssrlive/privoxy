@@ -1736,7 +1736,7 @@ static int load_rsa_key(const char *rsa_key_path, const char *password, RsaKey *
 }
 
 #ifndef WOLFSSL_ALT_NAMES
-#error wolfSSL lacks Subject Alternative Name support
+#error wolfSSL lacks Subject Alternative Name support (WOLFSSL_ALT_NAMES) which is mandatory
 #endif
 /*********************************************************************
  *
