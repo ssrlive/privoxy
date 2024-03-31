@@ -736,7 +736,7 @@ exit:
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   Md5 md5;
+   wc_Md5 md5;
    int ret;
    size_t i;
 
