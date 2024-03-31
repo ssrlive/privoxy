@@ -991,6 +991,11 @@ static void shutdown_connection(WOLFSSL *ssl, const char *type)
          type, fd, shutdown_attempts, ret, error,
          wolfSSL_ERR_error_string((unsigned long)error, buffer));
    }
+   else if (shutdown_attempts > 1)
+   {
+      log_error(LOG_LEVEL_CONNECT, "Succeeded to shutdown %s connection "
+         "on socket %d after %d attempts.", type, fd, shutdown_attempts);
+   }
 }
 
 
