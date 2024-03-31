@@ -37,6 +37,7 @@
 
 #include <wolfssl/options.h>
 #include <wolfssl/openssl/x509v3.h>
+#include <wolfssl/openssl/pem.h>
 #include <wolfssl/ssl.h>
 #include <wolfssl/wolfcrypt/coding.h>
 #include <wolfssl/wolfcrypt/rsa.h>
