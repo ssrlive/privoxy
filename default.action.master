@@ -2305,6 +2305,8 @@ services.akteneinsichtsportal.de/
 /wp-content/plugins/pdf-viewer-for-elementor
 # URL = https://syndication.twitter.com/i/jot/embeds?l=%7B%22_category_%22%3A%22tfw_client_event%22%2C%22triggered_on%22%3A1709138733184%2C%22event_namespace%22%3A%7B%22client%22%3A%22tfw%22%2C%22page%22%3A%22tweet%22%2C%22action%22%3A%22seen%22%2C%22section%22%3A%22main%22%2C%22component%22%3A%22privacy-notice%22%7D%2C%22context%22%3A%22horizon%22%2C%22client_version%22%3A%222615f7e52b7e0%3A1702314776716%22%2C%22dnt%22%3Afalse%2C%22widget_id%22%3A%22twitter-widget-6%22%2C%22widget_origin%22%3A%22https%3A%2F%2Fwww.danisch.de%2Fblog%2F2024%2F01%2F31%2Fwas-ist-faschismus%2F%22%2C%22widget_frame%22%3A%22false%22%2C%22widget_partner%22%3A%22%22%2C%22widget_site_screen_name%22%3A%22%22%2C%22widget_site_user_id%22%3A%22%22%2C%22widget_creator_screen_name%22%3A%22%22%2C%22widget_creator_user_id%22%3A%22%22%2C%22widget_iframe_version%22%3A%22da31e07063cce%3A1708130301554%22%2C%22item_ids%22%3A%5B%221752320689309143351%22%5D%2C%22item_details%22%3A%7B%221752320689309143351%22%3A%7B%22item_type%22%3A0%7D%7D%7D
 syndication.twitter.com/
+# URL = https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/tukaani-project/xz
+archive.softwareheritage.org/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
