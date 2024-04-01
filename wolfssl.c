@@ -1201,10 +1201,10 @@ extern int create_server_ssl_connection(struct client_state *csp)
    {
       long verify_result = wolfSSL_get_error(ssl, connect_ret);
 
-#ifdef X509_V_OK
-      if (verify_result == X509_V_OK)
-#else
+#if LIBWOLFSSL_VERSION_HEX > 0x05005004
       if (verify_result == WOLFSSL_X509_V_OK)
+#else
+      if (verify_result == X509_V_OK)
 #endif
       {
          ret = 0;
