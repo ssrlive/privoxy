@@ -973,9 +973,9 @@ static void shutdown_connection(WOLFSSL *ssl, const char *type)
          return;
       }
       ret = wolfSSL_shutdown(ssl);
+      shutdown_attempts++;
       if (WOLFSSL_SUCCESS != ret)
       {
-         shutdown_attempts++;
          log_error(LOG_LEVEL_CONNECT, "Failed to shutdown %s connection "
             "on socket %d. Attempts so far: %d, ret: %d", type, fd,
             shutdown_attempts, ret);
