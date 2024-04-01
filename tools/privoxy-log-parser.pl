@@ -1976,6 +1976,11 @@ sub handle_loglevel_connect($) {
         $c =~ s@(?<=offset at )(\d+)@$h{'Number'}$1$h{'Standard'}@;
         $c =~ s@(?<=flushing )(\d+)@$h{'Number'}$1$h{'Standard'}@;
 
+    } elsif ($c =~ m/^Not shutting down client connection on/) {
+
+        # Not shutting down client connection on socket 8. The socket is no longer alive.
+        $c =~ s@(?<=socket )(\d+)@$h{'Number'}$1$h{'Standard'}@;
+
     } elsif ($c =~ m/^Looks like we / or
              $c =~ m/^Unsetting keep-alive flag/ or
              $c =~ m/^No connections to wait/ or
