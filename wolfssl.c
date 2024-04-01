@@ -960,7 +960,7 @@ static void shutdown_connection(WOLFSSL *ssl, const char *type)
    int shutdown_attempts = 0;
    int ret;
    int fd;
-   enum { MAX_SHUTDOWN_ATTEMPTS = 2 };
+   enum { MAX_SHUTDOWN_ATTEMPTS = 5 };
 
    fd = wolfSSL_get_fd(ssl);
 
