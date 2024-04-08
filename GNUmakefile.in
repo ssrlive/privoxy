@@ -932,7 +932,11 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 			else \
 				GROUP_T=$(GROUP) ;\
 			fi ;\
-			INSTALL_CONF="$(INSTALL_R) -g $$GROUP_T " ;\
+			if [ x$(GROUP_T) != x ]; then \
+				INSTALL_CONF="$(INSTALL_R) -g $$GROUP_T " ;\
+			else \
+				INSTALL_CONF="$(INSTALL_R)" ;\
+			fi ;\
 		else \
 			$(ECHO) "Superuser install, installing config files as $(USER):$(GROUP_T)" ;\
 			INSTALL_CONF="$(INSTALL_R) -o $(USER) -g $(GROUP_T)" ;\
