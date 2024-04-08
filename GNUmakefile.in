@@ -922,7 +922,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
 					GROUP_T=privoxy ;\
 				else \
 					$(ECHO)  "******************************************************************" ;\
-					$(ECHO)  " WARNING! WARNING! installing config files as root!" ;\
+					$(ECHO)  " WARNING! Installing config files as root!" ;\
 					$(ECHO)  " It is strongly recommended to run $(PROGRAM) as a non-root user," ;\
 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
