@@ -652,7 +652,7 @@ void log_error(int loglevel, const char *fmt, ...)
    char outbuf[LOG_BUFFER_SIZE+1];
    char tempbuf[LOG_BUFFER_SIZE];
    size_t length = 0;
-   const char * src = fmt;
+   const char *src = fmt;
    long thread_id;
    char timestamp[30];
    const size_t log_buffer_size = LOG_BUFFER_SIZE;
