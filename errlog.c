@@ -86,7 +86,7 @@ static FILE *logfp = NULL;
 static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR);
 
 /* static functions */
-static void fatal_error(const char * error_message);
+static void fatal_error(const char *error_message);
 #ifdef _WIN32
 static char *w32_socket_strerr(int errcode, char *tmp_buf);
 #endif
