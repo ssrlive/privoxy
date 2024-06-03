@@ -692,8 +692,8 @@ void log_error(int loglevel, const char *fmt, ...)
 #endif
       if (loglevel == LOG_LEVEL_FATAL)
       {
-         fatal_error("Fatal error. You're not supposed to"
-            "see this message. Please file a bug report.");
+         fatal_error("Fatal error. You're not supposed to "
+            "see this message. Please file a bug report.\n");
       }
       return;
    }
