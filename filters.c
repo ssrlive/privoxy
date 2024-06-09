@@ -1417,12 +1417,24 @@ int is_untrusted_url(const struct client_state *csp)
       }
    }
 
-   if (NULL == (referer = get_header_value(csp->headers, "Referer:")))
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp))
    {
-      /* no referrer was supplied */
-      return 1;
+      if (NULL == (referer = get_header_value(csp->https_headers, "Referer:")))
+      {
+         /* no referrer was supplied */
+         return 1;
+      }
    }
-
+   else
+#endif
+   {
+      if (NULL == (referer = get_header_value(csp->headers, "Referer:")))
+      {
+         /* no referrer was supplied */
+         return 1;
+      }
+   }
 
    /*
     * If not, do we maybe trust its referrer?
