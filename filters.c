@@ -1393,7 +1393,7 @@ int is_untrusted_url(const struct client_state *csp)
    struct block_spec *b;
    struct pattern_spec **trusted_url;
    struct http_request rhttp[1];
-   const char * referer;
+   const char *referer;
    jb_err err;
 
    /*
