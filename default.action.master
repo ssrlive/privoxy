@@ -2307,6 +2307,8 @@ services.akteneinsichtsportal.de/
 syndication.twitter.com/
 # URL = https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/tukaani-project/xz
 archive.softwareheritage.org/
+# URL = https://accounts.bahn.de/auth/realms/db/protocol/openid-connect/auth?redirect_uri=https%3A%2F%2Fwww.bahn.de%2F.resources%2Fbahn-common-light%2Fwebresources%2Fassets%2Fhtml%2Fauth.v1.html&client_id=kf_web&response_type=code&state=n5YWCG28EH&scope=openid%20vendo&response_mode=fragment&prompt=none&code_challenge=6oD6Udoq5PCYo_7jt1b5ICMbxoGqYmAoBpIQuOEAK0c&code_challenge_method=S256
+accounts.bahn.de/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block
