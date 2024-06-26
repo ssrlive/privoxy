@@ -36,7 +36,7 @@
 #include <openssl/bn.h>
 #include <openssl/opensslv.h>
 #include <openssl/pem.h>
-#include <openssl/md5.h>
+#include <openssl/sha.h>
 #include <openssl/x509v3.h>
 #ifdef _WIN32
 /* https://www.openssl.org/docs/faq.html
@@ -706,8 +706,8 @@ exit:
  *
  * Function    :  host_to_hash
  *
- * Description :  Creates MD5 hash from host name. Host name is loaded
- *                from structure csp and saved again into it.
+ * Description :  Creates a sha256 hash from host name. The host name
+ *                is taken from the csp structure and stored into it.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -719,14 +719,13 @@ exit:
 static int host_to_hash(struct client_state *csp)
 {
    int ret = 0;
+   size_t i;
 
-   memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
-   MD5((unsigned char *)csp->http->host, strlen(csp->http->host),
+   SHA256((unsigned char *)csp->http->host, strlen(csp->http->host),
       csp->http->hash_of_host);
 
    /* Converting hash into string with hex */
-   size_t i = 0;
-   for (; i < 16; i++)
+   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
    {
       if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
          csp->http->hash_of_host[i])) < 0)

@@ -38,7 +38,7 @@
 #  include MBEDTLS_CONFIG_FILE
 #endif
 
-#include "mbedtls/md5.h"
+#include "mbedtls/sha256.h"
 #include "mbedtls/pem.h"
 #include "mbedtls/base64.h"
 #include "mbedtls/error.h"
@@ -1787,8 +1787,8 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  *
  * Function    :  host_to_hash
  *
- * Description :  Creates MD5 hash from host name. Host name is loaded
- *                from structure csp and saved again into it.
+ * Description :  Creates a sha256 hash from host name. The host name
+ *                is taken from the csp structure and stored into it.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1799,25 +1799,14 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   int ret = 0;
+   int ret;
+   size_t i;
 
-#if !defined(MBEDTLS_MD5_C)
-#error mbedTLS needs to be compiled with md5 support
-#else
-   memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
-   ret = mbedtls_md5_ret((unsigned char *)csp->http->host,
-      strlen(csp->http->host), csp->http->hash_of_host);
-   if (ret != 0)
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "Failed to generate md5 hash of host %s: %d",
-         csp->http->host, ret);
-      return -1;
-   }
+   mbedtls_sha256((unsigned char *)csp->http->host,
+      strlen(csp->http->host), csp->http->hash_of_host, 0);
 
    /* Converting hash into string with hex */
-   size_t i = 0;
-   for (; i < 16; i++)
+   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
    {
       if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
          csp->http->hash_of_host[i])) < 0)
@@ -1828,7 +1817,7 @@ static int host_to_hash(struct client_state *csp)
    }
 
    return 0;
-#endif /* MBEDTLS_MD5_C */
+
 }
 
 /*********************************************************************

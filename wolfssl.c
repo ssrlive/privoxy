@@ -724,8 +724,8 @@ exit:
  *
  * Function    :  host_to_hash
  *
- * Description :  Creates MD5 hash from host name. Host name is loaded
- *                from structure csp and saved again into it.
+ * Description :  Creates a sha256 hash from host name. The host name
+ *                is taken from the csp structure and stored into it.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -736,33 +736,18 @@ exit:
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   wc_Md5 md5;
    int ret;
    size_t i;
 
-   ret = wc_InitMd5(&md5);
+   ret = wc_Sha256Hash((const byte *)csp->http->host,
+      (word32)strlen(csp->http->host), (byte *)csp->http->hash_of_host);
    if (ret != 0)
    {
-      return -1;
+        return -1;
    }
-
-   ret = wc_Md5Update(&md5, (const byte *)csp->http->host,
-      (word32)strlen(csp->http->host));
-   if (ret != 0)
-   {
-      return -1;
-   }
-
-   ret = wc_Md5Final(&md5, csp->http->hash_of_host);
-   if (ret != 0)
-   {
-      return -1;
-   }
-
-   wc_Md5Free(&md5);
 
    /* Converting hash into string with hex */
-   for (i = 0; i < 16; i++)
+   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
    {
       ret = snprintf((char *)csp->http->hash_of_host_hex + 2 * i,
          sizeof(csp->http->hash_of_host_hex) - 2 * i,
@@ -775,6 +760,7 @@ static int host_to_hash(struct client_state *csp)
    }
 
    return 0;
+
 }
 
 
