@@ -1799,24 +1799,10 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   int ret;
-   size_t i;
-
    mbedtls_sha256((unsigned char *)csp->http->host,
       strlen(csp->http->host), csp->http->hash_of_host, 0);
 
-   /* Converting hash into string with hex */
-   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
-   {
-      if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
-         csp->http->hash_of_host[i])) < 0)
-      {
-         log_error(LOG_LEVEL_ERROR, "Sprintf return value: %d", ret);
-         return -1;
-      }
-   }
-
-   return 0;
+   return create_hexadecimal_hash_of_host(csp);
 
 }
 

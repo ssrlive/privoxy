@@ -736,3 +736,38 @@ extern int enforce_sane_certificate_state(const char *certificate, const char *k
    return 0;
 
 }
+
+
+/*********************************************************************
+ *
+ * Function    :  create_hexadecimal_hash_of_host
+ *
+ * Description :  Converts the binary hash of a host into a
+ *                hexadecimal string.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     : -1 => Error while creating hash
+ *                0 => Hash created successfully
+ *
+ *********************************************************************/
+int create_hexadecimal_hash_of_host(struct client_state *csp)
+{
+   int i;
+   int ret;
+
+   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
+   {
+      ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
+         csp->http->hash_of_host[i]);
+      if (ret < 0)
+      {
+         log_error(LOG_LEVEL_ERROR, "sprintf() return value: %d", ret);
+         return -1;
+      }
+   }
+
+   return 0;
+
+}

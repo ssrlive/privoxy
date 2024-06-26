@@ -718,24 +718,11 @@ exit:
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   int ret = 0;
-   size_t i;
-
    SHA256((unsigned char *)csp->http->host, strlen(csp->http->host),
       csp->http->hash_of_host);
 
-   /* Converting hash into string with hex */
-   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
-   {
-      if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
-         csp->http->hash_of_host[i])) < 0)
-      {
-         log_error(LOG_LEVEL_ERROR, "Sprintf return value: %d", ret);
-         return -1;
-      }
-   }
+   return create_hexadecimal_hash_of_host(csp);
 
-   return 0;
 }
 
 
