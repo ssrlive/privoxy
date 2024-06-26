@@ -7,7 +7,7 @@
  *                using mbedTLS.
  *
  * Copyright   :  Written by and Copyright (c) 2017-2020 Vaclav Svec. FIT CVUT.
- *                Copyright (C) 2018-2021 by Fabian Keil <fk@fabiankeil.de>
+ *                Copyright (C) 2018-2024 by Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
