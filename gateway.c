@@ -37,6 +37,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <stddef.h>
 #include <sys/types.h>
 
 #ifndef _WIN32
