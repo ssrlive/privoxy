@@ -1495,8 +1495,10 @@ static int generate_key(struct client_state *csp, char **key_buf)
 {
    int ret = 0;
    char* key_file_path;
+#if (OPENSSL_VERSION_NUMBER < 0x30000000L)
    BIGNUM *exp;
    RSA *rsa;
+#endif
    EVP_PKEY *key;
 
    key_file_path = make_certs_path(csp->config->certificate_directory,
@@ -1515,6 +1517,7 @@ static int generate_key(struct client_state *csp, char **key_buf)
       return 0;
    }
 
+#if (OPENSSL_VERSION_NUMBER < 0x30000000L)
    exp = BN_new();
    rsa = RSA_new();
    key = EVP_PKEY_new();
@@ -1547,6 +1550,9 @@ static int generate_key(struct client_state *csp, char **key_buf)
       ret = -1;
       goto exit;
    }
+#else
+   key = EVP_RSA_gen(RSA_KEYSIZE);
+#endif
 
    /*
     * Exporting private key into file
@@ -1563,6 +1569,7 @@ exit:
    /*
     * Freeing used variables
     */
+#if (OPENSSL_VERSION_NUMBER < 0x30000000L)
    if (exp)
    {
       BN_free(exp);
@@ -1571,6 +1578,7 @@ exit:
    {
       RSA_free(rsa);
    }
+#endif
    if (key)
    {
       EVP_PKEY_free(key);
