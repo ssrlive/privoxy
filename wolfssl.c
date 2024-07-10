@@ -157,6 +157,8 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
       return 0;
    }
 
+   wolfSSL_ERR_clear_error();
+
    ssl = ssl_attr->wolfssl_attr.ssl;
    fd = wolfSSL_get_fd(ssl);
 
@@ -206,6 +208,7 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
    int fd = -1;
 
    memset(buf, 0, max_length);
+   wolfSSL_ERR_clear_error();
 
    /*
     * Receiving data from SSL context into buffer
