@@ -825,7 +825,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    ssl_attr->wolfssl_attr.ctx = wolfSSL_CTX_new(wolfSSLv23_method());
    if (ssl_attr->wolfssl_attr.ctx == NULL)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Unable to create TLS context");
+      log_error(LOG_LEVEL_ERROR, "Unable to create TLS context.");
       ret = -1;
       goto exit;
    }
@@ -834,8 +834,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
    if (wolfSSL_CTX_use_certificate_file(ssl_attr->wolfssl_attr.ctx,
          cert_file, SSL_FILETYPE_PEM) != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR,
-         "Loading host certificate %s failed", cert_file);
+      log_error(LOG_LEVEL_ERROR,
+         "Loading host certificate %s failed.", cert_file);
       ret = -1;
       goto exit;
    }
@@ -843,8 +843,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
    if (wolfSSL_CTX_use_PrivateKey_file(ssl_attr->wolfssl_attr.ctx,
          key_file, SSL_FILETYPE_PEM) != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR,
-         "Loading host certificate private key %s failed", key_file);
+      log_error(LOG_LEVEL_ERROR,
+         "Loading host certificate private key %s failed.", key_file);
       ret = -1;
       goto exit;
    }
@@ -855,8 +855,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
 
    if (wolfSSL_set_fd(ssl, csp->cfd) != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR,
-         "wolfSSL_set_fd() failed to set the client socket");
+      log_error(LOG_LEVEL_ERROR,
+         "wolfSSL_set_fd() failed to set the client socket.");
       ret = -1;
       goto exit;
    }
@@ -865,8 +865,8 @@ extern int create_client_ssl_connection(struct client_state *csp)
    {
       if (!wolfSSL_set_cipher_list(ssl, csp->config->cipher_list))
       {
-         log_ssl_errors(LOG_LEVEL_ERROR,
-            "Setting the cipher list '%s' for the client connection failed",
+         log_error(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the client connection failed.",
             csp->config->cipher_list);
          ret = -1;
          goto exit;
@@ -1089,7 +1089,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    ssl_attrs->ctx = wolfSSL_CTX_new(wolfSSLv23_method());
    if (ssl_attrs->ctx == NULL)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "TLS context creation failed");
+      log_error(LOG_LEVEL_ERROR, "TLS context creation failed");
       ret = -1;
       goto exit;
    }
@@ -1101,7 +1101,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    else if (wolfSSL_CTX_load_verify_locations(ssl_attrs->ctx,
       csp->config->trusted_cas_file, NULL) != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Loading trusted CAs file %s failed",
+      log_error(LOG_LEVEL_ERROR, "Loading trusted-cas-file '%s' failed.",
          csp->config->trusted_cas_file);
       ret = -1;
       goto exit;
@@ -1113,8 +1113,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
 
    if (wolfSSL_set_fd(ssl, csp->server_connection.sfd) != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR,
-         "wolfSSL_set_fd() failed to set the server socket");
+      log_error(LOG_LEVEL_ERROR,
+         "wolfSSL_set_fd() failed to set the server socket.");
       ret = -1;
       goto exit;
    }
@@ -1123,8 +1123,8 @@ extern int create_server_ssl_connection(struct client_state *csp)
    {
       if (wolfSSL_set_cipher_list(ssl, csp->config->cipher_list) != WOLFSSL_SUCCESS)
       {
-         log_ssl_errors(LOG_LEVEL_ERROR,
-            "Setting the cipher list '%s' for the server connection failed",
+         log_error(LOG_LEVEL_ERROR,
+            "Setting the cipher list '%s' for the server connection failed.",
             csp->config->cipher_list);
          ret = -1;
          goto exit;
@@ -1135,7 +1135,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
       csp->http->host, (unsigned short)strlen(csp->http->host));
    if (ret != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR, "Failed to set use of SNI");
+      log_error(LOG_LEVEL_ERROR, "Failed to set use of SNI.");
       ret = -1;
       goto exit;
    }
@@ -1156,7 +1156,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
 #warning wolfssl has been compiled with HAVE_SECURE_RENEGOTIATION while you probably want HAVE_RENEGOTIATION_INDICATION
    if(wolfSSL_UseSecureRenegotiation(ssl) != WOLFSSL_SUCCESS)
    {
-      log_ssl_errors(LOG_LEVEL_ERROR,
+      log_error(LOG_LEVEL_ERROR,
          "Failed to enable 'Secure' Renegotiation. Continuing anyway.");
    }
 #endif
