@@ -1538,6 +1538,12 @@ static int generate_key(struct client_state *csp, char **key_buf)
    }
 #else
    key = EVP_RSA_gen(RSA_KEYSIZE);
+   if (key == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR, "EVP_RSA_gen() failed");
+      ret = -1;
+      goto exit;
+   }
 #endif
 
    /*
