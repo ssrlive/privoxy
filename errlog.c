@@ -339,7 +339,7 @@ void init_error_log(const char *prog_name, const char *logfname)
        * reopen it if the file name changed or if the
        * configuration reload was caused by a SIGHUP.
        */
-      log_error(LOG_LEVEL_INFO, "Failed to reopen logfile: \'%s\'. "
+      log_error(LOG_LEVEL_INFO, "Failed to reopen logfile: \'%s\': %E. "
          "Retrying after closing the old file descriptor first. If that "
          "doesn't work, Privoxy will exit without being able to log a message.",
          logfname);
@@ -352,7 +352,8 @@ void init_error_log(const char *prog_name, const char *logfname)
 
    if (NULL == fp)
    {
-      log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: \'%s\'", logfname);
+      log_error(LOG_LEVEL_FATAL,
+         "init_error_log(): can't open logfile \'%s\': %E", logfname);
    }
 
 #ifdef FEATURE_EXTERNAL_FILTERS
