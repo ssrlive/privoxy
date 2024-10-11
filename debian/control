@@ -18,7 +18,7 @@ Build-Depends: autoconf,
                sgmlspl <!nodoc>,
                w3m <!nodoc>,
                zlib1g-dev
-Standards-Version: 4.6.2
+Standards-Version: 4.7.0
 Homepage: https://www.privoxy.org/
 Vcs-Git: https://salsa.debian.org/debian/privoxy.git
 Vcs-Browser: https://salsa.debian.org/debian/privoxy
