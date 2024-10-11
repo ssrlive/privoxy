@@ -35,7 +35,7 @@
 
  Purpose     :  user manual
 
- Copyright (C) 2001-2023 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2024 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ========================================================================
@@ -8209,10 +8209,9 @@ EXTERNAL-FILTER: citation-needed Adds a "[citation needed]" tag to an image. The
 </para>
 <para>
  To do this, each browser has the certificates of multiple CAs in its
- trust store.  Only if the certificate of the CA, that signed the web
- server is in the trust store, the browser will accept the
- certificate, otherwise the browser will complain about a broken
- certificate.
+ trust store.  The browser will only accept the certificate if the CA
+ that signed it is in its trust store, otherwise it will warn that the
+ certificate is not valid.
 </para>
 <para>
  If this check passes, the browser sends a random number encrypted
@@ -8227,16 +8226,16 @@ EXTERNAL-FILTER: citation-needed Adds a "[citation needed]" tag to an image. The
 <para>
  When we try to inspect HTTPS traffic, we have to break the TLS
  encryption between browser and web server without being the browser
- or the web server.  This is exactly what TLS tries to avoid, as it's
- a man-in-the-middle-attack.
+ or the web server.  This is exactly what TLS is designed to prevent,
+ because it's a man-in-the-middle attack.
 </para>
 <para>
- To do this, Privoxy uses it's own (private) CA (let's call it
- "Privoxy CA"), which has to be added to the trust store of every
- single browser that should be used with Privoxy and HTTPS inspection.
+ To do this, Privoxy uses its own (private) CA (let's call it
+ "Privoxy CA"), which needs to be added to the trust store of every
+ single browser that you want to use with Privoxy and HTTPS inspection.
 </para>
 <para>
- Now Privoxy breaks the connection between browser and webserver by
+ Privoxy then breaks the connection between browser and webserver by
  acting as a browser/client when talking to the webserver (including
  checking the webserver's TLS certificate against it's own trust
  store).  Now Privoxy can read and modify the traffic from the
@@ -8252,14 +8251,14 @@ EXTERNAL-FILTER: citation-needed Adds a "[citation needed]" tag to an image. The
 <sect3 id="h2-hi-invalid-cert"><title>What happens, if the original
  certificate is invalid?</title>
 <para>
- If Privoxy detects, that a TLS certificate is not valid, because the
- certificate is expired, doesn't match the hostname, is self signed or
- similar, Privoxy blocks the requests and returns an error message
- explaining the problem to avoid that the user/browser communicates
- over an insecure communication channel.
+ If Privoxy detects that a TLS certificate is invalid, because it's
+ expired, doesn't match the hostname, is self-signed, or similar,
+ Privoxy will block the requests and return an error message
+ explaining the problem to prevent the user/browser from communicating
+ over an insecure channel.
 </para>
 <para>
- To check this behavior, simply go to
+ To test this behavior, just go to
  <ulink url="https://badssl.com/">https://badssl.com/</ulink>
 </para>
 </sect3>
@@ -8276,10 +8275,10 @@ EXTERNAL-FILTER: citation-needed Adds a "[citation needed]" tag to an image. The
 <para>
  If the feature is not enabled, you may need to
  <link linkend="installation-source">build Privoxy from source</link>
- to enable it.  You can use either
+ to enable it.  You can choose to use either
  <ulink url="https://www.trustedfirmware.org/projects/mbed-tls/">MbedTLS</ulink>
- or <ulink url="https://www.openssl.org/">OpenSSL</ulink>.  It's up to
- you, which one to use, they both behave the same for HTTPS inspection.
+ or <ulink url="https://www.openssl.org/">OpenSSL</ulink>.  You can
+ choose either one, as they both behave the same for HTTPS inspection.
 </para>
 <para>
  After installing the development libraries for either OpenSSL or
@@ -8320,23 +8319,23 @@ openssl req -new -x509 -extensions v3_ca -keyout privoxy.pem -out privoxy.crt -d
 </screen>
 </para>
 <para>
- Here we have defined a CA validity of 10 years (3650 days).  You
- should decide for yourself what is a good validity.  A shorter
- validity makes your system more secure (it doesn't hurt that long if
- the key gets lost to an attacker), but if the certificate expires
- before you have replaced it with a new one in Privoxy and in all
- browsers, the communication will fail.
+ In this example, a CA validity of 10 years (3650 days) is defined.
+ You should set the appropriate validity period based on your needs.
+ A shorter validity makes your system more secure (it doesn't hurt
+ that long if the key gets lost to an attacker), but if the
+ certificate expires before you have replaced it with a new one in
+ Privoxy and in all browsers, the communication will fail.
 </para>
 <para>
- During the key generation you will be asked for a "pass phrase".
- This pass phrase will appear in the Privoxy config CGI, so don't
- reuse it elsewhere!
+ During key generation you will be asked to provide a "PEM pass
+ phrase".  This passphrase will appear in the Privoxy config CGI, so
+ don't reuse it elsewhere!
 </para>
 <para>
  Then you will be asked for Country Name, State/Province, Locality,
- Orginzation Name, Common Name, and Email Address.  You should add
- some useful data here, because these entries are shown by the browser
- as "Issuer Name" when you inspect a certificate from an
+ Orginzation Name, Common Name, and Email Address.  You should fill in
+ some useful data here, because these entries will be shown by the
+ browser as "Issuer Name" when you inspect a certificate from an
  https-inspection site.  Especially the "Common Name" will be shown as
  the name of your CA, so it's good if you (and other users of your
  Privoxy instance) are able to identify this CA.
@@ -8349,7 +8348,7 @@ openssl req -new -x509 -extensions v3_ca -keyout privoxy.pem -out privoxy.crt -d
 </para>
 <para>
  Make sure that the private key (<filename>privoxy.pem</filename> in
- the above example) is only accessible to the user running Privoxy
+ the example above) is only accessible to the user running Privoxy
  (usually named "privoxy"):
 </para>
  <screen>
@@ -8357,7 +8356,7 @@ chmod 600 privoxy.pem
 chown privoxy privoxy.pem
 </screen>
 <para>
- Now adjust your Privoxy <link linkend="config">configuration</link>:
+ Now customize your Privoxy <link linkend="config">configuration</link>:
 </para>
  <screen>
 <link linkend="ca-directory">ca-directory</link> /etc/privoxy/CA # read-only
@@ -8374,7 +8373,7 @@ chown privoxy privoxy.pem
 </para>
  <screen>
 chown privoxy /var/lib/privoxy/certs
-chmod 700 /var/lib/privoxy/certs.
+chmod 700 /var/lib/privoxy/certs
 </screen>
 <para>
  <link linkend="trusted-cas-file">trusted-cas-file</link> is the trust
@@ -8391,7 +8390,7 @@ chmod 700 /var/lib/privoxy/certs.
 
 <sect3 id="h2-hi-browser"><title>Browser configuration</title>
 <para>
- As written above, each browser you use must now trust the newly
+ As mentioned earlier, each browser you use must now trust the newly
  created Privoxy CA certificate (<filename>privoxy.crt</filename>).
 </para>
 <para>
@@ -8409,7 +8408,7 @@ chmod 700 /var/lib/privoxy/certs.
  (<ulink url="chrome://settings/privacy">chrome://settings/privacy</ulink>).
  Click on "Security" and on the opened sub-page on "Manage
  certificates".  Now go to the "Authorities" tab and
- import <filename>privoxy.crt</filename> and configure that you trust
+ import <filename>privoxy.crt</filename> and configure it to trust
  the certificate for website identification.
 </para>
 </sect3>
@@ -8447,8 +8446,8 @@ clienttest.ssllabs.com
 <!--   ~~~~~~~~       New section Header    ~~~~~~~~~     -->
 <sect2 id="h2-client-tags"><title>Client Tags HOWTO</title>
 <para>
- Client-Tags are a mechanism to dynamically/temporarily enable/disable
- features in Privoxy per browser.
+ Client Tags are a mechanism to dynamically or temporarily enable and
+ disable features in Privoxy for each browser instance.
 </para>
 <para>
  In our example, we use this for the following two use cases:
@@ -8470,18 +8469,18 @@ clienttest.ssllabs.com
  Now you can open <ulink
  url="http://config.privoxy.org/client-tags">http://config.privoxy.org/client-tags</ulink>
  or <ulink url="http://p.p/client-tags">http://p.p/client-tags</ulink>
- and can enable/disable the tag there (you may want to add a bookmark
- for this in your browser for quick access, but it's also available as
- a link at <ulink url="http://p.p">http://p.p</ulink>).
+ and enable or disable the tag there (you may want to bookmark
+ this page for quick access, though it is also available via a link
+ at <ulink url="http://p.p">http://p.p</ulink>).
 </para>
 <para>
- It's also possible to temporarily enable a tag, which by default
- means 3 minutes (=180 seconds) (and can be changed via the
- <link linkend="client-tag-lifetime">client-tag-lifetime</link> option
- in <link linkend="config">config</link>).
+ You can also temporarily enable a tag, which by default means 3
+ minutes (180 seconds) (and can be changed using the
+ <link linkend="client-tag-lifetime">client-tag-lifetime</link>
+ option in <link linkend="config">config</link>).
 </para>
 <para>
- But before this has any effect, you have to use the client tag in
+ Before this takes effect, you must reference the client tag in
  your <link linkend="user-action">user.action</link> like this:
 </para>
  <screen>
@@ -8489,9 +8488,9 @@ clienttest.ssllabs.com
 <link linkend="client-tag-pattern">CLIENT-TAG</link>:^tor$
 </screen>
 <para>
- This means, that if the "tor" client tag is enabled, all traffic is
- forwarded by Privoxy through socks5t to a locally installed tor proxy
- listening on port 9050.
+ This means that if the "tor" client tag is enabled, all traffic will
+ be forwarded by Privoxy through SOCKS5T to a locally installed tor
+ proxy listening on port 9050.
 </para>
 <para>
  Similarly, you can specify to use the https-inspection client tag to
@@ -8503,8 +8502,9 @@ clienttest.ssllabs.com
 </screen>
 <para>
  The tag will be set for all requests coming from clients that have
- requested it to be set.  Note that "clients" are distinguished by IP
- address, if the IP address changes, the tag must be requested again.
+ requested it to be set.  Note that "clients" are distinguished by
+ their IP address.  If the IP address changes, the tag must be
+ requested again.
 </para>
 </sect2>
 
