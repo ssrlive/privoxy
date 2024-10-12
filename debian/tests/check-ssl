@@ -1,0 +1,138 @@
+#!/bin/sh
+#
+# Run privoxy-regression-test.pl --check-bad-ssl
+# and check https://www.howsmyssl.com/
+#
+# (c) 2024 Roland Rosenfeld <roland@debian.org>
+
+PORT=8119
+
+if [ -z "$AUTOPKGTEST_TMP" ]; then
+    AUTOPKGTEST_TMP=$(mktemp -d)
+fi
+
+trap 'rm -rf "$AUTOPKGTEST_TMP"' EXIT
+
+CONFIG=$AUTOPKGTEST_TMP/config
+PIDFILE=$AUTOPKGTEST_TMP/privoxy.pid
+PRIVOXY=$AUTOPKGTEST_TMP/privoxy
+
+cp /usr/sbin/privoxy "$PRIVOXY"
+
+OUTFILE=$AUTOPKGTEST_TMP/checkssl-test-output
+DAEMONOUT=$AUTOPKGTEST_TMP/checkssl-daemon-output
+CERTDIR=$AUTOPKGTEST_TMP/certs
+CADIR=$AUTOPKGTEST_TMP/CA
+
+mkdir "$CERTDIR"
+chmod 700 "$CERTDIR"
+CASFILE=/etc/ssl/certs/ca-certificates.crt
+CADIR="$AUTOPKGTEST_TMP"/CA
+mkdir "$CADIR"
+PRIVOXYCRT="$CADIR"/privoxy.crt
+PRIVOXYKEY="$CADIR"/privoxy.pem
+
+echo "Generate SSL key-pair"
+SSLPASS=foobar
+openssl req -new -x509 -extensions v3_ca -keyout "$PRIVOXYKEY" \
+        -out "$PRIVOXYCRT" -days 2 -passout pass:"$SSLPASS" \
+        -batch 2>/dev/null
+
+echo "Generate privoxy config"
+ACTION="$AUTOPKGTEST_TMP/httpsinspection.action"
+cat <<EOF > "$ACTION"
+{+https-inspection}
+/ # match all
+EOF
+
+sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
+    -e "s%^logdir.*%logdir $AUTOPKGTEST_TMP%" \
+    -e "s/^#debug 65536/debug 13551/" \
+    -e "s/^keep-alive-timeout.*/keep-alive-timeout 21/" \
+    -e "s/^#connection-sharing.*/connection-sharing 0/" \
+    -e "s%^#ca-directory.*%ca-directory $CADIR%" \
+    -e "s/^#ca-cert-file.*/ca-cert-file privoxy.crt/" \
+    -e "s/^#ca-key-file.*/ca-key-file privoxy.pem/" \
+    -e "s/^#ca-password.*/ca-password $SSLPASS/" \
+    -e "s%^#certificate-directory.*%certificate-directory $CERTDIR%" \
+    -e "s%^#trusted-cas-file.*%trusted-cas-file $CASFILE%" \
+    < /usr/share/privoxy/config > "$CONFIG"
+echo "actionsfile $ACTION" >> "$CONFIG"
+
+echo "Starting privoxy on port $PORT"
+$PRIVOXY --pidfile "$PIDFILE" --no-daemon "$CONFIG" > "$DAEMONOUT" 2>&1 &
+sleep 1
+
+CURL_CA_BUNDLE="$PRIVOXYCRT"
+export CURL_CA_BUNDLE
+http_proxy=http://127.0.0.1:$PORT/
+export http_proxy
+
+/usr/bin/privoxy-regression-test --check-bad-ssl \
+    | tee "$OUTFILE" 2>&1
+
+RET=0
+grep -q 'All requests resulted in status code 403 as expected.' "$OUTFILE" \
+     || RET=1
+
+echo "check https://www.howsmyssl.com"
+HOWSMYSSL="$AUTOPKGTEST_TMP"/howsmysql.json
+curl -sS -x "$http_proxy" https://www.howsmyssl.com/a/check > "$HOWSMYSSL"
+
+echo "check TLS version"
+tls_version=$(jq -r '.tls_version' "$HOWSMYSSL")
+if [ "$tls_version" != "TLS 1.2" ] && [ "$tls_version" != "TLS 1.3" ]
+then
+    echo "ERROR: TLS-Version is $tls_version"
+    RET=1
+fi
+
+echo "check values, that should be false"
+for i in beast_vuln tls_compression_supported unknown_cipher_suite_supported
+do
+    checkfalse=$(jq ".$i" "$HOWSMYSSL")
+    if [ "$checkfalse" != "false" ]
+    then
+        echo "ERROR: $i is not false but $checkfalse"
+        RET=1
+    fi
+done
+
+echo "check values, that should be true"
+for i in ephemeral_keys_supported session_ticket_supported
+do
+    checktrue=$(jq ".$i" "$HOWSMYSSL")
+    if [ "$checktrue" != "true" ]
+    then
+        echo "ERROR: $i is not true but $checktrue"
+        RET=1
+    fi
+done
+
+echo "check insecure cipher suites"
+insecure_cipher_suites=$(jq '.insecure_cipher_suites' "$HOWSMYSSL")
+if [ "$insecure_cipher_suites" != '{}' ]
+then
+    echo "ERROR: insecure_cipher_suites is not empty: $insecure_cipher_suites"
+    RET=1
+fi
+
+echo "check overall rating"
+rating=$(jq -r '.rating' "$HOWSMYSSL")
+if [ "$rating" != "Probably Okay" ]
+then
+    echo "ERROR: Rating is $rating"
+    RET=1
+fi
+
+echo "Stopping privoxy on port $PORT"
+kill "$(cat "$PIDFILE")"
+
+# Place privoxy output into artifacts:
+if [ -d "$AUTOPKGTEST_ARTIFACTS" ]
+then
+    cp -a "$OUTFILE" "$DAEMONOUT" "$CADIR" "$CERTDIR" "$HOWSMYSSL" \
+       "$AUTOPKGTEST_ARTIFACTS"/
+fi
+
+return $RET

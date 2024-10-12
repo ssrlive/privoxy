@@ -2,9 +2,24 @@ privoxy (3.0.35~gitsnapshot-1) UNRELEASED; urgency=medium
 
   * Unreleased GIT snapshot.
   * The following patches are now incorporated upstream: 35_pcre2-support,
-    36_pcre2-patternfix, 37_socks-bufferoverflow.
+    36_pcre2-patternfix, 37_socks-bufferoverflow, 38_filter.c-init1,
+    39_filter.c-init2, 40_openssl-deprwarn, 41_md5-to-sha256.
 
  -- Roland Rosenfeld <roland@debian.org>  Fri, 11 Oct 2024 16:31:33 +0200
+
+privoxy (3.0.34-6) unstable; urgency=medium
+
+  * d/test/check-ssl: run privoxy-regression-test --check-bad-ssl.
+  * debian/rules: preserve upstream install-sh on clean.
+  * 38_filter.c-init1, 39_filter.c-init2: initialize variables in
+    filter.c.
+  * d/test/check-ssl: Add tests via howsmyssl.com.
+  * Switch from mbedTLS to OpenSSL (Closes: #1075870).
+  * 40_openssl-deprwarn: Get rid of some openssl deprecation warnings.
+  * 41_md5-to-sha256: Use sha256 as hash algorithm for cert/key files.
+  * debian/salsa-ci.yml: Update to new recipe.
+
+ -- Roland Rosenfeld <roland@debian.org>  Sat, 12 Oct 2024 17:00:09 +0200
 
 privoxy (3.0.34-5) unstable; urgency=medium
 

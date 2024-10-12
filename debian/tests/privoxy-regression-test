@@ -22,8 +22,8 @@ cp /usr/sbin/privoxy "$PRIVOXY"
 http_proxy=http://127.0.0.1:$PORT/
 export http_proxy
 
-OUTFILE=$AUTOPKGTEST_TMP/test-output
-DAEMONOUT=$AUTOPKGTEST_TMP/daemon-output
+OUTFILE=$AUTOPKGTEST_TMP/regression-test-output
+DAEMONOUT=$AUTOPKGTEST_TMP/regression-daemon-output
 
 echo "#### pass 1: some optiones disabled"
 
