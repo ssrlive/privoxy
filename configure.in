@@ -1301,8 +1301,8 @@ dnl ========================================================
 FEATURE_HTTPS_INSPECTION_ONLY_WOLFSSL=#
 OPT_WOLFSSL=no
 AC_ARG_WITH(wolfssl,dnl
-AC_HELP_STRING([--with-wolfssl], [Enable Wolfssl/LibreSSL detection for https inspection.])
-AC_HELP_STRING([--without-wolfssl], [Disable Wolfssl/LibreSSL detection]),
+AC_HELP_STRING([--with-wolfssl], [Enable wolfSSL detection for https inspection.])
+AC_HELP_STRING([--without-wolfssl], [Disable wolfSSL detection]),
   OPT_WOLFSSL=$withval)
 
 if test X"$OPT_WOLFSSL" != Xno; then
