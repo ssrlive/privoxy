@@ -12,7 +12,7 @@
  *
  *                Stick to the short names in this file for consistency.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2014 the
+ * Copyright   :  Written by and Copyright (C) 2001-2023 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -369,38 +369,6 @@ static jb_err get_file_name_param(struct client_state *csp,
 	                                   const char *param_name,
 	                                   const char **pfilename);
 
-/* Internal convenience functions */
-static char *section_target(const unsigned sectionid);
-
-/*********************************************************************
- *
- * Function    :  section_target
- *
- * Description :  Given an unsigned (section id) n, produce a dynamically
- *                allocated string of the form #l<n>, for use in link
- *                targets.
- *
- *                XXX: The hash should be moved into the templates
- *                to make this function more generic and render
- *                stringify() obsolete.
- *
- * Parameters  :
- *          1  :  sectionid = start line number of section
- *
- * Returns     :  String with link target, or NULL if out of
- *                memory
- *
- *********************************************************************/
-static char *section_target(const unsigned sectionid)
-{
-   char buf[30];
-
-   snprintf(buf, sizeof(buf), "#l%u", sectionid);
-   return(strdup(buf));
-
-}
-
-
 /*********************************************************************
  *
  * Function    :  stringify
@@ -558,7 +526,7 @@ jb_err cgi_edit_actions_url_form(struct client_state *csp,
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
    if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
-   if (!err) err = map(exports, "jumptarget", 1, section_target(section_start_line_number), 0);
+   if (!err) err = map(exports, "jumptarget", 1, stringify(section_start_line_number), 0);
 
    edit_free_file(file);
 
@@ -718,7 +686,7 @@ jb_err cgi_edit_actions_remove_url_form(struct client_state *csp,
    if (!err) err = map(exports, "v", 1, file->version_str, 1);
    if (!err) err = map(exports, "p", 1, url_encode(lookup(parameters, "p")), 0);
    if (!err) err = map(exports, "u", 1, html_encode(cur_line->unprocessed), 0);
-   if (!err) err = map(exports, "jumptarget", 1, section_target(section_start_line_number), 0);
+   if (!err) err = map(exports, "jumptarget", 1, stringify(section_start_line_number), 0);
    if (!err) err = map(exports, "actions-file", 1, html_encode(file->filename), 0);
 
    edit_free_file(file);

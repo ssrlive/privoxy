@@ -62,7 +62,7 @@
 */
 #define CERT_INFO_BUF_SIZE         4096
 #define ISSUER_NAME_BUF_SIZE       2048
-#define HASH_OF_HOST_BUF_SIZE      16
+#define HASH_OF_HOST_BUF_SIZE      32
 #endif /* FEATURE_HTTPS_INSPECTION */
 
 #ifdef FEATURE_HTTPS_INSPECTION_MBEDTLS
@@ -86,6 +86,11 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
+
+#ifdef FEATURE_HTTPS_INSPECTION_WOLFSSL
+#include <wolfssl/options.h>
+#include <wolfssl/ssl.h>
+#endif /* FEATURE_HTTPS_INSPECTION_WOLFSSL */
 
 /* Need for struct sockaddr_storage */
 #ifdef HAVE_RFC2553
@@ -330,6 +335,17 @@ typedef struct {
    BIO *bio;
 } openssl_connection_attr;
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
+
+#ifdef FEATURE_HTTPS_INSPECTION_WOLFSSL
+/*
+ * Struct of attributes necessary for TLS/SSL connection
+ */
+typedef struct {
+   WOLFSSL_CTX *ctx;
+   WOLFSSL *ssl;
+} wolfssl_connection_attr;
+#endif /* def FEATURE_HTTPS_INSPECTION_WOLFSSL */
+
 /**
  * A HTTP request.  This includes the method (GET, POST) and
  * the parsed URL.
@@ -995,6 +1011,9 @@ struct ssl_attr {
 #ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
    openssl_connection_attr  openssl_attr; /* OpenSSL atrrs */
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
+#ifdef FEATURE_HTTPS_INSPECTION_WOLFSSL
+   wolfssl_connection_attr wolfssl_attr; /* wolfSSL atrrs */
+#endif /* FEATURE_HTTPS_INSPECTION_WOLFSSL */
    int dummy;
 };
 /**
@@ -1137,7 +1156,7 @@ struct client_state
 #define SSL_CERT_NOT_VERIFIED   0xFFFFFFFF
    uint32_t server_cert_verification_result;
 #endif /* FEATURE_HTTPS_INSPECTION_MBEDTLS */
-#ifdef FEATURE_HTTPS_INSPECTION_OPENSSL
+#if defined(FEATURE_HTTPS_INSPECTION_OPENSSL) || defined(FEATURE_HTTPS_INSPECTION_WOLFSSL)
 #define SSL_CERT_NOT_VERIFIED    ~0L
    long server_cert_verification_result;
 #endif /* FEATURE_HTTPS_INSPECTION_OPENSSL */
@@ -1321,9 +1340,9 @@ enum filter_type
 };
 
 #ifdef FEATURE_EXTERNAL_FILTERS
-#define MAX_FILTER_TYPES        9
+#define MAX_FILTER_TYPES        10
 #else
-#define MAX_FILTER_TYPES        8
+#define MAX_FILTER_TYPES        9
 #endif
 
 /**

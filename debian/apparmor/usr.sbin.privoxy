@@ -7,6 +7,7 @@
   capability setgid,
   capability setuid,
 
+  /usr/sbin/privoxy mr,
   /etc/privoxy/** r,
   owner /etc/privoxy/match-all.action rw,
   owner /etc/privoxy/user.action rw,
@@ -15,4 +16,5 @@
   /usr/share/doc/privoxy/p_doc.css r,
   owner /var/lib/privoxy/** rw,
   owner /var/log/privoxy/logfile rw,
+  /etc/ssl/openssl.cnf r,
 }

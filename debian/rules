@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-# (c) 2002-2022 Roland Rosenfeld <roland@debian.org>
+# (c) 2002-2024 Roland Rosenfeld <roland@debian.org>
 #
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -12,6 +12,11 @@ DEBDIR=`pwd`/debian/privoxy
 
 %:
 	dh $@
+
+override_dh_autoreconf:
+#	preserve files overwritten by dh_autoreconf:
+	tar cf debian/autoreconf.tar install-sh
+	dh_autoreconf
 
 override_dh_auto_configure:
 	autoheader
@@ -26,7 +31,7 @@ override_dh_auto_configure:
 		--enable-extended-statistics \
 		--enable-pcre-host-patterns \
 		--enable-compression \
-		--with-mbedtls \
+		--with-openssl \
 		--with-brotli \
 		--with-docbook=/usr/share/sgml/docbook/stylesheet/dsssl/modular
 
@@ -34,7 +39,7 @@ override_dh_auto_build:
 	$(MAKE)
 
 ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
-# 	preserve auto build documentation from source package:
+#	preserve auto build documentation from source package:
 	tar cf debian/doc.tar README INSTALL AUTHORS doc/webserver privoxy.8
 	env -u LANG LC_ALL=C.UTF-8 $(MAKE) dok
 	rm -f doc/webserver/user-manual/*.bak
@@ -58,6 +63,12 @@ endif
 	rm -f doc/source/ldp.dsl
 	rm -rf doc/source/temp
 	dh_clean
+
+override_dh_autoreconf_clean:
+	dh_autoreconf_clean
+#	restore files overwritten by dh_autoreconf:
+	[ ! -f debian/autoreconf.tar ] || tar xf debian/autoreconf.tar
+	rm -f debian/autoreconf.tar
 
 override_dh_auto_install:
 	install -m 0755 privoxy $(DEBDIR)/usr/sbin/privoxy
@@ -92,7 +103,7 @@ endif
 	cp -r templates $(DEBDIR)/etc/privoxy/
 	rm -f $(DEBDIR)/etc/privoxy/templates/*~
 
-#      Remove trailing spaces from config files:
+#	Remove trailing spaces from config files:
 	find $(DEBDIR)/etc/privoxy -type f \
 	| xargs grep -l ' $$' \
 	| while read f; do \

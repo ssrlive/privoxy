@@ -3,7 +3,7 @@
 # Run privoxy-regression-test.pl on a configuration extended by
 # regression-tests.action.
 #
-# (c) 2018-2022 Roland Rosenfeld <roland@debian.org>
+# (c) 2018-2024 Roland Rosenfeld <roland@debian.org>
 
 PORT=8119
 
@@ -22,20 +22,22 @@ cp /usr/sbin/privoxy "$PRIVOXY"
 http_proxy=http://127.0.0.1:$PORT/
 export http_proxy
 
-OUTFILE=$AUTOPKGTEST_TMP/output
-
+OUTFILE=$AUTOPKGTEST_TMP/regression-test-output
+DAEMONOUT=$AUTOPKGTEST_TMP/regression-daemon-output
 
 echo "#### pass 1: some optiones disabled"
 
 sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
     -e "s%^logdir.*%logdir $AUTOPKGTEST_TMP%" \
+    -e "s/^#debug 65536/debug 13551/" \
     -e "s/^keep-alive-timeout.*/keep-alive-timeout 21/" \
     -e "s/^#connection-sharing.*/connection-sharing 0/" \
     < /usr/share/privoxy/config > "$CONFIG"
 echo "actionsfile regression-tests.action" >> "$CONFIG"
 
 echo "Starting privoxy on port $PORT"
-$PRIVOXY --pidfile "$PIDFILE" "$CONFIG"
+$PRIVOXY --pidfile "$PIDFILE" --no-daemon "$CONFIG" > "$DAEMONOUT" 2>&1 &
+sleep 1
 
 /usr/bin/privoxy-regression-test --max-level 200 --show-skipped-tests \
     | tee "$OUTFILE" 2>&1
@@ -45,6 +47,7 @@ echo "#### pass 2 with some more options enabled"
 
 sed -e "s/^listen-address.*/listen-address 127.0.0.1:$PORT/" \
     -e "s%^logdir.*%logdir $AUTOPKGTEST_TMP%" \
+    -e "s/^#debug 65536/debug 13551/" \
     -e "s/^enable-remote-toggle.*/enable-remote-toggle 1/" \
     -e "s/^enable-edit-actions.*/enable-edit-actions 1/" \
     -e "s/^enable-proxy-authentication-forwarding.*/enable-proxy-authentication-forwarding 1/" \
@@ -60,6 +63,12 @@ echo "actionsfile regression-tests.action" >> "$CONFIG"
 echo "Stopping privoxy on port $PORT"
 kill "$(cat "$PIDFILE")"
 
+# Place privoxy output into artifacts:
+if [ -d "$AUTOPKGTEST_ARTIFACTS" ]
+then
+    cp -a "$OUTFILE" "$DAEMONOUT" "$AUTOPKGTEST_ARTIFACTS"/
+fi
+
 # Check that 2 passes have both 0 failures:
 if [ "$(grep -c 'Executed.*, 0 failures' "$OUTFILE")" = 2 ]
 then
@@ -67,4 +76,3 @@ then
 else
     exit 1
 fi
-

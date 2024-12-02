@@ -7,7 +7,7 @@
  *                not depend on particular TLS/SSL library.
  *
  * Copyright   :  Written by and Copyright (c) 2017 Vaclav Svec. FIT CVUT.
- *                Copyright (C) 2018-2021 by Fabian Keil <fk@fabiankeil.de>
+ *                Copyright (C) 2018-2024 by Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -741,6 +741,40 @@ extern int enforce_sane_certificate_state(const char *certificate, const char *k
       {
          log_error(LOG_LEVEL_ERROR, "Failed to unlink %s: %E", certificate);
 
+         return -1;
+      }
+   }
+
+   return 0;
+
+}
+
+/*********************************************************************
+ *
+ * Function    :  create_hexadecimal_hash_of_host
+ *
+ * Description :  Converts the binary hash of a host into a
+ *                hexadecimal string.
+ *
+ * Parameters  :
+ *          1  :  csp = Current client state (buffers, headers, etc...)
+ *
+ * Returns     : -1 => Error while creating hash
+ *                0 => Hash created successfully
+ *
+ *********************************************************************/
+int create_hexadecimal_hash_of_host(struct client_state *csp)
+{
+   int i;
+   int ret;
+
+   for (i = 0; i < HASH_OF_HOST_BUF_SIZE; i++)
+   {
+      ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
+         csp->http->hash_of_host[i]);
+      if (ret < 0)
+      {
+         log_error(LOG_LEVEL_ERROR, "sprintf() return value: %d", ret);
          return -1;
       }
    }

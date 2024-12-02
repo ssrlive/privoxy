@@ -88,7 +88,7 @@ static FILE *logfp = NULL;
 static int debug = (LOG_LEVEL_FATAL | LOG_LEVEL_ERROR | LOG_LEVEL_INFO);
 
 /* static functions */
-static void fatal_error(const char * error_message);
+static void fatal_error(const char *error_message);
 #ifdef _WIN32
 static char *w32_socket_strerr(int errcode, char *tmp_buf);
 #endif
@@ -341,7 +341,7 @@ void init_error_log(const char *prog_name, const char *logfname)
        * reopen it if the file name changed or if the
        * configuration reload was caused by a SIGHUP.
        */
-      log_error(LOG_LEVEL_INFO, "Failed to reopen logfile: \'%s\'. "
+      log_error(LOG_LEVEL_INFO, "Failed to reopen logfile: \'%s\': %E. "
          "Retrying after closing the old file descriptor first. If that "
          "doesn't work, Privoxy will exit without being able to log a message.",
          logfname);
@@ -354,7 +354,8 @@ void init_error_log(const char *prog_name, const char *logfname)
 
    if (NULL == fp)
    {
-      log_error(LOG_LEVEL_FATAL, "init_error_log(): can't open logfile: \'%s\'", logfname);
+      log_error(LOG_LEVEL_FATAL,
+         "init_error_log(): can't open logfile \'%s\': %E", logfname);
    }
 
 #ifdef FEATURE_EXTERNAL_FILTERS
@@ -654,7 +655,7 @@ void log_error(int loglevel, const char *fmt, ...)
    char outbuf[LOG_BUFFER_SIZE+1];
    char tempbuf[LOG_BUFFER_SIZE];
    size_t length = 0;
-   const char * src = fmt;
+   const char *src = fmt;
    long thread_id;
    char timestamp[30];
    const size_t log_buffer_size = LOG_BUFFER_SIZE;
@@ -694,8 +695,8 @@ void log_error(int loglevel, const char *fmt, ...)
 #endif
       if (loglevel == LOG_LEVEL_FATAL)
       {
-         fatal_error("Fatal error. You're not supposed to"
-            "see this message. Please file a bug report.");
+         fatal_error("Fatal error. You're not supposed to "
+            "see this message. Please file a bug report.\n");
       }
       return;
    }
