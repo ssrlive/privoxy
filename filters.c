@@ -4,7 +4,7 @@
  *
  * Purpose     :  Declares functions to parse/crunch headers and pages.
  *
- * Copyright   :  Written by and Copyright (C) 2001-2020 the
+ * Copyright   :  Written by and Copyright (C) 2001-2024 the
  *                Privoxy team. https://www.privoxy.org/
  *
  *                Based on the Internet Junkbuster originally written
@@ -1393,7 +1393,7 @@ int is_untrusted_url(const struct client_state *csp)
    struct block_spec *b;
    struct pattern_spec **trusted_url;
    struct http_request rhttp[1];
-   const char * referer;
+   const char *referer;
    jb_err err;
 
    /*
@@ -1417,12 +1417,24 @@ int is_untrusted_url(const struct client_state *csp)
       }
    }
 
-   if (NULL == (referer = get_header_value(csp->headers, "Referer:")))
+#ifdef FEATURE_HTTPS_INSPECTION
+   if (client_use_ssl(csp))
    {
-      /* no referrer was supplied */
-      return 1;
+      if (NULL == (referer = get_header_value(csp->https_headers, "Referer:")))
+      {
+         /* no referrer was supplied */
+         return 1;
+      }
    }
-
+   else
+#endif
+   {
+      if (NULL == (referer = get_header_value(csp->headers, "Referer:")))
+      {
+         /* no referrer was supplied */
+         return 1;
+      }
+   }
 
    /*
     * If not, do we maybe trust its referrer?

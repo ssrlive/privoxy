@@ -3,7 +3,7 @@
 
  Purpose     :  Entity included in other project documents.
 
- Copyright (C) 2001-2022 Privoxy Developers https://www.privoxy.org/
+ Copyright (C) 2001-2023 Privoxy Developers https://www.privoxy.org/
  See LICENSE.
 
  ======================================================================
@@ -88,6 +88,7 @@ Current Privoxy Team:
  Devin Bayer
  Havard Berland
  David Binderman
+ Ingo Blechschmidt
  David Bo
  Gergely Bor
  Francois Botha
@@ -97,6 +98,7 @@ Current Privoxy Team:
  Andrew J. Caines
  Clifford Caoile
  Edward Carrel
+ Laurent Caumont
  Celejar
  Chakib Benziane
  Pak Chan
@@ -119,6 +121,7 @@ Current Privoxy Team:
  Markus Elfring
  Ryan Farmer
  Matthew Fischer
+ Fabrice Fontaine
  T Ford
  Dean Gaudet
  Stephen Gildea
@@ -215,6 +218,7 @@ Current Privoxy Team:
  Gagan Sidhu
  Johan Sintorn
  Benjamin C. Wiley Sittler
+ Juliusz Sosinowicz
  DRS David Soft
  Simon South
  Dan Stahlke
@@ -241,6 +245,7 @@ Current Privoxy Team:
  David Wagner
  Glenn Washburn
  Song Weijia
+ Florian Weimer
  J&ouml;rg Weinmann
  Darren Wiebe
  Anduin Withers

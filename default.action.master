@@ -21,7 +21,7 @@
 #                 and enhancements are better placed in user.action,
 #                 the match-all section has been moved to match-all.action.
 #
-#  Copyright   :  Written by and Copyright (C) 2001-2023 the
+#  Copyright   :  Written by and Copyright (C) 2001-2024 the
 #                 Privoxy team. https://www.privoxy.org/
 #
 # Feedback welcome, for details please have a look at:
@@ -1254,6 +1254,8 @@ cas.criteo.com/
 # Blocked URL = https://trc-events.taboola.com/1301520/log/3/unip?en=pre_d_eng_tb&tos=382558&scd=49&ssd=1&est=1611317562537&ver=27&isls=true&src=i&invt=192000&tim=1611317945096&mrir=tto&vi=1611317562534&ref=https%3A%2F%2Fhtml.duckduckgo.com%2F&cv=20201217-8-RELEASE&item-url=https%3A%2F%2Fgenius.com%2FLords-of-acid-pussy-lyrics
 # Blocked URL = https://trc.taboola.com/slashdot/trc/3/json?tim=18%3A22%3A49.655&lti=deflated&data=%7B%22id%22%3A608%2C%22ii%22%3A%22_homepage_%22%2C%22it%22%3A%22home%22%2C%22sd%22%3Anull%2C%22ui%22%3Anull%2C%22uifp%22%3Anull%2C%22lbt%22%3A1612905877491%2C%22vi%22%3A1613064169633%2C%22cv%22%3A%2220210209-24-RELEASE%22%2C%22uiv%22%3A%22default%22%2C%22u%22%3A%22https%3A%2F%2Fmobile.slashdot.org%2Fstory%2F21%2F02%2F11%2F0036248%2Fapple-privacy-chief-north-dakota-bill-threatens-to-destroy-the-iphone-as-you-know-it%22%2C%22bv%22%3A%220%22%2C%22ul%22%3A%5B%22en-CA%22%5D%2C%22btv%22%3A%220%22%2C%22bad%22%3A-1%2C%22sw%22%3A1366%2C%22sh%22%3A768%2C%22bw%22%3A1362%2C%22sde%22%3A%221.000%22%2C%22bh%22%3A636%2C%22dw%22%3A1350%2C%22dh%22%3A10270%2C%22r%22%3A%5B%7B%22li%22%3A%22rbox-h2m%22%2C%22s%22%3A4%2C%22uim%22%3A%22thumbnails-rr2%3Aabp%3D0%22%2C%22uip%22%3A%22Below%20Article%20Thumbnails%22%2C%22orig_uip%22%3A%22Below%20Article%20Thumbnails%22%2C%22cd%22%3A255.5%2C%22mw%22%3A300%7D%2C%7B%22li%22%3A%22rbox-h2m%22%2C%22s%22%3A5%2C%22uim%22%3A%22text-links-a%3Aabp%3D0%22%2C%22uip%22%3A%22Below%20Article%20Text%20Links%22%2C%22orig_uip%22%3A%22Below%20Article%20Text%20Links%22%2C%22cd%22%3A9961.4501953125%2C%22mw%22%3A964.5%7D%5D%2C%22cacheKey%22%3A%22home%3D_homepage_%2CBelow%20Article%20Text%20Links%3Dtext-links-a%3Aabp%3D0%2C%2CBelow%20Article%20Thumbnails%3Dthumbnails-rr2%3Aabp%3D0%22%2C%22cb%22%3A%22TRC.callbacks.recommendations_1%22%2C%22lt%22%3A%22deflated%22%7D
 trc*.taboola.com/
+# Blocked URL = https://aax-eu.amazon-adsystem.com/s/iu3?d=imdb.com&a1=&a2=&cb=453310028601&pId=&r=1&rP=https%3A%2F%2Fwww.imdb.com%2Fname%2Fnm0117857%2F%3Fref_%3Dtt_cl_t_6&encoding=server&prid=0101ff30386eadcce1be353b6dd0ce30239fc4dca18ca56529951fd9f5776995a685&gdpr=1&gdpr_consent=&gdpr_consent_avl=
+.amazon-adsystem.com/
 
 
 #----------------------------------------------------------------------------
@@ -2061,6 +2063,8 @@ adv-archiv.dfn-cert.de/
 pinkstinks.de/
 # URL = https://www.eff.org/files/styles/teaser/public/banner_library/repro-rights-hd-3b.jpg?itok=uCnCHOj5
 .eff.org/
+# URL = https://www.datenschmutz.de/banner-square.png
+.datenschmutz.de/
 
 
 #############################################################################
@@ -2301,6 +2305,16 @@ consent.youtube.com/
 services.akteneinsichtsportal.de/
 # URL = https://bpe-online.de/wp-content/plugins/pdf-viewer-for-elementor/assets/pdfjs/web/viewer.html?file=https://bpe-online.de/wp-content/uploads/2020/11/HarmReductionLeitfadenzumrisikoarmenAbsetzenvonPsychopharmaka2EdOnline.pdf&embedded=true
 /wp-content/plugins/pdf-viewer-for-elementor
+# URL = https://syndication.twitter.com/i/jot/embeds?l=%7B%22_category_%22%3A%22tfw_client_event%22%2C%22triggered_on%22%3A1709138733184%2C%22event_namespace%22%3A%7B%22client%22%3A%22tfw%22%2C%22page%22%3A%22tweet%22%2C%22action%22%3A%22seen%22%2C%22section%22%3A%22main%22%2C%22component%22%3A%22privacy-notice%22%7D%2C%22context%22%3A%22horizon%22%2C%22client_version%22%3A%222615f7e52b7e0%3A1702314776716%22%2C%22dnt%22%3Afalse%2C%22widget_id%22%3A%22twitter-widget-6%22%2C%22widget_origin%22%3A%22https%3A%2F%2Fwww.danisch.de%2Fblog%2F2024%2F01%2F31%2Fwas-ist-faschismus%2F%22%2C%22widget_frame%22%3A%22false%22%2C%22widget_partner%22%3A%22%22%2C%22widget_site_screen_name%22%3A%22%22%2C%22widget_site_user_id%22%3A%22%22%2C%22widget_creator_screen_name%22%3A%22%22%2C%22widget_creator_user_id%22%3A%22%22%2C%22widget_iframe_version%22%3A%22da31e07063cce%3A1708130301554%22%2C%22item_ids%22%3A%5B%221752320689309143351%22%5D%2C%22item_details%22%3A%7B%221752320689309143351%22%3A%7B%22item_type%22%3A0%7D%7D%7D
+syndication.twitter.com/
+# URL = https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/tukaani-project/xz
+archive.softwareheritage.org/
+# URL = https://accounts.bahn.de/auth/realms/db/protocol/openid-connect/auth?redirect_uri=https%3A%2F%2Fwww.bahn.de%2F.resources%2Fbahn-common-light%2Fwebresources%2Fassets%2Fhtml%2Fauth.v1.html&client_id=kf_web&response_type=code&state=n5YWCG28EH&scope=openid%20vendo&response_mode=fragment&prompt=none&code_challenge=6oD6Udoq5PCYo_7jt1b5ICMbxoGqYmAoBpIQuOEAK0c&code_challenge_method=S256
+accounts.bahn.de/
+# URL = https://openbsd.creator-spring.com/_next/image?url=https%3A%2F%2Fimages.teespring.com%2Fv3%2Fimage%2FlULcQNlagtH6rVH3Nw5sYWm2MRU%2F800%2F800.jpg
+.creator-spring.com/_next/image
+# URL = https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.JNbKidcpiIxSgywXqxj1GAHaFC%26pid%3DApi&f=1&ipt=3754158f389c998b95c12d25e257114f092a3830762e99ba45a66f75b9a0cd3f&ipo=images
+duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/
 
 {+redirect{s@.*url=@http://@} -block}
 # Sticky Actions = +redirect -block

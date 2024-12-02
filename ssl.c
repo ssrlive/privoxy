@@ -7,7 +7,7 @@
  *                using mbedTLS.
  *
  * Copyright   :  Written by and Copyright (c) 2017-2020 Vaclav Svec. FIT CVUT.
- *                Copyright (C) 2018-2021 by Fabian Keil <fk@fabiankeil.de>
+ *                Copyright (C) 2018-2024 by Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@
 #  include MBEDTLS_CONFIG_FILE
 #endif
 
-#include "mbedtls/md5.h"
+#include "mbedtls/sha256.h"
 #include "mbedtls/pem.h"
 #include "mbedtls/base64.h"
 #include "mbedtls/error.h"
@@ -1799,8 +1799,8 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  *
  * Function    :  host_to_hash
  *
- * Description :  Creates MD5 hash from host name. Host name is loaded
- *                from structure csp and saved again into it.
+ * Description :  Creates a sha256 hash from host name. The host name
+ *                is taken from the csp structure and stored into it.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -1811,37 +1811,10 @@ static int ssl_verify_callback(void *csp_void, mbedtls_x509_crt *crt,
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   int ret = 0;
-   size_t i;
+   mbedtls_sha256((unsigned char *)csp->http->host,
+      strlen(csp->http->host), csp->http->hash_of_host, 0);
 
-#if !defined(MBEDTLS_MD5_C)
-#error mbedTLS needs to be compiled with md5 support
-#else
-   memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
-   ret = mbedtls_md5_ret((unsigned char *)csp->http->host,
-      strlen(csp->http->host), csp->http->hash_of_host);
-   if (ret != 0)
-   {
-      log_error(LOG_LEVEL_ERROR,
-         "Failed to generate md5 hash of host %s: %d",
-         csp->http->host, ret);
-      return -1;
-   }
-
-   /* Converting hash into string with hex */
-   i = 0;
-   for (; i < 16; i++)
-   {
-      if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
-         csp->http->hash_of_host[i])) < 0)
-      {
-         log_error(LOG_LEVEL_ERROR, "Sprintf return value: %d", ret);
-         return -1;
-      }
-   }
-
-   return 0;
-#endif /* MBEDTLS_MD5_C */
+   return create_hexadecimal_hash_of_host(csp);
 }
 
 /*********************************************************************

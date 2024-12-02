@@ -1,0 +1,43 @@
+# Mesajele în limba română pentru pachetul privoxy.
+# Romanian translation of privoxy.
+# Copyright © 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the privoxy package.
+#
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2023.
+#
+# Cronologia traducerii fișierului „privoxy”:
+# Traducerea inițială, făcută de R-GC, pentru versiunea privoxy 3.0.34-1(2006-11-01).
+# Actualizare a traducerii pentru versiunea Y, făcută de X, Y(anul).
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: privoxy 3.0.34-1\n"
+"Report-Msgid-Bugs-To: privoxy@packages.debian.org\n"
+"POT-Creation-Date: 2016-04-08 17:17+0200\n"
+"PO-Revision-Date: 2023-03-19 08:06+0100\n"
+"Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
+"Language-Team: Romanian <debian-l10n-romanian@lists.debian.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && "
+"n%100<=19) ? 1 : 2);\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. Type: string
+#. Description
+#: ../templates:1001
+msgid "Adresses on with Privoxy listens:"
+msgstr "Adresele pe care Privoxy ascultă:"
+
+#. Type: string
+#. Description
+#: ../templates:1001
+msgid ""
+"Please enter a space separated list of address:port combinations on which "
+"Privoxy will listen for client requests."
+msgstr ""
+"Introduceți o listă de combinații de adresă:port, separată de spații, pe care "
+"Privoxy va asculta cererile clienților."

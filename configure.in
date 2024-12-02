@@ -615,9 +615,9 @@ AC_CHECK_FUNC(gmtime_r, [
   AC_TRY_COMPILE([
 #   include <time.h>
   ], [
-    struct time *t;
-    struct tm *tm;
-    (void) gmtime_r(t, tm)
+    time_t t;
+    struct tm tm;
+    (void) gmtime_r(&t, &tm)
   ], [
     AC_MSG_RESULT(ok)
     AC_DEFINE(HAVE_GMTIME_R)
@@ -633,9 +633,9 @@ AC_CHECK_FUNC(localtime_r, [
   AC_TRY_COMPILE([
 #   include <time.h>
   ], [
-    struct time *t;
-    struct tm *tm;
-    (void) localtime_r(t, tm)
+    time_t t;
+    struct tm tm;
+    (void) localtime_r(&t, &tm)
   ], [
     AC_MSG_RESULT(ok)
     AC_DEFINE(HAVE_LOCALTIME_R)
@@ -1294,6 +1294,45 @@ if test X"$OPT_OPENSSL" != Xno; then
   fi
 fi
 AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY_OPENSSL)
+
+dnl ========================================================
+dnl check for wolfSSL which can be used for https inspection
+dnl ========================================================
+FEATURE_HTTPS_INSPECTION_ONLY_WOLFSSL=#
+OPT_WOLFSSL=no
+AC_ARG_WITH(wolfssl,dnl
+AC_HELP_STRING([--with-wolfssl], [Enable wolfSSL detection for https inspection.])
+AC_HELP_STRING([--without-wolfssl], [Disable wolfSSL detection]),
+  OPT_WOLFSSL=$withval)
+
+if test X"$OPT_WOLFSSL" != Xno; then
+    if test X"$OPT_MBEDTLS" != Xno; then
+        AC_MSG_ERROR([wolfSSL and mbedTLS support can't be enabled at the same time])
+    fi
+    if test X"$OPT_OPENSSL" != Xno; then
+        AC_MSG_ERROR([wolfSSL and OpenSSL support can't be enabled at the same time])
+    fi
+
+    AC_CHECK_LIB(wolfssl, wolfSSL_Init, [HAVE_WOLFSSL_INIT="yes"])
+
+    if test "x$HAVE_WOLFSSL_INIT" = "xyes"; then
+        AC_DEFINE(FEATURE_HTTPS_INSPECTION, 1, [if SSL/TLS is enabled])
+        AC_DEFINE(FEATURE_HTTPS_INSPECTION_WOLFSSL, 1, [if Wolfssl is enabled])
+        AC_SUBST(FEATURE_HTTPS_INSPECTION_WOLFSSL, [1])
+        FEATURE_HTTPS_INSPECTION="yes"
+        FEATURE_HTTPS_INSPECTION_WOLFSSL="yes"
+    fi
+
+    if test "x$FEATURE_HTTPS_INSPECTION_WOLFSSL" = "xyes"; then
+    AC_MSG_NOTICE([Detected wolfSSL. Enabling https inspection.])
+
+    LIBS="$LIBS -lwolfssl"
+
+    FEATURE_HTTPS_INSPECTION_ONLY=
+    FEATURE_HTTPS_INSPECTION_ONLY_WOLFSSL=
+  fi
+fi
+AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY_WOLFSSL)
 
 AC_SUBST(FEATURE_HTTPS_INSPECTION_ONLY)
 

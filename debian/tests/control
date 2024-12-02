@@ -1,5 +1,9 @@
 Tests: privoxy-regression-test
-Depends: curl, @
+Depends: privoxy, curl
+
+Tests: check-ssl
+Depends: privoxy, curl, openssl, ca-certificates, jq
+Restrictions: needs-internet
 
 Tests: conditional-defines
 Depends: privoxy, libwww-perl, libhtml-tree-perl

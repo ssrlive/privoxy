@@ -8,7 +8,7 @@
  *
  * Copyright   :  Written by and Copyright (c) 2020 Maxim Antonov <mantonov@gmail.com>
  *                Copyright (C) 2017 Vaclav Svec. FIT CVUT.
- *                Copyright (C) 2018-2022 by Fabian Keil <fk@fabiankeil.de>
+ *                Copyright (C) 2018-2024 by Fabian Keil <fk@fabiankeil.de>
  *
  *                This program is free software; you can redistribute it
  *                and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@
 #include <openssl/bn.h>
 #include <openssl/opensslv.h>
 #include <openssl/pem.h>
-#include <openssl/md5.h>
+#include <openssl/sha.h>
 #include <openssl/x509v3.h>
 #ifdef _WIN32
 /* https://www.openssl.org/docs/faq.html
@@ -182,7 +182,7 @@ extern int ssl_send_data(struct ssl_attr *ssl_attr, const unsigned char *buf, si
       int send_len = (int)len - pos;
 
       log_error(LOG_LEVEL_WRITING, "TLS on socket %d: %N",
-         fd, send_len, buf+pos);
+         fd, send_len, buf + pos);
 
       /*
        * Sending one part of the buffer
@@ -278,7 +278,7 @@ extern int ssl_recv_data(struct ssl_attr *ssl_attr, unsigned char *buf, size_t m
 static int ssl_store_cert(struct client_state *csp, X509 *crt)
 {
    long len;
-   struct certs_chain  *last = &(csp->server_certs_chain);
+   struct certs_chain* last = &(csp->server_certs_chain);
    int ret = 0;
    BIO *bio = BIO_new(BIO_s_mem());
    EVP_PKEY *pkey = NULL;
@@ -422,7 +422,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       for (i = 0; i < bs->length; i++)
       {
          if (BIO_printf(bio, "%02x%c", bs->data[i],
-               ((i + 1 == bs->length) ? '\n' : ':')) <= 0)
+            ((i + 1 == bs->length) ? '\n' : ':')) <= 0)
          {
             log_ssl_errors(LOG_LEVEL_ERROR, "BIO_printf() for serial failed");
             ret = -1;
@@ -507,19 +507,19 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
 #define BC              "18"
    switch (EVP_PKEY_base_id(pkey))
    {
-      case EVP_PKEY_RSA:
-         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "RSA key size", EVP_PKEY_bits(pkey));
-         break;
-      case EVP_PKEY_DSA:
-         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "DSA key size", EVP_PKEY_bits(pkey));
-         break;
-      case EVP_PKEY_EC:
-         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "EC key size", EVP_PKEY_bits(pkey));
-         break;
-      default:
-         ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "non-RSA/DSA/EC key size",
-            EVP_PKEY_bits(pkey));
-         break;
+   case EVP_PKEY_RSA:
+      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "RSA key size", EVP_PKEY_bits(pkey));
+      break;
+   case EVP_PKEY_DSA:
+      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "DSA key size", EVP_PKEY_bits(pkey));
+      break;
+   case EVP_PKEY_EC:
+      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "EC key size", EVP_PKEY_bits(pkey));
+      break;
+   default:
+      ret = BIO_printf(bio, "\n%-" BC "s: %d bits", "non-RSA/DSA/EC key size",
+         EVP_PKEY_bits(pkey));
+      break;
    }
    if (ret <= 0)
    {
@@ -564,7 +564,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       if (!X509V3_EXT_print(bio, ex, 0, 0))
       {
          if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
-               ASN1_STRFLGS_RFC2253))
+            ASN1_STRFLGS_RFC2253))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
                "ASN1_STRING_print_ex() for alt name failed");
@@ -587,7 +587,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       if (!X509V3_EXT_print(bio, ex, 0, 0))
       {
          if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
-               ASN1_STRFLGS_RFC2253))
+            ASN1_STRFLGS_RFC2253))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
                "ASN1_STRING_print_ex() for cert type failed");
@@ -610,7 +610,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       if (!X509V3_EXT_print(bio, ex, 0, 0))
       {
          if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
-               ASN1_STRFLGS_RFC2253))
+            ASN1_STRFLGS_RFC2253))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
                "ASN1_STRING_print_ex() for key usage failed");
@@ -633,7 +633,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       if (!X509V3_EXT_print(bio, ex, 0, 0))
       {
          if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
-               ASN1_STRFLGS_RFC2253))
+            ASN1_STRFLGS_RFC2253))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
                "ASN1_STRING_print_ex() for ext key usage failed");
@@ -656,7 +656,7 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       if (!X509V3_EXT_print(bio, ex, 0, 0))
       {
          if (!ASN1_STRING_print_ex(bio, X509_EXTENSION_get_data(ex),
-               ASN1_STRFLGS_RFC2253))
+            ASN1_STRFLGS_RFC2253))
          {
             log_ssl_errors(LOG_LEVEL_ERROR,
                "ASN1_STRING_print_ex() for certificate policies failed");
@@ -666,9 +666,9 @@ static int ssl_store_cert(struct client_state *csp, X509 *crt)
       }
    }
    {
-   /* make valgrind happy */
-   static const char zero = 0;
-   BIO_write(bio, &zero, 1);
+      /* make valgrind happy */
+      static const char zero = 0;
+      BIO_write(bio, &zero, 1);
    }
    len = BIO_get_mem_data(bio, &bio_mem_data);
    if (len <= 0)
@@ -708,8 +708,8 @@ exit:
  *
  * Function    :  host_to_hash
  *
- * Description :  Creates MD5 hash from host name. Host name is loaded
- *                from structure csp and saved again into it.
+ * Description :  Creates a sha256 hash from host name. The host name
+ *                is taken from the csp structure and stored into it.
  *
  * Parameters  :
  *          1  :  csp = Current client state (buffers, headers, etc...)
@@ -720,25 +720,10 @@ exit:
  *********************************************************************/
 static int host_to_hash(struct client_state *csp)
 {
-   int ret = 0;
-   size_t i = 0;
-
-   memset(csp->http->hash_of_host, 0, sizeof(csp->http->hash_of_host));
-   MD5((unsigned char *)csp->http->host, strlen(csp->http->host),
+   SHA256((unsigned char *)csp->http->host, strlen(csp->http->host),
       csp->http->hash_of_host);
 
-   /* Converting hash into string with hex */
-   for (; i < 16; i++)
-   {
-      if ((ret = sprintf((char *)csp->http->hash_of_host_hex + 2 * i, "%02x",
-         csp->http->hash_of_host[i])) < 0)
-      {
-         log_error(LOG_LEVEL_ERROR, "Sprintf return value: %d", ret);
-         return -1;
-      }
-   }
-
-   return 0;
+   return create_hexadecimal_hash_of_host(csp);
 }
 
 
@@ -759,7 +744,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
 {
    struct ssl_attr *ssl_attr = &csp->ssl_client_attr;
    /* Paths to certificates file and key file */
-   char *key_file  = NULL;
+   char *key_file = NULL;
    char *cert_file = NULL;
    int ret = 0;
    SSL *ssl;
@@ -785,7 +770,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
     */
    cert_file = make_certs_path(csp->config->certificate_directory,
       (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
-   key_file  = make_certs_path(csp->config->certificate_directory,
+   key_file = make_certs_path(csp->config->certificate_directory,
       (const char *)csp->http->hash_of_host_hex, KEY_FILE_TYPE);
 
    if (cert_file == NULL || key_file == NULL)
@@ -805,7 +790,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    if (ret < 0)
    {
       log_error(LOG_LEVEL_ERROR,
-         "generate_host_certificate failed: %d", ret);
+         "generate_host_certificate() failed: %d", ret);
       ret = -1;
       goto exit;
    }
@@ -819,7 +804,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
 
    /* Set the key and cert */
    if (SSL_CTX_use_certificate_file(ssl_attr->openssl_attr.ctx,
-         cert_file, SSL_FILETYPE_PEM) != 1)
+      cert_file, SSL_FILETYPE_PEM) != 1)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "Loading webpage certificate %s failed", cert_file);
@@ -828,7 +813,7 @@ extern int create_client_ssl_connection(struct client_state *csp)
    }
 
    if (SSL_CTX_use_PrivateKey_file(ssl_attr->openssl_attr.ctx,
-         key_file, SSL_FILETYPE_PEM) != 1)
+      key_file, SSL_FILETYPE_PEM) != 1)
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "Loading webpage certificate private key %s failed", key_file);
@@ -879,10 +864,10 @@ extern int create_client_ssl_connection(struct client_state *csp)
       csp->http->hash_of_host_hex);
    if (BIO_do_handshake(ssl_attr->openssl_attr.bio) != 1)
    {
-       log_ssl_errors(LOG_LEVEL_ERROR,
-          "The TLS/SSL handshake with the client failed");
-       ret = -1;
-       goto exit;
+      log_ssl_errors(LOG_LEVEL_ERROR,
+         "The TLS/SSL handshake with the client failed");
+      ret = -1;
+      goto exit;
    }
 
    log_error(LOG_LEVEL_CONNECT, "Client successfully connected over %s (%s).",
@@ -1122,7 +1107,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
 #else
    if (host_is_ip_address(csp->http->host))
    {
-      if (X509_VERIFY_PARAM_set1_ip_asc(ssl->param,  csp->http->host) != 1)
+      if (X509_VERIFY_PARAM_set1_ip_asc(ssl->param, csp->http->host) != 1)
       {
          log_ssl_errors(LOG_LEVEL_ERROR,
             "X509_VERIFY_PARAM_set1_ip_asc() failed");
@@ -1132,7 +1117,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    }
    else
    {
-      if (X509_VERIFY_PARAM_set1_host(ssl->param,  csp->http->host, 0) != 1)
+      if (X509_VERIFY_PARAM_set1_host(ssl->param, csp->http->host, 0) != 1)
       {
          log_ssl_errors(LOG_LEVEL_ERROR,
             "X509_VERIFY_PARAM_set1_host() failed");
@@ -1203,7 +1188,7 @@ extern int create_server_ssl_connection(struct client_state *csp)
    }
 
    log_error(LOG_LEVEL_CONNECT, "Server successfully connected over %s (%s).",
-     SSL_get_version(ssl), SSL_get_cipher_name(ssl));
+      SSL_get_version(ssl), SSL_get_cipher_name(ssl));
 
    /*
     * Server certificate chain is valid, so we can clean
@@ -1308,9 +1293,9 @@ static void log_ssl_errors(int debuglevel, const char* fmt, ...)
  *
  *********************************************************************/
 extern int ssl_base64_encode(unsigned char *dst, size_t dlen, size_t *olen,
-                             const unsigned char *src, size_t slen)
+   const unsigned char *src, size_t slen)
 {
-   *olen = 4 * ((slen/3) + ((slen%3) ? 1 : 0)) + 1;
+   *olen = 4 * ((slen / 3) + ((slen % 3) ? 1 : 0)) + 1;
    if (*olen > dlen)
    {
       return ENOBUFS;
@@ -1404,7 +1389,7 @@ static int write_certificate(X509 *crt, const char *output_file)
  *
  *********************************************************************/
 static int write_private_key(EVP_PKEY *key, char **ret_buf,
-                             const char *key_file_path)
+   const char *key_file_path)
 {
    size_t len = 0;                /* Length of created key    */
    FILE *f = NULL;                /* File to save certificate */
@@ -1497,8 +1482,10 @@ static int generate_key(struct client_state *csp, char **key_buf)
 {
    int ret = 0;
    char* key_file_path;
+#if (OPENSSL_VERSION_NUMBER < 0x30000000L)
    BIGNUM *exp;
    RSA *rsa;
+#endif
    EVP_PKEY *key;
 
    key_file_path = make_certs_path(csp->config->certificate_directory,
@@ -1517,6 +1504,7 @@ static int generate_key(struct client_state *csp, char **key_buf)
       return 0;
    }
 
+#if (OPENSSL_VERSION_NUMBER < 0x30000000L)
    exp = BN_new();
    rsa = RSA_new();
    key = EVP_PKEY_new();
@@ -1549,6 +1537,15 @@ static int generate_key(struct client_state *csp, char **key_buf)
       ret = -1;
       goto exit;
    }
+#else
+   key = EVP_RSA_gen(RSA_KEYSIZE);
+   if (key == NULL)
+   {
+      log_error(LOG_LEVEL_ERROR, "EVP_RSA_gen() failed");
+      ret = -1;
+      goto exit;
+   }
+#endif
 
    /*
     * Exporting private key into file
@@ -1565,6 +1562,7 @@ exit:
    /*
     * Freeing used variables
     */
+#if (OPENSSL_VERSION_NUMBER < 0x30000000L)
    if (exp)
    {
       BN_free(exp);
@@ -1573,6 +1571,7 @@ exit:
    {
       RSA_free(rsa);
    }
+#endif
    if (key)
    {
       EVP_PKEY_free(key);
@@ -1596,7 +1595,7 @@ exit:
  *                   pointer to certificate instance otherwise
  *
  *********************************************************************/
-static X509 *ssl_certificate_load(const char *cert_path)
+static X509* ssl_certificate_load(const char *cert_path)
 {
    X509 *cert = NULL;
    FILE *cert_f = NULL;
@@ -1723,7 +1722,7 @@ exit:
 static int set_subject_alternative_name(X509 *cert, X509 *issuer, const char *hostname)
 {
    size_t altname_len = strlen(hostname) + sizeof(CERTIFICATE_ALT_NAME_PREFIX);
-   char *alt_name_buf = (char*) malloc(altname_len);
+   char* alt_name_buf = (char*)malloc(altname_len);
    int result = 0;
 
    snprintf(alt_name_buf, sizeof(alt_name_buf),
@@ -1779,9 +1778,9 @@ static int generate_host_certificate(struct client_state *csp)
    int serial_num_size;
 
    /* Paths to keys and certificates needed to create certificate */
-   cert_opt.issuer_key  = NULL;
+   cert_opt.issuer_key = NULL;
    cert_opt.subject_key = NULL;
-   cert_opt.issuer_crt  = NULL;
+   cert_opt.issuer_crt = NULL;
 
    cert_opt.output_file = make_certs_path(csp->config->certificate_directory,
       (const char *)csp->http->hash_of_host_hex, CERT_FILE_TYPE);
@@ -1799,7 +1798,7 @@ static int generate_host_certificate(struct client_state *csp)
    }
 
    if (enforce_sane_certificate_state(cert_opt.output_file,
-         cert_opt.subject_key))
+      cert_opt.subject_key))
    {
       freez(cert_opt.output_file);
       freez(cert_opt.subject_key);
@@ -1870,7 +1869,7 @@ static int generate_host_certificate(struct client_state *csp)
       serial_num_size = 1;
    }
 
-   serial_num_text = (char*) malloc(serial_num_size);  /* Buffer for serial number */
+   serial_num_text = (char*)malloc(serial_num_size);  /* Buffer for serial number */
    ret = snprintf(serial_num_text, (size_t)serial_num_size, "%lu%lu",
       certificate_serial_time, certificate_serial);
    if (ret < 0 || ret >= serial_num_size)
@@ -1900,7 +1899,7 @@ static int generate_host_certificate(struct client_state *csp)
    common_name = (strlen(csp->http->host) > CERT_PARAM_COMMON_NAME_MAX) ?
       CGI_SITE_2_HOST : csp->http->host;
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COMMON_NAME_FCODE,
-         MBSTRING_ASC, (void *)common_name, -1, -1, 0))
+      MBSTRING_ASC, (void *)common_name, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
@@ -1909,7 +1908,7 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORGANIZATION_FCODE,
-         MBSTRING_ASC, (void *)common_name, -1, -1, 0))
+      MBSTRING_ASC, (void *)common_name, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
@@ -1918,7 +1917,7 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_ORG_UNIT_FCODE,
-         MBSTRING_ASC, (void *)common_name, -1, -1, 0))
+      MBSTRING_ASC, (void *)common_name, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
@@ -1927,7 +1926,7 @@ static int generate_host_certificate(struct client_state *csp)
       goto exit;
    }
    if (!X509_NAME_add_entry_by_txt(subject_name, CERT_PARAM_COUNTRY_FCODE,
-         MBSTRING_ASC, (void *)CERT_PARAM_COUNTRY_CODE, -1, -1, 0))
+      MBSTRING_ASC, (void *)CERT_PARAM_COUNTRY_CODE, -1, -1, 0))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "X509 subject name (code: %s, val: %s) error",
@@ -1940,8 +1939,8 @@ static int generate_host_certificate(struct client_state *csp)
    cert_opt.issuer_key = csp->config->ca_key_file;
 
    if (get_certificate_valid_from_date(cert_valid_from,
-         sizeof(cert_valid_from), VALID_DATETIME_FMT)
-    || get_certificate_valid_to_date(cert_valid_to,
+      sizeof(cert_valid_from), VALID_DATETIME_FMT)
+      || get_certificate_valid_to_date(cert_valid_to,
          sizeof(cert_valid_to), VALID_DATETIME_FMT))
    {
       log_error(LOG_LEVEL_ERROR, "Generating one of the validity dates failed");
@@ -1950,10 +1949,10 @@ static int generate_host_certificate(struct client_state *csp)
    }
 
    cert_opt.subject_pwd = CERT_SUBJECT_PASSWORD;
-   cert_opt.issuer_pwd  = csp->config->ca_password;
-   cert_opt.not_before  = cert_valid_from;
-   cert_opt.not_after   = cert_valid_to;
-   cert_opt.serial      = serial_num_text;
+   cert_opt.issuer_pwd = csp->config->ca_password;
+   cert_opt.not_before = cert_valid_from;
+   cert_opt.not_after = cert_valid_to;
+   cert_opt.serial = serial_num_text;
    cert_opt.max_pathlen = -1;
 
    /*
@@ -2165,7 +2164,7 @@ static int generate_host_certificate(struct client_state *csp)
    }
 
    if (!host_is_ip_address(csp->http->host) &&
-       !set_subject_alternative_name(cert, issuer_cert, csp->http->host))
+      !set_subject_alternative_name(cert, issuer_cert, csp->http->host))
    {
       log_ssl_errors(LOG_LEVEL_ERROR,
          "Setting the Subject Alt Name extension failed");
